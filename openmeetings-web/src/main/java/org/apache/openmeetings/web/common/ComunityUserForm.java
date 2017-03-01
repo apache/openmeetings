@@ -34,7 +34,7 @@ public class ComunityUserForm extends Form<User> {
 	public ComunityUserForm(String id, IModel<User> model) {
 		super(id, model);
 
-		RadioGroup<Long> rg = new RadioGroup<Long>("community_settings", new IModel<Long>() {
+		RadioGroup<Long> rg = new RadioGroup<>("community_settings", new IModel<Long>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -67,14 +67,14 @@ public class ComunityUserForm extends Form<User> {
 			public void detach() {
 			}
 		});
-		add(rg.add(new Radio<Long>("everybody", Model.of(1L)), new Radio<Long>("contact", Model.of(2L))
-			, new Radio<Long>("nobody", Model.of(3L))).setOutputMarkupId(true).setRenderBodyOnly(false)
+		add(rg.add(new Radio<>("everybody", Model.of(1L)), new Radio<>("contact", Model.of(2L))
+			, new Radio<>("nobody", Model.of(3L))).setOutputMarkupId(true).setRenderBodyOnly(false)
 			);
 
 		add(new TextArea<String>("userOffers"));
 		add(new TextArea<String>("userSearchs"));
 	}
-	
+
 	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);

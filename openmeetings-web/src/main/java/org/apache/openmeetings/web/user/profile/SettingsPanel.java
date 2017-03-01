@@ -47,8 +47,8 @@ public class SettingsPanel extends UserPanel {
 
 	public SettingsPanel(String id, int active) {
 		super(id);
-		
-		List<ITab> tabs = new ArrayList<ITab>();
+
+		List<ITab> tabs = new ArrayList<>();
 		tabs.add(new AjaxTab(Model.of(Application.getString(1170))) {
 			private static final long serialVersionUID = 1L;
 			UserProfilePanel profilePanel = null;
@@ -61,7 +61,7 @@ public class SettingsPanel extends UserPanel {
 				}
 				return profilePanel;
 			}
-			
+
 			@Override
 			public boolean load(AjaxRequestTarget target) {
 				if (profilePanel != null) {

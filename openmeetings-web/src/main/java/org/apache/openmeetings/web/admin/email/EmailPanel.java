@@ -41,7 +41,7 @@ public class EmailPanel extends AdminPanel {
 	public EmailPanel(String id) {
 		super(id);
 		SearchableDataView<MailMessage> dataView = new SearchableDataView<MailMessage>("email",
-				new SearchableDataProvider<MailMessage>(MailMessageDao.class))
+				new SearchableDataProvider<>(MailMessageDao.class))
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -73,17 +73,17 @@ public class EmailPanel extends AdminPanel {
 				target.add(list);
 			}
 		};
-		DataViewContainer<MailMessage> container = new DataViewContainer<MailMessage>(list, dataView, navigator);
-		container.addLink(new OmOrderByBorder<MailMessage>("orderById", "id", container))
-				.addLink(new OmOrderByBorder<MailMessage>("orderBySubject", "subject", container))
-				.addLink(new OmOrderByBorder<MailMessage>("orderByStatus", "status", container));
+		DataViewContainer<MailMessage> container = new DataViewContainer<>(list, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+				.addLink(new OmOrderByBorder<>("orderBySubject", "subject", container))
+				.addLink(new OmOrderByBorder<>("orderByStatus", "status", container));
 		add(container.getLinks());
 		add(navigator);
-		
+
 		form = new EmailForm("form", list, new MailMessage());
 		add(form);
 	}
-	
+
 	private StringBuilder getRowClass(final MailMessage m) {
 		StringBuilder sb = getRowClass(m.getId(), form.getModelObject().getId());
 		if (MailMessage.Status.ERROR == m.getStatus()) {

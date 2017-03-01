@@ -42,7 +42,7 @@ public class AppointmentModel extends CalendarModel implements ICalendarVisitor 
 
 	@Override
 	protected List<? extends CalendarEvent> load() {
-		List<CalendarEvent> list = new ArrayList<CalendarEvent>();
+		List<CalendarEvent> list = new ArrayList<>();
 		for (Appointment a : getBean(AppointmentDao.class).getInRange(getUserId(), getDate(getStart()), getDate(getEnd()))) {
 			list.add(new OmCalendarEvent(a));
 		}

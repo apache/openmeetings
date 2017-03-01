@@ -44,9 +44,9 @@ import org.apache.wicket.validation.ValidationError;
 
 /**
  * Handle {@link Configuration} items as list and form
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class ConfigForm extends AdminBaseForm<Configuration> {
 	private static final long serialVersionUID = 1L;
@@ -56,9 +56,9 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		target.add(this);
 		target.appendJavaScript("omConfigPanelInit();");
 	}
-	
+
 	public ConfigForm(String id, WebMarkupContainer listContainer, Configuration configuration) {
-		super(id, new CompoundPropertyModel<Configuration>(configuration));
+		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString(267))).add(new IValidator<String>(){
@@ -76,12 +76,12 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(forDatePattern("updated", WEB_DATE_PATTERN));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
-		
+
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
-	
+
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
@@ -100,7 +100,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		this.setModelObject(new Configuration());
 		refresh(target);
 	}
-	
+
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Configuration conf = getModelObject();
@@ -112,7 +112,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		setModelObject(conf);
 		refresh(target);
 	}
-	
+
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(ConfigurationDao.class).delete(getModelObject(), WebSession.getUserId());

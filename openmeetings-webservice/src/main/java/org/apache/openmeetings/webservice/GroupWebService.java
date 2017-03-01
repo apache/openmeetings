@@ -60,12 +60,12 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * The Service contains methods to login and create hash to directly enter
  * conference rooms, recordings or the application in general
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 @WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
@@ -87,7 +87,7 @@ public class GroupWebService {
 
 	/**
 	 * add a new group
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param name
@@ -109,10 +109,10 @@ public class GroupWebService {
 			return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 		}
 	}
-	
+
 	/**
 	 * Get the list of all groups
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @return list of all groups
@@ -129,11 +129,11 @@ public class GroupWebService {
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Add user to a certain group
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param userid
@@ -170,9 +170,9 @@ public class GroupWebService {
 	}
 
 	/**
-	 * 
+	 *
 	 * Remove user from a certain group
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param userid
@@ -215,11 +215,11 @@ public class GroupWebService {
 
 	/**
 	 * Adds a room to an group
-	 * 
+	 *
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param id - Id of group that the room is being paired with
 	 * @param roomid - Id of room to be added
-	 * 
+	 *
 	 * @return Id of the relation created, null or -1 in case of the error
 	 */
 	@POST
@@ -263,7 +263,7 @@ public class GroupWebService {
 
 	/**
 	 * Search users and return them
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param id
@@ -291,7 +291,7 @@ public class GroupWebService {
 	{
 		try {
 			Sessiondata sd = sessionDao.check(sid);
-			SearchResult<User> result = new SearchResult<User>();
+			SearchResult<User> result = new SearchResult<>();
 			result.setObjectName(User.class.getName());
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				result.setRecords(groupUserDao.count(id));
@@ -312,12 +312,12 @@ public class GroupWebService {
 
 	/**
 	 * Deletes a group
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param id
 	 *            the id of the group
-	 *            
+	 *
 	 * @throws {@link ServiceException} in case of any error
 	 */
 	@WebMethod

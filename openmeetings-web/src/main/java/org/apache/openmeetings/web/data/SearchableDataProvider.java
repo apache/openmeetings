@@ -30,16 +30,16 @@ import org.apache.wicket.model.IModel;
 
 /**
  * provides function to fill paging tables
- * 
+ *
  * @author swagner
- * 
+ *
  * @param <T>
  */
 public class SearchableDataProvider<T extends IDataProviderEntity> extends SortableDataProvider<T, String> {
 	private static final long serialVersionUID = 1L;
 	protected Class<? extends IDataProviderDao<T>> clazz;
 	protected String search = null;
-	
+
 	public SearchableDataProvider(Class<? extends IDataProviderDao<T>> c) {
 		this.clazz = c;
 	}
@@ -75,7 +75,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 
 	@Override
 	public IModel<T> model(T object) {
-		return new CompoundPropertyModel<T>(object);
+		return new CompoundPropertyModel<>(object);
 	}
 
 	public void setSearch(String search) {
@@ -85,7 +85,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 			this.search = null;
 		}
 	}
-	
+
 	public String getSearch() {
 		return search;
 	}

@@ -158,7 +158,7 @@ public class BackupPanel extends AdminPanel {
 					}
 				}
 			});
-			add((progressBar = new ProgressBar("dprogress", new Model<Integer>(0)) {
+			add((progressBar = new ProgressBar("dprogress", new Model<>(0)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

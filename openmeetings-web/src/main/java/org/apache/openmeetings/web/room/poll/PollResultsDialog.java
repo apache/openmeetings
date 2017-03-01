@@ -46,6 +46,12 @@ import org.wicketstuff.jqplot.behavior.JqPlotBehavior;
 import org.wicketstuff.jqplot.behavior.JqPlotCssResourceReference;
 import org.wicketstuff.jqplot.behavior.JqPlotJavascriptResourceReference;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
+
 import br.com.digilabs.jqplot.Chart;
 import br.com.digilabs.jqplot.ChartConfiguration;
 import br.com.digilabs.jqplot.JqPlotResources;
@@ -55,12 +61,6 @@ import br.com.digilabs.jqplot.chart.PieChart;
 import br.com.digilabs.jqplot.elements.Highlighter;
 import br.com.digilabs.jqplot.elements.Location;
 import br.com.digilabs.jqplot.elements.RendererOptions;
-
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 /**
  * @author solomax
@@ -122,12 +122,12 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	public int getWidth() {
 		return 500;
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(delete, close, cancel);
 	}
-	
+
 	public void updateModel(AjaxRequestTarget target, boolean moderator) {
 		selForm.updateModel(target);
 		this.moderator = moderator;
@@ -137,7 +137,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		builder.append("$('#").append(PollResultsDialog.this.getMarkupId()).append("').on('dialogopen', function( event, ui ) {");
 		builder.append(getScript(barChart(p)));
 		builder.append("});");
-		
+
 		target.appendJavaScript(builder.toString());
 	}
 
@@ -151,13 +151,13 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		builder.append(");");
 		return builder;
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(JqPlotJavascriptResourceReference.get()));
 		response.render(CssHeaderItem.forReference(JqPlotCssResourceReference.get()));
-		Chart<?> c1 = new PieChart<Number>(null);
+		Chart<?> c1 = new PieChart<>(null);
 		c1.getChartConfiguration().setHighlighter(new Highlighter());
 		for (Chart<?> chart : new Chart<?>[]{c1, new BarChart<Integer>(null)}) {
 			for (String resource : JqPlotUtils.retriveJavaScriptResources(chart)) {
@@ -165,42 +165,41 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			}
 		}
 	}
-	
-    private static String removeMinified(String name_) {
-        String name = name_;
-        int idxOfExtension = name.lastIndexOf('.');
-        if (idxOfExtension > -1) {
-            String extension = name.substring(idxOfExtension);
-            name = name.substring(0, name.length() - extension.length() + 1);
-            if (name.endsWith(".min."))
-            {
-                name = name.substring(0, name.length() - 5) + extension;
-            }
-        }
-        return name;
-    }
 
-    @Override
-    public void onClick(AjaxRequestTarget target, DialogButton button) {
-    	if (close.equals(button)) {
-    		closeConfirm.open(target);
-    	} else if (delete.equals(button)) {
-    		deleteConfirm.open(target);
-    	} else {
-    		super.onClick(target, button);
-    	}
-    }
-    
-    @Override
-    public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-    }
-    
-    private static String[] getTicks(RoomPoll p) {
+	private static String removeMinified(String name_) {
+		String name = name_;
+		int idxOfExtension = name.lastIndexOf('.');
+		if (idxOfExtension > -1) {
+			String extension = name.substring(idxOfExtension);
+			name = name.substring(0, name.length() - extension.length() + 1);
+			if (name.endsWith(".min.")) {
+				name = name.substring(0, name.length() - 5) + extension;
+			}
+		}
+		return name;
+	}
+
+	@Override
+	public void onClick(AjaxRequestTarget target, DialogButton button) {
+		if (close.equals(button)) {
+			closeConfirm.open(target);
+		} else if (delete.equals(button)) {
+			deleteConfirm.open(target);
+		} else {
+			super.onClick(target, button);
+		}
+	}
+
+	@Override
+	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+	}
+
+	private static String[] getTicks(RoomPoll p) {
 		return p != null && RoomPoll.Type.numeric == p.getType()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
 				: new String[] {Application.getString(34), Application.getString(35)};
-    }
-    
+	}
+
 	private static Integer[] initValues(int size) {
 		Integer[] values = new Integer[size];
 		for (int i = 0; i < size; ++i) {
@@ -208,7 +207,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		}
 		return values;
 	}
-	
+
 	private static Integer[] getValues(RoomPoll p) {
 		Integer[] values = initValues(p != null && RoomPoll.Type.numeric == p.getType() ? 10 : 2);
 		if (p != null && RoomPoll.Type.numeric == p.getType()) {
@@ -222,64 +221,63 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		}
 		return values;
 	}
-	
+
 	private static PieChart<Integer> pieChart(RoomPoll p) {
-        PieChart<Integer> pieChart = new PieChart<Integer>(null);
+		PieChart<Integer> pieChart = new PieChart<>(null);
 		String[] ticks = getTicks(p);
 		Integer[] values = getValues(p);
-        for (int i = 0; i < values.length; ++i) {
-            pieChart.addValue(ticks[i], values[i]);
-        }
-        
-        pieChart.getSeriesDefaults().setRendererOptions(
-        		new RendererOptions().setHighlightMouseDown(true).setShowDataLabels(true)
-        			.setFill(false).setSliceMargin(4).setLineWidth(5));
+		for (int i = 0; i < values.length; ++i) {
+			pieChart.addValue(ticks[i], values[i]);
+		}
 
-        Highlighter h = new Highlighter();
-        h.setShow(true);
-        h.setFormatString("%s, %P");
-        h.setTooltipLocation(Location.ne);
-        h.setShowTooltip(true);
-        h.setUseAxesFormatters(false);
-        
-        pieChart.getChartConfiguration().setLegend(null).setHighlighter(h);
-        return pieChart;
+		pieChart.getSeriesDefaults().setRendererOptions(new RendererOptions().setHighlightMouseDown(true)
+				.setShowDataLabels(true).setFill(false).setSliceMargin(4).setLineWidth(5));
+
+		Highlighter h = new Highlighter();
+		h.setShow(true);
+		h.setFormatString("%s, %P");
+		h.setTooltipLocation(Location.ne);
+		h.setShowTooltip(true);
+		h.setUseAxesFormatters(false);
+
+		pieChart.getChartConfiguration().setLegend(null).setHighlighter(h);
+		return pieChart;
 	}
-	
+
 	private static BarChart<Integer> barChart(RoomPoll p) {
 		String[] ticks = getTicks(p);
-		BarChart<Integer> barChart = new BarChart<Integer>(null);
+		BarChart<Integer> barChart = new BarChart<>(null);
 		barChart.addValue(Arrays.asList(getValues(p)));
-        
-        barChart.getSeriesDefaults().setRendererOptions(
-        		new RendererOptions().setHighlightMouseDown(true).setShowDataLabels(true)
-        			.setFill(false).setSliceMargin(4).setLineWidth(5).setBarDirection("horizontal"));
 
-        Highlighter h = new Highlighter();
-        h.setShow(true);
-        h.setFormatString("%s, %P");
-        h.setTooltipLocation(Location.ne);
-        h.setShowTooltip(true);
-        h.setUseAxesFormatters(false);
-        
-        ChartConfiguration<Long> cfg = barChart.getChartConfiguration();
-        cfg.setLegend(null).setHighlighter(h);
-        cfg.axesInstance().setXaxis(null);
-        /*cfg.axesInstance().xAxisInstance().setRenderer(JqPlotResources.AxisTickRenderer);*/
-        cfg.axesInstance()
-        	.yAxisInstance()
-        	.setTicks(ticks)
-        	.setRenderer(JqPlotResources.CategoryAxisRenderer);
-        return barChart;
+		barChart.getSeriesDefaults()
+				.setRendererOptions(new RendererOptions().setHighlightMouseDown(true).setShowDataLabels(true)
+						.setFill(false).setSliceMargin(4).setLineWidth(5).setBarDirection("horizontal"));
+
+		Highlighter h = new Highlighter();
+		h.setShow(true);
+		h.setFormatString("%s, %P");
+		h.setTooltipLocation(Location.ne);
+		h.setShowTooltip(true);
+		h.setUseAxesFormatters(false);
+
+		ChartConfiguration<Long> cfg = barChart.getChartConfiguration();
+		cfg.setLegend(null).setHighlighter(h);
+		cfg.axesInstance().setXaxis(null);
+		/*
+		 * cfg.axesInstance().xAxisInstance().setRenderer(JqPlotResources.
+		 * AxisTickRenderer);
+		 */
+		cfg.axesInstance().yAxisInstance().setTicks(ticks).setRenderer(JqPlotResources.CategoryAxisRenderer);
+		return barChart;
 	}
-	
+
 	private class PollSelectForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
 		private final DropDownChoice<RoomPoll> select;
 
 		PollSelectForm(String id) {
 			super(id);
-			add((select = new DropDownChoice<RoomPoll>("polls", Model.of((RoomPoll)null), new ArrayList<RoomPoll>(), new ChoiceRenderer<RoomPoll>() {
+			add((select = new DropDownChoice<>("polls", Model.of((RoomPoll)null), new ArrayList<RoomPoll>(), new ChoiceRenderer<RoomPoll>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -303,7 +301,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		}
 
 		public void updateModel(IPartialPageRequestHandler handler) {
-			List<RoomPoll> list = new ArrayList<RoomPoll>();
+			List<RoomPoll> list = new ArrayList<>();
 			RoomPoll p = getBean(PollDao.class).getByRoom(roomId);
 			if (p != null) {
 				list.add(p);
@@ -316,7 +314,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			}
 		}
 	}
-	
+
 	private class PollResultsForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
 		private final String SIMPLE_CHART = Application.getString(1414);
@@ -324,7 +322,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		private final IModel<String> name = Model.of((String)null);
 		private final IModel<String> question = Model.of((String)null);
 		private final IModel<Integer> count = Model.of(0);
-		private final DropDownChoice<String> chartType = new DropDownChoice<String>("chartType", Model.of(SIMPLE_CHART), Arrays.asList(SIMPLE_CHART, PIE_CHART));
+		private final DropDownChoice<String> chartType = new DropDownChoice<>("chartType", Model.of(SIMPLE_CHART), Arrays.asList(SIMPLE_CHART, PIE_CHART));
 
 		PollResultsForm(String id) {
 			super(id, Model.of((RoomPoll)null));
@@ -342,7 +340,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			}));
 			add(chartDiv.setOutputMarkupId(true));
 		}
-		
+
 		public void updateModel(RoomPoll poll, boolean redraw, IPartialPageRequestHandler handler) {
 			setModelObject(poll);
 			name.setObject(poll == null ? "" : VoteDialog.getName(poll.getCreator()));
@@ -355,13 +353,13 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 				redraw(handler);
 			}
 		}
-		
+
 		private void redraw(IPartialPageRequestHandler handler) {
 			RoomPoll poll = getModelObject();
 			Chart<?> chart = SIMPLE_CHART.equals(chartType.getModelObject()) ? barChart(poll) : pieChart(poll);
 			handler.appendJavaScript(getScript(chart));
 		}
-		
+
 		@Override
 		protected void onDetach() {
 			name.detach();

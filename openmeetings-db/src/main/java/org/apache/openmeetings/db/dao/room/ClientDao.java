@@ -32,18 +32,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Persistence of client objects to database is only available if so configured!
- * 
+ *
  * @author sebawagner
  *
  */
 @Transactional
 public class ClientDao {
-	
+
 	@PersistenceContext
 	private EntityManager em;
-	
-	private static List<Long> EMPTY_LIST = new ArrayList<Long>(0);
-	
+
+	private static List<Long> EMPTY_LIST = new ArrayList<>(0);
+
 	public void cleanAllClients() {
 		em.createNamedQuery("deleteAll").executeUpdate();
 	}
@@ -53,34 +53,34 @@ public class ClientDao {
 			setParameter("server", server).
 			executeUpdate();
 	}
-	
+
 	public Client add(Client entity) {
 		em.persist(entity);
 		return entity;
 	}
-	
+
 	public Client update(Client entity) {
 		em.merge(entity);
 		return entity;
 	}
-	
+
 	public void delete(Client entity) {
 		Query q = em.createNamedQuery("deletedById");
 		q.setParameter("id", entity.getId());
 		q.executeUpdate();
 	}
-	
+
 	public void removeClientByServerAndStreamId(Server server, String streamId) {
 		Query q = em.createNamedQuery("deletedByServerAndStreamId");
 		q.setParameter("server", server);
 		q.setParameter("streamid", streamId);
 		q.executeUpdate();
 	}
-	
+
 	public int countClients() {
 		return em.createNamedQuery("countClients", Long.class).getSingleResult().intValue();
 	}
-	
+
 	public int countClientsByServer(Server server) {
 		TypedQuery<Long> q = em.createNamedQuery("countClientsByServer", Long.class);
 		q.setParameter("server", server);
@@ -95,9 +95,9 @@ public class ClientDao {
 	}
 
 	/**
-	 * Query.getSingleResult would throw an error if result is null, 
+	 * Query.getSingleResult would throw an error if result is null,
 	 * see: http://stackoverflow.com/questions/2002993/jpa-getsingleresult-or-null
-	 * 
+	 *
 	 * @param server
 	 * @param streamId
 	 * @return
@@ -130,14 +130,14 @@ public class ClientDao {
 
 	public List<Client> getClientsByServer(Server server) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByServer", Client.class);
-		q.setParameter("server", server);	
+		q.setParameter("server", server);
 		return q.getResultList();
 	}
 
 	public List<Client> getClients() {
 		return em.createNamedQuery("getClients", Client.class).getResultList();
 	}
-	
+
 	public List<Client> getClientsWithServer() {
 		return em.createNamedQuery("getClientsWithServer", Client.class).getResultList();
 	}
@@ -145,19 +145,19 @@ public class ClientDao {
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByUserId", Client.class);
 		q.setParameter("server", server);
-		q.setParameter("userId", userId);	
+		q.setParameter("userId", userId);
 		return q.getResultList();
 	}
 
 	public List<Client> getClientsByRoomId(Long roomId) {
 		TypedQuery<Client> q = em.createNamedQuery("getClientsByRoomId", Client.class);
-		q.setParameter("roomId", roomId);	
+		q.setParameter("roomId", roomId);
 		return q.getResultList();
 	}
 
 	/**
 	 * returns a list of servers or an empty list in case no roomIds are found
-	 * 
+	 *
 	 * @param server
 	 * @return
 	 */
@@ -166,7 +166,7 @@ public class ClientDao {
 		q.setParameter("server", server);
 		@SuppressWarnings("unchecked")
 		List<Long> resultList = q.getResultList();
-		//if the result list contains only a value null, it means it 
+		//if the result list contains only a value null, it means it
 		//was empty and no roomid's have been found
 		if (resultList.size() == 1 && resultList.get(0) == null) {
 			return EMPTY_LIST;

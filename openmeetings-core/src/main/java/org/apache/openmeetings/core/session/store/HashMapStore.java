@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 /**
  * Stores the session in the memory.
  * Is NOT designed to be clustered across multiple servers.
- * 
+ *
  * <ul>
  * <li>client by streamid</li>
  * <li>client by publicSID</li>
@@ -45,20 +45,20 @@ import org.slf4j.Logger;
  * <li>clients by roomId</li>
  * <li>roomIds by server</li>
  * </ul>
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 public class HashMapStore implements IClientPersistenceStore {
 	protected static final Logger log = Red5LoggerFactory.getLogger(HashMapStore.class, webAppRootKey);
-	
+
 	private Map<String, Client> clientsByStreamId = new ConcurrentHashMap<>();
 
 	@Override
 	public void clear() {
 		clientsByStreamId = new ConcurrentHashMap<>();
 	}
-	
+
 	@Override
 	public void put(String streamId, Client rcl) {
 		clientsByStreamId.put(rcl.getStreamid(), rcl);
@@ -73,7 +73,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	public Client get(Server server, String streamId) {
 		return clientsByStreamId.get(streamId);
 	}
-	
+
 	@Override
 	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
 		List<Client> clientList = new ArrayList<>();
@@ -85,7 +85,7 @@ public class HashMapStore implements IClientPersistenceStore {
 		}
 		return clientList;
 	}
-	
+
 	@Override
 	public Map<Long,List<Client>> getClientsByPublicSID(String publicSID) {
 		Map<Long,List<Client>> clientMapList = new HashMap<>();
@@ -99,24 +99,24 @@ public class HashMapStore implements IClientPersistenceStore {
 		clientMapList.put(null, clientList);
 		return clientMapList;
 	}
-	
+
 	@Override
 	public Collection<Client> getClients() {
 		return clientsByStreamId.values();
 	}
-	
+
 	@Override
 	public Collection<Client> getClientsWithServer() {
 		//there is no server object to be loaded, memory cache means
 		//there is no cluster enabled
 		return getClients();
 	}
-	
+
 	@Override
 	public Collection<Client> getClientsByServer(Server server) {
 		return clientsByStreamId.values();
 	}
-	
+
 	@Override
 	public List<Client> getClientsByUserId(Server server, Long userId) {
 		List<Client> clientList = new ArrayList<>();
@@ -128,7 +128,7 @@ public class HashMapStore implements IClientPersistenceStore {
 		}
 		return clientList;
 	}
-	
+
 	@Override
 	public  List<Client> getClientsByRoomId(Long roomId) {
 		List<Client> clientList = new ArrayList<>();
@@ -150,7 +150,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	public int size() {
 		return clientsByStreamId.size();
 	}
-	
+
 	@Override
 	public int sizeByServer(Server server) {
 		return clientsByStreamId.size();
@@ -160,14 +160,14 @@ public class HashMapStore implements IClientPersistenceStore {
 	public Collection<Client> values() {
 		return clientsByStreamId.values();
 	}
-	
+
 	public int getTotalNumberOfSessions() {
 		return clientsByStreamId.size();
 	}
-	
+
 	/**
 	 * Print some session statistics to the debug out
-	 * 
+	 *
 	 * @param detailLevel
 	 */
 	public void printDebugInformation(List<DEBUG_DETAILS> detailLevel) {
@@ -201,7 +201,7 @@ public class HashMapStore implements IClientPersistenceStore {
 				rooms.add(roomId);
 			}
 		}
-		return new ArrayList<Long>(rooms);
+		return new ArrayList<>(rooms);
 	}
 
 }

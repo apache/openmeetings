@@ -282,7 +282,7 @@ public class Room implements IDataProviderEntity {
 	@JoinColumn(name = "roomId")
 	@ForeignKey(enabled = true)
 	@ElementList(name = "room_moderators", required=false)
-	private List<RoomModerator> moderators = new ArrayList<RoomModerator>();
+	private List<RoomModerator> moderators = new ArrayList<>();
 
 	@Column(name = "sip_enabled", nullable = false)
 	@Element(data = true, required = false)

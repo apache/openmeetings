@@ -90,7 +90,7 @@ public class LangPanel extends AdminPanel {
 
 		// Create feedback panels
 		add(feedback.setOutputMarkupId(true));
-		language = new AbstractMap.SimpleEntry<Long, Locale>(1L, Locale.ENGLISH);
+		language = new AbstractMap.SimpleEntry<>(1L, Locale.ENGLISH);
 
 		final LabelsForm form = new LabelsForm("form", this, new StringLabel(null, null));
 		form.showNewRecord();
@@ -148,10 +148,10 @@ public class LangPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<StringLabel> container = new DataViewContainer<StringLabel>(listContainer, dataView, navigator);
+		DataViewContainer<StringLabel> container = new DataViewContainer<>(listContainer, dataView, navigator);
 		container
-			.addLink(new OmOrderByBorder<StringLabel>("orderByName", "key", container))
-			.addLink(new OmOrderByBorder<StringLabel>("orderByValue", "value", container));
+			.addLink(new OmOrderByBorder<>("orderByName", "key", container))
+			.addLink(new OmOrderByBorder<>("orderByValue", "value", container));
 		add(container.getLinks());
 		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);

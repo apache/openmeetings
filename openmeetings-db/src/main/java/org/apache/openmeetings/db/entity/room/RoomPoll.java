@@ -65,30 +65,30 @@ public class RoomPoll implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int YES_NO_TYPE_ID = 1;
 	public static final int NUMERIC_TYPE_ID = 2;
-	
+
 	@XmlType(namespace="org.apache.openmeetings.room.poll.type")
 	public enum Type {
 		yesNo
 		, numeric;
 		private int id;
-		
+
 		Type() {} //default;
 		Type(int id) {
 			this.id = id;
 		}
-		
+
 		public int getId() {
 			return id;
 		}
-		
+
 		public static Type get(Long type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Type get(Integer type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Type get(int type) {
 			Type rt = Type.yesNo;
 			switch (type) {
@@ -101,16 +101,16 @@ public class RoomPoll implements IDataProviderEntity {
 			return rt;
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@Column(name = "name")
 	@Element(name = "pollname", data = true, required = false)
 	private String name;
-	
+
 	@Column(name = "question")
 	@Element(name = "pollquestion", data = true, required = false)
 	private String question;
@@ -122,12 +122,12 @@ public class RoomPoll implements IDataProviderEntity {
 	@Column(name = "archived", nullable = false)
 	@Element(data = true, required = false)
 	private boolean archived;
-	
+
 	@Column(name = "type")
 	@Element(name = "polltypeid", data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
-	
+
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
@@ -195,7 +195,7 @@ public class RoomPoll implements IDataProviderEntity {
 	 */
 	public List<RoomPollAnswer> getAnswers() {
 		if (answers == null) {
-			answers = new LinkedList<RoomPollAnswer>();
+			answers = new LinkedList<>();
 		}
 		return answers;
 	}

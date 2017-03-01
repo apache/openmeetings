@@ -27,14 +27,14 @@ import org.apache.wicket.resource.loader.IStringResourceLoader;
 
 /**
  * Map property values to OpenMeetings labelid's and get the string
- * 
+ *
  * @author swagner
  *
  */
 public class LabelResourceLoader implements IStringResourceLoader {
-	
-	private static Map<String,Long> STRING_LABEL_MAPPING = new HashMap<String,Long>();
-	
+
+	private static Map<String,Long> STRING_LABEL_MAPPING = new HashMap<>();
+
 	static {
 		STRING_LABEL_MAPPING.put("PagingNavigator.first", 368L);
 		STRING_LABEL_MAPPING.put("PagingNavigator.previous", 369L);
@@ -53,7 +53,7 @@ public class LabelResourceLoader implements IStringResourceLoader {
 			Locale locale, String style, String variation) {
 		return getStringByPropertyKey(key);
 	}
-	
+
 	private static String getStringByPropertyKey(String key) {
 		Long labelId = STRING_LABEL_MAPPING.get(key);
 		if (labelId == null) {

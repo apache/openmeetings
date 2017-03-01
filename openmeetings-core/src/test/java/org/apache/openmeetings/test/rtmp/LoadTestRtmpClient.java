@@ -53,16 +53,16 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 			this.ended = ended;
 		}
 	}
-	
+
 	private int counterCalls = 0; // a call is always 2 steps
-	private Map<Integer, CallObject> calls = new HashMap<Integer, CallObject>();
+	private Map<Integer, CallObject> calls = new HashMap<>();
 	private boolean isConnected = false;
 	private final int instanceId;
 
 	public LoadTestRtmpClient(int instanceId) {
 		this.instanceId = instanceId;
 	}
-	
+
 	public boolean performCall() {
 
 		// System.err.println("performCall " + isConnected);
@@ -70,7 +70,7 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 		if (!isConnected) {
 			return false;
 		}
-		
+
 		if (counterCalls % 2 == 0) {
 
 			if (counterCalls > 10) {
@@ -82,7 +82,7 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 			System.err.println("Rest o do new call " + counterCalls);
 			counterCalls++;
 
-			Map<String, Integer> map = new HashMap<String, Integer>();
+			Map<String, Integer> map = new HashMap<>();
 			map.put("instanceId", instanceId);
 			map.put("count", counterCalls);
 			calls.put(counterCalls, new CallObject(new Date()));
@@ -91,12 +91,12 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 		} else {
 			System.err.println("Call running " + counterCalls);
 		}
-		
-		
-		
+
+
+
 		return false;
 	}
-	
+
 	public double getAverageTime() {
 		long overallTime = 0L;
 
@@ -117,7 +117,7 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 
 		return averageTime;
 	}
-	
+
 	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		String method = call == null ? null : call.getServiceMethodName();
@@ -162,11 +162,11 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 	@Override
 	public void onStreamEvent(Notify notify) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public int getNumberOfCalls() {
 		return calls.size();
 	}
-	
+
 }

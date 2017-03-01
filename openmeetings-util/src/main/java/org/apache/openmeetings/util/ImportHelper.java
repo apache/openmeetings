@@ -22,21 +22,21 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * 
+ *
  * Get some of the default values for the upload
- * 
+ *
  * @author solomax, swagner
- * 
+ *
  */
 public class ImportHelper {
 	/**
 	 * returns a list of all timezones as a {@link Map}
-	 * 
+	 *
 	 * @param tzList
 	 * @return
 	 */
 	public static Map<String, String> getAllTimeZones(String ... tzList) {
-		Map<String, String> result = new LinkedHashMap<String, String>();
+		Map<String, String> result = new LinkedHashMap<>();
 
 		for (String omTimeZone : tzList) {
 			result.put(omTimeZone, omTimeZone);

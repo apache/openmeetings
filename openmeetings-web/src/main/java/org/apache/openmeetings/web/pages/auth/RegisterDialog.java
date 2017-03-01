@@ -71,7 +71,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 	private DialogButton registerBtn = new DialogButton("register", Application.getString(121));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
-	private final DropDownChoice<String> tzDropDown = new DropDownChoice<String>("tz", tzModel, AVAILABLE_TIMEZONES);
+	private final DropDownChoice<String> tzDropDown = new DropDownChoice<>("tz", tzModel, AVAILABLE_TIMEZONES);
 	private RegisterForm form;
 	private SignInDialog s;
 	private String firstName;
@@ -230,13 +230,13 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			super(id);
 			add(feedback.setOutputMarkupId(true));
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			add(firstNameField = new RequiredTextField<String>("firstName", new PropertyModel<String>(
+			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<String>(
 					RegisterDialog.this, "firstName")));
 			firstNameField.setLabel(Model.of(Application.getString(117)));
-			add(lastNameField = new RequiredTextField<String>("lastName", new PropertyModel<String>(
+			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<String>(
 					RegisterDialog.this, "lastName")));
 			lastNameField.setLabel(Model.of(Application.getString(118)));
-			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(RegisterDialog.this,
+			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(RegisterDialog.this,
 					"login")));
 			loginField.setLabel(Model.of(Application.getString(114)));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao)));
@@ -246,7 +246,7 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao)));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
 			confirmPassword.setLabel(Model.of(Application.getString(116)));
-			add(emailField = new RequiredTextField<String>("email", new PropertyModel<String>(RegisterDialog.this,
+			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this,
 					"email")));
 			emailField.setLabel(Model.of(Application.getString(119)));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance());

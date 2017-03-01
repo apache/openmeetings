@@ -32,9 +32,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 
 /**
  * Add/edit/delete {@link StringLabel}
- * 
+ *
  * @author solomax, swagner
- * 
+ *
  */
 public class LabelsForm extends AdminBaseForm<StringLabel> {
 	private static final long serialVersionUID = 1L;
@@ -42,11 +42,11 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 	private String key, value;
 
 	public LabelsForm(String id, LangPanel panel, StringLabel label) {
-		super(id, new CompoundPropertyModel<StringLabel>(label));
+		super(id, new CompoundPropertyModel<>(label));
 		this.panel = panel;
 		key = label.getKey();
 		value = label.getValue();
-		
+
 		add(new RequiredTextField<String>("key"));
 		add(new TextArea<String>("value"));
 	}

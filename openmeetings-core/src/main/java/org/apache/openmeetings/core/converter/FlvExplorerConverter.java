@@ -58,7 +58,7 @@ public class FlvExplorerConverter extends BaseConverter {
 	}
 
 	public List<ConverterProcessResult> convertToMP4(FileExplorerItem f, String ext) {
-		List<ConverterProcessResult> logs = new ArrayList<ConverterProcessResult>();
+		List<ConverterProcessResult> logs = new ArrayList<>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);
 			f.setType(Type.Video);

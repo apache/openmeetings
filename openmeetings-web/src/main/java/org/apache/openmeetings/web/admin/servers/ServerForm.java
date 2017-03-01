@@ -41,16 +41,16 @@ import org.apache.wicket.util.time.Duration;
 
 /**
  * Form component to insert/update/delete {@link Server}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class ServerForm extends AdminBaseForm<Server> {
 	private final WebMarkupContainer listContainer;
 	private static final long serialVersionUID = 1L;
 
 	public ServerForm(String id, WebMarkupContainer listContainer, final Server server) {
-		super(id, new CompoundPropertyModel<Server>(server));
+		super(id, new CompoundPropertyModel<>(server));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 

@@ -97,7 +97,7 @@ public class MessagesContactsPanel extends UserPanel {
 	private final Label pendingContacts = new Label("pendingContacts", Model.of(0L));
 	private final Label allContacts = new Label("allContacts", Model.of(0L));
 	private final IModel<Long> selectedFolderModel = Model.of(INBOX_FOLDER_ID);
-	private final IModel<List<PrivateMessageFolder>> foldersModel = new ListModel<PrivateMessageFolder>(null);
+	private final IModel<List<PrivateMessageFolder>> foldersModel = new ListModel<>(null);
 	private final WebMarkupContainer inbox = new WebMarkupContainer("inbox");
 	private final WebMarkupContainer sent = new WebMarkupContainer("sent");
 	private final WebMarkupContainer trash = new WebMarkupContainer("trash");
@@ -106,16 +106,16 @@ public class MessagesContactsPanel extends UserPanel {
 	private final WebMarkupContainer buttons = new WebMarkupContainer("buttons");
 	private final WebMarkupContainer contacts = new WebMarkupContainer("contacts");
 	private final DataViewContainer<PrivateMessage> dataContainer;
-	private final Set<Long> selectedMessages = new HashSet<Long>();
-	private final Set<Long> allMessages = new HashSet<Long>();
-	private final Set<Long> readMessages = new HashSet<Long>();
-	private final Set<Long> unreadMessages = new HashSet<Long>();
+	private final Set<Long> selectedMessages = new HashSet<>();
+	private final Set<Long> allMessages = new HashSet<>();
+	private final Set<Long> readMessages = new HashSet<>();
+	private final Set<Long> unreadMessages = new HashSet<>();
 	private final Button toInboxBtn = new Button("toInboxBtn");
 	private final Button deleteBtn = new Button("deleteBtn");
 	private final Button readBtn = new Button("readBtn");
 	private final Button unreadBtn = new Button("unreadBtn");
 	private final FixedHeaderTableBehavior fixedTable = new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100));
-	private final DropDownChoice<Integer> selectDropDown = new DropDownChoice<Integer>(
+	private final DropDownChoice<Integer> selectDropDown = new DropDownChoice<>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
 		, new ChoiceRenderer<Integer>() {
@@ -132,7 +132,7 @@ public class MessagesContactsPanel extends UserPanel {
 			}
 		});
 	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
-	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<PrivateMessageFolder>("msgMove", Model.of(NOT_MOVE_FOLDER)
+	private final DropDownChoice<PrivateMessageFolder> moveDropDown = new DropDownChoice<>("msgMove", Model.of(NOT_MOVE_FOLDER)
 		, Arrays.asList(NOT_MOVE_FOLDER)
 		, new ChoiceRenderer<PrivateMessageFolder>() {
 			private static final long serialVersionUID = 1L;
@@ -245,7 +245,7 @@ public class MessagesContactsPanel extends UserPanel {
 	}
 
 	private void updateMoveModel() {
-		List<PrivateMessageFolder> list = new ArrayList<PrivateMessageFolder>();
+		List<PrivateMessageFolder> list = new ArrayList<>();
 		list.add(NOT_MOVE_FOLDER);
 		list.addAll(foldersModel.getObject());
 		moveDropDown.setChoices(list);
@@ -423,11 +423,11 @@ public class MessagesContactsPanel extends UserPanel {
 				target.add(container);
 			}
 		};
-		dataContainer = new DataViewContainer<PrivateMessage>(container, dv, navigator);
-		dataContainer.addLink(new OmOrderByBorder<PrivateMessage>("orderById", "id", dataContainer))
-			.addLink(new OmOrderByBorder<PrivateMessage>("orderByFrom", "from.lastname", dataContainer))
-			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySubject", "subject", dataContainer))
-			.addLink(new OmOrderByBorder<PrivateMessage>("orderBySend", "inserted", dataContainer));
+		dataContainer = new DataViewContainer<>(container, dv, navigator);
+		dataContainer.addLink(new OmOrderByBorder<>("orderById", "id", dataContainer))
+			.addLink(new OmOrderByBorder<>("orderByFrom", "from.lastname", dataContainer))
+			.addLink(new OmOrderByBorder<>("orderBySubject", "subject", dataContainer))
+			.addLink(new OmOrderByBorder<>("orderBySend", "inserted", dataContainer));
 		add(dataContainer.getLinks());
 		add(navigator);
 

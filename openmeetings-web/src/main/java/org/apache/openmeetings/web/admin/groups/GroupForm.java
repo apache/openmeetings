@@ -85,14 +85,14 @@ public class GroupForm extends AdminBaseForm<Group> {
 	}
 
 	public GroupForm(String id, WebMarkupContainer groupList, Group group) {
-		super(id, new CompoundPropertyModel<Group>(group));
+		super(id, new CompoundPropertyModel<>(group));
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 
 		usersPanel = new GroupUsersPanel("users", getGroupId());
 		add(usersPanel);
 
-		add(userToadd = new Select2Choice<User>("user2add", Model.of((User)null), new AdminUserChoiceProvider() {
+		add(userToadd = new Select2Choice<>("user2add", Model.of((User)null), new AdminUserChoiceProvider() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

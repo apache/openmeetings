@@ -421,7 +421,7 @@ public class RoomWebService {
 	@GET
 	@Path("/counters")
 	public List<RoomCountBean> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
-		List<RoomCountBean> roomBeans = new ArrayList<RoomCountBean>();
+		List<RoomCountBean> roomBeans = new ArrayList<>();
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {

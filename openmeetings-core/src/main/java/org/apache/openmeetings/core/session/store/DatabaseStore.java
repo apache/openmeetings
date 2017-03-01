@@ -30,15 +30,15 @@ import org.apache.openmeetings.db.entity.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DatabaseStore implements IClientPersistenceStore {
-	
+
 	@Autowired
 	private ClientDao clientDao;
-	
+
 	@Override
 	public void clear() {
 		clientDao.cleanAllClients();
 	}
-	
+
 	@Override
 	public void put(String streamId, Client rcl) {
 		if (rcl.getId() != null) {
@@ -65,20 +65,20 @@ public class DatabaseStore implements IClientPersistenceStore {
 
 	@Override
 	public Map<Long, List<Client>> getClientsByPublicSID(String publicSID) {
-		Map<Long, List<Client>> returnMap = new HashMap<Long, List<Client>>();
+		Map<Long, List<Client>> returnMap = new HashMap<>();
 		List<Client> clientList = clientDao.getClientsByPublicSID(publicSID);
 		for (Client cl : clientList) {
 			if (cl.getServer() == null) {
 				List<Client> clList = returnMap.get(null);
 				if (clList == null) {
-					clList = new ArrayList<Client>();
+					clList = new ArrayList<>();
 				}
 				clList.add(cl);
 				returnMap.put(null, clList);
 			} else {
 				List<Client> clList = returnMap.get(cl.getServer().getId());
 				if (clList == null) {
-					clList = new ArrayList<Client>();
+					clList = new ArrayList<>();
 				}
 				clList.add(cl);
 				returnMap.put(cl.getServer().getId(), clList);
@@ -86,12 +86,12 @@ public class DatabaseStore implements IClientPersistenceStore {
 		}
 		return returnMap;
 	}
-	
+
 	@Override
 	public Collection<Client> getClients() {
 		return clientDao.getClients();
 	}
-	
+
 	@Override
 	public Collection<Client> getClientsWithServer() {
 		return clientDao.getClientsWithServer();

@@ -18,9 +18,17 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import net.fortuna.ical4j.data.CalendarOutputter;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
+import static javax.servlet.http.HttpServletResponse.SC_CREATED;
+import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
+import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -46,17 +54,9 @@ import org.osaf.caldav4j.util.UrlUtils;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_CREATED;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_NO_CONTENT;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_NOT_FOUND;
+import net.fortuna.ical4j.data.CalendarOutputter;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
 
 /**
  * Class which handles the Syncing through the use of Etags.
@@ -86,7 +86,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 
 		CompFilter vcalendar = new CompFilter(Calendar.VCALENDAR);
 		vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
-		
+
 		CalDAVReportMethod reportMethod = null;
 		try {
 			CalendarQuery query = new CalendarQuery(properties, vcalendar, map.isEmpty() ? new CalendarData() : null, false, false);
@@ -96,7 +96,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 				MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatus().getResponses();
 				if (map.isEmpty()) {
 					//Initializing the Calendar for the first time.
-	
+
 					//Parse the responses into Appointments
 					for (MultiStatusResponse response : multiStatusResponses) {
 						if (response.getStatus()[0].getStatusCode() == SC_OK) {
@@ -104,13 +104,13 @@ public class EtagsHandler extends AbstractCalendarHandler {
 							Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
 							Appointment appointments = utils.parseCalendartoAppointment(
 									ical, response.getHref(), etag, calendar);
-	
+
 							appointmentDao.update(appointments, ownerId);
 						}
 					}
 				} else {
 					//Calendar has been inited before
-					List<String> currenthrefs = new ArrayList<String>();
+					List<String> currenthrefs = new ArrayList<>();
 
 					for (MultiStatusResponse response : multiStatusResponses) {
 						if (response.getStatus()[0].getStatusCode() == SC_OK) {

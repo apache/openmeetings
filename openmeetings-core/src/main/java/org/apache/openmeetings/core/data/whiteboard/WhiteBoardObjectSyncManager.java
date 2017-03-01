@@ -29,13 +29,13 @@ import org.slf4j.Logger;
 
 /**
  * Memory based, configured as singleton in spring configuration
- * 
+ *
  * @author sebawagner
  *
  */
 public class WhiteBoardObjectSyncManager {
-	private Map<Long, Map<String, WhiteboardSyncLockObject>> whiteBoardSyncList = new ConcurrentHashMap<Long, Map<String, WhiteboardSyncLockObject>>();
-	private Map<Long, Map<String, Map<String, WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new ConcurrentHashMap<Long, Map<String, Map<String, WhiteboardSyncLockObject>>>();
+	private Map<Long, Map<String, WhiteboardSyncLockObject>> whiteBoardSyncList = new ConcurrentHashMap<>();
+	private Map<Long, Map<String, Map<String, WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new ConcurrentHashMap<>();
 
 	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectSyncManager.class, webAppRootKey);
 

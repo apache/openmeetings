@@ -89,7 +89,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private TimezoneUtil timezoneUtil;
 
 	public static Set<Right> getDefaultRights() {
-		Set<Right> rights = new HashSet<User.Right>();
+		Set<Right> rights = new HashSet<>();
 		rights.add(Right.Login);
 		rights.add(Right.Dashboard);
 		rights.add(Right.Room);
@@ -157,7 +157,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
 				, getAdditionalWhere(filterContacts, currentUserId, params), sort, searchFields), User.class);
 		q.setFirstResult(start);
@@ -193,7 +193,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public long count(String search, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, true
 				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
 		setAdditionalParams(q, params);
@@ -210,7 +210,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	//This is AdminDao method
 	public List<User> get(String search, boolean excludeContacts, int first, int count) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
 				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
 		setAdditionalParams(q, params);
@@ -220,7 +220,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
 				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), User.class);
 		setAdditionalParams(q, params);
@@ -530,7 +530,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	private <T> TypedQuery<T> getUserProfileQuery(Class<T> clazz, Long userId, String text, String offers, String search, String orderBy, boolean asc) {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		boolean filterContacts = true;
 		boolean count = clazz.isAssignableFrom(Long.class);
 
@@ -592,7 +592,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public Set<Right> getRights(Long id) {
-		Set<Right> rights = new HashSet<Right>();
+		Set<Right> rights = new HashSet<>();
 
 		if (id == null) {
 			return rights;

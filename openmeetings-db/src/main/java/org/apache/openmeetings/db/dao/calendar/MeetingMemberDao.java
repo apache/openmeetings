@@ -57,11 +57,11 @@ public class MeetingMemberDao {
 	public Set<Long> getMeetingMemberIdsByAppointment(Long appointmentId) {
 		log.debug("getMeetingMemberIdsByAppointment: " + appointmentId);
 
-		return new HashSet<Long>(em.createNamedQuery("getMeetingMemberIdsByAppointment", Long.class)
+		return new HashSet<>(em.createNamedQuery("getMeetingMemberIdsByAppointment", Long.class)
 				.setParameter("id", appointmentId)
 				.getResultList());
 	}
-	
+
 	/**
 	 * Updating MeetingMember
 	 */

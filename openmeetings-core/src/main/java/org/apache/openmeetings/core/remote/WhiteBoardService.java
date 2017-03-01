@@ -200,7 +200,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						rcl.setCanDraw(canDraw);
 						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
-						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
@@ -229,7 +229,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						rcl.setCanShare(canShare);
 						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
-						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
@@ -258,7 +258,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						rcl.setCanRemote(canRemote);
 						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
-						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateDrawStatus");
 						newMessage.put(1, rcl);
 						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);
@@ -288,7 +288,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 						rcl.setCanGiveAudio(canGiveAudio);
 						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
 
-						HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateGiveAudioStatus");
 						newMessage.put(1, rcl);
 						scopeAdapter.sendMessageWithClientWithSyncObject(newMessage, true);

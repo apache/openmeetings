@@ -85,7 +85,7 @@ public class GeneralUserForm extends Form<User> {
 		passwordField.setResetPassword(false).setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
 
 		updateModelObject(getModelObject(), isAdminForm);
-		add(new DropDownChoice<Salutation>("salutation"
+		add(new DropDownChoice<>("salutation"
 				, Arrays.asList(Salutation.values())
 				, new ChoiceRenderer<Salutation>() {
 					private static final long serialVersionUID = 1L;
@@ -103,11 +103,11 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
 
-		add(new DropDownChoice<String>("timeZoneId", AVAILABLE_TIMEZONES));
+		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 
 		add(new LanguageDropDown("languageId"));
 
-		add(email = new RequiredTextField<String>("address.email"));
+		add(email = new RequiredTextField<>("address.email"));
 		email.setLabel(Model.of(Application.getString(137)));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("address.phone"));
@@ -132,7 +132,7 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new Select2MultiChoice<GroupUser>("groupUsers", null, new ChoiceProvider<GroupUser>() {
+		add(new Select2MultiChoice<>("groupUsers", null, new ChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -157,11 +157,11 @@ public class GeneralUserForm extends Form<User> {
 
 			@Override
 			public Collection<GroupUser> toChoices(Collection<String> _ids) {
-				List<Long> ids = new ArrayList<Long>();
+				List<Long> ids = new ArrayList<>();
 				for (String id : _ids) {
 					ids.add(Long.parseLong(id));
 				}
-				List<GroupUser> list = new ArrayList<GroupUser>();
+				List<GroupUser> list = new ArrayList<>();
 				User u = GeneralUserForm.this.getModelObject();
 				for (Group g : getBean(GroupDao.class).get(ids)) {
 					GroupUser gu = new GroupUser(g, u);

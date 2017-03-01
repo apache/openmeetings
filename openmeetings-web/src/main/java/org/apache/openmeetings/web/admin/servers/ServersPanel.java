@@ -37,15 +37,15 @@ import org.apache.wicket.markup.repeater.Item;
 
 /**
  * Form component with list and form to manipulate {@link Server}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class ServersPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private ServerForm form;
-	
+
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
@@ -56,7 +56,7 @@ public class ServersPanel extends AdminPanel {
 	public ServersPanel(String id) {
 		super(id);
 		SearchableDataView<Server> dataView = new SearchableDataView<Server>("serverList",
-				new SearchableDataProvider<Server>(ServerDao.class)) {
+				new SearchableDataProvider<>(ServerDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -79,7 +79,7 @@ public class ServersPanel extends AdminPanel {
 				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));
 			}
 		};
-		
+
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 1L;
@@ -89,16 +89,16 @@ public class ServersPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<Server> container = new DataViewContainer<Server>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Server>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<Server>("orderByName", "name", container))
-			.addLink(new OmOrderByBorder<Server>("orderByAddress", "address", container));
+		DataViewContainer<Server> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<>("orderByAddress", "address", container));
 		add(container.getLinks());
 		add(navigator);
-		
+
 		form = new ServerForm("form", listContainer, new Server());
 		form.showNewRecord();
 		add(form);
-		
+
 	}
 }

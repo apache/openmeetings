@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
@@ -44,9 +45,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provides method to manipulate {@link User}
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 public class UserService implements IUserService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserService.class, webAppRootKey);
@@ -66,7 +67,7 @@ public class UserService implements IUserService {
 
 	/**
 	 * get user by id, admin only
-	 * 
+	 *
 	 * @param sid
 	 * @param userId
 	 * @return User with the id given
@@ -81,7 +82,7 @@ public class UserService implements IUserService {
 
 	/**
 	 * refreshes the current SID
-	 * 
+	 *
 	 * @param SID
 	 * @return "ok" string in case of success, "error" string in case of the error
 	 */
@@ -97,7 +98,7 @@ public class UserService implements IUserService {
 
 	/**
 	 * gets a whole user-list(admin-role only)
-	 * 
+	 *
 	 * @param sid
 	 * @param start
 	 * @param max
@@ -115,7 +116,7 @@ public class UserService implements IUserService {
 	/**
 	 * kicks a user from the server, also from slaves if needed, this method is
 	 * only invoked by the connection administration UI
-	 * 
+	 *
 	 * @param sid
 	 * @param streamid
 	 * @param serverId
@@ -141,7 +142,7 @@ public class UserService implements IUserService {
 					}
 					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
-					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
+					Map<Integer, String> messageObj = new HashMap<>();
 					messageObj.put(0, "kick");
 					scopeApplicationAdapter.sendMessageById(messageObj, streamid, currentScope);
 
@@ -153,7 +154,7 @@ public class UserService implements IUserService {
 					Client rcl = sessionManager.getClientByStreamId(
 							streamid, server);
 					slaveHTTPConnectionManager.kickSlaveUser(server, rcl.getPublicSID());
-					
+
 					// true means only the REST call is performed, it is no
 					// confirmation that the user is really kicked from the
 					// slave
@@ -170,10 +171,10 @@ public class UserService implements IUserService {
 	 * Kick a user by its publicSID.<br/>
 	 * <br/>
 	 * <i>Note:</i>
-	 * This method will not perform a call to the slave, cause this call can only be 
+	 * This method will not perform a call to the slave, cause this call can only be
 	 * invoked from inside the conference room, that means all clients are on the
 	 * same server, no matter if clustered or not.
-	 * 
+	 *
 	 * @param sid
 	 * @param publicSID
 	 * @return - true in case user have sufficient permissions, null otherwise
@@ -194,7 +195,7 @@ public class UserService implements IUserService {
 				}
 				IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
-				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
+				Map<Integer, String> messageObj = new HashMap<>();
 				messageObj.put(0, "kick");
 
 				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);

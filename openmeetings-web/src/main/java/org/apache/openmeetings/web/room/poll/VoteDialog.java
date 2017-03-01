@@ -54,7 +54,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  */
 public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
-	private final static List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added 
+	private final static List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added
 	private final PollAnswerForm form;
 	private final DialogButton vote = new DialogButton("vote", Application.getString(32));
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
@@ -63,13 +63,13 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 
 	public VoteDialog(String id) {
 		super(id, Application.getString(18));
-		add(form = new PollAnswerForm("form", new CompoundPropertyModel<RoomPollAnswer>(new RoomPollAnswer())));
+		add(form = new PollAnswerForm("form", new CompoundPropertyModel<>(new RoomPollAnswer())));
 	}
-	
+
 	static String getName(User u) {
 		return u == null ? "" : (getUserId().equals(u.getId()) ? Application.getString(1411) : u.getFirstname() + " " + u.getLastname());
 	}
-	
+
 	public void updateModel(IPartialPageRequestHandler target, RoomPoll rp) {
 		RoomPollAnswer a = new RoomPollAnswer();
 		a.setRoomPoll(rp);
@@ -82,12 +82,12 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		form.typeInt.setVisible(typeNum);
 		target.add(form);
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(vote, cancel);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#getSubmitButton()
 	 */
@@ -122,7 +122,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		a.getRoomPoll().getAnswers().add(a);
 		getBean(PollDao.class).update(a.getRoomPoll());
 	}
-	
+
 	@Override
 	protected void onDetach() {
 		user.detach();
@@ -139,9 +139,9 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 			add(new Label("user", user));
 			add(new Label("roomPoll.question"));
 			add(typeBool.add(new RadioGroup<Boolean>("answer").setRequired(true)
-						.add(new Radio<Boolean>("true", Model.of(Boolean.TRUE))).add(new Radio<Boolean>("false", Model.of(Boolean.FALSE)))
+						.add(new Radio<>("true", Model.of(Boolean.TRUE))).add(new Radio<>("false", Model.of(Boolean.FALSE)))
 				).setOutputMarkupPlaceholderTag(true).setVisible(false));
-			add(typeInt.add(new DropDownChoice<Integer>("pointList", answers).setRequired(true))
+			add(typeInt.add(new DropDownChoice<>("pointList", answers).setRequired(true))
 					.setOutputMarkupPlaceholderTag(true).setVisible(false));
 		}
 	}

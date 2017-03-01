@@ -37,15 +37,15 @@ import org.apache.wicket.markup.repeater.Item;
 
 /**
  * {@link AdminPanel} to list and modify {@link LdapConfig}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class LdapsPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private LdapForm form;
-	
+
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
@@ -56,7 +56,7 @@ public class LdapsPanel extends AdminPanel {
 	public LdapsPanel(String id) {
 		super(id);
 		SearchableDataView<LdapConfig> dataView = new SearchableDataView<LdapConfig>("ldapList"
-			, new SearchableDataProvider<LdapConfig>(LdapConfigDao.class)) {
+			, new SearchableDataProvider<>(LdapConfigDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -88,13 +88,13 @@ public class LdapsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<LdapConfig> container = new DataViewContainer<LdapConfig>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<LdapConfig>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<LdapConfig>("orderByName", "name", container))
-			.addLink(new OmOrderByBorder<LdapConfig>("orderByFile", "configFileName", container));
+		DataViewContainer<LdapConfig> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<>("orderByFile", "configFileName", container));
 		add(container.getLinks());
 		add(navigator);
-		
+
 		form = new LdapForm("form", listContainer, new LdapConfig());
 		form.showNewRecord();
 		add(form);

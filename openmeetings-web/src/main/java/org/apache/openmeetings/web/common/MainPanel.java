@@ -156,7 +156,7 @@ public class MainPanel extends Panel {
 			add(new EmptyPanel("dev").setVisible(false));
 		}
 		add(about, chat = new ChatPanel("chatPanel"));
-		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<PrivateMessage>(new PrivateMessage())) {
+		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

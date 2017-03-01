@@ -43,9 +43,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  */
 @Transactional
 public class RoomManager {
@@ -56,14 +56,14 @@ public class RoomManager {
 
 	@Autowired
 	private ISessionManager sessionManager;
-    @Autowired
+	@Autowired
 	private RoomDao roomDao;
-    @Autowired
+	@Autowired
 	private SipDao sipDao;
 
 	public SearchResult<Room> getRooms(int start, int max, String orderby, boolean asc, String search) {
 		try {
-			SearchResult<Room> sResult = new SearchResult<Room>();
+			SearchResult<Room> sResult = new SearchResult<>();
 			sResult.setRecords(this.selectMaxFromRooms(search));
 			sResult.setObjectName(Room.class.getName());
 			sResult.setResult(this.getRoomsInternatlByHQL(start, max,
@@ -74,10 +74,10 @@ public class RoomManager {
 		}
 		return null;
 	}
-	
+
 	public SearchResult<Room> getRoomsWithCurrentUsers(int start, int max, String orderby, boolean asc) {
 		try {
-			SearchResult<Room> sResult = new SearchResult<Room>();
+			SearchResult<Room> sResult = new SearchResult<>();
 			sResult.setRecords(this.selectMaxFromRooms(""));
 			sResult.setObjectName(Room.class.getName());
 
@@ -148,7 +148,7 @@ public class RoomManager {
 
 	/**
 	 * gets a list of all availible rooms
-	 * 
+	 *
 	 * @param user_level
 	 * @param start
 	 * @param max
@@ -182,7 +182,7 @@ public class RoomManager {
 
 	/**
 	 * gets a list of all availible rooms
-	 * 
+	 *
 	 * @param user_level
 	 * @param start
 	 * @param max
@@ -203,7 +203,7 @@ public class RoomManager {
 			}
 			if (orderby != null) {
 				hql += " ORDER BY " + (orderby.startsWith("c.") ? "" : "c.") + orderby;
-	
+
 				if (asc) {
 					hql += " ASC";
 				} else {
@@ -288,24 +288,24 @@ public class RoomManager {
 		} catch (Exception ex2) {
 			log.error("[getRoomsByIds] ", ex2);
 		}
-		return new LinkedList<Room>();
+		return new LinkedList<>();
 	}
 
 	// ---------------------------------------------------------------------------------------------
 
-    /**
-     * Returns number of SIP conference participants
-     * @param roomId id of room
-     * @return number of participants
-     */
-    public Integer getSipConferenceMembersNumber(Long roomId) {
-    	Room r = roomDao.get(roomId);
-    	return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
-    }
+	/**
+	 * Returns number of SIP conference participants
+	 * @param roomId id of room
+	 * @return number of participants
+	 */
+	public Integer getSipConferenceMembersNumber(Long roomId) {
+		Room r = roomDao.get(roomId);
+		return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
+	}
 
 	/**
 	 * get List of RoomGroup by group and roomtype
-	 * 
+	 *
 	 * @param groupId
 	 * @param typeId
 	 * @return
@@ -324,7 +324,7 @@ public class RoomManager {
 
 	/**
 	 * Gets all rooms by an group
-	 * 
+	 *
 	 * @param groupId
 	 * @return list of RoomGroup with Rooms as Sub-Objects or null
 	 */
@@ -347,7 +347,7 @@ public class RoomManager {
 	public SearchResult<RoomGroup> getRoomGroupByGroupId(long groupId, int start, int max, String orderby,
 			boolean asc) {
 		try {
-			SearchResult<RoomGroup> sResult = new SearchResult<RoomGroup>();
+			SearchResult<RoomGroup> sResult = new SearchResult<>();
 			sResult.setObjectName(RoomGroup.class.getName());
 			sResult.setRecords(this.selectMaxFromRoomsByGroup(groupId).longValue());
 			sResult.setResult(getRoomGroupsByGroupId(groupId, start, max, orderby, asc));
@@ -374,7 +374,7 @@ public class RoomManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param groupId
 	 * @param start
 	 * @param max

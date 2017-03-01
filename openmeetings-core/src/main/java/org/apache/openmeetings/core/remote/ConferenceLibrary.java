@@ -177,7 +177,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, wbId);
 		}
 
-		Map<String, Object> sendObject = new HashMap<String, Object>();
+		Map<String, Object> sendObject = new HashMap<>();
 		sendObject.put("id", wbId);
 		sendObject.put("roomitems", roomItems);
 

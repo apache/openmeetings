@@ -25,6 +25,7 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.io.IOException;
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,7 +59,7 @@ public class CaptureScreen extends Thread {
 	private volatile boolean active = true;
 	private IScreenEncoder se;
 	private IScreenShare client;
-	private ArrayBlockingQueue<VideoData> frames = new ArrayBlockingQueue<VideoData>(2);
+	private Queue<VideoData> frames = new ArrayBlockingQueue<>(2);
 	private String host = null;
 	private String app = null;
 	private int port = -1;
@@ -132,14 +133,14 @@ public class CaptureScreen extends Thread {
 			log.error("Error while running: ", e);
 		}
 	}
-	
+
 	/*
 	private void pushAudio(byte[] audio, long ts) {
 		if (startPublish) {
 			buffer.put((byte) 6);
 			buffer.put(audio);
 			buffer.flip();
-	
+
 			// I can stream audio
 			//packets successfully using linear PCM at 11025Hz. For those packets I
 			//push one byte (0x06) which specifies the format of audio data in a
@@ -149,7 +150,7 @@ public class CaptureScreen extends Thread {
 		}
 	}
 	*/
-	
+
 	public void pushVideo(VideoData data, int ts) throws IOException {
 		if (startPublish) {
 			if (Red5.getConnectionLocal() == null) {
@@ -188,7 +189,7 @@ public class CaptureScreen extends Thread {
 		return se;
 	}
 
-	public ArrayBlockingQueue<VideoData> getFrames() {
+	public Queue<VideoData> getFrames() {
 		return frames;
 	}
 

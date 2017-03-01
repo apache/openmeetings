@@ -22,7 +22,6 @@ import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.model.Model;
-import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.web.DashboardPanel;
 
 public class OmDashboardPanel extends UserPanel {
@@ -32,6 +31,6 @@ public class OmDashboardPanel extends UserPanel {
 		super(id);
 
 		boolean isRtl = FormatHelper.isRtlLanguage(WebSession.get().getLocale().toLanguageTag());
-		add(new DashboardPanel("dashboard", new Model<Dashboard>(WebSession.getDashboard())).setRtlModel(Model.of(isRtl)));
+		add(new DashboardPanel("dashboard", Model.of(WebSession.getDashboard())).setRtlModel(Model.of(isRtl)));
 	}
 }

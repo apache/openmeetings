@@ -70,18 +70,18 @@ public abstract class InvitationForm extends Form<Invitation> {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationForm.class, webAppRootKey);
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final PasswordTextField passwd;
-	private final DropDownChoice<String> timeZoneId = new DropDownChoice<String>("timeZoneId", Model.of((String)null), AVAILABLE_TIMEZONES);
+	private final DropDownChoice<String> timeZoneId = new DropDownChoice<>("timeZoneId", Model.of((String)null), AVAILABLE_TIMEZONES);
 	private final OmDateTimePicker from = new OmDateTimePicker("from", Model.of(LocalDateTime.now()));
 	private final OmDateTimePicker to = new OmDateTimePicker("to", Model.of(LocalDateTime.now()));
 	private final LanguageDropDown lang = new LanguageDropDown("language", Model.of((Long)null));
-	protected final TextField<String> subject = new TextField<String>("subject", Model.of((String)null));
-	protected final TextArea<String> message = new TextArea<String>("message", Model.of((String)null));
-	protected final TextField<String> url = new TextField<String>("url", Model.of((String)null));
-	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<User>(new ArrayList<User>()));
+	protected final TextField<String> subject = new TextField<>("subject", Model.of((String)null));
+	protected final TextArea<String> message = new TextArea<>("message", Model.of((String)null));
+	protected final TextField<String> url = new TextField<>("url", Model.of((String)null));
+	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<>(new ArrayList<User>()));
 	protected InvitationDialog dialog;
 
 	public InvitationForm(String id) {
-		super(id, new CompoundPropertyModel<Invitation>(new Invitation()));
+		super(id, new CompoundPropertyModel<>(new Invitation()));
 		setOutputMarkupId(true);
 
 		add(subject, message);
@@ -104,7 +104,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 				target.add(passwd);
 			}
 		});
-		RadioGroup<Valid> valid = new RadioGroup<Valid>("valid");
+		RadioGroup<Valid> valid = new RadioGroup<>("valid");
 		valid.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -114,9 +114,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 				target.add(from.setEnabled(dateEnabled), to.setEnabled(dateEnabled), timeZoneId.setEnabled(dateEnabled));
 			}
 		});
-		add(valid.add(new Radio<Valid>("one", Model.of(Valid.OneTime))
-				, new Radio<Valid>("period", Model.of(Valid.Period))
-				, new Radio<Valid>("endless", Model.of(Valid.Endless))));
+		add(valid.add(new Radio<>("one", Model.of(Valid.OneTime))
+				, new Radio<>("period", Model.of(Valid.Period))
+				, new Radio<>("endless", Model.of(Valid.Endless))));
 		add(passwd = new PasswordTextField("password"));
 		Invitation i = getModelObject();
 		passwd.setLabel(Model.of(Application.getString(525))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());

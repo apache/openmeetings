@@ -160,7 +160,7 @@ public class Chat extends Panel {
 
 		ChatDao dao = getBean(ChatDao.class);
 		//FIXME limited count should be loaded with "earlier" link
-		List<ChatMessage> list = new ArrayList<ChatMessage>(dao.getGlobal(0, 30));
+		List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
 		for(Long roomId : getUserRooms(getUserId())) {
 			Room r = getBean(RoomDao.class).get(roomId);
 			list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
@@ -177,7 +177,7 @@ public class Chat extends Panel {
 		private static final long serialVersionUID = 1L;
 		private final ChatToolbar toolbar = new ChatToolbar("toolbarContainer");
 		private final WysiwygEditor chatMessage = new WysiwygEditor("chatMessage", Model.of(""), toolbar);
-		private final HiddenField<String> activeTab = new HiddenField<String>("activeTab", Model.of(""));
+		private final HiddenField<String> activeTab = new HiddenField<>("activeTab", Model.of(""));
 
 		ChatForm(String id) {
 			super(id);

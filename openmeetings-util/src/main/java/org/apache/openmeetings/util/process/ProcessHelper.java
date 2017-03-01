@@ -39,11 +39,11 @@ public class ProcessHelper {
 	private static class Worker extends Thread {
 		private final Process process;
 		private Integer exitCode;
-	
+
 		private Worker(Process process) {
 			this.process = process;
 		}
-	
+
 		@Override
 		public void run() {
 			try {
@@ -58,13 +58,13 @@ public class ProcessHelper {
 		public StringBuilder output;
 		private final InputStream is;
 		private final BufferedReader br;
-	
+
 		private StreamWatcher(Process process, boolean isError) throws UnsupportedEncodingException {
 			output = new StringBuilder();
 			is = isError ? process.getErrorStream() : process.getInputStream();
 			br = new BufferedReader(new InputStreamReader(is, UTF_8));
 		}
-	
+
 		@Override
 		public void run() {
 			try {
@@ -85,14 +85,14 @@ public class ProcessHelper {
 			cmd[0] = "cmd.exe";
 			cmd[1] = "/C";
 			System.arraycopy(argv, 0, cmd, 2, argv.length);
-			Map<String, String> env = new HashMap<String, String>();
+			Map<String, String> env = new HashMap<>();
 			return executeScript(process, cmd, env);
 		} catch (Exception t) {
 			log.error("executeScriptWindows", t);
 			return new ConverterProcessResult(process, t.getMessage(), t);
 		}
 	}
-	
+
 	private static String getCommand(String[] argv) {
 		StringBuffer tString = new StringBuffer();
 		for (int i = 0; i < argv.length; i++) {
@@ -100,54 +100,54 @@ public class ProcessHelper {
 		}
 		return tString.toString();
 	}
-	
+
 	private static void debugCommandStart(String desc, String[] argv) {
 		if (log.isDebugEnabled()) {
 			log.debug("START " + desc + " ################# ");
 			log.debug(getCommand(argv));
 		}
 	}
-	
+
 	private static void debugCommandEnd(String desc) {
 		if (log.isDebugEnabled()) {
 			log.debug("END " + desc + " ################# ");
 		}
 	}
-	
+
 	public static ConverterProcessResult executeScript(String process, String[] argv) {
-		Map<String, String> env = new HashMap<String, String>();
+		Map<String, String> env = new HashMap<>();
 		return executeScript(process, argv, env);
 	}
-	
+
 	public static ConverterProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env) {
 		ConverterProcessResult returnMap = new ConverterProcessResult();
 		returnMap.setProcess(process);
 		debugCommandStart(process, argv);
-	
+
 		try {
 			returnMap.setCommand(getCommand(argv));
 			returnMap.setOut("");
-	
+
 			// By using the process Builder we have access to modify the
 			// environment variables
 			// that is handy to set variables to run it inside eclipse
 			ProcessBuilder pb = new ProcessBuilder(argv);
 			pb.environment().putAll(env);
-	
+
 			Process proc = pb.start();
-	
+
 			// 20-minute timeout for command execution
 			// FFMPEG conversion of Recordings may take a real long time until
 			// its finished
 			long timeout = 60000 * 20;
-	
+
 			StreamWatcher errorWatcher = new StreamWatcher(proc, true);
 			Worker worker = new Worker(proc);
 			StreamWatcher inputWatcher = new StreamWatcher(proc, false);
 			errorWatcher.start();
 			inputWatcher.start();
 			worker.start();
-			
+
 			try {
 				worker.join(timeout);
 				if (worker.exitCode != null) {
@@ -158,7 +158,7 @@ public class ProcessHelper {
 					returnMap.setException("timeOut");
 					returnMap.setError(errorWatcher.output.toString());
 					returnMap.setExitCode(-1);
-	
+
 					throw new TimeoutException();
 				}
 			} catch (InterruptedException ex) {
@@ -166,22 +166,22 @@ public class ProcessHelper {
 				errorWatcher.interrupt();
 				inputWatcher.interrupt();
 				Thread.currentThread().interrupt();
-	
+
 				returnMap.setError(ex.getMessage());
 				returnMap.setExitCode(-1);
-	
+
 				throw ex;
 			} finally {
 				proc.destroy();
 			}
-			
+
 		} catch (Throwable t) {
 			log.error("executeScript", t);
 			returnMap.setError(t.getMessage());
 			returnMap.setException(t.toString());
 			returnMap.setExitCode(-1);
 		}
-		
+
 		debugCommandEnd(process);
 		return returnMap;
 	}

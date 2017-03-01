@@ -61,11 +61,11 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * 
+ *
  * CRUD operations for {@link StringLabel}
- * 
+ *
  * @author solomax, swagner
- * 
+ *
  */
 public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final Logger log = Red5LoggerFactory.getLogger(LabelDao.class, webAppRootKey);
@@ -73,13 +73,13 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final String KEY_ATTR = "key";
 	public static final String APP_RESOURCES_EN = "Application.properties.xml";
 	public static final String APP_RESOURCES = "Application_%s.properties.xml";
-	public static final LinkedHashMap<Long, Locale> languages = new LinkedHashMap<Long, Locale>(); //TODO hide it and return unmodifiable map
-	public static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<Locale, List<StringLabel>>();
-	public static final Set<String> keys = new HashSet<String>();
+	public static final LinkedHashMap<Long, Locale> languages = new LinkedHashMap<>(); //TODO hide it and return unmodifiable map
+	public static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
+	public static final Set<String> keys = new HashSet<>();
 	private static Class<?> APP = null;
 
 	public List<Map<String, Object>> getStrings(Long language_id, int start, int count) {
-		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> result = new ArrayList<>();
 		for (int i = 0; i < count; ++i) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("id", start + i);
@@ -88,7 +88,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return result;
 	}
-	
+
 	private static void storeLanguages() throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d, "language");
@@ -97,7 +97,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		XmlExport.toXml(getLangFile(), d);
 	}
-	
+
 	public static void add(Locale l) throws Exception {
 		long id = 0L;
 		for (Map.Entry<Long, Locale> e : languages.entrySet()) {
@@ -107,7 +107,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		storeLanguages();
 		labelCache.put(l, new ArrayList<StringLabel>());
 	}
-	
+
 	public String getString(long fieldValuesId, long langId) {
 		return ensureApplication(langId).getOmString(fieldValuesId, langId);
 	}
@@ -119,7 +119,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static File getLangFile() {
 		return new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile);
 	}
-	
+
 	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
 		if (APP == null) {
 			//FIXME HACK to resolve package dependencies
@@ -127,7 +127,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return APP;
 	}
-	
+
 	public static void initLanguageMap() {
 		SAXReader reader = new SAXReader();
 		try {
@@ -156,7 +156,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return name;
 	}
-	
+
 	private static void storeLabels(Locale l) throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d);
@@ -167,7 +167,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		URL u = APP.getResource(getLabelFileName(l));
 		XmlExport.toXml(new File(u.toURI()), d);
 	}
-	
+
 	public static void upload(Locale l, InputStream is) throws Exception {
 		List<StringLabel> labels = getLabels(is);
 		URL u = APP.getResource(getLabelFileName(Locale.ENGLISH)); //get the URL of existing resource
@@ -179,9 +179,9 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		labelCache.put(l, labels);
 		storeLabels(l);
 	}
-	
+
 	private static List<StringLabel> getLabels(Locale l) {
-		List<StringLabel> labels = new ArrayList<StringLabel>();
+		List<StringLabel> labels = new ArrayList<>();
 		try (InputStream is = APP.getResourceAsStream(getLabelFileName(l))) {
 			labels = getLabels(is);
 		} catch (Exception e) {
@@ -189,9 +189,9 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return labels;
 	}
-	
+
 	private static List<StringLabel> getLabels(InputStream is) throws Exception {
-		final List<StringLabel> labels = new ArrayList<StringLabel>();
+		final List<StringLabel> labels = new ArrayList<>();
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		spf.setNamespaceAware(true);
 		try {
@@ -199,45 +199,45 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 			XMLReader xr = parser.getXMLReader();
 			xr.setContentHandler(new ContentHandler() {
 				StringLabel label = null;
-				
+
 				@Override
 				public void startPrefixMapping(String prefix, String uri) throws SAXException {}
-				
+
 				@Override
 				public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
 					if (ENTRY_ELEMENT.equals(localName)) {
 						label = new StringLabel(atts.getValue(KEY_ATTR), "");
 					}
 				}
-				
+
 				@Override
 				public void startDocument() throws SAXException {}
-				
+
 				@Override
 				public void skippedEntity(String name) throws SAXException {}
-				
+
 				@Override
 				public void setDocumentLocator(Locator locator) {}
-				
+
 				@Override
 				public void processingInstruction(String target, String data) throws SAXException {}
-				
+
 				@Override
 				public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {}
-				
+
 				@Override
 				public void endPrefixMapping(String prefix) throws SAXException {}
-				
+
 				@Override
 				public void endElement(String uri, String localName, String qName) throws SAXException {
 					if (ENTRY_ELEMENT.equals(localName)) {
 						labels.add(label);
 					}
 				}
-				
+
 				@Override
 				public void endDocument() throws SAXException {}
-				
+
 				@Override
 				public void characters(char[] ch, int start, int length) throws SAXException {
 					StringBuilder sb = new StringBuilder(label.getValue());
@@ -251,7 +251,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return labels;
 	}
-	
+
 	private static List<StringLabel> getLabels(Locale l, final String search) {
 		if (!labelCache.containsKey(l)) {
 			List<StringLabel> ll = getLabels(l);
@@ -270,7 +270,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return result;
 	}
-	
+
 	@Override
 	public StringLabel get(long id) {
 		throw new RuntimeException("Should not be used");
@@ -314,7 +314,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		return result.subList(start, start + count > result.size() ? result.size() : start + count);
 	}
-	
+
 	@Override
 	public long count() {
 		throw new RuntimeException("Should not be used");
@@ -343,12 +343,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		storeLabels(l);
 		return entity;
 	}
-	
+
 	@Override
 	public void delete(StringLabel entity, Long userId) {
 		throw new RuntimeException("Should not be used");
 	}
-	
+
 	public void delete(Locale l, StringLabel entity) throws Exception {
 		List<StringLabel> labels = labelCache.get(l);
 		if (labels.contains(entity)) {

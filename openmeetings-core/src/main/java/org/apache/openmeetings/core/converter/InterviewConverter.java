@@ -112,9 +112,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());
-	
+
 			stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaDataList);
-		
+
 			// Merge Wave to Full Length
 			File streamFolderGeneral = getStreamsHibernateDir();
 
@@ -166,7 +166,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					/*
 					 * CHECK FILE:
 					 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.flv -v error -f null file.null
-					 */ 
+					 */
 					String[] args = new String[] {getPathToFFMPEG(), "-y"
 							, "-i", path
 							, "-an" // only input files with video will be treated as video sources
@@ -191,7 +191,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 									, "-pix_fmt", "yuv420p" //
 									, podPB };
 							logs.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
-							
+
 							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
 							File podF = new File(streamFolder, OmFileHelper.getName(meta.getStreamName() + "_pod_" + pod, EXTENSION_FLV));
 							String podP = podF.getCanonicalPath();
@@ -202,7 +202,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 									, "-map", "[v]" //
 									, podP };
 							logs.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
-	
+
 							pods[pod - 1] = podP;
 						} else {
 							pods[pod - 1] = path;
@@ -220,7 +220,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				return;
 			}
 			boolean shortest = false;
-			List<String> args = new ArrayList<String>();
+			List<String> args = new ArrayList<>();
 			for (int i = 0; i < 2; ++i) {
 				/*
 				 * INSERT BLANK INSTEAD OF BAD PAD:

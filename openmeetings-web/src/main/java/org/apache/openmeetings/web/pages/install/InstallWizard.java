@@ -115,7 +115,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	//onInit, applyState
 	public InstallWizard(String id, String title) {
-		super(id, title, new CompoundPropertyModel<InstallationConfig>(new InstallationConfig()), true);
+		super(id, title, new CompoundPropertyModel<>(new InstallationConfig()), true);
 		setTitle(Model.of(getModelObject().appName));
 		welcomeStep = new WelcomeStep();
 		dbStep = new DbStep();
@@ -211,12 +211,12 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private static final long serialVersionUID = 1L;
 		private final WebMarkupContainer hostelem = new WebMarkupContainer("hostelem");
 		private final WebMarkupContainer portelem = new WebMarkupContainer("portelem");
-		private final RequiredTextField<String> host = new RequiredTextField<String>("host", Model.of(""));
-		private final RequiredTextField<Integer> port = new RequiredTextField<Integer>("port", Model.of(0));
-		private final RequiredTextField<String> dbname = new RequiredTextField<String>("dbname", Model.of(""));
-		private final Form<ConnectionProperties> form = new Form<ConnectionProperties>("form", new CompoundPropertyModel<ConnectionProperties>(getProps(null))) {
+		private final RequiredTextField<String> host = new RequiredTextField<>("host", Model.of(""));
+		private final RequiredTextField<Integer> port = new RequiredTextField<>("port", Model.of(0));
+		private final RequiredTextField<String> dbname = new RequiredTextField<>("dbname", Model.of(""));
+		private final Form<ConnectionProperties> form = new Form<ConnectionProperties>("form", new CompoundPropertyModel<>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
-			private final DropDownChoice<DbType> db = new DropDownChoice<DbType>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
+			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -229,8 +229,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					return object.name();
 				}
 			});
-			private final RequiredTextField<String> user = new RequiredTextField<String>("login");
-			private final TextField<String> pass = new TextField<String>("password");
+			private final RequiredTextField<String> user = new RequiredTextField<>("login");
+			private final TextField<String> pass = new TextField<>("password");
 			{
 				add(db.add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
@@ -467,7 +467,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			//TODO check mail server
 			add(new YesNoDropDown("replyToOrganizer"));
 			add(new LangDropDown("defaultLangId"));
-			add(new DropDownChoice<String>("defaultExportFont", allFonts));
+			add(new DropDownChoice<>("defaultExportFont", allFonts));
 		}
 
 		@Override
@@ -500,7 +500,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 			add(new TextField<Integer>("swfZoom").setRequired(true).add(range(50, 600)));
 			add(new TextField<Integer>("swfJpegQuality").setRequired(true).add(range(1, 100)));
-			add(swfPath = new TextField<String>("swfPath"));
+			add(swfPath = new TextField<>("swfPath"));
 			add(new AjaxButton("validateSwf") {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -509,7 +509,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(imageMagicPath = new TextField<String>("imageMagicPath"));
+			add(imageMagicPath = new TextField<>("imageMagicPath"));
 			add(new AjaxButton("validateImageMagic") {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -518,7 +518,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(ffmpegPath = new TextField<String>("ffmpegPath"));
+			add(ffmpegPath = new TextField<>("ffmpegPath"));
 			add(new AjaxButton("validateFfmpeg") {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -527,7 +527,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(soxPath = new TextField<String>("soxPath"));
+			add(soxPath = new TextField<>("soxPath"));
 			add(new AjaxButton("validateSox") {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -536,7 +536,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(officePath = new TextField<String>("officePath"));
+			add(officePath = new TextField<>("officePath"));
 			add(new AjaxButton("validateOffice") {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -696,7 +696,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					}
 				}
 			});
-			container.add(progressBar = new ProgressBar("progress", new Model<Integer>(0)) {
+			container.add(progressBar = new ProgressBar("progress", new Model<>(0)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -865,7 +865,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public LangDropDown(String id) {
 			super(id);
 
-			List<SelectOption> list = new ArrayList<SelectOption>();
+			List<SelectOption> list = new ArrayList<>();
 			for (Map.Entry<Long, Locale> me : LabelDao.languages.entrySet()) {
 				SelectOption op = new SelectOption(me.getKey().toString(), me.getValue().getDisplayName());
 				if (getSession().getLocale().equals(me.getValue())) {

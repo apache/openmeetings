@@ -27,7 +27,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REG
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -382,7 +381,7 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(Client c, ChatMessage m, FastDateFormat fmt) {
-		HashMap<String, Object> hsm = new HashMap<String, Object>();
+		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", Arrays.asList("chat", encodeChatMessage(m, fmt)));
 

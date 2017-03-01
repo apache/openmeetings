@@ -55,7 +55,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	protected abstract String getApplicationName();
 
 	public BasePage() {
-		options = new HashMap<String, String>();
+		options = new HashMap<>();
 		options.put("fragmentIdentifierSuffix", "");
 		options.put("keyValueDelimiter", "/");
 		String appName = getApplicationName();
@@ -64,7 +64,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(new TransparentWebMarkupContainer("html")
 				.add(new AttributeModifier("xml:lang", code))
 				.add(new AttributeModifier("lang", code))
-				.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr"))); 
+				.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr")));
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
 	}
@@ -91,11 +91,11 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	protected String getGaCode() {
 		return getBean(ConfigurationDao.class).getConfValue(CONFIG_GOOGLE_ANALYTICS_CODE, String.class, null);
 	}
-	
+
 	protected boolean isMainPage() {
 		return false;
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));

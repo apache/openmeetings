@@ -86,7 +86,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
 	private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 	private boolean isPrivate = false;
-	private final IModel<Collection<User>> modelTo = new CollectionModel<User>(new ArrayList<User>());
+	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<User>());
 
 	@Override
 	public int getWidth() {
@@ -131,7 +131,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
 		super(id, Application.getString(1209), model);
-		form = new Form<PrivateMessage>("form", getModel());
+		form = new Form<>("form", getModel());
 
 		form.add(feedback.setOutputMarkupId(true));
 		form.add(new UserMultiChoice("to", modelTo).setRequired(true));

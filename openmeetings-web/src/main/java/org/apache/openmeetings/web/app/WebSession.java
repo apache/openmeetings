@@ -95,10 +95,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private static final Logger log = getLogger(WebSession.class, webAppRootKey);
 	public static final int MILLIS_IN_MINUTE = 60000;
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
-	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<String>(AVAILABLE_TIMEZONES);
+	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<>(AVAILABLE_TIMEZONES);
 	public static final String WICKET_ROOM_ID = "wicketroomid";
 	private Long userId = null;
-	private Set<Right> rights = new HashSet<User.Right>(); //TODO renew somehow on user edit !!!!
+	private Set<Right> rights = new HashSet<>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
 	private String SID = null;
 	private OmUrlFragment area = null;
