@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
@@ -34,6 +35,7 @@ import java.util.Set;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
@@ -43,6 +45,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
@@ -218,9 +221,24 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		a.setRoom(form.createRoom ? form.appRoom : form.groom.getModelObject());
 		final List<MeetingMember> mms = a.getMeetingMembers() == null ? new ArrayList<>() : a.getMeetingMembers();
 		Set<Long> currentIds = new HashSet<>();
-		for (User u : attendees.getModelObject()) {
-			if (u.getId() != null) {
-				currentIds.add(u.getId());
+		List<User> users = new ArrayList<>();
+		if (InviteeType.group == rdi.getModelObject()) {
+			//lets iterate through all group users
+			for (Group g : groups.getModelObject()) {
+				for (GroupUser gu : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
+					User u = gu.getUser();
+					if (!currentIds.contains(u.getId())) {
+						users.add(u);
+						currentIds.add(u.getId());
+					}
+				}
+			}
+		} else {
+			users = new ArrayList<>(attendees.getModelObject());
+			for (User u : users) {
+				if (u.getId() != null) {
+					currentIds.add(u.getId());
+				}
 			}
 		}
 
@@ -236,7 +254,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			originalIds.add(m.getUser().getId());
 		}
 		//add users
-		for (User u : attendees.getModelObject()) {
+		for (User u : users) {
 			if (u.getId() == null || !originalIds.contains(u.getId())) {
 				MeetingMember mm = new MeetingMember();
 				mm.setUser(u);
@@ -338,6 +356,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				cals.setEnabled(false);
 			}
 
+			rdi.setModelObject(InviteeType.user);
 			attendees.setModelObject(new ArrayList<>());
 			if (a.getMeetingMembers() != null) {
 				for (MeetingMember mm : a.getMeetingMembers()) {
@@ -358,7 +377,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
 			add(start.setRequired(true), end.setRequired(true));
 			add(ownerPanel.add(owner));
-			boolean showGroups = false;//AuthLevelUtil.hasAdminLevel(getRights());
+			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 				private static final long serialVersionUID = 1L;
 
