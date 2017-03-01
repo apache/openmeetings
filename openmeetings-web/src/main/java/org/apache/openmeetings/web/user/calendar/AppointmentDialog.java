@@ -369,7 +369,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}));
 			groupContainer.add(
-				groups.setLabel(Model.of(Application.getString(126))).setOutputMarkupId(true)
+				groups.setLabel(Model.of(Application.getString(126))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true)
 				, new Radio<>("group", Model.of(InviteeType.group))
 			);
 			if (showGroups) {
