@@ -40,10 +40,6 @@ var Chat = function() {
 		typingTimer = null;
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
-	function emtClick(emoticon) {
-		var editor = $('#chatMessage .wysiwyg-editor');
-		editor.html(editor.html() + ' ' + emoticon + ' ');
-	}
 	function initToolbar() {
 		var emtBtn = $('#emoticons');
 		emtBtn.html('');
@@ -57,7 +53,7 @@ var Chat = function() {
 		var rowSize = 20;
 		var row = $('<tr></tr>');
 		for (var i = 0; i < emots.length; ++i) {
-			row.append('<td><div class="emt" onclick="emtClick(\'' + emots[i] + '\');">'
+			row.append('<td><div class="emt" onclick="Chat.emtClick(\'' + emots[i] + '\');">'
 				+ emoticon.emoticonize(emots[i]) + '</div></td>');
 			if (i != 0 && i % rowSize == 0) {
 				emotMenuList.append(row);
@@ -199,6 +195,10 @@ var Chat = function() {
 			} else {
 				this.close();
 			}
+		}
+		, emtClick: function(emoticon) {
+			var editor = $('#chatMessage .wysiwyg-editor');
+			editor.html(editor.html() + ' ' + emoticon + ' ');
 		}
 	};
 }();
