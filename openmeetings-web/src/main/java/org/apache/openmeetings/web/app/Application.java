@@ -278,8 +278,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
 			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 			if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
-				rcl.setVWidth(client.getWidth());
-				rcl.setVHeight(client.getHeight());
+				if (rcl.getVWidth() == 0 || rcl.getVHeight() == 0) {
+					rcl.setVWidth(client.getWidth());
+					rcl.setVHeight(client.getHeight());
+				}
 				if (client.getPod() != Pod.none) {
 					rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
 				}
