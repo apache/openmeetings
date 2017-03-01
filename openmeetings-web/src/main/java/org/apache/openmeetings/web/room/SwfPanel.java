@@ -177,7 +177,7 @@ public class SwfPanel extends BasePanel {
 
 		long minimum = -1;
 		Server result = null;
-		HashMap<Server, List<Long>> activeRoomsMap = new HashMap<Server, List<Long>>();
+		Map<Server, List<Long>> activeRoomsMap = new HashMap<>();
 		for (Server server : serverList) {
 			List<Long> roomIds = getBean(SessionManager.class).getActiveRoomIdsByServer(server);
 			if (roomIds.contains(roomId)) {

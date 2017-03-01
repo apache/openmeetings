@@ -30,18 +30,18 @@ import org.apache.wicket.model.IModel;
 
 public class LanguageDropDown extends DropDownChoice<Long> {
 	private static final long serialVersionUID = 1L;
-	private final List<Long> languages = new ArrayList<Long>();
+	private final List<Long> languages = new ArrayList<>();
 
 	public LanguageDropDown(String id, IModel<Long> model) {
 		super(id, model, new ArrayList<Long>());
 		internalInit();
 	}
-	
+
 	public LanguageDropDown(String id) {
 		super(id);
 		internalInit();
 	}
-	
+
 	private void internalInit() {
 		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
 			languages.add(e.getKey());

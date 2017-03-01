@@ -52,14 +52,14 @@ public class RoomListPanel extends UserPanel {
 				WebMarkupContainer roomContainer;
 				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior("click"){
 					private static final long serialVersionUID = 1L;
-					
+
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						onContainerClick(target, r);
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
-				final Label curUsers = new Label("curUsers", new Model<Integer>(Application.getRoomClients(r.getId()).size()));
+				final Label curUsers = new Label("curUsers", new Model<>(Application.getRoomClients(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
 				item.add(new Button("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
@@ -82,7 +82,7 @@ public class RoomListPanel extends UserPanel {
 			}
 		});
 	}
-	
+
 	public void update(IPartialPageRequestHandler handler, List<Room> rooms) {
 		list.setList(rooms);
 		handler.add(this);

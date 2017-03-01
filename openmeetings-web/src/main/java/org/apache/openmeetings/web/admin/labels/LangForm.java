@@ -37,22 +37,22 @@ import org.apache.wicket.util.time.Duration;
 
 /**
  * Modify the language selection, add/delete language
- * 
+ *
  * @author solomax, swagner
- * 
+ *
  */
 public class LangForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
 	private DropDownChoice<Map.Entry<Long, Locale>> languages;
 
 	static List<Map.Entry<Long, Locale>> getLanguages() {
-		List<Map.Entry<Long, Locale>> list = new ArrayList<Map.Entry<Long, Locale>>();
+		List<Map.Entry<Long, Locale>> list = new ArrayList<>();
 		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
-			list.add(new AbstractMap.SimpleEntry<Long,Locale>(e.getKey(), e.getValue()));
+			list.add(new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue()));
 		}
 		return list;
 	}
-	
+
 	public void updateLanguages(AjaxRequestTarget target) {
 		languages.setChoices(getLanguages());
 		target.add(languages);
@@ -60,7 +60,7 @@ public class LangForm extends Form<Void> {
 
 	/**
 	 * Render Main
-	 * 
+	 *
 	 * @param id
 	 * @param listContainer
 	 * @param language
@@ -70,7 +70,7 @@ public class LangForm extends Form<Void> {
 		super(id);
 		setOutputMarkupId(true);
 
-		languages = new DropDownChoice<Map.Entry<Long, Locale>>("language"
+		languages = new DropDownChoice<>("language"
 				, new PropertyModel<Map.Entry<Long, Locale>>(langPanel, "language")
 				, getLanguages()
 				, new ChoiceRenderer<Map.Entry<Long, Locale>>() {
@@ -86,7 +86,7 @@ public class LangForm extends Form<Void> {
 						return "" + object.getKey();
 					}
 				});
-				
+
 		languages.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 

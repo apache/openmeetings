@@ -23,12 +23,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Vector;
 
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
@@ -78,7 +79,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 	String recipients = "seba.wagner@gmail.com";
 	String htmlBody = "test";
 
-	
+
 	public void simpleInvitionIcalLink() {
 		// Create a TimeZone
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
@@ -138,28 +139,27 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 
 		// Add the event and print
 		icsCalendar.getComponents().add(meeting);
-		
+
 		Organizer orger = new Organizer(URI.create("seba.wagner@gmail.com"));
 		orger.getParameters().add(new Cn("Sebastian Wagner"));
 		meeting.getProperties().add(orger);
-		
+
 		icsCalendar.getProperties().add(Method.REQUEST);
-		
+
 		log.debug(icsCalendar.toString());
-		
+
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
 		CalendarOutputter outputter = new CalendarOutputter();
 		try {
 			outputter.output(icsCalendar, bout);
 			iCalMimeBody = bout.toByteArray();
-			
+
 			sendIcalMessage();
 		} catch (Exception e) {
 			log.error("Error", e);
 		}
 	}
 
-	
 	@Test
 	public void sendInvitionIcalLink() {
 		try {
@@ -176,7 +176,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 			Map<String, String> attendeeList = handler.getAttendeeData(email, username, invitor);
 			Map<String, String> organizerAttendee = handler.getAttendeeData(recipients, "seba-test", true);
 
-			Vector<Map<String, String>> atts = new Vector<Map<String, String>>();
+			List<Map<String, String>> atts = new ArrayList<>();
 			atts.add(attendeeList);
 
 			// Create ICal Message

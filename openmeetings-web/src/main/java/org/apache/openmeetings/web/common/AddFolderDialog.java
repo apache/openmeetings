@@ -52,7 +52,7 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 		form = new Form<String>("form", getModel()) {
 			private static final long serialVersionUID = 1L;
 			{
-				add(title = new RequiredTextField<String>("title", getModel()));
+				add(title = new RequiredTextField<>("title", getModel()));
 				title.setLabel(Model.of(Application.getString(572)));
 				add(feedback.setOutputMarkupId(true));
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected

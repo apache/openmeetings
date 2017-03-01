@@ -39,9 +39,9 @@ public class UserProfilePanel extends UserPanel {
 	private final Label addressDenied = new Label("addressDenied", "");
 
 	public UserProfilePanel(String id, long userId) {
-		this(id, new CompoundPropertyModel<User>(getBean(UserDao.class).get(userId)));
+		this(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(userId)));
 	}
-	
+
 	public UserProfilePanel(String id, CompoundPropertyModel<User> model) {
 		super(id, model);
 

@@ -69,7 +69,7 @@ public class UsersPanel extends AdminPanel {
 	public UsersPanel(String id) {
 		super(id);
 
-		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableGroupAdminDataProvider<User>(UserDao.class)) {
+		final SearchableDataView<User> dataView = new SearchableDataView<User>("userList", new SearchableGroupAdminDataProvider<>(UserDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -102,11 +102,11 @@ public class UsersPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<User> container = new DataViewContainer<User>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<User>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<User>("orderByLogin", "login", container))
-			.addLink(new OmOrderByBorder<User>("orderByFirstName", "firstname", container))
-			.addLink(new OmOrderByBorder<User>("orderByLastName", "lastname", container));
+		DataViewContainer<User> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByLogin", "login", container))
+			.addLink(new OmOrderByBorder<>("orderByFirstName", "firstname", container))
+			.addLink(new OmOrderByBorder<>("orderByLastName", "lastname", container));
 		add(container.getLinks());
 		add(navigator);
 

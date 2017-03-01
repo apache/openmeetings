@@ -111,7 +111,7 @@ public class AppointmentDao {
 		}
 		roomDao.update(r, userId);
 		if (sendmails) {
-			Set<Long> mmIds = a.getId() == null ? new HashSet<Long>()
+			Set<Long> mmIds = a.getId() == null ? new HashSet<>()
 					: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());
 			// update meeting members
 			Appointment a0 = a.getId() == null ? null : get(a.getId());

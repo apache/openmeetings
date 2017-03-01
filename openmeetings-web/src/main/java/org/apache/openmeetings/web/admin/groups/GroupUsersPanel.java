@@ -43,7 +43,7 @@ import org.apache.wicket.markup.repeater.Item;
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private long groupId;
-	private List<GroupUser> users2add = new ArrayList<GroupUser>();
+	private List<GroupUser> users2add = new ArrayList<>();
 
 	public GroupUsersPanel(String id, long groupId) {
 		super(id);
@@ -147,7 +147,7 @@ public class GroupUsersPanel extends Panel {
 
 		@Override
 		public java.util.Iterator<? extends GroupUser> iterator(long first, long count) {
-			List<GroupUser> list = new ArrayList<GroupUser>();
+			List<GroupUser> list = new ArrayList<>();
 			list.addAll(users2add);
 			list.addAll(search == null && getSort() == null
 					? getDao().get(groupId, (int)first, (int)count)

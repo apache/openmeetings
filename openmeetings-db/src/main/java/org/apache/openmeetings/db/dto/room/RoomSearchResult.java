@@ -31,12 +31,12 @@ public class RoomSearchResult {
 	private Long errorId;
 
 	public RoomSearchResult() {}
-	
+
 	public RoomSearchResult(SearchResult<Room> copy) {
 		if (copy != null) {
 			this.objectName = copy.getObjectName();
 			this.records = copy.getRecords();
-			this.result = new ArrayList<RoomDTO>(copy.getResult().size());
+			this.result = new ArrayList<>(copy.getResult().size());
 			for (Room r : copy.getResult()) {
 				result.add(new RoomDTO(r));
 			}

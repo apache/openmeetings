@@ -56,7 +56,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public CreatePollDialog(String id, Long roomId) {
-		super(id, Application.getString(18), new CompoundPropertyModel<RoomPoll>(new RoomPoll()));
+		super(id, Application.getString(18), new CompoundPropertyModel<>(new RoomPoll()));
 		this.roomId = roomId;
 		add(form = new PollForm("form", getModel()));
 	}
@@ -106,7 +106,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 			super(id, model);
 			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
 			add(new TextArea<String>("question"));
-			add(new DropDownChoice<RoomPoll.Type>("type", Arrays.asList(RoomPoll.Type.values())
+			add(new DropDownChoice<>("type", Arrays.asList(RoomPoll.Type.values())
 					, new ChoiceRenderer<RoomPoll.Type>() {
 						private static final long serialVersionUID = 1L;
 

@@ -141,11 +141,11 @@ public class CalendarPanel extends UserPanel {
 	public CalendarPanel(String id) {
 		super(id);
 
-		final Form<Date> form = new Form<Date>("form");
+		final Form<Date> form = new Form<>("form");
 		add(form);
 
 		dialog = new AppointmentDialog("appointment", Application.getString(815)
-				, this, new CompoundPropertyModel<Appointment>(getDefault()));
+				, this, new CompoundPropertyModel<>(getDefault()));
 		add(dialog);
 
 		boolean isRtl = isRtl();
@@ -299,7 +299,7 @@ public class CalendarPanel extends UserPanel {
 		add(syncTimer);
 
 		calendarDialog = new CalendarDialog("calendarDialog", Application.getString("calendar.dialogTitle"),
-				this, new CompoundPropertyModel<OmCalendar>(getDefaultCalendar()));
+				this, new CompoundPropertyModel<>(getDefaultCalendar()));
 
 		add(calendarDialog);
 
@@ -312,7 +312,7 @@ public class CalendarPanel extends UserPanel {
 			protected List<OmCalendar> load() {
 				// TODO: better way to do this?
 				AppointmentManager manager = getAppointmentManager();
-				List<OmCalendar> cals = new ArrayList<OmCalendar>(manager.getCalendars(getUserId()));
+				List<OmCalendar> cals = new ArrayList<>(manager.getCalendars(getUserId()));
 				cals.addAll(manager.getGoogleCalendars(getUserId()));
 				return cals;
 			}

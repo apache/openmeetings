@@ -63,7 +63,7 @@ import org.slf4j.Logger;
 public class ScreenSharerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = getLogger(ScreenSharerFrame.class);
-	
+
 	private JPanel contentPane;
 	private JPanel panelScreen = new DisabledPanel();
 	private JPanel panelRecording = new DisabledPanel();
@@ -113,7 +113,7 @@ public class ScreenSharerFrame extends JFrame {
 	private String recordingTipLabel;
 	private String publishingTipLabel;
 	private JCheckBox audioNotify;
-	
+
 	private class PublishTextField extends JTextField {
 		private static final long serialVersionUID = 1L;
 
@@ -139,23 +139,23 @@ public class ScreenSharerFrame extends JFrame {
 			setColumns(10);
 		}
 	}
-	
+
 	private static class KeyValue<T> {
 		private String key;
 		private T value;
-		
+
 		public KeyValue(String key, T value) {
 			this.key = key;
 			this.value = value;
 		}
-	 
+
 		@SuppressWarnings("unused")
 		public String getKey() { return key; }
 		public T getValue() { return value; }
-	 
+
 		@Override
 		public String toString() { return key; }
-	 
+
 		@Override
 		public boolean equals(Object obj) {
 			if (obj instanceof KeyValue) {
@@ -165,7 +165,7 @@ public class ScreenSharerFrame extends JFrame {
 			}
 			return false;
 		}
-	 
+
 		@Override
 		public int hashCode() {
 			int hash = 7;
@@ -173,7 +173,7 @@ public class ScreenSharerFrame extends JFrame {
 			return hash;
 		}
 	}
-	
+
 	//this implementation will not allow to Enable Panel in runtime
 	private static class DisabledPanel extends JPanel {
 		private static final long serialVersionUID = 1L;
@@ -186,7 +186,7 @@ public class ScreenSharerFrame extends JFrame {
 			super.setEnabled(enabled);
 		}
 	}
-	
+
 	private static class VerticalSlider extends MouseListenerable {
 		private static final long serialVersionUID = 1L;
 
@@ -202,7 +202,7 @@ public class ScreenSharerFrame extends JFrame {
 			add(jDown);
 		}
 	}
-	
+
 	private static class HorizontalSlider extends MouseListenerable {
 		private static final long serialVersionUID = 1L;
 
@@ -218,15 +218,15 @@ public class ScreenSharerFrame extends JFrame {
 			add(jRight);
 		}
 	}
-	
+
 	private static String getTextLabel(String[] textLabels, int idx) {
 		return textLabels != null && idx < textLabels.length ? textLabels[idx] : "#STAB#";
 	}
-	
+
 	/**
 	 * Create the frame.
-	 * @throws AWTException 
-	 * @throws IOException 
+	 * @throws AWTException
+	 * @throws IOException
 	 */
 	public ScreenSharerFrame(final Core core, String[] textLabels) throws AWTException {
 		setTitle(getTextLabel(textLabels, 0)); //#id 730
@@ -246,9 +246,9 @@ public class ScreenSharerFrame extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 0, 5, 5));
 		setContentPane(contentPane);
-		
+
 		JLabel lblStartSharing = new JLabel(getTextLabel(textLabels, 1)); //#id 731
-		
+
 		startSharingLabel = getTextLabel(textLabels, 2); //#id 732
 		stopSharingLabel = getTextLabel(textLabels, 3); //#id 733
 		startRecordingLabel = getTextLabel(textLabels, 15); //#id 871
@@ -287,7 +287,7 @@ public class ScreenSharerFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		JLabel lblSelectArea = new JLabel(getTextLabel(textLabels, 4)); //#id 734
 		JPanel panelStatus = new JPanel();
 		audioNotify = new JCheckBox(getTextLabel(textLabels, 36)); //#id 1589
@@ -299,7 +299,7 @@ public class ScreenSharerFrame extends JFrame {
 				core.setAudioNotify(audioNotify.isSelected());
 			}
 		});
-		
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -349,10 +349,10 @@ public class ScreenSharerFrame extends JFrame {
 		);
 		panelScreen.setLayout(null);
 		panelScreen.setBackground(Color.WHITE);
-		
+
 		int width = ScreenDimensions.width;
 		int height = ScreenDimensions.height;
-		
+
 		//Sliders
 		upSlider.addListener(new ScreenYMouseListener(this));
 		upSlider.setToolTipText(getTextLabel(textLabels, 6)); //#id 737
@@ -360,14 +360,14 @@ public class ScreenSharerFrame extends JFrame {
 		downSlider.addListener(new ScreenHeightMouseListener(this));
 		downSlider.setToolTipText(getTextLabel(textLabels, 6)); //#id 737
 		panelScreen.add(downSlider);
-		
+
 		leftSlider.addListener(new ScreenXMouseListener(this));
 		leftSlider.setToolTipText(getTextLabel(textLabels, 5)); //#id 735
 		panelScreen.add(leftSlider);
 		rightSlider.addListener(new ScreenWidthMouseListener(this));
 		rightSlider.setToolTipText(getTextLabel(textLabels, 5)); //#id 735
 		panelScreen.add(rightSlider);
-		
+
 		//Virtual Screen
 		virtualScreen.addListener(new ScreenMouseListener(this));
 		virtualScreen.setBounds(vScreenX, vScreenY, width, height);
@@ -379,7 +379,7 @@ public class ScreenSharerFrame extends JFrame {
 		JLabel bgScreen = new JLabel(imgBgScreen);
 		bgScreen.setBounds(vScreenX, vScreenY, width, height);
 		panelScreen.add(bgScreen);
-		
+
 		//Spinner Width
 		JLabel vscreenWidthLabel = new JLabel();
 		vscreenWidthLabel.setText(getTextLabel(textLabels, 9)); //#id 740
@@ -443,43 +443,43 @@ public class ScreenSharerFrame extends JFrame {
 			}
 		});
 		panelScreen.add(spinnerY);
-		
+
 		//Quality
 		JLabel labelQuality = new JLabel();
 		labelQuality.setText(getTextLabel(textLabels, 18)); //#id 1089
 		labelQuality.setBounds(250, 140, 200, 24);
 		panelScreen.add(labelQuality);
-		
-		comboQuality = new JComboBox<KeyValue<ScreenQuality>>();
-		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 19), ScreenQuality.VeryHigh)); //#id 1090
-		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 20), ScreenQuality.High)); //#id 1091
-		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 21), ScreenQuality.Medium)); //#id 1092
-		comboQuality.addItem(new KeyValue<ScreenQuality>(getTextLabel(textLabels, 22), ScreenQuality.Low)); //#id 1093
+
+		comboQuality = new JComboBox<>();
+		comboQuality.addItem(new KeyValue<>(getTextLabel(textLabels, 19), ScreenQuality.VeryHigh)); //#id 1090
+		comboQuality.addItem(new KeyValue<>(getTextLabel(textLabels, 20), ScreenQuality.High)); //#id 1091
+		comboQuality.addItem(new KeyValue<>(getTextLabel(textLabels, 21), ScreenQuality.Medium)); //#id 1092
+		comboQuality.addItem(new KeyValue<>(getTextLabel(textLabels, 22), ScreenQuality.Low)); //#id 1093
 		comboQuality.setBounds(250, 170, 130, 24);
 		comboQuality.addActionListener(new ActionListener() {
 			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-		        ScreenDimensions.quality = ((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue();
-		        calcRescaleFactors();
+				ScreenDimensions.quality = ((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue();
+				calcRescaleFactors();
 			}
-		}); 
+		});
 		comboQuality.setSelectedIndex(core.defaultQuality);
 		panelScreen.add(comboQuality);
-		comboFPS = new JComboBox<KeyValue<Integer>>();
-		comboFPS.addItem(new KeyValue<Integer>("2 FPS", 2));
-		comboFPS.addItem(new KeyValue<Integer>("5 FPS", 5));
-		comboFPS.addItem(new KeyValue<Integer>("10 FPS", 10));
-		comboFPS.addItem(new KeyValue<Integer>("15 FPS", 15));
-		comboFPS.addItem(new KeyValue<Integer>("20 FPS", 20));
-		comboFPS.addItem(new KeyValue<Integer>("25 FPS", 25));
-		comboFPS.addItem(new KeyValue<Integer>("30 FPS", 30));
+		comboFPS = new JComboBox<>();
+		comboFPS.addItem(new KeyValue<>("2 FPS", 2));
+		comboFPS.addItem(new KeyValue<>("5 FPS", 5));
+		comboFPS.addItem(new KeyValue<>("10 FPS", 10));
+		comboFPS.addItem(new KeyValue<>("15 FPS", 15));
+		comboFPS.addItem(new KeyValue<>("20 FPS", 20));
+		comboFPS.addItem(new KeyValue<>("25 FPS", 25));
+		comboFPS.addItem(new KeyValue<>("30 FPS", 30));
 		comboFPS.addActionListener(new ActionListener() {
 			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-		        ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
-		        calcRescaleFactors();
+				ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
+				calcRescaleFactors();
 			}
 		});
 		boolean fpsSelected = false;
@@ -492,24 +492,24 @@ public class ScreenSharerFrame extends JFrame {
 			}
 		}
 		if (!fpsSelected) {
-			comboFPS.addItem(new KeyValue<Integer>(core.defaultFPS + " FPS", core.defaultFPS));
+			comboFPS.addItem(new KeyValue<>(core.defaultFPS + " FPS", core.defaultFPS));
 			comboFPS.setSelectedIndex(comboFPS.getItemCount() - 1);
 		}
 		comboFPS.setBounds(390, 170, 70, 24);
 		comboFPS.setVisible(core.showFPS);
 		panelScreen.add(comboFPS);
-		
+
 		panelRecording.setBackground(Color.WHITE);
 		tabbedPane.addTab(getTextLabel(textLabels, 13), null, panelRecording, null); //#id 869
 		tabbedPane.setEnabledAt(0, true);
 		panelRecording.setLayout(null);
 		panelRecording.setEnabled(false);
-		
+
 		JLabel lblRecordingDesc = new JLabel("<html>" + getTextLabel(textLabels, 14) + "</html>"); //#id 870
 		lblRecordingDesc.setVerticalAlignment(SwingConstants.TOP);
 		lblRecordingDesc.setBounds(10, 10, 447, 60);
 		panelRecording.add(lblRecordingDesc);
-		
+
 		btnStartStopRecording = new JButton(getTextLabel(textLabels, 15)); //#id 871
 		btnStartStopRecording.setToolTipText(getTextLabel(textLabels, 15)); //#id 871
 		btnStartStopRecording.setIcon(startIcon);
@@ -535,49 +535,49 @@ public class ScreenSharerFrame extends JFrame {
 			}
 		});
 		panelRecording.add(btnStartStopRecording);
-		
+
 		panelPublish.setBackground(Color.WHITE);
 		tabbedPane.addTab(getTextLabel(textLabels, 23), null, panelPublish, null); //#id 1465
 		tabbedPane.setEnabledAt(1, true);
 		panelPublish.setEnabled(false);
 		panelPublish.setLayout(null);
-		
+
 		JLabel lblPublishDesc = new JLabel(getTextLabel(textLabels, 33)); //#id 1475
 		lblPublishDesc.setVerticalAlignment(SwingConstants.TOP);
 		lblPublishDesc.setBounds(10, 5, 450, 20);
 		panelPublish.add(lblPublishDesc);
-		
+
 		JLabel lblPublishHost = new JLabel(getTextLabel(textLabels, 26)); //#id 1468
 		lblPublishHost.setVerticalAlignment(SwingConstants.TOP);
 		lblPublishHost.setBounds(10, 27, 140, 20);
 		panelPublish.add(lblPublishHost);
-		
+
 		JLabel lblPublishApp = new JLabel(getTextLabel(textLabels, 27)); //#id 1469
 		lblPublishApp.setVerticalAlignment(SwingConstants.TOP);
 		lblPublishApp.setBounds(160, 27, 140, 20);
 		panelPublish.add(lblPublishApp);
-		
+
 		JLabel lblPublishId = new JLabel(getTextLabel(textLabels, 28)); //#id 1470
 		lblPublishId.setVerticalAlignment(SwingConstants.TOP);
 		lblPublishId.setBounds(310, 27, 140, 20);
 		panelPublish.add(lblPublishId);
-		
+
 		textPublishHost = new PublishTextField();
 		textPublishHost.setBounds(10, 45, 140, 20);
 		panelPublish.add(textPublishHost);
-		
+
 		textPublishApp = new PublishTextField();
 		textPublishApp.setBounds(160, 45, 140, 20);
 		panelPublish.add(textPublishApp);
-		
+
 		textPublishId = new PublishTextField();
 		textPublishId.setBounds(310, 45, 140, 20);
 		panelPublish.add(textPublishId);
-		
+
 		lblPublishURL = new JLabel("");
 		lblPublishURL.setBounds(10, 69, 447, 14);
 		panelPublish.add(lblPublishURL);
-		
+
 		btnStartStopPublish = new JButton(getTextLabel(textLabels, 24)); //#id 1466
 		btnStartStopPublish.setToolTipText(getTextLabel(textLabels, 24)); //#id 1466
 		btnStartStopPublish.setIcon(startIcon);
@@ -603,12 +603,12 @@ public class ScreenSharerFrame extends JFrame {
 			}
 		});
 		panelPublish.add(btnStartStopPublish);
-		
+
 		JPanel panelSecurity = new JPanel();
 		panelSecurity.setLayout(null);
 		panelSecurity.setBackground(Color.WHITE);
 		tabbedPane.addTab(getTextLabel(textLabels, 37), null, panelSecurity, null); //#id 1598
-		
+
 		final JCheckBox remoteEnabled = new JCheckBox(getTextLabel(textLabels, 38)); //#id 1078
 		remoteEnabled.setBackground(Color.WHITE);
 		remoteEnabled.setSelected(core.isRemoteEnabled());
@@ -621,7 +621,7 @@ public class ScreenSharerFrame extends JFrame {
 			}
 		});
 		panelSecurity.add(remoteEnabled);
-		
+
 		panelStatus.setBackground(SystemColor.control);
 		panelStatus.setLayout(null);
 		lblStatus.setHorizontalAlignment(SwingConstants.LEFT);
@@ -630,9 +630,9 @@ public class ScreenSharerFrame extends JFrame {
 				BorderFactory.createLineBorder(Color.LIGHT_GRAY),
 				BorderFactory.createEmptyBorder(0, 5, 0, 0)));
 		panelStatus.add(lblStatus);
-		
+
 		contentPane.setLayout(gl_contentPane);
-		
+
 		// Background Image
 		//We have no logo, that is why we need no background, sebawagner 29.04.2012
 	}
@@ -648,7 +648,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopSharing.setText(status ? stopSharingLabel : startSharingLabel);
 		btnStartStopSharing.setToolTipText(status ? stopSharingLabel : startSharingLabel);
 	}
-	
+
 	public void setRecordingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
 		if (status != recordingStarted) {
@@ -660,7 +660,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopRecording.setText(status ? stopRecordingLabel : startRecordingLabel);
 		btnStartStopRecording.setToolTipText(status ? stopRecordingLabel : startRecordingLabel);
 	}
-	
+
 	public void setPublishingStatus(boolean status, boolean unlockScreen) {
 		panelScreen.setEnabled(unlockScreen);
 		if (status != publishStarted) {
@@ -671,44 +671,44 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopPublish.setText(status ? stopPublishLabel : startPublishLabel);
 		btnStartStopPublish.setToolTipText(status ? stopPublishLabel : startPublishLabel);
 	}
-	
+
 	public void setRecordingTabEnabled(boolean enabled) {
 		panelRecording.setEnabled(enabled);
 		tabbedPane.setEnabledAt(0, enabled);
 		tabbedPane.setToolTipTextAt(0, enabled ? null : recordingTipLabel);
 	}
-	
+
 	public void setPublishingTabEnabled(boolean enabled) {
 		panelPublish.setEnabled(enabled);
 		tabbedPane.setEnabledAt(1, enabled);
 		tabbedPane.setToolTipTextAt(1, enabled ? null : publishingTipLabel);
 	}
-	
+
 	public String getPublishHost() {
 		return textPublishHost.getText();
 	}
-	
+
 	public String getPublishApp() {
 		return textPublishApp.getText();
 	}
-	
+
 	public String getPublishId() {
 		return textPublishId.getText();
 	}
-	
+
 	private void updatePublishURL() {
 		lblPublishURL.setText("rtmp://" + textPublishHost.getText() + ":1935/"
 				+ textPublishApp.getText() + "/" + textPublishId.getText());
 	}
-	
+
 	public void setShowWarning(boolean showWarning) {
 		this.showWarning = showWarning;
 	}
-	
+
 	public void setDoUpdateBounds(boolean doUpdateBounds) {
 		this.doUpdateBounds = doUpdateBounds;
 	}
-	
+
 	public void setStatus(String status) {
 		lblStatus.setText(status);
 	}
@@ -846,11 +846,11 @@ public class ScreenSharerFrame extends JFrame {
 		rightSlider.setBounds(x + vScreenX + width - 16, y + vScreenY - 8 + (height / 2), 32, 16);
 		upSlider.setBounds(x + vScreenX + (width / 2) - 8, y + vScreenY - 16, 16, 32);
 		downSlider.setBounds(x + vScreenX + (width / 2) - 8, y + vScreenY - 16 + height, 16, 32);
-		
+
 		virtualScreen.setText(ScreenDimensions.spinnerWidth + ":" + ScreenDimensions.spinnerHeight);
 		virtualScreen.setBounds(x + vScreenX, y + vScreenY, width, height);
 	}
-	
+
 	/**
 	 * update the bounds of the vScreen
 	 * by using the vars from the Spinners

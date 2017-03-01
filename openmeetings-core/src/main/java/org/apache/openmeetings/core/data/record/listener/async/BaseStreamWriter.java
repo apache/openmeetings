@@ -70,7 +70,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	protected String streamName = "";
 	protected final RecordingMetaDataDao metaDataDao;
-	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<CachedEvent>();
+	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<>();
 
 	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData, RecordingMetaDataDao metaDataDao) {
 		startedSessionTimeDate = new Date();
@@ -87,13 +87,13 @@ public abstract class BaseStreamWriter implements Runnable {
 		RecordingMetaData metaData = metaDataDao.get(metaDataId);
 		metaData.setStreamStatus(Status.STARTED);
 		metaDataDao.update(metaData);
-		
+
 		open();
 	}
 
 	/**
 	 * Initialization
-	 * 
+	 *
 	 * @throws IOException
 	 *             I/O exception
 	 */
@@ -134,7 +134,7 @@ public abstract class BaseStreamWriter implements Runnable {
 			try {
 				CachedEvent item = queue.poll(100, TimeUnit.MICROSECONDS);
 				if (item != null) {
-					log.trace("##REC:: got packet"); 
+					log.trace("##REC:: got packet");
 					lastPackedRecieved = System.currentTimeMillis();
 					if (dostopping) {
 						log.trace("metadatId: {} :: Recording stopped but still packets to write to file!", metaDataId);
@@ -142,7 +142,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 					packetReceived(item);
 				} else if (dostopping || lastPackedRecieved + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
-					log.debug(String.format("##REC:: none packets received for: %s minutes, exiting", (System.currentTimeMillis() - lastPackedRecieved) / MINUTE_MULTIPLIER)); 
+					log.debug(String.format("##REC:: none packets received for: %s minutes, exiting", (System.currentTimeMillis() - lastPackedRecieved) / MINUTE_MULTIPLIER));
 					stopping = true;
 					closeStream();
 				}
@@ -158,7 +158,7 @@ public abstract class BaseStreamWriter implements Runnable {
 
 	/**
 	 * Write the actual packet data to the disk and do calculate any needed additional information
-	 * 
+	 *
 	 * @param streampacket
 	 */
 	public abstract void packetReceived(CachedEvent streampacket);

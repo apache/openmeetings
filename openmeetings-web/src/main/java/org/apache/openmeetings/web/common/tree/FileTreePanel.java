@@ -91,7 +91,7 @@ public abstract class FileTreePanel extends Panel {
 			item.onClick(target);
 		}
 	};
-	private final Form<Void> form = new Form<Void>("form");
+	private final Form<Void> form = new Form<>("form");
 	private final AddFolderDialog addFolder;
 	private final ConfirmableBorderDialog trashConfirm;
 	private ConfirmableAjaxBorder trashBorder;

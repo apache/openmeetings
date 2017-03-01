@@ -47,7 +47,7 @@ public class RoomsPanel extends AdminPanel {
 	private final static JavaScriptResourceReference ROOM_FUNCTIONS = new JavaScriptResourceReference(RoomsPanel.class, "room.js");
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
-	
+
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
@@ -57,7 +57,7 @@ public class RoomsPanel extends AdminPanel {
 
 	public RoomsPanel(String id) {
 		super(id);
-		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableGroupAdminDataProvider<Room>(RoomDao.class)) {
+		SearchableDataView<Room> dataView = new SearchableDataView<Room>("roomList", new SearchableGroupAdminDataProvider<>(RoomDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -82,7 +82,7 @@ public class RoomsPanel extends AdminPanel {
 				item.add(AttributeModifier.replace("class", getRowClass(room.getId(), form.getModelObject().getId())));
 			}
 		};
-		
+
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;
@@ -92,16 +92,16 @@ public class RoomsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<Room> container = new DataViewContainer<Room>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Room>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<Room>("orderByName", "name", container))
-			.addLink(new OmOrderByBorder<Room>("orderByPublic", "ispublic", container));
+		DataViewContainer<Room> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByName", "name", container))
+			.addLink(new OmOrderByBorder<>("orderByPublic", "ispublic", container));
 		add(container.getLinks());
 		add(navigator);
 
 		add(form = new RoomForm("form", listContainer, new Room()));
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

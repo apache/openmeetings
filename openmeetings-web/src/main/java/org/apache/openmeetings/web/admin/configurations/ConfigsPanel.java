@@ -37,15 +37,15 @@ import org.apache.wicket.markup.repeater.Item;
 
 /**
  * add/update/delete {@link Configuration}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class ConfigsPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	private ConfigForm form;
 	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-	
+
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
@@ -55,9 +55,9 @@ public class ConfigsPanel extends AdminPanel {
 
 	public ConfigsPanel(String id) {
 		super(id);
-		
+
 		SearchableDataView<Configuration> dataView = new SearchableDataView<Configuration>("configList"
-			, new SearchableDataProvider<Configuration>(ConfigurationDao.class)) {
+			, new SearchableDataProvider<>(ConfigurationDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -89,16 +89,16 @@ public class ConfigsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<Configuration> container = new DataViewContainer<Configuration>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Configuration>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<Configuration>("orderByKey", "key", container))
-			.addLink(new OmOrderByBorder<Configuration>("orderByValue", "value", container));
+		DataViewContainer<Configuration> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByKey", "key", container))
+			.addLink(new OmOrderByBorder<>("orderByValue", "value", container));
 		add(container.getLinks());
 		add(navigator);
-		
+
 		form = new ConfigForm("form", listContainer, new Configuration());
 		form.showNewRecord();
 		add(form);
-		
+
 	}
 }

@@ -48,9 +48,9 @@ public abstract class PagedEntityListPanel extends BasePanel {
 		};
 
 		final SearchableDataProvider<? extends IDataProviderEntity> dp = dataView.getDataProvider();
-		Form<Void> searchForm = new Form<Void>("searchForm");
+		Form<Void> searchForm = new Form<>("searchForm");
 		add(searchForm.setOutputMarkupId(true));
-		searchForm.add(new TextField<String>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));
+		searchForm.add(new TextField<>("searchText", new PropertyModel<String>(dp, "search")).setOutputMarkupId(true));
 		AjaxButton b = new AjaxButton("search", searchForm) {
 			private static final long serialVersionUID = 1L;
 

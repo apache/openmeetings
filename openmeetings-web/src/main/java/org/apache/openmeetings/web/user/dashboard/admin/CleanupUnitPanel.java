@@ -28,12 +28,12 @@ public class CleanupUnitPanel extends Panel {
 	private final String lbl;
 
 	public CleanupUnitPanel(String id, final String lbl, CleanupUnit u) {
-		super(id, new CompoundPropertyModel<CleanupUnit>(u));
+		super(id, new CompoundPropertyModel<>(u));
 		this.lbl = lbl;
 		add(new Label("humanTotal"));
 		setRenderBodyOnly(true);
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();

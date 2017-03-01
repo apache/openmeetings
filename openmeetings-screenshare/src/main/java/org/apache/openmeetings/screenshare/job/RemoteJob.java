@@ -57,7 +57,7 @@ public class RemoteJob implements Job {
 	private static final Logger log = getLogger(RemoteJob.class);
 	public static final String CORE_KEY = "core";
 	private Robot robot = null;
-	
+
 	public RemoteJob() {
 		try {
 			robot = new Robot();
@@ -73,7 +73,7 @@ public class RemoteJob implements Job {
 		Core core = (Core)data.get(CORE_KEY);
 		try {
 			Map<String, Object> obj = null;
-			while ((obj = core.getRemoteEvents().poll(1, TimeUnit.MILLISECONDS)) != null) { 
+			while ((obj = core.getRemoteEvents().poll(1, TimeUnit.MILLISECONDS)) != null) {
 				String action = "" + obj.get("action");
 				log.trace("Action polled:: {}, count: {}", action, core.getRemoteEvents().size());
 
@@ -96,7 +96,7 @@ public class RemoteJob implements Job {
 				} else if (action.equals("copy")) {
 					String paste = getHighlightedText();
 
-					Map<Integer, String> map = new HashMap<Integer, String>();
+					Map<Integer, String> map = new HashMap<>();
 					map.put(0, "copiedText");
 					map.put(1, paste);
 
@@ -106,7 +106,7 @@ public class RemoteJob implements Job {
 				} else if (action.equals("show")) {
 					String paste = getClipboardText();
 
-					Map<Integer, String> map = new HashMap<Integer, String>();
+					Map<Integer, String> map = new HashMap<>();
 					map.put(0, "copiedText");
 					map.put(1, paste);
 

@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 public class SimulateLoadTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoadTest.class, webAppRootKey);
 	private int numberOfClients = 25;
-	private List<SimulateLoad> simulateLoadList = new ArrayList<SimulateLoad>();
+	private List<SimulateLoad> simulateLoadList = new ArrayList<>();
 
 	private String host = "192.168.1.7";
 	private final int port = 1935;

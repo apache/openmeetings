@@ -171,7 +171,7 @@ public class WebSocketHelper {
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 		Executor executor = settings.getWebSocketPushMessageExecutor();
 		for (Client c : func.apply(app)) {
-			if (check == null || (check != null && check.test(c))) {
+			if (check == null || check.test(c)) {
 				final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
 				if (wc != null && wc.isOpen()) {
 					executor.run(() -> consumer.accept(wc));

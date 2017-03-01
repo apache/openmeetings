@@ -41,7 +41,7 @@ public class OAuthPanel extends AdminPanel {
 	public OAuthPanel(String id) {
 		super(id);
 		SearchableDataView<OAuthServer> dataView = new SearchableDataView<OAuthServer>("oauthServersList",
-				new SearchableDataProvider<OAuthServer>(OAuth2Dao.class))
+				new SearchableDataProvider<>(OAuth2Dao.class))
 		{
 			private static final long serialVersionUID = 1L;
 
@@ -63,9 +63,9 @@ public class OAuthPanel extends AdminPanel {
 				});
 				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));
 			}
-			
+
 		};
-		
+
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = -1L;
@@ -75,12 +75,12 @@ public class OAuthPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<OAuthServer> container = new DataViewContainer<OAuthServer>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<OAuthServer>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<OAuthServer>("orderByName", "name", container));
+		DataViewContainer<OAuthServer> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByName", "name", container));
 		add(container.getLinks());
 		add(navigator);
-		
+
 		form = new OAuthForm("form", listContainer, new OAuthServer());
 		form.showNewRecord();
 		add(form);

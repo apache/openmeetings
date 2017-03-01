@@ -320,7 +320,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static List<Client> getClients() {
-		return new ArrayList<Client>(ONLINE_USERS.values());
+		return new ArrayList<>(ONLINE_USERS.values());
 	}
 
 	public static List<Client> getClients(Long userId) {

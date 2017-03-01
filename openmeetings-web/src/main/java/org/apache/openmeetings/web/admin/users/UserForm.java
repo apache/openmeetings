@@ -86,12 +86,12 @@ public class UserForm extends AdminBaseForm<User> {
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
-	private final RequiredTextField<String> login = new RequiredTextField<String>("login");
+	private final RequiredTextField<String> login = new RequiredTextField<>("login");
 	private final MessageDialog warning;
-	private final DropDownChoice<Long> domainId = new DropDownChoice<Long>("domainId");
+	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 
 	public UserForm(String id, WebMarkupContainer listContainer, final User user, MessageDialog warning) {
-		super(id, new CompoundPropertyModel<User>(user));
+		super(id, new CompoundPropertyModel<>(user));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		this.warning = warning;
@@ -176,7 +176,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
-		add(new DropDownChoice<Type>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
+		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -192,7 +192,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(new CheckBox("forceTimeZoneCheck"));
 
-		add(new Select2MultiChoice<Right>("rights", null, new ChoiceProvider<Right>() {
+		add(new Select2MultiChoice<>("rights", null, new ChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -235,8 +235,8 @@ public class UserForm extends AdminBaseForm<User> {
 
 	public void updateDomain(AjaxRequestTarget target) {
 		User u = getModelObject();
-		final Map<Long, String> values = new Hashtable<Long, String>();
-		List<Long> ids = new ArrayList<Long>();
+		final Map<Long, String> values = new Hashtable<>();
+		List<Long> ids = new ArrayList<>();
 		if (u.getType() == Type.ldap) {
 			for (LdapConfig c : getBean(LdapConfigDao.class).getActive()) {
 				ids.add(c.getId());

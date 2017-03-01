@@ -43,7 +43,7 @@ public class ProfileForm extends Form<User> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public ProfileForm(String id) {
-		super(id, new CompoundPropertyModel<User>(getBean(UserDao.class).get(getUserId())));
+		super(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(getUserId())));
 
 		add(feedback.setOutputMarkupId(true));
 		add(new FormSaveRefreshPanel<User>("buttons", this) {
@@ -89,7 +89,7 @@ public class ProfileForm extends Form<User> {
 		add(userForm = new UserForm("general", getModel()));
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		add(new ComunityUserForm("comunity", getModel()));
-		
+
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));

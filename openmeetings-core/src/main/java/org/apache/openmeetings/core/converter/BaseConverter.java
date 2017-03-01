@@ -120,7 +120,7 @@ public abstract class BaseConverter {
 	}
 
 	protected String[] mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
-		List<String> argv = new ArrayList<String>();
+		List<String> argv = new ArrayList<>();
 
 		argv.add(getPathToSoX());
 		argv.add("-m");

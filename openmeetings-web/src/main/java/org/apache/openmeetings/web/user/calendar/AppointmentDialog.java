@@ -27,7 +27,6 @@ import static org.apache.openmeetings.web.util.CalendarWebHelper.getDateTime;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -41,18 +40,22 @@ import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -63,6 +66,8 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -73,6 +78,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -100,8 +106,17 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private final CalendarPanel calendarPanel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	final MessageDialog confirmDelete;
-	private IModel<Collection<User>> attendeesModel = new CollectionModel<User>(new ArrayList<User>());
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
+	//FIXME TODO need to be unified with RoomInvitationForm
+	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
+	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
+			, new CollectionModel<Group>(new ArrayList<>())
+			, new GroupChoiceProvider());
+	private final UserMultiChoice attendees = new UserMultiChoice("attendees", new CollectionModel<User>(new ArrayList<>()));
+	private enum InviteeType {
+		user
+		, group
+	}
 
 	@Override
 	public int getWidth() {
@@ -201,27 +216,27 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		Appointment a = form.getModelObject();
 		a.setRoom(form.createRoom ? form.appRoom : form.groom.getModelObject());
-		final List<MeetingMember> attendees = a.getMeetingMembers() == null ? new ArrayList<MeetingMember>() : a.getMeetingMembers();
-		Set<Long> currentIds = new HashSet<Long>();
-		for (User u : attendeesModel.getObject()) {
+		final List<MeetingMember> mms = a.getMeetingMembers() == null ? new ArrayList<>() : a.getMeetingMembers();
+		Set<Long> currentIds = new HashSet<>();
+		for (User u : attendees.getModelObject()) {
 			if (u.getId() != null) {
 				currentIds.add(u.getId());
 			}
 		}
 
 		//remove users
-		for (Iterator<MeetingMember> i = attendees.iterator(); i.hasNext();) {
+		for (Iterator<MeetingMember> i = mms.iterator(); i.hasNext();) {
 			MeetingMember m = i.next();
 			if (!currentIds.contains(m.getUser().getId())) {
 				i.remove();
 			}
 		}
-		Set<Long> originalIds = new HashSet<Long>();
-		for (MeetingMember m : attendees) {
+		Set<Long> originalIds = new HashSet<>();
+		for (MeetingMember m : mms) {
 			originalIds.add(m.getUser().getId());
 		}
 		//add users
-		for (User u : attendeesModel.getObject()) {
+		for (User u : attendees.getModelObject()) {
 			if (u.getId() == null || !originalIds.contains(u.getId())) {
 				MeetingMember mm = new MeetingMember();
 				mm.setUser(u);
@@ -229,10 +244,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				mm.setInserted(a.getInserted());
 				mm.setUpdated(a.getUpdated());
 				mm.setAppointment(a);
-				attendees.add(mm);
+				mms.add(mm);
 			}
 		}
-		a.setMeetingMembers(attendees);
+		a.setMeetingMembers(mms);
 		a.setStart(getDate(form.start.getModelObject()));
 		a.setEnd(getDate(form.end.getModelObject()));
 		a.setCalendar(form.cals.getModelObject());
@@ -248,12 +263,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		return object.getOwner() != null && getUserId().equals(object.getOwner().getId());
 	}
 
-	@Override
-	protected void onDetach() {
-		attendeesModel.detach();
-		super.onDetach();
-	}
-
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private boolean createRoom = true;
@@ -263,9 +272,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private final PasswordTextField pwd = new PasswordTextField("password");
 		private final Label owner = new Label("aowner", Model.of(""));
 		private final WebMarkupContainer ownerPanel = new WebMarkupContainer("owner-row");
-		private final WebMarkupContainer createRoomBlock = new WebMarkupContainer("create-room-block", new CompoundPropertyModel<Room>(appRoom));
+		private final WebMarkupContainer createRoomBlock = new WebMarkupContainer("create-room-block", new CompoundPropertyModel<>(appRoom));
 		private final DropDownChoice<Room.Type> roomType = new RoomTypeDropDown("type");
-		private final DropDownChoice<Room> groom = new DropDownChoice<Room>(
+		private final DropDownChoice<Room> groom = new DropDownChoice<>(
 				"groom"
 				, Model.of(new Room())
 				, getRoomList()
@@ -282,6 +291,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				},
 				new ChoiceRenderer<OmCalendar>("title", "id")
 		);
+		private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 
 		private Room createAppRoom() {
 			Room r = new Room();
@@ -328,10 +338,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				cals.setEnabled(false);
 			}
 
-			attendeesModel.setObject(new ArrayList<User>());
+			attendees.setModelObject(new ArrayList<>());
 			if (a.getMeetingMembers() != null) {
 				for (MeetingMember mm : a.getMeetingMembers()) {
-					attendeesModel.getObject().add(mm.getUser());
+					attendees.getModelObject().add(mm.getUser());
 				}
 			}
 			pwd.setEnabled(a.isPasswordProtected());
@@ -348,7 +358,42 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
 			add(start.setRequired(true), end.setRequired(true));
 			add(ownerPanel.add(owner));
-			add(new UserMultiChoice("attendees", attendeesModel));
+			boolean showGroups = false;//AuthLevelUtil.hasAdminLevel(getRights());
+			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					boolean groupsEnabled = InviteeType.group == rdi.getModelObject();
+					target.add(groups.setEnabled(groupsEnabled), attendees.setEnabled(!groupsEnabled));
+				}
+			}));
+			groupContainer.add(
+				groups.setLabel(Model.of(Application.getString(126))).setOutputMarkupId(true)
+				, new Radio<>("group", Model.of(InviteeType.group))
+			);
+			if (showGroups) {
+				groups.add(new AjaxFormComponentUpdatingBehavior("change") {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						// added to update model
+					}
+				}).setEnabled(false);
+			}
+			rdi.add(attendees.add(new AjaxFormComponentUpdatingBehavior("change") {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected void onUpdate(AjaxRequestTarget target) {
+							// added to update model
+						}
+					})
+					, groupContainer.setVisible(showGroups)
+				);
+			rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
+
 			add(new TextField<String>("location"));
 			DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
 			add(toolbar);
@@ -370,7 +415,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 
 			//Advanced
-			add(new DropDownChoice<Reminder>(
+			add(new DropDownChoice<>(
 					"reminder"
 					, Arrays.asList(Reminder.values())
 					, new IChoiceRenderer<Reminder>() {
@@ -414,7 +459,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		private List<Room> getRoomList() {
 			//FIXME need to be reviewed
-			List<Room> result = new ArrayList<Room>();
+			List<Room> result = new ArrayList<>();
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
 			for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {

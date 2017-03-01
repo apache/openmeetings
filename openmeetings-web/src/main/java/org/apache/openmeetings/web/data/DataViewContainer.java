@@ -32,19 +32,19 @@ public class DataViewContainer<T extends IDataProviderEntity> implements Seriali
 	public WebMarkupContainer container;
 	public SearchableDataView<T> view;
 	public PagedEntityListPanel navigator;
-	private List<OmOrderByBorder<T>> orderLinks = new ArrayList<OmOrderByBorder<T>>();
-	
+	private List<OmOrderByBorder<T>> orderLinks = new ArrayList<>();
+
 	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view, PagedEntityListPanel navigator) {
 		this.container = container;
 		this.view = view;
 		this.navigator = navigator;
 	}
-	
+
 	public DataViewContainer<T> addLink(OmOrderByBorder<T> link) {
 		orderLinks.add(link);
 		return this;
 	}
-	
+
 	public OmOrderByBorder<T>[] getLinks() {
 		@SuppressWarnings("unchecked")
 		OmOrderByBorder<T>[] a = new OmOrderByBorder[0];

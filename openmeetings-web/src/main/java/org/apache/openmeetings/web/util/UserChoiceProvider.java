@@ -41,7 +41,7 @@ import org.wicketstuff.select2.Response;
 public class UserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	private final static int PAGE_SIZE = 10;
-	private Map<String, User> newContacts = new Hashtable<String, User>();
+	private Map<String, User> newContacts = new Hashtable<>();
 
 	public static User getUser(String value) {
 		User u = null;
@@ -70,7 +70,7 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 			} else {
 				email = value;
 			}
-			Validatable<String> valEmail = new Validatable<String>(email);
+			Validatable<String> valEmail = new Validatable<>(email);
 			RfcCompliantEmailAddressValidator.getInstance().validate(valEmail);
 			if (valEmail.isValid()) {
 				u = getBean(UserDao.class).getContact(email, fName, lName, getUserId());

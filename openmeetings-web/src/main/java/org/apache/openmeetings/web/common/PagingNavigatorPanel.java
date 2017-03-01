@@ -31,22 +31,22 @@ import org.apache.wicket.model.PropertyModel;
 public abstract class PagingNavigatorPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private int entitiesPerPage;
-	
+
 	public PagingNavigatorPanel(String id, final DataView<?> dataView, List<Integer> numbers) {
 		this(id, dataView, numbers, 50);
 	}
-	
+
 	public PagingNavigatorPanel(String id, final DataView<?> dataView, List<Integer> numbers, int _entitiesPerPage) {
 		super(id);
 		setOutputMarkupId(true);
 		this.entitiesPerPage = _entitiesPerPage;
 		dataView.setItemsPerPage(entitiesPerPage);
-		final Form<Void> f = new Form<Void>("pagingForm");
+		final Form<Void> f = new Form<>("pagingForm");
 		f.add(new OmPagingNavigator("navigator", dataView).setOutputMarkupId(true))
-			.add(new DropDownChoice<Integer>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
+			.add(new DropDownChoice<>("entitiesPerPage", new PropertyModel<Integer>(this, "entitiesPerPage"), numbers)
 				.add(new AjaxFormComponentUpdatingBehavior("change") {
 					private static final long serialVersionUID = 1L;
-	
+
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
 						long newPage = dataView.getCurrentPage() * dataView.getItemsPerPage() / entitiesPerPage;
@@ -62,10 +62,10 @@ public abstract class PagingNavigatorPanel extends Panel {
 	public int getEntitiesPerPage() {
 		return entitiesPerPage;
 	}
-	
+
 	public void setEntitiesPerPage(int entitiesPerPage) {
 		this.entitiesPerPage = entitiesPerPage;
 	}
-	
+
 	protected abstract void onEvent(AjaxRequestTarget target);
 }

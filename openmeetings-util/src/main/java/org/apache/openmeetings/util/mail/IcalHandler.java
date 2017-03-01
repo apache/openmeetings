@@ -25,9 +25,9 @@ import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.Vector;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -54,9 +54,9 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 
 /**
- * 
+ *
  * @author o.becherer, seba.wagner
- * 
+ *
  */
 public class IcalHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(IcalHandler.class, webAppRootKey);
@@ -74,14 +74,14 @@ public class IcalHandler {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param method
 	 *            (@see IcalHandler Constants)
 	 * @throws Exception
 	 */
 	public IcalHandler(Method method) {
 		log.debug("Icalhandler method type : " + method);
-		
+
 		icsCalendar = new Calendar();
 		icsCalendar.getProperties().add(new ProdId("-//Events Calendar//iCal4j 1.0//EN"));
 		icsCalendar.getProperties().add(Version.VERSION_2_0);
@@ -90,7 +90,7 @@ public class IcalHandler {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param startDate
 	 *            use standard TimeZone!!
 	 * @param endDate
@@ -110,12 +110,12 @@ public class IcalHandler {
 	 */
 	// ---------------------------------------------------------------------------------------
 	public String addNewMeeting(Date startDate, Date endDate, String name,
-			Vector<Map<String, String>> attendees, String description,
+			List<Map<String, String>> attendees, String description,
 			Map<String, String> organizer, String uid, String javaTzId) throws Exception
 	{
 
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-		
+
 		TimeZone timeZone = registry.getTimeZone(javaTzId);
 		if (timeZone == null) {
 			throw new Exception("Unable to get time zone by id provided: " + javaTzId);
@@ -125,7 +125,7 @@ public class IcalHandler {
 		start.setTimeZone(timeZone);
 		DateTime end = new DateTime(endDate);
 		end.setTimeZone(timeZone);
-		
+
 		VEvent meeting = new VEvent(start, end, name);
 
 		meeting.getProperties().add(new Description(description));
@@ -169,7 +169,7 @@ public class IcalHandler {
 	 * addMeetings Generate a Attendee
 	 */
 	public Map<String, String> getAttendeeData(String emailAdress, String displayName, boolean chair) {
-		Map<String, String> oneRecord = new HashMap<String, String>();
+		Map<String, String> oneRecord = new HashMap<>();
 		oneRecord.put("uri", "mailto:" + emailAdress);
 		oneRecord.put("cn", displayName);
 		oneRecord.put("chair", chair ? "1" : "0");

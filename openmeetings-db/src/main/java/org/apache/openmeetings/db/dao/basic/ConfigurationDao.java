@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
@@ -27,7 +28,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAME;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -55,9 +55,9 @@ import org.springframework.transaction.annotation.Transactional;
  * {@link #getConfValue(String, Class, String)} <br/>
  * <br/>
  * <b> {@link #get(String)} is deprecated!</b>
- * 
+ *
  * @author swagner
- * 
+ *
  */
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
@@ -74,7 +74,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	/**
 	 * Retrieves Configuration regardless of its deleted status
-	 * 
+	 *
 	 * @param confKey
 	 * @return
 	 */
@@ -90,8 +90,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public List<Configuration> get(String... keys) {
-		List<Configuration> result = new ArrayList<Configuration>();
-		for (String key : keys) { //iteration is necessary to fill list with all values 
+		List<Configuration> result = new ArrayList<>();
+		for (String key : keys) { //iteration is necessary to fill list with all values
 			List<Configuration> r = em.createNamedQuery("getConfigurationsByKeys", Configuration.class)
 					.setParameter("keys", Arrays.asList(key))
 					.getResultList();
@@ -103,9 +103,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	/**
 	 * Return a object using a custom type and a default value if the key is not
 	 * present, or value is not set
-	 * 
+	 *
 	 * Example: Integer my_key = getConfValue("my_key", Integer.class, "15");
-	 * 
+	 *
 	 * @param key
 	 * @param type
 	 * @param defaultValue
@@ -196,7 +196,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	public Configuration get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public Configuration get(Long id) {
 		if (id == null) {
@@ -219,7 +219,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
 	@Override
 	public long count() {
 		return em.createNamedQuery("countConfigurations", Long.class).getSingleResult();
@@ -230,12 +230,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
-	
+
 	@Override
 	public Configuration update(Configuration entity, Long userId) {
 		return update(entity, userId, false);
 	}
-	
+
 	public Configuration update(Configuration entity, Long userId, boolean deleted) {
 		String key = entity.getKey();
 		String value = entity.getValue();
@@ -270,7 +270,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	/**
 	 * returns the max upload size configured by max_upload_size config key
-	 * 
+	 *
 	 * @param configurationDao
 	 * @return
 	 */
@@ -282,7 +282,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		}
 		return DEFAULT_MAX_UPLOAD_SIZE;
 	}
-	
+
 	public String getCryptKey() {
 		if (configKeyCryptClassName == null) {
 			String cryptClass = getConfValue(CONFIG_CRYPT_KEY, String.class, null);

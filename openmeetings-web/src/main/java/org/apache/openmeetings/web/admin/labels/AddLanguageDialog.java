@@ -45,7 +45,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final DialogButton add = new DialogButton("add", Application.getString(366L));
 	private final Form<Void> form = new Form<>("addLangForm");
-	private final RequiredTextField<String> iso = new RequiredTextField<String>("iso", Model.of(""));
+	private final RequiredTextField<String> iso = new RequiredTextField<>("iso", Model.of(""));
 	private final LangPanel langPanel;
 
 	public AddLanguageDialog(String id, final LangPanel langPanel) {
@@ -73,7 +73,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 			}
 		});
 	}
-	
+
 	@Override
 	public Form<?> getForm() {
 		return form;
@@ -83,7 +83,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(add);
 	}
-	
+
 	@Override
 	public DialogButton getSubmitButton() {
 		return add;
@@ -95,7 +95,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 		handler.add(iso);
 		super.onOpen(handler);
 	}
-	
+
 	@Override
 	protected void onError(AjaxRequestTarget target) {
 		target.add(feedback);

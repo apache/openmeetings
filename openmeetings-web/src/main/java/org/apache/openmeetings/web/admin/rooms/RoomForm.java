@@ -107,7 +107,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private IModel<User> moderator2add = Model.of((User)null);
 
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
-		super(id, new CompoundPropertyModel<Room>(room));
+		super(id, new CompoundPropertyModel<>(room));
 		this.roomList = roomList;
 		setOutputMarkupId(true);
 	}
@@ -115,11 +115,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		RequiredTextField<String> name = new RequiredTextField<String>("name");
-		name.setLabel(new Model<String>(Application.getString(193)));
+		RequiredTextField<String> name = new RequiredTextField<>("name");
+		name.setLabel(new Model<>(Application.getString(193)));
 		add(name);
 
-		add(new DropDownChoice<Long>("numberOfPartizipants", //
+		add(new DropDownChoice<>("numberOfPartizipants", //
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
 				new ChoiceRenderer<Long>() {
 					private static final long serialVersionUID = 1L;
@@ -144,11 +144,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 		List<Group> orgList = isGroupAdmin
 				? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
 				: getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
-		final List<RoomGroup> orgRooms = new ArrayList<RoomGroup>(orgList.size());
+		final List<RoomGroup> orgRooms = new ArrayList<>(orgList.size());
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<RoomGroup>("roomGroups", null, new ChoiceProvider<RoomGroup>() {
+		add(new Select2MultiChoice<>("roomGroups", null, new ChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -174,11 +174,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 			@Override
 			public Collection<RoomGroup> toChoices(Collection<String> _ids) {
-				List<Long> ids = new ArrayList<Long>();
+				List<Long> ids = new ArrayList<>();
 				for (String id : _ids) {
 					ids.add(Long.valueOf(id));
 				}
-				List<RoomGroup> list = new ArrayList<RoomGroup>();
+				List<RoomGroup> list = new ArrayList<>();
 				for (Group o : getBean(GroupDao.class).get(ids)) {
 					list.add(new RoomGroup(o, RoomForm.this.getModelObject()));
 				}
@@ -187,8 +187,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 		}).setLabel(Model.of(getString("828"))).setRequired(isGroupAdmin));
 
 		add(new CheckBox("isDemoRoom"));
-		TextField<Integer> demoTime = new TextField<Integer>("demoTime");
-		demoTime.setLabel(new Model<String>(Application.getString(637)));
+		TextField<Integer> demoTime = new TextField<>("demoTime");
+		demoTime.setLabel(new Model<>(Application.getString(637)));
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("audioOnly"));
@@ -198,7 +198,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("allowRecording"));
 		add(new CheckBox("chatModerated"));
 
-		add(new Select2MultiChoice<RoomElement>("hiddenElements", null, new ChoiceProvider<RoomElement>() {
+		add(new Select2MultiChoice<>("hiddenElements", null, new ChoiceProvider<RoomElement>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -237,7 +237,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
 
 		// Moderators
-		final Select2Choice<User> moderatorChoice = new Select2Choice<User>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
+		final Select2Choice<User> moderatorChoice = new Select2Choice<>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

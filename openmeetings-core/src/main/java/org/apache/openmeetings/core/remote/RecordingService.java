@@ -65,7 +65,7 @@ public class RecordingService implements IPendingServiceCallback {
 	 * red5 stream object might be gone when the user closes the browser. But each listener has an asynchronous
 	 * component that needs to be closed no matter how the user leaves the application!
 	 */
-	private static final Map<Long, StreamListener> streamListeners = new ConcurrentHashMap<Long, StreamListener>();
+	private static final Map<Long, StreamListener> streamListeners = new ConcurrentHashMap<>();
 
 	// Spring Beans
 	@Autowired

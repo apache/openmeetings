@@ -21,11 +21,12 @@ package org.apache.openmeetings.service.room;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
-import java.util.Vector;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
@@ -56,9 +57,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class InvitationManager implements IInvitationManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, webAppRootKey);
@@ -74,12 +75,12 @@ public class InvitationManager implements IInvitationManager {
 
 	/**
 	 * @author vasya
-	 * 
+	 *
 	 * @param mm
 	 * @param a
 	 * @param message
 	 * @param subject
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
 		User owner = a.getOwner();
@@ -97,11 +98,10 @@ public class InvitationManager implements IInvitationManager {
 			default:
 				t = UpdatedAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
 				break;
-			
 		}
 		sendInvitationLink(mm.getInvitation(), type, t.getSubject(), t.getEmail(), ical);
 	}
-	
+
 	@Override
 	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
 		String invitation_link = null;
@@ -110,12 +110,12 @@ public class InvitationManager implements IInvitationManager {
 			invitation_link = app.getOmInvitationLink(i);
 		}
 		User owner = i.getInvitedBy();
-		
+
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
 		String template = InvitationTemplate.getEmail(i.getInvitee(), invitorName, message, invitation_link);
 		String email = i.getInvitee().getAddress().getEmail();
 		String replyToEmail = owner.getAddress().getEmail();
-		
+
 		if (ical) {
 			String username = i.getInvitee().getLogin();
 			boolean isOwner = owner.getId().equals(i.getInvitee().getId());
@@ -123,7 +123,7 @@ public class InvitationManager implements IInvitationManager {
 
 			Map<String, String> attendeeList = handler.getAttendeeData(email, username, isOwner);
 
-			Vector<Map<String, String>> atts = new Vector<Map<String, String>>();
+			List<Map<String, String>> atts = new ArrayList<>();
 			atts.add(attendeeList);
 
 			// Defining Organizer
@@ -152,7 +152,7 @@ public class InvitationManager implements IInvitationManager {
 	/**
 	 * This method sends invitation reminder SMS
 	 * @param phone user's phone
-	 * @param subject 
+	 * @param subject
 	 * @return
 	 */
 	@Override
@@ -169,7 +169,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param hashCode
 	 * @param hidePass
 	 * @return
@@ -209,7 +209,7 @@ public class InvitationManager implements IInvitationManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param hashCode
 	 * @param pass
 	 * @return
@@ -235,10 +235,10 @@ public class InvitationManager implements IInvitationManager {
 		}
 		return new Long(-1);
 	}
-	
+
 	/**
 	 * @author vasya
-	 * 
+	 *
 	 * @param member
 	 * @param a
 	 */
@@ -278,7 +278,7 @@ public class InvitationManager implements IInvitationManager {
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment) {
-		
+
 		Invitation invitation = _invitation;
 		if (null == _invitation) {
 			invitation = new Invitation();
@@ -292,7 +292,7 @@ public class InvitationManager implements IInvitationManager {
 
 		invitation.setUsed(false);
 		invitation.setValid(valid);
-		
+
 		// valid period of Invitation
 		switch (valid) {
 			case Period:

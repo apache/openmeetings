@@ -31,9 +31,9 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class LoadLibraryPresentationToObject {
-	
+
 	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentationToObject.class, OpenmeetingsVariables.webAppRootKey);
-	
+
 	private static LoadLibraryPresentationToObject instance;
 
 	private LoadLibraryPresentationToObject() {}
@@ -43,25 +43,25 @@ public class LoadLibraryPresentationToObject {
 			instance = new LoadLibraryPresentationToObject();
 		}
 		return instance;
-	}	
-	
+	}
+
 	public PresentationObject parseLibraryFileToObject(String filePath){
 		try {
 			PresentationObject lMap = new PresentationObject();
-			
-	        SAXReader reader = new SAXReader();
-	        Document document = reader.read(filePath);
-	        
-	        Element root = document.getRootElement();
-	        Integer k = 0;
-	        
-	        for (@SuppressWarnings("unchecked")
+
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(filePath);
+
+		Element root = document.getRootElement();
+		Integer k = 0;
+
+		for (@SuppressWarnings("unchecked")
 			Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
-	            Element item = i.next();
-	            log.error(item.getName());
-	            
-	            String nodeVal = item.getName();
-	            
+			Element item = i.next();
+			log.error(item.getName());
+
+			String nodeVal = item.getName();
+
 				if (nodeVal.equals("originalDocument")){
 					lMap.setOriginalDocument(this.createListObjectLibraryByFileDocument(item));
 				} else if (nodeVal.equals("pdfDocument")){
@@ -71,21 +71,21 @@ public class LoadLibraryPresentationToObject {
 				} else if (nodeVal.equals("thumbs")) {
 					lMap.setThumbs(this.createListObjectLibraryByFileDocumentThumbs(item));
 				}
-	            
-	            k++;
 
-	        }
-			
+			k++;
+
+		}
+
 			return lMap;
 		} catch (Exception err) {
 			log.error("parseLibraryFileToObject",err);
 			return null;
 		}
 	}
-	
+
 	public FileExplorerItemDTO createListObjectLibraryByFileDocument(Element fileElement){
 		try {
-			
+
 			log.info("createListObjectLibraryByFileDocument"+fileElement);
 			FileExplorerItemDTO fileObject = new FileExplorerItemDTO();
 			fileObject.setName(fileElement.getText());
@@ -96,13 +96,13 @@ public class LoadLibraryPresentationToObject {
 			log.error("createListObjectLibraryByFileDocument",err);
 		}
 		return null;
-	}		
-	
+	}
+
 	public LinkedList<FileExplorerItemDTO> createListObjectLibraryByFileDocumentThumbs(Element fileElement){
 		try {
 
-			LinkedList<FileExplorerItemDTO> thumbMap = new LinkedList<FileExplorerItemDTO>();
-			
+			LinkedList<FileExplorerItemDTO> thumbMap = new LinkedList<>();
+
 			for (@SuppressWarnings("unchecked")
 			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
@@ -114,13 +114,13 @@ public class LoadLibraryPresentationToObject {
 				//FIXME TODO singleThumb.setSize(thumbElement.attribute("size").getText());
 				thumbMap.add(singleThumb);
 			}
-			
+
 			return thumbMap;
-			
+
 		} catch (Exception err) {
 			log.error("createListObjectLibraryByFileDocumentThumbs",err);
 		}
 		return null;
-	}	
-	
+	}
+
 }

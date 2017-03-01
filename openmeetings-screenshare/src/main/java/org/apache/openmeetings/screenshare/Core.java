@@ -76,7 +76,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private String host;
 	private String app;
 	private int port;
-	
+
 	public String publishName;
 	private CaptureScreen _capture = null;
 	private RTMPClientPublish publishClient = null;
@@ -219,7 +219,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			int x = (int)(Ampl_factor * (mouseP.getX() - spinnerX) * scaleFactor);
 			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
 
-			Map<String, Object> cursorPosition = new HashMap<String, Object>();
+			Map<String, Object> cursorPosition = new HashMap<>();
 			cursorPosition.put("publicSID", publishName);
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
@@ -247,7 +247,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			if (Red5.getConnectionLocal() == null) {
 				Red5.setConnectionLocal(instance.getConnection());
 			}
-			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<>();
 			map.put("screenX", spinnerX);
 			map.put("screenY", spinnerY);
 
@@ -282,28 +282,28 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		startSharing = true;
 		captureScreenStart();
 	}
-	
+
 	public void recordingStart() {
 		startRecording= true;
 		captureScreenStart();
 	}
-	
+
 	public void publishingStart() {
 		startPublishing = true;
 		captureScreenStart();
 	}
-	
+
 	private void connect(String parentSid) {
 		Map<String, Object> map = instance.makeDefaultConnectionParams(host, port, app);
 		map.put("screenClient", true);
 		map.put("parentSid", parentSid);
 		instance.connect(host, port, map, this);
 	}
-	
+
 	private void captureScreenStart() {
 		try {
 			log.debug("captureScreenStart");
-			
+
 			if (!isConnected) {
 				connect(publishName);
 			} else {
@@ -324,22 +324,22 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		startSharing = false;
 		captureScreenStop("stopStreaming");
 	}
-	
+
 	public void recordingStop() {
 		startRecording = false;
 		captureScreenStop("stopRecording");
 	}
-	
+
 	public void publishingStop() {
 		startPublishing = false;
 		captureScreenStop("stopPublishing");
 	}
-	
+
 	private void captureScreenStop(String action) {
 		try {
 			log.debug("INVOKE screenSharerAction" );
 
-			Map<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<>();
 			map.put(action, true);
 
 			if (Red5.getConnectionLocal() == null) {
@@ -361,12 +361,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		frame.setSharingStatus(false, !startPublishing && !startRecording && !startSharing);
 		startSharing = false;
 	}
-	
+
 	public void stopRecording() {
 		frame.setRecordingStatus(false, !startPublishing && !startRecording && !startSharing);
 		startRecording = false;
 	}
-	
+
 	public void stopPublishing() {
 		frame.setPublishingStatus(false, !startPublishing && !startRecording && !startSharing);
 		startPublishing = false;
@@ -375,15 +375,15 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			publishClient = null;
 		}
 	}
-	
+
 	synchronized public boolean isReadyToRecord() {
 		return readyToRecord;
 	}
-	
+
 	synchronized private void setReadyToRecord(boolean readyToRecord) {
 		this.readyToRecord = readyToRecord;
 	}
-	
+
 	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
 		if (!(command instanceof Notify)) {
 			return;
@@ -392,7 +392,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		if (invoke.getType() == IEvent.Type.STREAM_DATA) {
 			return;
 		}
-		
+
 		String method = invoke.getCall().getServiceMethodName();
 		if ("screenSharerAction".equals(method)) {
 			Object[] args = invoke.getCall().getArguments();
@@ -446,7 +446,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private static boolean bool(Object b) {
 		return TRUE.equals(Boolean.valueOf("" + b));
 	}
-	
+
 	public void sendRemoteCursorEvent(Map<String, Object> obj) {
 		if (!remoteEnabled) {
 			return;
@@ -475,7 +475,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				log.trace("" + o);
 			}
 			@SuppressWarnings("unchecked")
-			Map<String, Object> returnMap = (o != null && o instanceof Map) ? (Map<String, Object>) o : new HashMap<String, Object>();
+			Map<String, Object> returnMap = (o != null && o instanceof Map) ? (Map<String, Object>) o : new HashMap<>();
 			log.trace("call ### get Method Name " + method);
 			if ("connect".equals(method)) {
 				Object code = returnMap.get("code");
@@ -520,9 +520,9 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 					}
 					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), publishName);
 					instance.publish(getCapture().getStreamId(), publishName, "live", this);
-	
+
 					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", spinnerWidth, spinnerHeight);
-	
+
 					if (!getCapture().isAlive()) {
 						getCapture().setSendCursor(startSharing);
 						getCapture().start();
@@ -566,7 +566,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	public void setRemoteEnabled(boolean remoteEnabled) {
 		this.remoteEnabled = remoteEnabled;
 	}
-	
+
 	public void setDeadlockGuard(RTMPConnection conn) {
 		ThreadPoolTaskScheduler deadlockGuard = new ThreadPoolTaskScheduler();
 		deadlockGuard.setPoolSize(16);

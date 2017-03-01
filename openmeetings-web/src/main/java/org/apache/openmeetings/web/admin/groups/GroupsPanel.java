@@ -40,9 +40,9 @@ import org.apache.wicket.markup.repeater.Item;
 /**
  * Modify/ CRUD operations for {@link Group} and
  * {@link GroupUser}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
 public class GroupsPanel extends AdminPanel {
@@ -65,7 +65,7 @@ public class GroupsPanel extends AdminPanel {
 		add(form);
 
 		//List view
-		SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableGroupAdminDataProvider<Group>(GroupDao.class)) {
+		SearchableDataView<Group> dataView = new SearchableDataView<Group>("groupList", new SearchableGroupAdminDataProvider<>(GroupDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -99,9 +99,9 @@ public class GroupsPanel extends AdminPanel {
 				target.add(listContainer);
 			}
 		};
-		DataViewContainer<Group> container = new DataViewContainer<Group>(listContainer, dataView, navigator);
-		container.addLink(new OmOrderByBorder<Group>("orderById", "id", container))
-			.addLink(new OmOrderByBorder<Group>("orderByName", "name", container));
+		DataViewContainer<Group> container = new DataViewContainer<>(listContainer, dataView, navigator);
+		container.addLink(new OmOrderByBorder<>("orderById", "id", container))
+			.addLink(new OmOrderByBorder<>("orderByName", "name", container));
 		add(container.getLinks());
 		add(navigator);
 	}

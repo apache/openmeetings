@@ -36,10 +36,10 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
-	
+
 	public AboutDialog(String id) {
 		super(id, Application.getString(1549));
-		
+
 		add(new Label("name", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("version", getVersion()));
 		add(new Label("revision", getRevision()));
@@ -48,7 +48,7 @@ public class AboutDialog extends AbstractDialog<String> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		return new ArrayList<DialogButton>();
+		return new ArrayList<>();
 	}
 
 	@Override

@@ -132,7 +132,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		List<DialogButton> list = new ArrayList<DialogButton>();
+		List<DialogButton> list = new ArrayList<>();
 		if (allowRegister()) {
 			list.add(registerBtn);
 		}
@@ -206,7 +206,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 				alreadyLoggedIn();
 			}
 			add(feedback.setOutputMarkupId(true));
-			add(loginField = new RequiredTextField<String>("login", new PropertyModel<String>(SignInDialog.this, "login")));
+			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(SignInDialog.this, "login")));
 			loginField.setLabel(Model.of(Application.getString(114)));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
 			passField.setLabel(Model.of(Application.getString(115)));
@@ -214,7 +214,7 @@ public class SignInDialog extends AbstractFormDialog<String> {
 			int selectedLdap = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LDAP_ID, Integer.class, "0");
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
 			add(new WebMarkupContainer("ldap")
-				.add(new DropDownChoice<LdapConfig>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
+				.add(new DropDownChoice<>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
 						, ldaps, new ChoiceRenderer<LdapConfig>("name", "id"))).setVisible(ldaps.size() > 1));
 			add(new CheckBox("rememberMe", new PropertyModel<Boolean>(SignInDialog.this, "rememberMe")).setOutputMarkupId(true));
 			AjaxButton ab = new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected

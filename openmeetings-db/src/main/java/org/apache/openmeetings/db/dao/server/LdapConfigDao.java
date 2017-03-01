@@ -41,10 +41,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Insert/Update/Delete {@link LdapConfig}
- * 
- * 
+ *
+ *
  * @author swagner
- * 
+ *
  */
 @Transactional
 public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
@@ -61,7 +61,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	public LdapConfig get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public LdapConfig get(Long id) {
 		try {
@@ -96,11 +96,11 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	public List<LdapConfig> get() {
 		//Add localhost Domain
 		LdapConfig ldapConfig = new LdapConfig();
-		
+
 		ldapConfig.setName("local DB [internal]");
 		ldapConfig.setId(-1L);
 
-		List<LdapConfig> result = new ArrayList<LdapConfig>();
+		List<LdapConfig> result = new ArrayList<>();
 		result.add(ldapConfig);
 		result.addAll(getActive());
 		return result;
@@ -121,7 +121,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
 	@Override
 	public long count() {
 		try {
@@ -140,7 +140,7 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
-	
+
 	@Override
 	public LdapConfig update(LdapConfig entity, Long userId) {
 		try {

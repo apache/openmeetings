@@ -59,7 +59,7 @@ public class ConnectionsPanel extends AdminPanel {
 			@Override
 			public Iterator<? extends Client> iterator(long first, long count) {
 				//FIXME add grouping by public SID
-				List<Client> l = new ArrayList<Client>(getBean(ISessionManager.class).getClientsWithServer());
+				List<Client> l = new ArrayList<>(getBean(ISessionManager.class).getClientsWithServer());
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 
@@ -131,7 +131,7 @@ public class ConnectionsPanel extends AdminPanel {
 
 			@Override
 			public Iterator<? extends org.apache.openmeetings.db.entity.basic.Client> iterator(long first, long count) {
-				List<org.apache.openmeetings.db.entity.basic.Client> l = new ArrayList<org.apache.openmeetings.db.entity.basic.Client>(Application.getClients());
+				List<org.apache.openmeetings.db.entity.basic.Client> l = new ArrayList<>(Application.getClients());
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 

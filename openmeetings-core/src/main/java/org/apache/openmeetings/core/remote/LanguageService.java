@@ -31,9 +31,9 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * @author sebastianwagner
- * 
+ *
  */
 public class LanguageService {
 	@Autowired
@@ -45,7 +45,7 @@ public class LanguageService {
 	 * @return - List of all available Languages
 	 */
 	public List<Language> getLanguages() {
-		List<Language> result = new ArrayList<Language>();
+		List<Language> result = new ArrayList<>();
 		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
 			result.add(new Language(e.getKey(), e.getValue().toLanguageTag(), e.getValue().getDisplayName(Locale.ENGLISH)));
 		}
@@ -58,7 +58,7 @@ public class LanguageService {
 
 	/**
 	 * get all fields of a given Language_id by params
-	 * 
+	 *
 	 * @param language_id
 	 * @param start
 	 * @param count
@@ -73,9 +73,9 @@ public class LanguageService {
 		public long language_id;
 		public String code;
 		public String name;
-		
+
 		public Language() {}
-		
+
 		public Language(long language_id, String code, String name) {
 			this.language_id = language_id;
 			this.code = code;

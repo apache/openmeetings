@@ -64,7 +64,7 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 			private PasswordTextField confirmPassword;
 			{
 				add(feedback.setOutputMarkupId(true));
-				add(login = new TextField<String>("login", Model.of(user.getLogin())));
+				add(login = new TextField<>("login", Model.of(user.getLogin())));
 				login.setOutputMarkupId(true);
 				add(password = new PasswordTextField("password", new Model<String>()));
 				password.setOutputMarkupId(true);

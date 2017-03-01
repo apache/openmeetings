@@ -103,7 +103,7 @@ public class UserManager implements IUserManager {
 	public SearchResult<User> getAllUserByRange(String search, int start, int max,
 			String orderby, boolean asc) {
 		try {
-			SearchResult<User> sresult = new SearchResult<User>();
+			SearchResult<User> sresult = new SearchResult<>();
 			sresult.setObjectName(User.class.getName());
 			sresult.setRecords(userDao.count(search));
 
@@ -431,7 +431,7 @@ public class UserManager implements IUserManager {
 					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
 
-					HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
+					Map<Integer, String> messageObj = new HashMap<>();
 					messageObj.put(0, "kick");
 					scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
 				}
@@ -461,7 +461,7 @@ public class UserManager implements IUserManager {
 				}
 				IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
 
-				HashMap<Integer, String> messageObj = new HashMap<Integer, String>();
+				Map<Integer, String> messageObj = new HashMap<>();
 				messageObj.put(0, "kick");
 				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
 

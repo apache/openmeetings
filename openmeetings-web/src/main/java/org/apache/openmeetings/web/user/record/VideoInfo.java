@@ -55,7 +55,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
 public class VideoInfo extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final Form<Void> form = new Form<Void>("form");
+	private final Form<Void> form = new Form<>("form");
 	private final AjaxSplitButton downloadBtn = new AjaxSplitButton("downloadBtn", new ArrayList<IMenuItem>());
 	private final AjaxButton reConvert = new AjaxButton("re-convert") {
 		private static final long serialVersionUID = 1L;
@@ -77,7 +77,7 @@ public class VideoInfo extends Panel {
 		}
 	};
 	private final AjaxDownload download = new AjaxDownload();
-	private final IModel<Recording> rm = new CompoundPropertyModel<Recording>(new Recording());
+	private final IModel<Recording> rm = new CompoundPropertyModel<>(new Recording());
 	private final IModel<String> roomName = Model.of((String)null);
 	private boolean isInterview = false;
 	private final InvitationDialog invite;

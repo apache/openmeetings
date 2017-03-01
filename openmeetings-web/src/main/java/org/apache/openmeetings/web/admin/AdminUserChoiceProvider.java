@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Response;
 
 public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
@@ -47,10 +47,10 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 
 	@Override
 	public Collection<User> toChoices(Collection<String> _ids) {
-		List<Long> ids = new ArrayList<Long>();
+		List<Long> ids = new ArrayList<>();
 		for (String id : _ids) {
 			ids.add(Long.valueOf(id));
 		}
-		return new ArrayList<User>(getBean(UserDao.class).get(ids));
+		return new ArrayList<>(getBean(UserDao.class).get(ids));
 	}
 }

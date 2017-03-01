@@ -76,10 +76,10 @@ public class OmOption extends Option {
 	public void setOptional(boolean val) {
 		setOptional(group, val);
 	}
-	
+
 	public void setOptional(String group, boolean val) {
 		String[] grps = group.split(",");
-		optional = new HashMap<String, Boolean>(grps.length);
+		optional = new HashMap<>(grps.length);
 		for(String g : grps) {
 			optional.put(g, val);
 		}

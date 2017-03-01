@@ -58,8 +58,8 @@ public class RoomInvitationForm extends InvitationForm {
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
-	final Select2MultiChoice<Group> groups = new Select2MultiChoice<Group>("groups"
-			, new CollectionModel<Group>(new ArrayList<Group>())
+	final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
+			, new CollectionModel<>(new ArrayList<Group>())
 			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 
@@ -85,17 +85,17 @@ public class RoomInvitationForm extends InvitationForm {
 		groupContainer.add(
 			groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
-				
+
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {
 					url.setModelObject(null);
 					updateButtons(target);
 				}
 			}).setOutputMarkupId(true)
-			, new Radio<InviteeType>("group", Model.of(InviteeType.group))
+			, new Radio<>("group", Model.of(InviteeType.group))
 		);
 		rdi.add(recipients, groupContainer.setVisible(showGroups));
-		rdi.add(new Radio<InviteeType>("user", Model.of(InviteeType.user)));
+		rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
 		add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		sipContainer.add(new Label("room.confno", "")).setVisible(false);
 	}
@@ -110,7 +110,7 @@ public class RoomInvitationForm extends InvitationForm {
 			dialog.generate.setEnabled(false, target);
 		}
 	}
-	
+
 	@Override
 	public void updateModel(AjaxRequestTarget target) {
 		super.updateModel(target);

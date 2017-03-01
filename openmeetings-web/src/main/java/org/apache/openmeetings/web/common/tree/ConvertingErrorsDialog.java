@@ -61,7 +61,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 	public int getWidth() {
 		return 600;
 	}
-	
+
 	@Override
 	public boolean isResizable() {
 		return true;
@@ -76,7 +76,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 		super(id, Application.getString(887), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
-	
+
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		FileItem f = getModelObject();
@@ -98,13 +98,13 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 		handler.add(container);
 		super.onOpen(handler);
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
-		return new ArrayList<DialogButton>();
+		return new ArrayList<>();
 	}
 }

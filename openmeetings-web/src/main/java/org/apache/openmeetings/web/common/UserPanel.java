@@ -37,13 +37,13 @@ public abstract class UserPanel extends BasePanel {
 	public UserPanel(String id) {
 		super(id);
 	}
-	
+
 	public UserPanel(String id, IModel<?> model) {
 		super(id, model);
 	}
-	
+
 	public static List<Room> getMyRooms() {
-		List<Room> result = new ArrayList<Room>();
+		List<Room> result = new ArrayList<>();
 		result.add(getBean(RoomDao.class).getUserRoom(getUserId(), Room.Type.conference, Application.getString(1306L)));
 		result.add(getBean(RoomDao.class).getUserRoom(getUserId(), Room.Type.restricted, Application.getString(1307L)));
 		result.addAll(getBean(RoomDao.class).getAppointedRoomsByUser(getUserId()));

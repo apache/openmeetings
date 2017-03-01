@@ -18,13 +18,12 @@
  */
 package org.apache.openmeetings.util.message;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 
-public class RoomMessage implements IWebSocketPushMessage, Serializable {
+public class RoomMessage implements IWebSocketPushMessage {
 	private static final long serialVersionUID = 1L;
 	public enum Type {
 		roomEnter

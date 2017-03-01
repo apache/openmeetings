@@ -74,9 +74,9 @@ public class UserSearchPanel extends UserPanel {
 		add(new Form<Void>("form") {
 			private static final long serialVersionUID = 1L;
 			{
-				add(new TextField<String>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
-				add(new TextField<String>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
-				add(new TextField<String>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));
+				add(new TextField<>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
+				add(new TextField<>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
+				add(new TextField<>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));
 				add(new AjaxButton("submit") {
 					private static final long serialVersionUID = 1L;
 
@@ -108,7 +108,7 @@ public class UserSearchPanel extends UserPanel {
 
 			@Override
 			public IModel<User> model(User object) {
-				return new CompoundPropertyModel<User>(object);
+				return new CompoundPropertyModel<>(object);
 			}
 
 		};

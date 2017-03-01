@@ -68,7 +68,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final Form<Void> form = new Form<Void>("form");
+		final Form<Void> form = new Form<>("form");
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object

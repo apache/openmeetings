@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.admin.ldaps;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
-import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -42,19 +42,19 @@ import org.apache.wicket.util.time.Duration;
 
 /**
  * Form components to insert/update/delete {@link LdapConfig}
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class LdapForm extends AdminBaseForm<LdapConfig> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
 
 	public LdapForm(String id, WebMarkupContainer listContainer, final LdapConfig ldapConfig) {
-		super(id, new CompoundPropertyModel<LdapConfig>(ldapConfig));
+		super(id, new CompoundPropertyModel<>(ldapConfig));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		
+
 		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1108))));
 		add(new CheckBox("active"));
 		add(forDatePattern("inserted", WEB_DATE_PATTERN));

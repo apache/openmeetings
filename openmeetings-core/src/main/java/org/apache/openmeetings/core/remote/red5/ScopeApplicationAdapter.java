@@ -215,6 +215,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
 			}
+			rcm.setUsername(parent.getUsername());
 			rcm.setFirstname(parent.getFirstname());
 			rcm.setLastname(parent.getLastname());
 			rcm.setUserId(parent.getUserId());
@@ -270,6 +271,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					log.error("Attempt of unauthorized room enter: USER not found, client is rejected");
 					return rejectClient();
 				}
+				rcm.setUsername(u.getLogin());
 				rcm.setFirstname(u.getFirstname());
 				rcm.setLastname(u.getLastname());
 				rcm.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
@@ -319,7 +321,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public Map<String, String> screenSharerAction(Map<String, Object> map) {
-		Map<String, String> returnMap = new HashMap<String, String>();
+		Map<String, String> returnMap = new HashMap<>();
 		try {
 			log.debug("-----------  screenSharerAction ENTER");
 			IConnection current = Red5.getConnectionLocal();
@@ -377,7 +379,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			log.debug("checkScreenSharing -2- " + streamid);
 
-			List<Client> screenSharerList = new LinkedList<Client>();
+			List<Client> screenSharerList = new LinkedList<>();
 
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 
@@ -432,7 +434,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				client.setStreamPublishName("" + map.get("publishName"));
 				sessionManager.updateClientByStreamId(current.getClient().getId(), client, false, null);
 
-				Map<String, Object> returnMap = new HashMap<String, Object>();
+				Map<String, Object> returnMap = new HashMap<>();
 				returnMap.put("alreadyPublished", false);
 
 				// if is already started screen sharing, then there is no need
@@ -509,7 +511,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 			}
 		}
-		return new ArrayList<Long>(broadcastList);
+		return new ArrayList<>(broadcastList);
 	}
 
 	/**
@@ -944,7 +946,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			currentClient.setMicMuted(mute);
 			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
 
-			HashMap<Integer, Object> newMessage = new HashMap<Integer, Object>();
+			Map<Integer, Object> newMessage = new HashMap<>();
 			newMessage.put(0, "updateMuteStatus");
 			newMessage.put(1, currentClient);
 			sendMessageWithClient(newMessage);
@@ -1231,8 +1233,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param message
 	 * @return the list of room clients
 	 */
-	public HashMap<String, Client> sendMessageByRoomAndDomain(Long roomId, Object message) {
-		HashMap<String, Client> roomClientList = new HashMap<String, Client>();
+	public Map<String, Client> sendMessageByRoomAndDomain(Long roomId, Object message) {
+		Map<String, Client> roomClientList = new HashMap<>();
 		try {
 
 			log.debug("sendMessageByRoomAndDomain " + roomId);
@@ -1441,7 +1443,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, wbId);
 			}
 
-			Map<String, Object> sendObject = new HashMap<String, Object>();
+			Map<String, Object> sendObject = new HashMap<>();
 			sendObject.put("id", wbId);
 			sendObject.put("param", wbObj);
 
@@ -1666,7 +1668,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
-			HashMap<String, Object> hsm = new HashMap<String, Object>();
+			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
 
@@ -1692,7 +1694,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			log.debug("### sendMessageById ###" + clientId);
 
-			HashMap<String, Object> hsm = new HashMap<String, Object>();
+			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("message", newMessage);
 
 			// broadcast Message to specific user with id inside the same Scope
@@ -1724,7 +1726,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
-			HashMap<String, Object> hsm = new HashMap<String, Object>();
+			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("client", currentClient);
 			hsm.put("message", newMessage);
 
@@ -1832,7 +1834,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			current_rcl.setIsRecording(true);
 			sessionManager.updateClientByStreamId(current.getClient().getId(), current_rcl, false, null);
 
-			Map<String, String> interviewStatus = new HashMap<String, String>();
+			Map<String, String> interviewStatus = new HashMap<>();
 			interviewStatus.put("action", "start");
 
 			for (IConnection conn : current.getScope().getClientConnections()) {
@@ -1922,7 +1924,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			recordingService.stopRecordAndSave(scope, currentClient, clientRecordingId);
 
-			Map<String, String> interviewStatus = new HashMap<String, String>();
+			Map<String, String> interviewStatus = new HashMap<>();
 			interviewStatus.put("action", "stop");
 
 			sendMessageToCurrentScope("interviewStatus", interviewStatus, true);
@@ -1949,7 +1951,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		} catch (Exception err) {
 			log.debug("[getClientListScope]", err);
 		}
-		return new ArrayList<Client>();
+		return new ArrayList<>();
 	}
 
 	private boolean getWhiteboardDrawStatus() {
@@ -1976,7 +1978,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 
 	private List<Long> getVerifiedActiveRoomIds(Server s) {
-		List<Long> result = new ArrayList<Long>(sessionManager.getActiveRoomIdsByServer(s));
+		List<Long> result = new ArrayList<>(sessionManager.getActiveRoomIdsByServer(s));
 		//verify
 		for (Iterator<Long> i = result.iterator(); i.hasNext();) {
 			Long id = i.next();

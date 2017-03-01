@@ -36,12 +36,12 @@ import org.apache.commons.cli.Options;
 public class OmHelpFormatter extends HelpFormatter {
 	private static String GENERAL_OPTION_GROUP = "";
 	private int maxPrefixLength = 0;
-	
+
 	@SuppressWarnings("unchecked")
 	private static List<OmOption> getReqOptions(Options opts) {
 		//suppose we have only 1 group (for now)
 		OptionGroup g = ((List<OptionGroup>)opts.getRequiredOptions()).get(0);
-		List<OmOption> result = new ArrayList<OmOption>();
+		List<OmOption> result = new ArrayList<>();
 		for (Option o : g.getOptions()) {
 			result.add((OmOption)o);
 		}
@@ -53,13 +53,13 @@ public class OmHelpFormatter extends HelpFormatter {
 		});
 		return result;
 	}
-	
-	private LinkedHashMap<String, List<OmOption>> getOptions(Options opts, int leftPad) {
+
+	private Map<String, List<OmOption>> getOptions(Options opts, int leftPad) {
 		final String longOptSeparator = " ";
 		final String lpad = createPadding(leftPad);
 		final String lpadParam = createPadding(leftPad + 2);
 		List<OmOption> reqOptions = getReqOptions(opts);
-		LinkedHashMap<String, List<OmOption>> map = new LinkedHashMap<String, List<OmOption>>(reqOptions.size());
+		Map<String, List<OmOption>> map = new LinkedHashMap<>(reqOptions.size());
 		map.put(GENERAL_OPTION_GROUP, new ArrayList<OmOption>());
 		for (OmOption o : reqOptions) {
 			map.put(o.getOpt(), new ArrayList<OmOption>());
@@ -69,7 +69,7 @@ public class OmHelpFormatter extends HelpFormatter {
 			//TODO need better check (required option should go first and should not be duplicated
 			boolean skipOption = map.containsKey(o.getOpt());
 			boolean mainOption = skipOption || o.getGroup() == null;
-			
+
 			// first create list containing only <lpad>-a,--aaa where
 			// -a is opt and --aaa is long opt; in parallel look for
 			// the longest opt string this list will be then used to
@@ -103,7 +103,7 @@ public class OmHelpFormatter extends HelpFormatter {
 
 			o.setHelpPrefix(optBuf);
 			maxPrefixLength = Math.max(optBuf.length(), maxPrefixLength);
-			
+
 			if (skipOption) {
 				//TODO need better check (required option should go first and should not be duplicated
 				continue;
@@ -125,7 +125,7 @@ public class OmHelpFormatter extends HelpFormatter {
 					boolean o2opt = !o2.isOptional(key);
 					return (o1opt && o2opt || !o1opt && !o2opt) ? (o1.getOpt() == null ? 1 : -1) : (o1opt ? -1 : 1);
 				}
-				
+
 			});
 			if (opts.hasOption(key)) {
 				options.add(0, (OmOption)opts.getOption(key));
@@ -133,7 +133,7 @@ public class OmHelpFormatter extends HelpFormatter {
 		}
 		return map;
 	}
-	
+
 	private static StringBuilder getReqOptionsString(Options opts) {
 		String delim = "";
 		StringBuilder result = new StringBuilder();
@@ -143,13 +143,13 @@ public class OmHelpFormatter extends HelpFormatter {
 		}
 		return result;
 	}
-	
+
 	@Override
 	protected StringBuffer renderOptions(StringBuffer sb, int width, Options options, int leftPad, int descPad) {
 		final String dpad = createPadding(descPad);
 		final String optional = "(optional) ";
 
-		LinkedHashMap<String, List<OmOption>> optList = getOptions(options, leftPad);
+		Map<String, List<OmOption>> optList = getOptions(options, leftPad);
 
 		char[] delimiter = new char[width - 2];
 		Arrays.fill(delimiter, '-');
