@@ -27,6 +27,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REG
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
