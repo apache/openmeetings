@@ -389,7 +389,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				c.setRoomId(null);
 			}
 			c.getActivities().clear();
-			c.getRights().clear();
+			c.clearRights();
 		}
 		return c;
 	}

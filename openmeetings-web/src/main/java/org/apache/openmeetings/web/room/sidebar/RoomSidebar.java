@@ -393,10 +393,10 @@ public class RoomSidebar extends Panel {
 		}
 		if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
 			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
-				c.getRights().add(Room.Right.audio);
+				c.allow(Room.Right.audio);
 			}
 			if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
-				c.getRights().add(Room.Right.video);
+				c.allow(Room.Right.video);
 			}
 		}
 		if (activityAllowed(c, a, room.getRoom())) {

@@ -38,6 +38,7 @@ import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -159,6 +160,8 @@ public class RoomPanel extends BasePanel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		//let's refresh user in client
+		getClient().updateUser(getBean(UserDao.class));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
@@ -418,7 +421,7 @@ public class RoomPanel extends BasePanel {
 			addUserToRoom(c.setRoomId(getRoom().getId()));
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
-				c.getRights().add(Right.superModerator);
+				c.allow(Right.superModerator);
 			} else {
 				//FIXME TODO !!! c.getUser != getUserId
 				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
@@ -538,7 +541,7 @@ public class RoomPanel extends BasePanel {
 
 	public void denyRight(AjaxRequestTarget target, Client client, Right... rights) {
 		for (Right right : rights) {
-			client.getRights().remove(right);
+			client.deny(right);
 		}
 		if (client.hasActivity(Client.Activity.broadcastA) && !client.hasRight(Right.audio)) {
 			client.remove(Client.Activity.broadcastA);

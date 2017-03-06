@@ -53,7 +53,7 @@ public class Client implements IDataProviderEntity {
 	}
 	private final String sessionId;
 	private int pageId;
-	private final User user;
+	private User user;
 	private Long roomId;
 	private final String uid;
 	private final String sid;
@@ -110,6 +110,10 @@ public class Client implements IDataProviderEntity {
 		return user;
 	}
 
+	public void updateUser(UserDao dao) {
+		user = dao.get(user.getId());
+	}
+
 	public Long getUserId() {
 		return user.getId();
 	}
@@ -122,8 +126,8 @@ public class Client implements IDataProviderEntity {
 		return sid;
 	}
 
-	public Set<Right> getRights() {
-		return rights;
+	public void clearRights() {
+		rights.clear();
 	}
 
 	public boolean hasRight(Right right) {
@@ -142,6 +146,12 @@ public class Client implements IDataProviderEntity {
 			if (!hasRight(right)) {
 				rights.add(right);
 			}
+		}
+	}
+
+	public void deny(Right... _rights) {
+		for (Right right : _rights) {
+			rights.remove(right);
 		}
 	}
 
