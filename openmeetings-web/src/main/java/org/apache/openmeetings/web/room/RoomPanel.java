@@ -30,6 +30,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.Calendar;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
@@ -408,9 +409,9 @@ public class RoomPanel extends BasePanel {
 				c.getRights().add(Right.superModerator);
 			} else {
 				//FIXME TODO !!! c.getUser != getUserId
-				Right rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
-				if (rr != null) {
-					c.getRights().add(rr);
+				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
+				if (!rr.isEmpty()) {
+					c.allow(rr);
 				}
 			}
 		}
@@ -520,9 +521,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void allowRight(AjaxRequestTarget target, Client client, Right... rights) {
-		for (Right right : rights) {
-			client.getRights().add(right);
-		}
+		client.allow(rights);
 		broadcast(target, client);
 	}
 

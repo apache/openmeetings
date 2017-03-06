@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -130,6 +131,18 @@ public class Client implements IDataProviderEntity {
 			return rights.contains(right);
 		}
 		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) ? true : rights.contains(right);
+	}
+
+	public void allow(Right... _rights) {
+		allow(Arrays.asList(_rights));
+	}
+
+	public void allow(Iterable<Right> _rights) {
+		for (Right right : _rights) {
+			if (!hasRight(right)) {
+				rights.add(right);
+			}
+		}
 	}
 
 	public Set<Activity> getActivities() {

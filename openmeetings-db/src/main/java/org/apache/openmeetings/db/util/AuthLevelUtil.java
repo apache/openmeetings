@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -33,57 +34,61 @@ import org.slf4j.Logger;
 
 public class AuthLevelUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelUtil.class, webAppRootKey);
-	
+
 	private static boolean check(Set<User.Right> rights, User.Right level) {
 		boolean result = rights.contains(level);
 		log.debug(String.format("Level %s :: %s", level, result ? "[GRANTED]" : "[DENIED]"));
 		return result;
 	}
-	
+
 	public static boolean hasUserLevel(Set<User.Right> rights) {
 		return check(rights, User.Right.Room);
 	}
 
-	public static Room.Right getRoomRight(User u, Room r, Appointment a, int userCount) {
-		Room.Right result = null;
+	public static Set<Room.Right> getRoomRight(User u, Room r, Appointment a, int userCount) {
+		Set<Room.Right> result = new HashSet<>();
 		if (u == null) {
 			return result;
 		}
 		if (hasAdminLevel(u.getRights())) {
 			//admin user get superModerator level, no-one can kick him/her
-			result = Room.Right.superModerator;
+			result.add(Room.Right.superModerator);
 		} else if (r.isAppointment() && a != null) {
 			// appointment owner is super moderator
 			if (u.getId().equals(a.getOwner().getId())) {
-				result = Room.Right.superModerator;
+				result.add(Room.Right.superModerator);
 			}
 		}
-		if (result == null) {
+		if (result.isEmpty()) {
 			if (!r.isModerated() && 1 == userCount) {
 				//room is not moderated, first user is moderator!
-				result = Room.Right.moderator;
+				result.add(Room.Right.moderator);
 			}
 			//performing loop here to set possible 'superModerator' right
 			for (RoomModerator rm : r.getModerators()) {
 				if (u.getId().equals(rm.getUser().getId())) {
-					result = rm.isSuperModerator() ? Room.Right.superModerator : Room.Right.moderator;
+					result.add(rm.isSuperModerator() ? Room.Right.superModerator : Room.Right.moderator);
 					break;
 				}
 			}
 			//no need to loop if client is moderator
-			if (result == null && !r.getRoomGroups().isEmpty()) {
+			if (result.isEmpty() && !r.getRoomGroups().isEmpty()) {
 				for (RoomGroup rg : r.getRoomGroups()) {
 					for (GroupUser gu : u.getGroupUsers()) {
 						if (gu.getGroup().getId().equals(rg.getGroup().getId()) && gu.isModerator()) {
-							result = Room.Right.moderator;
+							result.add(Room.Right.moderator);
 							break;
 						}
 					}
-					if (result != null) {
+					if (!result.isEmpty()) {
 						break;
 					}
 				}
 			}
+		}
+		if (Room.Type.conference == r.getType() && !result.contains(Room.Right.video)) {
+			result.add(Room.Right.audio);
+			result.add(Room.Right.video);
 		}
 		return result;
 	}
