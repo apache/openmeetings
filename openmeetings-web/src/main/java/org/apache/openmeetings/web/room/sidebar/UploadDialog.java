@@ -180,41 +180,45 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		FileUpload fu = uploadField.getFileUpload();
-		if (fu != null) {
-			FileExplorerItem f = new FileExplorerItem();
-			f.setSize(fu.getSize());
-			f.setName(fu.getClientFileName());
-			FileItem parent = roomFiles.getLastSelected();
-			if (parent == null || !(parent instanceof FileExplorerItem)) {
-				f.setOwnerId(getUserId());
-			} else {
-				f.setRoomId(parent.getRoomId());
-				f.setOwnerId(parent.getOwnerId());
-				if (parent.getId() != null) {
-					f.setParentId(FileItem.Type.Folder == parent.getType() ? parent.getId() : parent.getParentId());
+		List<FileUpload> ful = uploadField.getFileUploads();
+		if (ful != null) {
+			for (FileUpload fu : ful) {
+				FileExplorerItem f = new FileExplorerItem();
+				f.setSize(fu.getSize());
+				f.setName(fu.getClientFileName());
+				FileItem parent = roomFiles.getLastSelected();
+				if (parent == null || !(parent instanceof FileExplorerItem)) {
+					f.setOwnerId(getUserId());
+				} else {
+					f.setRoomId(parent.getRoomId());
+					f.setOwnerId(parent.getOwnerId());
+					if (parent.getId() != null) {
+						f.setParentId(FileItem.Type.Folder == parent.getType() ? parent.getId() : parent.getParentId());
+					}
+				}
+				f.setInsertedBy(getUserId());
+
+				try {
+					ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
+					for (Entry<String, ConverterProcessResult> entry : logs.getJobs().entrySet()) {
+						getBean(FileItemLogDao.class).add(entry.getValue().getProcess(), f, entry.getValue());
+					}
+					room.getSidebar().updateFiles(target);
+					if (logs.hasError()) {
+						form.error(getString("convert.errors.file"));
+					} else {
+						if (toWb.getModelObject()) {
+							room.sendFileToWb(f, cleanWb.getModelObject());
+						}
+					}
+				} catch (Exception e) {
+					form.error(e.getMessage());
 				}
 			}
-			f.setInsertedBy(getUserId());
-
-			try {
-				ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
-				for (Entry<String, ConverterProcessResult> entry : logs.getJobs().entrySet()) {
-					getBean(FileItemLogDao.class).add(entry.getValue().getProcess(), f, entry.getValue());
-				}
-				room.getSidebar().updateFiles(target);
-				if (logs.hasError()) {
-					form.error(getString("convert.errors.file"));
-					onError(target);
-				} else {
-					if (toWb.getModelObject()) {
-						room.sendFileToWb(f, cleanWb.getModelObject());
-					}
-					close(target, null);
-				}
-			} catch (Exception e) {
-				form.error(e.getMessage());
+			if (form.hasError()) {
 				onError(target);
+			} else {
+				close(target, null);
 			}
 		}
 	}

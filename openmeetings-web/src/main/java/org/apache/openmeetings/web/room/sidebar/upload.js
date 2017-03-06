@@ -21,8 +21,15 @@ function bindUpload(markupId, hiddenId) {
 	if (!fi.eventAdded) {
 		$('#' + markupId + ' .fileinput').on('change.bs.fileinput', function(event) {
 			event.stopPropagation();
+			var th = $(this),
+			fInput = th.find('input[type=file]'),
+			fn = th.find('.fileinput-filename');
+			if (fInput[0].files !== undefined && fInput[0].files.length > 1) {
+				fn.text($.map(fInput[0].files, function(val) { return val.name; }).join(', '));
+			}
+			fInput.attr('title', fn.text());
 			var hi = $('#' + hiddenId);
-			hi.val($('#' + markupId + ' .fileinput .fileinput-filename').text());
+			hi.val(fn.text());
 			hi.trigger('change');
 			return false;
 		});
