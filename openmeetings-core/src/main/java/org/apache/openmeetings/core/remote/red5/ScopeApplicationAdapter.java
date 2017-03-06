@@ -1140,9 +1140,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				client.setIsSuperModerator(isSuperModerator);
 				client.setIsMod(isSuperModerator);
 			} else {
-				Room.Right rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? appointmentDao.getByRoom(r.getId()) : null, roomClients.size());
-				client.setIsSuperModerator(rr == Room.Right.superModerator);
-				client.setIsMod(becomeModerator || rr == Room.Right.moderator);
+				Set<Room.Right> rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? appointmentDao.getByRoom(r.getId()) : null, roomClients.size());
+				client.setIsSuperModerator(rr.contains(Room.Right.superModerator));
+				client.setIsMod(becomeModerator || rr.contains(Room.Right.moderator));
 			}
 			if (client.getIsMod()) {
 				// Update the Client List
