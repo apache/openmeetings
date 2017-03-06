@@ -26,11 +26,16 @@ import org.json.JSONObject;
 
 public class ExtendedClientProperties extends ClientProperties {
 	private static final long serialVersionUID = 1L;
+	private String baseUrl;
 	private String codebase;
 	private String settings;
 
 	public String getCodebase() {
 		return codebase;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
 	}
 
 	public void setSettings(JSONObject s) {
@@ -57,6 +62,7 @@ public class ExtendedClientProperties extends ClientProperties {
 		if (sb.charAt(sb.length() - 1) != '/') {
 			sb.append('/');
 		}
+		baseUrl = sb.toString();
 		codebase = sb.append("screenshare").toString();
 		settings = parameters.getParameterValue("settings").toString("{}");
 	}
