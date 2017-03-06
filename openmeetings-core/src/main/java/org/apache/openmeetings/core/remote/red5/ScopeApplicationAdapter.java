@@ -287,7 +287,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (!Strings.isEmpty(uid)) {
 			rcm.setPublicSID(uid);
 		}
-		rcm = sessionManager.add(iapp.updateClient(rcm), null);
+		rcm = sessionManager.add(iapp.updateClient(rcm, false), null);
 		if (rcm == null) {
 			log.warn("Failed to create Client on room connect");
 			return false;

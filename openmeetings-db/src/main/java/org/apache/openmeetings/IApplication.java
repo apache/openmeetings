@@ -39,7 +39,7 @@ public interface IApplication {
 	String getOmString(long id, long languageId);
 	String getOmString(String key, long languageId);
 	String getOmString(String key, final Locale loc, String... params);
-	Client updateClient(Client rcl);
+	Client updateClient(Client rcl, boolean forceSize);
 	List<org.apache.openmeetings.db.entity.basic.Client> getOmRoomClients(Long roomId);
 	List<org.apache.openmeetings.db.entity.basic.Client> getOmClients(Long userId);
 	String getOmContactsLink();
