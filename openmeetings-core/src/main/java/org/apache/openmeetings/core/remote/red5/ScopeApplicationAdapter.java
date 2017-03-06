@@ -733,7 +733,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				c.setScreenPublishStarted(true);
 				sessionManager.updateClientByStreamId(streamid, c, false, null);
 			}
-			if (!Strings.isEmpty(c.getSecurityCode())) {
+			if (!c.isMobile() && !Strings.isEmpty(c.getSecurityCode())) {
 				c.setBroadCastID(Long.parseLong(stream.getPublishedName()));
 				c.setAvsettings("av");
 				c.setIsBroadcasting(true);
