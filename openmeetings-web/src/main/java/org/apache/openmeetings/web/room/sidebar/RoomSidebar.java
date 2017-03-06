@@ -37,6 +37,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
+import org.apache.openmeetings.web.room.RoomBroadcaster;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.wicket.AttributeModifier;
@@ -222,6 +223,7 @@ public class RoomSidebar extends Panel {
 						toggleActivity(c, Activity.broadcastAV, target);
 					}
 				}
+				RoomBroadcaster.sendUpdatedClient(c);
 				room.broadcast(target, c);
 			}
 		}

@@ -31,12 +31,12 @@ import org.slf4j.Logger;
 
 public class RoomBroadcaster {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, webAppRootKey);
-	
+
 	public static Client getClient(String publicSid) {
 		ClientSessionInfo csi = getBean(SessionManager.class).getClientByPublicSIDAnyServer(publicSid);
 		return csi == null ? null : csi.getRcl();
 	}
-	
+
 	public static void broadcast(String publicSid, String method, Object obj) {
 		Client rc = getClient(publicSid);
 		if (rc == null) {
@@ -51,7 +51,7 @@ public class RoomBroadcaster {
 	}
 
 	public static void sendUpdatedClient(org.apache.openmeetings.db.entity.basic.Client client) {
-		org.apache.openmeetings.db.entity.room.Client rcl = Application.get().updateClient(getClient(client.getUid()));
+		org.apache.openmeetings.db.entity.room.Client rcl = Application.get().updateClient(getClient(client.getUid()), true);
 		log.debug("-----------  sendUpdatedClient ");
 
 		if (rcl == null) {

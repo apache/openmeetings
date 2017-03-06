@@ -246,7 +246,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl) {
+	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl, boolean forceSize) {
 		if (rcl == null) {
 			return null;
 		}
@@ -278,7 +278,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
 			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
 			if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
-				if (rcl.getVWidth() == 0 || rcl.getVHeight() == 0) {
+				if (forceSize || rcl.getVWidth() == 0 || rcl.getVHeight() == 0) {
 					rcl.setVWidth(client.getWidth());
 					rcl.setVHeight(client.getHeight());
 				}
