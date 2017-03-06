@@ -51,6 +51,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
 import org.apache.openmeetings.web.util.CalendarWebHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -241,7 +242,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
 
-					invitation_link = getInvitationLink(i);
+					invitation_link = getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl());
 
 					if (invitation_link == null) {
 						invitation_link = "";

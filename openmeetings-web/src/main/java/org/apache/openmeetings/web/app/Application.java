@@ -98,6 +98,7 @@ import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.DynamicJQueryResourceReference;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
+import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
@@ -534,7 +535,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return getContactsLink();
 	}
 
-	public static String getInvitationLink(Invitation i) {
+	public static String getInvitationLink(Invitation i, String baseUrl) {
 		String link = "";
 		Room r = i.getRoom();
 		User u = i.getInvitee();
@@ -554,30 +555,34 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					if (u.getLanguageId() > 0) {
 						pp.add("language", u.getLanguageId());
 					}
-					link = urlForPage(HashPage.class, pp);
+					link = urlForPage(HashPage.class, pp, baseUrl);
 				}
 			}
 		}
 		Recording rec = i.getRecording();
 		if (rec != null) {
-			link = urlForPage(HashPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()));
+			link = urlForPage(HashPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()), baseUrl);
 		}
 		return link;
 	}
 
 	@Override
 	public String getOmInvitationLink(Invitation i) { //FIXME hack for email templates support (should be in separate module for now
-		return getInvitationLink(i);
+		return getInvitationLink(i, null);
 	}
 
-	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp) {
+	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String _baseUrl) {
 		RequestCycle rc = RequestCycle.get();
-		return rc.getUrlRenderer().renderFullUrl(Url.parse(getBean(ConfigurationDao.class).getBaseUrl() + rc.urlFor(clazz, pp)));
+		String baseUrl = getBean(ConfigurationDao.class).getBaseUrl();
+		if (!new UrlValidator(new String[] {"http", "https"}).isValid(baseUrl) && !Strings.isEmpty(_baseUrl)) {
+			baseUrl = _baseUrl;
+		}
+		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.urlFor(clazz, pp)));
 	}
 
 	@Override
 	public String urlForActivatePage(PageParameters pp) { //FIXME hack for email templates support (should be in separate module for now
-		return urlForPage(ActivatePage.class, pp);
+		return urlForPage(ActivatePage.class, pp, null);
 	}
 
 	@Override

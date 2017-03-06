@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -209,7 +210,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		} else if (button.equals(dialog.generate)) {
 			Invitation i = create(recipients.getModelObject().iterator().next());
 			setModelObject(i);
-			url.setModelObject(getInvitationLink(i));
+			url.setModelObject(getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl()));
 			target.add(url);
 		} else if (button.equals(dialog.send)) {
 			if (Strings.isEmpty(url.getModelObject())) {

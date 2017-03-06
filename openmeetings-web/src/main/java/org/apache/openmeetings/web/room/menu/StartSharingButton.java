@@ -44,9 +44,9 @@ import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.util.AjaxDownload;
-import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.util.resource.StringResourceStream;
@@ -61,7 +61,6 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
 	private final org.apache.openmeetings.db.entity.basic.Client c;
-	private final ExtendedClientProperties extProps;
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -69,10 +68,9 @@ public class StartSharingButton extends OmButton {
 		, rtmpt
 	}
 
-	public StartSharingButton(String id, org.apache.openmeetings.db.entity.basic.Client c, final ExtendedClientProperties extProps) {
+	public StartSharingButton(String id, org.apache.openmeetings.db.entity.basic.Client c) {
 		super(id);
 		this.c = c;
-		this.extProps = extProps;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
 		add(new AttributeAppender("title", Application.getString(1480)));
@@ -109,7 +107,8 @@ public class StartSharingButton extends OmButton {
 				throw new RuntimeException(String.format("Invalid room id passed %s, expected, %s", path, roomId));
 			}
 			Protocol protocol = Protocol.valueOf(url.getScheme());
-			app = addKeystore(rc, app, protocol).replace("$codebase", extProps.getCodebase())
+			app = addKeystore(rc, app, protocol)
+					.replace("$codebase", WebSession.get().getExtendedProperties().getCodebase())
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$publicSid", publicSid)
