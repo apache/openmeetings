@@ -121,6 +121,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				, "909", "952", "978", "981", "984", "989", "990", "999", "1151", "1155", "1157", "1158", "1194"));
 	}
 	public static final String HASH_MAPPING = "/hash";
+	public static final String SIGNIN_MAPPING = "/signin";
+	public static final String NOTINIT_MAPPING = "/notinited";
 
 	@Override
 	protected void init() {
@@ -152,9 +154,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		dashboardSettings.setIncludeJQueryUI(false);
 
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("notinited", NotInitedPage.class));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper(NOTINIT_MAPPING, NotInitedPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(HASH_MAPPING, HashPage.class));
-		getRootRequestMapperAsCompound().add(new NoVersionMapper("signin", getSignInPageClass()));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper(SIGNIN_MAPPING, getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
