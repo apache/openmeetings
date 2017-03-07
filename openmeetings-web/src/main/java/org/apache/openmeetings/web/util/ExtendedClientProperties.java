@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.web.app.Application.HASH_MAPPING;
+import static org.apache.openmeetings.web.app.Application.NOTINIT_MAPPING;
+import static org.apache.openmeetings.web.app.Application.SIGNIN_MAPPING;
 
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.request.IRequestParameters;
@@ -51,14 +53,22 @@ public class ExtendedClientProperties extends ClientProperties {
 		return new JSONObject();
 	}
 
+	private static StringBuilder cleanUrl(StringBuilder sb, String _url) {
+		for (String tail : new String[]{HASH_MAPPING, SIGNIN_MAPPING, NOTINIT_MAPPING}) {
+			if (_url.endsWith(tail)) {
+				sb.setLength(_url.length() - tail.length());
+				break;
+			}
+		}
+		return sb;
+	}
+
 	@Override
 	public void read(IRequestParameters parameters) {
 		super.read(parameters);
 		String _url = parameters.getParameterValue("codebase").toString("N/A");
 		StringBuilder sb = new StringBuilder(_url);
-		if (_url.endsWith(HASH_MAPPING)) {
-			sb.setLength(_url.length() - HASH_MAPPING.length());
-		}
+		cleanUrl(sb, _url);
 		if (sb.charAt(sb.length() - 1) != '/') {
 			sb.append('/');
 		}
