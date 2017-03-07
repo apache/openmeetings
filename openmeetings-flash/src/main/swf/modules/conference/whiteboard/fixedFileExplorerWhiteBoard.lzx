@@ -468,10 +468,10 @@
 		]]>
 		</method>
 
-		<mainToolsLeftPanel x="$once{ canvas.width - 33 }" y="40" name="_mainToolsPanel"
+		<mainToolsLeftPanel x="$once{ canvas.width - 33 - 20 }" y="40" name="_mainToolsPanel"
 				visible="${ canvas.ismoderator || canvas.isAllowedToDraw }"/>
 
-		<mainToolsLeftPanelPointer x="$once{ canvas.width - 33 }" y="40" name="_mainToolsLeftPanelPointer"
+		<mainToolsLeftPanelPointer x="$once{ canvas.width - 33 - 20 }" y="40" name="_mainToolsLeftPanelPointer"
 				visible="${ !parent.parent.restricted &amp;&amp; !canvas.ismoderator &amp;&amp; !canvas.isAllowedToDraw }"/>
 	</view>
 
