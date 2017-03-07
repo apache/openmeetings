@@ -140,9 +140,8 @@ var Chat = function() {
 				if (isClosed()) {
 					$('#chat .control.block').addClass('ui-state-highlight');
 				}
-				var msg;
-				for (var i = 0; i < m.msg.length; ++i) {
-					var cm = m.msg[i];
+				var msg, cm;
+				while (!!(cm = m.msg.pop())) {
 					msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
 							.replace(/#\{userId\}/g, cm.from.id)
 							.replace(/#\{imgSrc\}/g, cm.from.img)
@@ -166,10 +165,7 @@ var Chat = function() {
 						$('#chat-msg-id-' + cm.id).remove();
 					}
 					msg.append(clearBlock);
-					$('#' + cm.scope).append(msg);
-				}
-				if (msg[0]) {
-					msg[0].scrollIntoView();
+					$('#' + cm.scope).prepend(msg);
 				}
 			}
 		}
