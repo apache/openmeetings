@@ -49,32 +49,32 @@ public class LoadLibraryPresentationToObject {
 		try {
 			PresentationObject lMap = new PresentationObject();
 
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(filePath);
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(filePath);
 
-		Element root = document.getRootElement();
-		Integer k = 0;
+			Element root = document.getRootElement();
+			Integer k = 0;
 
-		for (@SuppressWarnings("unchecked")
-			Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
-			Element item = i.next();
-			log.error(item.getName());
+			for (@SuppressWarnings("unchecked")
+				Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+				Element item = i.next();
+				log.error(item.getName());
 
-			String nodeVal = item.getName();
+				String nodeVal = item.getName();
 
-				if (nodeVal.equals("originalDocument")){
-					lMap.setOriginalDocument(this.createListObjectLibraryByFileDocument(item));
-				} else if (nodeVal.equals("pdfDocument")){
-					lMap.setPdfDocument(this.createListObjectLibraryByFileDocument(item));
-				} else if (nodeVal.equals("swfDocument")) {
-					lMap.setSwfDocument(this.createListObjectLibraryByFileDocument(item));
-				} else if (nodeVal.equals("thumbs")) {
-					lMap.setThumbs(this.createListObjectLibraryByFileDocumentThumbs(item));
-				}
+					if (nodeVal.equals("originalDocument")){
+						lMap.setOriginalDocument(this.createListObjectLibraryByFileDocument(item));
+					} else if (nodeVal.equals("pdfDocument")){
+						lMap.setPdfDocument(this.createListObjectLibraryByFileDocument(item));
+					} else if (nodeVal.equals("swfDocument")) {
+						lMap.setSwfDocument(this.createListObjectLibraryByFileDocument(item));
+					} else if (nodeVal.equals("thumbs")) {
+						lMap.setThumbs(this.createListObjectLibraryByFileDocumentThumbs(item));
+					}
 
-			k++;
+				k++;
 
-		}
+			}
 
 			return lMap;
 		} catch (Exception err) {
