@@ -144,7 +144,7 @@ var Chat = function() {
 				while (!!(cm = m.msg.pop())) {
 					msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
 							.replace(/#\{userId\}/g, cm.from.id)
-							.replace(/#\{imgSrc\}/g, cm.from.img)
+							.replace(/#\{imgSrc\}/g, !!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())
 							.replace(/#\{from\}/g, cm.from.name)
 							.replace(/#\{sent\}/g, cm.sent)
 							.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
