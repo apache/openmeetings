@@ -69,29 +69,42 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.2.0 released!</b>
-				<div>Release 3.2.0, provides Partial HTML5 room:<br/>
-					Room is partially moved to HTML5<br/>
+				<b>Version 3.2.1 released!</b>
+				<div>Service release 1 for 3.2.0, provides following improvements:<br/>
+					Room<br/>
 					<ul>
-						<li>Room menu</li>
-						<li>User list</li>
-						<li>File tree</li>
-						<li>Activities and actions</li>
-						<li>Room chat</li>
+						<li>Video is more stable</li>
+						<li>Office files download is fixed</li>
+						<li>Multi-upload is added</li>
+						<li>External video works as expected</li>
+						<li>WB drawing on slides works as expected</li>
 					</ul>
 					<br/>
-					Other fixes and improvements in all components
+					Chat<br/>
+					<ul>
+						<li>chat is made resizable</li>
+						<li>multiple issues in chat are fixed</li>
+						<li>typing indicator is added</li>
+					</ul>
+					<br/>
+					Calendar<br/>
+					<ul>
+						<li>date/time validator is improved</li>
+						<li>whole group can be invited by admin to event</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
 					<br/>
 					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
 				</div>
 				<br/>
 				<span>
-					128 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335565">Detailed list</a>
+					35 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339215">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-02-12)</span>
+				<span class="date">(2017-03-11)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

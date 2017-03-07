@@ -22,6 +22,31 @@
 	<body>
 		<section name="News">
 			<div class="bs-callout bs-callout-info">
+				<b>Version 3.2.0 released!</b>
+				<div>Release 3.2.0, provides Partial HTML5 room:<br/>
+					Room is partially moved to HTML5<br/>
+					<ul>
+						<li>Room menu</li>
+						<li>User list</li>
+						<li>File tree</li>
+						<li>Activities and actions</li>
+						<li>Room chat</li>
+					</ul>
+					<br/>
+					Other fixes and improvements in all components
+					<br/>
+					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
+				</div>
+				<br/>
+				<span>
+					128 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.2.0/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12335565">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2017-02-12)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.1.5 released!</b>
 				<div>Service release 5 for 3.1.0, provides following improvements:<br/>
 					REST/SOAP<br/>
