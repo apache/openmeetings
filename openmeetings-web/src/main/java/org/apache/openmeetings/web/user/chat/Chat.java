@@ -120,7 +120,7 @@ public class Chat extends Panel {
 	}
 
 	public JSONObject getMessage(Long userId, List<ChatMessage> list) {
-		return WebSocketHelper.getMessage(getUserId(), list, getDateFormat(), (o, u) -> o.put("img", getUrl(getRequestCycle(), u)));
+		return WebSocketHelper.getMessage(userId, list, getDateFormat(), (o, u) -> o.put("img", getUrl(getRequestCycle(), u)));
 	}
 
 	public Chat(String id) {

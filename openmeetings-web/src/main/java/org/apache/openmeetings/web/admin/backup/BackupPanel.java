@@ -123,7 +123,7 @@ public class BackupPanel extends AdminPanel {
 					progressHolder = new ProgressHolder();
 
 					timer.restart(target);
-					new Thread(new BackupProcess(getBean(BackupExport.class), backupDir, includeFilesInBackup.getObject(), progressHolder)
+					new Thread(new BackupProcess(getBean(BackupExport.class), backupDir, includeFilesInBackup.getObject())
 						, "Openmeetings - " + dateString).start();
 
 					// repaint the feedback panel so that it is hidden
@@ -211,13 +211,11 @@ public class BackupPanel extends AdminPanel {
 			private BackupExport backup;
 			private File backupDir;
 			private boolean includeFiles;
-			private ProgressHolder progressHolder;
 
-			public BackupProcess(BackupExport backup, File backupDir, boolean includeFiles, ProgressHolder progressHolder) {
+			public BackupProcess(BackupExport backup, File backupDir, boolean includeFiles) {
 				this.backup = backup;
 				this.backupDir = backupDir;
 				this.includeFiles = includeFiles;
-				this.progressHolder = progressHolder;
 				th = null;
 			}
 

@@ -41,7 +41,7 @@ public class RoomModeratorDao {
 		}
 		return null;
 	}
-	
+
 	public List<RoomModerator> get(Collection<Long> ids) {
 		return em.createNamedQuery("getRoomModeratorsByIds", RoomModerator.class).setParameter("ids", ids).getResultList();
 	}
@@ -50,6 +50,9 @@ public class RoomModeratorDao {
 		return em.createNamedQuery("getRoomModeratorByRoomId", RoomModerator.class).setParameter("roomId", roomId).getResultList();
 	}
 
+	/**
+	 * @param userId unused
+	 */
 	public RoomModerator update(RoomModerator rm, Long userId) {
 		if (rm.getId() == null) {
 			rm.setInserted(new Date());

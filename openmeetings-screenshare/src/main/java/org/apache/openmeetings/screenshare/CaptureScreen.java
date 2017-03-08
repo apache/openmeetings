@@ -24,7 +24,6 @@ import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -151,7 +150,7 @@ public class CaptureScreen extends Thread {
 	}
 	*/
 
-	public void pushVideo(VideoData data, int ts) throws IOException {
+	public void pushVideo(VideoData data, int ts) {
 		if (startPublish) {
 			if (Red5.getConnectionLocal() == null) {
 				Red5.setConnectionLocal(client.getConnection());

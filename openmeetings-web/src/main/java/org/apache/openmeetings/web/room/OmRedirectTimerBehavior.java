@@ -35,19 +35,19 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 		this.delay = delay;
 		this.labelId = labelId;
 	}
-	
+
 	protected static String getTime(int remain) {
 		return Duration.seconds(remain).toString(WebSession.get().getLocale());
 	}
-	
+
 	public static String getText(String text, int remain) {
 		return String.format("%s: %s", text, getTime(remain));
 	}
-	
+
 	protected String getText(int remain) {
 		return getText(getComponent().getString(labelId), remain);
 	}
-	
+
 	private int remain(long now) {
 		return (int)(delay - (now - clock) / 1000);
 	}
@@ -60,9 +60,12 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 		onTimer(delay);
 	}
 
+	/**
+	 * @param remain
+	 */
 	protected void onTimer(int remain) {
 	}
-	
+
 	@Override
 	protected void onTimer(AjaxRequestTarget target) {
 		int remain = remain(System.currentTimeMillis());
@@ -75,6 +78,6 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 			onFinish(target);
 		}
 	}
-	
+
 	protected abstract void onFinish(AjaxRequestTarget target);
 }

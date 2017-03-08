@@ -19,8 +19,8 @@
 package org.apache.openmeetings.core.mail;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -59,12 +59,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  * For a documentation about Javax mail please see fro example:
  * http://connector.sourceforge.net/doc-files/Properties.html
- * 
+ *
  */
 public class MailHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, webAppRootKey);
@@ -128,7 +128,7 @@ public class MailHandler {
 		BodyPart body = new MimeBodyPart();
 		body.setContent(multiBody);
 		multipart.addBodyPart(body);
-		
+
 		BodyPart iCalAttachment = new MimeBodyPart();
 		iCalAttachment.setDataHandler(new DataHandler(new ByteArrayDataSource(new ByteArrayInputStream(m.getIcs()),
 				"application/ics")));
@@ -154,7 +154,7 @@ public class MailHandler {
 		// -- Set some other header information --
 		msg.setHeader("X-Mailer", "XML-Mail");
 		msg.setSentDate(new Date());
-		
+
 		return msg;
 	}
 
@@ -170,7 +170,7 @@ public class MailHandler {
 		if (mailTls) {
 			props.put("mail.smtp.starttls.enable", "true");
 		}
-		props.put("mail.smtp.connectiontimeout", smtpConnectionTimeOut); 
+		props.put("mail.smtp.connectiontimeout", smtpConnectionTimeOut);
 		props.put("mail.smtp.timeout", smtpTimeOut);
 
 		// Check for Authentication
@@ -208,7 +208,7 @@ public class MailHandler {
 			}
 		}
 		msg.addRecipients(Message.RecipientType.TO, InternetAddress.parse(m.getRecipients(), false));
-		
+
 		return m.getIcs() == null ? appendBody(msg, m) : appendIcsBody(msg, m);
 	}
 
@@ -274,7 +274,7 @@ public class MailHandler {
 		log.debug("... resetSendingStatus done.");
 	}
 
-	public void sendMails() throws Exception {
+	public void sendMails() {
 		init();
 		log.debug("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);

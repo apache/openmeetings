@@ -19,8 +19,8 @@
 package org.apache.openmeetings.screenshare.job;
 
 import static java.lang.Boolean.TRUE;
-import static java.lang.Character.toUpperCase;
 import static java.lang.Character.isUpperCase;
+import static java.lang.Character.toUpperCase;
 import static javax.swing.KeyStroke.getKeyStroke;
 import static org.apache.openmeetings.screenshare.util.Util.getInt;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -66,7 +66,7 @@ public class OmKeyEvent {
 		KEY_MAP.put(220, KeyEvent.VK_BACK_SLASH);
 		KEY_MAP.put(221, KeyEvent.VK_CLOSE_BRACKET);
 		KEY_MAP.put(222, KeyEvent.VK_QUOTE);
-		
+
 		CHAR_MAP.put(Character.valueOf('#'), KeyEvent.VK_NUMBER_SIGN);
 		CHAR_MAP.put(Character.valueOf('<'), KeyEvent.VK_LESS);
 		CHAR_MAP.put(Character.valueOf('.'), KeyEvent.VK_PERIOD);
@@ -87,7 +87,7 @@ public class OmKeyEvent {
 	private int inKey = 0;
 	private int key = 0;
 	private char ch = 0;
-	
+
 	public OmKeyEvent(Map<String, Object> obj) {
 		alt = TRUE.equals(obj.get("alt"));
 		ctrl = TRUE.equals(obj.get("ctrl"));
@@ -135,12 +135,12 @@ public class OmKeyEvent {
 		return vowel;
 	}
 
-	public void press(RemoteJob r) throws InterruptedException {
+	public void press(RemoteJob r) {
 		List<Integer> list = new ArrayList<>();
 		if (UNPRINTABLE.contains(ch)) {
 			if (SystemUtils.IS_OS_LINUX) {
 				r.press(KeyEvent.VK_CONTROL, KeyEvent.VK_SHIFT, KeyEvent.VK_U);
-				String hex = Integer.toHexString((int)ch);
+				String hex = Integer.toHexString(ch);
 				log.debug("sequence:: hex {}", hex);
 				for (int i = 0; i < hex.length(); ++i) {
 					r.press(KeyStroke.getKeyStroke(toUpperCase(hex.charAt(i)), 0).getKeyCode());
@@ -165,7 +165,7 @@ public class OmKeyEvent {
 					list.add(KeyEvent.VK_ADD);
 					String code = String.format("%04", (int)ch);
 					for (int i = 0; i < code.length(); ++i) {
-						list.add(KeyEvent.VK_NUMPAD0 + (int)code.charAt(i));
+						list.add(KeyEvent.VK_NUMPAD0 + code.charAt(i));
 					}
 					r.press(list);
 				}

@@ -137,7 +137,7 @@ public class RoomSidebar extends Panel {
 								} else {
 									c.remove(Activity.broadcastA);
 								}
-								room.broadcast(target, c);
+								room.broadcast(c);
 							}
 						}
 						break;
@@ -166,19 +166,19 @@ public class RoomSidebar extends Panel {
 					}
 					if (client.hasRight(right)) {
 						if (Right.audio == right) {
-							room.denyRight(target, client, right, Right.video);
+							room.denyRight(client, right, Right.video);
 						} else {
-							room.denyRight(target, client, right);
+							room.denyRight(client, right);
 						}
 					} else {
 						if (Right.video == right) {
-							room.allowRight(target, client, Right.audio, right);
+							room.allowRight(client, Right.audio, right);
 						} else {
-							room.allowRight(target, client, right);
+							room.allowRight(client, right);
 						}
 					}
 				} else {
-					room.requestRight(target, right);
+					room.requestRight(right, target);
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'right'", e);
@@ -197,7 +197,7 @@ public class RoomSidebar extends Panel {
 				}
 				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				Client c = getOnlineClient(uid);
-				toggleActivity(c, a, target);
+				toggleActivity(c, a);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
 			}
@@ -220,11 +220,11 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
-						toggleActivity(c, Activity.broadcastAV, target);
+						toggleActivity(c, Activity.broadcastAV);
 					}
 				}
 				RoomBroadcaster.sendUpdatedClient(c);
-				room.broadcast(target, c);
+				room.broadcast(c);
 			}
 		}
 	};
@@ -321,7 +321,7 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				room.kickUser(target, kickedClient);
+				room.kickUser(kickedClient);
 			}
 		});
 		final Form<?> form = new Form<>("form");
@@ -389,7 +389,7 @@ public class RoomSidebar extends Panel {
 		upload.open(handler);
 	}
 
-	public void toggleActivity(Client c, Activity a, AjaxRequestTarget target) {
+	public void toggleActivity(Client c, Activity a) {
 		if (c == null) {
 			return;
 		}
@@ -419,7 +419,7 @@ public class RoomSidebar extends Panel {
 			} else {
 				c.toggle(a);
 			}
-			room.broadcast(target, c);
+			room.broadcast(c);
 		}
 	}
 

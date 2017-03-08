@@ -137,8 +137,9 @@ public class Client implements IDataProviderEntity {
 		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) ? true : rights.contains(right);
 	}
 
-	public void allow(Right... _rights) {
+	public Client allow(Right... _rights) {
 		allow(Arrays.asList(_rights));
+		return this;
 	}
 
 	public void allow(Iterable<Right> _rights) {

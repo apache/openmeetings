@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.test.calendar;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
@@ -26,9 +29,6 @@ import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 public class TestOmCalendar extends AbstractJUnitDefaults {
 	@Autowired
 	private OmCalendarDao calendarDao;
@@ -36,7 +36,7 @@ public class TestOmCalendar extends AbstractJUnitDefaults {
 	private UserDao userDao;
 
 	@Test
-	public void saveCalendar() throws Exception {
+	public void saveCalendar() {
 		OmCalendar calendar = new OmCalendar();
 		Long userId = 1L;
 		User owner = userDao.get(userId);

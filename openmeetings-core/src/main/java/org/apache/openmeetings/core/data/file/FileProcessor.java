@@ -58,7 +58,7 @@ public class FileProcessor {
 	private GeneratePDF generatePDF;
 
 	//FIXME TODO this method need to be refactored to throw exceptions
-	public ConverterProcessResultList processFile(Long userId, FileExplorerItem f, InputStream is) throws Exception {
+	public ConverterProcessResultList processFile(FileExplorerItem f, InputStream is) throws Exception {
 		ConverterProcessResultList returnError = new ConverterProcessResultList();
 
 		// Generate a random string to prevent any problems with

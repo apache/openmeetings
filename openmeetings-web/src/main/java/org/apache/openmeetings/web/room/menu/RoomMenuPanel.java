@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -38,8 +37,6 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.message.RoomMessage;
-import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
@@ -82,7 +79,7 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			room.requestRight(target, Room.Right.moderator);
+			room.requestRight(Room.Right.moderator, target);
 		}
 	};
 	private final RoomPanel room;
@@ -126,7 +123,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightWb, room.getClient().getUid()));
+			room.requestRight(Room.Right.whiteBoard, target);
 		}
 	};
 	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString(786), Application.getString(1482), false) {
@@ -134,7 +131,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.requestRightAv, room.getClient().getUid()));
+			room.requestRight(Room.Right.video, target);
 		}
 	};
 	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString(24), Application.getString(1483), false) {
@@ -284,7 +281,6 @@ public class RoomMenuPanel extends Panel {
 		//TODO add check "sharing started"
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
-		//FIXME TODO apply* should be enabled if moder is in room
 		applyModerMenuItem.setEnabled(!moder);
 		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
@@ -294,7 +290,6 @@ public class RoomMenuPanel extends Panel {
 		sipDialerMenuItem.setEnabled(r.isSipEnabled() && getBean(ConfigurationDao.class).isSipEnabled());
 		//TODO sip menus
 		menuPanel.update(handler);
-		//FIXME TODO askBtn should be visible if moder is in room
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {

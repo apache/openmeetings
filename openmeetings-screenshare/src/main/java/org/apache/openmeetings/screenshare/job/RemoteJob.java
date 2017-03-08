@@ -120,12 +120,12 @@ public class RemoteJob implements Job {
 		}
 	}
 
-	public void press(List<Integer> codes) throws InterruptedException {
+	public void press(List<Integer> codes) {
 		log.debug("sequence:: codes {}", codes);
 		press(codes.stream().mapToInt(Integer::intValue).toArray());
 	}
 
-	public void press(int... codes) throws InterruptedException {
+	public void press(int... codes) {
 		for (int i = 0; i < codes.length; ++i) {
 			robot.keyPress(codes[i]);
 		}

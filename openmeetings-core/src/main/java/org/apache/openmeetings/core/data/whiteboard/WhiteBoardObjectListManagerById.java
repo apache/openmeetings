@@ -27,7 +27,7 @@ import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
 
 /**
  * Memory based cache, configured as singleton in spring configuration
- * 
+ *
  * @author sebawagner
  *
  */
@@ -36,7 +36,7 @@ public class WhiteBoardObjectListManagerById {
 
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
 
-	public long getNewWhiteboardId(Long roomId, String name) throws Exception {
+	public long getNewWhiteboardId(Long roomId, String name) {
 		long wbId = whiteboardId.getAndIncrement();
 		setWhiteBoardObjectListRoomObjAndWhiteboardId(roomId, new WhiteboardObject(name), wbId);
 		return wbId;
@@ -66,7 +66,7 @@ public class WhiteBoardObjectListManagerById {
 
 	/*
 	 * Whiteboard Object List
-	 * 
+	 *
 	 */
 	public void setWhiteBoardObjectListRoomObj(Long roomId, WhiteboardObjectList whiteboardObjectList){
 		whiteBoardObjectList.put(roomId, whiteboardObjectList);

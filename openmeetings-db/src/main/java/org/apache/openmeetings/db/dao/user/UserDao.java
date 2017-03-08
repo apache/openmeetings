@@ -22,7 +22,6 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -668,7 +667,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
 			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
 			boolean forceTimeZoneCheck, String userOffers, String userSearchs, boolean showContactData,
-			boolean showContactDataToContacts, String externalId, String externalType, List<Long> groupIds, String pictureuri) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+			boolean showContactDataToContacts, String externalId, String externalType, List<Long> groupIds, String pictureuri) throws NoSuchAlgorithmException {
 
 		User u = new User();
 		u.setFirstname(firstname);

@@ -67,7 +67,7 @@ public class NicknameDialog extends AbstractFormDialog<User> {
 	private static boolean isVisible(User u) {
 		return User.Type.external == u.getType() && Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname());
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
@@ -99,6 +99,6 @@ public class NicknameDialog extends AbstractFormDialog<User> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		room.broadcast(target, room.getClient());
+		room.broadcast(room.getClient());
 	}
 }

@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTests {
 
 	@BeforeClass
-	public static void init() throws Exception {
+	public static void init() {
 		setOmHome();
 		System.setProperty(Constants.SKIP_JARS_PROPERTY, "*");
 		LabelDao.initLanguageMap();
@@ -44,7 +44,7 @@ public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTest
 			fail("Failed to set languages");
 		}
 	}
-	
+
 	protected static void setOmHome() {
 		String webappsDir = System.getProperty("om.home", ".");
 		OmFileHelper.setOmHome(webappsDir);

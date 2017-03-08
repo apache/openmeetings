@@ -444,7 +444,7 @@ public class ImportInitvalues {
 		}
 	}
 
-	public void loadInitialOAuthServers() throws Exception {
+	public void loadInitialOAuthServers() {
 		// Yandex
 		OAuthServer yandexServer = new OAuthServer();
 		yandexServer.setName("Yandex");

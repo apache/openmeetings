@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
@@ -418,13 +419,16 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static List<Client> getRoomClients(Long roomId) {
+		return getRoomClients(roomId, null);
+	}
+	public static List<Client> getRoomClients(Long roomId, Predicate<Client> filter) {
 		List<Client> clients = new ArrayList<>();
 		if (roomId != null) {
 			Set<String> uids = ROOMS.get(roomId);
 			if (uids != null) {
 				for (String uid : uids) {
 					Client c = getOnlineClient(uid);
-					if (c != null) {
+					if (c != null && (filter == null || filter.test(c))) {
 						clients.add(c);
 					}
 				}

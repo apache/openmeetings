@@ -237,7 +237,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return new Long(-2);
 	}
 
-	private static void sendHashByUser(User us, String appLink, UserDao userDao) throws Exception {
+	private static void sendHashByUser(User us, String appLink, UserDao userDao) {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(UUID.randomUUID().toString());
 		userDao.update(us, -1L);

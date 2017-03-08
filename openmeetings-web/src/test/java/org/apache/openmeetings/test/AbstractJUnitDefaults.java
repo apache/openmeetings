@@ -162,7 +162,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return createUser(getUser(uuid));
 	}
 
-	public User createUser(User u) throws Exception {
+	public User createUser(User u) {
 		u = userDao.update(u, null);
 		assertNotNull("Can't add user", u);
 		return u;

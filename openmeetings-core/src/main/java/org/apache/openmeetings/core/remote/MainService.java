@@ -59,9 +59,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class MainService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.webAppRootKey);
@@ -91,7 +91,7 @@ public class MainService implements IPendingServiceCallback {
 
 	/**
 	 * gets a user by its SID
-	 * 
+	 *
 	 * @param sid
 	 * @param userId
 	 * @return - user with SID given
@@ -171,7 +171,7 @@ public class MainService implements IPendingServiceCallback {
 		}
 		return allowed;
 	}
-	
+
 	public List<Object> loginWicket(String wicketSID, Long wicketroomid) {
 		log.debug("[loginWicket] wicketSID: '{}'; wicketroomid: '{}'", wicketSID, wicketroomid);
 		Sessiondata sd = sessionDao.check(wicketSID);
@@ -184,22 +184,22 @@ public class MainService implements IPendingServiceCallback {
 				IConnection current = Red5.getConnectionLocal();
 				String streamId = current.getClient().getId();
 				Client currentClient = sessionManager.getClientByStreamId(streamId, null);
-				
+
 				if (User.Type.user != u.getType() || (User.Type.user == u.getType() && !u.getGroupUsers().isEmpty())) {
 					u.setSessionData(sd);
 					currentClient.setUserId(u.getId());
 					currentClient.setRoomId(wicketroomid);
 					SessionVariablesUtil.setUserId(current.getClient(), u.getId());
-				
+
 					currentClient.setUsername(u.getLogin());
 					currentClient.setFirstname(u.getFirstname());
 					currentClient.setLastname(u.getLastname());
 					currentClient.setPicture_uri(u.getPictureuri());
 					currentClient.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
-					
+
 					scopeApplicationAdapter.sendMessageToCurrentScope("roomConnect", currentClient, false);
-					
+
 					return Arrays.<Object>asList(u, r);
 				}
 			}
@@ -211,7 +211,7 @@ public class MainService implements IPendingServiceCallback {
 	 * Function is called if the user loggs in via a secureHash and sets the
 	 * param showNickNameDialog in the Object SOAPLogin to true the user gets
 	 * displayed an additional dialog to enter his nickname
-	 * 
+	 *
 	 * @param firstname
 	 * @param lastname
 	 * @param email
@@ -244,7 +244,7 @@ public class MainService implements IPendingServiceCallback {
 
 	/**
 	 * clear this session id
-	 * 
+	 *
 	 * @param sid
 	 * @return string value if completed
 	 */
@@ -253,11 +253,11 @@ public class MainService implements IPendingServiceCallback {
 			Sessiondata sd = sessionDao.check(sid);
 			IConnection current = Red5.getConnectionLocal();
 			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			
+
 			scopeApplicationAdapter.roomLeaveByScope(currentClient,current.getScope(), false);
-			
+
 			currentClient.setUserObject(null, null, null, null);
-			
+
 			return userManager.logout(sid, sd.getUserId());
 		} catch (Exception err) {
 			log.error("[logoutUser]",err);
@@ -265,7 +265,7 @@ public class MainService implements IPendingServiceCallback {
 		return -1L;
 	}
 
-	public List<Configuration> getGeneralOptions(String SID) {
+	public List<Configuration> getGeneralOptions() {
 		try {
 			return configurationDao.get("exclusive.audio.keycode", CONFIG_SIP_ENABLED, CONFIG_MAX_UPLOAD_SIZE_KEY, "mute.keycode", CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY);
 		} catch (Exception err) {
