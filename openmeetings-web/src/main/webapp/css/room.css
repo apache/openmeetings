@@ -179,8 +179,11 @@
 .audio-activity.ui-icon.speaking, .ui-icon.granted {
 	opacity: 1;
 }
-.right.moderator.ui-icon, .room.menu.right .icon.ask {
+.right.moderator.ui-icon {
 	background-image: url(images/user_add.png);
+}
+.room.menu.right .icon.ask {
+	background-image: url(images/hand.png);
 }
 .right.moderator.ui-icon.granted {
 	background-image: url(images/user_delete.png);

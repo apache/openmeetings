@@ -37,21 +37,22 @@ public class Activity implements Serializable {
 		, reqRightAv
 		, reqRightMute
 		, reqRightExclusive
+		, haveQuestion
 	}
 	private final String id;
 	private final String uid;
 	private final Long sender;
 	private final Date created;
 	private final Type type;
-	
+
 	public Activity(RoomMessage m, Type type) {
 		this(m.getUid(), null, m.getUserId(), type);
 	}
-	
+
 	public Activity(TextRoomMessage m, Type type) {
 		this(m.getUid(), m.getText(), m.getUserId(), type);
 	}
-	
+
 	public Activity(String id, String uid, Long sender, Type type) {
 		this.id = id;
 		this.uid = uid;
@@ -63,7 +64,7 @@ public class Activity implements Serializable {
 	public String getId() {
 		return id;
 	}
-	
+
 	public String getUid() {
 		return uid;
 	}

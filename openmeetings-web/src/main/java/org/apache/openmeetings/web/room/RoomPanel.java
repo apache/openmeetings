@@ -408,9 +408,11 @@ public class RoomPanel extends BasePanel {
 						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightExclusive), handler);
 						break;
 					case activityRemove:
-						{
-							TextRoomMessage tm = (TextRoomMessage)m;
-							activities.remove(tm.getText(), handler);
+						activities.remove(((TextRoomMessage)m).getText(), handler);
+						break;
+					case haveQuestion:
+						if (getClient().hasRight(Room.Right.moderator)) {
+							activities.add(new Activity(m, Activity.Type.haveQuestion), handler);
 						}
 						break;
 					case kick:

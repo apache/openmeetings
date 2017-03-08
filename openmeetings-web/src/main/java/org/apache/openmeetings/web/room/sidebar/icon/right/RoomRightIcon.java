@@ -50,8 +50,10 @@ public abstract class RoomRightIcon extends ClientIcon {
 	}
 
 	protected boolean visible() {
-		return !client.hasRight(Right.superModerator) &&
-				((self && !hasRight()) || (!self && room.getClient().hasRight(Right.moderator)));
+		return !client.hasRight(Right.superModerator) && (
+				(self && !hasRight() && room.getRoom().isAllowUserQuestions())
+				|| (!self && room.getClient().hasRight(Right.moderator))
+			);
 	}
 
 	@Override

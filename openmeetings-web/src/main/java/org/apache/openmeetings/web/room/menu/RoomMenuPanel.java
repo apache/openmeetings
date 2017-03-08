@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -37,6 +38,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
@@ -79,7 +81,7 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			room.requestRight(Room.Right.moderator, target);
+			WebSocketHelper.sendRoom(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.haveQuestion));
 		}
 	};
 	private final RoomPanel room;
@@ -115,7 +117,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			askBtn.onClick(target);
+			room.requestRight(Room.Right.moderator, target);
 		}
 	};
 	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString(785), Application.getString(1492), false) {
@@ -195,7 +197,6 @@ public class RoomMenuPanel extends Panel {
 		Room r = room.getRoom();
 		setVisible(!r.isHidden(RoomElement.TopBar));
 		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
-		add(askBtn.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
@@ -213,7 +214,7 @@ public class RoomMenuPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		askBtn.add(new AttributeAppender("title", getString("906")));
+		add(askBtn.add(new AttributeAppender("title", getString("84"))));
 		Label demo = new Label("demo", Model.of(""));
 		Room r = room.getRoom();
 		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));

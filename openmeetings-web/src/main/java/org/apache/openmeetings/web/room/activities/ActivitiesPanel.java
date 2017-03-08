@@ -26,12 +26,11 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -67,12 +66,7 @@ public class ActivitiesPanel extends BasePanel {
 	private enum Action {
 		accept, decline, close
 	};
-	private static ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat>() {
-		@Override
-		protected DateFormat initialValue() {
-			return new SimpleDateFormat("HH:mm:ss");
-		};
-	};
+	private static final FastDateFormat df = FastDateFormat.getInstance("HH:mm:ss");
 	private final Map<String, Activity> activities = new LinkedHashMap<>();
 	private final RoomPanel room;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
@@ -175,8 +169,9 @@ public class ActivitiesPanel extends BasePanel {
 					if (room.getClient().hasRight(Right.moderator)) {
 						accept.setVisible(true);
 						decline.setVisible(true);
-						break;
 					}
+					break;
+				case haveQuestion:
 				case roomEnter:
 				case roomExit:
 					accept.setVisible(false);
@@ -191,31 +186,34 @@ public class ActivitiesPanel extends BasePanel {
 					item.setVisible(false);
 					break;
 				case roomExit:
-					text = String.format("%s %s [%s]", name, getString("1367"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("1367"), df.format(a.getCreated()));
 					break;
 				case reqRightModerator:
-					text = String.format("%s %s [%s]", name, getString("room.action.request.right.moderator"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
 					break;
 				case reqRightWb:
-					text = String.format("%s %s [%s]", name, getString("694"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("694"), df.format(a.getCreated()));
 					break;
 				case reqRightShare:
-					text = String.format("%s %s [%s]", name, getString("1070"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("1070"), df.format(a.getCreated()));
 					break;
 				case reqRightRemote:
-					text = String.format("%s %s [%s]", name, getString("1082"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("1082"), df.format(a.getCreated()));
 					break;
 				case reqRightA:
-					text = String.format("%s %s [%s]", name, getString("1603"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("1603"), df.format(a.getCreated()));
 					break;
 				case reqRightAv:
-					text = String.format("%s %s [%s]", name, getString("695"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("695"), df.format(a.getCreated()));
 					break;
 				case reqRightMute:
-					text = String.format("%s %s [%s]", name, getString("1399"), df.get().format(a.getCreated()));//TODO un-mute 1398
+					text = String.format("%s %s [%s]", name, getString("1399"), df.format(a.getCreated()));//TODO un-mute 1398
 					break;
 				case reqRightExclusive:
-					text = String.format("%s %s [%s]", name, getString("1427"), df.get().format(a.getCreated()));
+					text = String.format("%s %s [%s]", name, getString("1427"), df.format(a.getCreated()));
+					break;
+				case haveQuestion:
+					text = String.format("%s %s [%s]", name, getString("693"), df.format(a.getCreated()));
 					break;
 			}
 			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
@@ -234,6 +232,7 @@ public class ActivitiesPanel extends BasePanel {
 				case reqRightAv:
 				case reqRightMute:
 				case reqRightExclusive:
+				case haveQuestion:
 					cls = "ui-state-highlight";
 					break;
 				case roomEnter:
