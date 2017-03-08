@@ -123,6 +123,12 @@ public class RoomPanel extends BasePanel {
 			if (r.isFilesOpened()) {
 				sidebar.setFilesActive(target);
 			}
+			if (Room.Type.restricted != r.getType()) {
+				List<Client> mods = Application.getRoomClients(r.getId(), c -> c.hasRight(Room.Right.moderator));
+				if (mods.isEmpty()) {
+					waitApplyModeration.open(target);
+				}
+			}
 		}
 	};
 	private final AbstractDefaultAjaxBehavior activeWb = new AbstractDefaultAjaxBehavior() {
@@ -137,8 +143,8 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 	private RedirectMessageDialog roomClosed;
-	private MessageDialog clientKicked;
-	private MessageDialog waitForModerator;
+	private MessageDialog clientKicked, waitForModerator, waitApplyModeration;
+
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
@@ -263,7 +269,15 @@ public class RoomPanel extends BasePanel {
 				// no-op
 			}
 		};
-		add(room, accessDenied, eventDetail, waitForModerator);
+		waitApplyModeration = new MessageDialog("wait-apply-moderation", getString("204"), getString(r.isModerated() ? "641" : "498"), DialogButtons.OK, DialogIcon.LIGHT) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				// no-op
+			}
+		};
+		add(room, accessDenied, eventDetail, waitForModerator, waitApplyModeration);
 		if (r.isWaitForRecording()) {
 			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
 				private static final long serialVersionUID = 1L;
