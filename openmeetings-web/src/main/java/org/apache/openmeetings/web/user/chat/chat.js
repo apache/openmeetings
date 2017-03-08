@@ -34,6 +34,7 @@ var Chat = function() {
 		, emoticon = new CSSEmoticon()
 		, typingTimer
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
+		, audio = new Audio('./public/chat_message.mp3');
 		;
 
 	function doneTyping () {
@@ -139,6 +140,7 @@ var Chat = function() {
 			if ($('#chat').length > 0 && m && m.type == "chat") {
 				if (isClosed()) {
 					$('#chat .control.block').addClass('ui-state-highlight');
+					audio.play();
 				}
 				var msg, cm;
 				while (!!(cm = m.msg.pop())) {
