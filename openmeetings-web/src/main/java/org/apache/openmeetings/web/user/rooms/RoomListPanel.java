@@ -90,12 +90,16 @@ public class RoomListPanel extends UserPanel {
 
 	/**
 	 * this method need to be overriden to perform custom actions on room container click
+	 * @param target
+	 * @param r
 	 */
 	public void onContainerClick(AjaxRequestTarget target, Room r) {
 	}
 
 	/**
 	 * this method need to be overriden to perform custom actions on room refresh click
+	 * @param target
+	 * @param r
 	 */
 	public void onRefreshClick(AjaxRequestTarget target, Room r) {
 	}

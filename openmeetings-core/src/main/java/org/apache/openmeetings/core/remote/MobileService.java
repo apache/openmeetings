@@ -328,7 +328,12 @@ public class MobileService {
 		return result;
 	}
 
-	//designed to do nothing remain for compatibility
+	/**
+	 * designed to do nothing remain for compatibility
+	 *
+	 * @param SID - sid
+	 * @param userId - redundant userId
+	 */
 	public Map<String, Object> roomConnect(String SID, Long userId) {
 		return new HashMap<>();
 	}

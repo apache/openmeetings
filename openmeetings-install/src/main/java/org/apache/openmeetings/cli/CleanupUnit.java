@@ -29,12 +29,12 @@ public class CleanupUnit implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final File parent;
 	private final long sizeTotal;
-	
+
 	public CleanupUnit() {
 		parent = new File(".");
 		sizeTotal = 0;
 	}
-	
+
 	public CleanupUnit(File parent) {
 		this.parent = parent;
 		if (!parent.isDirectory() || !parent.exists()) {
@@ -42,17 +42,20 @@ public class CleanupUnit implements Serializable {
 		}
 		sizeTotal = OmFileHelper.getSize(parent);
 	}
-	
+
+	/**
+	 * @throws IOException some of the subclussed can throw
+	 */
 	public void cleanup() throws IOException {
 		for (File f : getParent().listFiles()) {
 			FileUtils.deleteQuietly(f);
 		}
 	}
-	
+
 	public File getParent() {
 		return parent;
 	}
-	
+
 	public long getSizeTotal() {
 		return sizeTotal;
 	}

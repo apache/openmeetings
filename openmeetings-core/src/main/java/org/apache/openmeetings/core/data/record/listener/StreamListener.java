@@ -46,7 +46,7 @@ public class StreamListener implements IStreamListener {
 			, RecordingMetaDeltaDao metaDeltaDao) {
 		streamWriter = isAudio
 			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao, metaDeltaDao)
-			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao);
+			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData, metaDataDao);
 	}
 
 	@Override

@@ -496,21 +496,6 @@
 			//if ($debug) Debug.write("throw event to drawarea: ", canvas.moderatorStreamID, canvas.ismoderator);
 
 			canvas._drawarea.onopenWhiteBoard.sendEvent();
-
-			if ($debug) Debug.write("room ", canvas.currentRoomObj);
-			if ($debug) Debug.write("room.type ", canvas.currentRoomObj.type);
-
-			if (canvas.currentRoomObj.type != 'restricted') {
-				if (canvas.currentRoomObj.moderated) {
-					if (value.length == 0 && !messageAlreadyThrown){
-						new lz.labelerrorPopup(canvas,{errorlabelid:641});
-					}
-				} else {
-					if (value.length == 0 && !messageAlreadyThrown){
-						new lz.errorModeratorPopup(canvas,{error:canvas.getLabelName(498)});
-					}
-				}
-			}
 		]]>
 		</handler>
 	</netRemoteCallHib>

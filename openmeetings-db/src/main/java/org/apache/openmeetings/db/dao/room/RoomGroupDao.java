@@ -36,6 +36,9 @@ public class RoomGroupDao {
 		return em.createNamedQuery("getAllRoomGroups", RoomGroup.class).getResultList();
 	}
 
+	/**
+	 * @param userId unused
+	 */
 	public RoomGroup update(RoomGroup entity, Long userId) {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());

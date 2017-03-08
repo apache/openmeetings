@@ -238,6 +238,9 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		}
 	}
 
+	/**
+	 * @param id The streamid sent by server
+	 */
 	public void setId(String id) {
 	}
 
@@ -384,6 +387,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		this.readyToRecord = readyToRecord;
 	}
 
+	/**
+	 * @param conn - unused
+	 * @param channel - unused
+	 * @param source - unused
+	 * @param command - command to be processed
+	 */
 	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
 		if (!(command instanceof Notify)) {
 			return;

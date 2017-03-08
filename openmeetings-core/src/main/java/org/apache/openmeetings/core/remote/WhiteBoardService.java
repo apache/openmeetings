@@ -368,7 +368,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return;
 	}
 
-	private static int getNumberOfInitialLoaders(Map<String, WhiteboardSyncLockObject> syncListRoom) throws Exception {
+	private static int getNumberOfInitialLoaders(Map<String, WhiteboardSyncLockObject> syncListRoom) {
 		int number = 0;
 		for (Map.Entry<String, WhiteboardSyncLockObject> e : syncListRoom.entrySet()) {
 			if (e.getValue().isInitialLoaded()) {

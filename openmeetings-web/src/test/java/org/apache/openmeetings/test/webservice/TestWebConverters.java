@@ -34,7 +34,7 @@ import org.junit.Test;
 
 public class TestWebConverters {
 	@Test
-	public void testDateConverter() throws Exception {
+	public void testDateConverter() {
 		assertEquals("Null date should be parsed", null, DateParamConverter.get(null));
 		assertEquals("Date should be parsed"
 				, Date.from(LocalDate.of(2017, 01, 15).atStartOfDay(ZoneId.systemDefault()).toInstant())
@@ -45,7 +45,7 @@ public class TestWebConverters {
 	}
 
 	@Test
-	public void testCalendarConverter() throws Exception {
+	public void testCalendarConverter() {
 		CalendarParamConverter c = new CalendarParamConverter();
 		assertEquals("Null calendar should be parsed", null, c.fromString(null));
 		Calendar cal = Calendar.getInstance();
@@ -54,7 +54,7 @@ public class TestWebConverters {
 	}
 
 	@Test
-	public void testUserConverter() throws Exception {
+	public void testUserConverter() {
 		assertEquals("Null UserDTO should be parsed", null, UserDTO.get((JSONObject)null));
 	}
 }

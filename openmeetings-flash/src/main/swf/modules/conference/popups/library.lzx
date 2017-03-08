@@ -33,7 +33,6 @@
 	<include href="editWhiteboardDefault.lzx" />
 	<include href="confirmationSingle.lzx" />
 	<include href="autoLoader.lzx" />
-	<include href="errorModeratorPopup.lzx" />
 	<include href="syncWin.lzx" />
 	<include href="incomingScreenSharing.lzx" />
 </library>

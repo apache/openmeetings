@@ -94,7 +94,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	}
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", getLocale());
 		driver = new FirefoxDriver(profile);
@@ -222,7 +222,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		if (getDoTearDownAfterTest()) {
 			driver.close();
 			driver.quit();

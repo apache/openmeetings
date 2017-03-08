@@ -29,6 +29,7 @@ import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFu
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
@@ -137,6 +138,7 @@ public class RoomPanel extends BasePanel {
 	};
 	private RedirectMessageDialog roomClosed;
 	private MessageDialog clientKicked;
+	private MessageDialog waitForModerator;
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
@@ -253,7 +255,15 @@ public class RoomPanel extends BasePanel {
 				room.setVisible(false);
 			}
 		}
-		add(room, accessDenied, eventDetail);
+		waitForModerator = new MessageDialog("wait-for-moderator", getString("204"), getString("696"), DialogButtons.OK, DialogIcon.LIGHT) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				// no-op
+			}
+		};
+		add(room, accessDenied, eventDetail, waitForModerator);
 		if (r.isWaitForRecording()) {
 			add(new MessageDialog("wait-for-recording", getString("1316"), getString("1315"), DialogButtons.OK, DialogIcon.LIGHT) {
 				private static final long serialVersionUID = 1L;
@@ -495,8 +505,20 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	public void requestRight(AjaxRequestTarget target, Right right) {
+	public void requestRight(Right right, IPartialPageRequestHandler handler) {
 		RoomMessage.Type reqType = null;
+		List<Client> mods = Application.getRoomClients(r.getId(), c -> c.hasRight(Room.Right.moderator));
+		if (mods.size() == 0) {
+			if (r.isModerated()) {
+				//dialog
+				waitForModerator.open(handler);
+				return;
+			} else {
+				// we found no-one we can ask, allow right
+				broadcast(getClient().allow(right));
+			}
+		}
+		// ask
 		switch (right) {
 			case moderator:
 				reqType = Type.requestRightModerator;
@@ -530,12 +552,12 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	public void allowRight(AjaxRequestTarget target, Client client, Right... rights) {
+	public void allowRight(Client client, Right... rights) {
 		client.allow(rights);
-		broadcast(target, client);
+		broadcast(client);
 	}
 
-	public void denyRight(AjaxRequestTarget target, Client client, Right... rights) {
+	public void denyRight(Client client, Right... rights) {
 		for (Right right : rights) {
 			client.deny(right);
 		}
@@ -545,14 +567,14 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.broadcastV);
 		}
-		broadcast(target, client);
+		broadcast(client);
 	}
 
-	public void kickUser(AjaxRequestTarget target, Client client) {
+	public void kickUser(Client client) {
 		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), Type.kick, client.getUid()));
 	}
 
-	public void broadcast(AjaxRequestTarget target, Client client) {
+	public void broadcast(Client client) {
 		WebSocketHelper.sendRoom(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 		RoomBroadcaster.sendUpdatedClient(client);
 	}

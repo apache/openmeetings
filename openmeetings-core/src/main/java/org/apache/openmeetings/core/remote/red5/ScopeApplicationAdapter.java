@@ -761,7 +761,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					}
 					if (rcl.getIsRecording()) {
 						log.debug("RCL getIsRecording newStream SEND");
-						recordingService.addRecordingByStreamId(current, streamid, c, rcl.getRecordingId());
+						recordingService.addRecordingByStreamId(current, c, rcl.getRecordingId());
 					}
 					if (rcl.isScreenClient()) {
 						log.debug("RCL getIsScreenClient newStream SEND");
@@ -964,39 +964,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.error("[getMicMutedByPublicSID]",err);
 		}
 		return true;
-	}
-
-	/**
-	 * Invoked by a User whenever he want to become moderator this is needed,
-	 * cause if the room has no moderator yet there is no-one he can ask to get
-	 * the moderation, in case its a Non-Moderated Room he should then get the
-	 * Moderation without any confirmation needed
-	 *
-	 * @return Long 1 => means get Moderation, 2 => ask Moderator for
-	 *         Moderation, 3 => wait for Moderator
-	 */
-	public long applyForModeration(String publicSID) {
-		try {
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-			if (currentClient == null) {
-				log.warn("Unable to find client by publicSID: {}", publicSID);
-				return -1L;
-			}
-
-			List<Client> currentModList = sessionManager.getCurrentModeratorByRoom(currentClient.getRoomId());
-
-			if (currentModList.size() > 0) {
-				return 2L;
-			} else {
-				// No moderator in this room at the moment
-				Room room = roomDao.get(currentClient.getRoomId());
-
-				return room.isModerated() ? 3L : 1L;
-			}
-		} catch (Exception err) {
-			log.error("[applyForModeration]", err);
-		}
-		return -1L;
 	}
 
 	public static long nextBroadCastId() {

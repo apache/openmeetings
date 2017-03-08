@@ -71,9 +71,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Management of optional LDAP Login
- * 
+ *
  * @author o.becherer
- * 
+ *
  */
 public class LdapLoginManagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
@@ -142,7 +142,7 @@ public class LdapLoginManagement {
 		}
 	}
 
-	private static Attribute getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) throws LdapInvalidAttributeValueException {
+	private static Attribute getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) {
 		String alias = config.getProperty(aliasCode, "");
 		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
 		return a == null ? null : a;
@@ -159,9 +159,9 @@ public class LdapLoginManagement {
 
 	/**
 	 * Ldap Login
-	 * 
+	 *
 	 * Connection Data is retrieved from ConfigurationFile
-	 * 
+	 *
 	 */
 	public User login(String login, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");
@@ -374,7 +374,7 @@ public class LdapLoginManagement {
 			if (!Strings.isEmpty(options.pictureUri)) {
 				u.setPictureuri(options.pictureUri);
 			}
-			
+
 			List<Dn> groups = new ArrayList<>();
 			if (GroupMode.ATTRIBUTE == options.groupMode) {
 				Attribute attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);

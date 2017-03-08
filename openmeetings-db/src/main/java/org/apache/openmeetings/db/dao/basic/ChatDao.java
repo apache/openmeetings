@@ -52,7 +52,7 @@ public class ChatDao {
 				.setMaxResults(count)
 				.getResultList();
 	}
-	
+
 	public List<ChatMessage> getRoom(long roomId, int start, int count, boolean all) {
 		return em.createNamedQuery("getChatMessagesByRoom", ChatMessage.class)
 				.setParameter("roomId", roomId)
@@ -61,7 +61,7 @@ public class ChatDao {
 				.setMaxResults(count)
 				.getResultList();
 	}
-	
+
 	public List<ChatMessage> getUser(long userId, int start, int count) {
 		return em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
 				.setParameter("userId", userId)
@@ -87,6 +87,10 @@ public class ChatDao {
 		return entity;
 	}
 
+	/**
+	 * @param entity - unused
+	 * @param userId - unused
+	 */
 	public void delete(ChatMessage entity, long userId) {
 		// TODO Auto-generated method stub
 	}

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,7 +53,7 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String>  {
 
 	public void open(IPartialPageRequestHandler handler, Long roomId, Long userId) {
 		Room r = getBean(RoomDao.class).get(roomId);
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = getBean(UserDao.class).get(userId);
 		message.setModelObject(String.format("%s %s %s %s", u.getFirstname(), u.getLastname(), getString("1137"), r.getName()));
 		enterRoom.setModelObject(false);
 		handler.add(form);

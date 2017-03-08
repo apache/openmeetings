@@ -50,9 +50,9 @@ public class TestUserCount extends AbstractWicketTester {
 		createUserContact(u.getId());
 		assertTrue("Account of unfiltered should be more then one", userDao.count("firstname", false, getUserId()) > 1);
 	}
-		
+
 	@Test
-	public void testCountAllUsers() throws Exception {
+	public void testCountAllUsers() {
 		assertTrue("Account of users should be positive", userDao.count() > 0);
 	}
 }

@@ -89,7 +89,7 @@ public class RecordingService implements IPendingServiceCallback {
 	public void resultReceived(IPendingServiceCall arg0) {
 	}
 
-	private static String generateFileName(Long recordingId, String streamid) throws Exception {
+	private static String generateFileName(Long recordingId, String streamid) {
 		String dateString = CalendarPatterns.getTimeForStreamId(new Date());
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
@@ -435,7 +435,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public void addRecordingByStreamId(IConnection conn, String streamId, Client rcl, Long recordingId) {
+	public void addRecordingByStreamId(IConnection conn, Client rcl, Long recordingId) {
 		try {
 			Recording recording = recordingDao.get(recordingId);
 

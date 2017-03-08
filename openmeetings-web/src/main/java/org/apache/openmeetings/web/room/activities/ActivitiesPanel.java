@@ -103,35 +103,35 @@ public class ActivitiesPanel extends BasePanel {
 								switch (a.getType()) {
 									case reqRightModerator:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.moderator);
+										room.allowRight(client, Right.moderator);
 										break;
 									case reqRightAv:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.audio, Right.video);
+										room.allowRight(client, Right.audio, Right.video);
 										break;
 									case reqRightWb:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.whiteBoard);
+										room.allowRight(client, Right.whiteBoard);
 										break;
 									case reqRightShare:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.share);
+										room.allowRight(client, Right.share);
 										break;
 									case reqRightRemote:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.remoteControl);
+										room.allowRight(client, Right.remoteControl);
 										break;
 									case reqRightA:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.audio);
+										room.allowRight(client, Right.audio);
 										break;
 									case reqRightMute:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.mute);
+										room.allowRight(client, Right.mute);
 										break;
 									case reqRightExclusive:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(target, client, Right.exclusive);
+										room.allowRight(client, Right.exclusive);
 										break;
 									default:
 										break;

@@ -20,8 +20,6 @@ package org.apache.openmeetings.screenshare.job;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
-import java.io.IOException;
-
 import org.apache.openmeetings.screenshare.CaptureScreen;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -34,7 +32,7 @@ public class SendJob implements Job {
 	private static final Logger log = getLogger(SendJob.class);
 	public static final String CAPTURE_KEY = "capture";
 	public SendJob() {}
-	
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap data = context.getJobDetail().getJobDataMap();
@@ -50,18 +48,14 @@ public class SendJob implements Job {
 		}
 		f = f == null ? capture.getEncoder().getUnalteredFrame() : f;
 		if (f != null) {
-			try {
-				capture.pushVideo(f, capture.getTimestamp().get());
-				if (log.isTraceEnabled()) {
-					long real = System.currentTimeMillis() - capture.getStartTime();
-					log.trace(String.format("send: Sending video %sk, timestamp: %s, real: %s, diff: %s", f.getData().capacity() / 1024, capture.getTimestamp(), real, real - capture.getTimestamp().get()));
-				}
-				capture.getTimestamp().addAndGet(capture.getTimestampDelta());
-				if (log.isTraceEnabled()) {
-					log.trace(String.format("send: new timestamp: %s", capture.getTimestamp()));
-				}
-			} catch (IOException e) {
-				log.error("Error while sending: ", e);
+			capture.pushVideo(f, capture.getTimestamp().get());
+			if (log.isTraceEnabled()) {
+				long real = System.currentTimeMillis() - capture.getStartTime();
+				log.trace(String.format("send: Sending video %sk, timestamp: %s, real: %s, diff: %s", f.getData().capacity() / 1024, capture.getTimestamp(), real, real - capture.getTimestamp().get()));
+			}
+			capture.getTimestamp().addAndGet(capture.getTimestampDelta());
+			if (log.isTraceEnabled()) {
+				log.trace(String.format("send: new timestamp: %s", capture.getTimestamp()));
 			}
 		} else if (log.isTraceEnabled()) {
 			log.trace(String.format("send: nothing to send"));

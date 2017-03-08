@@ -33,13 +33,13 @@ public class CleanupEntityUnit extends CleanupUnit {
 	private long sizeInvalid = 0;
 	private long sizeDeleted = 0;
 	protected final int missing;
-	
+
 	public CleanupEntityUnit() {
 		invalid = new ArrayList<>();
 		deleted = new ArrayList<>();
 		missing = 0;
 	}
-	
+
 	public CleanupEntityUnit(File parent, List<File> invalid, List<File> deleted, int missing) {
 		super(parent);
 		this.invalid = invalid;
@@ -52,7 +52,7 @@ public class CleanupEntityUnit extends CleanupUnit {
 			sizeDeleted += OmFileHelper.getSize(i);
 		}
 	}
-	
+
 	@Override
 	public void cleanup() throws IOException {
 		for (File i : invalid) {
@@ -62,7 +62,7 @@ public class CleanupEntityUnit extends CleanupUnit {
 			FileUtils.deleteQuietly(i);
 		}
 	}
-	
+
 	public long getSizeInvalid() {
 		return sizeInvalid;
 	}
@@ -78,7 +78,7 @@ public class CleanupEntityUnit extends CleanupUnit {
 	public String getHumanDeleted() {
 		return OmFileHelper.getHumanSize(sizeDeleted);
 	}
-	
+
 	public int getMissing() {
 		return missing;
 	}

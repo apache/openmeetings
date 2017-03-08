@@ -37,7 +37,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	private Date startedSessionScreenTimeDate = null;
 
 	public StreamVideoWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,
-			boolean isInterview, RecordingMetaDataDao metaDataDao) {
+			RecordingMetaDataDao metaDataDao) {
 
 		super(streamName, scope, metaDataId, isScreenData, metaDataDao);
 	}

@@ -64,12 +64,12 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * Contains methods to import and upload files into the Files section of the
  * conference room and the personal drive of any user
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 @WebService(serviceName="org.apache.openmeetings.webservice.FileWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
@@ -89,7 +89,7 @@ public class FileWebService {
 
 	/**
 	 * deletes files or folders based on it id
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param id
@@ -124,9 +124,9 @@ public class FileWebService {
 	}
 
 	/**
-	 * 
+	 *
 	 * deletes a file by its external Id and type
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param externalId
@@ -141,11 +141,11 @@ public class FileWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
 			, @WebParam(name="externalid") @PathParam("externalid") String externalId
-			) throws ServiceException
+			)
 	{
 		try {
 			Sessiondata sd = sessionDao.check(sid);
-			
+
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				FileExplorerItem f = fileDao.get(externalId, externalType);
 				fileDao.delete(f);
@@ -160,7 +160,7 @@ public class FileWebService {
 	/**
 	 * to add a folder to the private drive, set parentFileExplorerItemId = 0 and isOwner to 1/true and
 	 * externalUserId/externalUserType to a valid user
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param file
@@ -197,7 +197,7 @@ public class FileWebService {
 				//TODO permissions
 				if (stream != null) {
 					//TODO attachment
-					ConverterProcessResultList result = fileProcessor.processFile(userId, f, stream);
+					ConverterProcessResultList result = fileProcessor.processFile(f, stream);
 					if (result.hasError()) {
 						throw new ServiceException(result.getLogMessage());
 					}
@@ -218,11 +218,11 @@ public class FileWebService {
 
 	/**
 	 * Get a LibraryPresentation-Object for a certain file
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param parentFolder
-	 * 
+	 *
 	 * @return - LibraryPresentation-Object for a certain file
 	 * @throws ServiceException
 	 */
@@ -256,7 +256,7 @@ public class FileWebService {
 
 	/**
 	 * Get a File Explorer Object by a given Room
-	 * 
+	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param roomId
@@ -301,9 +301,9 @@ public class FileWebService {
 	}
 
 	/**
-	 * 
+	 *
 	 * Get list of {@link FileExplorerItemDTO} by parent
-	 * 
+	 *
 	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param parentId
@@ -351,9 +351,9 @@ public class FileWebService {
 	}
 
 	/**
-	 * 
+	 *
 	 * update a file or folder name
-	 * 
+	 *
 	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param id
@@ -391,7 +391,7 @@ public class FileWebService {
 
 	/**
 	 * move a file or folder
-	 * 
+	 *
 	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param id

@@ -123,6 +123,10 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 		}
 	}
 
+	/**
+	 * @param id - entity id
+	 * @param userId - unused
+	 */
 	public void delete(Long id, Long userId) {
 		if (id != null) {
 			em.remove(get(id));

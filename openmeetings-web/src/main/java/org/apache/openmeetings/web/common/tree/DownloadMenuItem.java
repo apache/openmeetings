@@ -62,7 +62,7 @@ public class DownloadMenuItem extends MenuItem {
 		File f = fi.getFile(ext);
 		if (f != null && f.exists()) {
 			if (ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())) {
-				File[] ff = f.getParentFile().listFiles(new OriginalFilter(fi, ext));
+				File[] ff = f.getParentFile().listFiles(new OriginalFilter(fi));
 				if (ff.length > 0) {
 					f = ff[0];
 				}
@@ -77,7 +77,7 @@ public class DownloadMenuItem extends MenuItem {
 		final FileItem fi;
 		Set<String> exclusions = new HashSet<>();
 
-		OriginalFilter(FileItem fi, String ext) {
+		OriginalFilter(FileItem fi) {
 			this.fi = fi;
 			exclusions.add(EXTENSION_JPG);
 			if (Type.Presentation == fi.getType()) {

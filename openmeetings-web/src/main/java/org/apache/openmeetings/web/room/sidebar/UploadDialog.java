@@ -199,7 +199,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				f.setInsertedBy(getUserId());
 
 				try {
-					ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(getUserId(), f, fu.getInputStream());
+					ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream());
 					for (Entry<String, ConverterProcessResult> entry : logs.getJobs().entrySet()) {
 						getBean(FileItemLogDao.class).add(entry.getValue().getProcess(), f, entry.getValue());
 					}

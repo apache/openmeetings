@@ -338,7 +338,7 @@ public abstract class BaseConverter {
 		return String.format("%sx%s", r.getFlvWidth(), r.getFlvHeight());
 	}
 
-	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) throws IOException {
+	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
 		argv.addAll(Arrays.asList(
 				"-c:v", "h264", //
 				"-crf", "24",
