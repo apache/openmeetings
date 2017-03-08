@@ -23,6 +23,7 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.MENU_ROOMS_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.exit;
@@ -42,10 +43,12 @@ import java.util.Set;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.basic.Navimain;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
@@ -53,10 +56,12 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.MessageDialog;
 import org.apache.openmeetings.web.user.UserInfoDialog;
 import org.apache.openmeetings.web.user.chat.ChatPanel;
+import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
@@ -91,6 +96,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, webAppRootKey);
+	private static final String DELIMITER = "     ";
 	private static final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	public static final String PARAM_USER_ID = "userId";
 	private Client client = null;
@@ -287,6 +293,23 @@ public class MainPanel extends Panel {
 						onClick(MainPanel.this, target);
 					}
 				});
+			}
+			if (MENU_ROOMS_NAME.equals(gl.getName())) {
+				List<Room> recent = getBean(RoomDao.class).getRecent(getUserId());
+				if (!recent.isEmpty()) {
+					l.add(new MenuItem(DELIMITER, (String)null));
+				}
+				for (Room r : recent) {
+					final Long roomId = r.getId();
+					l.add(new MenuItem(r.getName(), r.getName()) {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void onClick(AjaxRequestTarget target) {
+							RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);
+						}
+					});
+				}
 			}
 			menu.add(new MenuItem(Application.getString(gl.getLabelId()), l));
 		}

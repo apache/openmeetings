@@ -18,11 +18,15 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.RECENT_ROOMS_COUNT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
@@ -35,6 +39,7 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -157,11 +162,11 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	public List<Room> getPublicRooms() {
 		return em.createNamedQuery("getPublicRoomsOrdered", Room.class).getResultList();
 	}
-	
+
 	public List<Room> getPublicRooms(Type type) {
 		return em.createNamedQuery("getPublicRooms", Room.class).setParameter("type", type).getResultList();
 	}
-	
+
 	public List<Long> getSipRooms(List<Long> ids) {
 		TypedQuery<Long> q = em.createNamedQuery("getSipRoomIdsByIds", Long.class);
 		q.setParameter("ids", ids);
@@ -196,19 +201,19 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				.setParameter("end", endCal.getTime())
 				.getResultList();
 	}
-	
+
 	public long getRoomsCapacityByIds(List<Long> ids) {
 		return ids == null || ids.isEmpty() ? 0L
 			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
 	}
-	
+
 	private String getSipNumber(long roomId) {
 		if (cfgDao.isSipEnabled()) {
 			return cfgDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Room update(Room entity, Long userId) {
 		if (entity.getId() == null) {
@@ -249,7 +254,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 
 		if (room == null) {
 			log.debug("Could not find room " + ownerId + " || " + type);
-			
+
 			room = new Room();
 			room.setName(name);
 			room.setType(type);
@@ -282,5 +287,28 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			log.error("Could not find room " + externalId);
 			return null;
 		}
+	}
+
+	public List<Room> getRecent(Long userId) {
+		List<Room> result = new ArrayList<>();
+		Set<Long> ids = new HashSet<>();
+		//(RECENT_ROOMS_COUNT + 1) passes required to preserve the order :(
+		for (ConferenceLog l : em.createNamedQuery("getLogRecentRooms", ConferenceLog.class)
+				.setParameter("roomEnter", ConferenceLog.Type.roomEnter)
+				.setParameter("userId", userId)
+				.getResultList())
+		{
+			if (!ids.contains(l.getRoomId())) {
+				Room r = get(l.getRoomId());
+				if (r != null && !r.isDeleted()) {
+					result.add(r);
+					ids.add(r.getId());
+				}
+			}
+			if (ids.size() == RECENT_ROOMS_COUNT) {
+				break;
+			}
+		}
+		return result;
 	}
 }

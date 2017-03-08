@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
@@ -45,10 +46,12 @@ import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -67,6 +70,7 @@ import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
+import org.apache.openmeetings.web.user.dashboard.RecentRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
@@ -143,6 +147,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		dashboardContext.setDashboardPersister(new UserDashboardPersister());
 		WidgetRegistry widgetRegistry = dashboardContext.getWidgetRegistry();
 		widgetRegistry.registerWidget(new MyRoomsWidgetDescriptor());
+		widgetRegistry.registerWidget(new RecentRoomsWidgetDescriptor());
 		widgetRegistry.registerWidget(new WelcomeWidgetDescriptor());
 		widgetRegistry.registerWidget(new StartWidgetDescriptor());
 		widgetRegistry.registerWidget(new RssWidgetDescriptor());
@@ -228,6 +233,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		removeUserFromRoom(c);
 		if (roomId != null) {
 			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
+			getBean(ConferenceLogDao.class).add(
+					ConferenceLog.Type.roomLeave
+					, getUserId(), "0", roomId
+					, WebSession.get().getClientInfo().getProperties().getRemoteAddress()
+					, "" + roomId);
 		}
 	}
 

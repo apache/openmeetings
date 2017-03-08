@@ -619,11 +619,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStoped, client.getStreamPublishName()));
 			}
 
-			// Log the User
-			conferenceLogDao.add(ConferenceLog.Type.roomLeave,
-					client.getUserId(), client.getStreamid(),
-					roomId, client.getUserip(), "");
-
 			// Remove User from Sync List's
 			if (roomId != null) {
 				whiteBoardService.removeUserFromAllLists(scope, client);
@@ -1124,10 +1119,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				client.setCanGiveAudio(true);
 			}
 			sessionManager.updateClientByStreamId(streamid, client, true, null); // first save to get valid room count
-			// Log the User
-			conferenceLogDao.add(ConferenceLog.Type.roomEnter,
-					client.getUserId(), streamid, roomId,
-					client.getUserip(), "");
 
 			// Check for Moderation LogicalRoom ENTER
 			List<Client> roomClients = sessionManager.getClientListByRoom(roomId);
