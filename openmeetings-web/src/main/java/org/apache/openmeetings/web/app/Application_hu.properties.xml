@@ -1897,4 +1897,6 @@
 	{0} Support Team.]]></entry>
 	<entry key="template.recording.expiring.subj.prefix">Recording will be deleted</entry>
 	<entry key="template.recording.expiring.subj.room"> -- Room[{0}]</entry>
+	<entry key="widget.recent.title">Recent Rooms</entry>
+	<entry key="widget.recent.desc">This sections displays rooms recently opened by you</entry>
 </properties>

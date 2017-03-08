@@ -38,11 +38,13 @@ import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -104,12 +106,17 @@ public class RoomPanel extends BasePanel {
 	}
 	private final Room r;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
-	private final AbstractDefaultAjaxBehavior aab = new AbstractDefaultAjaxBehavior() {
+	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			target.appendJavaScript("setRoomSizes();");
+			getBean(ConferenceLogDao.class).add(
+					ConferenceLog.Type.roomEnter
+					, getUserId(), "0", r.getId()
+					, WebSession.get().getClientInfo().getProperties().getRemoteAddress()
+					, "" + r.getId());
 			//TODO SID etc
 			try {
 				URL url = new URL(WebSession.get().getExtendedProperties().getCodebase());
@@ -195,7 +202,7 @@ public class RoomPanel extends BasePanel {
 		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
 		room.add(wbArea.add(wb.setOutputMarkupId(true)));
 		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
-		room.add(aab);
+		room.add(roomEnter);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
 		room.add(activities = new ActivitiesPanel("activities", this));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
@@ -495,7 +502,7 @@ public class RoomPanel extends BasePanel {
 					, String.format("room-reload-%s", UUID.randomUUID()))));
 		}
 		if (room.isVisible()) {
-			response.render(OnDomReadyHeaderItem.forScript(aab.getCallbackScript()));
+			response.render(OnDomReadyHeaderItem.forScript(roomEnter.getCallbackScript()));
 		}
 	}
 

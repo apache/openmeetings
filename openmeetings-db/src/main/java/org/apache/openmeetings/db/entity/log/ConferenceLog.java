@@ -27,12 +27,18 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 @Entity
-@Table(name = "conferencelog")
+@Table(name = "conference_log")
+@NamedQueries({
+	@NamedQuery(name = "getLogRecentRooms", query = "SELECT c FROM ConferenceLog c "
+			+ "WHERE c.roomId IS NOT NULL AND c.type = :roomEnter and c.userId = :userId ORDER BY c.inserted DESC")
+})
 public class ConferenceLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public enum Type {
@@ -41,38 +47,38 @@ public class ConferenceLog implements IDataProviderEntity {
 		, roomLeave
 		, nicknameEnter
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long id;
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type")
 	private Type type;
-	
+
 	@Column(name="inserted")
 	private Date inserted;
-	
+
 	@Column(name="insertedby")
 	private long insertedby;
-	
+
 	//NULL means its a Guest/Invited User
 	@Column(name="user_id")
 	private Long userId;
-	
+
 	@Column(name="streamid")
 	private String streamid;
-	
+
 	@Column(name="room_id")
 	private Long roomId;
-	
+
 	@Column(name="userip")
 	private String userip;
-	
+
 	@Column(name="scopename")
 	private String scopeName;
-	
+
 	@Override
 	public Long getId() {
 		return id;
@@ -81,14 +87,14 @@ public class ConferenceLog implements IDataProviderEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public Type getType() {
 		return type;
 	}
 	public void setType(Type type) {
 		this.type = type;
 	}
-	
+
 	public Date getInserted() {
 		return inserted;
 	}
@@ -102,35 +108,35 @@ public class ConferenceLog implements IDataProviderEntity {
 	public void setInsertedby(long insertedby) {
 		this.insertedby = insertedby;
 	}
-	
+
 	public Long getUserId() {
 		return userId;
 	}
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
+
 	public String getStreamid() {
 		return streamid;
 	}
 	public void setStreamid(String streamid) {
 		this.streamid = streamid;
 	}
-	
+
 	public Long getRoomId() {
 		return roomId;
 	}
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
-	
+
 	public String getUserip() {
 		return userip;
 	}
 	public void setUserip(String userip) {
 		this.userip = userip;
 	}
-	
+
 	public String getScopeName() {
 		return scopeName;
 	}

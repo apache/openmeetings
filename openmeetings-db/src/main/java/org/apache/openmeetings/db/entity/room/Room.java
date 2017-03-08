@@ -80,8 +80,8 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
 	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT c.room FROM RoomGroup c LEFT JOIN FETCH c.room "
-				+ "WHERE c.group.id = :groupId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
-				+ "AND c.group.deleted = false ORDER BY c.room.name ASC")
+			+ "WHERE c.group.id = :groupId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
+			+ "AND c.group.deleted = false ORDER BY c.room.name ASC")
 })
 @Table(name = "room")
 @Root(name = "room")

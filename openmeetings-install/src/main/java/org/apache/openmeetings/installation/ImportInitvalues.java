@@ -52,6 +52,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_E
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.MENU_ROOMS_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -129,7 +130,7 @@ public class ImportInitvalues {
 		/*
 		 * ######################## Conference Menu Points
 		 */
-		Naviglobal rooms = navimanagement.addGlobalStructure(2, "792", LEVEL_USER, "Conference Rooms", "793");
+		Naviglobal rooms = navimanagement.addGlobalStructure(2, "792", LEVEL_USER, MENU_ROOMS_NAME, "793");
 		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, "777", LEVEL_USER, "Public Rooms", rooms.getId(), "1506");
 		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, "779", LEVEL_USER, "Private Rooms", rooms.getId(), "1507");
 		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, "781", LEVEL_USER, "My Rooms", rooms.getId(), "1508");
