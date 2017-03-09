@@ -166,10 +166,8 @@ public class ActivitiesPanel extends BasePanel {
 				case reqRightAv:
 				case reqRightMute:
 				case reqRightExclusive:
-					if (room.getClient().hasRight(Right.moderator)) {
-						accept.setVisible(true);
-						decline.setVisible(true);
-					}
+					accept.setVisible(room.getClient().hasRight(Right.moderator));
+					decline.setVisible(room.getClient().hasRight(Right.moderator));
 					break;
 				case haveQuestion:
 				case roomEnter:
