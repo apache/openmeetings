@@ -7,6 +7,8 @@ Release Notes - Openmeetings - Version 3.2.1
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-571] - Chat area does not resize when resizing browser window
+    * [OPENMEETINGS-1437] - behavior os share audio and share audio/video button ist different
+    * [OPENMEETINGS-1547] - 'You have to wait until a moderator enters the room' dialog need to be added to the room
     * [OPENMEETINGS-1550] - Admin functions widget should be inaccessible for non-admin users
     * [OPENMEETINGS-1553] - Chat messages in mobile client are broken
     * [OPENMEETINGS-1555] - Text does not fit room tabs
@@ -33,13 +35,20 @@ Release Notes - Openmeetings - Version 3.2.1
     * [OPENMEETINGS-1590] - Video frame of mobile user are resized when mobile user switch off video
     * [OPENMEETINGS-1591] - Chat messages are not sorted correctly when user send message in the room
     * [OPENMEETINGS-1592] - Avatar is not shown when mobile client sends chat message in the room
+    * [OPENMEETINGS-1594] - Screen-sharing base URL is broken
 
 ** Improvement
     * [OPENMEETINGS-372] - Please make the ability to “clear the Chat window” only available to Moderators, and not to participants who have “Draw on the Whiteboard” rights
+    * [OPENMEETINGS-690] - possibility for user to signal a question 
     * [OPENMEETINGS-1209] - typing indicator
     * [OPENMEETINGS-1210] - chat jumps down, if it was scrolled up before
+    * [OPENMEETINGS-1301] - No Accessability for Conference Room
     * [OPENMEETINGS-1420] - Select a whole group of users as attendees in event
+    * [OPENMEETINGS-1424] - Add a "recent rooms" functionality
     * [OPENMEETINGS-1551] - Add prohibition of  time format  сombination as 15:00 PM when creating event 
     * [OPENMEETINGS-1558] - Room public drive should be accessible to all users in read-only mode
     * [OPENMEETINGS-1571] - 3.2.1 - Library versions should be updated
     * [OPENMEETINGS-1580] - Enable multiple uploads  at once to file tree and whiteboard.
+
+** New Feature
+    * [OPENMEETINGS-573] - Audio notification for new chat message
