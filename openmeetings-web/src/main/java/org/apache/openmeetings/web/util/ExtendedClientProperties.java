@@ -53,22 +53,26 @@ public class ExtendedClientProperties extends ClientProperties {
 		return new JSONObject();
 	}
 
-	private static StringBuilder cleanUrl(StringBuilder sb, String _url) {
+	private static StringBuilder cleanUrl(String _url) {
+		StringBuilder sb = new StringBuilder();
+		int semi = _url.indexOf(';');
+		if (semi > -1) {
+			_url = _url.substring(0, semi);
+		}
 		for (String tail : new String[]{HASH_MAPPING, SIGNIN_MAPPING, NOTINIT_MAPPING}) {
 			if (_url.endsWith(tail)) {
-				sb.setLength(_url.length() - tail.length());
+				_url = _url.substring(0, _url.length() - tail.length());
 				break;
 			}
 		}
-		return sb;
+		return sb.append(_url);
 	}
 
 	@Override
 	public void read(IRequestParameters parameters) {
 		super.read(parameters);
 		String _url = parameters.getParameterValue("codebase").toString("N/A");
-		StringBuilder sb = new StringBuilder(_url);
-		cleanUrl(sb, _url);
+		StringBuilder sb = cleanUrl(_url);
 		if (sb.charAt(sb.length() - 1) != '/') {
 			sb.append('/');
 		}
