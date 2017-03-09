@@ -878,7 +878,7 @@
 							</licenseFamily>
 						</licenseFamilies>
 						<excludes>
-							<exclude>*.mp3</exclude>
+							<exclude>**/*.mp3</exclude>
 						</excludes>
 					</configuration>
 				</plugin>
