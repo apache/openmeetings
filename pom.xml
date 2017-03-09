@@ -877,6 +877,9 @@
 								<familyName>MIT</familyName>
 							</licenseFamily>
 						</licenseFamilies>
+						<excludes>
+							<exclude>*.mp3</exclude>
+						</excludes>
 					</configuration>
 				</plugin>
 				<plugin>
