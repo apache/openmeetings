@@ -477,7 +477,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				log.debug("scope " + scope);
 
 				if (numberOfInitial == 0 && scope != null) {
-					scopeAdapter.sendMessageToCurrentScope("sendSyncCompleteFlag", wSyncLockObject, false);
+					scopeAdapter.sendMessageToCurrentScope("" + roomId, "sendSyncCompleteFlag", wSyncLockObject, false);
 				}
 
 				// Check Image Loaders
@@ -493,7 +493,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 				int numberOfImageLoaders = wbListManager.getWhiteBoardObjectSyncListByRoomid(roomId).size();
 
 				if (numberOfImageLoaders == 0 && scope != null) {
-					scopeAdapter.sendMessageToCurrentScope("sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
+					scopeAdapter.sendMessageToCurrentScope("" + roomId, "sendImagesSyncCompleteFlag", new Object[] { "remove" }, true);
 				}
 			}
 		} catch (Exception err) {
