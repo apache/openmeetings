@@ -146,7 +146,7 @@ public class UserService implements IUserService {
 					messageObj.put(0, "kick");
 					scopeApplicationAdapter.sendMessageById(messageObj, streamid, currentScope);
 
-					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
+					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 					return true;
 				} else {
@@ -199,7 +199,7 @@ public class UserService implements IUserService {
 				messageObj.put(0, "kick");
 
 				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
-				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 				return true;
 			}

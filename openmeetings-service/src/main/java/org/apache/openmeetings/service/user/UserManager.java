@@ -429,7 +429,7 @@ public class UserManager implements IUserManager {
 						scopeName = rcl.getRoomId().toString();
 					}
 					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
-					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
+					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 					Map<Integer, String> messageObj = new HashMap<>();
 					messageObj.put(0, "kick");
@@ -465,7 +465,7 @@ public class UserManager implements IUserManager {
 				messageObj.put(0, "kick");
 				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
 
-				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope, true);
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 				return true;
 			}

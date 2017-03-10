@@ -248,7 +248,7 @@ public class RecordingService implements IPendingServiceCallback {
 	 *
 	 * @param conn
 	 */
-	public void stopRecordingShow(IConnection conn, String broadcastId, Long metaId) {
+	public void stopRecordingShow(IScope scope, String broadcastId, Long metaId) {
 		try {
 			if (metaId == null) {
 				// this should be fixed, can be useful for debugging, after all this is an error
@@ -256,10 +256,10 @@ public class RecordingService implements IPendingServiceCallback {
 				log.error("recordingMetaDataId is null");
 			}
 
-			log.debug("** stopRecordingShow: " + conn);
-			log.debug("### Stop recording show for broadcastId: " + broadcastId + " || " + conn.getScope().getContextPath());
+			log.debug("** stopRecordingShow: " + scope);
+			log.debug("### Stop recording show for broadcastId: " + broadcastId + " || " + scope.getContextPath());
 
-			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(conn.getScope(), broadcastId);
+			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(scope, broadcastId);
 
 			StreamListener listenerAdapter = streamListeners.get(metaId);
 
@@ -327,14 +327,14 @@ public class RecordingService implements IPendingServiceCallback {
 						if (rcl.isScreenClient()) {
 							if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
 								// Stop FLV Recording
-								stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
+								stopRecordingShow(scope, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
 
 								// Update Meta Data
 								metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
 							}
 						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 
-							stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getRecordingMetaDataId());
+							stopRecordingShow(scope, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getRecordingMetaDataId());
 
 							// Update Meta Data
 							metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
@@ -397,7 +397,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public void stopRecordingShowForClient(IConnection conn, Client rcl) {
+	public void stopRecordingShowForClient(IScope scope, Client rcl) {
 		try {
 			// this cannot be handled here, as to stop a stream and to leave a
 			// room is not
@@ -414,7 +414,7 @@ public class RecordingService implements IPendingServiceCallback {
 					// FIXME: Is there really a need to stop it manually if the
 					// user just
 					// stops the stream?
-					stopRecordingShow(conn, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
+					stopRecordingShow(scope, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
 
 					// Update Meta Data
 					metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
@@ -424,7 +424,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 				// FIXME: Is there really a need to stop it manually if the user
 				// just stops the stream?
-				stopRecordingShow(conn, String.valueOf(rcl.getBroadCastID()), rcl.getRecordingMetaDataId());
+				stopRecordingShow(scope, String.valueOf(rcl.getBroadCastID()), rcl.getRecordingMetaDataId());
 
 				// Update Meta Data
 				metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());

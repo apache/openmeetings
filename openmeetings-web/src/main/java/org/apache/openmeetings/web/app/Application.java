@@ -283,6 +283,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					client = new Client(rcl, getBean(UserDao.class));
 					addOnlineUser(client);
 					if (rcl.getRoomId() != null) {
+						client.setCam(0);
+						client.setMic(0);
 						addUserToRoom(client);
 						//FIXME TODO unify this
 						WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
@@ -299,6 +301,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			rcl.setIsMod(client.hasRight(Right.moderator));
 			rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
 			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
+			if (client.hasActivity(Activity.broadcastA) && client.getMic() < 0) {
+				client.remove(Activity.broadcastA);
+			}
+			if (client.hasActivity(Activity.broadcastV) && client.getCam() < 0) {
+				client.remove(Activity.broadcastV);
+			}
 			if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
 				if (forceSize || rcl.getVWidth() == 0 || rcl.getVHeight() == 0) {
 					rcl.setVWidth(client.getWidth());
@@ -403,13 +411,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Client removeUserFromRoom(Client c) {
-		log.debug("Removing online room client: {}, room: {}", c.getUid(), c.getRoomId());
-		if (c.getRoomId() != null) {
-			Set<String> clients = ROOMS.get(c.getRoomId());
+		Long roomId = c.getRoomId();
+		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
+		if (roomId != null) {
+			Set<String> clients = ROOMS.get(roomId);
 			if (clients != null) {
 				clients.remove(c.getUid());
 				c.setRoomId(null);
 			}
+			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), roomId);
 			c.getActivities().clear();
 			c.clearRights();
 		}
