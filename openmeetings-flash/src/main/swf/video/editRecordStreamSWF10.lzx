@@ -189,10 +189,14 @@
 	<![CDATA[
 		//Initialize and get eventually stored property
 		var dev = canvas.commonVideoViewContent.getAvSetting(prop);
+		if ($debug) Debug.write("fillDeviceList:: ", prop, dev);
 
 		//Get all availible devices
 		var foundStoredDev = null;
 		combo.addItem(canvas.getLabelName(159), -1);
+		if ("-1" == dev) {
+			foundStoredDev = "-1";
+		}
 		for (var eg = 0; eg < list.length; ++eg) {
 			combo.addItem(list[eg], eg);
 			var r = "" + eg;

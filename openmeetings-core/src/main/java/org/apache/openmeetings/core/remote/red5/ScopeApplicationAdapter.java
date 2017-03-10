@@ -443,7 +443,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					returnMap.put("alreadyPublished", true);
 				}
 
-				log.debug(String.format("screen x,y,width,height %s,%s,%s,%s", client.getVX(), client.getVY(), client.getVWidth(), client.getVHeight()));
+				log.debug("screen x,y,width,height {},{},{},{}", client.getVX(), client.getVY(), client.getVWidth(), client.getVHeight());
 
 				if (startStreaming) {
 					if (!alreadyStreaming) {
@@ -559,43 +559,27 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Override
 	public void roomLeave(IClient client, IScope room) {
 		try {
-			log.debug(String.format("roomLeave %s %s %s %s", client.getId(), room.getClients().size(), room.getContextPath(), room.getName()));
+			log.debug("[roomLeave] {} {} {} {}", client.getId(), room.getClients().size(), room.getContextPath(), room.getName());
 
-			Client currentClient = sessionManager.getClientByStreamId(client.getId(), null);
+			Client rcl = sessionManager.getClientByStreamId(client.getId(), null);
 
 			// The Room Client can be null if the Client left the room by using
 			// logicalRoomLeave
-			if (currentClient != null) {
+			if (rcl != null) {
 				log.debug("currentClient IS NOT NULL");
-				roomLeaveByScope(currentClient, room, true);
+				roomLeaveByScope(rcl, room);
 			}
 		} catch (Exception err) {
 			log.error("[roomLeave]", err);
 		}
 	}
 
-	/**
-	 * this means a user has left a room but only logically, he didn't leave the
-	 * app he just left the room
-	 *
-	 * FIXME: Is this really needed anymore if you re-connect to another scope?
-	 *
-	 * Exit Room by Application
-	 *
-	 */
-	public void logicalRoomLeave() {
-		log.debug("logicalRoomLeave ");
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-
-			log.debug(streamid + " is leaving");
-
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-
-			roomLeaveByScope(currentClient, current.getScope(), true);
-		} catch (Exception err) {
-			log.error("[logicalRoomLeave]", err);
+	public void roomLeaveByScope(String uid, Long roomId) {
+		Client rcl = sessionManager.getClientByPublicSID(uid, null);
+		IScope scope = getRoomScope("" + roomId);
+		log.debug("[roomLeaveByScope] {} {} {} {}", uid, roomId, rcl, scope);
+		if (rcl != null && scope != null) {
+			roomLeaveByScope(rcl, scope);
 		}
 	}
 
@@ -609,9 +593,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param client
 	 * @param scope
 	 */
-	public void roomLeaveByScope(Client client, IScope scope, boolean removeUserFromSessionList) {
+	public void roomLeaveByScope(Client client, IScope scope) {
 		try {
-			log.debug("currentClient " + client);
+			log.debug("[roomLeaveByScope] currentClient " + client);
 			Long roomId = client.getRoomId();
 
 			if (client.isScreenClient() && client.isStartStreaming()) {
@@ -642,59 +626,30 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					client.setIsRecording(true);
 				}
 			}
+			recordingService.stopRecordingShowForClient(scope, client);
 
 			// Notify all clients of the same currentScope (room) with domain
 			// and room except the current disconnected cause it could throw an exception
 			log.debug("currentScope " + scope);
 
-			if (scope != null && scope.getClientConnections() != null) {
-				// Notify Users of the current Scope
-				for (IConnection cons : scope.getClientConnections()) {
-					if (cons != null && cons instanceof IServiceCapableConnection) {
-						log.debug("sending roomDisconnect to {}  client id {}", cons, cons.getClient().getId());
-
-						Client rcl = sessionManager.getClientByStreamId(cons.getClient().getId(), null);
-
-						// Check if the Client does still exist on the list
-						if (rcl == null) {
-							log.debug("For this StreamId: " + cons.getClient().getId() + " There is no Client in the List anymore");
-							continue;
-						}
-
-						//Do not send back to sender, but actually all other clients should receive this message swagner 01.10.2009
-						if (!client.getStreamid().equals(rcl.getStreamid())) {
-							// add Notification if another user isrecording
-							log.debug("###########[roomLeaveByScope]");
-							if (rcl.getIsRecording()) {
-								log.debug("*** roomLeave Any Client is Recording - stop that");
-								recordingService.stopRecordingShowForClient(cons, client);
-							}
-
-							boolean isScreen = rcl.isScreenClient();
-							if (isScreen && client.getPublicSID().equals(rcl.getStreamPublishName())) {
-								//going to terminate screen sharing started by this client
-								((IServiceCapableConnection) cons).invoke("stopStream", new Object[] { },this);
-								continue;
-							} else if (isScreen) {
-								// screen sharing clients do not receive events
-								continue;
-							}
-
-							// Send to all connected users
-							((IServiceCapableConnection) cons).invoke("roomDisconnect", new Object[] { client },this);
-							log.debug("sending roomDisconnect to " + cons);
-						}
-					}
+			new MessageSender(scope, "roomDisconnect", client, this) {
+				@Override
+				public boolean filter(IConnection conn) {
+					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					boolean isScreen = rcl.isScreenClient();
+					if (isScreen && client.getPublicSID().equals(rcl.getStreamPublishName())) {
+						//going to terminate screen sharing started by this client
+						((IServiceCapableConnection) conn).invoke("stopStream", new Object[] { }, callback);
+					}					// TODO Auto-generated method stub
+					return rcl == null || isScreen;
 				}
-			}
+			}.start();
 
 			if (client.isMobile()) {
 				IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
 				app.exit(client.getPublicSID());
 			}
-			if (removeUserFromSessionList) {
-				sessionManager.removeClient(client.getStreamid(), null);
-			}
+			sessionManager.removeClient(client.getStreamid(), null);
 		} catch (Exception err) {
 			log.error("[roomLeaveByScope]", err);
 		}
@@ -800,32 +755,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 	@Override
 	public void streamBroadcastClose(IBroadcastStream stream) {
-
 		// Notify all the clients that the stream had been closed
 		log.debug("start streamBroadcastClose broadcast close: " + stream.getPublishedName());
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client rcl = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			sendClientBroadcastNotifications(stream, "closeStream", rcl);
-		} catch (Exception e) {
-			log.error("[streamBroadcastClose]", e);
-		}
-	}
+			String streamId = current.getClient().getId();
+			Client rcl = sessionManager.getClientByStreamId(streamId, null);
 
-	/**
-	 * This method handles the notification room-based
-	 *
-	 * @return void
-	 *
-	 */
-	private void sendClientBroadcastNotifications(IBroadcastStream stream, String clientFunction, Client rc) {
-		try {
-			// Store the local so that we do not send notification to ourself back
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-
-			if (currentClient == null) {
+			if (rcl == null) {
 
 				// In case the client has already left(kicked) this message
 				// might be thrown later then the RoomLeave
@@ -837,55 +774,20 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			}
 			// Notify all the clients that the stream had been started
-			log.debug("sendClientBroadcastNotifications: " + stream.getPublishedName());
-			log.debug("sendClientBroadcastNotifications : " + currentClient + " " + currentClient.getStreamid());
-
-			// Notify all clients of the same scope (room)
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						if (conn.equals(current)) {
-							// there is a Bug in the current implementation
-							// of the appDisconnect
-							if (clientFunction.equals("closeStream")) {
-								Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-								if (clientFunction.equals("closeStream") && rcl.getIsRecording()) {
-									log.debug("*** stopRecordingShowForClient Any Client is Recording - stop that");
-									// StreamService.stopRecordingShowForClient(conn,
-									// currentClient,
-									// rcl.getRoomRecordingName(), false);
-									recordingService.stopRecordingShowForClient(conn, currentClient);
-								}
-								// Don't notify current client
-								current.ping();
-							}
-							continue;
-						} else {
-							Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-							if (rcl != null) {
-								if (rcl.isScreenClient()) {
-									// continue;
-								} else {
-									log.debug("is this users still alive? :" + rcl);
-									IServiceCapableConnection iStream = (IServiceCapableConnection) conn;
-									iStream.invoke(clientFunction, new Object[] { rc }, this);
-								}
-
-								log.debug("sending notification to " + conn + " ID: ");
-
-								// if this close stream event then stop the
-								// recording of this stream
-								if (clientFunction.equals("closeStream") && rcl.getIsRecording()) {
-									log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
-									recordingService.stopRecordingShowForClient(conn, currentClient);
-								}
-							}
-						}
-					}
-				}
+			log.debug("streamBroadcastClose : " + rcl + " " + rcl.getStreamid());
+			// this close stream event, stop the recording of this stream
+			if (rcl.getIsRecording()) {
+				log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
+				recordingService.stopRecordingShowForClient(current.getScope(), rcl);
 			}
-		} catch (Exception err) {
-			log.error("[sendClientBroadcastNotifications]", err);
+			rcl.setBroadCastID(-1);
+			rcl.setIsBroadcasting(false);
+			rcl.setAvsettings("n");
+			sessionManager.updateClientByStreamId(streamId, rcl, false, null);
+			// Notify all clients of the same scope (room)
+			sendMessageToCurrentScope("closeStream", rcl, false);
+		} catch (Exception e) {
+			log.error("[streamBroadcastClose]", e);
 		}
 	}
 
@@ -1528,18 +1430,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * <li>do not send to connections where no RoomClient is registered</li>
 	 * </ul>
 	 *
-	 * @param remoteMethodName The method to be called
-	 * @param newMessage parameters
+	 * @param method The method to be called
+	 * @param msg parameters
 	 * @param sendSelf send to the current client as well
 	 * @param sendScreen send to the current client as well
 	 */
-	public void sendMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
+	public void sendMessageToCurrentScope(final String method, final Object msg, final boolean sendSelf, final boolean sendScreen) {
 		IConnection conn = Red5.getConnectionLocal();
 		if (conn == null) {
-			log.warn(String.format("[sendMessageToCurrentScope] -> 'Unable to send message using NULL connection' %s, %s", remoteMethodName, newMessage));
+			log.warn("[sendMessageToCurrentScope] -> 'Unable to send message using NULL connection' {}, {}", method, msg);
 			return;
 		}
-		sendMessageToCurrentScope(conn.getScope().getName(), remoteMethodName, newMessage, sendSelf, sendScreen);
+		sendMessageToCurrentScope(conn.getScope().getName(), method, msg, sendSelf, sendScreen);
 	}
 
 	public void sendMessageToCurrentScope(final String scopeName, final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
@@ -1548,7 +1450,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
 				return (!sendScreen && SessionVariablesUtil.isScreenClient(client))
-						|| (!sendSelf && client.getId().equals(current.getClient().getId()));
+						|| (!sendSelf && current != null && client.getId().equals(current.getClient().getId()));
 			}
 		}.start();
 	}
@@ -1556,27 +1458,27 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public static abstract class MessageSender extends Thread {
 		final IScope scope;
 		final IConnection current;
-		final String remoteMethodName;
-		final Object newMessage;
+		final String method;
+		final Object msg;
 		final IPendingServiceCallback callback;
 
 		public MessageSender(final String remoteMethodName, final Object newMessage, IPendingServiceCallback callback) {
 			this((IScope)null, remoteMethodName, newMessage, callback);
 		}
 
-		public MessageSender(IScope _scope, String remoteMethodName, Object newMessage, IPendingServiceCallback callback) {
-			this(Red5.getConnectionLocal(), _scope, remoteMethodName, newMessage, callback);
+		public MessageSender(IScope _scope, String method, Object msg, IPendingServiceCallback callback) {
+			this(Red5.getConnectionLocal(), _scope, method, msg, callback);
 		}
 
-		public MessageSender(IConnection current, String remoteMethodName, Object newMessage, IPendingServiceCallback callback) {
-			this(current, null, remoteMethodName, newMessage, callback);
+		public MessageSender(IConnection current, String method, Object msg, IPendingServiceCallback callback) {
+			this(current, null, method, msg, callback);
 		}
 
-		public MessageSender(IConnection current, IScope _scope, String remoteMethodName, Object newMessage, IPendingServiceCallback callback) {
+		public MessageSender(IConnection current, IScope _scope, String method, Object msg, IPendingServiceCallback callback) {
 			this.current = current;
-			scope = _scope == null ? current.getScope() : _scope;
-			this.remoteMethodName = remoteMethodName;
-			this.newMessage = newMessage;
+			scope = _scope == null && current != null ? current.getScope() : _scope;
+			this.method = method;
+			this.msg = msg;
 			this.callback = callback;
 		}
 
@@ -1586,10 +1488,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		public void run() {
 			try {
 				if (scope == null) {
-					log.debug(String.format("[MessageSender] -> 'Unable to send message to NULL scope' %s, %s", remoteMethodName, newMessage));
+					log.debug("[MessageSender] -> 'Unable to send message to NULL scope' {}, {}", method, msg);
 				} else {
 					if (log.isTraceEnabled()) {
-						log.trace(String.format("[MessageSender] -> 'sending message' %s, %s", remoteMethodName, newMessage));
+						log.trace("[MessageSender] -> 'sending message' {}, {}", method, msg);
 					}
 					// Send to all Clients of that Scope(Room)
 					int count = 0;
@@ -1598,16 +1500,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 							if (filter(conn)) {
 								continue;
 							}
-							((IServiceCapableConnection) conn).invoke(remoteMethodName, new Object[] { newMessage }, callback);
+							((IServiceCapableConnection) conn).invoke(method, new Object[] { msg }, callback);
 							count++;
 						}
 					}
 					if (log.isTraceEnabled()) {
-						log.trace(String.format("[MessageSender] -> 'sending message to %s clients, DONE' %s", count, remoteMethodName));
+						log.trace("[MessageSender] -> 'sending message to {} clients, DONE' {}", count, method);
 					}
 				}
 			} catch (Exception err) {
-				log.error(String.format("[MessageSender -> %s, %s]", remoteMethodName, newMessage), err);
+				log.error(String.format("[MessageSender -> %s, %s]", method, msg), err);
 			}
 		}
 	}

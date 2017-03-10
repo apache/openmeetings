@@ -242,29 +242,6 @@ public class MainService implements IPendingServiceCallback {
 		return new Long(-1);
 	}
 
-	/**
-	 * clear this session id
-	 *
-	 * @param sid
-	 * @return string value if completed
-	 */
-	public Long logoutUser(String sid) {
-		try {
-			Sessiondata sd = sessionDao.check(sid);
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
-			scopeApplicationAdapter.roomLeaveByScope(currentClient,current.getScope(), false);
-
-			currentClient.setUserObject(null, null, null, null);
-
-			return userManager.logout(sid, sd.getUserId());
-		} catch (Exception err) {
-			log.error("[logoutUser]",err);
-		}
-		return -1L;
-	}
-
 	public List<Configuration> getGeneralOptions() {
 		try {
 			return configurationDao.get("exclusive.audio.keycode", CONFIG_SIP_ENABLED, CONFIG_MAX_UPLOAD_SIZE_KEY, "mute.keycode", CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY);

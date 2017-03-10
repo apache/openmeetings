@@ -84,6 +84,7 @@ import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
 import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
+import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
@@ -248,6 +249,12 @@ public class MainPanel extends Panel {
 			@Override
 			protected void onClose(ClosedMessage msg) {
 				super.onClose(msg);
+				closeHandler(msg);
+			}
+
+			@Override
+			protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
+				super.onError(handler, msg);
 				closeHandler(msg);
 			}
 
