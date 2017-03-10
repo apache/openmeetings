@@ -203,7 +203,7 @@
 		<method name="updateAVSettingsSymbol" args="rcl">
 		<![CDATA[
 			//FIXME: Set a Symbol whereve this Client is Audio(only)/Video(only), both or Profile Picture
-			if ($debug) Debug.warn("updateAVSettingsSymbol TODO ",rcl);
+			if ($debug) Debug.warn("updateAVSettingsSymbol TODO ", rcl, this);
 			switch (rcl.avsettings) {
 				case "av":
 					this.setDefaultVideoSize(rcl.VWidth, rcl.VHeight);
@@ -213,6 +213,7 @@
 					if(!canvas.isInterview && this.minimized) {
 						this.reminimize();
 					}
+					this.deleteVideoConfProfilePic();
 					break;
 				case "a":
 					this.setAttribute("visible", true);
@@ -231,6 +232,7 @@
 					if(!canvas.isInterview && this.minimized) {
 						this.reminimize();
 					}
+					this.deleteVideoConfProfilePic();
 					break;
 				case "n":
 					if ($debug) Debug.write("Do not Publish A/V");

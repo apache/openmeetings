@@ -1489,12 +1489,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		sendMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
 	}
 
+	public void sendMessageToCurrentScope(String scopeName, String remoteMethodName, Object newMessage, boolean sendSelf) {
+		sendMessageToCurrentScope(scopeName, remoteMethodName, newMessage, sendSelf, false);
+	}
+
 	public void sendToScope(final Long roomId, String method, Object obj) {
 		new MessageSender(getRoomScope("" + roomId), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				return rcl.isScreenClient()
+				return rcl == null || rcl.isScreenClient()
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
 			}
 		}.start();
@@ -1530,7 +1534,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param sendScreen send to the current client as well
 	 */
 	public void sendMessageToCurrentScope(final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
-		new MessageSender(remoteMethodName, newMessage, this) {
+		IConnection conn = Red5.getConnectionLocal();
+		if (conn == null) {
+			log.warn(String.format("[sendMessageToCurrentScope] -> 'Unable to send message using NULL connection' %s, %s", remoteMethodName, newMessage));
+			return;
+		}
+		sendMessageToCurrentScope(conn.getScope().getName(), remoteMethodName, newMessage, sendSelf, sendScreen);
+	}
+
+	public void sendMessageToCurrentScope(final String scopeName, final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
+		new MessageSender(getRoomScope(scopeName), remoteMethodName, newMessage, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();

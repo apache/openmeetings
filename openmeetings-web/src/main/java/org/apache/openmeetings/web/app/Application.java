@@ -259,6 +259,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
+	private static boolean hasVideo(org.apache.openmeetings.db.entity.room.Client rcl) {
+		return rcl != null && rcl.getAvsettings().contains("v");
+	}
+
+	private static boolean hasVideo(Client c) {
+		return c != null && c.hasActivity(Activity.broadcastV);
+	}
+
 	@Override
 	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl, boolean forceSize) {
 		if (rcl == null) {
@@ -306,7 +314,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				if (client.hasActivity(Activity.broadcastV)) {
 					sb.append('v');
 				}
-				if (!rcl.getIsBroadcasting()) {
+				if (!rcl.getIsBroadcasting() || hasVideo(rcl) != hasVideo(client)) {
 					rcl.setIsBroadcasting(true);
 					rcl.setBroadCastID(ScopeApplicationAdapter.nextBroadCastId());
 				}
