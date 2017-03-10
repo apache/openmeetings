@@ -245,7 +245,9 @@ table.adminListTable td div.four_column_layout_divcolumn4 {
 	word-wrap: break-word;
 	width: 132px;
 }
-
+table.adminListTable .one_sixth {
+	width: 16.67%;
+}
 .adminPanelColumnForm {
 	display: inline-block;
 	vertical-align: top;

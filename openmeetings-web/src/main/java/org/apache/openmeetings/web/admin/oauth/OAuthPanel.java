@@ -85,5 +85,4 @@ public class OAuthPanel extends AdminPanel {
 		form.showNewRecord();
 		add(form);
 	}
-
 }

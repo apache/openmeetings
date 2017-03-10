@@ -22,7 +22,6 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -30,7 +29,6 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
@@ -45,13 +43,6 @@ public class ConfigsPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	private ConfigForm form;
 	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-
-	@Override
-	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		super.onMenuPanelLoad(handler);
-		handler.appendJavaScript("omConfigPanelInit();");
-		return this;
-	}
 
 	public ConfigsPanel(String id) {
 		super(id);
@@ -99,6 +90,5 @@ public class ConfigsPanel extends AdminPanel {
 		form = new ConfigForm("form", listContainer, new Configuration());
 		form.showNewRecord();
 		add(form);
-
 	}
 }

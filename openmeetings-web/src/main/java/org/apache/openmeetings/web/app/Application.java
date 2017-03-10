@@ -366,10 +366,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return result;
 	}
 
-	public static int getClientsSize() {
-		return ONLINE_USERS.size();
-	}
-
 	public static Client getClientByKeys(Long userId, String sessionId) {
 		Client client = null;
 		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {

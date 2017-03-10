@@ -24,7 +24,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -33,7 +32,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,13 +45,6 @@ public class RoomsPanel extends AdminPanel {
 	private final static JavaScriptResourceReference ROOM_FUNCTIONS = new JavaScriptResourceReference(RoomsPanel.class, "room.js");
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
-
-	@Override
-	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		super.onMenuPanelLoad(handler);
-		handler.appendJavaScript("omRoomPanelInit();");
-		return this;
-	}
 
 	public RoomsPanel(String id) {
 		super(id);

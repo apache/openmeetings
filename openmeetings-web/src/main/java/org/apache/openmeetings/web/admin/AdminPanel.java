@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin;
 
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
 @AuthorizeInstantiation("Admin")
 public abstract class AdminPanel extends BasePanel {
@@ -30,7 +31,14 @@ public abstract class AdminPanel extends BasePanel {
 	public AdminPanel(String id) {
 		super(id);
 	}
-	
+
+	@Override
+	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
+		super.onMenuPanelLoad(handler);
+		handler.appendJavaScript("adminPanelInit();");
+		return this;
+	}
+
 	protected StringBuilder getRowClass(Long id, Long selectedId) {
 		StringBuilder sb = new StringBuilder(ROW_CLASS);
 		if (id != null && id.equals(selectedId)) {
