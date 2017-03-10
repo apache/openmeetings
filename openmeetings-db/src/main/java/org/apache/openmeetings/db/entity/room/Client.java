@@ -35,13 +35,13 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.CalendarPatterns;
 
 /**
  * Can be configured to be stored in memory or in database
- * 
+ *
  * @author sebawagner
  */
 @Entity
@@ -66,98 +66,98 @@ import org.apache.openmeetings.util.CalendarPatterns;
 @Table(name = "client")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Client implements IDataProviderEntity {
+public class Client implements IClient {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	/**
 	 * @see Client#getUsername()
 	 */
 	@Column(name = "username")
 	private String username = "";
-	
+
 	/**
 	 * @see Client#getStreamid()
 	 */
 	@Column(name = "streamid")
 	private String streamid = "";
-	
+
 	/**
 	 * @see Client#getScope()
 	 */
 	@Column(name = "scope")
 	private String scope = "";
-	
+
 	/**
 	 * @see Client#getVWidth()
 	 */
 	@Column(name = "vwidth")
 	private int vWidth = 0;
-	
+
 	/**
 	 * @see Client#getVHeight()
 	 */
 	@Column(name = "vheight")
 	private int vHeight = 0;
-	
+
 	/**
 	 * @see Client#getVX()
 	 */
 	@Column(name = "vx")
 	private int vX = 0;
-	
+
 	/**
 	 * @see Client#getVY()
 	 */
 	@Column(name = "vy")
 	private int vY = 0;
-	
+
 	/**
 	 * @see Client#getStreamPublishName()
 	 */
 	@Column(name = "stream_publish_name")
 	private String streamPublishName = "";
-	
+
 	/**
 	 * @see Client#getPublicSID()
 	 */
 	@Column(name = "public_sid")
 	private String publicSID = "";
-	
+
 	/**
 	 * @see Client#getIsMod()
 	 */
 	@Column(name = "is_mod", nullable = false)
 	private boolean isMod = false;
-	
+
 	/**
 	 * @see Client#getIsSuperModerator()
 	 */
 	@Column(name = "is_supermoderator", nullable = false)
 	private boolean isSuperModerator = false;
-	
+
 	/**
 	 * @see Client#getCanDraw()
 	 */
 	@Column(name = "can_draw", nullable = false)
 	private boolean canDraw = false;
-	
+
 	/**
 	 * @see Client#getCanShare()
 	 */
 	@Column(name = "can_share", nullable = false)
 	private boolean canShare = false;
-	
+
 	/**
 	 * @see Client#getCanRemote()
 	 */
 	@Column(name = "can_remote", nullable = false)
 	private boolean canRemote = false;
-	
+
 	/**
 	 * @see Client#getCanGiveAudio()
 	 */
@@ -172,115 +172,115 @@ public class Client implements IDataProviderEntity {
 	 */
 	@Column(name = "connected_since")
 	private Date connectedSince;
-	
+
 	/**
 	 * @see Client#getFormatedDate()
 	 */
 	@Column(name = "formated_date")
 	private String formatedDate;
-	
+
 	/**
 	 * @see Client#isScreenClient()
 	 */
 	@Column(name = "is_screenclient", nullable = false)
 	private boolean screenClient;
-	
+
 	/**
 	 * @see Client#getUsercolor()
 	 */
 	@Column(name = "usercolor")
 	private String usercolor;
-	
+
 	/**
 	 * @see Client#getUserpos()
 	 */
 	@Column(name = "userpos")
 	private Integer userpos;
-	
+
 	/**
 	 * @see Client#getUserip()
 	 */
 	@Column(name = "userip")
 	private String userip;
-	
+
 	/**
 	 * @see Client#getUserport()
 	 */
 	@Column(name = "userport")
 	private int userport;
-	
+
 	/**
 	 * @see Client#getRoomId()
 	 */
 	@Column(name = "room_id")
 	private Long roomId;
-	
+
 	/**
 	 * @see Client#getRoomEnter()
 	 */
 	@Column(name = "room_enter")
 	private Date roomEnter = null;
-	
+
 	/**
 	 * @see Client#getBroadCastID()
 	 */
 	@Column(name = "broadcast_id")
 	private long broadCastID = -2;
-	
+
 	/**
 	 * @see Client#getUserId()
 	 */
 	@Column(name = "user_id")
 	private Long userId = null;
-	
+
 	/**
 	 * @see Client#getFirstname()
 	 */
 	@Column(name = "firstname")
 	private String firstname = "";
-	
+
 	/**
 	 * @see Client#getLastname()
 	 */
 	@Column(name = "lastname")
 	private String lastname = "";
-	
+
 	/**
 	 * @see Client#getMail()
 	 */
 	@Column(name = "email")
 	private String email;
-	
+
 	/**
 	 * @see Client#getLastLogin()
 	 */
 	@Column(name = "last_login")
 	private String lastLogin;
-	
+
 	/**
 	 * @see Client#getSecurityCode()
 	 */
 	@Column(name = "security_code")
 	private String securityCode;
-	
+
 	/**
 	 * @see Client#getPicture_uri()
 	 */
 	@Column(name = "picture_uri")
 	private String picture_uri;
-	
+
 	/**
 	 * @see Client#getLanguage()
 	 */
 	@Column(name = "language")
 	private String language = "";
-	
+
 	/**
 	 * @see Client#getAvsettings()
 	 */
 	@Column(name = "avsettings")
 	private String avsettings = "";
-	
+
 	/**
 	 * @see Client#getSwfurl()
 	 */
@@ -299,97 +299,97 @@ public class Client implements IDataProviderEntity {
 	 */
 	@Column(name = "is_recording", nullable = false)
 	private boolean isRecording = false;
-	
+
 	/**
 	 * @see Client#getRoomRecordingName()
 	 */
 	@Column(name = "room_recording_name")
 	private String roomRecordingName;
-	
+
 	/**
 	 * @see Client#getRecordingId()
 	 */
 	@Column(name = "recording_id")
 	private Long recordingId;
-	
+
 	/**
 	 * @see Client#getRecordingMetaDataId()
 	 */
 	@Column(name = "recording_metadata_id")
 	private Long recordingMetaDataId;
-	
+
 	/**
 	 * @see Client#isStartRecording()
 	 */
 	@Column(name = "start_recording", nullable = false)
 	private boolean startRecording = false;
-	
+
 	/**
 	 * @see Client#isStartStreaming()
 	 */
 	@Column(name = "start_streaming", nullable = false)
 	private boolean startStreaming = false;
-	
+
 	/**
 	 * @see Client#isScreenPublishStarted()
 	 */
 	@Column(name = "screen_publish_started", nullable = false)
 	private boolean screenPublishStarted = false;
-	
+
 	/**
 	 * @see Client#isStreamPublishStarted()
 	 */
 	@Column(name = "stream_publish_started", nullable = false)
 	private boolean streamPublishStarted = false;
-	
+
 	/**
 	 * @see Client#getIsBroadcasting()
 	 */
 	@Column(name = "is_broadcasting", nullable = false)
 	private boolean isBroadcasting = false;
-	
+
 	/**
 	 * @see Client#getExternalUserId()
 	 */
 	@Column(name = "external_user_id")
 	private String externalUserId;
-	
+
 	/**
 	 * @see Client#getExternalUserType()
 	 */
 	@Column(name = "external_user_type")
 	private String externalUserType;
-	
+
 	/**
 	 * @see Client#getInterviewPodId()
 	 */
 	@Column(name = "interview_pod_id")
 	private Integer interviewPodId = null;
-	
+
 	/**
 	 * @see Client#isAllowRecording()
 	 */
 	@Column(name = "allow_recording", nullable = false)
 	private boolean allowRecording = true;
-	
+
 	/**
 	 * @see Client#getZombieCheckFlag()
 	 */
 	@Column(name = "zombie_check_flag", nullable = false)
 	private boolean zombieCheckFlag = false;
-	
+
 	/**
 	 * @see Client#getMicMuted()
 	 */
 	@Column(name = "mic_muted", nullable = false)
 	private boolean micMuted = false;
-	
+
 	/**
 	 * @see Client#isSipTransport()
 	 */
 	@Column(name = "sip_transport", nullable = false)
 	private boolean sipTransport = false;
-	
+
 	@Column(name = "mobile", nullable = false)
 	private boolean mobile = false;
 
@@ -426,7 +426,7 @@ public class Client implements IDataProviderEntity {
 		this.firstname = firstname;
 		this.lastname = lastname;
 	}
-	
+
 	@Override
 	public Long getId() {
 		return id;
@@ -452,7 +452,7 @@ public class Client implements IDataProviderEntity {
 	public void setIsMod(boolean isMod) {
 		this.isMod = isMod;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -640,7 +640,7 @@ public class Client implements IDataProviderEntity {
 	public String getPublicSID() {
 		return publicSID;
 	}
-	
+
 	public void setPublicSID(String publicSID) {
 		this.publicSID = publicSID;
 	}
@@ -648,7 +648,7 @@ public class Client implements IDataProviderEntity {
 	public boolean getZombieCheckFlag() {
 		return zombieCheckFlag;
 	}
-	
+
 	public void setZombieCheckFlag(boolean zombieCheckFlag) {
 		this.zombieCheckFlag = zombieCheckFlag;
 	}
@@ -852,7 +852,7 @@ public class Client implements IDataProviderEntity {
 	public void setSipTransport(boolean sipTransport) {
 		this.sipTransport = sipTransport;
 	}
-	
+
 	public Server getServer() {
 		return server;
 	}

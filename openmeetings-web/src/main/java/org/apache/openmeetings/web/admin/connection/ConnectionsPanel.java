@@ -29,11 +29,11 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -51,55 +51,80 @@ public class ConnectionsPanel extends AdminPanel {
 	public ConnectionsPanel(String id) {
 		super(id);
 
-		SearchableDataProvider<Client> sdp = new SearchableDataProvider<Client>(null) {
+		SearchableDataProvider<IClient> sdp = new SearchableDataProvider<IClient>(null) {
 			private static final long serialVersionUID = 1L;
 
 			//FIXME add search
 
+			private List<IClient> list() {
+				List<IClient> l = new ArrayList<>();
+				l.addAll(getBean(ISessionManager.class).getClientsWithServer());
+				l.addAll(Application.getClients());
+				return l;
+			}
+
 			@Override
-			public Iterator<? extends Client> iterator(long first, long count) {
+			public Iterator<? extends IClient> iterator(long first, long count) {
 				//FIXME add grouping by public SID
-				List<Client> l = new ArrayList<>(getBean(ISessionManager.class).getClientsWithServer());
+				List<IClient> l = list();
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 
 			@Override
 			public long size() {
-				return getBean(ISessionManager.class).getClients().size();
+				return list().size();
 			}
 		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
-		SearchableDataView<Client> dataView = new SearchableDataView<Client>("clientList", sdp) {
+		SearchableDataView<IClient> dataView = new SearchableDataView<IClient>("clientList", sdp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<Client> item) {
-				Client c = item.getModelObject();
-				item.add(new Label("streamid"));
-				item.add(new Label("username"));
-				item.add(new Label("connectedSince"));
-				item.add(new Label("scope"));
-				item.add(new Label("server", c.getServer() == null ? "no cluster" : c.getServer().getAddress())); //FIXME localization
-				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
+			protected void populateItem(final Item<IClient> item) {
+				IClient _c = item.getModelObject();
+				ConfirmableAjaxBorder confirm = new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						Client c = item.getModelObject();
-						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
-								, c.getServer() == null ? 0 : c.getServer().getId());
+						IClient _c = item.getModelObject();
+						if (_c instanceof Client) {
+							Client c = (Client)_c;
+							getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
+									, c.getServer() == null ? 0 : c.getServer().getId());
+						} else {
+							org.apache.openmeetings.db.entity.basic.Client c = (org.apache.openmeetings.db.entity.basic.Client)_c;
+							getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId(), c.getSessionId());
+						}
 						target.add(container, details.setVisible(false));
 					}
-				}.setEnabled(!c.isScreenClient()));
+				};
+				if (_c instanceof Client) {
+					Client c = (Client)_c;
+					item.add(new Label("streamid"));
+					item.add(new Label("login", c.getUsername()));
+					item.add(new Label("since", c.getConnectedSince()));
+					item.add(new Label("scope"));
+					item.add(new Label("server", c.getServer() == null ? "no cluster" : c.getServer().getAddress())); //FIXME localization
+					confirm.setEnabled(!c.isScreenClient());
+				} else {
+					org.apache.openmeetings.db.entity.basic.Client c = (org.apache.openmeetings.db.entity.basic.Client)_c;
+					item.add(new Label("streamid", ""));
+					item.add(new Label("login", c.getUser().getLogin()));
+					item.add(new Label("since", c.getConnectedSince()));
+					item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));
+					item.add(new Label("server", ""));
+				}
+				item.add(confirm);
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						Field[] ff = Client.class.getDeclaredFields();
+						Field[] ff = item.getModelObject().getClass().getDeclaredFields();
 						RepeatingView lines = new RepeatingView("line");
-						Client c = item.getModelObject();
+						IClient c = item.getModelObject();
 						for (Field f : ff) {
 							int mod = f.getModifiers();
 							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
@@ -125,82 +150,12 @@ public class ConnectionsPanel extends AdminPanel {
 			}
 		};
 		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
-
-		SearchableDataProvider<org.apache.openmeetings.db.entity.basic.Client> sdpWeb = new SearchableDataProvider<org.apache.openmeetings.db.entity.basic.Client>(null) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Iterator<? extends org.apache.openmeetings.db.entity.basic.Client> iterator(long first, long count) {
-				List<org.apache.openmeetings.db.entity.basic.Client> l = Application.getClients();
-				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
-			}
-
-			@Override
-			public long size() {
-				return Application.getClientsSize();
-			}
-		};
-
-		final WebMarkupContainer containerWeb = new WebMarkupContainer("containerWeb");
-		SearchableDataView<org.apache.openmeetings.db.entity.basic.Client> dataViewWeb = new SearchableDataView<org.apache.openmeetings.db.entity.basic.Client>("clientListWeb", sdpWeb) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void populateItem(final Item<org.apache.openmeetings.db.entity.basic.Client> item) {
-				org.apache.openmeetings.db.entity.basic.Client c = item.getModelObject();
-				item.add(new Label("id", ""));
-				item.add(new Label("login", c.getUser().getLogin()));
-				item.add(new Label("since", c.getConnectedSince()));
-				item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));
-				item.add(new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
-						org.apache.openmeetings.db.entity.basic.Client c = item.getModelObject();
-						getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId(), c.getSessionId());
-						target.add(containerWeb, details.setVisible(false));
-					}
-				}.setEnabled(!c.getSessionId().equals(WebSession.get().getId())));
-				item.add(new AjaxEventBehavior("click") {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onEvent(AjaxRequestTarget target) {
-						Field[] ff = org.apache.openmeetings.db.entity.basic.Client.class.getDeclaredFields();
-						RepeatingView lines = new RepeatingView("line");
-						org.apache.openmeetings.db.entity.basic.Client c = item.getModelObject();
-						for (Field f : ff) {
-							int mod = f.getModifiers();
-							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {
-								continue;
-							}
-							WebMarkupContainer line = new WebMarkupContainer(lines.newChildId());
-							line.add(new Label("name", f.getName()));
-							String val = "";
-							try {
-								f.setAccessible(true);
-								val = "" + f.get(c);
-							} catch (Exception e) {
-							}
-							line.add(new Label("value", val));
-							lines.add(line);
-						}
-						details.addOrReplace(lines);
-						target.add(details.setVisible(true));
-					}
-				});
-				item.add(AttributeModifier.append("class", ROW_CLASS));
-			}
-		};
-
-		add(containerWeb.add(dataViewWeb).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));
 		add(new PagedEntityListPanel("navigator", dataView) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
-				target.add(container, containerWeb);
+				target.add(container);
 			}
 		});
 	}
