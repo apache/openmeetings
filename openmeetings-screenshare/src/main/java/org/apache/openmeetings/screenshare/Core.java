@@ -415,6 +415,8 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 					frame.setStatus("" + params.get("error"));
 				}
 			}
+		} else if ("stopStream".equals(method)) {
+			sharingStop();
 		}
 	}
 
