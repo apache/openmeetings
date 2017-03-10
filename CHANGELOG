@@ -36,6 +36,10 @@ Release Notes - Openmeetings - Version 3.2.1
     * [OPENMEETINGS-1591] - Chat messages are not sorted correctly when user send message in the room
     * [OPENMEETINGS-1592] - Avatar is not shown when mobile client sends chat message in the room
     * [OPENMEETINGS-1594] - Screen-sharing base URL is broken
+    * [OPENMEETINGS-1595] - Video is not displayed when user try allow to share your video again
+    * [OPENMEETINGS-1597] - Message are not shown properly in the activities and actions window for user without moderator rights
+    * [OPENMEETINGS-1598] - The "Disabled" select item does not work properly on the  "Choose device" dialog
+    * [OPENMEETINGS-1599] - Connection panel is not scrolled
 
 ** Improvement
     * [OPENMEETINGS-372] - Please make the ability to “clear the Chat window” only available to Moderators, and not to participants who have “Draw on the Whiteboard” rights
