@@ -21,15 +21,14 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:head>
 	<script type="text/javascript">
-		var ADMIN_TABLE_SHIIFT = 144;
 		function adminPanelInit() {
 			if (typeof extAdminPanelInit === 'function') {
 				extAdminPanelInit();
 			}
-			var documentHeight = $(document).height();
-			$('#adminForm').height(documentHeight - 114);
-			$('#adminTable').height(documentHeight - ADMIN_TABLE_SHIIFT);
-		};
+			var h = $(window).height() - 5;
+			$('#adminForm').height(h - $('#adminForm').position().top);
+			$('#adminTable').height(h - $('#adminTable').position().top);
+		}
 	</script>
 </wicket:head>
 <wicket:panel>
