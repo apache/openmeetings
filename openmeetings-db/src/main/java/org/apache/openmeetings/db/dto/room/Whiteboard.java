@@ -30,8 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class WhiteboardObject {
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardObject.class, webAppRootKey);
+public class Whiteboard {
+	private static final Logger log = Red5LoggerFactory.getLogger(Whiteboard.class, webAppRootKey);
 	private long whiteBoardId;
 	private Integer x = 0;
 	private Integer y = 0;
@@ -42,9 +42,9 @@ public class WhiteboardObject {
 	private int zIndex = 1;
 	private String name;
 
-	public WhiteboardObject() {}
+	public Whiteboard() {}
 
-	public WhiteboardObject(String name) {
+	public Whiteboard(String name) {
 		this.name = name;
 	}
 

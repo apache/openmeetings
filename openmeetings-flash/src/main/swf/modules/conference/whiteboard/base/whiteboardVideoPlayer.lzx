@@ -7,110 +7,98 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
 	  http://www.apache.org/licenses/LICENSE-2.0
-		  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <library>
 
-<class name="whiteboardVideoPlayer" extends="labelExplorerBox" allowDragging="false" 
-		docking="false" resizeable="false" closable="false" 
+<class name="whiteboardVideoPlayer" extends="labelExplorerBox" allowDragging="false"
+		docking="false" resizeable="false" closable="false"
 		x="0" y="0" width="${ parent.width }" height="${ parent.height - 10 }">
-	
+
 	<attribute name="fileId" value="0" type="number" />
 	<attribute name="timerDelegateStarted" value="false" type="boolean" />
 	<attribute name="deltaInSeconds" value="0" type="number" />
-	<attribute name="currentTime" value="0" type="number" /> 	
+	<attribute name="currentTime" value="0" type="number" />
 	<attribute name="recordingName" value="" type="string" />
 	<attribute name="hash" value="" type="string" />
+	<attribute name="posterUrl" value="" type="string" />
 	<attribute name="isLoaded" value="false" type="boolean" />
 	<attribute name="sendInit" value="false" type="boolean" />
-	<attribute name="flv_width" value="0" type="number" /> 
-	<attribute name="flv_height" value="0" type="number" /> 
+	<attribute name="flv_width" value="0" type="number" />
+	<attribute name="flv_height" value="0" type="number" />
 	<attribute name="isPaused" value="true" type="boolean" />
 	<handler name="oninit">
+	<![CDATA[
 		if ($debug) Debug.write("whiteboardVideoPlayer :: ",this.fileId);
-		
+
 		this.recordingName = hash + ".mp4";
 		calcVideoWidthHeight();
-		this.copyFileToCurrentRoom.doCall();
+
+		this.isLoaded = true;
+
+		this._content._preview.imagePreview.setAttribute("src", canvas.getUrl() + posterUrl
+				 + '&uid=' + canvas.publicSID);
+		this._content._preview.bringToFront();
+
+		if (this.sendInit) {
+			parent.sendNewVideoRemote(this);
+		}
+	]]>
 	</handler>
-	
+
 	<handler name="prepareForDelete" args="tRef">
 		if ($debug) Debug.write("--- prepareForDelete ");
 		this.stopStream();
 	</handler>
-	
+
 	<handler name="onclose">
 		this.stopStreamPlay();
 	</handler>
-	
+
 	<handler name="onwidth" args="w">
 		calcVideoWidthHeight();
 	</handler>
-	
+
 	<handler name="onheight" args="h">
 		calcVideoWidthHeight();
 	</handler>
-	
-	<!--
-	public Long copyFileToCurrentRoom(String SID, Long flvFileExplorerId)
-	 -->
-	<netRemoteCallHib name="copyFileToCurrentRoom" funcname="fileservice.copyFileToCurrentRoom" 
-		remotecontext="$once{ canvas.thishib }" > 
-		<netparam><method name="getValue">return canvas.sessionId;</method></netparam>
-		<netparam><method name="getValue">return parent.parent.fileId;</method></netparam>
-		<handler name="ondata" args="value">
-		<![CDATA[	
-			if ($debug) Debug.write("deleteFileOrFolder: ",value);
-			parent.isLoaded = true;
-			
-			var downloadurl = canvas.getUrl() + 'room/file/' + parent.fileId + '?uid='
-				+ canvas.publicSID + '&preview=true';
-			parent._content._preview.imagePreview.setAttribute("src", downloadurl)
-			parent._content._preview.bringToFront();
 
-			if (parent.sendInit) {
-				parent.parent.sendNewVideoRemote(parent);
-			}
-		]]>
-		</handler>
-	</netRemoteCallHib>
-	
 	<method name="startStreamPlay">
 		parent.playFLV(this,true);
 	</method>
-	
+
 	<method name="stopStreamPlay">
 		parent.playFLV(this,false);
 		this.stopStream();
 	</method>
-	
+
 	<method name="playRemote">
 		this.startStream();
 	</method>
-	
+
 	<method name="stopRemote">
 		this.stopStream();
 	</method>
-	
+
 	<method name="startStream">
 	<![CDATA[
 		if (!this.isLoaded) {
 			return;
 		}
 		if ($debug) Debug.write("startStream ", this.recordingName);
-		
+
 		if (this.recordingName != "") {
 			this.isPaused = false;
-			
+
 			if (!this.timerDelegateStarted) {
 				this.timerDelegateStarted = true;
 			}
@@ -122,53 +110,53 @@
 		}
 	]]>
 	</method>
-	
+
 	<!---
-		calculates the new x, y, width and height of the video so that it is 100% 
+		calculates the new x, y, width and height of the video so that it is 100%
 		visible in the container
 	 -->
 	<method name="calcVideoWidthHeight">
 	<![CDATA[
 		if ($debug) Debug.write("calcVideoWidthHeight ", this.flv_width, this.flv_height);
-	
+
 		var ratio = this.flv_width / this.flv_height;
 		var t = {};
 		var area = {height: parent.height - 62, width: parent.width - 1}
-		
+
 		//max height of container is new height of video;
 		//calc new width and x-position of video
 		t.height = area.height;
-		t.width = ratio * t.height; 
+		t.width = ratio * t.height;
 		t.x = (area.width - t.width) / 2;
 		t.y = 0;
-		
+
 		if ($debug) Debug.write("calcVideoWidthHeight", area, t);
-	 
+
 		if (t.width > area.width) {
 			t.width = area.width;
 			t.height = t.width / ratio;
 			t.x = 0;
 			t.y = (area.height - t.height) / 2;
 		}
-		t.width = Math.round(t.width); 
+		t.width = Math.round(t.width);
 		t.height = Math.round(t.height);
 		t.x = Math.round(t.x);
 		t.y = Math.round(t.y);
-		
+
 		if ($debug) Debug.write("t", t);
-		
+
 		this._content.setAttribute("x", t.x + 1);
 		this._content.setAttribute("y", t.y + 22);
 		this._content.setAttribute("width", t.width);
 		this._content.setAttribute("height", t.height);
-		
+
 		this._content._preview.setAttribute("width", t.width);
 		this._content._preview.setAttribute("height", t.height);
-		
+
 		return t;
 	]]>
 	</method>
-	
+
 	<method name="setDuration">
 	<![CDATA[
 		if ($debug) Debug.write("setDuration ",this.deltaInSeconds);
@@ -183,7 +171,7 @@
 		this._progress._progressbar._duration.setAttribute("text",tString);
 	]]>
 	</method>
-	
+
 	<method name="calcProgressBar">
 	<![CDATA[
 		if ($debug) Debug.write("calcProgressBar ", this.currentTime);
@@ -200,8 +188,8 @@
 		this._progress._progressbar._time.setAttribute("text", tString);
 		this._progress._progressbar._pointer.setAttribute("x", tNewX);
 	]]>
-	</method> 
-	
+	</method>
+
 	<method name="stopStream">
 		if (this.timerDelegateStarted) {
 			this.timerDelegateStarted = false;
@@ -212,33 +200,33 @@
 		this._content._preview.setAttribute('visible', true);
 		this.isPaused = true;
 	</method>
-	
+
 	<method name="toggleStream">
 		if (canvas.ismoderator &amp;&amp; this.isPaused) {
 				this.startStreamPlay();
 		}
 	</method>
-	
+
 	<baseVideoStream name="_content" height="${ parent.height - 62 }" bgcolor="0x000000" y="22" x="1" width="${ parent.width-1 }">
 		<attribute name="timerDelegate" value="null"/>
 		<attribute name="timerDelegateStarted" value="false" type="boolean"/>
-		
+
 		<handler name="oninit">
 			this.timerDelegate = new LzDelegate(this, "calcProgressBar");
 		</handler>
-		
+
 		<method name="playVideoStream" args="streamName, delay">
 			this.playStream(streamName, delay);
 			this.timerDelegateStarted = true;
 			lz.Timer.addTimer(this.timerDelegate , 1000);
 		</method>
-		
+
 		<method name="stopVideo">
 			this._stop();
 			lz.Timer.removeTimer(this.timerDelegate);
 			this.timerDelegateStarted = false;
 		</method>
-		
+
 		<handler name="onNetStatus" args="info">
 			//if ($debug) Debug.write("onNetStatus ",info);
 			if (info.code ==  "NetStream.Play.Stop" ) {
@@ -252,7 +240,7 @@
 			parent.deltaInSeconds = Number(info.duration);
 			parent.setDuration();
 		</handler>
-		
+
 		<method name="calcProgressBar" args="tObjRef">
 			if ($debug) Debug.write("calcProgressBar:: updateRecordingStreamTime", this.timerDelegateStarted, this._ns.time)
 			parent.currentTime = this._ns.time;
@@ -288,23 +276,23 @@
 			</handler>
 			<labelTooltip labelid="875" />
 		</view>
-		
+
 		<view name="_progressbar" x="16" width="${ parent.width - 32 }" y="1" height="16" bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
-			<view x="0" width="${ parent.width }" y="0" height="16" bgcolor="0xFFFFFF" opacity="0.5" /> 
-			
+			<view x="0" width="${ parent.width }" y="0" height="16" bgcolor="0xFFFFFF" opacity="0.5" />
+
 			<handler name="onclick">
 				//parent.parent.seekStream(this.getMouse("x"));
 			</handler>
-			
+
 			<view name="_pointer" resource="flv_progress_pointer_rsc" visibility="hidden" />
-			
+
 			<text name="_time" resize="true" fontsize="10" />
-			
+
 			<text name="_duration" align="right" resize="true" fontsize="10" />
 		</view>
-		
+
 		<view resource="flv_recorder_stop_small_rsc" align="right" y="1" height="16" width="16"
-			  bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
+				bgcolor="$once{ canvas.getThemeColor('baseMouseOvercolorizer') }">
 			<handler name="onmouseover">
 				this.setAttribute("bgcolor",0xFFFFFF);
 			</handler>
@@ -318,8 +306,8 @@
 			</handler>
 			<labelTooltip labelid="876" />
 		</view>
-	</view>	
-	
+	</view>
+
 	<simpleLabelButton labelid="85" width="100" x="${ parent.width-118 }" y="${ parent.height-20 }" >
 		<handler name="onclick">
 			if (canvas.ismoderator) {

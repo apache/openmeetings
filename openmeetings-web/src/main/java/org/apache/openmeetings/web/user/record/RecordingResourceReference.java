@@ -20,14 +20,22 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getExternalType;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
+import java.util.Map.Entry;
+
+import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
@@ -50,13 +58,15 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 	public String getMimeType(Recording r) {
 		return getMimeType();
 	}
-	
+
 	public abstract String getMimeType();
-	
+
 	@Override
 	protected Recording getFileItem(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue _id = params.get("id");
+		String ruid = params.get("ruid").toString();
+		String uid = params.get("uid").toString();
 		Long id = null;
 		try {
 			id = _id.toOptionalLong();
@@ -68,12 +78,12 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 			id = getRecordingId();
 		}
 		if (id != null && ws.isSignedIn()) {
-			return getRecording(id);
+			return getRecording(id, ruid, uid);
 		}
 		return null;
 	}
-	
-	private static Recording getRecording(Long id) {
+
+	private static Recording getRecording(Long id, String ruid, String uid) {
 		log.debug("Recording with id {} is requested", id);
 		Recording r = getBean(RecordingDao.class).get(id);
 		if (r == null || r.getType() == Type.Folder || r.isDeleted()) {
@@ -81,6 +91,17 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		}
 		if (id.equals(getRecordingId())) {
 			return r;
+		}
+		Client c = getOnlineClient(uid);
+		if (c != null) {
+			Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
+			if (wbs != null && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
+				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
+					if (e.getValue().getRoomItems().containsKey(r.getHash())) {
+						return r; // item IS on WB
+					}
+				}
+			}
 		}
 		//TODO should we check parentId here
 		if (r.getOwnerId() == null && r.getGroupId() == null) {

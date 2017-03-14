@@ -21,7 +21,6 @@ package org.apache.openmeetings.webservice;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.openmeetings.core.data.file.FileProcessor;
-import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -51,12 +49,10 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
-import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
@@ -213,44 +209,6 @@ public class FileWebService {
 		} catch (Exception e) {
 			log.error("[add]", e);
 			throw new ServiceException(e.getMessage());
-		}
-	}
-
-	/**
-	 * Get a LibraryPresentation-Object for a certain file
-	 *
-	 * @param sid
-	 *            The SID of the User. This SID must be marked as logged in
-	 * @param parentFolder
-	 *
-	 * @return - LibraryPresentation-Object for a certain file
-	 * @throws ServiceException
-	 */
-	public LibraryPresentation getPresentationPreviewFileExplorer(String sid, String parentFolder)
-			throws ServiceException {
-
-		try {
-			Sessiondata sd = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-
-				File working_dir = new File(OmFileHelper.getUploadProfilesDir(), parentFolder);
-				log.debug("############# working_dir : " + working_dir);
-
-				File file = new File(working_dir, OmFileHelper.libraryFileName);
-
-				if (!file.exists()) {
-					throw new ServiceException(file.getCanonicalPath() + ": does not exist ");
-				}
-
-				return LoadLibraryPresentation.parseLibraryFileToObject(file);
-			} else {
-				throw new ServiceException("not Authenticated");
-			}
-		} catch (ServiceException e) {
-			throw e;
-		} catch (Exception e) {
-			log.error("[getListOfFilesByAbsolutePath]", e);
-			return null;
 		}
 	}
 

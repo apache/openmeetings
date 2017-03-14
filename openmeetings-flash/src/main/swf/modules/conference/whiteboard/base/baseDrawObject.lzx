@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <library>
 
@@ -25,7 +25,7 @@
 	<attribute name="newSlideNumber" value="1" type="number" />
 	<attribute name="fullFit" value="true" type="boolean" />
 
-	<!-- 
+	<!--
 		Invoked by the Library directly
 		Loads a SWFPresenation to the whiteBoard
 	 -->
@@ -48,17 +48,17 @@
 	<method name="setCurrentScaleByFullFit" args="scaleFactor">
 	<![CDATA[
 		var tScale = Math.round(scaleFactor*100);
-		
+
 		this.getDisplayObject().scaleX = scaleFactor;
 		this.getDisplayObject().scaleY = scaleFactor;
-		
+
 		this.setAttribute("x",0);
 		this.setAttribute("y",0);
-		
+
 		//Already send by x,y change
 		//this.onupdateScale.sendEvent(null);
 		if ($debug) Debug.write("setCurrentScaleByFullFit -1- ",tScale);
-		
+
 		parent.parent.zoombox.setCurrentScaleByFullFit(tScale);
 	]]>
 	</method>
@@ -67,37 +67,37 @@
 	<![CDATA[
 		if (canvas.ismoderator) {
 			if ($debug) Debug.write("doUpdateFullFit ",fullFit,zoom);
-		
+
 			var actionObject = new Array();
 			actionObject.push("whiteboardObj");
 			actionObject.push(fullFit);
-			
+
 			this.doFullFit(fullFit);
-			
+
 			actionObject.push(this.getDisplayObject().scaleX * 100);
-			
+
 			if ($debug) Debug.write("doUpdateFullFit ",fullFit,this.getDisplayObject().scaleX);
 			this.onsharedMessage('whiteboardObj',actionObject);
-		}	
+		}
 	]]>
 	</method>
 
 	<method name="doUpdateZoom" args="fullFit,zoom">
 	<![CDATA[
 		if ($debug) Debug.write("doUpdateZoom ",this.fullFit,zoom);
-		
+
 		this.getDisplayObject().scaleX = zoom / 100;
 		this.getDisplayObject().scaleY = zoom / 100;
-		
+
 		if ($debug) Debug.write("doUpdateZoom is moderator ", canvas.ismoderator);
 		if (canvas.ismoderator) {
 			var actionObject = new Array();
 			actionObject.push("whiteboardObj");
 			actionObject.push(fullFit);
 			actionObject.push(zoom);
-		
+
 			this.onupdateScale.sendEvent(null);
-			this.onsharedMessage('whiteboardObj',actionObject);	
+			this.onsharedMessage('whiteboardObj',actionObject);
 		}
 	]]>
 	</method>
@@ -108,7 +108,7 @@
 		if ($debug) Debug.write("doUpdateFullFitAndZoomRemote ",actionObject[1],actionObject[2]);
 
 		this.doFullFit(actionObject[1]);
-		
+
 		if (!actionObject[1]) {
 			this.getDisplayObject().scaleX = actionObject[2] / 100;
 			this.getDisplayObject().scaleY = actionObject[2] / 100;
@@ -120,9 +120,9 @@
 	<method name="doFullFit" args="v">
 	<![CDATA[
 		if ($debug) Debug.write("Do Full Fit ? doFullFit: ", v, this.ObjectByName);
-	
+
 		this.fullFit = v;
-		if (!!this.ObjectByName && this.ObjectByName.typeOfObject == "swf") {	
+		if (!!this.ObjectByName && this.ObjectByName.typeOfObject == "swf") {
 			if (v) {
 				if ($debug) Debug.write("Do Full Fit ! ", (!!this.ObjectByName._swfView));
 				if (!!this.ObjectByName._swfView) {
@@ -145,23 +145,23 @@
 				this.doDocumentAction('setSlideNumber');
 				return true;
 			}
-		} 
+		}
 		return false;
 	]]>
 	</method>
 
 	<!--
 		alterModus => this is added by the mod not remotely
-		
+
 		adds the SWF-Object to the Layer
 	 -->
 	<method name="addPresentationToLayer" args="obj,urlName,nameing,posx,posy,width,height,alterModus,baseurl,fileName,moduleName,parentPath,room,domain,slideNumber,currentzoom,innerwidth,innerheight,innerx,innery,uniqueObjectSyncName,standardFileName,fullFit">
 	<![CDATA[
 		if ($debug) Debug.write("addPresentationToLayer", standardFileName);
-		
-		var downloadurl = canvas.getUrl() + urlName + "?uid=" + canvas.publicSID;
+
+		var downloadurl = canvas.getUrl() + urlName + "&uid=" + canvas.publicSID;
 		if ($debug) Debug.write("addPresentationToLayer:: downloadurl=", downloadurl);
-		
+
 		this.currentlayer = new lz.swfResourceView(obj,{refObj:this,name:nameing,
 			x:posx,y:posy,alterModus:alterModus,
 			baseurl:baseurl,fileName:fileName,moduleName:moduleName,parentPath:parentPath,
@@ -190,7 +190,7 @@
 			actionObject[17],actionObject[18],actionObject[19]);
 	</method>
 
-	<!-- 
+	<!--
 		Invoked by the remote Host, see sendWatchObject in baseDraw.lzx
 	 -->
 	<method name="addSWFToLayerHistorySynced" args="actionObject,refObj">
@@ -207,8 +207,8 @@
 			actionObject[9],actionObject[10],actionObject[17],actionObject[18],actionObject[19]);
 	</method>
 
-	<!--- 
-		invoke by the initial Loading process in remoteWhiteboard.lzx, 
+	<!---
+		invoke by the initial Loading process in remoteWhiteboard.lzx,
 		does not invoke any Update Handler
 		once this object is loaded, it will throw an Update event of kind
 		addSWFToLayerHistoryToLocalLoaded
@@ -336,22 +336,22 @@
 			} else if (action=="doc_last"){
 				this.ObjectByName._swfView.setAttribute('frame',(this.ObjectByName._swfView.totalframes));
 			} else if (action=="doc_zoom_minus"){
-				
+
 				if ($debug) Debug.write("doc_zoom_minus ");
 				return;
-				
-				this.ObjectByName.currentzoomFactor-=this.ObjectByName.zoomlevel;	   
+
+				this.ObjectByName.currentzoomFactor-=this.ObjectByName.zoomlevel;
 				var newwidth = (this.ObjectByName.initwidth/100)*this.ObjectByName.currentzoomFactor;
 				var newheight = (this.ObjectByName.initheight/100)*this.ObjectByName.currentzoomFactor;
 				this.ObjectByName._swfView.setAttribute('width',newwidth);
 				this.ObjectByName._swfView.setAttribute('height',newheight);
 				this.boundingref.doSetInnerObjectsBounds(newwidth,newheight);
 			} else if (action=="doc_zoom_plus"){
-				
+
 				if ($debug) Debug.write("doc_zoom_plus ");
 				return;
-				
-				this.ObjectByName.currentzoomFactor+=this.ObjectByName.zoomlevel;	   
+
+				this.ObjectByName.currentzoomFactor+=this.ObjectByName.zoomlevel;
 				//Debug.write("doc_zoom_plus 1",this.ObjectByName.currentzoomFactor,this.ObjectByName.zoomlevel);
 				var newwidth = (this.ObjectByName.initwidth/100)*this.ObjectByName.currentzoomFactor;
 				var newheight = (this.ObjectByName.initheight/100)*this.ObjectByName.currentzoomFactor;
@@ -370,9 +370,9 @@
 			}
 			this.ObjectByName.slideNumber =  this.ObjectByName._swfView.frame;
 			this.doUpdateDocumentToolBar();
-			
+
 			if ($debug) Debug.info("doDocumentAction :2: sendCurrentSWFObject");
-			
+
 			this.sendCurrentSWFObject(this.ObjectByName);
 		}
 	]]>
@@ -419,7 +419,7 @@
 	<![CDATA[
 		var p = 0, t = 0;
 		if (this["ObjectByName"] && this.ObjectByName != null && this.ObjectByName._swfView) {
-			if ($debug) Debug.warn("doUpdateDocumentToolBar ", this.ObjectByName.fullFit);
+			//if ($debug) Debug.warn("doUpdateDocumentToolBar ", this.ObjectByName.fullFit);
 			p = this.ObjectByName._swfView.frame;
 			t = this.ObjectByName._swfView.totalframes;
 		}
@@ -467,21 +467,21 @@
 				this.baseactionobjectList[eg][16] = objRef.currentzoomFactor;
 				this.baseactionobjectList[eg][19] = objRef.fullFit;
 				var newA = this.baseactionobjectList[eg];
-				if (newA[0]=='paint') newA[1] = new Array();				
-				this.onsharedMessage('swf',newA);	
+				if (newA[0]=='paint') newA[1] = new Array();
+				this.onsharedMessage('swf',newA);
 				if (sendSlideObjectUpdate) {
 					this.updateObjectsToSlideNumber(this.baseactionobjectList[eg]);
 				}
 				break;
 			}
-		}	
+		}
 	]]>
 	</method>
 
 	<method name="remoteObjectUpdate" args="lastactionObject">
 	<![CDATA[
 		var obj = this.getObjectByName(lastactionObject[lastactionObject.length-1]);
-		
+
 		if ($debug) Debug.write("remoteObjectUpdate :: ",obj.fullFit);
 		obj._swfView.doSendChangeValue = false;
 		var sendSlideObjectUpdate = false;
@@ -494,21 +494,21 @@
 		obj._swfView.setAttribute('width',lastactionObject[11]);
 		obj._swfView.setAttribute('height',lastactionObject[12]);
 		obj.fullFit = lastactionObject[19];
-		
+
 		if ($debug) Debug.write("DO initialLoadFullFit ?? ",obj.fullFit);
-		
+
 		if (obj.fullFit) {
 			if ($debug) Debug.write("DO initialLoadFullFit !! ");
 			obj._swfView.initialLoadFullFit();
 		}
-		
+
 		obj._swfView.setAttribute('frame',obj.slideNumber);
 		obj._swfView.doSendChangeValue = true;
-		
+
 		this.doUpdateDocumentToolBarByParticipant(obj.name);
-		
+
 		this.remoteUpdateBaseObjectList(lastactionObject);
-		
+
 		if (sendSlideObjectUpdate) {
 			this.updateObjectsToSlideNumber(lastactionObject);
 		}
@@ -523,14 +523,14 @@
 				this.baseactionobjectList[eg] = actionObject;
 				break;
 			}
-		}	
+		}
 	]]>
 	</method>
 
 	<method name="playVideoSynced" args="fileId,fileName,flv_width,flv_height">
 	<![CDATA[
 		if ($debug) Debug.write("playVideoSynced : ", fileId,fileName,flv_width,flv_height);
-	
+
 		var tName = 'flv'+this.getCounter();
 		this.currentlayer = new lz.whiteboardVideoPlayer(this,{
 										name:tName,
@@ -540,14 +540,14 @@
 										flv_width:flv_width,
 										flv_height:flv_height
 									});
-		this.layers.push(this.currentlayer);  
+		this.layers.push(this.currentlayer);
 	]]>
 	</method>
 
 	<method name="sendNewVideoRemote" args="refObj">
 	<![CDATA[
 		if ($debug) Debug.write("sendNewVideoRemote : ",refObj.fileId,refObj.title);
-	
+
 		this.flvregisterFinal(refObj.name,refObj.x,refObj.y,refObj.width,refObj.height,
 											refObj.fileId,refObj.title,
 											false, //isPlaying
@@ -579,20 +579,18 @@
 
 	<method name="drawFlvToHistory" args="lastActionObject,parentView">
 	<![CDATA[
-		if ($debug) Debug.write("drawFlvToHistory PLAY :: ",lastActionObject[3]);
-	
+		//if ($debug) Debug.write("drawFlvToHistory POSTER :: ", lastActionObject[3]);
+
 		this.currentlayer = new lz.whiteboardVideoPlayer(this,{
 										name:lastActionObject[lastActionObject.length-1],
 										fileId:lastActionObject[1],
-										title:lastActionObject[2],
+										title: lastActionObject[2],
+										posterUrl: lastActionObject[3],
 										flv_width:lastActionObject[4],
 										flv_height:lastActionObject[5],
 										hash:lastActionObject[7]
 									});
-		if (lastActionObject[3]) {
-			this.currentlayer.playRemote();
-		}
-		this.layers.push(this.currentlayer);  
+		this.layers.push(this.currentlayer);
 	]]>
 	</method>
 
@@ -601,10 +599,10 @@
 		for (var eg=0;eg<this.baseactionobjectList.length;eg++){
 			if (this.baseactionobjectList[eg][this.baseactionobjectList[eg].length-1]==refObj.name) {
 				this.baseactionobjectList[eg][3] = play;
-				
+
 				if ($debug) Debug.write("playFLV :: ",this.baseactionobjectList[eg]);
 				this.onsharedMessage('flv',this.baseactionobjectList[eg]);
-				
+
 				break;
 			}
 		}

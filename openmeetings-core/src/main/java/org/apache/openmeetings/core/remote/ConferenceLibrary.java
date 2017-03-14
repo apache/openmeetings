@@ -18,27 +18,22 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.documents.LibraryChartLoader;
 import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.core.documents.LibraryWmlLoader;
-import org.apache.openmeetings.core.documents.LoadLibraryPresentation;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.file.LibraryPresentation;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -48,8 +43,6 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IConnection;
-import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.slf4j.Logger;
@@ -72,34 +65,9 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private FileExplorerItemDao fileDao;
 	@Autowired
-	private WhiteboardManager whiteboardManagement;
+	private WhiteboardManager whiteboardManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
-
-	public LibraryPresentation getPresentationPreviewFileExplorer(String sid, String parentFolder) {
-		try {
-			Sessiondata sd = sessionDao.check(sid);
-
-			log.debug("#############users_id : " + sd.getUserId());
-
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-				File working_dir = new File(OmFileHelper.getUploadFilesDir(), parentFolder);
-				log.debug("############# working_dir : " + working_dir);
-
-				File file = new File(working_dir, OmFileHelper.libraryFileName);
-
-				if (!file.exists()) {
-					throw new Exception(file.getCanonicalPath() + ": does not exist");
-				}
-				return LoadLibraryPresentation.parseLibraryFileToObject(file);
-			} else {
-				throw new Exception("not Authenticated");
-			}
-		} catch (Exception e) {
-			log.error("[getListOfFilesByAbsolutePath]", e);
-			return null;
-		}
-	}
 
 	/**
 	 *
@@ -165,7 +133,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 		wbClear.put(3, null);
 
 		Long roomId = client.getRoomId();
-		whiteboardManagement.addWhiteBoardObjectById(roomId, wbClear, wbId);
+		whiteboardManager.add(roomId, wbClear, wbId);
 
 		for (int k = 0; k < roomItems.size(); k++) {
 			List<?> actionObject = (List<?>)roomItems.get(k);
@@ -174,7 +142,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			whiteboardObj.put(2, "draw");
 			whiteboardObj.put(3, actionObject);
 
-			whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, wbId);
+			whiteboardManager.add(roomId, whiteboardObj, wbId);
 		}
 
 		Map<String, Object> sendObject = new HashMap<>();
@@ -204,40 +172,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			log.error("[loadChartObject] ", err);
 		}
 		return null;
-	}
-
-	/**
-	 * @param sid
-	 * @param fileId
-	 * @return 1 in case of success, -1 otherwise
-	 */
-	public Long copyFileToCurrentRoom(String sid, Long fileId) {
-		try {
-			Sessiondata sd = sessionDao.check(sid);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-				IConnection current = Red5.getConnectionLocal();
-				String streamid = current.getClient().getId();
-
-				Client client = sessionManager.getClientByStreamId(streamid, null);
-				Long roomId = client.getRoomId();
-
-				FileExplorerItem f = fileDao.get(fileId);
-				if (roomId != null && f != null) {
-					File mp4 = f.getFile(EXTENSION_MP4);
-
-					File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
-
-					File target = new File(targetFolder, mp4.getName());
-					if (mp4.exists() && !target.exists()) {
-						FileUtils.copyFile(mp4, target, false);
-					}
-					return 1L;
-				}
-			}
-		} catch (Exception err) {
-			log.error("[copyFileToCurrentRoom] ", err);
-		}
-		return -1L;
 	}
 
 	@Override

@@ -64,9 +64,9 @@
 	<!-- Database cache -->
 	<bean id="openmeetings.DatabaseStore" class="org.apache.openmeetings.core.session.store.DatabaseStore" />
 	
-	<bean id="whiteBoardObjectListManagerById" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById" />
-	<!-- WhiteBoardObjectSyncManager can stay in the memory, even on cluster! -->
-	<bean id="whiteBoardObjectSyncManager" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectSyncManager" />
+	<bean id="whiteboardCache" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardCache" />
+	<!-- WhiteboardObjectSyncManager can stay in the memory, even on cluster! -->
+	<bean id="whiteboardObjectSyncManager" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardObjectSyncManager" />
 
 	<!-- Cluster related config start -->
 	<bean id="openmeetings.ServerUtil" scope="singleton" class="org.apache.openmeetings.core.session.ServerUtil">
@@ -78,7 +78,7 @@
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
 	<bean id="languageservice.service" class="org.apache.openmeetings.core.remote.LanguageService" />
-	<bean id="whiteboardservice.service" class="org.apache.openmeetings.core.remote.WhiteBoardService" />
+	<bean id="whiteboardservice.service" class="org.apache.openmeetings.core.remote.WhiteboardService" />
 	<bean id="userservice.service" class="org.apache.openmeetings.core.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.core.remote.ConferenceLibrary" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />
@@ -211,7 +211,7 @@
 	<bean id="generateSWF" class="org.apache.openmeetings.core.converter.GenerateSWF" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.core.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.db.util.TimezoneUtil" />
-	<bean id="whiteboardManagement" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardManager" />
+	<bean id="whiteboardManager" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardManager" />
 	<bean id="backupExport" class="org.apache.openmeetings.backup.BackupExport" />
 	<bean id="backupImport" class="org.apache.openmeetings.backup.BackupImport" />
 	<bean id="appointmentManager" class="org.apache.openmeetings.service.calendar.caldav.AppointmentManager" destroy-method="destroy"/>
