@@ -160,7 +160,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 							client.setKeyStorePassword(args[11]);
 							instance = client;
 						} else {
-							instance = new RTMPTSScreenShare(this, true);
+							instance = new RTMPTSScreenShare(this);
 						}
 						break;
 					case rtmpe:

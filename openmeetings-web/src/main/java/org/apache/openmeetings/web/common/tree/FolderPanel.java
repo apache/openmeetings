@@ -52,7 +52,8 @@ public class FolderPanel extends Panel {
 	public FolderPanel(String id, final IModel<? extends FileItem> model, final FileTreePanel treePanel) {
 		super(id, model);
 		FileItem r = model.getObject();
-		drop = r.getType() == Type.Folder ? new Droppable<FileItem>("drop", Model.of(r)) {
+		boolean editable = !treePanel.isReadOnly() && !r.isReadOnly();
+		drop = r.getType() == Type.Folder && editable ? new Droppable<FileItem>("drop", Model.of(r)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -78,7 +79,7 @@ public class FolderPanel extends Panel {
 				target.add(treePanel.trees);
 			}
 		} : new WebMarkupContainer("drop");
-		if (r.getId() == null || treePanel.isReadOnly()) {
+		if (r.getId() == null || !editable) {
 			drag = new WebMarkupContainer("drag");
 		} else {
 			drag = new Draggable<FileItem>("drag", Model.of(r)) {
@@ -94,7 +95,7 @@ public class FolderPanel extends Panel {
 			}.setContainment(treePanel.getContainment());
 			drag.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 		}
-		drag.add(r.getId() == null || treePanel.isReadOnly() ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
+		Component name = r.getId() == null || !editable ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -118,7 +119,8 @@ public class FolderPanel extends Panel {
 			public void onEdit(AjaxRequestTarget target) {
 				super.onEdit(target);
 			}
-		});
+		};
+		drag.add(name.add(AttributeAppender.append("title", r.getName())));
 		add(drop.add(drag).setOutputMarkupId(true));
 	}
 
@@ -137,10 +139,9 @@ public class FolderPanel extends Panel {
 		f.setParentId(pid);
 		f.setOwnerId(p.getOwnerId());
 		f.setRoomId(p.getRoomId());
+		f.setGroupId(p.getGroupId());
 		if (f instanceof Recording) {
-			Recording r = (Recording)f;
-			r.setGroupId(((Recording)p).getGroupId());
-			getBean(RecordingDao.class).update(r);
+			getBean(RecordingDao.class).update((Recording)f);
 		} else {
 			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
 		}

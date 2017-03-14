@@ -73,6 +73,11 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 	}
 
 	@Override
+	public OmTreeProvider getProvider() {
+		return (OmTreeProvider)super.getProvider();
+	}
+
+	@Override
 	protected Component newContentComponent(String id, IModel<FileItem> node) {
 		return new Folder<FileItem>(id, this, node) {
 			private static final long serialVersionUID = 1L;

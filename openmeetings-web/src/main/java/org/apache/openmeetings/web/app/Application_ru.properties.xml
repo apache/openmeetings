@@ -1916,4 +1916,5 @@
 	<entry key="template.recording.expiring.subj.room"> -- Комната[{0}]</entry>
 	<entry key="widget.recent.title">Последние комнаты</entry>
 	<entry key="widget.recent.desc">Эта секция отображает комнаты в которые Вы недавно заходили</entry>
+	<entry key="files.root.group">Файлы группы</entry>
 </properties>

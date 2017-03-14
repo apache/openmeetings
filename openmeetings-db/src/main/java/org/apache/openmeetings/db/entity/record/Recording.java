@@ -55,30 +55,30 @@ import org.simpleframework.xml.Root;
  * <li>a interview recording</li>
  * <li>a folder</li>
  * </ul>
- * 
+ *
  * Recorded files are situated in: webapps/openmeetings/streams/hibernate.<br/>
  * The raw recorded files are situated in:
  * webapps/openmeetings/streams/$ROOM_ID.<br/>
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 @Entity
-@NamedQueries({ 
-	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM Recording f WHERE f.id = :id") 
-	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM Recording f WHERE f.hash = :hash") 
+@NamedQueries({
+	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM Recording f WHERE f.id = :id")
+	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM Recording f WHERE f.hash = :hash")
 	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM Recording c, User u "
 			+ "WHERE c.insertedBy = u.id AND u.externalId = :externalId  AND u.externalType = :externalType "
-			+ "AND c.deleted = false") 
+			+ "AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.groupId IS NULL AND (f.parentId IS NULL OR f.parentId = 0) "
-			+ "ORDER BY f.type DESC, f.inserted")
+			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByGroup", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "
 			+ "AND f.groupId = :groupId AND (f.parentId IS NULL OR f.parentId = 0) "
-			+ "ORDER BY f.type DESC, f.inserted")
+			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "getRecordingsByOwner", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId = :ownerId "
 			+ "AND (f.parentId IS NULL OR f.parentId = 0) "
-			+ "ORDER BY f.type DESC, f.inserted")
+			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE Recording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
 	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM Recording c LEFT JOIN FETCH c.metaData ORDER BY c.id")
 	, @NamedQuery(name = "getRecordingsByExternalTypeAndOwner", query = "SELECT c FROM Recording c, Room r WHERE c.roomId = r.id "
@@ -103,7 +103,7 @@ import org.simpleframework.xml.Root;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Recording extends FileItem {
 	private static final long serialVersionUID = 1L;
-	
+
 	@XmlType(namespace="org.apache.openmeetings.record")
 	public enum Status {
 		NONE
@@ -131,14 +131,6 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private Date recordEnd;
 
-	@Column(name = "width")
-	@Element(data = true, required = false)
-	private Integer width;
-
-	@Column(name = "height")
-	@Element(data = true, required = false)
-	private Integer height;
-
 	@Column(name = "duration")
 	@Element(data = true, required = false)
 	private String duration;
@@ -146,10 +138,6 @@ public class Recording extends FileItem {
 	@Column(name = "recorder_stream_id")
 	@Element(data = true, required = false)
 	private String recorderStreamId;
-
-	@Column(name = "group_id")
-	@Element(data = true, required = false)
-	private Long groupId;
 
 	@Column(name = "is_interview", nullable = false)
 	@Element(data = true, required = false)
@@ -219,36 +207,12 @@ public class Recording extends FileItem {
 		this.recorderStreamId = recorderStreamId;
 	}
 
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
 	public List<RecordingMetaData> getMetaData() {
 		return metaData;
 	}
 
 	public void setMetaData(List<RecordingMetaData> metaData) {
 		this.metaData = metaData;
-	}
-
-	public Integer getWidth() {
-		return width;
-	}
-
-	public void setWidth(Integer width) {
-		this.width = width;
-	}
-
-	public Integer getHeight() {
-		return height;
-	}
-
-	public void setHeight(Integer height) {
-		this.height = height;
 	}
 
 	public boolean isInterview() {

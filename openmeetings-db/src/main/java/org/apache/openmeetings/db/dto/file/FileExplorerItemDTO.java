@@ -49,8 +49,8 @@ public class FileExplorerItemDTO implements Serializable {
 	private String externalId;
 	private String externalType;
 	private Type type;
-	private Integer flvWidth;
-	private Integer flvHeight;
+	private Integer width;
+	private Integer height;
 
 	public FileExplorerItemDTO() {}
 
@@ -65,8 +65,8 @@ public class FileExplorerItemDTO implements Serializable {
 		externalId = f.getExternalId();
 		externalType = f.getExternalType();
 		type = f.getType();
-		flvWidth = f.getFlvWidth();
-		flvHeight = f.getFlvHeight();
+		width = f.getWidth();
+		height = f.getHeight();
 	}
 	
 	public FileExplorerItem get() {
@@ -81,8 +81,8 @@ public class FileExplorerItemDTO implements Serializable {
 		f.setExternalId(externalId);
 		f.setExternalType(externalType);
 		f.setType(type);
-		f.setFlvWidth(flvWidth);
-		f.setFlvHeight(flvHeight);
+		f.setWidth(width);
+		f.setHeight(height);
 		return f;
 	}
 	
@@ -166,20 +166,20 @@ public class FileExplorerItemDTO implements Serializable {
 		this.type = type;
 	}
 
-	public Integer getFlvWidth() {
-		return flvWidth;
+	public Integer getWidth() {
+		return width;
 	}
 
-	public void setFlvWidth(Integer flvWidth) {
-		this.flvWidth = flvWidth;
+	public void setWidth(Integer width) {
+		this.width = width;
 	}
 
-	public Integer getFlvHeight() {
-		return flvHeight;
+	public Integer getHeight() {
+		return height;
 	}
 
-	public void setFlvHeight(Integer flvHeight) {
-		this.flvHeight = flvHeight;
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 
 	public static List<FileExplorerItemDTO> list(List<FileExplorerItem> l) {

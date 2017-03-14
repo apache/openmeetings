@@ -29,14 +29,15 @@ import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import java.io.File;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.string.Strings;
 
 public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
 	private static final long serialVersionUID = 1L;
@@ -87,11 +88,15 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
-		if (id != null && ws.isSignedIn() && !Strings.isEmpty(uid) && getOnlineClient(uid) != null) {
-			//FIXME TODO ADDITIONALLY CHECK Rights !! and room !!
-			return getBean(FileExplorerItemDao.class).get(id);
+		Client c = getOnlineClient(uid);
+		if (id == null || !ws.isSignedIn() || c == null) {
+			return null;
 		}
-		return null;
+		FileExplorerItem f = getBean(FileExplorerItemDao.class).get(id);
+		// impossible to check file permission based on client, file can be dropped on WB
+		// and should be accessible to whole room
+		//FIXME TODO ADDITIONALLY CHECK Rights !! and room !!
+		return f;
 	}
 
 	protected File getFile(FileExplorerItem f, String ext) {
@@ -105,7 +110,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 
 	@Override
 	protected File getFile(FileExplorerItem f) {
-		return getFile(f, null);
+		return getFile(f, Type.Video == f.getType() && preview ? EXTENSION_JPG : null);
 	}
 
 	@Override

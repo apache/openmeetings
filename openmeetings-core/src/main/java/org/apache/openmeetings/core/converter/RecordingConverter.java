@@ -130,8 +130,8 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			log.debug("flvWidth -2- " + flvWidth);
 			log.debug("flvHeight -2- " + flvHeight);
 
-			r.setFlvWidth(flvWidth);
-			r.setFlvHeight(flvHeight);
+			r.setWidth(flvWidth);
+			r.setHeight(flvHeight);
 
 			String mp4path = convertToMp4(r, Arrays.asList(
 					"-itsoffset", formatMillis(diff(screenMetaData.getRecordStart(), r.getRecordStart())),
