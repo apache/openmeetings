@@ -72,7 +72,7 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		if (roomId != null) {
 			FileItem r = createRoot(Application.getString(707), FILES_ROOM, false);
 			r.setRoomId(roomId);
-			roots.add(r);
+			fRoot.add(r);
 		}
 		if (all) {
 			{
