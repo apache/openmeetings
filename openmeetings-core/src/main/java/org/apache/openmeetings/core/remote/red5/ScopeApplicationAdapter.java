@@ -18,9 +18,11 @@
  */
 package org.apache.openmeetings.core.remote.red5;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -34,11 +36,13 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.data.conference.RoomManager;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.remote.RecordingService;
-import org.apache.openmeetings.core.remote.WhiteBoardService;
+import org.apache.openmeetings.core.remote.WhiteboardService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -99,9 +103,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private WhiteBoardService whiteBoardService;
+	private WhiteboardService whiteBoardService;
 	@Autowired
-	private WhiteboardManager whiteboardManagement;
+	private WhiteboardManager whiteboardManager;
+	@Autowired
+	private WhiteboardCache whiteboardCache;
 	@Autowired
 	private RecordingService recordingService;
 	@Autowired
@@ -1160,7 +1166,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	private static List<?> getWbObject(FileItem fi, String url) {
-		String fuid = UUID.randomUUID().toString();
 		Point size = getSize(fi);
 		String type = "n/a";
 		switch (fi.getType()) {
@@ -1190,7 +1195,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				, size.x // initwidth //14
 				, size.y // initheight //15
 				, 100 // currentzoom //16 FIXME TODO
-				, fuid // uniquObjectSyncName //17
+				, fi.getHash() // uniquObjectSyncName //17
 				, fi.getName() // standardFileName //18
 				, true // fullFit //19 FIXME TODO
 				, 0 // zIndex //-8
@@ -1200,18 +1205,17 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				, 0 // posy //-4
 				, size.x // width //-3
 				, size.y // height //-2
-				, fuid // this.currentlayer.name //-1
+				, fi.getHash() // this.currentlayer.name //-1
 				);
 	}
 
-	private static List<?> getFlvWbObject(FileItem fi) {
-		String fuid = UUID.randomUUID().toString();
+	private static List<?> getMp4WbObject(FileItem fi, String url) {
 		Point size = getSize(fi);
 		return Arrays.asList(
 				"flv" // 0: 'flv'
 				, fi.getId() // 1: 7
 				, fi.getName() // 2: 'BigBuckBunny_512kb.mp4'
-				, false // 3: false //playRemote
+				, url // 3: posterUrl
 				, size.x // 4: 416
 				, size.y // 5: 240
 				, 0 // 6: 1 // z-index
@@ -1221,8 +1225,25 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				, 0 // 10: 0 //TODO // y
 				, size.x // 11: 749 // width
 				, size.y // 12: 739 // height
-				, fuid // 13: 'flv_1469602000351'
+				, fi.getHash() // 13: 'flv_1469602000351'
 				);
+	}
+
+	private static void copyFileToRoom(Long roomId, FileItem f) {
+		try {
+			if (roomId != null && f != null) {
+				File mp4 = f.getFile(EXTENSION_MP4);
+
+				File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
+
+				File target = new File(targetFolder, mp4.getName());
+				if (mp4.exists() && !target.exists()) {
+					FileUtils.copyFile(mp4, target, false);
+				}
+			}
+		} catch (Exception err) {
+			log.error("[copyFileToCurrentRoom] ", err);
+		}
 	}
 
 	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url, boolean clean) {
@@ -1242,7 +1263,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				wbObject = getWbObject(fi, url);
 				break;
 			case Video:
-				wbObject = getFlvWbObject(fi);
+			case Recording:
+				wbObject = getMp4WbObject(fi, url);
+				copyFileToRoom(client.getRoomId(), fi);
 				break;
 			default:
 		}
@@ -1251,6 +1274,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			wbClear.put("id", wbId);
 			wbClear.put("param", Arrays.asList("whiteboard", new Date(), "clear", null));
 
+			whiteboardCache.get(client.getRoomId(), wbId).clear();
 			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", Arrays.asList(null, wbClear));
 		}
 		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
@@ -1300,10 +1324,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 					whiteboardTempObj.put(3, tempActionObject);
 
-					whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardTempObj, wbId);
+					whiteboardManager.add(roomId, whiteboardTempObj, wbId);
 				}
 			} else {
-				whiteboardManagement.addWhiteBoardObjectById(roomId, whiteboardObj, wbId);
+				whiteboardManager.add(roomId, whiteboardObj, wbId);
 			}
 
 			Map<String, Object> sendObject = new HashMap<>();

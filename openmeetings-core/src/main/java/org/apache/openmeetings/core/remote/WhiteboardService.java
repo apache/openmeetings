@@ -32,8 +32,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.commons.collections4.ComparatorUtils;
-import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById;
-import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectSyncManager;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardObjectSyncManager;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -41,9 +41,9 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Cliparts;
-import org.apache.openmeetings.db.dto.room.WhiteboardObject;
-import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
+import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
@@ -63,8 +63,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author sebastianwagner
  *
  */
-public class WhiteBoardService implements IPendingServiceCallback {
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardService.class, webAppRootKey);
+public class WhiteboardService implements IPendingServiceCallback {
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardService.class, webAppRootKey);
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -72,9 +72,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private WhiteBoardObjectSyncManager wbListManager;
+	private WhiteboardObjectSyncManager wbListManager;
 	@Autowired
-	private WhiteBoardObjectListManagerById wbListManagerById;
+	private WhiteboardCache wbCache;
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
@@ -89,7 +89,7 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			Long roomId = currentClient.getRoomId();
 
-			Long whiteBoardId = wbListManagerById.getNewWhiteboardId(roomId, name);
+			Long whiteBoardId = wbCache.getNewWhiteboardId(roomId, name);
 			scopeAdapter.sendMessageAll(Arrays.asList("newWhiteboard", whiteBoardId, name));
 		} catch (Exception e) {
 			log.error("[getNewWhiteboardId]", e);
@@ -105,12 +105,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			Long roomId = currentClient.getRoomId();
 
-			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
-			Object returnValue = whiteboardObjectList.getWhiteboardObjects().remove(whiteBoardId);
+			Whiteboards whiteboards = wbCache.get(roomId);
+			Object returnValue = whiteboards.getWhiteboards().remove(whiteBoardId);
 
 			log.debug(" :: whiteBoardId :: " + whiteBoardId);
 
-			wbListManagerById.setWhiteBoardObjectListRoomObj(roomId, whiteboardObjectList);
+			wbCache.set(roomId, whiteboards);
 
 			if (returnValue != null) {
 				return true;
@@ -121,8 +121,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 		return false;
 	}
 
-	public Map<Long, WhiteboardObject> getRoomItemsBy() {
-		Map<Long, WhiteboardObject> result = new LinkedHashMap<>();
+	public Map<Long, Whiteboard> getRoomItemsBy() {
+		Map<Long, Whiteboard> result = new LinkedHashMap<>();
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
@@ -130,9 +130,9 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Long roomId = currentClient.getRoomId();
 
 			log.debug("getRoomItems: " + roomId);
-			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
+			Whiteboards whiteboards = wbCache.get(roomId);
 
-			if (whiteboardObjectList.getWhiteboardObjects().size() == 0) {
+			if (whiteboards.getWhiteboards().isEmpty()) {
 				Long langId = null;
 				{
 					Long userId = currentClient.getUserId();
@@ -142,12 +142,12 @@ public class WhiteBoardService implements IPendingServiceCallback {
 					User u = userDao.get(userId);
 					langId = u == null ? cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : u.getLanguageId();
 				}
-				wbListManagerById.getNewWhiteboardId(roomId, labelDao.getString("615", langId));
+				wbCache.getNewWhiteboardId(roomId, labelDao.getString("615", langId));
 				log.debug("Init New Room List");
-				whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
+				whiteboards = wbCache.get(roomId);
 			}
-			whiteboardObjectList.getWhiteboardObjects().entrySet().stream()
-					.sorted(Map.Entry.<Long, WhiteboardObject>comparingByKey().reversed())
+			whiteboards.getWhiteboards().entrySet().stream()
+					.sorted(Map.Entry.<Long, Whiteboard>comparingByKey().reversed())
 					.forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
 		} catch (Exception err) {
 			log.error("[getRoomItemsBy]", err);
@@ -162,8 +162,8 @@ public class WhiteBoardService implements IPendingServiceCallback {
 			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
 			Long roomId = currentClient.getRoomId();
 
-			WhiteboardObjectList whiteboardObjectList = wbListManagerById.getWhiteBoardObjectListByRoomId(roomId);
-			WhiteboardObject wb = whiteboardObjectList.getWhiteboardObjects().get(wbId);
+			Whiteboards whiteboards = wbCache.get(roomId);
+			Whiteboard wb = whiteboards.getWhiteboards().get(wbId);
 			wb.setName(name);
 
 			log.debug(" :: rename whiteBoard :: id = {}, name = {}", wbId, name);

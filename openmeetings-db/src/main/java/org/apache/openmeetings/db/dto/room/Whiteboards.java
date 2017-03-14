@@ -19,13 +19,15 @@
 package org.apache.openmeetings.db.dto.room;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class WhiteboardObjectList {
+public class Whiteboards {
 	private Long roomId;
-	private Map<Long, WhiteboardObject> whiteboardObjects = new ConcurrentHashMap<>();
+	private final String uid = UUID.randomUUID().toString();
+	private Map<Long, Whiteboard> whiteboards = new ConcurrentHashMap<>();
 
-	public WhiteboardObjectList() {}
+	public Whiteboards() {}
 
 	public Long getRoomId() {
 		return roomId;
@@ -35,11 +37,15 @@ public class WhiteboardObjectList {
 		this.roomId = roomId;
 	}
 
-	public Map<Long, WhiteboardObject> getWhiteboardObjects() {
-		return whiteboardObjects;
+	public Map<Long, Whiteboard> getWhiteboards() {
+		return whiteboards;
 	}
 
-	public void setWhiteboardObjects(Map<Long, WhiteboardObject> whiteboardObjects) {
-		this.whiteboardObjects = whiteboardObjects;
+	public void setWhiteboards(Map<Long, Whiteboard> whiteboards) {
+		this.whiteboards = whiteboards;
+	}
+
+	public String getUid() {
+		return uid;
 	}
 }

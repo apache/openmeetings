@@ -644,10 +644,25 @@ public class RoomPanel extends BasePanel {
 
 	public void sendFileToWb(FileItem fi, boolean clean) {
 		if (activeWbId > -1 && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
-			if (fi.getType() == FileItem.Type.WmlFile) {
+			if (FileItem.Type.WmlFile == fi.getType()) {
 				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
 			} else {
-				String url = urlFor(new RoomResourceReference(), new PageParameters().add("id", fi.getId())).toString();
+				String url = null;
+				PageParameters pp = new PageParameters();
+				pp.add("id", fi.getId())
+					.add("ruid", getBean(WhiteboardCache.class).get(r.getId()).getUid());
+				switch (fi.getType()) {
+					case Video:
+						pp.add("preview", true);
+						url = urlFor(new RoomResourceReference(), pp).toString();
+						break;
+					case Recording:
+						url = urlFor(new JpgRecordingResourceReference(), pp).toString();
+						break;
+					default:
+						url = urlFor(new RoomResourceReference(), pp).toString();
+						break;
+				}
 				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url, clean);
 			}
 		}

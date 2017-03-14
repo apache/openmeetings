@@ -33,11 +33,11 @@ import org.slf4j.Logger;
  * @author sebawagner
  *
  */
-public class WhiteBoardObjectSyncManager {
+public class WhiteboardObjectSyncManager {
 	private Map<Long, Map<String, WhiteboardSyncLockObject>> whiteBoardSyncList = new ConcurrentHashMap<>();
 	private Map<Long, Map<String, Map<String, WhiteboardSyncLockObject>>> whiteBoardObjectSyncList = new ConcurrentHashMap<>();
 
-	private static final Logger log = Red5LoggerFactory.getLogger(WhiteBoardObjectSyncManager.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WhiteboardObjectSyncManager.class, webAppRootKey);
 
 	/*
 	 * Initial Sync Process

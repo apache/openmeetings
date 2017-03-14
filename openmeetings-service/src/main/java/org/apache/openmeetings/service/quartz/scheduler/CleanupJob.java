@@ -29,11 +29,11 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.openmeetings.core.data.whiteboard.WhiteBoardObjectListManagerById;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dto.room.WhiteboardObject;
-import org.apache.openmeetings.db.dto.room.WhiteboardObjectList;
+import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ public class CleanupJob extends AbstractJob {
 	@Autowired
 	private SessionManager sessionManager;
 	@Autowired
-	private WhiteBoardObjectListManagerById wbManager;
+	private WhiteboardCache wbManager;
 
 	public long getSessionTimeout() {
 		return sessionTimeout;
@@ -122,8 +122,8 @@ public class CleanupJob extends AbstractJob {
 					Long roomId = null;
 					if (NumberUtils.isCreatable(folder.getName())) {
 						roomId = Long.valueOf(folder.getName());
-						WhiteboardObjectList wbList = wbManager.getWhiteBoardObjectListByRoomId(roomId);
-						for (Map.Entry<Long, WhiteboardObject> e : wbList.getWhiteboardObjects().entrySet()) {
+						Whiteboards wbList = wbManager.get(roomId);
+						for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
 							if (!e.getValue().getRoomItems().isEmpty()) {
 								roomId = null;
 								break;

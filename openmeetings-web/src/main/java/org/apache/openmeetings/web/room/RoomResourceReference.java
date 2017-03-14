@@ -27,8 +27,13 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 
 import java.io.File;
+import java.util.Map.Entry;
 
+import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -93,10 +98,16 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 			return null;
 		}
 		FileExplorerItem f = getBean(FileExplorerItemDao.class).get(id);
-		// impossible to check file permission based on client, file can be dropped on WB
-		// and should be accessible to whole room
-		//FIXME TODO ADDITIONALLY CHECK Rights !! and room !!
-		return f;
+		String ruid = params.get("ruid").toString();
+		Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
+		if (!Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
+			for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
+				if (e.getValue().getRoomItems().containsKey(f.getHash())) {
+					return f; // item IS on WB
+				}
+			}
+		}
+		return null;
 	}
 
 	protected File getFile(FileExplorerItem f, String ext) {

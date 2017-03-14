@@ -181,6 +181,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		List<FileUpload> ful = uploadField.getFileUploads();
 		if (ful != null) {
+			boolean clean = cleanWb.getModelObject();
 			for (FileUpload fu : ful) {
 				FileExplorerItem f = new FileExplorerItem();
 				f.setSize(fu.getSize());
@@ -208,7 +209,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 						form.error(getString("convert.errors.file"));
 					} else {
 						if (toWb.getModelObject()) {
-							room.sendFileToWb(f, cleanWb.getModelObject());
+							room.sendFileToWb(f, clean);
+							clean = false;
 						}
 					}
 				} catch (Exception e) {
