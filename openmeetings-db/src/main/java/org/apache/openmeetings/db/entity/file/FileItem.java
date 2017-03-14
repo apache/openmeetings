@@ -90,20 +90,27 @@ public abstract class FileItem implements IDataProviderEntity {
 
 	@Column(name = "flv_width")
 	@Element(data = true, required = false)
-	private Integer flvWidth;
+	private Integer width;
 
 	@Column(name = "flv_height")
 	@Element(data = true, required = false)
-	private Integer flvHeight;
+	private Integer height;
 
 	@Column(name = "type")
 	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
 
+	@Column(name = "group_id")
+	@Element(data = true, required = false)
+	private Long groupId;
+
 	// Not Mapped
 	@Transient
 	private List<FileItemLog> log;
+
+	@Transient
+	private boolean readOnly;
 
 	public String getName() {
 		return name;
@@ -177,20 +184,20 @@ public abstract class FileItem implements IDataProviderEntity {
 		this.deleted = deleted;
 	}
 
-	public Integer getFlvWidth() {
-		return flvWidth;
+	public Integer getWidth() {
+		return width;
 	}
 
-	public void setFlvWidth(Integer flvWidth) {
-		this.flvWidth = flvWidth;
+	public void setWidth(Integer flvWidth) {
+		this.width = flvWidth;
 	}
 
-	public Integer getFlvHeight() {
-		return flvHeight;
+	public Integer getHeight() {
+		return height;
 	}
 
-	public void setFlvHeight(Integer flvHeight) {
-		this.flvHeight = flvHeight;
+	public void setHeight(Integer flvHeight) {
+		this.height = flvHeight;
 	}
 
 	public Type getType() {
@@ -215,6 +222,22 @@ public abstract class FileItem implements IDataProviderEntity {
 
 	public File getFile() {
 		return getFile(null);
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
+	}
+
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 
 	public final File getFile(String ext) {

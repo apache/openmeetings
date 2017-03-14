@@ -106,12 +106,34 @@ public class FileExplorerItemDao {
 		return query.getResultList();
 	}
 
+	public List<FileExplorerItem> getByGroup(Long groupId) {
+		log.debug("getByGroup() started");
+		return em.createNamedQuery("getFileByGroup", FileExplorerItem.class)
+				.setParameter("groupId", groupId)
+				.getResultList();
+	}
+
+	public List<FileExplorerItem> getByGroup(Long groupId, List<Type> filter) {
+		log.debug("getByGroup() started");
+		return em.createNamedQuery("getFileFilteredByGroup", FileExplorerItem.class)
+				.setParameter("filter", filter)
+				.setParameter("groupId", groupId)
+				.getResultList();
+	}
+
 	public List<FileExplorerItem> getByParent(Long parentId) {
 		log.debug("getByParent() started");
-		TypedQuery<FileExplorerItem> query = em.createNamedQuery("getFilesByParent", FileExplorerItem.class);
-		query.setParameter("parentId", parentId);
+		return em.createNamedQuery("getFilesByParent", FileExplorerItem.class)
+				.setParameter("parentId", parentId)
+				.getResultList();
+	}
 
-		return query.getResultList();
+	public List<FileExplorerItem> getByParent(Long parentId, List<Type> filter) {
+		log.debug("getByParent() started");
+		return em.createNamedQuery("getFilesFilteredByParent", FileExplorerItem.class)
+				.setParameter("filter", filter)
+				.setParameter("parentId", parentId)
+				.getResultList();
 	}
 
 	public FileExplorerItem getByHash(String hash) {
@@ -264,7 +286,6 @@ public class FileExplorerItemDao {
 	public long getSize(List<FileExplorerItem> list) {
 		long size = 0;
 		for (FileExplorerItem f : list) {
-			log.debug("FileExplorerItem fList " + f.getName());
 			size += getSize(f);
 		}
 		return size;

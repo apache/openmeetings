@@ -89,8 +89,8 @@ public class FlvExplorerConverter extends BaseConverter {
 			}
 			//Parse the width height from the FFMPEG output
 			FlvDimension dim = getFlvDimension(res.getError());
-			f.setFlvWidth(dim.width);
-			f.setFlvHeight(dim.height);
+			f.setWidth(dim.width);
+			f.setHeight(dim.height);
 			File jpeg = f.getFile(EXTENSION_JPG);
 
 			args = new String[] { getPathToFFMPEG(), "-y", "-i",

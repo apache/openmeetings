@@ -22,6 +22,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,70 +42,76 @@ import org.apache.wicket.model.Model;
 
 public class OmTreeProvider implements ITreeProvider<FileItem> {
 	private static final long serialVersionUID = 1L;
+	private static final List<Type> VIDEO_TYPES = Arrays.asList(Type.Folder, Type.Video);
 	public static String RECORDINGS_MY = "recordings-my";
 	public static String RECORDINGS_PUBLIC = "recordings-public";
 	public static String RECORDINGS_GROUP = "recordings-group-%s";
 	public static String FILES_MY = "files-my";
 	public static String FILES_ROOM = "files-room";
+	public static String FILES_GROUP = "files-group-%s";
 	private final Long roomId;
 	private final List<FileItem> roots = new ArrayList<>();
+	private final String PUBLIC, GROUP;
 
 	public OmTreeProvider(Long roomId) {
 		this.roomId = roomId;
+		PUBLIC = Application.getString(861);
+		GROUP = Application.getString("files.root.group");
 		refreshRoots(true);
 	}
 
 	public void refreshRoots(boolean all) {
-		roots.clear();
+		List<FileItem> fRoot = new ArrayList<>(), rRoot = new ArrayList<>();
 		if (all) {
 			if (roomId != null) {
-				roots.add(createFileRoot(null));
-				roots.add(createFileRoot(roomId));
-			}
-			final String PUBLIC = Application.getString(861);
-			{
-				Recording r = createRecRoot(Application.getString(860), RECORDINGS_MY);
+				FileItem r = createRoot(Application.getString(706), FILES_MY, false);
 				r.setOwnerId(getUserId());
-				roots.add(r);
+				fRoot.add(r);
+			}
+		}
+		if (roomId != null) {
+			FileItem r = createRoot(Application.getString(707), FILES_ROOM, false);
+			r.setRoomId(roomId);
+			roots.add(r);
+		}
+		if (all) {
+			{
+				FileItem r = createRoot(Application.getString(860), RECORDINGS_MY, true);
+				r.setOwnerId(getUserId());
+				rRoot.add(r);
 			}
 			{
-				Recording r = createRecRoot(PUBLIC, RECORDINGS_PUBLIC);
-				roots.add(r);
+				FileItem r = createRoot(PUBLIC, RECORDINGS_PUBLIC, true);
+				rRoot.add(r);
 			}
-			for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
-				Group g = gu.getGroup();
-
-				Recording r = createRecRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()));
+		}
+		for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+			Group g = gu.getGroup();
+			if (all) {
+				FileItem r = createRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
 				r.setGroupId(g.getId());
-				roots.add(r);
+				rRoot.add(r);
 			}
-		} else {
-			if (roomId != null) {
-				roots.add(createFileRoot(roomId));
-			}
+			/*FileItem r = createRoot(String.format("%s (%s)", GROUP, g.getName()), String.format(FILES_GROUP, g.getId()), false);
+			r.setGroupId(g.getId());
+			r.setReadOnly(roomId == null); //group videos are read-only in recordings tree
+			fRoot.add(r);*/
 		}
-	}
-
-	static Recording createRecRoot(String name, String hash) {
-		Recording r = new Recording();
-		r.setType(Type.Folder);
-		r.setName(name);
-		r.setHash(hash);
-		return r;
-	}
-
-	static FileExplorerItem createFileRoot(Long roomId) {
-		FileExplorerItem f = new FileExplorerItem();
-		f.setRoomId(roomId);
-		f.setType(Type.Folder);
+		roots.clear();
 		if (roomId == null) {
-			f.setOwnerId(getUserId());
-			f.setName(Application.getString(706));
-			f.setHash(FILES_MY);
+			roots.addAll(rRoot);
+			roots.addAll(fRoot);
 		} else {
-			f.setName(Application.getString(707));
-			f.setHash(FILES_ROOM);
+			roots.addAll(fRoot);
+			roots.addAll(rRoot);
 		}
+	}
+
+	static FileItem createRoot(String name, String hash, boolean rec) {
+		FileItem f = rec ? new Recording() : new FileExplorerItem();
+		f.setType(Type.Folder);
+		f.setName(name);
+		f.setHash(hash);
 		return f;
 	}
 
@@ -137,15 +144,22 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 			FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
 			List<FileExplorerItem> _list;
 			if (id == null) {
-				if (node.getRoomId() == null) {
-					_list = dao.getByOwner(node.getOwnerId());
-				} else {
+				if (node.getRoomId() != null) {
 					_list = dao.getByRoom(node.getRoomId());
+				} else if (node.getGroupId() != null) {
+					_list = dao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
+				} else {
+					_list = dao.getByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(id);
+				_list = dao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
 			}
 			list.addAll(_list);
+		}
+		if (node.isReadOnly()) {
+			for (FileItem f : list) {
+				f.setReadOnly(true);
+			}
 		}
 		return list;
 	}

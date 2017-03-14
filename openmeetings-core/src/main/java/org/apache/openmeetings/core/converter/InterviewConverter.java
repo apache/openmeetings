@@ -251,8 +251,8 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("-qmin"); args.add("1");
 			// TODO additional flag to 'quiet' output should be added
 
-			r.setFlvWidth(2 * flvWidth);
-			r.setFlvHeight(flvHeight);
+			r.setWidth(2 * flvWidth);
+			r.setHeight(flvHeight);
 
 			String mp4path = convertToMp4(r, args, logs);
 

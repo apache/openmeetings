@@ -25,7 +25,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.AddFolderDialog;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -62,8 +61,8 @@ public class RecordingsPanel extends UserPanel {
 
 			@Override
 			protected void update(AjaxRequestTarget target, FileItem f) {
-				video.update(target, (Recording)f);
-				info.update(target, (Recording)f);
+				video.update(target, f);
+				info.update(target, f);
 			}
 		});
 		add(video, info, addFolder);

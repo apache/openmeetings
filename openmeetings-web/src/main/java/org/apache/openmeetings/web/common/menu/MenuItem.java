@@ -29,13 +29,11 @@ public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuIt
 
 	public MenuItem(String title, List<IMenuItem> items) {
 		super(title, items);
-		//setIcon(JQueryIcon.NONE);
 		setTop(true);
 	}
 
 	public MenuItem(String title, String desc) {
 		super(title);
-		//setIcon(JQueryIcon.NONE);
 		this.desc = desc;
 	}
 

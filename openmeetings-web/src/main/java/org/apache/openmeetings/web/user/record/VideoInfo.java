@@ -32,6 +32,7 @@ import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
@@ -111,38 +112,41 @@ public class VideoInfo extends Panel {
 		update(null, r);
 	}
 
-	public VideoInfo update(AjaxRequestTarget target, Recording _r) {
-		Recording r = _r == null ? new Recording() : _r;
-		rm.setObject(r);
-		try {
-			String name = null;
-			if (r.getRoomId() != null) {
-				Room room = getBean(RoomDao.class).get(r.getRoomId());
-				if (room != null) {
-					name = room.getName();
-					isInterview = Room.Type.interview == room.getType();
-				}
-			}
-			roomName.setObject(name);
-		} catch (Exception e) {
-			//no-op
-		}
-
+	public VideoInfo update(AjaxRequestTarget target, FileItem _r) {
 		boolean reConvEnabled = false;
-		if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
-			List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
-			reconvLabel:
-			if (!metas.isEmpty()) {
-				for (RecordingMetaData meta : metas) {
-					if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
-						break reconvLabel;
+		boolean exists = false;
+		if (_r instanceof Recording) {
+			Recording r = _r == null ? new Recording() : (Recording)_r;
+			rm.setObject(r);
+			exists = r.exists();
+			try {
+				String name = null;
+				if (r.getRoomId() != null) {
+					Room room = getBean(RoomDao.class).get(r.getRoomId());
+					if (room != null) {
+						name = room.getName();
+						isInterview = Room.Type.interview == room.getType();
 					}
 				}
-				reConvEnabled = true;
+				roomName.setObject(name);
+			} catch (Exception e) {
+				//no-op
+			}
+
+			if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
+				List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
+				reconvLabel:
+				if (!metas.isEmpty()) {
+					for (RecordingMetaData meta : metas) {
+						if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
+							break reconvLabel;
+						}
+					}
+					reConvEnabled = true;
+				}
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		boolean exists = r.exists();
 		downloadBtn.setEnabled(exists);
 		share.setEnabled(exists);
 		if (target != null) {

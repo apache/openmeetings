@@ -32,16 +32,24 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getAllFiles", query = "SELECT c FROM FileExplorerItem c ORDER BY c.id")
-	, @NamedQuery(name = "getFileById", query = "SELECT c FROM FileExplorerItem c WHERE c.id = :id")
-	, @NamedQuery(name = "getFileByHash", query = "SELECT c FROM FileExplorerItem c WHERE c.hash = :hash")
-	, @NamedQuery(name = "getFilesByRoom", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.roomId = :roomId " +
-			"AND c.ownerId IS NULL AND c.parentId IS NULL ORDER BY c.type ASC, c.name ")
-	, @NamedQuery(name = "getFilesByOwner", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false AND c.ownerId = :ownerId "
-			+ "AND c.parentId IS NULL ORDER BY c.type ASC, c.name ")
-	, @NamedQuery(name = "getFilesByParent", query = "SELECT c FROM FileExplorerItem c WHERE c.deleted = false "
-			+ "AND c.parentId = :parentId ORDER BY c.type ASC, c.name ")
-	, @NamedQuery(name = "getFileExternal", query = "SELECT c FROM FileExplorerItem c WHERE c.externalId = :externalId AND c.externalType LIKE :externalType")
+	@NamedQuery(name = "getAllFiles", query = "SELECT f FROM FileExplorerItem f ORDER BY f.id")
+	, @NamedQuery(name = "getFileById", query = "SELECT f FROM FileExplorerItem f WHERE f.id = :id")
+	, @NamedQuery(name = "getFileByHash", query = "SELECT f FROM FileExplorerItem f WHERE f.hash = :hash")
+	, @NamedQuery(name = "getFilesByRoom", query = "SELECT f FROM FileExplorerItem f WHERE f.deleted = false AND f.roomId = :roomId " +
+			"AND f.ownerId IS NULL AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFilesByOwner", query = "SELECT f FROM FileExplorerItem f WHERE f.deleted = false AND f.ownerId = :ownerId "
+			+ "AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFilesByParent", query = "SELECT f FROM FileExplorerItem f WHERE f.deleted = false "
+			+ "AND f.parentId = :parentId ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFilesFilteredByParent", query = "SELECT f FROM FileExplorerItem f WHERE f.deleted = false "
+			+ "AND f.parentId = :parentId AND f.type IN :filter ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFileExternal", query = "SELECT f FROM FileExplorerItem f WHERE f.externalId = :externalId AND f.externalType LIKE :externalType")
+	, @NamedQuery(name = "getFileByGroup", query = "SELECT f FROM FileExplorerItem f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.groupId = :groupId AND f.parentId IS NULL "
+			+ "ORDER BY f.type ASC, f.name")
+	, @NamedQuery(name = "getFileFilteredByGroup", query = "SELECT f FROM FileExplorerItem f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.groupId = :groupId AND f.parentId IS NULL AND f.type IN :filter "
+			+ "ORDER BY f.type ASC, f.name")
 })
 @Table(name = "fileexploreritem")
 @Root

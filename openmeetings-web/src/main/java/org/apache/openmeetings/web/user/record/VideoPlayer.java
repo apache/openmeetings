@@ -20,76 +20,74 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.media.Source;
 import org.apache.wicket.markup.html.media.video.Video;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.request.resource.UrlResourceReference;
 
 public class VideoPlayer extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer wait = new WebMarkupContainer("wait"); //FIXME not used
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
-	private final Mp4RecordingResourceReference mp4res = new Mp4RecordingResourceReference();
-	private final OmVideo player = new OmVideo("player", null);
-	private final Source mp4 = new Source("mp4", mp4res);
+	private final Mp4RecordingResourceReference mp4RecRes = new Mp4RecordingResourceReference();
+	private final JpgRecordingResourceReference posterRecRes = new JpgRecordingResourceReference();
+	private final RoomResourceReference mp4FileRes = new RoomResourceReference();
+	private final RoomResourceReference posterFileRes = new RoomResourceReference();
+	private final Video player = new Video("player") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean isAutoplay() {
+			return false;
+		}
+
+		@Override
+		public boolean hasControls() {
+			return true;
+		}
+	};
+	private final Source mp4Rec = new Source("mp4", mp4RecRes);
+	private final Source mp4File = new Source("mp4", mp4FileRes);
 
 	public VideoPlayer(String id) {
-		this(id, null);
-	}
-	
-	public VideoPlayer(String id, Recording r) {
 		super(id);
 		add(container.setOutputMarkupPlaceholderTag(true));
-		mp4.setDisplayType(true);
-		mp4.setType(MP4_MIME_TYPE);
-		player.add(mp4);
+		mp4Rec.setDisplayType(true);
+		mp4Rec.setType(MP4_MIME_TYPE);
+		mp4File.setDisplayType(true);
+		mp4File.setType(MP4_MIME_TYPE);
+		player.add(mp4Rec);
 		container.add(wait.setVisible(false), player);
-		update(null, r);
+		update(null, null);
 	}
-	
-	public VideoPlayer update(AjaxRequestTarget target, Recording r) {
+
+	public VideoPlayer update(AjaxRequestTarget target, FileItem r) {
 		boolean videoExists = r != null && r.exists();
 		if (videoExists) {
-			PageParameters pp = new PageParameters().add("id", r.getId());
-			mp4.setPageParameters(pp);
-			player.recId = r.getId();
+			PageParameters pp = new PageParameters();
+			if (r instanceof Recording) {
+				pp.add("id", r.getId());
+				mp4Rec.setPageParameters(pp);
+				player.replace(mp4Rec);
+				player.setPoster(posterRecRes, pp);
+			} else {
+				pp.add("id", r.getId()).add("uid", findParent(MainPanel.class).getClient().getUid());
+				mp4File.setPageParameters(pp);
+				player.replace(mp4File);
+				player.setPoster(posterFileRes, new PageParameters(pp).add("preview", true));
+			}
 		}
 		container.setVisible(videoExists);
 		if (target != null) {
 			target.add(container);
 		}
-		
+
 		return this;
-	}
-	
-	private static class OmVideo extends Video {
-		private static final long serialVersionUID = 1L;
-		Long recId = null;
-		
-		OmVideo(String id, Long recId) {
-			super(id);
-			this.recId = recId;
-		}
-		
-		@Override
-		public boolean isAutoplay() {
-			return false;
-		}
-		
-		@Override
-		public boolean hasControls() {
-			return true;
-		}
-		
-		@Override
-		public ResourceReference getPoster() {
-			return recId == null ? null : new UrlResourceReference(Url.parse("recordings/jpg/" + recId)).setContextRelative(true);
-		}
 	}
 }

@@ -96,7 +96,6 @@ public abstract class FileTreePanel extends Panel {
 	private final ConfirmableBorderDialog trashConfirm;
 	private ConfirmableAjaxBorder trashBorder;
 	private final Long roomId;
-	private final OmTreeProvider tp;
 	private boolean readOnly = true;
 	private final Component createDir = new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
 		private static final long serialVersionUID = 1L;
@@ -113,7 +112,7 @@ public abstract class FileTreePanel extends Panel {
 		this.roomId = roomId;
 		this.addFolder = addFolder;
 		this.trashConfirm = trashConfirm;
-		tp = new OmTreeProvider(roomId);
+		final OmTreeProvider tp = new OmTreeProvider(roomId);
 		select(tp.getRoot(), null, false, false);
 		form.add(tree = new FileItemTree("tree", this, tp));
 		form.add(download.setVisible(false).setOutputMarkupPlaceholderTag(true));
@@ -245,7 +244,7 @@ public abstract class FileTreePanel extends Panel {
 	public void setReadOnly(boolean readOnly, IPartialPageRequestHandler handler) {
 		if (this.readOnly != readOnly) {
 			this.readOnly = readOnly;
-			tp.refreshRoots(!readOnly);
+			tree.getProvider().refreshRoots(!readOnly);
 			createDir.setEnabled(!readOnly);
 			createDir.add(AttributeModifier.replace("class", new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			upload.setEnabled(!readOnly);
@@ -273,14 +272,13 @@ public abstract class FileTreePanel extends Panel {
 		f.setInserted(new Date());
 		f.setType(Type.Folder);
 		f.setOwnerId(p.getOwnerId());
+		f.setGroupId(p.getGroupId());
+		f.setRoomId(p.getRoomId());
 		//TODO lastSelected.parent??
 		f.setParentId(Type.Folder == p.getType() ? p.getId() : null);
 		if (isRecording) {
-			Recording r = (Recording)f;
-			r.setGroupId(((Recording)p).getGroupId());
-			getBean(RecordingDao.class).update(r);
+			getBean(RecordingDao.class).update((Recording)f);
 		} else {
-			f.setRoomId(p.getRoomId());
 			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
 		}
 		update(target);
@@ -343,7 +341,7 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	public void select(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
-		updateSelected(target);
+		updateSelected(target); //all previously selected are in update list
 		if (ctrl) {
 			if (isSelected(fi)) {
 				selected.remove(fi.getHash());
@@ -354,7 +352,7 @@ public abstract class FileTreePanel extends Panel {
 		} else if (shift && lastSelected != null && !lastSelected.getHash().equals(fi.getHash()) && sameParent(roomId, fi, lastSelected)) {
 			selected.clear();
 			String lastHash = null;
-			for (FileItem f : ((OmTreeProvider)tree.getProvider()).getByParent(fi, fi.getParentId())) {
+			for (FileItem f : tree.getProvider().getByParent(fi, fi.getParentId())) {
 				if (lastHash == null) {
 					if (f.getHash().equals(lastSelected.getHash())) {
 						lastHash = fi.getHash();
@@ -375,7 +373,7 @@ public abstract class FileTreePanel extends Panel {
 			selected.put(fi.getHash(), fi);
 			lastSelected = fi;
 		}
-		updateSelected(target);
+		updateSelected(target); //all finaly selected are in the update list
 		if (target != null) {
 			target.add(trashBorder, download.setVisible(lastSelected.getType() == Type.Presentation || lastSelected.getType() == Type.Image));
 		}

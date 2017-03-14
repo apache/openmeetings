@@ -335,7 +335,7 @@ public abstract class BaseConverter {
 	}
 
 	protected String getDimensions(Recording r) {
-		return String.format("%sx%s", r.getFlvWidth(), r.getFlvHeight());
+		return String.format("%sx%s", r.getWidth(), r.getHeight());
 	}
 
 	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
