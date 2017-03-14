@@ -636,12 +636,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				@Override
 				public boolean filter(IConnection conn) {
 					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					if (rcl == null) {
+						return true;
+					}
 					boolean isScreen = rcl.isScreenClient();
 					if (isScreen && client.getPublicSID().equals(rcl.getStreamPublishName())) {
 						//going to terminate screen sharing started by this client
 						((IServiceCapableConnection) conn).invoke("stopStream", new Object[] { }, callback);
-					}					// TODO Auto-generated method stub
-					return rcl == null || isScreen;
+					}
+					return isScreen;
 				}
 			}.start();
 
@@ -1149,9 +1152,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	private static Point getSize(FileItem fi) {
 		Point result = new Point(0, 0);
-		if (fi.getFlvWidth() != null && fi.getFlvHeight() != null) {
-			result.x = fi.getFlvWidth();
-			result.y = fi.getFlvHeight();
+		if (fi.getWidth() != null && fi.getHeight() != null) {
+			result.x = fi.getWidth();
+			result.y = fi.getHeight();
 		}
 		return result;
 	}
@@ -1244,11 +1247,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			default:
 		}
 		if (clean) {
-			Map<Integer, Object> wbClear = new HashMap<>();
-			wbClear.put(2, "clear");
-			wbClear.put(3, null);
+			Map<String, Object> wbClear = new HashMap<>();
+			wbClear.put("id", wbId);
+			wbClear.put("param", Arrays.asList("whiteboard", new Date(), "clear", null));
 
-			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", new Object[] { wbClear });
+			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", Arrays.asList(null, wbClear));
 		}
 		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
 	}
