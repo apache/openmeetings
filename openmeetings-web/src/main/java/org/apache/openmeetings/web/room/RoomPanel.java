@@ -423,7 +423,7 @@ public class RoomPanel extends BasePanel {
 						activities.remove(((TextRoomMessage)m).getText(), handler);
 						break;
 					case haveQuestion:
-						if (getClient().hasRight(Room.Right.moderator)) {
+						if (getClient().hasRight(Room.Right.moderator) || getUserId().equals(m.getUserId())) {
 							activities.add(new Activity(m, Activity.Type.haveQuestion), handler);
 						}
 						break;
