@@ -794,7 +794,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcl.setAvsettings("n");
 			sessionManager.updateClientByStreamId(streamId, rcl, false, null);
 			// Notify all clients of the same scope (room)
-			sendMessageToCurrentScope("closeStream", rcl, false);
+			sendMessageToCurrentScope("closeStream", rcl, rcl.isMobile());
 		} catch (Exception e) {
 			log.error("[streamBroadcastClose]", e);
 		}
