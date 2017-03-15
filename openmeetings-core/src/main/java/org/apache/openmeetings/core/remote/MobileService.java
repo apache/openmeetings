@@ -335,7 +335,13 @@ public class MobileService {
 	 * @param userId - redundant userId
 	 */
 	public Map<String, Object> roomConnect(String SID, Long userId) {
-		return new HashMap<>();
+		// publicSid is changed on mobile room connect
+		IConnection current = Red5.getConnectionLocal();
+		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		Map<String, Object> result = new HashMap<>();
+		result.put("publicSid", c.getPublicSID());
+		result.put("broadCastId", c.getBroadCastID());
+		return result;
 	}
 
 	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
