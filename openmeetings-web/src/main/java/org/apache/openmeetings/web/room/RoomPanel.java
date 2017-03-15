@@ -35,6 +35,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.remote.ConferenceLibrary;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -64,6 +65,7 @@ import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
+import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
