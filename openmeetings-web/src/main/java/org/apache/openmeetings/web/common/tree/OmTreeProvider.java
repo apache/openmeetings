@@ -147,12 +147,12 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 				if (node.getRoomId() != null) {
 					_list = dao.getByRoom(node.getRoomId());
 				} else if (node.getGroupId() != null) {
-					_list = dao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
+					_list = dao.getByGroup(node.getGroupId(), /*roomId == null ? VIDEO_TYPES : */null);
 				} else {
 					_list = dao.getByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
+				_list = dao.getByParent(id, /*roomId == null ? VIDEO_TYPES : */null);
 			}
 			list.addAll(_list);
 		}

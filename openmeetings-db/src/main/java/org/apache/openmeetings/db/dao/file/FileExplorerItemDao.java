@@ -129,7 +129,10 @@ public class FileExplorerItemDao {
 	}
 
 	public List<FileExplorerItem> getByParent(Long parentId, List<Type> filter) {
-		log.debug("getByParent() started");
+		if (filter == null) {
+			return getByParent(parentId);
+		}
+		log.debug("getByParent(filter) started");
 		return em.createNamedQuery("getFilesFilteredByParent", FileExplorerItem.class)
 				.setParameter("filter", filter)
 				.setParameter("parentId", parentId)
