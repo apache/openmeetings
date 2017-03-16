@@ -789,9 +789,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
 				recordingService.stopRecordingShowForClient(current.getScope(), rcl);
 			}
-			rcl.setBroadCastID(-1);
-			rcl.setIsBroadcasting(false);
-			rcl.setAvsettings("n");
+			if (stream.getPublishedName().equals("" + rcl.getBroadCastID())) {
+				rcl.setBroadCastID(-1);
+				rcl.setIsBroadcasting(false);
+				rcl.setAvsettings("n");
+			}
 			sessionManager.updateClientByStreamId(streamId, rcl, false, null);
 			// Notify all clients of the same scope (room)
 			sendMessageToCurrentScope("closeStream", rcl, rcl.isMobile());
