@@ -261,9 +261,11 @@ public class MainPanel extends Panel {
 
 			private void closeHandler(AbstractClientMessage msg) {
 				//no chance to stop pingTimer here :(
-				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
-				exit(client);
-				client = null;
+				if (client != null) {
+					log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
+					exit(client);
+					client = null;
+				}
 			}
 		});
 		add(new OmAjaxClientInfoBehavior());

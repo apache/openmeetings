@@ -131,13 +131,12 @@ public class RecordingMetaDataDao {
 		try {
 			RecordingMetaData meta = get(metaId);
 
-			meta.setRecordEnd(recordEnd);
-			
-			log.debug("updateEndDate :: Start Date :" + meta.getRecordStart());
-			log.debug("updateEndDate :: End Date :" + meta.getRecordEnd());
-			
-			update(meta);
-			
+			if (meta != null) {
+				meta.setRecordEnd(recordEnd);
+				log.debug("updateEndDate :: Start Date :" + meta.getRecordStart());
+				log.debug("updateEndDate :: End Date :" + meta.getRecordEnd());
+				update(meta);
+			}
 			return metaId;
 		} catch (Exception ex2) {
 			log.error("[updateEndDate]: ", ex2);
