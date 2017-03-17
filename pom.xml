@@ -703,8 +703,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<doCheck>false</doCheck>
-					<doUpdate>true</doUpdate>
+					<getRevisionOnlyOnce>true</getRevisionOnlyOnce>
 				</configuration>
 			</plugin>
 			<plugin>
