@@ -40,6 +40,9 @@ Release Notes - Openmeetings - Version 3.2.1
     * [OPENMEETINGS-1597] - Message are not shown properly in the activities and actions window for user without moderator rights
     * [OPENMEETINGS-1598] - The "Disabled" select item does not work properly on the  "Choose device" dialog
     * [OPENMEETINGS-1599] - Connection panel is not scrolled
+    * [OPENMEETINGS-1600] - The "Clear whiteboard" flag does not work when user upload file directly to whiteboard
+    * [OPENMEETINGS-1601] - Drop recording to WB doesn't work as expected
+    * [OPENMEETINGS-1603] - The "Internal error" is thrown when user select custom folder in the room
 
 ** Improvement
     * [OPENMEETINGS-372] - Please make the ability to “clear the Chat window” only available to Moderators, and not to participants who have “Draw on the Whiteboard” rights
