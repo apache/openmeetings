@@ -56,6 +56,7 @@ public class Client implements IClient {
 	private Long roomId;
 	private final String uid;
 	private final String sid;
+	private String remoteAddress;
 	private final Set<Right> rights = new HashSet<>();
 	private final Set<Activity> activities = new HashSet<>();
 	private final Date connectedSince;
@@ -64,10 +65,6 @@ public class Client implements IClient {
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
-
-	public Client(String sessionId, Long userId, UserDao dao) {
-		this(sessionId, 0, userId, dao);
-	}
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -86,6 +83,7 @@ public class Client implements IClient {
 		uid = rcl.getPublicSID();
 		sid = UUID.randomUUID().toString();
 		this.roomId = rcl.getRoomId();
+		this.remoteAddress = rcl.getUserip();
 	}
 
 	public String getSessionId() {
@@ -275,6 +273,14 @@ public class Client implements IClient {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public String getRemoteAddress() {
+		return remoteAddress;
+	}
+
+	public void setRemoteAddress(String remoteAddress) {
+		this.remoteAddress = remoteAddress;
 	}
 
 	@Override

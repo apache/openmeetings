@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
@@ -236,8 +235,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomLeave
-					, getUserId(), "0", roomId
-					, WebSession.get().getClientInfo().getProperties().getRemoteAddress()
+					, c.getUserId(), "0", roomId
+					, c.getRemoteAddress()
 					, "" + roomId);
 		}
 	}

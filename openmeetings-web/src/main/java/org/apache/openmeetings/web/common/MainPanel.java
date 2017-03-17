@@ -225,6 +225,7 @@ public class MainPanel extends Panel {
 			protected void onConnect(ConnectedMessage msg) {
 				super.onConnect(msg);
 				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
+				client.setRemoteAddress(WebSession.get().getClientInfo().getProperties().getRemoteAddress());
 				addOnlineUser(client);
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
