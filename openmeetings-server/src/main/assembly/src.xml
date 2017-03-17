@@ -48,5 +48,12 @@
 				<exclude>**/.settings/**</exclude>
 			</excludes>
 		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/classes</directory>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>build.properties</include>
+			</includes>
+		</fileSet>
 	</fileSets>
 </assembly>

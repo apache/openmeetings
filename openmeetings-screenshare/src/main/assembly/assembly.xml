@@ -27,7 +27,7 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 			<includes>
 				<include>commons-codec:commons-codec</include>
 				<include>commons-beanutils:commons-beanutils</include>
@@ -58,7 +58,7 @@
 	<fileSets>
 		<fileSet>
 			<directory>${project.build.outputDirectory}</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory></outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>

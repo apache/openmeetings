@@ -148,6 +148,30 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.internetitem</groupId>
+				<artifactId>write-properties-file-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<id>write build number</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>write-properties-file</goal>
+						</goals>
+						<configuration>
+							<filename>build.properties</filename>
+							<comment>Licensed under Apache License 2.0. http://www.apache.org/licenses/LICENSE-2.0</comment>
+							<properties>
+								<property>
+									<name>buildnumber</name>
+									<value>${buildNumber}</value>
+								</property>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
