@@ -32,8 +32,9 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
@@ -110,7 +111,7 @@ public class SwfPanel extends BasePanel {
 	private static ResourceReference newResourceReference() {
 		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);

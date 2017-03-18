@@ -65,9 +65,10 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
-import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.github.openjson.JSONObject;
 
 public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;

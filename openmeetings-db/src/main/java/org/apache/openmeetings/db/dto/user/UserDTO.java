@@ -35,7 +35,8 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONObject;
 
 @XmlRootElement
 public class UserDTO implements Serializable {

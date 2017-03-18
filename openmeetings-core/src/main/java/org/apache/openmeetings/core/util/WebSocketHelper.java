@@ -43,10 +43,11 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class WebSocketHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(WebSocketHelper.class, webAppRootKey);

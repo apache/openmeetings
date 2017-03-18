@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONObject;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)

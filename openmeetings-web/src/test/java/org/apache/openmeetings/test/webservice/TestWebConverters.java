@@ -29,8 +29,9 @@ import java.util.Date;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.webservice.util.CalendarParamConverter;
 import org.apache.openmeetings.webservice.util.DateParamConverter;
-import org.json.JSONObject;
 import org.junit.Test;
+
+import com.github.openjson.JSONObject;
 
 public class TestWebConverters {
 	@Test

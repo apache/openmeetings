@@ -246,9 +246,7 @@ public class MailHandler {
 						log.error("Error while sending message", e);
 						m.setErrorCount(m.getErrorCount() + 1);
 						StringWriter sw = new StringWriter();
-						try (PrintWriter pw = new PrintWriter(sw)) {
-							e.printStackTrace(pw);
-						}
+						e.printStackTrace(new PrintWriter(sw));
 						m.setLastError(sw.getBuffer().toString());
 						m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
 					}

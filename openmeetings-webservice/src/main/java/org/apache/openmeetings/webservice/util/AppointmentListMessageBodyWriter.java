@@ -37,8 +37,9 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 @Provider
 @Produces({MediaType.APPLICATION_JSON})
