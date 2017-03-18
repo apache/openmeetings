@@ -32,9 +32,9 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -69,7 +69,7 @@ public class GroupUsersPanel extends Panel {
 				User u = grpUser.getUser();
 				Label label = new Label("label", u == null ? "" : GroupForm.formatUser(u));
 				if (grpUser.getId() == null) {
-					label.add(AttributeAppender.append("class", "newItem"));
+					label.add(AttributeModifier.append("class", "newItem"));
 				}
 				item.add(label);
 				item.add(new ConfirmableAjaxBorder("deleteUserBtn", getString("80"), getString("833")) {

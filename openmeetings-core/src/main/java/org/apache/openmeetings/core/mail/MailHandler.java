@@ -203,7 +203,7 @@ public class MailHandler {
 		String replyTo = m.getReplyTo();
 		if (replyTo != null && mailAddReplyTo) {
 			log.debug("setReplyTo " + replyTo);
-			if (MailUtil.matches(replyTo)) {
+			if (MailUtil.isValid(replyTo)) {
 				msg.setReplyTo(new InternetAddress[]{new InternetAddress(replyTo)});
 			}
 		}

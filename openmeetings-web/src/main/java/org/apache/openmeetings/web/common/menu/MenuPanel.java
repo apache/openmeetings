@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.common.menu;
 import java.util.List;
 
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.util.string.Strings;
@@ -32,7 +32,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
 
 /**
  * Loads the menu items into the main area
- * 
+ *
  * @author sebawagner
  *
  */
@@ -52,12 +52,12 @@ public class MenuPanel extends BasePanel {
 			protected void addMenuItem(ListItem<IMenuItem> item, IMenuItem menuItem) {
 				super.addMenuItem(item, menuItem);
 				MenuItem m = (MenuItem)menuItem;
-				item.add(AttributeAppender.append("class", m.isTop() ? "top" : "sub"));
+				item.add(AttributeModifier.append("class", m.isTop() ? "top" : "sub"));
 				if (!Strings.isEmpty(m.getDesc())) {
-					item.add(AttributeAppender.append("title", m.getDesc()));
+					item.add(AttributeModifier.append("title", m.getDesc()));
 				}
 				if (!Strings.isEmpty(m.getIcon())) {
-					item.add(AttributeAppender.append("class", m.getIcon()));
+					item.add(AttributeModifier.append("class", m.getIcon()));
 				}
 			}
 		});

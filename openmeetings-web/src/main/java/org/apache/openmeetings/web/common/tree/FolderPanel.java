@@ -28,10 +28,10 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -93,7 +93,7 @@ public class FolderPanel extends Panel {
 					behavior.setOption("helper", "dragHelper");
 				}
 			}.setContainment(treePanel.getContainment());
-			drag.add(AttributeAppender.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
+			drag.add(AttributeModifier.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
 		}
 		Component name = r.getId() == null || !editable ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;
@@ -120,7 +120,7 @@ public class FolderPanel extends Panel {
 				super.onEdit(target);
 			}
 		};
-		drag.add(name.add(AttributeAppender.append("title", r.getName())));
+		drag.add(name.add(AttributeModifier.append("title", r.getName())));
 		add(drop.add(drag).setOutputMarkupId(true));
 	}
 

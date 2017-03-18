@@ -66,11 +66,11 @@ import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -183,7 +183,7 @@ public class RoomPanel extends BasePanel {
 		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
 		room.add(menu = new RoomMenuPanel("menu", this));
-		room.add(AttributeAppender.append("data-room-id", r.getId()));
+		room.add(AttributeModifier.append("data-room-id", r.getId()));
 		Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
 			private static final long serialVersionUID = 1L;
 

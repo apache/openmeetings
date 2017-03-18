@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 public class AsfCopyRightReplace {
 	private static final Logger log = Red5LoggerFactory.getLogger(AsfCopyRightReplace.class, webAppRootKey);
 
-	String asf_copyright = "/*\n"
+	private static String asf_copyright = "/*\n"
 			+ " * Licensed to the Apache Software Foundation (ASF) under one\n"
 			+ " * or more contributor license agreements.  See the NOTICE file\n"
 			+ " * distributed with this work for additional information\n"
@@ -54,7 +54,7 @@ public class AsfCopyRightReplace {
 			+ " * specific language governing permissions and limitations\n"
 			+ " * under the License.\n" + " */\n";
 
-	String asf_xml_copyright = "<!--\n"
+	private static String asf_xml_copyright = "<!--\n"
 			+ "  Licensed to the Apache Software Foundation (ASF) under one\n"
 			+ "  or more contributor license agreements.  See the NOTICE file\n"
 			+ "  distributed with this work for additional information\n"
@@ -62,16 +62,17 @@ public class AsfCopyRightReplace {
 			+ "  to you under the Apache License, Version 2.0 (the\n"
 			+ "  \"License\"); you may not use this file except in compliance\n"
 			+ "  with the License.  You may obtain a copy of the License at\n"
-			+ "  \n" + "      http://www.apache.org/licenses/LICENSE-2.0\n"
-			+ "    	  \n"
+			+ "\n"
+			+ "      http://www.apache.org/licenses/LICENSE-2.0\n"
+			+ "\n"
 			+ "  Unless required by applicable law or agreed to in writing,\n"
 			+ "  software distributed under the License is distributed on an\n"
 			+ "  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n"
 			+ "  KIND, either express or implied.  See the License for the\n"
 			+ "  specific language governing permissions and limitations\n"
 			+ "  under the License.\n" + "  \n" + "-->\n";
-	
-	String asf_vm_copyright = "#\n"
+
+	private static String asf_vm_copyright = "#\n"
 			+ "# Licensed to the Apache Software Foundation (ASF) under one\n"
 			+ "# or more contributor license agreements.  See the NOTICE file\n"
 			+ "# distributed with this work for additional information\n"
@@ -90,14 +91,10 @@ public class AsfCopyRightReplace {
 			+ "# under the License.\n" + "#/\n";
 
 	public static void main(String... args) {
-		new AsfCopyRightReplace();
-	}
-
-	public AsfCopyRightReplace() {
 		scanFolder(new File("./src/main"));
 	}
 
-	private void scanFolder(File folder) {
+	private static void scanFolder(File folder) {
 
 		for (File javaFile : folder.listFiles(new FilenameFilter() {
 			@Override
@@ -128,7 +125,7 @@ public class AsfCopyRightReplace {
 		}
 	}
 
-	private void scanAndWriteXMLFile(File javaFile) {
+	private static void scanAndWriteXMLFile(File javaFile) {
 		StringWriter strWriter = new StringWriter();
 		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), UTF_8))) {
 			log.debug("Processing " + javaFile.getCanonicalPath());
@@ -140,7 +137,7 @@ public class AsfCopyRightReplace {
 			while ((line = is.readLine()) != null) {
 				if (i == 0) {
 					firstline = line;
-					
+
 					if (firstline.startsWith("<canvas")) {
 						strWriter.append(asf_xml_copyright);
 					} else if (firstline.startsWith("<library")) {
@@ -173,7 +170,7 @@ public class AsfCopyRightReplace {
 		}
 	}
 
-	private void scanAndWriteJavaFile(File javaFile) {
+	private static void scanAndWriteJavaFile(File javaFile) {
 		StringWriter strWriter = new StringWriter();
 		try (BufferedReader is = new BufferedReader(new InputStreamReader(new FileInputStream(javaFile), UTF_8))) {
 			log.debug("Processing " + javaFile.getCanonicalPath());
@@ -185,7 +182,7 @@ public class AsfCopyRightReplace {
 				if (i == 0) {
 					if (line.startsWith("package ")) {
 						strWriter.append(asf_copyright);
-					} else if (line.startsWith("## OpenMeetings") 
+					} else if (line.startsWith("## OpenMeetings")
 							&& javaFile.getName().endsWith(".vm")) {
 						strWriter.append(asf_vm_copyright);
 					}

@@ -27,7 +27,7 @@ import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.util.FormatHelper;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebSession;
@@ -53,7 +53,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	public AbstractTemplatePanel(Locale locale) {
 		super(COMP_ID);
 		this.locale = locale == null ? getDefault() : locale;
-		add(new TransparentWebMarkupContainer("container").add(AttributeAppender.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
+		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
 	}
 
 	public static String getString(String id, Locale locale, String... params) {

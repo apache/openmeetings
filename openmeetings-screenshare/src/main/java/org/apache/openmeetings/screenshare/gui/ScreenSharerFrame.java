@@ -50,6 +50,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -76,7 +77,7 @@ public class ScreenSharerFrame extends JFrame {
 	private HorizontalSlider leftSlider = new HorizontalSlider();
 	private HorizontalSlider rightSlider = new HorizontalSlider();
 	private BlankArea virtualScreen = new BlankArea(new Color(255, 255, 255, 100));
-	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	private JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 	private boolean doUpdateBounds = true;
 	private boolean showWarning = true;
 	private JButton btnStartStopSharing;
@@ -232,7 +233,7 @@ public class ScreenSharerFrame extends JFrame {
 		setTitle(getTextLabel(textLabels, 0)); //#id 730
 		setBackground(Color.WHITE);
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

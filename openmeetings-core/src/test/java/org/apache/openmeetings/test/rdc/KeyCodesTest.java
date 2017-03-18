@@ -18,8 +18,13 @@
  */
 package org.apache.openmeetings.test.rdc;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 class WindowClosingAdapter extends WindowAdapter {
 	@Override
@@ -35,6 +40,7 @@ public class KeyCodesTest extends Frame implements KeyListener {
 	String msg1 = "";
 	String msg2 = "";
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		new KeyCodesTest();
 	}
@@ -76,17 +82,17 @@ public class KeyCodesTest extends Frame implements KeyListener {
 	public void keyPressed(KeyEvent event) {
 		msg1 = "";
 		System.out.println("keyPressed CODE1 "+event.getKeyCode());
-		
+
 		int myCode = event.getKeyCode();
-		
+
 		System.out.println("keyPressed CODE2 "+myCode);
-		
+
 		System.out.println("keyPressed CHAR3 "+event.getKeyChar());
-		
+
 		System.out.println("keyPressed CHAR4 "+KeyEvent.getKeyText(event.getKeyCode()));
-		
+
 		System.out.println("keyPressed CHAR5 "+KeyEvent.getKeyText(myCode));
-		
+
 		System.out.println("keyPressed isActionKey "+event.isActionKey());
 		System.out.println("keyPressed isAltDown "+event.isAltDown());
 		System.out.println("keyPressed isAltGraphDown "+event.isAltGraphDown());
@@ -96,7 +102,7 @@ public class KeyCodesTest extends Frame implements KeyListener {
 		System.out.println("keyPressed isShiftDown "+event.isShiftDown());
 
 		System.out.println("keyPressed paramString "+event.paramString());
-		
+
 		if (event.getKeyChar() == KeyEvent.CHAR_UNDEFINED) {
 			int key = event.getKeyCode();
 			// Funktionstaste abfragen
@@ -132,19 +138,19 @@ public class KeyCodesTest extends Frame implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent event) {
 		char key = event.getKeyChar();
-		
+
 //		System.out.println("keyTyped CODE1 "+event.getKeyCode());
-//		
+//
 //		Integer myCode = event.getKeyCode();
-//		
+//
 //		System.out.println("keyTyped CODE2 "+myCode);
-//		
+//
 //		System.out.println("keyTyped CHAR3 "+event.getKeyChar());
-//		
+//
 //		System.out.println("keyTyped CHAR4 "+event.getKeyText(event.getKeyCode()));
-//		
+//
 //		System.out.println("keyTyped CHAR5 "+event.getKeyText(myCode));
-		
+
 		if (key == KeyEvent.VK_BACK_SPACE) {
 			if (msg2.length() > 0) {
 				msg2 = msg2.substring(0, msg2.length() - 1);
