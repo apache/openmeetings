@@ -16,6 +16,69 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+/**
+ * Fast UUID generator, RFC4122 version 4 compliant.
+ * @author Jeff Ward (jcward.com).
+ * @license MIT license
+ * @link http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
+ **/
+var UUID = (function() {
+	var self = {};
+	var lut = [];
+	for (var i = 0; i < 256; i++) {
+		lut[i] = (i < 16 ? '0' : '') + (i).toString(16);
+	}
+	self.generate = function() {
+		var d0 = Math.random() * 0xffffffff | 0;
+		var d1 = Math.random() * 0xffffffff | 0;
+		var d2 = Math.random() * 0xffffffff | 0;
+		var d3 = Math.random() * 0xffffffff | 0;
+		return lut[d0 & 0xff] + lut[d0 >> 8 & 0xff] + lut[d0 >> 16 & 0xff] + lut[d0 >> 24 & 0xff] + '-' +
+			lut[d1 & 0xff] + lut[d1 >> 8 & 0xff] + '-' + lut[d1 >> 16 & 0x0f | 0x40] + lut[d1 >> 24 & 0xff] + '-' +
+			lut[d2 & 0x3f | 0x80] + lut[d2 >> 8 & 0xff] + '-' + lut[d2 >> 16 & 0xff] + lut[d2 >> 24 & 0xff] +
+			lut[d3 & 0xff] + lut[d3 >> 8 & 0xff] + lut[d3 >> 16 & 0xff] + lut[d3 >> 24 & 0xff];
+	}
+	return self;
+})();
+// Based on https://groups.google.com/d/msg/fabricjs/TSwLHzLsP_w/-sE8WBDq6QIJ
+fabric.LineArrow = fabric.util.createClass(fabric.Line, {
+	type: 'lineArrow'
+	, initialize: function(element, options) {
+		options || (options = {});
+		this.callSuper('initialize', element, options);
+	}
+	, toObject: function() {
+		return fabric.util.object.extend(this.callSuper('toObject'));
+	}
+	, _render: function(ctx) {
+		this.callSuper('_render', ctx);
+
+		// do not render if width/height are zeros or object is not visible
+		if (this.width === 0 || this.height === 0 || !this.visible) return;
+
+		ctx.save();
+		var xDiff = this.x2 - this.x1;
+		var yDiff = this.y2 - this.y1;
+		var angle = Math.atan2(yDiff, xDiff);
+		ctx.translate((this.x2 - this.x1) / 2, (this.y2 - this.y1) / 2);
+		ctx.rotate(angle);
+		ctx.beginPath();
+		// move 10px in front of line to start the arrow so it does not have the
+		// square line end showing in front (0,0)
+		ctx.moveTo(10, 0);
+		ctx.lineTo(-20, 15);
+		ctx.lineTo(-20, -15);
+		ctx.closePath();
+		this._renderFill(ctx);
+		this._renderStroke(ctx);
+		ctx.restore();
+	}
+});
+fabric.LineArrow.fromObject = function (object, callback) {
+	callback && callback(new fabric.LineArrow([object.x1, object.y1, object.x2, object.y2],object));
+};
+fabric.LineArrow.async = true;
+
 var Pointer = function(canvas, s) {
 	return {
 		activate: function() {
@@ -37,11 +100,33 @@ var Pointer = function(canvas, s) {
 	};
 }
 var Base = function() {
-	return {
+	var base = {
 		fill: {enabled: true, color: '#FFFF33'}
 		, stroke: {enabled: true, color: '#FF6600', width: 5}
 		, opacity: 1
 	};
+	base.enableLineProps = function(s) {
+		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = s.find('.wb-prop-opacity');
+		s.find('.wb-prop-fill').prop('disabled', true);
+		s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
+		c.val(base.stroke.color).prop('disabled', false);
+		w.val(base.stroke.width).prop('disabled', false);
+		o.val(100 * base.opacity).prop('disabled', false);
+		return {c: c, w: w, o: o};
+	};
+	base.enableAllProps = function(s) {
+		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width')
+			, o = s.find('.wb-prop-opacity'), f = s.find('.wb-prop-fill')
+			, lc = s.find('.wb-prop-lock-color'), lf = s.find('.wb-prop-lock-fill');
+		s.find('.wb-prop-b, .wb-prop-i').button("disable");
+		lc.button("enable").button('option', 'icon', base.stroke.enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
+		lf.button("enable").button('option', 'icon', base.fill.enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
+		c.val(base.stroke.color).prop('disabled', !base.stroke.enabled);
+		w.val(base.stroke.width).prop('disabled', false);
+		o.val(100 * base.opacity).prop('disabled', false);
+		f.val(base.fill.color).prop('disabled', !base.fill.enabled);
+	};
+	return base;
 }
 var Text = function(canvas, s) {
 	var text = Base();
@@ -58,6 +143,8 @@ var Text = function(canvas, s) {
 				, top: pointer.y
 				, padding: 7
 				, stroke: text.stroke.color
+				, fill: text.fill.color
+				, opacity: text.opacity
 			});
 			canvas.add(text.obj).setActiveObject(text.obj);
 		}
@@ -71,6 +158,7 @@ var Text = function(canvas, s) {
 				o.selectable = true;
 			}
 		});
+		text.enableAllProps(s);
 	};
 	text.deactivate = function() {
 		canvas.off('mouse:down', text.mouseDown);
@@ -91,12 +179,7 @@ var Paint = function(canvas, s) {
 		canvas.freeDrawingBrush.color = paint.stroke.color;
 		canvas.freeDrawingBrush.opacity = paint.opacity; //TODO not working
 
-		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = s.find('.wb-prop-opacity');
-		s.find('.wb-prop-fill').prop('disabled', true);
-		s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
-		c.val(paint.stroke.color).prop('disabled', false);
-		w.val(paint.stroke.width).prop('disabled', false);
-		o.val(100 * paint.opacity).prop('disabled', true); //TODO not working
+		paint.enableLineProps(s).o.prop('disabled', true); //TODO not working
 	};
 	paint.deactivate = function() {
 		canvas.isDrawingMode = false;
@@ -109,11 +192,15 @@ var Shape = function(canvas) {
 	shape.isDown = false;
 	shape.orig = {x: 0, y: 0};
 
+	shape.add2Canvas = function() {
+		canvas.add(shape.obj);
+	}
 	shape.mouseDown = function(o) {
 		shape.isDown = true;
 		var pointer = canvas.getPointer(o.e);
 		shape.orig = {x: pointer.x, y: pointer.y};
-		canvas.add(shape.createShape());
+		shape.createShape();
+		shape.add2Canvas();
 	};
 	shape.mouseMove = function(o) {
 		if (!shape.isDown) return;
@@ -152,17 +239,18 @@ var Line = function(canvas, s) {
 		return line.obj;
 	};
 	line.internalActivate = function() {
-		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = s.find('.wb-prop-opacity');
-		s.find('.wb-prop-fill').prop('disabled', true);
-		s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
-		c.val(line.stroke.color).prop('disabled', false);
-		w.val(line.stroke.width).prop('disabled', false);
-		o.val(100 * line.opacity).prop('disabled', false);
+		line.enableLineProps(s);
 	};
 	line.updateShape = function(pointer) {
 		line.obj.set({ x2: pointer.x, y2: pointer.y });
 	};
 	return line;
+}
+var ULine = function(canvas, s) {
+	var uline = Line(canvas, s);
+	uline.stroke.width = 20;
+	uline.opacity = .5;
+	return uline;
 }
 var Rect = function(canvas, s) {
 	var rect = Shape(canvas);
@@ -179,16 +267,7 @@ var Rect = function(canvas, s) {
 		return rect.obj;
 	};
 	rect.internalActivate = function() {
-		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width')
-			, o = s.find('.wb-prop-opacity'), f = s.find('.wb-prop-fill')
-			, lc = s.find('.wb-prop-lock-color'), lf = s.find('.wb-prop-lock-fill');
-		s.find('.wb-prop-b, .wb-prop-i').button("disable");
-		lc.button("enable").button('option', 'icon', rect.stroke.enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
-		lf.button("enable").button('option', 'icon', rect.fill.enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
-		c.val(rect.stroke.color).prop('disabled', !rect.stroke.enabled);
-		w.val(rect.stroke.width).prop('disabled', false);
-		o.val(100 * rect.opacity).prop('disabled', false);
-		f.val(rect.fill.color).prop('disabled', !rect.fill.enabled);
+		rect.enableAllProps(s);
 	};
 	rect.updateShape = function(pointer) {
 		if (rect.orig.x > pointer.x) {
@@ -204,15 +283,86 @@ var Rect = function(canvas, s) {
 	};
 	return rect;
 }
+var Ellipse = function(canvas, s) {
+	var ellipse = Rect(canvas, s);
+	ellipse.createShape = function() {
+		ellipse.obj = new fabric.Ellipse({
+			strokeWidth: ellipse.stroke.width
+			, fill: ellipse.fill.enabled ? ellipse.fill.color : 'rgba(0,0,0,0)'
+			, stroke: ellipse.stroke.enabled ? ellipse.stroke.color : 'rgba(0,0,0,0)'
+			, left: ellipse.orig.x
+			, top: ellipse.orig.y
+			, rx: 0
+			, ry: 0
+			, originX: 'center'
+			, originY: 'center'
+		});
+		return ellipse.obj;
+	};
+	ellipse.updateShape = function(pointer) {
+		ellipse.obj.set({
+			rx: Math.abs(ellipse.orig.x - pointer.x)
+			, ry: Math.abs(ellipse.orig.y - pointer.y)
+		});
+	};
+	return ellipse;
+}
+var Arrow = function(canvas, s) {
+	var arrow = Line(canvas, s);
+	arrow.createShape = function() {
+		arrow.obj = new fabric.LineArrow([arrow.orig.x, arrow.orig.y, arrow.orig.x, arrow.orig.y], {
+			strokeWidth: arrow.stroke.width
+			, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
+			, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
+			, opacity: arrow.opacity
+		});
+		return arrow.obj;
+	};
+	arrow.internalActivate = function() {
+		arrow.enableAllProps(s);
+	};
+	return arrow;
+}
+var Clipart = function(canvas, btn) {
+	var art = Shape(canvas);
+	art.add2Canvas = function() {}
+	art.createShape = function() {
+		fabric.Image.fromURL(btn.data('image'), function(img) {
+			art.orig.width = img.width;
+			art.orig.height = img.height;
+			art.obj = img.set({
+				left: art.orig.x
+				, top: art.orig.y
+				, width: 0
+				, height: 0
+			});
+			canvas.add(art.obj);
+		});
+	}
+	art.updateShape = function(pointer) {
+		if (!art.obj) {
+			return; // not ready
+		}
+		//TODO height == width
+		var dx = pointer.x - art.orig.x, dy = pointer.y - art.orig.y;
+		var d = Math.sqrt(dx * dx + dy * dy);
+		art.obj.set({
+			width: d
+			, height: art.orig.height * d / art.orig.width
+			, angle: Math.atan2(dy, dx) * 180 / Math.PI
+		});
+	}
+	return art;
+}
 var Wb = function() {
 	const ACTIVE = 'active';
 	var a, t, s, canvas, mode;
 
-	function getBtn() {
-		return t.find(".om-icon." + mode);
+	function getBtn(m) {
+		return t.find(".om-icon." + (m || mode));
 	}
 	function initToolBtn(m, def, obj) {
-		var btn = t.find(".om-icon." + m);
+		var btn = getBtn(m);
 		btn.data({
 			obj: obj
 			, activate: function() {
@@ -237,6 +387,22 @@ var Wb = function() {
 			btn.data('activate')();
 		}
 	}
+	function initCliparts() {
+		var c = $('#wb-area-clip').clone().attr('id', '');
+		getBtn('arrow').after(c);
+		c.find('a').prepend(c.find('div.om-icon.big:first'));
+		c.find('.om-icon.clipart').each(function(idx) {
+			var cur = $(this);
+			cur.css('background-image', 'url(' + cur.data('image') + ')')
+				.click(function() {
+					var old = c.find('a .om-icon.clipart');
+					c.find('ul li').prepend(old);
+					c.find('a').prepend(cur);
+				});
+			initToolBtn(cur.data('mode'), false, Clipart(canvas, cur));
+		});
+		c.show();
+	}
 	function internalInit(t) {
 		t.show().draggable({
 			snap: "parent"
@@ -256,7 +422,11 @@ var Wb = function() {
 		initToolBtn('text', false, Text(canvas, s));
 		initToolBtn('paint', false, Paint(canvas, s));
 		initToolBtn('line', false, Line(canvas, s));
+		initToolBtn('uline', false, ULine(canvas, s));
 		initToolBtn('rect', false, Rect(canvas, s));
+		initToolBtn('ellipse', false, Ellipse(canvas, s));
+		initToolBtn('arrow', false, Arrow(canvas, s));
+		initCliparts();
 		t.find(".om-icon.settings").click(function() {
 			s.show();
 		});

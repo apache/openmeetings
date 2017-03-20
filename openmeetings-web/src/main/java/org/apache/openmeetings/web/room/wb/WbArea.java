@@ -19,15 +19,11 @@
 package org.apache.openmeetings.web.room.wb;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 
 public class WbArea extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbArea.class, "fabric.js");
 
 	public WbArea(String id) {
 		super(id);
@@ -37,7 +33,6 @@ public class WbArea extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
 		response.render(OnDomReadyHeaderItem.forScript(String.format("initArea('%s');", getMarkupId())));
 	}
 }

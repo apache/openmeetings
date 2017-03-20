@@ -16,15 +16,25 @@
    limitations under the License.
 -->
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<ul>
+	<ul class="wb-tabbar">
+		<div class="add om-icon big"></div>
 		<li wicket:id="tabs">
 			<wicket:container wicket:id="tab"></wicket:container>
 		</li>
 	</ul>
 	<div wicket:id="panels">[panel]</div>
-	
+
 	<wicket:fragment wicket:id="tab-fragment">
 		<a wicket:id="link">[title]</a><span wicket:id="close" class='ui-icon ui-icon-close' 
 				wicket:message="title:85" role='presentation'><wicket:message key="85"/></span>
 	</wicket:fragment>
+	<div id="wb-area-clip" class="btn-group" style="display:none; float: left;">
+		<a class="dropdown-toggle" data-toggle="dropdown" wicket:message="title:1323"></a>
+		<ul class="dropdown-menu om-left">
+			<li>
+				<div wicket:id="clipart" class="ui-widget-header clickable om-icon big clipart" 
+					data-image="./public/cliparts/"></div>
+			</li>
+		</ul>
+	</div>
 </wicket:panel>

@@ -21,26 +21,55 @@ package org.apache.openmeetings.web.room.wb;
 import static org.apache.wicket.AttributeModifier.append;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableLabel;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 
 public class WbTabbedPanel extends TabbedPanel {
 	private static final long serialVersionUID = 1L;
+	private final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbTabbedPanel.class, "wb.js");
+	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbTabbedPanel.class, "fabric.js");
 	private final WbPanel wb;
 
 	public WbTabbedPanel(String id, WbPanel wb) {
 		super(id, new ArrayList<>());
 		setOutputMarkupId(true);
 		this.wb = wb;
+
+		add(new ListView<String>("clipart", Arrays.asList(OmFileHelper.getPublicClipartsDir().list())) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<String> item) {
+				String cls = String.format("clipart-%s", item.getIndex());
+				item.add(append("class", cls), append("data-mode", cls)
+						, new AttributeAppender("data-image", item.getModelObject()).setSeparator(""));
+			}
+		});
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
+		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
 	}
 
 	@Override

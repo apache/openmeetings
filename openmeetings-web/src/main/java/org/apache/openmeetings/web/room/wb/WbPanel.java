@@ -24,12 +24,7 @@ import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 
 public class WbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -46,16 +41,6 @@ public class WbPanel extends Panel {
 		add(tabs = new WbTabbedPanel("tabs", this));
 		tabs.setOutputMarkupId(true);// FIXME TODO add Sortable for tabs add(new Sortable<T>)
 		tabs.addWb("Whiteboard 1");
-	}
-
-	private static ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(WbPanel.class, "wb.js");
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
 	}
 
 	public boolean isReadOnly() {

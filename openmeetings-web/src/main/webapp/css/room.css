@@ -159,11 +159,20 @@
 .room.wb.area .tools .om-icon.big.line {
 	background-image: url(images/line.png);
 }
+.room.wb.area .tools .om-icon.big.uline {
+	background-image: url(images/uline.png);
+}
 .room.wb.area .tools .om-icon.big.rect {
 	background-image: url(images/rectangle.png);
 }
+.room.wb.area .tools .om-icon.big.ellipse {
+	background-image: url(images/ellipse.png);
+}
 .room.wb.area .tools .om-icon.big.text {
 	background-image: url(images/font.png);
+}
+.room.wb.area .tools .om-icon.big.arrow {
+	background-image: url(images/arrow.png);
 }
 .room.sidebar.left .ui-tabs .ui-tabs-panel {
 	padding: 0;
@@ -414,4 +423,14 @@
 }
 .wb-settings .tab.props .wb-prop-b.selected {
 	font-weight: bold;
+}
+.dropdown-menu.om-left {
+	right: 0;
+	left: auto !important;
+}
+.wb-tabbar {
+	padding-left: 45px;
+}
+.wb-tabbar .add {
+	position: absolute; left: 2px;
 }
