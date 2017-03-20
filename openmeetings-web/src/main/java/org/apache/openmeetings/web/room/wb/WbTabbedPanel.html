@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<wicket:panel xmlns:wicket="http://wicket.apache.org">
+	<ul>
+		<li wicket:id="tabs">
+			<wicket:container wicket:id="tab"></wicket:container>
+		</li>
+	</ul>
+	<div wicket:id="panels">[panel]</div>
+	
+	<wicket:fragment wicket:id="tab-fragment">
+		<a wicket:id="link">[title]</a><span wicket:id="close" class='ui-icon ui-icon-close' 
+				wicket:message="title:85" role='presentation'><wicket:message key="85"/></span>
+	</wicket:fragment>
+</wicket:panel>

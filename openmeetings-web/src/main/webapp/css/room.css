@@ -110,6 +110,61 @@
 	height: inherit;
 	background-position: center;
 }
+.room.wb.area .tabs.ui-tabs, .room.wb.area .ui-tabs-panel {
+	padding: 0;
+	background-color:transparent;
+}
+.room.wb.area .ui-tabs-panel {
+	position: relative;
+}
+.room.wb.area .tools {
+	position: relative;
+	display: inline-block;
+	border: 0;
+}
+.room.wb.area .tools .bumper {
+	float: left;
+	display: inline-block;
+	background: repeating-linear-gradient(-45deg, transparent, transparent 3px, gray 3px, gray 5px);
+}
+.room.wb.area .tools.vertical .bumper {
+	width: 38px;
+	height: 20px;
+}
+.room.wb.area .tools.horisontal .bumper {
+	width: 20px;
+	height: 38px;
+}
+.room.wb.area .tools.vertical {
+	width: 38px;
+	height: 400px;
+}
+.room.wb.area .tools.horisontal {
+	width: 400px;
+	height: 38px;
+}
+.room.wb.area .tools .om-icon.big {
+	float: left;
+	vertical-align: top;
+}
+.room.wb.area .tools .om-icon.big.active {
+	background-color: whitesmoke;
+}
+.room.wb.area .tools .om-icon.big.paint {
+	background-image: url(images/paintbrush.png);
+}
+.room.wb.area .tools .om-icon.big.pointer {
+	background-image: url(images/menupointer.png);
+}
+.room.wb.area .tools .om-icon.big.line {
+	background-image: url(images/line.png);
+}
+.room.wb.area .tools .om-icon.big.rect {
+	background-image: url(images/rectangle.png);
+}
+.room.wb.area .tools .om-icon.big.text {
+	background-image: url(images/font.png);
+}
 .room.sidebar.left .ui-tabs .ui-tabs-panel {
 	padding: 0;
 }
@@ -228,7 +283,7 @@
 .restart.ui-icon {
 	background-image: url(images/arrow_refresh_small.png);
 }
-.settings.ui-icon {
+.settings.ui-icon, .settings.om-icon {
 	background-image: url(images/settings.png);
 }
 .activity.cam.ui-icon {
@@ -295,4 +350,68 @@
 }
 .room.sidebar.left .tab.om-icon.big.file {
 	background-image: url(images/folder_explore.png);
+}
+/**************************/
+.wb-settings {
+	position: absolute;
+}
+.wb-settings, .wb-settings .tab.props {
+	display: inline-block;
+	width: 310px;
+}
+.wb-settings .ui-dialog-titlebar-close {
+	position: absolute;
+	right: .3em;
+	top: 5px;
+	width: 20px;
+	padding: 1px;
+	height: 20px;
+}
+.wb-settings .header {
+	padding: 5px;
+}
+.wb-settings .header .ui-dialog-title {
+	padding-left: 10px;
+}
+.wb-settings .tab.props {
+	padding: 5px 10px;
+}
+.wb-settings .tab.props .prop-row {
+	padding-top: 5px;
+	margin: 0;
+	font-size: small;
+}
+.wb-settings .tab.props .block {
+	display: inline;
+	padding-left: 5px;
+}
+.wb-settings .tab.props .block.lbl {
+	width: 1em;
+}
+.wb-settings .tab.props .block.but {
+	width: 2.5em;
+}
+.wb-settings .tab.props .block.input {
+	width: 40px;
+}
+.wb-settings .tab.props .block.input input {
+	width: 30px;
+}
+.wb-settings .tab.props .block.input input[type=number] {
+	width: 40px;
+}
+.wb-settings .tab.props .block.input input[type=color] {
+	padding: 0;
+}
+.wb-settings .tab.props .block.input input[type=color]:disabled {
+	opacity:.3;
+}
+.wb-settings .tab.props .block.but button {
+	width: 2.5em;
+}
+.wb-settings .tab.props  .wb-prop-i.selected {
+	font-style: italic;
+}
+.wb-settings .tab.props .wb-prop-b.selected {
+	font-weight: bold;
 }

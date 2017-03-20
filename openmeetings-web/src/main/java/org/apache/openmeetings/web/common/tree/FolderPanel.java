@@ -114,11 +114,6 @@ public class FolderPanel extends Panel {
 					getBean(FileExplorerItemDao.class).update((FileExplorerItem)fi);
 				}
 			}
-
-			@Override
-			public void onEdit(AjaxRequestTarget target) {
-				super.onEdit(target);
-			}
 		};
 		drag.add(name.add(AttributeModifier.append("title", r.getName())));
 		add(drop.add(drag).setOutputMarkupId(true));

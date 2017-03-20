@@ -58,16 +58,27 @@ function initVideo(_options) {
 
 function setRoomSizes() {
 	var w = $(window).width() - $(".room.sidebar.left").width() - 5;
-	$(".room.wb.area").width(w);
-	$(".room.wb.area .wb").width(w);
+	var area = $(".room.wb.area");
+	area.width(w);
+	var wb = area.find(".wb");
+	wb.width(w);
 
 	var h = $(window).height() - $('#menu').height();
 	$(".room.sidebar.left").height(h);
 	var p = $(".room.sidebar.left .tabs");
-	p.height(h - 5);
-	$(".user.list", p).height(h - $("ul", p).height() - $(".user.header", p).height() - 10);
-	$(".room.wb.area").height(h);
-	$(".room.wb.area .wb").height(h);
+	var hh = h - 5;
+	p.height(hh);
+	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
+	area.height(h);
+	wb.height(hh);
+	var wbTabs = wb.find(".tabs.ui-tabs");
+	wbTabs.height(hh);
+	var tabPanels = wbTabs.find(".ui-tabs-panel");
+	var wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
+	tabPanels.height(wbah);
+	if (tabPanels.data('fabric')) {
+		tabPanels.data('resize')(w, wbah);
+	}
 }
 function roomReload(event, ui) {
 	window.location.reload();

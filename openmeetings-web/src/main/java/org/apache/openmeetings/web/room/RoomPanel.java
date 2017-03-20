@@ -65,6 +65,7 @@ import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
+import org.apache.openmeetings.web.room.wb.WbPanel;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -84,7 +85,6 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.wicketstuff.whiteboard.WhiteboardBehavior;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -152,6 +152,7 @@ public class RoomPanel extends BasePanel {
 					waitApplyModeration.open(target);
 				}
 			}
+			wb.update(target);
 		}
 	};
 	private RedirectMessageDialog roomClosed;
@@ -160,6 +161,7 @@ public class RoomPanel extends BasePanel {
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
+	private final WbPanel wb;
 	private String sharingUser = null;
 	private String recordingUser = null;
 	private String publishingUser = null; //TODO add
@@ -168,6 +170,7 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
+		this.wb = new WbPanel("whiteboard", this);
 		//TODO check here and set
 		//private String recordingUser = null;
 		//private String sharingUser = null;
@@ -209,9 +212,7 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 		};
-		WebMarkupContainer wb = new WebMarkupContainer("whiteboard");
-		room.add(wbArea.add(wb.setOutputMarkupId(true)));
-		room.add(new WhiteboardBehavior("1", wb.getMarkupId(), null, null, null));
+		room.add(wbArea.add(wb));
 		room.add(roomEnter);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
 		room.add(activities = new ActivitiesPanel("activities", this));
@@ -379,18 +380,19 @@ public class RoomPanel extends BasePanel {
 						}
 						break;
 					case rightUpdated:
-						sidebar.updateUsers(handler);
+						sidebar.update(handler);
 						menu.update(handler);
+						wb.update(handler);
 						break;
 					case roomEnter:
-						sidebar.updateUsers(handler);
+						sidebar.update(handler);
 						menu.update(handler);
 						// TODO should this be fixed?
 						//activities.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
 						break;
 					case roomExit:
 						//TODO check user/remove tab
-						sidebar.updateUsers(handler);
+						sidebar.update(handler);
 						activities.add(new Activity(m, Activity.Type.roomExit), handler);
 						break;
 					case roomClosed:

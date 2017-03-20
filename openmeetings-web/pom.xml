@@ -432,17 +432,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-whiteboard</artifactId>
-			<version>${wickets.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.wicket</groupId>
-					<artifactId>wicket-native-websocket-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-select2</artifactId>
 			<version>${wickets.version}</version>
 		</dependency>
