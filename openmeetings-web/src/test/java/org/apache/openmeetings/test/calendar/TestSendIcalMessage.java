@@ -182,7 +182,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(start.getTime(), end.getTime(), "test event",
 					atts, "localhost:5080/link_openmeetings",
-					organizerAttendee, "", TimeZone.getDefault().getID());
+					organizerAttendee, "", java.util.TimeZone.getDefault().getID());
 
 			log.debug("meetingId " + meetingId);
 

@@ -35,7 +35,6 @@ import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -125,11 +124,11 @@ public class UserSearchPanel extends UserPanel {
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(AttributeAppender.append("onclick", String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("onclick", String.format("showUserInfo(%s);", userId))));
 				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId()))
-						.add(AttributeAppender.append("onclick", String.format("addContact(%s);", userId))));
-				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))));
-				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeAppender.append("onclick", String.format("inviteUser(%s);", userId))));
+						.add(AttributeModifier.append("onclick", String.format("addContact(%s);", userId))));
+				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeModifier.append("onclick", String.format("privateMessage(%s);", userId))));
+				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeModifier.append("onclick", String.format("inviteUser(%s);", userId))));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME
 			}
 		};

@@ -40,6 +40,7 @@ import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -216,7 +217,7 @@ public class ActivitiesPanel extends BasePanel {
 			}
 			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
 			item.add(accept, decline, new Label("text", text));
-			item.add(AttributeAppender.append("class", getClass(a)));
+			item.add(AttributeModifier.append("class", getClass(a)));
 		}
 
 		private String getClass(Activity a) {

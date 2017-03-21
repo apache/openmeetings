@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>3.2.1-SNAPSHOT</version>
+		<version>3.2.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-server</artifactId>
@@ -310,6 +310,27 @@
 										<versionRange>[3.3,)</versionRange>
 										<goals>
 											<goal>site</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.internetitem
+										</groupId>
+										<artifactId>
+											write-properties-file-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0.1,)
+										</versionRange>
+										<goals>
+											<goal>
+												write-properties-file
+											</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

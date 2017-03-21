@@ -40,8 +40,7 @@ public class SimulateLoad extends Thread {
 	public static void main(String... args) {
 		try {
 			if (args.length != 4) {
-				new RuntimeException(
-						"4 args needed, host, port, context, instanceId");
+				throw new RuntimeException("4 args needed, host, port, context, instanceId");
 			}
 			for (String arg : args) {
 				System.err.println("arg: " + arg);

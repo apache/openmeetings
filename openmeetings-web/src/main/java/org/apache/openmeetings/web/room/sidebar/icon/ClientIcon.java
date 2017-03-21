@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 
@@ -71,13 +71,13 @@ public abstract class ClientIcon extends WebMarkupContainer {
 		if (isClickable()) {
 			//request/remove
 			cls.append(CLS_CLICKABLE);
-			add(AttributeAppender.replace("onclick", getScript()));
+			add(AttributeModifier.replace("onclick", getScript()));
 		} else {
-			add(AttributeAppender.replace("onclick", ""));
+			add(AttributeModifier.replace("onclick", ""));
 		}
 		internalUpdate();
-		add(AttributeAppender.replace("title", getTitle()));
-		add(AttributeAppender.replace("class", cls.append(cssClass)));
+		add(AttributeModifier.replace("title", getTitle()));
+		add(AttributeModifier.replace("class", cls.append(cssClass)));
 		if (handler != null) {
 			handler.add(this);
 		}

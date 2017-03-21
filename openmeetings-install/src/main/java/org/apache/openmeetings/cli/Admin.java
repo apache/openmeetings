@@ -34,9 +34,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -411,12 +408,7 @@ public class Admin {
 			System.exit(1);
 		}
 
-		try {
-			if (cfg.email == null || !MailUtil.matches(cfg.email)) {
-				throw new AddressException("Invalid address");
-			}
-			new InternetAddress(cfg.email, true);
-		} catch (AddressException ae) {
+		if (!MailUtil.isValid(cfg.email)) {
 			System.out.println("Please provide non-empty valid email: '" + cfg.email + "' is not valid.");
 			System.exit(1);
 		}

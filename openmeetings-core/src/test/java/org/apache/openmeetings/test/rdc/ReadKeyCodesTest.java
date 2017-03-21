@@ -18,14 +18,18 @@
  */
 package org.apache.openmeetings.test.rdc;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class ReadKeyCodesTest extends Frame implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	String msg1 = "";
 	String msg2 = "";
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		new ReadKeyCodesTest();
 	}
@@ -102,9 +106,9 @@ public class ReadKeyCodesTest extends Frame implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent event) {
 		char key = event.getKeyChar();
-		
+
 		System.out.println("keyTyped "+event.getKeyCode());
-		
+
 		if (key == KeyEvent.VK_BACK_SPACE) {
 			if (msg2.length() > 0) {
 				msg2 = msg2.substring(0, msg2.length() - 1);

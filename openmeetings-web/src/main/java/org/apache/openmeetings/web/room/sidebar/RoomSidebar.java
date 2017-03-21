@@ -365,7 +365,7 @@ public class RoomSidebar extends Panel {
 		roomFiles.setReadOnly(!showFiles, handler);
 	}
 
-	public void updateUsers(IPartialPageRequestHandler handler) {
+	public void update(IPartialPageRequestHandler handler) {
 		updateShowFiles(handler);
 		updateUsers();
 		selfRights.setVisible(room.getRoom().isAllowUserQuestions() || room.getClient().hasRight(Right.moderator));

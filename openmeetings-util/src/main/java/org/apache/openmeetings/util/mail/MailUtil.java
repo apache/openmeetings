@@ -18,15 +18,17 @@
  */
 package org.apache.openmeetings.util.mail;
 
-import java.util.regex.Pattern;
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.validation.Validatable;
 
 public class MailUtil {
-	
-	private static final Pattern rfc2822 = Pattern.compile(
-	        "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
-	);
-	
-	public static boolean matches(String email) {
-		return rfc2822.matcher(email).matches();
+	public static boolean isValid(String email) {
+		if (Strings.isEmpty(email)) {
+			return false;
+		}
+		Validatable<String> eml = new Validatable<>(email);
+		RfcCompliantEmailAddressValidator.getInstance().validate(eml);
+		return eml.isValid();
 	}
 }

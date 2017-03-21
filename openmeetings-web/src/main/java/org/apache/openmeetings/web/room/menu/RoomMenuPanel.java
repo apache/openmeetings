@@ -51,6 +51,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.poll.CreatePollDialog;
 import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -224,7 +225,7 @@ public class RoomMenuPanel extends Panel {
 
 				@Override
 				protected void onTimer(int remain) {
-					getComponent().add(AttributeAppender.replace("title", getText("639", remain)));
+					getComponent().add(AttributeModifier.replace("title", getText("639", remain)));
 				}
 
 				@Override
@@ -311,7 +312,7 @@ public class RoomMenuPanel extends Panel {
 				roomClass.append(" screen");
 			}
 		}
-		handler.add(roomName.add(AttributeAppender.replace("class", roomClass), AttributeAppender.replace("title", roomTitle)));
+		handler.add(roomName.add(AttributeModifier.replace("class", roomClass), AttributeModifier.replace("title", roomTitle)));
 		handler.add(askBtn.setVisible(!moder && r.isAllowUserQuestions()));
 		handler.add(shareBtn.setVisible(shareVisible));
 	}

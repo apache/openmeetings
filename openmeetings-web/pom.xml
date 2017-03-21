@@ -22,7 +22,7 @@
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
 		<artifactId>openmeetings-parent</artifactId>
-		<version>3.2.1-SNAPSHOT</version>
+		<version>3.2.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-web</artifactId>
@@ -372,10 +372,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
 			<version>${wicket.version}</version>
 		</dependency>
@@ -433,17 +429,6 @@
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-urlfragment</artifactId>
 			<version>${wickets.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.wicketstuff</groupId>
-			<artifactId>wicketstuff-whiteboard</artifactId>
-			<version>${wickets.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.wicket</groupId>
-					<artifactId>wicket-native-websocket-tomcat</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>

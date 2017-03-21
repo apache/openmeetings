@@ -27,7 +27,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.KickIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
-import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -42,8 +42,8 @@ public class RoomClientPanel extends Panel {
 		setRenderBodyOnly(true);
 		Client c = item.getModelObject();
 		item.setMarkupId(String.format("user%s", c.getUid()));
-		item.add(AttributeAppender.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
-		item.add(AttributeAppender.append("data-userid", c.getUserId()));
+		item.add(AttributeModifier.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
+		item.add(AttributeModifier.append("data-userid", c.getUserId()));
 		add(new RefreshIcon("refresh", c, room));
 		add(new Label("name", getName(c)));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
@@ -52,7 +52,7 @@ public class RoomClientPanel extends Panel {
 		actions.setVisible(room.getClient().hasRight(Right.moderator));
 		if (c.getUid().equals(room.getClient().getUid())) {
 			actions.add(new SelfIconsPanel("icons", c, room, false));
-			item.add(AttributeAppender.append("class", "current"));
+			item.add(AttributeModifier.append("class", "current"));
 		} else {
 			actions.add(new ClientIconsPanel("icons", c, room));
 		}
@@ -97,6 +97,6 @@ public class RoomClientPanel extends Panel {
 		}
 		//FIXME TODO add 'typingActivity'
 		//FIXME TODO add ability to change 'first/last name'
-		add(new WebMarkupContainer("status").add(AttributeAppender.append("class", status), AttributeAppender.replace("title", getString(statusTitle))));
+		add(new WebMarkupContainer("status").add(AttributeModifier.append("class", status), AttributeModifier.replace("title", getString(statusTitle))));
 	}
 }

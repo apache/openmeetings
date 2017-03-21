@@ -84,6 +84,7 @@ import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.Session;
 import org.apache.wicket.ThreadContext;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -91,7 +92,6 @@ import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
@@ -138,6 +138,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
+		//FIXME TODO v3 on the way
 		getJavaScriptLibrarySettings().setJQueryReference(new JavaScriptResourceReference(DynamicJQueryResourceReference.class, DynamicJQueryResourceReference.VERSION_2));
 
 		super.init();
@@ -216,7 +217,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Application get() {
-		return (Application) WebApplication.get(wicketApplicationName);
+		return (Application)org.apache.wicket.Application.get(wicketApplicationName);
 	}
 
 	public static DashboardContext getDashboardContext() {
@@ -492,7 +493,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static Locale getLocale(final long languageId) {
 		Locale loc = LabelDao.languages.get(languageId);
 		if (loc == null) {
-			loc = WebSession.exists() ? WebSession.get().getLocale() : Locale.ENGLISH;
+			loc = Session.exists() ? WebSession.get().getLocale() : Locale.ENGLISH;
 		}
 		return loc;
 	}
@@ -511,7 +512,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static String getString(String key, final Locale loc, String... params) {
 		if (!exists()) {
-			ThreadContext.setApplication(Application.get(appName));
+			ThreadContext.setApplication(org.apache.wicket.Application.get(appName));
 		}
 		if ((params == null || params.length == 0) && STRINGS_WITH_APP.contains(key)) {
 			params = new String[]{getBean(ConfigurationDao.class).getAppName()};

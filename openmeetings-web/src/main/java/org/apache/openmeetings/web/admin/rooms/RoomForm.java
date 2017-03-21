@@ -47,11 +47,11 @@ import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -289,7 +289,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				RoomModerator moderator = item.getModelObject();
 				Label name = new Label("uName", moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname());
 				if (moderator.getId() == null) {
-					name.add(AttributeAppender.append("class", "newItem"));
+					name.add(AttributeModifier.append("class", "newItem"));
 				}
 				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
 					.add(new Label("userId", "" + moderator.getUser().getId()))

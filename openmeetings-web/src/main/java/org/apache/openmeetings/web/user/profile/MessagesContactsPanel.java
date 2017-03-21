@@ -61,7 +61,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.EventPropagation;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -150,17 +149,17 @@ public class MessagesContactsPanel extends UserPanel {
 	private WebMarkupContainer selectedFolder;
 
 	private void setDefaultFolderClass() {
-		inbox.add(AttributeAppender.replace("class", "email inbox clickable"));
-		sent.add(AttributeAppender.replace("class", "email sent clickable"));
-		trash.add(AttributeAppender.replace("class", "email trash clickable"));
+		inbox.add(AttributeModifier.replace("class", "email inbox clickable"));
+		sent.add(AttributeModifier.replace("class", "email sent clickable"));
+		trash.add(AttributeModifier.replace("class", "email trash clickable"));
 	}
 
 	private static void selectFolder(WebMarkupContainer folder) {
-		folder.add(AttributeAppender.append("class", "ui-widget-header ui-corner-all"));
+		folder.add(AttributeModifier.append("class", "ui-widget-header ui-corner-all"));
 	}
 
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
-		folder.add(AttributeAppender.replace("class", "email folder clickable"));
+		folder.add(AttributeModifier.replace("class", "email folder clickable"));
 		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
 			selectFolder(folder);
 		}
@@ -578,8 +577,8 @@ public class MessagesContactsPanel extends UserPanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("view").add(AttributeAppender.append("onclick", String.format("showUserInfo(%s);", userId))));
-				item.add(new WebMarkupContainer("message").add(AttributeAppender.append("onclick", String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
+				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("onclick", String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("message").add(AttributeModifier.append("onclick", String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
 				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
 
