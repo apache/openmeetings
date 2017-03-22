@@ -40,45 +40,6 @@ var UUID = (function() {
 	}
 	return self;
 })();
-// Based on https://groups.google.com/d/msg/fabricjs/TSwLHzLsP_w/-sE8WBDq6QIJ
-fabric.LineArrow = fabric.util.createClass(fabric.Line, {
-	type: 'lineArrow'
-	, initialize: function(element, options) {
-		options || (options = {});
-		this.callSuper('initialize', element, options);
-	}
-	, toObject: function() {
-		return fabric.util.object.extend(this.callSuper('toObject'));
-	}
-	, _render: function(ctx) {
-		this.callSuper('_render', ctx);
-
-		// do not render if width/height are zeros or object is not visible
-		if (this.width === 0 || this.height === 0 || !this.visible) return;
-
-		ctx.save();
-		var xDiff = this.x2 - this.x1;
-		var yDiff = this.y2 - this.y1;
-		var angle = Math.atan2(yDiff, xDiff);
-		ctx.translate((this.x2 - this.x1) / 2, (this.y2 - this.y1) / 2);
-		ctx.rotate(angle);
-		ctx.beginPath();
-		// move 10px in front of line to start the arrow so it does not have the
-		// square line end showing in front (0,0)
-		ctx.moveTo(10, 0);
-		ctx.lineTo(-20, 15);
-		ctx.lineTo(-20, -15);
-		ctx.closePath();
-		this._renderFill(ctx);
-		this._renderStroke(ctx);
-		ctx.restore();
-	}
-});
-fabric.LineArrow.fromObject = function (object, callback) {
-	callback && callback(new fabric.LineArrow([object.x1, object.y1, object.x2, object.y2],object));
-};
-fabric.LineArrow.async = true;
-
 var Pointer = function(canvas, s) {
 	return {
 		activate: function() {
@@ -310,13 +271,52 @@ var Ellipse = function(canvas, s) {
 var Arrow = function(canvas, s) {
 	var arrow = Line(canvas, s);
 	arrow.createShape = function() {
-		arrow.obj = new fabric.LineArrow([arrow.orig.x, arrow.orig.y, arrow.orig.x, arrow.orig.y], {
-			strokeWidth: arrow.stroke.width
-			, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
-			, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
-			, opacity: arrow.opacity
-		});
+		arrow.obj = new fabric.Polygon([
+			{x: 0, y: 0},
+			{x: 0, y: 0},
+			{x: 0, y: 0},
+			{x: 0, y: 0},
+			{x: 0, y: 0},
+			{x: 0, y: 0},
+			{x: 0, y: 0}]
+			, {
+				left: arrow.orig.x
+				, top: arrow.orig.y
+				, angle: 0
+				, strokeWidth: arrow.stroke.width
+				, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
+				, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
+			});
+
 		return arrow.obj;
+	};
+	arrow.updateShape = function(pointer) {
+		var dx = pointer.x - arrow.orig.x
+		, dy = pointer.y - arrow.orig.y
+		, d = Math.sqrt(dx * dx + dy * dy)
+		, sw = d > 40 ? 20 : 5
+		, hl = d > 40 ? 30 : 10
+		, h = 1.5 * sw
+		, points = [
+			{x: 0, y: sw},
+			{x: Math.max(0, d - hl), y: sw},
+			{x: Math.max(0, d - hl), y: h},
+			{x: d, y: 3 * sw / 4},
+			{x: Math.max(0, d - hl), y: 0},
+			{x: Math.max(0, d - hl), y: sw / 2},
+			{x: 0, y: sw / 2}];
+		arrow.obj.set({
+			points: points
+			, angle: Math.atan2(dy, dx) * 180 / Math.PI
+			, width: d
+			, height: h
+			, maxX: d
+			, maxY: h
+			, pathOffset: {
+				x: d / 2,
+				y: h / 2
+			}
+		});
 	};
 	arrow.internalActivate = function() {
 		arrow.enableAllProps(s);
@@ -343,7 +343,6 @@ var Clipart = function(canvas, btn) {
 		if (!art.obj) {
 			return; // not ready
 		}
-		//TODO height == width
 		var dx = pointer.x - art.orig.x, dy = pointer.y - art.orig.y;
 		var d = Math.sqrt(dx * dx + dy * dy);
 		art.obj.set({
