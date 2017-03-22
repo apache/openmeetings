@@ -388,7 +388,7 @@ var Wb = function() {
 		}
 	}
 	function initCliparts() {
-		var c = $('#wb-area-clip').clone().attr('id', '');
+		var c = $('#wb-area-cliparts').clone().attr('id', '');
 		getBtn('arrow').after(c);
 		c.find('a').prepend(c.find('div.om-icon.big:first'));
 		c.find('.om-icon.clipart').each(function(idx) {
@@ -401,7 +401,6 @@ var Wb = function() {
 				});
 			initToolBtn(cur.data('mode'), false, Clipart(canvas, cur));
 		});
-		c.show();
 	}
 	function internalInit(t) {
 		t.show().draggable({
@@ -509,13 +508,13 @@ var Wb = function() {
 	}
 
 	return {
-		fabric: true
-		, init: function(id) {
+		init: function(id) {
 			a = $('#' + id);
 			t = a.find('.tools'), c = a.find('canvas'), s = a.find(".wb-settings");
 			c.attr('id', 'can-' + id);
 			canvas = new fabric.Canvas(c.attr('id'));
 			internalInit(t);
+			setRoomSizes();
 		}
 		, resize: function(w, h) {
 			if (t.position().left + t.width() > a.width()) {
@@ -531,8 +530,57 @@ var Wb = function() {
 		}
 	};
 };
-function initArea(id) {
-	var a = $('#' + id);
-	a.data(Wb());
-	a.data('init')(id);
-}
+var WbArea = (function() {
+	var container, area, tabs, self = {};
+	
+	function refreshTabs() {
+		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
+	}
+	self.init = function() {
+		tabs = $('.room.wb.area .tabs').tabs();
+		tabs.find( ".ui-tabs-nav" ).sortable({
+			axis: "x"
+			, stop: function() {
+				refreshTabs();
+			}
+		});
+		container = $(".room.wb.area");
+		area = container.find(".wb-area");
+	}
+	self.add = function(id, name) {
+		var tid = "wb-tab-" + id
+			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', id)
+			, wb = $('#wb-area').clone().attr('id', tid);
+		li.find('a').text(name).attr('href', "#" + tid);
+
+		tabs.find(".ui-tabs-nav").append(li);
+		tabs.append(wb);
+		refreshTabs();
+
+		$('.room.wb.area .wb-tabbar li').each(function(idx) {
+			if (id == 1 * $(this).data('wb-id')) {
+				tabs.tabs("option", "active", idx);
+				return false;
+			}
+		});
+		wb.data(Wb()).data('init')(tid);
+	}
+	self.resize = function(w, h) {
+		if (!container) return;
+		var hh = h - 5;
+		container.width(w);
+		area.width(w);
+
+		container.height(h);
+		area.height(hh);
+		var wbTabs = area.find(".tabs.ui-tabs");
+		wbTabs.height(hh);
+		var tabPanels = wbTabs.find(".ui-tabs-panel");
+		var wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
+		tabPanels.height(wbah);
+		tabPanels.each(function(idx) {
+			$(this).data('resize')(w, wbah);
+		});
+	}
+	return self;
+})();

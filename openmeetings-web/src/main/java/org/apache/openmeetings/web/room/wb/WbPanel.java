@@ -19,16 +19,29 @@
 package org.apache.openmeetings.web.room.wb;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.AttributeModifier.append;
+
+import java.util.Arrays;
 
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 
 public class WbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final WbTabbedPanel tabs;
+	private final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
+	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private boolean readOnly = true;
 	private final RoomPanel rp;
 
@@ -38,9 +51,24 @@ public class WbPanel extends Panel {
 		setOutputMarkupId(true);
 
 		getBean(WhiteboardCache.class).get(rp.getRoom().getId()).getWhiteboards();//TODO
-		add(tabs = new WbTabbedPanel("tabs", this));
-		tabs.setOutputMarkupId(true);// FIXME TODO add Sortable for tabs add(new Sortable<T>)
-		tabs.addWb("Whiteboard 1");
+		add(new ListView<String>("clipart", Arrays.asList(OmFileHelper.getPublicClipartsDir().list())) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<String> item) {
+				String cls = String.format("clipart-%s", item.getIndex());
+				item.add(append("class", cls), append("data-mode", cls)
+						, new AttributeAppender("data-image", item.getModelObject()).setSeparator(""));
+			}
+		});
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
+		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
+		response.render(OnDomReadyHeaderItem.forScript("WbArea.init(); WbArea.add(1, 'Whiteboard 1');"));
 	}
 
 	public boolean isReadOnly() {
@@ -55,7 +83,6 @@ public class WbPanel extends Panel {
 	public WbPanel update(IPartialPageRequestHandler handler) {
 		readOnly = !rp.getClient().hasRight(Right.whiteBoard);
 		if (handler != null) {
-			tabs.reload(handler);
 			handler.appendJavaScript("setRoomSizes();");
 		}
 		return this;

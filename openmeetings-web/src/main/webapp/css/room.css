@@ -96,7 +96,7 @@
 .room.wb.area.ui-state-hover {
 	border: 0;
 }
-.room.wb.area.ui-state-hover .wb {
+.room.wb.area.ui-state-hover .wb-area {
 	visibility: hidden;
 	height: 1px !important;
 }
@@ -429,8 +429,19 @@
 	left: auto !important;
 }
 .wb-tabbar {
-	padding-left: 45px;
+	padding-left: 45px !important;
+}
+.wb-tabbar .scroll-container {
+	overflow: hidden;
+}
+.wb-tabbar .scroll-container .scrollable, .wb-tabbar .scroll-container .scrollable li {
+	display: flex;
 }
 .wb-tabbar .add {
 	position: absolute; left: 2px;
+}
+.wb-tabbar li button {
+	width: 20px;
+	height: 20px;
+	padding: 0;
 }
