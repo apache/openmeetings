@@ -60,6 +60,76 @@ var Pointer = function(canvas, s) {
 		}
 	};
 }
+var APointer = function(canvas, user) {
+	var pointer = {};
+	pointer.mouseUp = function(o) {
+		var ptr = canvas.getPointer(o.e);
+		fabric.Image.fromURL('./css/images/menupointer.png', function(img) {
+			img.set({
+				left:15
+				, originX: 'right'
+				, originY: 'top'
+			});
+			var circle1 = new fabric.Circle({
+				radius: 20
+				, stroke: '#ff6600'
+				, strokeWidth: 2
+				, fill: 'rgba(0,0,0,0)'
+				, originX: 'center'
+				, originY: 'center'
+			});
+			var circle2 = new fabric.Circle({
+				radius: 6
+				, stroke: '#ff6600'
+				, strokeWidth: 2
+				, fill: 'rgba(0,0,0,0)'
+				, originX: 'center'
+				, originY: 'center'
+			});
+			var text = new fabric.Text(user, {
+				fontSize: 12
+				, left: 10
+				, originX: 'left'
+				, originY: 'bottom'
+			});
+			var group = new fabric.Group([circle1, circle2, img, text], {
+				left: ptr.x - 20
+				, top: ptr.y - 20
+			});
+			canvas.add(group);
+
+			var count = 3;
+			function go(_cnt) {
+				if (_cnt < 0) {
+					canvas.remove(group);
+				}
+				circle1.set({radius: 3});
+				circle2.set({radius: 6});
+				circle1.animate(
+					'radius', '20'
+					, {
+						onChange: canvas.renderAll.bind(canvas)
+						, duration: 1000
+						, onComplete: function() {go(_cnt - 1);}
+					});
+				circle2.animate(
+					'radius', '20'
+					, {
+						onChange: canvas.renderAll.bind(canvas)
+						, duration: 1000
+					});
+			}
+			go(count);
+		});
+	}
+	pointer.activate = function() {
+		canvas.on('mouse:up', pointer.mouseUp);
+	}
+	pointer.deactivate = function() {
+		canvas.off('mouse:up', pointer.mouseUp);
+	};
+	return pointer;
+}
 var Base = function() {
 	var base = {
 		fill: {enabled: true, color: '#FFFF33'}
@@ -283,7 +353,7 @@ var Arrow = function(canvas, s) {
 				left: arrow.orig.x
 				, top: arrow.orig.y
 				, angle: 0
-				, strokeWidth: arrow.stroke.width
+				, strokeWidth: 2
 				, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
 				, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
 			});
@@ -294,8 +364,8 @@ var Arrow = function(canvas, s) {
 		var dx = pointer.x - arrow.orig.x
 		, dy = pointer.y - arrow.orig.y
 		, d = Math.sqrt(dx * dx + dy * dy)
-		, sw = d > 40 ? 20 : 5
-		, hl = d > 40 ? 30 : 10
+		, sw = arrow.stroke.width
+		, hl = sw * 3
 		, h = 1.5 * sw
 		, points = [
 			{x: 0, y: sw},
@@ -417,6 +487,7 @@ var Wb = function() {
 			}
 		});
 		initToolBtn('pointer', true, Pointer(canvas, s));
+		initToolBtn('apointer', true, APointer(canvas, 'TEST USER')); //FIXME TODO
 		initToolBtn('text', false, Text(canvas, s));
 		initToolBtn('paint', false, Paint(canvas, s));
 		initToolBtn('line', false, Line(canvas, s));

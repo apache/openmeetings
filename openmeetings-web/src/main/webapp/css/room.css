@@ -137,10 +137,10 @@
 }
 .room.wb.area .tools.vertical {
 	width: 38px;
-	height: 400px;
+	height: 420px;
 }
 .room.wb.area .tools.horisontal {
-	width: 400px;
+	width: 420px;
 	height: 38px;
 }
 .room.wb.area .tools .om-icon.big {
@@ -154,7 +154,10 @@
 	background-image: url(images/paintbrush.png);
 }
 .room.wb.area .tools .om-icon.big.pointer {
-	background-image: url(images/menupointer.png);
+	background-image: url(images/pointer.png);
+}
+.room.wb.area .tools .om-icon.big.apointer {
+	background-image: url(images/wbpointer.png);
 }
 .room.wb.area .tools .om-icon.big.line {
 	background-image: url(images/line.png);
