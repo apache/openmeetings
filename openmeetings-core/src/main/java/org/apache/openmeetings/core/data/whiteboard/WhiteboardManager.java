@@ -20,11 +20,8 @@ package org.apache.openmeetings.core.data.whiteboard;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,7 @@ public class WhiteboardManager {
 
 	@SuppressWarnings("unchecked")
 	public void add(Long roomId, Map<Integer, Object> whiteboardObj, Long whiteBoardId) {
+		/* FIXME TODO check this
 		try {
 			log.debug("add: ", whiteboardObj);
 
@@ -132,5 +130,6 @@ public class WhiteboardManager {
 		} catch (Exception err) {
 			log.error("[add]", err);
 		}
+		*/
 	}
 }

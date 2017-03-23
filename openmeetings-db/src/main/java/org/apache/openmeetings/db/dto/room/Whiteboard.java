@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 
 public class Whiteboard {
 	private static final Logger log = Red5LoggerFactory.getLogger(Whiteboard.class, webAppRootKey);
-	private long whiteBoardId;
+	private long id;
 	private Integer x = 0;
 	private Integer y = 0;
 	private Integer zoom = 100;
@@ -48,12 +48,12 @@ public class Whiteboard {
 		this.name = name;
 	}
 
-	public long getWhiteBoardId() {
-		return whiteBoardId;
+	public long getId() {
+		return id;
 	}
 
-	public void setWhiteBoardId(long whiteBoardId) {
-		this.whiteBoardId = whiteBoardId;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public Integer getX() {

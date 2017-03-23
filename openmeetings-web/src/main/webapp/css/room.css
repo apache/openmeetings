@@ -88,10 +88,10 @@
 .room.sidebar.left {
 	min-width: 200px;
 	width: 315px;
-	float: left;
+	position: absolute;
 }
 .room.wb.area {
-	float: left;
+	position: absolute;
 }
 .room.wb.area.ui-state-hover {
 	border: 0;

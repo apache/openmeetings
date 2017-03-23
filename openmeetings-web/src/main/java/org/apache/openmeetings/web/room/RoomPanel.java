@@ -138,7 +138,7 @@ public class RoomPanel extends BasePanel {
 								, "1429", "1430", "775", "452", "767", "764", "765", "918", "54", "761", "762"))
 						.toString()
 						));
-			} catch (MalformedURLException e) {
+			} catch (NullPointerException|MalformedURLException e) {
 				log.error("Error while constructing room parameters", e);
 			}
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));

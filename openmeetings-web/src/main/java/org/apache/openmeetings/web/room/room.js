@@ -57,15 +57,16 @@ function initVideo(_options) {
 }
 
 function setRoomSizes() {
-	var w = $(window).width() - $(".room.sidebar.left").width() - 5;
-	var h = $(window).height() - $('#menu').height();
-	$(".room.sidebar.left").height(h);
-	var p = $(".room.sidebar.left .tabs");
+	var sb = $(".room.sidebar.left")
+		, w = $(window).width() - sb.width() - 5
+		, h = $(window).height() - $('#menu').height()
+		, p = sb.find('.tabs');
+	sb.height(h);
 	var hh = h - 5;
 	p.height(hh);
 	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
 	if (!!WbArea) {
-		WbArea.resize(w, h);
+		WbArea.resize(sb.width(), w, h);
 	}
 }
 function roomReload(event, ui) {
@@ -100,7 +101,7 @@ function roomLoad() {
 	$(".room.sidebar.left").resizable({
 		handles: "e"
 		, stop: function(event, ui) {
-			alignBlocks();
+			setRoomSizes();
 		}
 	});
 	Wicket.Event.subscribe("/websocket/closed", roomClosed);

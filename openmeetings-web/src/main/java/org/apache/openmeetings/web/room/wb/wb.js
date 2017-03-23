@@ -594,7 +594,10 @@ var Wb = function() {
 };
 var WbArea = (function() {
 	var container, area, tabs, self = {};
-	
+
+	function getWbTabId(id) {
+		return "wb-tab-" + id;
+	}
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
 	}
@@ -630,11 +633,14 @@ var WbArea = (function() {
 	}
 	self.init = function() {
 		tabs = $('.room.wb.area .tabs').tabs();
-		tabs.find( ".ui-tabs-nav" ).sortable({
+		tabs.find(".ui-tabs-nav").sortable({
 			axis: "x"
 			, stop: function() {
 				refreshTabs();
 			}
+		});
+		tabs.find('.add.om-icon').click(function() {
+			wbAction('createWb');
 		});
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
@@ -643,28 +649,37 @@ var WbArea = (function() {
 	self.destroy = function() {
 		$(window).off('keyup', deleteHandler);
 	};
-	self.add = function(id, name) {
-		var tid = "wb-tab-" + id
-			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', id)
+	self.add = function(obj) {
+		var tid = getWbTabId(obj.id)
+			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.id)
 			, wb = $('#wb-area').clone().attr('id', tid);
-		li.find('a').text(name).attr('href', "#" + tid);
+		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
+		li.find('button').click(function() {
+			wbAction('removeWb', JSON.stringify({id: obj.id}));
+		});
 
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
 		refreshTabs();
 
 		$('.room.wb.area .wb-tabbar li').each(function(idx) {
-			if (id == 1 * $(this).data('wb-id')) {
+			if (obj.id == 1 * $(this).data('wb-id')) {
 				tabs.tabs("option", "active", idx);
 				return false;
 			}
 		});
-		wb.data(Wb()).data('init')(id, tid);
-	}
-	self.resize = function(w, h) {
+		wb.data(Wb()).data('init')(obj.id, tid);
+	};
+	self.remove = function(id) {
+		var tabId = getWbTabId(id);
+		tabs.find('li[aria-controls="' + tabId + '"]').remove();
+		$("#" + tabId).remove();
+		refreshTabs();
+	};
+	self.resize = function(posX, w, h) {
 		if (!container) return;
 		var hh = h - 5;
-		container.width(w);
+		container.width(w).css('left', posX	 + "px");
 		area.width(w);
 
 		container.height(h);
@@ -680,3 +695,19 @@ var WbArea = (function() {
 	}
 	return self;
 })();
+$(function() {
+	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
+		try {
+			var m = jQuery.parseJSON(msg);
+			if (m) {
+				switch(m.type) {
+					case "wb":
+						eval(m.func);
+						break;
+				}
+			}
+		} catch (err) {
+			//no-op
+		}
+	});
+});

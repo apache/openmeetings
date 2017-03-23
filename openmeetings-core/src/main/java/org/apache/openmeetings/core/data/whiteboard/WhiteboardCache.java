@@ -19,11 +19,14 @@
 package org.apache.openmeetings.core.data.whiteboard;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Memory based cache, configured as singleton in spring configuration
@@ -34,53 +37,57 @@ import org.apache.openmeetings.db.dto.room.Whiteboards;
 public class WhiteboardCache {
 	private Map<Long, Whiteboards> cache = new ConcurrentHashMap<>();
 
-	private volatile AtomicLong whiteboardId = new AtomicLong(0);
+	@Autowired
+	private LabelDao labelDao;
 
-	public long getNewWhiteboardId(Long roomId, String name) {
-		long wbId = whiteboardId.getAndIncrement();
-		set(roomId, new Whiteboard(name), wbId);
-		return wbId;
+	private String getDefaultName(Long langId, int num) {
+		StringBuilder sb = new StringBuilder(labelDao.getString("615", langId));
+		if (num > 0) {
+			sb.append(" ").append(num);
+		}
+		return sb.toString();
 	}
 
-	/*
-	 * Room items a Whiteboard
-	 */
+	public Set<Entry<Long, Whiteboard>> list(Long roomId, Long langId) {
+		Whiteboards wbs = get(roomId);
+		if (wbs.getWhiteboards().isEmpty()) {
+			add(wbs, langId);
+		}
+		return wbs.getWhiteboards().entrySet();
+	}
+
+	public Whiteboard add(Long roomId, Long langId) {
+		Whiteboards wbs = get(roomId);
+		return add(wbs, langId);
+	}
+
+	public Whiteboard add(Whiteboards wbs, Long langId) {
+		Whiteboard wb = new Whiteboard(getDefaultName(langId, wbs.count()));
+		wbs.add(wb);
+		return wb;
+	}
+
 	public Whiteboards get(Long roomId) {
 		if (roomId == null) {
 			return null;
 		}
-		if (cache.containsKey(roomId)) {
-			return cache.get(roomId);
-		} else {
-			Whiteboards whiteboards = new Whiteboards();
-			whiteboards.setRoomId(roomId);
-			set(roomId, whiteboards);
-			return whiteboards;
+		Whiteboards wbs = cache.get(roomId);
+		if (wbs == null) {
+			wbs = new Whiteboards(roomId);
+			cache.put(roomId, wbs);
+		}
+		return wbs;
+	}
+
+	public void clear(Long roomId, Long wbId) {
+		Whiteboard wb = get(roomId).get(wbId);
+		if (wb != null) {
+			wb.clear();
 		}
 	}
 
-	public Whiteboard get(Long roomId, Long whiteBoardId) {
-		Whiteboards whiteboards = get(roomId);
-		Whiteboard wb = whiteboards.getWhiteboards().get(whiteBoardId);
-		if (wb == null) {
-			wb = new Whiteboard();
-			set(roomId, wb, whiteBoardId);
-		}
-		return wb;
-	}
-
-	/*
-	 * Whiteboard Object List
-	 *
-	 */
-	public void set(Long roomId, Whiteboards whiteboards) {
-		cache.put(roomId, whiteboards);
-	}
-
-	public void set(Long roomId, Whiteboard wb, long whiteBoardId) {
-		Whiteboards whiteboards = get(roomId);
-		wb.setWhiteBoardId(whiteBoardId);
-		whiteboards.getWhiteboards().put(whiteBoardId, wb);
-		cache.put(roomId, whiteboards);
+	public Whiteboard remove(Long roomId, Long wbId) {
+		Whiteboards wbs = get(roomId);
+		return wbs.getWhiteboards().remove(wbId);
 	}
 }

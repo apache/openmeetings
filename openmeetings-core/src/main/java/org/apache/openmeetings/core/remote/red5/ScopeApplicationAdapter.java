@@ -42,7 +42,6 @@ import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.remote.RecordingService;
-import org.apache.openmeetings.core.remote.WhiteboardService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -102,8 +101,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private WhiteboardService whiteBoardService;
 	@Autowired
 	private WhiteboardManager whiteboardManager;
 	@Autowired
@@ -602,16 +599,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void roomLeaveByScope(Client client, IScope scope) {
 		try {
 			log.debug("[roomLeaveByScope] currentClient " + client);
-			Long roomId = client.getRoomId();
-
 			if (client.isScreenClient() && client.isStartStreaming()) {
 				//TODO check others/find better way
 				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStoped, client.getStreamPublishName()));
-			}
-
-			// Remove User from Sync List's
-			if (roomId != null) {
-				whiteBoardService.removeUserFromAllLists(scope, client);
 			}
 
 			log.debug("removing Username " + client.getUsername() + " "
@@ -1276,7 +1266,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			wbClear.put("id", wbId);
 			wbClear.put("param", Arrays.asList("whiteboard", new Date(), "clear", null));
 
-			whiteboardCache.get(client.getRoomId(), wbId).clear();
+			whiteboardCache.clear(client.getRoomId(), wbId);
 			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", Arrays.asList(null, wbClear));
 		}
 		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
