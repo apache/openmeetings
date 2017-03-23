@@ -108,6 +108,9 @@ function roomLoad() {
 function roomUnload() {
 	$(window).off('resize.openmeetings');
 	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
+	if (!!WbArea) {
+		WbArea.destroy();
+	}
 }
 function startPrivateChat(el) {
 	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());

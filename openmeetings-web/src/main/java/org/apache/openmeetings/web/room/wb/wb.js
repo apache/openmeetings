@@ -425,7 +425,7 @@ var Clipart = function(canvas, btn) {
 }
 var Wb = function() {
 	const ACTIVE = 'active';
-	var a, t, s, canvas, mode;
+	var wbId, a, t, s, canvas, mode;
 
 	function getBtn(m) {
 		return t.find(".om-icon." + (m || mode));
@@ -472,7 +472,7 @@ var Wb = function() {
 		});
 	}
 	function internalInit(t) {
-		t.show().draggable({
+		t.draggable({
 			snap: "parent"
 			, containment: "parent"
 			, scroll: false
@@ -487,7 +487,7 @@ var Wb = function() {
 			}
 		});
 		initToolBtn('pointer', true, Pointer(canvas, s));
-		initToolBtn('apointer', true, APointer(canvas, 'TEST USER')); //FIXME TODO
+		initToolBtn('apointer', false, APointer(canvas, 'TEST USER')); //FIXME TODO
 		initToolBtn('text', false, Text(canvas, s));
 		initToolBtn('paint', false, Paint(canvas, s));
 		initToolBtn('line', false, Line(canvas, s));
@@ -563,25 +563,14 @@ var Wb = function() {
 				}
 			}
 		});
-		/* TODO
-		$(window).keydown(function(e) {
-			switch (e.keyCode) {
-				case 46: // delete
-					var obj = canvas.getActiveObject(); //TODO iterate canvas.getActiveGroup()
-					canvas.remove(obj);
-					canvas.renderAll();
-					return false;
-			}
-			return; //using "return" other attached events will execute
-		});
-		*/
 	}
 
 	return {
-		init: function(id) {
-			a = $('#' + id);
+		init: function(_wbId, tid) {
+			wbId = _wbId;
+			a = $('#' + tid);
 			t = a.find('.tools'), c = a.find('canvas'), s = a.find(".wb-settings");
-			c.attr('id', 'can-' + id);
+			c.attr('id', 'can-' + tid);
 			canvas = new fabric.Canvas(c.attr('id'));
 			internalInit(t);
 			setRoomSizes();
@@ -598,6 +587,9 @@ var Wb = function() {
 			canvas.setWidth(w);
 			canvas.setHeight(h);
 		}
+		, getCanvas: function() {
+			return canvas;
+		}
 	};
 };
 var WbArea = (function() {
@@ -605,6 +597,36 @@ var WbArea = (function() {
 	
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
+	}
+	function getActive() {
+		var idx = tabs.tabs("option", 'active');
+		if (idx > -1) {
+			var href = tabs.find('a')[idx];
+			if (!!href) {
+				var wb = $($(href).attr('href'));
+				return wb.data('getCanvas')();
+			}
+		}
+		return null;
+	}
+	function deleteHandler(e) {
+		var canvas = getActive();
+		switch (e.which) {
+			case 8:  // backspace
+			case 46: // delete
+				if (!!canvas) {
+					if (canvas.getActiveGroup()) {
+						canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
+						canvas.discardActiveGroup().renderAll();
+					} else {
+						var obj = canvas.getActiveObject();
+						if (!!obj) {
+							canvas.remove(obj).renderAll();
+						}
+					}
+					return false;
+				}
+		}
 	}
 	self.init = function() {
 		tabs = $('.room.wb.area .tabs').tabs();
@@ -616,7 +638,11 @@ var WbArea = (function() {
 		});
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
+		$(window).keyup(deleteHandler);
 	}
+	self.destroy = function() {
+		$(window).off('keyup', deleteHandler);
+	};
 	self.add = function(id, name) {
 		var tid = "wb-tab-" + id
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', id)
@@ -633,7 +659,7 @@ var WbArea = (function() {
 				return false;
 			}
 		});
-		wb.data(Wb()).data('init')(tid);
+		wb.data(Wb()).data('init')(id, tid);
 	}
 	self.resize = function(w, h) {
 		if (!container) return;
