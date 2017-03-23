@@ -84,11 +84,11 @@
     <method name="toggle">
         if (this.boxPosition=="up"){
 	        this.colorPickRef = new lz.colorpicker(canvas,{btnRef:this,
-	        	x:(this.getAttributeRelative('x',canvas)-(250-this.width)),
+	        	x:(this.getAttributeRelative('x',canvas)-(200-this.width)),
 	        	y:(this.getAttributeRelative('y',canvas)-154+this.height)});
         } else {
 	        this.colorPickRef = new lz.colorpicker(canvas,{btnRef:this,
-	        	x:(this.getAttributeRelative('x',canvas)-(250-this.width)),
+	        	x:(this.getAttributeRelative('x',canvas)-(200-this.width)),
 	        	y:(this.getAttributeRelative('y',canvas))});
         }
         this.colorPickRef.doDefaultColor(selectedColor);
