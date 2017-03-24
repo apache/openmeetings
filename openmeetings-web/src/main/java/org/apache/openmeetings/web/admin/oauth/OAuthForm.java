@@ -86,14 +86,14 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
-		target.appendJavaScript("oauthPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new OAuthServer());
 		target.add(this);
-		target.appendJavaScript("oauthPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		}
 		this.setModelObject(server);
 		target.add(this);
-		target.appendJavaScript("oauthPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		this.setModelObject(new OAuthServer());
 		target.add(listContainer);
 		target.add(this);
-		target.appendJavaScript("oauthPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public class OAuthPanel extends AdminPanel {
 						form.setModelObject(server);
 						form.hideNewRecord();
 						target.add(form, listContainer);
-						target.appendJavaScript("oauthPanelInit();");
+						target.appendJavaScript("adminPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));

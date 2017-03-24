@@ -54,7 +54,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	private void refresh(AjaxRequestTarget target) {
 		target.add(this);
-		target.appendJavaScript("omConfigPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	public ConfigForm(String id, WebMarkupContainer listContainer, Configuration configuration) {
