@@ -64,7 +64,7 @@ public class ServersPanel extends AdminPanel {
 						form.setModelObject(server);
 						form.hideNewRecord();
 						target.add(form, listContainer);
-						target.appendJavaScript("omServerPanelInit();");
+						target.appendJavaScript("adminPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));

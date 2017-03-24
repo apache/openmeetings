@@ -65,7 +65,7 @@ public class ConfigsPanel extends AdminPanel {
 						form.hideNewRecord();
 						form.setModelObject(c);
 						target.add(form, listContainer);
-						target.appendJavaScript("omConfigPanelInit();");
+						target.appendJavaScript("adminPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", getRowClass(c.getId(), form.getModelObject().getId())));

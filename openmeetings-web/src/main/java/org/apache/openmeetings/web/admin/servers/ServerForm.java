@@ -83,7 +83,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
-		target.appendJavaScript("omServerPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		s.setProtocol("http");
 		setModelObject(s);
 		target.add(this);
-		target.appendJavaScript("omServerPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		}
 		setModelObject(server);
 		target.add(this);
-		target.appendJavaScript("omServerPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class ServerForm extends AdminBaseForm<Server> {
 		this.setModelObject(new Server());
 		target.add(listContainer);
 		target.add(this);
-		target.appendJavaScript("omServerPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override

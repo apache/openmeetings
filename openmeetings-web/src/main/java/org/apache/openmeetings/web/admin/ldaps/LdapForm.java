@@ -76,14 +76,14 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setModelObject(getBean(LdapConfigDao.class).update(getModelObject(), WebSession.getUserId()));
 		hideNewRecord();
 		target.add(this, listContainer);
-		target.appendJavaScript("omLdapPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new LdapConfig());
 		target.add(this);
-		target.appendJavaScript("omLdapPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		}
 		this.setModelObject(ldapConfig);
 		target.add(this);
-		target.appendJavaScript("omLdapPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		this.setModelObject(new LdapConfig());
 		target.add(listContainer);
 		target.add(this);
-		target.appendJavaScript("omLdapPanelInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override

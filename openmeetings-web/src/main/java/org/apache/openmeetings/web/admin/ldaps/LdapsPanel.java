@@ -64,7 +64,7 @@ public class LdapsPanel extends AdminPanel {
 						form.setModelObject(lc);
 						form.hideNewRecord();
 						target.add(form, listContainer);
-						target.appendJavaScript("omLdapPanelInit();");
+						target.appendJavaScript("adminPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.replace("class", getRowClass(lc.getId(), form.getModelObject().getId())));
