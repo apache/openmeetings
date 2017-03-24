@@ -52,6 +52,7 @@ import org.red5.server.api.scope.IScope;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
+import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.stream.ClientBroadcastStream;
 import org.slf4j.Logger;
@@ -250,22 +251,10 @@ public class RecordingService implements IPendingServiceCallback {
 	 */
 	public void stopRecordingShow(IScope scope, String broadcastId, Long metaId) {
 		try {
-			if (metaId == null) {
-				// this should be fixed, can be useful for debugging, after all this is an error
-				// but we don't want the application to completely stop the process
-				log.error("recordingMetaDataId is null");
-			}
-
 			log.debug("** stopRecordingShow: " + scope);
 			log.debug("### Stop recording show for broadcastId: " + broadcastId + " || " + scope.getContextPath());
 
-			Object streamToClose = scopeApplicationAdapter.getBroadcastStream(scope, broadcastId);
-
-			StreamListener listenerAdapter = streamListeners.get(metaId);
-
-			log.debug("Stream Closing :: " + metaId);
-
-			ClientBroadcastStream stream = (ClientBroadcastStream) streamToClose;
+			IBroadcastStream stream = scopeApplicationAdapter.getBroadcastStream(scope, broadcastId);
 
 			// the stream can be null if the user just closes the browser
 			// without canceling the recording before leaving
@@ -277,6 +266,16 @@ public class RecordingService implements IPendingServiceCallback {
 					}
 				}
 			}
+
+			if (metaId == null) {
+				// this should be fixed, can be useful for debugging, after all this is an error
+				// but we don't want the application to completely stop the process
+				log.error("recordingMetaDataId is null");
+				return;
+			}
+
+			StreamListener listenerAdapter = streamListeners.get(metaId);
+			log.debug("Stream Closing :: " + metaId);
 
 			RecordingMetaData metaData = metaDataDao.get(metaId);
 			BaseConverter.printMetaInfo(metaData, "Stopping the stream");
