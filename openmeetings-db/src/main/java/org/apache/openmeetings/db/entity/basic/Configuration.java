@@ -41,7 +41,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c " 
+		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c "
 				+ "WHERE c.key LIKE :key"),
 		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c "
 				+ "WHERE c.key IN :keys and c.deleted = false"),
