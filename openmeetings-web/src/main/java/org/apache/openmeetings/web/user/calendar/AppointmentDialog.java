@@ -496,7 +496,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		@Override
 		protected void onValidate() {
-			if (null != end.getConvertedInput() && null != end.getConvertedInput() && end.getConvertedInput().isBefore(start.getConvertedInput())) {
+			if (null != start.getConvertedInput() && null != end.getConvertedInput() && end.getConvertedInput().isBefore(start.getConvertedInput())) {
 				error(Application.getString(1592));
 			}
 		}
