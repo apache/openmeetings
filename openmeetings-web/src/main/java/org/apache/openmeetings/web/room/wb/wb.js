@@ -565,6 +565,31 @@ var Wb = function() {
 		});
 	}
 
+	//events
+	var objAddedHandler = function (e) {
+		var obj = e.target;
+		console.log('Object Added', obj);
+	};
+	var objModifiedHandler = function (e) {
+		var obj = e.target;
+		console.log('Object Modified', obj);
+	};
+	var objRemovedHandler = function (e) {
+		var obj = e.target;
+		console.log('Object Removed', obj);
+	};
+	var pathCreatedHandler = function (e) {
+		var obj = e.target;
+		console.log('Path Created', obj);
+	};
+	var textEditedHandler = function (e) {
+		var obj = e.target;
+		console.log('Text Edit Exit', obj);
+	};
+	var textChangedHandler = function (e) {
+		var obj = e.target;
+		console.log('Text Changed', obj);
+	};
 	return {
 		init: function(_wbId, tid) {
 			wbId = _wbId;
@@ -572,6 +597,13 @@ var Wb = function() {
 			t = a.find('.tools'), c = a.find('canvas'), s = a.find(".wb-settings");
 			c.attr('id', 'can-' + tid);
 			canvas = new fabric.Canvas(c.attr('id'));
+			//TODO create via WS canvas:cleared
+			canvas.on('object:added', objAddedHandler);
+			canvas.on('object:modified', objModifiedHandler);
+			canvas.on('object:removed', objRemovedHandler);
+			canvas.on('path:created', pathCreatedHandler);
+			canvas.on('text:editing:exited', textEditedHandler);
+			canvas.on('text:changed', textChangedHandler);
 			internalInit(t);
 			setRoomSizes();
 		}
