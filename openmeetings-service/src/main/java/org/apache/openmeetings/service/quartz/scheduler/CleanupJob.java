@@ -168,7 +168,10 @@ public class CleanupJob extends AbstractJob {
 		processExpiringRecordings(true, (rec, days) -> {
 			if (days < 0) {
 				log.debug("cleanExpiredRecordings:: following recording will be deleted {}", rec);
-				rec.getFile(EXTENSION_MP4).delete();
+				File f = rec.getFile(EXTENSION_MP4);
+				if (f != null && f.exists()) {
+					f.delete();
+				}
 				recordingDao.delete(rec);
 			}
 		});
