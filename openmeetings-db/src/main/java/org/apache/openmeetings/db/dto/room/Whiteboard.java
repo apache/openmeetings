@@ -30,6 +30,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.github.openjson.JSONObject;
+
 public class Whiteboard {
 	private static final Logger log = Red5LoggerFactory.getLogger(Whiteboard.class, webAppRootKey);
 	private long id;
@@ -37,7 +39,7 @@ public class Whiteboard {
 	private Integer y = 0;
 	private Integer zoom = 100;
 	private Boolean fullFit = true;
-	private Map<String, List<Object>> roomItems = new ConcurrentHashMap<>();
+	private Map<String, JSONObject> roomItems = new ConcurrentHashMap<>();
 	private Date created = new Date();
 	private int zIndex = 1;
 	private String name;
@@ -102,26 +104,19 @@ public class Whiteboard {
 	}
 
 	//getter is required, otherwise roomItems are not available in red5
-	public Map<String, List<Object>> getRoomItems() {
+	public Map<String, JSONObject> getRoomItems() {
 		return roomItems;
 	}
 
-	public void add(String oid, List<Object> actionObject) {
-		Object type = actionObject.size() > 0 ? actionObject.get(0) : "";
-		if (actionObject.size() > 8 && ("swf".equals(type) || "image".equals(type) || "flv".equals(type))) {
-			Integer zInd = (Integer)actionObject.get(actionObject.size() - 8);
-			if (zInd == null || zInd == 0 || zInd < zIndex) {
-				actionObject.set(actionObject.size() - 8, zIndex++);
-			}
-		}
-		roomItems.put(oid, actionObject);
+	public void add(String uid, JSONObject obj) {
+		roomItems.put(uid, obj);
 	}
 
-	public List<Object> get(String oid) {
-		return roomItems.get(oid);
+	public JSONObject get(String uid) {
+		return roomItems.get(uid);
 	}
 
-	public Set<Entry<String, List<Object>>> entrySet() {
+	public Set<Entry<String, JSONObject>> entrySet() {
 		return roomItems.entrySet();
 	}
 

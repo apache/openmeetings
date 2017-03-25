@@ -60,11 +60,20 @@ var Pointer = function(canvas, s) {
 		}
 	};
 }
-var APointer = function(canvas, user) {
-	var pointer = {};
-	pointer.mouseUp = function(o) {
-		var ptr = canvas.getPointer(o.e);
-		fabric.Image.fromURL('./css/images/menupointer.png', function(img) {
+var Base = function(canvas) {
+	var base = {};
+	base.objectCreated = function(o) {
+		o.uid = UUID.generate();
+		canvas.trigger("wb:object:created", o);
+		return o.uid;
+	}
+	return base;
+}
+var APointer = function(canvas) {
+	var pointer = Base(canvas);
+	pointer.user = '';
+	pointer.create = function(_cnvs, o) {
+		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
 			img.set({
 				left:15
 				, originX: 'right'
@@ -86,56 +95,70 @@ var APointer = function(canvas, user) {
 				, originX: 'center'
 				, originY: 'center'
 			});
-			var text = new fabric.Text(user, {
+			var text = new fabric.Text(o.user, {
 				fontSize: 12
 				, left: 10
 				, originX: 'left'
 				, originY: 'bottom'
 			});
 			var group = new fabric.Group([circle1, circle2, img, text], {
-				left: ptr.x - 20
-				, top: ptr.y - 20
+				left: o.x - 20
+				, top: o.y - 20
 			});
-			canvas.add(group);
+			
+			_cnvs.add(group);
+			group.uid = o.uid;
+			group.loaded = !!o.loaded;
 
 			var count = 3;
 			function go(_cnt) {
 				if (_cnt < 0) {
-					canvas.remove(group);
+					_cnvs.remove(group);
 				}
 				circle1.set({radius: 3});
 				circle2.set({radius: 6});
 				circle1.animate(
 					'radius', '20'
 					, {
-						onChange: canvas.renderAll.bind(canvas)
+						onChange: _cnvs.renderAll.bind(_cnvs)
 						, duration: 1000
 						, onComplete: function() {go(_cnt - 1);}
 					});
 				circle2.animate(
 					'radius', '20'
 					, {
-						onChange: canvas.renderAll.bind(canvas)
+						onChange: _cnvs.renderAll.bind(_cnvs)
 						, duration: 1000
 					});
 			}
 			go(count);
 		});
 	}
+	pointer.mouseUp = function(o) {
+		var ptr = canvas.getPointer(o.e);
+		var obj = {
+			type: 'pointer'
+			, x: ptr.x
+			, y: ptr.y
+			, user: pointer.user
+		};
+		obj.uid = uid = pointer.objectCreated(obj);
+		pointer.create(canvas, obj);
+	}
 	pointer.activate = function() {
 		canvas.on('mouse:up', pointer.mouseUp);
+		pointer.user = $('.room.sidebar.left .user.list .current .name').text();
 	}
 	pointer.deactivate = function() {
 		canvas.off('mouse:up', pointer.mouseUp);
 	};
 	return pointer;
 }
-var Base = function() {
-	var base = {
-		fill: {enabled: true, color: '#FFFF33'}
-		, stroke: {enabled: true, color: '#FF6600', width: 5}
-		, opacity: 1
-	};
+var ShapeBase = function(canvas) {
+	var base = Base(canvas);
+	base.fill = {enabled: true, color: '#FFFF33'};
+	base.stroke = {enabled: true, color: '#FF6600', width: 5};
+	base.opacity = 1;
 	base.enableLineProps = function(s) {
 		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = s.find('.wb-prop-opacity');
 		s.find('.wb-prop-fill').prop('disabled', true);
@@ -160,7 +183,7 @@ var Base = function() {
 	return base;
 }
 var Text = function(canvas, s) {
-	var text = Base();
+	var text = ShapeBase(canvas);
 	text.obj = null;
 
 	text.mouseDown = function(o) {
@@ -203,7 +226,7 @@ var Text = function(canvas, s) {
 	return text;
 }
 var Paint = function(canvas, s) {
-	var paint = Base();
+	var paint = ShapeBase(canvas);
 	paint.activate = function() {
 		canvas.isDrawingMode = true;
 		canvas.freeDrawingBrush.width = paint.stroke.width;
@@ -218,7 +241,7 @@ var Paint = function(canvas, s) {
 	return paint;
 }
 var Shape = function(canvas) {
-	var shape = Base();
+	var shape = ShapeBase(canvas);
 	shape.obj = null;
 	shape.isDown = false;
 	shape.orig = {x: 0, y: 0};
@@ -239,22 +262,31 @@ var Shape = function(canvas) {
 		shape.updateShape(pointer);
 		canvas.renderAll();
 	};
+	shape.updateCreated = function(o) {
+		return o;
+	};
 	shape.mouseUp = function(o) {
 		shape.isDown = false;
 		shape.obj.setCoords();
 		shape.obj.selectable = false;
+		canvas.renderAll();
+		shape.objectCreated(shape.obj);
 	};
 	shape.internalActivate = function() {};
 	shape.activate = function() {
-		canvas.on('mouse:down', shape.mouseDown);
-		canvas.on('mouse:move', shape.mouseMove);
-		canvas.on('mouse:up', shape.mouseUp);
+		canvas.on({
+			'mouse:down': shape.mouseDown
+			, 'mouse:move': shape.mouseMove
+			, 'mouse:up': shape.mouseUp
+		});
 		shape.internalActivate();
 	};
 	shape.deactivate = function() {
-		canvas.off('mouse:down', shape.mouseDown);
-		canvas.off('mouse:move', shape.mouseMove);
-		canvas.off('mouse:up', shape.mouseUup);
+		canvas.off({
+			'mouse:down': shape.mouseDown
+			, 'mouse:move': shape.mouseMove
+			, 'mouse:up': shape.mouseUp
+		});
 	};
 	return shape;
 };
@@ -487,7 +519,7 @@ var Wb = function() {
 			}
 		});
 		initToolBtn('pointer', true, Pointer(canvas, s));
-		initToolBtn('apointer', false, APointer(canvas, 'TEST USER')); //FIXME TODO
+		initToolBtn('apointer', false, APointer(canvas));
 		initToolBtn('text', false, Text(canvas, s));
 		initToolBtn('paint', false, Paint(canvas, s));
 		initToolBtn('line', false, Line(canvas, s));
@@ -566,22 +598,42 @@ var Wb = function() {
 	}
 
 	//events
+	var wbObjCreatedHandler = function (o) {
+		var json = {};
+		switch(o.type) {
+			case 'pointer':
+				json = o;
+				break;
+			default:
+				o.includeDefaultValues = false;
+				json = o.toJSON(['uid'])
+				break;
+		}
+		wbAction('createObj', JSON.stringify({
+			wbId: wbId
+			, obj: json
+		}));
+		//console.log('Wb Object Created', json, o);
+	};
 	var objAddedHandler = function (e) {
-		var obj = e.target;
-		console.log('Object Added', obj);
+		var o = e.target;
+		if (!!o.loaded) return;
+		switch(o.type) {
+			case 'i-text':
+				o.uid = UUID.generate();
+				wbObjCreatedHandler(o);
+				break;
+		}
 	};
 	var objModifiedHandler = function (e) {
 		var obj = e.target;
 		console.log('Object Modified', obj);
 	};
-	var objRemovedHandler = function (e) {
-		var obj = e.target;
-		console.log('Object Removed', obj);
+	var pathCreatedHandler = function (o) {
+		o.path.uid = UUID.generate();
+		wbObjCreatedHandler(o.path);
 	};
-	var pathCreatedHandler = function (e) {
-		var obj = e.target;
-		console.log('Path Created', obj);
-	};
+	/*TODO interactive text chage
 	var textEditedHandler = function (e) {
 		var obj = e.target;
 		console.log('Text Edit Exit', obj);
@@ -589,7 +641,7 @@ var Wb = function() {
 	var textChangedHandler = function (e) {
 		var obj = e.target;
 		console.log('Text Changed', obj);
-	};
+	};*/
 	return {
 		init: function(_wbId, tid) {
 			wbId = _wbId;
@@ -598,12 +650,14 @@ var Wb = function() {
 			c.attr('id', 'can-' + tid);
 			canvas = new fabric.Canvas(c.attr('id'));
 			//TODO create via WS canvas:cleared
-			canvas.on('object:added', objAddedHandler);
-			canvas.on('object:modified', objModifiedHandler);
-			canvas.on('object:removed', objRemovedHandler);
-			canvas.on('path:created', pathCreatedHandler);
-			canvas.on('text:editing:exited', textEditedHandler);
-			canvas.on('text:changed', textChangedHandler);
+			canvas.on({
+				'object:added': objAddedHandler
+				, 'object:modified': objModifiedHandler
+				, 'path:created': pathCreatedHandler
+				//, 'text:editing:exited': textEditedHandler
+				//, 'text:changed': textChangedHandler
+				, 'wb:object:created': wbObjCreatedHandler
+			});
 			internalInit(t);
 			setRoomSizes();
 		}
@@ -701,6 +755,30 @@ var WbArea = (function() {
 			}
 		});
 		wb.data(Wb()).data('init')(obj.id, tid);
+	};
+	self.createObj = function(json) {
+		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		var o = json.obj;
+		o.loaded = true;
+		switch(o.type) {
+			case 'pointer':
+				APointer().create(canvas, o);
+				break;
+			default:
+				//TODO will be reused on Load WB
+				fabric.util.enlivenObjects([o], function(objects) {
+					var origRenderOnAddRemove = canvas.renderOnAddRemove;
+					canvas.renderOnAddRemove = false;
+
+					objects.forEach(function(_o) {
+						canvas.add(_o);
+					});
+
+					canvas.renderOnAddRemove = origRenderOnAddRemove;
+					canvas.renderAll();
+				});
+				break;
+		}
 	};
 	self.remove = function(id) {
 		var tabId = getWbTabId(id);

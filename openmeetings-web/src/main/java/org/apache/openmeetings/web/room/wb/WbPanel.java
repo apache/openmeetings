@@ -25,10 +25,12 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -57,10 +59,12 @@ public class WbPanel extends Panel {
 	private final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private boolean readOnly = true;
+	private final Long roomId;
 	private final RoomPanel rp;
 	private enum Action {
 		createWb
 		, removeWb
+		, createObj
 	}
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -71,22 +75,36 @@ public class WbPanel extends Panel {
 				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
 				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
+				if (Action.createObj == a) {
+					if ("pointer".equals(obj.getJSONObject("obj").getString("type"))) {
+						sendWbOthers(String.format("WbArea.createObj(%s);", obj.toString()));
+						return;
+					}
+				}
 
 				//wb-right
 				if (rp.getClient().hasRight(Right.whiteBoard)) {
 					switch (a) {
 						case createWb:
 						{
-							Whiteboard wb = getBean(WhiteboardCache.class).add(rp.getRoom().getId(), rp.getClient().getUser().getLanguageId());
-							sendWb(getAddWbScript(wb.getId(), wb.getName()).toString());
+							Whiteboard wb = getBean(WhiteboardCache.class).add(roomId, rp.getClient().getUser().getLanguageId());
+							sendWbAll(getAddWbScript(wb.getId(), wb.getName()).toString());
 						}
 							break;
 						case removeWb:
 						{
 							long _id = obj.optLong("id", -1);
 							Long id = _id < 0 ? null : _id;
-							getBean(WhiteboardCache.class).remove(rp.getRoom().getId(), id);
-							sendWb(String.format("WbArea.remove(%s);", id));
+							getBean(WhiteboardCache.class).remove(roomId, id);
+							sendWbAll(String.format("WbArea.remove(%s);", id));
+						}
+							break;
+						case createObj:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							JSONObject o = obj.getJSONObject("obj");
+							wb.add(o.getString("uid"), o);
+							sendWbOthers(String.format("WbArea.createObj(%s);", obj.toString()));
 						}
 							break;
 					}
@@ -100,9 +118,10 @@ public class WbPanel extends Panel {
 	public WbPanel(String id, RoomPanel rp) {
 		super(id);
 		this.rp = rp;
+		this.roomId = rp.getRoom().getId();
 		setOutputMarkupId(true);
 
-		getBean(WhiteboardCache.class).get(rp.getRoom().getId()).getWhiteboards();//TODO
+		getBean(WhiteboardCache.class).get(roomId).getWhiteboards();//TODO
 		add(new ListView<String>("clipart", Arrays.asList(OmFileHelper.getPublicClipartsDir().list())) {
 			private static final long serialVersionUID = 1L;
 
@@ -123,19 +142,28 @@ public class WbPanel extends Panel {
 		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
 		StringBuilder sb = new StringBuilder("WbArea.init();");
-		for (Entry<Long, Whiteboard> entry : getBean(WhiteboardCache.class).list(rp.getRoom().getId(), rp.getClient().getUser().getLanguageId())) {
+		for (Entry<Long, Whiteboard> entry : getBean(WhiteboardCache.class).list(roomId, rp.getClient().getUser().getLanguageId())) {
 			sb.append(getAddWbScript(entry.getKey(), entry.getValue().getName()));
 		}
 		response.render(OnDomReadyHeaderItem.forScript(sb));
 	}
 
-	private void sendWb(CharSequence func) {
+	private void sendWbAll(CharSequence func) {
+		sendWb(func, null);
+	}
+
+	private void sendWbOthers(CharSequence func) {
+		sendWb(func, c -> !rp.getClient().getUid().equals(c.getUid()));
+	}
+
+	private void sendWb(CharSequence func, Predicate<Client> check) {
 		WebSocketHelper.sendRoom(
-				rp.getRoom().getId()
+				roomId
 				, new JSONObject()
 						.put("type", "wb")
 						.put("func", func)
 						.toString()
+				, check
 			);
 	}
 
