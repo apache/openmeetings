@@ -606,7 +606,7 @@ var Wb = function() {
 				break;
 			default:
 				o.includeDefaultValues = false;
-				json = o.toJSON(['uid'])
+				json = o.toJSON(['uid']);
 				break;
 		}
 		wbAction('createObj', JSON.stringify({
@@ -626,8 +626,14 @@ var Wb = function() {
 		}
 	};
 	var objModifiedHandler = function (e) {
-		var obj = e.target;
-		console.log('Object Modified', obj);
+		var o = e.target;
+		o.includeDefaultValues = false;
+		json = o.toJSON(['uid'])
+		wbAction('modifyObj', JSON.stringify({
+			wbId: wbId
+			, obj: o.toJSON(['uid'])
+		}));
+		//console.log('Object Modified', o);
 	};
 	var pathCreatedHandler = function (o) {
 		o.path.uid = UUID.generate();
@@ -676,6 +682,9 @@ var Wb = function() {
 		, getCanvas: function() {
 			return canvas;
 		}
+		, getWbId: function() {
+			return wbId;
+		}
 	};
 };
 var WbArea = (function() {
@@ -692,30 +701,75 @@ var WbArea = (function() {
 		if (idx > -1) {
 			var href = tabs.find('a')[idx];
 			if (!!href) {
-				var wb = $($(href).attr('href'));
-				return wb.data('getCanvas')();
+				return $($(href).attr('href'));
 			}
 		}
 		return null;
 	}
 	function deleteHandler(e) {
-		var canvas = getActive();
 		switch (e.which) {
 			case 8:  // backspace
 			case 46: // delete
-				if (!!canvas) {
-					if (canvas.getActiveGroup()) {
-						canvas.getActiveGroup().forEachObject(function(o){ canvas.remove(o) });
-						canvas.discardActiveGroup().renderAll();
-					} else {
-						var obj = canvas.getActiveObject();
-						if (!!obj) {
-							canvas.remove(obj).renderAll();
+				{
+					var wb = getActive();
+					var canvas = wb.data('getCanvas')();
+					if (!!canvas) {
+						var arr = [];
+						if (canvas.getActiveGroup()) {
+							canvas.getActiveGroup().forEachObject(function(o){ arr.push(o.uid); });
+						} else {
+							var obj = canvas.getActiveObject();
+							if (!!obj) {
+								arr.push(obj.uid);
+							}
 						}
+						wbAction('deleteObj', JSON.stringify({
+							wbId: wb.data('getWbId')()
+							, obj: arr
+						}));
+						return false;
 					}
-					return false;
 				}
+				break;
 		}
+	}
+	function _removeHandler(canvas, _uid) {
+		var __o = _findObject(canvas, _uid);
+		if (!!__o) {
+			canvas.remove(__o);
+		}
+	}
+	function _modifyHandler(canvas, _o) {
+		_removeHandler(canvas, _o.uid);
+		canvas.add(_o);
+	}
+	function _createHandler(canvas, _o) {
+		canvas.add(_o);
+	}
+	function _findObject(canvas, uid) {
+		var _o = {};
+		canvas.forEachObject(function(__o) {
+			if (!!__o && uid === __o.uid) {
+				_o = __o;
+				return false;
+			}
+		});
+		return _o;
+	}
+	function _createObject(canvas, arr, handler) {
+		fabric.util.enlivenObjects(arr, function(objects) {
+			var origRenderOnAddRemove = canvas.renderOnAddRemove;
+			canvas.renderOnAddRemove = false;
+
+			for (var i = 0; i < objects.length; ++i) {
+				var _o = objects[i];
+				_o.loaded = true;
+				handler(canvas, _o);
+			}
+
+			canvas.renderOnAddRemove = origRenderOnAddRemove;
+			canvas.renderAll();
+		});
 	}
 	self.init = function() {
 		tabs = $('.room.wb.area .tabs').tabs();
@@ -756,28 +810,47 @@ var WbArea = (function() {
 		});
 		wb.data(Wb()).data('init')(obj.id, tid);
 	};
-	self.createObj = function(json) {
+	self.load = function(json) { //TODO need to be unified
+		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		_createObject(canvas, json.obj, _createHandler);
+	};
+	self.createObj = function(json) { //TODO need to be unified
 		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
 		var o = json.obj;
-		o.loaded = true;
 		switch(o.type) {
 			case 'pointer':
 				APointer().create(canvas, o);
 				break;
 			default:
-				//TODO will be reused on Load WB
-				fabric.util.enlivenObjects([o], function(objects) {
-					var origRenderOnAddRemove = canvas.renderOnAddRemove;
-					canvas.renderOnAddRemove = false;
-
-					objects.forEach(function(_o) {
-						canvas.add(_o);
-					});
-
-					canvas.renderOnAddRemove = origRenderOnAddRemove;
-					canvas.renderAll();
-				});
+				_createObject(canvas, [o], _createHandler);
 				break;
+		}
+	};
+	self.modifyObj = function(json) { //TODO need to be unified
+		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		var o = json.obj;
+		switch(o.type) {
+			case 'pointer':
+				_modifyHandler(canvas, APointer().create(canvas, o))
+				break;
+			default:
+				var arr = [o];
+				if (!!o.objects) {
+					arr = o.objects;
+					for (var i = 0; i < arr.length; ++i) {
+						var _o = arr[i];
+						_o.left += o.left;
+						_o.top += o.top;
+					}
+				}
+				_createObject(canvas, o.objects || [o], _modifyHandler);
+				break;
+		}
+	};
+	self.removeObj = function(json) {
+		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		for (var i = 0; i < json.obj.length; ++i) {
+			_removeHandler(canvas, json.obj[i]);
 		}
 	};
 	self.remove = function(id) {

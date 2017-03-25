@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dto.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -108,7 +107,7 @@ public class Whiteboard {
 		return roomItems;
 	}
 
-	public void add(String uid, JSONObject obj) {
+	public void put(String uid, JSONObject obj) {
 		roomItems.put(uid, obj);
 	}
 
@@ -121,56 +120,6 @@ public class Whiteboard {
 	}
 
 	public void remove(Object oid) {
-		roomItems.remove(oid);
-	}
-
-	public void remove(List<Object> actionObject) {
-		String oid = actionObject.get(actionObject.size() - 1).toString();
-		String type = actionObject.get(0).toString();
-		log.debug("Removal of object: oid = {}, type = {} ", oid, type);
-
-		/* I believe this is redundant
-		// Re-Index all items in its zIndex
-		if (type.equals("ellipse")
-				|| type.equals("drawarrow")
-				|| type.equals("line")
-				|| type.equals("paint")
-				|| type.equals("rectangle")
-				|| type.equals("uline")
-				|| type.equals("image")
-				|| type.equals("letter")
-				|| type.equals("clipart")
-				|| type.equals("swf")
-				|| type.equals("mindmapnode")
-				|| type.equals("flv")) {
-
-			Integer zIndex = Integer.valueOf(actionObject.get(actionObject.size() - 8).toString());
-
-			log.debug("1|zIndex " + zIndex);
-			log.debug("2|zIndex " + actionObject.get(actionObject.size() - 8).toString());
-			log.debug("3|zIndex " + actionObject.get(actionObject.size() - 8));
-
-			int l = 0;
-			for (Object o : actionObject) {
-				log.debug("4|zIndex " + l + " -- " + o);
-				l++;
-			}
-
-			for (Entry<String, List<Object>> e : roomItems.entrySet()) {
-				List<Object> actionObjectStored = e.getValue();
-
-				Integer zIndexStored = Integer.valueOf(actionObjectStored.get(actionObjectStored.size() - 8).toString());
-
-				log.debug("zIndexStored|zIndex " + zIndexStored + "|" + zIndex);
-
-				if (zIndexStored >= zIndex) {
-					zIndexStored -= 1;
-					log.debug("new-zIndex " + zIndexStored);
-				}
-				actionObjectStored.set(actionObjectStored.size() - 8, zIndexStored);
-			}
-		}
-		*/
 		roomItems.remove(oid);
 	}
 

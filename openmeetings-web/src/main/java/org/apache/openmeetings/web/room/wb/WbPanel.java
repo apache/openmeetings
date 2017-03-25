@@ -49,6 +49,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class WbPanel extends Panel {
@@ -65,6 +66,8 @@ public class WbPanel extends Panel {
 		createWb
 		, removeWb
 		, createObj
+		, modifyObj
+		, deleteObj
 	}
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -75,9 +78,9 @@ public class WbPanel extends Panel {
 				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
 				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
-				if (Action.createObj == a) {
+				if (Action.createObj == a || Action.modifyObj == a) {
 					if ("pointer".equals(obj.getJSONObject("obj").getString("type"))) {
-						sendWbOthers(String.format("WbArea.createObj(%s);", obj.toString()));
+						sendWbOthers(String.format("WbArea.%s(%s);", a.name(), obj.toString()));
 						return;
 					}
 				}
@@ -103,8 +106,33 @@ public class WbPanel extends Panel {
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							JSONObject o = obj.getJSONObject("obj");
-							wb.add(o.getString("uid"), o);
-							sendWbOthers(String.format("WbArea.createObj(%s);", obj.toString()));
+							wb.put(o.getString("uid"), o);
+							sendWbOthers(String.format("WbArea.%s(%s);", a.name(), obj.toString()));
+						}
+							break;
+						case modifyObj:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							JSONObject o = obj.getJSONObject("obj");
+							JSONArray arr = o.optJSONArray("objects");
+							if (arr == null) {
+								wb.put(o.getString("uid"), o);
+							} else {
+								for (int i = 0; i < arr.length(); ++i) {
+									JSONObject _o = arr.getJSONObject(i);
+									wb.put(_o.getString("uid"), _o);
+								}
+							}
+							sendWbOthers(String.format("WbArea.%s(%s);", a.name(), obj.toString()));
+						}
+						case deleteObj:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							JSONArray arr = obj.getJSONArray("obj");
+							for (int i = 0; i < arr.length(); ++i) {
+								wb.remove(arr.getString(i));
+							}
+							sendWbAll(String.format("WbArea.removeObj(%s);", obj.toString()));
 						}
 							break;
 					}
@@ -144,6 +172,11 @@ public class WbPanel extends Panel {
 		StringBuilder sb = new StringBuilder("WbArea.init();");
 		for (Entry<Long, Whiteboard> entry : getBean(WhiteboardCache.class).list(roomId, rp.getClient().getUser().getLanguageId())) {
 			sb.append(getAddWbScript(entry.getKey(), entry.getValue().getName()));
+			JSONArray arr = new JSONArray();
+			for (Entry<String, JSONObject> wbEntry : entry.getValue().getRoomItems().entrySet()) {
+				arr.put(wbEntry.getValue());
+			}
+			sb.append("WbArea.load(").append(new JSONObject().put("wbId", entry.getKey()).put("obj", arr).toString()).append(");");
 		}
 		response.render(OnDomReadyHeaderItem.forScript(sb));
 	}
