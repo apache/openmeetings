@@ -597,6 +597,9 @@ var Wb = function() {
 		});
 	}
 
+	function toOmJson(o) {
+		return o.toJSON(['uid', 'fileId', 'fileType']);
+	}
 	//events
 	var wbObjCreatedHandler = function (o) {
 		var json = {};
@@ -606,7 +609,7 @@ var Wb = function() {
 				break;
 			default:
 				o.includeDefaultValues = false;
-				json = o.toJSON(['uid']);
+				json = toOmJson(o);
 				break;
 		}
 		wbAction('createObj', JSON.stringify({
@@ -628,10 +631,9 @@ var Wb = function() {
 	var objModifiedHandler = function (e) {
 		var o = e.target;
 		o.includeDefaultValues = false;
-		json = o.toJSON(['uid'])
 		wbAction('modifyObj', JSON.stringify({
 			wbId: wbId
-			, obj: o.toJSON(['uid'])
+			, obj: toOmJson(o)
 		}));
 		//console.log('Object Modified', o);
 	};
@@ -688,7 +690,7 @@ var Wb = function() {
 	};
 };
 var WbArea = (function() {
-	var container, area, tabs, self = {};
+	var container, area, tabs, scroll, self = {};
 
 	function getWbTabId(id) {
 		return "wb-tab-" + id;
@@ -773,6 +775,7 @@ var WbArea = (function() {
 	}
 	self.init = function() {
 		tabs = $('.room.wb.area .tabs').tabs();
+		scroll = tabs.find('.scroll-container');
 		tabs.find(".ui-tabs-nav").sortable({
 			axis: "x"
 			, stop: function() {
@@ -781,6 +784,12 @@ var WbArea = (function() {
 		});
 		tabs.find('.add.om-icon').click(function() {
 			wbAction('createWb');
+		});
+		tabs.find('.prev.om-icon').click(function() {
+			scroll.scrollLeft(scroll.scrollLeft() - 30);
+		});
+		tabs.find('.next.om-icon').click(function() {
+			scroll.scrollLeft(scroll.scrollLeft() + 30);
 		});
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
@@ -853,8 +862,8 @@ var WbArea = (function() {
 			_removeHandler(canvas, json.obj[i]);
 		}
 	};
-	self.remove = function(id) {
-		var tabId = getWbTabId(id);
+	self.remove = function(obj) {
+		var tabId = getWbTabId(obj.id);
 		tabs.find('li[aria-controls="' + tabId + '"]').remove();
 		$("#" + tabId).remove();
 		refreshTabs();

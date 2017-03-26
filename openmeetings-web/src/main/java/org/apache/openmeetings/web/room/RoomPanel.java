@@ -35,9 +35,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.core.remote.ConferenceLibrary;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -66,7 +63,6 @@ import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.openmeetings.web.room.wb.WbPanel;
-import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -80,7 +76,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
@@ -165,7 +160,6 @@ public class RoomPanel extends BasePanel {
 	private String sharingUser = null;
 	private String recordingUser = null;
 	private String publishingUser = null; //TODO add
-	private long activeWbId = -1;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -200,14 +194,14 @@ public class RoomPanel extends BasePanel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (activeWbId > -1 && o instanceof FileItem) {
+				if (wb.isVisible() && o instanceof FileItem) {
 					FileItem f = (FileItem)o;
 					if (sidebar.getFilesPanel().isSelected(f)) {
 						for (Entry<String, FileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
-							sendFileToWb(e.getValue(), false);
+							wb.sendFileToWb(e.getValue(), false);
 						}
 					} else {
-						sendFileToWb(f, false);
+						wb.sendFileToWb(f, false);
 					}
 				}
 			}
@@ -630,6 +624,10 @@ public class RoomPanel extends BasePanel {
 		return sidebar;
 	}
 
+	public WbPanel getWb() {
+		return wb;
+	}
+
 	public ActivitiesPanel getActivities() {
 		return activities;
 	}
@@ -644,31 +642,5 @@ public class RoomPanel extends BasePanel {
 
 	public String getPublishingUser() {
 		return publishingUser;
-	}
-
-	public void sendFileToWb(FileItem fi, boolean clean) {
-		if (activeWbId > -1 && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
-			if (FileItem.Type.WmlFile == fi.getType()) {
-				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
-			} else {
-				String url = null;
-				PageParameters pp = new PageParameters();
-				pp.add("id", fi.getId())
-					.add("ruid", getBean(WhiteboardCache.class).get(r.getId()).getUid());
-				switch (fi.getType()) {
-					case Video:
-						pp.add("preview", true);
-						url = urlFor(new RoomResourceReference(), pp).toString();
-						break;
-					case Recording:
-						url = urlFor(new JpgRecordingResourceReference(), pp).toString();
-						break;
-					default:
-						url = urlFor(new RoomResourceReference(), pp).toString();
-						break;
-				}
-				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url, clean);
-			}
-		}
 	}
 }

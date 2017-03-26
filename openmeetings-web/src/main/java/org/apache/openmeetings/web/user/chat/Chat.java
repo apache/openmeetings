@@ -102,8 +102,7 @@ public class Chat extends Panel {
 					WebSocketHelper.sendRoom(roomId
 							, new JSONObject().put("type", "typing")
 									.put("active", type.indexOf("start") > -1)
-									.put("uid", getUid())
-									.toString());
+									.put("uid", getUid()));
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while accepting chat message", e);

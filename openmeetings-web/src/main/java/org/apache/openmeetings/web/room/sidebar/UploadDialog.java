@@ -209,7 +209,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 						form.error(getString("convert.errors.file"));
 					} else {
 						if (toWb.getModelObject()) {
-							room.sendFileToWb(f, clean);
+							room.getWb().sendFileToWb(f, clean);
 							clean = false;
 						}
 					}

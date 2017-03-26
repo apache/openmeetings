@@ -177,6 +177,12 @@
 .room.wb.area .tools .om-icon.big.arrow {
 	background-image: url(images/arrow.png);
 }
+.room.wb.area .om-icon.big.next {
+	background-image: url(images/next.png);
+}
+.room.wb.area .om-icon.big.prev {
+	background-image: url(images/prev.png);
+}
 .room.sidebar.left .ui-tabs .ui-tabs-panel {
 	padding: 0;
 }
@@ -432,7 +438,8 @@
 	left: auto !important;
 }
 .wb-tabbar {
-	padding-left: 45px !important;
+	padding-left: 70px !important;
+	padding-right: 35px !important;
 }
 .wb-tabbar .scroll-container {
 	overflow: hidden;
@@ -440,8 +447,21 @@
 .wb-tabbar .scroll-container .scrollable, .wb-tabbar .scroll-container .scrollable li {
 	display: flex;
 }
+.wb-tabbar .add.disabled, .wb-tabbar .prev.disabled, .wb-tabbar .next.disabled {
+	opacity: .3;
+}
+.wb-tabbar .add, .wb-tabbar .prev, .wb-tabbar .next {
+	position: absolute;
+	top: 3px;
+}
 .wb-tabbar .add {
-	position: absolute; left: 2px;
+	left: 2px;
+}
+.wb-tabbar .prev {
+	left: 35px;
+}
+.wb-tabbar .next {
+	right: 2px;
 }
 .wb-tabbar li button {
 	width: 20px;

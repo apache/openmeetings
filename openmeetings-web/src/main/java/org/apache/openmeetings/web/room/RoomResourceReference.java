@@ -44,6 +44,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.string.StringValue;
 
+import com.github.openjson.JSONObject;
+
 public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_NAME = "wb-room-file";
@@ -99,10 +101,12 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		}
 		FileExplorerItem f = getBean(FileExplorerItemDao.class).get(id);
 		String ruid = params.get("ruid").toString();
+		String wuid = params.get("wuid").toString();
 		Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
-		if (!Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
+		if (!Strings.isEmpty(wuid) && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 			for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
-				if (e.getValue().getRoomItems().containsKey(f.getHash())) {
+				JSONObject file = e.getValue().getRoomItems().get(wuid);
+				if (file != null && f.getId().equals(file.optLong("fileId"))) {
 					return f; // item IS on WB
 				}
 			}
@@ -112,7 +116,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 
 	protected File getFile(FileExplorerItem f, String ext) {
 		File file = f.getFile(ext);
-		if (!file.exists()) {
+		if (file == null || !file.exists()) {
 			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s"
 					, FileItem.Type.Image == f.getType() ? EXTENSION_JPG : EXTENSION_SWF));
 		}

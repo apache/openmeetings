@@ -25,15 +25,23 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.RoomResourceReference;
+import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -45,8 +53,10 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.FileSystemResourceReference;
 import org.apache.wicket.util.string.StringValue;
 
 import com.github.openjson.JSONArray;
@@ -80,7 +90,7 @@ public class WbPanel extends Panel {
 				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
 				if (Action.createObj == a || Action.modifyObj == a) {
 					if ("pointer".equals(obj.getJSONObject("obj").getString("type"))) {
-						sendWbOthers(String.format("WbArea.%s(%s);", a.name(), obj.toString()));
+						sendWbOthers(String.format("WbArea.%s", a.name()), obj);
 						return;
 					}
 				}
@@ -91,7 +101,7 @@ public class WbPanel extends Panel {
 						case createWb:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).add(roomId, rp.getClient().getUser().getLanguageId());
-							sendWbAll(getAddWbScript(wb.getId(), wb.getName()).toString());
+							sendWbAll("WbArea.add", getAddWbJson(wb.getId(), wb.getName()));
 						}
 							break;
 						case removeWb:
@@ -99,7 +109,7 @@ public class WbPanel extends Panel {
 							long _id = obj.optLong("id", -1);
 							Long id = _id < 0 ? null : _id;
 							getBean(WhiteboardCache.class).remove(roomId, id);
-							sendWbAll(String.format("WbArea.remove(%s);", id));
+							sendWbAll("WbArea.remove", new JSONObject().put("id", id));
 						}
 							break;
 						case createObj:
@@ -107,7 +117,7 @@ public class WbPanel extends Panel {
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							JSONObject o = obj.getJSONObject("obj");
 							wb.put(o.getString("uid"), o);
-							sendWbOthers(String.format("WbArea.%s(%s);", a.name(), obj.toString()));
+							sendWbOthers(String.format("WbArea.%s", a.name()), obj);
 						}
 							break;
 						case modifyObj:
@@ -123,7 +133,7 @@ public class WbPanel extends Panel {
 									wb.put(_o.getString("uid"), _o);
 								}
 							}
-							sendWbOthers(String.format("WbArea.%s(%s);", a.name(), obj.toString()));
+							sendWbOthers(String.format("WbArea.%s", a.name()), obj);
 						}
 						case deleteObj:
 						{
@@ -132,7 +142,7 @@ public class WbPanel extends Panel {
 							for (int i = 0; i < arr.length(); ++i) {
 								wb.remove(arr.getString(i));
 							}
-							sendWbAll(String.format("WbArea.removeObj(%s);", obj.toString()));
+							sendWbAll("WbArea.removeObj", obj);
 						}
 							break;
 					}
@@ -148,19 +158,21 @@ public class WbPanel extends Panel {
 		this.rp = rp;
 		this.roomId = rp.getRoom().getId();
 		setOutputMarkupId(true);
+		if (rp.getRoom().isHidden(RoomElement.Whiteboard)) {
+			setVisible(false);
+		} else {
+			add(new ListView<String>("clipart", Arrays.asList(OmFileHelper.getPublicClipartsDir().list())) {
+				private static final long serialVersionUID = 1L;
 
-		getBean(WhiteboardCache.class).get(roomId).getWhiteboards();//TODO
-		add(new ListView<String>("clipart", Arrays.asList(OmFileHelper.getPublicClipartsDir().list())) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void populateItem(ListItem<String> item) {
-				String cls = String.format("clipart-%s", item.getIndex());
-				item.add(append("class", cls), append("data-mode", cls)
-						, new AttributeAppender("data-image", item.getModelObject()).setSeparator(""));
-			}
-		});
-		add(wbAction);
+				@Override
+				protected void populateItem(ListItem<String> item) {
+					String cls = String.format("clipart-%s", item.getIndex());
+					item.add(append("class", cls), append("data-mode", cls)
+							, new AttributeAppender("data-image", item.getModelObject()).setSeparator(""));
+				}
+			});
+			add(wbAction);
+		}
 	}
 
 	@Override
@@ -170,43 +182,53 @@ public class WbPanel extends Panel {
 		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
 		StringBuilder sb = new StringBuilder("WbArea.init();");
-		for (Entry<Long, Whiteboard> entry : getBean(WhiteboardCache.class).list(roomId, rp.getClient().getUser().getLanguageId())) {
+		WhiteboardCache cache = getBean(WhiteboardCache.class);
+		Whiteboards wbs = cache.get(roomId);
+		for (Entry<Long, Whiteboard> entry : cache.list(roomId, rp.getClient().getUser().getLanguageId())) {
 			sb.append(getAddWbScript(entry.getKey(), entry.getValue().getName()));
 			JSONArray arr = new JSONArray();
 			for (Entry<String, JSONObject> wbEntry : entry.getValue().getRoomItems().entrySet()) {
-				arr.put(wbEntry.getValue());
+				JSONObject o = wbEntry.getValue();
+				arr.put(addFileUrl(wbs.getUid(), o));
 			}
-			sb.append("WbArea.load(").append(new JSONObject().put("wbId", entry.getKey()).put("obj", arr).toString()).append(");");
+			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString()).append(");");
 		}
 		response.render(OnDomReadyHeaderItem.forScript(sb));
 	}
 
-	private void sendWbAll(CharSequence func) {
-		sendWb(func, null);
+	private void sendWbAll(CharSequence meth, JSONObject obj) {
+		sendWb(meth, obj, null);
 	}
 
-	private void sendWbOthers(CharSequence func) {
-		sendWb(func, c -> !rp.getClient().getUid().equals(c.getUid()));
+	private void sendWbOthers(CharSequence meth, JSONObject obj) {
+		sendWb(meth, obj, c -> !rp.getClient().getUid().equals(c.getUid()));
 	}
 
-	private void sendWb(CharSequence func, Predicate<Client> check) {
+	private void sendWb(CharSequence meth, JSONObject obj, Predicate<Client> check) {
 		WebSocketHelper.sendRoom(
 				roomId
 				, new JSONObject()
 						.put("type", "wb")
-						.put("func", func)
-						.toString()
 				, check
+				, (o, c) -> o.put("func", String.format("%s(%s);", meth, obj.toString())).toString()
 			);
+	}
+
+	private static JSONObject getObjWbJson(Long wbId, Object o) {
+		return new JSONObject()
+				.put("wbId", wbId)
+				.put(PARAM_OBJ, o);
+	}
+
+	private static JSONObject getAddWbJson(Long id, String name) {
+		return new JSONObject()
+				.put("id", id)
+				.put("name", name);
 	}
 
 	private static CharSequence getAddWbScript(Long id, String name) {
 		return new StringBuilder("WbArea.add(")
-				.append(new JSONObject()
-						.put("id", id)
-						.put("name", name)
-						.toString()
-						)
+				.append(getAddWbJson(id, name).toString())
 				.append(");");
 	}
 
@@ -226,4 +248,110 @@ public class WbPanel extends Panel {
 		}
 		return this;
 	}
+
+	private JSONObject addFileUrl(String ruid, JSONObject _file) {
+		try {
+		final long fid = _file.optLong("fileId", -1);
+			if (fid > 0) {
+				FileItem fi = FileItem.Type.Recording.name().equals(_file.optString("fileType"))
+						? getBean(RecordingDao.class).get(fid)
+						: getBean(FileExplorerItemDao.class).get(fid);
+				if (fi != null) {
+					return addFileUrl(ruid, _file, fi, rp.getClient());
+				}
+			}
+		} catch (Exception e) {
+			//no-op, non-file object
+		}
+		return _file;
+	}
+	private JSONObject addFileUrl(String ruid, JSONObject _file, FileItem fi, Client c) {
+		final PageParameters pp = new PageParameters();
+		final FileSystemResourceReference ref;
+		pp.add("id", fi.getId()).add("ruid", ruid).add("wuid", _file.optString("uid"));
+		switch (fi.getType()) {
+			case Video:
+				pp.add("preview", true);
+				ref = new RoomResourceReference();
+				break;
+			case Recording:
+				ref = new JpgRecordingResourceReference();
+				break;
+			default:
+				ref = new RoomResourceReference();
+				break;
+		}
+		return new JSONObject(_file, JSONObject.getNames(_file)).put("src", urlFor(ref, pp.add("uid", c.getUid())));  //FIXME TODO openjson 1.0.2
+	}
+
+	/*
+	 * OLD VERSION
+	 *
+	public void sendFileToWb(FileItem fi, boolean clean) {
+		if (wb.isVisible() && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
+			long activeWbId = -1;
+			if (FileItem.Type.WmlFile == fi.getType()) {
+				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
+			} else {
+				String url = null;
+				PageParameters pp = new PageParameters();
+				pp.add("id", fi.getId())
+					.add("ruid", getBean(WhiteboardCache.class).get(r.getId()).getUid());
+				switch (fi.getType()) {
+					case Video:
+						pp.add("preview", true);
+						url = urlFor(new RoomResourceReference(), pp).toString();
+						break;
+					case Recording:
+						url = urlFor(new JpgRecordingResourceReference(), pp).toString();
+						break;
+					default:
+						url = urlFor(new RoomResourceReference(), pp).toString();
+						break;
+				}
+				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url, clean);
+			}
+		}
+	}
+	 */
+
+	public void sendFileToWb(FileItem fi, boolean clean) {
+		if (isVisible() && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
+			//FIXME TODO WmlFile special handling
+			Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
+			String wuid = UUID.randomUUID().toString();
+			Whiteboard wb = wbs.getWhiteboards().values().iterator().next(); //TODO active
+			//FIXME TODO various types
+			JSONObject file = new JSONObject()
+					.put("fileId", fi.getId())
+					.put("fileType", fi.getType().name())
+					.put("type", "image")
+					.put("left", 0) //FIXME TODO constant
+					.put("top", 0) //FIXME TODO constant
+					.put("width", 800/*fi.getWidth()*/) //FIXME TODO check null
+					.put("height", 600/*fi.getHeight()*/) //FIXME TODO constant
+					//,"angle":32.86
+					//,"crossOrigin":""
+					.put("uid", wuid)
+					//,"filters":[]
+					//,"resizeFilters":[]
+					;
+			wb.put(wuid, file);
+			final String ruid = wbs.getUid();
+			WebSocketHelper.sendRoom(
+					roomId
+					, new JSONObject().put("type", "wb")
+					, null
+					, (o, c) -> {
+							return o.put("func", String.format("WbArea.%s(%s);"
+									, Action.createObj.name()
+									, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString()) //FIXME TODO openjson 1.0.2
+								).toString();
+						}
+					);
+		}
+	}
+
+	//FIXME TODO openjson 1.0.2
+	//private static class ObjectStringer
 }
