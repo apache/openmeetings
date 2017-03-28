@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.File;
 import java.util.Map.Entry;
@@ -32,6 +33,7 @@ import java.util.Map.Entry;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -110,6 +112,9 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 					return f; // item IS on WB
 				}
 			}
+		}
+		if (f.getGroupId() != null && getBean(GroupUserDao.class).isUserInGroup(f.getGroupId(), getUserId())) {
+			return f;
 		}
 		return null;
 	}

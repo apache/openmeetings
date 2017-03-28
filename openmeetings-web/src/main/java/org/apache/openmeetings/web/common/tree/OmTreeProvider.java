@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -51,12 +53,13 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 	public static String FILES_GROUP = "files-group-%s";
 	private final Long roomId;
 	private final List<FileItem> roots = new ArrayList<>();
-	private final String PUBLIC, GROUP;
+	private final String PUBLIC, GROUP_FILE, GROUP_REC;
 
 	public OmTreeProvider(Long roomId) {
 		this.roomId = roomId;
 		PUBLIC = Application.getString(861);
-		GROUP = Application.getString("files.root.group");
+		GROUP_FILE = Application.getString("files.root.group");
+		GROUP_REC = Application.getString("recordings.root.group");
 		refreshRoots(true);
 	}
 
@@ -87,15 +90,18 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		}
 		for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
 			Group g = gu.getGroup();
+			boolean readOnly = g.isRestricted() && !hasAdminLevel(getRights()) && !gu.isModerator();
 			if (all) {
-				FileItem r = createRoot(String.format("%s (%s)", PUBLIC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
+				FileItem r = createRoot(String.format("%s (%s)", GROUP_REC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
+				r.setReadOnly(readOnly);
 				r.setGroupId(g.getId());
 				rRoot.add(r);
 			}
-			/*FileItem r = createRoot(String.format("%s (%s)", GROUP, g.getName()), String.format(FILES_GROUP, g.getId()), false);
+			FileItem r = createRoot(String.format("%s (%s)", GROUP_FILE, g.getName()), String.format(FILES_GROUP, g.getId()), false);
 			r.setGroupId(g.getId());
-			r.setReadOnly(roomId == null); //group videos are read-only in recordings tree
-			fRoot.add(r);*/
+			//group videos are read-only in recordings tree
+			r.setReadOnly(roomId == null || readOnly);
+			fRoot.add(r);
 		}
 		roots.clear();
 		if (roomId == null) {
@@ -147,12 +153,12 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 				if (node.getRoomId() != null) {
 					_list = dao.getByRoom(node.getRoomId());
 				} else if (node.getGroupId() != null) {
-					_list = dao.getByGroup(node.getGroupId(), /*roomId == null ? VIDEO_TYPES : */null);
+					_list = dao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
 				} else {
 					_list = dao.getByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(id, /*roomId == null ? VIDEO_TYPES : */null);
+				_list = dao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
 			}
 			list.addAll(_list);
 		}

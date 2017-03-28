@@ -42,6 +42,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -151,6 +152,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
 		add(logo);
 		add(new TextField<String>("tag").setLabel(Model.of(getString("admin.group.form.tag"))));
+		add(new CheckBox("restricted").setLabel(Model.of(getString("restricted.group.files"))));
 		add(new AjaxCheckBox("limited") {
 			private static final long serialVersionUID = 1L;
 
@@ -182,7 +184,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		reminderDays.setEnabled(getModelObject().isLimited());
 		logo.update();
 		target.add(this, groupList);
-		target.appendJavaScript("groupsInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	private long getGroupId() {

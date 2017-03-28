@@ -114,6 +114,9 @@ public class FileExplorerItemDao {
 	}
 
 	public List<FileExplorerItem> getByGroup(Long groupId, List<Type> filter) {
+		if (filter == null) {
+			return getByGroup(groupId);
+		}
 		log.debug("getByGroup() started");
 		return em.createNamedQuery("getFileFilteredByGroup", FileExplorerItem.class)
 				.setParameter("filter", filter)

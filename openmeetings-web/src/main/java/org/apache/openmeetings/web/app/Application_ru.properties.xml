@@ -1917,4 +1917,6 @@
 	<entry key="widget.recent.title">Последние комнаты</entry>
 	<entry key="widget.recent.desc">Эта секция отображает комнаты в которые Вы недавно заходили</entry>
 	<entry key="files.root.group">Файлы группы</entry>
+	<entry key="recordings.root.group">Записи группы</entry>
+	<entry key="restricted.group.files">Доступ к групповым файлам ограничен</entry>
 </properties>
