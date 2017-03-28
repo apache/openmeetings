@@ -28,10 +28,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.core.converter.FlvExplorerConverter;
-import org.apache.openmeetings.core.converter.GenerateImage;
-import org.apache.openmeetings.core.converter.GenerateThumbs;
-import org.apache.openmeetings.core.documents.GeneratePDF;
+import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
@@ -51,11 +50,9 @@ public class FileProcessor {
 	@Autowired
 	private FileExplorerItemDao fileDao;
 	@Autowired
-	private GenerateImage generateImage;
+	private ImageConverter imageConverter;
 	@Autowired
-	private GenerateThumbs generateThumbs;
-	@Autowired
-	private GeneratePDF generatePDF;
+	private DocumentConverter generatePDF;
 
 	//FIXME TODO this method need to be refactored to throw exceptions
 	public ConverterProcessResultList processFile(FileExplorerItem f, InputStream is) throws Exception {
@@ -116,13 +113,10 @@ public class FileProcessor {
 			returnError = generatePDF.convertPDF(f, ext);
 		} else if (isChart) {
 			log.debug("uploaded chart file");
-		} else if (isImage && !isAsIs) {
+		} else if (isImage) {
 			// convert it to JPG
 			log.debug("##### convert it to JPG: ");
-			returnError = generateImage.convertImage(f, ext);
-		} else if (isAsIs) {
-			ConverterProcessResult processThumb = generateThumbs.generateThumb(thumbImagePrefix, file, 50);
-			returnError.addItem("processThumb", processThumb);
+			returnError = imageConverter.convertImage(f, ext);
 		} else if (isVideo) {
 			List<ConverterProcessResult> returnList = flvExplorerConverter.convertToMP4(f, ext);
 

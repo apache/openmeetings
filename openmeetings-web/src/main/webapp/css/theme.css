@@ -298,6 +298,7 @@ html, body {
 }
 .om-icon.big {
 	background-size: 32px;
+	background-position: 1px 1px !important;
 	width: 34px;
 	height: 34px;
 }

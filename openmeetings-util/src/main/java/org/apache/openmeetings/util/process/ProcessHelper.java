@@ -20,63 +20,17 @@ package org.apache.openmeetings.util.process;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ProcessHelper {
 	public static final Logger log = Red5LoggerFactory.getLogger(ProcessHelper.class, OpenmeetingsVariables.webAppRootKey);
-
-	private static class Worker extends Thread {
-		private final Process process;
-		private Integer exitCode;
-
-		private Worker(Process process) {
-			this.process = process;
-		}
-
-		@Override
-		public void run() {
-			try {
-				exitCode = process.waitFor();
-			} catch (InterruptedException ignore) {
-				return;
-			}
-		}
-	}
-
-	private static class StreamWatcher extends Thread {
-		public StringBuilder output;
-		private final InputStream is;
-		private final BufferedReader br;
-
-		private StreamWatcher(Process process, boolean isError) {
-			output = new StringBuilder();
-			is = isError ? process.getErrorStream() : process.getInputStream();
-			br = new BufferedReader(new InputStreamReader(is, UTF_8));
-		}
-
-		@Override
-		public void run() {
-			try {
-				String line = br.readLine();
-				while (line != null) {
-					output.append(line).append('\n');
-					line = br.readLine();
-				}
-			} catch (IOException ioexception) {
-				return;
-			}
-		}
-	}
 
 	public static ConverterProcessResult executeScriptWindows(String process, String[] argv) {
 		try {
@@ -119,13 +73,14 @@ public class ProcessHelper {
 	}
 
 	public static ConverterProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env) {
-		ConverterProcessResult returnMap = new ConverterProcessResult();
-		returnMap.setProcess(process);
+		ConverterProcessResult res = new ConverterProcessResult();
+		res.setProcess(process);
 		debugCommandStart(process, argv);
 
+		Process proc = null;
 		try {
-			returnMap.setCommand(getCommand(argv));
-			returnMap.setOut("");
+			res.setCommand(getCommand(argv));
+			res.setOut("");
 
 			// By using the process Builder we have access to modify the
 			// environment variables
@@ -133,56 +88,29 @@ public class ProcessHelper {
 			ProcessBuilder pb = new ProcessBuilder(argv);
 			pb.environment().putAll(env);
 
-			Process proc = pb.start();
+			proc = pb.start();
 
 			// 20-minute timeout for command execution
 			// FFMPEG conversion of Recordings may take a real long time until
 			// its finished
-			long timeout = 60000 * 20;
+			proc.waitFor(20, TimeUnit.MINUTES);
 
-			StreamWatcher errorWatcher = new StreamWatcher(proc, true);
-			Worker worker = new Worker(proc);
-			StreamWatcher inputWatcher = new StreamWatcher(proc, false);
-			errorWatcher.start();
-			inputWatcher.start();
-			worker.start();
-
-			try {
-				worker.join(timeout);
-				if (worker.exitCode != null) {
-					returnMap.setExitCode(worker.exitCode);
-					log.debug("exitVal: " + worker.exitCode);
-					returnMap.setError(errorWatcher.output.toString());
-				} else {
-					returnMap.setException("timeOut");
-					returnMap.setError(errorWatcher.output.toString());
-					returnMap.setExitCode(-1);
-
-					throw new TimeoutException();
-				}
-			} catch (InterruptedException ex) {
-				worker.interrupt();
-				errorWatcher.interrupt();
-				inputWatcher.interrupt();
-				Thread.currentThread().interrupt();
-
-				returnMap.setError(ex.getMessage());
-				returnMap.setExitCode(-1);
-
-				throw ex;
-			} finally {
-				proc.destroy();
-			}
-
+			res.setExitCode(proc.exitValue());
+			res.setOut(IOUtils.toString(proc.getInputStream(), UTF_8));
+			res.setError(IOUtils.toString(proc.getErrorStream(), UTF_8));
 		} catch (Throwable t) {
 			log.error("executeScript", t);
-			returnMap.setError(t.getMessage());
-			returnMap.setException(t.toString());
-			returnMap.setExitCode(-1);
+			res.setError(t.getMessage());
+			res.setException(t.toString());
+			res.setExitCode(-1);
+		} finally {
+			if (proc != null) {
+				proc.destroy();
+			}
 		}
 
 		debugCommandEnd(process);
-		return returnMap;
+		return res;
 	}
-
 }
+

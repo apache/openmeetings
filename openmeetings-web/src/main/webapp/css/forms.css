@@ -32,7 +32,7 @@ div.formSaveBar {
 	vertical-align: super;
 }
 div.formSaveButton input {
-	background: url(images/forms/disk.png) no-repeat;
+	background: url(images/disk.png) no-repeat;
 	float: left;
 	cursor: pointer;
 	width: 18px;
@@ -42,13 +42,13 @@ div.formSaveButton input {
 	margin-top: 2px;
 }
 .addButton {
-	background: url(images/forms/plus_icon.png) no-repeat;
+	background: url(images/plus_icon.png) no-repeat;
 }
 .delButton {
-	background: url(images/forms/cancel_icon.png) no-repeat;
+	background: url(images/cancel_icon.png) no-repeat;
 }
 .formNewButton {
-	background: url(images/forms/plus_icon.png) no-repeat;
+	background: url(images/plus_icon.png) no-repeat;
 	float: left;
 	cursor: pointer;
 	width: 18px;
@@ -58,10 +58,10 @@ div.formSaveButton input {
 	margin-top: 2px;
 }
 .formNewButton.disabled {
-	background: url(images/forms/plus_icon_disabled.png) no-repeat;
+	background: url(images/plus_icon_disabled.png) no-repeat;
 }
 div.formRefreshButton input {
-	background: url(images/forms/arrow_refresh_small.png) no-repeat;
+	background: url(images/arrow_refresh_small.png) no-repeat;
 	float: left;
 	cursor: pointer;
 	width: 18px;
@@ -71,7 +71,7 @@ div.formRefreshButton input {
 	margin-top: 2px;
 }
 .formCancelButton {
-	background: url(images/forms/cancel_icon.png) no-repeat;
+	background: url(images/cancel_icon.png) no-repeat;
 	display: inline-block;
 	float: left;
 	cursor: pointer;

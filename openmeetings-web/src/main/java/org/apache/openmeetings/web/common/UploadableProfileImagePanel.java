@@ -23,7 +23,7 @@ import static org.apache.openmeetings.web.util.ProfileImageResourceReference.get
 
 import java.io.File;
 
-import org.apache.openmeetings.core.converter.GenerateImage;
+import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.util.StoredFile;
 
 public class UploadableProfileImagePanel extends UploadableImagePanel {
@@ -37,7 +37,7 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 
 	@Override
 	protected void processImage(StoredFile sf, File f) throws Exception {
-		getBean(GenerateImage.class).convertImageUserProfile(f, userId, sf.isAsIs());
+		getBean(ImageConverter.class).convertImageUserProfile(f, userId, sf.isAsIs());
 	}
 
 	@Override

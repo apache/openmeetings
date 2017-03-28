@@ -41,31 +41,35 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GenerateImage extends BaseConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(GenerateImage.class, webAppRootKey);
+public class ImageConverter extends BaseConverter {
+	private static final Logger log = Red5LoggerFactory.getLogger(ImageConverter.class, webAppRootKey);
 
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private GenerateThumbs generateThumbs;
 
 	public ConverterProcessResultList convertImage(FileItem f, String ext) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
-		File img = f.getFile(ext);
 		File jpg = f.getFile(EXTENSION_JPG);
+		if (!EXTENSION_JPG.equals(ext)) {
+			File img = f.getFile(ext);
 
-		log.debug("##### convertImage destinationFile: " + jpg);
-
-		returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
-		returnMap.addItem("processThumb", generateThumbs.generateThumb(thumbImagePrefix, jpg, 50));
-
+			log.debug("##### convertImage destinationFile: " + jpg);
+			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
+		}
+		ConverterProcessResult res = ProcessHelper.executeScript("get image dimensions :: " + f.getId()
+				, new String[] {getPathToIdentify(), "-format", "%wx%h", jpg.getCanonicalPath()});
+		returnMap.addItem("get JPG dimensions", res);
+		Dimension dim = getDimension(res.getOut());
+		f.setWidth(dim.width);
+		f.setHeight(dim.height);
+		returnMap.addItem("processThumb", generateThumb(thumbImagePrefix, jpg, 50));
 		return returnMap;
 	}
 
 	public ConverterProcessResultList convertImageUserProfile(File file, Long userId, boolean skipConvertion) throws Exception {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
-		
+
 		// User Profile Update
 		File[] files = getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
 			@Override
@@ -78,14 +82,14 @@ public class GenerateImage extends BaseConverter {
 				FileUtils.deleteQuietly(f);
 			}
 		}
-		
+
 		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), profileFileName, EXTENSION_JPG);
 		if (!skipConvertion) {
 			returnMap.addItem("processJPG", convertSingleJpg(file, destinationFile));
 		} else {
 			FileUtils.copyFile(file, destinationFile);
 		}
-		returnMap.addItem("processThumb2", generateThumbs.generateThumb(profileImagePrefix, destinationFile, 126));
+		returnMap.addItem("processThumb2", generateThumb(profileImagePrefix, destinationFile, 126));
 
 		if (!skipConvertion) {
 			// Delete old one
@@ -106,20 +110,57 @@ public class GenerateImage extends BaseConverter {
 
 	/**
 	 * -density 150 -resize 800
-	 * @throws IOException 
-	 * 
+	 * @throws IOException
+	 *
 	 */
 	private ConverterProcessResult convertSingleJpg(File in, File out) throws IOException {
-		String[] argv = new String[] { getPathToImageMagick(), in.getCanonicalPath(), out.getCanonicalPath() };
+		String[] argv = new String[] { getPathToConvert(), in.getCanonicalPath(), out.getCanonicalPath() };
 
 		return ProcessHelper.executeScript("convertSingleJpg", argv);
 	}
 
 	public ConverterProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {
-		String[] argv = new String[] { getPathToImageMagick()
+		String[] argv = new String[] { getPathToConvert()
 				, "-resize", (width == null ? "" : width) + (height == null ? "" : "x" + height)
 				, in.getCanonicalPath(), out.getCanonicalPath()
 				};
 		return ProcessHelper.executeScript("GenerateImage::resize", argv);
+	}
+
+	public ConverterProcessResult decodePDF(String inputfile, String outputfile) {
+		log.debug("decodePDF");
+		String[] argv = new String[] { getPathToConvert(), inputfile, outputfile };
+
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
+	}
+
+	public ConverterProcessResult generateBatchThumb(File in, File outDir, Integer thumbSize, String pre) throws IOException {
+		log.debug("generateBatchThumbByWidth");
+		String[] argv = new String[] {
+			getPathToConvert()
+			, "-thumbnail" // FIXME
+			, "" + thumbSize
+			, in.getCanonicalPath()
+			, new File(outDir, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
+			};
+
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
+	}
+
+	public ConverterProcessResult generateThumb(String pre, File f, Integer thumbSize) throws IOException {
+		log.debug("generateThumb");
+		// Init variables
+		String name = f.getName();
+		File parent = f.getParentFile();
+
+		String[] argv = new String[] {
+			getPathToConvert()
+			, "-thumbnail"
+			, thumbSize + "x" + thumbSize
+			, f.getCanonicalPath()
+			, new File(parent, pre + name).getCanonicalPath()
+			};
+
+		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
 	}
 }

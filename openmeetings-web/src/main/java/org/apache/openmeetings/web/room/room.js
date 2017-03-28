@@ -17,17 +17,19 @@
  * under the License.
  */
 function setRoomSizes() {
-	var w = $(window).width() - $(".room.sidebar.left").width() - 5;
-	$(".room.wb.area").width(w);
-	$(".room.wb.area .wb").width(w);
+	var sb = $(".room.sidebar.left")
+		, w = $(window).width() - sb.width() - 5
+		, h = $(window).height() - $('#menu').height()
+		, p = sb.find('.tabs');
+	sb.height(h);
+	var hh = h - 5;
+	p.height(hh);
+	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
 
-	var h = $(window).height() - $('#menu').height();
-	$(".room.sidebar.left").height(h);
-	var p = $(".room.sidebar.left .tabs");
-	p.height(h - 5);
-	$(".user.list", p).height(h - $("ul", p).height() - $(".user.header", p).height() - 10);
-	$(".room.wb.area").height(h);
-	$(".room.wb.area .wb").height(h);
+	var container = $(".room.wb.area")
+		, area = container.find(".wb-area");
+	container.width(w).height(h).css('left', sb.width() + "px");
+	area.width(w).height(hh);
 }
 function roomReload(event, ui) {
 	window.location.reload();
@@ -61,7 +63,7 @@ function roomLoad() {
 	$(".room.sidebar.left").resizable({
 		handles: "e"
 		, stop: function(event, ui) {
-			alignBlocks();
+			setRoomSizes();
 		}
 	});
 	Wicket.Event.subscribe("/websocket/closed", roomClosed);

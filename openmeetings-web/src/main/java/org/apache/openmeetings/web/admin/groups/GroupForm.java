@@ -27,7 +27,7 @@ import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl
 
 import java.io.File;
 
-import org.apache.openmeetings.core.converter.GenerateImage;
+import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.user.Group;
@@ -71,7 +71,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 
 		@Override
 		protected void processImage(StoredFile sf, File f) throws Exception {
-			getBean(GenerateImage.class).resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
+			getBean(ImageConverter.class).resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
 		}
 
 		@Override

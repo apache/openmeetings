@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -55,9 +55,9 @@ public class WebSocketHelper {
 	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
 	public static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
 
-	public static void sendClient(final Client c, byte[] b) {
-		if (c != null) {
-			send(a -> Arrays.asList(c), (t) -> {
+	public static void sendClient(final Client _c, byte[] b) {
+		if (_c != null) {
+			send(a -> Arrays.asList(_c), (t, c) -> {
 				try {
 					t.sendMessage(b, 0, b.length);
 				} catch (IOException e) {
@@ -69,11 +69,7 @@ public class WebSocketHelper {
 
 	public static void sendRoom(final RoomMessage m) {
 		log.debug("Sending WebSocket message: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
-		sendRoom(m.getRoomId(), (t) -> t.sendMessage(m), null);
-	}
-
-	public static void sendRoom(final Long roomId, final String m) {
-		sendRoom(roomId, m, null);
+		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
 	}
 
 	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
@@ -114,16 +110,21 @@ public class WebSocketHelper {
 			.put("msg", arr);
 	}
 
-	public static void sendRoom(ChatMessage m, JSONObject msg) {
-		sendRoom(m.getToRoom().getId(), msg.toString()
-				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator)));
+	public static void sendRoom(final Long roomId, final JSONObject m) {
+		sendRoom(roomId, m, null, null);
 	}
 
-	public static void sendRoom(final Long roomId, final String m, Predicate<Client> check) {
+	public static void sendRoom(ChatMessage m, JSONObject msg) {
+		sendRoom(m.getToRoom().getId(), msg
+				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator))
+				, null);
+	}
+
+	public static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
 		log.debug("Sending WebSocket message: {}", m);
-		sendRoom(roomId, (t) -> {
+		sendRoom(roomId, (t, c) -> {
 			try {
-				t.sendMessage(m);
+				t.sendMessage(func == null ? m.toString() : func.apply(m, c));
 			} catch (IOException e) {
 				log.error("Error while broadcasting message to room", e);
 			}
@@ -131,7 +132,7 @@ public class WebSocketHelper {
 	}
 
 	public static void sendUser(final Long userId, final String m) {
-		send(a -> ((IApplication)a).getOmClients(userId), (t) -> {
+		send(a -> ((IApplication)a).getOmClients(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
 			} catch (IOException e) {
@@ -157,13 +158,13 @@ public class WebSocketHelper {
 		}
 	}
 
-	public static void sendRoom(final Long roomId, Consumer<IWebSocketConnection> consumer, Predicate<Client> check) {
+	public static void sendRoom(final Long roomId, BiConsumer<IWebSocketConnection, Client> consumer, Predicate<Client> check) {
 		send(a -> ((IApplication)a).getOmRoomClients(roomId), consumer, check);
 	}
 
 	public static void send(
 			final Function<Application, List<Client>> func
-			, Consumer<IWebSocketConnection> consumer
+			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
 		Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
@@ -174,7 +175,7 @@ public class WebSocketHelper {
 			if (check == null || check.test(c)) {
 				final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
 				if (wc != null && wc.isOpen()) {
-					executor.run(() -> consumer.accept(wc));
+					executor.run(() -> consumer.accept(wc, c));
 				}
 			}
 		}

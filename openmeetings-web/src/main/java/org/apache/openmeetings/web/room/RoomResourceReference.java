@@ -112,7 +112,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 
 	protected File getFile(FileExplorerItem f, String ext) {
 		File file = f.getFile(ext);
-		if (!file.exists()) {
+		if (file == null || !file.exists()) {
 			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s"
 					, FileItem.Type.Image == f.getType() ? EXTENSION_JPG : EXTENSION_SWF));
 		}

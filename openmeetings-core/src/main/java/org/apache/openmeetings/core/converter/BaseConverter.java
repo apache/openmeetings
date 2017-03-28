@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IMAGEMAGIC_PATH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -32,7 +33,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
@@ -50,6 +54,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, webAppRootKey);
+	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 
 	@Autowired
 	private ConfigurationDao configurationDao;
@@ -58,9 +63,19 @@ public abstract class BaseConverter {
 	@Autowired
 	private RecordingMetaDeltaDao metaDeltaDao;
 
+	protected static class Dimension {
+		public int width = 0;
+		public int height = 0;
+
+		public Dimension(int width, int height) {
+			this.width = width;
+			this.height = height;
+		}
+	}
+
 	private String getPath(String key, String app) {
 		String path = configurationDao.getConfValue(key, String.class, "");
-		if (!"".equals(path) && !path.endsWith(File.separator)) {
+		if (!Strings.isEmpty(path) && !path.endsWith(File.separator)) {
 			path += File.separator;
 		}
 		path += app;
@@ -75,12 +90,12 @@ public abstract class BaseConverter {
 		return getPath("sox_path", "sox");
 	}
 
-	protected String getPathToImageMagick() {
-		return getPath("imagemagick_path", "convert") + GenerateSWF.execExt;
+	protected String getPathToConvert() {
+		return getPath(CONFIG_IMAGEMAGIC_PATH, "convert") + GenerateSWF.execExt;
 	}
 
-	protected boolean isUseOldStyleFfmpegMap() {
-		return "1".equals(configurationDao.getConfValue("use.old.style.ffmpeg.map.option", String.class, "0"));
+	protected String getPathToIdentify() {
+		return getPath(CONFIG_IMAGEMAGIC_PATH, "identify") + GenerateSWF.execExt;
 	}
 
 	protected File getStreamFolder(Recording recording) {
@@ -379,5 +394,17 @@ public abstract class BaseConverter {
 				jpg.getCanonicalPath() };
 
 		returnLog.add(ProcessHelper.executeScript("generate preview JPG", argv));
+	}
+
+	protected static Dimension getDimension(String txt) {
+		Matcher matcher = p.matcher(txt);
+
+		while (matcher.find()) {
+			String foundResolution = txt.substring(matcher.start(), matcher.end());
+			String[] resultions = foundResolution.split("x");
+			return new Dimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
+		}
+
+		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 }

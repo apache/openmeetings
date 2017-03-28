@@ -88,15 +88,15 @@
 .room.sidebar.left {
 	min-width: 200px;
 	width: 315px;
-	float: left;
+	position: absolute;
 }
 .room.wb.area {
-	float: left;
+	position: absolute;
 }
 .room.wb.area.ui-state-hover {
 	border: 0;
 }
-.room.wb.area.ui-state-hover .wb {
+.room.wb.area.ui-state-hover .wb-area {
 	visibility: hidden;
 	height: 1px !important;
 }
@@ -109,6 +109,79 @@
 	background-repeat: no-repeat;
 	height: inherit;
 	background-position: center;
+}
+.room.wb.area .tabs.ui-tabs, .room.wb.area .ui-tabs-panel {
+	padding: 0;
+	background-color:transparent;
+}
+.room.wb.area .ui-tabs-panel {
+	position: relative;
+}
+.room.wb.area .tools {
+	position: relative;
+	display: inline-block;
+	border: 0;
+}
+.room.wb.area .tools .bumper {
+	float: left;
+	display: inline-block;
+	background: repeating-linear-gradient(-45deg, transparent, transparent 3px, gray 3px, gray 5px);
+}
+.room.wb.area .tools.vertical .bumper {
+	width: 38px;
+	height: 20px;
+}
+.room.wb.area .tools.horisontal .bumper {
+	width: 20px;
+	height: 38px;
+}
+.room.wb.area .tools.vertical {
+	width: 38px;
+	height: 420px;
+}
+.room.wb.area .tools.horisontal {
+	width: 420px;
+	height: 38px;
+}
+.room.wb.area .tools .om-icon.big {
+	float: left;
+	vertical-align: top;
+}
+.room.wb.area .tools .om-icon.big.active {
+	background-color: whitesmoke;
+}
+.room.wb.area .tools .om-icon.big.paint {
+	background-image: url(images/paintbrush.png);
+}
+.room.wb.area .tools .om-icon.big.pointer {
+	background-image: url(images/pointer.png);
+}
+.room.wb.area .tools .om-icon.big.apointer {
+	background-image: url(images/wbpointer.png);
+}
+.room.wb.area .tools .om-icon.big.line {
+	background-image: url(images/line.png);
+}
+.room.wb.area .tools .om-icon.big.uline {
+	background-image: url(images/uline.png);
+}
+.room.wb.area .tools .om-icon.big.rect {
+	background-image: url(images/rectangle.png);
+}
+.room.wb.area .tools .om-icon.big.ellipse {
+	background-image: url(images/ellipse.png);
+}
+.room.wb.area .tools .om-icon.big.text {
+	background-image: url(images/font.png);
+}
+.room.wb.area .tools .om-icon.big.arrow {
+	background-image: url(images/arrow.png);
+}
+.room.wb.area .om-icon.big.next {
+	background-image: url(images/next.png);
+}
+.room.wb.area .om-icon.big.prev {
+	background-image: url(images/prev.png);
 }
 .room.sidebar.left .ui-tabs .ui-tabs-panel {
 	padding: 0;
@@ -228,7 +301,7 @@
 .restart.ui-icon {
 	background-image: url(images/arrow_refresh_small.png);
 }
-.settings.ui-icon {
+.settings.ui-icon, .settings.om-icon {
 	background-image: url(images/settings.png);
 }
 .activity.cam.ui-icon {
@@ -295,4 +368,103 @@
 }
 .room.sidebar.left .tab.om-icon.big.file {
 	background-image: url(images/folder_explore.png);
+}
+/**************************/
+.wb-settings {
+	position: absolute;
+}
+.wb-settings, .wb-settings .tab.props {
+	display: inline-block;
+	width: 310px;
+}
+.wb-settings .ui-dialog-titlebar-close {
+	position: absolute;
+	right: .3em;
+	top: 5px;
+	width: 20px;
+	padding: 1px;
+	height: 20px;
+}
+.wb-settings .header {
+	padding: 5px;
+}
+.wb-settings .header .ui-dialog-title {
+	padding-left: 10px;
+}
+.wb-settings .tab.props {
+	padding: 5px 10px;
+}
+.wb-settings .tab.props .prop-row {
+	padding-top: 5px;
+	margin: 0;
+	font-size: small;
+}
+.wb-settings .tab.props .block {
+	display: inline;
+	padding-left: 5px;
+}
+.wb-settings .tab.props .block.lbl {
+	width: 1em;
+}
+.wb-settings .tab.props .block.but {
+	width: 2.5em;
+}
+.wb-settings .tab.props .block.input {
+	width: 40px;
+}
+.wb-settings .tab.props .block.input input {
+	width: 30px;
+}
+.wb-settings .tab.props .block.input input[type=number] {
+	width: 40px;
+}
+.wb-settings .tab.props .block.input input[type=color] {
+	padding: 0;
+}
+.wb-settings .tab.props .block.input input[type=color]:disabled {
+	opacity:.3;
+}
+.wb-settings .tab.props .block.but button {
+	width: 2.5em;
+}
+.wb-settings .tab.props  .wb-prop-i.selected {
+	font-style: italic;
+}
+.wb-settings .tab.props .wb-prop-b.selected {
+	font-weight: bold;
+}
+.dropdown-menu.om-left {
+	right: 0;
+	left: auto !important;
+}
+.wb-tabbar {
+	padding-left: 70px !important;
+	padding-right: 35px !important;
+}
+.wb-tabbar .scroll-container {
+	overflow: hidden;
+}
+.wb-tabbar .scroll-container .scrollable, .wb-tabbar .scroll-container .scrollable li {
+	display: flex;
+}
+.wb-tabbar .add.disabled, .wb-tabbar .prev.disabled, .wb-tabbar .next.disabled {
+	opacity: .3;
+}
+.wb-tabbar .add, .wb-tabbar .prev, .wb-tabbar .next {
+	position: absolute;
+	top: 3px;
+}
+.wb-tabbar .add {
+	left: 2px;
+}
+.wb-tabbar .prev {
+	left: 35px;
+}
+.wb-tabbar .next {
+	right: 2px;
+}
+.wb-tabbar li button {
+	width: 20px;
+	height: 20px;
+	padding: 0;
 }
