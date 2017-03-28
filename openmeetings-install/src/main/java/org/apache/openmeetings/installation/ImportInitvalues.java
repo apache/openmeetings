@@ -35,6 +35,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IMAGEMAGIC_PATH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
@@ -243,7 +244,7 @@ public class ImportInitvalues {
 
 		cfgDao.add("swftools_path", cfg.swfPath, null, "Path To SWF-Tools");
 
-		cfgDao.add("imagemagick_path", cfg.imageMagicPath, null, "Path to ImageMagick tools");
+		cfgDao.add(CONFIG_IMAGEMAGIC_PATH, cfg.imageMagicPath, null, "Path to ImageMagick tools");
 
 		cfgDao.add("sox_path", cfg.soxPath, null, "Path To SoX-Tools");
 

@@ -616,7 +616,6 @@ var Wb = function() {
 			wbId: wbId
 			, obj: json
 		}));
-		//console.log('Wb Object Created', json, o);
 	};
 	var objAddedHandler = function (e) {
 		var o = e.target;
@@ -635,8 +634,14 @@ var Wb = function() {
 			wbId: wbId
 			, obj: toOmJson(o)
 		}));
-		//console.log('Object Modified', o);
 	};
+	var objSelectedHandler = function (e) {
+		var o = e.target;
+		s.find('.wb-dim-x').val(o.left);
+		s.find('.wb-dim-y').val(o.top);
+		s.find('.wb-dim-w').val(o.width);
+		s.find('.wb-dim-h').val(o.height);
+	}
 	var pathCreatedHandler = function (o) {
 		o.path.uid = UUID.generate();
 		wbObjCreatedHandler(o.path);
@@ -657,10 +662,12 @@ var Wb = function() {
 			t = a.find('.tools'), c = a.find('canvas'), s = a.find(".wb-settings");
 			c.attr('id', 'can-' + tid);
 			canvas = new fabric.Canvas(c.attr('id'));
+			canvas.wbId = _wbId;
 			//TODO create via WS canvas:cleared
 			canvas.on({
 				'object:added': objAddedHandler
 				, 'object:modified': objModifiedHandler
+				, 'object:selected': objSelectedHandler
 				, 'path:created': pathCreatedHandler
 				//, 'text:editing:exited': textEditedHandler
 				//, 'text:changed': textChangedHandler
@@ -746,7 +753,16 @@ var WbArea = (function() {
 		canvas.add(_o);
 	}
 	function _createHandler(canvas, _o) {
-		canvas.add(_o);
+		if ('Video' === _o.fileType || 'Recording' === _o.fileType) {
+			var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
+				.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
+			$('#wb-tab-' + canvas.wbId).append(vid);
+			//canvas.add(new fabric.Image(vid[0], _o));
+			canvas.add(new fabric.Image(vid[0], {}));
+			//vid.toJSON(['uid', 'fileId', 'fileType']);
+		} else {
+			canvas.add(_o);
+		}
 	}
 	function _findObject(canvas, uid) {
 		var _o = {};
@@ -832,6 +848,12 @@ var WbArea = (function() {
 				break;
 			default:
 				_createObject(canvas, [o], _createHandler);
+				if ('Video' === o.fileType || 'Recording' === o.fileType) {
+					fabric.util.requestAnimFrame(function render() {
+						canvas.renderAll();
+						fabric.util.requestAnimFrame(render);
+					});
+				}
 				break;
 		}
 	};
@@ -871,11 +893,9 @@ var WbArea = (function() {
 	self.resize = function(posX, w, h) {
 		if (!container) return;
 		var hh = h - 5;
-		container.width(w).css('left', posX	 + "px");
-		area.width(w);
+		container.width(w).height(h).css('left', posX + "px");
+		area.width(w).height(hh);
 
-		container.height(h);
-		area.height(hh);
 		var wbTabs = area.find(".tabs.ui-tabs");
 		wbTabs.height(hh);
 		var tabPanels = wbTabs.find(".ui-tabs-panel");
@@ -899,6 +919,7 @@ $(function() {
 				}
 			}
 		} catch (err) {
+			console.log(err);
 			//no-op
 		}
 	});

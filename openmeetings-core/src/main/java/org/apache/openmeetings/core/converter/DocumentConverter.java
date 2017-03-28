@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.documents;
+package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.documents.CreateLibraryPresentation.generateXMLDocument;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
@@ -24,8 +24,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 
-import org.apache.openmeetings.core.converter.GenerateSWF;
-import org.apache.openmeetings.core.converter.GenerateThumbs;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
@@ -39,15 +37,15 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GeneratePDF {
-	private static final Logger log = Red5LoggerFactory.getLogger(GeneratePDF.class, webAppRootKey);
+public class DocumentConverter {
+	private static final Logger log = Red5LoggerFactory.getLogger(DocumentConverter.class, webAppRootKey);
 
-	@Autowired
-	private GenerateThumbs generateThumbs;
 	@Autowired
 	private GenerateSWF generateSWF;
 	@Autowired
 	private ConfigurationDao configurationDao;
+	@Autowired
+	private ImageConverter imageConverter;
 
 	public ConverterProcessResultList convertPDF(FileExplorerItem f, String ext) throws Exception {
 		ConverterProcessResultList errors = new ConverterProcessResultList();
@@ -60,9 +58,9 @@ public class GeneratePDF {
 			log.debug("-- running JOD --");
 			errors.addItem("processOpenOffice", doJodConvert(original, pdf));
 		}
-		
+
 		log.debug("-- generateBatchThumb --");
-		errors.addItem("processThumb", generateThumbs.generateBatchThumb(pdf, pdf.getParentFile(), 80, "thumb"));
+		errors.addItem("processThumb", imageConverter.generateBatchThumb(pdf, pdf.getParentFile(), 80, "thumb"));
 		File swf = f.getFile();
 		errors.addItem("processSWF", generateSWF.generateSwf(pdf, swf));
 

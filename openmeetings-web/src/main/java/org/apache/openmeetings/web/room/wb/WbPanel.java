@@ -42,6 +42,7 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
+import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -64,6 +65,10 @@ import com.github.openjson.JSONObject;
 
 public class WbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private static final int UPLOAD_WB_LEFT = 0;
+	private static final int UPLOAD_WB_TOP = 0;
+	private static final int DEFAULT_WIDTH = 640;
+	private static final int DEFAULT_HEIGHT = 480;
 	public static final String FUNC_ACTION = "wbAction";
 	public static final String PARAM_ACTION = "action";
 	public static final String PARAM_OBJ = "obj";
@@ -266,22 +271,28 @@ public class WbPanel extends Panel {
 		return _file;
 	}
 	private JSONObject addFileUrl(String ruid, JSONObject _file, FileItem fi, Client c) {
-		final PageParameters pp = new PageParameters();
+		JSONObject file = new JSONObject(_file, JSONObject.getNames(_file)); //FIXME TODO openjson 1.0.2
 		final FileSystemResourceReference ref;
-		pp.add("id", fi.getId()).add("ruid", ruid).add("wuid", _file.optString("uid"));
+		final PageParameters pp = new PageParameters()
+				.add("id", fi.getId()).add("uid", c.getUid())
+				.add("ruid", ruid).add("wuid", _file.optString("uid"));
 		switch (fi.getType()) {
 			case Video:
-				pp.add("preview", true);
 				ref = new RoomResourceReference();
+				file.put("_src", urlFor(ref, pp));
+				file.put("_poster", urlFor(ref, new PageParameters(pp).add("preview", true)));
 				break;
 			case Recording:
-				ref = new JpgRecordingResourceReference();
+				ref = new Mp4RecordingResourceReference();
+				file.put("_src", urlFor(ref, pp));
+				file.put("_poster", urlFor(new JpgRecordingResourceReference(), pp));
 				break;
 			default:
 				ref = new RoomResourceReference();
+				file.put("src", urlFor(ref, pp));
 				break;
 		}
-		return new JSONObject(_file, JSONObject.getNames(_file)).put("src", urlFor(ref, pp.add("uid", c.getUid())));  //FIXME TODO openjson 1.0.2
+		return file;
 	}
 
 	/*
@@ -317,7 +328,7 @@ public class WbPanel extends Panel {
 
 	public void sendFileToWb(FileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
-			//FIXME TODO WmlFile special handling
+			//FIXME TODO WmlFile/Chart special handling
 			Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
 			String wuid = UUID.randomUUID().toString();
 			Whiteboard wb = wbs.getWhiteboards().values().iterator().next(); //TODO active
@@ -326,10 +337,10 @@ public class WbPanel extends Panel {
 					.put("fileId", fi.getId())
 					.put("fileType", fi.getType().name())
 					.put("type", "image")
-					.put("left", 0) //FIXME TODO constant
-					.put("top", 0) //FIXME TODO constant
-					.put("width", 800/*fi.getWidth()*/) //FIXME TODO check null
-					.put("height", 600/*fi.getHeight()*/) //FIXME TODO constant
+					.put("left", UPLOAD_WB_LEFT)
+					.put("top", UPLOAD_WB_TOP)
+					.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
+					.put("height", fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
 					//,"angle":32.86
 					//,"crossOrigin":""
 					.put("uid", wuid)
@@ -345,7 +356,7 @@ public class WbPanel extends Panel {
 					, (o, c) -> {
 							return o.put("func", String.format("WbArea.%s(%s);"
 									, Action.createObj.name()
-									, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString()) //FIXME TODO openjson 1.0.2
+									, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString())
 								).toString();
 						}
 					);

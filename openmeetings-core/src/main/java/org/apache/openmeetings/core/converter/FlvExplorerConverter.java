@@ -28,8 +28,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
@@ -42,20 +40,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
-	private static final Pattern p = Pattern.compile("\\d{2,4}(x)\\d{2,4}");
 
 	// Spring loaded Beans
 	@Autowired
 	private FileExplorerItemDao fileDao;
-
-	private static class FlvDimension {
-		public FlvDimension(int width, int height) {
-			this.width = width;
-			this.height = height;
-		}
-		public int width = 0;
-		public int height = 0;
-	}
 
 	public List<ConverterProcessResult> convertToMP4(FileExplorerItem f, String ext) {
 		List<ConverterProcessResult> logs = new ArrayList<>();
@@ -88,7 +76,7 @@ public class FlvExplorerConverter extends BaseConverter {
 				}
 			}
 			//Parse the width height from the FFMPEG output
-			FlvDimension dim = getFlvDimension(res.getError());
+			Dimension dim = getDimension(res.getError());
 			f.setWidth(dim.width);
 			f.setHeight(dim.height);
 			File jpeg = f.getFile(EXTENSION_JPG);
@@ -107,17 +95,5 @@ public class FlvExplorerConverter extends BaseConverter {
 		}
 
 		return logs;
-	}
-
-	private static FlvDimension getFlvDimension(String txt) throws Exception {
-		Matcher matcher = p.matcher(txt);
-
-		while (matcher.find()) {
-			String foundResolution = txt.substring(matcher.start(), matcher.end());
-			String[] resultions = foundResolution.split("x");
-			return new FlvDimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
-		}
-
-		return new FlvDimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 }
