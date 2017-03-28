@@ -147,8 +147,8 @@ public class VideoInfo extends Panel {
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);
-		downloadBtn.setEnabled(exists);
-		share.setEnabled(exists);
+		downloadBtn.setEnabled(exists && !_r.isReadOnly());
+		share.setEnabled(exists && !_r.isReadOnly());
 		if (target != null) {
 			target.add(form);
 		}
@@ -178,8 +178,8 @@ public class VideoInfo extends Panel {
 
 			@Override
 			public boolean isEnabled() {
-				Recording r = rm.getObject();
-				return r != null && r.exists(EXTENSION_MP4);
+				FileItem r = rm.getObject();
+				return r != null && r.exists(EXTENSION_MP4) && !r.isReadOnly();
 			}
 
 			@Override

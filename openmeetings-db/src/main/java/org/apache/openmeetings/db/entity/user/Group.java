@@ -82,6 +82,10 @@ public class Group implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private boolean limited;
 
+	@Column(name = "restricted", nullable = false)
+	@Element(data = true, required = false)
+	private boolean restricted;
+
 	@Column(name = "max_files_size", nullable = false)
 	@Element(data = true, required = false)
 	private int maxFilesSize;
@@ -174,6 +178,14 @@ public class Group implements IDataProviderEntity {
 
 	public void setLimited(boolean limited) {
 		this.limited = limited;
+	}
+
+	public boolean isRestricted() {
+		return restricted;
+	}
+
+	public void setRestricted(boolean restricted) {
+		this.restricted = restricted;
 	}
 
 	public int getMaxFilesSize() {

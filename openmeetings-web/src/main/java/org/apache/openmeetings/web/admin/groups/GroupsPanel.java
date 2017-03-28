@@ -73,7 +73,7 @@ public class GroupsPanel extends AdminPanel {
 						form.setModelObject(g);
 						form.updateView(target);
 						target.add(listContainer);
-						target.appendJavaScript("groupsInit();");
+						target.appendJavaScript("adminPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.append("class", getRowClass(g.getId(), form.getModelObject().getId())));

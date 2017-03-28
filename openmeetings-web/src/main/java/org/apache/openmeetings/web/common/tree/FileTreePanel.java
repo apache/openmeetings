@@ -340,6 +340,10 @@ public abstract class FileTreePanel extends Panel {
 		return false;
 	}
 
+	private static boolean isDownloadable(FileItem f) {
+		return !f.isReadOnly() && (f.getType() == Type.Presentation || f.getType() == Type.Image);
+	}
+
 	public void select(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
 		updateSelected(target); //all previously selected are in update list
 		if (ctrl) {
@@ -375,7 +379,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 		updateSelected(target); //all finaly selected are in the update list
 		if (target != null) {
-			target.add(trashBorder, download.setVisible(lastSelected.getType() == Type.Presentation || lastSelected.getType() == Type.Image));
+			target.add(trashBorder, download.setVisible(isDownloadable(lastSelected)));
 		}
 	}
 
