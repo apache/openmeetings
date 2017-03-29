@@ -59,13 +59,14 @@ public class OmFileHelper {
 	public static final String recordingFileName = "flvRecording_";
 	public static final String profileImagePrefix = "_profile_";
 	public static final String thumbImagePrefix = "_thumb_";
+	public static final String DOC_PAGE_PREFIX = "page";
 	public static final String TEST_SETUP_PREFIX = "TEST_SETUP_";
 	public static final String dashboardFile = "dashboard.xml";
 	public static final String EXTENSION_WML = "wml";
 	public static final String EXTENSION_FLV = "flv";
 	public static final String EXTENSION_MP4 = "mp4";
 	public static final String EXTENSION_JPG = "jpg";
-	public static final String EXTENSION_SWF = "swf";
+	public static final String EXTENSION_PNG = "png";
 	public static final String EXTENSION_PDF = "pdf";
 	public static final String WB_VIDEO_FILE_PREFIX = "UPLOADFLV_";
 	public static final String MP4_MIME_TYPE = "video/" + EXTENSION_MP4;

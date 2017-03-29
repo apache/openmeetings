@@ -28,6 +28,7 @@ public class Whiteboards {
 	private final String uid = UUID.randomUUID().toString();
 	private Map<Long, Whiteboard> whiteboards = new ConcurrentHashMap<>();
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
+	private volatile AtomicLong activeWb = new AtomicLong(0);
 
 	public Whiteboards() {}
 
@@ -67,5 +68,13 @@ public class Whiteboards {
 
 	public String getUid() {
 		return uid;
+	}
+
+	public long getActiveWb() {
+		return activeWb.get();
+	}
+
+	public void setActiveWb(long wbId) {
+		activeWb.set(wbId);
 	}
 }

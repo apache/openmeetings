@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.install;
 
+import static org.apache.openmeetings.core.converter.BaseConverter.EXEC_EXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -40,7 +41,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
-import org.apache.openmeetings.core.converter.GenerateSWF;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -491,30 +491,20 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final TextField<String> ffmpegPath;
 		private final TextField<String> imageMagicPath;
 		private final TextField<String> soxPath;
-		private final TextField<String> swfPath;
 		private final TextField<String> officePath;
 		private final String regex = "\\r\\n|\\r|\\n";
 		private boolean isAllChecked = false;
 		public ParamsStep3() {
 			super(paramsStep2);
 
-			add(new TextField<Integer>("swfZoom").setRequired(true).add(range(50, 600)));
-			add(new TextField<Integer>("swfJpegQuality").setRequired(true).add(range(1, 100)));
-			add(swfPath = new TextField<>("swfPath"));
-			add(new AjaxButton("validateSwf") {
-				private static final long serialVersionUID = 1L;
-				@Override
-				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + GenerateSWF.execExt), "--version"});
-					target.add(getFeedbackPanel());
-				}
-			});
+			add(new TextField<Integer>("docDpi").setRequired(true).add(range(50, 600)));
+			add(new TextField<Integer>("docQuality").setRequired(true).add(range(1, 100)));
 			add(imageMagicPath = new TextField<>("imageMagicPath"));
 			add(new AjaxButton("validateImageMagic") {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + GenerateSWF.execExt), "-version"});
+					checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -523,7 +513,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + GenerateSWF.execExt), "-version"});
+					checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -532,7 +522,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + GenerateSWF.execExt), "--version"});
+					checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -580,10 +570,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		private boolean checkAllPath() {
-			boolean result = checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + GenerateSWF.execExt), "--version"});
-			result = checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + GenerateSWF.execExt), "-version"}) && result;
-			result = checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + GenerateSWF.execExt), "-version"}) && result;
-			result = checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + GenerateSWF.execExt), "--version"}) && result;
+			boolean result = checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
+			result = checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"}) && result;
+			result = checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"}) && result;
 			result = checkOfficePath() && result;
 			isAllChecked = true;
 			return result;

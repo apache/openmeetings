@@ -1625,14 +1625,6 @@
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>. 
 					Sur la majorité des systèmes linux vous pouvez le trouver via votre gestionnaire de paquets (apt-get).
 				</li>
-				<li>Installez <strong>SWFTools</strong> sur le serveur. Vous trouverez plus d'informations sur <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>. 
-					Certaines distribution de Linux le possède déjà. Voir
-					<a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>).
-					La version recommandée de <strong>SWFTools</strong> est 0.9 - les versions précédentes ont un bug qui modifie les dimensions des objets sur le tableau blanc.
-				</li>
 			</ul>
 		</li>
 	</ol>
@@ -1731,15 +1723,12 @@
 	<entry key="install.wizard.params.step3.converters">Convertisseurs</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> Voir</entry>
 	<entry key="install.wizard.params.step3.installation">Installation</entry>
-	<entry key="install.wizard.params.step3.swfZoom">Zoom des SWFTools</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">Veuillez indiquer le nombre de dpi que swftools devra utiliser lors de la conversion de PDF vers SWF.</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. Indiquez combien de dpi swtools devra utiliser pour les conversions PDF vers SWF. (Par défaut : 100 dpi).</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools Qualité JPEG</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">Entrez la qualité des images jpec incorporées. 0 étant la moins bonne et 100 la meilleure (par défaut : 85).</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. Indiquez la qualité pour les images jpeg. 0 est la moins bonne (taille plus petite), 100 est la meilleure (taille plus grande) (par défaut : 85).</entry>
-	<entry key="install.wizard.params.step3.swfPath">Chemin vers SWFTools</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Indiquez le chemin vers swftools,  par ex. C:/swftools (Windows), ou laissez vide si swftools se trouve déjà dans le chemin système.</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">Vous pouvez vérifier que swftools se trouve dans votre chemin système en tapant pdf2swf dans une ligne de commande. Si le résultat de cette commande vous montre une liste d'options, laissez ce champ vide, dans le cas contraire veuillez indiquer le chemin vers swftools.</entry>
+	<entry key="install.wizard.params.step3.docDpi">Document conversion DPI</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Enter the dpi that ImageMagic will use for PDF to image conversion</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI that ImageMagic will use for PDF to image conversion (default is 150)</entry>
+	<entry key="install.wizard.params.step3.docQuality">Document conversion JPEG Quality</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">Chemin vers ImageMagick</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Indiquez le chemin vers ImageMagick dans le cas où ImageMagick ne se trouve pas dans le chemin système.</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installez ImageMagick sur le serveur. Vous trouverez plus d'informations à l'adresse http://www.imagemagick.org. Les instructions d'installation peuvent être trouvées ici http://www.imagemagick.org/script/binary-releases.php. Sur la majorité des systèmes linux vous pouvez le trouver via votre gestionnaire de paquets (apt-get).]]></entry>

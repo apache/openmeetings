@@ -32,6 +32,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
@@ -236,13 +238,11 @@ public class ImportInitvalues {
 		// "1" == "EN"
 		cfgDao.add(CONFIG_DEFAULT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
 
-		cfgDao.add("swftools_zoom", "" + cfg.swfZoom, null,
-				"dpi for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 dpi)");
+		cfgDao.add(CONFIG_DOCUMENT_DPI, "" + cfg.docDpi, null,
+				"dpi for conversion of PDF to images (should be an integer between 50 and  600 with a default value of 150 dpi)");
 
-		cfgDao.add("swftools_jpegquality", "" + cfg.swfJpegQuality, null,
-				"compression quality for conversion of PDF to SWF (should be an integer between 1 and 100, with a default value of 85)");
-
-		cfgDao.add("swftools_path", cfg.swfPath, null, "Path To SWF-Tools");
+		cfgDao.add(CONFIG_DOCUMENT_QUALITY, "" + cfg.docQuality, null,
+				"compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90)");
 
 		cfgDao.add(CONFIG_IMAGEMAGIC_PATH, cfg.imageMagicPath, null, "Path to ImageMagick tools");
 

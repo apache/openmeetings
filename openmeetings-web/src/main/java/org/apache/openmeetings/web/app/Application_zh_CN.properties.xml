@@ -1625,13 +1625,6 @@
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
 					关于安装. 安装的说明可以在这里找到, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它 (apt-get it).
 				</li>
-				<li>安装 <strong>SWFTools</strong> 在服务器上, 你可以得到更多的信息在 <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					关于安装. 一些Linux在软件包管理器中已经包含了 <a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					推荐的版本 <strong>SWFTools</strong> 是 0.9 因为之前的版本有一个错误，导致在白板上显示错误的对象尺寸
-				</li>
 			</ul>
 		</li>
 	</ol>
@@ -1729,15 +1722,12 @@
 	<entry key="install.wizard.params.step3.converters">转换器</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> 见</entry>
 	<entry key="install.wizard.params.step3.installation">安装</entry>
-	<entry key="install.wizard.params.step3.swfZoom">swftools变焦</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">输入DPI，swftools将SWF转换为PDF</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">DPI，swftools将SWF转换为PDF (默认是 100)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">swftools JPEG质量</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">输入嵌入的JPEG图片的质量。0是最坏的（小），100是最好的（大）。（默认：85）</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">输入嵌入的JPEG图片的质量。0是最坏的（小），100是最好的（大）。（默认：85）</entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools 路径</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">输入swftools例如C:/swftools（Windows）或留有空白，如果swftools是已知的系统路径</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">你可以测试是否将swftools安装到系统路径，打开shell或者cmd提示符下输入Pdf2swf，如果出现了一个列表，上有一些选项，就不用填写这个字段，否则否则你必须指定Pdf2swf在您的系统上的路径</entry>
+	<entry key="install.wizard.params.step3.docDpi">Document conversion DPI</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Enter the dpi that ImageMagic will use for PDF to image conversion</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI that ImageMagic will use for PDF to image conversion (default is 150)</entry>
+	<entry key="install.wizard.params.step3.docQuality">Document conversion JPEG Quality</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick 路径</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">输入ImageMagick的路径, 如果ImageMagick成功安装到系统路径，就不用填写这个字段</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[安装 ImageMagick 在服务器上，你可以得到更多的信息在 http://www.imagemagick.org 关于安装. 安装的说明可以在这里找到 http://www.imagemagick.org/script/binary-releases.php, 然而，在大多数linux系统中，您可以通过您最喜爱的软件包管理器来获得它(apt-get it)]]></entry>

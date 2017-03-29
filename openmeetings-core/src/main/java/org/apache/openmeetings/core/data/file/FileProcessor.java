@@ -94,9 +94,6 @@ public class FileProcessor {
 		}
 		f.setHash(hash);
 
-		f = fileDao.update(f);
-		log.debug("fileId: " + f.getId());
-
 		File file = f.getFile(ext);
 		log.debug("writing file to: " + file);
 		if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
@@ -108,7 +105,7 @@ public class FileProcessor {
 
 		log.debug("canBeConverted: " + canBeConverted);
 		if (canBeConverted || isPdf) {
-			// convert to pdf, thumbs, swf and xml-description
+			// convert to pdf and images
 			returnError = generatePDF.convertPDF(f, ext);
 		} else if (isChart) {
 			log.debug("uploaded chart file");
@@ -124,6 +121,8 @@ public class FileProcessor {
 				returnError.addItem("processVideo " + i++, returnMap);
 			}
 		}
+		f = fileDao.update(f);
+		log.debug("fileId: " + f.getId());
 
 		// has to happen at the end, otherwise it will be overwritten
 		//cause the variable is new initialized

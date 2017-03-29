@@ -1628,17 +1628,6 @@
 					de todos modos en la mayoría de los sistemas linux puede conseguirlo
 					via su paquete favorito de administración (apt-get it)
 				</li>
-				<li>Instale <strong>SWFTools</strong> en el servidor, puede tener
-					más información en <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					mire en instalación. Algunas de las distribuciones Linux ya lo tienen en el
-					administrador de paquetes, vea <a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					la versión recomendada de <strong>SWFTools</strong> es 0.9 porque las
-					anteriores tienen un bug que hace llevar unas dimensiones erróneas al objeto
-					en la Pizarra.
-				</li>
 			</ul>
 		</li>
 	</ol>
@@ -1740,15 +1729,12 @@
 	<entry key="install.wizard.params.step3.converters">Convertidores</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> consulte</entry>
 	<entry key="install.wizard.params.step3.installation">Instalación</entry>
-	<entry key="install.wizard.params.step3.swfZoom">Zoom SWFTools</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">Introduzca el dpi que swftools empleará para convertir PDF a SWF</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">Puede comprobar si la ruta a la instalación de swftools es la correcta abriendo una shell o cmd-prompt y escribir pdf2swf  Introduzca la dpi que swftools empleará para convertir PDF a SWF. Preconfigurada es 100 dpi</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">Calidad de JPEG en SWFTools</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">Introduzca la calidad embebida de las imágenes jpeg. 0 es la menor (pesa menos), 100 es la mejor (pesa más). (por omisión:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Puede comprobar si la ruta a la instalación de swftools es la correcta abriendo una shell o cmd-prompt y escribir pdf2swf  Introduzca la calidad de las imagenes jpeg embebidas. 0 es la menor (pequeña), 100 es la mejor (grande). (preconfigurada:85)</entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools Path (Ruta)</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Introduzca la ruta a swftools, por ejemplo C:/swftools (Windows) o déjelo en blanco si swftools está registrado en el path del sistema</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">Puede comprobar si la ruta a la instalación de swftools es la correcta abriendo una shell o cmd-prompt y escribir pdf2swf  Si muestra una lista de opciones, deje este campo en blanco, si no debe especificar la ruta a pdf2swf en su sistema</entry>
+	<entry key="install.wizard.params.step3.docDpi">Document conversion DPI</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Enter the dpi that ImageMagic will use for PDF to image conversion</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI that ImageMagic will use for PDF to image conversion (default is 150)</entry>
+	<entry key="install.wizard.params.step3.docQuality">Document conversion JPEG Quality</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Path (Ruta)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Introduzca la ruta a ImageMagick, o déjelo en blanco si ImageMagick está registrado en el path del sistema</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Instalar ImageMagick en el servidor, puede obtener más información en http://www.imagemagick.org observando instalación. Las instrucciones para la misma puede encontrarlas aquí http://www.imagemagick.org/script/binary-releases.php, de todos modos en la mayoría de los sistemas linux puede conseguirlo via su paquete favorito de administración (apt-get it).]]></entry>

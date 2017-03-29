@@ -46,9 +46,8 @@ public class InstallationConfig implements Serializable {
 	public String mailReferer = "noreply@openmeetings.apache.org";
 	public String mailUseTls = "0";
 	//paths
-	public Integer swfZoom = 100;
-	public Integer swfJpegQuality = 85;
-	public String swfPath = "";
+	public Integer docDpi = 150;
+	public Integer docQuality = 90;
 	public String imageMagicPath = "";
 	public String ffmpegPath = "";
 	public String soxPath = "";
@@ -82,8 +81,8 @@ public class InstallationConfig implements Serializable {
 				+ ", smtpPort=" + smtpPort + ", smtpServer=" + smtpServer
 				+ ", mailAuthName=" + mailAuthName + ", mailAuthPass="
 				+ mailAuthPass + ", mailReferer=" + mailReferer
-				+ ", mailUseTls=" + mailUseTls + ", swfZoom=" + swfZoom
-				+ ", swfJpegQuality=" + swfJpegQuality  + ", swfPath=" + swfPath
+				+ ", mailUseTls=" + mailUseTls + ", docDpi=" + docDpi
+				+ ", docQuality=" + docQuality
 				+ ", imageMagicPath=" + imageMagicPath + ", ffmpegPath="
 				+ ffmpegPath + ", soxPath=" + soxPath
 				+ ", defaultLangId=" + defaultLangId + ", sendEmailAtRegister="
@@ -94,7 +93,7 @@ public class InstallationConfig implements Serializable {
 				+ red5SipEnable + ", red5SipRoomPrefix=" + red5SipRoomPrefix
 				+ ", red5SipExtenContext=" + red5SipExtenContext
 				+ ", replyToOrganizer=" + replyToOrganizer
-				+ ", ical_timeZone=" + ical_timeZone 
+				+ ", ical_timeZone=" + ical_timeZone
 				+ "]";
 	}
 }

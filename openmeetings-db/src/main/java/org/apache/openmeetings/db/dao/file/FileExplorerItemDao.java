@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -302,26 +300,19 @@ public class FileExplorerItemDao {
 		try {
 			if (f.exists()) {
 				File base = OmFileHelper.getUploadFilesDir();
-				if (Type.Image == f.getType()) {
-					size += f.getFile().length();
-					File thumbFile = new File(base, String.format("%s%s.%s", thumbImagePrefix, f.getHash(), EXTENSION_JPG));
-					if (thumbFile.exists()) {
-						size += thumbFile.length();
-					}
-				}
-				if (Type.Presentation == f.getType()) {
-					File tFolder = new File(base, f.getHash());
+				switch (f.getType()) {
+					case Image:
+					case Presentation:
+					case Video:
+						File tFolder = new File(base, f.getHash());
 
-					if (tFolder.exists()) {
-						size += OmFileHelper.getSize(tFolder);
-					}
-				}
-				if (Type.Video == f.getType()) {
-					size += f.getFile().length();
-					File thumb = f.getFile(EXTENSION_JPG);
-					if (thumb.exists()) {
-						size += thumb.length();
-					}
+						if (tFolder.exists()) {
+							size += OmFileHelper.getSize(tFolder);
+						}
+						break;
+					default:
+						// TODO check other types
+						break;
 				}
 			}
 			if (Type.Folder == f.getType()) {

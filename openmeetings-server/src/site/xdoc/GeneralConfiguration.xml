@@ -200,16 +200,16 @@
 					<td> 2.1.x </td>
 				</tr>
 				<tr>
-					<td> swftools_zoom </td>
-					<td> 100 </td>
-					<td> DPI for conversion of PDF to SWF (should be an integer between 50 and  600 with a default value of 100 DPI) </td>
-					<td> 2.0.x </td>
+					<td> document.dpi </td>
+					<td> 150 </td>
+					<td> DPI for conversion of PDF to images (should be an integer between 50 and  600 with a default value of 150 DPI) </td>
+					<td> 4.0.x </td>
 				</tr>
 				<tr>
-					<td> swftools_jpegquality </td>
-					<td> 85 </td>
-					<td> Compression quality for conversion of PDF to SWF (should be an integer between 1 and 100, with a default value of 85) </td>
-					<td> 2.0.x </td>
+					<td> document.quality </td>
+					<td> 90 </td>
+					<td> Compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90) </td>
+					<td> 4.0.x </td>
 				</tr>
 				<tr>
 					<td> sendEmailAtRegister </td>

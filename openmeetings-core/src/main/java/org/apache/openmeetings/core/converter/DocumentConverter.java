@@ -18,14 +18,13 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.core.documents.CreateLibraryPresentation.generateXMLDocument;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.wicket.util.string.Strings;
@@ -41,14 +40,12 @@ public class DocumentConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(DocumentConverter.class, webAppRootKey);
 
 	@Autowired
-	private GenerateSWF generateSWF;
-	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private ImageConverter imageConverter;
 
-	public ConverterProcessResultList convertPDF(FileExplorerItem f, String ext) throws Exception {
-		ConverterProcessResultList errors = new ConverterProcessResultList();
+	public ConverterProcessResultList convertPDF(FileItem f, String ext) throws Exception {
+		ConverterProcessResultList list = new ConverterProcessResultList();
 
 		boolean fullProcessing = !EXTENSION_PDF.equals(ext);
 		File original = f.getFile(ext);
@@ -56,16 +53,11 @@ public class DocumentConverter {
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
 			log.debug("-- running JOD --");
-			errors.addItem("processOpenOffice", doJodConvert(original, pdf));
+			list.addItem("processOpenOffice", doJodConvert(original, pdf));
 		}
 
-		log.debug("-- generateBatchThumb --");
-		errors.addItem("processThumb", imageConverter.generateBatchThumb(pdf, pdf.getParentFile(), 80, "thumb"));
-		File swf = f.getFile();
-		errors.addItem("processSWF", generateSWF.generateSwf(pdf, swf));
-
-		errors.addItem("processXML", generateXMLDocument(original, fullProcessing ? pdf : null, swf));
-		return errors;
+		log.debug("-- generate page images --");
+		return imageConverter.convertDocument(list, f, pdf);
 	}
 
 	/**

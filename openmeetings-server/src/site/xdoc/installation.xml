@@ -101,25 +101,6 @@
 								your
 								favorite package managers (apt-get it).
 							</li>
-							<li>
-								Install
-								<b>SWFTools</b>
-								on the server, you can get more information
-								on
-								<a href="http://www.swftools.org/" target="_blank" rel="nofollow">http://www.swftools.org/
-								</a>
-								regarding installation. Some of the
-								Linux distributions already
-								have it in there package manager (see
-								<a href="http://packages.debian.org/unstable/utils/swftools"
-									target="_blank" rel="nofollow">http://packages.debian.org/unstable/utils/swftools
-								</a>
-								), the
-								recommended version of SWFTools is 0.9 as prior version
-								have a
-								bug that does lead to wrong object dimensions at
-								whiteboard
-							</li>
 						</ul>
 					</div>
 				</li>
@@ -267,7 +248,7 @@
 				</li>
 				<li>If you have Problems with conversion-jobs check your openmeetings log
 					output (available at <tt>$RED5_HOME/log/openmeetings.log</tt>). There will be error Messages which help you. You must
-					install OpenOffice, ImageMagick, GhostScript and SWFTools to run
+					install OpenOffice, ImageMagick and GhostScript to run
 					all conversion-Jobs correctly.
 				</li>
 				<li>

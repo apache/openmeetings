@@ -1628,17 +1628,6 @@
 					In den meisten Linux-Distributionen l&auml;sst es sich bequem per Paketmanager
 					(z.B. apt-get) installieren.
 				</li>
-				<li>Installieren Sie <strong>SWFTools</strong> auf dem Server. Weitere 
-					Informationen (Installationsanleitungen etc.) finden Sie unter <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>. 
-					Einige Linux-Distributionen haben es bereits in ihre Paketquellen aufgenommen (siehe 
-					<a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>).
-					Die empfohlene Version von <strong>SWFTools</strong> ist 0.9 - fr&uuml;here Versionen
-					enthalten einen Bug, welcher zu falschen Objektausdehnungen auf dem Whiteboard 
-					f&uuml;hrt.
-				</li>
 			</ul>
 		</li>
 	</ol>
@@ -1742,31 +1731,12 @@
 	<entry key="install.wizard.params.step3.converters">Konverter</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> Siehe</entry>
 	<entry key="install.wizard.params.step3.installation">Installation</entry>
-	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title"><![CDATA[Geben Sie an, wieviel dpi swftools f&uuml;r die 'PDF zu SWF'-Konvertierung nutzen soll.]]></entry>
-	<entry key="install.wizard.params.step3.swfZoom.text"><![CDATA[Sie k&ouml;nnen &uuml;berpr&uuml;fen, ob swftools im Systempfad 
-		installiert ist, indem Sie eine Shell oder einen cmd-Prompt &ouml;ffnen
-		und pdf2swf eingeben.
-		Geben Sie an, wieviel dpi swftools f&uuml;r die 'PDF zu SWF'-Konvertierung nutzen soll.
-		Voreingestellter Wert ist 100 dpi.]]></entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality"><![CDATA[SWFTools JPEG-Qualit&auml;t]]></entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title"><![CDATA[Geben Sie an, welche Qualit&auml;tsstufe f&uuml;r eingebettete JPEG-Bilder verwendet werden soll.]]></entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text"><![CDATA[Sie k&ouml;nnen &uuml;berpr&uuml;fen, ob swftools im Systempfad 
-		installiert ist, indem Sie eine Shell oder einen cmd-Prompt &ouml;ffnen
-		und pdf2swf eingeben.
-		Geben Sie an, welche Qualit&auml;tsstufe f&uuml;r eingebettete JPEG-Bilder 
-		verwendet werden soll. 0 bedeutet schlechteste Qualit&auml;t (kleinste 
-		Dateigr&ouml;&szlig;e), 100 bedeutet beste Qualit&auml;t (gr&ouml;&szlig;te 
-		Dateigr&ouml;&szlig;e) (Voreinstellung: 85)]]></entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools-Pfad</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Geben Sie den Pfad zu swftools an, z.B. C:/swftools (Windows), falls es sich nicht im Systempfad befindet.</entry>
-	<entry key="install.wizard.params.step3.swfPath.text"><![CDATA[
-		Sie k&ouml;nnen &uuml;berpr&uuml;fen, ob swftools im Systempfad 
-		installiert ist, indem Sie eine Shell oder einen cmd-Prompt &ouml;ffnen
-		und pdf2swf eingeben. Wenn daraufhin eine Liste mit Optionen angezeigt wird, 
-		k&ouml;nen Sie dieses Feld leer lassen. Ansonsten m&uuml;ssen Sie den Pfad 
-		zu pdf2swf hier eintragen.
-	]]></entry>
+	<entry key="install.wizard.params.step3.docDpi">Document conversion DPI</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Enter the dpi that ImageMagic will use for PDF to image conversion</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI that ImageMagic will use for PDF to image conversion (default is 150)</entry>
+	<entry key="install.wizard.params.step3.docQuality">Document conversion JPEG Quality</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick-Pfad</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Geben Sie den Pfad zu ImageMagick an, falls es sich nicht im Systempfad befindet.</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Installieren Sie ImageMagick auf dem Server. Weitere Informationen unter http://www.imagemagick.org. Anleitungen f&uuml;r die Installation finden Sie unter http://www.imagemagick.org/script/binary-releases.php, in den meisten Linux-Distributionen l&auml;sst es sich jedoch bequem per Paketmanager (z.B. apt-get) installieren.]]></entry>

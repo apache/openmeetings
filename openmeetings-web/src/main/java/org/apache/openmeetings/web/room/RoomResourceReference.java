@@ -19,9 +19,9 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
@@ -72,7 +71,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 				mime = JPG_MIME_TYPE;
 				break;
 			case Presentation:
-				mime = "application/x-shockwave-flash";
+				mime = PNG_MIME_TYPE;
 				break;
 			case Video:
 				mime = preview ? JPG_MIME_TYPE : MP4_MIME_TYPE;
@@ -122,8 +121,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	protected File getFile(FileExplorerItem f, String ext) {
 		File file = f.getFile(ext);
 		if (file == null || !file.exists()) {
-			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s"
-					, FileItem.Type.Image == f.getType() ? EXTENSION_JPG : EXTENSION_SWF));
+			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s", EXTENSION_JPG));
 		}
 		return file;
 	}

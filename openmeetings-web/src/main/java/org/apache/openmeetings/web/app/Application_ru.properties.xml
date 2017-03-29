@@ -1629,17 +1629,6 @@
 					найти здесь, однако в большинстве систем Линукс Вы можете установить его через Ваш 
 					менеджер пакетов (apt-get it).
 				</li>
-				<li>Установите <strong>SWFTools</strong> на Ваш сервер, более подробную информацию
-					можно найти на сайте <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					Некоторые дистрибутивы Линукс уже включают его
-					в свои менеджеры пакетов, посмотреть можно здесь <a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					для установки рекомендуется <strong>SWFTools</strong> версии 0.9 так как 
-					предыдущая версия содержит баг который приводил к ошибке отображения размеров объекта 
-					на доске
-				</li>
 			</ul>
 		</li>
 
@@ -1741,15 +1730,12 @@
 	<entry key="install.wizard.params.step3.converters">Конвертеры</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> смотрите также</entry>
 	<entry key="install.wizard.params.step3.installation">Установка</entry>
-	<entry key="install.wizard.params.step3.swfZoom">SWFTools масштабирование</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">Укажите разрешение (dpi), которое вы будите использовать для конвертации PDF в SWF</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">DPI которое swftools будет использовать для конвертации PDF в SWF. По умолчанию 100 dpi.</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Качество</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">Укажите качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:85)</entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools Путь</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Укажите путь к swftools например C:/swftools (Windows) или или не заполняйте данное поле если путь к swftools задан в системных путях</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">Вы можете проверить, настроен ли запуск swftools на Вашей системе с помошью командной строки или shell или cmd-prompt набрав команду pdf2swf. Если будет показан список опций оставьте это поле пустым, в противном случае вы должны указать путь к pdf2swf на Вашей системе</entry>
+	<entry key="install.wizard.params.step3.docDpi">Качество конвертации документа точек/дюйм</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Укажите разрешение (dpi), которое вы будете использовать для конвертации PDF в изображения</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI которое ImageMagic будет использовать для конвертации PDF в изображения. По умолчанию 150 dpi.</entry>
+	<entry key="install.wizard.params.step3.docQuality">JPEG качество конвертации документов</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Укажите качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Качество встроенного jpeg изображения. 0 плохое (маленькое), 100 высокое (большое). (по умолчанию:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Путь</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Укажите путь к ImageMagick, или не заполняйте данное поле если ImageMagick установлен в путях Вашей системы</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Установите ImageMagick на Ваш сервер, более подробную информацию касающуюся установки можно посмотреть тут http://www.imagemagick.org Инструкцию по установке Вы можете найти здесь http://www.imagemagick.org/script/binary-releases.php, однако в большинстве систем Линукс Вы можете установить его через Ваш менеджер пакетов (apt-get it)]]></entry>

@@ -1629,17 +1629,6 @@
 					found there, however on most linux systems you can get it via your
 					favorite package managers (apt-get it).
 				</li>
-				<li>Install <strong>SWFTools</strong> on the server, you can get
-					more information on <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					regarding installation. Some of the Linux distributions already have
-					it in there package manager see <a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					the recommended version of <strong>SWFTools</strong> is 0.9 as prior
-					version have a bug that does lead to wrong object dimensions in the
-					Whiteboard
-				</li>
 			</ul>
 		</li>
 	</ol>
@@ -1740,15 +1729,12 @@
 	<entry key="install.wizard.params.step3.converters">Converters</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> see also</entry>
 	<entry key="install.wizard.params.step3.installation">Installation</entry>
-	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">Enter the dpi that swftools will use for PDF to SWF conversion</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">DPI that swftools will use for PDF to SWF conversion (default is 100)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Quality</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:85)</entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools Path</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Enter the path to swftools for example C:/swftools (Windows) or leave blank if swftools is a known to your system path</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">You can test if swftools is installed into system path by opening a shell or cmd-prompt and type pdf2swf If this shows a list of options leave this field blank otherwise you have to specify the path to pdf2swf on your system</entry>
+	<entry key="install.wizard.params.step3.docDpi">Document conversion DPI</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Enter the dpi that ImageMagic will use for PDF to image conversion</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI that ImageMagic will use for PDF to image conversion (default is 150)</entry>
+	<entry key="install.wizard.params.step3.docQuality">Document conversion JPEG Quality</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick Path</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Install ImageMagick on the server, you can get more information on http://www.imagemagick.org regarding installation. The instructions for installation can be found there http://www.imagemagick.org/script/binary-releases.php, however on most linux systems you can get it via your favorite package managers (apt-get it)]]></entry>

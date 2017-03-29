@@ -1625,13 +1625,6 @@
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
 					Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).
 				</li>
-				<li>Telepítse a <strong>SWFTools</strong> program csomagot a szerverre. Telepítési útmutató és további információk itt  <a target="_blank"
-					href="http://www.swftools.org/" rel="nofollow">http://www.swftools.org/</a>
-					Több linux disztribúció csomagkezelőjében megtalálható <a target="_blank"
-					href="http://packages.debian.org/unstable/utils/swftools"
-					rel="nofollow">http://packages.debian.org/unstable/utils/swftools</a>),
-					ajánlott verzió a <strong>SWFTools</strong> 0.9 egyéb verzió bugja miatt hibát okozhat a prezentációkban. 
-				</li>
 			</ul>
 		</li>
 	</ol>
@@ -1725,15 +1718,12 @@
 	<entry key="install.wizard.params.step3.converters">Konverterek</entry>
 	<entry key="install.wizard.params.step3.seeAlso"> bővebben</entry>
 	<entry key="install.wizard.params.step3.installation">Telepítés</entry>
-	<entry key="install.wizard.params.step3.swfZoom">SWFTools Zoom</entry>
-	<entry key="install.wizard.params.step3.swfZoom.title">Adja meg az SWFTools felbontását (dpi) amit a PDF2SWF konverziónál használ</entry>
-	<entry key="install.wizard.params.step3.swfZoom.text">Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon. Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a felbontást. Alapértelmezett felbontás 100 dpi.</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality">SWFTools JPEG Minőség</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.title">Adja meg a jpeg képek minőségi rátáját. 0 a gyengébb (kicsi), 100 a legjobb (nagy). (alapértelmezett:85)</entry>
-	<entry key="install.wizard.params.step3.swfJpegQuality.text">Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon. Nyisson egy parancssort és futtassa: pdf2swf. Paraméterként megadhatja a jpeg képek minőségét. 0 a gyengébb (kicsi), 100 a legjobb (nagy). (alapértelmezett:85).</entry>
-	<entry key="install.wizard.params.step3.swfPath">SWFTools útvonala</entry>
-	<entry key="install.wizard.params.step3.swfPath.title">Adja meg az SWFTools elérési útvonalát C:/swftools (Windows) /usr/local/swftools (Linux) vagy hagyja üresen, ha elérhető a rendszerútvonalak közt</entry>
-	<entry key="install.wizard.params.step3.swfPath.text">Ellenőrizze az swftools telepítését és elérését a rendszerútvonalon. Nyisson egy parancssort és futtassa: pdf2swf. Hagyja üresen, ha nem ismeri, vagy ha elérhető a rendszerútvonalon.</entry>
+	<entry key="install.wizard.params.step3.docDpi">Document conversion DPI</entry>
+	<entry key="install.wizard.params.step3.docDpi.title">Enter the dpi that ImageMagic will use for PDF to image conversion</entry>
+	<entry key="install.wizard.params.step3.docDpi.text">DPI that ImageMagic will use for PDF to image conversion (default is 150)</entry>
+	<entry key="install.wizard.params.step3.docQuality">Document conversion JPEG Quality</entry>
+	<entry key="install.wizard.params.step3.docQuality.title">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
+	<entry key="install.wizard.params.step3.docQuality.text">Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath">ImageMagick útvonala</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.title">Adja meg a ImageMagick elérési útvonalát, hagyja üresen, ha az ImageMagick elérhető a rendszer útvonalak közt</entry>
 	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Telepítse a ImageMagick program csomagot a szerverre. Telepítési útmutató és további információk itt http://www.imagemagick.org http://www.imagemagick.org/script/binary-releases.php, Linux operációs rendszerben használja a beépített csomagkezelőt (apt-get it).]]></entry>

@@ -45,6 +45,8 @@ import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -80,12 +82,18 @@ public class WbPanel extends Panel {
 	private enum Action {
 		createWb
 		, removeWb
+		, activeWb
 		, createObj
 		, modifyObj
 		, deleteObj
 	}
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+			attributes.setMethod(Method.POST);
+		}
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
@@ -115,6 +123,16 @@ public class WbPanel extends Panel {
 							Long id = _id < 0 ? null : _id;
 							getBean(WhiteboardCache.class).remove(roomId, id);
 							sendWbAll("WbArea.remove", new JSONObject().put("id", id));
+						}
+							break;
+						case activeWb:
+						{
+							long _id = obj.optLong("id", -1);
+							if (_id > -1) {
+								Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
+								wbs.setActiveWb(_id);
+								sendWbAll("WbArea.activate", new JSONObject().put("id", _id));
+							}
 						}
 							break;
 						case createObj:
@@ -331,7 +349,7 @@ public class WbPanel extends Panel {
 			//FIXME TODO WmlFile/Chart special handling
 			Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
 			String wuid = UUID.randomUUID().toString();
-			Whiteboard wb = wbs.getWhiteboards().values().iterator().next(); //TODO active
+			Whiteboard wb = wbs.get(wbs.getActiveWb());
 			//FIXME TODO various types
 			JSONObject file = new JSONObject()
 					.put("fileId", fi.getId())

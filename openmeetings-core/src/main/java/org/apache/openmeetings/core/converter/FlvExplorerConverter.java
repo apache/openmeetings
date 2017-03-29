@@ -29,21 +29,15 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
-
-	// Spring loaded Beans
-	@Autowired
-	private FileExplorerItemDao fileDao;
 
 	public List<ConverterProcessResult> convertToMP4(FileExplorerItem f, String ext) {
 		List<ConverterProcessResult> logs = new ArrayList<>();
@@ -65,7 +59,7 @@ public class FlvExplorerConverter extends BaseConverter {
 					, "-c:a", "libfdk_aac" //
 					, "-pix_fmt", "yuv420p" //
 					, mp4.getCanonicalPath() };
-			ConverterProcessResult res = ProcessHelper.executeScript("uploadVideo ID :: " + f.getId(), args);
+			ConverterProcessResult res = ProcessHelper.executeScript("uploadVideo ID :: " + f.getHash(), args);
 			logs.add(res);
 			if (sameExt && tmp != null) {
 				if (res.isOk()) {
@@ -86,9 +80,7 @@ public class FlvExplorerConverter extends BaseConverter {
 					"-f", "rawvideo", "-s", dim.width + "x" + dim.height,
 					jpeg.getCanonicalPath() };
 
-			logs.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getId(), args));
-
-			fileDao.update(f);
+			logs.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getHash(), args));
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
 			logs.add(new ConverterProcessResult("convertToMP4", err.getMessage(), err));

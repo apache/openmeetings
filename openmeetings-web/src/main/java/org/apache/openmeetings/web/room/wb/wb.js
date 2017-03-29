@@ -755,11 +755,15 @@ var WbArea = (function() {
 	function _createHandler(canvas, _o) {
 		if ('Video' === _o.fileType || 'Recording' === _o.fileType) {
 			var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
+				.attr("width", _o.width).attr("height", _o.height)
 				.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
 			$('#wb-tab-' + canvas.wbId).append(vid);
-			//canvas.add(new fabric.Image(vid[0], _o));
-			canvas.add(new fabric.Image(vid[0], {}));
-			//vid.toJSON(['uid', 'fileId', 'fileType']);
+			var vImg = new fabric.Image(vid[0], {
+				left: _o.left
+				, top: _o.top
+			});
+			canvas.add(vImg);
+			//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
 		} else {
 			canvas.add(_o);
 		}
@@ -789,8 +793,21 @@ var WbArea = (function() {
 			canvas.renderAll();
 		});
 	}
+	function _activateTab(wbId) {
+		container.find('.wb-tabbar li').each(function(idx) {
+			if (wbId == 1 * $(this).data('wb-id')) {
+				tabs.tabs("option", "active", idx);
+				return false;
+			}
+		});
+	}
 	self.init = function() {
-		tabs = $('.room.wb.area .tabs').tabs();
+		container = $(".room.wb.area");
+		tabs = container.find('.tabs').tabs({
+			activate: function(event, ui) {
+				wbAction('activeWb', JSON.stringify({id: ui.newTab.data('wb-id')}));
+			}
+		});
 		scroll = tabs.find('.scroll-container');
 		tabs.find(".ui-tabs-nav").sortable({
 			axis: "x"
@@ -807,7 +824,6 @@ var WbArea = (function() {
 		tabs.find('.next.om-icon').click(function() {
 			scroll.scrollLeft(scroll.scrollLeft() + 30);
 		});
-		container = $(".room.wb.area");
 		area = container.find(".wb-area");
 		$(window).keyup(deleteHandler);
 	}
@@ -827,14 +843,12 @@ var WbArea = (function() {
 		tabs.append(wb);
 		refreshTabs();
 
-		$('.room.wb.area .wb-tabbar li').each(function(idx) {
-			if (obj.id == 1 * $(this).data('wb-id')) {
-				tabs.tabs("option", "active", idx);
-				return false;
-			}
-		});
+		_activateTab(obj.id);
 		wb.data(Wb()).data('init')(obj.id, tid);
 	};
+	self.activate = function(obj) {
+		_activateTab(obj.id);
+	}
 	self.load = function(json) { //TODO need to be unified
 		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
 		_createObject(canvas, json.obj, _createHandler);
@@ -848,12 +862,15 @@ var WbArea = (function() {
 				break;
 			default:
 				_createObject(canvas, [o], _createHandler);
+				/*
+				 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
 				if ('Video' === o.fileType || 'Recording' === o.fileType) {
 					fabric.util.requestAnimFrame(function render() {
 						canvas.renderAll();
 						fabric.util.requestAnimFrame(render);
 					});
 				}
+				*/
 				break;
 		}
 	};
@@ -919,7 +936,7 @@ $(function() {
 				}
 			}
 		} catch (err) {
-			console.log(err);
+			//console.log(err);
 			//no-op
 		}
 	});

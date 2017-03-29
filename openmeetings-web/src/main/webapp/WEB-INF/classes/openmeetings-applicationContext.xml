@@ -202,7 +202,6 @@
 	<bean id="documentConverter" class="org.apache.openmeetings.core.converter.DocumentConverter" />
 	<bean id="smsHandler" class="org.apache.openmeetings.core.mail.SMSHandler" />
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
-	<bean id="generateSWF" class="org.apache.openmeetings.core.converter.GenerateSWF" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.core.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.db.util.TimezoneUtil" />
 	<bean id="whiteboardManager" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardManager" />

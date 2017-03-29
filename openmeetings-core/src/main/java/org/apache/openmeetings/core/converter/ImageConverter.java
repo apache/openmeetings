@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -28,6 +32,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
@@ -41,9 +46,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ImageConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImageConverter.class, webAppRootKey);
+	private static final String PAGE_TMPLT = DOC_PAGE_PREFIX + "-%04d." + EXTENSION_PNG;
 
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private ConfigurationDao cfgDao;
 
 	public ConverterProcessResultList convertImage(FileItem f, String ext) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
@@ -55,12 +63,7 @@ public class ImageConverter extends BaseConverter {
 			log.debug("##### convertImage destinationFile: " + jpg);
 			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
 		}
-		ConverterProcessResult res = ProcessHelper.executeScript("get image dimensions :: " + f.getId()
-				, new String[] {getPathToIdentify(), "-format", "%wx%h", jpg.getCanonicalPath()});
-		returnMap.addItem("get JPG dimensions", res);
-		Dimension dim = getDimension(res.getOut());
-		f.setWidth(dim.width);
-		f.setHeight(dim.height);
+		returnMap.addItem("get JPG dimensions", initSize(f, jpg));
 		return returnMap;
 	}
 
@@ -104,8 +107,35 @@ public class ImageConverter extends BaseConverter {
 		return returnMap;
 	}
 
+	private String getDpi() {
+		return cfgDao.getConfValue(CONFIG_DOCUMENT_DPI, String.class, "150"); //TODO constant
+	}
+
+	private String getQuality() {
+		return cfgDao.getConfValue(CONFIG_DOCUMENT_QUALITY, String.class, "90"); //TODO constant
+	}
+
 	/**
-	 * -density 150 -resize 800
+	 * This method determines and set image size
+	 *
+	 * @param f - file item to set size
+	 * @param img - image file used to determine size
+	 * @return result of the operation
+	 * @throws IOException in case exception is occured
+	 */
+	public ConverterProcessResult initSize(FileItem f, File img) throws IOException {
+		ConverterProcessResult res = ProcessHelper.executeScript("get image dimensions :: " + f.getId()
+				, new String[] {getPathToIdentify(), "-format", "%wx%h", img.getCanonicalPath()});
+		Dimension dim = getDimension(res.getOut());
+		f.setWidth(dim.width);
+		f.setHeight(dim.height);
+		return res;
+	}
+
+	/**
+	 * @param in - input file
+	 * @param out - output file
+	 * @return - conversion result
 	 * @throws IOException
 	 *
 	 */
@@ -120,26 +150,41 @@ public class ImageConverter extends BaseConverter {
 				, "-resize", (width == null ? "" : width) + (height == null ? "" : "x" + height)
 				, in.getCanonicalPath(), out.getCanonicalPath()
 				};
-		return ProcessHelper.executeScript("GenerateImage::resize", argv);
+		return ProcessHelper.executeScript("resize", argv);
 	}
 
-	public ConverterProcessResult decodePDF(String inputfile, String outputfile) {
-		log.debug("decodePDF");
-		String[] argv = new String[] { getPathToConvert(), inputfile, outputfile };
-
-		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
-	}
-
-	public ConverterProcessResult generateBatchThumb(File in, File outDir, Integer thumbSize, String pre) throws IOException {
-		log.debug("generateBatchThumbByWidth");
+	/**
+	 * Converts PDF document to the series of images
+	 *
+	 * @param pdf - input PDF document
+	 * @return - result of conversion
+	 * @throws IOException in case IO exception occured
+	 */
+	public ConverterProcessResultList convertDocument(ConverterProcessResultList list, FileItem f, File pdf) throws IOException {
+		log.debug("convertDocument");
 		String[] argv = new String[] {
 			getPathToConvert()
-			, "-thumbnail" // FIXME
-			, "" + thumbSize
-			, in.getCanonicalPath()
-			, new File(outDir, "_" + pre + "_page-%04d.jpg").getCanonicalPath()
+			, "-density", getDpi()
+			, pdf.getCanonicalPath()
+			, "-quality", getQuality()
+			, new File(pdf.getParentFile(), PAGE_TMPLT).getCanonicalPath()
 			};
-
-		return ProcessHelper.executeScript("generateBatchThumbByWidth", argv);
+		ConverterProcessResult res = ProcessHelper.executeScript("convertDocument", argv);
+		list.addItem("convert PDF to images", res);
+		if (res.isOk()) {
+			File[] pages = pdf.getParentFile().listFiles(new FileFilter() {
+				@Override
+				public boolean accept(File f) {
+					return f.isFile() && f.getName().startsWith(DOC_PAGE_PREFIX) && f.getName().endsWith(EXTENSION_PNG);
+				}
+			});
+			if (pages == null || pages.length == 0) {
+				f.setCount(0);
+			} else {
+				f.setCount(pages.length);
+			}
+			list.addItem("get PNG page dimensions", initSize(f, pages[0]));
+		}
+		return list;
 	}
 }

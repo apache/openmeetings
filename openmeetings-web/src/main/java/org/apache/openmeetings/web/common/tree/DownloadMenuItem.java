@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -82,7 +81,6 @@ public class DownloadMenuItem extends MenuItem {
 			exclusions.add(EXTENSION_JPG);
 			if (Type.Presentation == fi.getType()) {
 				exclusions.add(EXTENSION_PDF);
-				exclusions.add(EXTENSION_SWF);
 			}
 		}
 

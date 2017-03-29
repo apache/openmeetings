@@ -18,9 +18,10 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
@@ -88,11 +89,11 @@ public abstract class FileItem implements IDataProviderEntity {
 	@Element(data = true)
 	private boolean deleted;
 
-	@Column(name = "flv_width")
+	@Column(name = "width")
 	@Element(data = true, required = false)
 	private Integer width;
 
-	@Column(name = "flv_height")
+	@Column(name = "height")
 	@Element(data = true, required = false)
 	private Integer height;
 
@@ -104,6 +105,10 @@ public abstract class FileItem implements IDataProviderEntity {
 	@Column(name = "group_id")
 	@Element(data = true, required = false)
 	private Long groupId;
+
+	@Column(name = "page_count", nullable = false)
+	@Element(data = true, required = false)
+	private int count = 1;
 
 	// Not Mapped
 	@Transient
@@ -232,6 +237,14 @@ public abstract class FileItem implements IDataProviderEntity {
 		this.groupId = groupId;
 	}
 
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	public boolean isReadOnly() {
 		return readOnly;
 	}
@@ -258,7 +271,14 @@ public abstract class FileItem implements IDataProviderEntity {
 					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
 				case Presentation:
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
+					int slide = 0;
+					try {
+						slide = Integer.parseInt(ext);
+					} catch (Exception e) {
+						//no-op
+					}
+					//ext is used for slide here
+					f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));
 					break;
 				case PollChart:
 				case Folder:
