@@ -35,6 +35,7 @@
 		<menu name="Community">
 			<item name="Get Involved" href="/get-involved.html" />
 			<item name="Committers" href="/team-list.html" />
+			<item name="Our Users" href="/OurUsers.html" />
 			<item name="Mailing Lists" href="/mail-lists.html" />
 			<item name="Wiki" href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
 		</menu>
