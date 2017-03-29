@@ -114,16 +114,14 @@ public class BackupPanel extends AdminPanel {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					File workingDir = OmFileHelper.getUploadBackupDir();
 					String dateString = "backup_" + CalendarPatterns.getTimeForStreamId(new Date());
-					File backupDir = new File(workingDir, dateString);
-					backupFile = new File(backupDir, dateString + ".zip");
+					backupFile = new File(OmFileHelper.getUploadBackupDir(), dateString + ".zip");
 					th = null;
 					started = true;
 					progressHolder = new ProgressHolder();
 
 					timer.restart(target);
-					new Thread(new BackupProcess(getBean(BackupExport.class), backupDir, includeFilesInBackup.getObject())
+					new Thread(new BackupProcess(getBean(BackupExport.class), includeFilesInBackup.getObject())
 						, "Openmeetings - " + dateString).start();
 
 					// repaint the feedback panel so that it is hidden
@@ -209,12 +207,10 @@ public class BackupPanel extends AdminPanel {
 
 		private class BackupProcess implements Runnable {
 			private BackupExport backup;
-			private File backupDir;
 			private boolean includeFiles;
 
-			public BackupProcess(BackupExport backup, File backupDir, boolean includeFiles) {
+			public BackupProcess(BackupExport backup, boolean includeFiles) {
 				this.backup = backup;
-				this.backupDir = backupDir;
 				this.includeFiles = includeFiles;
 				th = null;
 			}
@@ -222,7 +218,7 @@ public class BackupPanel extends AdminPanel {
 			@Override
 			public void run() {
 				try {
-					backup.performExport(backupFile, backupDir, includeFiles, progressHolder);
+					backup.performExport(backupFile, includeFiles, progressHolder);
 				} catch (Exception e) {
 					log.error("Exception on panel backup download ", e);
 					th = e;

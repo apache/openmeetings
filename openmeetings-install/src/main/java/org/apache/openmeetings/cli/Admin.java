@@ -295,7 +295,7 @@ public class Admin {
 					backup_dir.mkdirs();
 
 					BackupExport export = getApplicationContext().getBean(BackupExport.class);
-					export.performExport(f, backup_dir, includeFiles, new ProgressHolder());
+					export.performExport(f, includeFiles, new ProgressHolder());
 					FileUtils.deleteDirectory(backup_dir);
 					backup_dir.delete();
 				} catch (Exception e) {
