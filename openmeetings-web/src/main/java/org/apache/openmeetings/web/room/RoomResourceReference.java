@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -83,8 +82,8 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected FileExplorerItem getFileItem(Attributes attributes) {
-		PageParameters params = attributes.getParameters();
+	protected FileExplorerItem getFileItem(Attributes attr) {
+		PageParameters params = attr.getParameters();
 		StringValue _id = params.get("id");
 		StringValue _preview = params.get("preview");
 		preview = _preview.toBoolean(false);
@@ -127,8 +126,20 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem f) {
-		return getFile(f, Type.Video == f.getType() && preview ? EXTENSION_JPG : null);
+	protected File getFile(FileExplorerItem f, Attributes attr) {
+		String ext = null;
+		switch (f.getType()) {
+			case Video:
+				if (preview) {
+					ext = EXTENSION_JPG;
+				}
+				break;
+			case Presentation:
+				ext = attr.getParameters().get("slide").toString();
+				break;
+			default:
+		}
+		return getFile(f, ext);
 	}
 
 	@Override

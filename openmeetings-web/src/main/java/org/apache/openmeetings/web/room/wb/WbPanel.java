@@ -208,7 +208,9 @@ public class WbPanel extends Panel {
 		WhiteboardCache cache = getBean(WhiteboardCache.class);
 		Whiteboards wbs = cache.get(roomId);
 		for (Entry<Long, Whiteboard> entry : cache.list(roomId, rp.getClient().getUser().getLanguageId())) {
-			sb.append(getAddWbScript(entry.getKey(), entry.getValue().getName()));
+			sb.append(new StringBuilder("WbArea.create(")
+					.append(getAddWbJson(entry.getKey(), entry.getValue().getName()).toString())
+					.append(");"));
 			JSONArray arr = new JSONArray();
 			for (Entry<String, JSONObject> wbEntry : entry.getValue().getRoomItems().entrySet()) {
 				JSONObject o = wbEntry.getValue();
@@ -216,6 +218,7 @@ public class WbPanel extends Panel {
 			}
 			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString()).append(");");
 		}
+		sb.append("WbArea.activate({id: ").append(wbs.getActiveWb()).append("});");
 		response.render(OnDomReadyHeaderItem.forScript(sb));
 	}
 
@@ -247,12 +250,6 @@ public class WbPanel extends Panel {
 		return new JSONObject()
 				.put("id", id)
 				.put("name", name);
-	}
-
-	private static CharSequence getAddWbScript(Long id, String name) {
-		return new StringBuilder("WbArea.add(")
-				.append(getAddWbJson(id, name).toString())
-				.append(");");
 	}
 
 	public boolean isReadOnly() {
@@ -354,6 +351,7 @@ public class WbPanel extends Panel {
 			JSONObject file = new JSONObject()
 					.put("fileId", fi.getId())
 					.put("fileType", fi.getType().name())
+					.put("count", fi.getCount())
 					.put("type", "image")
 					.put("left", UPLOAD_WB_LEFT)
 					.put("top", UPLOAD_WB_TOP)

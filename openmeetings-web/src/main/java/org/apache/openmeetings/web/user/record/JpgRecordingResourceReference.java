@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import java.io.File;
 
 import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.wicket.request.resource.IResource.Attributes;
 
 public class JpgRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +45,7 @@ public class JpgRecordingResourceReference extends RecordingResourceReference {
 	}
 
 	@Override
-	protected File getFile(Recording r) {
+	protected File getFile(Recording r, Attributes attr) {
 		return r.getFile(EXTENSION_JPG);
 	}
 }

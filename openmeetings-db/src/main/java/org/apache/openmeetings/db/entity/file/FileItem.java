@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.entity.file;
 import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
@@ -271,14 +272,18 @@ public abstract class FileItem implements IDataProviderEntity {
 					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
 				case Presentation:
-					int slide = 0;
+					int slide = (ext == null) ? 0 : -1;
 					try {
+						//ext is used for slide here
 						slide = Integer.parseInt(ext);
 					} catch (Exception e) {
 						//no-op
 					}
-					//ext is used for slide here
-					f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));
+					if (slide > -1) {
+						f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));
+					} else {
+						f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_PDF : ext));
+					}
 					break;
 				case PollChart:
 				case Folder:

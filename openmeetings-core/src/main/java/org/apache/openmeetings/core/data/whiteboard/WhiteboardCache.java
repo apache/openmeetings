@@ -51,7 +51,8 @@ public class WhiteboardCache {
 	public Set<Entry<Long, Whiteboard>> list(Long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
 		if (wbs.getWhiteboards().isEmpty()) {
-			add(wbs, langId);
+			Whiteboard wb = add(wbs, langId);
+			wbs.setActiveWb(wb.getId());
 		}
 		return wbs.getWhiteboards().entrySet();
 	}

@@ -40,12 +40,23 @@ var UUID = (function() {
 	}
 	return self;
 })();
-var Pointer = function(canvas, s) {
+var Base = function() {
+	var base = {};
+	base.objectCreated = function(o, canvas) {
+		o.uid = UUID.generate();
+		canvas.trigger("wb:object:created", o);
+		return o.uid;
+	}
+	return base;
+}
+var Pointer = function(wb, s) {
 	return {
 		activate: function() {
-			canvas.selection = true;
-			canvas.forEachObject(function(o) {
-				o.selectable = true;
+			wb.eachCanvas(function(canvas) {
+				canvas.selection = true;
+				canvas.forEachObject(function(o) {
+					o.selectable = true;
+				});
 			});
 			s.find('[class^="wb-prop"]').prop('disabled', true);
 			if (!!s.find('.wb-prop-b').button("instance")) {
@@ -53,26 +64,19 @@ var Pointer = function(canvas, s) {
 			}
 		}
 		, deactivate: function() {
-			canvas.selection = false;
-			canvas.forEachObject(function(o) {
-				o.selectable = false;
+			wb.eachCanvas(function(canvas) {
+				canvas.selection = false;
+				canvas.forEachObject(function(o) {
+					o.selectable = false;
+				});
 			});
 		}
 	};
 }
-var Base = function(canvas) {
-	var base = {};
-	base.objectCreated = function(o) {
-		o.uid = UUID.generate();
-		canvas.trigger("wb:object:created", o);
-		return o.uid;
-	}
-	return base;
-}
-var APointer = function(canvas) {
-	var pointer = Base(canvas);
+var APointer = function(wb) {
+	var pointer = Base(wb);
 	pointer.user = '';
-	pointer.create = function(_cnvs, o) {
+	pointer.create = function(canvas, o) {
 		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
 			img.set({
 				left:15
@@ -106,28 +110,28 @@ var APointer = function(canvas) {
 				, top: o.y - 20
 			});
 			
-			_cnvs.add(group);
+			canvas.add(group);
 			group.uid = o.uid;
 			group.loaded = !!o.loaded;
 
 			var count = 3;
 			function go(_cnt) {
 				if (_cnt < 0) {
-					_cnvs.remove(group);
+					canvas.remove(group);
 				}
 				circle1.set({radius: 3});
 				circle2.set({radius: 6});
 				circle1.animate(
 					'radius', '20'
 					, {
-						onChange: _cnvs.renderAll.bind(_cnvs)
+						onChange: canvas.renderAll.bind(canvas)
 						, duration: 1000
 						, onComplete: function() {go(_cnt - 1);}
 					});
 				circle2.animate(
 					'radius', '20'
 					, {
-						onChange: _cnvs.renderAll.bind(_cnvs)
+						onChange: canvas.renderAll.bind(canvas)
 						, duration: 1000
 					});
 			}
@@ -135,6 +139,7 @@ var APointer = function(canvas) {
 		});
 	}
 	pointer.mouseUp = function(o) {
+		var canvas = this;
 		var ptr = canvas.getPointer(o.e);
 		var obj = {
 			type: 'pointer'
@@ -142,20 +147,24 @@ var APointer = function(canvas) {
 			, y: ptr.y
 			, user: pointer.user
 		};
-		obj.uid = uid = pointer.objectCreated(obj);
+		obj.uid = uid = pointer.objectCreated(obj, canvas);
 		pointer.create(canvas, obj);
 	}
 	pointer.activate = function() {
-		canvas.on('mouse:up', pointer.mouseUp);
+		wb.eachCanvas(function(canvas) {
+			canvas.on('mouse:up', pointer.mouseUp);
+		});
 		pointer.user = $('.room.sidebar.left .user.list .current .name').text();
 	}
 	pointer.deactivate = function() {
-		canvas.off('mouse:up', pointer.mouseUp);
+		wb.eachCanvas(function(canvas) {
+			canvas.off('mouse:up', pointer.mouseUp);
+		});
 	};
 	return pointer;
 }
-var ShapeBase = function(canvas) {
-	var base = Base(canvas);
+var ShapeBase = function(wb) {
+	var base = Base(wb);
 	base.fill = {enabled: true, color: '#FFFF33'};
 	base.stroke = {enabled: true, color: '#FF6600', width: 5};
 	base.opacity = 1;
@@ -182,11 +191,12 @@ var ShapeBase = function(canvas) {
 	};
 	return base;
 }
-var Text = function(canvas, s) {
-	var text = ShapeBase(canvas);
+var Text = function(wb, s) {
+	var text = ShapeBase(wb);
 	text.obj = null;
 
 	text.mouseDown = function(o) {
+		var canvas = this;
 		var pointer = canvas.getPointer(o.e);
 		var ao = canvas.getActiveObject();
 		if (!!ao && ao.type == 'i-text') {
@@ -205,58 +215,67 @@ var Text = function(canvas, s) {
 		text.obj.enterEditing();
 	};
 	text.activate = function() {
-		canvas.on('mouse:down', text.mouseDown);
-		canvas.selection = true;
-		canvas.forEachObject(function(o) {
-			if (o.type == 'i-text') {
-				o.selectable = true;
-			}
+		wb.eachCanvas(function(canvas) {
+			canvas.on('mouse:down', text.mouseDown);
+			canvas.selection = true;
+			canvas.forEachObject(function(o) {
+				if (o.type == 'i-text') {
+					o.selectable = true;
+				}
+			});
 		});
 		text.enableAllProps(s);
 	};
 	text.deactivate = function() {
-		canvas.off('mouse:down', text.mouseDown);
-		canvas.selection = false;
-		canvas.forEachObject(function(o) {
-			if (o.type == 'i-text') {
-				o.selectable = false;
-			}
+		wb.eachCanvas(function(canvas) {
+			canvas.off('mouse:down', text.mouseDown);
+			canvas.selection = false;
+			canvas.forEachObject(function(o) {
+				if (o.type == 'i-text') {
+					o.selectable = false;
+				}
+			});
 		});
 	};
 	return text;
 }
-var Paint = function(canvas, s) {
-	var paint = ShapeBase(canvas);
+var Paint = function(wb, s) {
+	var paint = ShapeBase(wb);
 	paint.activate = function() {
-		canvas.isDrawingMode = true;
-		canvas.freeDrawingBrush.width = paint.stroke.width;
-		canvas.freeDrawingBrush.color = paint.stroke.color;
-		canvas.freeDrawingBrush.opacity = paint.opacity; //TODO not working
-
+		wb.eachCanvas(function(canvas) {
+			canvas.isDrawingMode = true;
+			canvas.freeDrawingBrush.width = paint.stroke.width;
+			canvas.freeDrawingBrush.color = paint.stroke.color;
+			canvas.freeDrawingBrush.opacity = paint.opacity; //TODO not working
+		});
 		paint.enableLineProps(s).o.prop('disabled', true); //TODO not working
 	};
 	paint.deactivate = function() {
-		canvas.isDrawingMode = false;
+		wb.eachCanvas(function(canvas) {
+			canvas.isDrawingMode = false;
+		});
 	};
 	return paint;
 }
-var Shape = function(canvas) {
-	var shape = ShapeBase(canvas);
+var Shape = function(wb) {
+	var shape = ShapeBase(wb);
 	shape.obj = null;
 	shape.isDown = false;
 	shape.orig = {x: 0, y: 0};
 
-	shape.add2Canvas = function() {
+	shape.add2Canvas = function(canvas) {
 		canvas.add(shape.obj);
 	}
 	shape.mouseDown = function(o) {
+		var canvas = this;
 		shape.isDown = true;
 		var pointer = canvas.getPointer(o.e);
 		shape.orig = {x: pointer.x, y: pointer.y};
-		shape.createShape();
-		shape.add2Canvas();
+		shape.createShape(canvas);
+		shape.add2Canvas(canvas);
 	};
 	shape.mouseMove = function(o) {
+		var canvas = this;
 		if (!shape.isDown) return;
 		var pointer = canvas.getPointer(o.e);
 		shape.updateShape(pointer);
@@ -266,33 +285,38 @@ var Shape = function(canvas) {
 		return o;
 	};
 	shape.mouseUp = function(o) {
+		var canvas = this;
 		shape.isDown = false;
 		shape.obj.setCoords();
 		shape.obj.selectable = false;
 		canvas.renderAll();
-		shape.objectCreated(shape.obj);
+		shape.objectCreated(shape.obj, canvas);
 	};
 	shape.internalActivate = function() {};
 	shape.activate = function() {
-		canvas.on({
-			'mouse:down': shape.mouseDown
-			, 'mouse:move': shape.mouseMove
-			, 'mouse:up': shape.mouseUp
+		wb.eachCanvas(function(canvas) {
+			canvas.on({
+				'mouse:down': shape.mouseDown
+				, 'mouse:move': shape.mouseMove
+				, 'mouse:up': shape.mouseUp
+			});
 		});
 		shape.internalActivate();
 	};
 	shape.deactivate = function() {
-		canvas.off({
-			'mouse:down': shape.mouseDown
-			, 'mouse:move': shape.mouseMove
-			, 'mouse:up': shape.mouseUp
+		wb.eachCanvas(function(canvas) {
+			canvas.off({
+				'mouse:down': shape.mouseDown
+				, 'mouse:move': shape.mouseMove
+				, 'mouse:up': shape.mouseUp
+			});
 		});
 	};
 	return shape;
 };
-var Line = function(canvas, s) {
-	var line = Shape(canvas);
-	line.createShape = function() {
+var Line = function(wb, s) {
+	var line = Shape(wb);
+	line.createShape = function(canvas) {
 		line.obj = new fabric.Line([line.orig.x, line.orig.y, line.orig.x, line.orig.y], {
 			strokeWidth: line.stroke.width
 			, fill: line.stroke.color
@@ -309,15 +333,15 @@ var Line = function(canvas, s) {
 	};
 	return line;
 }
-var ULine = function(canvas, s) {
-	var uline = Line(canvas, s);
+var ULine = function(wb, s) {
+	var uline = Line(wb, s);
 	uline.stroke.width = 20;
 	uline.opacity = .5;
 	return uline;
 }
-var Rect = function(canvas, s) {
-	var rect = Shape(canvas);
-	rect.createShape = function() {
+var Rect = function(wb, s) {
+	var rect = Shape(wb);
+	rect.createShape = function(canvas) {
 		rect.obj = new fabric.Rect({
 			strokeWidth: rect.stroke.width
 			, fill: rect.fill.enabled ? rect.fill.color : 'rgba(0,0,0,0)'
@@ -346,9 +370,9 @@ var Rect = function(canvas, s) {
 	};
 	return rect;
 }
-var Ellipse = function(canvas, s) {
-	var ellipse = Rect(canvas, s);
-	ellipse.createShape = function() {
+var Ellipse = function(wb, s) {
+	var ellipse = Rect(wb, s);
+	ellipse.createShape = function(canvas) {
 		ellipse.obj = new fabric.Ellipse({
 			strokeWidth: ellipse.stroke.width
 			, fill: ellipse.fill.enabled ? ellipse.fill.color : 'rgba(0,0,0,0)'
@@ -370,9 +394,9 @@ var Ellipse = function(canvas, s) {
 	};
 	return ellipse;
 }
-var Arrow = function(canvas, s) {
-	var arrow = Line(canvas, s);
-	arrow.createShape = function() {
+var Arrow = function(wb, s) {
+	var arrow = Line(wb, s);
+	arrow.createShape = function(canvas) {
 		arrow.obj = new fabric.Polygon([
 			{x: 0, y: 0},
 			{x: 0, y: 0},
@@ -425,10 +449,10 @@ var Arrow = function(canvas, s) {
 	};
 	return arrow;
 }
-var Clipart = function(canvas, btn) {
-	var art = Shape(canvas);
-	art.add2Canvas = function() {}
-	art.createShape = function() {
+var Clipart = function(wb, btn) {
+	var art = Shape(wb);
+	art.add2Canvas = function(canvas) {}
+	art.createShape = function(canvas) {
 		fabric.Image.fromURL(btn.data('image'), function(img) {
 			art.orig.width = img.width;
 			art.orig.height = img.height;
@@ -457,7 +481,7 @@ var Clipart = function(canvas, btn) {
 }
 var Wb = function() {
 	const ACTIVE = 'active';
-	var wbId, a, t, s, canvas, mode;
+	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0;
 
 	function getBtn(m) {
 		return t.find(".om-icon." + (m || mode));
@@ -500,7 +524,7 @@ var Wb = function() {
 					c.find('ul li').prepend(old);
 					c.find('a').prepend(cur);
 				});
-			initToolBtn(cur.data('mode'), false, Clipart(canvas, cur));
+			initToolBtn(cur.data('mode'), false, Clipart(wb, cur));
 		});
 	}
 	function internalInit(t) {
@@ -515,18 +539,17 @@ var Wb = function() {
 				} else if (pos.top == 0 || pos.top + ui.helper.height() == ui.helper.parent().height()) {
 					ui.helper.removeClass('vertical').addClass('horisontal');
 				}
-				setRoomSizes(); // TODO should be better option
 			}
 		});
-		initToolBtn('pointer', true, Pointer(canvas, s));
-		initToolBtn('apointer', false, APointer(canvas));
-		initToolBtn('text', false, Text(canvas, s));
-		initToolBtn('paint', false, Paint(canvas, s));
-		initToolBtn('line', false, Line(canvas, s));
-		initToolBtn('uline', false, ULine(canvas, s));
-		initToolBtn('rect', false, Rect(canvas, s));
-		initToolBtn('ellipse', false, Ellipse(canvas, s));
-		initToolBtn('arrow', false, Arrow(canvas, s));
+		initToolBtn('pointer', true, Pointer(wb, s));
+		initToolBtn('apointer', false, APointer(wb));
+		initToolBtn('text', false, Text(wb, s));
+		initToolBtn('paint', false, Paint(wb, s));
+		initToolBtn('line', false, Line(wb, s));
+		initToolBtn('uline', false, ULine(wb, s));
+		initToolBtn('rect', false, Rect(wb, s));
+		initToolBtn('ellipse', false, Ellipse(wb, s));
+		initToolBtn('arrow', false, Arrow(wb, s));
 		initCliparts();
 		t.find(".om-icon.settings").click(function() {
 			s.show();
@@ -553,7 +576,9 @@ var Wb = function() {
 				var v = $(this).val();
 				btn.data('obj').stroke.color = v;
 				if ('paint' == mode) {
-					canvas.freeDrawingBrush.color = v;
+					wb.eachCanvas(function(canvas) {
+						canvas.freeDrawingBrush.color = v;
+					});
 				}
 			}
 		});
@@ -563,7 +588,9 @@ var Wb = function() {
 				var v = 1 * $(this).val();
 				btn.data('obj').stroke.width = v;
 				if ('paint' == mode) {
-					canvas.freeDrawingBrush.width = v;
+					wb.eachCanvas(function(canvas) {
+						canvas.freeDrawingBrush.width = v;
+					});
 				}
 			}
 		});
@@ -573,7 +600,9 @@ var Wb = function() {
 				var v = (1 * $(this).val()) / 100;
 				btn.data('obj').opacity = v;
 				if ('paint' == mode) {
-					canvas.freeDrawingBrush.opacity = v;
+					wb.eachCanvas(function(canvas) {
+						canvas.freeDrawingBrush.opacity = v;
+					});
 				}
 			}
 		});
@@ -586,7 +615,6 @@ var Wb = function() {
 			, start: function(event, ui) {
 				if (!!s.css("bottom")) {
 					s.css("bottom", "").css("right", "");
-					setRoomSizes(); // TODO should be better option
 				}
 			}
 			, drag: function(event, ui) {
@@ -598,10 +626,10 @@ var Wb = function() {
 	}
 
 	function toOmJson(o) {
-		return o.toJSON(['uid', 'fileId', 'fileType']);
+		return o.toJSON(['uid', 'fileId', 'fileType', 'count']);
 	}
 	//events
-	var wbObjCreatedHandler = function (o) {
+	function wbObjCreatedHandler(o) {
 		var json = {};
 		switch(o.type) {
 			case 'pointer':
@@ -613,11 +641,11 @@ var Wb = function() {
 				break;
 		}
 		wbAction('createObj', JSON.stringify({
-			wbId: wbId
+			wbId: wb.id
 			, obj: json
 		}));
 	};
-	var objAddedHandler = function (e) {
+	function objAddedHandler(e) {
 		var o = e.target;
 		if (!!o.loaded) return;
 		switch(o.type) {
@@ -627,22 +655,22 @@ var Wb = function() {
 				break;
 		}
 	};
-	var objModifiedHandler = function (e) {
+	function objModifiedHandler(e) {
 		var o = e.target;
 		o.includeDefaultValues = false;
 		wbAction('modifyObj', JSON.stringify({
-			wbId: wbId
+			wbId: wb.id
 			, obj: toOmJson(o)
 		}));
 	};
-	var objSelectedHandler = function (e) {
+	function objSelectedHandler(e) {
 		var o = e.target;
 		s.find('.wb-dim-x').val(o.left);
 		s.find('.wb-dim-y').val(o.top);
 		s.find('.wb-dim-w').val(o.width);
 		s.find('.wb-dim-h').val(o.height);
 	}
-	var pathCreatedHandler = function (o) {
+	function pathCreatedHandler(o) {
 		o.path.uid = UUID.generate();
 		wbObjCreatedHandler(o.path);
 	};
@@ -655,53 +683,57 @@ var Wb = function() {
 		var obj = e.target;
 		console.log('Text Changed', obj);
 	};*/
-	return {
-		init: function(_wbId, tid) {
-			wbId = _wbId;
-			a = $('#' + tid);
-			t = a.find('.tools'), c = a.find('canvas'), s = a.find(".wb-settings");
-			c.attr('id', 'can-' + tid);
-			canvas = new fabric.Canvas(c.attr('id'));
-			canvas.wbId = _wbId;
-			//TODO create via WS canvas:cleared
-			canvas.on({
-				'object:added': objAddedHandler
-				, 'object:modified': objModifiedHandler
-				, 'object:selected': objSelectedHandler
-				, 'path:created': pathCreatedHandler
-				//, 'text:editing:exited': textEditedHandler
-				//, 'text:changed': textChangedHandler
-				, 'wb:object:created': wbObjCreatedHandler
-			});
-			internalInit(t);
-			setRoomSizes();
-		}
-		, resize: function(w, h) {
-			if (t.position().left + t.width() > a.width()) {
-				t.position({
-					my: "right"
-					, at: "right"
-					, of: a.selector
-					, collision: "fit"
-				});
-			}
-			canvas.setWidth(w);
-			canvas.setHeight(h);
-		}
-		, getCanvas: function() {
-			return canvas;
-		}
-		, getWbId: function() {
-			return wbId;
-		}
+	function addCanvas() {
+		var c = $('<canvas></canvas>').attr('id', 'can-' + a.attr('id'));
+		a.find('.canvases').append(c);
+		var canvas = new fabric.Canvas(c.attr('id'));
+		canvas.wbId = wb.id;
+		canvas.slide = canvases.length;
+		//TODO create via WS canvas:cleared
+		canvas.on({
+			'object:added': objAddedHandler
+			, 'object:modified': objModifiedHandler
+			, 'object:selected': objSelectedHandler
+			, 'path:created': pathCreatedHandler
+			//, 'text:editing:exited': textEditedHandler
+			//, 'text:changed': textChangedHandler
+			, 'wb:object:created': wbObjCreatedHandler
+		});
+		canvases.push(canvas);
+	}
+	wb.init = function(_wbId, tid) {
+		wb.id = _wbId;
+		a = $('#' + tid);
+		t = a.find('.tools'), s = a.find(".wb-settings");
+		addCanvas();
+		internalInit(t);
 	};
+	wb.resize = function(w, h) {
+		if (t.position().left + t.width() > a.width()) {
+			t.position({
+				my: "right"
+				, at: "right"
+				, of: a.selector
+				, collision: "fit"
+			});
+		}
+		wb.eachCanvas(function(canvas) {
+			canvas.setWidth(w).setHeight(h);
+		});
+	};
+	wb.getCanvas = function() {
+		return canvases[slide];
+	};
+	wb.eachCanvas = function(func) {
+		for (var i = 0; i < canvases.length; ++i) {
+			func(canvases[i]);
+		}
+	}
+	return wb;
 };
 var WbArea = (function() {
 	var container, area, tabs, scroll, self = {};
 
-	function getWbTabId(id) {
-		return "wb-tab-" + id;
-	}
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
 	}
@@ -733,7 +765,7 @@ var WbArea = (function() {
 							}
 						}
 						wbAction('deleteObj', JSON.stringify({
-							wbId: wb.data('getWbId')()
+							wbId: wb.data('id')()
 							, obj: arr
 						}));
 						return false;
@@ -753,19 +785,26 @@ var WbArea = (function() {
 		canvas.add(_o);
 	}
 	function _createHandler(canvas, _o) {
-		if ('Video' === _o.fileType || 'Recording' === _o.fileType) {
-			var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
-				.attr("width", _o.width).attr("height", _o.height)
-				.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
-			$('#wb-tab-' + canvas.wbId).append(vid);
-			var vImg = new fabric.Image(vid[0], {
-				left: _o.left
-				, top: _o.top
-			});
-			canvas.add(vImg);
-			//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
-		} else {
-			canvas.add(_o);
+		switch (_o.fileType) {
+			case 'Video':
+			case 'Recording':
+			{
+				var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
+					.attr("width", _o.width).attr("height", _o.height)
+					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
+				$('#wb-tab-' + canvas.wbId).append(vid);
+				var vImg = new fabric.Image(vid[0], {
+					left: _o.left
+					, top: _o.top
+				});
+				canvas.add(vImg);
+				//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
+			}
+				break;
+			case 'Presentation':
+			default:
+				canvas.add(_o);
+				break;
 		}
 	}
 	function _findObject(canvas, uid) {
@@ -797,10 +836,20 @@ var WbArea = (function() {
 		container.find('.wb-tabbar li').each(function(idx) {
 			if (wbId == 1 * $(this).data('wb-id')) {
 				tabs.tabs("option", "active", idx);
+				$(this)[0].scrollIntoView();
 				return false;
 			}
 		});
 	}
+	self.getWbTabId = function(id) {
+		return "wb-tab-" + id;
+	};
+	self.getCanvas = function(id) {
+		return $('#' + self.getWbTabId(id)).data('getCanvas')();
+	};
+	self.eachCanvas = function(id, func) {
+		return $('#' + self.getWbTabId(id)).data('eachCanvas')(func);
+	};
 	self.init = function() {
 		container = $(".room.wb.area");
 		tabs = container.find('.tabs').tabs({
@@ -826,35 +875,37 @@ var WbArea = (function() {
 		});
 		area = container.find(".wb-area");
 		$(window).keyup(deleteHandler);
-	}
+	};
 	self.destroy = function() {
 		$(window).off('keyup', deleteHandler);
 	};
-	self.add = function(obj) {
-		var tid = getWbTabId(obj.id)
+	self.create = function(obj) {
+		var tid = self.getWbTabId(obj.id)
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.id)
 			, wb = $('#wb-area').clone().attr('id', tid);
 		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
 		li.find('button').click(function() {
 			wbAction('removeWb', JSON.stringify({id: obj.id}));
 		});
-
+	
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
 		refreshTabs();
-
-		_activateTab(obj.id);
+	
 		wb.data(Wb()).data('init')(obj.id, tid);
+	}
+	self.add = function(obj) {
+		self.create(obj);
+		_activateTab(obj.id);
 	};
 	self.activate = function(obj) {
 		_activateTab(obj.id);
 	}
-	self.load = function(json) { //TODO need to be unified
-		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
-		_createObject(canvas, json.obj, _createHandler);
+	self.load = function(json) {
+		_createObject(self.getCanvas(json.wbId), json.obj, _createHandler);
 	};
 	self.createObj = function(json) { //TODO need to be unified
-		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		var canvas = self.getCanvas(json.wbId);
 		var o = json.obj;
 		switch(o.type) {
 			case 'pointer':
@@ -875,7 +926,7 @@ var WbArea = (function() {
 		}
 	};
 	self.modifyObj = function(json) { //TODO need to be unified
-		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		var canvas = self.getCanvas(json.wbId);
 		var o = json.obj;
 		switch(o.type) {
 			case 'pointer':
@@ -896,13 +947,13 @@ var WbArea = (function() {
 		}
 	};
 	self.removeObj = function(json) {
-		var canvas = $('#' + getWbTabId(json.wbId)).data('getCanvas')();
+		var canvas = self.getCanvas(json.wbId);
 		for (var i = 0; i < json.obj.length; ++i) {
 			_removeHandler(canvas, json.obj[i]);
 		}
 	};
 	self.remove = function(obj) {
-		var tabId = getWbTabId(obj.id);
+		var tabId = self.getWbTabId(obj.id);
 		tabs.find('li[aria-controls="' + tabId + '"]').remove();
 		$("#" + tabId).remove();
 		refreshTabs();
