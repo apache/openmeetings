@@ -19,13 +19,12 @@
 var Chat = function() {
 	var chatTabs
 		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
-		, msgTemplate = "<div id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
+		, msgTemplate = "<div class='clear' id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
 		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
 		, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
 		, addTemplate = "<div class='add om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);addContact(e.data(\"userId\"));'></div>"
 		, messageTemplate = "<div class='new-email om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);privateMessage(e.data(\"userId\"));'></div>"
 		, inviteTemplate = "<div class='invite om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);inviteUser(e.data(\"userId\"));'></div>"
-		, clearBlock = "<div class='clear'></div>"
 		, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 		, closedHeight = "20px"
 		, openedHeight = "345px"
@@ -90,7 +89,7 @@ var Chat = function() {
 			$('#chatPanel').resizable({
 				handles: "n, w"
 				, disabled: isClosed()
-				, alsoResize: "#chat, #chat .ui-tabs .ui-tabs-panel.messageArea"
+				, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
 				, minHeight: 195
 				, minWidth: 260
 				, stop: function(event, ui) {
@@ -139,11 +138,12 @@ var Chat = function() {
 		, addMessage: function(m) {
 			if ($('#chat').length > 0 && m && m.type == "chat") {
 				if (isClosed()) {
-					$('#chat .control.block').addClass('ui-state-highlight');
+					$('#chatPopup .control.block').addClass('ui-state-highlight');
 					audio.play();
 				}
 				var msg, cm;
 				while (!!(cm = m.msg.pop())) {
+					var area = $('#' + cm.scope);
 					msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
 							.replace(/#\{userId\}/g, cm.from.id)
 							.replace(/#\{imgSrc\}/g, !!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())
@@ -160,30 +160,37 @@ var Chat = function() {
 					if (cm.needModeration) {
 						msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
 					}
-					if (!$('#' + cm.scope).length) {
+					if (!area.length) {
 						this.addTab(cm.scope, cm.scopeName);
 					}
 					if (m.mode == "accept") {
 						$('#chat-msg-id-' + cm.id).remove();
 					}
-					msg.append(clearBlock);
-					$('#' + cm.scope).prepend(msg);
+					var btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+					area.append(msg);
+					if (btm) {
+						area.animate({
+							scrollTop: area[0].scrollHeight
+						}, 300);
+					}
 				}
 			}
 		}
 		, open: function() {
 			if (isClosed()) {
-				$('#chat .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
-				$('#chat .control.block').removeClass('ui-state-highlight');
-				$('#chatPanel, #chat').animate({height: openedHeight}, 1000);
+				$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
+				$('#chatPopup .control.block').removeClass('ui-state-highlight');
+				$('#chatPanel, #chatPopup').animate({height: openedHeight}, 1000);
 				$('#chatPanel').resizable("option", "disabled", false);
+				$('#chat .messageArea').each(function(idx) {
+					$(this).scrollTop($(this)[0].scrollHeight);
+				});
 			}
 		}
 		, close: function() {
 			if (!isClosed()) {
-				$('#chat .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
-				$('#chatPanel').animate({height: closedHeight}, 1000);
-				$('#chatPanel, #chat').animate({height: closedHeight}, 1000);
+				$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
+				$('#chatPanel, #chatPopup').animate({height: closedHeight}, 1000);
 				$('#chatPanel').resizable("option", "disabled", true);
 			}
 		}

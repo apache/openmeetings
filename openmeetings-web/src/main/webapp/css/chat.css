@@ -24,10 +24,10 @@
 	width: 600px;
 	height: 20px;
 }
-#chatPanel #chat {
+#chatPanel #chatPopup {
 	height: 20px;
 }
-##chat .btn-toolbar {
+#chat .btn-toolbar {
 	margin-top: 2px;
 	margin-bottom: 0;
 	margin-left: 5px;
@@ -48,10 +48,10 @@
 	padding: 2px .5em;
 	float: left;
 }
-#chat .control.block .ui-icon {
+#chatPopup .control.block .ui-icon {
 	text-align: center;
 }
-#chat .control.block .label {
+#chatPopup .control.block .label {
 	display: inline-block;
 	padding-left: 20px;
 }
@@ -73,7 +73,7 @@
 .ui-tabs .ui-tabs-panel.messageArea {
 	height: 165px;
 	overflow-y: auto;
-	padding: 5px;
+	padding: 0 5px;
 }
 #chatMessage .wysiwyg-editor {
 	height: 70px;
