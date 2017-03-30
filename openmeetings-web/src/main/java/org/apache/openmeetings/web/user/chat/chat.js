@@ -162,6 +162,7 @@ var Chat = function() {
 					}
 					if (!area.length) {
 						this.addTab(cm.scope, cm.scopeName);
+						area = $('#' + cm.scope);
 					}
 					if (m.mode == "accept") {
 						$('#chat-msg-id-' + cm.id).remove();
