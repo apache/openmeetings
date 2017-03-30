@@ -31,8 +31,9 @@ import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class AppointmentParamConverter implements ParamConverter<AppointmentDTO> {
 	public static final String ROOT = "appointmentDTO";

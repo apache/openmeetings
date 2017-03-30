@@ -36,7 +36,8 @@ import org.apache.wicket.markup.repeater.ReuseIfModelsEqualStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONObject;
 
 public class FileItemTree extends DefaultNestedTree<FileItem> {
 	private static final long serialVersionUID = 1L;

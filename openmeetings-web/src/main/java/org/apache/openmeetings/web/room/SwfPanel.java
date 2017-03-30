@@ -51,10 +51,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;

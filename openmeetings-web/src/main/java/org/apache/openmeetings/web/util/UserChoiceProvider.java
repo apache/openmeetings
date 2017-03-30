@@ -33,10 +33,11 @@ import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
-import org.json.JSONException;
-import org.json.JSONStringer;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
+
+import com.github.openjson.JSONException;
+import com.github.openjson.JSONStringer;
 
 public class UserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;

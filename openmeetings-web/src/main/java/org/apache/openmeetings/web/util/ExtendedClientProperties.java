@@ -24,7 +24,8 @@ import static org.apache.openmeetings.web.app.Application.SIGNIN_MAPPING;
 
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.request.IRequestParameters;
-import org.json.JSONObject;
+
+import com.github.openjson.JSONObject;
 
 public class ExtendedClientProperties extends ClientProperties {
 	private static final long serialVersionUID = 1L;

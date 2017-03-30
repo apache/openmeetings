@@ -58,10 +58,10 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.json.JSONObject;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 import com.googlecode.wicket.kendo.ui.widget.tabs.TabListModel;
 

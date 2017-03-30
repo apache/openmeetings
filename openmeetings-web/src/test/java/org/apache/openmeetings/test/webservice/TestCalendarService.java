@@ -46,10 +46,11 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class TestCalendarService extends AbstractWebServiceTest {
 	public final static String CALENDAR_SERVICE_URL = BASE_SERVICES_URL + "/calendar";

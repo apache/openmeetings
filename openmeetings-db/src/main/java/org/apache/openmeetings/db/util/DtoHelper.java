@@ -21,8 +21,8 @@ package org.apache.openmeetings.db.util;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 public class DtoHelper {
 	public static Integer optInt(JSONObject o, String key) {
