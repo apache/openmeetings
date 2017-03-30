@@ -70,5 +70,17 @@ var Activities = function() {
 				close();
 			}
 		}
+		, findUser: function(uid) {
+			var m = '5px', t = 50, u = $('#user'+uid);
+			if (u.length === 1) {
+				u[0].scrollIntoView();
+				u.addClass('ui-state-highlight');
+				for(i = 0; i < 10; i++) {
+					u.animate({marginTop: '-='+m}, t)
+						.animate({marginTop: '+='+m}, t);
+				}
+				u.removeClass('ui-state-highlight', 1500);
+			}
+		}
 	};
 }();

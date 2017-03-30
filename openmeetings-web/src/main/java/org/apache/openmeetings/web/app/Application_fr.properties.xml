@@ -1896,4 +1896,5 @@
 	<entry key="files.root.group">Group files</entry>
 	<entry key="recordings.root.group">Group recordings</entry>
 	<entry key="restricted.group.files">Group files are restricted</entry>
+	<entry key="find.user">Find user</entry>
 </properties>

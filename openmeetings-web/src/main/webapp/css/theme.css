@@ -578,8 +578,8 @@ select.messages.selector {
 	font-weight: bold !important;
 	text-align: left;
 }
-#ui-datepicker-div{
-    z-index: 100 !important;
+#ui-datepicker-div {
+	z-index: 100 !important;
 }
 .room-list {
 	border-collapse: collapse;

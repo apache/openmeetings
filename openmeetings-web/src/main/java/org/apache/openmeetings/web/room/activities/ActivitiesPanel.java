@@ -158,6 +158,8 @@ public class ActivitiesPanel extends BasePanel {
 			Long roomId = room.getRoom().getId();
 			Component accept = new WebMarkupContainer("accept").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getId())));
 			Component decline = new WebMarkupContainer("decline").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getId())));
+			Component find = new WebMarkupContainer("find").add(new AttributeAppender("onclick", String.format("Activities.findUser('%s');", a.getUid()))).setVisible(false);
+			boolean self = getUserId().equals(a.getSender());
 			switch (a.getType()) {
 				case reqRightModerator:
 				case reqRightWb:
@@ -171,6 +173,7 @@ public class ActivitiesPanel extends BasePanel {
 					decline.setVisible(room.getClient().hasRight(Right.moderator));
 					break;
 				case haveQuestion:
+					find.setVisible(!self);
 				case roomEnter:
 				case roomExit:
 					accept.setVisible(false);
@@ -178,7 +181,7 @@ public class ActivitiesPanel extends BasePanel {
 					break;
 			}
 			User u = getBean(UserDao.class).get(a.getSender());
-			String name = getUserId().equals(a.getSender()) ? getString("1362") : String.format("%s %s", u.getFirstname(), u.getLastname());
+			String name = self ? getString("1362") : String.format("%s %s", u.getFirstname(), u.getLastname());
 			switch (a.getType()) {
 				case roomEnter:
 					text = ""; // TODO should this be fixed?
@@ -216,7 +219,7 @@ public class ActivitiesPanel extends BasePanel {
 					break;
 			}
 			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
-			item.add(accept, decline, new Label("text", text));
+			item.add(accept, decline, find, new Label("text", text));
 			item.add(AttributeModifier.append("class", getClass(a)));
 		}
 
