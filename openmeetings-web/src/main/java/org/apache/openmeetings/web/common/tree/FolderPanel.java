@@ -79,7 +79,7 @@ public class FolderPanel extends Panel {
 				target.add(treePanel.trees);
 			}
 		} : new WebMarkupContainer("drop");
-		if (r.getId() == null || !editable) {
+		if (r.getId() == null || treePanel.isReadOnly()) {
 			drag = new WebMarkupContainer("drag");
 		} else {
 			drag = new Draggable<FileItem>("drag", Model.of(r)) {
@@ -93,7 +93,8 @@ public class FolderPanel extends Panel {
 					behavior.setOption("helper", "dragHelper");
 				}
 			}.setContainment(treePanel.getContainment());
-			drag.add(AttributeModifier.append("class", r instanceof Recording ? "recorditem" : "fileitem"));
+			String cls = r instanceof Recording ? "recorditem" : "fileitem";
+			drag.add(AttributeModifier.append("class", r.isReadOnly() ? "readonlyitem" : cls));
 		}
 		Component name = r.getId() == null || !editable ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;

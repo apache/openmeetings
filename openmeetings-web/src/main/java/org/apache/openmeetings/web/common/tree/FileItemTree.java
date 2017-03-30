@@ -78,6 +78,14 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 		return (OmTreeProvider)super.getProvider();
 	}
 
+	public void refreshRoots(boolean all) {
+		modelChanging();
+		getModelObject().clear();
+		modelChanged();
+		getProvider().refreshRoots(all);
+		replace(newSubtree("subtree", Model.of((FileItem)null)));
+	}
+
 	@Override
 	protected Component newContentComponent(String id, IModel<FileItem> node) {
 		return new Folder<FileItem>(id, this, node) {

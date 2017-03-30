@@ -223,8 +223,12 @@ public abstract class FileTreePanel extends Panel {
 
 	private void deleteAll(AjaxRequestTarget target) {
 		for (Entry<String, FileItem> e : selected.entrySet()) {
-			delete(e.getValue(), target);
+			FileItem f = e.getValue();
+			if (!f.isReadOnly()) {
+				delete(f, target);
+			}
 		}
+		updateSelected(target);
 		selected.clear();
 	}
 
@@ -243,7 +247,7 @@ public abstract class FileTreePanel extends Panel {
 	public void setReadOnly(boolean readOnly, IPartialPageRequestHandler handler) {
 		if (this.readOnly != readOnly) {
 			this.readOnly = readOnly;
-			tree.getProvider().refreshRoots(!readOnly);
+			tree.refreshRoots(!readOnly);
 			createDir.setEnabled(!readOnly);
 			createDir.add(AttributeModifier.replace("class", new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			upload.setEnabled(!readOnly);
@@ -251,6 +255,7 @@ public abstract class FileTreePanel extends Panel {
 			trashBorder.add(AttributeModifier.replace("class", new StringBuilder(TRASH_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			if (handler != null) {
 				handler.add(createDir, upload, trashBorder);
+				update(handler);
 			}
 		}
 	}
