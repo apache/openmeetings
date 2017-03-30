@@ -1919,4 +1919,5 @@
 	<entry key="files.root.group">Файлы группы</entry>
 	<entry key="recordings.root.group">Записи группы</entry>
 	<entry key="restricted.group.files">Доступ к групповым файлам ограничен</entry>
+	<entry key="find.user">Найти пользователя</entry>
 </properties>

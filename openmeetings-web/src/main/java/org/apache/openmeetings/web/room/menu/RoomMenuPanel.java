@@ -33,12 +33,14 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.RoomMessage.Type;
+import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
@@ -82,7 +84,8 @@ public class RoomMenuPanel extends Panel {
 		}
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			WebSocketHelper.sendRoom(new RoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.haveQuestion));
+			Client c = room.getClient();
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), Type.haveQuestion, c.getUid()));
 		}
 	};
 	private final RoomPanel room;
