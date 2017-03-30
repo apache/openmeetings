@@ -188,7 +188,7 @@ public class RoomPanel extends BasePanel {
 			public void onConfigure(JQueryBehavior behavior) {
 				super.onConfigure(behavior);
 				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
-				behavior.setOption("accept", Options.asString(".recorditem, .fileitem"));
+				behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
 			}
 
 			@Override
