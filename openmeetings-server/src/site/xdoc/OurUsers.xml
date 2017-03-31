@@ -23,7 +23,9 @@
 
 	<body>
 		<section name="List companies/institutions using OpenMeetings">
-			<p></p>
+			<p>If you also want to get listed, please write to <a href="mail-lists.html">user@/dev@ mailing list</a> (you need to subscribe first)<br/>
+			 with subject "Add entry in 'Our Users' list". <br/>
+			 And following information in the body: company/institution|city|country|type.'</p>
 			<table>
 				<tr>
 					<th> company/institution </th>
@@ -32,8 +34,8 @@
 					<th> type </th>
 				</tr>
 				<tr>
-					<td> Schulnetz Koblenz </td>
-					<td> Koblenz </td>
+					<td> Beuth Hochschule für Technik </td>
+					<td> Berlin </td>
 					<td> Germany </td>
 					<td> edu </td>
 				</tr>
@@ -44,14 +46,14 @@
 					<td> edu </td>
 				</tr>
 				<tr>
-					<td> VCRP - Virtueller Campus Rheinland Pfalz </td>
-					<td> Kaiserslautern </td>
+					<td> Schulnetz Koblenz </td>
+					<td> Koblenz </td>
 					<td> Germany </td>
 					<td> edu </td>
 				</tr>
 				<tr>
-					<td> Beuth Hochschule für Technik </td>
-					<td> Berlin </td>
+					<td> VCRP - Virtueller Campus Rheinland Pfalz </td>
+					<td> Kaiserslautern </td>
 					<td> Germany </td>
 					<td> edu </td>
 				</tr>
