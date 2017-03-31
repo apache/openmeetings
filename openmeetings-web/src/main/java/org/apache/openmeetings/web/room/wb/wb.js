@@ -44,6 +44,7 @@ var Base = function() {
 	var base = {};
 	base.objectCreated = function(o, canvas) {
 		o.uid = UUID.generate();
+		o.slide = canvas.slide;
 		canvas.trigger("wb:object:created", o);
 		return o.uid;
 	}
@@ -481,7 +482,7 @@ var Clipart = function(wb, btn) {
 }
 var Wb = function() {
 	const ACTIVE = 'active';
-	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0;
+	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, resizable = true;
 
 	function getBtn(m) {
 		return t.find(".om-icon." + (m || mode));
@@ -624,9 +625,90 @@ var Wb = function() {
 			}
 		});
 	}
+	function _findObject(o) {
+		var _o = {};
+		canvases[o.slide].forEachObject(function(__o) {
+			if (!!__o && o.uid === __o.uid) {
+				_o = __o;
+				return false;
+			}
+		});
+		return _o;
+	}
+	function _removeHandler(o) {
+		var __o = _findObject(o);
+		if (!!__o) {
+			canvases[o.slide].remove(__o);
+		}
+	}
+	function _modifyHandler(_o) {
+		_removeHandler(_o);
+		canvases[_o.slide].add(_o);
+	}
+	function _createHandler(_o) {
+		switch (_o.fileType) {
+			case 'Video':
+			case 'Recording':
+			{
+				var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
+					.attr("width", _o.width).attr("height", _o.height)
+					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
+				$('#wb-tab-' + canvas.wbId).append(vid);
+				var vImg = new fabric.Image(vid[0], {
+					left: _o.left
+					, top: _o.top
+				});
+				canvases[_o.slide].add(vImg);
+				//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
+			}
+				break;
+			case 'Presentation':
+			{
+				if (resizable && !_o.deleted) {
+					resizable = false;
+				}
+				var count = _o.deleted ? 1 : _o.count;
+				for (var i = 0; i < count; ++i) {
+					if (canvases.length < i + 1) {
+						addCanvas();
+					}
+					var canvas = canvases[i];
+					/*
+					 * TODO block resizing
+					*/
+					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {
+						/*backgroundImageOpacity: 0.5
+						, */backgroundImageStretch: false
+					}).setWidth(Math.max(canvas.width, _o.width)).setHeight(Math.max(canvas.height, _o.height));
+				}
+			}
+				break;
+			default:
+				canvases[_o.slide].add(_o);
+				break;
+		}
+	}
+	function _createObject(arr, handler) {
+		fabric.util.enlivenObjects(arr, function(objects) {
+			wb.eachCanvas(function(canvas) {
+				canvas.renderOnAddRemove = false;
+			});
+
+			for (var i = 0; i < objects.length; ++i) {
+				var _o = objects[i];
+				_o.loaded = true;
+				handler(_o);
+			}
+
+			wb.eachCanvas(function(canvas) {
+				canvas.renderOnAddRemove = true;
+				canvas.renderAll();
+			});
+		});
+	};
 
 	function toOmJson(o) {
-		return o.toJSON(['uid', 'fileId', 'fileType', 'count']);
+		return o.toJSON(['uid', 'fileId', 'fileType', 'count', 'slide']);
 	}
 	//events
 	function wbObjCreatedHandler(o) {
@@ -651,6 +733,7 @@ var Wb = function() {
 		switch(o.type) {
 			case 'i-text':
 				o.uid = UUID.generate();
+				o.slide = this.slide;
 				wbObjCreatedHandler(o);
 				break;
 		}
@@ -672,6 +755,7 @@ var Wb = function() {
 	}
 	function pathCreatedHandler(o) {
 		o.path.uid = UUID.generate();
+		o.path.slide = this.slide;
 		wbObjCreatedHandler(o.path);
 	};
 	/*TODO interactive text chage
@@ -684,11 +768,12 @@ var Wb = function() {
 		console.log('Text Changed', obj);
 	};*/
 	function addCanvas() {
-		var c = $('<canvas></canvas>').attr('id', 'can-' + a.attr('id'));
+		var slide = canvases.length;
+		var c = $('<canvas></canvas>').attr('id', 'can-' + a.attr('id') + '-slide-' + slide);
 		a.find('.canvases').append(c);
 		var canvas = new fabric.Canvas(c.attr('id'));
 		canvas.wbId = wb.id;
-		canvas.slide = canvases.length;
+		canvas.slide = slide;
 		//TODO create via WS canvas:cleared
 		canvas.on({
 			'object:added': objAddedHandler
@@ -717,9 +802,58 @@ var Wb = function() {
 				, collision: "fit"
 			});
 		}
-		wb.eachCanvas(function(canvas) {
-			canvas.setWidth(w).setHeight(h);
-		});
+		if (resizable) {
+			//TODO FIXME need to be checked
+			wb.eachCanvas(function(canvas) {
+				canvas.setWidth(w).setHeight(h);
+			});
+		}
+	};
+	wb.load = function(arr) {
+		_createObject(arr, _createHandler);
+	};
+	wb.createObj = function(o) {
+		switch(o.type) {
+			case 'pointer':
+				APointer().create(canvases[o.slide], o);
+				break;
+			default:
+				_createObject([o], _createHandler);
+				/*
+				 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
+				if ('Video' === o.fileType || 'Recording' === o.fileType) {
+					fabric.util.requestAnimFrame(function render() {
+						canvas.renderAll();
+						fabric.util.requestAnimFrame(render);
+					});
+				}
+				*/
+				break;
+		}
+	};
+	wb.modifyObj = function(o) { //TODO need to be unified
+		switch(o.type) {
+			case 'pointer':
+				_modifyHandler(APointer().create(canvases[o.slide], o))
+				break;
+			default:
+				var arr = [o];
+				if (!!o.objects) {
+					arr = o.objects;
+					for (var i = 0; i < arr.length; ++i) {
+						var _o = arr[i];
+						_o.left += o.left;
+						_o.top += o.top;
+					}
+				}
+				_createObject(o.objects || [o], _modifyHandler);
+				break;
+		}
+	};
+	wb.removeObj = function(arr) {
+		for (var i = 0; i < arr.length; ++i) {
+			_removeHandler(arr[i]);
+		}
 	};
 	wb.getCanvas = function() {
 		return canvases[slide];
@@ -752,20 +886,28 @@ var WbArea = (function() {
 			case 8:  // backspace
 			case 46: // delete
 				{
-					var wb = getActive();
-					var canvas = wb.data('getCanvas')();
+					var wb = getActive().data();
+					var canvas = wb.getCanvas();
 					if (!!canvas) {
 						var arr = [];
 						if (canvas.getActiveGroup()) {
-							canvas.getActiveGroup().forEachObject(function(o){ arr.push(o.uid); });
+							canvas.getActiveGroup().forEachObject(function(o){
+								arr.push({
+									uid: o.uid
+									, slide: o.slide
+								});
+							});
 						} else {
 							var obj = canvas.getActiveObject();
 							if (!!obj) {
-								arr.push(obj.uid);
+								arr.push({
+									uid: o.uid
+									, slide: o.slide
+								});
 							}
 						}
 						wbAction('deleteObj', JSON.stringify({
-							wbId: wb.data('id')()
+							wbId: wb.id
 							, obj: arr
 						}));
 						return false;
@@ -773,64 +915,6 @@ var WbArea = (function() {
 				}
 				break;
 		}
-	}
-	function _removeHandler(canvas, _uid) {
-		var __o = _findObject(canvas, _uid);
-		if (!!__o) {
-			canvas.remove(__o);
-		}
-	}
-	function _modifyHandler(canvas, _o) {
-		_removeHandler(canvas, _o.uid);
-		canvas.add(_o);
-	}
-	function _createHandler(canvas, _o) {
-		switch (_o.fileType) {
-			case 'Video':
-			case 'Recording':
-			{
-				var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
-					.attr("width", _o.width).attr("height", _o.height)
-					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
-				$('#wb-tab-' + canvas.wbId).append(vid);
-				var vImg = new fabric.Image(vid[0], {
-					left: _o.left
-					, top: _o.top
-				});
-				canvas.add(vImg);
-				//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
-			}
-				break;
-			case 'Presentation':
-			default:
-				canvas.add(_o);
-				break;
-		}
-	}
-	function _findObject(canvas, uid) {
-		var _o = {};
-		canvas.forEachObject(function(__o) {
-			if (!!__o && uid === __o.uid) {
-				_o = __o;
-				return false;
-			}
-		});
-		return _o;
-	}
-	function _createObject(canvas, arr, handler) {
-		fabric.util.enlivenObjects(arr, function(objects) {
-			var origRenderOnAddRemove = canvas.renderOnAddRemove;
-			canvas.renderOnAddRemove = false;
-
-			for (var i = 0; i < objects.length; ++i) {
-				var _o = objects[i];
-				_o.loaded = true;
-				handler(canvas, _o);
-			}
-
-			canvas.renderOnAddRemove = origRenderOnAddRemove;
-			canvas.renderAll();
-		});
 	}
 	function _activateTab(wbId) {
 		container.find('.wb-tabbar li').each(function(idx) {
@@ -844,11 +928,11 @@ var WbArea = (function() {
 	self.getWbTabId = function(id) {
 		return "wb-tab-" + id;
 	};
-	self.getCanvas = function(id) {
-		return $('#' + self.getWbTabId(id)).data('getCanvas')();
+	self.getWb = function(id) {
+		return $('#' + self.getWbTabId(id)).data();
 	};
-	self.eachCanvas = function(id, func) {
-		return $('#' + self.getWbTabId(id)).data('eachCanvas')(func);
+	self.getCanvas = function(id) {
+		return self.getWb(id).getCanvas();
 	};
 	self.init = function() {
 		container = $(".room.wb.area");
@@ -892,7 +976,9 @@ var WbArea = (function() {
 		tabs.append(wb);
 		refreshTabs();
 	
-		wb.data(Wb()).data('init')(obj.id, tid);
+		var wbo = Wb();
+		wb.data(wbo);
+		wbo.init(obj.id, tid);
 	}
 	self.add = function(obj) {
 		self.create(obj);
@@ -902,55 +988,16 @@ var WbArea = (function() {
 		_activateTab(obj.id);
 	}
 	self.load = function(json) {
-		_createObject(self.getCanvas(json.wbId), json.obj, _createHandler);
+		self.getWb(json.wbId).load(json.obj);
 	};
-	self.createObj = function(json) { //TODO need to be unified
-		var canvas = self.getCanvas(json.wbId);
-		var o = json.obj;
-		switch(o.type) {
-			case 'pointer':
-				APointer().create(canvas, o);
-				break;
-			default:
-				_createObject(canvas, [o], _createHandler);
-				/*
-				 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
-				if ('Video' === o.fileType || 'Recording' === o.fileType) {
-					fabric.util.requestAnimFrame(function render() {
-						canvas.renderAll();
-						fabric.util.requestAnimFrame(render);
-					});
-				}
-				*/
-				break;
-		}
+	self.createObj = function(json) {
+		self.getWb(json.wbId).createObj(json.obj);
 	};
-	self.modifyObj = function(json) { //TODO need to be unified
-		var canvas = self.getCanvas(json.wbId);
-		var o = json.obj;
-		switch(o.type) {
-			case 'pointer':
-				_modifyHandler(canvas, APointer().create(canvas, o))
-				break;
-			default:
-				var arr = [o];
-				if (!!o.objects) {
-					arr = o.objects;
-					for (var i = 0; i < arr.length; ++i) {
-						var _o = arr[i];
-						_o.left += o.left;
-						_o.top += o.top;
-					}
-				}
-				_createObject(canvas, o.objects || [o], _modifyHandler);
-				break;
-		}
+	self.modifyObj = function(json) {
+		self.getWb(json.wbId).modifyObj(json.obj);
 	};
 	self.removeObj = function(json) {
-		var canvas = self.getCanvas(json.wbId);
-		for (var i = 0; i < json.obj.length; ++i) {
-			_removeHandler(canvas, json.obj[i]);
-		}
+		self.getWb(json.wbId).removeObj(json.obj);
 	};
 	self.remove = function(obj) {
 		var tabId = self.getWbTabId(obj.id);
@@ -970,8 +1017,9 @@ var WbArea = (function() {
 		var wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
 		tabPanels.height(wbah);
 		tabPanels.each(function(idx) {
-			$(this).data('resize')(w, wbah);
+			$(this).data('resize')(w - 20, wbah);
 		});
+		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
 	}
 	return self;
 })();

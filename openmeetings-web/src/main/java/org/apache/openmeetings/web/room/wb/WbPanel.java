@@ -302,6 +302,11 @@ public class WbPanel extends Panel {
 				file.put("_src", urlFor(ref, pp));
 				file.put("_poster", urlFor(new JpgRecordingResourceReference(), pp));
 				break;
+			case Presentation:
+				ref = new RoomResourceReference();
+				file.put("_src", urlFor(ref, pp));
+				file.put("deleted", !fi.exists());
+				break;
 			default:
 				ref = new RoomResourceReference();
 				file.put("src", urlFor(ref, pp));

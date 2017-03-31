@@ -501,4 +501,12 @@
 	height: 20px;
 	padding: 0;
 }
-
+.wb-area .ui-tabs-panel .scroll-container {
+	overflow: auto;
+}
+.wb-area .ui-tabs-panel .scroll-container .canvas-container {
+	margin-top: 5px;
+	margin-left: 5px;
+	border: 1px solid #888888;
+	box-shadow: 5px 5px 5px #888888;
+}
