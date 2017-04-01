@@ -340,6 +340,14 @@
 			</roles>
 		</developer>
 		<developer>
+			<name>Dmitry Bezhetskov</name>
+			<organization>Unipro</organization>
+			<organizationUrl>http://unipro.ru</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+		<developer>
 			<id>albus</id>
 			<name>Alvaro Bustos</name>
 			<email>zurcamos@gmail.com</email>
