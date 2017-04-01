@@ -83,6 +83,7 @@ public class WbPanel extends Panel {
 		createWb
 		, removeWb
 		, activeWb
+		, setSlide
 		, createObj
 		, modifyObj
 		, deleteObj
@@ -133,6 +134,13 @@ public class WbPanel extends Panel {
 								wbs.setActiveWb(_id);
 								sendWbAll("WbArea.activate", new JSONObject().put("id", _id));
 							}
+						}
+							break;
+						case setSlide:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							wb.setSlide(obj.optInt("slide", 0));
+							sendWbOthers(String.format("WbArea.%s", a.name()), obj);
 						}
 							break;
 						case createObj:
@@ -362,11 +370,8 @@ public class WbPanel extends Panel {
 					.put("top", UPLOAD_WB_TOP)
 					.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
 					.put("height", fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
-					//,"angle":32.86
-					//,"crossOrigin":""
 					.put("uid", wuid)
-					//,"filters":[]
-					//,"resizeFilters":[]
+					.put("slide", wb.getSlide())
 					;
 			wb.put(wuid, file);
 			final String ruid = wbs.getUid();

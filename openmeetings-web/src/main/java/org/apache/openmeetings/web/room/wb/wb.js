@@ -482,7 +482,9 @@ var Clipart = function(wb, btn) {
 }
 var Wb = function() {
 	const ACTIVE = 'active';
-	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, resizable = true;
+	const BUMPER = 100;
+	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
+			, minWidth = 0, minHeight = 0;
 
 	function getBtn(m) {
 		return t.find(".om-icon." + (m || mode));
@@ -664,22 +666,18 @@ var Wb = function() {
 				break;
 			case 'Presentation':
 			{
-				if (resizable && !_o.deleted) {
-					resizable = false;
-				}
+				minWidth = Math.max(minWidth, _o.width);
+				minHeight = Math.max(minHeight, _o.height);
+				width = Math.max(minWidth, width);
+				height = Math.max(minHeight, height);
 				var count = _o.deleted ? 1 : _o.count;
 				for (var i = 0; i < count; ++i) {
 					if (canvases.length < i + 1) {
 						addCanvas();
 					}
 					var canvas = canvases[i];
-					/*
-					 * TODO block resizing
-					*/
-					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {
-						/*backgroundImageOpacity: 0.5
-						, */backgroundImageStretch: false
-					}).setWidth(Math.max(canvas.width, _o.width)).setHeight(Math.max(canvas.height, _o.height));
+					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {})
+							.setWidth(width).setHeight(height);
 				}
 			}
 				break;
@@ -792,6 +790,21 @@ var Wb = function() {
 		t = a.find('.tools'), s = a.find(".wb-settings");
 		addCanvas();
 		internalInit(t);
+		a.find('.scroll-container').on('scroll', function(e) {
+			$(this).find('.canvas-container').each(function(idx) {
+				var h = $(this).height(), pos = $(this).position();
+				if (slide != idx &&pos.top > BUMPER - h && pos.top < BUMPER) {
+					//TODO FIXME might be done without iterating
+					//console.log("Found:", idx);
+					slide = idx;
+					wbAction('setSlide', JSON.stringify({
+						wbId: wb.id
+						, slide: idx
+					}));
+					return false;
+				}
+			});
+		});
 	};
 	wb.resize = function(w, h) {
 		if (t.position().left + t.width() > a.width()) {
@@ -802,15 +815,18 @@ var Wb = function() {
 				, collision: "fit"
 			});
 		}
-		if (resizable) {
-			//TODO FIXME need to be checked
-			wb.eachCanvas(function(canvas) {
-				canvas.setWidth(w).setHeight(h);
-			});
-		}
+		width = Math.max(minWidth, w);
+		height = Math.max(minHeight, h);
+		wb.eachCanvas(function(canvas) {
+			canvas.setWidth(width).setHeight(height);
+		});
 	};
 	wb.load = function(arr) {
 		_createObject(arr, _createHandler);
+	};
+	wb.setSlide = function(_sl) {
+		slide = _sl;
+		a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
 	};
 	wb.createObj = function(o) {
 		switch(o.type) {
@@ -925,6 +941,17 @@ var WbArea = (function() {
 			}
 		});
 	}
+	function _resizeWbs() {
+		var w = area.width(), hh = area.height();
+		var wbTabs = area.find(".tabs.ui-tabs");
+		var tabPanels = wbTabs.find(".ui-tabs-panel");
+		var wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
+		tabPanels.height(wbah);
+		tabPanels.each(function(idx) {
+			$(this).data().resize(w - 25, wbah - 20);
+		});
+		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
+	}
 	self.getWbTabId = function(id) {
 		return "wb-tab-" + id;
 	};
@@ -979,6 +1006,7 @@ var WbArea = (function() {
 		var wbo = Wb();
 		wb.data(wbo);
 		wbo.init(obj.id, tid);
+		_resizeWbs();
 	}
 	self.add = function(obj) {
 		self.create(obj);
@@ -989,6 +1017,9 @@ var WbArea = (function() {
 	}
 	self.load = function(json) {
 		self.getWb(json.wbId).load(json.obj);
+	};
+	self.setSlide = function(json) {
+		self.getWb(json.wbId).setSlide(json.slide);
 	};
 	self.createObj = function(json) {
 		self.getWb(json.wbId).createObj(json.obj);
@@ -1013,13 +1044,7 @@ var WbArea = (function() {
 
 		var wbTabs = area.find(".tabs.ui-tabs");
 		wbTabs.height(hh);
-		var tabPanels = wbTabs.find(".ui-tabs-panel");
-		var wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
-		tabPanels.height(wbah);
-		tabPanels.each(function(idx) {
-			$(this).data('resize')(w - 20, wbah);
-		});
-		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
+		_resizeWbs();
 	}
 	return self;
 })();

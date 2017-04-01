@@ -40,6 +40,7 @@ public class Whiteboard {
 	private Boolean fullFit = true;
 	private Map<String, JSONObject> roomItems = new ConcurrentHashMap<>();
 	private Date created = new Date();
+	private int slide = 0;
 	private int zIndex = 1;
 	private String name;
 
@@ -129,5 +130,13 @@ public class Whiteboard {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getSlide() {
+		return slide;
+	}
+
+	public void setSlide(int slide) {
+		this.slide = slide;
 	}
 }
