@@ -28,7 +28,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.KendoCultureHeaderItem;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DatePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.DateTimePicker;
 import com.googlecode.wicket.kendo.ui.form.datetime.local.TimePicker;
@@ -37,22 +36,27 @@ public class OmDateTimePicker extends DateTimePicker {
 	private static final long serialVersionUID = 1L;
 
 	public OmDateTimePicker(String id, IModel<LocalDateTime> model) {
-		super(id, model);
+		super(id, model, WebSession.get().getLocale());
 	}
 
 	@Override
 	protected DatePicker newDatePicker(String id, IModel<LocalDate> model, Locale locale, String datePattern, Options options) {
-		return new DatePicker(id, model, WebSession.get().getLocale());
+		DatePicker dp = super.newDatePicker(id, model, locale, datePattern, options);
+		dp.setLabel(getLabel());
+		return dp;
 	}
 
 	@Override
 	protected TimePicker newTimePicker(String id, IModel<LocalTime> model, Locale locale, String timePattern, Options options) {
-		return new TimePicker(id, model, WebSession.get().getLocale());
+		TimePicker tp = super.newTimePicker(id, model, locale, timePattern, options);
+		tp.setLabel(getLabel());
+		return tp;
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
+		//FIXME TODO this is remain here until localized AM/PM will be correctly handled
+		//response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
 	}
 }

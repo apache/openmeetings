@@ -375,7 +375,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(feedback.setOutputMarkupId(true));
 			//General
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
-			add(start.setRequired(true), end.setRequired(true));
 			add(ownerPanel.add(owner));
 			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
@@ -474,6 +473,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			add(cals.setNullValid(true).setLabel(Model.of("calendar")).setOutputMarkupId(true));
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			add(start.setLabel(Model.of(getString("570"))).setRequired(true)
+					, end.setLabel(Model.of(getString("571"))).setRequired(true));
 		}
 
 		private List<Room> getRoomList() {
