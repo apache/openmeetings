@@ -95,7 +95,7 @@ public class OmFileHelper {
 	private static File getDir(File parent, String name) {
 		File f = new File(parent, name);
 		if (!f.exists()) {
-			f.mkdir();
+			f.mkdirs();
 		}
 		return f;
 	}

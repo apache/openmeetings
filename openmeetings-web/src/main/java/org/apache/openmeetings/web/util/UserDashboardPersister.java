@@ -27,6 +27,8 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 
 import org.slf4j.Logger;
@@ -39,7 +41,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class UserDashboardPersister implements DashboardPersister {
 	private static final Logger log = getLogger(UserDashboardPersister.class, webAppRootKey);
-	
+
 	@Override
 	public Dashboard load() {
 		return new XStreamDashboardPersister().load();
@@ -53,23 +55,23 @@ public class UserDashboardPersister implements DashboardPersister {
 	public static class XStreamDashboardPersister implements DashboardPersister {
 		private File file;
 		private XStream xstream;
-		
+
 		public XStreamDashboardPersister() {
 			this.file = getUserDashboard(getUserId());
-			
+
 			xstream = new XStream(new DomDriver(UTF_8.name()));
 			xstream.setMode(XStream.NO_REFERENCES);
 			xstream.alias("dashboard", UserDashboard.class);
 		}
-		
+
 		@Override
 		public Dashboard load() {
 			if (!file.exists() || !file.isFile()) {
 				return null;
 			}
-			
-			try {
-				return (Dashboard) xstream.fromXML(new FileInputStream(file));
+
+			try (InputStream is = new FileInputStream(file)) {
+				return (Dashboard) xstream.fromXML(is);
 			} catch (Exception e) {
 				log.error("Error while loading dashboard", e);
 				return null;
@@ -80,9 +82,9 @@ public class UserDashboardPersister implements DashboardPersister {
 		public void save(Dashboard dashboard) {
 			// sort widgets
 			Collections.sort(dashboard.getWidgets(), new WidgetComparator());
-			
-			try {
-				xstream.toXML(dashboard, new FileOutputStream(file));
+
+			try (OutputStream os = new FileOutputStream(file)) {
+				xstream.toXML(dashboard, os);
 			} catch (Exception e) {
 				log.error("Error while saving dashboard", e);
 			}
