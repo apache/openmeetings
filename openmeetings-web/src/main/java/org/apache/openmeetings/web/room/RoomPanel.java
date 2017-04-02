@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
+import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
@@ -426,6 +427,7 @@ public class RoomPanel extends BasePanel {
 								handler.add(room.setVisible(false));
 								getMainPanel().getChat().toggle(handler, false);
 								clientKicked.open(handler);
+								exitRoom(getClient());
 							}
 						}
 						break;

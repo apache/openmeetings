@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room.menu;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
+import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
@@ -336,7 +337,7 @@ public class RoomMenuPanel extends Panel {
 
 	public void exit(IPartialPageRequestHandler handler) {
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
-			Application.exitRoom(room.getClient());
+			exitRoom(room.getClient());
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, String.class, "");
