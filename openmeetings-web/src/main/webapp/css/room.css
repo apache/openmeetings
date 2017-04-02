@@ -137,14 +137,14 @@
 }
 .room.wb.area .tools.vertical {
 	width: 38px;
-	height: 420px;
+	height: 563px;
 }
 .room.wb.area .tools.readonly.vertical {
 	width: 38px;
 	height: 60px;
 }
 .room.wb.area .tools.horisontal {
-	width: 420px;
+	width: 563px;
 	height: 38px;
 }
 .room.wb.area .tools.readonly.horisontal {
@@ -184,6 +184,18 @@
 }
 .room.wb.area .tools .om-icon.big.arrow {
 	background-image: url(images/arrow.png);
+}
+.room.wb.area .tools .om-icon.big.clear-all {
+	background-image: url(images/cancel.png);
+}
+.room.wb.area .tools .om-icon.big.clear-slide {
+	background-image: url(images/page_delete.png);
+}
+.room.wb.area .tools .om-icon.big.save {
+	background-image: url(images/file_save_as.png);
+}
+.room.wb.area .tools .om-icon.big.undo {
+	background-image: url(images/arrow_undo.png);
 }
 .room.wb.area .om-icon.big.next {
 	background-image: url(images/next.png);
