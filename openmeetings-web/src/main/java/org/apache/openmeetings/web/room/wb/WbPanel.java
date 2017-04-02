@@ -272,7 +272,7 @@ public class WbPanel extends Panel {
 	public WbPanel update(IPartialPageRequestHandler handler) {
 		readOnly = !rp.getClient().hasRight(Right.whiteBoard);
 		if (handler != null) {
-			handler.appendJavaScript("setRoomSizes();");
+			handler.appendJavaScript(String.format("setRoomSizes();WbArea.setReadOnly(%s);", readOnly));
 		}
 		return this;
 	}

@@ -484,10 +484,10 @@ var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
 	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, minWidth = 0, minHeight = 0;
+			, minWidth = 0, minHeight = 0, readOnly = null;
 
 	function getBtn(m) {
-		return t.find(".om-icon." + (m || mode));
+		return !!t ? t.find(".om-icon." + (m || mode)) : null;
 	}
 	function initToolBtn(m, def, obj) {
 		var btn = getBtn(m);
@@ -530,7 +530,7 @@ var Wb = function() {
 			initToolBtn(cur.data('mode'), false, Clipart(wb, cur));
 		});
 	}
-	function internalInit(t) {
+	function internalInit() {
 		t.draggable({
 			snap: "parent"
 			, containment: "parent"
@@ -544,88 +544,92 @@ var Wb = function() {
 				}
 			}
 		});
-		initToolBtn('pointer', true, Pointer(wb, s));
-		initToolBtn('apointer', false, APointer(wb));
-		initToolBtn('text', false, Text(wb, s));
-		initToolBtn('paint', false, Paint(wb, s));
-		initToolBtn('line', false, Line(wb, s));
-		initToolBtn('uline', false, ULine(wb, s));
-		initToolBtn('rect', false, Rect(wb, s));
-		initToolBtn('ellipse', false, Ellipse(wb, s));
-		initToolBtn('arrow', false, Arrow(wb, s));
-		initCliparts();
-		t.find(".om-icon.settings").click(function() {
-			s.show();
-		});
-		s.find('.wb-prop-b, .wb-prop-i')
-			.button()
-			.click(function() {
-				$(this).toggleClass('ui-state-active selected');
+		if (readOnly) {
+			initToolBtn('apointer', true, APointer(wb));
+		} else {
+			initToolBtn('pointer', true, Pointer(wb, s));
+			initToolBtn('apointer', false, APointer(wb));
+			initToolBtn('text', false, Text(wb, s));
+			initToolBtn('paint', false, Paint(wb, s));
+			initToolBtn('line', false, Line(wb, s));
+			initToolBtn('uline', false, ULine(wb, s));
+			initToolBtn('rect', false, Rect(wb, s));
+			initToolBtn('ellipse', false, Ellipse(wb, s));
+			initToolBtn('arrow', false, Arrow(wb, s));
+			initCliparts();
+			t.find(".om-icon.settings").click(function() {
+				s.show();
 			});
-		s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
-			.button({icon: 'ui-icon-locked', showLabel: false})
-			.click(function() {
+			s.find('.wb-prop-b, .wb-prop-i')
+				.button()
+				.click(function() {
+					$(this).toggleClass('ui-state-active selected');
+				});
+			s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
+				.button({icon: 'ui-icon-locked', showLabel: false})
+				.click(function() {
+					var btn = getBtn();
+					var isColor = $(this).hasClass('wb-prop-lock-color');
+					var c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
+					var enabled = $(this).button('option', 'icon') == 'ui-icon-locked';
+					$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
+					c.prop('disabled', !enabled);
+					btn.data('obj')[isColor ? 'stroke' : 'fill'].enabled = enabled;
+				});
+			s.find('.wb-prop-color').change(function() {
 				var btn = getBtn();
-				var isColor = $(this).hasClass('wb-prop-lock-color');
-				var c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
-				var enabled = $(this).button('option', 'icon') == 'ui-icon-locked';
-				$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
-				c.prop('disabled', !enabled);
-				btn.data('obj')[isColor ? 'stroke' : 'fill'].enabled = enabled;
+				if (btn.length == 1) {
+					var v = $(this).val();
+					btn.data('obj').stroke.color = v;
+					if ('paint' == mode) {
+						wb.eachCanvas(function(canvas) {
+							canvas.freeDrawingBrush.color = v;
+						});
+					}
+				}
 			});
-		s.find('.wb-prop-color').change(function() {
-			var btn = getBtn();
-			if (btn.length == 1) {
-				var v = $(this).val();
-				btn.data('obj').stroke.color = v;
-				if ('paint' == mode) {
-					wb.eachCanvas(function(canvas) {
-						canvas.freeDrawingBrush.color = v;
-					});
+			s.find('.wb-prop-width').change(function() {
+				var btn = getBtn();
+				if (btn.length == 1) {
+					var v = 1 * $(this).val();
+					btn.data('obj').stroke.width = v;
+					if ('paint' == mode) {
+						wb.eachCanvas(function(canvas) {
+							canvas.freeDrawingBrush.width = v;
+						});
+					}
 				}
-			}
-		});
-		s.find('.wb-prop-width').change(function() {
-			var btn = getBtn();
-			if (btn.length == 1) {
-				var v = 1 * $(this).val();
-				btn.data('obj').stroke.width = v;
-				if ('paint' == mode) {
-					wb.eachCanvas(function(canvas) {
-						canvas.freeDrawingBrush.width = v;
-					});
+			});
+			s.find('.wb-prop-opacity').change(function() {
+				var btn = getBtn();
+				if (btn.length == 1) {
+					var v = (1 * $(this).val()) / 100;
+					btn.data('obj').opacity = v;
+					if ('paint' == mode) {
+						wb.eachCanvas(function(canvas) {
+							canvas.freeDrawingBrush.opacity = v;
+						});
+					}
 				}
-			}
-		});
-		s.find('.wb-prop-opacity').change(function() {
-			var btn = getBtn();
-			if (btn.length == 1) {
-				var v = (1 * $(this).val()) / 100;
-				btn.data('obj').opacity = v;
-				if ('paint' == mode) {
-					wb.eachCanvas(function(canvas) {
-						canvas.freeDrawingBrush.opacity = v;
-					});
+			});
+			s.find('.ui-dialog-titlebar-close').click(function() {
+				s.hide();
+			});
+			s.draggable({
+				scroll: false
+				, containment: "body"
+				, start: function(event, ui) {
+					if (!!s.css("bottom")) {
+						s.css("bottom", "").css("right", "");
+					}
 				}
-			}
-		});
-		s.find('.ui-dialog-titlebar-close').click(function() {
-			s.hide();
-		});
-		s.draggable({
-			scroll: false
-			, containment: "body"
-			, start: function(event, ui) {
-				if (!!s.css("bottom")) {
-					s.css("bottom", "").css("right", "");
+				, drag: function(event, ui) {
+					if (s.position().x + s.width() >= s.parent().width()) {
+						return false;
+					}
 				}
-			}
-			, drag: function(event, ui) {
-				if (s.position().x + s.width() >= s.parent().width()) {
-					return false;
-				}
-			}
-		});
+			});
+		}
 	}
 	function _findObject(o) {
 		var _o = {};
@@ -756,6 +760,34 @@ var Wb = function() {
 		o.path.slide = this.slide;
 		wbObjCreatedHandler(o.path);
 	};
+	function scrollHandler(e) {
+		$(this).find('.canvas-container').each(function(idx) {
+			var h = $(this).height(), pos = $(this).position();
+			if (slide != idx &&pos.top > BUMPER - h && pos.top < BUMPER) {
+				//TODO FIXME might be done without iterating
+				//console.log("Found:", idx);
+				slide = idx;
+				wbAction('setSlide', JSON.stringify({
+					wbId: wb.id
+					, slide: idx
+				}));
+				return false;
+			}
+		});
+	}
+	function showCurentSlide() {
+		a.find('.scroll-container .canvas-container').each(function(idx) {
+			if (readOnly) {
+				if (idx == slide) {
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			} else {
+				$(this).show();
+			}
+		});
+	}
 	/*TODO interactive text chage
 	var textEditedHandler = function (e) {
 		var obj = e.target;
@@ -766,45 +798,75 @@ var Wb = function() {
 		console.log('Text Changed', obj);
 	};*/
 	function addCanvas() {
-		var slide = canvases.length;
-		var c = $('<canvas></canvas>').attr('id', 'can-' + a.attr('id') + '-slide-' + slide);
+		var sl = canvases.length;
+		var cid = 'can-' + a.attr('id') + '-slide-' + sl;
+		var c = $('<canvas></canvas>').attr('id', cid);
 		a.find('.canvases').append(c);
 		var canvas = new fabric.Canvas(c.attr('id'));
 		canvas.wbId = wb.id;
-		canvas.slide = slide;
-		//TODO create via WS canvas:cleared
-		canvas.on({
-			'object:added': objAddedHandler
-			, 'object:modified': objModifiedHandler
-			, 'object:selected': objSelectedHandler
-			, 'path:created': pathCreatedHandler
-			//, 'text:editing:exited': textEditedHandler
-			//, 'text:changed': textChangedHandler
-			, 'wb:object:created': wbObjCreatedHandler
-		});
+		canvas.slide = sl;
 		canvases.push(canvas);
+		//TODO create via WS canvas:cleared
+		if (readOnly) {
+			canvas.off({
+				'object:added': objAddedHandler
+				, 'object:modified': objModifiedHandler
+				, 'object:selected': objSelectedHandler
+				, 'path:created': pathCreatedHandler
+				//, 'text:editing:exited': textEditedHandler
+				//, 'text:changed': textChangedHandler
+				, 'wb:object:created': wbObjCreatedHandler
+			});
+		} else {
+			canvas.on({
+				'object:added': objAddedHandler
+				, 'object:modified': objModifiedHandler
+				, 'object:selected': objSelectedHandler
+				, 'path:created': pathCreatedHandler
+				//, 'text:editing:exited': textEditedHandler
+				//, 'text:changed': textChangedHandler
+				, 'wb:object:created': wbObjCreatedHandler
+			});
+		}
+		var cc = $('#' + cid).closest('.canvas-container');
+		if (readOnly) {
+			if (sl == slide) {
+				cc.show();
+			} else {
+				cc.hide();
+			}
+		}
 	}
-	wb.init = function(_wbId, tid) {
+	wb.setReadOnly = function(ro) {
+		if (readOnly != ro) {
+			var btn = getBtn();
+			if (!!btn && btn.length == 1) {
+				btn.data().deactivate();
+			}
+			a.find('.tools').remove();
+			a.find('.wb-settings').remove();
+			readOnly = ro;
+			var sc = a.find('.scroll-container');
+			if (readOnly) {
+				t = $('#wb-tools-readonly').clone().attr('id', '');
+				a.append(t);
+				sc.off('scroll', scrollHandler);
+			} else {
+				t = $('#wb-tools').clone().attr('id', '');
+				s = $("#wb-settings").clone().attr('id', '');
+				a.append(t).append(s);
+				sc.on('scroll', scrollHandler);
+			}
+			showCurentSlide();
+			t = a.find('.tools'), s = a.find(".wb-settings");
+			internalInit();
+		}
+	};
+	wb.init = function(_wbId, tid, ro) {
 		wb.id = _wbId;
 		a = $('#' + tid);
-		t = a.find('.tools'), s = a.find(".wb-settings");
+		wb.setReadOnly(ro);
 		addCanvas();
-		internalInit(t);
-		a.find('.scroll-container').on('scroll', function(e) {
-			$(this).find('.canvas-container').each(function(idx) {
-				var h = $(this).height(), pos = $(this).position();
-				if (slide != idx &&pos.top > BUMPER - h && pos.top < BUMPER) {
-					//TODO FIXME might be done without iterating
-					//console.log("Found:", idx);
-					slide = idx;
-					wbAction('setSlide', JSON.stringify({
-						wbId: wb.id
-						, slide: idx
-					}));
-					return false;
-				}
-			});
-		});
 	};
 	wb.resize = function(w, h) {
 		if (t.position().left + t.width() > a.width()) {
@@ -826,7 +888,11 @@ var Wb = function() {
 	};
 	wb.setSlide = function(_sl) {
 		slide = _sl;
-		a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
+		if (readOnly) {
+			showCurentSlide();
+		} else {
+			a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
+		}
 	};
 	wb.createObj = function(o) {
 		switch(o.type) {
@@ -882,7 +948,7 @@ var Wb = function() {
 	return wb;
 };
 var WbArea = (function() {
-	var container, area, tabs, scroll, self = {};
+	var container, area, tabs, scroll, readOnly = true, self = {};
 
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
@@ -961,31 +1027,61 @@ var WbArea = (function() {
 	self.getCanvas = function(id) {
 		return self.getWb(id).getCanvas();
 	};
+	self.setReadOnly = function(ro) {
+		readOnly = ro;
+		tabs.find(".ui-tabs-nav").sortable(readOnly ? "disable" : "enable");
+		var prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
+		if (readOnly) {
+			if (prev.length > 0) {
+				prev.parent().remove();
+				next.parent().remove();
+			}
+			$(window).off('keyup', deleteHandler);
+		} else {
+			if (prev.length == 0) {
+				var cc = tabs.find('.wb-tabbar .scroll-container')
+					, left = $('#wb-tabbar-ctrls-left').clone().attr('id', '')
+					, right = $('#wb-tabbar-ctrls-right').clone().attr('id', '');
+				cc.before(left).after(right);
+				tabs.find('.add.om-icon').click(function() {
+					wbAction('createWb');
+				});
+				tabs.find('.prev.om-icon').click(function() {
+					scroll.scrollLeft(scroll.scrollLeft() - 30);
+				});
+				tabs.find('.next.om-icon').click(function() {
+					scroll.scrollLeft(scroll.scrollLeft() + 30);
+				});
+				$(window).keyup(deleteHandler);
+			}
+		}
+		tabs.find(".ui-tabs-panel").each(function(idx) {
+			$(this).data().setReadOnly(readOnly);
+		});
+	}
 	self.init = function() {
 		container = $(".room.wb.area");
 		tabs = container.find('.tabs').tabs({
-			activate: function(event, ui) {
+			beforeActivate: function(e, ui) {
+				var res = true;
+				if (e.originalEvent && e.originalEvent.type === 'click') {
+					res = !readOnly;
+				}
+				return res;
+			}
+			, activate: function(e, ui) {
 				wbAction('activeWb', JSON.stringify({id: ui.newTab.data('wb-id')}));
 			}
 		});
 		scroll = tabs.find('.scroll-container');
+		area = container.find(".wb-area");
 		tabs.find(".ui-tabs-nav").sortable({
 			axis: "x"
 			, stop: function() {
 				refreshTabs();
 			}
 		});
-		tabs.find('.add.om-icon').click(function() {
-			wbAction('createWb');
-		});
-		tabs.find('.prev.om-icon').click(function() {
-			scroll.scrollLeft(scroll.scrollLeft() - 30);
-		});
-		tabs.find('.next.om-icon').click(function() {
-			scroll.scrollLeft(scroll.scrollLeft() + 30);
-		});
-		area = container.find(".wb-area");
-		$(window).keyup(deleteHandler);
+		self.setReadOnly(readOnly);
 	};
 	self.destroy = function() {
 		$(window).off('keyup', deleteHandler);
@@ -995,9 +1091,12 @@ var WbArea = (function() {
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.id)
 			, wb = $('#wb-area').clone().attr('id', tid);
 		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
-		li.find('button').click(function() {
-			wbAction('removeWb', JSON.stringify({id: obj.id}));
-		});
+		if (!readOnly) {
+			li.append($('#wb-tab-close').clone().attr('id', ''));
+			li.find('button').click(function() {
+				wbAction('removeWb', JSON.stringify({id: obj.id}));
+			});
+		}
 	
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
@@ -1005,7 +1104,7 @@ var WbArea = (function() {
 	
 		var wbo = Wb();
 		wb.data(wbo);
-		wbo.init(obj.id, tid);
+		wbo.init(obj.id, tid, readOnly);
 		_resizeWbs();
 	}
 	self.add = function(obj) {

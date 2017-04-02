@@ -139,8 +139,16 @@
 	width: 38px;
 	height: 420px;
 }
+.room.wb.area .tools.readonly.vertical {
+	width: 38px;
+	height: 60px;
+}
 .room.wb.area .tools.horisontal {
 	width: 420px;
+	height: 38px;
+}
+.room.wb.area .tools.readonly.horisontal {
+	width: 60px;
 	height: 38px;
 }
 .room.wb.area .tools .om-icon.big {
