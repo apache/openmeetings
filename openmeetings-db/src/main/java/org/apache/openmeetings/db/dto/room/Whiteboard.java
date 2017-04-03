@@ -20,11 +20,12 @@ package org.apache.openmeetings.db.dto.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class Whiteboard {
 	private Integer y = 0;
 	private Integer zoom = 100;
 	private Boolean fullFit = true;
-	private Map<String, JSONObject> roomItems = new ConcurrentHashMap<>();
+	private Map<String, JSONObject> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
 	private Date created = new Date();
 	private int slide = 0;
 	private int zIndex = 1;

@@ -87,6 +87,8 @@ public class WbPanel extends Panel {
 		, createObj
 		, modifyObj
 		, deleteObj
+		, clearAll
+		, clearSlide
 	}
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -174,6 +176,20 @@ public class WbPanel extends Panel {
 								wb.remove(arr.getString(i));
 							}
 							sendWbAll("WbArea.removeObj", obj);
+						}
+							break;
+						case clearAll:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							wb.clear();
+							sendWbAll("WbArea.clearAll", obj);
+						}
+							break;
+						case clearSlide:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							wb.entrySet().removeIf(e -> e.getValue().optInt("slide", -1) == obj.getInt("slide"));
+							sendWbAll("WbArea.clearSlide", obj);
 						}
 							break;
 					}

@@ -507,12 +507,12 @@ var Wb = function() {
 		}).click(function() {
 			var b = getBtn();
 			if (b.length && b.hasClass(ACTIVE)) {
-				b.data('deactivate')();
+				b.data().deactivate();
 			}
-			btn.data('activate')();
+			btn.data().activate();
 		});
 		if (def) {
-			btn.data('activate')();
+			btn.data().activate();
 		}
 	}
 	function initCliparts() {
@@ -528,6 +528,27 @@ var Wb = function() {
 					c.find('a').prepend(cur);
 				});
 			initToolBtn(cur.data('mode'), false, Clipart(wb, cur));
+		});
+	}
+	function confirmDlg(_id, okHandler) {
+		var confirm = $('#' + _id);
+		confirm.dialog({
+			modal: true
+			, buttons: [
+				{
+					text: confirm.data('btn-ok')
+					, click: function() {
+						okHandler();
+						$(this).dialog("close");
+					}
+				}
+				, {
+					text: confirm.data('btn-cancel')
+					, click: function() {
+						$(this).dialog("close");
+					}
+				}
+			]
 		});
 	}
 	function internalInit() {
@@ -559,6 +580,12 @@ var Wb = function() {
 			initCliparts();
 			t.find(".om-icon.settings").click(function() {
 				s.show();
+			});
+			t.find('.om-icon.clear-all').click(function() {
+				confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
+			});
+			t.find('.om-icon.clear-slide').click(function() {
+				confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
 			});
 			s.find('.wb-prop-b, .wb-prop-i')
 				.button()
@@ -670,6 +697,7 @@ var Wb = function() {
 				break;
 			case 'Presentation':
 			{
+				var ccount = canvases.length;
 				minWidth = Math.max(minWidth, _o.width);
 				minHeight = Math.max(minHeight, _o.height);
 				width = Math.max(minWidth, width);
@@ -682,6 +710,13 @@ var Wb = function() {
 					var canvas = canvases[i];
 					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {})
 							.setWidth(width).setHeight(height);
+				}
+				if (ccount != canvases.length) {
+					var b = getBtn();
+					if (b.length && b.hasClass(ACTIVE)) {
+						b.data().deactivate();
+						b.data().activate();
+					}
 				}
 			}
 				break;
@@ -797,16 +832,7 @@ var Wb = function() {
 		var obj = e.target;
 		console.log('Text Changed', obj);
 	};*/
-	function addCanvas() {
-		var sl = canvases.length;
-		var cid = 'can-' + a.attr('id') + '-slide-' + sl;
-		var c = $('<canvas></canvas>').attr('id', cid);
-		a.find('.canvases').append(c);
-		var canvas = new fabric.Canvas(c.attr('id'));
-		canvas.wbId = wb.id;
-		canvas.slide = sl;
-		canvases.push(canvas);
-		//TODO create via WS canvas:cleared
+	function setHandlers(canvas) {
 		if (readOnly) {
 			canvas.off({
 				'object:added': objAddedHandler
@@ -828,6 +854,16 @@ var Wb = function() {
 				, 'wb:object:created': wbObjCreatedHandler
 			});
 		}
+	}
+	function addCanvas() {
+		var sl = canvases.length;
+		var cid = 'can-' + a.attr('id') + '-slide-' + sl;
+		var c = $('<canvas></canvas>').attr('id', cid);
+		a.find('.canvases').append(c);
+		var canvas = new fabric.Canvas(c.attr('id'));
+		canvas.wbId = wb.id;
+		canvas.slide = sl;
+		canvases.push(canvas);
 		var cc = $('#' + cid).closest('.canvas-container');
 		if (readOnly) {
 			if (sl == slide) {
@@ -836,6 +872,7 @@ var Wb = function() {
 				cc.hide();
 			}
 		}
+		setHandlers(canvas);
 	}
 	wb.setReadOnly = function(ro) {
 		if (readOnly != ro) {
@@ -859,14 +896,17 @@ var Wb = function() {
 			}
 			showCurentSlide();
 			t = a.find('.tools'), s = a.find(".wb-settings");
+			wb.eachCanvas(function(canvas) {
+				setHandlers(canvas);
+			});
 			internalInit();
 		}
 	};
 	wb.init = function(_wbId, tid, ro) {
 		wb.id = _wbId;
 		a = $('#' + tid);
-		wb.setReadOnly(ro);
 		addCanvas();
+		wb.setReadOnly(ro);
 	};
 	wb.resize = function(w, h) {
 		if (t.position().left + t.width() > a.width()) {
@@ -935,6 +975,28 @@ var Wb = function() {
 	wb.removeObj = function(arr) {
 		for (var i = 0; i < arr.length; ++i) {
 			_removeHandler(arr[i]);
+		}
+	};
+	wb.clearAll = function() {
+		for (var i = 1; i < canvases.length; ++i) {
+			var cc = $('#can-wb-tab-0-slide-' + i).closest('.canvas-container');
+			cc.remove();
+			canvases[i].dispose();
+		}
+		canvases.splice(1);
+		canvases[0].clear();
+		minWidth = minHeight = 0;
+	};
+	wb.clearSlide = function(_sl) {
+		if (canvases.length > _sl) {
+			var canvas = canvases[_sl];
+			canvas.renderOnAddRemove = false;
+			var arr = canvas.getObjects();
+			while (arr.length > 0) {
+				arr[arr.length - 1].remove();
+			}
+			canvas.renderOnAddRemove = true;
+			canvas.renderAll();
 		}
 	};
 	wb.getCanvas = function() {
@@ -1029,12 +1091,14 @@ var WbArea = (function() {
 	};
 	self.setReadOnly = function(ro) {
 		readOnly = ro;
-		tabs.find(".ui-tabs-nav").sortable(readOnly ? "disable" : "enable");
+		var tabsNav = tabs.find(".ui-tabs-nav");
+		tabsNav.sortable(readOnly ? "disable" : "enable");
 		var prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
 		if (readOnly) {
 			if (prev.length > 0) {
 				prev.parent().remove();
 				next.parent().remove();
+				tabsNav.find('li button').remove();
 			}
 			$(window).off('keyup', deleteHandler);
 		} else {
@@ -1051,6 +1115,12 @@ var WbArea = (function() {
 				});
 				tabs.find('.next.om-icon').click(function() {
 					scroll.scrollLeft(scroll.scrollLeft() + 30);
+				});
+				tabsNav.find('li').each(function(idx) {
+					$(this).append($('#wb-tab-close').clone().attr('id', ''));
+					$(this).find('button').click(function() {
+						wbAction('removeWb', JSON.stringify({id: obj.id}));
+					});
 				});
 				$(window).keyup(deleteHandler);
 			}
@@ -1091,12 +1161,6 @@ var WbArea = (function() {
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.id)
 			, wb = $('#wb-area').clone().attr('id', tid);
 		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
-		if (!readOnly) {
-			li.append($('#wb-tab-close').clone().attr('id', ''));
-			li.find('button').click(function() {
-				wbAction('removeWb', JSON.stringify({id: obj.id}));
-			});
-		}
 	
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
@@ -1128,6 +1192,13 @@ var WbArea = (function() {
 	};
 	self.removeObj = function(json) {
 		self.getWb(json.wbId).removeObj(json.obj);
+	};
+	self.clearAll = function(json) {
+		self.getWb(json.wbId).clearAll();
+		setRoomSizes();
+	};
+	self.clearSlide = function(json) {
+		self.getWb(json.wbId).clearSlide(json.slide);
 	};
 	self.remove = function(obj) {
 		var tabId = self.getWbTabId(obj.id);
