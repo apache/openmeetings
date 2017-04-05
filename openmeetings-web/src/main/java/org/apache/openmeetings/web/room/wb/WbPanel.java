@@ -39,6 +39,8 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
@@ -79,16 +81,18 @@ public class WbPanel extends Panel {
 	private boolean readOnly = true;
 	private final Long roomId;
 	private final RoomPanel rp;
+	private long wb2save = -1;
 	private enum Action {
 		createWb
 		, removeWb
-		, activeWb
+		, activateWb
 		, setSlide
 		, createObj
 		, modifyObj
 		, deleteObj
 		, clearAll
 		, clearSlide
+		, save
 	}
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -106,7 +110,7 @@ public class WbPanel extends Panel {
 				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
 				if (Action.createObj == a || Action.modifyObj == a) {
 					if ("pointer".equals(obj.getJSONObject("obj").getString("type"))) {
-						sendWbOthers(String.format("WbArea.%s", a.name()), obj);
+						sendWbOthers(a, obj);
 						return;
 					}
 				}
@@ -117,7 +121,7 @@ public class WbPanel extends Panel {
 						case createWb:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).add(roomId, rp.getClient().getUser().getLanguageId());
-							sendWbAll("WbArea.add", getAddWbJson(wb.getId(), wb.getName()));
+							sendWbAll(Action.createWb, getAddWbJson(wb.getId(), wb.getName()));
 						}
 							break;
 						case removeWb:
@@ -125,16 +129,16 @@ public class WbPanel extends Panel {
 							long _id = obj.optLong("id", -1);
 							Long id = _id < 0 ? null : _id;
 							getBean(WhiteboardCache.class).remove(roomId, id);
-							sendWbAll("WbArea.remove", new JSONObject().put("id", id));
+							sendWbAll(Action.removeWb, new JSONObject().put("id", id));
 						}
 							break;
-						case activeWb:
+						case activateWb:
 						{
 							long _id = obj.optLong("id", -1);
 							if (_id > -1) {
 								Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
 								wbs.setActiveWb(_id);
-								sendWbAll("WbArea.activate", new JSONObject().put("id", _id));
+								sendWbAll(Action.activateWb, new JSONObject().put("id", _id));
 							}
 						}
 							break;
@@ -142,7 +146,7 @@ public class WbPanel extends Panel {
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							wb.setSlide(obj.optInt("slide", 0));
-							sendWbOthers(String.format("WbArea.%s", a.name()), obj);
+							sendWbOthers(Action.setSlide, obj);
 						}
 							break;
 						case createObj:
@@ -150,7 +154,7 @@ public class WbPanel extends Panel {
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							JSONObject o = obj.getJSONObject("obj");
 							wb.put(o.getString("uid"), o);
-							sendWbOthers(String.format("WbArea.%s", a.name()), obj);
+							sendWbOthers(Action.createObj, obj);
 						}
 							break;
 						case modifyObj:
@@ -166,7 +170,7 @@ public class WbPanel extends Panel {
 									wb.put(_o.getString("uid"), _o);
 								}
 							}
-							sendWbOthers(String.format("WbArea.%s", a.name()), obj);
+							sendWbOthers(Action.modifyObj, obj);
 						}
 						case deleteObj:
 						{
@@ -175,28 +179,56 @@ public class WbPanel extends Panel {
 							for (int i = 0; i < arr.length(); ++i) {
 								wb.remove(arr.getString(i));
 							}
-							sendWbAll("WbArea.removeObj", obj);
+							sendWbAll(Action.deleteObj, obj);
 						}
 							break;
 						case clearAll:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							wb.clear();
-							sendWbAll("WbArea.clearAll", obj);
+							sendWbAll(Action.clearAll, obj);
 						}
 							break;
 						case clearSlide:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							wb.entrySet().removeIf(e -> e.getValue().optInt("slide", -1) == obj.getInt("slide"));
-							sendWbAll("WbArea.clearSlide", obj);
+							sendWbAll(Action.clearSlide, obj);
 						}
+							break;
+						case save:
+							wb2save = obj.getLong("wbId");
+							fileName.open(target);
 							break;
 					}
 				}
 			} catch (Exception e) {
 				// no-op
 			}
+		}
+	};
+	private final NameDialog fileName = new NameDialog("filename") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onSubmit(AjaxRequestTarget target) {
+			Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(wb2save);
+			wb.toJson();
+		}
+
+		@Override
+		protected String getTitleStr() {
+			return getString("199");
+		}
+
+		@Override
+		protected String getLabelStr() {
+			return getString("200");
+		}
+
+		@Override
+		protected String getAddStr() {
+			return Application.getString("203");
 		}
 	};
 
@@ -217,7 +249,7 @@ public class WbPanel extends Panel {
 					item.add(append("class", cls), append("data-mode", cls)
 							, new AttributeAppender("data-image", item.getModelObject()).setSeparator(""));
 				}
-			});
+			}, fileName);
 			add(wbAction);
 		}
 	}
@@ -242,25 +274,25 @@ public class WbPanel extends Panel {
 			}
 			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString()).append(");");
 		}
-		sb.append("WbArea.activate({id: ").append(wbs.getActiveWb()).append("});");
+		sb.append("WbArea.activateWb({id: ").append(wbs.getActiveWb()).append("});");
 		response.render(OnDomReadyHeaderItem.forScript(sb));
 	}
 
-	private void sendWbAll(CharSequence meth, JSONObject obj) {
+	private void sendWbAll(Action meth, JSONObject obj) {
 		sendWb(meth, obj, null);
 	}
 
-	private void sendWbOthers(CharSequence meth, JSONObject obj) {
+	private void sendWbOthers(Action meth, JSONObject obj) {
 		sendWb(meth, obj, c -> !rp.getClient().getUid().equals(c.getUid()));
 	}
 
-	private void sendWb(CharSequence meth, JSONObject obj, Predicate<Client> check) {
+	private void sendWb(Action meth, JSONObject obj, Predicate<Client> check) {
 		WebSocketHelper.sendRoom(
 				roomId
 				, new JSONObject()
 						.put("type", "wb")
 				, check
-				, (o, c) -> o.put("func", String.format("%s(%s);", meth, obj.toString())).toString()
+				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);", meth.name(), obj.toString())).toString()
 			);
 	}
 
@@ -391,6 +423,9 @@ public class WbPanel extends Panel {
 					;
 			wb.put(wuid, file);
 			final String ruid = wbs.getUid();
+			if (clean) {
+				sendWbAll(Action.clearAll, new JSONObject().put("wbId", wb.getId()));
+			}
 			WebSocketHelper.sendRoom(
 					roomId
 					, new JSONObject().put("type", "wb")

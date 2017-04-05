@@ -44,7 +44,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.AddFolderDialog;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
@@ -265,7 +265,7 @@ public class MessagesContactsPanel extends UserPanel {
 		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 
-		final AddFolderDialog addFolder = new AddFolderDialog("addFolder") {
+		final NameDialog addFolder = new NameDialog("addFolder") {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -38,7 +38,7 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.web.common.AddFolderDialog;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.util.AjaxDownload;
@@ -91,7 +91,7 @@ public abstract class FileTreePanel extends Panel {
 		}
 	};
 	private final Form<Void> form = new Form<>("form");
-	private final AddFolderDialog addFolder;
+	private final NameDialog addFolder;
 	private final ConfirmableBorderDialog trashConfirm;
 	private ConfirmableAjaxBorder trashBorder;
 	private final Long roomId;
@@ -106,7 +106,7 @@ public abstract class FileTreePanel extends Panel {
 	});
 	private final Component upload = new WebMarkupContainer("upload");
 
-	public FileTreePanel(String id, Long roomId, AddFolderDialog addFolder, ConfirmableBorderDialog trashConfirm) {
+	public FileTreePanel(String id, Long roomId, NameDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id);
 		this.roomId = roomId;
 		this.addFolder = addFolder;

@@ -119,6 +119,7 @@ var APointer = function(wb) {
 			function go(_cnt) {
 				if (_cnt < 0) {
 					canvas.remove(group);
+					return;
 				}
 				circle1.set({radius: 3});
 				circle2.set({radius: 6});
@@ -550,6 +551,7 @@ var Wb = function() {
 				}
 			]
 		});
+		return confirm;
 	}
 	function internalInit() {
 		t.draggable({
@@ -586,6 +588,9 @@ var Wb = function() {
 			});
 			t.find('.om-icon.clear-slide').click(function() {
 				confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
+			});
+			t.find('.om-icon.save').click(function() {
+				wbAction('save', JSON.stringify({wbId: wb.id}));
 			});
 			s.find('.wb-prop-b, .wb-prop-i')
 				.button()
@@ -1140,7 +1145,7 @@ var WbArea = (function() {
 				return res;
 			}
 			, activate: function(e, ui) {
-				wbAction('activeWb', JSON.stringify({id: ui.newTab.data('wb-id')}));
+				wbAction('activateWb', JSON.stringify({id: ui.newTab.data('wb-id')}));
 			}
 		});
 		scroll = tabs.find('.scroll-container');
@@ -1171,11 +1176,11 @@ var WbArea = (function() {
 		wbo.init(obj.id, tid, readOnly);
 		_resizeWbs();
 	}
-	self.add = function(obj) {
+	self.createWb = function(obj) {
 		self.create(obj);
 		_activateTab(obj.id);
 	};
-	self.activate = function(obj) {
+	self.activateWb = function(obj) {
 		_activateTab(obj.id);
 	}
 	self.load = function(json) {
@@ -1190,7 +1195,7 @@ var WbArea = (function() {
 	self.modifyObj = function(json) {
 		self.getWb(json.wbId).modifyObj(json.obj);
 	};
-	self.removeObj = function(json) {
+	self.deleteObj = function(json) {
 		self.getWb(json.wbId).removeObj(json.obj);
 	};
 	self.clearAll = function(json) {
@@ -1200,7 +1205,7 @@ var WbArea = (function() {
 	self.clearSlide = function(json) {
 		self.getWb(json.wbId).clearSlide(json.slide);
 	};
-	self.remove = function(obj) {
+	self.removeWb = function(obj) {
 		var tabId = self.getWbTabId(obj.id);
 		tabs.find('li[aria-controls="' + tabId + '"]').remove();
 		$("#" + tabId).remove();

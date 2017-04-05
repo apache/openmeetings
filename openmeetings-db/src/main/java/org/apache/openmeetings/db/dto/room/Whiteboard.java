@@ -140,4 +140,15 @@ public class Whiteboard {
 	public void setSlide(int slide) {
 		this.slide = slide;
 	}
+
+	public JSONObject toJson() {
+		//deep-copy
+		JSONObject json = new JSONObject(new JSONObject(this).toString());
+		json.remove("id"); //filtering
+		JSONObject items = json.getJSONObject("roomItems");
+		for (String uid : items.keySet()) {
+			items.getJSONObject(uid).remove("_src"); //filtering
+		}
+		return json;
+	}
 }
