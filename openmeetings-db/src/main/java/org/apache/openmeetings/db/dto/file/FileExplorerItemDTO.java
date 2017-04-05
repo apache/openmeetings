@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 
 /**
  * This Object will represent a File on the File-System
- * 
+ *
  * @author sebastianwagner
  *
  */
@@ -44,6 +44,7 @@ public class FileExplorerItemDTO implements Serializable {
 	private String hash;
 	private Long parentId;
 	private Long roomId;
+	private Long groupId;
 	private Long ownerId;
 	private Long size;
 	private String externalId;
@@ -60,6 +61,7 @@ public class FileExplorerItemDTO implements Serializable {
 		hash = f.getHash();
 		parentId = f.getParentId();
 		roomId = f.getRoomId();
+		groupId = f.getGroupId();
 		ownerId = f.getOwnerId();
 		size = f.getSize();
 		externalId = f.getExternalId();
@@ -68,7 +70,7 @@ public class FileExplorerItemDTO implements Serializable {
 		width = f.getWidth();
 		height = f.getHeight();
 	}
-	
+
 	public FileExplorerItem get() {
 		FileExplorerItem f = new FileExplorerItem();
 		f.setId(id);
@@ -76,6 +78,7 @@ public class FileExplorerItemDTO implements Serializable {
 		f.setHash(hash);
 		f.setParentId(parentId != null && parentId > 0 ? parentId : null);
 		f.setRoomId(roomId != null && roomId > 0 ? roomId : null);
+		f.setRoomId(groupId != null && groupId > 0 ? groupId : null);
 		f.setOwnerId(ownerId != null && ownerId > 0 ? ownerId : null);
 		f.setSize(size);
 		f.setExternalId(externalId);
@@ -85,11 +88,11 @@ public class FileExplorerItemDTO implements Serializable {
 		f.setHeight(height);
 		return f;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -124,6 +127,14 @@ public class FileExplorerItemDTO implements Serializable {
 
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 
 	public Long getOwnerId() {

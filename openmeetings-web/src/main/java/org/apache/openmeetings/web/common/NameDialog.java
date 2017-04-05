@@ -25,51 +25,57 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public abstract class AddFolderDialog extends AbstractFormDialog<String> {
+public abstract class NameDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton add = new DialogButton("add", Application.getString(1261));
+	private final DialogButton add;
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final Form<String> form;
-	private final FeedbackPanel feedback = new FeedbackPanel("feedback");
+	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final String name;
 	private RequiredTextField<String> title;
 
-	public AddFolderDialog(String id) {
+	public NameDialog(String id) {
 		this(id, null);
 	}
 
-	public AddFolderDialog(String id, String name) {
-		super(id, Application.getString(1260), Model.of(name));
+	public NameDialog(String id, String name) {
+		super(id, "", Model.of(name));
 		this.name = name;
-		form = new Form<String>("form", getModel()) {
-			private static final long serialVersionUID = 1L;
-			{
-				add(title = new RequiredTextField<>("title", getModel()));
-				title.setLabel(Model.of(Application.getString(572)));
-				add(feedback.setOutputMarkupId(true));
-				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+		add = new DialogButton("add", getAddStr());
+		form = new Form<>("form", getModel());
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		setTitle(Model.of(getTitleStr()));
+		form.add(new Label("label", getLabelStr())
+				, title = new RequiredTextField<>("title", getModel())
+				, feedback.setOutputMarkupId(true)
+				, new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						AddFolderDialog.this.onSubmit(target);
+						NameDialog.this.onSubmit(target);
 					}
 
 					@Override
 					protected void onError(AjaxRequestTarget target) {
-						AddFolderDialog.this.onError(target);
+						NameDialog.this.onError(target);
 					}
 				});
-			}
-		};
+		title.setLabel(Model.of(getLabelStr()));
 		add(form.setOutputMarkupId(true));
 	}
 
@@ -103,5 +109,17 @@ public abstract class AddFolderDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onError(AjaxRequestTarget target) {
 		target.add(feedback);
+	}
+
+	protected String getTitleStr() {
+		return getString("1260");
+	}
+
+	protected String getLabelStr() {
+		return getString("572");
+	}
+
+	protected String getAddStr() {
+		return Application.getString("1261");
 	}
 }

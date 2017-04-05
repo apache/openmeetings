@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.github.openjson.JSONObject;
 
-
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RoomOptionsDTO implements Serializable {

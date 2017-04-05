@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.AddFolderDialog;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.room.RoomBroadcaster;
@@ -97,7 +97,7 @@ public class RoomSidebar extends Panel {
 			item.add(new RoomClientPanel("user", item, room));
 		}
 	};
-	private final AddFolderDialog addFolder = new AddFolderDialog("addFolder", Application.getString(712)) {
+	private final NameDialog addFolder = new NameDialog("addFolder", Application.getString(712)) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
