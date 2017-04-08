@@ -24,7 +24,6 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
@@ -40,13 +39,13 @@ public class KickMessageDialog extends AbstractDialog<String> {
 		super.onInitialize();
 		add(new Label("message", getString("606")));
 	};
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
 		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
 		behavior.setOption("resizable", false);
 	}
 

@@ -135,7 +135,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
 		behavior.setOption("resizable", false);
 	}
 

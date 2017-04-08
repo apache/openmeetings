@@ -40,5 +40,72 @@
 	<form wicket:id="form"><div wicket:id="confirm-trash"></div></form>
 	<div wicket:id="upload"></div>
 	<div wicket:id="confirm-kick" />
+	<div id="video-settings" wicket:message="title:51, data-btn-save:144, data-btn-cancel:25" style="display:none;">
+		<div class="title"><wicket:message key="758"/></div>
+		<div class="sett-container">
+			<div class="opt-block">
+				<div class="sett-row">
+					<div><wicket:message key="52"/></div>
+					<div>
+						<select class="cam">
+							<option value="-1"><wicket:message key="159"/></option>
+						</select>
+					</div>
+				</div>
+				<div class="sett-row">
+					<div><wicket:message key="53"/></div>
+					<div>
+						<select class="mic">
+							<option value="-1"><wicket:message key="159"/></option>
+						</select>
+					</div>
+				</div>
+				<div class="sett-row">
+					<div class="clear">
+						<wicket:message key="1429"/>
+						<span class="warn ui-state-highlight" wicket:message="title:1430">
+							<span class="ui-icon ui-icon-alert"></span>
+						</span>
+					</div>
+					<div>
+						<select class="cam-resolution">
+							<option value="1" data-width="40" data-height="30">40x30 [4:3 (~6 KByte/sec)]</option>
+							<option value="2" data-width="80" data-height="60">80x60 [4:3 (~12 KByte/sec)]</option>
+							<option value="3" data-width="120" data-height="90" selected="selected">120x90 [4:3 (~20 KByte/sec)]</option>
+							<option value="4" data-width="160" data-height="120">160x120 [QQVGA 4:3 (~36 KByte/sec)]</option>
+							<option value="5" data-width="240" data-height="180">240x180 [4:3 (~40 KByte/sec)]</option>
+							<option value="6" data-width="320" data-height="240">320x240 [HVGA 4:3 (~56 KByte/sec)]</option>
+							<option value="7" data-width="480" data-height="360">480x360 [4:3  (~60 KByte/sec)]</option>
+							<option value="8" data-width="640" data-height="480">640x480 [4:3 (~68 KByte/sec)]</option>
+							<option value="9" data-width="1024" data-height="768">1024x768 [XGA 4:3]</option>
+							<option value="10" data-width="256" data-height="150">256x150 [16:9]</option>
+							<option value="11" data-width="432" data-height="240">432x240 [WQVGA 9:5]</option>
+							<option value="12" data-width="480" data-height="234">480x234 [pseudo 16:9]</option>
+							<option value="13" data-width="512" data-height="300">512x300 [16:9]</option>
+							<option value="14" data-width="640" data-height="360">640x360 [nHD 16:9]</option>
+							<option value="15" data-width="1024" data-height="600">1024x600 [16:9]</option>
+						</select>
+					</div>
+				</div>
+				<div class="sett-row">
+					<div class="align-right"><button><wicket:message key="775"/></button></div>
+				</div>
+			</div>
+			<div class="vid-block">
+				<div>
+				</div>
+				<div class="level-meter"></div>
+				<div class="sett-row">
+					<div class="align-right"><button><wicket:message key="764"/></button></div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<span style="padding: 5px;">
+				<span class="ui-icon ui-icon-info"></span>
+			</span>
+			<wicket:message key="765"/>
+		</div>
+	</div>
 </wicket:panel>
 </html>

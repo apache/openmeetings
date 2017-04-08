@@ -19,9 +19,9 @@
 
 -->
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
-			   xmlns:s="library://ns.adobe.com/flex/spark"
-			   xmlns:mx="library://ns.adobe.com/flex/mx" width="570" height="900" pageTitle="Openmeetings"
-			   preinitialize="init()" fontSize="12" applicationComplete="appInit()">
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx" width="570" height="900" pageTitle="Openmeetings"
+		preinitialize="init()" fontSize="12" applicationComplete="appInit()">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<mx:TraceTarget/>
@@ -477,7 +477,7 @@
 					</s:Group>
 				</s:Scroller>
 				<s:Label id="timerText" height="20" width="45" x="{videoGroup.width - 60}" y="5" paddingLeft="5" paddingTop="5"
-				         visible="false" backgroundColor="0xf5f5f5" fontWeight="bold"><s:text></s:text></s:Label>
+						visible="false" backgroundColor="0xf5f5f5" fontWeight="bold"><s:text></s:text></s:Label>
 				<s:VGroup id="playGroup">
 					<s:Group>
 						<s:Graphic x="0" z="1">

@@ -1085,6 +1085,15 @@ var WbArea = (function() {
 		});
 		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
 	}
+	function _addCloseBtn(li) {
+		if (readOnly) {
+			return;
+		}
+		li.append($('#wb-tab-close').clone().attr('id', ''));
+		li.find('button').click(function() {
+			wbAction('removeWb', JSON.stringify({wbId: li.data().wbId}));
+		});
+	}
 	self.getWbTabId = function(id) {
 		return "wb-tab-" + id;
 	};
@@ -1122,10 +1131,8 @@ var WbArea = (function() {
 					scroll.scrollLeft(scroll.scrollLeft() + 30);
 				});
 				tabsNav.find('li').each(function(idx) {
-					$(this).append($('#wb-tab-close').clone().attr('id', ''));
-					$(this).find('button').click(function() {
-						wbAction('removeWb', JSON.stringify({id: obj.id}));
-					});
+					var li = $(this);
+					_addCloseBtn(li);
 				});
 				$(window).keyup(deleteHandler);
 			}
@@ -1145,7 +1152,7 @@ var WbArea = (function() {
 				return res;
 			}
 			, activate: function(e, ui) {
-				wbAction('activateWb', JSON.stringify({id: ui.newTab.data('wb-id')}));
+				wbAction('activateWb', JSON.stringify({wbId: ui.newTab.data('wb-id')}));
 			}
 		});
 		scroll = tabs.find('.scroll-container');
@@ -1162,26 +1169,28 @@ var WbArea = (function() {
 		$(window).off('keyup', deleteHandler);
 	};
 	self.create = function(obj) {
-		var tid = self.getWbTabId(obj.id)
-			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.id)
+		var tid = self.getWbTabId(obj.wbId)
+			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId)
 			, wb = $('#wb-area').clone().attr('id', tid);
 		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
 	
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
 		refreshTabs();
+		_addCloseBtn(li);
 	
 		var wbo = Wb();
 		wb.data(wbo);
-		wbo.init(obj.id, tid, readOnly);
+		wbo.init(obj.wbId, tid, readOnly);
 		_resizeWbs();
 	}
 	self.createWb = function(obj) {
 		self.create(obj);
-		_activateTab(obj.id);
+		self.setReadOnly(readOnly);
+		_activateTab(obj.wbId);
 	};
 	self.activateWb = function(obj) {
-		_activateTab(obj.id);
+		_activateTab(obj.wbId);
 	}
 	self.load = function(json) {
 		self.getWb(json.wbId).load(json.obj);
@@ -1206,7 +1215,7 @@ var WbArea = (function() {
 		self.getWb(json.wbId).clearSlide(json.slide);
 	};
 	self.removeWb = function(obj) {
-		var tabId = self.getWbTabId(obj.id);
+		var tabId = self.getWbTabId(obj.wbId);
 		tabs.find('li[aria-controls="' + tabId + '"]').remove();
 		$("#" + tabId).remove();
 		refreshTabs();

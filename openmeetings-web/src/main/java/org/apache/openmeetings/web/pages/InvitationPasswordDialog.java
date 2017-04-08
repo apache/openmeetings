@@ -26,6 +26,7 @@ import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
+import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -38,11 +39,10 @@ import org.apache.wicket.validation.ValidationError;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
+public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final DialogButton check = new DialogButton("check", Application.getString(537));
@@ -87,8 +87,6 @@ public class InvitationPasswordDialog extends AbstractFormDialog<Invitation> {
 		super.onConfigure(behavior);
 		Invitation i = WebSession.get().getInvitation();
 		behavior.setOption("autoOpen", i != null && i.isPasswordProtected());
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
 	}
 

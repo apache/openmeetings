@@ -356,6 +356,43 @@
 	padding: 0;
 	overflow: hidden;
 }
+.ui-dialog.video .ui-dialog-titlebar {
+	padding-left:10px
+}
+.ui-dialog.video .title {
+	font-weight: bold;
+}
+.ui-dialog.video .opt-block {
+	width: 300px;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.ui-dialog.video .vid-block {
+	min-width: 300px;
+	padding-left: 305px;
+}
+.ui-dialog.video .level-meter {
+	height: 16px;
+}
+.ui-dialog.video .warn {
+	float: right;
+	margin-right: .3em;
+}
+.ui-dialog.video .level-meter .ui-progressbar-value {
+	background: greenyellow;
+}
+.ui-dialog.video .sett-container {
+	position: relative;
+	min-height: 200px;
+}
+.ui-dialog.video .sett-row {
+	padding-top: 10px;
+}
+.ui-dialog.video .sett-row select, .ui-dialog.video .level-meter {
+	width: 250px;
+}
 .input .select2-container {
 	max-height: 100px;
 	overflow-y: auto;

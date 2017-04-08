@@ -38,9 +38,9 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -149,7 +149,7 @@ public abstract class FileTreePanel extends Panel {
 								String statement = "var $drop = $(this);";
 								statement += "$('body').append('<div id=" + dialogId + ">" + getString("713") + "</div>');";
 								statement += "$( '#" + dialogId
-										+ "' ).dialog({ title: '" + escapeEcmaScript(getString("80")) + "', dialogClass: 'no-close', buttons: [";
+										+ "' ).dialog({ title: '" + escapeEcmaScript(getString("80")) + "', classes: {'ui-dialog-titlebar': 'ui-corner-all no-close'}, buttons: [";
 								statement += "	{ text: '" + escapeEcmaScript(getString("54")) + "', click: function() { $drop.append(ui.draggable); $(this).dialog('close'); " + super.getCallbackFunctionBody(parameters) + " } },";
 								statement += "	{ text: '" + escapeEcmaScript(getString("25")) + "', click: function() { $(this).dialog('close'); } } ";
 								statement += "],";

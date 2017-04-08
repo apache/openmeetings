@@ -39,6 +39,8 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.LanguageDropDown;
 import org.apache.openmeetings.web.util.CountryDropDown;
+import org.apache.openmeetings.web.util.NonClosableDialog;
+import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -55,16 +57,12 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public class RegisterDialog extends AbstractFormDialog<String> {
+public class RegisterDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString(122));
@@ -92,16 +90,8 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		form.setOutputMarkupId(true);
 		tzDropDown.setOutputMarkupId(true);
 
-		confirmRegistration = new MessageDialog("confirmRegistration", Application.getString(235),
-				Application.getString(674), DialogButtons.OK, DialogIcon.INFO) {
+		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", Application.getString(235), Application.getString(674)) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onConfigure(JQueryBehavior behavior) {
-				super.onConfigure(behavior);
-				behavior.setOption("dialogClass", Options.asString("no-close"));
-				behavior.setOption("closeOnEscape", false);
-			}
 
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
@@ -110,13 +100,6 @@ public class RegisterDialog extends AbstractFormDialog<String> {
 		};
 		add(confirmRegistration);
 		reset();
-	}
-
-	@Override
-	public void onConfigure(JQueryBehavior behavior) {
-		super.onConfigure(behavior);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
-		behavior.setOption("closeOnEscape", false);
 	}
 
 	public void setSignInDialog(SignInDialog s) {

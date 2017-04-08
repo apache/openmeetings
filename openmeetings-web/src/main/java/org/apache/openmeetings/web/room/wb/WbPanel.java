@@ -18,11 +18,17 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.AttributeModifier.append;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -35,7 +41,9 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -63,12 +71,16 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.resource.FileSystemResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.github.openjson.JSONTokener;
 
 public class WbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(WbPanel.class, webAppRootKey);
 	private static final int UPLOAD_WB_LEFT = 0;
 	private static final int UPLOAD_WB_TOP = 0;
 	private static final int DEFAULT_WIDTH = 640;
@@ -126,19 +138,19 @@ public class WbPanel extends Panel {
 							break;
 						case removeWb:
 						{
-							long _id = obj.optLong("id", -1);
+							long _id = obj.optLong("wbId", -1);
 							Long id = _id < 0 ? null : _id;
 							getBean(WhiteboardCache.class).remove(roomId, id);
-							sendWbAll(Action.removeWb, new JSONObject().put("id", id));
+							sendWbAll(Action.removeWb, obj);
 						}
 							break;
 						case activateWb:
 						{
-							long _id = obj.optLong("id", -1);
+							long _id = obj.optLong("wbId", -1);
 							if (_id > -1) {
 								Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
 								wbs.setActiveWb(_id);
-								sendWbAll(Action.activateWb, new JSONObject().put("id", _id));
+								sendWbAll(Action.activateWb, obj);
 							}
 						}
 							break;
@@ -185,8 +197,7 @@ public class WbPanel extends Panel {
 						case clearAll:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
-							wb.clear();
-							sendWbAll(Action.clearAll, obj);
+							clearAll(wb);
 						}
 							break;
 						case clearSlide:
@@ -213,7 +224,19 @@ public class WbPanel extends Panel {
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(wb2save);
-			wb.toJson();
+			FileExplorerItem f = new FileExplorerItem();
+			f.setType(Type.WmlFile);
+			f.setRoomId(roomId);
+			f.setHash(UUID.randomUUID().toString());
+			f.setName(getModelObject());
+			f = getBean(FileExplorerItemDao.class).update(f);
+			try (BufferedWriter writer = Files.newBufferedWriter(f.getFile().toPath())) {
+				writer.write(wb.toJson().toString(2));
+			} catch (IOException e) {
+				error("Unexpected error while saving WB: " + e.getMessage());
+				target.add(feedback);
+				log.error("Unexpected error while saving WB", e);
+			}
 		}
 
 		@Override
@@ -274,7 +297,7 @@ public class WbPanel extends Panel {
 			}
 			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString()).append(");");
 		}
-		sb.append("WbArea.activateWb({id: ").append(wbs.getActiveWb()).append("});");
+		sb.append("WbArea.activateWb({wbId: ").append(wbs.getActiveWb()).append("});");
 		response.render(OnDomReadyHeaderItem.forScript(sb));
 	}
 
@@ -289,23 +312,18 @@ public class WbPanel extends Panel {
 	private void sendWb(Action meth, JSONObject obj, Predicate<Client> check) {
 		WebSocketHelper.sendRoom(
 				roomId
-				, new JSONObject()
-						.put("type", "wb")
+				, new JSONObject().put("type", "wb")
 				, check
 				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);", meth.name(), obj.toString())).toString()
 			);
 	}
 
 	private static JSONObject getObjWbJson(Long wbId, Object o) {
-		return new JSONObject()
-				.put("wbId", wbId)
-				.put(PARAM_OBJ, o);
+		return new JSONObject().put("wbId", wbId).put(PARAM_OBJ, o);
 	}
 
 	private static JSONObject getAddWbJson(Long id, String name) {
-		return new JSONObject()
-				.put("id", id)
-				.put("name", name);
+		return new JSONObject().put("wbId", id).put("name", name);
 	}
 
 	public boolean isReadOnly() {
@@ -327,7 +345,7 @@ public class WbPanel extends Panel {
 
 	private JSONObject addFileUrl(String ruid, JSONObject _file) {
 		try {
-		final long fid = _file.optLong("fileId", -1);
+			final long fid = _file.optLong("fileId", -1);
 			if (fid > 0) {
 				FileItem fi = FileItem.Type.Recording.name().equals(_file.optString("fileType"))
 						? getBean(RecordingDao.class).get(fid)
@@ -371,72 +389,78 @@ public class WbPanel extends Panel {
 		return file;
 	}
 
-	/*
-	 * OLD VERSION
-	 *
-	public void sendFileToWb(FileItem fi, boolean clean) {
-		if (wb.isVisible() && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
-			long activeWbId = -1;
-			if (FileItem.Type.WmlFile == fi.getType()) {
-				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
-			} else {
-				String url = null;
-				PageParameters pp = new PageParameters();
-				pp.add("id", fi.getId())
-					.add("ruid", getBean(WhiteboardCache.class).get(r.getId()).getUid());
-				switch (fi.getType()) {
-					case Video:
-						pp.add("preview", true);
-						url = urlFor(new RoomResourceReference(), pp).toString();
-						break;
-					case Recording:
-						url = urlFor(new JpgRecordingResourceReference(), pp).toString();
-						break;
-					default:
-						url = urlFor(new RoomResourceReference(), pp).toString();
-						break;
-				}
-				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url, clean);
-			}
-		}
+	private void clearAll(Whiteboard wb) {
+		wb.clear();
+		sendWbAll(Action.clearAll, new JSONObject().put("wbId", wb.getId()));
 	}
-	 */
 
 	public void sendFileToWb(FileItem fi, boolean clean) {
-		if (isVisible() && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
-			//FIXME TODO WmlFile/Chart special handling
+		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
 			String wuid = UUID.randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
-			//FIXME TODO various types
-			JSONObject file = new JSONObject()
-					.put("fileId", fi.getId())
-					.put("fileType", fi.getType().name())
-					.put("count", fi.getCount())
-					.put("type", "image")
-					.put("left", UPLOAD_WB_LEFT)
-					.put("top", UPLOAD_WB_TOP)
-					.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
-					.put("height", fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
-					.put("uid", wuid)
-					.put("slide", wb.getSlide())
-					;
-			wb.put(wuid, file);
-			final String ruid = wbs.getUid();
-			if (clean) {
-				sendWbAll(Action.clearAll, new JSONObject().put("wbId", wb.getId()));
-			}
-			WebSocketHelper.sendRoom(
-					roomId
-					, new JSONObject().put("type", "wb")
-					, null
-					, (o, c) -> {
-							return o.put("func", String.format("WbArea.%s(%s);"
-									, Action.createObj.name()
-									, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString())
-								).toString();
+			switch (fi.getType()) {
+				case Folder:
+					//do nothing
+					break;
+				case WmlFile:
+				{
+					File f = fi.getFile();
+					if (f.exists() && f.isFile()) {
+						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
+							JSONObject wbo = new JSONObject(new JSONTokener(br));
+							/*WebSocketHelper.sendRoom(
+									roomId
+									, new JSONObject().put("type", "wb")
+									, null
+									, (o, c) -> {
+											return o.put("func", String.format("WbArea.%s(%s);"
+													, Action.createObj.name()
+													, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString())
+												).toString();
+										}
+									);*/
+						} catch (IOException e) {
+							log.error("Unexpected error while loading WB", e);
 						}
-					);
+					}
+				}
+					break;
+				case PollChart:
+					break;
+				default:
+				{
+					JSONObject file = new JSONObject()
+							.put("fileId", fi.getId())
+							.put("fileType", fi.getType().name())
+							.put("count", fi.getCount())
+							.put("type", "image")
+							.put("left", UPLOAD_WB_LEFT)
+							.put("top", UPLOAD_WB_TOP)
+							.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
+							.put("height", fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
+							.put("uid", wuid)
+							.put("slide", wb.getSlide())
+							;
+					wb.put(wuid, file);
+					final String ruid = wbs.getUid();
+					if (clean) {
+						clearAll(wb);
+					}
+					WebSocketHelper.sendRoom(
+							roomId
+							, new JSONObject().put("type", "wb")
+							, null
+							, (o, c) -> {
+									return o.put("func", String.format("WbArea.%s(%s);"
+											, Action.createObj.name()
+											, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString())
+										).toString();
+								}
+							);
+				}
+					break;
+			}
 		}
 	}
 

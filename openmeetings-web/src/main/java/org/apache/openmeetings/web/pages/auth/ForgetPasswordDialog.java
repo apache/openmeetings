@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.ResetPage;
+import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -48,12 +49,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
@@ -136,15 +134,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				super.onDetach();
 			}
 		});
-		confirmDialog = new MessageDialog("confirmDialog", Application.getString(312), Application.getString(321), DialogButtons.OK, DialogIcon.INFO){
+		confirmDialog = new NonClosableMessageDialog("confirmDialog", Application.getString(312), Application.getString(321)){
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onConfigure(JQueryBehavior behavior) {
-				super.onConfigure(behavior);
-				behavior.setOption("dialogClass", Options.asString("no-close"));
-				behavior.setOption("closeOnEscape", false);
-			}
 
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {

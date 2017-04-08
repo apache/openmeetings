@@ -16,32 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room.sidebar.icon;
+package org.apache.openmeetings.web.util;
 
-import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.room.RoomPanel;
+import java.io.Serializable;
 
-public class SettingsIcon extends ClientIcon {
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
+
+public abstract class NonClosableDialog<T extends Serializable> extends AbstractFormDialog<T> {
 	private static final long serialVersionUID = 1L;
 
-	public SettingsIcon(String id, Client client, RoomPanel room) {
-		super(id, client, room);
-		mainCssClass = "settings ";
+	public NonClosableDialog(String id, String title) {
+		super(id, title);
 	}
 
 	@Override
-	protected String getTitle() {
-		return getString("306");
-	}
-
-	@Override
-	protected boolean isClickable() {
-		return true;
-	}
-
-	@Override
-	protected String getScript() {
-		return String.format("VideoSettings.open(%s);", Room.Type.interview == room.getRoom().getType());
+	public void onConfigure(JQueryBehavior behavior) {
+		super.onConfigure(behavior);
+		behavior.setOption("closeOnEscape", false);
+		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
 	}
 }

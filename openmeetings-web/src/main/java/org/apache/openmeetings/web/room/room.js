@@ -17,6 +17,7 @@
  * under the License.
  */
 function initVideo(_options) {
+	return; //commented until video is implemented
 	var options = $.extend({bgcolor: "#ffffff"
 		, resolutions: JSON.stringify([{label: "4:3 (~6 KByte/sec)", width: 40, height: 30}
 			, {label: "4:3 (~12 KByte/sec)", width: 80, height: 60}
@@ -37,7 +38,7 @@ function initVideo(_options) {
 	var type = 'application/x-shockwave-flash';
 	var src = 'public/main.swf?cache' + new Date().getTime();
 	var r = $('<div class="room video">').attr("id", "video" + options.uid);
-	var o = $('<object>').attr('type', type).attr('data', src);
+	var o = $('<object>').attr('type', type).attr('data', src).attr('width', 640).attr('height', 480);
 	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
 		.append($('<param>').attr('name', 'wmode').attr('value', 'transparent'))
 		.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'))
@@ -104,6 +105,7 @@ function roomLoad() {
 			setRoomSizes();
 		}
 	});
+	VideoSettings.init();
 	Wicket.Event.subscribe("/websocket/closed", roomClosed);
 }
 function roomUnload() {
@@ -112,12 +114,61 @@ function roomUnload() {
 	if (!!WbArea) {
 		WbArea.destroy();
 	}
+	VideoSettings.close();
 }
 function startPrivateChat(el) {
 	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
 	Chat.open();
 	$('#chatMessage .wysiwyg-editor').click();
 }
+var VideoSettings = (function() {
+	var self = {}, vs, lm;
+	function _init() {
+		vs = $('#video-settings');
+		lm = vs.find('.level-meter');
+		vs.dialog({
+			classes: {
+				'ui-dialog': 'ui-corner-all video'
+			}
+			, width: 640
+			, autoOpen: false
+			, buttons: [
+				{
+					text: vs.data('btn-save')
+					, icons: {
+						primary: "ui-icon-disk"
+					}
+					, click: function() {
+						vs.dialog("close");
+					}
+				}
+				, {
+					text: vs.data('btn-cancel')
+					, click: function() {
+						vs.dialog("close");
+					}
+				}
+			]
+		});
+		lm.progressbar({ value: 0 });
+		vs.find('button').button();
+	}
+	function _open(interview) {
+		var rr = vs.find('.cam-resolution').parent('.sett-row');
+		if (interview) {
+			rr.show();
+		} else {
+			rr.hide();
+		}
+		vs.dialog('open');
+	}
+	return {
+		init: _init
+		, open: _open
+		, close: function() { vs.dialog('close'); }
+	};
+})();
+
 /***** functions required by SIP   ******/
 function sipBtnClick() {
 	var txt = $('.sip-number');
