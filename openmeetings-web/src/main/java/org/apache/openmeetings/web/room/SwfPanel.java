@@ -21,11 +21,15 @@ package org.apache.openmeetings.web.room;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -41,13 +45,42 @@ public class SwfPanel extends BasePanel {
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
+	private final PageParameters pp;
+	private final AbstractDefaultAjaxBehavior panelLoaded = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			PageParameters spp = new PageParameters(pp);
+			target.appendJavaScript(getInitFunction(spp));
+		}
+	};
 
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
 	}
 
-	public String getInitFunction() {
-		return getInitFunction(new PageParameters());
+	public SwfPanel(String id, PageParameters pp) {
+		super(id);
+		this.pp = pp;
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(panelLoaded);
+	}
+
+	private static ResourceReference newResourceReference() {
+		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/openmeetings_functions.js")));
+		response.render(OnDomReadyHeaderItem.forScript(panelLoaded.getCallbackScript()));
 	}
 
 	public String getInitFunction(PageParameters pp) {
@@ -77,8 +110,10 @@ public class SwfPanel extends BasePanel {
 						, "775", "452", "767", "764", "765", "918", "54", "761", "762", "144", "203", "642"
 						, "save.success");
 			}
-			initStr = String.format("var labels = %s; initSwf(%s);", lbls
-					, new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp)).toString());
+			JSONObject options = new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp));
+			ClientProperties cp = WebSession.get().getClientInfo().getProperties();
+			options.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
+			initStr = String.format("var labels = %s; initSwf(%s);", lbls, options.toString());
 		}
 		return initStr;
 	}
@@ -101,21 +136,5 @@ public class SwfPanel extends BasePanel {
 			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
 		}
 		return arr.toString();
-	}
-
-	public SwfPanel(String id, PageParameters pp) {
-		super(id);
-		add(new Label("init", getInitFunction(pp)).setEscapeModelStrings(false));
-	}
-
-	private static ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/openmeetings_functions.js")));
 	}
 }
