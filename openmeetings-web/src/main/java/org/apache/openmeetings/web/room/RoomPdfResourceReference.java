@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room;
 import java.io.File;
 
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.wicket.request.resource.IResource.Attributes;
 
 public class RoomPdfResourceReference extends RoomResourceReference {
 	private static final long serialVersionUID = 1L;
@@ -40,7 +41,7 @@ public class RoomPdfResourceReference extends RoomResourceReference {
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem r) {
+	protected File getFile(FileExplorerItem r, Attributes attr) {
 		return getFile(r, "pdf");
 	}
 }

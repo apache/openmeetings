@@ -24,7 +24,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 
 public class SettingsIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
-	
+
 	public SettingsIcon(String id, Client client, RoomPanel room) {
 		super(id, client, room);
 		mainCssClass = "settings ";

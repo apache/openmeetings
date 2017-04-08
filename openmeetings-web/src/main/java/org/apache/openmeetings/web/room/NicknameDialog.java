@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.form.Form;
@@ -37,11 +38,10 @@ import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public class NicknameDialog extends AbstractFormDialog<User> {
+public class NicknameDialog extends NonClosableDialog<User> {
 	private static final long serialVersionUID = 1L;
 	private static final FastDateFormat TIME_DF = FastDateFormat.getInstance("HH:mm:ss");
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
@@ -72,8 +72,6 @@ public class NicknameDialog extends AbstractFormDialog<User> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", isVisible(form.getModelObject()));
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
 	}
 

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.openmeetings.core.converter.BaseConverter.EXEC_EXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -33,15 +34,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class GenerateSWF {
-
 	public static final Logger log = Red5LoggerFactory.getLogger(GenerateSWF.class, webAppRootKey);
 
 	@Autowired
 	private ConfigurationDao configurationDao;
-
-	public final static boolean isPosix = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") == -1;
-
-	public final static String execExt = isPosix ? "" : ".exe";
 
 	private String getPathToSwfTools() {
 		String pathToSWFTools = configurationDao.getConfValue("swftools_path", String.class, "");
@@ -72,16 +68,16 @@ public class GenerateSWF {
 	}
 
 	public ConverterProcessResult generateSwf(File in, File out) throws IOException {
-		
+
 		// Create the Content of the Converter Script (.bat or .sh File)
 		String[] argv = new String[] {
-				getPathToSwfTools() + "pdf2swf" + execExt, "-s",
+				getPathToSwfTools() + "pdf2swf" + EXEC_EXT, "-s",
 				"insertstop", // insert Stop command into every frame
 				"-s","poly2bitmap", //http://www.swftools.org/gfx_tutorial.html#Rendering_pages_to_SWF_files
 				"--flashversion=9", //option to generate as3 compatible files
 				"-i", // change draw order to reduce pdf complexity
-				"-j", "" + getSwfJpegQuality(), // JPEG Quality 
-				"-s", "zoom=" + getSwfZoom(), // set zoom dpi 
+				"-j", "" + getSwfJpegQuality(), // JPEG Quality
+				"-s", "zoom=" + getSwfZoom(), // set zoom dpi
 				in.getCanonicalPath(),
 				out.getCanonicalPath() };
 
@@ -93,7 +89,7 @@ public class GenerateSWF {
 	 */
 	public ConverterProcessResult generateSwfByImages(List<String> images, String outputfile, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
-				getPathToSwfTools() + "png2swf" + execExt, "-s", 
+				getPathToSwfTools() + "png2swf" + EXEC_EXT, "-s",
 				"insertstop", // Insert Stop command into every frame
 				"-o", outputfile, "-r", Integer.toString(fps), "-z" });
 
@@ -106,7 +102,7 @@ public class GenerateSWF {
 	 */
 	public ConverterProcessResult generateSWFByCombine(List<String> swfs, String outputswf, int fps) {
 		List<String> argvList = Arrays.asList(new String[] {
-				getPathToSwfTools() + "swfcombine" + execExt, "-s",
+				getPathToSwfTools() + "swfcombine" + EXEC_EXT, "-s",
 				"insertstop", // Insert Stop command into every frame
 				"-o", outputswf, "-r", Integer.toString(fps), "-z", "-a" });
 
@@ -117,7 +113,7 @@ public class GenerateSWF {
 	public ConverterProcessResult generateSWFByFFMpeg(String inputWildCard,
 			String outputswf, int fps, int width, int height) {
 		// FIXME: ffmpeg should be on the system path
-		String[] argv = new String[] { "ffmpeg" + execExt, "-r",
+		String[] argv = new String[] { "ffmpeg" + EXEC_EXT, "-r",
 				Integer.toString(fps), "-i", inputWildCard, "-s",
 				width + "x" + height, "-b", "750k", "-ar", "44100", "-y",
 				outputswf };

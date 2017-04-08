@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.install;
 
+import static org.apache.openmeetings.core.converter.BaseConverter.EXEC_EXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -40,7 +41,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
-import org.apache.openmeetings.core.converter.GenerateSWF;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -135,7 +135,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
+		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
 		behavior.setOption("resizable", false);
 	}
 
@@ -505,7 +505,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + GenerateSWF.execExt), "--version"});
+					checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + EXEC_EXT), "--version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -514,7 +514,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + GenerateSWF.execExt), "-version"});
+					checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -523,7 +523,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + GenerateSWF.execExt), "-version"});
+					checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -532,7 +532,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + GenerateSWF.execExt), "--version"});
+					checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -580,10 +580,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		private boolean checkAllPath() {
-			boolean result = checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + GenerateSWF.execExt), "--version"});
-			result = checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + GenerateSWF.execExt), "-version"}) && result;
-			result = checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + GenerateSWF.execExt), "-version"}) && result;
-			result = checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + GenerateSWF.execExt), "--version"}) && result;
+			boolean result = checkToolPath(swfPath, new String[] {InstallWizard.getPath(swfPath.getValue(), "pdf2swf" + EXEC_EXT), "--version"});
+			result = checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"}) && result;
+			result = checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"}) && result;
+			result = checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"}) && result;
 			result = checkOfficePath() && result;
 			isAllChecked = true;
 			return result;

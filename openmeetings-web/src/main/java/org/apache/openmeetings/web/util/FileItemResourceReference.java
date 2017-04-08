@@ -54,10 +54,10 @@ public abstract class FileItemResourceReference<T extends FileItem> extends File
 			}
 
 			@Override
-			protected ResourceResponse newResourceResponse(Attributes attributes) {
-				r = getFileItem(attributes);
+			protected ResourceResponse newResourceResponse(Attributes attr) {
+				r = getFileItem(attr);
 				if (r != null) {
-					file = getFile(r);
+					file = getFile(r, attr);
 					ResourceResponse rr = createResourceResponse(file.toPath());
 					rr.setFileName(getFileName(r));
 					return rr;
@@ -73,6 +73,6 @@ public abstract class FileItemResourceReference<T extends FileItem> extends File
 
 	protected abstract String getMimeType(T r);
 	protected abstract String getFileName(T r);
-	protected abstract File getFile(T r);
-	protected abstract T getFileItem(Attributes attributes);
+	protected abstract File getFile(T r, Attributes attr);
+	protected abstract T getFileItem(Attributes attr);
 }

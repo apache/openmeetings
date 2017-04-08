@@ -42,6 +42,7 @@ import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
+import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -72,11 +73,10 @@ import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.effect.JQueryEffectBehavior;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public class SignInDialog extends AbstractFormDialog<String> {
+public class SignInDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private Form<String> form;
 	private DialogButton loginBtn = new DialogButton("login", Application.getString(112));
@@ -107,8 +107,6 @@ public class SignInDialog extends AbstractFormDialog<String> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
 	}
 

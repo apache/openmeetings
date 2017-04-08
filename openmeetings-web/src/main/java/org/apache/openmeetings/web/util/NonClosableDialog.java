@@ -16,34 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.room;
+package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
+import java.io.Serializable;
 
-import java.io.File;
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.wicket.request.resource.IResource.Attributes;
-
-public class RoomFileResourceReference extends RoomResourceReference {
+public abstract class NonClosableDialog<T extends Serializable> extends AbstractFormDialog<T> {
 	private static final long serialVersionUID = 1L;
 
-	public RoomFileResourceReference() {
-		super("original-room-file");
+	public NonClosableDialog(String id, String title) {
+		super(id, title);
 	}
 
 	@Override
-	protected String getMimeType(FileExplorerItem r) {
-		return "application/octet-stream";
-	}
-
-	@Override
-	protected String getFileName(FileExplorerItem r) {
-		return r.getName();
-	}
-
-	@Override
-	protected File getFile(FileExplorerItem r, Attributes attr) {
-		return getFile(r, getFileExt(r.getName()));
+	public void onConfigure(JQueryBehavior behavior) {
+		super.onConfigure(behavior);
+		behavior.setOption("closeOnEscape", false);
+		behavior.setOption("classes", "{'ui-dialog-titlebar': 'ui-corner-all no-close'}");
 	}
 }

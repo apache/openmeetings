@@ -125,7 +125,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem f) {
+	protected File getFile(FileExplorerItem f, Attributes attr) {
 		return getFile(f, Type.Video == f.getType() && preview ? EXTENSION_JPG : null);
 	}
 

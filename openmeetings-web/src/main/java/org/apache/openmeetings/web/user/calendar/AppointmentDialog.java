@@ -129,7 +129,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-		behavior.setOption("dialogClass", Options.asString("appointment"));
+		behavior.setOption("classes", "{'ui-dialog': 'ui-corner-all appointment'}");
 	}
 
 	public void setModelObjectWithAjaxTarget(Appointment a, AjaxRequestTarget target) {

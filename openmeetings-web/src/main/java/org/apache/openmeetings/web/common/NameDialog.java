@@ -40,7 +40,7 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	private final DialogButton add;
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
 	private final Form<String> form;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final String name;
 	private RequiredTextField<String> title;
 

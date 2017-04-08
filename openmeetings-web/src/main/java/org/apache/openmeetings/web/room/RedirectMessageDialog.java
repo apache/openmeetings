@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -30,26 +31,24 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
-import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
-public class RedirectMessageDialog extends MessageDialog {
+public class RedirectMessageDialog extends NonClosableMessageDialog {
 	private static final long serialVersionUID = 1L;
 	private final String labelId;
 	private final String url;
 	private final int delay = 5;
 	private final boolean autoOpen;
-	private Component label; 
-	
+	private Component label;
+
 	public RedirectMessageDialog(String id, String labelId, boolean autoOpen, String url) {
 		super(id, Application.getString(204), "", new ArrayList<DialogButton>(), DialogIcon.ERROR);
 		this.labelId = labelId;
 		this.url = url;
 		this.autoOpen = autoOpen;
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -75,36 +74,34 @@ public class RedirectMessageDialog extends MessageDialog {
 			handler.add(label);
 		}
 	}
-	
+
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		super.onOpen(handler);
 		startTimer(handler);
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", autoOpen);
-		behavior.setOption("closeOnEscape", false);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
 		behavior.setOption("resizable", false);
 	}
-	
+
 	@Override
 	public boolean isModal() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean isDefaultCloseEventEnabled() {
 		return false;
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 	}
-	
+
 	@Override
 	protected Component newLabel(String id, IModel<String> model) {
 		label = super.newLabel(id, model);

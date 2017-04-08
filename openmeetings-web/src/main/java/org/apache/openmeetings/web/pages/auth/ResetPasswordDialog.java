@@ -29,6 +29,8 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.util.NonClosableDialog;
+import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -39,14 +41,11 @@ import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
-import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public class ResetPasswordDialog extends AbstractFormDialog<String> {
+public class ResetPasswordDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private DialogButton resetBtn = new DialogButton("reset", Application.getString(327));
 	private Form<String> form;
@@ -101,16 +100,8 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 			}
 
 		});
-		confirmReset = new MessageDialog("confirmReset", Application.getString(325), Application.getString(332),
-				DialogButtons.OK, DialogIcon.INFO) {
+		confirmReset = new NonClosableMessageDialog("confirmReset", Application.getString(325), Application.getString(332)) {
 			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onConfigure(JQueryBehavior behavior) {
-				super.onConfigure(behavior);
-				behavior.setOption("dialogClass", Options.asString("no-close"));
-				behavior.setOption("closeOnEscape", false);
-			}
 
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
@@ -124,8 +115,6 @@ public class ResetPasswordDialog extends AbstractFormDialog<String> {
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
-		behavior.setOption("dialogClass", Options.asString("no-close"));
-		behavior.setOption("closeOnEscape", false);
 	}
 
 	@Override
