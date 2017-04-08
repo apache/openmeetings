@@ -31,7 +31,7 @@ function initSwf(_options) {
 		.attr('quality', 'high')
 		.attr('bgcolor', options.bgcolor)
 		.attr('src', "public/" + options.src)
-		.attr('wmode', 'direct')
+		.attr('wmode', options.wmode)
 		.attr('allowfullscreen', true)
 		.attr('width', options.width).attr('height', options.height)
 		.attr('id', 'lzapp')

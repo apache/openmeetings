@@ -38,12 +38,14 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -65,7 +67,20 @@ public class SwfPanel extends BasePanel {
 	public static final String PARAM_URL = "url";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
+	private final PageParameters pp;
 	private Long roomId = null;
+	private final AbstractDefaultAjaxBehavior panelLoaded = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			PageParameters spp = new PageParameters(pp);
+			if (roomId != null) {
+				spp.mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
+			}
+			target.appendJavaScript(getInitFunction(spp));
+		}
+	};
 
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
@@ -77,6 +92,7 @@ public class SwfPanel extends BasePanel {
 
 	public SwfPanel(String id, PageParameters pp) {
 		super(id);
+		this.pp = pp;
 		//OK let's find the room
 		try {
 			StringValue room = pp.get(WICKET_ROOM_ID);
@@ -86,12 +102,12 @@ public class SwfPanel extends BasePanel {
 		} catch (Exception e) {
 			//no-op
 		}
-		PageParameters spp = new PageParameters(pp);
-		if (roomId != null) {
-			spp.mergeWith(new PageParameters().add(WICKET_ROOM_ID, roomId));
-		}
-		add(new Label("init", getInitFunction(spp)).setEscapeModelStrings(false));
-		add(new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(panelLoaded, new AbstractAjaxTimerBehavior(Duration.minutes(5)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -114,6 +130,7 @@ public class SwfPanel extends BasePanel {
 		if (WebSession.get().getClientInfo().getProperties().isBrowserMozillaFirefox()) {
 			response.render(new PriorityHeaderItem(CssHeaderItem.forCSS(".ui-widget-overlay{opacity: 1 !important;}", "ff-veil-hack")));
 		}
+		response.render(OnDomReadyHeaderItem.forScript(panelLoaded.getCallbackScript()));
 	}
 
 	public String getInitFunction(PageParameters pp) {
@@ -143,8 +160,10 @@ public class SwfPanel extends BasePanel {
 						, "775", "452", "767", "764", "765", "918", "54", "761", "762", "144", "203", "642"
 						, "save.success");
 			}
-			initStr = String.format("var labels = %s; initSwf(%s);", lbls
-					, new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp)).toString());
+			JSONObject options = new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp));
+			ClientProperties cp = WebSession.get().getClientInfo().getProperties();
+			options.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
+			initStr = String.format("var labels = %s; initSwf(%s);", lbls, options.toString());
 		}
 		return initStr;
 	}

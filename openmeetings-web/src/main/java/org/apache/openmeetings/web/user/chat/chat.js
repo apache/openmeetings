@@ -33,9 +33,16 @@ var Chat = function() {
 		, emoticon = new CSSEmoticon()
 		, typingTimer
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
-		, audio = new Audio('./public/chat_message.mp3');
+		, audio
 		;
-
+	try {
+		audio = new Audio('./public/chat_message.mp3');
+	} catch (e) {
+		//not implemented in IE
+		audio = {
+			play: function() {}
+		};
+	}
 	function doneTyping () {
 		typingTimer = null;
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
