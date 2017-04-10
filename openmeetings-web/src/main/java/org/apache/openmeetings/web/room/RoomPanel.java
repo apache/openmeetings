@@ -76,6 +76,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -121,7 +122,8 @@ public class RoomPanel extends BasePanel {
 				URL url = new URL(WebSession.get().getExtendedProperties().getCodebase());
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
-				target.appendJavaScript(String.format("initVideo(%s);", new JSONObject()
+				ClientProperties cp = WebSession.get().getClientInfo().getProperties();
+				target.appendJavaScript(String.format("VideoSettings.init(%s);", new JSONObject()
 						.put("uid", getClient().getUid())
 						.put("audioOnly", r.isAudioOnly())
 						.put("SID", WebSession.getSid())
@@ -130,8 +132,7 @@ public class RoomPanel extends BasePanel {
 						.put("host", url.getHost())
 						//.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
 						.put("app", path + r.getId())
-						.put("labels", SwfPanel.getStringLabels("448", "449", "450", "451", "758", "447", "52", "53"
-								, "1429", "1430", "775", "452", "767", "764", "765", "918", "54", "761", "762"))
+						.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct")
 						.toString()
 						));
 			} catch (NullPointerException|MalformedURLException e) {

@@ -16,45 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-function initVideo(_options) {
-	return; //commented until video is implemented
-	var options = $.extend({bgcolor: "#ffffff"
-		, resolutions: JSON.stringify([{label: "4:3 (~6 KByte/sec)", width: 40, height: 30}
-			, {label: "4:3 (~12 KByte/sec)", width: 80, height: 60}
-			, {label: "4:3 (~20 KByte/sec)", width: 120, height: 90, "default": true}
-			, {label: "QQVGA 4:3 (~36 KByte/sec)", width: 160, height: 120}
-			, {label: "4:3 (~40 KByte/sec)", width: 240, height: 180}
-			, {label: "HVGA 4:3 (~56 KByte/sec)", width: 320, height: 240}
-			, {label: "4:3  (~60 KByte/sec)", width: 480, height: 360}
-			, {label: "4:3 (~68 KByte/sec)", width: 640, height: 480}
-			, {label: "XGA 4:3", width: 1024, height: 768}
-			, {label: "16:9", width: 256, height: 150}
-			, {label: "WQVGA 9:5", width: 432, height: 240}
-			, {label: "pseudo 16:9", width: 480, height: 234}
-			, {label: "16:9", width: 512, height: 300}
-			, {label: "nHD 16:9", width: 640, height: 360}
-			, {label: "16:9", width: 1024, height: 600}])
-		}, _options);
+function initVideo(el, id, options) {
 	var type = 'application/x-shockwave-flash';
 	var src = 'public/main.swf?cache' + new Date().getTime();
-	var r = $('<div class="room video">').attr("id", "video" + options.uid);
-	var o = $('<object>').attr('type', type).attr('data', src).attr('width', 640).attr('height', 480);
+	var o = $('<object>').attr('id', id).attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
 	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
-		.append($('<param>').attr('name', 'wmode').attr('value', 'transparent'))
+		.append($('<param>').attr('name', 'wmode').attr('value', options.wmode))
 		.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'))
 		.append($('<param>').attr('name', 'allowfullscreen').attr('value', 'false'))
 		.append($('<param>').attr('name', 'flashvars').attr('value', $.param(options)));
-	$('#roomMenu').parent().append(r.append(o));
-	/*
-			.attr('wmode', 'window').attr('allowfullscreen', true)
-			.attr('width', options.width).attr('height', options.height)
-			.attr('id', 'lzapp').attr('name', 'lzapp')
-			.attr('flashvars', escape($.param(options)))
-			.attr('swliveconnect', true).attr('align', 'middle')
-			.attr('allowscriptaccess', 'sameDomain').attr('type', 'application/x-shockwave-flash')
-			.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer')
-	*/
-	r.dialog({dialogClass: "video"});
+	el.append(o);
+	return o;
 }
 
 function setRoomSizes() {
@@ -105,7 +77,6 @@ function roomLoad() {
 			setRoomSizes();
 		}
 	});
-	VideoSettings.init();
 	Wicket.Event.subscribe("/websocket/closed", roomClosed);
 }
 function roomUnload() {
@@ -122,10 +93,25 @@ function startPrivateChat(el) {
 	$('#chatMessage .wysiwyg-editor').click();
 }
 var VideoSettings = (function() {
-	var self = {}, vs, lm;
-	function _init() {
+	var self = {}, vs, lm, swf, s, cam, mic, res, inited = false;
+	function _load() {
+		s = {};
+		try {
+			s = JSON.parse(localStorage.getItem('openmeetings')) || s;
+		} catch (e) {}
+		if (!s.video) {
+			s.video = {};
+		}
+	}
+	function _save() {
+		localStorage.setItem('openmeetings', JSON.stringify(s));
+	}
+	function _init(options) {
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
+		cam = vs.find('select.cam');
+		mic = vs.find('select.mic');
+		res = vs.find('select.cam-resolution');
 		vs.dialog({
 			classes: {
 				'ui-dialog': 'ui-corner-all video'
@@ -139,6 +125,7 @@ var VideoSettings = (function() {
 						primary: "ui-icon-disk"
 					}
 					, click: function() {
+						_save();
 						vs.dialog("close");
 					}
 				}
@@ -151,7 +138,60 @@ var VideoSettings = (function() {
 			]
 		});
 		lm.progressbar({ value: 0 });
+		options.width = 300;
+		options.height = 200;
+		swf = initVideo(vs.find('.vid-block .video-conainer'), 'video-settings-swf', options)[0];
+		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
+		_load();
+	}
+	function _readValues() {
+		s.video.cam = cam.val();
+		s.video.mic = mic.val();
+		var o = res.find('option:selected').data();
+		s.video.width = o.width;
+		s.video.height = o.height;
+		$(swf).attr('width', Math.max(300, s.video.width)).attr('height', Math.max(200, s.video.height));
+	}
+	function _initSwf() {
+		if (!inited) {
+			var obj = swf.getDevices();
+			for (var i = 0; i < obj.cams.length; ++i) {
+				var o = $('<option></option>').attr('value', i).text(obj.cams[i]);
+				if (i == s.video.cam) {
+					o.prop('selected', true);
+				}
+				cam.append(o);
+			}
+			cam.prop('disabled', false).change(function() {
+				_readValues();
+				swf.camChanged(s.video.cam);
+			});
+			for (var i = 0; i < obj.mics.length; ++i) {
+				var o = $('<option></option>').attr('value', i).text(obj.mics[i]);
+				if (i == s.video.mic) {
+					o.prop('selected', true);
+				}
+				mic.append(o);
+			}
+			mic.prop('disabled', false).change(function() {
+				_readValues();
+				swf.micChanged(s.video.mic);
+			});
+			res.change(function() {
+				_readValues();
+				swf.resChanged(s.video.width, s.video.height);
+			});
+			res.find('option').each(function(idx) {
+				var o = $(this).data();
+				if (o.width == s.video.width && o.height == s.video.height) {
+					$(this).prop('selected', true);
+					return false;
+				}
+			});
+		}
+		_readValues();
+		swf.init(s.video.cam, s.video.mic, s.video.width, s.video.height);
 	}
 	function _open(interview) {
 		var rr = vs.find('.cam-resolution').parent('.sett-row');
@@ -164,6 +204,7 @@ var VideoSettings = (function() {
 	}
 	return {
 		init: _init
+		, initSwf: _initSwf
 		, open: _open
 		, close: function() { vs.dialog('close'); }
 	};

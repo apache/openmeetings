@@ -390,6 +390,13 @@
 .ui-dialog.video .sett-row {
 	padding-top: 10px;
 }
+.ui-dialog.video .sett-row.right {
+	text-align: right;
+}
+.ui-dialog.video .vid-block .video-conainer {
+	overflow: auto;
+	max-height: 300px;
+}
 .ui-dialog.video .sett-row select, .ui-dialog.video .level-meter {
 	width: 250px;
 }
