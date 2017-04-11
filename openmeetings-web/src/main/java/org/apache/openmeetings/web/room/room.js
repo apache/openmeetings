@@ -93,7 +93,8 @@ function startPrivateChat(el) {
 	$('#chatMessage .wysiwyg-editor').click();
 }
 var VideoSettings = (function() {
-	var self = {}, vs, lm, swf, s, cam, mic, res, inited = false;
+	var self = {}, vs, lm, swf, s, cam, mic, res,
+		vidScroll, recBtn, playBtn, inited = false, recAllowed = false;
 	function _load() {
 		s = {};
 		try {
@@ -112,6 +113,14 @@ var VideoSettings = (function() {
 		cam = vs.find('select.cam');
 		mic = vs.find('select.mic');
 		res = vs.find('select.cam-resolution');
+		vidScroll = vs.find('.vid-block .video-conainer');
+		recBtn = vs.find('.rec-start').click(function() {
+			recBtn.prop('disabled', true).button('refresh'); //TODO disable drop-downs
+			swf.startRec();
+		});
+		playBtn = vs.find('.play').click(function() {
+			swf.play();
+		});
 		vs.dialog({
 			classes: {
 				'ui-dialog': 'ui-corner-all video'
@@ -140,18 +149,43 @@ var VideoSettings = (function() {
 		lm.progressbar({ value: 0 });
 		options.width = 300;
 		options.height = 200;
-		swf = initVideo(vs.find('.vid-block .video-conainer'), 'video-settings-swf', options)[0];
+		swf = initVideo(vidScroll, 'video-settings-swf', options)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
+		var rr = vs.find('.cam-resolution').parent('.sett-row');
+		if (!!options.interview) {
+			rr.show();
+		} else {
+			rr.hide();
+		}
 		_load();
 	}
+	function _updateRec() {
+		recBtn.prop('disabled', !recAllowed && (s.video.cam > -1 || s.video.mic > -1)).button('refresh');
+	}
 	function _readValues() {
-		s.video.cam = cam.val();
-		s.video.mic = mic.val();
+		s.video.cam = 1 * cam.val();
+		s.video.mic = 1 * mic.val();
 		var o = res.find('option:selected').data();
 		s.video.width = o.width;
 		s.video.height = o.height;
 		$(swf).attr('width', Math.max(300, s.video.width)).attr('height', Math.max(200, s.video.height));
+		vidScroll.scrollLeft(Math.max(0, s.video.width / 2 - 150))
+			.scrollTop(Math.max(0, s.video.height / 2 - 110));
+		_updateRec();
+	}
+	
+	function _allowRec(allow) {
+		recAllowed = allow;
+		_updateRec();
+	}
+	function _allowPlay() {
+		_updateRec();
+		playBtn.prop('disabled', false).button('refresh');
+	}
+	function _micActivity(level) {
+		console.log("activity: ", level)
+		lm.progressbar("value", Math.max(0, level));
 	}
 	function _initSwf() {
 		if (!inited) {
@@ -193,19 +227,17 @@ var VideoSettings = (function() {
 		_readValues();
 		swf.init(s.video.cam, s.video.mic, s.video.width, s.video.height);
 	}
-	function _open(interview) {
-		var rr = vs.find('.cam-resolution').parent('.sett-row');
-		if (interview) {
-			rr.show();
-		} else {
-			rr.hide();
-		}
+	function _open() {
+		recAllowed = false;
 		vs.dialog('open');
 	}
 	return {
 		init: _init
 		, initSwf: _initSwf
 		, open: _open
+		, allowRec: _allowRec
+		, allowPlay: _allowPlay
+		, micActivity: _micActivity
 		, close: function() { vs.dialog('close'); }
 	};
 })();

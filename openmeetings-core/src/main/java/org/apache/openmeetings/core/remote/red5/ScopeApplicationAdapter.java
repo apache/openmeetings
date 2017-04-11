@@ -19,10 +19,15 @@
 package org.apache.openmeetings.core.remote.red5;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.awt.Point;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -32,6 +37,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
@@ -92,6 +98,8 @@ import org.red5.server.api.stream.IBroadcastStream;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.openjson.JSONObject;
+
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String SECURITY_CODE_PARAM = "securityCode";
@@ -108,7 +116,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private RecordingService recordingService;
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
@@ -125,6 +133,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private RecordingDao recordingDao;
 	@Autowired
 	private ServerDao serverDao;
+	private JSONObject flashSettings;
 
 	private static AtomicLong broadCastCounter = new AtomicLong(0);
 
@@ -147,6 +156,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			getCryptKey();
 
 			// init your handler here
+			Properties props = new Properties();
+			try (InputStream is = new FileInputStream(new File(new File(OmFileHelper.getRootDir(), "conf"), "red5.properties"))) {
+				props.load(is);
+			}
+			flashSettings = new JSONObject()
+					.put("secure", "yes".equals(cfgDao.getConfValue(CONFIG_FLASH_SECURE, String.class, "no")))
+					.put("proxyType", cfgDao.getConfValue(CONFIG_FLASH_SECURE_PROXY, String.class, "none"))
+					.put("rtmpPort", props.getProperty("rtmp.port"))
+					.put("rtmpsPort", props.getProperty("rtmps.port"))
+					.put("videoCodec", cfgDao.getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
+					.put("fps", cfgDao.getConfValue(OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
+					;
 
 			for (String scopeName : scope.getScopeNames()) {
 				log.debug("scopeName :: " + scopeName);
@@ -1847,11 +1868,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	private boolean getWhiteboardDrawStatus() {
-		return configurationDao.getWhiteboardDrawStatus();
+		return cfgDao.getWhiteboardDrawStatus();
 	}
 
 	public String getCryptKey() {
-		return configurationDao.getCryptKey();
+		return cfgDao.getCryptKey();
 	}
 
 	public IScope getRoomScope(String room) {
@@ -1939,5 +1960,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		SessionVariablesUtil.initClient(c, publicSID);
 
 		sendMessageToCurrentScope("addNewUser", currentClient, false);
+	}
+
+	public JSONObject getFlashSettings() {
+		return flashSettings;
 	}
 }

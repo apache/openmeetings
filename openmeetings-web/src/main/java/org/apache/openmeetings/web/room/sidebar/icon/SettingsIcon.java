@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.sidebar.icon;
 
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class SettingsIcon extends ClientIcon {
@@ -42,6 +41,6 @@ public class SettingsIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("VideoSettings.open(%s);", Room.Type.interview == room.getRoom().getType());
+		return String.format("VideoSettings.open();");
 	}
 }

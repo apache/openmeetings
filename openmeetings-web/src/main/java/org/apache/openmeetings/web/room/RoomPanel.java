@@ -36,6 +36,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -123,14 +124,12 @@ public class RoomPanel extends BasePanel {
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
 				ClientProperties cp = WebSession.get().getClientInfo().getProperties();
-				target.appendJavaScript(String.format("VideoSettings.init(%s);", new JSONObject()
+				target.appendJavaScript(String.format("VideoSettings.init(%s);", new JSONObject(getBean(ScopeApplicationAdapter.class).getFlashSettings().toString())
 						.put("uid", getClient().getUid())
 						.put("audioOnly", r.isAudioOnly())
 						.put("SID", WebSession.getSid())
 						.put("interview", Room.Type.interview == r.getType())
-						//.put("protocol", cfgDao.getConfValue(CONFIG_FLASH_PROTOCOL, String.class, ""))
 						.put("host", url.getHost())
-						//.put("port", cfgDao.getConfValue(CONFIG_FLASH_PORT, String.class, ""))
 						.put("app", path + r.getId())
 						.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct")
 						.toString()

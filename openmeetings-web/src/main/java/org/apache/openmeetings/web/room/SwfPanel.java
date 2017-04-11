@@ -79,7 +79,6 @@ public class SwfPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forUrl("js/openmeetings_functions.js")));
 		response.render(OnDomReadyHeaderItem.forScript(panelLoaded.getCallbackScript()));
 	}
 

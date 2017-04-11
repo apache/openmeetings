@@ -34,6 +34,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
@@ -352,6 +356,10 @@ public class ImportInitvalues {
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
 		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
 		cfgDao.add(CONFIG_GOOGLE_ANALYTICS_CODE, null, null, "Code for Google Analytics");
+		cfgDao.add(CONFIG_FLASH_SECURE, "no", null, "Wether it should try to connect to rtmps first or not\nValid values: yes / no");
+		cfgDao.add(CONFIG_FLASH_SECURE_PROXY, "none", null, "The setting for the NetConnection default settings is 'none'\n set to value 'best' if you are trying to use rtmp over native SSL");
+		cfgDao.add(CONFIG_FLASH_VIDEO_CODEC, "h263", null, "Camera codecType, possible values: 'h263', 'h264'");
+		cfgDao.add(CONFIG_FLASH_VIDEO_FPS, "30", null, "Camera FPS, should be positive number in range (0, 60]");
 
 		log.debug("Configurations ADDED");
 	}

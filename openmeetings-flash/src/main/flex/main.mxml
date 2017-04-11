@@ -21,8 +21,8 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		width="570" height="900" pageTitle="Openmeetings"
-		preinitialize="init()" fontSize="12" applicationComplete="appInit()">
+		width="570" height="900" pageTitle="Openmeetings" fontSize="12"
+		applicationComplete="appInit(event)" uncaughtError="uncaughtError(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<mx:TraceTarget/>
@@ -32,10 +32,7 @@
 
 		import org.apache.openmeetings.OmVideo;
 
-		private var sid:String;
-		private var roomid:int;
 		private var audioOnly:Boolean = false;
-		private var labels:Object = new Object();
 		private var FPS:int;
 		private var bandwidth:int = 0;
 		private var quality:int = 100;
@@ -46,36 +43,12 @@
 		private var selectedCam:int = -1;
 		private var video:OmVideo;
 		private var recName:String;
-		private var codec:String = OmVideo.CODEC_H264;
-		private var protocol:String;
-		private var host:String;
-		private var port:String;
-		private var app:String;
+		private var mic:Microphone = null;
 		[Bindable]
 		private var interview:Boolean = false;
 
-		private function init():void {
-			trace("init()");
-			var tla:Object = FlexGlobals.topLevelApplication;
-			sid = tla.parameters['sid'];
-			roomid = tla.parameters['roomid'];
-			audioOnly = 'true' == tla.parameters['audioOnly'];
-			interview = 'true' == tla.parameters['interview'];
-			var _fps:int = parseInt(tla.parameters['fps']);
-			FPS = interview ? 24 : (isNaN(_fps) || _fps < 1 ? 30 : _fps);
-
-			var lbls:Array = JSON.parse(tla.parameters['labels']) as Array;
-			for (var i:int = 0; i < lbls.length; ++i) {
-				labels[lbls[i].id] = lbls[i].value;
-			}
-			protocol = tla.parameters['protocol'];
-			host = tla.parameters['host'];
-			port = tla.parameters['port'];
-			app = tla.parameters['app'];
-		}
-
-		private function debug(str:String):void {
-			ExternalInterface.call("console.log", str);
+		private function debug(...rest):void {
+			ExternalInterface.call("console.log", rest);
 		}
 
 		private function camAvail():Boolean {
@@ -86,10 +59,15 @@
 			return Microphone.names.length > 0;
 		}
 
-		private function appInit():void {
-			video = new OmVideo(videoDisplay, codec, protocol + "://" + host + ":" + port + "/" + app);
-
+		private function appInit(evt:Event):void {
 			var tla:Object = FlexGlobals.topLevelApplication;
+			debug("appInit()", tla.parameters);
+			audioOnly = 'true' == tla.parameters['audioOnly'];
+			interview = 'true' == tla.parameters['interview'];
+			var _fps:int = parseInt(tla.parameters['fps']);
+			FPS = (isNaN(_fps) || _fps < 1 ? 30 : _fps);
+			video = new OmVideo(videoDisplay, tla.parameters);
+
 			ExternalInterface.addCallback("getDevices", function ():Object {
 				return {
 					cams: Camera.names
@@ -115,7 +93,17 @@
 				selectedMic = micIdx;
 				setResolution(width, height, true);
 			});
+			ExternalInterface.addCallback("startRec", function ():void {
+				startTestRecording();
+			});
+			ExternalInterface.addCallback("play", function ():void {
+				playTestRecording();
+			});
 			ExternalInterface.call("VideoSettings.initSwf");
+		}
+
+		private function uncaughtError(e:UncaughtErrorEvent):void {
+			debug("Unexpected ERROR", e);
 		}
 
 		private function getMic():Microphone {
@@ -124,16 +112,15 @@
 			if (selectedMic > -1) {
 				_micro = echoPath == 0 ? Microphone.getMicrophone(selectedMic) : Microphone.getEnhancedMicrophone(selectedMic);
 
-				if (_micro != null && echoPath == 256) {
-					var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
-					options.mode = MicrophoneEnhancedMode.FULL_DUPLEX;
-					options.echoPath = 256;
-					options.nonLinearProcessing = true;
-					_micro.enhancedOptions = options;
-					debug("echoPath set to 256 " + _micro.enhancedOptions);
-				}
-
 				if (_micro != null) {
+					if (echoPath == 256) {
+						var options:MicrophoneEnhancedOptions = new MicrophoneEnhancedOptions();
+						options.mode = MicrophoneEnhancedMode.FULL_DUPLEX;
+						options.echoPath = echoPath;
+						options.nonLinearProcessing = true;
+						_micro.enhancedOptions = options;
+						debug("echoPath set to " + echoPath + ", " + _micro.enhancedOptions);
+					}
 					_micro.codec = SoundCodec.NELLYMOSER;
 					_micro.framesPerPacket = 1;
 					_micro.setSilenceLevel(0, 2000);
@@ -186,12 +173,13 @@
 					video.attachCamera(cam);
 					cam.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
 						debug("cameraStatusHandler! " + event);
-						//cam.removeEventListener(StatusEvent.STATUS, arguments.callee);
+						cam.removeEventListener(StatusEvent.STATUS, arguments.callee);
 						switch (event.code) {
 							case 'Camera.Muted':
 								debug("Unable to connect to active camera.");
 								break;
 							case 'Camera.Unmuted':
+								ExternalInterface.call("VideoSettings.allowRec", true);
 								_attachCamera(getCam());
 								break;
 						}
@@ -200,20 +188,22 @@
 					_attachCamera(cam);
 				}
 			} else {
-				var mic:Microphone = getMic();
-				if (mic != null) {
-					if (mic.muted) {
+				var _mic:Microphone = getMic();
+				if (_mic != null) {
+					if (_mic.muted) {
 						var nc:NetConnection = new NetConnection();
 						nc.connect(null);
 						var ns:NetStream = new NetStream(nc);
-						ns.attachAudio(mic);
-						mic.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
+						ns.attachAudio(_mic);
+						_mic.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
 							debug("micStatusHandler! " + event);
-							mic.removeEventListener(StatusEvent.STATUS, arguments.callee);
+							_mic.removeEventListener(StatusEvent.STATUS, arguments.callee);
 							ns.close();
 							nc.close();
-							if (mic.muted) {
+							if (_mic.muted) {
 								debug("Unable to connect to active microphone.");
+							} else {
+								ExternalInterface.call("VideoSettings.allowRec", true);
 							}
 						});
 					}
@@ -257,39 +247,39 @@
 		}
 
 		private function startTestRecording():void {
-			var counter:int = 5;
-			timerText.visible = true;
-			timerText.text = "5 sec";
-			var recTimer:Timer = new Timer(1000, counter);
-			var t:Date = new Date();
-			recName = "TEST_SETUP_" + t.getTime();
-			var mic:Microphone = getMic();
-			video.record(recName, getCam(), mic, function ():void {
-				mic.addEventListener(ActivityEvent.ACTIVITY, micActivityHandler);
-				//mic.onA
-				var micTimer:Timer = new Timer(100, 0);
-				micTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
-					//FIXME TODO fill.width = mic.activityLevel * RIGHT_WIDTH / 100;
-					debug("activity: " + mic.activityLevel);
+			try {
+				var counter:int = 5;
+				timerText.visible = true;
+				timerText.text = "5 sec";
+				var recTimer:Timer = new Timer(1000, counter);
+				var t:Date = new Date();
+				recName = "TEST_SETUP_" + t.getTime();
+				mic = getMic();
+				var activityTimer:Timer = new Timer(100);
+				activityTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+					ExternalInterface.call("VideoSettings.micActivity", mic.activityLevel);
 				});
-				recTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
-					timerText.text = --counter + " sec";
-					if (counter == 0) {
-						timerText.visible = false;
-						playTestRecording();
-						micTimer.stop();
-						mic.removeEventListener(ActivityEvent.ACTIVITY, micActivityHandler);
+				video.record(recName, getCam(), mic, function ():void {
+					if (mic != null) {
+						activityTimer.start();
 					}
+					recTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+						timerText.text = --counter + " sec";
+						if (counter == 0) {
+							timerText.visible = false;
+							ExternalInterface.call("VideoSettings.allowPlay");
+							playTestRecording();
+							activityTimer.stop();
+							mic = null;
+						}
+					});
+					recTimer.start();
 				});
-				recTimer.start();
-				micTimer.start();
-			});
+			} catch (err:Error) {
+				debug("ERROR: " + err);
+			}
 		}
-
-		private function micActivityHandler(event:ActivityEvent):void {
-			//Do nothing, it just need to be there.
-		}
-	]]></fx:Script>
+		]]></fx:Script>
 
 	<mx:UIComponent id="videoDisplay" width="0" height="0" />
 	<s:Label id="timerText" height="20" width="45" x="20" y="5" paddingLeft="5" paddingTop="5"

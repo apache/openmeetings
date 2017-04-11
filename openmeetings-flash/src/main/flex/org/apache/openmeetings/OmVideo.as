@@ -19,6 +19,7 @@
 package org.apache.openmeetings {
 import flash.events.AsyncErrorEvent;
 import flash.events.NetStatusEvent;
+import flash.external.ExternalInterface;
 import flash.media.Camera;
 import flash.media.H264Level;
 import flash.media.H264Profile;
@@ -43,13 +44,12 @@ public class OmVideo {
 	public var width:int;
 	public var height:int;
 	private var mode:String;
-	private var codec:String;
-	private var url:String;
+	private var params:Object;
+	private var fallback:Boolean;
 
-	public function OmVideo(ui:UIComponent, codec:String, url:String) {
+	public function OmVideo(ui:UIComponent, params:Object) {
 		this.ui = ui;
-		this.codec = codec;
-		this.url = url;
+		this.params = params;
 	}
 
 	private function getVideo():Video {
@@ -84,44 +84,42 @@ public class OmVideo {
 		vid = null;
 	}
 
+	private function debug(... rest):void {
+		ExternalInterface.call("console.log", rest);
+	}
+
 	private function createStream():void {
+		debug("createStream: ");
 		ns = new NetStream(nc);
 		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
 		//according to the docs the construct to catch event has to be implemented like this.
 		//var t = this;
-		var clientObject:Object = new Object();
-		clientObject.onMetaData = function(metadata:Object):void {
-			//t.onMetaData(metadata);
-			trace("onMetaData: ", metadata);
+		ns.client = {
+			onMetaData: function(metadata:Object):void {
+				debug("onMetaData: ", metadata);
+			}
+			, onPlayStatus: function(metadata:Object):void {
+				debug("onPlayStatus: ", metadata);
+			}
+			, onCuePoint: function(metadata:Object):void {
+				debug("onCuePoint: ", metadata);
+			}
+			, ioError: function(error:Object):void {
+				debug("ioError: ", error);
+			}
+			, netStatus: function(status:Object):void {
+				debug("netStatus: ", status);
+			}
+			, asyncError: function(error:Object):void {
+				debug("asyncError: ", error);
+			}
 		};
-		clientObject.onPlayStatus = function(metadata:Object):void {
-			//t.onPlayStatus(metadata);
-			trace("onPlayStatus: ", metadata);
-		};
-		clientObject.onCuePoint = function(metadata:Object):void {
-			//t.onCuePoint(metadata);
-			trace("onCuePoint: ", metadata);
-		};
-		clientObject.ioError = function(error:Object):void {
-			//t.ioError(error);
-			trace("ioError: ", error);
-		};
-		clientObject.netStatus = function(status:Object):void {
-			//t.netStatus(status);
-			trace("netStatus: ", status);
-		};
-		clientObject.asyncError = function(error:Object):void {
-			//t.asyncError(error);
-			trace("asyncError: ", error);
-		};
-		ns.client = clientObject;
 		//this is a workaround, attaching the event to the client object does not work
 		ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
 	}
 
 	private function onNetStatus2(evt:Object):void {
-		trace("netStream_onNetStatus: ", evt.info.code, evt.target);
-		//this.onNetStatus.sendEvent(evt.info);
+		debug("netStream_onNetStatus: ", evt.info.code, evt.target);
 	}
 
 	private function _publish(mode:String, name:String, cam:Camera, mic:Microphone, f:Function):void {
@@ -137,8 +135,8 @@ public class OmVideo {
 			attachCamera(cam);
 
 			var videoStreamSettings:VideoStreamSettings = null;
-			trace("codec = " + codec);
-			if (codec === CODEC_H264) {
+			debug("codec = " + params.videoCodec);
+			if (params.videoCodec === CODEC_H264) {
 				var vss:H264VideoStreamSettings = new H264VideoStreamSettings();
 				vss.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
 				videoStreamSettings = vss;
@@ -147,7 +145,7 @@ public class OmVideo {
 			}
 			videoStreamSettings.setQuality(cam.bandwidth, cam.quality);
 			videoStreamSettings.setKeyFrameInterval(cam.keyFrameInterval);
-			trace("::keyFrameInterval " + cam.keyFrameInterval);
+			debug("::keyFrameInterval " + cam.keyFrameInterval);
 			videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
 			ns.videoStreamSettings = videoStreamSettings;
 		}
@@ -162,12 +160,22 @@ public class OmVideo {
 		}
 	}
 
+	private function getUrl():String {
+		var secure:Boolean = ('true' === params.secure);
+		var url:String = (secure ? "rtmps" : "rtmp") + "://"
+				+ params.host + ":" + (secure ? params.rtmpsPort : params.rtmpPort)
+				+ "/" + params.app;
+		//TODO fallback
+		return url;
+	}
+
 	private function publish(mode:String, name:String, cam:Camera, mic:Microphone, f:Function):void {
 		if (nc == null || !nc.connected) {
-			trace("NetConnection is not connected");
+			var url:String = getUrl();
+			debug("NetConnection is not connected", url);
 			nc = new NetConnection();
 			nc.addEventListener(NetStatusEvent.NET_STATUS, function onConnectionStatus(e:NetStatusEvent):void {
-				trace("ConnectionStatus: " + e.info.code);
+				debug("ConnectionStatus: " + e.info.code);
 				if (e.info.code == "NetConnection.Connect.Success") {
 					_publish(mode, name, cam, mic, f);
 				} else {
@@ -175,26 +183,28 @@ public class OmVideo {
 				}
 			});
 			nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, function (event:AsyncErrorEvent):void {
-				trace("login Async error" + event);
+				debug("login Async error" + event);
 			});
 			nc.client = {
 				onMetaData: function (infoObject:Object):void {
-					for (var propName:String in infoObject) {
-						trace(propName + " = " + infoObject[propName]);
-					}
+					debug("onMetaData::", infoObject);
 				}
 				, onBWDone: function(...rest):void {
-					trace("onBWDone");
+					debug("onBWDone");
 				}
 				, onBWCheck: function(...rest):Number {
-					trace("onBWCheck");
+					debug("onBWCheck");
 					return 0;
 				}
 				, setId: function (id:Number):void {
-					trace("id: " + id); //TODO save connection id
+					debug("id: " + id); //TODO save connection id
 				}
 			};
-			nc.connect(url);
+			nc.connect(url, {
+				uid: params.uid
+				, sid: params.sid
+				, nativeSsl: 'best' == params.proxyType
+			});
 		} else {
 			_publish(mode, name, cam, mic, f);
 		}
@@ -205,6 +215,7 @@ public class OmVideo {
 	}
 
 	public function play(name:String):void {
+		debug("PLAY::", name);
 		if (ns != null){
 			reset();
 		}
@@ -215,16 +226,15 @@ public class OmVideo {
 		//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
 		//after re-syncing the stream
 		//this.setBuffer(0.1);
-		ns.play(name);
+		ns.play(name + ".flv");
 	}
 
 	public function reset():void {
-		var vid:Video = getVideo();
 		if (ns != null) {
 			switch (mode) {
 				case PLAY:
 					ns.pause();
-					ns.close();
+					ns.dispose();
 					clear();
 					break;
 				case BROADCAST:
@@ -232,7 +242,7 @@ public class OmVideo {
 					ns.publish(null); //false in original code
 				default:
 					clear();
-					ns.close();
+					ns.dispose();
 					break;
 			}
 		} else {

@@ -51,6 +51,10 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_IMAGEMAGIC_PATH = "imagemagick_path";
 	public static final String CONFIG_DOCUMENT_DPI = "document.dpi";
 	public static final String CONFIG_DOCUMENT_QUALITY = "document.quality";
+	public static final String CONFIG_FLASH_SECURE = "flash.secure";
+	public static final String CONFIG_FLASH_SECURE_PROXY = "flash.secure.proxy";
+	public static final String CONFIG_FLASH_VIDEO_CODEC = "flash.video.codec";
+	public static final String CONFIG_FLASH_VIDEO_FPS = "flash.video.fps";
 	public static final String MENU_ROOMS_NAME = "Conference Rooms";
 	public static final int RECENT_ROOMS_COUNT = 5;
 	public static final int LEVEL_USER = 1;
