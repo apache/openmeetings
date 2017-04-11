@@ -41,12 +41,13 @@ import org.apache.wicket.util.time.Duration;
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
-	private final AbstractAjaxTimerBehavior areaBehavior;
+	private AbstractAjaxTimerBehavior areaBehavior;
 	private final MainPanel main = new MainPanel("main");
-	private final InviteUserToRoomDialog inviteUser;
+	private InviteUserToRoomDialog inviteUser;
 
-	public MainPage() {
-		super();
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		getHeader().setVisible(false);
 		add(main, inviteUser = new InviteUserToRoomDialog("invite-to-room"));
 		//load preselected content
@@ -68,7 +69,7 @@ public class MainPage extends BaseInitedPage {
 			protected void respond(AjaxRequestTarget target) {
 				inviteUser.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
-			
+
 			@Override
 			public void renderHead(Component component, IHeaderResponse response) {
 				super.renderHead(component, response);

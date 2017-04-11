@@ -393,6 +393,9 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(Client c, ChatMessage m, FastDateFormat fmt) {
+		if (c == null) {
+			return;
+		}
 		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", Arrays.asList("chat", encodeChatMessage(m, fmt)));

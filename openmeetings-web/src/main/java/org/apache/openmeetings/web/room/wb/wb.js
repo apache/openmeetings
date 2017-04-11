@@ -154,6 +154,7 @@ var APointer = function(wb) {
 	}
 	pointer.activate = function() {
 		wb.eachCanvas(function(canvas) {
+			canvas.selection = false;
 			canvas.on('mouse:up', pointer.mouseUp);
 		});
 		pointer.user = $('.room.sidebar.left .user.list .current .name').text();
@@ -681,13 +682,16 @@ var Wb = function() {
 	}
 	function _modifyHandler(_o) {
 		_removeHandler(_o);
-		canvases[_o.slide].add(_o);
+		var canvas = canvases[_o.slide];
+		_o.selectable = canvas.selection;
+		canvas.add(_o);
 	}
 	function _createHandler(_o) {
 		switch (_o.fileType) {
 			case 'Video':
 			case 'Recording':
 			{
+				var canvas = canvases[_o.slide];
 				var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
 					.attr("width", _o.width).attr("height", _o.height)
 					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
@@ -696,7 +700,8 @@ var Wb = function() {
 					left: _o.left
 					, top: _o.top
 				});
-				canvases[_o.slide].add(vImg);
+				vImg.selectable = canvas.selection;
+				canvas.add(vImg);
 				//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
 			}
 				break;
@@ -726,7 +731,11 @@ var Wb = function() {
 			}
 				break;
 			default:
-				canvases[_o.slide].add(_o);
+			{
+				var canvas = canvases[_o.slide];
+				_o.selectable = canvas.selection;
+				canvas.add(_o);
+			}
 				break;
 		}
 	}
@@ -754,6 +763,8 @@ var Wb = function() {
 	}
 	//events
 	function wbObjCreatedHandler(o) {
+		if (readOnly && o.type != 'pointer') return;
+
 		var json = {};
 		switch(o.type) {
 			case 'pointer':
@@ -778,10 +789,15 @@ var Wb = function() {
 				o.slide = this.slide;
 				wbObjCreatedHandler(o);
 				break;
+			default:
+				o.selectable = this.selection;
+				break;
 		}
 	};
 	function objModifiedHandler(e) {
 		var o = e.target;
+		if (readOnly && o.type != 'pointer') return;
+
 		o.includeDefaultValues = false;
 		wbAction('modifyObj', JSON.stringify({
 			wbId: wb.id
@@ -838,25 +854,25 @@ var Wb = function() {
 		console.log('Text Changed', obj);
 	};*/
 	function setHandlers(canvas) {
+		canvas.on({
+			'wb:object:created': wbObjCreatedHandler
+			, 'object:modified': objModifiedHandler
+		});
 		if (readOnly) {
 			canvas.off({
 				'object:added': objAddedHandler
-				, 'object:modified': objModifiedHandler
 				, 'object:selected': objSelectedHandler
 				, 'path:created': pathCreatedHandler
 				//, 'text:editing:exited': textEditedHandler
 				//, 'text:changed': textChangedHandler
-				, 'wb:object:created': wbObjCreatedHandler
 			});
 		} else {
 			canvas.on({
 				'object:added': objAddedHandler
-				, 'object:modified': objModifiedHandler
 				, 'object:selected': objSelectedHandler
 				, 'path:created': pathCreatedHandler
 				//, 'text:editing:exited': textEditedHandler
 				//, 'text:changed': textChangedHandler
-				, 'wb:object:created': wbObjCreatedHandler
 			});
 		}
 	}
@@ -865,7 +881,9 @@ var Wb = function() {
 		var cid = 'can-' + a.attr('id') + '-slide-' + sl;
 		var c = $('<canvas></canvas>').attr('id', cid);
 		a.find('.canvases').append(c);
-		var canvas = new fabric.Canvas(c.attr('id'));
+		var canvas = new fabric.Canvas(c.attr('id'), {
+			preserveObjectStacking: true
+		});
 		canvas.wbId = wb.id;
 		canvas.slide = sl;
 		canvases.push(canvas);
