@@ -16,8 +16,8 @@
    limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
@@ -35,7 +35,7 @@
 		<commons-dbcp.version>2.1.1</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
 		<commons-pool2.version>2.4.2</commons-pool2.version>
-		<postgresql.version>9.4.1212.jre7</postgresql.version>
+		<postgresql.version>42.0.0</postgresql.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<dependencies>
@@ -107,11 +107,6 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.tdunning</groupId>
-			<artifactId>json</artifactId>
-			<version>1.8</version> <!-- FIXME need to be removed with update to wicket-8.x -->
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -120,27 +115,27 @@
 				<artifactId>openjpa-maven-plugin</artifactId>
 				<version>${openjpa.version}</version>
 				<configuration>
-				    <includes>**/entity/**/*.class</includes>
-				    <addDefaultConstructor>true</addDefaultConstructor>               
-				    <enforcePropertyRestrictions>true</enforcePropertyRestrictions>
-				    <persistenceXmlFile>${project.parent.basedir}/openmeetings-web/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml</persistenceXmlFile>
+					<includes>**/entity/**/*.class</includes>
+					<addDefaultConstructor>true</addDefaultConstructor>
+					<enforcePropertyRestrictions>true</enforcePropertyRestrictions>
+					<persistenceXmlFile>${project.parent.basedir}/openmeetings-web/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml</persistenceXmlFile>
 				</configuration>
 				<executions>
-				    <execution>
-				        <id>enhancer</id>
-				        <phase>process-classes</phase>
-				        <goals>
-				            <goal>enhance</goal>
-				        </goals>
-				    </execution>
+					<execution>
+						<id>enhancer</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>enhance</goal>
+						</goals>
+					</execution>
 				</executions>
 				<dependencies>
-				    <dependency>
-				        <groupId>org.apache.openjpa</groupId>
-				        <artifactId>openjpa</artifactId>
-				        <!-- set the version to be the same as the level in your runtime -->
-				        <version>${openjpa.version}</version>
-				    </dependency>
+					<dependency>
+						<groupId>org.apache.openjpa</groupId>
+						<artifactId>openjpa</artifactId>
+						<!-- set the version to be the same as the level in your runtime -->
+						<version>${openjpa.version}</version>
+					</dependency>
 				</dependencies>
 			</plugin>
 		</plugins>
