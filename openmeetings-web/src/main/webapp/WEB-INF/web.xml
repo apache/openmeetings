@@ -35,7 +35,7 @@
 		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
 		<init-param>
 			<param-name>config-location</param-name>
-			<param-value>classpath:openmeetings-applicationContext.xml</param-value>
+			<param-value>classpath:applicationContext.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 		<async-supported>true</async-supported>

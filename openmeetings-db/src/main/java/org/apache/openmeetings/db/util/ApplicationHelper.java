@@ -100,7 +100,7 @@ public class ApplicationHelper {
 				OMContextListener omcl = new OMContextListener();
 				omcl.contextInitialized(new ServletContextEvent(sc));
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
-				xmlContext.setConfigLocation("classpath:openmeetings-applicationContext.xml");
+				xmlContext.setConfigLocation("classpath:applicationContext.xml");
 				xmlContext.setServletContext(sc);
 				xmlContext.refresh();
 				sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);

@@ -34,16 +34,20 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.SwfPanel;
+import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -137,9 +141,25 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			}
 		}
 		StringValue swf = p.get(SWF);
-		if (!swf.isEmpty() && (SWF_TYPE_NETWORK.equals(swf.toString()) || SWF_TYPE_SETTINGS.equals(swf.toString()))) {
-			replace(new SwfPanel(PANEL_MAIN, p));
-			error = false;
+		if (!swf.isEmpty()) {
+			if (SWF_TYPE_NETWORK.equals(swf.toString())) {
+				replace(new SwfPanel(PANEL_MAIN, p));
+				error = false;
+			}
+			if (SWF_TYPE_SETTINGS.equals(swf.toString())) {
+				replace(new VideoSettings(PANEL_MAIN).add(new OmAjaxClientInfoBehavior() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
+						super.onClientInfo(target, info);
+						target.appendJavaScript(
+								VideoSettings.getInitScript((ExtendedClientProperties)info.getProperties(), "hibernate", "networktest")
+								.append("VideoSettings.open();"));
+					}
+				}));
+				error = false;
+			}
 		}
 		add(recContainer.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true),
 				vp.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));

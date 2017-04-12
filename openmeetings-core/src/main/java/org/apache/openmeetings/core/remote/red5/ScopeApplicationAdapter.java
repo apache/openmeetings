@@ -18,18 +18,15 @@
  */
 package org.apache.openmeetings.core.remote.red5;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,11 +39,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.data.conference.RoomManager;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.remote.RecordingService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -62,8 +56,6 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
-import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -105,14 +97,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String SECURITY_CODE_PARAM = "securityCode";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
-	private static final String NATIVE_SSL_PARAM = "nativeSsl";
+	public static final String FLASH_SECURE = "secure";
+	public static final String FLASH_NATIVE_SSL = "native";
+	public static final String FLASH_PORT = "rtmpPort";
+	public static final String FLASH_SSL_PORT = "rtmpsPort";
+	public static final String FLASH_VIDEO_CODEC = "videoCodec";
+	public static final String FLASH_FPS = "fps";
 
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private WhiteboardManager whiteboardManager;
-	@Autowired
-	private WhiteboardCache whiteboardCache;
 	@Autowired
 	private RecordingService recordingService;
 	@Autowired
@@ -161,12 +154,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				props.load(is);
 			}
 			flashSettings = new JSONObject()
-					.put("secure", "yes".equals(cfgDao.getConfValue(CONFIG_FLASH_SECURE, String.class, "no")))
-					.put("proxyType", cfgDao.getConfValue(CONFIG_FLASH_SECURE_PROXY, String.class, "none"))
-					.put("rtmpPort", props.getProperty("rtmp.port"))
-					.put("rtmpsPort", props.getProperty("rtmps.port"))
-					.put("videoCodec", cfgDao.getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
-					.put("fps", cfgDao.getConfValue(OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
+					.put(FLASH_SECURE, "yes".equals(cfgDao.getConfValue(CONFIG_FLASH_SECURE, String.class, "no")))
+					.put(FLASH_NATIVE_SSL, "best".equals(cfgDao.getConfValue(CONFIG_FLASH_SECURE_PROXY, String.class, "none")))
+					.put(FLASH_PORT, props.getProperty("rtmp.port"))
+					.put(FLASH_SSL_PORT, props.getProperty("rtmps.port"))
+					.put(FLASH_VIDEO_CODEC, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
+					.put(FLASH_FPS, cfgDao.getConfValue(OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
 					;
 
 			for (String scopeName : scope.getScopeNames()) {
@@ -307,7 +300,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		rcm.setUserip(conn.getRemoteAddress());
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
-		rcm.setNativeSsl(Boolean.TRUE.equals(connParams.get(NATIVE_SSL_PARAM)));
 		if (!Strings.isEmpty(uid)) {
 			rcm.setPublicSID(uid);
 		}
@@ -1151,212 +1143,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return null;
 	}
 
-	/**
-	 * This Function is triggered from the Whiteboard
-	 *
-	 * @param whiteboardObjParam - array of parameters being sended to whiteboard
-	 * @param whiteboardId - id of whiteboard parameters will be send to
-	 * @return 1 in case of no errors, -1 otherwise
-	 */
-	public int sendVarsByWhiteboardId(List<?> whiteboardObjParam, Long whiteboardId) {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			return sendToWhiteboard(client, whiteboardObjParam, whiteboardId);
-		} catch (Exception err) {
-			log.error("[sendVarsByWhiteboardId]", err);
-			return -1;
-		}
-	}
-
-	private static Point getSize(FileItem fi) {
-		Point result = new Point(0, 0);
-		if (fi.getWidth() != null && fi.getHeight() != null) {
-			result.x = fi.getWidth();
-			result.y = fi.getHeight();
-		}
-		return result;
-	}
-
-	private static List<?> getWbObject(FileItem fi, String url) {
-		Point size = getSize(fi);
-		String type = "n/a";
-		switch (fi.getType()) {
-			case Image:
-				type = "image";
-				break;
-			case Presentation:
-				type = "swf";
-				break;
-			default:
-		}
-		return Arrays.asList(
-				type // 0
-				, url // urlname
-				, "--dummy--" // baseurl
-				, fi.getName() // fileName //3
-				, "--dummy--" // moduleName //4
-				, "--dummy--" // parentPath //5
-				, "--dummy--" // room //6
-				, "--dummy--" // domain //7
-				, 1 // slideNumber //8
-				, 0 // innerx //9
-				, 0 // innery //10
-				, size.x // innerwidth //11
-				, size.y // innerheight //12
-				, 20 // zoomlevel //13
-				, size.x // initwidth //14
-				, size.y // initheight //15
-				, 100 // currentzoom //16 FIXME TODO
-				, fi.getHash() // uniquObjectSyncName //17
-				, fi.getName() // standardFileName //18
-				, true // fullFit //19 FIXME TODO
-				, 0 // zIndex //-8
-				, null //-7
-				, 0 // this.counter //-6 FIXME TODO
-				, 0 // posx //-5
-				, 0 // posy //-4
-				, size.x // width //-3
-				, size.y // height //-2
-				, fi.getHash() // this.currentlayer.name //-1
-				);
-	}
-
-	private static List<?> getMp4WbObject(FileItem fi, String url) {
-		Point size = getSize(fi);
-		return Arrays.asList(
-				"flv" // 0: 'flv'
-				, fi.getId() // 1: 7
-				, fi.getName() // 2: 'BigBuckBunny_512kb.mp4'
-				, url // 3: posterUrl
-				, size.x // 4: 416
-				, size.y // 5: 240
-				, 0 // 6: 1 // z-index
-				, fi.getHash() // 7: null //TODO
-				, 0 // 8: 0 //TODO // counter
-				, 0 // 9: 0 //TODO // x
-				, 0 // 10: 0 //TODO // y
-				, size.x // 11: 749 // width
-				, size.y // 12: 739 // height
-				, fi.getHash() // 13: 'flv_1469602000351'
-				);
-	}
-
-	private static void copyFileToRoom(Long roomId, FileItem f) {
-		try {
-			if (roomId != null && f != null) {
-				File mp4 = f.getFile(EXTENSION_MP4);
-
-				File targetFolder = OmFileHelper.getStreamsSubDir(roomId);
-
-				File target = new File(targetFolder, mp4.getName());
-				if (mp4.exists() && !target.exists()) {
-					FileUtils.copyFile(mp4, target, false);
-				}
-			}
-		} catch (Exception err) {
-			log.error("[copyFileToCurrentRoom] ", err);
-		}
-	}
-
-	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url, boolean clean) {
-		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
-		if (csi == null) {
-			log.warn("No client was found to send Wml:: {}", uid);
-			return;
-		}
-		Client client = csi.getRcl();
-
-		List<?> wbObject = new ArrayList<>();
-		switch (fi.getType()) {
-			case Image:
-				wbObject = getWbObject(fi, url);
-				break;
-			case Presentation:
-				wbObject = getWbObject(fi, url);
-				break;
-			case Video:
-			case Recording:
-				wbObject = getMp4WbObject(fi, url);
-				copyFileToRoom(client.getRoomId(), fi);
-				break;
-			default:
-		}
-		if (clean) {
-			Map<String, Object> wbClear = new HashMap<>();
-			wbClear.put("id", wbId);
-			wbClear.put("param", Arrays.asList("whiteboard", new Date(), "clear", null));
-
-			whiteboardCache.clear(client.getRoomId(), wbId);
-			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", Arrays.asList(null, wbClear));
-		}
-		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
-	}
-
-	private int sendToWhiteboard(Client client, List<?> wbObj, Long wbId) {
-		try {
-			// Check if this User is the Mod:
-			if (client == null) {
-				return -1;
-			}
-
-			Map<Integer, Object> whiteboardObj = new HashMap<>();
-			int i = 0;
-			for (Object obj : wbObj) {
-				whiteboardObj.put(i++, obj);
-			}
-
-			Long roomId = client.getRoomId();
-
-			// log.debug("***** sendVars: " + whiteboardObj);
-
-			// Store event in list
-			String action = whiteboardObj.get(2).toString();
-
-			if (action.equals("deleteMindMapNodes")) {
-				// Simulate Single Delete Events for z-Index
-				List<?> actionObject = (List<?>) whiteboardObj.get(3);
-
-				@SuppressWarnings("unchecked")
-				List<List<?>> itemObjects = (List<List<?>>) actionObject.get(3);
-
-				Map<Integer, Object> whiteboardTempObj = new HashMap<>();
-				whiteboardTempObj.put(2, "delete");
-
-				for (List<?> itemObject : itemObjects) {
-					List<Object> tempActionObject = new ArrayList<>();
-					tempActionObject.add("mindmapnode");
-					tempActionObject.add(itemObject.get(0)); // z-Index -8
-					tempActionObject.add(null); // simulate -7
-					tempActionObject.add(null); // simulate -6
-					tempActionObject.add(null); // simulate -5
-					tempActionObject.add(null); // simulate -4
-					tempActionObject.add(null); // simulate -3
-					tempActionObject.add(null); // simulate -2
-					tempActionObject.add(itemObject.get(1)); // Object-Name -1
-
-					whiteboardTempObj.put(3, tempActionObject);
-
-					whiteboardManager.add(roomId, whiteboardTempObj, wbId);
-				}
-			} else {
-				whiteboardManager.add(roomId, whiteboardObj, wbId);
-			}
-
-			Map<String, Object> sendObject = new HashMap<>();
-			sendObject.put("id", wbId);
-			sendObject.put("param", wbObj);
-
-			boolean showDrawStatus = getWhiteboardDrawStatus();
-
-			sendToScope(roomId, "sendVarsToWhiteboardById", new Object[] { showDrawStatus ? client : null, sendObject });
-		} catch (Exception err) {
-			log.error("[sendToWhiteboard]", err);
-			return -1;
-		}
-		return 1;
-	}
-
 	public int sendMessage(Object newMessage) {
 		sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
 		return 1;
@@ -1865,10 +1651,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("[getClientListScope]", err);
 		}
 		return new ArrayList<>();
-	}
-
-	private boolean getWhiteboardDrawStatus() {
-		return cfgDao.getWhiteboardDrawStatus();
 	}
 
 	public String getCryptKey() {

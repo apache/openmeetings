@@ -160,18 +160,9 @@ public class OmVideo {
 		}
 	}
 
-	private function getUrl():String {
-		var secure:Boolean = ('true' === params.secure);
-		var url:String = (secure ? "rtmps" : "rtmp") + "://"
-				+ params.host + ":" + (secure ? params.rtmpsPort : params.rtmpPort)
-				+ "/" + params.app;
-		//TODO fallback
-		return url;
-	}
-
 	private function publish(mode:String, name:String, cam:Camera, mic:Microphone, f:Function):void {
 		if (nc == null || !nc.connected) {
-			var url:String = getUrl();
+			var url:String = params.url;  //TODO fallback
 			debug("NetConnection is not connected", url);
 			nc = new NetConnection();
 			nc.addEventListener(NetStatusEvent.NET_STATUS, function onConnectionStatus(e:NetStatusEvent):void {

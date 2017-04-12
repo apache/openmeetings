@@ -99,8 +99,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.resource.DynamicJQueryResourceReference;
+import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
@@ -138,8 +137,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		//FIXME TODO v3 on the way
-		getJavaScriptLibrarySettings().setJQueryReference(new JavaScriptResourceReference(DynamicJQueryResourceReference.class, DynamicJQueryResourceReference.VERSION_2));
+		getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
 
 		super.init();
 

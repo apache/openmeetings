@@ -21,24 +21,14 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.documents.LibraryChartLoader;
 import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
-import org.apache.openmeetings.core.documents.LibraryWmlLoader;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -57,17 +47,11 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLibrary.class, webAppRootKey);
 
 	@Autowired
-	private ISessionManager sessionManager;
-	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private FileExplorerItemDao fileDao;
-	@Autowired
-	private WhiteboardManager whiteboardManager;
-	@Autowired
-	private ScopeApplicationAdapter scopeAdapter;
 
 	/**
 	 *
@@ -103,53 +87,6 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 			log.error("[saveAsObject] ", err);
 		}
 		return -1L;
-	}
-
-	/**
-	 * Loads a Object from the library into the whiteboard of all participant of
-	 * the current room
-	 *
-	 * @param uid - uid of the client performing operation
-	 * @param wbId - id of whiteboard
-	 * @param fi - FileItem of the Wml being loaded
-	 */
-	public void sendToWhiteboard(String uid, Long wbId, FileItem fi) {
-		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
-		if (csi == null) {
-			log.warn("No client was found to send Wml:: {}", uid);
-			return;
-		}
-		Client client = csi.getRcl();
-
-		if (client == null) {
-			log.warn("No client was found to send Wml:: {}", uid);
-			return;
-		}
-
-		List<?> roomItems = LibraryWmlLoader.loadWmlFile(fi.getHash());
-
-		Map<Integer, Object> wbClear = new HashMap<>();
-		wbClear.put(2, "clear");
-		wbClear.put(3, null);
-
-		Long roomId = client.getRoomId();
-		whiteboardManager.add(roomId, wbClear, wbId);
-
-		for (int k = 0; k < roomItems.size(); k++) {
-			List<?> actionObject = (List<?>)roomItems.get(k);
-
-			Map<Integer, Object> whiteboardObj = new HashMap<>();
-			whiteboardObj.put(2, "draw");
-			whiteboardObj.put(3, actionObject);
-
-			whiteboardManager.add(roomId, whiteboardObj, wbId);
-		}
-
-		Map<String, Object> sendObject = new HashMap<>();
-		sendObject.put("id", wbId);
-		sendObject.put("roomitems", roomItems);
-
-		scopeAdapter.sendToScope(roomId, "loadWmlToWhiteboardById", sendObject);
 	}
 
 	/**

@@ -204,7 +204,6 @@
 	<bean id="importInitvalues" class="org.apache.openmeetings.installation.ImportInitvalues" />
 	<bean id="ldapLoginManagement" class="org.apache.openmeetings.core.ldap.LdapLoginManagement" />
 	<bean id="timezoneUtil" class="org.apache.openmeetings.db.util.TimezoneUtil" />
-	<bean id="whiteboardManager" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardManager" />
 	<bean id="backupExport" class="org.apache.openmeetings.backup.BackupExport" />
 	<bean id="backupImport" class="org.apache.openmeetings.backup.BackupImport" />
 	<bean id="appointmentManager" class="org.apache.openmeetings.service.calendar.caldav.AppointmentManager" destroy-method="destroy"/>

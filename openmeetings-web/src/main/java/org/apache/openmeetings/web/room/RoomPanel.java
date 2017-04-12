@@ -27,8 +27,6 @@ import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
@@ -36,7 +34,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -65,6 +62,7 @@ import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
 import org.apache.openmeetings.web.room.wb.WbPanel;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -77,14 +75,12 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
@@ -113,30 +109,13 @@ public class RoomPanel extends BasePanel {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			target.appendJavaScript("setRoomSizes();");
+			ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomEnter
 					, getUserId(), "0", r.getId()
-					, WebSession.get().getClientInfo().getProperties().getRemoteAddress()
+					, cp.getRemoteAddress()
 					, "" + r.getId());
-			//TODO SID etc
-			try {
-				URL url = new URL(WebSession.get().getExtendedProperties().getCodebase());
-				String path = url.getPath();
-				path = path.substring(1, path.indexOf('/', 2) + 1);
-				ClientProperties cp = WebSession.get().getClientInfo().getProperties();
-				target.appendJavaScript(String.format("VideoSettings.init(%s);", new JSONObject(getBean(ScopeApplicationAdapter.class).getFlashSettings().toString())
-						.put("uid", getClient().getUid())
-						.put("audioOnly", r.isAudioOnly())
-						.put("SID", WebSession.getSid())
-						.put("interview", Room.Type.interview == r.getType())
-						.put("host", url.getHost())
-						.put("app", path + r.getId())
-						.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct")
-						.toString()
-						));
-			} catch (NullPointerException|MalformedURLException e) {
-				log.error("Error while constructing room parameters", e);
-			}
+			target.appendJavaScript(VideoSettings.getInitScript(cp, "" + r.getId(), getClient().getUid()));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			getMainPanel().getChat().roomEnter(r, target);
 			if (r.isFilesOpened()) {
@@ -616,10 +595,9 @@ public class RoomPanel extends BasePanel {
 
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
-		org.apache.openmeetings.db.entity.room.Client rcl = RoomBroadcaster.getClient(getMainPanel().getClient().getUid());
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
-				&& getSharingUser() == null && rcl != null && rcl.getUserId() != null;
+				&& getSharingUser() == null;
 	}
 
 	public RoomSidebar getSidebar() {

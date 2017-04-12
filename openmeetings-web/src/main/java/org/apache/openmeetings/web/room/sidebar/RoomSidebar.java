@@ -34,12 +34,13 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomBroadcaster;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
+import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -89,6 +90,7 @@ public class RoomSidebar extends Panel {
 	private boolean avInited = false;
 	private int selectedIdx = 0;
 	private Client kickedClient;
+	private VideoSettings settings = new VideoSettings("settings");
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
 
@@ -314,7 +316,7 @@ public class RoomSidebar extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(addFolder);
+		add(addFolder, settings);
 		add(toggleRight, toggleActivity, roomAction, avSettings);
 		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
 			private static final long serialVersionUID = 1L;
