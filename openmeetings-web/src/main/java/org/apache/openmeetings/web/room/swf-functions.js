@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+var labels, config;
 function initSwf(_options) {
 	var options = $.extend({
 		allowfullscreen : 'true',
@@ -44,6 +44,15 @@ function initSwf(_options) {
 		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
 	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
 }
+function loadingComplete() {
+	document.getElementById("swfloading").style.display = 'none';
+	var lzApp = document.getElementById("lzappContainer");
+	lzApp.style.width = '100%';
+	lzApp.style.height = '100%';
+}
 function getStringLabels() {
 	return labels;
+}
+function getConfig() {
+	return config;
 }

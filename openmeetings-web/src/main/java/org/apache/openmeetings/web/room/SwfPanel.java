@@ -18,43 +18,45 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
+import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_PORT;
+import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_SECURE;
+import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_SSL_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
+import java.net.URL;
+
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	private final static Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
 	private final PageParameters pp;
-	private final AbstractDefaultAjaxBehavior panelLoaded = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			PageParameters spp = new PageParameters(pp);
-			target.appendJavaScript(getInitFunction(spp));
-		}
-	};
 
 	public SwfPanel(String id) {
 		this(id, new PageParameters());
@@ -68,7 +70,17 @@ public class SwfPanel extends BasePanel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(panelLoaded);
+		add(new OmAjaxClientInfoBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
+				super.onClientInfo(target, info);
+				ExtendedClientProperties cp = (ExtendedClientProperties)info.getProperties();
+				PageParameters spp = new PageParameters(pp);
+				target.appendJavaScript(getInitFunction(spp, cp));
+			}
+		});
 	}
 
 	private static ResourceReference newResourceReference() {
@@ -79,10 +91,9 @@ public class SwfPanel extends BasePanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
-		response.render(OnDomReadyHeaderItem.forScript(panelLoaded.getCallbackScript()));
 	}
 
-	public String getInitFunction(PageParameters pp) {
+	public String getInitFunction(PageParameters pp, ExtendedClientProperties cp) {
 		String initStr = null;
 		StringValue type = pp.get(SWF);
 		String swf = getFlashFile(type);
@@ -110,9 +121,25 @@ public class SwfPanel extends BasePanel {
 						, "save.success");
 			}
 			JSONObject options = new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp));
-			ClientProperties cp = WebSession.get().getClientInfo().getProperties();
 			options.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
-			initStr = String.format("var labels = %s; initSwf(%s);", lbls, options.toString());
+
+			JSONObject s = new JSONObject();
+			try {
+				URL url = new URL(cp.getCodebase());
+				String path = url.getPath();
+				path = path.substring(1, path.indexOf('/', 2) + 1);
+				JSONObject gs = getBean(ScopeApplicationAdapter.class).getFlashSettings();
+				s.put("flashProtocol", gs.getBoolean(FLASH_SECURE) ? "rtmps" : "rtmp")
+						.put("flashPort", gs.getBoolean(FLASH_SECURE) ? gs.getString(FLASH_SSL_PORT) : gs.getString(FLASH_PORT))
+						.put("proxy", gs.getBoolean(FLASH_NATIVE_SSL) ? "best" : "none")
+						.put("httpProtocol", url.getProtocol())
+						.put("httpPort", url.getPort())
+						.put("host", url.getHost())
+						.put("path", path);
+			} catch (Exception e) {
+				log.error("Error while constructing video settings parameters", e);
+			}
+			initStr = String.format("labels = %s; config = %s; initSwf(%s);", lbls, s, options.toString());
 		}
 		return initStr;
 	}

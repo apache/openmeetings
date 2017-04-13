@@ -80,7 +80,7 @@ public class VideoSettings extends Panel {
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
 			if (gs.getBoolean(FLASH_SECURE)) {
-				s.put(FLASH_NATIVE_SSL, gs.get(FLASH_NATIVE_SSL));
+				s.put(FLASH_NATIVE_SSL, gs.getBoolean(FLASH_NATIVE_SSL));
 				s.put(URL, getUri("rtmps", url.getHost(), gs.getString(FLASH_SSL_PORT), path));
 				s.put(FALLBACK, getUri("rtmps", url.getHost(), url.getPort(), path));
 			} else {
