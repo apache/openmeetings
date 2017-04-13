@@ -137,7 +137,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV3());
+		getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
 
 		super.init();
 

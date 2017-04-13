@@ -65,12 +65,12 @@ public class VideoSettings extends Panel {
 		return String.format("%s://%s:%s/%s", protocol, host, port, app);
 	}
 
-	public static StringBuilder getInitScript(ExtendedClientProperties cp, String scope, String uid) {
+	public static JSONObject getInitJson(ExtendedClientProperties cp, String scope, String uid) {
 		JSONObject gs = getBean(ScopeApplicationAdapter.class).getFlashSettings();
 		JSONObject s = new JSONObject()
 				.put(FLASH_VIDEO_CODEC, gs.get(FLASH_VIDEO_CODEC))
 				.put(FLASH_FPS, gs.get(FLASH_FPS))
-				.put("SID", WebSession.getSid())
+				.put("sid", WebSession.getSid())
 				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
 		if (!Strings.isEmpty(uid)) {
 			s.put("uid", uid);
@@ -90,6 +90,6 @@ public class VideoSettings extends Panel {
 		} catch (Exception e) {
 			log.error("Error while constructing video settings parameters", e);
 		}
-		return new StringBuilder("VideoSettings.init(").append(s.toString()).append(");");
+		return s;
 	}
 }

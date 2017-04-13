@@ -25,6 +25,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
+import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Calendar;
@@ -81,6 +82,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.interaction.droppable.Droppable;
@@ -115,7 +117,10 @@ public class RoomPanel extends BasePanel {
 					, getUserId(), "0", r.getId()
 					, cp.getRemoteAddress()
 					, "" + r.getId());
-			target.appendJavaScript(VideoSettings.getInitScript(cp, "" + r.getId(), getClient().getUid()));
+			//TODO add all broadcasting clients
+			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getUid());
+			options.put("interview", Room.Type.interview == r.getType());
+			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			getMainPanel().getChat().roomEnter(r, target);
 			if (r.isFilesOpened()) {
@@ -354,9 +359,14 @@ public class RoomPanel extends BasePanel {
 						}
 						break;
 					case rightUpdated:
-						sidebar.update(handler);
-						menu.update(handler);
-						wb.update(handler);
+						{
+							Client c = getOnlineClient(((TextRoomMessage)m).getText());
+							handler.appendJavaScript(String.format("VideoManager.update(%s);"
+									, c.toJson().put("sid", getSid()).put("self", getClient().getUid().equals(c.getUid()))));
+							sidebar.update(handler);
+							menu.update(handler);
+							wb.update(handler);
+						}
 						break;
 					case roomEnter:
 						sidebar.update(handler);
@@ -581,7 +591,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void broadcast(Client client) {
-		WebSocketHelper.sendRoom(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
+		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated, client.getUid()));
 		RoomBroadcaster.sendUpdatedClient(client);
 	}
 

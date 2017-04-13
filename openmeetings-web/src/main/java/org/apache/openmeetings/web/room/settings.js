@@ -41,7 +41,11 @@ var VideoSettings = (function() {
 		}
 	}
 	function _save() {
-		localStorage.setItem('openmeetings', JSON.stringify(s));
+		var _s = JSON.stringify(s);
+		localStorage.setItem('openmeetings', _s);
+		if (typeof avSettings === 'function') {
+			avSettings(_s);
+		}
 	}
 	function _init(options) {
 		vs = $('#video-settings');
@@ -85,6 +89,7 @@ var VideoSettings = (function() {
 		lm.progressbar({ value: 0 });
 		options.width = 300;
 		options.height = 200;
+		options.mode = 'settings';
 		swf = initVideo(vidScroll, 'video-settings-swf', options)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();

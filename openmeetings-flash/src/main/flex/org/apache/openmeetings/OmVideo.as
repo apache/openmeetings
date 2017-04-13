@@ -145,7 +145,7 @@ public class OmVideo {
 			}
 			videoStreamSettings.setQuality(cam.bandwidth, cam.quality);
 			videoStreamSettings.setKeyFrameInterval(cam.keyFrameInterval);
-			debug("::keyFrameInterval " + cam.keyFrameInterval);
+			debug("::camera settings ", cam.keyFrameInterval, cam.width, cam.height, cam.fps);
 			videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
 			ns.videoStreamSettings = videoStreamSettings;
 		}
@@ -160,7 +160,7 @@ public class OmVideo {
 		}
 	}
 
-	private function publish(mode:String, name:String, cam:Camera, mic:Microphone, f:Function):void {
+	private function connect(callback:Function):void {
 		if (nc == null || !nc.connected) {
 			var url:String = params.url;  //TODO fallback
 			debug("NetConnection is not connected", url);
@@ -168,7 +168,7 @@ public class OmVideo {
 			nc.addEventListener(NetStatusEvent.NET_STATUS, function onConnectionStatus(e:NetStatusEvent):void {
 				debug("ConnectionStatus: " + e.info.code);
 				if (e.info.code == "NetConnection.Connect.Success") {
-					_publish(mode, name, cam, mic, f);
+					callback();
 				} else {
 					//TODO
 				}
@@ -197,27 +197,37 @@ public class OmVideo {
 				, nativeSsl: 'best' == params.proxyType
 			});
 		} else {
-			_publish(mode, name, cam, mic, f);
+			callback();
 		}
+	}
+
+	public function broadcast(name:String, cam:Camera, mic:Microphone):void {
+		connect(function():void {
+			_publish(BROADCAST, name, cam, mic, null);
+		});
 	}
 
 	public function record(name:String, cam:Camera, mic:Microphone, f:Function):void {
-		publish(RECORD, name, cam, mic, f);
+		connect(function():void {
+			_publish(RECORD, name, cam, mic, f);
+		});
 	}
 
 	public function play(name:String):void {
-		debug("PLAY::", name);
-		if (ns != null){
-			reset();
-		}
-		mode = PLAY;
-		createStream();
-		//invokes Method in baseVideoView which shows the stream
-		getVideo().attachNetStream(ns);
-		//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
-		//after re-syncing the stream
-		//this.setBuffer(0.1);
-		ns.play(name + ".flv");
+		connect(function():void {
+			debug("PLAY::", name);
+			if (ns != null){
+				reset();
+			}
+			mode = PLAY;
+			createStream();
+			//invokes Method in baseVideoView which shows the stream
+			getVideo().attachNetStream(ns);
+			//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
+			//after re-syncing the stream
+			//this.setBuffer(0.1);
+			ns.play(name);
+		});
 	}
 
 	public function reset():void {

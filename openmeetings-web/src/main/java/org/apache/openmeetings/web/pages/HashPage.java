@@ -153,9 +153,10 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 					@Override
 					protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
 						super.onClientInfo(target, info);
+						ExtendedClientProperties cp = (ExtendedClientProperties)info.getProperties();
 						target.appendJavaScript(
-								VideoSettings.getInitScript((ExtendedClientProperties)info.getProperties(), "hibernate", "networktest")
-								.append("VideoSettings.open();"));
+								String.format("VideoSettings.init(%s);VideoSettings.open();"
+										, VideoSettings.getInitJson(cp, "hibernate", "noclient")));
 					}
 				}));
 				error = false;

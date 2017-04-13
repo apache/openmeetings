@@ -28,6 +28,10 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
+import org.apache.wicket.util.string.Strings;
+
+import com.github.openjson.JSONArray;
+import com.github.openjson.JSONObject;
 
 /**
  * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.Client}
@@ -65,6 +69,7 @@ public class Client implements IClient {
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
+	private long broadcastId = -1;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -157,6 +162,16 @@ public class Client implements IClient {
 		return activities;
 	}
 
+	public boolean hasAnyActivity(Activity... aa) {
+		boolean res = false;
+		if (aa != null) {
+			for (Activity a : aa) {
+				res |= activities.contains(a);
+			}
+		}
+		return res;
+	}
+
 	public boolean hasActivity(Activity a) {
 		return activities.contains(a);
 	}
@@ -243,8 +258,9 @@ public class Client implements IClient {
 		return cam;
 	}
 
-	public void setCam(int cam) {
+	public Client setCam(int cam) {
 		this.cam = cam;
+		return this;
 	}
 
 	public boolean isMicEnabled() {
@@ -255,32 +271,45 @@ public class Client implements IClient {
 		return mic;
 	}
 
-	public void setMic(int mic) {
+	public Client setMic(int mic) {
 		this.mic = mic;
+		return this;
 	}
 
 	public int getWidth() {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public Client setWidth(int width) {
 		this.width = width;
+		return this;
 	}
 
 	public int getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public Client setHeight(int height) {
 		this.height = height;
+		return this;
 	}
 
 	public String getRemoteAddress() {
 		return remoteAddress;
 	}
 
-	public void setRemoteAddress(String remoteAddress) {
+	public Client setRemoteAddress(String remoteAddress) {
 		this.remoteAddress = remoteAddress;
+		return this;
+	}
+
+	public long getBroadcastId() {
+		return broadcastId;
+	}
+
+	public Client setBroadcastId(long broadcastId) {
+		this.broadcastId = broadcastId;
+		return this;
 	}
 
 	@Override
@@ -311,6 +340,31 @@ public class Client implements IClient {
 			return false;
 		}
 		return true;
+	}
+
+	public JSONObject toJson() {
+		JSONObject u = new JSONObject();
+		if (user != null) {
+			JSONObject a = new JSONObject();
+			u.put("firstName", user.getFirstname())
+				.put("lastName", user.getLastname())
+				.put("address", a);
+			if (user.getAddress() != null) {
+				if (Strings.isEmpty(user.getFirstname()) && Strings.isEmpty(user.getLastname())) {
+					a.put("email", user.getAddress().getEmail());
+				}
+				a.put("country", user.getAddress().getCountry());
+			}
+		}
+		return new JSONObject()
+				.put("user", u)
+				.put("uid", uid)
+				.put("rights", new JSONArray(rights))
+				.put("activities", new JSONArray(activities))
+				.put("pod", pod)
+				.put("broadcastId", broadcastId)
+				.put("width", width)
+				.put("height", height);
 	}
 
 	@Override

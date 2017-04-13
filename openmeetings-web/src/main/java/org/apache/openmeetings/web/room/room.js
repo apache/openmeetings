@@ -16,6 +16,99 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var Video = (function() {
+	var self = {}, c, box, v, vc, t, swf;
+
+	function _getName() {
+		return c.user.firstName + ' ' + c.user.lastName;
+	}
+	function _resetSize() {
+		v.dialog("option", "width", c.width).dialog("option", "height", t.height() + c.height + 2);
+		vc.width(c.width).height(c.height);
+		swf.attr('width', c.width).attr('height', c.height);
+	}
+	function _init(_box, _c) {
+		c = _c;
+		box = _box;
+		var _id = "video" + c.uid, name = _getName()
+			, w = c.self ? Math.max(300, c.width) : c.width
+			, h = c.self ? Math.max(200, c.height) : c.height;
+		box.append($('#user-video').clone().attr('id', _id).attr('title', name).data(self));
+		v = $('#' + _id);
+		v.dialog({
+			classes: {
+				'ui-dialog': 'ui-corner-all video user-video'
+				, 'ui-dialog-titlebar': 'ui-corner-all no-close'
+			}
+			, width: w
+			, minWidth: 40
+			, minHeight: 50
+			, autoOpen: true
+			, modal: false
+			//resizeStop
+		});
+		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
+		vc = v.find('.video');
+		vc.width(w).height(h);
+		//broadcast
+		var o = VideoManager.getOptions();
+		if (c.self) {
+			o.cam = c.cam;
+			o.mic = c.mic;
+			o.mode = 'broadcast';
+		} else {
+			o.mode = 'play';
+		}
+		o.width = c.width;
+		o.height = c.height;
+		o.uid = c.uid;
+		o.sid = c.sid;
+		o.broadcastId = c.broadcastId;
+		swf = initVideo(vc, _id + '-swf', o);
+		swf.attr('width', w).attr('height', h);
+	}
+	function _update(_c) {
+		// TODO check, update video
+		c = _c;
+	}
+
+	self.update = _update;
+	self.init = _init;
+	self.resetSize = _resetSize;
+	return self;
+});
+var VideoManager = (function() {
+	var self = {}, box, options;
+
+	function _init(_options) {
+		options = _options;
+		VideoSettings.init(self.getOptions());
+		box = $('.room.box');
+	}
+	function _getVid(uid) {
+		return "video" + uid;
+	}
+	function _update(o) {
+		var _id = _getVid(o.uid)
+			, video = o.activities.indexOf('broadcastV') > -1
+			, audio = o.activities.indexOf('broadcastA') > -1
+			, av = audio || video
+			, v = $('#' + _id);
+		if (av && v.length != 1) {
+			Video().init(box, o);
+		} else if (av && v.length == 1) {
+			v.data().update(o);
+		} else if (!av && v.length == 1) {
+			v.remove();
+		}
+	}
+
+	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
+	self.init = _init;
+	self.update = _update;
+	self.resetSize = function(uid) { $('#' + _getVid(uid)).data().resetSize(); };
+	return self;
+})();
 function setRoomSizes() {
 	var sb = $(".room.sidebar.left")
 		, w = $(window).width() - sb.width() - 5
@@ -73,6 +166,7 @@ function roomUnload() {
 		WbArea.destroy();
 	}
 	VideoSettings.close();
+	$('.ui-dialog.user-video').remove();
 }
 function startPrivateChat(el) {
 	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());

@@ -60,46 +60,72 @@
 		}
 
 		private function appInit(evt:Event):void {
-			var tla:Object = FlexGlobals.topLevelApplication;
-			debug("appInit()", tla.parameters);
-			audioOnly = 'true' == tla.parameters['audioOnly'];
-			interview = 'true' == tla.parameters['interview'];
-			var _fps:int = parseInt(tla.parameters['fps']);
+			var params:Object = FlexGlobals.topLevelApplication.parameters;
+			debug("appInit()", params);
+			audioOnly = 'true' == params.audioOnly;
+			interview = 'true' == params.interview;
+			var _fps:int = parseInt(params.fps);
 			FPS = (isNaN(_fps) || _fps < 1 ? 30 : _fps);
-			video = new OmVideo(videoDisplay, tla.parameters);
-
-			ExternalInterface.addCallback("getDevices", function ():Object {
-				return {
-					cams: Camera.names
-					, mics: Microphone.names
-				};
-			});
-			ExternalInterface.addCallback("camChanged", function (val:int):void {
-				selectedCam = val;
-				camChanged(null);
-			});
-			ExternalInterface.addCallback("micChanged", function (val:int):void {
-				selectedMic = val;
-				camChanged(null);
-			});
-			ExternalInterface.addCallback("resChanged", function (width:int, height:int):void {
-				setResolution(width, height, true);
-			});
-			ExternalInterface.addCallback("close", function ():void {
-				video.reset();
-			});
-			ExternalInterface.addCallback("init", function (camIdx:int, micIdx:int, width:int, height:int):void {
-				selectedCam = camIdx;
-				selectedMic = micIdx;
-				setResolution(width, height, true);
-			});
-			ExternalInterface.addCallback("startRec", function ():void {
-				startTestRecording();
-			});
-			ExternalInterface.addCallback("play", function ():void {
-				playTestRecording();
-			});
-			ExternalInterface.call("VideoSettings.initSwf");
+			video = new OmVideo(videoDisplay, params);
+			switch (params.mode) {
+				case 'settings':
+				{
+					ExternalInterface.addCallback("getDevices", function ():Object {
+						return {
+							cams: Camera.names
+							, mics: Microphone.names
+						};
+					});
+					ExternalInterface.addCallback("camChanged", function (val:int):void {
+						selectedCam = val;
+						camChanged(null);
+					});
+					ExternalInterface.addCallback("micChanged", function (val:int):void {
+						selectedMic = val;
+						camChanged(null);
+					});
+					ExternalInterface.addCallback("resChanged", function (width:int, height:int):void {
+						setResolution(width, height, true);
+					});
+					ExternalInterface.addCallback("close", function ():void {
+						video.reset();
+					});
+					ExternalInterface.addCallback("init", function (camIdx:int, micIdx:int, width:int, height:int):void {
+						selectedCam = camIdx;
+						selectedMic = micIdx;
+						setResolution(width, height, true);
+					});
+					ExternalInterface.addCallback("startRec", function ():void {
+						startTestRecording();
+					});
+					ExternalInterface.addCallback("play", function ():void {
+						playTestRecording();
+					});
+					ExternalInterface.call("VideoSettings.initSwf");
+				}
+					break;
+				case OmVideo.BROADCAST:
+				{
+					selectedCam = params.cam;
+					selectedMic = params.mic;
+					video.resize(Math.max(300, params.width), Math.max(200, params.height));
+					attachCamera(function():void {
+						video.resize(params.width, params.height);
+						video.reset();
+						var cam:Camera = getCam();
+						video.attachCamera(cam);
+						video.broadcast(params.broadcastId, cam, getMic());
+						ExternalInterface.call("VideoManager.resetSize", params.uid);
+					});
+				}
+					break;
+				case OmVideo.PLAY:
+				{
+					video.resize(params.width, params.height);
+					video.play(params.broadcastId); // TODO audio/video
+				}
+					break;
+			}
 		}
 
 		private function uncaughtError(e:UncaughtErrorEvent):void {
@@ -160,7 +186,7 @@
 			return _camera;
 		}
 
-		private function attachCamera():void {
+		private function attachCamera(callback:Function):void {
 			if (!camAvail()) {
 				return;
 			}
@@ -179,13 +205,12 @@
 								debug("Unable to connect to active camera.");
 								break;
 							case 'Camera.Unmuted':
-								ExternalInterface.call("VideoSettings.allowRec", true);
-								_attachCamera(getCam());
+								callback();
 								break;
 						}
 					});
 				} else {
-					_attachCamera(cam);
+					callback();
 				}
 			} else {
 				var _mic:Microphone = getMic();
@@ -226,6 +251,11 @@
 			}
 		}
 
+		private function settingsCameraCallback():void {
+			ExternalInterface.call("VideoSettings.allowRec", true);
+			_attachCamera(getCam());
+		}
+
 		private function setResolution(width:int, height:int, attach:Boolean):void {
 			if (!interview) {
 				debug("onselect WxH :: " + width + "x" + height);
@@ -233,17 +263,17 @@
 				video.resize(width, height);
 
 				if (attach) {
-					attachCamera();
+					attachCamera(settingsCameraCallback);
 				}
 			}
 		}
 
 		private function camChanged(e:Event):void {
-			attachCamera();
+			attachCamera(settingsCameraCallback);
 		}
 
 		private function playTestRecording():void {
-			video.play(recName);
+			video.play(recName + ".flv");
 		}
 
 		private function startTestRecording():void {

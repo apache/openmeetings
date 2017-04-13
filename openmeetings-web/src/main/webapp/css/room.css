@@ -352,7 +352,7 @@
 	font-weight: bold;
 	background-color: #00FF00;
 }
-.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .video.ui-dialog-content {
+.ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
 	padding: 0;
 	overflow: hidden;
 }
@@ -573,4 +573,21 @@
 	margin-left: 5px;
 	border: 1px solid #888888;
 	box-shadow: 5px 5px 5px #888888;
+}
+.room.box .user-video {
+	display: inline-block !important;
+}
+.room.box .user-video .header {
+	height: 20px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.room.box .user-video .header .ui-dialog-title {
+	padding-left: 5px;
+}
+.room.box .user-video .video {
+	min-width: 40px;
+	min-height: 30px;
+	overflow: hidden;
 }

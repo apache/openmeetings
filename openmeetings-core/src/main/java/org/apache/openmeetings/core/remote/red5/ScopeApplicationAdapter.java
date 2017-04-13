@@ -201,6 +201,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String tcUrl = map.containsKey("tcUrl") ? (String)map.get("tcUrl") : "";
 		Map<String, Object> connParams = getConnParams(params);
 		String uid = (String)connParams.get("uid");
+		if ("noclient".equals(uid)) {
+			return true;
+		}
 		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
 		String parentSid = (String)map.get("parentSid");
 		if (parentSid == null) {
@@ -248,9 +251,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
 			log.warn("No UIDs are provided, client is rejected");
 			return rejectClient();
-		}
-		if ("networktest".equals(uid)) {
-			return true;
 		}
 
 		if (map.containsKey("screenClient")) {

@@ -63,6 +63,7 @@ import org.apache.openmeetings.web.user.UserInfoDialog;
 import org.apache.openmeetings.web.user.chat.ChatPanel;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ContactsHelper;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -127,10 +128,29 @@ public class MainPanel extends Panel {
 		super(id);
 		this.panel = _panel;
 		setOutputMarkupId(true);
-		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
-		add(contents.add(client == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
+		add(chat = new ChatPanel("chatPanel"));
+		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				BasePanel bp = getCurrentPanel();
+				if (send.equals(button) && bp != null) {
+					bp.onNewMessageClose(handler);
+				}
+			}
+		});
+		add(userInfo = new UserInfoDialog("userInfoDialog", newMessage));
+		add(new OmAjaxClientInfoBehavior());
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
+		add(contents.add(client == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
@@ -157,24 +177,21 @@ public class MainPanel extends Panel {
 				about.open(target);
 			}
 		});
+		add(about);
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
 			add(new DebugBar("dev").setOutputMarkupId(true));
 		} else {
 			add(new EmptyPanel("dev").setVisible(false));
 		}
-		add(about, chat = new ChatPanel("chatPanel"));
-		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
+		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				BasePanel bp = getCurrentPanel();
-				if (send.equals(button) && bp != null) {
-					bp.onNewMessageClose(handler);
-				}
+			protected void onSubmit(AjaxRequestTarget target) {
+				getSession().invalidate();
+				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
-		add(userInfo = new UserInfoDialog("userInfoDialog", newMessage));
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -224,9 +241,9 @@ public class MainPanel extends Panel {
 			@Override
 			protected void onConnect(ConnectedMessage msg) {
 				super.onConnect(msg);
+				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
-				client.setRemoteAddress(WebSession.get().getClientInfo().getProperties().getRemoteAddress());
-				addOnlineUser(client);
+				addOnlineUser(cp.update(client));
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
 
@@ -266,21 +283,6 @@ public class MainPanel extends Panel {
 					exit(client);
 					client = null;
 				}
-			}
-		});
-		add(new OmAjaxClientInfoBehavior());
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				getSession().invalidate();
-				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
 	}

@@ -22,6 +22,8 @@ import static org.apache.openmeetings.web.app.Application.HASH_MAPPING;
 import static org.apache.openmeetings.web.app.Application.NOTINIT_MAPPING;
 import static org.apache.openmeetings.web.app.Application.SIGNIN_MAPPING;
 
+import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.request.IRequestParameters;
 
@@ -29,6 +31,10 @@ import com.github.openjson.JSONObject;
 
 public class ExtendedClientProperties extends ClientProperties {
 	private static final long serialVersionUID = 1L;
+	public static final String CAM = "cam";
+	public static final String MIC = "mic";
+	public static final String WIDTH = "width";
+	public static final String HEIGHT = "height";
 	private String baseUrl;
 	private String codebase;
 	private String settings;
@@ -41,13 +47,14 @@ public class ExtendedClientProperties extends ClientProperties {
 		return baseUrl;
 	}
 
-	public void setSettings(JSONObject s) {
+	public ExtendedClientProperties setSettings(JSONObject s) {
 		settings = s.toString();
+		return this;
 	}
 
 	public JSONObject getSettings() {
 		try {
-			return settings == null ? new JSONObject() : new JSONObject(settings.toString());
+			return Strings.isEmpty(settings) ? new JSONObject() : new JSONObject(settings.toString());
 		} catch (Exception e) {
 			//can throw, no op
 		}
@@ -80,5 +87,21 @@ public class ExtendedClientProperties extends ClientProperties {
 		baseUrl = sb.toString();
 		codebase = sb.append("screenshare").toString();
 		settings = parameters.getParameterValue("settings").toString("{}");
+	}
+
+	public Client update(Client c) {
+		return update(c, false);
+	}
+
+	public Client update(Client c, boolean interview) {
+		JSONObject s = getSettings().optJSONObject("video");
+		if (s == null) {
+			s = new JSONObject();
+		}
+		return c.setRemoteAddress(getRemoteAddress())
+				.setCam(s.optInt(CAM, -1))
+				.setMic(s.optInt(MIC, -1))
+				.setWidth(interview ? 320 : s.optInt(WIDTH, 0))
+				.setHeight(interview ? 260 : s.optInt(HEIGHT, 0));
 	}
 }

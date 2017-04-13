@@ -27,6 +27,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
@@ -34,6 +35,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.common.NameDialog;
@@ -41,6 +43,7 @@ import org.apache.openmeetings.web.room.RoomBroadcaster;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
+import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -212,13 +215,9 @@ public class RoomSidebar extends Panel {
 		protected void respond(AjaxRequestTarget target) {
 			StringValue s = getRequest().getRequestParameters().getParameterValue(PARAM_SETTINGS);
 			if (!s.isEmpty()) {
-				JSONObject o = new JSONObject(s.toString());
+				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				Client c = room.getClient();
-				c.setCam(o.optInt("cam", -1));
-				c.setMic(o.optInt("mic", -1));
-				boolean interview = Room.Type.interview == room.getRoom().getType();
-				c.setWidth(interview ? 320 : o.optInt("width"));
-				c.setHeight(interview ? 260 : o.optInt("height"));
+				cp.setSettings(new JSONObject(s.toString())).update(c, Room.Type.interview == room.getRoom().getType());
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
@@ -419,6 +418,9 @@ public class RoomSidebar extends Panel {
 				//pod has changed, no need to toggle
 				c.set(a);
 			} else {
+				if (!c.hasActivity(Activity.broadcastV) && Activity.broadcastV == a) {
+					c.setBroadcastId(ScopeApplicationAdapter.nextBroadCastId());
+				}
 				c.toggle(a);
 			}
 			room.broadcast(c);
