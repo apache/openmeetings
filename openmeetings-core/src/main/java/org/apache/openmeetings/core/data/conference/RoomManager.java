@@ -32,7 +32,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -58,8 +57,6 @@ public class RoomManager {
 	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private SipDao sipDao;
 
 	public SearchResult<Room> getRooms(int start, int max, String orderby, boolean asc, String search) {
 		try {
@@ -292,16 +289,6 @@ public class RoomManager {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns number of SIP conference participants
-	 * @param roomId id of room
-	 * @return number of participants
-	 */
-	public Integer getSipConferenceMembersNumber(Long roomId) {
-		Room r = roomDao.get(roomId);
-		return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
-	}
 
 	/**
 	 * get List of RoomGroup by group and roomtype

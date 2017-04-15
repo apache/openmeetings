@@ -38,6 +38,7 @@
 	</resources>
 	<application-desc main-class='org.apache.openmeetings.screenshare.Core'>
 		<argument>$url</argument>
+		<argument>$fallback</argument>
 		<argument>$publicSid</argument>
 		<argument>$labels</argument>
 		<argument>$defaultQuality</argument>
@@ -47,7 +48,5 @@
 		<argument>$allowRecording</argument>
 		<argument>$allowPublishing</argument>
 		<argument>$native</argument>
-		<argument>$keystore</argument>
-		<argument>$password</argument>
 	</application-desc>
 </jnlp>

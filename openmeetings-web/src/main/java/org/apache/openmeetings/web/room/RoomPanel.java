@@ -368,6 +368,27 @@ public class RoomPanel extends BasePanel {
 							wb.update(handler);
 						}
 						break;
+					case newStream:
+					{
+						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+						Client c = getOnlineClient(obj.getString("uid"));
+						boolean self = getClient().getUid().equals(c.getUid());
+						if (!self) {
+							JSONObject json = c.toJson().put("sid", getSid()).put("self", self);
+							if (obj.optBoolean("screenShare", false)) {
+								json.put("screenShare", true)
+									.put("uid", obj.getString("suid")) // unique screen-sharing ID
+									.put("broadcastId", obj.getString("broadcastId"))
+									.put("width", obj.getInt("width"))
+									.put("height", obj.getInt("height"));
+							}
+							handler.appendJavaScript(String.format("VideoManager.play(%s);", json));
+						}
+					}
+						break;
+					case closeStream:
+						handler.appendJavaScript(String.format("VideoManager.close('%s');", ((TextRoomMessage)m).getText()));
+						break;
 					case roomEnter:
 						sidebar.update(handler);
 						menu.update(handler);

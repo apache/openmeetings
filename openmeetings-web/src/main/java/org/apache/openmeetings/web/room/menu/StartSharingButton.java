@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.menu;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -26,33 +27,28 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
-import static org.apache.openmeetings.web.room.RoomBroadcaster.getClient;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URI;
-import java.util.Properties;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
+import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.util.resource.StringResourceStream;
-import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.github.openjson.JSONObject;
 
 public class StartSharingButton extends OmButton {
 	private static final long serialVersionUID = 1L;
@@ -60,15 +56,9 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
-	private final org.apache.openmeetings.db.entity.basic.Client c;
-	private enum Protocol {
-		rtmp
-		, rtmpe
-		, rtmps
-		, rtmpt
-	}
+	private final Client c;
 
-	public StartSharingButton(String id, org.apache.openmeetings.db.entity.basic.Client c) {
+	public StartSharingButton(String id, Client c) {
 		super(id);
 		this.c = c;
 		setOutputMarkupPlaceholderTag(true);
@@ -92,25 +82,16 @@ public class StartSharingButton extends OmButton {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
 			String publicSid = c.getUid();
-			Client rc = getClient(publicSid);
-			if (rc == null || rc.getUserId() == null) {
-				throw new RuntimeException(String.format("Unable to find client by publicSID '%s'", publicSid));
-			}
-			String _url = rc.getTcUrl();
-			URI url = new URI(_url);
+			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + c.getRoomId(), publicSid);
+			String _url = s.getString(VideoSettings.URL);
 			long roomId = c.getRoomId();
 			Room room = getBean(RoomDao.class).get(roomId);
 			SessionManager sessionManager = getBean(SessionManager.class);
-			String path = url.getPath();
-			path = path.substring(path.lastIndexOf('/') + 1);
-			if (Strings.isEmpty(path) || rc.getRoomId() == null || !path.equals(rc.getRoomId().toString()) || !rc.getRoomId().equals(roomId)) {
-				throw new RuntimeException(String.format("Invalid room id passed %s, expected, %s", path, roomId));
-			}
-			Protocol protocol = Protocol.valueOf(url.getScheme());
-			app = addKeystore(rc, app, protocol)
+			app = app.replace("$native", "" + s.getBoolean(FLASH_NATIVE_SSL))
 					.replace("$codebase", WebSession.get().getExtendedProperties().getCodebase())
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
+					.replace("$fallback", s.getString(VideoSettings.FALLBACK))
 					.replace("$publicSid", publicSid)
 					.replace("$labels", getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
@@ -124,7 +105,7 @@ public class StartSharingButton extends OmButton {
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
 					.replace("$allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, String.class, "true"))
-					.replace("$allowRecording", "" + (rc.getUserId() > 0 && room.isAllowRecording() && rc.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
+					.replace("$allowRecording", "" + (room.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
 					.replace("$allowPublishing", "" + (0 == sessionManager.getPublishingCount(roomId)))
 					;
 
@@ -150,48 +131,5 @@ public class StartSharingButton extends OmButton {
 		}
 		result.append(CDATA_END);
 		return result.toString();
-	}
-
-	private static String addKeystore(Client rc, String app, Protocol protocol) {
-		log.debug("RTMP Sharer Keystore :: start");
-		String keystore = "--dummy--", password = "--dummy--";
-		if (Protocol.rtmps == protocol) {
-			File conf = new File(OmFileHelper.getRootDir(), "conf");
-			File keyStore = new File(conf, "keystore.screen");
-			if (keyStore.exists()) {
-				try (FileInputStream fis = new FileInputStream(keyStore); FileInputStream ris = new FileInputStream(new File(conf, "red5.properties"))) {
-					Properties red5Props = new Properties();
-					red5Props.load(ris);
-
-					byte keyBytes[] = new byte[(int)keyStore.length()];
-					fis.read(keyBytes);
-
-					keystore = Hex.encodeHexString(keyBytes);
-					password = red5Props.getProperty("rtmps.screen.keystorepass");
-
-					/*
-					KeyStore ksIn = KeyStore.getInstance(KeyStore.getDefaultType());
-					ksIn.load(new FileInputStream(keyStore), red5Props.getProperty("rtmps.keystorepass").toCharArray());
-					ByteArrayInputStream bin = new ByteArrayInputStream()
-
-					byte fileContent[] = new byte[(int)file.length()];
-					sb = addArgument(sb, Object arg)
-					ctx.put("$KEYSTORE", users_id);
-					/*
-					KeyStore ksOut = KeyStore.getInstance(KeyStore.getDefaultType());
-					for (Certificate cert : ksIn.getCertificateChain("red5")) {
-						PublicKey pub = cert.getPublicKey();
-						TrustedCertificateEntry tce = new TrustedCertificateEntry(cert);
-						tce.
-					}
-					*/
-				} catch (Exception e) {
-					//no op
-				}
-			}
-		}
-		return app.replace("$native", "" + rc.isNativeSsl())
-				.replace("$keystore", CDATA_BEGIN + keystore + CDATA_END)
-				.replace("$password", CDATA_BEGIN + password + CDATA_END);
 	}
 }

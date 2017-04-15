@@ -88,17 +88,27 @@ var VideoManager = (function() {
 	function _getVid(uid) {
 		return "video" + uid;
 	}
-	function _update(o) {
-		var _id = _getVid(o.uid)
-			, video = o.activities.indexOf('broadcastV') > -1
-			, audio = o.activities.indexOf('broadcastA') > -1
+	function _update(c) {
+		var _id = _getVid(c.uid)
+			, video = c.activities.indexOf('broadcastV') > -1
+			, audio = c.activities.indexOf('broadcastA') > -1
 			, av = audio || video
 			, v = $('#' + _id);
-		if (av && v.length != 1) {
-			Video().init(box, o);
+		if (av && v.length != 1 && !!c.self) {
+			Video().init(box, c);
 		} else if (av && v.length == 1) {
-			v.data().update(o);
+			v.data().update(c);
 		} else if (!av && v.length == 1) {
+			v.remove();
+		}
+	}
+	function _play(c) {
+		Video().init(box, c);
+	}
+	function _close(uid) {
+		var _id = _getVid(uid)
+			, v = $('#' + _id);
+		if (v.length == 1) {
 			v.remove();
 		}
 	}
@@ -106,6 +116,8 @@ var VideoManager = (function() {
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.init = _init;
 	self.update = _update;
+	self.play = _play;
+	self.close = _close;
 	self.resetSize = function(uid) { $('#' + _getVid(uid)).data().resetSize(); };
 	return self;
 })();

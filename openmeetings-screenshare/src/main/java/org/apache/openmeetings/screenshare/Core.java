@@ -67,12 +67,16 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	final static String QUARTZ_GROUP_NAME = "ScreenShare";
 	final static String QUARTZ_REMOTE_JOB_NAME = "RemoteJob";
 	final static String QUARTZ_REMOTE_TRIGGER_NAME = "RemoteTrigger";
+	private static final String CONNECT_REJECTED = "NetConnection.Connect.Rejected";
+	private static final String CONNECT_FAILED = "NetConnection.Connect.Failed";
 
 	enum Protocol {
 		rtmp, rtmpt, rtmpe, rtmps
 	}
 	private IScreenShare instance = null;
-	private Protocol protocol;
+	private URI url;
+	private URI fallback;
+	private boolean fallbackUsed = false;
 	private String host;
 	private String app;
 	private int port;
@@ -97,6 +101,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private boolean readyToRecord = false;
 	private boolean audioNotify = false;
 	private boolean remoteEnabled = true;
+	private boolean nativeSsl = false;
 	private SchedulerFactory schdlrFactory;
 	private Scheduler schdlr;
 	private LinkedBlockingQueue<Map<String, Object>> remoteEvents = new LinkedBlockingQueue<>();
@@ -121,20 +126,17 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			}
 			String[] textArray = null;
 			if (args.length > 8) {
-				String _url = args[0];
-				URI url = new URI(_url);
-				protocol = Protocol.valueOf(url.getScheme());
-				host = url.getHost();
-				port = url.getPort();
-				app = url.getPath().substring(1);
-				publishName = args[1];
-				String labelTexts = args[2];
-				defaultQuality = Integer.parseInt(args[3]);
-				defaultFPS = Integer.parseInt(args[4]);
-				showFPS = bool(args[5]);
-				remoteEnabled = bool(args[6]);
-				allowRecording = bool(args[7]);
-				allowPublishing = bool(args[8]);
+				url = new URI(args[0]);
+				fallback = new URI(args[1]);
+				publishName = args[2];
+				String labelTexts = args[3];
+				defaultQuality = Integer.parseInt(args[4]);
+				defaultFPS = Integer.parseInt(args[5]);
+				showFPS = bool(args[6]);
+				remoteEnabled = bool(args[7]);
+				allowRecording = bool(args[8]);
+				allowPublishing = bool(args[9]);
+				nativeSsl = bool(args[10]);
 
 				if (labelTexts.length() > 0) {
 					textArray = labelTexts.split(";");
@@ -145,30 +147,6 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 						log.debug(i + " :: " + textArray[i]);
 					}
 				}
-				switch (protocol) {
-					case rtmp:
-						instance = new RTMPScreenShare(this);
-						break;
-					case rtmpt:
-						instance = new RTMPTScreenShare(this);
-						break;
-					case rtmps:
-						boolean nativeSsl = bool(args[9]);
-						if (nativeSsl) {
-							RTMPSScreenShare client = new RTMPSScreenShare(this);
-							//NOT in use since 1.0.8-M3 client.setKeystoreBytes(Hex.decodeHex(args[10].toCharArray()));
-							client.setKeyStorePassword(args[11]);
-							instance = client;
-						} else {
-							instance = new RTMPTSScreenShare(this);
-						}
-						break;
-					case rtmpe:
-					default:
-						throw new Exception("Unsupported protocol");
-				}
-				instance.setServiceProvider(this);
-				log.debug(String.format("host: %s, port: %s, app: %s, publish: %s", host, port, app, publishName));
 			} else {
 				System.exit(0);
 			}
@@ -186,6 +164,35 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		} catch (Exception err) {
 			log.error("", err);
 		}
+	}
+
+	private void setInstance(URI uri) {
+		Protocol protocol = Protocol.valueOf(uri.getScheme());
+		host = uri.getHost();
+		port = uri.getPort();
+		app = uri.getPath().substring(1);
+
+		switch (protocol) {
+			case rtmp:
+				instance = new RTMPScreenShare(this);
+				break;
+			case rtmpt:
+				instance = new RTMPTScreenShare(this);
+				break;
+			case rtmps:
+				if (nativeSsl) {
+					RTMPSScreenShare client = new RTMPSScreenShare(this);
+					instance = client;
+				} else {
+					instance = new RTMPTSScreenShare(this);
+				}
+				break;
+			case rtmpe:
+			default:
+				throw new RuntimeException("Unsupported protocol");
+		}
+		instance.setServiceProvider(this);
+		log.debug(String.format("host: %s, port: %s, app: %s, publish: %s", host, port, app, publishName));
 	}
 
 	@SuppressWarnings("unused")
@@ -298,10 +305,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	}
 
 	private void connect(String parentSid) {
+		setInstance(fallbackUsed ? fallback : url);
 		Map<String, Object> map = instance.makeDefaultConnectionParams(host, port, app);
 		map.put("screenClient", true);
-		map.put("parentSid", parentSid);
-		instance.connect(host, port, map, this);
+		Map<String, Object> params = new HashMap<>();
+		params.put("uid", parentSid);
+		instance.connect(host, port, map, this, new Object[]{params});
 	}
 
 	private void captureScreenStart() {
@@ -491,7 +500,13 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			log.trace("call ### get Method Name " + method);
 			if ("connect".equals(method)) {
 				Object code = returnMap.get("code");
-				if ("NetConnection.Connect.Rejected".equals(code) || "NetConnection.Connect.Failed".equals(code)) {
+				if (CONNECT_FAILED.equals(code) && !fallbackUsed) {
+					fallbackUsed = true;
+					connect(publishName);
+					frame.setStatus("Re-connecting using fallback");
+					return;
+				}
+				if (CONNECT_FAILED.equals(code) || CONNECT_REJECTED.equals(code)) {
 					frame.setStatus(String.format("Error: %s %s", code, returnMap.get("description")));
 					return;
 				}

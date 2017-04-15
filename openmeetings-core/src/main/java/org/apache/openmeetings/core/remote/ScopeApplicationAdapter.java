@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.remote.red5;
+package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
@@ -29,41 +29,32 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.core.data.conference.RoomManager;
-import org.apache.openmeetings.core.remote.RecordingService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.room.BrowserStatus;
-import org.apache.openmeetings.db.dto.room.RoomStatus;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -79,10 +70,7 @@ import org.red5.server.adapter.MultiThreadedApplicationAdapter;
 import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
-import org.red5.server.api.scope.IBasicScope;
-import org.red5.server.api.scope.IBroadcastScope;
 import org.red5.server.api.scope.IScope;
-import org.red5.server.api.scope.ScopeType;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
@@ -103,6 +91,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public static final String FLASH_SSL_PORT = "rtmpsPort";
 	public static final String FLASH_VIDEO_CODEC = "videoCodec";
 	public static final String FLASH_FPS = "fps";
+	private static AtomicLong broadCastCounter = new AtomicLong(0);
+	private JSONObject flashSettings;
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -111,11 +101,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private AppointmentDao appointmentDao;
-	@Autowired
 	private SessiondataDao sessiondataDao;
-	@Autowired
-	private RoomManager roomManager;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
@@ -123,12 +109,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
+	private SipDao sipDao;
+	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
 	private ServerDao serverDao;
-	private JSONObject flashSettings;
-
-	private static AtomicLong broadCastCounter = new AtomicLong(0);
 
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
@@ -146,7 +131,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.debug("webAppPath : " + OmFileHelper.getOmHome());
 
 			// Only load this Class one time Initially this value might by empty, because the DB is empty yet
-			getCryptKey();
+			cfgDao.getCryptKey();
 
 			// init your handler here
 			Properties props = new Properties();
@@ -254,7 +239,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 
 		if (map.containsKey("screenClient")) {
-			Client parent = sessionManager.getClientByPublicSID(parentSid, null);
+			org.apache.openmeetings.db.entity.basic.Client parent = iapp.getOmClient(uid);
 			if (parent == null) {
 				log.warn("Bad parent for screen-sharing client, client is rejected");
 				return rejectClient();
@@ -263,7 +248,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcm.setUserId(parent.getUserId());
 			rcm.setScreenClient(true);
 			rcm.setPublicSID(UUID.randomUUID().toString());
-			rcm.setStreamPublishName(parentSid);
+			rcm.setStreamPublishName(uid);
 		}
 		rcm.setStreamid(conn.getClient().getId());
 		rcm.setScope(scn.toString());
@@ -388,31 +373,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return returnMap;
 	}
 
-	public List<Client> checkScreenSharing() {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-
-			log.debug("checkScreenSharing -2- " + streamid);
-
-			List<Client> screenSharerList = new LinkedList<>();
-
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
-				if (rcl.isStartStreaming()) {
-					screenSharerList.add(rcl);
-				}
-			}
-
-			return screenSharerList;
-
-		} catch (Exception err) {
-			log.error("[checkScreenSharing]", err);
-		}
-		return null;
-	}
-
 	/**
 	 *
 	 * @param map
@@ -453,8 +413,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				Map<String, Object> returnMap = new HashMap<>();
 				returnMap.put("alreadyPublished", false);
 
-				// if is already started screen sharing, then there is no need
-				// to start it again
+				// if is already started screen sharing, then there is no need to start it again
 				if (client.isScreenPublishStarted()) {
 					returnMap.put("alreadyPublished", true);
 				}
@@ -498,73 +457,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.error("[setConnectionAsSharingClient]", err);
 		}
 		return null;
-	}
-
-	public List<Long> listRoomBroadcast() {
-		Set<Long> broadcastList = new HashSet<>();
-		IConnection current = Red5.getConnectionLocal();
-		String streamid = current.getClient().getId();
-		for (IConnection conn : current.getScope().getClientConnections()) {
-			if (conn != null) {
-				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
-				if (rcl == null) {
-					// continue;
-				} else if (rcl.isScreenClient()) {
-					// continue;
-				} else {
-					if (!streamid.equals(rcl.getStreamid())) {
-						// It is not needed to send back
-						// that event to the actuall
-						// Moderator
-						// as it will be already triggered
-						// in the result of this Function
-						// in the Client
-						Long id = Long.valueOf(rcl.getBroadCastID());
-						if (!broadcastList.contains(id)) {
-							broadcastList.add(id);
-						}
-					}
-				}
-			}
-		}
-		return new ArrayList<>(broadcastList);
-	}
-
-	/**
-	 * this function is invoked directly after initial connecting
-	 *
-	 * @return publicSID of current client
-	 */
-	public String getPublicSID() {
-		log.debug("-----------  getPublicSID");
-		IConnection current = Red5.getConnectionLocal();
-		Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-		sessionManager.updateClientByStreamId(current.getClient().getId(), currentClient, false, null);
-		return currentClient.getPublicSID();
-	}
-
-	/**
-	 * this function is invoked after a reconnect
-	 *
-	 * @param newPublicSID
-	 */
-	public boolean overwritePublicSID(String newPublicSID) {
-		try {
-			log.debug("-----------  overwritePublicSID");
-			IConnection current = Red5.getConnectionLocal();
-			IClient c = current.getClient();
-			Client currentClient = sessionManager.getClientByStreamId(c.getId(), null);
-			if (currentClient == null) {
-				return false;
-			}
-			SessionVariablesUtil.initClient(c, newPublicSID);
-			currentClient.setPublicSID(newPublicSID);
-			sessionManager.updateClientByStreamId(c.getId(), currentClient, false, null);
-			return true;
-		} catch (Exception err) {
-			log.error("[overwritePublicSID]", err);
-		}
-		return false;
 	}
 
 	/**
@@ -743,17 +635,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					return false;
 				}
 			}.start();
+			JSONObject obj = new JSONObject().put("uid", c.getPublicSID());
+			if (c.isScreenClient()) {
+				obj.put("screenShare", true)
+						.put("uid", c.getStreamPublishName())
+						.put("broadcastId", stream.getPublishedName())
+						.put("suid", c.getPublicSID())
+						.put("width", c.getVWidth())
+						.put("height", c.getVHeight());
+			}
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.newStream, obj.toString()));
 		} catch (Exception err) {
 			log.error("[streamPublishStart]", err);
-		}
-	}
-
-	public IBroadcastScope getBroadcastScope(IScope scope, String name) {
-		IBasicScope basicScope = scope.getBasicScope(ScopeType.BROADCAST, name);
-		if (!(basicScope instanceof IBroadcastScope)) {
-			return null;
-		} else {
-			return (IBroadcastScope) basicScope;
 		}
 	}
 
@@ -800,6 +693,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			sessionManager.updateClientByStreamId(streamId, rcl, false, null);
 			// Notify all clients of the same scope (room)
 			sendMessageToCurrentScope("closeStream", rcl, rcl.isMobile());
+			if (rcl.isScreenClient()) {
+				WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, rcl.getPublicSID()));
+			}
 		} catch (Exception e) {
 			log.error("[streamBroadcastClose]", e);
 		}
@@ -819,30 +715,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		} catch (Exception err) {
 			log.error("[setNewCursorPosition]", err);
 		}
-	}
-
-	public long removeModerator(String publicSID) {
-		try {
-			log.debug("-----------  removeModerator: " + publicSID);
-
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-
-			if (currentClient == null) {
-				return -1L;
-			}
-			Long roomId = currentClient.getRoomId();
-
-			currentClient.setIsMod(false);
-			// Put the mod-flag to true for this client
-			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
-
-			List<Client> currentMods = sessionManager.getCurrentModeratorByRoom(roomId);
-
-			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
-		} catch (Exception err) {
-			log.error("[removeModerator]", err);
-		}
-		return -1L;
 	}
 
 	public long switchMicMuted(String publicSID, boolean mute) {
@@ -867,280 +739,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return 0L;
 	}
 
-	public boolean getMicMutedByPublicSID(String publicSID) {
-		try {
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-			if (currentClient == null) {
-				return true;
-			}
-
-			//Put the mod-flag to true for this client
-			return currentClient.getMicMuted();
-		} catch (Exception err) {
-			log.error("[getMicMutedByPublicSID]",err);
-		}
-		return true;
-	}
-
 	public static long nextBroadCastId() {
 		return broadCastCounter.getAndIncrement();
-	}
-
-	/**
-	 * This method is used to set/update broadCastID of current client
-	 *
-	 * @param updateBroadcastId boolean flag
-	 *
-	 * @return BroadcastId in case of no errors, -1 otherwise
-	 */
-	public long setUserAVSettings(boolean updateBroadcastId) {
-		try {
-			String streamid = Red5.getConnectionLocal().getClient().getId();
-			log.debug("-----------  setUserAVSettings {}", streamid);
-			Client rcl = sessionManager.getClientByStreamId(streamid, null);
-			if (rcl == null) {
-				log.warn("Failed to find appropriate clients");
-				return -1;
-			}
-			if (updateBroadcastId) {
-				rcl.setBroadCastID(nextBroadCastId());
-				sessionManager.updateAVClientByStreamId(streamid, rcl, null);
-			}
-			return rcl.getBroadCastID();
-		} catch (Exception err) {
-			log.error("[setUserAVSettings]", err);
-		}
-		return -1;
-	}
-
-	/*
-	 * checks if the user is allowed to apply for Moderation
-	 */
-	public boolean checkRoomValues(Long roomId) {
-		try {
-
-			// appointed meeting or moderated Room?
-			Room room = roomDao.get(roomId);
-
-			// not really - default logic
-			if (!room.isAppointment() && room.isModerated()) {
-				// if this is a Moderated Room then the Room can be only
-				// locked off by the Moderator Bit
-				List<Client> clientModeratorListRoom = sessionManager.getCurrentModeratorByRoom(roomId);
-
-				// If there is no Moderator yet and we are asking for it
-				// then deny it
-				// cause at this moment, the user should wait untill a
-				// Moderator enters the Room
-				return clientModeratorListRoom.size() != 0;
-			} else {
-				// FIXME: TODO: For Rooms that are created as Appointment we
-				// have to check that too
-				// but I don't know yet the Logic behind it - swagner 19.06.2009
-				return true;
-
-			}
-		} catch (Exception err) {
-			log.error("[checkRoomValues]", err);
-		}
-		return false;
-	}
-
-	/**
-	 * This function is called once a User enters a Room
-	 *
-	 * It contains several different mechanism depending on what roomtype and
-	 * what options are available for the room to find out if the current user
-	 * will be a moderator of that room or not<br/>
-	 * <br/>
-	 * Some rules:<br/>
-	 * <ul>
-	 * <li>If it is a room that was created through the calendar, the user that
-	 * organized the room will be moderator, the param Boolean becomeModerator
-	 * will be ignored then</li>
-	 * <li>In regular rooms you can use the param Boolean becomeModerator to set
-	 * any user to become a moderator of the room</li>
-	 * </ul>
-	 * <br/>
-	 * If a new moderator is detected a Push Call to all current users of the
-	 * room is invoked "setNewModeratorByList" to notify them of the new
-	 * moderator<br/>
-	 * <br/>
-	 * At the end of the mechanism a push call with the new client-object
-	 * and all the informations about the new user is send to every user of the
-	 * current conference room<br/>
-	 * <br/>
-	 *
-	 * @param roomId - id of the room
-	 * @param becomeModerator - is user will become moderator
-	 * @param isSuperModerator - is user super moderator
-	 * @param groupId - group id of the user
-	 * @param colorObj - some color
-	 * @return RoomStatus object
-	 */
-	public RoomStatus setRoomValues(Long roomId, boolean becomeModerator, boolean isSuperModerator, String colorObj) {
-		try {
-			log.debug("-----------  setRoomValues");
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client client = sessionManager.getClientByStreamId(streamid, null);
-			client.setRoomId(roomId);
-			client.setRoomEnter(new Date());
-
-			client.setUsercolor(colorObj);
-
-			Long userId = client.getUserId();
-			User u = userId == null ? null : userDao.get(userId > 0 ? userId : -userId);
-			// Inject externalUserId if nothing is set yet
-			if (client.getExternalUserId() == null && u != null) {
-				client.setExternalUserId(u.getExternalId());
-				client.setExternalUserType(u.getExternalType());
-			}
-
-			Room r = roomDao.get(roomId);
-			if (!r.isHidden(RoomElement.MicrophoneStatus)) {
-				client.setCanGiveAudio(true);
-			}
-			sessionManager.updateClientByStreamId(streamid, client, true, null); // first save to get valid room count
-
-			// Check for Moderation LogicalRoom ENTER
-			List<Client> roomClients = sessionManager.getClientListByRoom(roomId);
-
-			// Return Object
-			RoomStatus roomStatus = new RoomStatus();
-			// appointed meeting or moderated Room? => Check Max Users first
-			if (isSuperModerator) {
-				// This can be set without checking for Moderation Flag
-				client.setIsSuperModerator(isSuperModerator);
-				client.setIsMod(isSuperModerator);
-			} else {
-				Set<Room.Right> rr = AuthLevelUtil.getRoomRight(u, r, r.isAppointment() ? appointmentDao.getByRoom(r.getId()) : null, roomClients.size());
-				client.setIsSuperModerator(rr.contains(Room.Right.superModerator));
-				client.setIsMod(becomeModerator || rr.contains(Room.Right.moderator));
-			}
-			if (client.getIsMod()) {
-				// Update the Client List
-				sessionManager.updateClientByStreamId(streamid, client, false, null);
-
-				List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(client.getRoomId());
-
-				//Sync message to everybody
-				sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
-			}
-
-			//Sync message to everybody
-			sendMessageToCurrentScope("addNewUser", client, false);
-
-			//Status object for Shared Browsing
-			BrowserStatus browserStatus = (BrowserStatus)current.getScope().getAttribute("browserStatus");
-
-			if (browserStatus == null) {
-				browserStatus = new BrowserStatus();
-			}
-
-			// RoomStatus roomStatus = new RoomStatus();
-
-			// FIXME: Rework Client Object to DTOs
-			roomStatus.setClientList(roomClients);
-			roomStatus.setBrowserStatus(browserStatus);
-
-			return roomStatus;
-		} catch (Exception err) {
-			log.error("[setRoomValues]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * this is set initial directly after login/loading language
-	 *
-	 * @param SID - id of the session
-	 * @param userId - id of the user being set
-	 * @param username - username of the user
-	 * @param firstname - firstname of the user
-	 * @param lastname - lastname of the user
-	 * @return RoomClient in case of everything is OK, null otherwise
-	 */
-	public Client setUsernameAndSession(String SID, Long userId, String username, String firstname, String lastname) {
-		try {
-			log.debug("-----------  setUsernameAndSession");
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
-
-			currentClient.setUsername(username);
-			currentClient.setUserId(userId);
-			SessionVariablesUtil.setUserId(current.getClient(), userId);
-			currentClient.setUserObject(userId, username, firstname, lastname);
-
-			// Update Session Data
-			log.debug("UDPATE SESSION " + SID + ", " + userId);
-			sessiondataDao.updateUserWithoutSession(SID, userId);
-
-			User user = userDao.get(userId);
-
-			if (user != null) {
-				currentClient.setExternalUserId(user.getExternalId());
-				currentClient.setExternalUserType(user.getExternalType());
-			}
-
-			// only fill this value from User-Record
-			// cause invited users have non
-			// you cannot set the firstname,lastname from the UserRecord
-			User us = userDao.get(userId);
-			if (us != null && us.getPictureuri() != null) {
-				// set Picture-URI
-				currentClient.setPicture_uri(us.getPictureuri());
-			}
-			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
-			return currentClient;
-		} catch (Exception err) {
-			log.error("[setUsername]", err);
-		}
-		return null;
-	}
-
-	/**
-	 * used by the Screen-Sharing Servlet to trigger events
-	 *
-	 * @param roomId
-	 * @param message
-	 * @return the list of room clients
-	 */
-	public Map<String, Client> sendMessageByRoomAndDomain(Long roomId, Object message) {
-		Map<String, Client> roomClientList = new HashMap<>();
-		try {
-
-			log.debug("sendMessageByRoomAndDomain " + roomId);
-
-			IScope scope = getRoomScope(roomId.toString());
-
-			new MessageSender(scope, "newMessageByRoomAndDomain", message, this) {
-				@Override
-				public boolean filter(IConnection conn) {
-					IClient client = conn.getClient();
-					return SessionVariablesUtil.isScreenClient(client);
-				}
-			}.start();
-		} catch (Exception err) {
-			log.error("[getClientListBYRoomAndDomain]", err);
-		}
-		return roomClientList;
-	}
-
-	public List<Client> getCurrentModeratorList() {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-			Long roomId = client.getRoomId();
-			Room r = roomDao.get(roomId);
-			if (r != null) {
-				return sessionManager.getCurrentModeratorByRoom(roomId);
-			}
-		} catch (Exception err) {
-			log.error("[getCurrentModerator]", err);
-		}
-		return null;
 	}
 
 	public int sendMessage(Object newMessage) {
@@ -1150,43 +750,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public int sendMessageAll(Object newMessage) {
 		sendMessageToCurrentScope("sendVarsToMessage", newMessage, true);
-		return 1;
-	}
-
-	/**
-	 * send status for shared browsing to all members except self
-	 * @param newMessage
-	 * @return 1
-	 */
-	@SuppressWarnings({ "rawtypes" })
-	public int sendBrowserMessageToMembers(Object newMessage) {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-
-			List newMessageList = (List) newMessage;
-
-			String action = newMessageList.get(0).toString();
-
-			BrowserStatus browserStatus = (BrowserStatus) current.getScope().getAttribute("browserStatus");
-
-			if (browserStatus == null) {
-				browserStatus = new BrowserStatus();
-			}
-
-			if (action.equals("initBrowser") || action.equals("newBrowserURL")) {
-				browserStatus.setBrowserInited(true);
-				browserStatus.setCurrentURL(newMessageList.get(1).toString());
-			} else if (action.equals("closeBrowserURL")) {
-				browserStatus.setBrowserInited(false);
-			}
-
-			current.getScope().setAttribute("browserStatus", browserStatus);
-
-			sendMessageToCurrentScope("sendVarsToMessage", newMessage, false);
-
-		} catch (Exception err) {
-			log.error("[sendMessage]", err);
-		}
 		return 1;
 	}
 
@@ -1442,45 +1005,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return 1;
 	}
 
-	public void sendMessageWithClientByPublicSID(Object message, String publicSID) {
-		try {
-			if (publicSID == null) {
-				log.warn("'null' publicSID was passed to sendMessageWithClientByPublicSID");
-				return;
-			}
-
-			// Get Room Id to send it to the correct Scope
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
-
-			if (currentClient == null) {
-				throw new Exception("Could not Find RoomClient on List publicSID: " + publicSID);
-			}
-			IScope scope = getRoomScope("" + currentClient.getRoomId());
-
-			// log.debug("scopeHibernate "+scopeHibernate);
-
-			if (scope != null) {
-				// Notify the clients of the same scope (room) with userId
-
-				for (IConnection conn : scope.getClientConnections()) {
-					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
-						// screen sharing clients do not receive events
-						continue;
-					}
-
-					if (publicSID.equals(SessionVariablesUtil.getPublicSID(client))) {
-						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
-					}
-				}
-			} else {
-				// Scope not yet started
-			}
-		} catch (Exception err) {
-			log.error("[sendMessageWithClientByPublicSID] ", err);
-		}
-	}
-
 	/**
 	 * @deprecated this method should be reworked to use a single SQL query in
 	 *             the cache to get any client in the current room that is
@@ -1635,28 +1159,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return false;
 	}
 
-	/**
-	 * Get all ClientList Objects of that room and domain Used in
-	 * lz.applyForModeration.lzx
-	 *
-	 * @return all ClientList Objects of that room
-	 */
-	public List<Client> getClientListScope() {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
-
-			return sessionManager.getClientListByRoom(currentClient.getRoomId());
-		} catch (Exception err) {
-			log.debug("[getClientListScope]", err);
-		}
-		return new ArrayList<>();
-	}
-
-	public String getCryptKey() {
-		return cfgDao.getCryptKey();
-	}
-
 	public IScope getRoomScope(String room) {
 		if (Strings.isEmpty(room)) {
 			return null;
@@ -1693,8 +1195,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 
+	/**
+	 * Returns number of SIP conference participants
+	 * @param roomId id of room
+	 * @return number of participants
+	 */
+	public Integer getSipConferenceMembersNumber(Long roomId) {
+		Room r = roomDao.get(roomId);
+		return r == null || r.getConfno() == null ? null : sipDao.countUsers(r.getConfno());
+	}
+
 	private String getSipTransportLastname(Long roomId) {
-		return getSipTransportLastname(roomManager.getSipConferenceMembersNumber(roomId));
+		return getSipTransportLastname(getSipConferenceMembersNumber(roomId));
 	}
 
 	private static String getSipTransportLastname(Integer c) {
@@ -1707,7 +1219,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String streamid = current.getClient().getId();
 		Client client = sessionManager.getClientByStreamId(streamid, null);
 		Long roomId = client.getRoomId();
-		Integer count = roomManager.getSipConferenceMembersNumber(roomId);
+		Integer count = getSipConferenceMembersNumber(roomId);
 		String newNumber = getSipTransportLastname(count);
 		log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {

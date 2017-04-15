@@ -18,17 +18,17 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_PORT;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_SECURE;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_SSL_PORT;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_PORT;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SECURE;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
 
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;

@@ -42,7 +42,7 @@ import java.util.function.Predicate;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MainService;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -631,5 +631,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public String getOmString(String key, final Locale loc, String... params) {
 		return getString(key, loc, params);
+	}
+
+	@Override
+	public Client getOmClient(String uid) {
+		return getOnlineClient(uid);
 	}
 }

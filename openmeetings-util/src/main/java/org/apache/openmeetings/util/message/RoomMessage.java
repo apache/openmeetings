@@ -47,6 +47,8 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, requestRightExclusive
 		, haveQuestion
 		, kick
+		, newStream
+		, closeStream
 	}
 	private final Date timestamp;
 	private final String uid;

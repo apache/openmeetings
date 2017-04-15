@@ -18,19 +18,19 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_FPS;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_PORT;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_SECURE;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_SSL_PORT;
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_FPS;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_PORT;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SECURE;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SSL_PORT;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.net.URL;
 
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -48,8 +48,8 @@ public class VideoSettings extends Panel {
 	private final static long serialVersionUID = 1L;
 	private final static Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, webAppRootKey);
 	private final static ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
-	private final static String URL = "url";
-	private final static String FALLBACK = "fallback";
+	public final static String URL = "url";
+	public final static String FALLBACK = "fallback";
 
 	public VideoSettings(String id) {
 		super(id);
@@ -79,8 +79,8 @@ public class VideoSettings extends Panel {
 			URL url = new URL(cp.getCodebase());
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
+			s.put(FLASH_NATIVE_SSL, gs.getBoolean(FLASH_NATIVE_SSL));
 			if (gs.getBoolean(FLASH_SECURE)) {
-				s.put(FLASH_NATIVE_SSL, gs.getBoolean(FLASH_NATIVE_SSL));
 				s.put(URL, getUri("rtmps", url.getHost(), gs.getString(FLASH_SSL_PORT), path));
 				s.put(FALLBACK, getUri("rtmps", url.getHost(), url.getPort(), path));
 			} else {

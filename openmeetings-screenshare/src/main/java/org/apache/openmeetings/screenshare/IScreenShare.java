@@ -30,7 +30,7 @@ public interface IScreenShare extends ClientExceptionHandler {
 	RTMPConnection getConnection();
 	void invoke(String method, Object[] params, IPendingServiceCallback callback);
 	Map<String, Object> makeDefaultConnectionParams(String server, int port, String application);
-	void connect(String server, int port, Map<String, Object> connectionParams, IPendingServiceCallback connectCallback);
+	void connect(String server, int port, Map<String, Object> connectionParams, IPendingServiceCallback connectCallback, Object[] connectCallArguments);
 	void setServiceProvider(Object serviceProvider);
 	void disconnect();
 	void createStream(IPendingServiceCallback callback);
