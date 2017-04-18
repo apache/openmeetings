@@ -122,6 +122,8 @@ public class RoomPanel extends BasePanel {
 			options.put("interview", Room.Type.interview == r.getType());
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
+			// play video from other participants
+			playVideos(target);
 			getMainPanel().getChat().roomEnter(r, target);
 			if (r.isFilesOpened()) {
 				sidebar.setFilesActive(target);
@@ -156,6 +158,23 @@ public class RoomPanel extends BasePanel {
 		//private String publishingUser = null;
 	}
 
+	private void playVideos(AjaxRequestTarget target) {
+		for (Client c: getRoomClients(getRoom().getId()) ){
+			boolean self = getClient().getUid().equals(c.getUid());
+			if (!self) {
+				JSONObject json = c.toJson().put("sid", getSid()).put("self", self);
+				json.put("screenShare", false)
+					.put("uid", c.getUid())
+					.put("broadcastId", c.getBroadcastId())
+					.put("width", c.getWidth())
+					.put("height", c.getHeight());
+				target.appendJavaScript(String.format("VideoManager.play(%s);", json));
+			}
+			
+		}
+		
+	}
+	
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
