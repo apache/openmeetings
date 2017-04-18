@@ -60,7 +60,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.message.RoomMessage;
-import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
@@ -230,10 +229,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static void exitRoom(Client c) {
 		Long roomId = c.getRoomId();
+		removeUserFromRoom(c);
 		if (roomId != null) {
-			if (hasVideo(c)){
-				sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.closeStream, c.getUid()));
-			}
 			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomLeave
@@ -241,7 +238,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					, c.getRemoteAddress()
 					, "" + roomId);
 		}
-		removeUserFromRoom(c);
 	}
 
 	@Override

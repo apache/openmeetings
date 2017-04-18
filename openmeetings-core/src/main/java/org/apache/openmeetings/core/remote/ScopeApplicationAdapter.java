@@ -507,6 +507,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			if (client.isScreenClient() && client.isStartStreaming()) {
 				//TODO check others/find better way
 				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStoped, client.getStreamPublishName()));
+			} 
+			if (client.getIsBroadcasting()) {
+				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.closeStream, client.getPublicSID()));
 			}
 
 			log.debug("removing Username " + client.getUsername() + " "
