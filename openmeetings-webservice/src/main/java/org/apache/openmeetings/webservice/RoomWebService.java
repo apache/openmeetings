@@ -39,18 +39,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.InvitationDTO;
-import org.apache.openmeetings.db.dto.room.RoomCountBean;
+import org.apache.openmeetings.db.dto.room.RoomCountDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
@@ -58,8 +58,10 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +89,6 @@ public class RoomWebService {
 	private InvitationDao invitationDao;
 	@Autowired
 	private IInvitationManager invitationManager;
-	@Autowired
-	private ISessionManager sessionManager;
 	@Autowired
 	private RoomDao roomDao;
 
@@ -420,19 +420,20 @@ public class RoomWebService {
 	@WebMethod
 	@GET
 	@Path("/counters")
-	public List<RoomCountBean> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
-		List<RoomCountBean> roomBeans = new ArrayList<>();
+	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
+		List<RoomCountDTO> roomBeans = new ArrayList<>();
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
+				IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
 				List<Room> rooms = roomDao.get(ids);
 
 				for (Room room : rooms) {
-					RoomCountBean rCountBean = new RoomCountBean();
+					RoomCountDTO rCountBean = new RoomCountDTO();
 					rCountBean.setRoomId(room.getId());
 					rCountBean.setRoomName(room.getName());
 					rCountBean.setMaxUser(room.getNumberOfPartizipants());
-					rCountBean.setRoomCount(sessionManager.getClientListByRoom(room.getId()).size());
+					rCountBean.setRoomCount(app.getOmRoomClients(room.getId()).size());
 
 					roomBeans.add(rCountBean);
 				}

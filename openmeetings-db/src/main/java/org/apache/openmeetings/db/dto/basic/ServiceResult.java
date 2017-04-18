@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceResult implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static ServiceResult NO_PERMISSION = new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
 	private long code;
 	private String message;
 	private String type;
@@ -39,7 +40,7 @@ public class ServiceResult implements Serializable {
 	}
 
 	public ServiceResult() {}
-	
+
 	public ServiceResult(long code, String message, String type) {
 		super();
 		this.code = code;
@@ -53,7 +54,7 @@ public class ServiceResult implements Serializable {
 		this.message = message;
 		this.type = type.name();
 	}
-	
+
 	public long getCode() {
 		return code;
 	}
