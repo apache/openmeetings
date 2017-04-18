@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
@@ -106,7 +107,7 @@ public class GroupWebService {
 			return new ServiceResult(groupDao.update(o, userId).getId(), "Success", Type.SUCCESS);
 		} else {
 			log.error("Could not create group");
-			return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+			return NO_PERMISSION;
 		}
 	}
 
@@ -161,7 +162,7 @@ public class GroupWebService {
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("addUser", err);
@@ -205,7 +206,7 @@ public class GroupWebService {
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("addUser", err);
@@ -253,7 +254,7 @@ public class GroupWebService {
 				}
 				return new ServiceResult(0L, "Not added", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("[addRoom]", err);
@@ -333,7 +334,7 @@ public class GroupWebService {
 
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("deleteUserById", err);

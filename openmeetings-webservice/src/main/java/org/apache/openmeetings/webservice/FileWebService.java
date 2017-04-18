@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
@@ -111,7 +112,7 @@ public class FileWebService {
 				fileDao.delete(f);
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception e) {
 			log.error("[delete] ", e);

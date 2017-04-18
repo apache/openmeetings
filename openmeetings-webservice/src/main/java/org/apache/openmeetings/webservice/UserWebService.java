@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
@@ -41,7 +42,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.core.session.SessionManager;
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -59,20 +60,22 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.webservice.cluster.UserService;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * The Service contains methods to login and create hash to directly enter
  * conference rooms, recordings or the application in general
- * 
+ *
  * @author sebawagner
- * 
+ *
  */
 @WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
@@ -90,8 +93,6 @@ public class UserWebService implements UserService {
 	private UserDao userDao;
 	@Autowired
 	private SessiondataDao sessionDao;
-	@Autowired
-	private SessionManager sessionManager;
 
 	/* (non-Javadoc)
 	 * @see org.apache.openmeetings.webservice.cluster.UserService#login(java.lang.String, java.lang.String)
@@ -107,7 +108,7 @@ public class UserWebService implements UserService {
 			if (u == null) {
 				return new ServiceResult(-1L, "Login failed", Type.ERROR);
 			}
-			
+
 			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
 			log.debug("Login user SID : " + sd.getSessionId());
 			return new ServiceResult(u.getId(), sd.getSessionId(), Type.SUCCESS);
@@ -207,7 +208,7 @@ public class UserWebService implements UserService {
 	}
 
 	//FIXME no update
-	
+
 	/* (non-Javadoc)
 	 * @see org.apache.openmeetings.webservice.cluster.UserService#delete(java.lang.String, long)
 	 */
@@ -223,7 +224,7 @@ public class UserWebService implements UserService {
 
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("deleteUserById", err);
@@ -253,7 +254,7 @@ public class UserWebService implements UserService {
 
 				return new ServiceResult(user.getId(), "Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("deleteUserByExternalUserIdAndType", err);
@@ -305,7 +306,7 @@ public class UserWebService implements UserService {
 					return new ServiceResult(0, hash, Type.SUCCESS);
 				}
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("getRoomHash", err);
@@ -326,10 +327,10 @@ public class UserWebService implements UserService {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
 				Boolean success = userManagement.kickUserByPublicSID(sid, publicSID);
-	
+
 				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
+				return NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("[kick]", err);
@@ -344,11 +345,12 @@ public class UserWebService implements UserService {
 	@WebMethod
 	@GET
 	@Path("/count/{roomid}")
-	public int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
+	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		Sessiondata sd = sessionDao.check(sid);
 		if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-			return sessionManager.getClientListByRoom(roomId).size();
+			IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
+			return new ServiceResult(app.getOmRoomClients(roomId).size(), "count", Type.SUCCESS);
 		}
-		return -1;
+		return NO_PERMISSION;
 	}
 }

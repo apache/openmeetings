@@ -45,33 +45,33 @@ public interface UserService {
 	/**
 	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
 	 * @param pass - password
-	 *            
+	 *
 	 * @return - {@link ServiceResult} with error code or SID and userId
 	 */
 	ServiceResult login(@WebParam(name="user") @QueryParam("user") String user, @WebParam(name="pass") @QueryParam("pass") String pass);
 
 	/**
 	 * Lists all users in the system!
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
-	 *            
+	 *
 	 * @return - list of users
 	 * @throws ServiceException
 	 */
 	List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException;
-	
+
 	/**
 	 * Adds a new User like through the Frontend, but also does activates the
 	 * Account To do SSO see the methods to create a hash and use those ones!
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param user
 	 *            user object
 	 * @param confirm
 	 *            whatever or not to send email, leave empty for auto-send
-	 *            
+	 *
 	 * @return - id of the user added or error code
 	 * @throws ServiceException
 	 */
@@ -82,30 +82,30 @@ public interface UserService {
 			) throws ServiceException;
 
 	/**
-	 * 
+	 *
 	 * Delete a certain user by its id
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param id
 	 *            the openmeetings user id
-	 *            
+	 *
 	 * @return - id of the user deleted, error code otherwise
 	 * @throws ServiceException
 	 */
 	ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException;
 
 	/**
-	 * 
+	 *
 	 * Delete a certain user by its external user id
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param externalId
 	 *            externalUserId
 	 * @param externalType
 	 *            externalUserId
-	 *            
+	 *
 	 * @return - id of user deleted, or error code
 	 * @throws ServiceException
 	 */
@@ -119,14 +119,14 @@ public interface UserService {
 	 * Description: sets the SessionObject for a certain SID, after setting this
 	 * Session-Object you can use the SID + a RoomId to enter any Room. ...
 	 * Session-Hashs are deleted 15 minutes after the creation if not used.
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param user
 	 *            user details to set
 	 * @param options
 	 *            room options to set
-	 *            
+	 *
 	 * @return - secure hash or error code
 	 * @throws ServiceException
 	 */
@@ -138,7 +138,7 @@ public interface UserService {
 
 	/**
 	 * Kick a user by its public SID
-	 * 
+	 *
 	 * @param sid
 	 *            The SID from getSession
 	 * @param publicSID
@@ -151,10 +151,10 @@ public interface UserService {
 	/**
 	 * Returns the count of users currently in the Room with given id
 	 * No admin rights are necessary for this call
-	 * 
+	 *
 	 * @param sid The SID from UserService.getSession
 	 * @param roomId id of the room to get users
 	 * @return number of users as int
 	 */
-	int count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId);
+	ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId);
 }

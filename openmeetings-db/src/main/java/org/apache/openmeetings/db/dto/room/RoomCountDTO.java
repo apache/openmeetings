@@ -18,35 +18,48 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-public class RoomCountBean {
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+public class RoomCountDTO {
 	private Long roomId;
 	private String roomName;
 	private int roomCount;
 	private long maxUser;
-	
-	public RoomCountBean() {}
-	
+
+	public RoomCountDTO() {}
+
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
+
 	public String getRoomName() {
 		return roomName;
 	}
+
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
 	}
+
 	public int getRoomCount() {
 		return roomCount;
 	}
+
 	public void setRoomCount(int roomCount) {
 		this.roomCount = roomCount;
 	}
+
 	public long getMaxUser() {
 		return maxUser;
 	}
+
 	public void setMaxUser(long maxUser) {
 		this.maxUser = maxUser;
 	}
