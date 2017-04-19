@@ -101,8 +101,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 					RoomPoll p = getBean(PollDao.class).get(id);
 					selForm.select.setModelObject(p);
-					dispForm.updateModel(p, false, handler);
-					//TODO result dialogs of other users should also be updated
+					dispForm.updateModel(p, true, handler);
+					sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollUpdated));
 				}
 			}
 		});
@@ -278,10 +278,6 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		ChartConfiguration<Long> cfg = barChart.getChartConfiguration();
 		cfg.setLegend(null).setHighlighter(h);
 		cfg.axesInstance().setXaxis(null);
-		/*
-		 * cfg.axesInstance().xAxisInstance().setRenderer(JqPlotResources.
-		 * AxisTickRenderer);
-		 */
 		cfg.axesInstance().yAxisInstance().setTicks(ticks).setRenderer(JqPlotResources.CategoryAxisRenderer);
 		return barChart;
 	}
