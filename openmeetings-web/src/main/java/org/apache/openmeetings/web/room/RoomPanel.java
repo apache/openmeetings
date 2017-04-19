@@ -78,7 +78,6 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -170,11 +169,9 @@ public class RoomPanel extends BasePanel {
 					.put("height", c.getHeight());
 				target.appendJavaScript(String.format("VideoManager.play(%s);", json));
 			}
-			
 		}
-		
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -542,14 +539,11 @@ public class RoomPanel extends BasePanel {
 		getMainPanel().getChat().roomExit(r, handler);
 	}
 
-	private static ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(RoomPanel.class, "room.js");
-	}
-
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "jquery.dialogextend.js"))));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
 		WebSession ws = WebSession.get();
 		if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(

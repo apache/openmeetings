@@ -17,39 +17,57 @@
  * under the License.
  */
 var Video = (function() {
-	var self = {}, c, box, v, vc, t, swf;
+	var self = {}, c, box, v, vc, t, swf, size;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
 	}
-	function _resetSize() {
-		v.dialog("option", "width", c.width).dialog("option", "height", t.height() + c.height + 2);
-		vc.width(c.width).height(c.height);
-		swf.attr('width', c.width).attr('height', c.height);
+	function _resetSize(_w, _h) {
+		var w = _w || size.width, h = _h || size.height;
+		_setSize(w, h);
+	}
+	function _setSize(w, h) {
+		v.dialog("option", "width", w).dialog("option", "height", t.height() + h + 2);
+		vc.width(w).height(h);
+		swf.attr('width', w).attr('height', h);
 	}
 	function _init(_box, _c) {
 		c = _c;
 		box = _box;
+		size = {width: c.width, height: c.height};
 		var _id = "video" + c.uid, name = _getName()
-			, w = c.self ? Math.max(300, c.width) : c.width
-			, h = c.self ? Math.max(200, c.height) : c.height;
+			, _w = c.self ? Math.max(300, c.width) : c.width
+			, _h = c.self ? Math.max(200, c.height) : c.height;
 		box.append($('#user-video').clone().attr('id', _id).attr('title', name).data(self));
 		v = $('#' + _id);
 		v.dialog({
 			classes: {
 				'ui-dialog': 'ui-corner-all video user-video'
-				, 'ui-dialog-titlebar': 'ui-corner-all no-close'
 			}
-			, width: w
+			, width: _w
 			, minWidth: 40
 			, minHeight: 50
 			, autoOpen: true
 			, modal: false
-			//resizeStop
+			, resizeStop: function(event, ui) {
+				var i = 0;
+			}
+		}).dialogExtend({
+			icons: {
+				'collapse': 'ui-icon-minus'
+			}
+			, closable: false
+			, collapsable: true
+			, dblclick: "collapse"
+			, restore : function(evt, dlg) {
+				var w = c.self ? Math.max(300, size.width) : size.width
+					, h = c.self ? Math.max(200, size.height) : size.height;
+				_setSize(w, h);
+			}
 		});
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		vc = v.find('.video');
-		vc.width(w).height(h);
+		vc.width(_w).height(_h);
 		//broadcast
 		var o = VideoManager.getOptions();
 		if (c.self) {
@@ -65,7 +83,7 @@ var Video = (function() {
 		o.sid = c.sid;
 		o.broadcastId = c.broadcastId;
 		swf = initVideo(vc, _id + '-swf', o);
-		swf.attr('width', w).attr('height', h);
+		swf.attr('width', _w).attr('height', _h);
 	}
 	function _update(_c) {
 		// TODO check, update video
@@ -106,8 +124,7 @@ var VideoManager = (function() {
 		Video().init(box, c);
 	}
 	function _close(uid) {
-		var _id = _getVid(uid)
-			, v = $('#' + _id);
+		var _id = _getVid(uid), v = $('#' + _id);
 		if (v.length == 1) {
 			v.remove();
 		}
