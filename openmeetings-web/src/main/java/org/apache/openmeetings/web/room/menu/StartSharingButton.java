@@ -27,6 +27,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
+import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.InputStream;
 
@@ -41,9 +42,11 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.room.VideoSettings;
-import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -57,6 +60,7 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
 	private final Client c;
+	private String app = "";
 
 	public StartSharingButton(String id, Client c) {
 		super(id);
@@ -64,20 +68,26 @@ public class StartSharingButton extends OmButton {
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
 		add(new AttributeAppender("title", Application.getString(1480)));
-		add(download = new AjaxDownload(true) {
+		add(download = new AjaxDownload(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 
-			@Override
-			protected String getFileName() {
-				return String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId());
+			{
+				setFileName(String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId()));
+				setCacheDuration(NONE);
 			}
-		});
+
+			@Override
+			protected IResourceStream getResourceStream(Attributes attributes) {
+				StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
+				srs.setCharset(UTF_8);
+				return srs;
+			}
+		}));
 	}
 
 	@Override
 	public void onClick(AjaxRequestTarget target) {
 		//TODO deny download in case other screen sharing is in progress
-		String app = "";
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
@@ -108,10 +118,6 @@ public class StartSharingButton extends OmButton {
 					.replace("$allowRecording", "" + (room.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
 					.replace("$allowPublishing", "" + (0 == sessionManager.getPublishingCount(roomId)))
 					;
-
-			StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
-			srs.setCharset(UTF_8);
-			download.setResourceStream(srs);
 			download.initiate(target);
 		} catch (Exception e) {
 			log.error("Unexpected error while creating jnlp file", e);

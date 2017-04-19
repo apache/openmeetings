@@ -23,7 +23,10 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.wicket.util.time.Duration.NONE;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,19 +44,21 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.common.NameDialog;
-import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.CallbackParameter;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.extensions.ajax.AjaxDownload;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.resource.FileSystemResource;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -77,7 +82,24 @@ public abstract class FileTreePanel extends Panel {
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
 	private FileItem lastSelected = null;
 	private Map<String, FileItem> selected = new HashMap<>();
-	final AjaxDownload downloader = new AjaxDownload();
+	File dwnldFile;
+	final AjaxDownload downloader = new AjaxDownload(new IResource() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void respond(Attributes attributes) {
+			new FileSystemResource(dwnldFile.toPath()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected ResourceResponse createResourceResponse(Attributes attr, Path path) {
+					ResourceResponse response = super.createResourceResponse(attr, path);
+					response.setCacheDuration(NONE);
+					return response;
+				}
+			}.respond(attributes);
+		}
+	});
 	protected final IModel<String> homeSize = Model.of((String)null);
 	protected final IModel<String> publicSize = Model.of((String)null);
 	final ConvertingErrorsDialog errorsDialog = new ConvertingErrorsDialog("errors", Model.of((Recording)null));

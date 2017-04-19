@@ -20,8 +20,10 @@ package org.apache.openmeetings.web.admin.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -33,11 +35,11 @@ import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.extensions.ajax.AjaxDownload;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -45,8 +47,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -106,7 +109,23 @@ public class BackupPanel extends AdminPanel {
 			setMaxSize(Bytes.bytes(maxBytes));
 
 			// Add a component to download a file without page refresh
-			final AjaxDownload download = new AjaxDownload();
+			final AjaxDownload download = new AjaxDownload(new IResource() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void respond(Attributes attributes) {
+					new FileSystemResource(backupFile.toPath()) {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected ResourceResponse createResourceResponse(Attributes attr, Path path) {
+							ResourceResponse response = super.createResourceResponse(attr, path);
+							response.setCacheDuration(NONE);
+							return response;
+						}
+					}.respond(attributes);
+				}
+			});
 			add(download);
 			// add an download button
 			add(new AjaxButton("download", this) {
@@ -164,8 +183,6 @@ public class BackupPanel extends AdminPanel {
 					timer.stop(target);
 					target.add(progressBar.setVisible(false));
 
-					download.setFileName(backupFile.getName());
-					download.setResourceStream(new FileResourceStream(backupFile));
 					download.initiate(target);
 				}
 			}).setVisible(false).setOutputMarkupPlaceholderTag(true));
