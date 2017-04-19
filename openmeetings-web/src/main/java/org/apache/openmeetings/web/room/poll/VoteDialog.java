@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.poll;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -30,6 +31,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -121,6 +123,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		a.setVoteDate(new Date());
 		a.getRoomPoll().getAnswers().add(a);
 		getBean(PollDao.class).update(a.getRoomPoll());
+		sendRoom(new RoomMessage(a.getRoomPoll().getRoom().getId(), getUserId(), RoomMessage.Type.pollUpdated));
 	}
 
 	@Override

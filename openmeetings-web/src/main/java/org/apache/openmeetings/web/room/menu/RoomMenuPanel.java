@@ -325,6 +325,8 @@ public class RoomMenuPanel extends Panel {
 		RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
 		if (rp != null) {
 			vote.updateModel(handler, rp);
+		} else {
+			vote.close(handler, null);
 		}
 		if (createdBy != null && !getUserId().equals(createdBy)) {
 			vote.open(handler);
