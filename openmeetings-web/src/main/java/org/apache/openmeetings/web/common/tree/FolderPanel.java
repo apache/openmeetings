@@ -91,6 +91,7 @@ public class FolderPanel extends Panel {
 					behavior.setOption("revert", "treeRevert");
 					behavior.setOption("cursor", Options.asString("move"));
 					behavior.setOption("helper", "dragHelper");
+					behavior.setOption("cursorAt", "{left: 40, top: 18}");
 				}
 			}.setContainment(treePanel.getContainment());
 			String cls = r instanceof Recording ? "recorditem" : "fileitem";

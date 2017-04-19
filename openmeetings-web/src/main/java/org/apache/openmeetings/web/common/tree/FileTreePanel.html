@@ -27,9 +27,9 @@
 			if (s.parents('a').hasClass('ui-state-active')) {
 				s = $('.ui-state-active .ui-draggable.ui-draggable-handle');
 			}
-			var c = $('<div/>').attr('id', 'draggingContainer');
-			c.append(s.clone());
-			return c;
+			var c = $('<div/>').attr('id', 'draggingContainer').width(80).height(36);
+			var h = $('<div class="ui-corner-all ui-widget-header"/>').append(s.clone()).width(s.width());
+			return c.append(h);
 		}
 		function treeRevert(dropped) {
 			$('.file.tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
