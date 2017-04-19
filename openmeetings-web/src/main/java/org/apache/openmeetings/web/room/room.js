@@ -67,10 +67,12 @@ function roomLoad() {
 		}
 	});
 	Wicket.Event.subscribe("/websocket/closed", roomClosed);
+	Wicket.Event.subscribe("/websocket/error", roomClosed);
 }
 function roomUnload() {
 	$(window).off('resize.openmeetings');
 	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
+	Wicket.Event.unsubscribe("/websocket/error", roomClosed);
 }
 function startPrivateChat(el) {
 	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
