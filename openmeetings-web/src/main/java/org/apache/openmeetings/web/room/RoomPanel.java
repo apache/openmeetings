@@ -162,11 +162,7 @@ public class RoomPanel extends BasePanel {
 			boolean self = getClient().getUid().equals(c.getUid());
 			if (!self) {
 				JSONObject json = c.toJson().put("sid", getSid()).put("self", self);
-				json.put("screenShare", false)
-					.put("uid", c.getUid())
-					.put("broadcastId", c.getBroadcastId())
-					.put("width", c.getWidth())
-					.put("height", c.getHeight());
+				// TODO we should check if client is screenShare, see onEvent newStream case.
 				target.appendJavaScript(String.format("VideoManager.play(%s);", json));
 			}
 		}
