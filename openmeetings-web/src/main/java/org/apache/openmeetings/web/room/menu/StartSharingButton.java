@@ -72,12 +72,12 @@ public class StartSharingButton extends OmButton {
 			private static final long serialVersionUID = 1L;
 
 			{
-				setFileName(String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId()));
 				setCacheDuration(NONE);
 			}
 
 			@Override
 			protected IResourceStream getResourceStream(Attributes attributes) {
+				setFileName(String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId()));
 				StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
 				srs.setCharset(UTF_8);
 				return srs;
