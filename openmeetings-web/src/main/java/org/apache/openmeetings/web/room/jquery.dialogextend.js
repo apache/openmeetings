@@ -280,7 +280,7 @@
     collapse: function() {
       var newHeight, pos;
 
-      newHeight = $(this.element[0]).dialog("widget").find(".ui-dialog-titlebar").height() + 15;
+      newHeight = $(this.element[0]).dialog("widget").find(".ui-dialog-titlebar").height() + 2;
       this._trigger("beforeCollapse");
       if (this._state !== "normal") {
         this._restore();
@@ -292,7 +292,7 @@
         "height": newHeight,
         "maxHeight": newHeight,
         "position": [pos.left - $(document).scrollLeft(), pos.top - $(document).scrollTop()]
-      }).on('dialogclose', this._collapse_restore).hide().dialog("widget").find(".ui-dialog-buttonpane:visible").hide().end().find(".ui-dialog-titlebar").css("white-space", "nowrap").end().find(".ui-dialog-content");
+      }).on('dialogclose', this._collapse_restore).dialog("widget").find(".ui-dialog-buttonpane:visible").hide().end().find(".ui-dialog-titlebar").css("white-space", "nowrap").end().find(".ui-dialog-content");
       this._setState("collapsed");
       this._toggleButtons();
       return this._trigger("collapse");

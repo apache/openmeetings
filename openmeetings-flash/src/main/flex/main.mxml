@@ -126,6 +126,10 @@
 				}
 					break;
 			}
+			ExternalInterface.addCallback("vidResize", function (width:int, height:int):void {
+				video.resize(width, height);
+				video.vidResize(width, height);
+			});
 		}
 
 		private function uncaughtError(e:UncaughtErrorEvent):void {

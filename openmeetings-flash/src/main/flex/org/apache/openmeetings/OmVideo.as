@@ -67,6 +67,12 @@ public class OmVideo {
 		this.height = ui.height = height;
 	}
 
+	public function vidResize(width:int, height:int):void {
+		vid.width = width;
+		vid.height = height;
+		debug("OmVideo::resize", width, height);
+	}
+
 	public function attachCamera(cam:Camera):void {
 		getVideo().attachCamera(cam);
 	}

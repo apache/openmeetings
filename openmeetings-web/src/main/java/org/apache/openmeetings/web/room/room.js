@@ -24,10 +24,10 @@ var Video = (function() {
 	}
 	function _resetSize(_w, _h) {
 		var w = _w || size.width, h = _h || size.height;
+		v.dialog("option", "width", w).dialog("option", "height", t.height() + h + 2);
 		_setSize(w, h);
 	}
 	function _setSize(w, h) {
-		v.dialog("option", "width", w).dialog("option", "height", t.height() + h + 2);
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
@@ -50,7 +50,9 @@ var Video = (function() {
 			, autoOpen: true
 			, modal: false
 			, resizeStop: function(event, ui) {
-				var i = 0;
+				var w = ui.size.width - 2, h = ui.size.height - t.height() - 4;
+				_setSize(w, h);
+				swf[0].vidResize(w, h);
 			}
 		}).dialogExtend({
 			icons: {
@@ -59,11 +61,6 @@ var Video = (function() {
 			, closable: false
 			, collapsable: true
 			, dblclick: "collapse"
-			, restore : function(evt, dlg) {
-				var w = c.self ? Math.max(300, size.width) : size.width
-					, h = c.self ? Math.max(200, size.height) : size.height;
-				_setSize(w, h);
-			}
 		});
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		vc = v.find('.video');
