@@ -414,7 +414,7 @@ public class RoomSidebar extends Panel {
 			}
 			Pod pod = c.getPod();
 			c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
-			if (pod != Pod.none && pod != c.getPod()) {
+			if (pod != null && pod != Pod.none && pod != c.getPod()) {
 				//pod has changed, no need to toggle
 				c.set(a);
 			} else {

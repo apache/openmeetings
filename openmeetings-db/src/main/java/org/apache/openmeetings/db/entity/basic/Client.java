@@ -342,7 +342,7 @@ public class Client implements IClient {
 		return true;
 	}
 
-	public JSONObject toJson() {
+	public JSONObject toJson(boolean self) {
 		JSONObject u = new JSONObject();
 		if (user != null) {
 			JSONObject a = new JSONObject();
@@ -356,7 +356,7 @@ public class Client implements IClient {
 				a.put("country", user.getAddress().getCountry());
 			}
 		}
-		return new JSONObject()
+		JSONObject json = new JSONObject()
 				.put("user", u)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
@@ -364,7 +364,12 @@ public class Client implements IClient {
 				.put("pod", pod)
 				.put("broadcastId", broadcastId)
 				.put("width", width)
-				.put("height", height);
+				.put("height", height)
+				.put("self", self);
+		if (self) {
+			json.put("cam", cam).put("mic", mic);
+		}
+		return json;
 	}
 
 	@Override

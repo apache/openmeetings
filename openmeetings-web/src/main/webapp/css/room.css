@@ -354,10 +354,22 @@
 }
 .ui-dialog.video, .ui-dialog.video .ui-dialog-titlebar, .ui-dialog.video .ui-dialog-content {
 	padding: 0;
+}
+.ui-dialog.video .ui-dialog-content {
 	overflow: hidden;
 }
 .ui-dialog.video .ui-dialog-titlebar {
-	padding-left:10px
+	padding-left: 10px
+}
+.dropdown-menu.video.volume, .dropdown-menu.video.volume li {
+	width: 20px;
+	min-width: 20px;
+	border-radius: 0;
+	border: 0;
+	box-shadow: initial;
+	left: 50px;
+	top: -50px;
+	background-color: transparent;
 }
 .ui-dialog.video .title {
 	font-weight: bold;

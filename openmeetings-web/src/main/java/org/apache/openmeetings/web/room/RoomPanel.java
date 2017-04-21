@@ -161,7 +161,7 @@ public class RoomPanel extends BasePanel {
 		for (Client c: getRoomClients(getRoom().getId()) ){
 			boolean self = getClient().getUid().equals(c.getUid());
 			if (!self) {
-				JSONObject json = c.toJson().put("sid", getSid()).put("self", self);
+				JSONObject json = c.toJson(self).put("sid", getSid());
 				// TODO we should check if client is screenShare, see onEvent newStream case.
 				target.appendJavaScript(String.format("VideoManager.play(%s);", json));
 			}
@@ -344,7 +344,7 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user has stopped recording {} !!!!", uid);
 								return;
 							}
-							c.getActivities().remove(Client.Activity.record);
+							c.remove(Client.Activity.record);
 						}
 						break;
 					case recordingStarted:
@@ -356,17 +356,30 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user has started recording {} !!!!", recordingUser);
 								return;
 							}
-							c.getActivities().add(Client.Activity.record);
+							c.set(Client.Activity.record);
 						}
 						break;
 					case sharingStoped:
-						//TODO check sharingUser == ((TextRoomMessage)m).getText();
-						sharingUser = null;
-						menu.update(handler);
+						{
+							sharingUser = null;
+							Client c = getOnlineClient(((TextRoomMessage)m).getText());
+							if (c == null) {
+								log.error("Not existing user has started sharing {} !!!!", sharingUser);
+								return;
+							}
+							c.remove(Client.Activity.share);
+							menu.update(handler);
+						}
 						break;
 					case sharingStarted:
 						{
 							sharingUser = ((TextRoomMessage)m).getText();
+							Client c = getOnlineClient(sharingUser);
+							if (c == null) {
+								log.error("Not existing user has started sharing {} !!!!", sharingUser);
+								return;
+							}
+							c.set(Client.Activity.share);
 							menu.update(handler);
 						}
 						break;
@@ -374,7 +387,7 @@ public class RoomPanel extends BasePanel {
 						{
 							Client c = getOnlineClient(((TextRoomMessage)m).getText());
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.toJson().put("sid", getSid()).put("self", getClient().getUid().equals(c.getUid()))));
+									, c.toJson(getClient().getUid().equals(c.getUid())).put("sid", getSid())));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -386,7 +399,7 @@ public class RoomPanel extends BasePanel {
 						Client c = getOnlineClient(obj.getString("uid"));
 						boolean self = getClient().getUid().equals(c.getUid());
 						if (!self) {
-							JSONObject json = c.toJson().put("sid", getSid()).put("self", self);
+							JSONObject json = c.toJson(self).put("sid", getSid());
 							if (obj.optBoolean("screenShare", false)) {
 								json.put("screenShare", true)
 									.put("uid", obj.getString("suid")) // unique screen-sharing ID

@@ -63,6 +63,30 @@ var Video = (function() {
 			, dblclick: "collapse"
 		});
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
+		v.parent().find('.ui-dialog-titlebar-buttonpane').append($('#video-volume-btn').children().clone());
+		var volume = v.parent().find('.dropdown-menu.video.volume');
+		v.parent().find('.ui-dialog-titlebar-volume').click(function(e) {
+			e.stopImmediatePropagation();
+			volume.toggle();
+		}).dblclick(function(e) {
+			e.stopImmediatePropagation();
+		});
+		var handle = v.parent().find('.slider .handle');
+		v.parent().find('.slider').slider({
+			orientation: 'vertical'
+			, range: 'min'
+			, min: 0
+			, max: 100
+			, value: 60
+			, slide: function(event, ui) {
+			}
+			, create: function() {
+				handle.text($(this).slider("value"));
+			}
+			, slide: function(event, ui) {
+				handle.text(ui.value);
+			}
+		});
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 		//broadcast

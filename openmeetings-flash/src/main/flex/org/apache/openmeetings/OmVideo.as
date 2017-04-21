@@ -45,6 +45,7 @@ public class OmVideo {
 	public var height:int;
 	private var mode:String;
 	private var params:Object;
+	private var url:String;
 	private var fallback:Boolean;
 
 	public function OmVideo(ui:UIComponent, params:Object) {
@@ -97,9 +98,6 @@ public class OmVideo {
 	private function createStream():void {
 		debug("createStream: ");
 		ns = new NetStream(nc);
-		//see: http://livedocs.adobe.com/flash/9.0_de/ActionScriptLangRefV3/flash/net/NetStream.html
-		//according to the docs the construct to catch event has to be implemented like this.
-		//var t = this;
 		ns.client = {
 			onMetaData: function(metadata:Object):void {
 				debug("onMetaData: ", metadata);
@@ -137,7 +135,6 @@ public class OmVideo {
 
 		if (cam != null) {
 			ns.attachCamera(cam);
-			//invokes Method in baseVideoView which shows the cam
 			attachCamera(cam);
 
 			var videoStreamSettings:VideoStreamSettings = null;
@@ -166,17 +163,33 @@ public class OmVideo {
 		}
 	}
 
+	private function _connect(url:String):void {
+		nc.connect(url, {
+			uid: params.uid
+			, sid: params.sid
+			, nativeSsl: 'best' == params.proxyType
+		});
+	}
+
 	private function connect(callback:Function):void {
 		if (nc == null || !nc.connected) {
-			var url:String = params.url;  //TODO fallback
+			url = params.url;
 			debug("NetConnection is not connected", url);
 			nc = new NetConnection();
 			nc.addEventListener(NetStatusEvent.NET_STATUS, function onConnectionStatus(e:NetStatusEvent):void {
 				debug("ConnectionStatus: " + e.info.code);
-				if (e.info.code == "NetConnection.Connect.Success") {
-					callback();
-				} else {
-					//TODO
+				switch (e.info.code) {
+					case 'NetConnection.Connect.Failed':
+						if (!fallback) {
+							fallback = true;
+							url = params.fallback;
+							_connect(url);
+						}
+						break;
+					case 'NetConnection.Connect.Success':
+						callback();
+						break;
+					//TODO other cases
 				}
 			});
 			nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, function (event:AsyncErrorEvent):void {
@@ -197,11 +210,7 @@ public class OmVideo {
 					debug("id: " + id); //TODO save connection id
 				}
 			};
-			nc.connect(url, {
-				uid: params.uid
-				, sid: params.sid
-				, nativeSsl: 'best' == params.proxyType
-			});
+			_connect(url);
 		} else {
 			callback();
 		}
