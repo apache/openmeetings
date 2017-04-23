@@ -323,13 +323,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 				if (!rcl.getIsBroadcasting() || hasVideo(rcl) != hasVideo(client)) {
 					rcl.setIsBroadcasting(true);
-					rcl.setBroadCastID(ScopeApplicationAdapter.nextBroadCastId());
+					rcl.setBroadCastId("" + ScopeApplicationAdapter.nextBroadCastId());
 				}
 				rcl.setAvsettings(sb.toString());
 			} else {
 				rcl.setAvsettings("n");
 				rcl.setIsBroadcasting(false);
-				rcl.setBroadCastID(-1L);
+				rcl.setBroadCastId("-1");
 			}
 		}
 		return rcl;

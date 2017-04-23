@@ -588,10 +588,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// In case its a screen sharing we start a new Video for that
 			if (c.isScreenClient()) {
 				c.setScreenPublishStarted(true);
+				c.setBroadCastId(stream.getPublishedName());
 				sessionManager.updateClientByStreamId(streamid, c, false, null);
 			}
 			if (!c.isMobile() && !Strings.isEmpty(c.getSecurityCode())) {
-				c.setBroadCastID(Long.parseLong(stream.getPublishedName()));
+				c.setBroadCastId(stream.getPublishedName());
 				c.setAvsettings("av");
 				c.setIsBroadcasting(true);
 				if (c.getVWidth() == 0 || c.getVHeight() == 0) {
@@ -680,8 +681,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
 				recordingService.stopRecordingShowForClient(current.getScope(), rcl);
 			}
-			if (stream.getPublishedName().equals("" + rcl.getBroadCastID())) {
-				rcl.setBroadCastID(-1);
+			if (stream.getPublishedName().equals(rcl.getBroadCastId())) {
+				rcl.setBroadCastId("-1");
 				rcl.setIsBroadcasting(false);
 				rcl.setAvsettings("n");
 			}
@@ -1239,7 +1240,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		currentClient.setRoomEnter(new Date());
 		currentClient.setFirstname("SIP Transport");
 		currentClient.setLastname(getSipTransportLastname(roomId));
-		currentClient.setBroadCastID(Long.parseLong(broadCastId));
+		currentClient.setBroadCastId(broadCastId);
 		currentClient.setIsBroadcasting(true);
 		currentClient.setPublicSID(publicSID);
 		currentClient.setVWidth(120);

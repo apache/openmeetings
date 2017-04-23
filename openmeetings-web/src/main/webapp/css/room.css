@@ -79,6 +79,9 @@
 .room.menu.right .icon.share {
 	background-image: url(images/monitor_go.png);
 }
+.room.menu.right .icon.shared {
+	background-image: url(images/shared.png);
+}
 .room.menu.right .icon .profile {
 	margin-top: 3px;
 }

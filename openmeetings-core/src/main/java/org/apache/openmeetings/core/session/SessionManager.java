@@ -213,7 +213,7 @@ public class SessionManager implements ISessionManager {
 			// get the corresponding user session object and update the settings
 			StreamClient rclUsual = getClientByPublicSID(rcm.getPublicSID(), server);
 			if (rclUsual != null) {
-				rclUsual.setBroadCastID(rcm.getBroadCastID());
+				rclUsual.setBroadCastId(rcm.getBroadCastId());
 				rclUsual.setAvsettings(rcm.getAvsettings());
 				rclUsual.setVHeight(rcm.getVHeight());
 				rclUsual.setVWidth(rcm.getVWidth());

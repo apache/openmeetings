@@ -165,7 +165,7 @@ public class RecordingService implements IPendingServiceCallback {
 						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 							// if the user does publish av, a, v
 							// But we only record av or a, video only is not interesting
-							String broadcastId = "" + rcl.getBroadCastID();
+							String broadcastId = rcl.getBroadCastId();
 							String streamName = generateFileName(recordingId, broadcastId);
 
 							// Add Meta Data
@@ -332,7 +332,7 @@ public class RecordingService implements IPendingServiceCallback {
 							}
 						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 
-							stopRecordingShow(scope, String.valueOf(rcl.getBroadCastID()).toString(), rcl.getRecordingMetaDataId());
+							stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getRecordingMetaDataId());
 
 							// Update Meta Data
 							metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
@@ -422,7 +422,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 				// FIXME: Is there really a need to stop it manually if the user
 				// just stops the stream?
-				stopRecordingShow(scope, String.valueOf(rcl.getBroadCastID()), rcl.getRecordingMetaDataId());
+				stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getRecordingMetaDataId());
 
 				// Update Meta Data
 				metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
@@ -461,7 +461,7 @@ public class RecordingService implements IPendingServiceCallback {
 				// if the user does publish av, a, v
 				// But we only record av or a, video only is not interesting
 
-				String streamName = generateFileName(recordingId, String.valueOf(rcl.getBroadCastID()).toString());
+				String streamName = generateFileName(recordingId, rcl.getBroadCastId());
 
 				// Add Meta Data
 				boolean isAudioOnly = false;
@@ -477,7 +477,7 @@ public class RecordingService implements IPendingServiceCallback {
 						+ rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName, rcl.getInterviewPodId());
 
 				// Start FLV recording
-				recordShow(conn, String.valueOf(rcl.getBroadCastID()).toString(), streamName, metaDataId, false, recording.isInterview());
+				recordShow(conn, rcl.getBroadCastId(), streamName, metaDataId, false, recording.isInterview());
 
 				rcl.setRecordingMetaDataId(metaDataId);
 

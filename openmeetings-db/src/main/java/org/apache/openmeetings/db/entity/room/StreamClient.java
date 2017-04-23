@@ -46,22 +46,22 @@ import org.apache.openmeetings.util.CalendarPatterns;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "deleteAll", query = "DELETE FROM Client"),
-	@NamedQuery(name = "deletedById", query = "DELETE FROM Client c WHERE c.id = :id"),
-	@NamedQuery(name = "deleteClientsByServer", query = "DELETE FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "deletedByServerAndStreamId", query = "DELETE FROM Client c WHERE c.server = :server AND c.streamid LIKE :streamid"),
-	@NamedQuery(name = "countClients", query = "SELECT count(c.id) FROM Client c"),
-	@NamedQuery(name = "countClientsByServer", query = "SELECT count(c.id) FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "countClientsByServerAndStreamId", query = "SELECT count(c.id) FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
-	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
-	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
-	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID"),
-	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
-	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM Client c LEFT JOIN FETCH c.server"),
-	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.userId = :userId"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.roomId = :roomId"),
-	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM Client c WHERE c.server = :server GROUP BY c.roomId")
+	@NamedQuery(name = "deleteAll", query = "DELETE FROM StreamClient"),
+	@NamedQuery(name = "deletedById", query = "DELETE FROM StreamClient c WHERE c.id = :id"),
+	@NamedQuery(name = "deleteClientsByServer", query = "DELETE FROM StreamClient c WHERE c.server = :server"),
+	@NamedQuery(name = "deletedByServerAndStreamId", query = "DELETE FROM StreamClient c WHERE c.server = :server AND c.streamid LIKE :streamid"),
+	@NamedQuery(name = "countClients", query = "SELECT count(c.id) FROM StreamClient c"),
+	@NamedQuery(name = "countClientsByServer", query = "SELECT count(c.id) FROM StreamClient c WHERE c.server = :server"),
+	@NamedQuery(name = "countClientsByServerAndStreamId", query = "SELECT count(c.id) FROM StreamClient c WHERE c.streamid LIKE :streamid AND c.server = :server"),
+	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM StreamClient c WHERE c.streamid LIKE :streamid AND c.server = :server"),
+	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM StreamClient c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
+	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM StreamClient c WHERE c.publicSID LIKE :publicSID"),
+	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM StreamClient c WHERE c.server = :server"),
+	@NamedQuery(name = "getClients", query = "SELECT c FROM StreamClient c"),
+	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM StreamClient c LEFT JOIN FETCH c.server"),
+	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM StreamClient c WHERE c.server = :server AND c.userId = :userId"),
+	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM StreamClient c WHERE c.roomId = :roomId"),
+	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM StreamClient c WHERE c.server = :server GROUP BY c.roomId")
 })
 @Table(name = "client")
 @XmlRootElement
@@ -225,7 +225,7 @@ public class StreamClient implements IClient {
 	 * @see StreamClient#getBroadCastID()
 	 */
 	@Column(name = "broadcast_id")
-	private long broadCastID = -2;
+	private String broadCastId = "-2";
 
 	/**
 	 * @see StreamClient#getUserId()
@@ -629,12 +629,12 @@ public class StreamClient implements IClient {
 		this.avsettings = avsettings;
 	}
 
-	public long getBroadCastID() {
-		return broadCastID;
+	public String getBroadCastId() {
+		return broadCastId;
 	}
 
-	public void setBroadCastID(long broadCastID) {
-		this.broadCastID = broadCastID;
+	public void setBroadCastId(String broadCastId) {
+		this.broadCastId = broadCastId;
 	}
 
 	public String getPublicSID() {
@@ -888,7 +888,7 @@ public class StreamClient implements IClient {
 	@Override
 	public String toString() {
 		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
-				+ ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
+				+ ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastId + ", userId="
 				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
 				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
 				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";

@@ -261,7 +261,7 @@ public class MobileService {
 				if (!Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
 					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getStreamid());
-					add(map, "broadCastId", c.getBroadCastID());
+					add(map, "broadCastId", c.getBroadCastId());
 					add(map, "userId", c.getUserId());
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
@@ -339,7 +339,7 @@ public class MobileService {
 		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		Map<String, Object> result = new HashMap<>();
 		result.put("publicSid", c.getPublicSID());
-		result.put("broadCastId", c.getBroadCastID());
+		result.put("broadCastId", c.getBroadCastId());
 		return result;
 	}
 
@@ -348,7 +348,7 @@ public class MobileService {
 		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
 		if (!"n".equals(avMode)) {
-			c.setBroadCastID(nextBroadCastId());
+			c.setBroadCastId("" + nextBroadCastId());
 			c.setIsBroadcasting(true);
 		}
 		c.setVWidth(Double.valueOf(width).intValue());
@@ -362,7 +362,7 @@ public class MobileService {
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
 		Map<String, Object> result = new HashMap<>();
 		if (!"n".equals(avMode)) {
-			result.put("broadcastId", c.getBroadCastID());
+			result.put("broadcastId", c.getBroadCastId());
 		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);

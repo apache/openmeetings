@@ -147,16 +147,11 @@ public class RoomPanel extends BasePanel {
 	private final WbPanel wb;
 	private String sharingUser = null;
 	private String recordingUser = null;
-	private String publishingUser = null; //TODO add
 
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
 		this.wb = new WbPanel("whiteboard", this);
-		//TODO check here and set
-		//private String recordingUser = null;
-		//private String sharingUser = null;
-		//private String publishingUser = null;
 	}
 
 	private void initVideos(AjaxRequestTarget target) {
@@ -343,51 +338,51 @@ public class RoomPanel extends BasePanel {
 					case recordingStoped:
 						{
 							String uid = ((TextRoomMessage)m).getText();
-							if (Strings.isEmpty(uid) || !uid.equals(recordingUser)) {
-								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid, recordingUser);
-							}
-							recordingUser = null;
-							menu.update(handler);
 							Client c = getOnlineClient(uid);
-							if (c == null) {
-								log.error("Not existing user has stopped recording {} !!!!", uid);
+							if (c == null || !c.hasActivity(Client.Activity.record)) {
+								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid);
 								return;
 							}
+							recordingUser = null;
 							c.remove(Client.Activity.record);
+							menu.update(handler);
 						}
 						break;
 					case recordingStarted:
 						{
-							recordingUser = ((TextRoomMessage)m).getText();
-							menu.update(handler);
-							Client c = getOnlineClient(recordingUser);
+							String uid = ((TextRoomMessage)m).getText();
+							Client c = getOnlineClient(uid);
 							if (c == null) {
-								log.error("Not existing user has started recording {} !!!!", recordingUser);
+								log.error("Not existing user has started recording {} !!!!", uid);
 								return;
 							}
+							recordingUser = uid;
 							c.set(Client.Activity.record);
+							menu.update(handler);
 						}
 						break;
 					case sharingStoped:
 						{
-							sharingUser = null;
-							Client c = getOnlineClient(((TextRoomMessage)m).getText());
-							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", sharingUser);
+							String uid = ((TextRoomMessage)m).getText();
+							Client c = getOnlineClient(uid);
+							if (c == null || !c.hasActivity(Client.Activity.share)) {
+								log.error("Not existing user has started sharing {} !!!!", uid);
 								return;
 							}
+							sharingUser = null;
 							c.remove(Client.Activity.share);
 							menu.update(handler);
 						}
 						break;
 					case sharingStarted:
 						{
-							sharingUser = ((TextRoomMessage)m).getText();
-							Client c = getOnlineClient(sharingUser);
+							String uid = ((TextRoomMessage)m).getText();
+							Client c = getOnlineClient(uid);
 							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", sharingUser);
+								log.error("Not existing user has started sharing {} !!!!", uid);
 								return;
 							}
+							sharingUser = uid;
 							c.set(Client.Activity.share);
 							menu.update(handler);
 						}
@@ -652,7 +647,7 @@ public class RoomPanel extends BasePanel {
 		Room r = getRoom();
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
-				&& getSharingUser() == null;
+				&& sharingUser == null;
 	}
 
 	public RoomSidebar getSidebar() {
@@ -676,6 +671,6 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public String getPublishingUser() {
-		return publishingUser;
+		return null;
 	}
 }

@@ -33,7 +33,7 @@ public class RoomHelper {
 
 			json.put("screenShare", true)
 				.put("uid", sc.getPublicSID()) // unique screen-sharing ID
-				.put("broadcastId", sc.getBroadCastID())
+				.put("broadcastId", sc.getBroadCastId())
 				.put("width", sc.getVWidth())
 				.put("height", sc.getVHeight());
 		}
