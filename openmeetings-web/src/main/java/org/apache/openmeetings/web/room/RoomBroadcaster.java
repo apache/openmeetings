@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.web.app.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -32,13 +32,13 @@ import org.slf4j.Logger;
 public class RoomBroadcaster {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, webAppRootKey);
 
-	public static Client getClient(String publicSid) {
+	public static StreamClient getClient(String publicSid) {
 		ClientSessionInfo csi = getBean(SessionManager.class).getClientByPublicSIDAnyServer(publicSid);
 		return csi == null ? null : csi.getRcl();
 	}
 
 	public static void broadcast(String publicSid, String method, Object obj) {
-		Client rc = getClient(publicSid);
+		StreamClient rc = getClient(publicSid);
 		if (rc == null) {
 			return;
 		}
@@ -51,7 +51,7 @@ public class RoomBroadcaster {
 	}
 
 	public static void sendUpdatedClient(org.apache.openmeetings.db.entity.basic.Client client) {
-		org.apache.openmeetings.db.entity.room.Client rcl = Application.get().updateClient(getClient(client.getUid()), true);
+		StreamClient rcl = Application.get().updateClient(getClient(client.getUid()), true);
 		log.debug("-----------  sendUpdatedClient ");
 
 		if (rcl == null) {

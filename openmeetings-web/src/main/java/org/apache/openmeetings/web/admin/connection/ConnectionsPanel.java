@@ -30,7 +30,7 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.entity.basic.IClient;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
@@ -89,8 +89,8 @@ public class ConnectionsPanel extends AdminPanel {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						IClient _c = item.getModelObject();
-						if (_c instanceof Client) {
-							Client c = (Client)_c;
+						if (_c instanceof StreamClient) {
+							StreamClient c = (StreamClient)_c;
 							getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
 									, c.getServer() == null ? 0 : c.getServer().getId());
 						} else {
@@ -100,8 +100,8 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(container, details.setVisible(false));
 					}
 				};
-				if (_c instanceof Client) {
-					Client c = (Client)_c;
+				if (_c instanceof StreamClient) {
+					StreamClient c = (StreamClient)_c;
 					item.add(new Label("streamid"));
 					item.add(new Label("login", c.getUsername()));
 					item.add(new Label("since", c.getConnectedSince()));

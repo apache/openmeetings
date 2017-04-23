@@ -23,11 +23,11 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 
 /**
- * Methods to add/get/remove {@link Client}s to the session
+ * Methods to add/get/remove {@link StreamClient}s to the session
  *
  *
  * @author sebawagner
@@ -42,7 +42,7 @@ public interface ISessionManager {
 	 */
 	void sessionStart();
 
-	Client add(Client c, Server server);
+	StreamClient add(StreamClient c, Server server);
 	/**
 	 * add a new client item
 	 *
@@ -54,16 +54,16 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	Client addClientListItem(String streamId, String scopeName, int remotePort, String remoteAddress, String swfUrl, Server server);
+	StreamClient addClientListItem(String streamId, String scopeName, int remotePort, String remoteAddress, String swfUrl, Server server);
 
-	Collection<Client> getClients();
+	Collection<StreamClient> getClients();
 
 	/**
 	 * loads the server into the client (only if database cache is used)
 	 *
 	 * @return
 	 */
-	Collection<Client> getClientsWithServer();
+	Collection<StreamClient> getClientsWithServer();
 
 	/**
 	 * Get a client by its streamId
@@ -72,7 +72,7 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	Client getClientByStreamId(String streamId, Server server);
+	StreamClient getClientByStreamId(String streamId, Server server);
 
 	/**
 	 * get a client by its publicSID and the server,
@@ -81,7 +81,7 @@ public interface ISessionManager {
 	 * @param server
 	 * @return
 	 */
-	Client getClientByPublicSID(String publicSID, Server server);
+	StreamClient getClientByPublicSID(String publicSID, Server server);
 
 	/**
 	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores
@@ -105,7 +105,7 @@ public interface ISessionManager {
 	 *             then this call would return a list not a single user
 	 */
 	@Deprecated
-	Client getClientByUserId(Long userId);
+	StreamClient getClientByUserId(Long userId);
 
 	/**
 	 * Update the session object of the audio/video-connection and additionally
@@ -116,7 +116,7 @@ public interface ISessionManager {
 	 * @param rcm
 	 * @return
 	 */
-	boolean updateAVClientByStreamId(String streamId, Client rcm, Server server);
+	boolean updateAVClientByStreamId(String streamId, StreamClient rcm, Server server);
 
 	/**
 	 * Update the session object
@@ -131,7 +131,7 @@ public interface ISessionManager {
 	 *            true means the count for the room has to be updated
 	 * @return
 	 */
-	boolean updateClientByStreamId(String streamId, Client rcm, boolean updateRoomCount, Server server);
+	boolean updateClientByStreamId(String streamId, StreamClient rcm, boolean updateRoomCount, Server server);
 
 	/**
 	 * Remove a client from the session store
@@ -149,9 +149,9 @@ public interface ISessionManager {
 	 * @param roomId
 	 * @return
 	 */
-	List<Client> getClientListByRoom(Long roomId);
+	List<StreamClient> getClientListByRoom(Long roomId);
 
-	Collection<Client> getClientListByRoomAll(Long roomId);
+	Collection<StreamClient> getClientListByRoomAll(Long roomId);
 
 	/**
 	 * get the current Moderator in this room
@@ -159,7 +159,7 @@ public interface ISessionManager {
 	 * @param roomname
 	 * @return
 	 */
-	List<Client> getCurrentModeratorByRoom(Long roomId);
+	List<StreamClient> getCurrentModeratorByRoom(Long roomId);
 
 	/**
 	 * Get list of current client sessions
@@ -170,7 +170,7 @@ public interface ISessionManager {
 	 * @param asc
 	 * @return
 	 */
-	SearchResult<Client> getListByStartAndMax(int start, int max, String orderby, boolean asc);
+	SearchResult<StreamClient> getListByStartAndMax(int start, int max, String orderby, boolean asc);
 
 	/**
 	 * returns number of current users recording

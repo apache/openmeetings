@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.ClientDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -58,7 +58,7 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 			serverDao.update(server, null);
 		}
 
-		Client cl1 = new Client();
+		StreamClient cl1 = new StreamClient();
 		cl1.setStreamid("1");
 		cl1.setServer(server);
 		cl1.setUserId(1L);
@@ -66,7 +66,7 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 		cl1.setPublicSID("public1");
 		clientDao.add(cl1);
 
-		Client cl2 = new Client();
+		StreamClient cl2 = new StreamClient();
 		cl2.setStreamid("2");
 		cl2.setServer(server);
 		cl2.setRoomId(1L);
@@ -74,7 +74,7 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 		cl2.setPublicSID("public2");
 		clientDao.add(cl2);
 
-		Client cl3 = new Client();
+		StreamClient cl3 = new StreamClient();
 		cl3.setStreamid("3");
 		cl3.setServer(server);
 		cl3.setRoomId(3L);

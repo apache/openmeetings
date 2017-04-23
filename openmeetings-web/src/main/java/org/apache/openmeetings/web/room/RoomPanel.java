@@ -34,10 +34,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.util.RoomHelper;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -78,6 +79,7 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -122,7 +124,7 @@ public class RoomPanel extends BasePanel {
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			// play video from other participants
-			playVideos(target);
+			initVideos(target);
 			getMainPanel().getChat().roomEnter(r, target);
 			if (r.isFilesOpened()) {
 				sidebar.setFilesActive(target);
@@ -157,14 +159,21 @@ public class RoomPanel extends BasePanel {
 		//private String publishingUser = null;
 	}
 
-	private void playVideos(AjaxRequestTarget target) {
-		for (Client c: getRoomClients(getRoom().getId()) ){
+	private void initVideos(AjaxRequestTarget target) {
+		StringBuilder sb = new StringBuilder();
+		for (Client c: getRoomClients(getRoom().getId()) ) {
 			boolean self = getClient().getUid().equals(c.getUid());
-			if (!self) {
-				JSONObject json = c.toJson(self).put("sid", getSid());
-				// TODO we should check if client is screenShare, see onEvent newStream case.
-				target.appendJavaScript(String.format("VideoManager.play(%s);", json));
+			if (c.hasAnyActivity(Client.Activity.broadcastA, Client.Activity.broadcastV)) {
+				sb.append(String.format("VideoManager.play(%s);"
+						, RoomHelper.videoJson(c, self, getSid(), getBean(ISessionManager.class), false)));
 			}
+			if (c.hasActivity(Client.Activity.share)) {
+				sb.append(String.format("VideoManager.play(%s);"
+						, RoomHelper.videoJson(c, self, getSid(), getBean(ISessionManager.class), true)));
+			}
+		}
+		if (!Strings.isEmpty(sb)) {
+			target.appendJavaScript(sb);
 		}
 	}
 
@@ -399,15 +408,8 @@ public class RoomPanel extends BasePanel {
 						Client c = getOnlineClient(obj.getString("uid"));
 						boolean self = getClient().getUid().equals(c.getUid());
 						if (!self) {
-							JSONObject json = c.toJson(self).put("sid", getSid());
-							if (obj.optBoolean("screenShare", false)) {
-								json.put("screenShare", true)
-									.put("uid", obj.getString("suid")) // unique screen-sharing ID
-									.put("broadcastId", obj.getString("broadcastId"))
-									.put("width", obj.getInt("width"))
-									.put("height", obj.getInt("height"));
-							}
-							handler.appendJavaScript(String.format("VideoManager.play(%s);", json));
+							handler.appendJavaScript(String.format("VideoManager.play(%s);"
+									, RoomHelper.videoJson(c, self, getSid(), getBean(ISessionManager.class), obj.optBoolean("screenShare", false))));
 						}
 					}
 						break;

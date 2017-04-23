@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.message.RoomMessage;
@@ -94,7 +94,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public String recordMeetingStream(IConnection current, Client client, String roomRecordingName, String comment, boolean isInterview) {
+	public String recordMeetingStream(IConnection current, StreamClient client, String roomRecordingName, String comment, boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
@@ -140,7 +140,7 @@ public class RecordingService implements IPendingServiceCallback {
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						StreamClient rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
 						// Send every user a notification that the recording did start
 						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getPublicSID()));
@@ -306,7 +306,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public Long stopRecordAndSave(IScope scope, Client client, Long storedRecordingId) {
+	public Long stopRecordAndSave(IScope scope, StreamClient client, Long storedRecordingId) {
 		try {
 			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
 			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
@@ -315,7 +315,7 @@ public class RecordingService implements IPendingServiceCallback {
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						StreamClient rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 
 						if (rcl == null) {
 							continue;
@@ -372,18 +372,18 @@ public class RecordingService implements IPendingServiceCallback {
 		return new Long(-1);
 	}
 
-	public Client checkLzRecording() {
+	public StreamClient checkLzRecording() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			String streamid = current.getClient().getId();
 
 			log.debug("getCurrentRoomClient -2- " + streamid);
 
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.getClientByStreamId(streamid, null);
 
 			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoomId());
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
+			for (StreamClient rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
@@ -395,7 +395,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public void stopRecordingShowForClient(IScope scope, Client rcl) {
+	public void stopRecordingShowForClient(IScope scope, StreamClient rcl) {
 		try {
 			// this cannot be handled here, as to stop a stream and to leave a
 			// room is not
@@ -433,7 +433,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public void addRecordingByStreamId(IConnection conn, Client rcl, Long recordingId) {
+	public void addRecordingByStreamId(IConnection conn, StreamClient rcl, Long recordingId) {
 		try {
 			Recording recording = recordingDao.get(recordingId);
 

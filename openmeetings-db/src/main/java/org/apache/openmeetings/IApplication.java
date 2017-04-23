@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
@@ -40,7 +40,7 @@ public interface IApplication {
 	String getOmString(String key, long languageId);
 	String getOmString(String key, final Locale loc, String... params);
 	org.apache.openmeetings.db.entity.basic.Client getOmClient(String uid);
-	Client updateClient(Client rcl, boolean forceSize);
+	StreamClient updateClient(StreamClient rcl, boolean forceSize);
 	List<org.apache.openmeetings.db.entity.basic.Client> getOmRoomClients(Long roomId);
 	List<org.apache.openmeetings.db.entity.basic.Client> getOmClients(Long userId);
 	String getOmContactsLink();

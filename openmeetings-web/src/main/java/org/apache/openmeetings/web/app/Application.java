@@ -56,6 +56,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
@@ -257,7 +258,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
-	private static boolean hasVideo(org.apache.openmeetings.db.entity.room.Client rcl) {
+	private static boolean hasVideo(StreamClient rcl) {
 		return rcl != null && rcl.getAvsettings().contains("v");
 	}
 
@@ -266,7 +267,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl, boolean forceSize) {
+	public StreamClient updateClient(StreamClient rcl, boolean forceSize) {
 		if (rcl == null) {
 			return null;
 		}

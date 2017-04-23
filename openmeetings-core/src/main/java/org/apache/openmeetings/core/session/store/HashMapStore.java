@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ import org.slf4j.Logger;
 public class HashMapStore implements IClientPersistenceStore {
 	protected static final Logger log = Red5LoggerFactory.getLogger(HashMapStore.class, webAppRootKey);
 
-	private Map<String, Client> clientsByStreamId = new ConcurrentHashMap<>();
+	private Map<String, StreamClient> clientsByStreamId = new ConcurrentHashMap<>();
 
 	@Override
 	public void clear() {
@@ -60,7 +60,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public void put(String streamId, Client rcl) {
+	public void put(String streamId, StreamClient rcl) {
 		clientsByStreamId.put(rcl.getStreamid(), rcl);
 	}
 
@@ -70,15 +70,15 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Client get(Server server, String streamId) {
+	public StreamClient get(Server server, String streamId) {
 		return clientsByStreamId.get(streamId);
 	}
 
 	@Override
-	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
-		List<Client> clientList = new ArrayList<>();
-		for (Map.Entry<String, Client> e: clientsByStreamId.entrySet()) {
-			Client cl = e.getValue();
+	public List<StreamClient> getClientsByPublicSID(Server server, String publicSID) {
+		List<StreamClient> clientList = new ArrayList<>();
+		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+			StreamClient cl = e.getValue();
 			if (cl.getPublicSID().equals(publicSID)) {
 				clientList.add(cl);
 			}
@@ -87,11 +87,11 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Map<Long,List<Client>> getClientsByPublicSID(String publicSID) {
-		Map<Long,List<Client>> clientMapList = new HashMap<>();
-		List<Client> clientList = new ArrayList<>();
-		for (Map.Entry<String, Client> e: clientsByStreamId.entrySet()) {
-			Client cl = e.getValue();
+	public Map<Long,List<StreamClient>> getClientsByPublicSID(String publicSID) {
+		Map<Long,List<StreamClient>> clientMapList = new HashMap<>();
+		List<StreamClient> clientList = new ArrayList<>();
+		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+			StreamClient cl = e.getValue();
 			if (cl.getPublicSID().equals(publicSID)) {
 				clientList.add(cl);
 			}
@@ -101,27 +101,27 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Collection<Client> getClients() {
+	public Collection<StreamClient> getClients() {
 		return clientsByStreamId.values();
 	}
 
 	@Override
-	public Collection<Client> getClientsWithServer() {
+	public Collection<StreamClient> getClientsWithServer() {
 		//there is no server object to be loaded, memory cache means
 		//there is no cluster enabled
 		return getClients();
 	}
 
 	@Override
-	public Collection<Client> getClientsByServer(Server server) {
+	public Collection<StreamClient> getClientsByServer(Server server) {
 		return clientsByStreamId.values();
 	}
 
 	@Override
-	public List<Client> getClientsByUserId(Server server, Long userId) {
-		List<Client> clientList = new ArrayList<>();
-		for (Map.Entry<String, Client> e: clientsByStreamId.entrySet()) {
-			Client cl = e.getValue();
+	public List<StreamClient> getClientsByUserId(Server server, Long userId) {
+		List<StreamClient> clientList = new ArrayList<>();
+		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+			StreamClient cl = e.getValue();
 			if (cl.getUserId().equals(userId)) {
 				clientList.add(cl);
 			}
@@ -130,10 +130,10 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public  List<Client> getClientsByRoomId(Long roomId) {
-		List<Client> clientList = new ArrayList<>();
-		for (Map.Entry<String, Client> e: clientsByStreamId.entrySet()) {
-			Client cl = e.getValue();
+	public  List<StreamClient> getClientsByRoomId(Long roomId) {
+		List<StreamClient> clientList = new ArrayList<>();
+		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+			StreamClient cl = e.getValue();
 			if (cl.getRoomId() != null && cl.getRoomId().equals(roomId)) {
 				clientList.add(cl);
 			}
@@ -157,7 +157,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Collection<Client> values() {
+	public Collection<StreamClient> values() {
 		return clientsByStreamId.values();
 	}
 
@@ -194,8 +194,8 @@ public class HashMapStore implements IClientPersistenceStore {
 	@Override
 	public List<Long> getRoomsIdsByServer(Server server) {
 		Set<Long> rooms = new HashSet<>();
-		for (Map.Entry<String, Client> e: clientsByStreamId.entrySet()) {
-			Client cl = e.getValue();
+		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+			StreamClient cl = e.getValue();
 			Long roomId = cl.getRoomId();
 			if (roomId != null && roomId.longValue() > 0 && !rooms.contains(roomId)) {
 				rooms.add(roomId);

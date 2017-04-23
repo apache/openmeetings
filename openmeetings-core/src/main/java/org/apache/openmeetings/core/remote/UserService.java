@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
@@ -130,7 +130,7 @@ public class UserService implements IUserService {
 			// admins only
 			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
 				if (serverId == 0) {
-					Client rcl = sessionManager.getClientByStreamId(streamid, null);
+					StreamClient rcl = sessionManager.getClientByStreamId(streamid, null);
 
 					if (rcl == null) {
 						return true;
@@ -150,7 +150,7 @@ public class UserService implements IUserService {
 					return true;
 				} else {
 					Server server = serverDao.get(serverId);
-					Client rcl = sessionManager.getClientByStreamId(
+					StreamClient rcl = sessionManager.getClientByStreamId(
 							streamid, server);
 					slaveHTTPConnectionManager.kickSlaveUser(server, rcl.getPublicSID());
 
@@ -183,7 +183,7 @@ public class UserService implements IUserService {
 			Sessiondata sd = sessionDao.check(sid);
 			// users only
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
+				StreamClient rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 				if (rcl == null) {
 					return true;

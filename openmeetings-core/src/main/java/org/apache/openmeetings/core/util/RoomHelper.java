@@ -16,28 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dto.room;
+package org.apache.openmeetings.core.util;
 
-import java.util.List;
-
+import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 
-public class RoomStatus {
-	List<StreamClient> clientList;
-	BrowserStatus browserStatus;
-	
-	public RoomStatus() {}
-	
-	public List<StreamClient> getClientList() {
-		return clientList;
-	}
-	public void setClientList(List<StreamClient> clientList) {
-		this.clientList = clientList;
-	}
-	public BrowserStatus getBrowserStatus() {
-		return browserStatus;
-	}
-	public void setBrowserStatus(BrowserStatus browserStatus) {
-		this.browserStatus = browserStatus;
+import com.github.openjson.JSONObject;
+
+public class RoomHelper {
+
+	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, boolean share) {
+		JSONObject json = c.toJson(self).put("sid", sid);
+		if (share) {
+			StreamClient sc = mgr.getClientByPublicSID(c.getUid(), null); //TODO check server
+
+			json.put("screenShare", true)
+				.put("uid", sc.getPublicSID()) // unique screen-sharing ID
+				.put("broadcastId", sc.getBroadCastID())
+				.put("width", sc.getVWidth())
+				.put("height", sc.getVHeight());
+		}
+		return json;
 	}
 }

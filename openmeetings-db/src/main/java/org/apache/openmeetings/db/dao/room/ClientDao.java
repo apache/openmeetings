@@ -26,7 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,17 +54,17 @@ public class ClientDao {
 			executeUpdate();
 	}
 
-	public Client add(Client entity) {
+	public StreamClient add(StreamClient entity) {
 		em.persist(entity);
 		return entity;
 	}
 
-	public Client update(Client entity) {
+	public StreamClient update(StreamClient entity) {
 		em.merge(entity);
 		return entity;
 	}
 
-	public void delete(Client entity) {
+	public void delete(StreamClient entity) {
 		Query q = em.createNamedQuery("deletedById");
 		q.setParameter("id", entity.getId());
 		q.executeUpdate();
@@ -102,11 +102,11 @@ public class ClientDao {
 	 * @param streamId
 	 * @return
 	 */
-	public Client getClientByServerAndStreamId(Server server, String streamId) {
-		TypedQuery<Client> q = em.createNamedQuery("getClientByServerAndStreamId", Client.class);
+	public StreamClient getClientByServerAndStreamId(Server server, String streamId) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientByServerAndStreamId", StreamClient.class);
 		q.setParameter("streamid", streamId);
 		q.setParameter("server", server);
-		List<Client> ll = q.getResultList();
+		List<StreamClient> ll = q.getResultList();
 		if (ll.size() == 1) {
 			return ll.get(0);
 		} else if (ll.size() == 0) {
@@ -115,42 +115,42 @@ public class ClientDao {
 		throw new RuntimeException("more then one client was found streamId "+ streamId + " server "+server);
 	}
 
-	public List<Client> getClientsByPublicSIDAndServer(Server server, String publicSID) {
-		TypedQuery<Client> q = em.createNamedQuery("getClientsByPublicSIDAndServer", Client.class);
+	public List<StreamClient> getClientsByPublicSIDAndServer(Server server, String publicSID) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByPublicSIDAndServer", StreamClient.class);
 		q.setParameter("server", server);
 		q.setParameter("publicSID", publicSID);
 		return q.getResultList();
 	}
 
-	public List<Client> getClientsByPublicSID(String publicSID) {
-		TypedQuery<Client> q = em.createNamedQuery("getClientsByPublicSID", Client.class);
+	public List<StreamClient> getClientsByPublicSID(String publicSID) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByPublicSID", StreamClient.class);
 		q.setParameter("publicSID", publicSID);
 		return q.getResultList();
 	}
 
-	public List<Client> getClientsByServer(Server server) {
-		TypedQuery<Client> q = em.createNamedQuery("getClientsByServer", Client.class);
+	public List<StreamClient> getClientsByServer(Server server) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByServer", StreamClient.class);
 		q.setParameter("server", server);
 		return q.getResultList();
 	}
 
-	public List<Client> getClients() {
-		return em.createNamedQuery("getClients", Client.class).getResultList();
+	public List<StreamClient> getClients() {
+		return em.createNamedQuery("getClients", StreamClient.class).getResultList();
 	}
 
-	public List<Client> getClientsWithServer() {
-		return em.createNamedQuery("getClientsWithServer", Client.class).getResultList();
+	public List<StreamClient> getClientsWithServer() {
+		return em.createNamedQuery("getClientsWithServer", StreamClient.class).getResultList();
 	}
 
-	public List<Client> getClientsByUserId(Server server, Long userId) {
-		TypedQuery<Client> q = em.createNamedQuery("getClientsByUserId", Client.class);
+	public List<StreamClient> getClientsByUserId(Server server, Long userId) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByUserId", StreamClient.class);
 		q.setParameter("server", server);
 		q.setParameter("userId", userId);
 		return q.getResultList();
 	}
 
-	public List<Client> getClientsByRoomId(Long roomId) {
-		TypedQuery<Client> q = em.createNamedQuery("getClientsByRoomId", Client.class);
+	public List<StreamClient> getClientsByRoomId(Long roomId) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByRoomId", StreamClient.class);
 		q.setParameter("roomId", roomId);
 		return q.getResultList();
 	}

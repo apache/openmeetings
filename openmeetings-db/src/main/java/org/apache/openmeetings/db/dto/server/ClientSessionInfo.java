@@ -18,26 +18,26 @@
  */
 package org.apache.openmeetings.db.dto.server;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 
 
 public class ClientSessionInfo {
 	
-	private Client rcl;
+	private StreamClient rcl;
 	public Long serverId;
 	
 	public ClientSessionInfo() {}
 	
-	public ClientSessionInfo(Client rcl, Long serverId) {
+	public ClientSessionInfo(StreamClient rcl, Long serverId) {
 		super();
 		this.rcl = rcl;
 		this.serverId = serverId;
 	}
 	
-	public Client getRcl() {
+	public StreamClient getRcl() {
 		return rcl;
 	}
-	public void setRcl(Client rcl) {
+	public void setRcl(StreamClient rcl) {
 		this.rcl = rcl;
 	}
 	public Long getServerId() {

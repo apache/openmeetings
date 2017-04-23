@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.ClientDao;
 import org.apache.openmeetings.db.dao.server.ServerDao;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -58,7 +58,7 @@ public class TestDbSession extends AbstractJUnitDefaults {
 			serverDao.update(server, null);
 		}
 
-		Client cl1 = new Client();
+		StreamClient cl1 = new StreamClient();
 		cl1.setStreamid("1");
 		cl1.setServer(null);
 		cl1.setUserId(1L);
@@ -66,7 +66,7 @@ public class TestDbSession extends AbstractJUnitDefaults {
 		cl1.setPublicSID("public1");
 		clientDao.add(cl1);
 
-		Client cl2 = new Client();
+		StreamClient cl2 = new StreamClient();
 		cl2.setStreamid("2");
 		cl2.setServer(null);
 		cl2.setRoomId(1L);
@@ -74,7 +74,7 @@ public class TestDbSession extends AbstractJUnitDefaults {
 		cl2.setPublicSID("public2");
 		clientDao.add(cl2);
 
-		Client cl3 = new Client();
+		StreamClient cl3 = new StreamClient();
 		cl3.setStreamid("3");
 		cl3.setServer(server);
 		cl3.setRoomId(3L);
@@ -82,21 +82,21 @@ public class TestDbSession extends AbstractJUnitDefaults {
 		cl3.setPublicSID("public3");
 		clientDao.add(cl3);
 		
-		Client clTest = clientDao.getClientByServerAndStreamId(null, "1");
+		StreamClient clTest = clientDao.getClientByServerAndStreamId(null, "1");
 
 		log.debug("cl1 " + cl1);
 		log.debug("clTest " + clTest);
 
 		assertEquals(clTest.getId(), cl1.getId());
 
-		Client clTest3 = clientDao.getClientByServerAndStreamId(server, "3");
+		StreamClient clTest3 = clientDao.getClientByServerAndStreamId(server, "3");
 
 		log.debug("cl3 " + cl3);
 		log.debug("clTest3 " + clTest3);
 
 		assertEquals(clTest3.getId(), cl3.getId());
 
-		Client clTest_NOT_3 = clientDao.getClientByServerAndStreamId(null, "3");
+		StreamClient clTest_NOT_3 = clientDao.getClientByServerAndStreamId(null, "3");
 
 		log.debug("clTest_NOT_3 " + clTest_NOT_3);
 		assertEquals(null, clTest_NOT_3);
@@ -110,51 +110,51 @@ public class TestDbSession extends AbstractJUnitDefaults {
 		long numberOfClients4 = clientDao.countClientsByServerAndStreamId(null, "3");
 		assertEquals(0, numberOfClients4);
 		
-		List<Client> clTest_Pub_1_list = clientDao.getClientsByPublicSIDAndServer(null, "public1");
+		List<StreamClient> clTest_Pub_1_list = clientDao.getClientsByPublicSIDAndServer(null, "public1");
 		assertEquals(cl1.getId(), clTest_Pub_1_list.get(0).getId());
 		
-		List<Client> clTest_Pub_3_list = clientDao.getClientsByPublicSIDAndServer(server, "public3");
+		List<StreamClient> clTest_Pub_3_list = clientDao.getClientsByPublicSIDAndServer(server, "public3");
 		assertEquals(cl3.getId(), clTest_Pub_3_list.get(0).getId());
 		
-		List<Client> clTest_Fail_list = clientDao.getClientsByPublicSIDAndServer(null, "public3");
+		List<StreamClient> clTest_Fail_list = clientDao.getClientsByPublicSIDAndServer(null, "public3");
 		assertEquals(0, clTest_Fail_list.size());
 		
-		List<Client> clTest_PubAll_1_list = clientDao.getClientsByPublicSID("public1");
+		List<StreamClient> clTest_PubAll_1_list = clientDao.getClientsByPublicSID("public1");
 		assertEquals(cl1.getId(), clTest_PubAll_1_list.get(0).getId());
 		
-		List<Client> clTest_PubAll_3_list = clientDao.getClientsByPublicSID("public3");
+		List<StreamClient> clTest_PubAll_3_list = clientDao.getClientsByPublicSID("public3");
 		assertEquals(cl3.getId(), clTest_PubAll_3_list.get(0).getId());
 		
-		List<Client> clTest_FailAll_list = clientDao.getClientsByPublicSID("public4");
+		List<StreamClient> clTest_FailAll_list = clientDao.getClientsByPublicSID("public4");
 		assertEquals(0, clTest_FailAll_list.size());
 		
-		List<Client> clientsByServerNull = clientDao.getClientsByServer(null);
+		List<StreamClient> clientsByServerNull = clientDao.getClientsByServer(null);
 		assertEquals(2, clientsByServerNull.size());
 		
-		List<Client> clientsByServer = clientDao.getClientsByServer(server);
+		List<StreamClient> clientsByServer = clientDao.getClientsByServer(server);
 		assertEquals(1, clientsByServer.size());
 		
-		List<Client> clientsAll = clientDao.getClients();
+		List<StreamClient> clientsAll = clientDao.getClients();
 		assertEquals(3, clientsAll.size());
 		
 		//by userid
-		List<Client> clTest_User_1_list = clientDao.getClientsByUserId(null, 1L);
+		List<StreamClient> clTest_User_1_list = clientDao.getClientsByUserId(null, 1L);
 		assertEquals(cl1.getId(), clTest_User_1_list.get(0).getId());
 		
-		List<Client> clTest_User_3_list = clientDao.getClientsByUserId(server, 3L);
+		List<StreamClient> clTest_User_3_list = clientDao.getClientsByUserId(server, 3L);
 		assertEquals(cl3.getId(), clTest_User_3_list.get(0).getId());
 		
-		List<Client> clTest_UserFail_list = clientDao.getClientsByUserId(null, 3L);
+		List<StreamClient> clTest_UserFail_list = clientDao.getClientsByUserId(null, 3L);
 		assertEquals(0, clTest_UserFail_list.size());
 		
 		//by roomid
-		List<Client> clTest_Room_1_list = clientDao.getClientsByRoomId(1L);
+		List<StreamClient> clTest_Room_1_list = clientDao.getClientsByRoomId(1L);
 		assertEquals(2, clTest_Room_1_list.size());
 		
-		List<Client> clTest_Room_3_list = clientDao.getClientsByRoomId(3L);
+		List<StreamClient> clTest_Room_3_list = clientDao.getClientsByRoomId(3L);
 		assertEquals(cl3.getId(), clTest_Room_3_list.get(0).getId());
 		
-		List<Client> clTest_RoomFail_list = clientDao.getClientsByRoomId(2L);
+		List<StreamClient> clTest_RoomFail_list = clientDao.getClientsByRoomId(2L);
 		assertEquals(0, clTest_RoomFail_list.size());
 		
 		//count all

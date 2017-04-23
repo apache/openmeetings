@@ -52,7 +52,7 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -420,7 +420,7 @@ public class UserManager implements IUserManager {
 
 				sessionDao.clearSessionByRoomId(room_id);
 
-				for (Client rcl : sessionManager.getClientListByRoom(room_id)) {
+				for (StreamClient rcl : sessionManager.getClientListByRoom(room_id)) {
 					if (rcl == null) {
 						return true;
 					}
@@ -449,7 +449,7 @@ public class UserManager implements IUserManager {
 			Sessiondata sd = sessionDao.check(sid);
 			// admins only
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-				Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
+				StreamClient rcl = sessionManager.getClientByPublicSID(publicSID, null);
 
 				if (rcl == null) {
 					return true;

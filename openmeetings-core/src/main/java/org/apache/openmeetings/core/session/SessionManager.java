@@ -33,7 +33,7 @@ import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Handle {@link Client} objects.
+ * Handle {@link StreamClient} objects.
  *
  * Use a kind of decorator pattern to inject the {@link Server} into every call.
  *
@@ -75,7 +75,7 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public Client add(Client c, Server server) {
+	public StreamClient add(StreamClient c, Server server) {
 		if (c == null) {
 			return null;
 		}
@@ -99,7 +99,7 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public Client addClientListItem(String streamId, String scopeName,
+	public StreamClient addClientListItem(String streamId, String scopeName,
 			int remotePort, String remoteAddress, String swfUrl, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
@@ -107,7 +107,7 @@ public class SessionManager implements ISessionManager {
 		try {
 
 			// Store the Connection into a bean and add it to the HashMap
-			Client rcm = new Client();
+			StreamClient rcm = new StreamClient();
 			rcm.setConnectedSince(new Date());
 			rcm.setStreamid(streamId);
 			rcm.setScope(scopeName);
@@ -134,17 +134,17 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public Collection<Client> getClients() {
+	public Collection<StreamClient> getClients() {
 		return cache.getClients();
 	}
 
 	@Override
-	public Collection<Client> getClientsWithServer() {
+	public Collection<StreamClient> getClientsWithServer() {
 		return cache.getClientsWithServer();
 	}
 
 	@Override
-	public Client getClientByStreamId(String streamId, Server server) {
+	public StreamClient getClientByStreamId(String streamId, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
@@ -161,12 +161,12 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public Client getClientByPublicSID(String publicSID, Server server) {
+	public StreamClient getClientByPublicSID(String publicSID, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
 		try {
-			List<Client> list = cache.getClientsByPublicSID(server, publicSID);
+			List<StreamClient> list = cache.getClientsByPublicSID(server, publicSID);
 			return list == null || list.isEmpty() ? null : list.get(0);
 		} catch (Exception err) {
 			log.error("[getClientByPublicSID]", err);
@@ -177,8 +177,8 @@ public class SessionManager implements ISessionManager {
 	@Override
 	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID) {
 		try {
-			for (Entry<Long,List<Client>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
-				for (Client rcl : entry.getValue()) {
+			for (Entry<Long,List<StreamClient>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
+				for (StreamClient rcl : entry.getValue()) {
 					return new ClientSessionInfo(rcl, entry.getKey());
 				}
 			}
@@ -189,9 +189,9 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public Client getClientByUserId(Long userId) {
+	public StreamClient getClientByUserId(Long userId) {
 		try {
-			for (Client rcl : cache.getClientsByUserId(null, userId)) {
+			for (StreamClient rcl : cache.getClientsByUserId(null, userId)) {
 				if (rcl.isScreenClient()) {
 					continue;
 				}
@@ -205,13 +205,13 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public boolean updateAVClientByStreamId(String streamId, Client rcm, Server server) {
+	public boolean updateAVClientByStreamId(String streamId, StreamClient rcm, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
 		try {
 			// get the corresponding user session object and update the settings
-			Client rclUsual = getClientByPublicSID(rcm.getPublicSID(), server);
+			StreamClient rclUsual = getClientByPublicSID(rcm.getPublicSID(), server);
 			if (rclUsual != null) {
 				rclUsual.setBroadCastID(rcm.getBroadCastID());
 				rclUsual.setAvsettings(rcm.getAvsettings());
@@ -219,7 +219,7 @@ public class SessionManager implements ISessionManager {
 				rclUsual.setVWidth(rcm.getVWidth());
 				rclUsual.setVX(rcm.getVX());
 				rclUsual.setVY(rcm.getVY());
-				Client rclSaved = cache.get(server, rclUsual.getStreamid());
+				StreamClient rclSaved = cache.get(server, rclUsual.getStreamid());
 				if (rclSaved != null) {
 					cache.put(rclUsual.getStreamid(), rclUsual);
 				} else {
@@ -236,12 +236,12 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public boolean updateClientByStreamId(String streamId, Client rcm, boolean updateRoomCount, Server server) {
+	public boolean updateClientByStreamId(String streamId, StreamClient rcm, boolean updateRoomCount, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
 		try {
-			Client rclSaved = cache.get(server, streamId);
+			StreamClient rclSaved = cache.get(server, streamId);
 
 			if (rclSaved != null) {
 				cache.put(streamId, rcm);
@@ -274,10 +274,10 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public List<Client> getClientListByRoom(Long roomId) {
-		List<Client> roomClientList = new ArrayList<>();
+	public List<StreamClient> getClientListByRoom(Long roomId) {
+		List<StreamClient> roomClientList = new ArrayList<>();
 		try {
-			for (Client rcl : cache.getClientsByRoomId(roomId)) {
+			for (StreamClient rcl : cache.getClientsByRoomId(roomId)) {
 				if (rcl.isScreenClient()) {
 					continue;
 				}
@@ -294,7 +294,7 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public Collection<Client> getClientListByRoomAll(Long roomId) {
+	public Collection<StreamClient> getClientListByRoomAll(Long roomId) {
 		try {
 			return cache.getClientsByRoomId(roomId);
 		} catch (Exception err) {
@@ -304,10 +304,10 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public List<Client> getCurrentModeratorByRoom(Long roomId) {
-		List<Client> rclList = new LinkedList<>();
-		List<Client> currentClients = this.getClientListByRoom(roomId);
-		for (Client rcl : currentClients) {
+	public List<StreamClient> getCurrentModeratorByRoom(Long roomId) {
+		List<StreamClient> rclList = new LinkedList<>();
+		List<StreamClient> currentClients = this.getClientListByRoom(roomId);
+		for (StreamClient rcl : currentClients) {
 			if (rcl.getIsMod()) {
 				rclList.add(rcl);
 			}
@@ -316,9 +316,9 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public SearchResult<Client> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
-		SearchResult<Client> sResult = new SearchResult<>();
-		sResult.setObjectName(Client.class.getName());
+	public SearchResult<StreamClient> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
+		SearchResult<StreamClient> sResult = new SearchResult<>();
+		sResult.setObjectName(StreamClient.class.getName());
 		sResult.setRecords(Long.valueOf(cache.size()));
 		sResult.setResult(cache.getClientsWithServer());
 		return sResult;
@@ -326,9 +326,9 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public long getRecordingCount(long roomId) {
-		List<Client> currentClients = this.getClientListByRoom(roomId);
+		List<StreamClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfRecordingUsers = 0;
-		for (Client rcl : currentClients) {
+		for (StreamClient rcl : currentClients) {
 			if (rcl.isStartRecording()) {
 				numberOfRecordingUsers++;
 			}
@@ -338,9 +338,9 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public long getPublishingCount(long roomId) {
-		List<Client> currentClients = this.getClientListByRoom(roomId);
+		List<StreamClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfPublishingUsers = 0;
-		for (Client rcl : currentClients) {
+		for (StreamClient rcl : currentClients) {
 			if (rcl.isStreamPublishStarted()) {
 				numberOfPublishingUsers++;
 			}

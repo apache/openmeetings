@@ -45,7 +45,7 @@
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
-		<class>org.apache.openmeetings.db.entity.room.Client</class>
+		<class>org.apache.openmeetings.db.entity.room.StreamClient</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
 		<class>org.apache.openmeetings.db.entity.room.Whiteboard</class>

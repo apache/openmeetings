@@ -51,7 +51,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
@@ -220,7 +220,7 @@ public class MobileService {
 		if (u != null) {
 			IConnection conn = Red5.getConnectionLocal();
 			String streamId = conn.getClient().getId();
-			Client c = sessionManager.getClientByStreamId(streamId, null);
+			StreamClient c = sessionManager.getClientByStreamId(streamId, null);
 			if (c == null) {
 				// Failed to create client
 				result.put("status", -1);
@@ -257,7 +257,7 @@ public class MobileService {
 		IConnection current = Red5.getConnectionLocal();
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
-				Client c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				StreamClient c = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 				if (!Strings.isEmpty(c.getAvsettings()) && !c.isScreenClient()) {
 					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getStreamid());
@@ -299,7 +299,7 @@ public class MobileService {
 		List<Map<String, Object>> result = new ArrayList<>();
 		// FIXME duplicated code
 		IConnection current = Red5.getConnectionLocal();
-		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<>();
@@ -336,7 +336,7 @@ public class MobileService {
 	public Map<String, Object> roomConnect(String SID, Long userId) {
 		// publicSid is changed on mobile room connect
 		IConnection current = Red5.getConnectionLocal();
-		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		Map<String, Object> result = new HashMap<>();
 		result.put("publicSid", c.getPublicSID());
 		result.put("broadCastId", c.getBroadCastID());
@@ -345,7 +345,7 @@ public class MobileService {
 
 	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
 		IConnection current = Red5.getConnectionLocal();
-		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
 		if (!"n".equals(avMode)) {
 			c.setBroadCastID(nextBroadCastId());
@@ -371,7 +371,7 @@ public class MobileService {
 
 	public void sendChatMessage(String msg) {
 		IConnection current = Red5.getConnectionLocal();
-		Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 
 		ChatMessage m = new ChatMessage();
 		m.setMessage(msg);
@@ -391,7 +391,7 @@ public class MobileService {
 		sendChatMessage(sessionManager.getClientByPublicSID(uid, null), m, fmt);
 	}
 
-	public void sendChatMessage(Client c, ChatMessage m, FastDateFormat fmt) {
+	public void sendChatMessage(StreamClient c, ChatMessage m, FastDateFormat fmt) {
 		if (c == null) {
 			return;
 		}
@@ -404,14 +404,14 @@ public class MobileService {
 		new MessageSender(scopeAdapter.getRoomScope("" + roomId), "sendVarsToMessageWithClient", hsm, scopeAdapter) {
 			@Override
 			public boolean filter(IConnection conn) {
-				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				StreamClient rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
 				return rcl.isScreenClient()
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
 			}
 		}.start();
 	}
 
-	private static boolean isModerator(Client c) {
+	private static boolean isModerator(StreamClient c) {
 		return c.getIsMod() || c.getIsSuperModerator();
 	}
 
@@ -435,7 +435,7 @@ public class MobileService {
 		List<Map<String,Object>> myChatList = new ArrayList<>();
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 			Long roomId = c.getRoomId();
 
 			log.debug("GET CHATROOM: " + roomId);

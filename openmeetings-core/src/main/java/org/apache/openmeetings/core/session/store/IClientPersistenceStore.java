@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 
 public interface IClientPersistenceStore {
@@ -41,7 +41,7 @@ public interface IClientPersistenceStore {
 	 * @param streamId
 	 * @param rcl
 	 */
-	void put(String streamId, Client rcl);
+	void put(String streamId, StreamClient rcl);
 	
 	/**
 	 * 
@@ -58,7 +58,7 @@ public interface IClientPersistenceStore {
 	 * @param streamId
 	 * @return will return null if the client does not exist in the list
 	 */
-	Client get(Server server, String streamId);
+	StreamClient get(Server server, String streamId);
 
 	/**
 	 * 
@@ -66,7 +66,7 @@ public interface IClientPersistenceStore {
 	 * @param publicSID
 	 * @return will return an empty list if nothing available
 	 */
-	List<Client> getClientsByPublicSID(Server server, String publicSID);
+	List<StreamClient> getClientsByPublicSID(Server server, String publicSID);
 
 	/**
 	 * Searches for the publicSID across all servers
@@ -74,9 +74,9 @@ public interface IClientPersistenceStore {
 	 * @param publicSID
 	 * @return will return a map with the serverId as key and the RoomClients as list in the value
 	 */
-	Map<Long, List<Client>> getClientsByPublicSID(String publicSID);
+	Map<Long, List<StreamClient>> getClientsByPublicSID(String publicSID);
 
-	Collection<Client> getClients();
+	Collection<StreamClient> getClients();
 	
 	/**
 	 * get all clients by a specific {@link Server}
@@ -84,7 +84,7 @@ public interface IClientPersistenceStore {
 	 * @param server
 	 * @return will return an empty map if nothing available
 	 */
-	Collection<Client> getClientsByServer(Server server);
+	Collection<StreamClient> getClientsByServer(Server server);
 
 	/**
 	 * 
@@ -92,7 +92,7 @@ public interface IClientPersistenceStore {
 	 * @param userId
 	 * @return will return an empty list if nothing available
 	 */
-	Collection<Client> getClientsByUserId(Server server, Long userId);
+	Collection<StreamClient> getClientsByUserId(Server server, Long userId);
 
 	/**
 	 * 
@@ -101,7 +101,7 @@ public interface IClientPersistenceStore {
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
-	List<Client> getClientsByRoomId(Long roomId);
+	List<StreamClient> getClientsByRoomId(Long roomId);
 
 	void remove(Server server, String streamId);
 
@@ -109,7 +109,7 @@ public interface IClientPersistenceStore {
 
 	int sizeByServer(Server server);
 
-	Collection<Client> values();
+	Collection<StreamClient> values();
 	
 	/**
 	 * Get some session statistics
@@ -135,5 +135,5 @@ public interface IClientPersistenceStore {
 	 * 
 	 * @return
 	 */
-	Collection<Client> getClientsWithServer();
+	Collection<StreamClient> getClientsWithServer();
 }

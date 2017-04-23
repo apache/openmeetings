@@ -27,7 +27,7 @@ import java.util.Random;
 
 import org.apache.openmeetings.core.session.store.HashMapStore;
 import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -54,7 +54,7 @@ public class TestHashMapSession extends AbstractJUnitDefaults {
 			
 			String streamId = ""+i;
 			
-			Client rcm = new Client();
+			StreamClient rcm = new StreamClient();
 			rcm.setConnectedSince(new Date());
 			rcm.setStreamid(streamId);
 			rcm.setScope("scopeName");

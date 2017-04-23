@@ -66,7 +66,7 @@ import org.apache.openmeetings.util.CalendarPatterns;
 @Table(name = "client")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Client implements IClient {
+public class StreamClient implements IClient {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -75,91 +75,91 @@ public class Client implements IClient {
 	private Long id;
 
 	/**
-	 * @see Client#getUsername()
+	 * @see StreamClient#getUsername()
 	 */
 	@Column(name = "username")
 	private String username = "";
 
 	/**
-	 * @see Client#getStreamid()
+	 * @see StreamClient#getStreamid()
 	 */
 	@Column(name = "streamid")
 	private String streamid = "";
 
 	/**
-	 * @see Client#getScope()
+	 * @see StreamClient#getScope()
 	 */
 	@Column(name = "scope")
 	private String scope = "";
 
 	/**
-	 * @see Client#getVWidth()
+	 * @see StreamClient#getVWidth()
 	 */
 	@Column(name = "vwidth")
 	private int vWidth = 0;
 
 	/**
-	 * @see Client#getVHeight()
+	 * @see StreamClient#getVHeight()
 	 */
 	@Column(name = "vheight")
 	private int vHeight = 0;
 
 	/**
-	 * @see Client#getVX()
+	 * @see StreamClient#getVX()
 	 */
 	@Column(name = "vx")
 	private int vX = 0;
 
 	/**
-	 * @see Client#getVY()
+	 * @see StreamClient#getVY()
 	 */
 	@Column(name = "vy")
 	private int vY = 0;
 
 	/**
-	 * @see Client#getStreamPublishName()
+	 * @see StreamClient#getStreamPublishName()
 	 */
 	@Column(name = "stream_publish_name")
 	private String streamPublishName = "";
 
 	/**
-	 * @see Client#getPublicSID()
+	 * @see StreamClient#getPublicSID()
 	 */
 	@Column(name = "public_sid")
 	private String publicSID = "";
 
 	/**
-	 * @see Client#getIsMod()
+	 * @see StreamClient#getIsMod()
 	 */
 	@Column(name = "is_mod", nullable = false)
 	private boolean isMod = false;
 
 	/**
-	 * @see Client#getIsSuperModerator()
+	 * @see StreamClient#getIsSuperModerator()
 	 */
 	@Column(name = "is_supermoderator", nullable = false)
 	private boolean isSuperModerator = false;
 
 	/**
-	 * @see Client#getCanDraw()
+	 * @see StreamClient#getCanDraw()
 	 */
 	@Column(name = "can_draw", nullable = false)
 	private boolean canDraw = false;
 
 	/**
-	 * @see Client#getCanShare()
+	 * @see StreamClient#getCanShare()
 	 */
 	@Column(name = "can_share", nullable = false)
 	private boolean canShare = false;
 
 	/**
-	 * @see Client#getCanRemote()
+	 * @see StreamClient#getCanRemote()
 	 */
 	@Column(name = "can_remote", nullable = false)
 	private boolean canRemote = false;
 
 	/**
-	 * @see Client#getCanGiveAudio()
+	 * @see StreamClient#getCanGiveAudio()
 	 */
 	@Column(name = "can_giveaudio", nullable = false)
 	private boolean canGiveAudio = false;
@@ -168,121 +168,121 @@ public class Client implements IClient {
 	private boolean canVideo = false;
 
 	/**
-	 * @see Client#getConnectedSince()
+	 * @see StreamClient#getConnectedSince()
 	 */
 	@Column(name = "connected_since")
 	private Date connectedSince;
 
 	/**
-	 * @see Client#getFormatedDate()
+	 * @see StreamClient#getFormatedDate()
 	 */
 	@Column(name = "formated_date")
 	private String formatedDate;
 
 	/**
-	 * @see Client#isScreenClient()
+	 * @see StreamClient#isScreenClient()
 	 */
 	@Column(name = "is_screenclient", nullable = false)
 	private boolean screenClient;
 
 	/**
-	 * @see Client#getUsercolor()
+	 * @see StreamClient#getUsercolor()
 	 */
 	@Column(name = "usercolor")
 	private String usercolor;
 
 	/**
-	 * @see Client#getUserpos()
+	 * @see StreamClient#getUserpos()
 	 */
 	@Column(name = "userpos")
 	private Integer userpos;
 
 	/**
-	 * @see Client#getUserip()
+	 * @see StreamClient#getUserip()
 	 */
 	@Column(name = "userip")
 	private String userip;
 
 	/**
-	 * @see Client#getUserport()
+	 * @see StreamClient#getUserport()
 	 */
 	@Column(name = "userport")
 	private int userport;
 
 	/**
-	 * @see Client#getRoomId()
+	 * @see StreamClient#getRoomId()
 	 */
 	@Column(name = "room_id")
 	private Long roomId;
 
 	/**
-	 * @see Client#getRoomEnter()
+	 * @see StreamClient#getRoomEnter()
 	 */
 	@Column(name = "room_enter")
 	private Date roomEnter = null;
 
 	/**
-	 * @see Client#getBroadCastID()
+	 * @see StreamClient#getBroadCastID()
 	 */
 	@Column(name = "broadcast_id")
 	private long broadCastID = -2;
 
 	/**
-	 * @see Client#getUserId()
+	 * @see StreamClient#getUserId()
 	 */
 	@Column(name = "user_id")
 	private Long userId = null;
 
 	/**
-	 * @see Client#getFirstname()
+	 * @see StreamClient#getFirstname()
 	 */
 	@Column(name = "firstname")
 	private String firstname = "";
 
 	/**
-	 * @see Client#getLastname()
+	 * @see StreamClient#getLastname()
 	 */
 	@Column(name = "lastname")
 	private String lastname = "";
 
 	/**
-	 * @see Client#getMail()
+	 * @see StreamClient#getMail()
 	 */
 	@Column(name = "email")
 	private String email;
 
 	/**
-	 * @see Client#getLastLogin()
+	 * @see StreamClient#getLastLogin()
 	 */
 	@Column(name = "last_login")
 	private String lastLogin;
 
 	/**
-	 * @see Client#getSecurityCode()
+	 * @see StreamClient#getSecurityCode()
 	 */
 	@Column(name = "security_code")
 	private String securityCode;
 
 	/**
-	 * @see Client#getPicture_uri()
+	 * @see StreamClient#getPicture_uri()
 	 */
 	@Column(name = "picture_uri")
 	private String picture_uri;
 
 	/**
-	 * @see Client#getLanguage()
+	 * @see StreamClient#getLanguage()
 	 */
 	@Column(name = "language")
 	private String language = "";
 
 	/**
-	 * @see Client#getAvsettings()
+	 * @see StreamClient#getAvsettings()
 	 */
 	@Column(name = "avsettings")
 	private String avsettings = "";
 
 	/**
-	 * @see Client#getSwfurl()
+	 * @see StreamClient#getSwfurl()
 	 */
 	// FIXME: Move to {@link ClientSession}
 	@Column(name = "swfurl", length=2048)
@@ -295,97 +295,97 @@ public class Client implements IClient {
 	private boolean nativeSsl = false;
 
 	/**
-	 * @see Client#getIsRecording()
+	 * @see StreamClient#getIsRecording()
 	 */
 	@Column(name = "is_recording", nullable = false)
 	private boolean isRecording = false;
 
 	/**
-	 * @see Client#getRoomRecordingName()
+	 * @see StreamClient#getRoomRecordingName()
 	 */
 	@Column(name = "room_recording_name")
 	private String roomRecordingName;
 
 	/**
-	 * @see Client#getRecordingId()
+	 * @see StreamClient#getRecordingId()
 	 */
 	@Column(name = "recording_id")
 	private Long recordingId;
 
 	/**
-	 * @see Client#getRecordingMetaDataId()
+	 * @see StreamClient#getRecordingMetaDataId()
 	 */
 	@Column(name = "recording_metadata_id")
 	private Long recordingMetaDataId;
 
 	/**
-	 * @see Client#isStartRecording()
+	 * @see StreamClient#isStartRecording()
 	 */
 	@Column(name = "start_recording", nullable = false)
 	private boolean startRecording = false;
 
 	/**
-	 * @see Client#isStartStreaming()
+	 * @see StreamClient#isStartStreaming()
 	 */
 	@Column(name = "start_streaming", nullable = false)
 	private boolean startStreaming = false;
 
 	/**
-	 * @see Client#isScreenPublishStarted()
+	 * @see StreamClient#isScreenPublishStarted()
 	 */
 	@Column(name = "screen_publish_started", nullable = false)
 	private boolean screenPublishStarted = false;
 
 	/**
-	 * @see Client#isStreamPublishStarted()
+	 * @see StreamClient#isStreamPublishStarted()
 	 */
 	@Column(name = "stream_publish_started", nullable = false)
 	private boolean streamPublishStarted = false;
 
 	/**
-	 * @see Client#getIsBroadcasting()
+	 * @see StreamClient#getIsBroadcasting()
 	 */
 	@Column(name = "is_broadcasting", nullable = false)
 	private boolean isBroadcasting = false;
 
 	/**
-	 * @see Client#getExternalUserId()
+	 * @see StreamClient#getExternalUserId()
 	 */
 	@Column(name = "external_user_id")
 	private String externalUserId;
 
 	/**
-	 * @see Client#getExternalUserType()
+	 * @see StreamClient#getExternalUserType()
 	 */
 	@Column(name = "external_user_type")
 	private String externalUserType;
 
 	/**
-	 * @see Client#getInterviewPodId()
+	 * @see StreamClient#getInterviewPodId()
 	 */
 	@Column(name = "interview_pod_id")
 	private Integer interviewPodId = null;
 
 	/**
-	 * @see Client#isAllowRecording()
+	 * @see StreamClient#isAllowRecording()
 	 */
 	@Column(name = "allow_recording", nullable = false)
 	private boolean allowRecording = true;
 
 	/**
-	 * @see Client#getZombieCheckFlag()
+	 * @see StreamClient#getZombieCheckFlag()
 	 */
 	@Column(name = "zombie_check_flag", nullable = false)
 	private boolean zombieCheckFlag = false;
 
 	/**
-	 * @see Client#getMicMuted()
+	 * @see StreamClient#getMicMuted()
 	 */
 	@Column(name = "mic_muted", nullable = false)
 	private boolean micMuted = false;
 
 	/**
-	 * @see Client#isSipTransport()
+	 * @see StreamClient#isSipTransport()
 	 */
 	@Column(name = "sip_transport", nullable = false)
 	private boolean sipTransport = false;
@@ -397,9 +397,9 @@ public class Client implements IClient {
 	@JoinColumn(name = "server_id")
 	private Server server;
 
-	public Client() {}
+	public StreamClient() {}
 
-	public Client(String streamid, String publicSID, Long roomId,
+	public StreamClient(String streamid, String publicSID, Long roomId,
 			Long userId, String firstname, String lastname,
 			String username, String connectedSince, String scope) {
 		super();

@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 import org.apache.wicket.util.string.Strings;
@@ -34,7 +35,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 /**
- * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.Client}
+ * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.StreamClient}
  * @author solomax
  *
  */
@@ -80,7 +81,7 @@ public class Client implements IClient {
 		sid = UUID.randomUUID().toString();
 	}
 
-	public Client(org.apache.openmeetings.db.entity.room.Client rcl, UserDao dao) {
+	public Client(StreamClient rcl, UserDao dao) {
 		this.sessionId = UUID.randomUUID().toString();
 		this.pageId = 0;
 		this.user = dao.get(rcl.getUserId());

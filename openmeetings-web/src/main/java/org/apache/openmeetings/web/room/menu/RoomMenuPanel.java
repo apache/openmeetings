@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage.Type;
@@ -300,13 +301,13 @@ public class RoomMenuPanel extends Panel {
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {
 			ISessionManager sessMngr = getBean(ISessionManager.class);
-			org.apache.openmeetings.db.entity.room.Client recUser = sessMngr.getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
+			StreamClient recUser = sessMngr.getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
 			if (recUser != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
 						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.format(recUser.getConnectedSince())));
 				roomClass.append(" screen");
 			}
-			org.apache.openmeetings.db.entity.room.Client pubUser = sessMngr.getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
+			StreamClient pubUser = sessMngr.getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
 			if (pubUser != null) {
 				if (recUser != null) {
 					roomTitle.append('\n');

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.room.ClientDao;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,7 +40,7 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public void put(String streamId, Client rcl) {
+	public void put(String streamId, StreamClient rcl) {
 		if (rcl.getId() != null) {
 			clientDao.update(rcl);
 		} else {
@@ -54,29 +54,29 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Client get(Server server, String streamId) {
+	public StreamClient get(Server server, String streamId) {
 		return clientDao.getClientByServerAndStreamId(server, streamId);
 	}
 
 	@Override
-	public List<Client> getClientsByPublicSID(Server server, String publicSID) {
+	public List<StreamClient> getClientsByPublicSID(Server server, String publicSID) {
 		return clientDao.getClientsByPublicSIDAndServer(server, publicSID);
 	}
 
 	@Override
-	public Map<Long, List<Client>> getClientsByPublicSID(String publicSID) {
-		Map<Long, List<Client>> returnMap = new HashMap<>();
-		List<Client> clientList = clientDao.getClientsByPublicSID(publicSID);
-		for (Client cl : clientList) {
+	public Map<Long, List<StreamClient>> getClientsByPublicSID(String publicSID) {
+		Map<Long, List<StreamClient>> returnMap = new HashMap<>();
+		List<StreamClient> clientList = clientDao.getClientsByPublicSID(publicSID);
+		for (StreamClient cl : clientList) {
 			if (cl.getServer() == null) {
-				List<Client> clList = returnMap.get(null);
+				List<StreamClient> clList = returnMap.get(null);
 				if (clList == null) {
 					clList = new ArrayList<>();
 				}
 				clList.add(cl);
 				returnMap.put(null, clList);
 			} else {
-				List<Client> clList = returnMap.get(cl.getServer().getId());
+				List<StreamClient> clList = returnMap.get(cl.getServer().getId());
 				if (clList == null) {
 					clList = new ArrayList<>();
 				}
@@ -88,27 +88,27 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Collection<Client> getClients() {
+	public Collection<StreamClient> getClients() {
 		return clientDao.getClients();
 	}
 
 	@Override
-	public Collection<Client> getClientsWithServer() {
+	public Collection<StreamClient> getClientsWithServer() {
 		return clientDao.getClientsWithServer();
 	}
 
 	@Override
-	public Collection<Client> getClientsByServer(Server server) {
+	public Collection<StreamClient> getClientsByServer(Server server) {
 		return clientDao.getClientsByServer(server);
 	}
 
 	@Override
-	public List<Client> getClientsByUserId(Server server, Long userId) {
+	public List<StreamClient> getClientsByUserId(Server server, Long userId) {
 		return clientDao.getClientsByUserId(server, userId);
 	}
 
 	@Override
-	public List<Client> getClientsByRoomId(Long roomId) {
+	public List<StreamClient> getClientsByRoomId(Long roomId) {
 		return clientDao.getClientsByRoomId(roomId);
 	}
 
@@ -128,7 +128,7 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Collection<Client> values() {
+	public Collection<StreamClient> values() {
 		return clientDao.getClients();
 	}
 

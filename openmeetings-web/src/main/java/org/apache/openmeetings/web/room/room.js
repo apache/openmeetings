@@ -31,7 +31,7 @@ var Video = (function() {
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
-	function _init(_box, _c) {
+	function _init(_box, _uid, _c) {
 		c = _c;
 		box = _box;
 		size = {width: c.width, height: c.height};
@@ -95,12 +95,13 @@ var Video = (function() {
 			o.cam = c.cam;
 			o.mic = c.mic;
 			o.mode = 'broadcast';
+			o.uid = c.uid;
 		} else {
 			o.mode = 'play';
+			o.uid = _uid;
 		}
 		o.width = c.width;
 		o.height = c.height;
-		o.uid = c.uid;
 		o.sid = c.sid;
 		o.broadcastId = c.broadcastId;
 		swf = initVideo(vc, _id + '-swf', o);
@@ -134,7 +135,7 @@ var VideoManager = (function() {
 			, av = audio || video
 			, v = $('#' + _id);
 		if (av && v.length != 1 && !!c.self) {
-			Video().init(box, c);
+			Video().init(box, options.uid, c);
 		} else if (av && v.length == 1) {
 			v.data().update(c);
 		} else if (!av && v.length == 1) {
@@ -142,7 +143,7 @@ var VideoManager = (function() {
 		}
 	}
 	function _play(c) {
-		Video().init(box, c);
+		Video().init(box, options.uid, c);
 	}
 	function _close(uid) {
 		var _id = _getVid(uid), v = $('#' + _id);
