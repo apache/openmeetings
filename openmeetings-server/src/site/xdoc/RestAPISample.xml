@@ -132,7 +132,7 @@ $.ajax({
 					</table>
 				</li>
 				<li>If your request was successful you will get your hash as <b>message</b> (fa1f9381-bd03-42ae-9fd9-332b5f775a1b)</li>
-				<li>Now you can use following URL to enter the room: <tt>http://localhost:5080/openmeetings/swf?secureHash=fa1f9381-bd03-42ae-9fd9-332b5f775a1b&amp;language=1</tt></li>
+				<li>Now you can use following URL to enter the room: <tt>http://localhost:5080/openmeetings/hash?secure=fa1f9381-bd03-42ae-9fd9-332b5f775a1b&amp;language=1</tt></li>
 			</ul>
 		</section>
 	</body>
