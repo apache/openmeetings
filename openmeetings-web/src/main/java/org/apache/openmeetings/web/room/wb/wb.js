@@ -1065,8 +1065,8 @@ var WbArea = (function() {
 								});
 							});
 						} else {
-							var obj = canvas.getActiveObject();
-							if (!!obj) {
+							var o = canvas.getActiveObject();
+							if (!!o) {
 								arr.push({
 									uid: o.uid
 									, slide: o.slide
@@ -1198,8 +1198,8 @@ var WbArea = (function() {
 		_addCloseBtn(li);
 	
 		var wbo = Wb();
-		wb.data(wbo);
 		wbo.init(obj.wbId, tid, readOnly);
+		wb.data(wbo);
 		_resizeWbs();
 	}
 	self.createWb = function(obj) {

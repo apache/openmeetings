@@ -88,6 +88,7 @@ var Video = (function() {
 					handle.text(ui.value);
 				}
 			});
+			//TODO add mute, ADD refresh
 		}
 		vc = v.find('.video');
 		vc.width(_w).height(_h);

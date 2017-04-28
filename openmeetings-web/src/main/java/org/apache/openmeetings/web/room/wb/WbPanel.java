@@ -189,7 +189,8 @@ public class WbPanel extends Panel {
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							JSONArray arr = obj.getJSONArray("obj");
 							for (int i = 0; i < arr.length(); ++i) {
-								wb.remove(arr.getString(i));
+								JSONObject _o = arr.getJSONObject(i);
+								wb.remove(_o.getString("uid"));
 							}
 							sendWbAll(Action.deleteObj, obj);
 						}
@@ -442,11 +443,11 @@ public class WbPanel extends Panel {
 							.put("uid", wuid)
 							.put("slide", wb.getSlide())
 							;
-					wb.put(wuid, file);
 					final String ruid = wbs.getUid();
 					if (clean) {
 						clearAll(wb);
 					}
+					wb.put(wuid, file);
 					WebSocketHelper.sendRoom(
 							roomId
 							, new JSONObject().put("type", "wb")
