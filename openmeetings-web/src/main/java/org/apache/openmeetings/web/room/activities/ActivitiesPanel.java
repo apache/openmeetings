@@ -103,6 +103,10 @@ public class ActivitiesPanel extends BasePanel {
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(client, Right.audio, Right.video);
 										break;
+									case reqRightPresenter:
+										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+										room.allowRight(client, Right.presenter);
+										break;
 									case reqRightWb:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
 										room.allowRight(client, Right.whiteBoard);
@@ -161,6 +165,7 @@ public class ActivitiesPanel extends BasePanel {
 			boolean self = getUserId().equals(a.getSender());
 			switch (a.getType()) {
 				case reqRightModerator:
+				case reqRightPresenter:
 				case reqRightWb:
 				case reqRightShare:
 				case reqRightRemote:
@@ -191,6 +196,9 @@ public class ActivitiesPanel extends BasePanel {
 					break;
 				case reqRightModerator:
 					text = String.format("%s %s [%s]", name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
+					break;
+				case reqRightPresenter:
+					text = String.format("%s %s [%s]", name, getString("right.presenter.request"), df.format(a.getCreated()));
 					break;
 				case reqRightWb:
 					text = String.format("%s %s [%s]", name, getString("694"), df.format(a.getCreated()));
@@ -226,6 +234,7 @@ public class ActivitiesPanel extends BasePanel {
 			String cls = "ui-state-default";
 			switch (a.getType()) {
 				case reqRightModerator:
+				case reqRightPresenter:
 				case reqRightWb:
 				case reqRightShare:
 				case reqRightRemote:

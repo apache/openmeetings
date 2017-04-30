@@ -30,6 +30,7 @@ public class Activity implements Serializable {
 		roomEnter
 		, roomExit
 		, reqRightModerator
+		, reqRightPresenter
 		, reqRightWb
 		, reqRightShare
 		, reqRightRemote

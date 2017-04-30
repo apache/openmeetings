@@ -429,6 +429,9 @@ public class RoomPanel extends BasePanel {
 					case requestRightModerator:
 						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightModerator), handler);
 						break;
+					case requestRightPresenter:
+						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightPresenter), handler);
+						break;
 					case requestRightWb:
 						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightWb), handler);
 						break;
@@ -578,6 +581,9 @@ public class RoomPanel extends BasePanel {
 		switch (right) {
 			case moderator:
 				reqType = Type.requestRightModerator;
+				break;
+			case presenter:
+				reqType = Type.requestRightPresenter;
 				break;
 			case whiteBoard:
 				reqType = Type.requestRightWb;

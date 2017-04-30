@@ -23,6 +23,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.right.AudioRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ExclusiveRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ModeratorRightIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.right.PresenterRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.RemoteControlRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ScreenShareRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.VideoRightIcon;
@@ -34,6 +35,7 @@ public class ClientIconsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final ModeratorRightIcon rightModer;
 	private final WhiteboardRightIcon rightWb;
+	private final PresenterRightIcon rightPresenter;
 	private final ScreenShareRightIcon rightScreen;
 	private final RemoteControlRightIcon rightRemote;
 	private final AudioRightIcon rightAudio;
@@ -45,6 +47,7 @@ public class ClientIconsPanel extends Panel {
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 		add(rightModer = new ModeratorRightIcon("right-moder", client, room));
+		add(rightPresenter = new PresenterRightIcon("right-presenter", client, room));
 		add(rightWb = new WhiteboardRightIcon("right-wb", client, room));
 		add(rightScreen = new ScreenShareRightIcon("right-screen-share", client, room));
 		add(rightRemote = new RemoteControlRightIcon("right-remote-control", client, room));
@@ -61,6 +64,7 @@ public class ClientIconsPanel extends Panel {
 	
 	public void update(IPartialPageRequestHandler handler) {
 		rightModer.update(handler);
+		rightPresenter.update(handler);
 		rightWb.update(handler);
 		rightScreen.update(handler);
 		rightRemote.update(handler);

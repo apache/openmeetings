@@ -284,6 +284,12 @@
 .right.moderator.ui-icon.granted {
 	background-image: url(images/user_delete.png);
 }
+.right.presenter.ui-icon {
+	background-image: url(images/wand_add.png);
+}
+.right.presenter.ui-icon.granted {
+	background-image: url(images/wand_delete.png);
+}
 .right.wb.ui-icon {
 	background-image: url(images/pencil_add.png);
 }

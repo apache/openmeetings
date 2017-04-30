@@ -90,7 +90,6 @@ public class WbPanel extends Panel {
 	public static final String PARAM_OBJ = "obj";
 	private final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
-	private boolean readOnly = true;
 	private final Long roomId;
 	private final RoomPanel rp;
 	private long wb2save = -1;
@@ -127,12 +126,13 @@ public class WbPanel extends Panel {
 					}
 				}
 
-				//wb-right
-				if (rp.getClient().hasRight(Right.whiteBoard)) {
+				Client c = rp.getClient();
+				//presenter-right
+				if (c.hasRight(Right.presenter)) {
 					switch (a) {
 						case createWb:
 						{
-							Whiteboard wb = getBean(WhiteboardCache.class).add(roomId, rp.getClient().getUser().getLanguageId());
+							Whiteboard wb = getBean(WhiteboardCache.class).add(roomId, c.getUser().getLanguageId());
 							sendWbAll(Action.createWb, getAddWbJson(wb.getId(), wb.getName()));
 						}
 							break;
@@ -161,6 +161,19 @@ public class WbPanel extends Panel {
 							sendWbOthers(Action.setSlide, obj);
 						}
 							break;
+						case clearAll:
+						{
+							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
+							clearAll(wb);
+						}
+							break;
+						default:
+							break;
+					}
+				}
+				//wb-right
+				if (c.hasRight(Right.presenter) || c.hasRight(Right.whiteBoard)) {
+					switch (a) {
 						case createObj:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
@@ -195,12 +208,6 @@ public class WbPanel extends Panel {
 							sendWbAll(Action.deleteObj, obj);
 						}
 							break;
-						case clearAll:
-						{
-							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
-							clearAll(wb);
-						}
-							break;
 						case clearSlide:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
@@ -211,6 +218,8 @@ public class WbPanel extends Panel {
 						case save:
 							wb2save = obj.getLong("wbId");
 							fileName.open(target);
+							break;
+						default:
 							break;
 					}
 				}
@@ -327,19 +336,15 @@ public class WbPanel extends Panel {
 		return new JSONObject().put("wbId", id).put("name", name);
 	}
 
-	public boolean isReadOnly() {
-		return readOnly;
-	}
-
-	public WbPanel setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-		return this;
-	}
-
 	public WbPanel update(IPartialPageRequestHandler handler) {
-		readOnly = !rp.getClient().hasRight(Right.whiteBoard);
+		String role = "none";
+		if (rp.getClient().hasRight(Right.presenter)) {
+			role = "presenter";
+		} else if (rp.getClient().hasRight(Right.whiteBoard)) {
+			role = "whiteBoard";
+		}
 		if (handler != null) {
-			handler.appendJavaScript(String.format("setRoomSizes();WbArea.setReadOnly(%s);", readOnly));
+			handler.appendJavaScript(String.format("setRoomSizes();WbArea.setRole('%s');", role));
 		}
 		return this;
 	}

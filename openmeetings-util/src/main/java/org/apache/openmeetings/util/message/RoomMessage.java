@@ -38,6 +38,7 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, rightUpdated
 		, activityRemove
 		, requestRightModerator
+		, requestRightPresenter
 		, requestRightWb
 		, requestRightShare
 		, requestRightRemote

@@ -24,28 +24,23 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.room.RoomPanel;
 
-public class WhiteboardRightIcon extends RoomRightIcon {
+public class PresenterRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.whiteBoard, room);
-		mainCssClass = "right wb bumper ";
+	public PresenterRightIcon(String id, Client client, RoomPanel room) {
+		super(id, client, Right.presenter, room);
+		mainCssClass = "right presenter bumper ";
 	}
 
 	@Override
 	protected String getTitle() {
 		String title;
 		if (client.hasRight(right)) {
-			title = self ? "689" : "612";
+			title = self ? "right.presenter.allowed.self" : "right.presenter.remove";
 		} else {
-			title = self ? "686" : "694";
+			title = self ? "right.presenter.request.self" : "right.presenter.request";
 		}
 		return getString(title);
-	}
-
-	@Override
-	protected boolean hasRight() {
-		return client.hasRight(Right.presenter) || client.hasRight(right);
 	}
 
 	@Override

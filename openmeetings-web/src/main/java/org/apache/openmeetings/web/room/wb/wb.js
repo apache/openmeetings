@@ -22,6 +22,9 @@
  * @license MIT license
  * @link http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
  **/
+const PRESENTER = 'presenter';
+const WHITEBOARD = 'whiteBoard';
+const NONE = 'none';
 var UUID = (function() {
 	var self = {};
 	var lut = [];
@@ -486,7 +489,7 @@ var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
 	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, minWidth = 0, minHeight = 0, readOnly = null;
+			, minWidth = 0, minHeight = 0, role = null;
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
@@ -568,100 +571,107 @@ var Wb = function() {
 				}
 			}
 		});
-		if (readOnly) {
-			initToolBtn('apointer', true, APointer(wb));
-		} else {
-			initToolBtn('pointer', true, Pointer(wb, s));
-			initToolBtn('apointer', false, APointer(wb));
-			initToolBtn('text', false, Text(wb, s));
-			initToolBtn('paint', false, Paint(wb, s));
-			initToolBtn('line', false, Line(wb, s));
-			initToolBtn('uline', false, ULine(wb, s));
-			initToolBtn('rect', false, Rect(wb, s));
-			initToolBtn('ellipse', false, Ellipse(wb, s));
-			initToolBtn('arrow', false, Arrow(wb, s));
-			initCliparts();
-			t.find(".om-icon.settings").click(function() {
-				s.show();
-			});
-			t.find('.om-icon.clear-all').click(function() {
-				confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
-			});
-			t.find('.om-icon.clear-slide').click(function() {
-				confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
-			});
-			t.find('.om-icon.save').click(function() {
-				wbAction('save', JSON.stringify({wbId: wb.id}));
-			});
-			s.find('.wb-prop-b, .wb-prop-i')
-				.button()
-				.click(function() {
-					$(this).toggleClass('ui-state-active selected');
+		var _firstToolItem = true;
+		var clearAll = t.find('.om-icon.clear-all');
+		switch (role) {
+			case PRESENTER:
+				clearAll.click(function() {
+					confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
+				}).removeClass('disabled');
+			case WHITEBOARD:
+				if (role === WHITEBOARD) {
+					clearAll.addClass('disabled');
+				}
+				initToolBtn('pointer', _firstToolItem, Pointer(wb, s));
+				_firstToolItem = false;
+				initToolBtn('text', _firstToolItem, Text(wb, s));
+				initToolBtn('paint', _firstToolItem, Paint(wb, s));
+				initToolBtn('line', _firstToolItem, Line(wb, s));
+				initToolBtn('uline', _firstToolItem, ULine(wb, s));
+				initToolBtn('rect', _firstToolItem, Rect(wb, s));
+				initToolBtn('ellipse', _firstToolItem, Ellipse(wb, s));
+				initToolBtn('arrow', _firstToolItem, Arrow(wb, s));
+				initCliparts();
+				t.find(".om-icon.settings").click(function() {
+					s.show();
 				});
-			s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
-				.button({icon: 'ui-icon-locked', showLabel: false})
-				.click(function() {
+				t.find('.om-icon.clear-slide').click(function() {
+					confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
+				});
+				t.find('.om-icon.save').click(function() {
+					wbAction('save', JSON.stringify({wbId: wb.id}));
+				});
+				s.find('.wb-prop-b, .wb-prop-i')
+					.button()
+					.click(function() {
+						$(this).toggleClass('ui-state-active selected');
+					});
+				s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
+					.button({icon: 'ui-icon-locked', showLabel: false})
+					.click(function() {
+						var btn = getBtn();
+						var isColor = $(this).hasClass('wb-prop-lock-color');
+						var c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
+						var enabled = $(this).button('option', 'icon') == 'ui-icon-locked';
+						$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
+						c.prop('disabled', !enabled);
+						btn.data('obj')[isColor ? 'stroke' : 'fill'].enabled = enabled;
+					});
+				s.find('.wb-prop-color').change(function() {
 					var btn = getBtn();
-					var isColor = $(this).hasClass('wb-prop-lock-color');
-					var c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
-					var enabled = $(this).button('option', 'icon') == 'ui-icon-locked';
-					$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
-					c.prop('disabled', !enabled);
-					btn.data('obj')[isColor ? 'stroke' : 'fill'].enabled = enabled;
+					if (btn.length == 1) {
+						var v = $(this).val();
+						btn.data('obj').stroke.color = v;
+						if ('paint' == mode) {
+							wb.eachCanvas(function(canvas) {
+								canvas.freeDrawingBrush.color = v;
+							});
+						}
+					}
 				});
-			s.find('.wb-prop-color').change(function() {
-				var btn = getBtn();
-				if (btn.length == 1) {
-					var v = $(this).val();
-					btn.data('obj').stroke.color = v;
-					if ('paint' == mode) {
-						wb.eachCanvas(function(canvas) {
-							canvas.freeDrawingBrush.color = v;
-						});
+				s.find('.wb-prop-width').change(function() {
+					var btn = getBtn();
+					if (btn.length == 1) {
+						var v = 1 * $(this).val();
+						btn.data('obj').stroke.width = v;
+						if ('paint' == mode) {
+							wb.eachCanvas(function(canvas) {
+								canvas.freeDrawingBrush.width = v;
+							});
+						}
 					}
-				}
-			});
-			s.find('.wb-prop-width').change(function() {
-				var btn = getBtn();
-				if (btn.length == 1) {
-					var v = 1 * $(this).val();
-					btn.data('obj').stroke.width = v;
-					if ('paint' == mode) {
-						wb.eachCanvas(function(canvas) {
-							canvas.freeDrawingBrush.width = v;
-						});
+				});
+				s.find('.wb-prop-opacity').change(function() {
+					var btn = getBtn();
+					if (btn.length == 1) {
+						var v = (1 * $(this).val()) / 100;
+						btn.data('obj').opacity = v;
+						if ('paint' == mode) {
+							wb.eachCanvas(function(canvas) {
+								canvas.freeDrawingBrush.opacity = v;
+							});
+						}
 					}
-				}
-			});
-			s.find('.wb-prop-opacity').change(function() {
-				var btn = getBtn();
-				if (btn.length == 1) {
-					var v = (1 * $(this).val()) / 100;
-					btn.data('obj').opacity = v;
-					if ('paint' == mode) {
-						wb.eachCanvas(function(canvas) {
-							canvas.freeDrawingBrush.opacity = v;
-						});
+				});
+				s.find('.ui-dialog-titlebar-close').click(function() {
+					s.hide();
+				});
+				s.draggable({
+					scroll: false
+					, containment: "body"
+					, start: function(event, ui) {
+						if (!!s.css("bottom")) {
+							s.css("bottom", "").css("right", "");
+						}
 					}
-				}
-			});
-			s.find('.ui-dialog-titlebar-close').click(function() {
-				s.hide();
-			});
-			s.draggable({
-				scroll: false
-				, containment: "body"
-				, start: function(event, ui) {
-					if (!!s.css("bottom")) {
-						s.css("bottom", "").css("right", "");
+					, drag: function(event, ui) {
+						if (s.position().x + s.width() >= s.parent().width()) {
+							return false;
+						}
 					}
-				}
-				, drag: function(event, ui) {
-					if (s.position().x + s.width() >= s.parent().width()) {
-						return false;
-					}
-				}
-			});
+				});
+			case NONE:
+				initToolBtn('apointer', _firstToolItem, APointer(wb));
 		}
 	}
 	function _findObject(o) {
@@ -763,7 +773,7 @@ var Wb = function() {
 	}
 	//events
 	function wbObjCreatedHandler(o) {
-		if (readOnly && o.type != 'pointer') return;
+		if (role === NONE && o.type != 'pointer') return;
 
 		var json = {};
 		switch(o.type) {
@@ -796,7 +806,7 @@ var Wb = function() {
 	};
 	function objModifiedHandler(e) {
 		var o = e.target;
-		if (readOnly && o.type != 'pointer') return;
+		if (role === NONE && o.type != 'pointer') return;
 
 		o.includeDefaultValues = false;
 		wbAction('modifyObj', JSON.stringify({
@@ -833,7 +843,7 @@ var Wb = function() {
 	}
 	function showCurentSlide() {
 		a.find('.scroll-container .canvas-container').each(function(idx) {
-			if (readOnly) {
+			if (role === NONE) {
 				if (idx == slide) {
 					$(this).show();
 				} else {
@@ -858,7 +868,7 @@ var Wb = function() {
 			'wb:object:created': wbObjCreatedHandler
 			, 'object:modified': objModifiedHandler
 		});
-		if (readOnly) {
+		if (role === NONE) {
 			canvas.off({
 				'object:added': objAddedHandler
 				, 'object:selected': objSelectedHandler
@@ -888,7 +898,7 @@ var Wb = function() {
 		canvas.slide = sl;
 		canvases.push(canvas);
 		var cc = $('#' + cid).closest('.canvas-container');
-		if (readOnly) {
+		if (role === NONE) {
 			if (sl == slide) {
 				cc.show();
 			} else {
@@ -897,17 +907,17 @@ var Wb = function() {
 		}
 		setHandlers(canvas);
 	}
-	wb.setReadOnly = function(ro) {
-		if (readOnly != ro) {
+	wb.setRole = function(_role) {
+		if (role != _role) {
 			var btn = getBtn();
 			if (!!btn && btn.length == 1) {
 				btn.data().deactivate();
 			}
 			a.find('.tools').remove();
 			a.find('.wb-settings').remove();
-			readOnly = ro;
+			role = _role;
 			var sc = a.find('.scroll-container');
-			if (readOnly) {
+			if (role === NONE) {
 				t = $('#wb-tools-readonly').clone().attr('id', '');
 				a.append(t);
 				sc.off('scroll', scrollHandler);
@@ -925,11 +935,11 @@ var Wb = function() {
 			internalInit();
 		}
 	};
-	wb.init = function(_wbId, tid, ro) {
+	wb.init = function(_wbId, tid, _role) {
 		wb.id = _wbId;
 		a = $('#' + tid);
 		addCanvas();
-		wb.setReadOnly(ro);
+		wb.setRole(_role);
 	};
 	wb.resize = function(w, h) {
 		if (t.position().left + t.width() > a.width()) {
@@ -951,7 +961,7 @@ var Wb = function() {
 	};
 	wb.setSlide = function(_sl) {
 		slide = _sl;
-		if (readOnly) {
+		if (role === NONE) {
 			showCurentSlide();
 		} else {
 			a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
@@ -1033,7 +1043,7 @@ var Wb = function() {
 	return wb;
 };
 var WbArea = (function() {
-	var container, area, tabs, scroll, readOnly = true, self = {};
+	var container, area, tabs, scroll, role = NONE, self = {};
 
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
@@ -1104,7 +1114,7 @@ var WbArea = (function() {
 		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
 	}
 	function _addCloseBtn(li) {
-		if (readOnly) {
+		if (role != PRESENTER) {
 			return;
 		}
 		li.append($('#wb-tab-close').clone().attr('id', ''));
@@ -1121,19 +1131,12 @@ var WbArea = (function() {
 	self.getCanvas = function(id) {
 		return self.getWb(id).getCanvas();
 	};
-	self.setReadOnly = function(ro) {
-		readOnly = ro;
+	self.setRole = function(_role) {
+		role = _role;
 		var tabsNav = tabs.find(".ui-tabs-nav");
-		tabsNav.sortable(readOnly ? "disable" : "enable");
+		tabsNav.sortable(role === PRESENTER ? "enable" : "disable");
 		var prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
-		if (readOnly) {
-			if (prev.length > 0) {
-				prev.parent().remove();
-				next.parent().remove();
-				tabsNav.find('li button').remove();
-			}
-			$(window).off('keyup', deleteHandler);
-		} else {
+		if (role === PRESENTER) {
 			if (prev.length == 0) {
 				var cc = tabs.find('.wb-tabbar .scroll-container')
 					, left = $('#wb-tabbar-ctrls-left').clone().attr('id', '')
@@ -1154,9 +1157,16 @@ var WbArea = (function() {
 				});
 				$(window).keyup(deleteHandler);
 			}
+		} else {
+			if (prev.length > 0) {
+				prev.parent().remove();
+				next.parent().remove();
+				tabsNav.find('li button').remove();
+			}
+			$(window).off('keyup', deleteHandler);
 		}
 		tabs.find(".ui-tabs-panel").each(function(idx) {
-			$(this).data().setReadOnly(readOnly);
+			$(this).data().setRole(role);
 		});
 	}
 	self.init = function() {
@@ -1165,7 +1175,7 @@ var WbArea = (function() {
 			beforeActivate: function(e, ui) {
 				var res = true;
 				if (e.originalEvent && e.originalEvent.type === 'click') {
-					res = !readOnly;
+					res = role === PRESENTER;
 				}
 				return res;
 			}
@@ -1181,7 +1191,7 @@ var WbArea = (function() {
 				refreshTabs();
 			}
 		});
-		self.setReadOnly(readOnly);
+		self.setRole(role);
 	};
 	self.destroy = function() {
 		$(window).off('keyup', deleteHandler);
@@ -1198,13 +1208,13 @@ var WbArea = (function() {
 		_addCloseBtn(li);
 	
 		var wbo = Wb();
-		wbo.init(obj.wbId, tid, readOnly);
+		wbo.init(obj.wbId, tid, role);
 		wb.data(wbo);
 		_resizeWbs();
 	}
 	self.createWb = function(obj) {
 		self.create(obj);
-		self.setReadOnly(readOnly);
+		self.setRole(role);
 		_activateTab(obj.wbId);
 	};
 	self.activateWb = function(obj) {

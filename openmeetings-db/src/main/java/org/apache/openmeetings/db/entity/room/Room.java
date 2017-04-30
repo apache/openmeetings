@@ -96,6 +96,7 @@ public class Room implements IDataProviderEntity {
 	public enum Right {
 		superModerator
 		, moderator
+		, presenter
 		, whiteBoard
 		, share
 		, remoteControl
