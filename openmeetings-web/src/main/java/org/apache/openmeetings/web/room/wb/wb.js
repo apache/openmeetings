@@ -843,14 +843,14 @@ var Wb = function() {
 	}
 	function showCurentSlide() {
 		a.find('.scroll-container .canvas-container').each(function(idx) {
-			if (role === NONE) {
+			if (role === PRESENTER) {
+				$(this).show();
+			} else {
 				if (idx == slide) {
 					$(this).show();
 				} else {
 					$(this).hide();
 				}
-			} else {
-				$(this).show();
 			}
 		});
 	}
