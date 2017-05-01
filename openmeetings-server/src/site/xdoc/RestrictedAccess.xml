@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>How to restrict access to your Openmeetings server</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -32,8 +32,8 @@
 			<source>webapp.virtualHosts=*,localhost, 127.0.0.1</source>
 			Sample file:
 			<a
-				href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
-				rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties
+				href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties;hb=HEAD"
+				rel="nofollow">https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties;hb=HEAD
 			</a>
 		</section>
 

@@ -44,9 +44,9 @@
 	</properties>
 	<url>http://openmeetings.apache.org</url>
 	<scm>
-		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/trunk</connection>
-		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/trunk</developerConnection>
-		<url>https://svn.apache.org/repos/asf/openmeetings/application/trunk</url>
+		<connection>scm:git:http://git-wip-us.apache.org/repos/asf/openmeetings.git</connection>
+		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/openmeetings.git</developerConnection>
+		<url>http://git-wip-us.apache.org/repos/asf/wicket/repo?p=openmeetings.git</url>
 		<tag>HEAD</tag>
 	</scm>
 	<profiles>

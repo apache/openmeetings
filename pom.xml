@@ -391,9 +391,9 @@
 		</contributor>
 	</contributors>
 	<scm>
-		<connection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/trunk</connection>
-		<developerConnection>scm:svn:https://svn.apache.org/repos/asf/openmeetings/application/trunk</developerConnection>
-		<url>https://svn.apache.org/repos/asf/openmeetings/application/trunk</url>
+		<connection>scm:git:http://git-wip-us.apache.org/repos/asf/openmeetings.git</connection>
+		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/openmeetings.git</developerConnection>
+		<url>http://git-wip-us.apache.org/repos/asf/wicket/repo?p=openmeetings.git</url>
 		<tag>HEAD</tag>
 	</scm>
 	<mailingLists>
@@ -792,7 +792,7 @@
 							<manifestEntries>
 								<Built-By>OpenMeetings - http://openmeetings.apache.org</Built-By>
 								<Built-On>${maven.build.timestamp}</Built-On>
-								<Svn-Revision>${buildNumber}</Svn-Revision>
+								<Git-Revision>${buildNumber}</Git-Revision>
 								<Product-Version>${project.version}</Product-Version>
 							</manifestEntries>
 						</archive>

@@ -121,17 +121,10 @@
 				<li>
 					<p>
 						Check out the OpenMeetings sources and test your svn account:
-						<a href="http://svn.apache.org/viewvc/openmeetings/">
-							SubversionRepository
-						</a>
-						.
+						<a href="https://git-wip-us.apache.org/repos/asf/openmeetings.git">Git Repository</a>
 					</p>
-
 				</li>
-
 			</ul>
-
 		</section>
-
 	</body>
 </document>

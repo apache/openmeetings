@@ -24,8 +24,8 @@
 			<p>You can find all current language files here: </p>
 			<p>
 				<a
-					href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/java/org/apache/openmeetings/web/app/"
-					rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/java/org/apache/openmeetings/web/app/
+					href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=tree;f=openmeetings-web/src/main/java/org/apache/openmeetings/web/app;hb=HEAD"
+					rel="nofollow">https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=tree;f=openmeetings-web/src/main/java/org/apache/openmeetings/web/app;hb=HEAD
 				</a>
 			</p>
 			<p>Just take one file and translate it to your language. </p>

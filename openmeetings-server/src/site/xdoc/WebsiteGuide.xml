@@ -37,7 +37,7 @@
 					<p>
 						The Apache OpenMeetings HTML websites are generated from XML files. 
 						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -P allModules,unpacked]]></source> that generates the HTML files 
-						and then you copy generated HTML files into appropriate place and commit to SVN both: XML and HTML files.
+						and then you copy generated HTML files into appropriate place and commit to Git both: XML and HTML files.
 					</p>
 					<p>
 						The website itself uses JQuery to generate the menu, the pop images and the image slider at the landing page.
@@ -48,26 +48,26 @@
 			<subsection name="Editing the website">
 				<div>
 					<p>
-						OpenMeetings website (<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>) is a copy from the SVN repository.<br />
-						The file in the SVN to be synced are at:
+						OpenMeetings website (<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>) is a copy from the Git repository.<br />
+						The files in the Git to be synced are at:
 						<br />
-						<a href="http://svn.apache.org/repos/asf/openmeetings/trunk/site/">http://svn.apache.org/repos/asf/openmeetings/trunk/site/</a><br/>
+						<a href="https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git">https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git</a><br/>
 					</p>
 					
 					<div>
-						To update the website you need to checkout trunk:<br />
-						<a href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/">https://svn.apache.org/repos/asf/openmeetings/application/trunk/</a> <br/>
+						To update the website you need to clone master:<br />
+						<a href="https://git-wip-us.apache.org/repos/asf/openmeetings-site.git">https://git-wip-us.apache.org/repos/asf/openmeetings-site.git</a> <br/>
 						edit the files in the folder <tt>openmeetings-server/src/site</tt><br/>
 						then you run the command:
 						<source><![CDATA[mvn install -Dunpacked=true]]></source>
 						control the output locally in the folder <tt>openmeetings-server/target/server/webapps/openmeetings/docs/</tt><br/>
 						copy site contents into target folder: <source><![CDATA[cp -r openmeetings-server/target/server/webapps/openmeetings/docs/* ../site/]]></source>
-						And then commit your changes into the SVN <i>both</i> the edited xml(s) and generated html files.
+						And then commit your changes into the Git <i>both</i> the edited xml(s) and generated html files.
 					</div>
 					
 					<p>
-						The public website is automatically synced with the SVN repository.<br/>
-						Changes to the SVN should be immediately synced to the production website.<br/>
+						The public website is automatically synced with the Git repository.<br/>
+						Changes to the Git should be immediately synced to the production website.<br/>
 						If not you might login to people.apache.org,<br/>
 						cd to <tt>/www/openmeetings.apache.org/content/</tt><br/>
 						and run the linux command "touch" on the files that need to be synced

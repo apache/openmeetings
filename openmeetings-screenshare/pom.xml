@@ -164,7 +164,7 @@
 									<Application-Name>${project.name}</Application-Name>
 									<Built-By>OpenMeetings - http://openmeetings.apache.org</Built-By>
 									<Built-On>${maven.build.timestamp}</Built-On>
-									<Svn-Revision>${buildNumber}</Svn-Revision>
+									<Git-Revision>${buildNumber}</Git-Revision>
 									<Product-Version>${project.version}</Product-Version>
 									<Permissions>all-permissions</Permissions>
 									<Trusted-Only>true</Trusted-Only>

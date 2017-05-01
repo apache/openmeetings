@@ -37,15 +37,12 @@
 				<ul>
 					<li>Oracle JDK8</li>
 					<li>Apache Maven (minimum) 3.3.9</li>
-					<li>
-						SVN Command line client (Subversion 1.7 required!)
-						<a href="http://subversion.apache.org/packages.html" target="_blank" rel="nofollow">http://subversion.apache.org/packages.html</a>
-					</li>
+					<li>Git</li>
 				</ul>
 			</div>
 
 			<p>Get the source: </p>
-			<source><![CDATA[svn checkout https://svn.apache.org/repos/asf/openmeetings/application/trunk/]]></source>
+			<source><![CDATA[git clone https://git-wip-us.apache.org/repos/asf/openmeetings.git]]></source>
 			<p>Run the command: </p>
 			<source><![CDATA[mvn clean install -P allModules]]></source>
 		</section>
@@ -89,16 +86,18 @@ mvn install -P allModules,quick,mysql -pl openmeetings-web -pl openmeetings-serv
 mvn install -P allModules,quick,mysql -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dwicket.mode=DEVELOPMENT
 ]]>
 			</source>
-			<p>
+			<div>
 				<b>Working behind a proxy:</b>
 				If you are sitting behind a proxy you should add some proxy settings before starting the build process.
 				<br />
-				For SVN Command Line Client (From CollabNet 1.7) see:
-				<a
-					href="https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html"
-					target="_blank" rel="nofollow">https://ctf6latest.collab.net/internal-help/index.jsp?topic=/teamforge610/faq/client_proxy_settings.html
-				</a>
-			</p>
+				<source>git config --global http.proxy http://proxyuser:proxypwd@proxy.server.com:8080</source>
+				<ul>
+					<li>change <tt>proxyuser</tt> to your proxy user</li>
+					<li>change <tt>proxypwd</tt> to your proxy password</li>
+					<li>change <tt>proxy.server.com</tt> to the URL of your proxy server</li>
+					<li>change <tt>8080</tt> to the proxy port configured on your proxy server</li>
+				</ul>
+			</div>
 		</section>
 
 	</body>

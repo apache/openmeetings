@@ -33,11 +33,11 @@
 			</p>
 			<p>You get something like this: </p>
 			<source>
-	##################################################
-	#               Openmeetings is up               #
-	#       2.1.1-RELEASE 1490720 7-June-2013        #
-	#                and ready to use                #
-	##################################################
+	################################################################################
+	#                              Openmeetings is up                              #
+	#   4.0.0-SNAPSHOT 943f172e9d63c3ab7210f895fdede1ad7fa6aebc 2017/05/01 05:56   #
+	#                               and ready to use                               #
+	################################################################################
 			</source>
 		</section>
 		<section name="How to check which Openmeetings version running (1.8.0 - 2.1.0)">
@@ -56,11 +56,9 @@
 			<source>
 <![CDATA[
 Manifest-Version: 1.0
-Ant-Version: Apache Ant 1.8.2
-Created-By: 1.6.0_26-b03-383-11A511 (Apple Inc.)
-Built-By: OpenMeetings - http://openmeetings.googlecode.com
-Built-On: 23-October-2011
-Svn-Revision: 4368
+Built-By: OpenMeetings - http://openmeetings.apache.org
+Built-On: 2017/05/01 05:41
+Git-Revision: 943f172e9d63c3ab7210f895fdede1ad7fa6aebc
 ]]>
 			</source>
 			<p>This version info is available since version 1.8.0. If you have an
