@@ -1,0 +1,16 @@
+# Eclipse
+.classpath
+.project
+.settings
+
+# IntellyJ
+.idea
+*.iml
+
+# Maven
+target
+
+# OM
+openmeetings-server/red5-server
+openmeetings-web/src/main/webapp/WEB-INF/classes/META-INF/persistence.xml
+

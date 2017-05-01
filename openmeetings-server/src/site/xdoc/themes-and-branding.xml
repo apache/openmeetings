@@ -31,10 +31,10 @@
 		<section name="Editing the theme">
 			<p>To modify default theme used by OM</p>
 			<ul>
-				<li>please open following file in the SVN:<br/>
+				<li>please open following file in the Git:<br/>
 					<a
-						href="https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css"
-						target="_blank" rel="nofollow">https://svn.apache.org/repos/asf/openmeetings/application/trunk/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css
+						href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css;hb=HEAD"
+						target="_blank" rel="nofollow">https://git-wip-us.apache.org/repos/asf/openmeetings.git/?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css;hb=HEAD
 					</a><br/>
 					Or if you already installed OpenMeetings on your machine at:<br />
 					<tt>/webapps/openmeetings/css/theme_om/jquery-ui.css</tt>

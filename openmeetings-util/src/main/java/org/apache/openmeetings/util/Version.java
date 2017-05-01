@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 
 public class Version {
 	private static final Logger log = Red5LoggerFactory.getLogger(Version.class, OpenmeetingsVariables.webAppRootKey);
-	private static final int startedStringLength = 48;
+	private static final int startedStringLength = 78;
 	private static String version = null;
 	private static String revision = null;
 	private static String buildDate = null;
@@ -53,7 +53,7 @@ public class Version {
 	public static String getRevision() {
 		if (revision == null) {
 			try {
-				revision = getAttributes().getValue("Svn-Revision");
+				revision = getAttributes().getValue("Git-Revision");
 			} catch (Exception e) {
 				log.error("Error", e);
 			}
