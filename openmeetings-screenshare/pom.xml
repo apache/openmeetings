@@ -158,7 +158,7 @@
 								<manifest>
 									<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-									<mainClass>org.apache.openmeetings.screen.webstart.CoreScreenShare</mainClass>
+									<mainClass>org.apache.openmeetings.screenshare.Core</mainClass>
 								</manifest>
 								<manifestEntries>
 									<Application-Name>${project.name}</Application-Name>
