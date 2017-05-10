@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.util;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
@@ -73,12 +75,16 @@ public class WebSocketHelper {
 		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
 	}
 
+	private static String getName(User u) {
+		return escapeHtml4(String.format("%s %s", u.getFirstname(), u.getLastname()));
+	}
+
 	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
 		String scope, scopeName = null;
 		if (m.getToUser() != null) {
 			User u = curUserId == m.getToUser().getId() ? m.getFromUser() : m.getToUser();
 			scope = ID_USER_PREFIX + u.getId();
-			scopeName = String.format("%s %s", u.getFirstname(), u.getLastname());
+			scopeName = getName(u);
 		} else if (m.getToRoom() != null) {
 			scope = ID_ROOM_PREFIX + m.getToRoom().getId();
 			o.put("needModeration", m.isNeedModeration());
@@ -95,7 +101,7 @@ public class WebSocketHelper {
 			smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
 			JSONObject from = new JSONObject()
 					.put("id", m.getFromUser().getId())
-					.put("name", m.getFromUser().getFirstname() + " " + m.getFromUser().getLastname());
+					.put("name", getName(m.getFromUser()));
 			if (uFmt != null) {
 				uFmt.accept(from, m.getFromUser());
 			}
