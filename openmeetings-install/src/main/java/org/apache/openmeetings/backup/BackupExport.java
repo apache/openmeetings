@@ -360,7 +360,7 @@ public class BackupExport {
 			 * ##################### Config
 			 */
 			{
-				List<Configuration> list = configurationDao.getConfigurations(0, Integer.MAX_VALUE, "c.id", true);
+				List<Configuration> list = configurationDao.get(0, Integer.MAX_VALUE);
 				Registry registry = new Registry();
 				registry.bind(User.class, UserConverter.class);
 				Strategy strategy = new RegistryStrategy(registry);

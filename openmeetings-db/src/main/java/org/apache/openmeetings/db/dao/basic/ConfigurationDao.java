@@ -142,27 +142,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		}
 	}
 
-	public List<Configuration> getConfigurations(int start, int max, String orderby, boolean asc) {
-		try {
-
-			String query = "SELECT c FROM Configuration c LEFT JOIN FETCH c.user WHERE c.deleted = false ORDER BY " + orderby;
-
-			if (asc) {
-				query += " ASC";
-			} else {
-				query += " DESC";
-			}
-
-			TypedQuery<Configuration> q = em.createQuery(query, Configuration.class);
-			q.setFirstResult(start);
-			q.setMaxResults(max);
-			return q.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getConfigurations]", ex2);
-		}
-		return null;
-	}
-
 	/**
 	 */
 	public Configuration add(String key, String value, Long userId, String comment) {
