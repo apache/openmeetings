@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -29,7 +29,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
@@ -76,7 +75,7 @@ public class WebSocketHelper {
 	}
 
 	private static String getName(User u) {
-		return escapeHtml4(String.format("%s %s", u.getFirstname(), u.getLastname()));
+		return escapeMarkup(String.format("%s %s", u.getFirstname(), u.getLastname())).toString();
 	}
 
 	private static JSONObject setScope(JSONObject o, ChatMessage m, long curUserId) {
