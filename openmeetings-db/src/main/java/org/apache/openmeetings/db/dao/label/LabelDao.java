@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplicatio
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,16 +30,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
@@ -53,12 +53,6 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 /**
  *
@@ -190,65 +184,11 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return labels;
 	}
 
-	private static List<StringLabel> getLabels(InputStream is) throws Exception {
+	private static List<StringLabel> getLabels(InputStream is) throws InvalidPropertiesFormatException, IOException {
 		final List<StringLabel> labels = new ArrayList<>();
-		SAXParserFactory spf = SAXParserFactory.newInstance();
-		spf.setNamespaceAware(true);
-		try {
-			SAXParser parser = spf.newSAXParser();
-			XMLReader xr = parser.getXMLReader();
-			xr.setContentHandler(new ContentHandler() {
-				StringLabel label = null;
-
-				@Override
-				public void startPrefixMapping(String prefix, String uri) throws SAXException {}
-
-				@Override
-				public void startElement(String uri, String localName, String qName, Attributes atts) throws SAXException {
-					if (ENTRY_ELEMENT.equals(localName)) {
-						label = new StringLabel(atts.getValue(KEY_ATTR), "");
-					}
-				}
-
-				@Override
-				public void startDocument() throws SAXException {}
-
-				@Override
-				public void skippedEntity(String name) throws SAXException {}
-
-				@Override
-				public void setDocumentLocator(Locator locator) {}
-
-				@Override
-				public void processingInstruction(String target, String data) throws SAXException {}
-
-				@Override
-				public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {}
-
-				@Override
-				public void endPrefixMapping(String prefix) throws SAXException {}
-
-				@Override
-				public void endElement(String uri, String localName, String qName) throws SAXException {
-					if (ENTRY_ELEMENT.equals(localName)) {
-						labels.add(label);
-					}
-				}
-
-				@Override
-				public void endDocument() throws SAXException {}
-
-				@Override
-				public void characters(char[] ch, int start, int length) throws SAXException {
-					StringBuilder sb = new StringBuilder(label.getValue());
-					sb.append(ch, start, length);
-					label.setValue(sb.toString());
-				}
-			});
-			xr.parse(new InputSource(is));
-		} catch (Exception e) {
-			throw e;
-		}
+		Properties props = new Properties();
+		props.loadFromXML(is);
+		props.forEach((k, v) -> labels.add(new StringLabel((String)k, (String)v)));
 		return labels;
 	}
 
