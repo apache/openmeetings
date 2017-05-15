@@ -1905,4 +1905,8 @@
 	<entry key="recordings.root.group">Group recordings</entry>
 	<entry key="restricted.group.files">Group files are restricted</entry>
 	<entry key="find.user">Find user</entry>
+	<entry key="right.presenter.allowed.self">You granted right to be presenter in this room</entry>
+	<entry key="right.presenter.remove">Remove right to be presenter in this room</entry>
+	<entry key="right.presenter.request">would like to have right to be presenter in this room</entry>
+	<entry key="right.presenter.request.self">I would like to have right to be presenter in this room</entry>
 </properties>

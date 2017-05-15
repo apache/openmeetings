@@ -618,7 +618,7 @@
   <entry key="602">Комната/Кол-во</entry>
   <entry key="603">Отключить</entry>
   <entry key="604">Отключить</entry>
-  <entry key="605">Вы действительно хотите отключит этого клиента? Клиент может залогиниться вновь</entry>
+  <entry key="605">Вы действительно хотите отключить этого клиента? Клиент может залогиниться вновь</entry>
   <entry key="606">Ваша сессия завершена администратором или модератором.</entry>
   <entry key="607">Телефон</entry>
   <entry key="608">Этот пользователь - модератор в этой комнате</entry>
@@ -1906,4 +1906,8 @@
 	<entry key="recordings.root.group">Записи группы</entry>
 	<entry key="restricted.group.files">Доступ к групповым файлам ограничен</entry>
 	<entry key="find.user">Найти пользователя</entry>
+	<entry key="right.presenter.allowed.self">Вы Докладчик в этой комнате.</entry>
+	<entry key="right.presenter.remove">Отнять право быть Докладчиком в комнате</entry>
+	<entry key="right.presenter.request">хотел бы быть Докладчиком в этой комнате</entry>
+	<entry key="right.presenter.request.self">Я хотел бы быть Докладчиком в этой комнате</entry>
 </properties>
