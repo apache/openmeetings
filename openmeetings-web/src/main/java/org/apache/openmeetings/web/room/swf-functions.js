@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+var labels
 function initSwf(_options) {
 	var options = $.extend({
 		allowfullscreen : 'true',

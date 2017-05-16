@@ -163,7 +163,7 @@ public class SwfPanel extends BasePanel {
 			JSONObject options = new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp));
 			ClientProperties cp = WebSession.get().getClientInfo().getProperties();
 			options.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
-			initStr = String.format("var labels = %s; initSwf(%s);", lbls, options.toString());
+			initStr = String.format("labels = %s; initSwf(%s);", lbls, options.toString());
 		}
 		return initStr;
 	}
