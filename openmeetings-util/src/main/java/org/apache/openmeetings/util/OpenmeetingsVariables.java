@@ -57,7 +57,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_FLASH_VIDEO_FPS = "flash.video.fps";
 	public static final String CONFIG_HEADER_XFRAME = "header.x.frame.options";
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
-	public static final String HEADER_CSP_SELF = "default-src 'self';";
+	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
 	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
 	public static final String MENU_ROOMS_NAME = "Conference Rooms";
 	public static final int RECENT_ROOMS_COUNT = 5;
