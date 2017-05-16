@@ -357,7 +357,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
 		cfgDao.add(CONFIG_GOOGLE_ANALYTICS_CODE, null, null, "Code for Google Analytics");
 		cfgDao.add(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, null, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options");
-		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, null, "Value for 'Content-Security-Policy' header (default: default-src 'self';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
+		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, null, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
 		log.debug("Configurations ADDED");
 	}
 
