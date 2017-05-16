@@ -37,5 +37,5 @@
 		<property name="virtualHosts" value="${webapp.virtualHosts}" />
 	</bean>
 
-	<import resource="classes/openmeetings-applicationContext.xml" />
+	<import resource="classes/applicationContext.xml" />
 </beans>

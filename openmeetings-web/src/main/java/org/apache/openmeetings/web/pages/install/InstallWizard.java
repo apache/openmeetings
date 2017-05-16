@@ -328,6 +328,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			try {
 				File conf = OmFileHelper.getPersistence(type);
 				props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
+				// resetting default login/password
+				props.setLogin(null);
+				props.setPassword(null);
 			} catch (Exception e) {
 				form.warn(getString("install.wizard.db.step.errorprops"));
 			}

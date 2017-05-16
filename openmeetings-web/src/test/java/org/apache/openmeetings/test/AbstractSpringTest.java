@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({})
-@ContextConfiguration(locations={"classpath:openmeetings-applicationContext.xml"}, inheritLocations = true)
+@ContextConfiguration(locations={"classpath:applicationContext.xml"}, inheritLocations = true)
 public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTests {
 
 	@BeforeClass
