@@ -1662,6 +1662,9 @@
 			Par défaut {0} utilise la base de données {1}. Dans un environnement de production vous devriez opter pour
 			{2}, {3}, {4}, {5} or {6}.
 		</blockquote>
+		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
+		</div>
 	]]></entry>
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>]]></entry>

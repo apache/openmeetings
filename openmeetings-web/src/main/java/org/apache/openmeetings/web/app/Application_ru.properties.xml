@@ -1668,6 +1668,9 @@
 			По умолчанию {0} использует интегрированную базу данных {1}. В 
 			продакшине Вы должны задуматься об использовании таких баз, как {2}, {3}, {4}, {5} or {6}
 		</blockquote>
+		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
+			<p><strong>ВНИМАНИЕ</strong> Пожалуйста используйте логин БД, который трудно угадать и 'сложный' пароль с длинной не менее 8 символов.</p>
+		</div>
 	]]></entry>
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mysql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MySQLConfig.html">MySQL</a>]]></entry>

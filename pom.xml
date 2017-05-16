@@ -56,6 +56,8 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
 		<derby.version>10.13.1.1</derby.version>
+		<db_user></db_user>
+		<db_pass></db_pass>
 	</properties>
 	<profiles>
 		<profile>
@@ -84,6 +86,13 @@
 				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
 				<wicket.mode>DEVELOPMENT</wicket.mode>
 				<src.pack.skip>true</src.pack.skip>
+			</properties>
+		</profile>
+		<profile>
+			<id>default-db-cred</id>
+			<properties>
+				<db_user>root</db_user>
+				<db_pass></db_pass>
 			</properties>
 		</profile>
 		<profile>
@@ -857,7 +866,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

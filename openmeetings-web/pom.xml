@@ -58,6 +58,13 @@
 					<archiveClasses>true</archiveClasses>
 					<packagingExcludes>**/*.class</packagingExcludes>
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+					<webResources>
+						<webResource>
+							<directory>${project.build.directory}/generated-res</directory>
+							<targetPath>WEB-INF/classes/META-INF</targetPath>
+							<filtering>true</filtering>
+						</webResource>
+					</webResources>
 				</configuration>
 				<executions>
 					<execution>
@@ -179,8 +186,8 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-web-templates</id>
-						<phase>process-resources</phase>
+						<id>copy-test-web-templates</id>
+						<phase>process-test-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
@@ -208,6 +215,14 @@
 										<include>**/*.properties</include>
 									</includes>
 								</resource>
+								<resource>
+									<directory>${project.build.directory}/generated-test-res</directory>
+									<filtering>true</filtering>
+								</resource>
+								<resource>
+									<directory>${project.build.directory}/test-root/WEB-INF/classes/</directory>
+									<filtering>true</filtering>
+								</resource>
 							</resources>
 							<skip>${om.quick.build}</skip>
 						</configuration>
@@ -218,13 +233,27 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
-					<execution><!-- FIXME should be refactored -->
+					<execution>
 						<id>select-db</id>
-						<phase>generate-sources</phase>
+						<phase>generate-resources</phase>
 						<configuration>
 							<target>
 								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/${db}_persistence.xml"
-									tofile="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/persistence.xml" 
+									tofile="${project.build.directory}/generated-res/persistence.xml"
+									overwrite="true" force="true"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>test-db</id>
+						<phase>generate-test-resources</phase>
+						<configuration>
+							<target>
+								<copy file="${project.basedir}/src/main/webapp/WEB-INF/classes/META-INF/derby_persistence.xml"
+									tofile="${project.build.directory}/generated-test-res/META-INF/persistence.xml"
 									overwrite="true" force="true"/>
 							</target>
 						</configuration>
@@ -243,24 +272,16 @@
 					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests,org.apache.openmeetings.test.selenium.HeavyTests</excludedGroups>
 					<systemPropertyVariables>
 						<om.home>${project.build.directory}/test-root</om.home>
-						<languages.home>${project.basedir}/src/main/webapp/languages</languages.home>
+						<languages.home>${project.build.directory}/test-root/languages</languages.home>
 						<red5.root>red5.root</red5.root>
 						<backups.dir>${old-backups.dir}</backups.dir>
 						<logback.ContextSelector>org.red5.logging.LoggingContextSelector</logback.ContextSelector>
 						<catalina.useNaming>true</catalina.useNaming>
 					</systemPropertyVariables>
-					<additionalClasspathElements>
-						<additionalClasspathElement>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</additionalClasspathElement>
-					</additionalClasspathElements>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
 			</plugin>
 		</plugins>
-		<testResources>
-			<testResource>
-				<directory>${project.basedir}/src/main/webapp/WEB-INF/classes</directory>
-			</testResource>
-		</testResources>
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
