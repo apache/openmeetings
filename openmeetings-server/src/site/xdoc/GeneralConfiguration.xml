@@ -13,16 +13,13 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>List of general configuration options</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
 		<section name="List of general configuration options">
 			<p>In Administration &gt; Configuration there are a number of
 				configuration values.
@@ -298,9 +295,19 @@
 					<td> Code for Google Analytics. </td>
 					<td> 3.1.0 </td>
 				</tr>
+				<tr>
+					<td> header.x.frame.options </td>
+					<td> SAMEORIGIN </td>
+					<td> Value for 'X-Frame-Options' header, more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options </td>
+					<td> 3.3.0 </td>
+				</tr>
+				<tr>
+					<td> header.content.security.policy </td>
+					<td> default-src 'self'; </td>
+					<td> Value for 'Content-Security-Policy' header, have to be modified to enable Google analytics site: https://content-security-policy.com/ </td>
+					<td> 3.3.0 </td>
+				</tr>
 			</table>
 		</section>
-
 	</body>
-
 </document>

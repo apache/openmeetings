@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
@@ -59,6 +60,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
@@ -95,10 +97,13 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.CsrfPreventionRequestCycleListener;
 import org.apache.wicket.protocol.ws.api.WebSocketMessageBroadcastHandler;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
+import org.apache.wicket.protocol.ws.api.WebSocketResponse;
 import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
@@ -130,6 +135,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String HASH_MAPPING = "/hash";
 	public static final String SIGNIN_MAPPING = "/signin";
 	public static final String NOTINIT_MAPPING = "/notinited";
+	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
+	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
 
 	@Override
 	protected void init() {
@@ -144,6 +151,19 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//FIXME TODO v3 on the way
 		getJavaScriptLibrarySettings().setJQueryReference(new JavaScriptResourceReference(DynamicJQueryResourceReference.class, DynamicJQueryResourceReference.VERSION_2));
 		getRequestCycleListeners().add(new CsrfPreventionRequestCycleListener() {
+			@Override
+			public void onEndRequest(RequestCycle cycle) {
+				Response resp = cycle.getResponse();
+				if (resp instanceof WebResponse && !(resp instanceof WebSocketResponse)) {
+					WebResponse wresp = (WebResponse)resp;
+					wresp.setHeader("X-XSS-Protection", "1; mode=block");
+					wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+					wresp.setHeader("X-Content-Type-Options", "nosniff");
+					wresp.setHeader("X-Frame-Options", xFrameOptions);
+					wresp.setHeader("Content-Security-Policy", contentSecurityPolicy);
+				}
+			}
+
 			@Override
 			protected boolean isChecked(IRequestHandler handler) {
 				if (handler instanceof WebSocketRequestHandler || handler instanceof WebSocketMessageBroadcastHandler) {
@@ -645,5 +665,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public String getOmString(String key, final Locale loc, String... params) {
 		return getString(key, loc, params);
+	}
+
+	@Override
+	public void setXFrameOptions(String xFrameOptions) {
+		this.xFrameOptions = xFrameOptions;
+	}
+
+	@Override
+	public void setContentSecurityPolicy(String contentSecurityPolicy) {
+		this.contentSecurityPolicy = contentSecurityPolicy;
 	}
 }

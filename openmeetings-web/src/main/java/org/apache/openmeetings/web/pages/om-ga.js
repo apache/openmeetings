@@ -24,19 +24,16 @@
 	a=s.createElement(o),m=s.getElementsByTagName(o)[0];
 	a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
 function initGA(code) {
 	ga('create', code, 'auto');
 }
-
 function init() {
-    ga('send', 'pageview');
+	ga('send', 'pageview');
 }
-
 function initHash() {
-    ga('send', 'pageview', window.location.hash);
+	ga('send', 'pageview', window.location.hash);
 
-    $(window).bind( 'hashchange', function( e ) {
-            ga('send', 'pageview', window.location.hash);
-    });
+	$(window).bind( 'hashchange', function( e ) {
+		ga('send', 'pageview', window.location.hash);
+	});
 }
