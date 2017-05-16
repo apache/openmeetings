@@ -21,7 +21,12 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,8 +55,8 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
@@ -152,6 +157,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 
 			InitializationContainer.initComplete = true;
+			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+			iapp.setXFrameOptions(cfgDao.getConfValue(CONFIG_HEADER_XFRAME, String.class, HEADER_XFRAME_SAMEORIGIN));
+			iapp.setContentSecurityPolicy(cfgDao.getConfValue(CONFIG_HEADER_CSP, String.class, HEADER_CSP_SELF));
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 			sessionManager.clearCache(); // 'sticky' clients should be cleaned up from DB
@@ -197,7 +205,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		StringValue scn = StringValue.valueOf(conn.getScope().getName());
 		long roomId = scn.toLong(Long.MIN_VALUE);
 		StreamClient rcm = new StreamClient();
-		IApplication iapp = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 		if (!Strings.isEmpty(securityCode)) {
 			//this is for external applications like ffmpeg [OPENMEETINGS-1574]
 			if (roomId < 0) {
@@ -507,7 +515,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			if (client.isScreenClient() && client.isStartStreaming()) {
 				//TODO check others/find better way
 				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStoped, client.getStreamPublishName()));
-			} 
+			}
 			if (client.getIsBroadcasting()) {
 				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.closeStream, client.getPublicSID()));
 			}
@@ -553,7 +561,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}.start();
 
 			if (client.isMobile()) {
-				IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
+				IApplication app = (IApplication)Application.get(wicketApplicationName);
 				app.exit(client.getPublicSID());
 			}
 			sessionManager.removeClient(client.getStreamid(), null);

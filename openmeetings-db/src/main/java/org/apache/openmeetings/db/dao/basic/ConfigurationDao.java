@@ -22,12 +22,15 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -39,10 +42,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
+import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -230,14 +235,33 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity.setUpdated(new Date());
 			entity = em.merge(entity);
 		}
-		if (CONFIG_CRYPT_KEY.equals(key)) {
-			configKeyCryptClassName = value;
-		} else if ("show.whiteboard.draw.status".equals(key)) {
-			whiteboardDrawStatus = Boolean.valueOf("1".equals(value));
-		} else if (CONFIG_APPLICATION_NAME.equals(key)) {
-			APPLICATION_NAME = value;
+		switch (key) {
+			case CONFIG_CRYPT_KEY:
+				configKeyCryptClassName = value;
+				break;
+			case "show.whiteboard.draw.status":
+				whiteboardDrawStatus = Boolean.valueOf("1".equals(value));
+				break;
+			case CONFIG_APPLICATION_NAME:
+				APPLICATION_NAME = value;
+				break;
+			case CONFIG_HEADER_XFRAME:
+			{
+				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+				if (iapp != null) {
+					iapp.setXFrameOptions(value);
+				}
+			}
+				break;
+			case CONFIG_HEADER_CSP:
+			{
+				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+				if (iapp != null) {
+					iapp.setContentSecurityPolicy(value);
+				}
+			}
+				break;
 		}
-		//TODO ensure entity returned is updated
 		return entity;
 	}
 

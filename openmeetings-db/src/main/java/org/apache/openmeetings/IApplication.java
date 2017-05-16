@@ -48,4 +48,6 @@ public interface IApplication {
 	String urlForActivatePage(PageParameters pp);
 	void invalidateClient(Long userId, String sessionId);
 	void exit(String uid);
+	void setXFrameOptions(String xFrameOptions);
+	void setContentSecurityPolicy(String contentSecurityPolicy);
 }
