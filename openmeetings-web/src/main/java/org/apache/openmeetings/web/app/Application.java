@@ -92,6 +92,9 @@ import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.CsrfPreventionRequestCycleListener;
+import org.apache.wicket.protocol.ws.api.WebSocketMessageBroadcastHandler;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
@@ -140,6 +143,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		//FIXME TODO v3 on the way
 		getJavaScriptLibrarySettings().setJQueryReference(new JavaScriptResourceReference(DynamicJQueryResourceReference.class, DynamicJQueryResourceReference.VERSION_2));
+		getRequestCycleListeners().add(new CsrfPreventionRequestCycleListener() {
+			@Override
+			protected boolean isChecked(IRequestHandler handler) {
+				if (handler instanceof WebSocketRequestHandler || handler instanceof WebSocketMessageBroadcastHandler) {
+					return false;
+				}
+				return super.isChecked(handler);
+			}
+		});
 
 		super.init();
 
