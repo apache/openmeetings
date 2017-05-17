@@ -58,7 +58,7 @@ public abstract class FileItemResourceReference<T extends FileItem> extends File
 				r = getFileItem(attr);
 				if (r != null) {
 					file = getFile(r, attr);
-					ResourceResponse rr = createResourceResponse(file.toPath());
+					ResourceResponse rr = createResourceResponse(attr, file.toPath());
 					rr.setFileName(getFileName(r));
 					return rr;
 				} else {

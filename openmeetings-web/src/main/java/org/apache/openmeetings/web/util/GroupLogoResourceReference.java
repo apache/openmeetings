@@ -49,8 +49,8 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 			}
 
 			@Override
-			protected ResourceResponse newResourceResponse(Attributes attributes) {
-				PageParameters params = attributes.getParameters();
+			protected ResourceResponse newResourceResponse(Attributes attrs) {
+				PageParameters params = attrs.getParameters();
 				StringValue _id = params.get("id");
 				Long id = null;
 				try {
@@ -58,7 +58,7 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 				} catch (Exception e) {
 					//no-op expected
 				}
-				return createResourceResponse(getGroupLogo(id, true).toPath());
+				return createResourceResponse(attrs, getGroupLogo(id, true).toPath());
 			}
 		};
 	}
