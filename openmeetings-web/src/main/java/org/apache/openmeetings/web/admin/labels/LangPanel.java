@@ -125,7 +125,7 @@ public class LangPanel extends AdminPanel {
 						form.setModelObject(fv);
 						form.hideNewRecord();
 						target.add(form, listContainer);
-						target.appendJavaScript("labelsInit();");
+						target.appendJavaScript("adminPanelInit();");
 					}
 				});
 				item.add(AttributeModifier.append("class", getRowClass(fv.getId(), form.getModelObject().getId())));

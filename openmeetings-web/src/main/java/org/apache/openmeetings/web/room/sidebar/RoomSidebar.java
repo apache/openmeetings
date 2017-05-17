@@ -45,6 +45,7 @@ import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -52,7 +53,6 @@ import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -301,7 +301,7 @@ public class RoomSidebar extends Panel {
 			@Override
 			protected WebMarkupContainer newTabContainer(String id, String tabId, ITab tab, int index) {
 				WebMarkupContainer t = super.newTabContainer(id, tabId, tab, index);
-				Label link = newTitleLabel("link", tab.getTitle());
+				Component link = newTitleLabel("link", tab.getTitle());
 				link.add(AttributeModifier.replace("href", "#" + tabId));
 				link.add(AttributeModifier.append("class", ((OmTab)tab).getCssClass()));
 				link.add(AttributeModifier.append("title", tab.getTitle()));

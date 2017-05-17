@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
+import static org.apache.wicket.resource.JQueryResourceReference.getV3;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
@@ -108,7 +109,6 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.resource.JQueryResourceReference;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
@@ -148,8 +148,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
-		//FIXME TODO v3 on the way
-		getJavaScriptLibrarySettings().setJQueryReference(JQueryResourceReference.getV2());
+		getJavaScriptLibrarySettings().setJQueryReference(getV3());
 		getRequestCycleListeners().add(new CsrfPreventionRequestCycleListener() {
 			@Override
 			public void onEndRequest(RequestCycle cycle) {

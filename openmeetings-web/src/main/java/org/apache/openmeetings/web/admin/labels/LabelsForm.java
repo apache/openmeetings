@@ -57,14 +57,14 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		value = null;
 		setModelObject(new StringLabel(key, value));
 		target.add(this);
-		target.appendJavaScript("labelsInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		this.setModelObject(new StringLabel(key, value));
 		target.add(this);
-		target.appendJavaScript("labelsInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		}
 		hideNewRecord();
 		target.add(panel.listContainer);
-		target.appendJavaScript("labelsInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 			error("Unexpected error while deleting label:" + e.getMessage()); //TODO localize
 		}
 		target.add(panel.listContainer);
-		target.appendJavaScript("labelsInit();");
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	@Override
