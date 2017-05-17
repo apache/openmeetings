@@ -146,7 +146,17 @@ var Chat = function() {
 			if ($('#chat').length > 0 && m && m.type == "chat") {
 				if (isClosed()) {
 					$('#chatPopup .control.block').addClass('ui-state-highlight');
-					audio.play();
+					var playPromise = audio.play();
+
+					// In browsers that don’t yet support this functionality,
+					// playPromise won’t be defined.
+					if (playPromise !== undefined) {
+						playPromise.then(function() {
+							// Automatic playback started!
+						}).catch(function(error) {
+							// Automatic playback failed.
+						});
+					}
 				}
 				var msg, cm;
 				while (!!(cm = m.msg.pop())) {

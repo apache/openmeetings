@@ -20,20 +20,17 @@
  * @author Sebastien Briquet
  */
 function getCalendarHeight() {
-    return $(window).height() - $('#${markupId}').position().top - 20;
+	return $(window).height() - $('#${markupId}').position().top - 20;
 }
-
 function setCalendarHeight() {
 	var cal = $('#${markupId}');
 	if (cal.length) {
-    	cal.fullCalendar('option', 'height', getCalendarHeight());
+		cal.fullCalendar('option', 'height', getCalendarHeight());
 	}
 }
-
 $(function() {
-    $(window).load(function() { setCalendarHeight(); } );
+	$(window).on("load", function() { setCalendarHeight(); } );
 });
-
 function toggleDatePicker(id) {
 	var dp = $("#" + id);
 	dp.datepicker(dp.datepicker("widget").is(":visible") ? "hide" : "show");
@@ -74,7 +71,6 @@ function addCalButton(rtl, id) {
 	});
 	dp.hide();
 }
- 
 function setDatepickerDate(id, date) {
 	$("#"+id).datepicker('setDate', date);
 }
