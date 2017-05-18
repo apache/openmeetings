@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.service.user;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
@@ -27,6 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -43,6 +42,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -310,6 +310,8 @@ public class UserManager implements IUserManager {
 				}
 
 				return userId;
+			} else {
+				return -14L;
 			}
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
@@ -509,12 +511,10 @@ public class UserManager implements IUserManager {
 			return null; //TODO FIXME need to be checked
 		}
 		// generate random password
+		SecureRandom rnd = new SecureRandom();
 		byte[] rawPass = new byte[25];
-		Random rnd = new Random();
-		for (int i = 0; i < rawPass.length; ++i) {
-			rawPass[i] = (byte) ('!' + rnd.nextInt(93));
-		}
-		String pass = new String(rawPass, UTF_8);
+		rnd.nextBytes(rawPass);
+		String pass = Base64.encodeBase64String(rawPass);
 		// check if the user already exists and register new one if it's needed
 		if (u == null) {
 			u = userDao.getNewUserInstance(null);
