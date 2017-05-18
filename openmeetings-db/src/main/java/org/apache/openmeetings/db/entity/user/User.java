@@ -67,9 +67,9 @@ import org.simpleframework.xml.Root;
 /**
  * Entity to store user data, password field is {@link FetchType#LAZY}, so that
  * is why there is an extra udpate statement at this moment
- * 
+ *
  * @author sebawagner, solomax
- * 
+ *
  */
 @Entity
 @FetchGroups({
@@ -82,7 +82,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
-	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId"), 
+	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId"),
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
 			+ "where c.deleted = false " + "AND ("
 			+ "lower(c.login) LIKE :search "
@@ -93,7 +93,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "updatePassword", query = "UPDATE User u SET u.password = :password WHERE u.id = :userId"), //
 	@NamedQuery(name = "getNondeletedUsers", query = "SELECT u FROM User u WHERE u.deleted = false"),
 	@NamedQuery(name = "countNondeletedUsers", query = "SELECT COUNT(u) FROM User u WHERE u.deleted = false"),
-	@NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId"), 
+	@NamedQuery(name = "getUsersByGroupId", query = "SELECT u FROM User u WHERE u.deleted = false AND u.groupUsers.group.id = :groupId"),
 	@NamedQuery(name = "getExternalUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.externalId LIKE :externalId AND u.externalType LIKE :externalType"),
 	@NamedQuery(name = "getUserByLoginOrEmail", query = "SELECT u from User u WHERE u.deleted = false AND u.type = :type AND (u.login = :userOrEmail OR u.address.email = :userOrEmail)")
 })
@@ -106,7 +106,7 @@ public class User implements IDataProviderEntity {
 	public static final int SALUTATION_MRS_ID = 3;
 	public static final int SALUTATION_DR_ID = 4;
 	public static final int SALUTATION_PROF_ID = 5;
-	
+
 	@XmlType(namespace="org.apache.openmeetings.user.user.right")
 	public enum Right {
 		Admin			// access to Admin module
@@ -116,7 +116,7 @@ public class User implements IDataProviderEntity {
 		, Login			// login to Om internal DB
 		, Soap			// use rest/soap calls
 	}
-	
+
 	@XmlType(namespace="org.apache.openmeetings.user.user.type")
 	public enum Type {
 		user
@@ -132,24 +132,24 @@ public class User implements IDataProviderEntity {
 		, dr(SALUTATION_DR_ID)
 		, prof(SALUTATION_PROF_ID);
 		private int id;
-		
+
 		Salutation() {} //default;
 		Salutation(int id) {
 			this.id = id;
 		}
-		
+
 		public int getId() {
 			return id;
 		}
-		
+
 		public static Salutation get(Long type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Salutation get(Integer type) {
 			return get(type == null ? 1 : type.intValue());
 		}
-		
+
 		public static Salutation get(int type) {
 			Salutation rt = Salutation.mr;
 			switch (type) {
@@ -310,18 +310,18 @@ public class User implements IDataProviderEntity {
 	@Column(name = "owner_id")
 	@Element(data = true, required = false)
 	private Long ownerId;
-	
+
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "om_right")
 	@CollectionTable(name = "om_user_right", joinColumns = @JoinColumn(name = "user_id"))
 	@Enumerated(EnumType.STRING)
 	@ElementList(name="rights", data = true, required = false)
 	private Set<Right> rights = new HashSet<>();
-	
+
 	@Column(name = "domain_id")
 	@Element(data = true, required = false)
 	private Long domainId; // LDAP config id for LDAP, OAuth server id for OAuth
-	
+
 	@Override
 	public Long getId() {
 		return id;
@@ -391,7 +391,7 @@ public class User implements IDataProviderEntity {
 	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
 		updatePassword(configDao, pass, false);
 	}
-	
+
 	public void updatePassword(ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException {
 		if (!empty) {
 			if (invalidPassword(pass, configDao)) {
@@ -414,7 +414,7 @@ public class User implements IDataProviderEntity {
 		}
 		password = CryptProvider.get().hash(pass);
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
@@ -604,11 +604,11 @@ public class User implements IDataProviderEntity {
 	public void setType(Type type) {
 		this.type = type;
 	}
-	
+
 	public Long getOwnerId(){
 		return ownerId;
 	}
-	
+
 	public void setOwnerId(Long ownerId){
 		this.ownerId = ownerId;
 	}

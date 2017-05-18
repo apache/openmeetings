@@ -117,7 +117,7 @@ import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.crypt.SHA256Implementation;
+import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
@@ -281,7 +281,7 @@ public class BackupImport {
 					try {
 						Class.forName(c.getValue());
 					} catch (ClassNotFoundException e) {
-						c.setValue(SHA256Implementation.class.getCanonicalName());
+						c.setValue(SCryptImplementation.class.getCanonicalName());
 					}
 				}
 				configurationDao.update(c, null);

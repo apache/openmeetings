@@ -18,25 +18,22 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import org.apache.commons.codec.binary.Base64;
-import org.bouncycastle.crypto.digests.SHA256Digest;
-import org.bouncycastle.crypto.generators.PKCS5S2ParametersGenerator;
-import org.bouncycastle.crypto.params.KeyParameter;
+import org.bouncycastle.crypto.generators.SCrypt;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-public class SHA256Implementation implements ICrypt {
-	private static final Logger log = Red5LoggerFactory.getLogger(SHA256Implementation.class, webAppRootKey);
+public class SCryptImplementation implements ICrypt {
+	private static final Logger log = Red5LoggerFactory.getLogger(SCryptImplementation.class, webAppRootKey);
 	private static final String SECURE_RND_ALG = "SHA1PRNG";
-	private static final int ITERATIONS = 1000;
-	private static final int KEY_LENGTH = 128 * 8;
-	private static final int SALT_LENGTH = 256;
+	private static final int COST = 1024 * 16;
+	private static final int KEY_LENGTH = 512;
+	private static final int SALT_LENGTH = 200;
 
 	private static byte[] getSalt() throws NoSuchAlgorithmException {
 		SecureRandom sr = SecureRandom.getInstance(SECURE_RND_ALG);
@@ -44,18 +41,12 @@ public class SHA256Implementation implements ICrypt {
 		sr.nextBytes(salt);
 		return salt;
 	}
-	
-	private static String hash(String str, byte[] salt, int iter) {
-		PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
-		gen.init(str.getBytes(UTF_8), salt, iter);
-		byte[] dk = ((KeyParameter) gen.generateDerivedParameters(KEY_LENGTH)).getKey();
+
+	private static String hash(String str, byte[] salt) {
+		byte[] dk = SCrypt.generate(str.getBytes(), salt, COST, 8, 8, KEY_LENGTH);
 		return Base64.encodeBase64String(dk);
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.utils.crypt.ICrypt#hash(java.lang.String)
-	 */
+
 	@Override
 	public String hash(String str) {
 		if (str == null) {
@@ -64,18 +55,14 @@ public class SHA256Implementation implements ICrypt {
 		String hash = null;
 		try {
 			byte[] salt = getSalt();
-			String h = hash(str, salt, ITERATIONS);
-			hash = String.format("%s:%s:%s", ITERATIONS, h, Base64.encodeBase64String(salt));
+			String h = hash(str, salt);
+			hash = String.format("%s:%s", h, Base64.encodeBase64String(salt));
 		} catch (NoSuchAlgorithmException e) {
 			log.error("Error", e);
 		}
 		return hash;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.apache.openmeetings.utils.crypt.ICrypt#verify(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public boolean verify(String str, String hash) {
 		if (str == null) {
@@ -85,14 +72,13 @@ public class SHA256Implementation implements ICrypt {
 			return false;
 		}
 		String[] ss = hash.split(":");
-		if (ss.length != 3) {
+		if (ss.length != 2) {
 			return false;
 		}
 		try {
-			int iter = Integer.parseInt(ss[0]);
-			String h1 = ss[1];
-			byte[] salt = Base64.decodeBase64(ss[2]);
-			String h2 = hash(str, salt, iter);
+			String h1 = ss[0];
+			byte[] salt = Base64.decodeBase64(ss[1]);
+			String h2 = hash(str, salt);
 			return h2.equals(h1);
 		} catch (Exception e) {
 			return false;
