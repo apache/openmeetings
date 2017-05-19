@@ -26,7 +26,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_C
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
@@ -67,8 +69,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, webAppRootKey);
-	public static final long DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
-	public static final String DEFAULT_APP_NAME = "OpenMeetings";
 	public final static String[] searchFields = {"key", "value"};
 
 	@PersistenceContext

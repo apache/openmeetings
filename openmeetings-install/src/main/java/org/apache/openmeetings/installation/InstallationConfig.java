@@ -18,17 +18,17 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 
 import java.io.Serializable;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
 
 public class InstallationConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public String appName = ConfigurationDao.DEFAULT_APP_NAME;
+	public String appName = DEFAULT_APP_NAME;
 	public String username;
 	private String password;
 	public String email;
