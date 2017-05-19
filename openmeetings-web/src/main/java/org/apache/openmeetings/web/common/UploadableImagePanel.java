@@ -83,12 +83,17 @@ public abstract class UploadableImagePanel extends ImagePanel {
 				if (fu != null) {
 					StoredFile sf = new StoredFile(fu.getClientFileName());
 					if (sf.isImage()) {
+						File temp = null;
 						try {
-							//FIXME need to work with InputStream !!!
-							processImage(sf, fu.writeToTempFile());
+							temp = fu.writeToTempFile();
+							processImage(sf, temp);
 						} catch (Exception e) {
 							// TODO display error
 							log.error("Error", e);
+						} finally {
+							if (temp != null && temp.exists()) {
+								temp.delete();
+							}
 						}
 					} else {
 						//TODO display error
