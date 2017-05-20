@@ -28,6 +28,7 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -66,10 +67,18 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
 	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString(122));
-	private DialogButton registerBtn = new DialogButton("register", Application.getString(121));
+	private DialogButton registerBtn = new DialogButton("register", Application.getString(121)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean isIndicating() {
+			return true;
+		}
+	};
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
 	private final DropDownChoice<String> tzDropDown = new DropDownChoice<>("tz", tzModel, AVAILABLE_TIMEZONES);
+	private final Random rnd = new Random();
 	private RegisterForm form;
 	private SignInDialog s;
 	private String firstName;
@@ -261,6 +270,14 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			}
 			if (!getBean(UserDao.class).checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
 				error(getString("105"));
+			}
+			if (hasErrorMessage()) {
+				// add random timeout
+				try {
+					Thread.sleep(rnd.nextInt(10) * 1000);
+				} catch (InterruptedException e) {
+					log.error("Unexpected exception while sleeting", e);
+				}
 			}
 		}
 	}
