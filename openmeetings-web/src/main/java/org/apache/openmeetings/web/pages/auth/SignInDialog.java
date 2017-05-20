@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
@@ -28,6 +29,7 @@ import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
@@ -68,6 +70,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -78,8 +82,16 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class SignInDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(SignInDialog.class, webAppRootKey);
 	private Form<String> form;
-	private DialogButton loginBtn = new DialogButton("login", Application.getString(112));
+	private DialogButton loginBtn = new DialogButton("login", Application.getString(112)) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public boolean isIndicating() {
+			return true;
+		}
+	};
 	private DialogButton registerBtn = new DialogButton("register", Application.getString(123));
 	private String password;
 	private String login;
@@ -88,6 +100,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private ForgetPasswordDialog f;
 	private LdapConfig domain;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final Random rnd = new Random();
 
 	public SignInDialog(String id) {
 		super(id, Application.getString(108));
@@ -190,6 +203,12 @@ public class SignInDialog extends NonClosableDialog<String> {
 			if (!hasErrorMessage()) {
 				error(getString("335"));
 				target.add(feedback);
+			}
+			// add random timeout
+			try {
+				Thread.sleep((6 + rnd.nextInt(10)) * 1000);
+			} catch (InterruptedException e) {
+				log.error("Unexpected exception while sleeting", e);
 			}
 			strategy.remove();
 			shake(target);
