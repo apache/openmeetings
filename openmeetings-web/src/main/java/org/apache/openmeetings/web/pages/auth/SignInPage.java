@@ -54,6 +54,7 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
@@ -123,10 +124,14 @@ public class SignInPage extends BaseInitedPage {
 		IRequestParameters pp = RequestCycle.get().getRequest().getPostParameters();
 		StringValue login = pp.getParameterValue("login"), password = pp.getParameterValue("password");
 		if (!login.isEmpty() && !password.isEmpty()) {
-			if (WebSession.get().signIn(login.toString(), password.toString(), Type.user, null)) {
-	 			setResponsePage(Application.get().getHomePage());
-			} else {
-				log.error("Failed to login using POST parameters passed");
+			try {
+				if (WebSession.get().signIn(login.toString(), password.toString(), Type.user, null)) {
+					setResponsePage(Application.get().getHomePage());
+				} else {
+					log.error("Failed to login using POST parameters passed");
+				}
+			} catch (OmException e) {
+				log.error("Exception while login with POST parameters passed", e);
 			}
 		}
 

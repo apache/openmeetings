@@ -63,8 +63,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  */
 public class BackupPanel extends AdminPanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, webAppRootKey);
-
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = 1L;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 

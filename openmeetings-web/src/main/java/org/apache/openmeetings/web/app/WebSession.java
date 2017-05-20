@@ -112,7 +112,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private SOAPLogin soap = null;
 	private Long roomId = null;
 	private Long recordingId = null;
-	private Long loginError = null;
 	private String externalType;
 	private boolean kickedByAdmin = false;
 	private ExtendedClientProperties extProps = new ExtendedClientProperties();
@@ -131,6 +130,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		SID = null;
 		ISO8601FORMAT = null;
 		sdf = null;
+		languageId = -1;
 		i = null;
 		soap = null;
 		roomId = null;
@@ -138,7 +138,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		externalType = null;
 		tz = null;
 		browserTz = null;
-		loginError = null;
 		browserLocale = null;
 		extProps = new ExtendedClientProperties();
 	}
@@ -169,9 +168,13 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					//no-op
 				}
 				// try to sign in the user
-				if (!signIn(data[0], data[1], Type.valueOf(data[2]), domainId)) {
-					// the loaded credentials are wrong. erase them.
-					strategy.remove();
+				try {
+					if (!signIn(data[0], data[1], Type.valueOf(data[2]), domainId)) {
+						// the loaded credentials are wrong. erase them.
+						strategy.remove();
+					}
+				} catch (OmException e) {
+					//no-op, bad credentials
 				}
 			}
 		}
@@ -322,33 +325,28 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
 	}
 
-	public boolean signIn(String login, String password, Type type, Long domainId) {
-		try {
-			User u = null;
-			switch (type) {
-				case ldap:
-					u = getBean(LdapLoginManagement.class).login(login, password, domainId);
-					break;
-				case user:
-					/* we will allow login against internal DB in case user 'guess' LDAP password */
-					u = getBean(UserDao.class).login(login, password);
-					break;
-				case oauth:
-					// we did all the checks at this stage, just set the user
-					u = getBean(UserDao.class).getByLogin(login, Type.oauth, domainId);
-					break;
-				default:
-					throw new OmException(-1L);
-			}
-			if (u == null) {
-				return false;
-			}
-			signIn(u);
-			return true;
-		} catch (OmException oe) {
-			loginError = oe.getCode() == null ? Long.valueOf(-1) : oe.getCode();
+	public boolean signIn(String login, String password, Type type, Long domainId) throws OmException {
+		User u = null;
+		switch (type) {
+			case ldap:
+				u = getBean(LdapLoginManagement.class).login(login, password, domainId);
+				break;
+			case user:
+				/* we will allow login against internal DB in case user 'guess' LDAP password */
+				u = getBean(UserDao.class).login(login, password);
+				break;
+			case oauth:
+				// we did all the checks at this stage, just set the user
+				u = getBean(UserDao.class).getByLogin(login, Type.oauth, domainId);
+				break;
+			default:
+				throw new OmException(-1L);
 		}
-		return false;
+		if (u == null) {
+			return false;
+		}
+		signIn(u);
+		return true;
 	}
 
 	public boolean signIn(User u) {
@@ -357,10 +355,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		setUser(u, null);
 		return true;
-	}
-
-	public Long getLoginError() {
-		return loginError;
 	}
 
 	public static WebSession get() {

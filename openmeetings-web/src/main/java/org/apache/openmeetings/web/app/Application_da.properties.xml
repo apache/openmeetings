@@ -121,7 +121,7 @@
   <entry key="101">Luk</entry>
   <entry key="102">Forkerte data angivet</entry>
   <entry key="103">Brugernavnet skal indeholde mindst 4 tegn</entry>
-  <entry key="104">Adgangskoden skal indeholde mindst 4 tegn</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Brugernavnet anvendes i forvejen</entry>
   <entry key="106">Emailadressen anvendes i forvejen</entry>
   <entry key="107">Systemfejl, kontakt systemadministrator</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Brugere</entry>
   <entry key="319">Indsæt venligst emailadresse eller brugernavn</entry>
   <entry key="320">Ingen bruger er forbundet med dette brugernavn</entry>
-  <entry key="321">Emailen med det specielle link er blevet sendt til din emailadresse. Kontroller venligst din indbakke. Hvis du ikke har modtaget en email, bedes du kontrollere dint SPAM-filter og genfremsende emailen fra systemet.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Forkert HASH. Ingen bruger fundet.</entry>
   <entry key="325">Nulstil din adgangskode</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Adgangskode valgt. Du kan logge ind nu.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Ukendt fejl. Rapporter venligst til dine support muligheder.</entry>
-  <entry key="335">Brugernavnet blev ikke fundet.</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Ugyldig adgangskode.</entry>
   <entry key="337">Du er nu logget ud.</entry>
   <entry key="338">Registrering via loginside (frontend) er inaktiveret.</entry>

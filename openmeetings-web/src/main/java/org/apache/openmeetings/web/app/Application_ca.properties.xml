@@ -121,7 +121,7 @@
   <entry key="101">tancar</entry>
   <entry key="102">error en la introducció de dades</entry>
   <entry key="103">el nom d'usuari ha de contenir almenys 4 caràcters</entry>
-  <entry key="104">la clau d'usuari ha de contenir almenys 4 caràcters</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Aquest nombre d'usuari ja existeix</entry>
   <entry key="106">Aquest email ja està registrat</entry>
   <entry key="107">Error, per favor contacti amb l'administrador del sistema</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Usuaris</entry>
   <entry key="319">Enquestes</entry>
   <entry key="320">No hi ha ningú connectat amb aquest nom d'usuari</entry>
-  <entry key="321">El email conté un enllaç especial que ha estat enviat al seu correu. Si no apareix aquest correu revisi la configuració de filtres de spam del seu servidor i reenvée aquest correu novament.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">No es va trobar a l'usuari (mètode de generació de claus incorrecte).</entry>
   <entry key="325">Generar contrasenya</entry>
   <entry key="326">Entrar</entry>
@@ -348,7 +348,7 @@
   <entry key="332">La contrasenya ha estat canviada, ara pot iniciar sessió.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Error desconegut. Enviï aquesta informació a l'administrador del sistema.</entry>
-  <entry key="335">No es va trobar a l'usuari</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Contrasenya incorrecta</entry>
   <entry key="337">Ha sortit del sistema</entry>
   <entry key="338">Es troba deshabilitada l'opció de registre.</entry>

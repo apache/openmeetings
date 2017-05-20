@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -120,8 +120,8 @@
   <entry key="100">Ellipse</entry>
   <entry key="101">Close</entry>
   <entry key="102">input data error</entry>
-  <entry key="103">Password and or login is too short</entry>
-  <entry key="104">Password and or login is too short</entry>
+  <entry key="103">Password and/or login is too short</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">The username is already used</entry>
   <entry key="106">The mail address is already registered</entry>
   <entry key="107">System error please contact the administrator</entry>
@@ -336,7 +336,7 @@
   <entry key="318">No such email address was found. Make sure you entered the same email address you used to create your account.</entry>
   <entry key="319">Please enter either an email address or a user name</entry>
   <entry key="320">There is no user connected to this username</entry>
-  <entry key="321">The email containing a special link has been sent to your email address</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">No user found</entry>
   <entry key="325">Reset your password</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Password set. You can now login.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Unknown error. Please report this to the administrator.</entry>
-  <entry key="335">Username not found</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Invalid password</entry>
   <entry key="337">Successfully logged out</entry>
   <entry key="338">Registration disabled</entry>

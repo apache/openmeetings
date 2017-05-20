@@ -29,9 +29,9 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * @author swagner
- * 
+ *
  */
 public class ErrorService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ErrorService.class, webAppRootKey);
@@ -45,7 +45,7 @@ public class ErrorService {
 	 * Gets an Error-Object by its id TODO: add error-code-handlers -20
 	 * duplicate FileName -21 FileName too short (length = 0) and make the
 	 * persistent in the DataBase
-	 * 
+	 *
 	 * @param SID
 	 * @param errorid
 	 * @return - ErrorResult object with the id given
@@ -66,5 +66,4 @@ public class ErrorService {
 		}
 		return null;
 	}
-
 }

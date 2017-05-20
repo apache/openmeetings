@@ -121,7 +121,7 @@
   <entry key="101">關閉</entry>
   <entry key="102">輸入資料有誤</entry>
   <entry key="103">用戶名必須至少4個字符</entry>
-  <entry key="104">用戶密碼必須至少4個字符</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">用戶台已被姶用</entry>
   <entry key="106">這電子郵件已註冊过了</entry>
   <entry key="107">系統錯誤 ,請聯繫系統管理員</entry>
@@ -336,7 +336,7 @@
   <entry key="318">用戶</entry>
   <entry key="319">民調</entry>
   <entry key="320">有沒有用戶連接到該用戶名</entry>
-  <entry key="321">該電郵載有一個特殊的聯繫已被發送到您的電子郵件地址，請檢查您的信箱。如果您還沒有收到郵件，請調整你的垃圾郵件設置，並重新發送確認郵件</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">無效散列。找不到用戶.</entry>
   <entry key="325">重置密碼</entry>
   <entry key="326">登錄</entry>
@@ -348,7 +348,7 @@
   <entry key="332">密碼設定。您可以立即登錄。</entry>
   <entry key="333">OK</entry>
   <entry key="334">未知錯誤。請告知您的服務團隊</entry>
-  <entry key="335">用戶名找不到</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">密碼無效</entry>
   <entry key="337">成功登出</entry>
   <entry key="338">前端登記禁用</entry>

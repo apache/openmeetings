@@ -121,7 +121,7 @@
   <entry key="101">Stäng</entry>
   <entry key="102">Fel data angivet</entry>
   <entry key="103">Användarnamnet måste innehålla minst 4 tecken</entry>
-  <entry key="104">Lösenordet måste innehålla minst 4 tecken</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Användarnamnet är redan använt</entry>
   <entry key="106">Denna epost är redan använd</entry>
   <entry key="107">Systemfel, kontakta systemadmin</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Användare</entry>
   <entry key="319">Omröstningar</entry>
   <entry key="320">Det finns ingen Användare kopplad till detta Användarnamn</entry>
-  <entry key="321">Ett e-postmeddelande innehållande en unik länk har skickats till din epostadress, var vänlig kolla din epost. Om du fortfarande inte fått något e-postmeddelande, var vänlig ändra spaminställningarna för din e-post och skicka bekräftelsemeddelandet på nytt.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Ogiltig Hash. Ingen Användare Funnen.</entry>
   <entry key="325">Återställ Ditt Lösenord</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Lösenord valt. Du kan logga in nu.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Okänt Fel. Var vänlig rapportera detta till ditt Service-Team.</entry>
-  <entry key="335">Användarnamnet hittades inte.</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Ogiltigt Lösenord.</entry>
   <entry key="337">Utloggning Lyckades.</entry>
   <entry key="338">Registrering via gränssnittet är Inaktiverat.</entry>

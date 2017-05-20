@@ -121,7 +121,7 @@
   <entry key="101">بستن</entry>
   <entry key="102"></entry>
   <entry key="103">كاراكتر 4 از بيش يا 4</entry>
-  <entry key="104">باشد كاراكتر 4 حداقل بايد عبور رمز</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">The username is already taken</entry>
   <entry key="106">The email is already registered</entry>
   <entry key="107">سيستم اخطار</entry>
@@ -336,7 +336,7 @@
   <entry key="318">No such email address was found. Make sure you enter the same email address you used to create your account.</entry>
   <entry key="319">Please enter either a Mail or a Username</entry>
   <entry key="320">There is no User connected to this Username</entry>
-  <entry key="321">The email containing a special link has been sent to your email address, please check your mailbox. If you still have not received a email, please adjust your email spam settings and resend confirmation email.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Invalid Hash. No User found.</entry>
   <entry key="325">Reset Your Password</entry>
   <entry key="326">ارتباط قطع</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Password set. You can login now.</entry>
   <entry key="333">ادامه</entry>
   <entry key="334">Unkown Error. Please report this to your Service-Team.</entry>
-  <entry key="335">Username not found</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">صحيح نا عبور رمز</entry>
   <entry key="337">Successfully Logged out</entry>
   <entry key="338">Frontend Registration disabled.</entry>

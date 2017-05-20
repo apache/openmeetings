@@ -121,7 +121,7 @@
   <entry key="101">zavři</entry>
   <entry key="102">chyba vstupních dat</entry>
   <entry key="103">4 nebo více znaků; záleží na velkých písmenkách!</entry>
-  <entry key="104">heslo musí mít minimálně 4 znaky</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Uživatel již existuje</entry>
   <entry key="106">Email je již registrován</entry>
   <entry key="107">Systémová chyba, kontaktujte správce sítě!</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Emailová adresa nenalezena. Použíjte stejnou adresu jako při zakládání uživatelského účtu.</entry>
   <entry key="319">Zadejte prosím mail, nebo uživatelské jméno</entry>
   <entry key="320">Takový uživatelský účet neexistuje</entry>
-  <entry key="321">Email obsahuje speciální odkaz, skontrolujte Vaši schránku. Pokud jste mail neobdrželi, skontrolujte nastavení antispamového filtru a pošlete mail znovu.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Špatný Hash. Uživatel nenalezen.</entry>
   <entry key="325">Reset Vašeho hesla</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Heslo nastaveno. Můžete se přihlásit.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Neznámá chyba. Nahlaste ji servisnímu týmu.</entry>
-  <entry key="335">Uživatelský účet nenalezen</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Špatné heslo</entry>
   <entry key="337">Byli jste vpořádku odhlášeni</entry>
   <entry key="338">Registrace uživatelů zakázána.</entry>

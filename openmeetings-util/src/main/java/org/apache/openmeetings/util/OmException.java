@@ -21,11 +21,11 @@ package org.apache.openmeetings.util;
 public class OmException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private Long code;
-	
+
 	public OmException(String msg) {
 		super(msg);
 	}
-	
+
 	public OmException(long code) {
 		this.code = Long.valueOf(code);
 	}

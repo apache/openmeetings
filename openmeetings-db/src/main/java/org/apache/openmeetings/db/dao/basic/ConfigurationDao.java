@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -238,6 +239,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		switch (key) {
 			case CONFIG_CRYPT_KEY:
 				configKeyCryptClassName = value;
+				CryptProvider.reset();
 				break;
 			case "show.whiteboard.draw.status":
 				whiteboardDrawStatus = Boolean.valueOf("1".equals(value));
@@ -293,7 +295,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				configKeyCryptClassName = cryptClass;
 			}
 		}
-
 		return configKeyCryptClassName;
 	}
 

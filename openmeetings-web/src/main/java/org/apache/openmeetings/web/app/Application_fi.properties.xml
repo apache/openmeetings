@@ -121,7 +121,7 @@
   <entry key="101">sulje</entry>
   <entry key="102">syötevirhe</entry>
   <entry key="103">vähintään 4 merkkiä; isoilla kirjaimilla on merkitystä!</entry>
-  <entry key="104">salasanan täytyy olla vähintään 4 merkkiä pitkä</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Tunnus on jo varattu</entry>
   <entry key="106">Sähköpostiosoite on jo rekisteröity</entry>
   <entry key="107">Järjestelmävirhe, ota yhteyttä ylläpitoon</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Sähköpostiosoitetta ei löytynyt. Varmista että annoit saman osoitteen kuin mitä käytit rekisteröityessäsi.</entry>
   <entry key="319">Anna sähköpostiosoite tai käyttäjätunnus</entry>
   <entry key="320">Käyttäjätunnusta ei ole</entry>
-  <entry key="321">Linkin sisältävä sähköposti on lähetetty osoitteeseesi, ole hyvä ja tarkista sähköpostisi. Jos et ole vielä vastaanottanut viestiä, tarkista roskapostiasetuksesi ja yritä uudestaan.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Epäkelpo hash. Käyttäjää ei löydy.</entry>
   <entry key="325">Nollaa salasanasi</entry>
   <entry key="326">Kirjaudu</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Salasana asetettu. Voit nyt kirjautua sisään.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Tuntematon virhe. Ole hyvä ja ilmoita virheestä tukitiimillesi.</entry>
-  <entry key="335">Käyttäjää ei löydy</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Epäkelpo salasana</entry>
   <entry key="337">Uloskirjautuminen onnistui</entry>
   <entry key="338">Rekisteröinti on poissa käytöstä.</entry>

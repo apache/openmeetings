@@ -121,7 +121,7 @@
   <entry key="101">Pechado</entry>
   <entry key="102">erro na entrada de datos</entry>
   <entry key="103">o nome de usuario debe conter alo menos 4 caracteres</entry>
-  <entry key="104">o contrasinal de usuario debe conter alo menos 4 caracteres</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Este nome de usuario xa existe</entry>
   <entry key="106">Este correo-e xa está rexistrado</entry>
   <entry key="107">Erro do sistema, por favor contacte co administrador do sistema</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Nose atopou o enderezo de correo electrónico. Asegúrese de introducir o mesmo enderezo de correo electrónico que utilizou para crear a súa conta.</entry>
   <entry key="319">Escriba o seu correo-e ou o nome de usuario</entry>
   <entry key="320">Non hai ningun usuario con este nome</entry>
-  <entry key="321">Enviouselle un correo-e cunha ligazón especial, revise a súa bandexa de entrada de correo. Se non atopa este correo revise a configuración de spam do seu servidor e reenvie o correo de confirmación.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Non se atopou ó usuario (hash incorrecto).</entry>
   <entry key="325">Xerar contrasinal</entry>
   <entry key="326">Inicio de sesión</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Cambiouse o contrasinal, agora pode a iniciar sesión.</entry>
   <entry key="333">Aceptar</entry>
   <entry key="334">Erro descoñecido. Informe ao administradores.</entry>
-  <entry key="335">Non se atopou o nome de usuario</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Contrasinal incorrecto</entry>
   <entry key="337">Vostede saiu do sistema</entry>
   <entry key="338">A ferramenta de rexistro está desactivada.</entry>

@@ -307,7 +307,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public Long stopRecordAndSave(IScope scope, Client client, Long storedRecordingId) {
+	public void stopRecordAndSave(IScope scope, Client client, Long storedRecordingId) {
 		try {
 			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
 			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
@@ -370,7 +370,6 @@ public class RecordingService implements IPendingServiceCallback {
 		} catch (Exception err) {
 			log.error("[-- stopRecordAndSave --]", err);
 		}
-		return new Long(-1);
 	}
 
 	public Client checkLzRecording() {

@@ -121,7 +121,7 @@
   <entry key="101">bezár</entry>
   <entry key="102">beviteli adathiba</entry>
   <entry key="103">4 vagy több karakter; kis/nagybetű számít!</entry>
-  <entry key="104">a felhasználói jelszónak legalább 4 karakternek kell lennie</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">A felhasználó már létezik</entry>
   <entry key="106">Az e-mail cím már regisztrálva van</entry>
   <entry key="107">Rendszerhiba, keresse fel a rendszergazdát.</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Nem található az e-mail cím. Ellenőrizd, hogy ugyanazt az e-mail címet adtad meg amit a felhasználó létrehozásához használtál.</entry>
   <entry key="319">Kérlek add meg az e-mail címet vagy felhasználói nevet.</entry>
   <entry key="320">Nincs felhasználó ehhez a névhez.</entry>
-  <entry key="321">A levél, amit küldtünk neked, tartalmaz egy speciális linket, ellenőrizd a postafiókodat. Ha még nem kaptad meg a levelet, állítsd be a spamszűrődet és küldd újra a megerősítő e-mail-t.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Rossz Hash. A felhasználható nem található.</entry>
   <entry key="325">Jelszó törlése</entry>
   <entry key="326">Bejelentkező név</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Jelszó beállítva. Bejelentkezhetsz.</entry>
   <entry key="333">Rendben</entry>
   <entry key="334">Ismeretlen hiba. Írd meg a fejlesztőknek.</entry>
-  <entry key="335">Felhasználónév nem található</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Hibás jelszó</entry>
   <entry key="337">Sikeres kijelentkezés</entry>
   <entry key="338">Regisztráció letiltva.</entry>

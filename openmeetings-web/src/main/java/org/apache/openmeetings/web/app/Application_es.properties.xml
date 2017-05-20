@@ -121,7 +121,7 @@
   <entry key="101">Cerrado</entry>
   <entry key="102">error en la introducción de datos</entry>
   <entry key="103">el nombre de usuario debe contener al menos 4 caracteres</entry>
-  <entry key="104">la clave de usuario debe contener al menos 4 caracteres</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Este nombre de usuario ya existe</entry>
   <entry key="106">Este email ya está registrado</entry>
   <entry key="107">Error del sistema, por favor contacte con el administrador</entry>
@@ -336,7 +336,7 @@
   <entry key="318">No se ha encontrado esa dirección de correo. Asegúrese de introducir la misma dirección que utilizó al crear la cuenta</entry>
   <entry key="319">Escriba o su correo o su nombre de usuario</entry>
   <entry key="320">No hay ningún usuario con ese nombre</entry>
-  <entry key="321">Se le ha enviado un correo con un enlace especial. Si no aparece este correo revise la configuración de filtros de spam de su servidor y reenvée este correo nuevamente.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">No se encontró al usuario (método de generación de claves incorrecto).</entry>
   <entry key="325">Generar contraseña</entry>
   <entry key="326">Inicio</entry>
@@ -348,7 +348,7 @@
   <entry key="332">La contraseña ha sido cambiada, ahora puede iniciar sesión.</entry>
   <entry key="333">Aceptar</entry>
   <entry key="334">Error desconocido. Envíe esta información al administrador del sistema.</entry>
-  <entry key="335">No se encontró al usuario</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Contraseña incorrecta</entry>
   <entry key="337">Ha salido del sistema</entry>
   <entry key="338">Registro desactivado.</entry>

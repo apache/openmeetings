@@ -30,7 +30,6 @@ import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -39,7 +38,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -76,8 +74,6 @@ public class MainService implements IPendingServiceCallback {
 	private ConfigurationDao configurationDao;
 	@Autowired
 	private IUserManager userManager;
-	@Autowired
-	private ConferenceLogDao conferenceLogDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -205,41 +201,6 @@ public class MainService implements IPendingServiceCallback {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Function is called if the user loggs in via a secureHash and sets the
-	 * param showNickNameDialog in the Object SOAPLogin to true the user gets
-	 * displayed an additional dialog to enter his nickname
-	 *
-	 * @param firstname
-	 * @param lastname
-	 * @param email
-	 * @return - 1 in case of success, -1 otherwise
-	 */
-	public Long setUserNickName(String firstname, String lastname, String email) {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			String streamId = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamId, null);
-
-			currentClient.setFirstname(firstname);
-			currentClient.setLastname(lastname);
-			currentClient.setEmail(email);
-
-			// Log the User
-			conferenceLogDao.add(
-					ConferenceLog.Type.nicknameEnter, currentClient.getUserId(), streamId,
-					null, currentClient.getUserip(), currentClient.getScope());
-
-			sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
-			scopeApplicationAdapter.sendMessageToCurrentScope("nickNameSet", currentClient, true);
-
-			return 1L;
-		} catch (Exception err) {
-			log.error("[setUserNickName] ", err);
-		}
-		return new Long(-1);
 	}
 
 	public List<Configuration> getGeneralOptions() {

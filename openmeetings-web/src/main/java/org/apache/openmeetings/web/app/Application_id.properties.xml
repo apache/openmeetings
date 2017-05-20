@@ -121,7 +121,7 @@
   <entry key="101">tutup</entry>
   <entry key="102">entri data salah</entry>
   <entry key="103">4 karakter atau lebih; hurup kapital semua!</entry>
-  <entry key="104">userpass harus lebih dari 4 karakter</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">username sudah terpakai</entry>
   <entry key="106">email sudah diregistrasi</entry>
   <entry key="107">System error silahkan kontak Admin</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Email tidak ditemukan. Pastikan email tersebut anda gunakan saat membuat akun.</entry>
   <entry key="319">Silahkan masukan alamat email yang lain atau Username</entry>
   <entry key="320">Tidak ada User terkoneksi dengan Username ini</entry>
-  <entry key="321">Email yang berisi informasi alamat baru telah dikirim ke email anda, silahkan cek email anda. Jika anda belum mendapatkan email, pastikan pada baigan seting spaming pada konfigurasi email anda dan kirimkan email lagi.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Hash tidak valid. User tidak ditemukan.</entry>
   <entry key="325">Isi Ulang Password Anda</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Password sudah di seting. Anda dapat login sekarang.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Kesalahan belum terlacak. Silahkan laporkan ke Team Servis.</entry>
-  <entry key="335">Username tidak ditemukan</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Password tidak valid</entry>
   <entry key="337">Sukses keluar dari sistem</entry>
   <entry key="338">Halaman depan registrasi dimatikan.</entry>
