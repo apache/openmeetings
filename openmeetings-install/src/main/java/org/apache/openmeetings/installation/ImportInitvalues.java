@@ -203,7 +203,7 @@ public class ImportInitvalues {
 				}
 			}
 
-			errorDao.addErrorValues(errorvalueId, type, labelId);
+			errorDao.add(errorvalueId, type, labelId);
 		}
 		log.debug("ErrorMappings ADDED");
 	}

@@ -121,7 +121,7 @@
   <entry key="101">Schließen</entry>
   <entry key="102">Eingabefehler</entry>
   <entry key="103">Der Benutzername muss mindestens 4 Zeichen lang sein</entry>
-  <entry key="104">Das Passwort muss mindestens 4 Zeichen lang sein</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Der Benutzername ist bereits vergeben</entry>
   <entry key="106">Die E-Mail ist bereits registriert</entry>
   <entry key="107">Ein Fehler trat auf. Bitte kontaktieren Sie den Administrator</entry>
@@ -336,7 +336,7 @@
   <entry key="318">E-Mail mit Reset-Link versenden</entry>
   <entry key="319">Geben Sie bitte entweder eine E-Mail oder einen Login an.</entry>
   <entry key="320">Es gibt keinen Benutzer mit diesem Benutzernamen.</entry>
-  <entry key="321">Die E-Mail mit dem dazugehörigen Link wurde an Ihre E-Mail-Adresse gesandt. Bitte überprüfen Sie Ihren Posteingang. Falls Sie immer noch keine E-Mail erhalten haben, korrigieren Sie bitte Ihre Spam-Einstellungen und senden Sie die E-Mail nochmals.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Ungültiger Hash.</entry>
   <entry key="325">Passwort zurücksetzen</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Passwort gespeichert. Sie können sich nun damit einloggen.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Unbekannter Fehler. Bitte melden Sie das dem Service-Team.</entry>
-  <entry key="335">Benutzername nicht gefunden</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Ungültiges Passwort</entry>
   <entry key="337">Erfolgreich ausgeloggt</entry>
   <entry key="338">Registrierung ist ausgeschaltet.</entry>

@@ -416,9 +416,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return u;
 	}
 
-	public Object getUserByHash(String hash) {
-		if (hash.length() == 0) {
-			return new Long(-5);
+	public User getUserByHash(String hash) {
+		if (Strings.isEmpty(hash)) {
+			return null;
 		}
 		User us = null;
 		try {
@@ -430,11 +430,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		} catch (Exception e) {
 			log.error("[getUserByHash]", e);
 		}
-		if (us != null) {
-			return us;
-		} else {
-			return new Long(-5);
-		}
+		return us;
 	}
 
 	/**
@@ -627,13 +623,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 		if (users.size() == 0) {
 			log.debug("No users was found: {}", userOrEmail);
-			throw new OmException(-10L);
+			return null;
 		}
 		User u = users.get(0);
 
 		if (!verifyPassword(u.getId(), userpass)) {
 			log.debug("Password does not match: {}", u);
-			throw new OmException(-11L);
+			return null;
 		}
 		// Check if activated
 		if (!AuthLevelUtil.hasLoginLevel(u.getRights())) {

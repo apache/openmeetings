@@ -121,7 +121,7 @@
   <entry key="101">kapat</entry>
   <entry key="102">veri giriş hatası</entry>
   <entry key="103">4 ya da daha fazla karakter; büyük-küçük harfe duyarlı!</entry>
-  <entry key="104">Kullanıcı şifresi en az 4 karakter olmalıdır</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Bu kullanıcı adı alınmış</entry>
   <entry key="106">Bu e-posta adresi zaten kayıtlı</entry>
   <entry key="107">Sistem hatası. Lütfen sistem yöneticileri ile bağlantıya geçiniz.</entry>
@@ -336,7 +336,7 @@
   <entry key="318">E-posta adresi bulunamadı. Kayıt esnasında kullandığınız e-posta adresini girdiğinizden emin olun.</entry>
   <entry key="319">Lütfen bir e-posta adresi ya da bir kullanıcı adı giriniz</entry>
   <entry key="320">Bu kullanıcı adı ile bağlanmış bir kullanıcı yok</entry>
-  <entry key="321">Özel bir bağlantıya sahip olan bir e-posta, e-posta adresinize yollanmış durumda. Lütfen posta kutunuzu kontrol edin. Eğer e-posta mesajını alamazsanız, lütfen posta kutunuzun gereksiz posta ayarlarını kontrol edin ve/veya yeniden doğrulama mesajının gönderilmesini sağlayın.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Geçersiz Komut. Hiçbir Kullanıcı Bulunamadı.</entry>
   <entry key="325">Şifrenizi Sıfırlayın</entry>
   <entry key="326">Oturum Aç</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Şİfre belirlendi. Şuan oturum açabilirsiniz.</entry>
   <entry key="333">TAMAM</entry>
   <entry key="334">Bilinmeyen Hata. Lütfen bu durumu sistem sorumlusuna rapor ediniz.</entry>
-  <entry key="335">Kullanıcı adı bulunamadı</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Geçersiz Şifre</entry>
   <entry key="337">Oturum başarıyla kapatıldı</entry>
   <entry key="338">Geriplan kayıt işlemi devre dışı.</entry>

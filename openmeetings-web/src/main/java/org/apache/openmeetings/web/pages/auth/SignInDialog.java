@@ -33,10 +33,10 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.OmAuthenticationStrategy;
 import org.apache.openmeetings.web.app.WebSession;
@@ -172,7 +172,14 @@ public class SignInDialog extends NonClosableDialog<String> {
 		OmAuthenticationStrategy strategy = getAuthenticationStrategy();
 		WebSession ws = WebSession.get();
 		Type type = domain.getId() > 0 ? Type.ldap : Type.user;
-		if (ws.signIn(login, password, type, domain.getId())) {
+		boolean signIn = false;
+		try {
+			signIn = ws.signIn(login, password, type, domain.getId());
+		} catch (OmException e) {
+			error(e.getCode() == null ? e.getMessage() : getBean(ErrorDao.class).getMessage(e.getCode(), ws.getOmLanguage()));
+			target.add(feedback);
+		}
+		if (signIn) {
  			setResponsePage(Application.get().getHomePage());
 			if (rememberMe) {
 				strategy.save(login, password, type, domain.getId());
@@ -180,14 +187,11 @@ public class SignInDialog extends NonClosableDialog<String> {
 				strategy.remove();
 			}
 		} else {
-			strategy.remove();
-			if (ws.getLoginError() != null) {
-				ErrorValue eValue = getBean(ErrorDao.class).get(-1 * ws.getLoginError());
-				if (eValue != null) {
-					error(Application.getString(eValue.getLabelId()));
-					target.add(feedback);
-				}
+			if (!hasErrorMessage()) {
+				error(getString("335"));
+				target.add(feedback);
 			}
+			strategy.remove();
 			shake(target);
 		}
 	}

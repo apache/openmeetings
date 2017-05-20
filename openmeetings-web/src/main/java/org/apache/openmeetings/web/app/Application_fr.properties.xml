@@ -121,7 +121,7 @@
   <entry key="101">Fermer</entry>
   <entry key="102">Erreur de formulaire</entry>
   <entry key="103">Le nom d'utilisateur doit contenir au moins 4 caractères</entry>
-  <entry key="104">Le mot de passe doit contenir au moins 4 caractères</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Le nom d'utilisateur existe déjà</entry>
   <entry key="106">Cette adresse de courriel est déjà utilisée</entry>
   <entry key="107">Erreur système, merci de contacter l'administrateur</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Aucune adresse trouvée. Soyez sûr d'avoir entré la même adresse que durant l'inscription.</entry>
   <entry key="319">Entrez votre courriel ou nom d'utilisateur</entry>
   <entry key="320">Il n'y a pas d'utilisateur avec ce nom</entry>
-  <entry key="321">Un courriel contenant un lien vous a été envoyé. Si vous n'avez pas reçu de courriel, vérifiez votre antispam et redemandez une confirmation.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Hachage non valide. Pas d'utilisateur trouvé.</entry>
   <entry key="325">Changez votre mot de passe</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Mot de passe changé. Vous pouvez vous connecter.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Erreur inconnue. Veuillez le signaler à votre équipe support.</entry>
-  <entry key="335">Nom d'utilisateur inconnu</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Mot de passe non valide</entry>
   <entry key="337">Déconnecté avec succès</entry>
   <entry key="338">Enregistrement depuis la page d'accueil désactivé.</entry>

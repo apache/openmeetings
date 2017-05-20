@@ -121,7 +121,7 @@
   <entry key="101">Sluiten</entry>
   <entry key="102">input data foutmelding</entry>
   <entry key="103">Gebruikersnaam moet minimaal 4 karakters zijn en is hoofdletter gevoelig!</entry>
-  <entry key="104">Wachtwoord moet minimaal 4 karakters zijn</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Deze gebruikersnaam is al gebruikt</entry>
   <entry key="106">Dit e-mail adres is al geregistreerd</entry>
   <entry key="107">Systeem fout neem contact op met een Systeem beheerder</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Dit E-mail adres is niet gevonden. Geeft E-mail adres waar ook het account mee gemaakt is.</entry>
   <entry key="319">Geeft inlognaam of E-mail adres</entry>
   <entry key="320">Er is geen gebruiker met deze inlognaam</entry>
-  <entry key="321">Een E-mail met een link is naar je toegestuurd, controller je Postvak-In. Als je dan nog steeds niets hebt ontvangen bekijk je E-mail spam instellingen.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Er is geen gebruiker met deze gegevens.</entry>
   <entry key="325">Wachtwoord opnieuw instellen</entry>
   <entry key="326">Inlognaam</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Wachtwoord ingesteld. Je kunt nu inloggen.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Onbekende Foutmelding. Geef dit door aan de beheerder.</entry>
-  <entry key="335">Inlognaam niet gevonden</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Verkeerd wachtwoord</entry>
   <entry key="337">U bent uitgelogd</entry>
   <entry key="338">Registratie is uitgezet.</entry>

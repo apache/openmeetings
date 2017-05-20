@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestOldBackups extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, webAppRootKey);
-	
+
 	@Autowired
 	private BackupImport backupController;
 	@Autowired
@@ -70,7 +70,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 		// Crypt class need to be preserved here to avoid overriding by backup import
 		cryptClass = cfgDao.getCryptKey();
 	}
-	
+
 	@After
 	public void tearDown() {
 		List<Configuration> cfgs = cfgDao.get(CONFIG_CRYPT_KEY);
@@ -80,12 +80,12 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 		c.setValue(cryptClass);
 		cfgDao.update(c, null);
 	}
-	
+
 	@Test
 	public void importOldVersions() {
 		String backupsDir = System.getProperty("backups.dir", ".");
 		File backupsHome = new File(backupsDir);
-		
+
 		if (!backupsHome.exists() || !backupsHome.isDirectory()) {
 			fail("Invalid directory is specified for backup files: " + backupsDir);
 		}
@@ -112,7 +112,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				assertTrue("Zero room groups were imported from " + name, newRoomGroupCount > roomGroupCount);
 				assertTrue("Zero appointments were imported from " + name, newApptCount > apptCount);
 				assertTrue("Zero meeting members were imported from " + name, newMeetingMembersCount > meetingMembersCount);
-				
+
 				groupCount = newGroupCount;
 				userCount = newUserCount;
 				roomCount = newRoomCount;

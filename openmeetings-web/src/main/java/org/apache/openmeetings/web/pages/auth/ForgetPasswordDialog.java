@@ -25,10 +25,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.ResetPage;
@@ -37,6 +39,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -46,6 +49,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.Validatable;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -58,9 +64,10 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
-	private DialogButton send = new DialogButton("send", Application.getString(317));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString(122));
+	private final DialogButton send = new DialogButton("send", Application.getString(317));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString(122));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private RequiredTextField<String> nameField;
 	private Form<String> form;
 	private SignInDialog s;
@@ -116,14 +123,17 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 			@Override
 			protected void onValidate() {
-				UserDao dao = getBean(UserDao.class);
 				String n = nameField.getConvertedInput();
 				if (n != null) {
-					if (type == Type.email && null == dao.getByEmail(n)) {
-						error(Application.getString(318));
+					IValidatable<String> val = new Validatable<>(n);
+					if (type == Type.email) {
+						emailValidator.validate(val);
+						if (!val.isValid()) {
+							error(getString("234"));
+						}
 					}
-					if (type == Type.login && null == dao.getByLogin(n, User.Type.user, null)) {
-						error(Application.getString(320));
+					if (type == Type.login && n.length() < UserHelper.getMinLoginLength(getBean(ConfigurationDao.class))) {
+						error(getString("104"));
 					}
 				}
 			}
@@ -196,36 +206,31 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 * @param email
 	 * @param username
 	 * @param appLink
-	 * @return
+	 * @return <code>true</code> in case reset was successful, <code>false</code> otherwise
 	 */
-	private static Long resetUser(String email, String username, String appLink) {
+	private static boolean resetUser(String email, String username, String appLink) {
 		try {
 			UserDao userDao = getBean(UserDao.class);
 			log.debug("resetUser " + email);
 
 			// check if Mail given
-			if (email.length() > 0) {
+			if (!Strings.isEmpty(email)) {
 				User us = userDao.getByEmail(email);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
-					return new Long(-4);
-				} else {
-					return new Long(-9);
+					return true;
 				}
-			} else if (username.length() > 0) {
+			} else if (!Strings.isEmpty(username)) {
 				User us = userDao.getByLogin(username, User.Type.user, null);
 				if (us != null) {
 					sendHashByUser(us, appLink, userDao);
-					return new Long(-4);
-				} else {
-					return new Long(-3);
+					return true;
 				}
 			}
 		} catch (Exception e) {
 			log.error("[resetUser]", e);
-			return new Long(-1);
 		}
-		return new Long(-2);
+		return false;
 	}
 
 	private static void sendHashByUser(User us, String appLink, UserDao userDao) {

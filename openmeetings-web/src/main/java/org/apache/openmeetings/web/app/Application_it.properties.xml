@@ -121,7 +121,7 @@
   <entry key="101">Chiudi</entry>
   <entry key="102">errori nei dati inseriti</entry>
   <entry key="103">Il nome utente o la password sono troppi corti</entry>
-  <entry key="104">Il nome utente o la password sono troppo corti</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Il nome utente è già in uso</entry>
   <entry key="106">L'indirizzo email è già stato usato</entry>
   <entry key="107">Errore di sistema, contattare l'amministratore</entry>
@@ -336,7 +336,7 @@
   <entry key="318">L'email specificata non è stata trovata. Verifica di aver inserito la stessa email usata per la creazione dell'account.</entry>
   <entry key="319">Per favore inserisci un indirizzo email o un nome utente</entry>
   <entry key="320">Non ci sono utenti collegati con questo Username</entry>
-  <entry key="321">L'email con il link di reset è stata inviata al tuo indirizzo email.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Utente non trovato.</entry>
   <entry key="325">Resetta la tua password</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Password impostata. Ora puoi collegarti.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Errore sconosciuto. Contatta il tuo amministratore.</entry>
-  <entry key="335">Nome utente non trovato</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Password non valida</entry>
   <entry key="337">Disconnessione effettuata</entry>
   <entry key="338">Registrazione disattivata.</entry>

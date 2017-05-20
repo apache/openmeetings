@@ -27,10 +27,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.basic.ErrorValue.Type;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -40,7 +42,10 @@ public class ErrorDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addErrorValues(Long id, Type type, Long labelId) {
+	@Autowired
+	private LabelDao labelDao;
+
+	public Long add(Long id, Type type, Long labelId) {
 		try {
 			ErrorValue eValue = new ErrorValue();
 			eValue.setId(id);
@@ -52,34 +57,6 @@ public class ErrorDao {
 			return eValue.getId();
 		} catch (Exception ex2) {
 			log.error("[addErrorValues]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long getErrorValueById(Type type, Long labelId) {
-		try {
-			ErrorValue eValue = new ErrorValue();
-			eValue.setType(type);
-			eValue.setInserted(new Date());
-			eValue.setLabelId(labelId);
-			eValue = em.merge(eValue);
-			return eValue.getId();
-		} catch (Exception ex2) {
-			log.error("[getErrorValueById]: ", ex2);
-		}
-		return null;
-	}
-
-	public Long updateErrorValues(Type type, Long labelId) {
-		try {
-			ErrorValue eValue = new ErrorValue();
-			eValue.setType(type);
-			eValue.setInserted(new Date());
-			eValue.setLabelId(labelId);
-			eValue = em.merge(eValue);
-			return eValue.getId();
-		} catch (Exception ex2) {
-			log.error("[addErrorType]: ", ex2);
 		}
 		return null;
 	}
@@ -98,5 +75,16 @@ public class ErrorDao {
 			log.error("[get]", ex2);
 		}
 		return null;
+	}
+
+	public String getMessage(Long id, long langId) {
+		if (id == null) {
+			return null;
+		}
+		ErrorValue ev = get(-1 * id.longValue());
+		if (ev == null) {
+			return null;
+		}
+		return labelDao.getString(ev.getLabelId(), langId);
 	}
 }

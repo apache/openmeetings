@@ -144,7 +144,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		} else if (sendConfirmation) {
 			messageCode = 1591;
 		}
-		confirmRegistration.setModelObject(Application.getString(messageCode));
+		confirmRegistration.setModelObject(getString("" + messageCode));
 		reset();
 		handler.add(form);
 	}
@@ -212,32 +212,29 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		public RegisterForm(String id) {
 			super(id);
 			add(feedback.setOutputMarkupId(true));
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<String>(
-					RegisterDialog.this, "firstName")));
-			firstNameField.setLabel(Model.of(Application.getString(117)));
-			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<String>(
-					RegisterDialog.this, "lastName")));
-			lastNameField.setLabel(Model.of(Application.getString(118)));
-			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(RegisterDialog.this,
-					"login")));
-			loginField.setLabel(Model.of(Application.getString(114)));
-			loginField.add(minimumLength(getMinLoginLength(cfgDao)));
-			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this,
-					"password")));
-			passwordField.setLabel(Model.of(Application.getString(115)));
-			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao)));
+			add(firstNameField = new RequiredTextField<>("firstName", new PropertyModel<String>(RegisterDialog.this, "firstName")));
+			add(lastNameField = new RequiredTextField<>("lastName", new PropertyModel<String>(RegisterDialog.this, "lastName")));
+			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(RegisterDialog.this, "login")));
+			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
-			confirmPassword.setLabel(Model.of(Application.getString(116)));
-			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this,
-					"email")));
-			emailField.setLabel(Model.of(Application.getString(119)));
-			emailField.add(RfcCompliantEmailAddressValidator.getInstance());
+			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
 			add(langField = new LanguageDropDown("lang", new PropertyModel<Long>(RegisterDialog.this, "lang")));
-			langField.setRequired(true).setLabel(Model.of(Application.getString(111)));
-			add(tzDropDown.setRequired(true).setLabel(Model.of(Application.getString(1143))));
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+			firstNameField.setLabel(Model.of(getString("117")));
+			lastNameField.setLabel(Model.of(getString("118")));
+			loginField.add(minimumLength(getMinLoginLength(cfgDao))).setLabel(Model.of(getString("114")));
+			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao))).setLabel(Model.of(getString("115")));
+			confirmPassword.setLabel(Model.of(getString("116")));
+			emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(Model.of(getString("119")));
+			langField.setRequired(true).setLabel(Model.of(getString("111")));
+			add(tzDropDown.setRequired(true).setLabel(Model.of(getString("1143"))));
 			add(countryField = new CountryDropDown("country", new PropertyModel<String>(RegisterDialog.this, "country")));
-			countryField.setRequired(true).setLabel(Model.of(Application.getString(120)));
+			countryField.setRequired(true).setLabel(Model.of(getString("120")));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 
@@ -257,13 +254,13 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		protected void onValidate() {
 			if (passwordField.getConvertedInput() == null
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
-				error(Application.getString(232));
+				error(getString("232"));
 			}
 			if (!getBean(UserDao.class).checkEmail(emailField.getConvertedInput(), User.Type.user, null, null)) {
-				error(Application.getString(1000));
+				error(getString("1000"));
 			}
 			if (!getBean(UserDao.class).checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
-				error(Application.getString(105));
+				error(getString("105"));
 			}
 		}
 	}

@@ -121,7 +121,7 @@
   <entry key="101">关闭</entry>
   <entry key="102">输入错误</entry>
   <entry key="103">用户名必须长于4个字符</entry>
-  <entry key="104">用户密码必须长于4个字符</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">用户名已存在</entry>
   <entry key="106">邮件地址已注册</entry>
   <entry key="107">系统错误，请联系管理员</entry>
@@ -336,7 +336,7 @@
   <entry key="318">用户</entry>
   <entry key="319">投票</entry>
   <entry key="320">没有此用户名</entry>
-  <entry key="321">一封包含特殊链接的邮件已发送至你的信箱,请查收.如果没有收到,请检查和调整你的邮箱垃圾邮件设置,重新发送认证邮件.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">无效的哈希值,没有该用户.</entry>
   <entry key="325">重置你的密码</entry>
   <entry key="326">登录</entry>
@@ -348,7 +348,7 @@
   <entry key="332">密码设置完毕,你可以登录.</entry>
   <entry key="333">完成</entry>
   <entry key="334">未知错误.</entry>
-  <entry key="335">未发现该用户名</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">无效密码</entry>
   <entry key="337">注销成功</entry>
   <entry key="338">禁止前端注册.</entry>

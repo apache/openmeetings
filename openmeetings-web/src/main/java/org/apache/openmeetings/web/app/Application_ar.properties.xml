@@ -121,7 +121,7 @@
   <entry key="101">وثيق</entry>
   <entry key="102">خطأ في البيانات المدخله</entry>
   <entry key="103">اسم المستخدم يجب ان تكون على الأقل 4 احرف</entry>
-  <entry key="104">Userpass يجب أن تكون على الأقل 4 احرف</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">اسم المستخدم مأخوذ من قبل</entry>
   <entry key="106">البريد الالكتروني هو ما سبق تسجيله</entry>
   <entry key="107">خطأ في النظام الرجاء الاتصال منظومة المشرفون</entry>
@@ -336,7 +336,7 @@
   <entry key="318">مستخدمين</entry>
   <entry key="319">إستطلاعات</entry>
   <entry key="320">هذا الإسم لا يعود إلى أي مستخدم</entry>
-  <entry key="321">لقد تم إرسال بريد يتضمن رابط خاص إلى بريدك الإلكتروني، الرجاء تفحص صندوق البريد. إذا لم تحصل بعد على بريد إلكتروني، الرجاء تعديل إعدادات البريد المزعج و قم بإعادة إرسال البريد الإلكتروني الخاص بالتأكيد.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">مزيج غير صالح. ليس هناك أي مستخدم.</entry>
   <entry key="325">إستعادة كلمة المرور</entry>
   <entry key="326">تسجيل الدخول</entry>
@@ -348,7 +348,7 @@
   <entry key="332">تم تسجيل كلمة المرور. يمكنك الآن تسجيل الدخول</entry>
   <entry key="333">OK</entry>
   <entry key="334">خطأ غير معروف. الرجاء إبلاغ فريق الخدمة</entry>
-  <entry key="335">إسم المستخدم غير موجود</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">كلمة مرور غير صحيحة</entry>
   <entry key="337">تم تسجيل الخروج بنجاح</entry>
   <entry key="338">تم إلغاء التسجيل السابق.</entry>

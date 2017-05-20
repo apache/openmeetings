@@ -121,7 +121,7 @@
   <entry key="101">ปิด</entry>
   <entry key="102">ข้อมูลที่กรอกขัดข้อง</entry>
   <entry key="103">ตัวอักษร 4 ตัวขึ้นไป อักษรตัวใหญ่มีผลสำคัญ</entry>
-  <entry key="104">รหัสผู้ใช้ต้องมีตัวอักษรอย่างน้อย 4 ตัว</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">มีผู้ใช้ชื่อนี้ไปแล้ว</entry>
   <entry key="106">อีเมล์นี้ลงทะเบียนไปแล้ว</entry>
   <entry key="107">ระบบขัดข้อง โปรดติดต่อผู้ดูแลระบบ</entry>
@@ -336,7 +336,7 @@
   <entry key="318">ไม่พบอีเมล์แอดเดรสดังกล่าว ดูให้แน่ใจว่าคุณกรอกอีเมล์แอดเดรสเดียวกับที่คุณใช้ในการจัดทำบัญชีของคุณ</entry>
   <entry key="319">โปรดกรอกอีเมล์หรือชื่อผู้ใช้</entry>
   <entry key="320">ไม่มีผู้ใช้รายใดเชื่อมต่อกับชื่อผู้ใช้รายนี้</entry>
-  <entry key="321">ได้ส่งอีเมล์ซึ่งมีลิงค์พิเศษไปยังอีเมล์แอดเดรสของคุณแล้ว โปรดเช็คอีเมล์ด้วย หากยังคงไม่ได้รับอีเมล์ โปรดปรับการตั้งค่าอีเมล์สแปมและส่งอีเมล์ยืนยันใหม่อีกครั้ง</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">รหัสผ่านไม่ถูกต้อง ไม่พบผู้ใช้</entry>
   <entry key="325">ตั้งรหัสผ่านของคุณใหม่</entry>
   <entry key="326">ล็อคอิน</entry>
@@ -348,7 +348,7 @@
   <entry key="332">ตั้งรหัสผ่านแล้ว คุณสามารถล็อคอินได้แล้ว</entry>
   <entry key="333">ตกลง</entry>
   <entry key="334">ขัดข้องโดยไม่ทราบสาเหตุ โปรดรายงานต่อทีมบริการของคุณ</entry>
-  <entry key="335">ไม่พบชื่อผู้ใช้</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">รหัสผ่านไม่ถูกต้อง</entry>
   <entry key="337">ออกจากระบบเรียบร้อยแล้ว</entry>
   <entry key="338">การลงทะเบียนถูกยกเลิกแล้ว</entry>

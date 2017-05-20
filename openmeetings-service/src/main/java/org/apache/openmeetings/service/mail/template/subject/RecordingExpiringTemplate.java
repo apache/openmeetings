@@ -54,7 +54,7 @@ public class RecordingExpiringTemplate extends AbstractSubjectEmailTemplate {
 		final String app = getBean(ConfigurationDao.class).getAppName();
 		add(new Label("greetings", getString("template.recording.expiring.greetings", locale, u.getFirstname())));
 		add(new Label("body", getString("template.recording.expiring.body", locale, app, "" + remainingDays)));
-		add(new Label("footer", getString("template.recording.expiring.footer", locale, app)));
+		add(new Label("footer", getString("template.recording.expiring.footer", locale, app)).setEscapeModelStrings(false));
 	}
 
 	@Override

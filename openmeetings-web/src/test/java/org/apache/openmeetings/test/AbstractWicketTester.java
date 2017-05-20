@@ -21,11 +21,13 @@ package org.apache.openmeetings.test;
 import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.Serializable;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
@@ -45,12 +47,17 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	public void login(String login, String password) {
-		if (login != null && password != null) {
-			WebSession.get().signIn(login, password, Type.user, null);
-		} else {
-			WebSession.get().signIn(username, userpass, Type.user, null);
+		WebSession s = WebSession.get();
+		try {
+			if (login != null && password != null) {
+				s.signIn(login, password, Type.user, null);
+			} else {
+				s.signIn(username, userpass, Type.user, null);
+			}
+		} catch (OmException e) {
+			fail(e.getMessage());
 		}
-		assertTrue("Web session is not signed in for user: " + (login != null ? login : username), WebSession.get().isSignedIn());
+		assertTrue("Web session is not signed in for user: " + (login != null ? login : username), s.isSignedIn());
 	}
 
 	@After

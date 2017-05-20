@@ -212,7 +212,7 @@ public class LdapLoginManagement {
 					}
 					if (userDn == null) {
 						log.error("NONE users found in LDAP");
-						throw new OmException(-11L);
+						throw new OmException(-10L);
 					}
 					w.conn.bind(userDn, passwd);
 				}
@@ -232,7 +232,7 @@ public class LdapLoginManagement {
 			log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
 			if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
 				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
-				throw new OmException(-11L);
+				throw new OmException(-10L);
 			}
 			if (authenticated && entry == null) {
 				if (w.options.useAdminForAttrs) {
@@ -255,7 +255,7 @@ public class LdapLoginManagement {
 			}
 		} catch (LdapAuthenticationException ae) {
 			log.error("Not authenticated.", ae);
-			throw new OmException(-11L);
+			throw new OmException(-10L);
 		} catch (OmException e) {
 			throw e;
 		} catch (Exception e) {
@@ -296,7 +296,7 @@ public class LdapLoginManagement {
 			}
 		} catch (LdapAuthenticationException ae) {
 			log.error("Not authenticated.", ae);
-			throw new OmException(-11L);
+			throw new OmException(-10L);
 		} catch (OmException e) {
 			throw e;
 		} catch (Exception e) {
@@ -334,7 +334,7 @@ public class LdapLoginManagement {
 		public User getUser(Entry entry, User u) throws LdapException, CursorException, OmException, IOException {
 			if (entry == null) {
 				log.error("LDAP entry is null, search or lookup by Dn failed");
-				throw new OmException(-11L);
+				throw new OmException(-10L);
 			}
 			if (u == null) {
 				u = userDao.getNewUserInstance(null);

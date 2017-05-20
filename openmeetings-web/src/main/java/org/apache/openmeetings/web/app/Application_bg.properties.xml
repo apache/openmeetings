@@ -121,7 +121,7 @@
   <entry key="101">затваряне</entry>
   <entry key="102">грешка във входните данни</entry>
   <entry key="103">4 или повече знака; големите букви имат значение</entry>
-  <entry key="104">паролата трябва да е поне 4 знака</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">потребителското име е заето</entry>
   <entry key="106">E-mail адресът е зает</entry>
   <entry key="107">Грешка в системата, потърсете системния администратор.</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Не е намерен такъв e-mail.</entry>
   <entry key="319">Моля, въведете E-mail или потребителско име.</entry>
   <entry key="320">Не е намерено такова потребителско име.</entry>
-  <entry key="321">Изпратен е e-mail, съдържащ линк за нова парола.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Не е намерен такъв потребител.</entry>
   <entry key="325">Нова парола</entry>
   <entry key="326">Потребителско име</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Паролата е настроена, вече може да влезете в системата.</entry>
   <entry key="333">ОК</entry>
   <entry key="334">Грешка. Докладвайте за бъг!</entry>
-  <entry key="335">Потребителското име не е намерено.</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Невалидна парола</entry>
   <entry key="337">Успешен изход от системата</entry>
   <entry key="338">Забранена е регистрацията на нови потребители.</entry>

@@ -120,8 +120,8 @@
   <entry key="100">Еліпс</entry>
   <entry key="101">Закрити</entry>
   <entry key="102">Помилка при вводі</entry>
-  <entry key="103">Ім'я користувача повинно складатись мінімум з 4 знаків</entry>
-  <entry key="104">Пароль повинен містити мінімум 4 знаки</entry>
+  <entry key="103">Password and/or login is too short</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Це ім'я користувача вже присвоєне</entry>
   <entry key="106">Введена електронна адреса вже зареєстрована</entry>
   <entry key="107">Присутня помилка, просимо зв''язатись з адміністрацією</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Користувачі</entry>
   <entry key="319">Опитування</entry>
   <entry key="320">Користувач з даним іменем відсутній</entry>
-  <entry key="321">На вашу поштоу скриньку вислано лист. Будь-ласка перевірте ваш поштову скриньку.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Неправильний хеш. Користувача не знайдено.</entry>
   <entry key="325">Скинути Ваш пароль</entry>
   <entry key="326">Логін</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Пароль встановлено. Тепер ви можете ввійти.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Невідома помилка. Будь-ласка зв'яжіться з адміністратором.</entry>
-  <entry key="335">Невідоме ім'я користувача</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Невірний пароль</entry>
   <entry key="337">Ви успішно вийшли з системи</entry>
   <entry key="338">Попередня реєстрація вимкнена.</entry>

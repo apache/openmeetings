@@ -161,12 +161,6 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public Long logout(String SID, long userId) {
-		sessionDao.updateUser(SID, null);
-		return -12L;
-	}
-
-	@Override
 	public List<Userdata> getUserdataDashBoard(Long userId) {
 		if (userId != null && userId.longValue() > 0) {
 			try {
@@ -404,6 +398,8 @@ public class UserManager implements IUserManager {
 					return -17L;
 				}
 			}
+		} else {
+			return -13L;
 		}
 		return -1L;
 	}

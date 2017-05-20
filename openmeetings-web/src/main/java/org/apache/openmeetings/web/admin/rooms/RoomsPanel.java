@@ -38,7 +38,7 @@ import org.apache.wicket.markup.repeater.Item;
 
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
 public class RoomsPanel extends AdminPanel {
-	private static final long serialVersionUID = -1L;
+	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
 
@@ -72,7 +72,7 @@ public class RoomsPanel extends AdminPanel {
 
 		add(listContainer.add(dataView).setOutputMarkupId(true));
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = -1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {

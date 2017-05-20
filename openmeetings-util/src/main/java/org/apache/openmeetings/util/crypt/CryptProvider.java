@@ -26,15 +26,26 @@ import org.slf4j.Logger;
 
 public class CryptProvider {
 	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, webAppRootKey);
+	private static ICrypt crypt;
 
 	public static ICrypt get() {
-		try {
-			log.debug("getInstanceOfCrypt:: configKeyCryptClassName: " + configKeyCryptClassName);
+		if (crypt == null) {
+			synchronized (CryptProvider.class) {
+				if (crypt == null) {
+					try {
+						log.debug("getInstanceOfCrypt:: configKeyCryptClassName: " + configKeyCryptClassName);
 
-			return configKeyCryptClassName == null ? null : (ICrypt) Class.forName(configKeyCryptClassName).newInstance();
-		} catch (Exception err) {
-			log.error("[getInstanceOfCrypt]", err);
+						crypt = configKeyCryptClassName == null ? null : (ICrypt) Class.forName(configKeyCryptClassName).newInstance();
+					} catch (Exception err) {
+						log.error("[getInstanceOfCrypt]", err);
+					}
+				}
+			}
 		}
-		return null;
+		return crypt;
+	}
+
+	public static synchronized void reset() {
+		crypt = null;
 	}
 }

@@ -25,20 +25,18 @@ import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ResetPage extends BaseNotInitedPage {
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
 	private final String RESET_PARAM = "hash";
-	
-	public ResetPage(PageParameters pp){
+
+	public ResetPage(PageParameters pp) {
 		String resetHash = pp.get(RESET_PARAM).toString();
-		if (resetHash != null){
-			Object user = Application.getBean(UserDao.class).getUserByHash(resetHash);
-			if (user instanceof User){
-				add(new ResetPasswordDialog("resetPassword", (User)user));
-			} else {
-				setResponsePage(Application.get().getSignInPageClass());		
+		if (resetHash != null) {
+			User user = Application.getBean(UserDao.class).getUserByHash(resetHash);
+			if (user != null) {
+				add(new ResetPasswordDialog("resetPassword", user));
+				return;
 			}
-		} else {
-			setResponsePage(Application.get().getSignInPageClass());		
 		}
+		setResponsePage(Application.get().getSignInPageClass());
 	}
 }

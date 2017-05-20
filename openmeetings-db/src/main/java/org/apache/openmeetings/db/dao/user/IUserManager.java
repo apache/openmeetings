@@ -33,13 +33,13 @@ import org.apache.openmeetings.db.entity.user.Userdata;
 
 //FIXME HACK to bypass cross project compilation
 public interface IUserManager {
-	
+
 	Long registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation);
-	
+
 	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
@@ -54,10 +54,8 @@ public interface IUserManager {
 
 	/** TODO FIXME seems to be unused **/
 	boolean kickUserByStreamId(String SID, Long roomId);
-	
+
 	boolean kickUserByPublicSID(String SID, String publicSID);
-	
-	Long logout(String SID, long userId);
-	
+
 	List<Userdata> getUserdataDashBoard(Long userId);
 }

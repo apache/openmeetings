@@ -66,7 +66,7 @@ public class EmailPanel extends AdminPanel {
 		};
 		add(list.add(dataView).setOutputMarkupId(true));
 		final PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dataView) {
-			private static final long serialVersionUID = -1L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {

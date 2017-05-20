@@ -121,7 +121,7 @@
   <entry key="101">fechar</entry>
   <entry key="102">erro na entrada de dados</entry>
   <entry key="103">Nome do usuário deve ter no mínimo 4 letras</entry>
-  <entry key="104">senha deve ter no mínimo 4 letras</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Nome de usuário já existente</entry>
   <entry key="106">O email já foi registrado.</entry>
   <entry key="107">Erro no sistema, por favor, contacte os administradores.</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Nenhum endereço de e-mail foi encontrado. Verifique se você digitou o endereço de email que você usou para criar sua conta.</entry>
   <entry key="319">Por favor, indique um endereço de e-mail ou um nome de usuário</entry>
   <entry key="320">Não existe usuário conectado com este nome</entry>
-  <entry key="321">Um email contendo um link foi enviado a seu endereço de email, por favor confira sua caixa postal. Se você ainda não tiver recebido um email, por favor ajuste as configurações de spam e re-envie a confirmação de email.</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Hash inválido. Nenhum usuário encontrado.</entry>
   <entry key="325">Redefina sua senha</entry>
   <entry key="326">Login</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Senha configurada. Você pode acessar agora.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Erro desconhecido. Por favor informe isso ao Administrador.</entry>
-  <entry key="335">Username não encontrado</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Senha inválida</entry>
   <entry key="337">Desconectado com sucesso</entry>
   <entry key="338">Cadastro do frontend desabilitado.</entry>

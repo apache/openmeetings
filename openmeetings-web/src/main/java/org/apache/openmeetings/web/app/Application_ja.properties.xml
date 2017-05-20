@@ -121,7 +121,7 @@
   <entry key="101">閉じる</entry>
   <entry key="102">入力データエラー</entry>
   <entry key="103">ユーザー名は最低4文字以上必要です</entry>
-  <entry key="104">パスワードは最低4文字以上必要です</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">そのユーザー名は既に使われています</entry>
   <entry key="106">そのメールアドレスは既に登録されています</entry>
   <entry key="107">システムエラー。管理者に連絡してください。</entry>
@@ -336,7 +336,7 @@
   <entry key="318">指定されたメール・アドレスが見つかりません。アカウント作成時に指定したメール・アドレスを指定してください。</entry>
   <entry key="319">メール・アドレスまたはユーザー名を入力してください。</entry>
   <entry key="320">このユーザー名で接続するユーザーはありません。</entry>
-  <entry key="321">専用リンクを含むメールをあなたのメール・アドレスに対して送信しました。メール受信箱をご確認ください。もし受信できない場合は、スパムとして除外されている可能性があります。その場合はスパム設定を見直し、再度、確認メールを送信してください。</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">ハッシュ値が不正です。ユーザーが見つかりません。</entry>
   <entry key="325">パスワードのリセット</entry>
   <entry key="326">ログイン</entry>
@@ -348,7 +348,7 @@
   <entry key="332">パスワードが設定されました。ログイン可能です。</entry>
   <entry key="333">OK</entry>
   <entry key="334">未知のエラーです。管理者に報告してください。</entry>
-  <entry key="335">ユーザー名が見つかりません。</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">パスワードが無効です。</entry>
   <entry key="337">ログアウト完了</entry>
   <entry key="338">フロントエンド登録は無効です。</entry>

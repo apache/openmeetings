@@ -35,6 +35,7 @@ public class OmTextLabel extends Label {
 
 	public OmTextLabel(String id, String label) {
 		this(id, Model.of(label));
+		setEscapeModelStrings(false);
 	}
 
 	@Override

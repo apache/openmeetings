@@ -121,7 +121,7 @@
   <entry key="101">Zatvoriť</entry>
   <entry key="102">chyba vstupných údajov</entry>
   <entry key="103">Rozlíšujte veľké a malé písmena a minimálne 4 znaky</entry>
-  <entry key="104">Heslo musí mať aspoň 4 znaky</entry>
+  <entry key="104">Login is too short</entry>
   <entry key="105">Používateľské meno už existuje</entry>
   <entry key="106">Email už je zaregistrovaný</entry>
   <entry key="107">Systémová chyba, kontaktujte administrátora</entry>
@@ -336,7 +336,7 @@
   <entry key="318">Žiadny takýto email neexistuje. Uistite sa, že ste zadali rovnaký email ako pri registrácií.</entry>
   <entry key="319">Prosím zadajte email alebo používateľské meno</entry>
   <entry key="320">There is no user connected to this username</entry>
-  <entry key="321">Email bol zaslaný</entry>
+  <entry key="321">The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered</entry>
   <entry key="324">Používateľ sa nenašiel</entry>
   <entry key="325">Resetovať vaše heslo</entry>
   <entry key="326">Prihlásenie</entry>
@@ -348,7 +348,7 @@
   <entry key="332">Heslo nastavené. Môžte sa prihlásiť.</entry>
   <entry key="333">OK</entry>
   <entry key="334">Chyba. Kontaktujte administrátora.</entry>
-  <entry key="335">Používateľské meno sa nenašlo</entry>
+  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Nesprávne heslo</entry>
   <entry key="337">Úspešne odhlásený</entry>
   <entry key="338">Registrácia nemožná</entry>
