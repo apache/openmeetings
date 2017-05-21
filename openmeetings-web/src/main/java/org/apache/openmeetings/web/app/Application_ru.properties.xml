@@ -1913,4 +1913,6 @@
 	<entry key="right.presenter.remove">Отнять право быть Докладчиком в комнате</entry>
 	<entry key="right.presenter.request">хотел бы быть Докладчиком в этой комнате</entry>
 	<entry key="right.presenter.request.self">Я хотел бы быть Докладчиком в этой комнате</entry>
+	<entry key="captcha.text">Текст капчи</entry>
+	<entry key="bad.captcha.text">Вы ввели неверный текст капчи</entry>
 </properties>

@@ -1914,4 +1914,6 @@
 	<entry key="right.presenter.remove">Remove right to be presenter in this room</entry>
 	<entry key="right.presenter.request">would like to have right to be presenter in this room</entry>
 	<entry key="right.presenter.request.self">I would like to have right to be presenter in this room</entry>
+	<entry key="captcha.text">Captcha text</entry>
+	<entry key="bad.captcha.text">You have entered incorrect captcha text</entry>
 </properties>
