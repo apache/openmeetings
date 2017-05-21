@@ -1923,4 +1923,6 @@
 	<entry key="recordings.root.group">Записи группы</entry>
 	<entry key="restricted.group.files">Доступ к групповым файлам ограничен</entry>
 	<entry key="find.user">Найти пользователя</entry>
+	<entry key="captcha.text">Текст капчи</entry>
+	<entry key="bad.captcha.text">Вы ввели неверный текст капчи</entry>
 </properties>

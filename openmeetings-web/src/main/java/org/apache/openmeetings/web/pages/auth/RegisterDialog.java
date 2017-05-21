@@ -23,12 +23,10 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -38,15 +36,13 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.LanguageDropDown;
-import org.apache.openmeetings.web.util.CountryDropDown;
+import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -77,10 +73,9 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	};
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
-	private final DropDownChoice<String> tzDropDown = new DropDownChoice<>("tz", tzModel, AVAILABLE_TIMEZONES);
-	private final Random rnd = new Random();
 	private RegisterForm form;
 	private SignInDialog s;
+	private Captcha captcha;
 	private String firstName;
 	private String lastName;
 	private String login;
@@ -97,7 +92,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		super(id, Application.getString(113));
 		add(form = new RegisterForm("form"));
 		form.setOutputMarkupId(true);
-		tzDropDown.setOutputMarkupId(true);
 
 		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", Application.getString(235), Application.getString(674)) {
 			private static final long serialVersionUID = 1L;
@@ -138,6 +132,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		email = null;
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		country = WebSession.get().getBrowserLocale().getCountry();
+		captcha.refresh();
 	}
 
 	@Override
@@ -215,8 +210,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		private RequiredTextField<String> loginField;
 		private RequiredTextField<String> firstNameField;
 		private RequiredTextField<String> lastNameField;
-		private LanguageDropDown langField;
-		private CountryDropDown countryField;
 
 		public RegisterForm(String id) {
 			super(id);
@@ -227,7 +220,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			add(passwordField = new PasswordTextField("password", new PropertyModel<String>(RegisterDialog.this, "password")));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()).setResetPassword(true));
 			add(emailField = new RequiredTextField<>("email", new PropertyModel<String>(RegisterDialog.this, "email")));
-			add(langField = new LanguageDropDown("lang", new PropertyModel<Long>(RegisterDialog.this, "lang")));
+			add(captcha = new Captcha("captcha"));
 		}
 
 		@Override
@@ -240,10 +233,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao))).setLabel(Model.of(getString("115")));
 			confirmPassword.setLabel(Model.of(getString("116")));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(Model.of(getString("119")));
-			langField.setRequired(true).setLabel(Model.of(getString("111")));
-			add(tzDropDown.setRequired(true).setLabel(Model.of(getString("1143"))));
-			add(countryField = new CountryDropDown("country", new PropertyModel<String>(RegisterDialog.this, "country")));
-			countryField.setRequired(true).setLabel(Model.of(getString("120")));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;
 
@@ -274,7 +263,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			if (hasErrorMessage()) {
 				// add random timeout
 				try {
-					Thread.sleep(rnd.nextInt(10) * 1000);
+					Thread.sleep((long)(10 * Math.random() * 1000));
 				} catch (InterruptedException e) {
 					log.error("Unexpected exception while sleeting", e);
 				}

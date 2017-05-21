@@ -29,7 +29,6 @@ import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
@@ -100,7 +99,6 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private ForgetPasswordDialog f;
 	private LdapConfig domain;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final Random rnd = new Random();
 
 	public SignInDialog(String id) {
 		super(id, Application.getString(108));
@@ -206,7 +204,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 			}
 			// add random timeout
 			try {
-				Thread.sleep((6 + rnd.nextInt(10)) * 1000);
+				Thread.sleep(6 + (long)(10 * Math.random() * 1000));
 			} catch (InterruptedException e) {
 				log.error("Unexpected exception while sleeting", e);
 			}

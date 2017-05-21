@@ -1923,4 +1923,6 @@
 	<entry key="recordings.root.group">Group recordings</entry>
 	<entry key="restricted.group.files">Group files are restricted</entry>
 	<entry key="find.user">Find user</entry>
+	<entry key="captcha.text">Captcha text</entry>
+	<entry key="bad.captcha.text">You have entered incorrect captcha text</entry>
 </properties>

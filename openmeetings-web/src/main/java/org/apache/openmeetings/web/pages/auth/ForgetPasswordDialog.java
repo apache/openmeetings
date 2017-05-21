@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -92,6 +93,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				add(label.setOutputMarkupId(true));
 				add(nameField = new RequiredTextField<>("name", new PropertyModel<String>(ForgetPasswordDialog.this, "name")));
 				nameField.setLabel(Model.of(Application.getString(type == Type.email ? 315 : 316)));
+				add(new Captcha("captcha"));
 				RadioGroup<Type> rg = new RadioGroup<>("type", new PropertyModel<Type>(ForgetPasswordDialog.this, "type"));
 				add(rg.add(new Radio<>("email", Model.of(Type.email)).setOutputMarkupId(true))
 						.add(new Radio<>("login", Model.of(Type.login)).setOutputMarkupId(true))
