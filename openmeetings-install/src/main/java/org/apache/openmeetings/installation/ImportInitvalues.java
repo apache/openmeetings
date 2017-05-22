@@ -30,6 +30,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
@@ -51,6 +52,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENAB
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_EMAIL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
@@ -358,6 +360,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_GOOGLE_ANALYTICS_CODE, null, null, "Code for Google Analytics");
 		cfgDao.add(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, null, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options");
 		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, null, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
+		cfgDao.add(CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, null, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL));
 		log.debug("Configurations ADDED");
 	}
 

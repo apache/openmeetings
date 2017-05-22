@@ -19,8 +19,10 @@
 package org.apache.openmeetings.core.remote.red5;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -161,9 +163,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 
 			InitializationContainer.initComplete = true;
+			// Init properties
 			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 			iapp.setXFrameOptions(cfgDao.getConfValue(CONFIG_HEADER_XFRAME, String.class, HEADER_XFRAME_SAMEORIGIN));
 			iapp.setContentSecurityPolicy(cfgDao.getConfValue(CONFIG_HEADER_CSP, String.class, HEADER_CSP_SELF));
+			EXT_PROCESS_TTL = cfgDao.getConfValue(CONFIG_EXT_PROCESS_TTL, Integer.class, "" + EXT_PROCESS_TTL);
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 			sessionManager.clearCache(); // 'sticky' clients should be cleaned up from DB

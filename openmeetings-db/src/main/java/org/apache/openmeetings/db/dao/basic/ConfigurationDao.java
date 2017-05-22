@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
@@ -29,6 +30,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENAB
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
@@ -262,6 +264,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 					iapp.setContentSecurityPolicy(value);
 				}
 			}
+				break;
+			case CONFIG_EXT_PROCESS_TTL:
+				EXT_PROCESS_TTL = Integer.parseInt(value);
 				break;
 		}
 		return entity;

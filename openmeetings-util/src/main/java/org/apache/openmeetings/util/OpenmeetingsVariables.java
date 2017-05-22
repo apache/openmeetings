@@ -50,6 +50,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_SYSTEM_EMAIL = "system_email_addr";
 	public static final String CONFIG_IMAGEMAGIC_PATH = "imagemagick_path";
 	public static final String CONFIG_HEADER_XFRAME = "header.x.frame.options";
+	public static final String CONFIG_EXT_PROCESS_TTL = "external.process.ttl";
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
 	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
@@ -73,4 +74,5 @@ public class OpenmeetingsVariables {
 	public static String APPLICATION_NAME = null;
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
 	public static final long DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
+	public static int EXT_PROCESS_TTL = 20;
 }
