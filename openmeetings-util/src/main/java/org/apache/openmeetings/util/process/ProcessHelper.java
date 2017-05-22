@@ -19,6 +19,7 @@
 package org.apache.openmeetings.util.process;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class ProcessHelper {
 			// 20-minute timeout for command execution
 			// FFMPEG conversion of Recordings may take a real long time until
 			// its finished
-			proc.waitFor(20, TimeUnit.MINUTES);
+			proc.waitFor(EXT_PROCESS_TTL, TimeUnit.MINUTES);
 
 			res.setExitCode(proc.exitValue());
 			res.setOut(IOUtils.toString(proc.getInputStream(), UTF_8));
