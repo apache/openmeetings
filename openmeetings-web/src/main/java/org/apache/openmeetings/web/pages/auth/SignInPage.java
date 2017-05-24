@@ -198,13 +198,11 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	private static void prepareConnection(URLConnection connection) {
-		if (!(connection instanceof HttpsURLConnection)) {
+	private static void prepareConnection(URLConnection _connection) {
+		if (!(_connection instanceof HttpsURLConnection)) {
 			return;
 		}
-		ConfigurationDao configurationDao = getBean(ConfigurationDao.class);
-		Boolean ignoreBadSSL = configurationDao.getConfValue(CONFIG_IGNORE_BAD_SSL, String.class, "no").equals("yes");
-		if (!ignoreBadSSL) {
+		if (!"yes".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_IGNORE_BAD_SSL, String.class, "no"))) {
 			return;
 		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
@@ -220,17 +218,17 @@ public class SignInPage extends BaseInitedPage {
 
 		}};
 		try {
+			HttpsURLConnection connection = (HttpsURLConnection)_connection;
 			SSLContext sslContext = SSLContext.getInstance("SSL");
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-			((HttpsURLConnection) connection).setSSLSocketFactory(sslSocketFactory);
-			((HttpsURLConnection) connection).setHostnameVerifier(new HostnameVerifier() {
+			connection.setSSLSocketFactory(sslSocketFactory);
+			connection.setHostnameVerifier(new HostnameVerifier() {
 
 				@Override
 				public boolean verify(String arg0, SSLSession arg1) {
 					return true;
 				}
-
 			});
 		} catch (Exception e) {
 			log.error("[prepareConnection]", e);
