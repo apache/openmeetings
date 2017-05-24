@@ -105,15 +105,18 @@ public class StrongPasswordValidator implements IValidator<String> {
 
 	private void error(IValidatable<String> pass, String key, Map<String, Object> params) {
 		if (web) {
-			pass.error(new ValidationError().addKey(key).setVariables(params));
+			ValidationError err = new ValidationError().addKey(key);
+			if (params != null) {
+				err.setVariables(params);
+			}
+			pass.error(err);
 		} else {
 			String msg = LabelDao.getString(key, 1L);
 			if (params != null && !params.isEmpty() && !Strings.isEmpty(msg)) {
 				for (Map.Entry<String, Object> e : params.entrySet()) {
-					msg.replace(String.format("${%s}", e.getKey()), "" + e.getValue());
+					msg = msg.replace(String.format("${%s}", e.getKey()), "" + e.getValue());
 				}
 			}
-			System.err.print(msg); // for command line
 			log.warn(msg);
 			pass.error(new ValidationError(msg));
 		}

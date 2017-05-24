@@ -419,18 +419,19 @@ public class Admin {
 			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + cfg.group);
 			System.exit(1);
 		}
-		if (!cmdl.hasOption("password")) {
-			System.out.print("Please enter password for the user '" + cfg.username + "':");
-		} else {
+		if (cmdl.hasOption("password")) {
 			cfg.setPassword(cmdl.getOptionValue("password"));
 		}
 		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
-		IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), new User());
+		IValidator<String> passValidator = new StrongPasswordValidator(false, getMinPasswdLength(cfgDao), new User());
 		Validatable<String> passVal;
 		do {
 			passVal = new Validatable<>(cfg.getPassword());
 			passValidator.validate(passVal);
-			cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
+			if (!passVal.isValid()) {
+				System.out.print("Please enter password for the user '" + cfg.username + "':");
+				cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
+			}
 		} while (!passVal.isValid());
 		Map<String, String> tzMap = ImportHelper.getAllTimeZones(TimeZone.getAvailableIDs());
 		cfg.ical_timeZone = null;
