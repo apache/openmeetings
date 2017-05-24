@@ -61,8 +61,6 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao configurationDao;
 	@Autowired
-	private LabelDao langDao;
-	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private IInvitationManager invitationManager;
@@ -85,7 +83,7 @@ public class AppointmentLogic {
 		i.setRoom(a.getRoom());
 		sendReminder(u, a, i);
 	}
-	
+
 	private void sendReminder(User u, Appointment a, Invitation inv) throws Exception {
 		if (inv == null) {
 			log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
@@ -99,7 +97,7 @@ public class AppointmentLogic {
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
 
-		String smsSubject = generateSMSSubject(langDao.getString(1158L, langId), a);
+		String smsSubject = generateSMSSubject(LabelDao.getString(1158L, langId), a);
 
 		AbstractSubjectEmailTemplate t = AppointmentReminderTemplate.get(u, a, tz);
 		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
@@ -110,7 +108,7 @@ public class AppointmentLogic {
 			invitationDao.update(inv);
 		}
 	}
-	
+
 	/**
 	 * Sending Reminder in Simple mail format 5 minutes before Meeting begins
 	 */
@@ -183,7 +181,7 @@ public class AppointmentLogic {
 
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
 		String subj = configurationDao.getConfValue("sms.subject", String.class, null);
-		return subj == null || subj.length() == 0 ? 
+		return subj == null || subj.length() == 0 ?
 				labelid1158 + " " + ment.getTitle() : subj;
 	}
 
@@ -231,7 +229,7 @@ public class AppointmentLogic {
 
 	public MeetingMember getMeetingMember(Long userId, Long langId, String str) {
 		String[] params = str.split(",");
-		
+
 		try {
 			return meetingMemberDao.get(Long.valueOf(params[0]));
 		} catch (Exception e) {
@@ -246,7 +244,7 @@ public class AppointmentLogic {
 		if (mm.getUser() == null) {
 			mm.setUser(userDao.getContact(params[3], params[1], params[2], langId, params[5], userId));
 		}
-		
+
 		return mm;
 	}
 }

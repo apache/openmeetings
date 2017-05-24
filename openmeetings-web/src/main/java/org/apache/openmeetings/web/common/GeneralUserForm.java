@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -73,6 +73,7 @@ public class GeneralUserForm extends Form<User> {
 	private final PasswordTextField passwordField;
 	private final RequiredTextField<String> email;
 	private final List<GroupUser> grpUsers = new ArrayList<>();
+	private final StrongPasswordValidator passValidator;
 	private final boolean isAdminForm;
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
@@ -82,7 +83,8 @@ public class GeneralUserForm extends Form<User> {
 		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
 		add(passwordField = new PasswordTextField("password", new Model<String>()));
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		passwordField.setResetPassword(false).setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
+		passwordField.setResetPassword(false)
+				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), model.getObject()));
 
 		updateModelObject(getModelObject(), isAdminForm);
 		add(new DropDownChoice<>("salutation"
@@ -176,6 +178,7 @@ public class GeneralUserForm extends Form<User> {
 	public void updateModelObject(User u, boolean isAdminForm) {
 		grpUsers.clear();
 		grpUsers.addAll(u.getGroupUsers());
+		passValidator.setUser(u);
 		if (isAdminForm) {
 			List<Group> grpList = hasGroupAdminLevel(getRights())
 					? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)

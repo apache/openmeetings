@@ -1925,4 +1925,10 @@
 	<entry key="find.user">Найти пользователя</entry>
 	<entry key="captcha.text">Текст капчи</entry>
 	<entry key="bad.captcha.text">Вы ввели неверный текст капчи</entry>
+	<entry key="bad.password.short"><![CDATA['Слабый' пароль: минимальная длина пароля ${0}]]></entry>
+	<entry key="bad.password.lower"><![CDATA['Слабый' пароль: обязателена по крайней мере одна строчная буква]]></entry>
+	<entry key="bad.password.upper"><![CDATA['Слабый' пароль: обязателена по крайней мере одна прописная буква]]></entry>
+	<entry key="bad.password.digit"><![CDATA['Слабый' пароль: обязателена по крайней мере одна цифра]]></entry>
+	<entry key="bad.password.special"><![CDATA['Слабый' пароль: обязателен по крайней мере один символ из '!@#$%^&*][']]></entry>
+	<entry key="bad.password.stop"><![CDATA['Слабый' пароль: пароль не должен содержать частей пользовательского email или логина]]></entry>
 </properties>

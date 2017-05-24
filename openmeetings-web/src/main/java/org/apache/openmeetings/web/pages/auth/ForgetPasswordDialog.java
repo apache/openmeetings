@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -238,7 +239,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static void sendHashByUser(User us, String appLink, UserDao userDao) {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(UUID.randomUUID().toString());
-		userDao.update(us, -1L);
+		us.setResetDate(new Date());
+		userDao.update(us, null);
 		String reset_link = appLink + "?hash=" + us.getResethash();
 
 		String email = us.getAddress().getEmail();

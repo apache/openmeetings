@@ -78,8 +78,6 @@ public class WhiteboardService implements IPendingServiceCallback {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private LabelDao labelDao;
-	@Autowired
 	private ConfigurationDao cfgDao;
 
 	public boolean getNewWhiteboardId(String name) {
@@ -142,7 +140,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 					User u = userDao.get(userId);
 					langId = u == null ? cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : u.getLanguageId();
 				}
-				wbCache.getNewWhiteboardId(roomId, labelDao.getString("615", langId));
+				wbCache.getNewWhiteboardId(roomId, LabelDao.getString("615", langId));
 				log.debug("Init New Room List");
 				whiteboards = wbCache.get(roomId);
 			}

@@ -44,11 +44,11 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 
+ *
  * The Service contains methods to get localized errors
- * 
+ *
  * @author solomax
- * 
+ *
  */
 @WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
@@ -60,8 +60,6 @@ public class ErrorWebService {
 	@Autowired
 	private ErrorDao errorDao;
 	@Autowired
-	private LabelDao labelDao;
-	@Autowired
 	private SessiondataDao sessionDao;
 
 	/**
@@ -69,12 +67,12 @@ public class ErrorWebService {
 	 * Error-id, it needs a languageId to specify in which language you want to
 	 * display/read the error-message. English has the Language-ID one, for
 	 * different one see the list of languages
-	 * 
+	 *
 	 * @param id
 	 *            the error id (negative Value here!)
 	 * @param lang
 	 *            The id of the language
-	 *            
+	 *
 	 * @return - error with the code given
 	 */
 	@WebMethod
@@ -87,8 +85,8 @@ public class ErrorWebService {
 				if (eValues != null) {
 					log.debug("eValues.getLabelId() = " + eValues.getLabelId());
 					log.debug("eValues.getErrorType() = " + eValues.getType());
-					String eValue = labelDao.getString(eValues.getLabelId(), lang);
-					String tValue = labelDao.getString("error.type." + eValues.getType().name(), lang);
+					String eValue = LabelDao.getString(eValues.getLabelId(), lang);
+					String tValue = LabelDao.getString("error.type." + eValues.getType().name(), lang);
 					if (eValue != null) {
 						return new ServiceResult(id, eValue, tValue);
 					}
@@ -101,7 +99,7 @@ public class ErrorWebService {
 		}
 		return null;
 	}
-	
+
 	@WebMethod
 	@POST
 	@Path("/report/")

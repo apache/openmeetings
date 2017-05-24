@@ -140,12 +140,11 @@ public class StartSharingButton extends OmButton {
 	private static String getLabels(int ... ids) {
 		StringBuilder result = new StringBuilder(CDATA_BEGIN);
 		boolean delim = false;
-		LabelDao labelDao = getBean(LabelDao.class);
 		for (int id : ids) {
 			if (delim) {
 				result.append(';');
 			}
-			result.append(labelDao.getString(id, getLanguage()));
+			result.append(LabelDao.getString(id, getLanguage()));
 			delim = true;
 		}
 		result.append(CDATA_END);

@@ -1925,4 +1925,10 @@
 	<entry key="find.user">Find user</entry>
 	<entry key="captcha.text">Captcha text</entry>
 	<entry key="bad.captcha.text">You have entered incorrect captcha text</entry>
+	<entry key="bad.password.short"><![CDATA['Weak' password: minimum password length is ${0}]]></entry>
+	<entry key="bad.password.lower"><![CDATA['Weak' password: at least 1 lower-case letter is required]]></entry>
+	<entry key="bad.password.upper"><![CDATA['Weak' password: at least 1 upper-case letter is required]]></entry>
+	<entry key="bad.password.digit"><![CDATA['Weak' password: at least 1 digit is required]]></entry>
+	<entry key="bad.password.special"><![CDATA['Weak' password: at least 1 special symbol '!@#$%^&*][' is required]]></entry>
+	<entry key="bad.password.stop"><![CDATA['Weak' password: it shouldn't contain part of the user's email address or username]]></entry>
 </properties>

@@ -114,6 +114,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.UserContact;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -348,8 +349,6 @@ public class BackupImport {
 				if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
 					u.setLogin(UUID.randomUUID().toString());
 				}
-				//FIXME: OPENMEETINGS-750
-				//Convert old Backups with OmTimeZone to new schema
 
 				String tz = u.getTimeZoneId();
 				if (tz == null) {
@@ -374,6 +373,9 @@ public class BackupImport {
 				}
 				if (!Strings.isEmpty(u.getExternalType())) {
 					u.setType(User.Type.external);
+				}
+				if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
+					u.setActivatehash(null);
 				}
 				userDao.update(u, Long.valueOf(-1));
 				userMap.put(userId, u.getId());

@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,6 +80,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getUserByLogin", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.login = :login AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.address.email = :email AND ((:domainId = 0 AND u.domainId IS NULL) OR (:domainId > 0 AND u.domainId = :domainId))"),
 	@NamedQuery(name = "getUserByHash",  query = "SELECT u FROM User u WHERE u.deleted = false AND u.type = :type AND u.resethash = :resethash"),
+	@NamedQuery(name = "getUserByExpiredHash",  query = "SELECT u FROM User u WHERE u.resetDate < :date"),
 	@NamedQuery(name = "getContactByEmailAndUser", query = "SELECT u FROM User u WHERE u.deleted = false AND u.address.email = :email AND u.type = :type AND u.ownerId = :ownerId"),
 	@NamedQuery(name = "selectMaxFromUsersWithSearch", query = "select count(c.id) from User c "
 			+ "where c.deleted = false " + "AND ("
@@ -193,10 +192,6 @@ public class User implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private String lastname;
 
-	@Column(name = "lasttrans")
-	@Element(data = true, required = false)
-	private Long lasttrans;
-
 	@Column(name = "login")
 	@Element(data = true, required = false)
 	private String login;
@@ -237,6 +232,10 @@ public class User implements IDataProviderEntity {
 	@Column(name = "resethash")
 	@Element(data = true, required = false)
 	private String resethash;
+
+	@Column(name = "resetdate")
+	@Element(data = true, required = false)
+	private Date resetDate;
 
 	@Column(name = "activatehash")
 	@Element(data = true, required = false)
@@ -372,14 +371,6 @@ public class User implements IDataProviderEntity {
 		this.lastname = lastname;
 	}
 
-	public Long getLasttrans() {
-		return lasttrans;
-	}
-
-	public void setLasttrans(Long lasttrans) {
-		this.lasttrans = lasttrans;
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -389,15 +380,6 @@ public class User implements IDataProviderEntity {
 	}
 
 	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
-		updatePassword(configDao, pass, false);
-	}
-
-	public void updatePassword(ConfigurationDao configDao, String pass, boolean empty) throws NoSuchAlgorithmException {
-		if (!empty) {
-			if (invalidPassword(pass, configDao)) {
-				throw new RuntimeException("Password of invalid length is provided");
-			}
-		}
 		if (configDao.isSipEnabled()) {
 			AsteriskSipUser u = getSipUser();
 			if (u == null) {
@@ -496,6 +478,14 @@ public class User implements IDataProviderEntity {
 
 	public void setResethash(String resethash) {
 		this.resethash = resethash;
+	}
+
+	public Date getResetDate() {
+		return resetDate;
+	}
+
+	public void setResetDate(Date resetDate) {
+		this.resetDate = resetDate;
 	}
 
 	public String getActivatehash() {

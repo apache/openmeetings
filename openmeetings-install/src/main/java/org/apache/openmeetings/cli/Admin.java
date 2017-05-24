@@ -21,7 +21,6 @@ package org.apache.openmeetings.cli;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.db.util.UserHelper.invalidPassword;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 
@@ -50,10 +49,12 @@ import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.core.ldap.LdapLoginManagement;
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -65,6 +66,8 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.Validatable;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -416,16 +419,19 @@ public class Admin {
 			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + cfg.group);
 			System.exit(1);
 		}
-		cfg.setPassword(cmdl.getOptionValue("password"));
-		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
-		if (invalidPassword(cfg.getPassword(), cfgDao)) {
+		if (!cmdl.hasOption("password")) {
 			System.out.print("Please enter password for the user '" + cfg.username + "':");
-			cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
-			if (invalidPassword(cfg.getPassword(), cfgDao)) {
-				System.out.println("Password was not provided, or too short, should be at least " + getMinPasswdLength(cfgDao) + " character long.");
-				System.exit(1);
-			}
+		} else {
+			cfg.setPassword(cmdl.getOptionValue("password"));
 		}
+		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
+		IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), new User());
+		Validatable<String> passVal;
+		do {
+			passVal = new Validatable<>(cfg.getPassword());
+			passValidator.validate(passVal);
+			cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
+		} while (!passVal.isValid());
 		Map<String, String> tzMap = ImportHelper.getAllTimeZones(TimeZone.getAvailableIDs());
 		cfg.ical_timeZone = null;
 		if (cmdl.hasOption("tz")) {

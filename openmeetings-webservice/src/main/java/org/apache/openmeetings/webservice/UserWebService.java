@@ -43,6 +43,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -59,12 +60,17 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.webservice.cluster.UserService;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.validation.IValidationError;
+import org.apache.wicket.validation.IValidator;
+import org.apache.wicket.validation.Validatable;
+import org.apache.wicket.validation.ValidationError;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,6 +176,16 @@ public class UserWebService implements UserService {
 				}
 				if (user.getLanguageId() == null) {
 					user.setLanguageId(1L);
+				}
+				IValidator<String> passValidator = new StrongPasswordValidator(true, UserHelper.getMinPasswdLength(cfgDao), user.get(userDao));
+				Validatable<String> passVal = new Validatable<>(user.getPassword());
+				passValidator.validate(passVal);
+				if (!passVal.isValid()) {
+					StringBuilder sb = new StringBuilder();
+					for (IValidationError err : passVal.getErrors()) {
+						sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
+					}
+					throw new ServiceException(sb.toString());
 				}
 				Long userId = userManagement.registerUser(user.getLogin(), user.getPassword(),
 						user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),

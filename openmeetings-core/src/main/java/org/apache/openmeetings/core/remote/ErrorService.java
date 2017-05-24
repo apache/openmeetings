@@ -37,8 +37,6 @@ public class ErrorService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ErrorService.class, webAppRootKey);
 
 	@Autowired
-	private LabelDao labelDao;
-	@Autowired
 	private ErrorDao errorDao;
 
 	/**
@@ -56,7 +54,7 @@ public class ErrorService {
 			ErrorValue eValues = errorDao.get(-1 * errorid);
 			if (eValues != null) {
 				log.debug("eValues.getFieldvalues_id() = " + eValues.getLabelId());
-				String eValue = labelDao.getString(eValues.getLabelId(), langId);
+				String eValue = LabelDao.getString(eValues.getLabelId(), langId);
 				if (eValue != null) {
 					return new ServiceResult(errorid, eValue, eValues.getType().name());
 				}
