@@ -48,7 +48,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class ResetPasswordDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private DialogButton resetBtn = new DialogButton("reset", Application.getString(327));
-	private Form<String> form;
+	private Form<String> form = new ResetForm("form");
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private PasswordTextField password;
 	private final User user;
@@ -62,46 +62,7 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(form = new Form<String>("form") {
-			private static final long serialVersionUID = 1L;
-			private TextField<String> login;
-			private PasswordTextField confirmPassword;
-			{
-				add(feedback.setOutputMarkupId(true));
-				add(login = new TextField<>("login", Model.of(user.getLogin())));
-				login.setOutputMarkupId(true);
-				add(password = new PasswordTextField("password", new Model<String>()));
-				password.setLabel(Model.of(getString("328"))).setOutputMarkupId(true);
-				ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-				password.setRequired(false).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), user));
-				add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
-				confirmPassword.setLabel(Model.of(getString("329"))).setOutputMarkupId(true);
-
-				add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
-						ResetPasswordDialog.this.onSubmit(target);
-					}
-
-					@Override
-					protected void onError(AjaxRequestTarget target) {
-						ResetPasswordDialog.this.onError(target);
-					}
-				});
-			}
-
-			@Override
-			protected void onValidate() {
-				String pass = password.getConvertedInput();
-				if (pass != null && !pass.isEmpty() && !pass.equals(confirmPassword.getConvertedInput())) {
-					error(getString("232"));
-				}
-				super.onValidate();
-			}
-
-		});
+		add(form);
 		confirmReset = new NonClosableMessageDialog("confirmReset", getString("325"), getString("332")) {
 			private static final long serialVersionUID = 1L;
 
@@ -154,6 +115,53 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			confirmReset.open(handler);
 		} else {
 			setResponsePage(Application.get().getSignInPageClass());
+		}
+	}
+
+	private class ResetForm extends Form<String> {
+		private static final long serialVersionUID = 1L;
+		private TextField<String> login;
+		private PasswordTextField confirmPassword;
+
+		private ResetForm(String id) {
+			super(id);
+		}
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			add(feedback.setOutputMarkupId(true));
+			add(login = new TextField<>("login", Model.of(user.getLogin())));
+			login.setOutputMarkupId(true);
+			add(password = new PasswordTextField("password", new Model<String>()));
+			password.setLabel(Model.of(getString("328"))).setOutputMarkupId(true);
+			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+			password.setRequired(false).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), user));
+			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
+			confirmPassword.setLabel(Model.of(getString("329"))).setOutputMarkupId(true);
+
+			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					ResetPasswordDialog.this.onSubmit(target);
+				}
+
+				@Override
+				protected void onError(AjaxRequestTarget target) {
+					ResetPasswordDialog.this.onError(target);
+				}
+			});
+		}
+
+		@Override
+		protected void onValidate() {
+			String pass = password.getConvertedInput();
+			if (pass != null && !pass.isEmpty() && !pass.equals(confirmPassword.getConvertedInput())) {
+				error(getString("232"));
+			}
+			super.onValidate();
 		}
 	}
 }
