@@ -53,6 +53,11 @@ public class Captcha extends Panel {
 		super(id);
 		setOutputMarkupId(true);
 		add(captcha.setOutputMarkupId(true));
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(captchaText.setLabel(Model.of(getString("captcha.text"))).add(new IValidator<String>() {
 			private static final long serialVersionUID = 1L;
 
@@ -63,11 +68,6 @@ public class Captcha extends Panel {
 				}
 			}
 		}));
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		add(new AjaxLink<String>("refresh") {
 			private static final long serialVersionUID = 1L;
 

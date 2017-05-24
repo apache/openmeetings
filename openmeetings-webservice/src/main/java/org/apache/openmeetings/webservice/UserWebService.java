@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
+import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
@@ -60,7 +61,6 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.webservice.cluster.UserService;
@@ -177,7 +177,7 @@ public class UserWebService implements UserService {
 				if (user.getLanguageId() == null) {
 					user.setLanguageId(1L);
 				}
-				IValidator<String> passValidator = new StrongPasswordValidator(true, UserHelper.getMinPasswdLength(cfgDao), user.get(userDao));
+				IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), user.get(userDao));
 				Validatable<String> passVal = new Validatable<>(user.getPassword());
 				passValidator.validate(passVal);
 				if (!passVal.isValid()) {
