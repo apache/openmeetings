@@ -511,7 +511,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @param hash
 	 * @return
 	 */
-	public User getUserByActivationHash(String hash) {
+	public User getByActivationHash(String hash) {
 		TypedQuery<User> query = em.createQuery("SELECT u FROM User as u WHERE u.activatehash = :activatehash"
 				+ " AND u.deleted = false", User.class);
 		query.setParameter("activatehash", hash);
@@ -674,7 +674,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		u.setSendSMS(sendSMS);
 		u.setRights(rights);
 		u.setLastlogin(new Date());
-		u.setLasttrans(new Long(0));
 		u.setSalutation(Salutation.mr);
 		u.setActivatehash(hash);
 		u.setTimeZoneId(timezone.getID());
@@ -704,5 +703,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 
 		return update(u, null);
+	}
+
+	public List<User> getByExpiredHash(long ttl) {
+		return em.createNamedQuery("getUserByExpiredHash", User.class)
+				.setParameter("date", new Date(System.currentTimeMillis() - ttl))
+				.getResultList();
 	}
 }

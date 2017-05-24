@@ -74,7 +74,7 @@ public class OpenmeetingsVariables {
 	public static String webAppRootPath = null;
 	public static String configKeyCryptClassName = null;
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
-	public static final int USER_PASSWORD_MINIMUM_LENGTH = 4;
+	public static final int USER_PASSWORD_MINIMUM_LENGTH = 8;
 	public static Boolean whiteboardDrawStatus = null;
 	public static String wicketApplicationName = null;
 	public static String APPLICATION_NAME = null;

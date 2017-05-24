@@ -82,8 +82,6 @@ public class MobileService {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private LabelDao labelDao;
-	@Autowired
 	private ChatDao chatDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
@@ -303,8 +301,8 @@ public class MobileService {
 		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<>();
-		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, labelDao.getString(1306L, u.getLanguageId())));
-		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.restricted, labelDao.getString(1307L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, LabelDao.getString(1306L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.restricted, LabelDao.getString(1307L, u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);

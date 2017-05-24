@@ -32,7 +32,6 @@ import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.basic.ErrorValue.Type;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -41,9 +40,6 @@ public class ErrorDao {
 
 	@PersistenceContext
 	private EntityManager em;
-
-	@Autowired
-	private LabelDao labelDao;
 
 	public Long add(Long id, Type type, Long labelId) {
 		try {
@@ -85,6 +81,6 @@ public class ErrorDao {
 		if (ev == null) {
 			return null;
 		}
-		return labelDao.getString(ev.getLabelId(), langId);
+		return LabelDao.getString(ev.getLabelId(), langId);
 	}
 }

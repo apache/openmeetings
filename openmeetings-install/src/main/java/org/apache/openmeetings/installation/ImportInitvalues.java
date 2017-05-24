@@ -123,8 +123,6 @@ public class ImportInitvalues {
 	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private LabelDao labelDao;
 
 	private int progress = 0;
 
@@ -330,7 +328,7 @@ public class ImportInitvalues {
 				"Number of chars needed in a user login");
 
 		cfgDao.add(CONFIG_PASS_MIN_LENGTH_KEY, "" + USER_PASSWORD_MINIMUM_LENGTH, null,
-				"Number of chars needed in a user login");
+				"Number of chars needed in a user password");
 
 		cfgDao.add("calendar.conference.rooms.default.size", "50", null,
 				"Default number of participants conference room created via calendar");
@@ -415,22 +413,22 @@ public class ImportInitvalues {
 
 	public void loadDefaultRooms(boolean createRooms, long langId) {
 		if (createRooms) {
-			createRoom(labelDao.getString("install.room.public.interview", langId), Type.interview, 16L, true, null);
-			createRoom(labelDao.getString("install.room.public.conference", langId), Type.conference, 32L, true, null);
-			Room r = createRoom(labelDao.getString("install.room.public.video.only", langId), Type.conference, 32L, true, null);
+			createRoom(LabelDao.getString("install.room.public.interview", langId), Type.interview, 16L, true, null);
+			createRoom(LabelDao.getString("install.room.public.conference", langId), Type.conference, 32L, true, null);
+			Room r = createRoom(LabelDao.getString("install.room.public.video.only", langId), Type.conference, 32L, true, null);
 			r.hide(RoomElement.Whiteboard);
 			roomDao.update(r, null);
-			createRoom(labelDao.getString("install.room.public.video.wb", langId), Type.conference, 32L, true, null);
-			createRoom(labelDao.getString("install.room.public.restricted", langId), Type.restricted, 100L, true, null);
-			r = createRoom(labelDao.getString("install.room.restricted.micro", langId), Type.restricted, 100L, true, null);
+			createRoom(LabelDao.getString("install.room.public.video.wb", langId), Type.conference, 32L, true, null);
+			createRoom(LabelDao.getString("install.room.public.restricted", langId), Type.restricted, 100L, true, null);
+			r = createRoom(LabelDao.getString("install.room.restricted.micro", langId), Type.restricted, 100L, true, null);
 			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
-			r = createRoom(labelDao.getString("install.room.conference.micro", langId), Type.conference, 32L, true, null);
+			r = createRoom(LabelDao.getString("install.room.conference.micro", langId), Type.conference, 32L, true, null);
 			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
-			createRoom(labelDao.getString("install.room.private.conference", langId), Type.conference, 32L, false, 1L);
+			createRoom(LabelDao.getString("install.room.private.conference", langId), Type.conference, 32L, false, 1L);
 		}
 	}
 

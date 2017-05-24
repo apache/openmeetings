@@ -20,11 +20,11 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -52,11 +52,16 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private PasswordTextField password;
 	private final User user;
-	final MessageDialog confirmReset;
+	MessageDialog confirmReset;
 
 	public ResetPasswordDialog(String id, final User user) {
 		super(id, Application.getString(325));
 		this.user = user;
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		add(form = new Form<String>("form") {
 			private static final long serialVersionUID = 1L;
 			private TextField<String> login;
@@ -66,14 +71,11 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 				add(login = new TextField<>("login", Model.of(user.getLogin())));
 				login.setOutputMarkupId(true);
 				add(password = new PasswordTextField("password", new Model<String>()));
-				password.setOutputMarkupId(true);
-				password.setLabel(Model.of(Application.getString(328)));
+				password.setLabel(Model.of(getString("328"))).setOutputMarkupId(true);
 				ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-				password.setRequired(false).add(minimumLength(getMinPasswdLength(cfgDao)));
+				password.setRequired(false).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), user));
 				add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
-				confirmPassword.setOutputMarkupId(true);
-				confirmPassword.setLabel(Model.of(Application.getString(329)));
-				confirmPassword.setRequired(true).add(minimumLength(getMinPasswdLength(cfgDao)));
+				confirmPassword.setLabel(Model.of(getString("329"))).setOutputMarkupId(true);
 
 				add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 					private static final long serialVersionUID = 1L;
@@ -94,13 +96,13 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			protected void onValidate() {
 				String pass = password.getConvertedInput();
 				if (pass != null && !pass.isEmpty() && !pass.equals(confirmPassword.getConvertedInput())) {
-					error(Application.getString(232));
+					error(getString("232"));
 				}
 				super.onValidate();
 			}
 
 		});
-		confirmReset = new NonClosableMessageDialog("confirmReset", Application.getString(325), Application.getString(332)) {
+		confirmReset = new NonClosableMessageDialog("confirmReset", getString("325"), getString("332")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

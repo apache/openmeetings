@@ -76,11 +76,9 @@
 				</tr>
 				<tr>
 					<td> user.pass.minimum.length </td>
-					<td> 4 </td>
-					<td> minimum chars required for the password to create a
-						user
-					</td>
-					<td> 1.9.x </td>
+					<td> 8 </td>
+					<td> minimum chars required for the password to create a user </td>
+					<td> 1.9.x <b>default value changed in 3.3.0</b> </td>
 				</tr>
 				<tr>
 					<td> number.minutes.reminder.send </td>
@@ -93,9 +91,7 @@
 				<tr>
 					<td> max_upload_size </td>
 					<td> 1073741824 </td>
-					<td> Maximum size of upload file (bytes) 1073741824 bytes
-						= 1GB
-					</td>
+					<td> Maximum size of upload file (bytes) 1073741824 bytes = 1GB </td>
 					<td> 1.8.x </td>
 				</tr>
 				<tr>

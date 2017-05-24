@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -32,8 +33,10 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -44,6 +47,7 @@ public class CleanupJob extends AbstractJob {
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
 	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour
+	private long resetHashTtl = 24 * 60 * 60 * 1000L; // 1 day
 
 	@Autowired
 	private SessiondataDao sessionDao;
@@ -51,29 +55,23 @@ public class CleanupJob extends AbstractJob {
 	private SessionManager sessionManager;
 	@Autowired
 	private WhiteboardCache wbManager;
-
-	public long getSessionTimeout() {
-		return sessionTimeout;
-	}
+	@Autowired
+	private UserDao userDao;
 
 	public void setSessionTimeout(long sessionTimeout) {
 		this.sessionTimeout = sessionTimeout;
-	}
-
-	public long getTestSetupTimeout() {
-		return testSetupTimeout;
 	}
 
 	public void setTestSetupTimeout(long testSetupTimeout) {
 		this.testSetupTimeout = testSetupTimeout;
 	}
 
-	public long getRoomFilesTtl() {
-		return roomFilesTtl;
-	}
-
 	public void setRoomFilesTtl(long roomFilesTtl) {
 		this.roomFilesTtl = roomFilesTtl;
+	}
+
+	public void setResetHashTtl(long resetHashTtl) {
+		this.resetHashTtl = resetHashTtl;
 	}
 
 	public void cleanTestSetup() {
@@ -175,5 +173,20 @@ public class CleanupJob extends AbstractJob {
 				recordingDao.delete(rec);
 			}
 		});
+	}
+
+	public void cleanExpiredResetHash() {
+		log.debug("CleanupJob.cleanExpiredResetHash");
+		if (!InitializationContainer.initComplete) {
+			return;
+		}
+		List<User> users = userDao.getByExpiredHash(resetHashTtl);
+		log.debug("... {} expired hashes were found", users.size());
+		for (User u : users) {
+			u.setResetDate(null);
+			u.setResethash(null);
+			userDao.update(u, null);
+		}
+		log.debug("... DONE CleanupJob.cleanExpiredResetHash");
 	}
 }

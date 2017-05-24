@@ -33,8 +33,4 @@ public class UserHelper {
 	public static int getMinPasswdLength(ConfigurationDao cfgDao) {
 		return cfgDao.getConfValue(CONFIG_PASS_MIN_LENGTH_KEY, Integer.class, "" + USER_PASSWORD_MINIMUM_LENGTH);
 	}
-
-	public static boolean invalidPassword(String pass, ConfigurationDao cfgDao) {
-		return (pass == null || pass.length() < getMinPasswdLength(cfgDao));
-	}
 }

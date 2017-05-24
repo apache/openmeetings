@@ -20,30 +20,28 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
 
-import java.util.Date;
-
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 public class ActivatePage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
 	public static final String ACTIVATION_PARAM = "u";
-	
+
 	public ActivatePage(PageParameters pp) {
-		String userHash = pp.get(ACTIVATION_PARAM).toString();
-		if (userHash != null) {
-			User user = getBean(UserDao.class).getUserByActivationHash(userHash);
+		StringValue userHash = pp.get(ACTIVATION_PARAM);
+		if (!userHash.isEmpty()) {
+			User user = getBean(UserDao.class).getByActivationHash(userHash.toString());
 
 			if (user != null && !AuthLevelUtil.hasLoginLevel(user.getRights())) {
 				// activate
 				user.getRights().add(Right.Login);
-				user.setUpdated(new Date());
-
-				getBean(UserDao.class).update(user, null);
+				user.setActivatehash(null);
+				getBean(UserDao.class).update(user, user.getId());
 			}
 		}
 		setResponsePage(Application.get().getSignInPageClass());

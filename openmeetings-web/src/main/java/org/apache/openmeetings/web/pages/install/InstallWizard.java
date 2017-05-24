@@ -41,7 +41,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.util.ConnectionProperties;
@@ -424,7 +426,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super.onInitialize();
 			add(new RequiredTextField<String>("username").setLabel(Model.of(getString("install.wizard.params.step1.username"))).add(minimumLength(USER_LOGIN_MINIMUM_LENGTH)));
 			add(new PasswordTextField("password")
-					.setResetPassword(false).setLabel(Model.of(getString("install.wizard.params.step1.password"))).add(minimumLength(USER_PASSWORD_MINIMUM_LENGTH)));
+					.setResetPassword(false).setLabel(Model.of(getString("install.wizard.params.step1.password")))
+					.add(new StrongPasswordValidator(USER_PASSWORD_MINIMUM_LENGTH, new User())));
 			add(new RequiredTextField<String>("email").setLabel(Model.of(getString("install.wizard.params.step1.email"))).add(RfcCompliantEmailAddressValidator.getInstance()));
 			add(new RequiredTextField<String>("group").setLabel(Model.of(getString("install.wizard.params.step1.group"))));
 		}

@@ -30,13 +30,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Category(SeleniumTests.class)
 public abstract class AbstractTestDefaults extends AbstractSpringTest {
-	@Autowired
-	private LabelDao labelDao;
-
 	public WebDriver driver = null;
 
 	private String BASE_URL = "http://localhost:5080/openmeetings";
@@ -81,7 +77,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	public boolean doTearDownAfterTest = false;
 
 	public String getString(long id) {
-		return labelDao.getString(id, getLanguageId());
+		return LabelDao.getString(id, getLanguageId());
 	}
 
 	/**

@@ -102,11 +102,11 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		labelCache.put(l, new ArrayList<StringLabel>());
 	}
 
-	public String getString(long fieldValuesId, long langId) {
+	public static String getString(long fieldValuesId, long langId) {
 		return ensureApplication(langId).getOmString(fieldValuesId, langId);
 	}
 
-	public String getString(String key, long langId) {
+	public static String getString(String key, long langId) {
 		return ensureApplication(langId).getOmString(key, langId);
 	}
 
