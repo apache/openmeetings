@@ -35,6 +35,7 @@ import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.test.selenium.HeavyTests;
 import org.apache.openmeetings.util.OmException;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserGroup extends AbstractJUnitDefaults {
@@ -62,7 +63,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		Long groupId = u.getGroupUsers().get(0).getGroup().getId();
 		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
 		assertTrue("Default Group should contain at least 1 user: " + ul.size(), ul.size() > 0);
-		
+
 		GroupUser ou = groupUserDao.getByGroupAndUser(groupId, u.getId());
 		assertNotNull("Unable to find [group, user] pair - [" + groupId + "," + u.getId() + "]", ou);
 	}
@@ -73,7 +74,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		g.setName(GROUP_NAME);
 		Long groupId = groupDao.update(g, null).getId(); //inserted by not checked
 		assertNotNull("New Group have valid id", groupId);
-		
+
 		List<GroupUser> ul = groupUserDao.get(groupId, 0, 9999);
 		assertTrue("New Group should contain NO users: " + ul.size(), ul.size() == 0);
 	}
@@ -111,7 +112,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 	}
 
 	@Test
-	@HeavyTests
+	@Category(HeavyTests.class)
 	public void add10kUsers() throws Exception {
 		List<Group> groups = groupDao.get(GROUP_NAME, 0, 1, null);
 		Group g = null;

@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.apache.openmeetings.util.StoredFile;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
+@Category({NonJenkinsTests.class})
 public class TestStoredFile {
-
 	@Test
 	public void testAudio() {
 		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"}; //TODO enlarge
