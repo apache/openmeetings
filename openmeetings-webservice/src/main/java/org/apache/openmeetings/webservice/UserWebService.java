@@ -116,7 +116,7 @@ public class UserWebService implements UserService {
 			}
 
 			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
-			log.debug("Login user SID : " + sd.getSessionId());
+			log.debug("Login user: {}", u.getId());
 			return new ServiceResult(u.getId(), sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
 			return new ServiceResult(oe.getCode() == null ? -1 : oe.getCode(), oe.getMessage(), Type.ERROR);
