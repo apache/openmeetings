@@ -102,7 +102,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			}
 		};
 		add(confirmRegistration);
-		reset();
+		reset(null);
 	}
 
 	public void setSignInDialog(SignInDialog s) {
@@ -123,7 +123,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		return Arrays.asList(registerBtn, cancelBtn);
 	}
 
-	public void reset() {
+	public void reset(IPartialPageRequestHandler handler) {
 		firstName = null;
 		lastName = null;
 		login = null;
@@ -132,7 +132,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		email = null;
 		lang = WebSession.get().getLanguageByBrowserLocale();
 		country = WebSession.get().getBrowserLocale().getCountry();
-		captcha.refresh();
+		captcha.refresh(handler);
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			messageCode = 1591;
 		}
 		confirmRegistration.setModelObject(getString("" + messageCode));
-		reset();
+		reset(handler);
 		handler.add(form);
 	}
 
