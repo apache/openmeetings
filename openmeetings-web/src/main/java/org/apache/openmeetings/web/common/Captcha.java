@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.image.Image;
@@ -67,7 +68,7 @@ public class Captcha extends Panel {
 					validatable.error(new ValidationError(getString("bad.captcha.text")));
 				}
 			}
-		}));
+		}).setOutputMarkupId(true));
 		add(new AjaxLink<String>("refresh") {
 			private static final long serialVersionUID = 1L;
 
@@ -98,9 +99,12 @@ public class Captcha extends Panel {
 		return new String(b);
 	}
 
-	public Image refresh() {
+	public Image refresh(IPartialPageRequestHandler handler) {
 		captchaImageResource.invalidate();
 		captchaText.setModelObject("");
+		if (handler != null) {
+			handler.add(captchaText, captcha);
+		}
 		return captcha;
 	}
 }

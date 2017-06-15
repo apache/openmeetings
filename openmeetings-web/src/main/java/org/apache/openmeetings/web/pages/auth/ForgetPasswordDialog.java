@@ -47,9 +47,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -70,11 +68,12 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString(122));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
-	private RequiredTextField<String> nameField;
+	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
+	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
+	private final Label label = new Label("label", Model.of(Application.getString(315)));
+	private final Captcha captcha = new Captcha("captcha");
 	private Form<String> form;
 	private SignInDialog s;
-	private String name;
-	private Type type = Type.email;
 	final MessageDialog confirmDialog;
 
 	enum Type {
@@ -86,16 +85,12 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		super(id, Application.getString(312));
 		add(form = new Form<String>("form") {
 			private static final long serialVersionUID = 1L;
-			private IModel<String> lblModel = Model.of(Application.getString(315));
-			private Label label = new Label("label", lblModel);
 
 			{
 				add(feedback.setOutputMarkupId(true));
 				add(label.setOutputMarkupId(true));
-				add(nameField = new RequiredTextField<>("name", new PropertyModel<String>(ForgetPasswordDialog.this, "name")));
-				nameField.setLabel(Model.of(Application.getString(type == Type.email ? 315 : 316)));
-				add(new Captcha("captcha"));
-				RadioGroup<Type> rg = new RadioGroup<>("type", new PropertyModel<Type>(ForgetPasswordDialog.this, "type"));
+				add(name.setOutputMarkupId(true));
+				add(captcha);
 				add(rg.add(new Radio<>("email", Model.of(Type.email)).setOutputMarkupId(true))
 						.add(new Radio<>("login", Model.of(Type.login)).setOutputMarkupId(true))
 						.setOutputMarkupId(true));
@@ -104,9 +99,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 					@Override
 					protected void onUpdate(AjaxRequestTarget target) {
-						lblModel.setObject(Application.getString(type == Type.email ? 315 : 316));
-						nameField.setLabel(Model.of(Application.getString(type == Type.email ? 315 : 316)));
-						target.add(label);
+						updateLabel(target);
 					}
 				});
 				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
@@ -122,13 +115,15 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 						ForgetPasswordDialog.this.onError(target);
 					}
 				});
+				updateLabel(null);
 			}
 
 			@Override
 			protected void onValidate() {
-				String n = nameField.getConvertedInput();
+				String n = name.getConvertedInput();
 				if (n != null) {
 					IValidatable<String> val = new Validatable<>(n);
+					Type type = rg.getModelObject();
 					if (type == Type.email) {
 						emailValidator.validate(val);
 						if (!val.isValid()) {
@@ -140,12 +135,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 					}
 				}
 			}
-
-			@Override
-			protected void onDetach() {
-				lblModel.detach();
-				super.onDetach();
-			}
 		});
 		confirmDialog = new NonClosableMessageDialog("confirmDialog", Application.getString(312), Application.getString(321)){
 			private static final long serialVersionUID = 1L;
@@ -156,6 +145,25 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			}
 		};
 		add(confirmDialog);
+	}
+
+	private void updateLabel(IPartialPageRequestHandler handler) {
+		String lbl = Application.getString(rg.getModelObject() == Type.email ? 315 : 316);
+		name.setLabel(Model.of(lbl));
+		label.setDefaultModelObject(lbl);
+		if (handler != null) {
+			handler.add(name, label);
+		}
+	}
+
+	@Override
+	protected void onOpen(IPartialPageRequestHandler handler) {
+		super.onOpen(handler);
+		name.setModelObject(null);
+		rg.setModelObject(Type.email);
+		captcha.refresh(handler);
+		handler.add(rg);
+		updateLabel(handler);
 	}
 
 	@Override
@@ -198,7 +206,9 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		resetUser(type == Type.email ? name : "", type == Type.login ? name : ""
+		String nm = name.getModelObject();
+		Type type = rg.getModelObject();
+		resetUser(type == Type.email ? nm : "", type == Type.login ? nm : ""
 			, getBean(ConfigurationDao.class).getBaseUrl() + getRequestCycle().urlFor(ResetPage.class, new PageParameters()).toString().substring(2));
 	}
 
