@@ -20,19 +20,29 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.io.File;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.openmeetings.db.dao.user.GroupUserDao;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
 import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
 
 public class GroupLogoResourceReference extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = getLogger(GroupLogoResourceReference.class, webAppRootKey);
 
 	public GroupLogoResourceReference() {
 		super(GroupLogoResourceReference.class, "grouplogo");
@@ -50,15 +60,27 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attrs) {
-				PageParameters params = attrs.getParameters();
-				StringValue _id = params.get("id");
 				Long id = null;
-				try {
-					id = _id.toOptionalLong();
-				} catch (Exception e) {
-					//no-op expected
+				if (WebSession.get().isSignedIn()) {
+					PageParameters params = attrs.getParameters();
+					StringValue _id = params.get("id");
+					try {
+						id = _id.toOptionalLong();
+					} catch (Exception e) {
+						//no-op expected
+					}
+					if (null == getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId())) {
+						id = null;
+					}
 				}
-				return createResourceResponse(attrs, getGroupLogo(id, true).toPath());
+				if (id != null) {
+					return createResourceResponse(attrs, getGroupLogo(id, true).toPath());
+				} else {
+					log.debug("Not authorized");
+					ResourceResponse rr = new ResourceResponse();
+					rr.setError(HttpServletResponse.SC_FORBIDDEN);
+					return rr;
+				}
 			}
 		};
 	}
