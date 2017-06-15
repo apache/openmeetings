@@ -83,6 +83,7 @@ public class InvitationDao {
 					if (markUsed) {
 						i.setUsed(true);
 						update(i);
+						em.flush(); // flash is required to eliminate 'detach' effect
 					}
 					break;
 				case Period:

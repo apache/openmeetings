@@ -26,9 +26,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ByteArrayResource;
@@ -45,11 +48,11 @@ public class ProfileImageResourceReference extends ResourceReference {
 	public ProfileImageResourceReference() {
 		super(ProfileImageResourceReference.class, "profile");
 	}
-	
+
 	public static String getUrl(RequestCycle rc, Long userId) {
 		return getUrl(rc, getBean(UserDao.class).get(userId));
 	}
-	
+
 	public static String getUrl(RequestCycle rc, User u) {
 		String uri = u.getPictureuri();
 		if (!isAbsolute(uri)) {
@@ -69,7 +72,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 		}
 		return absolute;
 	}
-	
+
 	@Override
 	public IResource getResource() {
 		return new ByteArrayResource("image/jpeg") {
@@ -79,14 +82,21 @@ public class ProfileImageResourceReference extends ResourceReference {
 
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attributes) {
-				PageParameters params = attributes.getParameters();
-				userId = params.get("id").toOptionalLong();
-				uri = getBean(UserDao.class).get(userId).getPictureuri();
-				ResourceResponse rr = super.newResourceResponse(attributes);
-				rr.disableCaching();
+				ResourceResponse rr;
+				if (WebSession.get().isSignedIn()) {
+					PageParameters params = attributes.getParameters();
+					userId = params.get("id").toOptionalLong();
+					uri = getBean(UserDao.class).get(userId).getPictureuri();
+					rr = super.newResourceResponse(attributes);
+					rr.disableCaching();
+				} else {
+					log.debug("Not authorized");
+					rr = new ResourceResponse();
+					rr.setError(HttpServletResponse.SC_FORBIDDEN);
+				}
 				return rr;
 			}
-			
+
 			@Override
 			protected byte[] getData(Attributes attributes) {
 				if (!isAbsolute(uri)) {
