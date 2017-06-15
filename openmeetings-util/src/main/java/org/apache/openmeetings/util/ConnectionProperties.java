@@ -77,10 +77,9 @@ public class ConnectionProperties implements Serializable {
 	public void setDbType(DbType dbType) {
 		this.dbType = dbType;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "ConnectionProperties [type=" + dbType + ", driver=" + driver + ", url=" + url
-				+ ", login=" + login + ", password=" + password + "]";
+		return "ConnectionProperties [type=" + dbType + ", driver=" + driver + ", url=" + url + ", login=" + login + "]";
 	}
 }

@@ -36,9 +36,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
+ *
  * @author swagner This Class handles all session management
- * 
+ *
  */
 @Transactional
 public class SessiondataDao {
@@ -62,7 +62,7 @@ public class SessiondataDao {
 
 	/**
 	 * creates a new session-object in the database
-	 * 
+	 *
 	 * @param userId the id of the user to be set on this session
 	 * @param languageId language id to be set on this session
 	 * @return newly create {@link Sessiondata}
@@ -73,7 +73,7 @@ public class SessiondataDao {
 
 	/**
 	 * creates a new session-object in the database
-	 * 
+	 *
 	 * @param userId the id of the user to be set on this session
 	 * @param roomId the id of the room to be set on this session
 	 * @param languageId language id to be set on this session
@@ -89,7 +89,7 @@ public class SessiondataDao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param SID
 	 * @return
 	 */
@@ -107,7 +107,7 @@ public class SessiondataDao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param SID
 	 * @return
 	 */
@@ -123,7 +123,7 @@ public class SessiondataDao {
 	/**
 	 * update the session of a user with a new user id this is needed to see if
 	 * the session is loggedin
-	 * 
+	 *
 	 * @param SID
 	 * @param userId
 	 */
@@ -136,7 +136,7 @@ public class SessiondataDao {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: {}, userId: {}", sd.getSessionId(), userId);
+			log.debug("Found session to update: userId: {}", userId);
 
 			sd.setUserId(userId);
 			update(sd);
@@ -155,7 +155,7 @@ public class SessiondataDao {
 				log.error("Could not find session to Update");
 				return false;
 			}
-			log.debug("Found session to update: {}, userId: {}", sd.getSessionId(), userId);
+			log.debug("Found session to update: userId: {}", userId);
 
 			sd.setUserId(userId);
 			update(sd);
@@ -167,7 +167,7 @@ public class SessiondataDao {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param date
 	 * @return
 	 */
@@ -183,7 +183,7 @@ public class SessiondataDao {
 	}
 
 	/**
-	 * 
+	 *
 	 *
 	 */
 	public void clearSessionTable(long timeout) {
@@ -225,7 +225,7 @@ public class SessiondataDao {
 			log.error("clearSessionByRoomId", err);
 		}
 	}
-	
+
 	public Sessiondata update(Sessiondata sd) {
 		sd.setRefreshed(new Date());
 
