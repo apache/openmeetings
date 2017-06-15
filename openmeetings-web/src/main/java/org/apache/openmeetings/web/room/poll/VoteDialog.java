@@ -120,10 +120,14 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		RoomPollAnswer a = form.getModelObject();
-		a.setVoteDate(new Date());
-		a.getRoomPoll().getAnswers().add(a);
-		getBean(PollDao.class).update(a.getRoomPoll());
-		sendRoom(new RoomMessage(a.getRoomPoll().getRoom().getId(), getUserId(), RoomMessage.Type.pollUpdated));
+		PollDao dao = getBean(PollDao.class);
+		Long roomId = a.getRoomPoll().getRoom().getId();
+		if (!dao.hasVoted(roomId, getUserId())) {
+			a.setVoteDate(new Date());
+			a.getRoomPoll().getAnswers().add(a);
+			dao.update(a.getRoomPoll());
+		}
+		sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollUpdated));
 	}
 
 	@Override
