@@ -39,7 +39,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	public GroupUser get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public GroupUser get(Long id) {
 		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersById", GroupUser.class);
@@ -56,7 +56,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	public List<GroupUser> get(String search, int start, int count, String sort) {
 		throw new RuntimeException("Should not be used");
 	}
-	
+
 	public List<GroupUser> get(long groupId, String search, int start, int count, String sort) {
 		TypedQuery<GroupUser> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", null, search, false, false, "ou.group.id = :groupId", sort, searchFields), GroupUser.class);
 		q.setParameter("groupId", groupId);
@@ -64,7 +64,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
 	public List<GroupUser> get(long groupId, int start, int count) {
 		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersByGroupId", GroupUser.class);
 		q.setParameter("id", groupId);
@@ -73,7 +73,7 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 		return q.getResultList();
 	}
 
-	public GroupUser getByGroupAndUser(long groupId, long userId) {
+	public GroupUser getByGroupAndUser(Long groupId, Long userId) {
 		try {
 			List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
 					.setParameter("groupId", groupId).setParameter("userId", userId).getResultList();
@@ -85,12 +85,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 		}
 		return null;
 	}
-	
+
 	public boolean isUserInGroup(long groupId, long userId) {
 		return em.createNamedQuery("isUserInGroup", GroupUser.class)
 				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList().size() > 0;
 	}
-	
+
 	@Override
 	public long count() {
 		throw new RuntimeException("Should not be used");
@@ -100,12 +100,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	public long count(String search) {
 		throw new RuntimeException("Should not be used");
 	}
-	
+
 	public long count(long groupId, String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", search, false, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}
-	
+
 	public long count(long groupId) {
 		TypedQuery<Long> q = em.createNamedQuery("countGroupUsers", Long.class);
 		q.setParameter("id", groupId);

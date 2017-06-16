@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
@@ -61,6 +63,7 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 			@Override
 			protected ResourceResponse newResourceResponse(Attributes attrs) {
 				Long id = null;
+				boolean allowed = false;
 				if (WebSession.get().isSignedIn()) {
 					PageParameters params = attrs.getParameters();
 					StringValue _id = params.get("id");
@@ -69,11 +72,11 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 					} catch (Exception e) {
 						//no-op expected
 					}
-					if (null == getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId())) {
-						id = null;
+					if (hasAdminLevel(getRights()) || null != getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId())) {
+						allowed = true;
 					}
 				}
-				if (id != null) {
+				if (allowed) {
 					return createResourceResponse(attrs, getGroupLogo(id, true).toPath());
 				} else {
 					log.debug("Not authorized");
