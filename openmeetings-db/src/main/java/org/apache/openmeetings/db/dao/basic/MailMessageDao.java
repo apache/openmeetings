@@ -111,7 +111,7 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 			em.persist(m);
 		} else {
 			m.setUpdated(Calendar.getInstance());
-			m =	em.merge(m);
+			m = em.merge(m);
 		}
 		return m;
 	}

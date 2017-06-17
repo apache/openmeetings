@@ -84,4 +84,15 @@ public class SCryptImplementation implements ICrypt {
 			return false;
 		}
 	}
+
+	@Override
+	public boolean fallback(String str, String hash) {
+		if (SHA256Implementation.verify(str, hash)) {
+			return true;
+		}
+		if (MD5Implementation.verify(str, hash)) {
+			return true;
+		}
+		return false;
+	}
 }
