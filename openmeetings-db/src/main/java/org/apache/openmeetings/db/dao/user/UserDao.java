@@ -59,6 +59,7 @@ import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.CryptProvider;
+import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -236,7 +237,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			em.persist(u);
 		} else {
 			u.setUpdated(new Date());
-			u =	em.merge(u);
+			u = em.merge(u);
 		}
 		return u;
 	}
@@ -250,6 +251,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return u;
 	}
 
+	private User updatePassword(Long id, String pwd, Long updatedBy) throws NoSuchAlgorithmException {
+		//OpenJPA is not allowing to set fields not being fetched before
+		User u = get(id, true);
+		u.updatePassword(cfgDao, pwd);
+		return update(u, updatedBy);
+	}
+
 	// TODO: Why the password field is not set via the Model is because its
 	// FetchType is Lazy, this extra hook here might be not needed with a
 	// different mechanism to protect the password from being read
@@ -257,10 +265,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	public User update(User user, String password, Long updatedBy) throws NoSuchAlgorithmException {
 		User u = update(user, updatedBy);
 		if (u != null && !Strings.isEmpty(password)) {
-			//OpenJPA is not allowing to set fields not being fetched before
-			User u1 = get(u.getId(), true);
-			u1.updatePassword(cfgDao, password);
-			u = update(u1, updatedBy);
+			u = updatePassword(u.getId(), password, updatedBy);
 		}
 		return u;
 	}
@@ -464,7 +469,22 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		if (l == null || l.size() != 1) {
 			return false;
 		}
-		return CryptProvider.get().verify(password, l.get(0));
+		String hash = l.get(0);
+		ICrypt crypt = CryptProvider.get();
+		if (crypt.verify(password, hash)) {
+			return true;
+		}
+		if (crypt.fallback(password, hash)) {
+			log.warn("Password for user with ID {} crypted with outdated Crypt, updating ...", userId);
+			try {
+				User u = updatePassword(userId, password, userId);
+				log.warn("Password for user {} updated successfully", u);
+				return true;
+			} catch (NoSuchAlgorithmException e) {
+				log.error("Unexpected exception while updating password");
+			}
+		}
+		return false;
 	}
 
 	public User getContact(String email, Long ownerId) {

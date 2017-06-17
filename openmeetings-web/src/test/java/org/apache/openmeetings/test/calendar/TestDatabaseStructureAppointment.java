@@ -36,54 +36,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureAppointment extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureAppointment.class, webAppRootKey);
+
 	@Autowired
 	private AppointmentDao appointmentDao;
 
 	@Test
-	public void testAddingGroup(){
-
+	public void testAddingGroup() {
 		try {
-			
-				Calendar cal = Calendar.getInstance();
-				cal.set(2008, 9, 2);
-				cal.get(Calendar.DAY_OF_MONTH);
-				cal.getTime();
-				
-				SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd" );
-				Date date = format.parse( "2008-17-08" );
-				Date date2 = format.parse( "2008-18-08" );
-		
-				List<Appointment> listAppoints =	appointmentDao.getInRange(1L, date, date2);
-			//List<Appointment> listAppoints = AppointmentDaoImpl.getInstance().searchAppointmentsByName("%");
-			//AppointmentDaoImpl.getInstance().getNextAppointmentById(1L);
-			//AppointmentDaoImpl.getInstance().addAppointment("mezo",1L, "Pforzheim", "zweiter", Calendar.getInstance().getTime() , 
-				//date, null, true, null, null, 1L,1L);
-			//AppointmentDaoImpl.getInstance().addAppointment("testap", "erster Test",Calendar.getInstance().getTime() , 
-					///Calendar.getInstance().getTime(), true, false, false, false, new Long(1), 1L);
-			log.debug("Anzahl: "+listAppoints.size());
-			
-			
+			Calendar cal = Calendar.getInstance();
+			cal.set(2008, 9, 2);
+			cal.get(Calendar.DAY_OF_MONTH);
+			cal.getTime();
+
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = format.parse("2008-17-08");
+			Date date2 = format.parse("2008-18-08");
+
+			List<Appointment> listAppoints = appointmentDao.getInRange(1L, date, date2);
+			// List<Appointment> listAppoints = appointmentDao.searchAppointmentsByName("%");
+			// appointmentDao.getNextAppointmentById(1L);
+			// appointmentDao.addAppointment("mezo", 1L, "Pforzheim", "zweiter", Calendar.getInstance().getTime(),
+			// 		date, null, true, null, null, 1L,1L);
+			// appointmentDao.addAppointment("testap", "erster Test",Calendar.getInstance().getTime(),
+			// 		Calendar.getInstance().getTime(), true, false, false, false, new Long(1), 1L);
+			log.debug("Anzahl: " + listAppoints.size());
+
 			for (Appointment appoints : listAppoints) {
-				log.debug("Termin: "+appoints.getTitle()+" startDate: "+appoints.getStart()+ " endDate: "+appoints.getEnd());
-				log.debug("MeetingMembers: "+appoints.getMeetingMembers().size());
+				log.debug("Termin: " + appoints.getTitle() + " startDate: " + appoints.getStart() + " endDate: " + appoints.getEnd());
+				log.debug("MeetingMembers: " + appoints.getMeetingMembers().size());
 			}
-			
-			for (Iterator<Appointment> iter = listAppoints.iterator();iter.hasNext();) {
-				log.debug(""+iter.next());
+
+			for (Iterator<Appointment> iter = listAppoints.iterator(); iter.hasNext();) {
+				log.debug("" + iter.next());
 			}
 		} catch (Exception err) {
-
-			log.error("[testAddingGroup]",err);
-
+			log.error("[testAddingGroup]", err);
 		}
-
-		
-
-		
-
 	}
-
-
-
 }
-

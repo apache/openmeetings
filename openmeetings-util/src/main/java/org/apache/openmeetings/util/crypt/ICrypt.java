@@ -22,7 +22,7 @@ package org.apache.openmeetings.util.crypt;
  * Interface for Encryption-Class see:
  * http://openmeetings.apache.org/CustomCryptMechanism.html see:
  * https://crackstation.net/hashing-security.htm
- * 
+ *
  * @author sebastianwagner, solomax
  *
  */
@@ -30,7 +30,7 @@ package org.apache.openmeetings.util.crypt;
 public interface ICrypt {
 	/**
 	 * Creates hash of given string
-	 * 
+	 *
 	 * @param str
 	 *            - string to calculate hash for
 	 * @return hash of passed string
@@ -39,7 +39,7 @@ public interface ICrypt {
 
 	/**
 	 * Verify string passed is matches given hash
-	 * 
+	 *
 	 * @param str
 	 *            - string to check hash for
 	 * @param hash
@@ -47,4 +47,15 @@ public interface ICrypt {
 	 * @return <code>true</code> in case string matches hash, <code>false</code> otherwise
 	 */
 	boolean verify(String str, String hash);
+
+	/**
+	 * Verify string passed is matches given hash (using fallback crypt mechanism)
+	 *
+	 * @param str
+	 *            - string to check hash for
+	 * @param hash
+	 *            - hash to compare
+	 * @return <code>true</code> in case string matches hash, <code>false</code> otherwise
+	 */
+	boolean fallback(String str, String hash);
 }
