@@ -33,7 +33,7 @@ var Chat = function() {
 		, emoticon = new CSSEmoticon()
 		, typingTimer
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
-		, audio
+		, audio, s
 		;
 	try {
 		audio = new Audio('./public/chat_message.mp3');
@@ -42,6 +42,24 @@ var Chat = function() {
 		audio = {
 			play: function() {}
 		};
+	}
+	function _load() {
+		s = {};
+		try {
+			s = JSON.parse(localStorage.getItem('openmeetings')) || s;
+		} catch (e) {}
+		if (!s.chat) {
+			s.chat = {};
+		}
+	}
+	function _save() {
+		var _s = JSON.stringify(s);
+		localStorage.setItem('openmeetings', _s);
+	}
+	function _updateBtn(a) {
+		var muted = s.chat.muted === true;
+		a.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
+				.attr('title', a.data(muted ? 'sound-enabled' : 'sound-muted'));
 	}
 	function doneTyping () {
 		typingTimer = null;
@@ -67,6 +85,15 @@ var Chat = function() {
 				row = $('<tr></tr>');
 			}
 		}
+		_load();
+		var a = $('#chat .audio');
+		_updateBtn(a);
+		$('#chat .chat-btn').hover(function(){ $(this).addClass('ui-state-hover') }, function(){ $(this).removeClass('ui-state-hover') });
+		a.click(function() {
+			s.chat.muted = !s.chat.muted;
+			_updateBtn(a);
+			_save();
+		});
 	}
 	function isClosed() {
 		return $('#chatPanel').height() < 24;
@@ -146,16 +173,18 @@ var Chat = function() {
 			if ($('#chat').length > 0 && m && m.type == "chat") {
 				if (isClosed()) {
 					$('#chatPopup .control.block').addClass('ui-state-highlight');
-					var playPromise = audio.play();
+					if (s.chat.muted !== true) {
+						var playPromise = audio.play();
 
-					// In browsers that don’t yet support this functionality,
-					// playPromise won’t be defined.
-					if (playPromise !== undefined) {
-						playPromise.then(function() {
-							// Automatic playback started!
-						}).catch(function(error) {
-							// Automatic playback failed.
-						});
+						// In browsers that don’t yet support this functionality,
+						// playPromise won’t be defined.
+						if (playPromise !== undefined) {
+							playPromise.then(function() {
+								// Automatic playback started!
+							}).catch(function(error) {
+								// Automatic playback failed.
+							});
+						}
 					}
 				}
 				var msg, cm;
