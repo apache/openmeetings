@@ -80,3 +80,15 @@
 	max-height: 70px;
 	max-width: 500px;
 }
+.sound.om-icon {
+	background-image: url(images/sound.png);
+}
+.sound-mute.om-icon {
+	background-image: url(images/sound_mute.png);
+}
+#chat .chat-btn {
+	display: inline-block;
+	float: right;
+	margin-right: 10px;
+	padding: 4px;
+}
