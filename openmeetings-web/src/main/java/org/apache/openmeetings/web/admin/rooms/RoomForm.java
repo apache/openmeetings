@@ -34,11 +34,11 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
@@ -46,6 +46,7 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -148,7 +149,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<>("roomGroups", null, new ChoiceProvider<RoomGroup>() {
+		add(new Select2MultiChoice<>("roomGroups", null, new RestrictiveChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -158,7 +159,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 
 			@Override
-			public String getIdValue(RoomGroup choice) {
+			public String toId(RoomGroup choice) {
 				Long id = choice.getGroup().getId();
 				return id == null ? null : "" + id;
 			}
@@ -173,16 +174,10 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 
 			@Override
-			public Collection<RoomGroup> toChoices(Collection<String> _ids) {
-				List<Long> ids = new ArrayList<>();
-				for (String id : _ids) {
-					ids.add(Long.valueOf(id));
-				}
-				List<RoomGroup> list = new ArrayList<>();
-				for (Group o : getBean(GroupDao.class).get(ids)) {
-					list.add(new RoomGroup(o, RoomForm.this.getModelObject()));
-				}
-				return list;
+			public RoomGroup fromId(String _id) {
+				Long id = Long.valueOf(_id);
+				Group g = getBean(GroupDao.class).get(id);
+				return new RoomGroup(g, RoomForm.this.getModelObject());
 			}
 		}).setLabel(Model.of(getString("828"))).setRequired(isGroupAdmin));
 

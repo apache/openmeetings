@@ -21,9 +21,7 @@ package org.apache.openmeetings.web.util;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -33,16 +31,15 @@ import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
 import com.github.openjson.JSONException;
 import com.github.openjson.JSONStringer;
 
-public class UserChoiceProvider extends ChoiceProvider<User> {
+public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	private final static int PAGE_SIZE = 10;
-	private Map<String, User> newContacts = new Hashtable<>();
+	private final Map<String, User> newContacts = new HashMap<>();
 
 	public static User getUser(String value) {
 		User u = null;
@@ -81,7 +78,7 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 	}
 
 	@Override
-	public String getIdValue(User u) {
+	public String toId(User u) {
 		String id = "" + u.getId();
 		if (u.getId() == null) {
 			newContacts.put(u.getLogin(), u);
@@ -108,16 +105,14 @@ public class UserChoiceProvider extends ChoiceProvider<User> {
 	}
 
 	@Override
-	public Collection<User> toChoices(Collection<String> ids) {
-		Collection<User> c = new ArrayList<>();
-		for (String id : ids) {
-			if (newContacts.containsKey(id)) {
-				c.add(newContacts.get(id));
-			} else {
-				c.add(getBean(UserDao.class).get(Long.valueOf(id)));
-			}
+	public User fromId(String id) {
+		User u = null;
+		if (newContacts.containsKey(id)) {
+			u = newContacts.get(id);
+		} else {
+			u = getBean(UserDao.class).get(Long.valueOf(id));
 		}
-		return c;
+		return u;
 	}
 
 	@Override
