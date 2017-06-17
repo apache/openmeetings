@@ -28,7 +28,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
@@ -43,6 +42,7 @@ import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.CountryDropDown;
+import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -60,7 +60,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
@@ -134,7 +133,7 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new Select2MultiChoice<>("groupUsers", null, new ChoiceProvider<GroupUser>() {
+		add(new Select2MultiChoice<>("groupUsers", null, new RestrictiveChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -143,7 +142,7 @@ public class GeneralUserForm extends Form<User> {
 			}
 
 			@Override
-			public String getIdValue(GroupUser choice) {
+			public String toId(GroupUser choice) {
 				Long id = choice.getGroup().getId();
 				return id == null ? null : "" + id;
 			}
@@ -158,19 +157,13 @@ public class GeneralUserForm extends Form<User> {
 			}
 
 			@Override
-			public Collection<GroupUser> toChoices(Collection<String> _ids) {
-				List<Long> ids = new ArrayList<>();
-				for (String id : _ids) {
-					ids.add(Long.parseLong(id));
-				}
-				List<GroupUser> list = new ArrayList<>();
+			public GroupUser fromId(String _id) {
+				Long id = Long.parseLong(_id);
 				User u = GeneralUserForm.this.getModelObject();
-				for (Group g : getBean(GroupDao.class).get(ids)) {
-					GroupUser gu = new GroupUser(g, u);
-					int idx = grpUsers.indexOf(gu);
-					list.add(idx < 0 ? gu : grpUsers.get(idx));
-				}
-				return list;
+				Group g = getBean(GroupDao.class).get(id);
+				GroupUser gu = new GroupUser(g, u);
+				int idx = grpUsers.indexOf(gu);
+				return idx < 0 ? gu : grpUsers.get(idx);
 			}
 		}).setLabel(Model.of(getString("161"))).setRequired(isAdminForm && hasGroupAdminLevel(getRights())).setEnabled(isAdminForm));
 	}

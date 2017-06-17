@@ -30,7 +30,6 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +49,7 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
+import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -68,7 +68,6 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
@@ -192,7 +191,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 		add(new CheckBox("forceTimeZoneCheck"));
 
-		add(new Select2MultiChoice<>("rights", null, new ChoiceProvider<Right>() {
+		add(new Select2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -201,7 +200,7 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 
 			@Override
-			public String getIdValue(Right choice) {
+			public String toId(Right choice) {
 				return choice.name();
 			}
 
@@ -222,12 +221,8 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 
 			@Override
-			public Collection<Right> toChoices(Collection<String> ids) {
-				Collection<Right> rights = new ArrayList<>(ids.size());
-				for (String id : ids) {
-					rights.add(Right.valueOf(id));
-				}
-				return rights;
+			public Right fromId(String id) {
+				return Right.valueOf(id);
 			}
 		}));
 		add(new ComunityUserForm("comunity", getModel()));
