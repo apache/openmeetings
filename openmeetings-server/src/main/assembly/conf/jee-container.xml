@@ -34,7 +34,7 @@
 		Blocking I/O:
 			<property name="protocol" value="org.apache.coyote.http11.Http11Protocol" />
 		Non-blocking I/O:
-			<property name="protocol" value="org.apache.coyote.http11.Http11NioProtocol" />  
+			<property name="protocol" value="org.apache.coyote.http11.Http11NioProtocol" />
 	 -->
 	<!-- Tomcat without SSL enabled -->
 	<bean id="tomcat.server" class="org.red5.server.tomcat.TomcatLoader" depends-on="context.loader,warDeployer" lazy-init="true">
@@ -67,6 +67,10 @@
 					<property name="suffix" value=".log" />
 					<property name="pattern" value="common" />
 					<property name="rotatable" value="true" />
+				</bean>
+				<bean id="valve.error" class="org.apache.catalina.valves.ErrorReportValve">
+					<property name="showReport" value="false" />
+					<property name="showServerInfo" value="false" />
 				</bean>
 			</list>
 		</property>
@@ -115,6 +119,21 @@
 			<bean class="org.apache.catalina.core.StandardHost">
 				<property name="name" value="${http.host}" />
 			</bean>
+		</property>
+		<property name="valves">
+			<list>
+				<bean id="valve.access" class="org.apache.catalina.valves.AccessLogValve">
+					<property name="directory" value="log" />
+					<property name="prefix" value="${http.host}_access." />
+					<property name="suffix" value=".log" />
+					<property name="pattern" value="common" />
+					<property name="rotatable" value="true" />
+				</bean>
+				<bean id="valve.error" class="org.apache.catalina.valves.ErrorReportValve">
+					<property name="showReport" value="false" />
+					<property name="showServerInfo" value="false" />
+				</bean>
+			</list>
 		</property>
 	</bean>
 -->
