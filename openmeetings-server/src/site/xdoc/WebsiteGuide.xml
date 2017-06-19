@@ -50,8 +50,11 @@
 						<a href="https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git">https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git</a><br/>
 					</p>
 					<div>
-						To update the website you need to clone master:<br />
-						<a href="https://git-wip-us.apache.org/repos/asf/openmeetings-site.git">https://git-wip-us.apache.org/repos/asf/openmeetings-site.git</a> <br/>
+						To update the website you need to clone asf-site:<br />
+						<source><![CDATA[
+git clone https://git-wip-us.apache.org/repos/asf/openmeetings-site.git
+git checkout asf-site
+						]]></source>
 						edit the files in the folder <tt>openmeetings-server/src/site</tt><br/>
 						then you run the command:
 						<source><![CDATA[mvn install -P allModules,unpacked -DskipTests=true]]></source>
@@ -62,9 +65,6 @@
 					<p>
 						The public website is automatically synced with the Git repository.<br/>
 						Changes to the Git should be immediately synced to the production website.<br/>
-						If not you might login to people.apache.org,<br/>
-						cd to <tt>/www/openmeetings.apache.org/content/</tt><br/>
-						and run the linux command "touch" on the files that need to be synced
 					</p>
 				</div>
 			</subsection>
