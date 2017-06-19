@@ -36,6 +36,7 @@
 			</includes>
 			<excludes>
 				<exclude>WEB-INF/web.xml</exclude>
+				<exclude>WEB-INF/classes/META-INF/*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -44,6 +45,7 @@
 			<filtered>true</filtered>
 			<includes>
 				<include>WEB-INF/web.xml</include>
+				<include>WEB-INF/classes/META-INF/*</include>
 			</includes>
 		</fileSet>
 		<fileSet>

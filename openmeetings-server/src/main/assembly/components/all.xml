@@ -31,6 +31,7 @@
 				<exclude>webapps/chat/**</exclude>
 				<exclude>webapps/root/demos/**</exclude>
 				<exclude>webapps/root/index.html</exclude>
+				<exclude>webapps/root/crossdomain.xml</exclude>
 				<exclude>lib/commons-io*.jar</exclude>
 				<exclude>plugins/websocket*.jar</exclude>
 				<exclude>*.sh</exclude>
@@ -95,6 +96,7 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>META-INF/**</exclude>
+				<exclude>WEB-INF/classes/META-INF/**</exclude>
 				<exclude>WEB-INF/lib/asm*</exclude>
 				<exclude>WEB-INF/lib/aopalliance*</exclude>
 				<exclude>WEB-INF/lib/cglib-nodep*</exclude>
@@ -110,6 +112,14 @@
 				<exclude>WEB-INF/lib/commons-lang3*</exclude>
 				<exclude>WEB-INF/lib/jcl-over-slf4j*</exclude>
 			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory><!-- FIXME should be implemented differently -->
+			<outputDirectory>${om.webapp}</outputDirectory>
+			<filtered>true</filtered>
+			<includes>
+				<include>WEB-INF/classes/META-INF/**</include>
+			</includes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory><!-- FIXME should be implemented differently -->
