@@ -280,8 +280,9 @@ public class BackupImport {
 				}
 				if (CONFIG_CRYPT_KEY.equals(c.getKey())) {
 					try {
-						Class.forName(c.getValue());
-					} catch (ClassNotFoundException e) {
+						Class<?> clazz = Class.forName(c.getValue());
+						clazz.newInstance();
+					} catch (Exception e) {
 						c.setValue(SCryptImplementation.class.getCanonicalName());
 					}
 				}
