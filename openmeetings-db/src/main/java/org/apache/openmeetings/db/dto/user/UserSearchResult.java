@@ -21,9 +21,12 @@ package org.apache.openmeetings.db.dto.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.user.User;
 
+@XmlRootElement
 public class UserSearchResult {
 	private String objectName;
 	private Long records;
