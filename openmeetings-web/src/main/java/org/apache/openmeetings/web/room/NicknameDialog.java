@@ -53,11 +53,12 @@ public class NicknameDialog extends NonClosableDialog<User> {
 		super(id, Application.getString(1287));
 		this.room = room;
 		User u = room.getClient().getUser();
-		if (isVisible(u)) {
-			u.setFirstname(Application.getString(433));
-			u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
-		}
 		add(form = new Form<>("form", new CompoundPropertyModel<>(u)));
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 		form.add(feedback);
 		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(Application.getString(135))).add(minimumLength(4)));
 		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(Application.getString(136))).add(minimumLength(4)));
@@ -65,13 +66,20 @@ public class NicknameDialog extends NonClosableDialog<User> {
 	}
 
 	private static boolean isVisible(User u) {
-		return User.Type.external == u.getType() && Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname());
+		return (User.Type.contact == u.getType() || User.Type.external == u.getType())
+				&& Strings.isEmpty(u.getFirstname()) && Strings.isEmpty(u.getLastname());
 	}
 
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
-		behavior.setOption("autoOpen", isVisible(form.getModelObject()));
+		User u = form.getModelObject();
+		boolean visible = isVisible(u);
+		if (visible) {
+			u.setFirstname(Application.getString(433));
+			u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
+		}
+		behavior.setOption("autoOpen", visible);
 		behavior.setOption("resizable", false);
 	}
 
