@@ -328,6 +328,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					return null;
 				}
 			}
+			rcl.setFirstname(client.getUser().getFirstname());
+			rcl.setLastname(client.getUser().getLastname());
 			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
 			rcl.setIsMod(client.hasRight(Right.moderator));
 			rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
