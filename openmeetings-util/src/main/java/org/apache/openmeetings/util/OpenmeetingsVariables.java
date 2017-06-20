@@ -73,6 +73,6 @@ public class OpenmeetingsVariables {
 	public static String wicketApplicationName = null;
 	public static String APPLICATION_NAME = null;
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
-	public static final long DEFAULT_MAX_UPLOAD_SIZE = 1024 * 1024 * 1024; // 1GB
+	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // 100MB
 	public static int EXT_PROCESS_TTL = 20;
 }

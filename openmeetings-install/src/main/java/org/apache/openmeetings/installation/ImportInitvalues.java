@@ -315,7 +315,7 @@ public class ImportInitvalues {
 				"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
 		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE_KEY, "" + DEFAULT_MAX_UPLOAD_SIZE, null,
-				"Maximum size of upload file (bytes)"); // defaults to 1GB
+				"Maximum size of upload file (bytes)"); // defaults to 100MB
 
 		cfgDao.add(CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", null,
 				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");

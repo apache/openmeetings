@@ -90,9 +90,9 @@
 				</tr>
 				<tr>
 					<td> max_upload_size </td>
-					<td> 1073741824 </td>
-					<td> Maximum size of upload file (bytes) 1073741824 bytes = 1GB </td>
-					<td> 1.8.x </td>
+					<td> 104857600 </td>
+					<td> Maximum size of upload file (bytes) 104857600 bytes = 100MB </td>
+					<td> 1.8.x <b>default value changed in 3.3.0</b> </td>
 				</tr>
 				<tr>
 					<td> show.whiteboard.draw.status </td>
