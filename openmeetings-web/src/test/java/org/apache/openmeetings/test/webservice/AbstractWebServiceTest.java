@@ -51,9 +51,14 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		return login(username, userpass);
 	}
 
-	public static ServiceResult login(String user, String pass) {
+	public static ServiceResult loginNoCheck(String user, String pass) {
 		ServiceResult sr = getClient(USER_SERVICE_URL).path("/login").query("user", user).query("pass", pass)
 				.get(ServiceResult.class);
+		return sr;
+	}
+
+	public static ServiceResult login(String user, String pass) {
+		ServiceResult sr = loginNoCheck(user, pass);
 		assertEquals("Login should be successful", Type.SUCCESS.name(), sr.getType());
 		return sr;
 	}
