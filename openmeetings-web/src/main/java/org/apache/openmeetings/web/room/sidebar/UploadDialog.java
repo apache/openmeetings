@@ -215,6 +215,9 @@ public class UploadDialog extends AbstractFormDialog<String> {
 					}
 				} catch (Exception e) {
 					form.error(e.getMessage());
+				} finally {
+					fu.closeStreams();
+					fu.delete();
 				}
 			}
 			if (form.hasError()) {

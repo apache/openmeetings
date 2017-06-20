@@ -21,16 +21,16 @@ package org.apache.openmeetings.util;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import java.io.InputStream;
 
-@Category({NonJenkinsTests.class})
+import org.junit.Test;
+
 public class TestStoredFile {
 	@Test
 	public void testAudio() {
 		final String[] exts = {"aif", "aifc", "aiff", "au", "mp3", "flac", "wav"}; //TODO enlarge
 		for (String ext : exts) {
-			StoredFile sf = new StoredFile("test", ext);
+			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(String.format("Files of type '%s' should be treated as Video", ext), sf.isVideo());
 			assertFalse(String.format("Files of type '%s' should NOT be treated as Image", ext), sf.isImage());
 		}
@@ -40,7 +40,7 @@ public class TestStoredFile {
 	public void testVideo() {
 		final String[] exts = {"avi", "mov", "flv", "mp4"}; //TODO enlarge
 		for (String ext : exts) {
-			StoredFile sf = new StoredFile("test", ext);
+			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(String.format("Files of type '%s' should be treated as Video", ext), sf.isVideo());
 			assertFalse(String.format("Files of type '%s' should NOT be treated as Image", ext), sf.isImage());
 		}
@@ -59,8 +59,20 @@ public class TestStoredFile {
 				"tga", // Truevision Targa
 				"jpg", "jpeg"}; //TODO enlarge
 		for (String ext : exts) {
-			StoredFile sf = new StoredFile("test", ext);
+			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(String.format("Files of type '%s' should be treated as Image", ext), sf.isImage());
+			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", ext), sf.isVideo());
+		}
+	}
+
+	@Test
+	public void testOffice() {
+		final String[] exts = {
+				"ppt", "odp", "odt", "sxw", "wpd", "doc", "rtf", "txt", "ods", "sxc", "xls", "sxi", "pptx", "docx", "xlsx"
+		};
+		for (String ext : exts) {
+			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
+			assertTrue(String.format("Files of type '%s' should be treated as Convertible", ext), sf.isOffice());
 			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", ext), sf.isVideo());
 		}
 	}

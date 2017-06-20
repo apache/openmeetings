@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.openmeetings.core.documents.CreateLibraryPresentation.generateXMLDocument;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -26,6 +27,7 @@ import java.io.File;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.wicket.util.string.Strings;
@@ -47,25 +49,27 @@ public class DocumentConverter {
 	@Autowired
 	private ImageConverter imageConverter;
 
-	public ConverterProcessResultList convertPDF(FileExplorerItem f, String ext) throws Exception {
-		ConverterProcessResultList errors = new ConverterProcessResultList();
+	public ConverterProcessResultList convertPDF(FileExplorerItem f, StoredFile sf) throws Exception {
+		ConverterProcessResultList result = new ConverterProcessResultList();
 
-		boolean fullProcessing = !EXTENSION_PDF.equals(ext);
-		File original = f.getFile(ext);
+		boolean fullProcessing = !sf.isPdf();
+		File original = f.getFile(sf.getExt());
 		File pdf = f.getFile(EXTENSION_PDF);
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
 			log.debug("-- running JOD --");
-			errors.addItem("processOpenOffice", doJodConvert(original, pdf));
+			result.addItem("processOpenOffice", doJodConvert(original, pdf));
+		} else if (!EXTENSION_PDF.equals(sf.getExt())) {
+			copyFile(original, pdf);
 		}
 
 		log.debug("-- generateBatchThumb --");
-		errors.addItem("processThumb", imageConverter.generateBatchThumb(pdf, pdf.getParentFile(), 80, "thumb"));
+		result.addItem("processThumb", imageConverter.generateBatchThumb(pdf, pdf.getParentFile(), 80, "thumb"));
 		File swf = f.getFile();
-		errors.addItem("processSWF", generateSWF.generateSwf(pdf, swf));
+		result.addItem("processSWF", generateSWF.generateSwf(pdf, swf));
 
-		errors.addItem("processXML", generateXMLDocument(original, fullProcessing ? pdf : null, swf));
-		return errors;
+		result.addItem("processXML", generateXMLDocument(original, fullProcessing ? pdf : null, swf));
+		return result;
 	}
 
 	/**

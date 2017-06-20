@@ -19,103 +19,173 @@
 package org.apache.openmeetings.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.tika.mime.MediaType.application;
+import static org.apache.tika.mime.MediaType.image;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.activation.MimetypesFileTypeMap;
-
+import org.apache.tika.Tika;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.mime.MediaType;
 import org.apache.wicket.util.string.Strings;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public class StoredFile {
-	private final static MimetypesFileTypeMap MIMES_MAP = new MimetypesFileTypeMap();
+	private static final Logger log = Red5LoggerFactory.getLogger(StoredFile.class, webAppRootKey);
 	private final static String MIME_AUDIO = "audio";
 	private final static String MIME_VIDEO = "video";
 	private final static String MIME_IMAGE = "image";
-	private static final Set<String> convertExtensions = new HashSet<>(
-			Arrays.asList("ppt", "odp", "odt", "sxw", "wpd", "doc", "rtf", "txt", "ods", "sxc", "xls", "sxi", "pptx", "docx", "xlsx"));
+	private final static String MIME_TEXT = "text";
+	private final static String MIME_APP = "application";
+	private static final Set<MediaType> CONVERT_TYPES = new HashSet<>(Arrays.asList(
+			application("x-tika-msoffice"), application("x-tika-ooxml"), application("msword")
+			, application("vnd.wordperfect"), application("rtf")));
 
-	private static final Set<String> pdfExtensions = new HashSet<>(Arrays.asList("pdf", "ps"));
-
-	private static final Set<String> chartExtensions = new HashSet<>(Arrays.asList("xchart"));
-
-	private static final Set<String> asIsExtensions = new HashSet<>(Arrays.asList(EXTENSION_JPG, "xchart")); //mp4 removed to get video size
-
-	private final String name;
-	private final String ext;
-
-	public StoredFile(String fullname) {
-		int idx = fullname.lastIndexOf('.');
-		name = idx < 0 ? fullname : fullname.substring(0, idx);
-		ext = idx < 0 ? "" : fullname.substring(idx + 1).toLowerCase();
+	private static final MediaType MIME_JPG = image(EXTENSION_JPG);
+	private static final Set<MediaType> PDF_TYPES = new HashSet<>(Arrays.asList(application("pdf"), application("postscript")));
+	private static final Set<MediaType> CHART_TYPES = new HashSet<>(/* TODO have to be tested and re-added Arrays.asList("xchart")*/);
+	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_JPG/* TODO have to be tested and re-added, "xchart"*/));
+	private static final String ACCEPT_STRING;
+	static {
+		Set<MediaType> types = new LinkedHashSet<>();
+		types.addAll(CONVERT_TYPES);
+		types.addAll(PDF_TYPES);
+		//TODO have to be tested and re-added ext.addAll(chartExtensions);
+		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*,text/*");
+		sb.append(",application/vnd.oasis.opendocument.*");
+		sb.append(",application/vnd.sun.xml.*");
+		sb.append(",application/vnd.stardivision.*");
+		sb.append(",application/x-star*");
+		for (MediaType mt : types) {
+			sb.append(',').append(mt.toString());
+		}
+		ACCEPT_STRING = sb.toString();
 	}
 
-	public StoredFile(String name, String ext) {
-		this.name = name;
-		this.ext = ext != null ? ext.toLowerCase() : "";
+	private String name;
+	private String ext;
+	private MediaType mime;
+
+	public StoredFile(String fullname, InputStream is) {
+		this(fullname, null, is);
+	}
+
+	public StoredFile(String name, String ext, InputStream is) {
+		init(name, ext, is);
+	}
+
+	public StoredFile(String fullname, File f) throws FileNotFoundException, IOException {
+		this(fullname, null, f);
+	}
+
+	public StoredFile(String name, String ext, File f) throws FileNotFoundException, IOException {
+		try (InputStream fis = new FileInputStream(f)) {
+			init(name, ext, fis);
+		}
+	}
+
+	private void init(String name, String ext, InputStream is) {
+		if (Strings.isEmpty(ext)) {
+			int idx = name.lastIndexOf('.');
+			this.name = idx < 0 ? name : name.substring(0, idx);
+			this.ext = getFileExt(name);
+		} else {
+			this.name = name;
+			this.ext = ext.toLowerCase();
+		}
+		Tika tika = new Tika();
+		Metadata md = new Metadata();
+		md.add(Metadata.RESOURCE_NAME_KEY, String.format("%s.%s", name, ext));
+		try {
+			mime = MediaType.parse(tika.detect(is, md));
+		} catch (Exception e) {
+			mime = null;
+			log.error("Unexpected exception while detecting mime type", e);
+		}
 	}
 
 	public static String getAcceptAttr() {
-		Set<String> ext = new LinkedHashSet<>();
-		ext.addAll(convertExtensions);
-		ext.addAll(pdfExtensions);
-		ext.addAll(chartExtensions);
-		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*,.");
-		sb.append(String.join(",.", ext));
-		return sb.toString();
+		return ACCEPT_STRING;
 	}
 
-	public boolean isConvertable() {
-		return convertExtensions.contains(ext);
+	public boolean isOffice() {
+		if (mime == null) {
+			return false;
+		}
+		return MIME_TEXT.equals(mime.getType())
+				|| (MIME_APP.equals(mime.getType()) &&
+						(mime.getSubtype().startsWith("vnd.oasis.opendocument")
+							|| mime.getSubtype().startsWith("vnd.sun.xml")
+							|| mime.getSubtype().startsWith("vnd.stardivision")
+							|| mime.getSubtype().startsWith("x-star")
+							|| mime.getSubtype().startsWith("vnd.ms-")
+							|| mime.getSubtype().startsWith("vnd.openxmlformats-officedocument")
+					))
+				|| CONVERT_TYPES.contains(mime);
 	}
 
 	public boolean isPresentation() {
-		return isConvertable() || isPdf();
+		return isOffice() || isPdf();
 	}
 
 	public boolean isPdf() {
-		return pdfExtensions.contains(ext);
+		if (mime == null) {
+			return false;
+		}
+		return PDF_TYPES.contains(mime);
 	}
 
-	private static String getMimeType(StoredFile f) {
-		String filename = String.format("%s%s%s", f.name, Strings.isEmpty(f.ext) ? "" : ".", f.ext);
-		String type = "";
-		try {
-			type = Files.probeContentType(new File(filename).toPath());
-		} catch (IOException e) {
-			//no-op
+	public boolean isJpg() {
+		if (mime == null) {
+			return false;
 		}
-		if (Strings.isEmpty(type)) {
-			type = MIMES_MAP.getContentType(filename);
-		}
-		String[] mime = type.split("/");
-		return mime[0];
+		return MIME_JPG.equals(mime);
 	}
 
 	public boolean isImage() {
-		String mime = getMimeType(this);
-		return MIME_IMAGE.equals(mime);
+		if (mime == null) {
+			return false;
+		}
+		return MIME_IMAGE.equals(mime.getType());
 	}
 
 	public boolean isVideo() {
-		String mime = getMimeType(this);
-		return MIME_AUDIO.equals(mime) || MIME_VIDEO.equals(mime);
+		if (mime == null) {
+			return false;
+		}
+		return MIME_AUDIO.equals(mime.getType()) || MIME_VIDEO.equals(mime.getType());
 	}
 
 	public boolean isChart() {
-		return chartExtensions.contains(ext);
+		if (mime == null) {
+			return false;
+		}
+		return CHART_TYPES.contains(mime);
 	}
 
 	public boolean isAsIs() {
-		return asIsExtensions.contains(ext);
+		if (mime == null) {
+			return false;
+		}
+		return AS_IS_TYPES.contains(mime);
 	}
 
 	public String getName() {
 		return name;
+	}
+
+	public String getExt() {
+		return ext;
 	}
 }

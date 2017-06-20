@@ -81,22 +81,24 @@ public abstract class UploadableImagePanel extends ImagePanel {
 			protected void onSubmit(AjaxRequestTarget target) {
 				FileUpload fu = fileUploadField.getFileUpload();
 				if (fu != null) {
-					StoredFile sf = new StoredFile(fu.getClientFileName());
-					if (sf.isImage()) {
-						File temp = null;
-						try {
-							temp = fu.writeToTempFile();
+					File temp = null;
+					try {
+						temp = fu.writeToTempFile();
+						StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
+						if (sf.isImage()) {
 							processImage(sf, temp);
-						} catch (Exception e) {
-							// TODO display error
-							log.error("Error", e);
-						} finally {
-							if (temp != null && temp.exists()) {
-								temp.delete();
-							}
+						} else {
+							//TODO display error
 						}
-					} else {
-						//TODO display error
+					} catch (Exception e) {
+						// TODO display error
+						log.error("Error", e);
+					} finally {
+						if (temp != null && temp.exists()) {
+							log.debug("Temp file was deleted ? {}", temp.delete());
+						}
+						fu.closeStreams();
+						fu.delete();
 					}
 				}
 				update();
