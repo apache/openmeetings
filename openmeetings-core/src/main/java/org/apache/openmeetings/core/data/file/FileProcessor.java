@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.data.file;
 
+import static org.apache.commons.io.FileUtils.copyFile;
+import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -26,7 +28,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.core.converter.FlvExplorerConverter;
 import org.apache.openmeetings.core.converter.ImageConverter;
@@ -55,80 +56,93 @@ public class FileProcessor {
 
 	//FIXME TODO this method need to be refactored to throw exceptions
 	public ConverterProcessResultList processFile(FileExplorerItem f, InputStream is) throws Exception {
-		ConverterProcessResultList returnError = new ConverterProcessResultList();
-
+		ConverterProcessResultList result = new ConverterProcessResultList();
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
 		String hash = UUID.randomUUID().toString();
 
-		String ext = getFileExt(f.getName());
-		log.debug("file extension: " + ext);
-		StoredFile storedFile = new StoredFile(hash, ext);
+		File temp = null;
+		try {
+			temp = File.createTempFile(String.format("upload_%s", hash), ".tmp");
+			copyInputStreamToFile(is, temp);
 
-		// Check variable to see if this file is a presentation
-		// check if this is a a file that can be converted by
-		// openoffice-service
-		boolean canBeConverted = storedFile.isConvertable();
-		boolean isPdf = storedFile.isPdf();
-		boolean isImage = storedFile.isImage();
-		boolean isChart = storedFile.isChart();
-		boolean isAsIs = storedFile.isAsIs();
-		boolean isVideo = storedFile.isVideo();
+			String ext = getFileExt(f.getName());
+			log.debug("file extension: " + ext);
+			StoredFile sf = new StoredFile(hash, ext, temp);
+			// Check variable to see if this file is a presentation
+			// check if this is a a file that can be converted by
+			// openoffice-service
+			boolean isOffice = sf.isOffice();
+			boolean isPdf = sf.isPdf();
+			boolean isImage = sf.isImage();
+			boolean isChart = sf.isChart();
+			boolean isAsIs = sf.isAsIs();
+			boolean isVideo = sf.isVideo();
 
-		log.debug("isAsIs: " + isAsIs);
+			log.debug("isAsIs: " + isAsIs);
 
-		// add outputfolders for profiles
-		// if it is a presenation it will be copied to another place
-		if (!(canBeConverted || isPdf || isImage || isVideo || isAsIs)) {
-			returnError.addItem("wrongType", new ConverterProcessResult("The file type cannot be converted"));
-			return returnError;
-		}
-		if (isImage) {
-			f.setType(Type.Image);
-		} else if (isVideo) {
-			f.setType(Type.Video);
-		} else if (isChart) {
-			f.setType(Type.PollChart);
-		} else if (isPdf || canBeConverted) {
-			f.setType(Type.Presentation);
-		}
-		f.setHash(hash);
+			// add outputfolders for profiles
+			// if it is a presenation it will be copied to another place
+			if (!(isOffice || isPdf || isImage || isVideo || isAsIs)) {
+				result.addItem("wrongType", new ConverterProcessResult("The file type cannot be converted"));
+				return result;
+			}
+			if (isImage) {
+				f.setType(Type.Image);
+			} else if (isVideo) {
+				f.setType(Type.Video);
+			} else if (isChart) {
+				f.setType(Type.PollChart);
+			} else if (isPdf || isOffice) {
+				f.setType(Type.Presentation);
+			}
+			f.setHash(hash);
 
-		File file = f.getFile(ext);
-		log.debug("writing file to: " + file);
-		if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
-			returnError.addItem("No parent", new ConverterProcessResult("Unable to create parent for file: " + file.getCanonicalPath()));
-			return returnError;
-		}
-		FileUtils.copyInputStreamToFile(is, file);
+			f = fileDao.update(f);
+			log.debug("fileId: " + f.getId());
 
+			File file = f.getFile(ext);
+			log.debug("writing file to: " + file);
+			if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+				result.addItem("No parent", new ConverterProcessResult("Unable to create parent for file: " + file.getCanonicalPath()));
+				return result;
+			}
 
-		log.debug("canBeConverted: " + canBeConverted);
-		if (canBeConverted || isPdf) {
-			// convert to pdf and images
-			returnError = generatePDF.convertPDF(f, ext);
-		} else if (isChart) {
-			log.debug("uploaded chart file");
-		} else if (isImage) {
-			// convert it to JPG
-			log.debug("##### convert it to JPG: ");
-			returnError = imageConverter.convertImage(f, ext);
-		} else if (isVideo) {
-			List<ConverterProcessResult> returnList = flvExplorerConverter.convertToMP4(f, ext);
+			log.debug("canBeConverted: " + isOffice);
+			if (isOffice || isPdf) {
+				copyFile(temp, file);
+				// convert to pdf, thumbs, swf and xml-description
+				result = generatePDF.convertPDF(f, sf);
+			} else if (isChart) {
+				//TODO should be implemented copyFile(temp, file);
+				log.debug("uploaded chart file");
+			} else if (isImage) {
+				// convert it to JPG
+				log.debug("##### convert it to JPG: ");
+				copyFile(temp, file);
+				result = imageConverter.convertImage(f, sf);
+			} else if (isVideo) {
+				copyFile(temp, file);
+				List<ConverterProcessResult> returnList = flvExplorerConverter.convertToMP4(f, ext);
 
-			int i = 0;
-			for (ConverterProcessResult returnMap : returnList) {
-				returnError.addItem("processVideo " + i++, returnMap);
+				int i = 0;
+				for (ConverterProcessResult returnMap : returnList) {
+					result.addItem("processVideo " + i++, returnMap);
+				}
+			}
+
+			// has to happen at the end, otherwise it will be overwritten
+			//cause the variable is new initialized
+			result.setCompleteName(file.getName());
+			result.setFileItemId(f.getId());
+		} catch (Exception e) {
+			result.addItem("exception", new ConverterProcessResult("Unexpected exception: " + e.getMessage()));
+			throw e;
+		} finally {
+			if (temp != null && temp.exists() && temp.isFile()) {
+				log.debug("Clean up was successful ? {}", temp.delete());
 			}
 		}
-		f = fileDao.update(f);
-		log.debug("fileId: " + f.getId());
-
-		// has to happen at the end, otherwise it will be overwritten
-		//cause the variable is new initialized
-		returnError.setCompleteName(file.getName());
-		returnError.setFileItemId(f.getId());
-
-		return returnError;
+		return result;
 	}
 }

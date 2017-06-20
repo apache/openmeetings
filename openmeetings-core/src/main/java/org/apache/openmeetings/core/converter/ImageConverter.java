@@ -37,6 +37,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.ProcessHelper;
@@ -53,12 +54,12 @@ public class ImageConverter extends BaseConverter {
 	@Autowired
 	private ConfigurationDao cfgDao;
 
-	public ConverterProcessResultList convertImage(FileItem f, String ext) throws IOException {
+	public ConverterProcessResultList convertImage(FileItem f, StoredFile sf) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
 		File jpg = f.getFile(EXTENSION_JPG);
-		if (!EXTENSION_JPG.equals(ext)) {
-			File img = f.getFile(ext);
+		if (!sf.isJpg()) {
+			File img = f.getFile(sf.getExt());
 
 			log.debug("##### convertImage destinationFile: " + jpg);
 			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
