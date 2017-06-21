@@ -1923,4 +1923,5 @@
 	<entry key="bad.password.stop"><![CDATA['Слабый' пароль: пароль не должен содержать частей пользовательского email или логина]]></entry>
 	<entry key="sound.enable">Включить звук</entry>
 	<entry key="sound.mute">Выключить звук</entry>
+	<entry key="current.password">Текущий пароль</entry>
 </properties>

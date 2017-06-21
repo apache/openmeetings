@@ -1927,4 +1927,5 @@
 	<entry key="bad.password.stop"><![CDATA['Weak' password: it shouldn't contain part of the user's email address or username]]></entry>
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
+	<entry key="current.password">Current password</entry>
 </properties>

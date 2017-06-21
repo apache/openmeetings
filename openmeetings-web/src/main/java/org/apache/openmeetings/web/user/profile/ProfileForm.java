@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -25,27 +26,43 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
+import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
-import com.googlecode.wicket.jquery.core.Options;
-import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
+import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
 
 public class ProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private final UserForm userForm;
-	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private static final Logger log = Red5LoggerFactory.getLogger(ProfileForm.class, webAppRootKey);
+	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
+	private final GeneralUserForm userForm;
+	private final ChangePasswordDialog chPwdDlg;
 
-	public ProfileForm(String id) {
+	public ProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
 		super(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(getUserId())));
+		userForm = new GeneralUserForm("general", getModel(), false);
+		this.chPwdDlg = chPwdDlg;
+	}
 
-		add(feedback.setOutputMarkupId(true));
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(passwd.setLabel(Model.of(getString("current.password"))).setRequired(true));
+
 		add(new FormSaveRefreshPanel<User>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
@@ -62,7 +79,7 @@ public class ProfileForm extends Form<User> {
 			@Override
 			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 				try {
-					getBean(UserDao.class).update(getModelObject(), userForm.getPasswordField().getConvertedInput(), getUserId());
+					getBean(UserDao.class).update(getModelObject(), null, getUserId());
 				} catch (Exception e) {
 					error(e.getMessage());
 				}
@@ -86,13 +103,36 @@ public class ProfileForm extends Form<User> {
 				// FIXME update feedback with the error details
 			}
 		});
-		add(userForm = new UserForm("general", getModel()));
+		add(new WebMarkupContainer("changePwd").add(new ButtonBehavior("#changePwd"), new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				chPwdDlg.open(target);
+			}
+		}));
+		add(userForm);
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		add(new ComunityUserForm("comunity", getModel()));
 
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	@Override
+	protected void onValidate() {
+		String p = passwd.getConvertedInput();
+		if (!Strings.isEmpty(p) && !getBean(UserDao.class).verifyPassword(getModelObject().getId(), p)) {
+			error(getString("231"));
+			// add random timeout
+			try {
+				Thread.sleep(6 + (long)(10 * Math.random() * 1000));
+			} catch (InterruptedException e) {
+				log.error("Unexpected exception while sleeting", e);
+			}
+		}
+		super.onValidate();
 	}
 
 	@Override

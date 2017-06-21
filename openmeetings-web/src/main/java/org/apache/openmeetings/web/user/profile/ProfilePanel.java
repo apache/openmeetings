@@ -26,7 +26,8 @@ public class ProfilePanel extends UserPanel {
 	public ProfilePanel(String id) {
 		super(id);
 		setOutputMarkupId(true);
-		
-		add(new ProfileForm("form"));
+
+		final ChangePasswordDialog chPwdDlg = new ChangePasswordDialog("changePasswd");
+		add(chPwdDlg, new ProfileForm("form", chPwdDlg));
 	}
 }

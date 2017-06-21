@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.users;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
@@ -59,6 +61,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
@@ -86,6 +89,8 @@ public class UserForm extends AdminBaseForm<User> {
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
 	private final RequiredTextField<String> login = new RequiredTextField<>("login");
+	private StrongPasswordValidator passValidator;
+	private final PasswordTextField password = new PasswordTextField("password", new Model<String>());
 	private final MessageDialog warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 
@@ -94,86 +99,17 @@ public class UserForm extends AdminBaseForm<User> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		this.warning = warning;
-		// Add form fields
-		addFormFields();
-
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+		add(generalForm = new GeneralUserForm("general", getModel(), true));
 	}
 
 	@Override
-	protected void onModelChanged() {
-		super.onModelChanged();
-		generalForm.updateModelObject(getModelObject(), true);
-	}
-
-	@Override
-	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		User u = getModelObject();
-		try {
-			boolean isNew = (u.getId() == null);
-			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
-			if (isNew && sendEmailAtRegister) {
-				u.setActivatehash(UUID.randomUUID().toString());
-			}
-			u = getBean(UserDao.class).update(u, generalForm.getPasswordField().getConvertedInput(), getUserId());
-			if (isNew && sendEmailAtRegister) {
-				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(), generalForm.getEmail(), u.getActivatehash(), false, null);
-				if (!sendMail.equals("success")) {
-					throw new Exception("Mail for new user is not sent");
-				}
-			}
-		} catch (Exception e) {
-			// FIXME update feedback with the error details
-			log.error("[onSaveSubmit]: ", e);
-		}
-		setModelObject(u);
-		hideNewRecord();
-		target.add(this);
-		target.add(listContainer);
-		target.appendJavaScript("adminPanelInit();");
-		if (u.getGroupUsers().isEmpty()) {
-			warning.open(target);
-		}
-	}
-
-	@Override
-	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		UserDao userDao = getBean(UserDao.class);
-		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
-		update(target);
-	}
-
-	@Override
-	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
-		User user = getModelObject();
-		if (user.getId() != null) {
-			user = getBean(UserDao.class).get(user.getId());
-		} else {
-			user = getBean(UserDao.class).getNewUserInstance(null);
-		}
-		setModelObject(user);
-		update(target);
-	}
-
-	@Override
-	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		UserDao userDao = getBean(UserDao.class);
-		userDao.delete(getModelObject(), getUserId());
-		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
-		update(target);
-	}
-
-	/**
-	 * Add the fields to the form
-	 */
-	private void addFormFields() {
+	protected void onInitialize() {
+		super.onInitialize();
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+		add(password.setResetPassword(false).setLabel(Model.of(getString("133")))
+				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getModelObject())));
 		login.setLabel(Model.of(Application.getString(132)));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
-
-		add(generalForm = new GeneralUserForm("general", getModel(), true));
 
 		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -226,6 +162,76 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}));
 		add(new ComunityUserForm("comunity", getModel()));
+
+		// attach an ajax validation behavior to all form component's keydown
+		// event and throttle it down to once per second
+		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	@Override
+	protected void onModelChanged() {
+		super.onModelChanged();
+		password.setModelObject(null);
+		generalForm.updateModelObject(getModelObject(), true);
+		passValidator.setUser(getModelObject());
+	}
+
+	@Override
+	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+		User u = getModelObject();
+		try {
+			boolean isNew = (u.getId() == null);
+			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
+			if (isNew && sendEmailAtRegister) {
+				u.setActivatehash(UUID.randomUUID().toString());
+			}
+			u = getBean(UserDao.class).update(u, password.getConvertedInput(), getUserId());
+			if (isNew && sendEmailAtRegister) {
+				String email = u.getAddress().getEmail();
+				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
+				if (!sendMail.equals("success")) {
+					throw new Exception("Mail for new user is not sent");
+				}
+			}
+		} catch (Exception e) {
+			// FIXME update feedback with the error details
+			log.error("[onSaveSubmit]: ", e);
+		}
+		setModelObject(u);
+		hideNewRecord();
+		target.add(this);
+		target.add(listContainer);
+		target.appendJavaScript("adminPanelInit();");
+		if (u.getGroupUsers().isEmpty()) {
+			warning.open(target);
+		}
+	}
+
+	@Override
+	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
+		UserDao userDao = getBean(UserDao.class);
+		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
+		update(target);
+	}
+
+	@Override
+	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
+		User user = getModelObject();
+		if (user.getId() != null) {
+			user = getBean(UserDao.class).get(user.getId());
+		} else {
+			user = getBean(UserDao.class).getNewUserInstance(null);
+		}
+		setModelObject(user);
+		update(target);
+	}
+
+	@Override
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+		UserDao userDao = getBean(UserDao.class);
+		userDao.delete(getModelObject(), getUserId());
+		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
+		update(target);
 	}
 
 	public void updateDomain(AjaxRequestTarget target) {
@@ -278,6 +284,7 @@ public class UserForm extends AdminBaseForm<User> {
 		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("105"));
 		}
+		super.onValidate();
 	}
 
 	@Override
