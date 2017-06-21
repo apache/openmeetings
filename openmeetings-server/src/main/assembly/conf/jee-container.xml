@@ -22,13 +22,6 @@
 				http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 				http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
 		">
-	<!-- War deployer -->
-	<bean id="warDeployer" class="org.red5.server.tomcat.WarDeployer">
-		<property name="checkInterval" value="${war.deploy.server.check.interval}"/>
-		<property name="webappFolder" value="${red5.root}/webapps"/>
-		<!-- Expand war files prior to startup of the remaining services -->
-		<property name="expandWars" value="true" />
-	</bean>
 	<!--
 	The tomcat connectors may be blocking or non-blocking. Select between either option via the protocol property.
 		Blocking I/O:
@@ -37,7 +30,7 @@
 			<property name="protocol" value="org.apache.coyote.http11.Http11NioProtocol" />
 	 -->
 	<!-- Tomcat without SSL enabled -->
-	<bean id="tomcat.server" class="org.red5.server.tomcat.TomcatLoader" depends-on="context.loader,warDeployer" lazy-init="true">
+	<bean id="tomcat.server" class="org.red5.server.tomcat.TomcatLoader" depends-on="context.loader" lazy-init="true">
 		<property name="webappFolder" value="${red5.root}/webapps" />
 		<property name="connectors">
 			<list>
@@ -103,7 +96,7 @@
 							<entry key="truststoreFile" value="${rtmps.truststorefile}" />
 							<entry key="truststorePass" value="${rtmps.truststorepass}" />
 							<entry key="clientAuth" value="false" />
-							<entry key="allowUnsafeLegacyRenegotiation" value="true" />							 
+							<entry key="allowUnsafeLegacyRenegotiation" value="true" />
 							<entry key="maxKeepAliveRequests" value="${http.max_keep_alive_requests}"/>
 							<entry key="keepAliveTimout" value="-1"/>
 							<entry key="useExecutor" value="true"/>
