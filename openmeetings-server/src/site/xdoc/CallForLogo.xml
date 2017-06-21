@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Call For Logo</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -144,18 +144,6 @@
 				<li>
 					<table>
 						<tr>
-							<td><img class="logo-square" src="images/logos/logo_om_small2.png" alt="Square version" width="50"/></td>
-							<td><span class="btn btn-primary" onclick="applyLogoSmall($(this));">Apply</span></td>
-						</tr>
-						<tr>
-							<td>Author</td>
-							<td>Alvaro Bustos</td>
-						</tr>
-					</table>
-				</li>
-				<li>
-					<table>
-						<tr>
 							<td><img class="logo-square" src="images/logos/logo_om_small3.png" alt="Square version" width="50"/></td>
 							<td><span class="btn btn-primary" onclick="applyLogoSmall($(this));">Apply</span></td>
 						</tr>
@@ -174,18 +162,6 @@
 						<tr>
 							<td>Author</td>
 							<td>Vital Trizna</td>
-						</tr>
-					</table>
-				</li>
-				<li>
-					<table>
-						<tr>
-							<td><img class="logo-square" src="images/logos/logo_om_small5.png" alt="Square version" width="50"/></td>
-							<td><span class="btn btn-primary" onclick="applyLogoSmall($(this));">Apply</span></td>
-						</tr>
-						<tr>
-							<td>Author</td>
-							<td>Alvaro Bustos</td>
 						</tr>
 					</table>
 				</li>
