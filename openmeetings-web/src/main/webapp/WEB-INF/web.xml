@@ -104,6 +104,21 @@
 
 	<security-constraint>
 		<web-resource-collection>
+			<web-resource-name>Allowed methods</web-resource-name>
+			<url-pattern>/services/*</url-pattern>
+			<http-method-omission>TRACE</http-method-omission>
+			<http-method-omission>HEAD</http-method-omission>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>Allowed methods</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<!-- no auth-constraint tag here -->
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
 			<web-resource-name>Forbidden</web-resource-name>
 			<url-pattern>/streams/*</url-pattern>
 		</web-resource-collection>
@@ -121,17 +136,15 @@
 		</web-resource-collection>
 		<web-resource-collection>
 			<web-resource-name>Forbidden</web-resource-name>
-			<url-pattern>/*</url-pattern>
-			<http-method>PUT</http-method>
-			<http-method>HEAD</http-method>
-			<http-method>PATCH</http-method>
-			<http-method>DELETE</http-method>
+			<url-pattern>/services/*</url-pattern>
 			<http-method>TRACE</http-method>
+			<http-method>HEAD</http-method>
 		</web-resource-collection>
 		<web-resource-collection>
 			<web-resource-name>Forbidden</web-resource-name>
-			<url-pattern>/services/*</url-pattern>
-			<http-method>TRACE</http-method>
+			<url-pattern>/*</url-pattern>
+			<http-method-omission>GET</http-method-omission>
+			<http-method-omission>POST</http-method-omission>
 		</web-resource-collection>
 		<auth-constraint/>
 	</security-constraint>
