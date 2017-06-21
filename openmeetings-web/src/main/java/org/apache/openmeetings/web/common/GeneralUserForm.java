@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
@@ -30,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
@@ -50,7 +47,6 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -68,24 +64,23 @@ import com.googlecode.wicket.kendo.ui.form.datetime.local.AjaxDatePicker;
 
 public class GeneralUserForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
+	private final RequiredTextField<String> email = new RequiredTextField<>("address.email");
 	private LocalDate age;
-	private final PasswordTextField passwordField;
-	private final RequiredTextField<String> email;
 	private final List<GroupUser> grpUsers = new ArrayList<>();
-	private final StrongPasswordValidator passValidator;
 	private final boolean isAdminForm;
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
 		super(id, model);
 		this.isAdminForm = isAdminForm;
-
-		//TODO should throw exception if non admin User edit somebody else (or make all fields read-only)
-		add(passwordField = new PasswordTextField("password", new Model<String>()));
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		passwordField.setResetPassword(false)
-				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), model.getObject()));
-
 		updateModelObject(getModelObject(), isAdminForm);
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(email);
+		email.setLabel(Model.of(Application.getString(137)));
+		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new DropDownChoice<>("salutation"
 				, Arrays.asList(Salutation.values())
 				, new ChoiceRenderer<Salutation>() {
@@ -103,14 +98,8 @@ public class GeneralUserForm extends Form<User> {
 				}));
 		add(new TextField<String>("firstname"));
 		add(new TextField<String>("lastname"));
-
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
-
 		add(new LanguageDropDown("languageId"));
-
-		add(email = new RequiredTextField<>("address.email"));
-		email.setLabel(Model.of(Application.getString(137)));
-		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new TextField<String>("address.phone"));
 		add(new CheckBox("sendSMS"));
 		add(new AjaxDatePicker("age", new PropertyModel<LocalDate>(this, "age"), WebSession.get().getLocale()) {
@@ -128,11 +117,6 @@ public class GeneralUserForm extends Form<User> {
 		add(new TextField<String>("address.town"));
 		add(new CountryDropDown("address.country"));
 		add(new TextArea<String>("address.comment"));
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		add(new Select2MultiChoice<>("groupUsers", null, new RestrictiveChoiceProvider<GroupUser>() {
 			private static final long serialVersionUID = 1L;
 
@@ -171,7 +155,6 @@ public class GeneralUserForm extends Form<User> {
 	public void updateModelObject(User u, boolean isAdminForm) {
 		grpUsers.clear();
 		grpUsers.addAll(u.getGroupUsers());
-		passValidator.setUser(u);
 		if (isAdminForm) {
 			List<Group> grpList = hasGroupAdminLevel(getRights())
 					? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
@@ -194,14 +177,6 @@ public class GeneralUserForm extends Form<User> {
 			error(Application.getString(1000));
 		}
 		super.onValidate();
-	}
-
-	public PasswordTextField getPasswordField() {
-		return passwordField;
-	}
-
-	public String getEmail() {
-		return email.getValue();
 	}
 
 	@Override

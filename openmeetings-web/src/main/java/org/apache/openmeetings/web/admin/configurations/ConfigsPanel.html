@@ -50,10 +50,10 @@
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="266" /></legend>
 					<div class="formelement">
-						<label><wicket:message key="267" /></label><input type="text" wicket:id="key"/>
+						<label wicket:for="key"><wicket:message key="267" /></label><input type="text" wicket:id="key"/>
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="271" /></label><input type="text" wicket:id="value"/>
+						<label wicket:for="value"><wicket:message key="271" /></label><input type="text" wicket:id="value"/>
 					</div>
 					<div class="formelement">
 						<label><wicket:message key="268" /></label><span wicket:id="updated"/>
@@ -62,7 +62,7 @@
 						<label><wicket:message key="269" /></label><span wicket:id="user.login"/>
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="270" /></label><textarea wicket:id="comment"/>
+						<label wicket:for="comment"><wicket:message key="270" /></label><textarea wicket:id="comment"/>
 					</div>
 				</fieldset>
 			</div>

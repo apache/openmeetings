@@ -27,14 +27,17 @@
 				<wicket:message key="143" />
 			</legend>
 			<div class="formelement">
-				<label><wicket:message key="132" /></label><input type="text" wicket:id="login" />
+				<label wicket:for="login"><wicket:message key="132" /></label><input type="text" wicket:id="login" />
+			</div>
+			<div class="formelement">
+				<label wicket:for="password"><wicket:message key="133" /></label><input type="password" wicket:id="password" />
 			</div>
 			<form wicket:id="general"></form>
 			<div class="formelement">
-				<label><wicket:message key="45" /></label><select wicket:id="type"></select>
+				<label wicket:for="type"><wicket:message key="45" /></label><select wicket:id="type"></select>
 			</div>
 			<div class="formelement" wicket:id="domain">
-				<label><wicket:message key="1118" /></label><select wicket:id="domainId"></select>
+				<label wicket:for="domainId"><wicket:message key="1118" /></label><select wicket:id="domainId"></select>
 			</div>
 			<div class="formelement">
 				<label><wicket:message key="1308" /></label><span wicket:id="ownerId"></span>
@@ -49,11 +52,11 @@
 				<div class="info-text">
 					<wicket:message key="1149" />
 				</div>
-				<br /> <label><wicket:message key="1148" /></label><input class="formcheckbox" type="checkbox"
+				<br /> <label wicket:for="forceTimeZoneCheck"><wicket:message key="1148" /></label><input class="formcheckbox" type="checkbox"
 					wicket:id="forceTimeZoneCheck" />
 			</div>
 			<div class="formelement">
-				<label><wicket:message key="881" /></label><div class="om-select2"><select class="input" wicket:id="rights"></select></div>
+				<label wicket:for="rights"><wicket:message key="881" /></label><div class="om-select2"><select class="input" wicket:id="rights"></select></div>
 			</div>
 		</fieldset>
 		<fieldset class="ui-widget-content">

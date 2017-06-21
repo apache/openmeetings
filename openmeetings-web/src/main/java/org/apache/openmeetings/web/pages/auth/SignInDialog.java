@@ -206,7 +206,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 			try {
 				Thread.sleep(6 + (long)(10 * Math.random() * 1000));
 			} catch (InterruptedException e) {
-				log.error("Unexpected exception while sleeting", e);
+				log.error("Unexpected exception while sleeping", e);
 			}
 			strategy.remove();
 			shake(target);

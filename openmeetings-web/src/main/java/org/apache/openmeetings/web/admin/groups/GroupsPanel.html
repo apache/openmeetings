@@ -46,40 +46,40 @@
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="170" /></legend>
 					<div class="formelement">
-						<label><wicket:message key="171" /></label><input type="text" wicket:id="name" />
+						<label wicket:for="name"><wicket:message key="171" /></label><input type="text" wicket:id="name" />
 					</div>
 					<div class="formelement">
 						<label><wicket:message key="admin.group.form.logo" /></label><div wicket:id="logo" class="input group logo"></div>
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="admin.group.form.tag" /></label><input type="text" wicket:id="tag" />
+						<label wicket:for="tag"><wicket:message key="admin.group.form.tag" /></label><input type="text" wicket:id="tag" />
 					</div>
 					<div class="formelement">
-						<label style="font-weight: bold;"><wicket:message key="178" /></label><div class="om-select2"><select wicket:id="user2add" class="input"></select></div>
+						<label wicket:for="user2add" style="font-weight: bold;"><wicket:message key="178" /></label><div class="om-select2"><select wicket:id="user2add" class="input"></select></div>
 					</div>
 					<div class="formelement">
 						<div wicket:id="users"></div>
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="restricted.group.files" /></label><input type="checkbox" wicket:id="restricted" />
+						<label wicket:for="restricted"><wicket:message key="restricted.group.files" /></label><input type="checkbox" wicket:id="restricted" />
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="admin.group.form.limited" /></label><input type="checkbox" wicket:id="limited" />
+						<label wicket:for="limited"><wicket:message key="admin.group.form.limited" /></label><input type="checkbox" wicket:id="limited" />
 					</div>
 					<div class="formelement" style="display:none">
-						<label><wicket:message key="admin.group.form.maxFilesSize" /></label><input type="number" wicket:id="maxFilesSize" /><wicket:message key="network.test.mb"/>
+						<label wicket:for="maxFilesSize"><wicket:message key="admin.group.form.maxFilesSize" /></label><input type="number" wicket:id="maxFilesSize" /><wicket:message key="network.test.mb"/>
 					</div>
 					<div class="formelement" style="display:none">
-						<label><wicket:message key="admin.group.form.maxRecordingsSize" /></label><input type="number" wicket:id="maxRecordingsSize" /><wicket:message key="network.test.mb"/>
+						<label wicket:for="maxRecordingsSize"><wicket:message key="admin.group.form.maxRecordingsSize" /></label><input type="number" wicket:id="maxRecordingsSize" /><wicket:message key="network.test.mb"/>
 					</div>
 					<div class="formelement" style="display:none">
-						<label><wicket:message key="admin.group.form.maxRooms" /></label><input type="number" wicket:id="maxRooms" />
+						<label wicket:for="maxRooms"><wicket:message key="admin.group.form.maxRooms" /></label><input type="number" wicket:id="maxRooms" />
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="admin.group.form.recordingTtl" /></label><input type="number" wicket:id="recordingTtl" /><wicket:message key="admin.group.form.days"/>
+						<label wicket:for="recordingTtl"><wicket:message key="admin.group.form.recordingTtl" /></label><input type="number" wicket:id="recordingTtl" /><wicket:message key="admin.group.form.days"/>
 					</div>
 					<div class="formelement">
-						<label><wicket:message key="admin.group.form.reminderDays" /></label><input type="number" wicket:id="reminderDays" /><wicket:message key="admin.group.form.days"/>
+						<label wicket:for="reminderDays"><wicket:message key="admin.group.form.reminderDays" /></label><input type="number" wicket:id="reminderDays" /><wicket:message key="admin.group.form.days"/>
 					</div>
 				</fieldset>
 			</div>
