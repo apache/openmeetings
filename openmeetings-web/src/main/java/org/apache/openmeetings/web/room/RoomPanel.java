@@ -308,7 +308,6 @@ public class RoomPanel extends BasePanel {
 		}
 		if (room.isVisible()) {
 			add(new NicknameDialog("nickname", this));
-			wbArea.setVisible(!r.isHidden(RoomElement.Whiteboard));
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
