@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Memory based cache, configured as singleton in spring configuration
@@ -37,11 +36,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class WhiteboardCache {
 	private Map<Long, Whiteboards> cache = new ConcurrentHashMap<>();
 
-	@Autowired
-	private LabelDao labelDao;
-
-	private String getDefaultName(Long langId, int num) {
-		StringBuilder sb = new StringBuilder(labelDao.getString("615", langId));
+	private static String getDefaultName(Long langId, int num) {
+		StringBuilder sb = new StringBuilder(LabelDao.getString("615", langId));
 		if (num > 0) {
 			sb.append(" ").append(num);
 		}

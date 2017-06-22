@@ -18,13 +18,16 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.RandomStringGenerator;
 import org.junit.Test;
 
 public abstract class AbstractCryptTest {
@@ -37,17 +40,21 @@ public abstract class AbstractCryptTest {
 
 		assertTrue("Hash for null should be null", crypt.verify(null, null));
 	}
-	
+
 	private static List<String> get(int count) {
 		Random rnd = new Random();
 		List<String> l = new ArrayList<>(count + 1);
 		l.add("");
+		RandomStringGenerator generator = new RandomStringGenerator.Builder()
+				.withinRange('!', '}')
+				.usingRandom(rnd::nextInt)
+				.build();
 		for (int i = 0; i < count; ++i) {
-			l.add(RandomStringUtils.random(rnd.nextInt(256)));
+			l.add(generator.generate(rnd.nextInt(256)));
 		}
 		return l;
 	}
-	
+
 	@Test
 	public void test() {
 		for (String str : get(64)) {
