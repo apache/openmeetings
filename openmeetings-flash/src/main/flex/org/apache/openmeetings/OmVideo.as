@@ -84,6 +84,9 @@ public class OmVideo {
 	}
 
 	private function clear():void {
+		if (!vid) {
+			return;
+		}
 		vid.attachNetStream(null);
 		vid.attachCamera(null);
 		vid.clear();

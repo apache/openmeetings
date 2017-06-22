@@ -196,7 +196,7 @@
 			}
 			debug("Camera selected:: " + selectedCam);
 			var cam:Camera = getCam();
-			debug("Camera selected:: " + cam);
+			debug("Camera selected:: " + cam, cam.muted);
 			if (cam != null) {
 				if (cam.muted) {
 					debug("Camera Muted");
