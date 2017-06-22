@@ -72,7 +72,7 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 					} catch (Exception e) {
 						//no-op expected
 					}
-					if (hasAdminLevel(getRights()) || null != getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId())) {
+					if (id == null || hasAdminLevel(getRights()) || null != getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId())) {
 						allowed = true;
 					}
 				}
