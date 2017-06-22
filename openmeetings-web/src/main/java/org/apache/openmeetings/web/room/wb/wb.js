@@ -675,7 +675,7 @@ var Wb = function() {
 		}
 	}
 	function _findObject(o) {
-		var _o = {};
+		var _o = null;
 		canvases[o.slide].forEachObject(function(__o) {
 			if (!!__o && o.uid === __o.uid) {
 				_o = __o;
@@ -973,7 +973,10 @@ var Wb = function() {
 				APointer().create(canvases[o.slide], o);
 				break;
 			default:
-				_createObject([o], _createHandler);
+				var __o = _findObject(o);
+				if (!__o) {
+					_createObject([o], _createHandler);
+				}
 				/*
 				 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
 				if ('Video' === o.fileType || 'Recording' === o.fileType) {
