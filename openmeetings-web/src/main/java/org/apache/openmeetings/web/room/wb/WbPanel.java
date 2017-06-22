@@ -76,6 +76,7 @@ import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.github.openjson.JSONStringer;
 import com.github.openjson.JSONTokener;
 
 public class WbPanel extends Panel {
@@ -305,7 +306,7 @@ public class WbPanel extends Panel {
 				JSONObject o = wbEntry.getValue();
 				arr.put(addFileUrl(wbs.getUid(), o));
 			}
-			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString()).append(");");
+			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
 		}
 		sb.append("WbArea.activateWb({wbId: ").append(wbs.getActiveWb()).append("});");
 		response.render(OnDomReadyHeaderItem.forScript(sb));
@@ -324,7 +325,7 @@ public class WbPanel extends Panel {
 				roomId
 				, new JSONObject().put("type", "wb")
 				, check
-				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);", meth.name(), obj.toString())).toString()
+				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);", meth.name(), obj.toString(new NullStringer()))).toString()
 			);
 	}
 
@@ -472,4 +473,11 @@ public class WbPanel extends Panel {
 
 	//FIXME TODO openjson 1.0.2
 	//private static class ObjectStringer
+
+	private static class NullStringer extends JSONStringer {
+		@Override
+		public JSONStringer entry(Entry<String, Object> entry) {
+			return this.key(entry.getKey()).value(entry.getValue());
+		}
+	}
 }
