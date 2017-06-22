@@ -31,6 +31,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.net.ConnectException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
@@ -311,6 +312,14 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		Map<String, Object> params = new HashMap<>();
 		params.put("uid", parentSid);
 		instance.connect(host, port, map, this, new Object[]{params});
+	}
+
+	void handleException(Throwable e) {
+		frame.setStatus("Exception: " + e);
+		if (e instanceof ConnectException) {
+			fallbackUsed = true;
+			connect(publishName);
+		}
 	}
 
 	private void captureScreenStart() {

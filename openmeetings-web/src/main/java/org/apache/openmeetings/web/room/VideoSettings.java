@@ -80,12 +80,13 @@ public class VideoSettings extends Panel {
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
 			s.put(FLASH_NATIVE_SSL, gs.getBoolean(FLASH_NATIVE_SSL));
+			int port = url.getPort() > -1 ? url.getPort() : url.getDefaultPort();
 			if (gs.getBoolean(FLASH_SECURE)) {
 				s.put(URL, getUri("rtmps", url.getHost(), gs.getString(FLASH_SSL_PORT), path));
-				s.put(FALLBACK, getUri("rtmps", url.getHost(), url.getPort(), path));
+				s.put(FALLBACK, getUri("rtmps", url.getHost(), port, path));
 			} else {
 				s.put(URL, getUri("rtmp", url.getHost(), gs.getString(FLASH_PORT), path));
-				s.put(FALLBACK, getUri("rtmpt", url.getHost(), url.getPort(), path));
+				s.put(FALLBACK, getUri("rtmpt", url.getHost(), port, path));
 			}
 		} catch (Exception e) {
 			log.error("Error while constructing video settings parameters", e);
