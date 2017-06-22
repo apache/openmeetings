@@ -21,6 +21,7 @@ package org.apache.openmeetings.util;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.tika.metadata.TikaMetadataKeys.RESOURCE_NAME_KEY;
 import static org.apache.tika.mime.MediaType.application;
 import static org.apache.tika.mime.MediaType.image;
 
@@ -106,7 +107,7 @@ public class StoredFile {
 		}
 		Tika tika = new Tika();
 		Metadata md = new Metadata();
-		md.add(Metadata.RESOURCE_NAME_KEY, String.format("%s.%s", name, ext));
+		md.add(RESOURCE_NAME_KEY, String.format("%s.%s", name, ext));
 		try {
 			mime = MediaType.parse(tika.detect(is, md));
 		} catch (Exception e) {

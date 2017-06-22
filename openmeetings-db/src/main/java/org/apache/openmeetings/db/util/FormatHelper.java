@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
+import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 import java.util.regex.Pattern;
 
@@ -27,7 +27,7 @@ import org.apache.openmeetings.db.entity.user.User;
 public class FormatHelper {
 	/**
 	 * taken from BidiUtils
-	 * 
+	 *
 	 * A regular expression for matching right-to-left language codes. See
 	 * {@link #isRtlLanguage} for the design.
 	 */
