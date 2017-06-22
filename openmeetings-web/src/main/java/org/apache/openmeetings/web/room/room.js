@@ -144,8 +144,14 @@ var VideoManager = (function() {
 		} else if (av && v.length == 1) {
 			v.data().update(c);
 		} else if (!av && v.length == 1) {
-			v.remove();
+			_closeV(v);
 		}
+	}
+	function _closeV(v) {
+		if (v.dialog('instance') !== undefined) {
+			v.dialog('destroy');
+		}
+		v.remove();
 	}
 	function _play(c) {
 		if (!!c.screenShare) {
@@ -168,7 +174,7 @@ var VideoManager = (function() {
 			if (v.data().client().screenShare) {
 				share.off('click').hide();
 			}
-			v.remove();
+			_closeV(v);
 		}
 	}
 	function _highlight(el, count) {
