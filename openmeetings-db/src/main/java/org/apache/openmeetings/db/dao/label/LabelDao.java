@@ -129,7 +129,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 			Document document = reader.read(getLangFile());
 			Element root = document.getRootElement();
 			languages.clear();
-			for (@SuppressWarnings("unchecked")Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
+			for (Iterator<Element> it = root.elementIterator("lang"); it.hasNext();) {
 				Element item = it.next();
 				Long id = Long.valueOf(item.attributeValue("id"));
 				String code = item.attributeValue("code");

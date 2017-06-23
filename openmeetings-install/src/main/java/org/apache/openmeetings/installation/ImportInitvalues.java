@@ -176,17 +176,14 @@ public class ImportInitvalues {
 
 		Element root = document.getRootElement();
 
-		for (@SuppressWarnings("unchecked")
-		Iterator<Element> it = root.elementIterator("row"); it.hasNext();) {
-
+		for (Iterator<Element> it = root.elementIterator("row"); it.hasNext();) {
 			Element row = it.next();
 
 			Long errorvalueId = null;
 			Long labelId = null;
 			ErrorValue.Type type = null;
 
-			for (@SuppressWarnings("unchecked")
-			Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
+			for (Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
 				Element field = itSub.next();
 
 				String name = field.attributeValue("name");

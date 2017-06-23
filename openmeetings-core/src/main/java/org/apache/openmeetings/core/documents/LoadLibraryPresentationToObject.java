@@ -31,7 +31,6 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class LoadLibraryPresentationToObject {
-
 	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentationToObject.class, OpenmeetingsVariables.webAppRootKey);
 
 	private static LoadLibraryPresentationToObject instance;
@@ -55,8 +54,7 @@ public class LoadLibraryPresentationToObject {
 			Element root = document.getRootElement();
 			Integer k = 0;
 
-			for (@SuppressWarnings("unchecked")
-				Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
 				Element item = i.next();
 				log.error(item.getName());
 
@@ -103,8 +101,7 @@ public class LoadLibraryPresentationToObject {
 
 			LinkedList<FileExplorerItemDTO> thumbMap = new LinkedList<>();
 
-			for (@SuppressWarnings("unchecked")
-			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
+			for (Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
 				log.info("createListObjectLibraryByFileDocumentThumbs"+thumbElement);
 				FileExplorerItemDTO singleThumb = new FileExplorerItemDTO();

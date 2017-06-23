@@ -196,7 +196,6 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		log.debug(String.format("host: %s, port: %s, app: %s, publish: %s", host, port, app, publishName));
 	}
 
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		new Core(args);
 	}
