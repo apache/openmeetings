@@ -98,10 +98,10 @@ var Video = (function() {
 			o.cam = c.cam;
 			o.mic = c.mic;
 			o.mode = 'broadcast';
-			o.uid = c.uid;
+			o.uid = _uid;
 		} else {
 			o.mode = 'play';
-			o.uid = _uid;
+			o.uid = c.uid;
 		}
 		o.width = c.width;
 		o.height = c.height;
