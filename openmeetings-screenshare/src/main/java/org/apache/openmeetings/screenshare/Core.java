@@ -188,7 +188,6 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		new Core(args);
 	}

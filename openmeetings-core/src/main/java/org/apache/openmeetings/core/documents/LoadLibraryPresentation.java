@@ -35,93 +35,77 @@ import org.slf4j.Logger;
 
 public class LoadLibraryPresentation {
 	private static final Logger log = Red5LoggerFactory.getLogger(LoadLibraryPresentation.class, OpenmeetingsVariables.webAppRootKey);
-	
+
 	public static LibraryPresentation parseLibraryFileToObject(File file){
 		try {
 			LibraryPresentation lPresentation = new LibraryPresentation();
-			
-	        SAXReader reader = new SAXReader();
-	        Document document = reader.read( new FileInputStream(file) );
-	        
-	        Element root = document.getRootElement();
-	        
-	        for ( @SuppressWarnings("unchecked")
-			Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
-	        	
-	            Element item = i.next();
-	            
-	            log.debug(item.getName());
-	            
-	            String nodeVal = item.getName();
-	            
+
+			SAXReader reader = new SAXReader();
+			Document document = reader.read( new FileInputStream(file) );
+
+			Element root = document.getRootElement();
+
+			for (Iterator<Element> i = root.elementIterator(); i.hasNext(); ) {
+				Element item = i.next();
+
+				log.debug(item.getName());
+				String nodeVal = item.getName();
+
 				if (nodeVal.equals("originalDocument")){
-					
 					lPresentation.setOriginalDocument(createListObjectLibraryByFileDocument(item));
-					
 				} else if (nodeVal.equals("pdfDocument")){
-					
 					lPresentation.setPdfDocument(createListObjectLibraryByFileDocument(item));
-					
 				} else if (nodeVal.equals("swfDocument")){
-					
 					lPresentation.setSwfDocument(createListObjectLibraryByFileDocument(item));
-					
 				} else if (nodeVal.equals("thumbs")) {
-					
 					lPresentation.setThumbs(createListObjectLibraryByFileDocumentThumbs(item));
-					
 				} else {
 					throw new Exception("Unkown Library type: "+nodeVal);
 				}
-	            
-	        }
-	        
-	        log.debug("Returning presentation file object");
-			
+			}
+
+			log.debug("Returning presentation file object");
+
 			return lPresentation;
 		} catch (Exception err) {
 			log.error("parseLibraryFileToObject",err);
 			return null;
 		}
 	}
-	
+
 	public static LibraryPresentationFile createListObjectLibraryByFileDocument(Element fileElement){
 		try {
-			
 			log.info("createListObjectLibraryByFileDocument"+fileElement);
-			
+
 			LibraryPresentationFile libraryPresentationFile = new LibraryPresentationFile();
 			libraryPresentationFile.setName(fileElement.getName());
 			libraryPresentationFile.setFilename(fileElement.getText());
 			libraryPresentationFile.setLastmod(fileElement.attribute("lastmod").getText());
 			libraryPresentationFile.setSize(Long.valueOf(fileElement.attribute("size").getText()));
-			
+
 			return libraryPresentationFile;
-			
+
 		} catch (Exception err) {
 			log.error("createListObjectLibraryByFileDocument",err);
 		}
 		return null;
-	}		
-	
+	}
+
 	public static LibraryPresenationThumbs createListObjectLibraryByFileDocumentThumbs(Element fileElement){
 		try {
-			
+
 			LibraryPresenationThumbs thumbMap = new LibraryPresenationThumbs();
 			thumbMap.setName(fileElement.getName());
-			
-			Integer k = 0;
-			for ( @SuppressWarnings("unchecked")
-			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); i.next()) {
+
+			int k = 0;
+			for (Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); i.next()) {
 				k++;
 			}
-			
+
 			thumbMap.setThumbs(new LibraryPresentationThumb[k]);
-			
-			
+
 			k = 0;
-			for ( @SuppressWarnings("unchecked")
-			Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
+			for (Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
 				//log.info("createListObjectLibraryByFileDocumentThumbs"+thumbElement);
 				LibraryPresentationThumb singleThumb = new LibraryPresentationThumb();
@@ -132,14 +116,11 @@ public class LoadLibraryPresentation {
 				thumbMap.getThumbs()[k] = singleThumb;
 				k++;
 			}
-			
-			
+
 			return thumbMap;
-			
 		} catch (Exception err) {
 			log.error("createListObjectLibraryByFileDocumentThumbs",err);
 		}
 		return null;
-	}	
-	
+	}
 }
