@@ -104,7 +104,7 @@ public abstract class BaseConverter {
 	}
 
 	protected long diff(Date from, Date to) {
-		return from.getTime() - to.getTime();
+		return from == null || to == null ? 0 : from.getTime() - to.getTime();
 	}
 
 	protected double diffSeconds(Date from, Date to) {
