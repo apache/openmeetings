@@ -85,8 +85,12 @@ public class ProfileImageResourceReference extends ResourceReference {
 				ResourceResponse rr;
 				if (WebSession.get().isSignedIn()) {
 					PageParameters params = attributes.getParameters();
-					userId = params.get("id").toOptionalLong();
-					uri = getBean(UserDao.class).get(userId).getPictureuri();
+					try {
+						userId = params.get("id").toOptionalLong();
+						uri = getBean(UserDao.class).get(userId).getPictureuri();
+					} catch (Exception e) {
+						// no-op, junk filter
+					}
 					rr = super.newResourceResponse(attributes);
 					rr.disableCaching();
 				} else {

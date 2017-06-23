@@ -68,10 +68,12 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 			} else {
 				email = value;
 			}
-			Validatable<String> valEmail = new Validatable<>(email);
-			RfcCompliantEmailAddressValidator.getInstance().validate(valEmail);
-			if (valEmail.isValid()) {
-				u = getBean(UserDao.class).getContact(email, fName, lName, getUserId());
+			if (!Strings.isEmpty(email)) {
+				Validatable<String> valEmail = new Validatable<>(email);
+				RfcCompliantEmailAddressValidator.getInstance().validate(valEmail);
+				if (valEmail.isValid()) {
+					u = getBean(UserDao.class).getContact(email, fName, lName, getUserId());
+				}
 			}
 		}
 		return u;

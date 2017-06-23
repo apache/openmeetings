@@ -137,8 +137,11 @@ public class OmFileHelper {
 	}
 
 	public static File getUserProfilePicture(Long userId, String uri) {
-		File img = new File(getUploadProfilesUserDir(userId), uri == null ? "" : uri);
-		if (!img.exists() || img.isDirectory()) {
+		File img = null;
+		if (userId != null) {
+			img = new File(getUploadProfilesUserDir(userId), uri == null ? "" : uri);
+		}
+		if (img == null || !img.exists() || img.isDirectory()) {
 			img = getDefaultProfilePicture();
 		}
 		return img;
