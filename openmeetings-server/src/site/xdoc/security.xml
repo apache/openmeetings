@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Security Vulnerabilities</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -38,6 +38,140 @@
 				<br/>
 				Please NOTE: only security issues should be reported to this list.
 			</p>
+		</section>
+		<section name="CVE-2017-7663 - Apache OpenMeetings - XSS in chat">
+			<p>Severity: High</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 3.2.0</p>
+			<p>Description: Both global and Room chat are vulnerable to XSS attack<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7663">CVE-2017-7663</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7664 - Apache OpenMeetings - Missing XML Validation">
+			<p>Severity: High</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
+			<p>Description: Uploaded XML documents were not correctly validated<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7664">CVE-2017-7664</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7666 - Apache OpenMeetings Missing Secure Headers">
+			<p>Severity: High</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache Openmeetings is vulnerable to Cross-Site Request Forgery (CSRF) 
+					attacks, XSS attacks, click-jacking, and MIME based attacks<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7666">CVE-2017-7666</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7673 - Apache OpenMeetings  Insufficient check in dialogs with passwords">
+			<p>Severity: High</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetings uses not very strong cryptographic storage,
+					captcha is not used in registration and forget password dialogs and auth forms
+					missing brute force protection<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7673">CVE-2017-7673</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7680 - Apache OpenMeetings - Insecure crossdomain.xml policy">
+			<p>Severity: Low</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetings has an overly permissive
+					crossdomain.xml file. This allows for flash content to be loaded
+					from untrusted domains.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7680">CVE-2017-7680</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7681 - Apache OpenMeetings - SQL injection in web services">
+			<p>Severity: High</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetings is vulnerable to SQL injection
+					This allows authenticated users to modify the structure of the existing
+					query and leak the structure of other queries being made by the
+					application in the back-end<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7681">CVE-2017-7681</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7682 - Apache OpenMeetings - Business Logic Bypass">
+			<p>Severity: Medium</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 3.2.0</p>
+			<p>Description: Apache OpenMeetings is vulnerable to parameter manipulation
+					attacks, as a result attacker has access to restricted areas.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7682">CVE-2017-7682</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7683 - Apache OpenMeetings - Information Disclosure">
+			<p>Severity: Lowest</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetings displays Tomcat version and
+					detailed error stack trace which is not secure.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7683">CVE-2017-7683</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7684 - Apache OpenMeetings - Insecure File Upload">
+			<p>Severity: Low</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetings doesn't check contents of files
+					being uploaded. An attacker can cause a denial of service by
+					uploading multiple large files to the server<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7684">CVE-2017-7684</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7685 - Apache OpenMeetings - Insecure HTTP Methods">
+			<p>Severity: Lowest</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetingsrespond to the following insecure HTTP
+					Methods: PUT, DELETE, HEAD, and PATCH.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7685">CVE-2017-7685</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
+		</section>
+		<section name="CVE-2017-7688 - Apache OpenMeetings - Insecure Password Update">
+			<p>Severity: Low</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
+			<p>Description: Apache OpenMeetings updates user password in insecure manner.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7688">CVE-2017-7688</a>
+			</p>
+			<p>The issue was fixed in 3.3.0<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 3.3.0</p>
+			<p>Credit: This issue was identified by Security Innovation</p>
 		</section>
 		<section name="CVE-2016-8736 - Apache Openmeetings RMI Registry Java Deserialization RCE">
 			<p>Severity: Moderate</p>
