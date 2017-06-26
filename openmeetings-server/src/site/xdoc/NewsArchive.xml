@@ -13,7 +13,7 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>News archive</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -21,6 +21,44 @@
 
 	<body>
 		<section name="News">
+			<div class="bs-callout bs-callout-info">
+				<b>Version 3.2.1 released!</b>
+				<div>Service release 1 for 3.2.0, provides following improvements:<br/>
+					Room<br/>
+					<ul>
+						<li>Video is more stable</li>
+						<li>Office files download is fixed</li>
+						<li>Multi-upload is added</li>
+						<li>External video works as expected</li>
+						<li>WB drawing on slides works as expected</li>
+					</ul>
+					<br/>
+					Chat<br/>
+					<ul>
+						<li>chat is made resizable</li>
+						<li>multiple issues in chat are fixed</li>
+						<li>typing indicator is added</li>
+					</ul>
+					<br/>
+					Calendar<br/>
+					<ul>
+						<li>date/time validator is improved</li>
+						<li>whole group can be invited by admin to event</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<br/>
+					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
+				</div>
+				<br/>
+				<span>
+					49 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339215">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2017-03-21)</span>
+			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 3.2.0 released!</b>
 				<div>Release 3.2.0, provides Partial HTML5 room:<br/>

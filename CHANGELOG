@@ -5,6 +5,47 @@ See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number 
 
 Release Notes - Openmeetings - Version 3.2.1
 ================================================================================================================
+** Vulnerability
+    * CVE-2017-7663 - Apache OpenMeetings XSS in chat
+    * CVE-2017-7664 - Apache OpenMeetings Missing XML Validation
+    * CVE-2017-7666 - Apache OpenMeetings Missing Secure Headers
+    * CVE-2017-7673 - Apache OpenMeetings Insufficient check in dialogs with passwords
+    * CVE-2017-7680 - Apache OpenMeetings Insecure crossdomain.xml policy
+    * CVE-2017-7681 - Apache OpenMeetings SQL injection in web services
+    * CVE-2017-7682 - Apache OpenMeetings Business Logic Bypass
+    * CVE-2017-7683 - Apache OpenMeetings Information Disclosure
+    * CVE-2017-7684 - Apache OpenMeetings Insecure File Upload
+    * CVE-2017-7685 - Apache OpenMeetings Insecure HTTP Methods
+    * CVE-2017-7688 - Apache OpenMeetings Insecure Password Update
+
+** Bug
+    * [OPENMEETINGS-159] - Horizontal scrolling for Low resolution screen
+    * [OPENMEETINGS-1609] - When you select the color of the object to be placed on the white board, the left side of the color selection window is hidden.
+    * [OPENMEETINGS-1610] - "'timepicker' is not a valid LocalTime
+    * [OPENMEETINGS-1611] - JS errors in OM Admin
+    * [OPENMEETINGS-1616] - New chat messages should be added to the bottom
+    * [OPENMEETINGS-1619] - User details panel is cut off when admin click on add new user button
+    * [OPENMEETINGS-1620] - 'Unenroll user' is not fully working
+    * [OPENMEETINGS-1624] - "File upload" Window hidden behind whiteboard with Internet Explorer 11
+    * [OPENMEETINGS-1630] - It is impossible to get room count using REST
+    * [OPENMEETINGS-1631] - User can vote multiple times
+    * [OPENMEETINGS-1648] - External process time-to-live should be configurable
+    * [OPENMEETINGS-1651] - Chat - Window hidden behind whiteboard with Internet Explorer 11
+    * [OPENMEETINGS-1654] - No nickname dialog, wrong name on video window
+    * [OPENMEETINGS-1655] - Whiteboard room element can not be hidden
+
+** Improvement
+    * [OPENMEETINGS-553] - GSOC: Need to have possibility to import/export or sync events from OpenMeetings calendar using ical or caldav protocol.
+    * [OPENMEETINGS-1554] - Please add the feature to upload your video files to the server, in the recording section
+    * [OPENMEETINGS-1607] - "Raise your hand" notification should also be added in user-list
+    * [OPENMEETINGS-1612] - 3.3.0 - Library versions should be updated
+    * [OPENMEETINGS-1617] - BackupExport should write directly to zip file
+    * [OPENMEETINGS-1634] - File tree drag to trash, need to be enhanced
+    * [OPENMEETINGS-1650] - Make Audio Alerts Configurable
+
+
+Release Notes - Openmeetings - Version 3.2.1
+================================================================================================================
 ** Bug
     * [OPENMEETINGS-571] - Chat area does not resize when resizing browser window
     * [OPENMEETINGS-1437] - behavior os share audio and share audio/video button ist different

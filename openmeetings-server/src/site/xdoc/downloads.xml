@@ -13,43 +13,40 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Downloads</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 
 	<body>
-
 		<section name="Downloads">
 			<p>
 				All downloads can be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/3.2.1/KEYS">KEYS</a>, changes: <a 
-					href="https://www.apache.org/dist/openmeetings/3.2.1/CHANGELOG">CHANGELOG</a>.
+				signing <a href="https://www.apache.org/dist/openmeetings/3.3.0/KEYS">KEYS</a>, changes: <a
+					href="https://www.apache.org/dist/openmeetings/3.3.0/CHANGELOG">CHANGELOG</a>.
 			</p>
 			<p>
 				All are available for download as source and binary.
 			</p>
-			
 			<subsection name="Latest Official Release">
 				<p>
-					Apache Openmeetings 3.2.1
+					Apache Openmeetings 3.3.0
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.2.1/bin/apache-openmeetings-3.2.1.zip">apache-openmeetings-3.2.1.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/bin/apache-openmeetings-3.2.1.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/bin/apache-openmeetings-3.2.1.zip.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.3.0/bin/apache-openmeetings-3.3.0.zip">apache-openmeetings-3.3.0.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/bin/apache-openmeetings-3.3.0.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/bin/apache-openmeetings-3.3.0.zip.sha256">[SHA256]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.2.1/bin/apache-openmeetings-3.2.1.tar.gz">apache-openmeetings-3.2.1.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/bin/apache-openmeetings-3.2.1.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/bin/apache-openmeetings-3.2.1.tar.gz.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.3.0/bin/apache-openmeetings-3.3.0.tar.gz">apache-openmeetings-3.3.0.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/bin/apache-openmeetings-3.3.0.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/bin/apache-openmeetings-3.3.0.tar.gz.sha256">[SHA256]</a>
 							</li>
 						</ul>
 					</li>
@@ -57,21 +54,19 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.2.1/src/apache-openmeetings-3.2.1-src.zip">apache-openmeetings-3.2.1-src.zip</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/src/apache-openmeetings-3.2.1-src.zip.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/src/apache-openmeetings-3.2.1-src.zip.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.3.0/src/apache-openmeetings-3.3.0-src.zip">apache-openmeetings-3.3.0-src.zip</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/src/apache-openmeetings-3.3.0-src.zip.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/src/apache-openmeetings-3.3.0-src.zip.sha256">[SHA256]</a>
 							</li>
 							<li>
-								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.2.1/src/apache-openmeetings-3.2.1-src.tar.gz">apache-openmeetings-3.2.1-src.tar.gz</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/src/apache-openmeetings-3.2.1-src.tar.gz.asc">[SIG]</a>
-								<a href="http://www.apache.org/dist/openmeetings/3.2.1/src/apache-openmeetings-3.2.1-src.tar.gz.sha256">[SHA256]</a>
+								<a href="http://www.apache.org/dyn/closer.lua/openmeetings/3.3.0/src/apache-openmeetings-3.3.0-src.tar.gz">apache-openmeetings-3.3.0-src.tar.gz</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/src/apache-openmeetings-3.3.0-src.tar.gz.asc">[SIG]</a>
+								<a href="http://www.apache.org/dist/openmeetings/3.3.0/src/apache-openmeetings-3.3.0-src.tar.gz.sha256">[SHA256]</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
-				
 			</subsection>
-
 			<subsection name="Previous Official Releases">
 				<p>
 					Apache Openmeetings releases available here:
@@ -82,15 +77,12 @@
 					<a href="http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating/">http://archive.apache.org/dist/incubator/openmeetings/2.0-incubating</a>
 				</p>
 			</subsection>
-
 			<subsection name="Plugins / Non ASF downloads">
-			
 				<p>
 					If you are looking for more plugins for 3th party applications (Moodle, Drupal, Joomla, ...) check out 
 					<a href="https://github.com/openmeetings/" target="_blank" rel="nofollow">github.com</a> or 
 					ask <a href="commercial-support.html">commercial support</a>.
 				</p>
-			
 				<p>
 					OpenMeetings releases that are not part of the ASF can be downloaded from the
 					old
@@ -98,8 +90,6 @@
 						target="_blank">GoogleCode website</a>
 				</p>
 			</subsection>
-
 		</section>
 	</body>
 </document>
-
