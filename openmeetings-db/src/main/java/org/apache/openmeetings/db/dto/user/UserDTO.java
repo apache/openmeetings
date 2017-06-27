@@ -190,6 +190,10 @@ public class UserDTO implements Serializable {
 		this.externalType = externalType;
 	}
 
+	public static UserDTO fromString(String s) {
+		return get(new JSONObject(s));
+	}
+
 	public static UserDTO get(JSONObject o) {
 		if (o == null) {
 			return null;
@@ -213,5 +217,10 @@ public class UserDTO implements Serializable {
 		u.externalType = o.optString("externalType");
 		u.type = optEnum(Type.class, o, "type");
 		return u;
+	}
+
+	@Override
+	public String toString() {
+		return new JSONObject(this).toString();
 	}
 }

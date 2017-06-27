@@ -23,6 +23,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+import java.util.UUID;
+
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
@@ -30,6 +33,8 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
+import org.apache.openmeetings.db.dto.user.UserDTO;
+import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.tester.WicketTester;
@@ -84,6 +89,30 @@ public class TestUserService extends AbstractWebServiceTest {
 		WebSession ws = WebSession.get();
 		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
 		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
+	}
+
+	@Test
+	public void addUserTest() {
+		ServiceResult r = login();
+		UserDTO u = new UserDTO();
+		String uuid = UUID.randomUUID().toString();
+		u.setLogin("test" + uuid);
+		u.setPassword("aS" + UUID.randomUUID().toString() + "!");
+		u.setFirstname("testF" + uuid);
+		u.setLastname("testL" + uuid);
+		u.setAddress(new Address());
+		u.getAddress().setEmail(uuid + "@local");
+		u.getAddress().setCountry(Locale.getDefault().getCountry());
+		u.setExternalId(uuid);
+		u.setExternalType("OmJunitTests");
+		UserDTO user = getClient(USER_SERVICE_URL)
+				.path("/")
+				.query("sid", r.getMessage())
+				.query("user", u.toString())
+				.query("confirm", false).post(null, UserDTO.class);
+		assertNotNull("Valid UserDTO should be returned", user);
+		assertNotNull("Id should not be NULL", user.getId());
+		assertEquals("OM Call should be successful", u.getLogin(), user.getLogin());
 	}
 
 	@After
