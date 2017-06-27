@@ -52,7 +52,7 @@ public class EmailManager {
 
 	/**
 	 * sends a mail address to the user with his account data
-	 * 
+	 *
 	 * @param username
 	 * @param userpass
 	 * @param email
@@ -64,11 +64,10 @@ public class EmailManager {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
+		ensureApplication(langId != null ? langId : configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
-		
+
 		if (sendEmailAtRegister == 1) {
-			ensureApplication(langId != null ? langId :
-					configurationDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1"));
 			mailHandler.send(email, getString(512)
 				, RegisterUserTemplate.getEmail(username, email, sendEmailWithVerficationCode ? link : null));
 		}
