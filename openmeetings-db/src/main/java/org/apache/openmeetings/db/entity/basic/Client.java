@@ -70,7 +70,7 @@ public class Client implements IClient {
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
-	private long broadcastId = -1;
+	private String broadcastId = null;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -304,11 +304,11 @@ public class Client implements IClient {
 		return this;
 	}
 
-	public long getBroadcastId() {
+	public String getBroadcastId() {
 		return broadcastId;
 	}
 
-	public Client setBroadcastId(long broadcastId) {
+	public Client setBroadcastId(String broadcastId) {
 		this.broadcastId = broadcastId;
 		return this;
 	}

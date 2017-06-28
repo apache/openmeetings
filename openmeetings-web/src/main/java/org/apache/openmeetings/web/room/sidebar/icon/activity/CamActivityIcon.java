@@ -33,7 +33,7 @@ public class CamActivityIcon extends RoomActivityIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(client.hasRight(Right.audio) &&  client.hasRight(Right.video) ? "690" : "687");
+		return getString(client.hasRight(Right.audio) && client.hasRight(Right.video) ? "690" : "687");
 	}
 
 	@Override

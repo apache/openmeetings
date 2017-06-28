@@ -27,7 +27,6 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
@@ -418,9 +417,6 @@ public class RoomSidebar extends Panel {
 				//pod has changed, no need to toggle
 				c.set(a);
 			} else {
-				if (!c.hasActivity(Activity.broadcastV) && Activity.broadcastV == a) {
-					c.setBroadcastId(ScopeApplicationAdapter.nextBroadCastId());
-				}
 				c.toggle(a);
 			}
 			room.broadcast(c);

@@ -29,6 +29,7 @@
 	</fx:Declarations>
 	<fx:Script><![CDATA[
 		import mx.core.FlexGlobals;
+		import mx.utils.UIDUtil;
 
 		import org.apache.openmeetings.OmVideo;
 
@@ -114,7 +115,7 @@
 						video.reset();
 						var cam:Camera = getCam();
 						video.attachCamera(cam);
-						video.broadcast(params.broadcastId, cam, getMic());
+						video.broadcast(UIDUtil.createUID(), cam, getMic());
 						ExternalInterface.call("VideoManager.resetSize", params.uid);
 					});
 				}

@@ -401,6 +401,7 @@ public class RoomPanel extends BasePanel {
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
 						Client c = getOnlineClient(obj.getString("uid"));
+						c.setBroadcastId(obj.getString("stream"));
 						boolean self = getClient().getUid().equals(c.getUid());
 						if (!self) {
 							handler.appendJavaScript(String.format("VideoManager.play(%s);"

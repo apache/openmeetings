@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.nextBroadCastId;
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
@@ -51,8 +50,8 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -337,7 +336,6 @@ public class MobileService {
 		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		Map<String, Object> result = new HashMap<>();
 		result.put("publicSid", c.getPublicSID());
-		result.put("broadCastId", c.getBroadCastId());
 		return result;
 	}
 
@@ -346,7 +344,6 @@ public class MobileService {
 		StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
 		c.setAvsettings(avMode);
 		if (!"n".equals(avMode)) {
-			c.setBroadCastId("" + nextBroadCastId());
 			c.setIsBroadcasting(true);
 		}
 		c.setVWidth(Double.valueOf(width).intValue());
@@ -358,13 +355,9 @@ public class MobileService {
 		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
-		Map<String, Object> result = new HashMap<>();
-		if (!"n".equals(avMode)) {
-			result.put("broadcastId", c.getBroadCastId());
-		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
-		return result;
+		return new HashMap<>();
 	}
 
 	public void sendChatMessage(String msg) {
