@@ -339,7 +339,7 @@ public class RoomPanel extends BasePanel {
 						{
 							String uid = ((TextRoomMessage)m).getText();
 							Client c = getOnlineClient(uid);
-							if (c == null || !c.hasActivity(Client.Activity.record)) {
+							if (c == null) {
 								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid);
 								return;
 							}
@@ -365,7 +365,7 @@ public class RoomPanel extends BasePanel {
 						{
 							String uid = ((TextRoomMessage)m).getText();
 							Client c = getOnlineClient(uid);
-							if (c == null || !c.hasActivity(Client.Activity.share)) {
+							if (c == null) {
 								log.error("Not existing user has started sharing {} !!!!", uid);
 								return;
 							}

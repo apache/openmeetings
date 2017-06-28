@@ -702,7 +702,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// Notify all clients of the same scope (room)
 			sendMessageToCurrentScope("closeStream", rcl, rcl.isMobile());
 			if (rcl.isScreenClient()) {
-				WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, rcl.getPublicSID()));
+				WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.sharingStoped, rcl.getPublicSID()));
 			}
 		} catch (Exception e) {
 			log.error("[streamBroadcastClose]", e);
