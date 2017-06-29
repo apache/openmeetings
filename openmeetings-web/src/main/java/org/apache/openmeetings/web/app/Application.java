@@ -187,7 +187,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		// add dashboard context injector
 		getComponentInstantiationListeners().add(new DashboardContextInjector(dashboardContext));
 		DashboardSettings dashboardSettings = DashboardSettings.get();
-		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
 
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
