@@ -28,6 +28,7 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.junit.Before;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -41,14 +42,13 @@ public class TestDbSession extends AbstractJUnitDefaults {
 
 	@Autowired
 	private ClientDao clientDao;
+	private Server server = null;
+	StreamClient cl1, cl2, cl3;
 
-	@Test
-	public void testDbSessionFunctions() {
-		clientDao.cleanAllClients();
-
+	@Before
+	public void setup() {
 		List<Server> serverList = serverDao.getActiveServers();
 
-		Server server = null;
 		if (serverList.size() > 0) {
 			server = serverList.get(0);
 		} else {
@@ -58,27 +58,32 @@ public class TestDbSession extends AbstractJUnitDefaults {
 			serverDao.update(server, null);
 		}
 
-		StreamClient cl1 = new StreamClient();
+		clientDao.cleanAllClients();
+
+		cl1 = new StreamClient();
 		cl1.setServer(null);
 		cl1.setUserId(1L);
 		cl1.setScope("1");
 		cl1.setUid("public1");
 		clientDao.add(cl1);
 
-		StreamClient cl2 = new StreamClient();
+		cl2 = new StreamClient();
 		cl2.setServer(null);
 		cl2.setScope("1");
 		cl2.setUserId(2L);
 		cl2.setUid("public2");
 		clientDao.add(cl2);
 
-		StreamClient cl3 = new StreamClient();
+		cl3 = new StreamClient();
 		cl3.setServer(server);
 		cl3.setScope("3");
 		cl3.setUserId(3L);
 		cl3.setUid("public3");
 		clientDao.add(cl3);
+	}
 
+	@Test
+	public void testByUidAndServer() {
 		List<StreamClient> clTest_Pub_1_list = clientDao.getClientsByUidAndServer(null, "public1");
 		assertEquals(cl1.getId(), clTest_Pub_1_list.get(0).getId());
 
@@ -87,7 +92,10 @@ public class TestDbSession extends AbstractJUnitDefaults {
 
 		List<StreamClient> clTest_Fail_list = clientDao.getClientsByUidAndServer(null, "public3");
 		assertEquals(0, clTest_Fail_list.size());
+	}
 
+	@Test
+	public void testByUid() {
 		List<StreamClient> clTest_PubAll_1_list = clientDao.getClientsByUid("public1");
 		assertEquals(cl1.getId(), clTest_PubAll_1_list.get(0).getId());
 
@@ -96,16 +104,27 @@ public class TestDbSession extends AbstractJUnitDefaults {
 
 		List<StreamClient> clTest_FailAll_list = clientDao.getClientsByUid("public4");
 		assertEquals(0, clTest_FailAll_list.size());
+	}
 
+
+	@Test
+	public void testByServer() {
 		List<StreamClient> clientsByServerNull = clientDao.getClientsByServer(null);
 		assertEquals(2, clientsByServerNull.size());
 
 		List<StreamClient> clientsByServer = clientDao.getClientsByServer(server);
 		assertEquals(1, clientsByServer.size());
 
-		List<StreamClient> clientsAll = clientDao.getClients();
-		assertEquals(3, clientsAll.size());
+		//count by server
+		int clTest_Count_1_list = clientDao.countClientsByServer(null);
+		assertEquals(2, clTest_Count_1_list);
 
+		int clTest_Count_3_list = clientDao.countClientsByServer(server);
+		assertEquals(1, clTest_Count_3_list);
+	}
+
+	@Test
+	public void testByUser() {
 		//by userid
 		List<StreamClient> clTest_User_1_list = clientDao.getClientsByUserId(null, 1L);
 		assertEquals(cl1.getId(), clTest_User_1_list.get(0).getId());
@@ -115,7 +134,10 @@ public class TestDbSession extends AbstractJUnitDefaults {
 
 		List<StreamClient> clTest_UserFail_list = clientDao.getClientsByUserId(null, 3L);
 		assertEquals(0, clTest_UserFail_list.size());
+	}
 
+	@Test
+	public void testByRoom() {
 		//by roomid
 		List<StreamClient> clTest_Room_1_list = clientDao.getClientsByRoomId(1L);
 		assertEquals(2, clTest_Room_1_list.size());
@@ -125,18 +147,20 @@ public class TestDbSession extends AbstractJUnitDefaults {
 
 		List<StreamClient> clTest_RoomFail_list = clientDao.getClientsByRoomId(2L);
 		assertEquals(0, clTest_RoomFail_list.size());
+	}
 
-		//count all
+	@Test
+	public void testAll() {
+		//all
+		List<StreamClient> clientsAll = clientDao.getClients();
+		assertEquals(3, clientsAll.size());
+
 		int countAll = clientDao.countClients();
 		assertEquals(3, countAll);
+	}
 
-		//count by server
-		int clTest_Count_1_list = clientDao.countClientsByServer(null);
-		assertEquals(2, clTest_Count_1_list);
-
-		int clTest_Count_3_list = clientDao.countClientsByServer(server);
-		assertEquals(1, clTest_Count_3_list);
-
+	@Test
+	public void testRemove() {
 		//remove by id
 		clientDao.delete(cl1);
 
@@ -144,12 +168,12 @@ public class TestDbSession extends AbstractJUnitDefaults {
 		assertEquals(1, clTest_Count_Delete_list);
 
 		clTest_Count_Delete_list = clientDao.countClientsByServer(server);
-		assertEquals(0, clTest_Count_Delete_list);
+		assertEquals(1, clTest_Count_Delete_list);
 
 		//delete all
 		clientDao.cleanAllClients();
 
-		countAll = clientDao.countClients();
+		int countAll = clientDao.countClients();
 		assertEquals(0, countAll);
 	}
 }

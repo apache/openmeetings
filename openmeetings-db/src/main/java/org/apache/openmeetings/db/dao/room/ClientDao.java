@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,11 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class ClientDao {
-
 	@PersistenceContext
 	private EntityManager em;
-
-	private static List<Long> EMPTY_LIST = new ArrayList<>(0);
 
 	public void cleanAllClients() {
 		em.createNamedQuery("deleteClientAll").executeUpdate();
@@ -76,7 +73,7 @@ public class ClientDao {
 	}
 
 	public void remove(Long id) {
-		Query q = em.createNamedQuery("deletedClientById");
+		Query q = em.createNamedQuery("deleteClientById");
 		q.setParameter("id", id);
 		q.executeUpdate();
 	}
@@ -126,8 +123,8 @@ public class ClientDao {
 	}
 
 	public List<StreamClient> getClientsByRoomId(Long roomId) {
-		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByRoomId", StreamClient.class);
-		q.setParameter("roomId", roomId);
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByScope", StreamClient.class);
+		q.setParameter("scope", "" + roomId);
 		return q.getResultList();
 	}
 
@@ -138,16 +135,8 @@ public class ClientDao {
 	 * @return
 	 */
 	public List<Long> getRoomsIdsByServer(Server server) {
-		Query q = em.createNamedQuery("getRoomsIdsByServer");
-		q.setParameter("server", server);
-		@SuppressWarnings("unchecked")
-		List<Long> resultList = q.getResultList();
-		//if the result list contains only a value null, it means it
-		//was empty and no roomid's have been found
-		if (resultList.size() == 1 && resultList.get(0) == null) {
-			return EMPTY_LIST;
-		}
-		return resultList;
+		return em.createNamedQuery("getRoomsIdsByServer", String.class)
+				.setParameter("server", server).getResultList()
+				.stream().map(Long::valueOf).collect(Collectors.toList());
 	}
-
 }

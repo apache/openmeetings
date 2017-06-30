@@ -59,6 +59,7 @@
 				<item name="VoIP and SIP" href="/voip-sip-integration.html" />
 				<item name="Errors table" href="/errorvalues.html" />
 				<item name="CalDAV and Google Calendar integration" href="/CalDAVandGCal.html" />
+				<item name="External Video/Camera" href="/ExternalVideo.html" />
 			</item>
 			<item name="Plugins" href="#plugins">
 				<item name="Moodle Plugin" href="/MoodlePlugin.html" />

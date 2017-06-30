@@ -60,8 +60,8 @@ import org.apache.wicket.util.string.StringValue;
 	@NamedQuery(name = "getClients", query = "SELECT c FROM StreamClient c"),
 	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM StreamClient c LEFT JOIN FETCH c.server"),
 	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM StreamClient c WHERE c.server = :server AND c.userId = :userId"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM StreamClient c WHERE c.scope = :roomId"),
-	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM StreamClient c WHERE c.server = :server GROUP BY c.scope")
+	@NamedQuery(name = "getClientsByScope", query = "SELECT c FROM StreamClient c WHERE c.scope = :scope"),
+	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.scope FROM StreamClient c WHERE c.server = :server GROUP BY c.scope")
 })
 @Table(name = "client")
 @XmlRootElement
