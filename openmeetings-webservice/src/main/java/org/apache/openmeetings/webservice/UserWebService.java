@@ -195,6 +195,7 @@ public class UserWebService implements UserService {
 					for (IValidationError err : passVal.getErrors()) {
 						sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
 					}
+					log.debug("addNewUser::weak password {}", sb);
 					throw new ServiceException(sb.toString());
 				}
 				Long userId = userManager.registerUser(user.getLogin(), user.getPassword(),
