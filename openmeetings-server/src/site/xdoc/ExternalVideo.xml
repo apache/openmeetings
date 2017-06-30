@@ -24,7 +24,7 @@
 			correct ffmpeg command for testing (width/height only works if both specified)
 			<source>
 <![CDATA[
-ffmpeg -re -i Avengers2.mp4 -vcodec flv -f flv -rtmp_conn "O:1 NS:securityCode:SID_OF_EXISTENT_USER NN:width:720 NN:height:480 O:0" rtmp://localhost:1935/openmeetings/ROOM_ID/UNIQUE_BROADCAST_ID_STRING
+ffmpeg -re -i Avengers2.mp4 -vcodec flv -f flv -rtmp_conn "O:1 NS:ownerSid:SID_OF_EXISTENT_USER NN:width:720 NN:height:480 O:0" rtmp://localhost:1935/openmeetings/ROOM_ID/UNIQUE_BROADCAST_ID_STRING
 ]]>
 			</source>
 			SID_OF_EXISTENT_USER == Admin->Connections -> client "sid" parameter (NOT broadcastId, NOT uid)

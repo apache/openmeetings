@@ -327,6 +327,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			//TODO mobile
 			return null;
 		}
+		rcl.setUserId(client.getUser().getId());
+		rcl.setUsername(client.getUser().getLogin());
 		rcl.setFirstname(client.getUser().getFirstname());
 		rcl.setLastname(client.getUser().getLastname());
 		rcl.setSuperMod(client.hasRight(Right.superModerator));

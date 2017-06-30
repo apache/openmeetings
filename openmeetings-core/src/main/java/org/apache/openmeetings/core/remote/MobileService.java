@@ -411,7 +411,7 @@ public class MobileService {
 		new MessageSender(scopeAdapter.getRoomScope("" + roomId), "sendVarsToMessageWithClient", hsm, scopeAdapter) {
 			@Override
 			public boolean filter(IConnection conn) {
-				StreamClient rcl = sessionManager.get(IClientUtil.getId(current.getClient()));
+				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 				return rcl.isSharing()
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
 			}

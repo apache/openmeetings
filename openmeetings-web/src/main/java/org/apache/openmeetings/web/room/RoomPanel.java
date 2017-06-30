@@ -159,8 +159,7 @@ public class RoomPanel extends BasePanel {
 		for (Client c: getRoomClients(getRoom().getId()) ) {
 			boolean self = getClient().getUid().equals(c.getUid());
 			for (Client.Stream s : c.getStreams()) {
-				JSONObject jo = RoomHelper.videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getStreamClientId(), s.isSharing())
-						.put("broadcastId", s.getBroadcastId());
+				JSONObject jo = RoomHelper.videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getStreamClientId());
 				sb.append(String.format("VideoManager.play(%s);", jo));
 			}
 		}
@@ -407,27 +406,38 @@ public class RoomPanel extends BasePanel {
 						String uid = obj.getString("uid");
 						Client c = getOnlineClient(uid);
 						if (c == null) {
-							// screen client, ext video stream ??
+							// screen client, ext video stream
 							c = getClientBySid(obj.getString("ownerSid"));
 						}
 						if (c == null) {
 							log.error("Not existing user in newStream {} !!!!", uid);
 							return;
 						}
-						boolean self = getClient().getUid().equals(c.getUid());
+						boolean self = getClient().getUid().equals(uid);
 						String broadcastId = obj.getString("stream");
 						Long streamClientId = obj.getLong("streamClientId");
 						if (!self) {
-							JSONObject jo = RoomHelper.videoJson(c, uid, self, c.getSid(), getBean(ISessionManager.class), streamClientId, share)
-									.put("broadcastId", broadcastId);
+							JSONObject jo = RoomHelper.videoJson(c, self, getClient().getSid(), getBean(ISessionManager.class), streamClientId);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
-						} else {
+						}
+						if (getClient().getSid().equals(c.getSid())) {
 							c.addStream(streamClientId, broadcastId, share);
 						}
 					}
 						break;
 					case closeStream:
-						handler.appendJavaScript(String.format("VideoManager.close('%s');", ((TextRoomMessage)m).getText()));
+					{
+						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+						Client c = getClientBySid(obj.getString("ownerSid"));
+						if (c == null) {
+							log.error("Not existing user in closeStream {} !!!!", obj);
+							return;
+						}
+						if (getClient().getUid().equals(c.getUid())) {
+							c.removeStream(obj.getString("broadcastId"));
+						}
+						handler.appendJavaScript(String.format("VideoManager.close('%s');", obj.getString("uid")));
+					}
 						break;
 					case roomEnter:
 						sidebar.update(handler);

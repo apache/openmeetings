@@ -416,7 +416,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				sendSharingStoped(client);
 			}
 			if (client.isBroadcasting()) {
-				WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.closeStream, client.getUid()));
+				sendStreamClosed(client);
 			}
 
 			_log.debug("removing Username {} {},  streamid: {}", client.getUsername()
@@ -471,9 +471,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// In case its a screen sharing we start a new Video for that
 			if (c.isSharing()) {
 				c.setSharingStarted(true);
-			}
-			/* TODO different handling is required for ext video source
-			if (!c.isMobile() && !Strings.isEmpty(c.getOwnerSid())) {
+			} else if (!c.isMobile()) {
 				c.setAvsettings("av");
 				c.setBroadcasting(true);
 				if (c.getWidth() == 0 || c.getHeight() == 0) {
@@ -481,7 +479,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					c.setHeight(240);
 				}
 			}
-			*/
 			sessionManager.update(c);
 
 			_log.debug("newStream SEND: {}", c);
@@ -567,6 +564,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				_log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
 				recordingService.stopRecordingShowForClient(current.getScope(), rcl);
 			}
+			sendStreamClosed(rcl);
 			if (stream.getPublishedName().equals(rcl.getBroadCastId())) {
 				rcl.setBroadCastId(null);
 				rcl.setBroadcasting(false);
@@ -588,6 +586,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				.put("ownerSid", rcl.getOwnerSid())
 				.put("uid", rcl.getUid());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.sharingStoped, obj.toString()));
+	}
+
+	private void sendStreamClosed(StreamClient rcl) {
+		JSONObject obj = new JSONObject()
+				.put("uid", rcl.getUid())
+				.put("ownerSid", rcl.getOwnerSid())
+				.put("broadcastId", rcl.getBroadCastId());
+		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, obj.toString()));
 	}
 
 	/** TODO need to be implemented in Flex

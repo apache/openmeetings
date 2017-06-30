@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -57,7 +58,8 @@ public class Client implements IClient {
 	public enum Pod {
 		none, left, right;
 	}
-	public static class Stream {
+	public static class Stream implements Serializable {
+		private static final long serialVersionUID = 1L;
 		private Long streamClientId = null;
 		private String broadcastId = null;
 		private boolean sharing;
@@ -115,6 +117,11 @@ public class Client implements IClient {
 			} else if (!broadcastId.equals(other.broadcastId))
 				return false;
 			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "Stream [id=" + streamClientId + ", broadcastId=" + broadcastId + ", sharing=" + sharing + "]";
 		}
 	}
 	private final String sessionId;
@@ -291,6 +298,10 @@ public class Client implements IClient {
 
 	public void addStream(Long streamClientId, String broadcastId, boolean sharing) {
 		streams.add(new Stream(streamClientId, broadcastId, sharing));
+	}
+
+	public void removeStream(String broadcastId) {
+		streams.remove(new Stream(1L, broadcastId, false));
 	}
 
 	public List<Stream> getStreams() {

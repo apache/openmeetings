@@ -101,7 +101,7 @@ public class ConnectionsPanel extends AdminPanel {
 				};
 				if (_c instanceof StreamClient) {
 					StreamClient c = (StreamClient)_c;
-					item.add(new Label("streamid"));
+					item.add(new Label("id"));
 					item.add(new Label("login", c.getUsername()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope"));
@@ -109,7 +109,7 @@ public class ConnectionsPanel extends AdminPanel {
 					confirm.setEnabled(!c.isSharing());
 				} else {
 					Client c = (Client)_c;
-					item.add(new Label("streamid", ""));
+					item.add(new Label("id", ""));
 					item.add(new Label("login", c.getUser().getLogin()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));

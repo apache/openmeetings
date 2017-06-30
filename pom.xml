@@ -219,6 +219,30 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>generate-third-party</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>1.13</version>
+						<executions>
+							<execution>
+								<id>download-licenses</id>
+								<goals>
+									<goal>aggregate-add-third-party</goal>
+								</goals>
+								<configuration>
+									<useMissingFile>true</useMissingFile>
+									<sortArtifactByName>true</sortArtifactByName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 	<url>http://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
