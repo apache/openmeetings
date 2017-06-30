@@ -396,7 +396,7 @@ public class RoomWebService {
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-				boolean result = userManager.kickUserByStreamId(sid, id);
+				boolean result = userManager.kickUsersByRoomId(id);
 				return new ServiceResult(result ? 1L : 0L, "Kicked", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26

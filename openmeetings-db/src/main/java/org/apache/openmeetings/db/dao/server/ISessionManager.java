@@ -43,18 +43,6 @@ public interface ISessionManager {
 	void sessionStart();
 
 	StreamClient add(StreamClient c, Server server);
-	/**
-	 * add a new client item
-	 *
-	 * @param streamId
-	 * @param scopeName
-	 * @param remotePort
-	 * @param remoteAddress
-	 * @param swfUrl
-	 * @param server
-	 * @return
-	 */
-	StreamClient addClientListItem(String streamId, String scopeName, int remotePort, String remoteAddress, String swfUrl, Server server);
 
 	Collection<StreamClient> getClients();
 
@@ -66,22 +54,21 @@ public interface ISessionManager {
 	Collection<StreamClient> getClientsWithServer();
 
 	/**
-	 * Get a client by its streamId
+	 * Get a client by its id
 	 *
-	 * @param streamId
-	 * @param server
+	 * @param id
 	 * @return
 	 */
-	StreamClient getClientByStreamId(String streamId, Server server);
+	StreamClient get(Long id);
 
 	/**
 	 * get a client by its publicSID and the server,
 	 *
-	 * @param publicSID
+	 * @param uid
 	 * @param server
 	 * @return
 	 */
-	StreamClient getClientByPublicSID(String publicSID, Server server);
+	StreamClient getClientByUid(String uid, Server server);
 
 	/**
 	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores
@@ -91,32 +78,20 @@ public interface ISessionManager {
 	 * This method requires more time to find the user, so under normal circumstances
 	 * you should use {@link #getClientByPublicSID(String, boolean, Server)}!
 	 *
-	 * @param publicSID
+	 * @param uid
 	 * @return
 	 */
-	ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID);
-
-	/**
-	 *
-	 * @param userId
-	 * @return
-	 *
-	 * @deprecated There could be multiple users logged in with the same userid,
-	 *             then this call would return a list not a single user
-	 */
-	@Deprecated
-	StreamClient getClientByUserId(Long userId);
+	ClientSessionInfo getClientByUidAnyServer(String uid);
 
 	/**
 	 * Update the session object of the audio/video-connection and additionally
 	 * swap the values to the session object of the user that holds the full
 	 * session object
 	 *
-	 * @param streamId
-	 * @param rcm
+	 * @param id
 	 * @return
 	 */
-	boolean updateAVClientByStreamId(String streamId, StreamClient rcm, Server server);
+	boolean updateAVClient(StreamClient rcm);
 
 	/**
 	 * Update the session object
@@ -125,21 +100,21 @@ public interface ISessionManager {
 	 * ScopeApplicationAdapter#setRoomValues(Long, Boolean, Boolean, String)
 	 * .
 	 *
-	 * @param streamId
 	 * @param rcm
 	 * @param updateRoomCount
 	 *            true means the count for the room has to be updated
+	 * @param server
 	 * @return
 	 */
-	boolean updateClientByStreamId(String streamId, StreamClient rcm, boolean updateRoomCount, Server server);
+	boolean update(StreamClient rcm);
 
 	/**
 	 * Remove a client from the session store
 	 *
-	 * @param streamId
+	 * @param id
 	 * @return
 	 */
-	boolean removeClient(String streamId, Server server);
+	boolean remove(Long id);
 
 	/**
 	 * Get all ClientList Objects of that room and domain This Function is
@@ -152,14 +127,6 @@ public interface ISessionManager {
 	List<StreamClient> getClientListByRoom(Long roomId);
 
 	Collection<StreamClient> getClientListByRoomAll(Long roomId);
-
-	/**
-	 * get the current Moderator in this room
-	 *
-	 * @param roomname
-	 * @return
-	 */
-	List<StreamClient> getCurrentModeratorByRoom(Long roomId);
 
 	/**
 	 * Get list of current client sessions

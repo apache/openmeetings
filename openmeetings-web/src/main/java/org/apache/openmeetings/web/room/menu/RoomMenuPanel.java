@@ -301,13 +301,13 @@ public class RoomMenuPanel extends Panel {
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {
 			ISessionManager sessMngr = getBean(ISessionManager.class);
-			StreamClient recUser = sessMngr.getClientByPublicSID(room.getRecordingUser(), null); //TODO check server
+			StreamClient recUser = sessMngr.getClientByUid(room.getRecordingUser(), null); //TODO check server
 			if (recUser != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
 						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.format(recUser.getConnectedSince())));
 				roomClass.append(" screen");
 			}
-			StreamClient pubUser = sessMngr.getClientByPublicSID(room.getPublishingUser(), null); //TODO check server
+			StreamClient pubUser = sessMngr.getClientByUid(room.getPublishingUser(), null); //TODO check server
 			if (pubUser != null) {
 				if (recUser != null) {
 					roomTitle.append('\n');

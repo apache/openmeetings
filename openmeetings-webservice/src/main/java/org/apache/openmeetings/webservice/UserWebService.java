@@ -26,8 +26,10 @@ import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -44,8 +46,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
@@ -55,6 +59,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -72,6 +77,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
 import org.apache.wicket.validation.ValidationError;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -92,13 +98,17 @@ public class UserWebService implements UserService {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private IUserManager userManagement;
+	private IUserManager userManager;
 	@Autowired
 	private SOAPLoginDao soapLoginDao;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private SessiondataDao sessionDao;
+	@Autowired
+	private ISessionManager sessionManager;
+	@Autowired
+	private ScopeApplicationAdapter scopeApplicationAdapter;
 
 	/* (non-Javadoc)
 	 * @see org.apache.openmeetings.webservice.cluster.UserService#login(java.lang.String, java.lang.String)
@@ -187,7 +197,7 @@ public class UserWebService implements UserService {
 					}
 					throw new ServiceException(sb.toString());
 				}
-				Long userId = userManagement.registerUser(user.getLogin(), user.getPassword(),
+				Long userId = userManager.registerUser(user.getLogin(), user.getPassword(),
 						user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
 						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
 						, user.getAddress().getTown(), user.getLanguageId(),
@@ -331,18 +341,51 @@ public class UserWebService implements UserService {
 		return new ServiceResult(-1L, "Unknown error", Type.ERROR);
 	}
 
+	/**
+	 * Kick a user by its publicSID.<br/>
+	 * <br/>
+	 * <i>Note:</i>
+	 * This method will not perform a call to the slave, cause this call can only be
+	 * invoked from inside the conference room, that means all clients are on the
+	 * same server, no matter if clustered or not.
+	 *
+	 * @param sid
+	 * @param uid
+	 * @return - true in case user have sufficient permissions, null otherwise
+	 */
+	private boolean kickUserByUid(String uid) {
+		StreamClient rcl = sessionManager.getClientByUid(uid, null);
+
+		if (rcl == null) {
+			return true;
+		}
+		String scopeName = "hibernate";
+		if (rcl.getRoomId() != null) {
+			scopeName = rcl.getRoomId().toString();
+		}
+		IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
+
+		Map<Integer, String> messageObj = new HashMap<>();
+		messageObj.put(0, "kick");
+
+		scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), currentScope);
+		scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+
+		return true;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.apache.openmeetings.webservice.cluster.UserService#kick(java.lang.String, java.lang.String)
 	 */
 	@Override
 	@WebMethod
 	@POST
-	@Path("/kick/{publicsid}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="publicsid") @PathParam("publicsid") String publicSID) throws ServiceException {
+	@Path("/kick/{uid}")
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) throws ServiceException {
 		try {
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-				Boolean success = userManagement.kickUserByPublicSID(sid, publicSID);
+				boolean success = kickUserByUid(uid);
 
 				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
 			} else {

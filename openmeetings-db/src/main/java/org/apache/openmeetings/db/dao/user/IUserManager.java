@@ -52,10 +52,9 @@ public interface IUserManager {
 	Long getLanguage(Locale loc);
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 
-	/** TODO FIXME seems to be unused **/
-	boolean kickUserByStreamId(String SID, Long roomId);
+	boolean kickUsersByRoomId(Long roomId);
 
-	boolean kickUserByPublicSID(String SID, String publicSID);
+	boolean kickById(Long id);
 
 	List<Userdata> getUserdataDashBoard(Long userId);
 }

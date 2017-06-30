@@ -29,9 +29,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.net.URL;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -65,16 +63,13 @@ public class VideoSettings extends Panel {
 		return String.format("%s://%s:%s/%s", protocol, host, port, app);
 	}
 
-	public static JSONObject getInitJson(ExtendedClientProperties cp, String scope, String uid) {
+	public static JSONObject getInitJson(ExtendedClientProperties cp, String scope, String sid) {
 		JSONObject gs = getBean(ScopeApplicationAdapter.class).getFlashSettings();
 		JSONObject s = new JSONObject()
 				.put(FLASH_VIDEO_CODEC, gs.get(FLASH_VIDEO_CODEC))
 				.put(FLASH_FPS, gs.get(FLASH_FPS))
-				.put("sid", WebSession.getSid())
+				.put("sid", sid)
 				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
-		if (!Strings.isEmpty(uid)) {
-			s.put("uid", uid);
-		}
 		try {
 			URL url = new URL(cp.getCodebase());
 			String path = url.getPath();

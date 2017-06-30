@@ -40,33 +40,29 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public void put(String streamId, StreamClient rcl) {
-		if (rcl.getId() != null) {
-			clientDao.update(rcl);
-		} else {
-			clientDao.add(rcl);
-		}
+	public StreamClient put(StreamClient rcl) {
+		return rcl.getId() == null ? clientDao.add(rcl) : clientDao.update(rcl);
 	}
 
 	@Override
-	public boolean containsKey(Server server, String streamId) {
-		return clientDao.countClientsByServerAndStreamId(server, streamId) > 0;
+	public boolean containsKey(Long id) {
+		return clientDao.get(id) != null;
 	}
 
 	@Override
-	public StreamClient get(Server server, String streamId) {
-		return clientDao.getClientByServerAndStreamId(server, streamId);
+	public StreamClient get(Long id) {
+		return clientDao.get(id);
 	}
 
 	@Override
-	public List<StreamClient> getClientsByPublicSID(Server server, String publicSID) {
-		return clientDao.getClientsByPublicSIDAndServer(server, publicSID);
+	public List<StreamClient> getClientsByUid(Server server, String publicSID) {
+		return clientDao.getClientsByUidAndServer(server, publicSID);
 	}
 
 	@Override
-	public Map<Long, List<StreamClient>> getClientsByPublicSID(String publicSID) {
+	public Map<Long, List<StreamClient>> getClientsByUid(String publicSID) {
 		Map<Long, List<StreamClient>> returnMap = new HashMap<>();
-		List<StreamClient> clientList = clientDao.getClientsByPublicSID(publicSID);
+		List<StreamClient> clientList = clientDao.getClientsByUid(publicSID);
 		for (StreamClient cl : clientList) {
 			if (cl.getServer() == null) {
 				List<StreamClient> clList = returnMap.get(null);
@@ -113,8 +109,8 @@ public class DatabaseStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public void remove(Server server, String streamId) {
-		clientDao.removeClientByServerAndStreamId(server, streamId);
+	public void remove(Long id) {
+		clientDao.remove(id);
 	}
 
 	@Override

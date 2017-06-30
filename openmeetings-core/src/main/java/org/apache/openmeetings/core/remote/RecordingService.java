@@ -29,6 +29,7 @@ import org.apache.openmeetings.core.converter.BaseConverter;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
+import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
@@ -46,7 +47,6 @@ import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
-import org.red5.server.api.Red5;
 import org.red5.server.api.scope.IScope;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
@@ -121,8 +121,8 @@ public class RecordingService implements IPendingServiceCallback {
 			recording.setRoomId(roomId);
 			recording.setRecordStart(now);
 
-			recording.setWidth(client.getVWidth());
-			recording.setHeight(client.getVHeight());
+			recording.setWidth(client.getWidth());
+			recording.setHeight(client.getHeight());
 
 			recording.setOwnerId(ownerId);
 			recording.setStatus(Recording.Status.RECORDING);
@@ -132,35 +132,35 @@ public class RecordingService implements IPendingServiceCallback {
 			log.debug("##REC:: recording created by USER: " + ownerId);
 
 			// Update Client and set Flag
-			client.setIsRecording(true);
+			client.setRecordingStarted(true);
 			client.setRecordingId(recordingId);
-			sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
+			sessionManager.update(client);
 
 			// get all stream and start recording them
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						StreamClient rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 						// Send every user a notification that the recording did start
-						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getPublicSID()));
+						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getOwnerSid()));
 
 						// If its the recording client we need another type of Meta Data
-						if (rcl.isScreenClient()) {
-							if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
-								String streamName_Screen = generateFileName(recordingId, rcl.getStreamPublishName().toString());
+						if (rcl.isSharing()) {
+							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
+								String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId());
 
 								Long metaDataId = metaDataDao.add(
 										recordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
 										false, true, streamName_Screen, rcl.getInterviewPodId());
 
 								// Start FLV Recording
-								recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, metaDataId, true, isInterview);
+								recordShow(conn, rcl.getBroadCastId(), streamName_Screen, metaDataId, true, isInterview);
 
 								// Add Meta Data
-								rcl.setRecordingMetaDataId(metaDataId);
+								rcl.setMetaId(metaDataId);
 
-								sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+								sessionManager.update(rcl);
 							}
 						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 							// if the user does publish av, a, v
@@ -183,9 +183,9 @@ public class RecordingService implements IPendingServiceCallback {
 									rcl.getFirstname() + " " + rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName,
 									rcl.getInterviewPodId());
 
-							rcl.setRecordingMetaDataId(metaId);
+							rcl.setMetaId(metaId);
 
-							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+							sessionManager.update(rcl);
 
 							// Start FLV recording
 							recordShow(conn, broadcastId, streamName, metaId, !isAudioOnly, isInterview);
@@ -212,8 +212,8 @@ public class RecordingService implements IPendingServiceCallback {
 	 */
 	private void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, boolean isInterview) throws Exception {
 		try {
-			log.debug("Recording show for: " + conn.getScope().getContextPath());
-			log.debug("Name of CLient and Stream to be recorded: " + broadcastid);
+			log.debug("Recording show for: {}", conn.getScope().getContextPath());
+			log.debug("Name of CLient and Stream to be recorded: {}", broadcastid);
 			// log.debug("Application.getInstance()"+Application.getInstance());
 			log.debug("Scope " + conn);
 			log.debug("Scope " + conn.getScope());
@@ -309,33 +309,32 @@ public class RecordingService implements IPendingServiceCallback {
 	public void stopRecordAndSave(IScope scope, StreamClient client, Long storedRecordingId) {
 		try {
 			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
-			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getOwnerSid()));
 
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						StreamClient rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 						if (rcl == null) {
 							continue;
 						}
 						log.debug("is this users still alive? stop it :" + rcl);
 
-						if (rcl.isScreenClient()) {
-							if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
+						if (rcl.isSharing()) {
+							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
 								// Stop FLV Recording
-								stopRecordingShow(scope, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
+								stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
 
 								// Update Meta Data
-								metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
+								metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
 							}
 						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
-
-							stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getRecordingMetaDataId());
+							stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
 
 							// Update Meta Data
-							metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
+							metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
 						}
 					}
 				}
@@ -354,10 +353,10 @@ public class RecordingService implements IPendingServiceCallback {
 
 				// Reset values
 				client.setRecordingId(null);
-				client.setIsRecording(false);
+				client.setRecordingStarted(false);
 
-				sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
-				log.debug("recordingConverterTask ", recordingConverterTask);
+				sessionManager.update(client);
+				log.debug("recordingConverterTask {}", recordingConverterTask);
 
 				Recording recording = recordingDao.get(recordingId);
 				if (!recording.isInterview()) {
@@ -371,29 +370,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public StreamClient checkLzRecording() {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-
-			log.debug("getCurrentRoomClient -2- " + streamid);
-
-			StreamClient currentClient = sessionManager.getClientByStreamId(streamid, null);
-
-			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoomId());
-
-			for (StreamClient rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
-				if (rcl.getIsRecording()) {
-					return rcl;
-				}
-			}
-
-		} catch (Exception err) {
-			log.error("[checkLzRecording]", err);
-		}
-		return null;
-	}
-
+	//TODO copy/paste
 	public void stopRecordingShowForClient(IScope scope, StreamClient rcl) {
 		try {
 			// this cannot be handled here, as to stop a stream and to leave a
@@ -403,28 +380,25 @@ public class RecordingService implements IPendingServiceCallback {
 			// rcl.getUserip(), false);
 			log.debug("### stopRecordingShowForClient: " + rcl);
 
-			if (rcl.isScreenClient()) {
-
-				if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
+			if (rcl.isSharing()) {
+				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
 
 					// Stop FLV Recording
 					// FIXME: Is there really a need to stop it manually if the
 					// user just
 					// stops the stream?
-					stopRecordingShow(scope, rcl.getStreamPublishName(), rcl.getRecordingMetaDataId());
+					stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
 
 					// Update Meta Data
-					metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
+					metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
 				}
-
 			} else if (rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v") || rcl.getAvsettings().equals("av")) {
-
 				// FIXME: Is there really a need to stop it manually if the user
 				// just stops the stream?
-				stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getRecordingMetaDataId());
+				stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
 
 				// Update Meta Data
-				metaDataDao.updateEndDate(rcl.getRecordingMetaDataId(), new Date());
+				metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
 			}
 
 		} catch (Exception err) {
@@ -439,22 +413,22 @@ public class RecordingService implements IPendingServiceCallback {
 			Date now = new Date();
 
 			// If its the recording client we need another type of Meta Data
-			if (rcl.isScreenClient()) {
-				if (rcl.getRecordingId() != null && rcl.isScreenPublishStarted()) {
-					String streamName_Screen = generateFileName(recordingId, rcl.getStreamPublishName().toString());
+			if (rcl.isSharing()) {
+				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
+					String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId().toString());
 
-					log.debug("##############  ADD SCREEN OF SHARER :: " + rcl.getStreamPublishName());
+					log.debug("##############  ADD SCREEN OF SHARER :: {}", rcl.getBroadCastId());
 
 					Long metaDataId = metaDataDao.add(recordingId, rcl.getFirstname()
 							+ " " + rcl.getLastname(), now, false, false, true, streamName_Screen, rcl.getInterviewPodId());
 
 					// Start FLV Recording
-					recordShow(conn, rcl.getStreamPublishName(), streamName_Screen, metaDataId, true, recording.isInterview());
+					recordShow(conn, rcl.getBroadCastId(), streamName_Screen, metaDataId, true, recording.isInterview());
 
 					// Add Meta Data
-					rcl.setRecordingMetaDataId(metaDataId);
+					rcl.setMetaId(metaDataId);
 
-					sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+					sessionManager.update(rcl);
 				}
 			} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 				// if the user does publish av, a, v
@@ -478,12 +452,10 @@ public class RecordingService implements IPendingServiceCallback {
 				// Start FLV recording
 				recordShow(conn, rcl.getBroadCastId(), streamName, metaDataId, false, recording.isInterview());
 
-				rcl.setRecordingMetaDataId(metaDataId);
+				rcl.setMetaId(metaDataId);
 
-				sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
-
+				sessionManager.update(rcl);
 			}
-
 		} catch (Exception err) {
 			log.error("[addRecordingByStreamId]", err);
 		}

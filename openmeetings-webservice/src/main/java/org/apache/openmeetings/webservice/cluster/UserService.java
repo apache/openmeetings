@@ -141,12 +141,10 @@ public interface UserService {
 	 *
 	 * @param sid
 	 *            The SID from getSession
-	 * @param publicSID
-	 *            the publicSID (you can get it from the call to get users in a
-	 *            room)
+	 * @param uid the uid of the client
 	 * @return - <code>true</code> if user was kicked
 	 */
-	ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="publicsid") @PathParam("publicsid") String publicSID) throws ServiceException;
+	ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) throws ServiceException;
 
 	/**
 	 * Returns the count of users currently in the Room with given id

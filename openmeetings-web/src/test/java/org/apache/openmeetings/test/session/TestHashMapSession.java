@@ -18,74 +18,56 @@
  */
 package org.apache.openmeetings.test.session;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertEquals;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Random;
+import java.util.UUID;
 
 import org.apache.openmeetings.core.session.store.HashMapStore;
 import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestHashMapSession extends AbstractJUnitDefaults {
-	
-	protected static final Logger log = Red5LoggerFactory.getLogger(
-			TestHashMapSession.class, OpenmeetingsVariables.webAppRootKey);
-	
+	protected static final Logger log = Red5LoggerFactory.getLogger(TestHashMapSession.class, webAppRootKey);
+
 	@Autowired
 	private HashMapStore cache;
-	
+
 	@Test
 	public void testHashMapSession() {
-		
 		//make sure the cache is empty before starting the test
 		cache.clear();
-		
-		for (int i=0;i<20;i++) {
-			
-			String streamId = ""+i;
-			
+
+		for (int i = 0; i < 20; i++) {
+			Long id = (long)i;
+
 			StreamClient rcm = new StreamClient();
+			rcm.setId(id);
 			rcm.setConnectedSince(new Date());
-			rcm.setStreamid(streamId);
 			rcm.setScope("scopeName");
-			long random = System.currentTimeMillis() + new BigInteger(256, new Random()).longValue();
-			
-			rcm.setPublicSID(CryptProvider.get().hash(String.valueOf(random).toString()));
+
+			rcm.setUid(UUID.randomUUID().toString());
 
 			rcm.setUserport(0);
 			rcm.setUserip("remoteAddress");
 			rcm.setSwfurl("swfUrl");
-			rcm.setIsMod(false);
-			rcm.setCanDraw(false);
+			rcm.setMod(false);
 
-			if (cache.containsKey(null, streamId)) {
-				log.error("Tried to add an existing Client " + streamId);
+			if (cache.containsKey(id)) {
+				log.error("Tried to add an existing Client " + id);
 				break;
 			}
-
-			cache.put(rcm.getStreamid(), rcm);
-			
-			cache.remove(null, streamId);
-		
+			cache.remove(id);
 		}
-		
 		String logString = cache.getDebugInformation(Arrays.asList(IClientPersistenceStore.DEBUG_DETAILS.SIZE));
-		
-		
 		log.debug("######## \n\r "+ logString + " \n\r ########");
-		
 		assertEquals(0, cache.size());
-		
 	}
-
 }

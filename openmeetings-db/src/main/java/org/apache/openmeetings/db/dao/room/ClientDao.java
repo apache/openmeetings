@@ -45,13 +45,20 @@ public class ClientDao {
 	private static List<Long> EMPTY_LIST = new ArrayList<>(0);
 
 	public void cleanAllClients() {
-		em.createNamedQuery("deleteAll").executeUpdate();
+		em.createNamedQuery("deleteClientAll").executeUpdate();
 	}
 
 	public void cleanClientsByServer(Server server) {
 		em.createNamedQuery("deleteClientsByServer").
 			setParameter("server", server).
 			executeUpdate();
+	}
+
+	public StreamClient get(Long id) {
+		List<StreamClient> list = em.createNamedQuery("getClientById", StreamClient.class)
+				.setParameter("id", id)
+				.getResultList();
+		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
 	public StreamClient add(StreamClient entity) {
@@ -65,15 +72,12 @@ public class ClientDao {
 	}
 
 	public void delete(StreamClient entity) {
-		Query q = em.createNamedQuery("deletedById");
-		q.setParameter("id", entity.getId());
-		q.executeUpdate();
+		remove(entity.getId());
 	}
 
-	public void removeClientByServerAndStreamId(Server server, String streamId) {
-		Query q = em.createNamedQuery("deletedByServerAndStreamId");
-		q.setParameter("server", server);
-		q.setParameter("streamid", streamId);
+	public void remove(Long id) {
+		Query q = em.createNamedQuery("deletedClientById");
+		q.setParameter("id", id);
 		q.executeUpdate();
 	}
 
@@ -87,44 +91,16 @@ public class ClientDao {
 		return q.getSingleResult().intValue();
 	}
 
-	public long countClientsByServerAndStreamId(Server server, String streamId) {
-		TypedQuery<Long> q = em.createNamedQuery("countClientsByServerAndStreamId", Long.class);
-		q.setParameter("streamid", streamId);
+	public List<StreamClient> getClientsByUidAndServer(Server server, String uid) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByUidAndServer", StreamClient.class);
 		q.setParameter("server", server);
-		return q.getSingleResult();
-	}
-
-	/**
-	 * Query.getSingleResult would throw an error if result is null,
-	 * see: http://stackoverflow.com/questions/2002993/jpa-getsingleresult-or-null
-	 *
-	 * @param server
-	 * @param streamId
-	 * @return
-	 */
-	public StreamClient getClientByServerAndStreamId(Server server, String streamId) {
-		TypedQuery<StreamClient> q = em.createNamedQuery("getClientByServerAndStreamId", StreamClient.class);
-		q.setParameter("streamid", streamId);
-		q.setParameter("server", server);
-		List<StreamClient> ll = q.getResultList();
-		if (ll.size() == 1) {
-			return ll.get(0);
-		} else if (ll.size() == 0) {
-			return null;
-		}
-		throw new RuntimeException("more then one client was found streamId "+ streamId + " server "+server);
-	}
-
-	public List<StreamClient> getClientsByPublicSIDAndServer(Server server, String publicSID) {
-		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByPublicSIDAndServer", StreamClient.class);
-		q.setParameter("server", server);
-		q.setParameter("publicSID", publicSID);
+		q.setParameter("uid", uid);
 		return q.getResultList();
 	}
 
-	public List<StreamClient> getClientsByPublicSID(String publicSID) {
-		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByPublicSID", StreamClient.class);
-		q.setParameter("publicSID", publicSID);
+	public List<StreamClient> getClientsByUid(String uid) {
+		TypedQuery<StreamClient> q = em.createNamedQuery("getClientsByUid", StreamClient.class);
+		q.setParameter("uid", uid);
 		return q.getResultList();
 	}
 

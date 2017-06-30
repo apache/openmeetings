@@ -31,13 +31,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  * Can be configured to be stored in memory or in database
@@ -46,22 +48,20 @@ import org.apache.openmeetings.util.CalendarPatterns;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "deleteAll", query = "DELETE FROM StreamClient"),
-	@NamedQuery(name = "deletedById", query = "DELETE FROM StreamClient c WHERE c.id = :id"),
+	@NamedQuery(name = "deleteClientAll", query = "DELETE FROM StreamClient"),
+	@NamedQuery(name = "deleteClientById", query = "DELETE FROM StreamClient c WHERE c.id = :id"),
+	@NamedQuery(name = "getClientById", query = "SELECT c FROM StreamClient c WHERE c.id = :id"),
 	@NamedQuery(name = "deleteClientsByServer", query = "DELETE FROM StreamClient c WHERE c.server = :server"),
-	@NamedQuery(name = "deletedByServerAndStreamId", query = "DELETE FROM StreamClient c WHERE c.server = :server AND c.streamid LIKE :streamid"),
-	@NamedQuery(name = "countClients", query = "SELECT count(c.id) FROM StreamClient c"),
-	@NamedQuery(name = "countClientsByServer", query = "SELECT count(c.id) FROM StreamClient c WHERE c.server = :server"),
-	@NamedQuery(name = "countClientsByServerAndStreamId", query = "SELECT count(c.id) FROM StreamClient c WHERE c.streamid LIKE :streamid AND c.server = :server"),
-	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM StreamClient c WHERE c.streamid LIKE :streamid AND c.server = :server"),
-	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM StreamClient c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
-	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM StreamClient c WHERE c.publicSID LIKE :publicSID"),
+	@NamedQuery(name = "countClients", query = "SELECT count(c) FROM StreamClient c"),
+	@NamedQuery(name = "countClientsByServer", query = "SELECT count(c) FROM StreamClient c WHERE c.server = :server"),
+	@NamedQuery(name = "getClientsByUidAndServer", query = "SELECT c FROM StreamClient c WHERE c.uid = :uid AND c.server = :server"),
+	@NamedQuery(name = "getClientsByUid", query = "SELECT c FROM StreamClient c WHERE c.uid = :uid"),
 	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM StreamClient c WHERE c.server = :server"),
 	@NamedQuery(name = "getClients", query = "SELECT c FROM StreamClient c"),
 	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM StreamClient c LEFT JOIN FETCH c.server"),
 	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM StreamClient c WHERE c.server = :server AND c.userId = :userId"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM StreamClient c WHERE c.roomId = :roomId"),
-	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM StreamClient c WHERE c.server = :server GROUP BY c.roomId")
+	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM StreamClient c WHERE c.scope = :roomId"),
+	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM StreamClient c WHERE c.server = :server GROUP BY c.scope")
 })
 @Table(name = "client")
 @XmlRootElement
@@ -75,88 +75,47 @@ public class StreamClient implements IClient {
 	private Long id;
 
 	/**
-	 * @see StreamClient#getUsername()
-	 */
-	@Column(name = "username")
-	private String username = "";
-
-	/**
-	 * @see StreamClient#getStreamid()
-	 */
-	@Column(name = "streamid")
-	private String streamid = "";
-
-	/**
-	 * @see StreamClient#getScope()
+	 * Red5 scope, can be roomId or 'hibernate'
 	 */
 	@Column(name = "scope")
 	private String scope = "";
 
 	/**
-	 * @see StreamClient#getVWidth()
+	 * The width of the video
 	 */
-	@Column(name = "vwidth")
-	private int vWidth = 0;
+	@Column(name = "width")
+	private int width = 0;
 
 	/**
-	 * @see StreamClient#getVHeight()
+	 * The height of the video
 	 */
-	@Column(name = "vheight")
-	private int vHeight = 0;
+	@Column(name = "height")
+	private int height = 0;
 
 	/**
-	 * @see StreamClient#getVX()
+	 * {@link Client#getUid()} of the client this stream is originated from
+	 *
 	 */
-	@Column(name = "vx")
-	private int vX = 0;
+	@Column(name = "uid")
+	private String uid = null;
 
 	/**
-	 * @see StreamClient#getVY()
+	 * {@link Client#getSid()} of the client who initiated the connection
 	 */
-	@Column(name = "vy")
-	private int vY = 0;
+	@Column(name = "owner_sid")
+	private String ownerSid = null;
 
 	/**
-	 * @see StreamClient#getStreamPublishName()
-	 */
-	@Column(name = "stream_publish_name")
-	private String streamPublishName = "";
-
-	/**
-	 * @see StreamClient#getPublicSID()
-	 */
-	@Column(name = "public_sid")
-	private String publicSID = "";
-
-	/**
-	 * @see StreamClient#getIsMod()
+	 * Is this user moderator
 	 */
 	@Column(name = "is_mod", nullable = false)
-	private boolean isMod = false;
+	private boolean mod = false;
 
 	/**
-	 * @see StreamClient#getIsSuperModerator()
+	 * Is this user "super moderator"
 	 */
-	@Column(name = "is_supermoderator", nullable = false)
-	private boolean isSuperModerator = false;
-
-	/**
-	 * @see StreamClient#getCanDraw()
-	 */
-	@Column(name = "can_draw", nullable = false)
-	private boolean canDraw = false;
-
-	/**
-	 * @see StreamClient#getCanShare()
-	 */
-	@Column(name = "can_share", nullable = false)
-	private boolean canShare = false;
-
-	/**
-	 * @see StreamClient#getCanRemote()
-	 */
-	@Column(name = "can_remote", nullable = false)
-	private boolean canRemote = false;
+	@Column(name = "super_mod", nullable = false)
+	private boolean superMod = false;
 
 	/**
 	 * @see StreamClient#getCanGiveAudio()
@@ -174,30 +133,6 @@ public class StreamClient implements IClient {
 	private Date connectedSince;
 
 	/**
-	 * @see StreamClient#getFormatedDate()
-	 */
-	@Column(name = "formated_date")
-	private String formatedDate;
-
-	/**
-	 * @see StreamClient#isScreenClient()
-	 */
-	@Column(name = "is_screenclient", nullable = false)
-	private boolean screenClient;
-
-	/**
-	 * @see StreamClient#getUsercolor()
-	 */
-	@Column(name = "usercolor")
-	private String usercolor;
-
-	/**
-	 * @see StreamClient#getUserpos()
-	 */
-	@Column(name = "userpos")
-	private Integer userpos;
-
-	/**
 	 * @see StreamClient#getUserip()
 	 */
 	@Column(name = "userip")
@@ -210,12 +145,6 @@ public class StreamClient implements IClient {
 	private int userport;
 
 	/**
-	 * @see StreamClient#getRoomId()
-	 */
-	@Column(name = "room_id")
-	private Long roomId;
-
-	/**
 	 * @see StreamClient#getRoomEnter()
 	 */
 	@Column(name = "room_enter")
@@ -225,66 +154,35 @@ public class StreamClient implements IClient {
 	 * @see StreamClient#getBroadCastID()
 	 */
 	@Column(name = "broadcast_id")
-	private String broadCastId = "-2";
+	private String broadCastId = null;
 
-	/**
-	 * @see StreamClient#getUserId()
-	 */
+	@Column(name = "username")
+	private String username = "";
+
 	@Column(name = "user_id")
 	private Long userId = null;
 
-	/**
-	 * @see StreamClient#getFirstname()
-	 */
 	@Column(name = "firstname")
 	private String firstname = "";
 
-	/**
-	 * @see StreamClient#getLastname()
-	 */
 	@Column(name = "lastname")
 	private String lastname = "";
 
-	/**
-	 * @see StreamClient#getMail()
-	 */
 	@Column(name = "email")
 	private String email;
 
-	/**
-	 * @see StreamClient#getLastLogin()
-	 */
 	@Column(name = "last_login")
 	private String lastLogin;
 
-	/**
-	 * @see StreamClient#getSecurityCode()
-	 */
-	@Column(name = "security_code")
-	private String securityCode;
-
-	/**
-	 * @see StreamClient#getPicture_uri()
-	 */
 	@Column(name = "picture_uri")
 	private String picture_uri;
 
-	/**
-	 * @see StreamClient#getLanguage()
-	 */
 	@Column(name = "language")
 	private String language = "";
 
-	/**
-	 * @see StreamClient#getAvsettings()
-	 */
 	@Column(name = "avsettings")
 	private String avsettings = "";
 
-	/**
-	 * @see StreamClient#getSwfurl()
-	 */
-	// FIXME: Move to {@link ClientSession}
 	@Column(name = "swfurl", length=2048)
 	private String swfurl;
 
@@ -295,68 +193,38 @@ public class StreamClient implements IClient {
 	private boolean nativeSsl = false;
 
 	/**
-	 * @see StreamClient#getIsRecording()
+	 * Is this client connect via mobile application
 	 */
-	@Column(name = "is_recording", nullable = false)
-	private boolean isRecording = false;
+	@Column(name = "mobile", nullable = false)
+	private boolean mobile = false;
 
 	/**
-	 * @see StreamClient#getRoomRecordingName()
+	 * Is this client performs screen sharing
 	 */
-	@Column(name = "room_recording_name")
-	private String roomRecordingName;
+	@Column(name = "sharing", nullable = false)
+	private boolean sharing = false;
 
-	/**
-	 * @see StreamClient#getRecordingId()
-	 */
+	@Column(name = "recording_started", nullable = false)
+	private boolean recordingStarted = false;
+
+	@Column(name = "sharing_started", nullable = false)
+	private boolean sharingStarted = false;
+
+	@Column(name = "publish_started", nullable = false)
+	private boolean publishStarted = false;
+
+	@Column(name = "broadcasting", nullable = false)
+	private boolean broadcasting = false;
+
 	@Column(name = "recording_id")
 	private Long recordingId;
 
-	/**
-	 * @see StreamClient#getRecordingMetaDataId()
-	 */
-	@Column(name = "recording_metadata_id")
-	private Long recordingMetaDataId;
+	@Column(name = "meta_id")
+	private Long metaId;
 
-	/**
-	 * @see StreamClient#isStartRecording()
-	 */
-	@Column(name = "start_recording", nullable = false)
-	private boolean startRecording = false;
-
-	/**
-	 * @see StreamClient#isStartStreaming()
-	 */
-	@Column(name = "start_streaming", nullable = false)
-	private boolean startStreaming = false;
-
-	/**
-	 * @see StreamClient#isScreenPublishStarted()
-	 */
-	@Column(name = "screen_publish_started", nullable = false)
-	private boolean screenPublishStarted = false;
-
-	/**
-	 * @see StreamClient#isStreamPublishStarted()
-	 */
-	@Column(name = "stream_publish_started", nullable = false)
-	private boolean streamPublishStarted = false;
-
-	/**
-	 * @see StreamClient#getIsBroadcasting()
-	 */
-	@Column(name = "is_broadcasting", nullable = false)
-	private boolean isBroadcasting = false;
-
-	/**
-	 * @see StreamClient#getExternalUserId()
-	 */
 	@Column(name = "external_user_id")
 	private String externalUserId;
 
-	/**
-	 * @see StreamClient#getExternalUserType()
-	 */
 	@Column(name = "external_user_type")
 	private String externalUserType;
 
@@ -373,12 +241,6 @@ public class StreamClient implements IClient {
 	private boolean allowRecording = true;
 
 	/**
-	 * @see StreamClient#getZombieCheckFlag()
-	 */
-	@Column(name = "zombie_check_flag", nullable = false)
-	private boolean zombieCheckFlag = false;
-
-	/**
 	 * @see StreamClient#getMicMuted()
 	 */
 	@Column(name = "mic_muted", nullable = false)
@@ -390,42 +252,14 @@ public class StreamClient implements IClient {
 	@Column(name = "sip_transport", nullable = false)
 	private boolean sipTransport = false;
 
-	@Column(name = "mobile", nullable = false)
-	private boolean mobile = false;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "server_id")
 	private Server server;
 
+	@Transient
+	private Long roomId;
+
 	public StreamClient() {}
-
-	public StreamClient(String streamid, String publicSID, Long roomId,
-			Long userId, String firstname, String lastname,
-			String username, String connectedSince, String scope) {
-		super();
-		this.streamid = streamid;
-		this.publicSID = publicSID;
-		this.roomId = roomId;
-		this.userId = userId;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.username = username;
-		this.connectedSince = CalendarPatterns.parseDateWithHour(connectedSince);
-		this.scope = scope;
-	}
-
-	public void setUserObject(Long userId, String username, String firstname, String lastname) {
-		this.userId = userId;
-		this.username = username;
-		this.firstname = firstname;
-		this.lastname = lastname;
-	}
-
-	public void setUserObject(String username, String firstname, String lastname) {
-		this.username = username;
-		this.firstname = firstname;
-		this.lastname = lastname;
-	}
 
 	@Override
 	public Long getId() {
@@ -437,68 +271,89 @@ public class StreamClient implements IClient {
 		this.id = id;
 	}
 
-	public Date getConnectedSince() {
-		return connectedSince;
-	}
-
-	public void setConnectedSince(Date connectedSince) {
-		this.connectedSince = connectedSince;
-	}
-
-	public boolean getIsMod() {
-		return isMod;
-	}
-
-	public void setIsMod(boolean isMod) {
-		this.isMod = isMod;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getStreamid() {
-		return streamid;
-	}
-
-	public void setStreamid(String streamid) {
-		this.streamid = streamid;
-	}
-
 	public String getScope() {
 		return scope;
 	}
 
 	public void setScope(String scope) {
 		this.scope = scope;
+		StringValue scn = StringValue.valueOf(scope);
+		long roomId = scn.toLong(Long.MIN_VALUE);
+		if (roomId > 0) {
+			this.roomId = roomId;
+		}
 	}
 
-	public String getFormatedDate() {
-		return formatedDate;
+	public int getWidth() {
+		return width;
 	}
 
-	public void setFormatedDate(String formatedDate) {
-		this.formatedDate = formatedDate;
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
-	public String getUsercolor() {
-		return usercolor;
+	public int getHeight() {
+		return height;
 	}
 
-	public void setUsercolor(String usercolor) {
-		this.usercolor = usercolor;
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
-	public Integer getUserpos() {
-		return userpos;
+	public String getUid() {
+		return uid;
 	}
 
-	public void setUserpos(Integer userpos) {
-		this.userpos = userpos;
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getOwnerSid() {
+		return ownerSid;
+	}
+
+	public void setOwnerSid(String ownerSid) {
+		this.ownerSid = ownerSid;
+	}
+
+	public boolean isMod() {
+		return mod;
+	}
+
+	public void setMod(boolean mod) {
+		this.mod = mod;
+	}
+
+	public boolean isSuperMod() {
+		return superMod;
+	}
+
+	public void setSuperMod(boolean superMod) {
+		this.superMod = superMod;
+	}
+
+	public boolean isCanGiveAudio() {
+		return canGiveAudio;
+	}
+
+	public void setCanGiveAudio(boolean canGiveAudio) {
+		this.canGiveAudio = canGiveAudio;
+	}
+
+	public boolean isCanVideo() {
+		return canVideo;
+	}
+
+	public void setCanVideo(boolean canVideo) {
+		this.canVideo = canVideo;
+	}
+
+	public Date getConnectedSince() {
+		return connectedSince;
+	}
+
+	public void setConnectedSince(Date connectedSince) {
+		this.connectedSince = connectedSince;
 	}
 
 	public String getUserip() {
@@ -509,14 +364,6 @@ public class StreamClient implements IClient {
 		this.userip = userip;
 	}
 
-	public String getSwfurl() {
-		return swfurl;
-	}
-
-	public void setSwfurl(String swfurl) {
-		this.swfurl = swfurl;
-	}
-
 	public int getUserport() {
 		return userport;
 	}
@@ -525,28 +372,44 @@ public class StreamClient implements IClient {
 		this.userport = userport;
 	}
 
+	public Date getRoomEnter() {
+		return roomEnter;
+	}
+
+	public void setRoomEnter(Date roomEnter) {
+		this.roomEnter = roomEnter;
+	}
+
+	public String getBroadCastId() {
+		return broadCastId;
+	}
+
+	public void setBroadCastId(String broadCastId) {
+		this.broadCastId = broadCastId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
 	public String getFirstname() {
 		return firstname;
 	}
 
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public void setLanguage(String language) {
-		this.language = language;
-	}
-
-	public String getLastLogin() {
-		return lastLogin;
-	}
-
-	public void setLastLogin(String lastLogin) {
-		this.lastLogin = lastLogin;
 	}
 
 	public String getLastname() {
@@ -565,12 +428,12 @@ public class StreamClient implements IClient {
 		this.email = email;
 	}
 
-	public String getSecurityCode() {
-		return securityCode;
+	public String getLastLogin() {
+		return lastLogin;
 	}
 
-	public void setSecurityCode(String securityCode) {
-		this.securityCode = securityCode;
+	public void setLastLogin(String lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 
 	public String getPicture_uri() {
@@ -581,44 +444,12 @@ public class StreamClient implements IClient {
 		this.picture_uri = picture_uri;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public String getLanguage() {
+		return language;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public Long getRoomId() {
-		return roomId;
-	}
-
-	public void setRoomId(Long roomId) {
-		this.roomId = roomId;
-	}
-
-	public Date getRoomEnter() {
-		return roomEnter;
-	}
-
-	public void setRoomEnter(Date roomEnter) {
-		this.roomEnter = roomEnter;
-	}
-
-	public boolean getIsRecording() {
-		return isRecording;
-	}
-
-	public void setIsRecording(boolean isRecording) {
-		this.isRecording = isRecording;
-	}
-
-	public String getRoomRecordingName() {
-		return roomRecordingName;
-	}
-
-	public void setRoomRecordingName(String roomRecordingName) {
-		this.roomRecordingName = roomRecordingName;
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public String getAvsettings() {
@@ -629,244 +460,12 @@ public class StreamClient implements IClient {
 		this.avsettings = avsettings;
 	}
 
-	public String getBroadCastId() {
-		return broadCastId;
+	public String getSwfurl() {
+		return swfurl;
 	}
 
-	public void setBroadCastId(String broadCastId) {
-		this.broadCastId = broadCastId;
-	}
-
-	public String getPublicSID() {
-		return publicSID;
-	}
-
-	public void setPublicSID(String publicSID) {
-		this.publicSID = publicSID;
-	}
-
-	public boolean getZombieCheckFlag() {
-		return zombieCheckFlag;
-	}
-
-	public void setZombieCheckFlag(boolean zombieCheckFlag) {
-		this.zombieCheckFlag = zombieCheckFlag;
-	}
-
-	public boolean getMicMuted() {
-		return micMuted;
-	}
-
-	public void setMicMuted(boolean micMuted) {
-		this.micMuted = micMuted;
-	}
-
-	public boolean getCanDraw() {
-		return canDraw;
-	}
-
-	public void setCanDraw(boolean canDraw) {
-		this.canDraw = canDraw;
-	}
-
-	public boolean getIsBroadcasting() {
-		return isBroadcasting;
-	}
-
-	public void setIsBroadcasting(boolean isBroadcasting) {
-		this.isBroadcasting = isBroadcasting;
-	}
-
-	public boolean getCanShare() {
-		return canShare;
-	}
-
-	public void setCanShare(boolean canShare) {
-		this.canShare = canShare;
-	}
-
-	public String getExternalUserId() {
-		return externalUserId;
-	}
-
-	public void setExternalUserId(String externalUserId) {
-		this.externalUserId = externalUserId;
-	}
-
-	public String getExternalUserType() {
-		return externalUserType;
-	}
-
-	public void setExternalUserType(String externalUserType) {
-		this.externalUserType = externalUserType;
-	}
-
-	public boolean getIsSuperModerator() {
-		return isSuperModerator;
-	}
-
-	public void setIsSuperModerator(boolean isSuperModerator) {
-		this.isSuperModerator = isSuperModerator;
-	}
-
-	public boolean isScreenClient() {
-		return screenClient;
-	}
-
-	public void setScreenClient(boolean screenClient) {
-		this.screenClient = screenClient;
-	}
-
-	public int getVWidth() {
-		return vWidth;
-	}
-
-	public void setVWidth(int width) {
-		vWidth = width;
-	}
-
-	public int getVHeight() {
-		return vHeight;
-	}
-
-	public void setVHeight(int height) {
-		vHeight = height;
-	}
-
-	public int getVX() {
-		return vX;
-	}
-
-	public void setVX(int vx) {
-		vX = vx;
-	}
-
-	public int getVY() {
-		return vY;
-	}
-
-	public void setVY(int vy) {
-		vY = vy;
-	}
-
-	public String getStreamPublishName() {
-		return streamPublishName;
-	}
-
-	public void setStreamPublishName(String streamPublishName) {
-		this.streamPublishName = streamPublishName;
-	}
-
-	public Long getRecordingId() {
-		return recordingId;
-	}
-
-	public void setRecordingId(Long recordingId) {
-		this.recordingId = recordingId;
-	}
-
-	public Long getRecordingMetaDataId() {
-		return recordingMetaDataId;
-	}
-
-	public void setRecordingMetaDataId(Long recordingMetaDataId) {
-		this.recordingMetaDataId = recordingMetaDataId;
-	}
-
-	public boolean isScreenPublishStarted() {
-		return screenPublishStarted;
-	}
-
-	public void setScreenPublishStarted(boolean screenPublishStarted) {
-		this.screenPublishStarted = screenPublishStarted;
-	}
-
-	public boolean isStartRecording() {
-		return startRecording;
-	}
-
-	public void setStartRecording(boolean startRecording) {
-		this.startRecording = startRecording;
-	}
-
-	public boolean isStartStreaming() {
-		return startStreaming;
-	}
-
-	public void setStartStreaming(boolean startStreaming) {
-		this.startStreaming = startStreaming;
-	}
-
-	public Integer getInterviewPodId() {
-		return interviewPodId;
-	}
-
-	public void setInterviewPodId(Integer interviewPodId) {
-		this.interviewPodId = interviewPodId;
-	}
-
-	public boolean getCanRemote() {
-		return canRemote;
-	}
-
-	public void setCanRemote(boolean canRemote) {
-		this.canRemote = canRemote;
-	}
-
-	public boolean getCanGiveAudio() {
-		return canGiveAudio;
-	}
-
-	public void setCanGiveAudio(boolean canGiveAudio) {
-		this.canGiveAudio = canGiveAudio;
-	}
-
-	public boolean getCanVideo() {
-		return canVideo;
-	}
-
-	public void setCanVideo(boolean canVideo) {
-		this.canVideo = canVideo;
-	}
-
-	public boolean isAllowRecording() {
-		return allowRecording;
-	}
-
-	public void setAllowRecording(boolean allowRecording) {
-		this.allowRecording = allowRecording;
-	}
-
-	public boolean isStreamPublishStarted() {
-		return streamPublishStarted;
-	}
-
-	public void setStreamPublishStarted(boolean streamPublishStarted) {
-		this.streamPublishStarted = streamPublishStarted;
-	}
-
-	public boolean isSipTransport() {
-		return sipTransport;
-	}
-
-	public void setSipTransport(boolean sipTransport) {
-		this.sipTransport = sipTransport;
-	}
-
-	public Server getServer() {
-		return server;
-	}
-
-	public void setServer(Server server) {
-		this.server = server;
-	}
-
-	public boolean isMobile() {
-		return mobile;
-	}
-
-	public void setMobile(boolean mobile) {
-		this.mobile = mobile;
+	public void setSwfurl(String swfurl) {
+		this.swfurl = swfurl;
 	}
 
 	public String getTcUrl() {
@@ -885,12 +484,135 @@ public class StreamClient implements IClient {
 		this.nativeSsl = nativeSsl;
 	}
 
+	public boolean isMobile() {
+		return mobile;
+	}
+
+	public void setMobile(boolean mobile) {
+		this.mobile = mobile;
+	}
+
+	public boolean isSharing() {
+		return sharing;
+	}
+
+	public void setSharing(boolean sharing) {
+		this.sharing = sharing;
+	}
+
+	public boolean isRecordingStarted() {
+		return recordingStarted;
+	}
+
+	public void setRecordingStarted(boolean recordingStarted) {
+		this.recordingStarted = recordingStarted;
+	}
+
+	public boolean isSharingStarted() {
+		return sharingStarted;
+	}
+
+	public void setSharingStarted(boolean sharingStarted) {
+		this.sharingStarted = sharingStarted;
+	}
+
+	public boolean isPublishStarted() {
+		return publishStarted;
+	}
+
+	public void setPublishStarted(boolean publishStarted) {
+		this.publishStarted = publishStarted;
+	}
+
+	public boolean isBroadcasting() {
+		return broadcasting;
+	}
+
+	public void setBroadcasting(boolean isBroadcasting) {
+		this.broadcasting = isBroadcasting;
+	}
+
+	public Long getRecordingId() {
+		return recordingId;
+	}
+
+	public void setRecordingId(Long recordingId) {
+		this.recordingId = recordingId;
+	}
+
+	public Long getMetaId() {
+		return metaId;
+	}
+
+	public void setMetaId(Long metaId) {
+		this.metaId = metaId;
+	}
+
+	public String getExternalUserId() {
+		return externalUserId;
+	}
+
+	public void setExternalUserId(String externalUserId) {
+		this.externalUserId = externalUserId;
+	}
+
+	public String getExternalUserType() {
+		return externalUserType;
+	}
+
+	public void setExternalUserType(String externalUserType) {
+		this.externalUserType = externalUserType;
+	}
+
+	public Integer getInterviewPodId() {
+		return interviewPodId;
+	}
+
+	public void setInterviewPodId(Integer interviewPodId) {
+		this.interviewPodId = interviewPodId;
+	}
+
+	public boolean isAllowRecording() {
+		return allowRecording;
+	}
+
+	public void setAllowRecording(boolean allowRecording) {
+		this.allowRecording = allowRecording;
+	}
+
+	public boolean isMicMuted() {
+		return micMuted;
+	}
+
+	public void setMicMuted(boolean micMuted) {
+		this.micMuted = micMuted;
+	}
+
+	public boolean isSipTransport() {
+		return sipTransport;
+	}
+
+	public void setSipTransport(boolean sipTransport) {
+		this.sipTransport = sipTransport;
+	}
+
+	public Server getServer() {
+		return server;
+	}
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
 	@Override
 	public String toString() {
-		return "Client [streamid=" + streamid + ", publicSID=" + publicSID + ", isScreenClient=" + screenClient
-				+ ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastId + ", userId="
-				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
-				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
-				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
+		return "StreamClient [scope=" + scope + ", uid=" + uid + ", ownerSid=" + ownerSid + ", broadCastId="
+				+ broadCastId + ", username=" + username + ", userId=" + userId + ", avsettings=" + avsettings + ", sharing=" + sharing
+				+ ", isBroadcasting=" + broadcasting + "]";
 	}
+
 }

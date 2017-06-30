@@ -30,64 +30,61 @@ public interface IClientPersistenceStore {
 	public enum DEBUG_DETAILS {
 		SIZE
 	}
-	
+
 	/**
 	 * called upon start of the session cache
 	 */
 	void clear();
 
 	/**
-	 * 
-	 * @param streamId
+	 *
 	 * @param rcl
 	 */
-	void put(String streamId, StreamClient rcl);
-	
+	StreamClient put(StreamClient rcl);
+
 	/**
-	 * 
-	 * @param server
-	 * @param streamId
+	 *
+	 * @param id
 	 * @return
 	 */
-	boolean containsKey(Server server, String streamId);
+	boolean containsKey(Long id);
 
 	/**
 	 * by server and publicSID
-	 * 
-	 * @param server
-	 * @param streamId
+	 *
+	 * @param id
 	 * @return will return null if the client does not exist in the list
 	 */
-	StreamClient get(Server server, String streamId);
+	StreamClient get(Long id);
 
 	/**
-	 * 
+	 *
 	 * @param server
-	 * @param publicSID
+	 * @param uid
 	 * @return will return an empty list if nothing available
 	 */
-	List<StreamClient> getClientsByPublicSID(Server server, String publicSID);
+	List<StreamClient> getClientsByUid(Server server, String uid);
 
 	/**
 	 * Searches for the publicSID across all servers
-	 * 
-	 * @param publicSID
+	 *
+	 * @param uid
 	 * @return will return a map with the serverId as key and the RoomClients as list in the value
 	 */
-	Map<Long, List<StreamClient>> getClientsByPublicSID(String publicSID);
+	Map<Long, List<StreamClient>> getClientsByUid(String uid);
 
 	Collection<StreamClient> getClients();
-	
+
 	/**
 	 * get all clients by a specific {@link Server}
-	 * 
+	 *
 	 * @param server
 	 * @return will return an empty map if nothing available
 	 */
 	Collection<StreamClient> getClientsByServer(Server server);
 
 	/**
-	 * 
+	 *
 	 * @param server
 	 * @param userId
 	 * @return will return an empty list if nothing available
@@ -95,25 +92,25 @@ public interface IClientPersistenceStore {
 	Collection<StreamClient> getClientsByUserId(Server server, Long userId);
 
 	/**
-	 * 
+	 *
 	 * We ignore the server here, cause ONE room can only be on ONE server and often we don't know where.
-	 * 
+	 *
 	 * @param roomId
 	 * @return will return an empty map if nothing available
 	 */
 	List<StreamClient> getClientsByRoomId(Long roomId);
 
-	void remove(Server server, String streamId);
+	void remove(Long id);
 
 	int size();
 
 	int sizeByServer(Server server);
 
 	Collection<StreamClient> values();
-	
+
 	/**
 	 * Get some session statistics
-	 * 
+	 *
 	 * @param detailLevel
 	 * @return
 	 */
@@ -121,18 +118,18 @@ public interface IClientPersistenceStore {
 
 	/**
 	 * returns a list of roomIds (unique) that are currently active on the given server
-	 * In case the session is stored in the memory (no-cluster setup) it will always 
+	 * In case the session is stored in the memory (no-cluster setup) it will always
 	 * return simply all active roomIds
-	 * 
+	 *
 	 * @param server
 	 * @return
 	 */
 	List<Long> getRoomsIdsByServer(Server server);
 
 	/**
-	 * if database cache + cluster is enabled, the server object will be loaded 
+	 * if database cache + cluster is enabled, the server object will be loaded
 	 * into the client
-	 * 
+	 *
 	 * @return
 	 */
 	Collection<StreamClient> getClientsWithServer();

@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getClientBySid;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
-import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Calendar;
@@ -158,13 +158,10 @@ public class RoomPanel extends BasePanel {
 		StringBuilder sb = new StringBuilder();
 		for (Client c: getRoomClients(getRoom().getId()) ) {
 			boolean self = getClient().getUid().equals(c.getUid());
-			if (c.hasAnyActivity(Client.Activity.broadcastA, Client.Activity.broadcastV)) {
-				sb.append(String.format("VideoManager.play(%s);"
-						, RoomHelper.videoJson(c, self, getSid(), getBean(ISessionManager.class), false)));
-			}
-			if (c.hasActivity(Client.Activity.share)) {
-				sb.append(String.format("VideoManager.play(%s);"
-						, RoomHelper.videoJson(c, self, getSid(), getBean(ISessionManager.class), true)));
+			for (Client.Stream s : c.getStreams()) {
+				JSONObject jo = RoomHelper.videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getStreamClientId(), s.isSharing())
+						.put("broadcastId", s.getBroadcastId());
+				sb.append(String.format("VideoManager.play(%s);", jo));
 			}
 		}
 		if (!Strings.isEmpty(sb)) {
@@ -338,7 +335,7 @@ public class RoomPanel extends BasePanel {
 					case recordingStoped:
 						{
 							String uid = ((TextRoomMessage)m).getText();
-							Client c = getOnlineClient(uid);
+							Client c = getClientBySid(uid);
 							if (c == null) {
 								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid);
 								return;
@@ -351,7 +348,7 @@ public class RoomPanel extends BasePanel {
 					case recordingStarted:
 						{
 							String uid = ((TextRoomMessage)m).getText();
-							Client c = getOnlineClient(uid);
+							Client c = getClientBySid(uid);
 							if (c == null) {
 								log.error("Not existing user has started recording {} !!!!", uid);
 								return;
@@ -363,12 +360,13 @@ public class RoomPanel extends BasePanel {
 						break;
 					case sharingStoped:
 						{
-							String uid = ((TextRoomMessage)m).getText();
-							Client c = getOnlineClient(uid);
+							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+							Client c = getClientBySid(obj.getString("ownerSid"));
 							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", uid);
+								log.error("Not existing user has started sharing {} !!!!", obj);
 								return;
 							}
+							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", obj.getString("uid")));
 							sharingUser = null;
 							c.remove(Client.Activity.share);
 							menu.update(handler);
@@ -389,9 +387,14 @@ public class RoomPanel extends BasePanel {
 						break;
 					case rightUpdated:
 						{
-							Client c = getOnlineClient(((TextRoomMessage)m).getText());
+							String uid = ((TextRoomMessage)m).getText();
+							Client c = getOnlineClient(uid);
+							if (c == null) {
+								log.error("Not existing user in rightUpdated {} !!!!", uid);
+								return;
+							}
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.toJson(getClient().getUid().equals(c.getUid())).put("sid", getSid())));
+									, c.toJson(getClient().getUid().equals(c.getUid())).put("sid", getClient().getSid())));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -400,12 +403,26 @@ public class RoomPanel extends BasePanel {
 					case newStream:
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						Client c = getOnlineClient(obj.getString("uid"));
-						c.setBroadcastId(obj.getString("stream"));
+						boolean share = obj.optBoolean("screenShare", false);
+						String uid = obj.getString("uid");
+						Client c = getOnlineClient(uid);
+						if (c == null) {
+							// screen client, ext video stream ??
+							c = getClientBySid(obj.getString("ownerSid"));
+						}
+						if (c == null) {
+							log.error("Not existing user in newStream {} !!!!", uid);
+							return;
+						}
 						boolean self = getClient().getUid().equals(c.getUid());
+						String broadcastId = obj.getString("stream");
+						Long streamClientId = obj.getLong("streamClientId");
 						if (!self) {
-							handler.appendJavaScript(String.format("VideoManager.play(%s);"
-									, RoomHelper.videoJson(c, self, getSid(), getBean(ISessionManager.class), obj.optBoolean("screenShare", false))));
+							JSONObject jo = RoomHelper.videoJson(c, uid, self, c.getSid(), getBean(ISessionManager.class), streamClientId, share)
+									.put("broadcastId", broadcastId);
+							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
+						} else {
+							c.addStream(streamClientId, broadcastId, share);
 						}
 					}
 						break;

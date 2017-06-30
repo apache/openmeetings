@@ -115,7 +115,9 @@
 						video.reset();
 						var cam:Camera = getCam();
 						video.attachCamera(cam);
-						video.broadcast(UIDUtil.createUID(), cam, getMic());
+						var broadcastId:String = UIDUtil.createUID();
+						debug("BroadcastId = " + broadcastId);
+						video.broadcast(broadcastId, cam, getMic());
 						ExternalInterface.call("VideoManager.resetSize", params.uid);
 					});
 				}

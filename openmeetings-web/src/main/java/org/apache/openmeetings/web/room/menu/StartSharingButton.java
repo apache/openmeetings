@@ -91,8 +91,8 @@ public class StartSharingButton extends OmButton {
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
-			String publicSid = c.getUid();
-			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + c.getRoomId(), publicSid);
+			String sid = c.getSid();
+			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + c.getRoomId(), sid);
 			String _url = s.getString(VideoSettings.URL);
 			long roomId = c.getRoomId();
 			Room room = getBean(RoomDao.class).get(roomId);
@@ -102,7 +102,7 @@ public class StartSharingButton extends OmButton {
 					.replace("$applicationName", cfgDao.getAppName())
 					.replace("$url", _url)
 					.replace("$fallback", s.getString(VideoSettings.FALLBACK))
-					.replace("$publicSid", publicSid)
+					.replace("$sid", sid)
 					.replace("$labels", getLabels(730,  731,  732,  733,  734
 							,  735,  737,  738,  739,  740
 							,  741,  742,  844,  869,  870

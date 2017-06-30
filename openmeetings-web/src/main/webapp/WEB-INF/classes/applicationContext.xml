@@ -75,7 +75,6 @@
 
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
-	<bean id="userservice.service" class="org.apache.openmeetings.core.remote.UserService" />
 	<bean id="fileservice.service" class="org.apache.openmeetings.core.remote.ConferenceLibrary" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.core.converter.FlvExplorerConverter" />

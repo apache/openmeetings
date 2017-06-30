@@ -24,10 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.apache.openmeetings.core.session.store.IClientPersistenceStore;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -35,7 +33,6 @@ import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
-import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,53 +81,9 @@ public class SessionManager implements ISessionManager {
 		}
 		c.setConnectedSince(new Date());
 		c.setRoomEnter(new Date());
-		if (Strings.isEmpty(c.getPublicSID())) {
-			c.setPublicSID(UUID.randomUUID().toString());
-		}
 		c.setServer(server);
 
-		if (cache.containsKey(null, c.getStreamid())) {
-			log.error("Tried to add an existing Client " + c.getStreamid());
-			return null;
-		}
-
-		cache.put(c.getStreamid(), c);
-		return c;
-	}
-
-	@Override
-	public StreamClient addClientListItem(String streamId, String scopeName,
-			int remotePort, String remoteAddress, String swfUrl, Server server) {
-		if (server == null) {
-			server = serverUtil.getCurrentServer();
-		}
-		try {
-
-			// Store the Connection into a bean and add it to the HashMap
-			StreamClient rcm = new StreamClient();
-			rcm.setConnectedSince(new Date());
-			rcm.setStreamid(streamId);
-			rcm.setScope(scopeName);
-			rcm.setPublicSID(UUID.randomUUID().toString());
-			rcm.setServer(server);
-			rcm.setUserport(remotePort);
-			rcm.setUserip(remoteAddress);
-			rcm.setSwfurl(swfUrl);
-			rcm.setIsMod(false);
-			rcm.setCanDraw(false);
-
-			if (cache.containsKey(null, streamId)) {
-				log.error("Tried to add an existing Client " + streamId);
-				return null;
-			}
-
-			cache.put(rcm.getStreamid(), rcm);
-
-			return rcm;
-		} catch (Exception err) {
-			log.error("[addClientListItem]", err);
-		}
-		return null;
+		return cache.put(c);
 	}
 
 	@Override
@@ -144,16 +97,13 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public StreamClient getClientByStreamId(String streamId, Server server) {
-		if (server == null) {
-			server = serverUtil.getCurrentServer();
-		}
+	public StreamClient get(Long id) {
 		try {
-			if (!cache.containsKey(server, streamId)) {
-				log.debug("Tried to get a non existing Client " + streamId + " server " + server);
+			if (!cache.containsKey(id)) {
+				log.debug("Tried to get a non existing Client {}", id);
 				return null;
 			}
-			return cache.get(server, streamId);
+			return cache.get(id);
 		} catch (Exception err) {
 			log.error("[getClientByStreamId]", err);
 		}
@@ -161,12 +111,12 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public StreamClient getClientByPublicSID(String publicSID, Server server) {
+	public StreamClient getClientByUid(String publicSID, Server server) {
 		if (server == null) {
 			server = serverUtil.getCurrentServer();
 		}
 		try {
-			List<StreamClient> list = cache.getClientsByPublicSID(server, publicSID);
+			List<StreamClient> list = cache.getClientsByUid(server, publicSID);
 			return list == null || list.isEmpty() ? null : list.get(0);
 		} catch (Exception err) {
 			log.error("[getClientByPublicSID]", err);
@@ -175,9 +125,9 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID) {
+	public ClientSessionInfo getClientByUidAnyServer(String publicSID) {
 		try {
-			for (Entry<Long,List<StreamClient>> entry : cache.getClientsByPublicSID(publicSID).entrySet()) {
+			for (Entry<Long,List<StreamClient>> entry : cache.getClientsByUid(publicSID).entrySet()) {
 				for (StreamClient rcl : entry.getValue()) {
 					return new ClientSessionInfo(rcl, entry.getKey());
 				}
@@ -189,83 +139,51 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public StreamClient getClientByUserId(Long userId) {
-		try {
-			for (StreamClient rcl : cache.getClientsByUserId(null, userId)) {
-				if (rcl.isScreenClient()) {
-					continue;
-				}
-
-				return rcl;
-			}
-		} catch (Exception err) {
-			log.error("[getClientByUserId]", err);
-		}
-		return null;
-	}
-
-	@Override
-	public boolean updateAVClientByStreamId(String streamId, StreamClient rcm, Server server) {
-		if (server == null) {
-			server = serverUtil.getCurrentServer();
-		}
+	public boolean updateAVClient(StreamClient rcm) {
 		try {
 			// get the corresponding user session object and update the settings
-			StreamClient rclUsual = getClientByPublicSID(rcm.getPublicSID(), server);
+			StreamClient rclUsual = get(rcm.getId());
 			if (rclUsual != null) {
 				rclUsual.setBroadCastId(rcm.getBroadCastId());
 				rclUsual.setAvsettings(rcm.getAvsettings());
-				rclUsual.setVHeight(rcm.getVHeight());
-				rclUsual.setVWidth(rcm.getVWidth());
-				rclUsual.setVX(rcm.getVX());
-				rclUsual.setVY(rcm.getVY());
-				StreamClient rclSaved = cache.get(server, rclUsual.getStreamid());
-				if (rclSaved != null) {
-					cache.put(rclUsual.getStreamid(), rclUsual);
-				} else {
-					log.debug("Tried to update a non existing Client " + rclUsual.getStreamid());
-				}
+				rclUsual.setHeight(rcm.getHeight());
+				rclUsual.setWidth(rcm.getWidth());
+				cache.put(rclUsual);
+			} else {
+				log.debug("Tried to update a non existing Client {}", rclUsual);
 			}
 
-			updateClientByStreamId(streamId, rcm, false, server);
+			update(rcm);
 			return true;
 		} catch (Exception err) {
-			log.error("[updateAVClientByStreamId]", err);
+			log.error("[updateAVClient]", err);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean updateClientByStreamId(String streamId, StreamClient rcm, boolean updateRoomCount, Server server) {
-		if (server == null) {
-			server = serverUtil.getCurrentServer();
-		}
+	public boolean update(StreamClient rcm) {
 		try {
-			StreamClient rclSaved = cache.get(server, streamId);
-
-			if (rclSaved != null) {
-				cache.put(streamId, rcm);
+			if (cache.containsKey(rcm.getId())) {
+				cache.put(rcm);
 				return true;
 			} else {
-				log.debug("Tried to update a non existing Client " + streamId);
+				log.debug("Tried to update a non existing Client {}", rcm.getId());
 			}
 		} catch (Exception err) {
-			log.error("[updateClientByStreamId]", err);
+			log.error("[updateClient]", err);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean removeClient(String streamId, Server server) {
-		if (server == null) {
-			server = serverUtil.getCurrentServer();
-		}
+	public boolean remove(Long id) {
 		try {
-			if (cache.containsKey(server,streamId)) {
-				cache.remove(server,streamId);
+			if (cache.containsKey(id)) {
+				cache.remove(id);
 				return true;
 			} else {
-				log.debug("Tried to remove a non existing Client " + streamId);
+				log.debug("Tried to remove a non existing Client {}", id);
 			}
 		} catch (Exception err) {
 			log.error("[removeClient]", err);
@@ -278,7 +196,7 @@ public class SessionManager implements ISessionManager {
 		List<StreamClient> roomClientList = new ArrayList<>();
 		try {
 			for (StreamClient rcl : cache.getClientsByRoomId(roomId)) {
-				if (rcl.isScreenClient()) {
+				if (rcl.isSharing()) {
 					continue;
 				}
 
@@ -304,18 +222,6 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public List<StreamClient> getCurrentModeratorByRoom(Long roomId) {
-		List<StreamClient> rclList = new LinkedList<>();
-		List<StreamClient> currentClients = this.getClientListByRoom(roomId);
-		for (StreamClient rcl : currentClients) {
-			if (rcl.getIsMod()) {
-				rclList.add(rcl);
-			}
-		}
-		return rclList;
-	}
-
-	@Override
 	public SearchResult<StreamClient> getListByStartAndMax(int start, int max, String orderby, boolean asc) {
 		SearchResult<StreamClient> sResult = new SearchResult<>();
 		sResult.setObjectName(StreamClient.class.getName());
@@ -329,7 +235,7 @@ public class SessionManager implements ISessionManager {
 		List<StreamClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfRecordingUsers = 0;
 		for (StreamClient rcl : currentClients) {
-			if (rcl.isStartRecording()) {
+			if (rcl.isRecordingStarted()) {
 				numberOfRecordingUsers++;
 			}
 		}
@@ -341,7 +247,7 @@ public class SessionManager implements ISessionManager {
 		List<StreamClient> currentClients = this.getClientListByRoom(roomId);
 		int numberOfPublishingUsers = 0;
 		for (StreamClient rcl : currentClients) {
-			if (rcl.isStreamPublishStarted()) {
+			if (rcl.isPublishStarted()) {
 				numberOfPublishingUsers++;
 			}
 		}

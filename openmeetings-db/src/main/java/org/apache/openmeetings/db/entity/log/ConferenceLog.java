@@ -116,7 +116,7 @@ public class ConferenceLog implements IDataProviderEntity {
 		this.userId = userId;
 	}
 
-	public String getStreamid() {
+	public String getStreamId() {
 		return streamid;
 	}
 	public void setStreamid(String streamid) {

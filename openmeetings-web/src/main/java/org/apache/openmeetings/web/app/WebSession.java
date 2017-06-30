@@ -24,10 +24,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.exit;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getClientByKeys;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
@@ -100,7 +98,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private Long userId = null;
 	private Set<Right> rights = new HashSet<>(); //TODO renew somehow on user edit !!!!
 	private long languageId = -1; //TODO renew somehow on user edit !!!!
-	private String SID = null;
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private TimeZone browserTz;
@@ -123,11 +120,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public void invalidate() {
-		exit(getClientByKeys(userId, getId()));
+		Application.get().invalidateClient(userId, getId());
 		super.invalidate();
 		userId = null;
 		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
-		SID = null;
 		ISO8601FORMAT = null;
 		sdf = null;
 		languageId = -1;
@@ -273,7 +269,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	private void setUser(User u, Set<Right> rights) {
-		String _sid = SID;
 		Long _recordingId = recordingId;
 		Long _roomId = roomId;
 		Invitation _i = i;
@@ -281,9 +276,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		ClientInfo _info = clientInfo;
 		ExtendedClientProperties _extProps = extProps;
 		replaceSession(); // required to prevent session fixation
-		if (_sid != null) {
-			SID = _sid;
-		}
 		if (_recordingId != null) {
 			recordingId = _recordingId;
 		}
@@ -377,23 +369,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			}
 		}
 		return session.languageId;
-	}
-
-	public String getValidatedSid() {
-		SessiondataDao sessionDao = getBean(SessiondataDao.class);
-		Sessiondata sd = sessionDao.check(SID);
-		//TODO need to check roomId equality
-		if (sd.getUserId() == null || !sd.getUserId().equals(userId)) {
-			if (sd.getId() == null) {
-				sd = sessionDao.create(userId, roomId, languageId);
-			}
-			SID = sd.getSessionId();
-		}
-		return SID;
-	}
-
-	public static String getSid() {
-		return get().getValidatedSid();
 	}
 
 	public static Long getUserId() {

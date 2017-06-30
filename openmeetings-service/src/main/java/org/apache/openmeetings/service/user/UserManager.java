@@ -60,7 +60,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.entity.user.Userdata;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.DaoHelper;
@@ -410,65 +409,56 @@ public class UserManager implements IUserManager {
 	 * @return
 	 */
 	@Override
-	public boolean kickUserByStreamId(String sid, Long room_id) {
+	public boolean kickUsersByRoomId(Long roomId) {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
-			// admins only
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(sd.getUserId()))) {
+			sessionDao.clearSessionByRoomId(roomId);
 
-				sessionDao.clearSessionByRoomId(room_id);
-
-				for (StreamClient rcl : sessionManager.getClientListByRoom(room_id)) {
-					if (rcl == null) {
-						return true;
-					}
-					String scopeName = "hibernate";
-					if (rcl.getRoomId() != null) {
-						scopeName = rcl.getRoomId().toString();
-					}
-					IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
-					scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
-
-					Map<Integer, String> messageObj = new HashMap<>();
-					messageObj.put(0, "kick");
-					scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
-				}
-				return true;
-			}
-		} catch (Exception err) {
-			log.error("[kickUserByStreamId]", err);
-		}
-		return false;
-	}
-
-	@Override
-	public boolean kickUserByPublicSID(String sid, String publicSID) {
-		try {
-			Sessiondata sd = sessionDao.check(sid);
-			// admins only
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-				StreamClient rcl = sessionManager.getClientByPublicSID(publicSID, null);
-
+			for (StreamClient rcl : sessionManager.getClientListByRoom(roomId)) {
 				if (rcl == null) {
 					return true;
 				}
-
 				String scopeName = "hibernate";
 				if (rcl.getRoomId() != null) {
 					scopeName = rcl.getRoomId().toString();
 				}
 				IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
+				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
 
 				Map<Integer, String> messageObj = new HashMap<>();
 				messageObj.put(0, "kick");
-				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getStreamid(), currentScope);
+				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), currentScope);
+			}
+			return true;
+		} catch (Exception err) {
+			log.error("[kickUsersByRoomId]", err);
+		}
+		return false;
+	}
 
-				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+	@Override
+	public boolean kickById(Long id) {
+		try {
+			StreamClient rcl = sessionManager.get(id);
 
+			if (rcl == null) {
 				return true;
 			}
+
+			String scopeName = "hibernate";
+			if (rcl.getRoomId() != null) {
+				scopeName = rcl.getRoomId().toString();
+			}
+			IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
+
+			Map<Integer, String> messageObj = new HashMap<>();
+			messageObj.put(0, "kick");
+			scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), currentScope);
+
+			scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+
+			return true;
 		} catch (Exception err) {
-			log.error("[kickUserByStreamId]", err);
+			log.error("[kickById]", err);
 		}
 		return false;
 	}

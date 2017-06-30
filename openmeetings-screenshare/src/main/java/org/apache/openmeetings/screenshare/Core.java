@@ -35,6 +35,7 @@ import java.net.ConnectException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
@@ -82,7 +83,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private String app;
 	private int port;
 
-	public String publishName;
+	public String sid;
 	private CaptureScreen _capture = null;
 	private RTMPClientPublish publishClient = null;
 
@@ -129,7 +130,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			if (args.length > 8) {
 				url = new URI(args[0]);
 				fallback = new URI(args[1]);
-				publishName = args[2];
+				sid = args[2];
 				String labelTexts = args[3];
 				defaultQuality = Integer.parseInt(args[4]);
 				defaultFPS = Integer.parseInt(args[5]);
@@ -193,7 +194,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				throw new RuntimeException("Unsupported protocol");
 		}
 		instance.setServiceProvider(this);
-		log.debug(String.format("host: %s, port: %s, app: %s, publish: %s", host, port, app, publishName));
+		log.debug(String.format("host: %s, port: %s, app: %s, publish: %s", host, port, app, sid));
 	}
 
 	public static void main(String[] args) {
@@ -228,7 +229,6 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
 
 			Map<String, Object> cursorPosition = new HashMap<>();
-			cursorPosition.put("publicSID", publishName);
 			cursorPosition.put("cursor_x", x);
 			cursorPosition.put("cursor_y", y);
 
@@ -259,15 +259,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				Red5.setConnectionLocal(instance.getConnection());
 			}
 			Map<String, Object> map = new HashMap<>();
-			map.put("screenX", spinnerX);
-			map.put("screenY", spinnerY);
 
 			int scaledWidth = (int)(Ampl_factor * resizeX);
 			int scaledHeight = (int)(Ampl_factor * resizeY);
 
 			map.put("screenWidth", scaledWidth);
 			map.put("screenHeight", scaledHeight);
-			map.put("publishName", publishName);
 			map.put("startRecording", startRecording);
 			map.put("startStreaming", startSharing);
 			map.put("startPublishing", startPublishing);
@@ -304,12 +301,12 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		captureScreenStart();
 	}
 
-	private void connect(String parentSid) {
+	private void connect(String sid) {
 		setInstance(fallbackUsed ? fallback : url);
 		Map<String, Object> map = instance.makeDefaultConnectionParams(host, port, app);
 		map.put("screenClient", true);
 		Map<String, Object> params = new HashMap<>();
-		params.put("uid", parentSid);
+		params.put("ownerSid", sid);
 		instance.connect(host, port, map, this, new Object[]{params});
 	}
 
@@ -317,7 +314,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		frame.setStatus("Exception: " + e);
 		if (e instanceof ConnectException) {
 			fallbackUsed = true;
-			connect(publishName);
+			connect(sid);
 		}
 	}
 
@@ -326,7 +323,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			log.debug("captureScreenStart");
 
 			if (!isConnected) {
-				connect(publishName);
+				connect(sid);
 			} else {
 				setConnectionAsSharingClient();
 			}
@@ -447,7 +444,9 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			stopPublishing();
 			isConnected = false;
 
-			instance.disconnect();
+			if (instance != null) {
+				instance.disconnect();
+			}
 			setReadyToRecord(false);
 			getCapture().setStartPublish(false);
 			getCapture().release();
@@ -510,7 +509,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				Object code = returnMap.get("code");
 				if (CONNECT_FAILED.equals(code) && !fallbackUsed) {
 					fallbackUsed = true;
-					connect(publishName);
+					connect(sid);
 					frame.setStatus("Re-connecting using fallback");
 					return;
 				}
@@ -553,8 +552,9 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 					if (o != null && o instanceof Number) {
 						getCapture().setStreamId((Number)o);
 					}
-					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), publishName);
-					instance.publish(getCapture().getStreamId(), publishName, "live", this);
+					final String broadcastId = UUID.randomUUID().toString();
+					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), broadcastId);
+					instance.publish(getCapture().getStreamId(), broadcastId, "live", this);
 
 					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", spinnerWidth, spinnerHeight);
 

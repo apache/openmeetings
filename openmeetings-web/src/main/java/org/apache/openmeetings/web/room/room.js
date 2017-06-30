@@ -16,6 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var VideoUtil = (function() {
+	var self = {};
+	function _getVid(uid) {
+		return "video" + uid;
+	}
+	function _getShareVid(uid) {
+		return "video-share" + uid;
+	}
+	self.getVid = _getVid;
+	self.getShareVid = _getShareVid;
+	return self;
+})();
 var Video = (function() {
 	var self = {}, c, box, v, vc, t, swf, size;
 
@@ -35,7 +47,8 @@ var Video = (function() {
 		c = _c;
 		box = _box;
 		size = {width: c.width, height: c.height};
-		var _id = "video" + c.uid, name = _getName()
+		var _id = !!c.screenShare ? VideoUtil.getShareVid(c.uid) : VideoUtil.getVid(c.uid)
+			, name = _getName()
 			, _w = c.self ? Math.max(300, c.width) : c.width
 			, _h = c.self ? Math.max(200, c.height) : c.height;
 		box.append($('#user-video').clone().attr('id', _id).attr('title', name).data(self));
@@ -106,6 +119,7 @@ var Video = (function() {
 		o.width = c.width;
 		o.height = c.height;
 		o.sid = c.sid;
+		o.uid = c.uid;
 		o.broadcastId = c.broadcastId;
 		swf = initVideo(vc, _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
@@ -130,11 +144,8 @@ var VideoManager = (function() {
 		box = $('.room.box');
 		share = box.find('.icon.shared.ui-button');
 	}
-	function _getVid(uid) {
-		return "video" + uid;
-	}
 	function _update(c) {
-		var _id = _getVid(c.uid)
+		var _id = VideoUtil.getVid(c.uid)
 			, video = c.activities.indexOf('broadcastV') > -1
 			, audio = c.activities.indexOf('broadcastA') > -1
 			, av = audio || video
@@ -156,8 +167,8 @@ var VideoManager = (function() {
 	function _play(c) {
 		if (!!c.screenShare) {
 			_highlight(share.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text')).show(), 10);
-			share.tooltip().click(function() {
-				var v = $('#' + _getVid(c.uid))
+			share.tooltip().off('click').click(function() {
+				var v = $('#' + VideoUtil.getShareVid(c.uid))
 				if (v.length != 1) {
 					Video().init(box, options.uid, c);
 				} else {
@@ -168,8 +179,9 @@ var VideoManager = (function() {
 			Video().init(box, options.uid, c);
 		}
 	}
-	function _close(uid) {
-		var _id = _getVid(uid), v = $('#' + _id);
+	function _close(uid, screenShare) {
+		var _id = !!screenShare ? VideoUtil.getShareVid(uid) : VideoUtil.getVid(uid)
+				, v = $('#' + _id);
 		if (v.length == 1) {
 			if (v.data().client().screenShare) {
 				share.off('click').hide();
@@ -193,7 +205,7 @@ var VideoManager = (function() {
 	self.update = _update;
 	self.play = _play;
 	self.close = _close;
-	self.resetSize = function(uid) { $('#' + _getVid(uid)).data().resetSize(); };
+	self.resetSize = function(uid) { $('#' + VideoUtil.getVid(uid)).data().resetSize(); };
 	return self;
 })();
 function setRoomSizes() {

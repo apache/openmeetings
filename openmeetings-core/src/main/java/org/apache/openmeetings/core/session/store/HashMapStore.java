@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
@@ -52,34 +53,46 @@ import org.slf4j.Logger;
 public class HashMapStore implements IClientPersistenceStore {
 	protected static final Logger log = Red5LoggerFactory.getLogger(HashMapStore.class, webAppRootKey);
 
-	private Map<String, StreamClient> clientsByStreamId = new ConcurrentHashMap<>();
+	private volatile AtomicLong nextId = new AtomicLong(1);
+	private Map<Long, StreamClient> clientsById = new ConcurrentHashMap<>();
 
 	@Override
 	public void clear() {
-		clientsByStreamId = new ConcurrentHashMap<>();
+		clientsById = new ConcurrentHashMap<>();
 	}
 
 	@Override
-	public void put(String streamId, StreamClient rcl) {
-		clientsByStreamId.put(rcl.getStreamid(), rcl);
+	public StreamClient put(StreamClient rcl) {
+		if (rcl.getId() != null) {
+			log.error("Tried to add Client with not NULL ID {}", rcl.getId());
+			return null;
+		} else {
+			rcl.setId(nextId.getAndIncrement());
+		}
+		if (clientsById.containsKey(rcl.getId())) {
+			log.error("Tried to add an existing Client {}", rcl.getId());
+			return null;
+		}
+		clientsById.put(rcl.getId(), rcl);
+		return rcl;
 	}
 
 	@Override
-	public boolean containsKey(Server server, String streamId) {
-		return clientsByStreamId.containsKey(streamId);
+	public boolean containsKey(Long id) {
+		return id != null && clientsById.containsKey(id);
 	}
 
 	@Override
-	public StreamClient get(Server server, String streamId) {
-		return clientsByStreamId.get(streamId);
+	public StreamClient get(Long id) {
+		return id == null ? null : clientsById.get(id);
 	}
 
 	@Override
-	public List<StreamClient> getClientsByPublicSID(Server server, String publicSID) {
+	public List<StreamClient> getClientsByUid(Server server, String uid) {
 		List<StreamClient> clientList = new ArrayList<>();
-		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+		for (Map.Entry<Long, StreamClient> e: clientsById.entrySet()) {
 			StreamClient cl = e.getValue();
-			if (cl.getPublicSID().equals(publicSID)) {
+			if (cl.getUid().equals(uid)) {
 				clientList.add(cl);
 			}
 		}
@@ -87,12 +100,12 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public Map<Long,List<StreamClient>> getClientsByPublicSID(String publicSID) {
+	public Map<Long,List<StreamClient>> getClientsByUid(String uid) {
 		Map<Long,List<StreamClient>> clientMapList = new HashMap<>();
 		List<StreamClient> clientList = new ArrayList<>();
-		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+		for (Map.Entry<Long, StreamClient> e: clientsById.entrySet()) {
 			StreamClient cl = e.getValue();
-			if (cl.getPublicSID().equals(publicSID)) {
+			if (cl.getUid().equals(uid)) {
 				clientList.add(cl);
 			}
 		}
@@ -102,7 +115,7 @@ public class HashMapStore implements IClientPersistenceStore {
 
 	@Override
 	public Collection<StreamClient> getClients() {
-		return clientsByStreamId.values();
+		return clientsById.values();
 	}
 
 	@Override
@@ -114,13 +127,13 @@ public class HashMapStore implements IClientPersistenceStore {
 
 	@Override
 	public Collection<StreamClient> getClientsByServer(Server server) {
-		return clientsByStreamId.values();
+		return clientsById.values();
 	}
 
 	@Override
 	public List<StreamClient> getClientsByUserId(Server server, Long userId) {
 		List<StreamClient> clientList = new ArrayList<>();
-		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+		for (Map.Entry<Long, StreamClient> e: clientsById.entrySet()) {
 			StreamClient cl = e.getValue();
 			if (cl.getUserId().equals(userId)) {
 				clientList.add(cl);
@@ -132,7 +145,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	@Override
 	public  List<StreamClient> getClientsByRoomId(Long roomId) {
 		List<StreamClient> clientList = new ArrayList<>();
-		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+		for (Map.Entry<Long, StreamClient> e: clientsById.entrySet()) {
 			StreamClient cl = e.getValue();
 			if (cl.getRoomId() != null && cl.getRoomId().equals(roomId)) {
 				clientList.add(cl);
@@ -142,27 +155,27 @@ public class HashMapStore implements IClientPersistenceStore {
 	}
 
 	@Override
-	public void remove(Server server, String streamId) {
-		clientsByStreamId.remove(streamId);
+	public void remove(Long id) {
+		clientsById.remove(id);
 	}
 
 	@Override
 	public int size() {
-		return clientsByStreamId.size();
+		return clientsById.size();
 	}
 
 	@Override
 	public int sizeByServer(Server server) {
-		return clientsByStreamId.size();
+		return clientsById.size();
 	}
 
 	@Override
 	public Collection<StreamClient> values() {
-		return clientsByStreamId.values();
+		return clientsById.values();
 	}
 
 	public int getTotalNumberOfSessions() {
-		return clientsByStreamId.size();
+		return clientsById.size();
 	}
 
 	/**
@@ -194,7 +207,7 @@ public class HashMapStore implements IClientPersistenceStore {
 	@Override
 	public List<Long> getRoomsIdsByServer(Server server) {
 		Set<Long> rooms = new HashSet<>();
-		for (Map.Entry<String, StreamClient> e: clientsByStreamId.entrySet()) {
+		for (Map.Entry<Long, StreamClient> e: clientsById.entrySet()) {
 			StreamClient cl = e.getValue();
 			Long roomId = cl.getRoomId();
 			if (roomId != null && roomId.longValue() > 0 && !rooms.contains(roomId)) {

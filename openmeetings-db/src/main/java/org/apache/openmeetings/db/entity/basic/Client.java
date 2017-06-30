@@ -18,9 +18,11 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -55,6 +57,66 @@ public class Client implements IClient {
 	public enum Pod {
 		none, left, right;
 	}
+	public static class Stream {
+		private Long streamClientId = null;
+		private String broadcastId = null;
+		private boolean sharing;
+
+		public Stream(Long streamClientId, String broadcastId, boolean sharing) {
+			this.streamClientId = streamClientId;
+			this.broadcastId = broadcastId;
+			this.sharing= sharing;
+		}
+
+		public Long getStreamClientId() {
+			return streamClientId;
+		}
+
+		public void setStreamClientId(Long streamClientId) {
+			this.streamClientId = streamClientId;
+		}
+
+		public String getBroadcastId() {
+			return broadcastId;
+		}
+
+		public void setBroadcastId(String broadcastId) {
+			this.broadcastId = broadcastId;
+		}
+
+		public boolean isSharing() {
+			return sharing;
+		}
+
+		public void setSharing(boolean sharing) {
+			this.sharing = sharing;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((broadcastId == null) ? 0 : broadcastId.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Stream other = (Stream) obj;
+			if (broadcastId == null) {
+				if (other.broadcastId != null)
+					return false;
+			} else if (!broadcastId.equals(other.broadcastId))
+				return false;
+			return true;
+		}
+	}
 	private final String sessionId;
 	private int pageId;
 	private User user;
@@ -64,13 +126,13 @@ public class Client implements IClient {
 	private String remoteAddress;
 	private final Set<Right> rights = new HashSet<>();
 	private final Set<Activity> activities = new HashSet<>();
+	private final Set<Stream> streams = new HashSet<>();
 	private final Date connectedSince;
 	private Pod pod;
 	private int cam = -1;
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
-	private String broadcastId = null;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -86,8 +148,8 @@ public class Client implements IClient {
 		this.pageId = 0;
 		this.user = dao.get(rcl.getUserId());
 		this.connectedSince = new Date();
-		uid = rcl.getPublicSID();
-		sid = UUID.randomUUID().toString();
+		uid = rcl.getUid();
+		sid = rcl.getOwnerSid();
 		this.roomId = rcl.getRoomId();
 		this.remoteAddress = rcl.getUserip();
 	}
@@ -129,8 +191,10 @@ public class Client implements IClient {
 		return sid;
 	}
 
-	public void clearRights() {
+	public void clear() {
+		activities.clear();
 		rights.clear();
+		streams.clear();
 	}
 
 	public boolean hasRight(Right right) {
@@ -213,8 +277,24 @@ public class Client implements IClient {
 				activities.remove(Activity.broadcastA);
 				activities.remove(Activity.broadcastV);
 				break;
+			case share:
+				for (Stream s : streams) {
+					if (s.isSharing()) {
+						streams.remove(s);
+						break;
+					}
+				}
+				break;
 			default:
 		}
+	}
+
+	public void addStream(Long streamClientId, String broadcastId, boolean sharing) {
+		streams.add(new Stream(streamClientId, broadcastId, sharing));
+	}
+
+	public List<Stream> getStreams() {
+		return new ArrayList<>(streams);
 	}
 
 	public Date getConnectedSince() {
@@ -304,15 +384,6 @@ public class Client implements IClient {
 		return this;
 	}
 
-	public String getBroadcastId() {
-		return broadcastId;
-	}
-
-	public Client setBroadcastId(String broadcastId) {
-		this.broadcastId = broadcastId;
-		return this;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -363,7 +434,6 @@ public class Client implements IClient {
 				.put("rights", new JSONArray(rights))
 				.put("activities", new JSONArray(activities))
 				.put("pod", pod)
-				.put("broadcastId", broadcastId)
 				.put("width", width)
 				.put("height", height)
 				.put("self", self);

@@ -25,17 +25,21 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import com.github.openjson.JSONObject;
 
 public class RoomHelper {
+	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, Long streamClientId, boolean share) {
+		return videoJson(c, c.getUid(), self, sid, mgr, streamClientId, share);
+	}
 
-	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, boolean share) {
+	public static JSONObject videoJson(Client c, String uid, boolean self, String sid, ISessionManager mgr, Long streamClientId, boolean share) {
 		JSONObject json = c.toJson(self).put("sid", sid);
 		if (share) {
-			StreamClient sc = mgr.getClientByPublicSID(c.getUid(), null); //TODO check server
+			StreamClient sc = mgr.get(streamClientId);
 
 			json.put("screenShare", true)
-				.put("uid", sc.getPublicSID()) // unique screen-sharing ID
+				.put("sid", sid)
+				.put("uid", sc.getUid())
 				.put("broadcastId", sc.getBroadCastId())
-				.put("width", sc.getVWidth())
-				.put("height", sc.getVHeight());
+				.put("width", sc.getWidth())
+				.put("height", sc.getHeight());
 		}
 		return json;
 	}

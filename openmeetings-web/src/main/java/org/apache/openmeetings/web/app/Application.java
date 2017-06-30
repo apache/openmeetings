@@ -122,6 +122,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
 	private static ConcurrentHashMap<String, Client> ONLINE_USERS = new ConcurrentHashMap<>();
+	private static ConcurrentHashMap<String, String> UID_BY_SID = new ConcurrentHashMap<>();
 	private static ConcurrentHashMap<String, Client> INVALID_SESSIONS = new ConcurrentHashMap<>();
 	private static ConcurrentHashMap<Long, Set<String>> ROOMS = new ConcurrentHashMap<>();
 	//additional maps for faster searching should be created
@@ -257,6 +258,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static void addOnlineUser(Client c) {
 		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoomId());
 		ONLINE_USERS.put(c.getUid(), c);
+		UID_BY_SID.put(c.getSid(), c.getUid());
 	}
 
 	public static void exitRoom(Client c) {
@@ -279,13 +281,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
-	public static void exit(Client c) {
+	private static void exit(Client c) {
 		if (c != null) {
 			if (c.getRoomId() != null) {
 				exitRoom(c);
 			}
 			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoomId());
 			ONLINE_USERS.remove(c.getUid());
+			UID_BY_SID.remove(c.getSid());
 		}
 	}
 
@@ -302,71 +305,79 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (rcl == null) {
 			return null;
 		}
-		if (!rcl.isScreenClient() && (!rcl.isMobile() || (rcl.isMobile() && rcl.getUserId() != null))) {
-			Client client = getOnlineClient(rcl.getPublicSID());
-			if (client == null) {
-				if (!Strings.isEmpty(rcl.getSecurityCode())) {
-					client = getOnlineClient(rcl.getSecurityCode());
+		Client client = getClientBySid(rcl.getOwnerSid());
+		if (client == null) {
+			if (rcl.isMobile()) {
+				//Mobile client enters the room
+				client = new Client(rcl, getBean(UserDao.class));
+				addOnlineUser(client);
+				if (rcl.getRoomId() != null) {
+					client.setCam(0);
+					client.setMic(0);
+					addUserToRoom(client);
+					//FIXME TODO unify this
+					WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				}
-				if (client == null && rcl.isMobile()) {
-					//Mobile client enters the room
-					client = new Client(rcl, getBean(UserDao.class));
-					addOnlineUser(client);
-					if (rcl.getRoomId() != null) {
-						client.setCam(0);
-						client.setMic(0);
-						addUserToRoom(client);
-						//FIXME TODO unify this
-						WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
-					}
-					//FIXME TODO rights
-				} else if (client == null) {
-					return null;
-				} else if (!client.hasRight(Right.audio) && !client.hasRight(Right.video)) {
-					log.warn("Parent client has no AV rights, going reject client");
-					return null;
-				}
-			}
-			rcl.setFirstname(client.getUser().getFirstname());
-			rcl.setLastname(client.getUser().getLastname());
-			rcl.setIsSuperModerator(client.hasRight(Right.superModerator));
-			rcl.setIsMod(client.hasRight(Right.moderator));
-			rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
-			rcl.setCanDraw(client.hasRight(Right.whiteBoard));
-			if (client.hasActivity(Activity.broadcastA) && client.getMic() < 0) {
-				client.remove(Activity.broadcastA);
-			}
-			if (client.hasActivity(Activity.broadcastV) && client.getCam() < 0) {
-				client.remove(Activity.broadcastV);
-			}
-			if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
-				if (forceSize || rcl.getVWidth() == 0 || rcl.getVHeight() == 0) {
-					rcl.setVWidth(client.getWidth());
-					rcl.setVHeight(client.getHeight());
-				}
-				if (client.getPod() != Pod.none) {
-					rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
-				}
-				StringBuilder sb = new StringBuilder();
-				if (client.hasActivity(Activity.broadcastA)) {
-					sb.append('a');
-				}
-				if (client.hasActivity(Activity.broadcastV)) {
-					sb.append('v');
-				}
-				if (!rcl.getIsBroadcasting() || hasVideo(rcl) != hasVideo(client)) {
-					rcl.setIsBroadcasting(true);
-				}
-				rcl.setAvsettings(sb.toString());
+				//FIXME TODO rights
 			} else {
-				rcl.setAvsettings("n");
-				rcl.setIsBroadcasting(false);
+				return null;
 			}
+		}
+		if (rcl.getRoomId() == null || !rcl.getRoomId().equals(client.getRoomId())) {
+			//TODO mobile
+			return null;
+		}
+		rcl.setFirstname(client.getUser().getFirstname());
+		rcl.setLastname(client.getUser().getLastname());
+		rcl.setSuperMod(client.hasRight(Right.superModerator));
+		rcl.setMod(client.hasRight(Right.moderator));
+		rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
+		if (client.hasActivity(Activity.broadcastA) && client.getMic() < 0) {
+			client.remove(Activity.broadcastA);
+		}
+		if (client.hasActivity(Activity.broadcastV) && client.getCam() < 0) {
+			client.remove(Activity.broadcastV);
+		}
+		if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
+			if (forceSize || rcl.getWidth() == 0 || rcl.getHeight() == 0) {
+				rcl.setWidth(client.getWidth());
+				rcl.setHeight(client.getHeight());
+			}
+			if (client.getPod() != Pod.none) {
+				rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
+			}
+			StringBuilder sb = new StringBuilder();
+			if (client.hasActivity(Activity.broadcastA)) {
+				sb.append('a');
+			}
+			if (client.hasActivity(Activity.broadcastV)) {
+				sb.append('v');
+			}
+			if (!rcl.isBroadcasting() || hasVideo(rcl) != hasVideo(client)) {
+				rcl.setBroadcasting(true);
+			}
+			rcl.setAvsettings(sb.toString());
+		} else {
+			rcl.setAvsettings("n");
+			rcl.setBroadcasting(false);
 		}
 		return rcl;
 	}
 
 	public static Client getOnlineClient(String uid) {
+		return uid == null ? null : ONLINE_USERS.get(uid);
+	}
+
+	@Override
+	public Client getOmClientBySid(String sid) {
+		return getClientBySid(sid);
+	}
+
+	public static Client getClientBySid(String sid) {
+		if (sid == null) {
+			return null;
+		}
+		String uid = UID_BY_SID.get(sid);
 		return uid == null ? null : ONLINE_USERS.get(uid);
 	}
 
@@ -446,8 +457,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				c.setRoomId(null);
 			}
 			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), roomId);
-			c.getActivities().clear();
-			c.clearRights();
+			c.clear();
 		}
 		return c;
 	}

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.session;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -27,7 +28,6 @@ import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 	@Test
 	public void testDbSessionFunctions() {
 		clientDao.cleanAllClients();
-		
+
 		List<Server> serverList = serverDao.getActiveServers();
 
 		Server server = null;
@@ -59,33 +59,30 @@ public class TestDbSessionGetRoomIds extends AbstractJUnitDefaults {
 		}
 
 		StreamClient cl1 = new StreamClient();
-		cl1.setStreamid("1");
 		cl1.setServer(server);
 		cl1.setUserId(1L);
-		cl1.setRoomId(1L);
-		cl1.setPublicSID("public1");
+		cl1.setScope("1");
+		cl1.setUid("public1");
 		clientDao.add(cl1);
 
 		StreamClient cl2 = new StreamClient();
-		cl2.setStreamid("2");
 		cl2.setServer(server);
-		cl2.setRoomId(1L);
+		cl2.setScope("1");
 		cl2.setUserId(2L);
-		cl2.setPublicSID("public2");
+		cl2.setUid("public2");
 		clientDao.add(cl2);
 
 		StreamClient cl3 = new StreamClient();
-		cl3.setStreamid("3");
 		cl3.setServer(server);
-		cl3.setRoomId(3L);
+		cl3.setScope("3");
 		cl3.setUserId(3L);
-		cl3.setPublicSID("public3");
+		cl3.setUid("public3");
 		clientDao.add(cl3);
-		
+
 		List<Long> roomids = clientDao.getRoomsIdsByServer(server);
 
 		assertEquals(2, roomids.size());
-		
+
 		//delete all
 		clientDao.cleanAllClients();
 

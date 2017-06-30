@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.web.app.Application;
 import org.red5.logging.Red5LoggerFactory;
@@ -33,7 +34,7 @@ public class RoomBroadcaster {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, webAppRootKey);
 
 	public static StreamClient getClient(String publicSid) {
-		ClientSessionInfo csi = getBean(SessionManager.class).getClientByPublicSIDAnyServer(publicSid);
+		ClientSessionInfo csi = getBean(SessionManager.class).getClientByUidAnyServer(publicSid);
 		return csi == null ? null : csi.getRcl();
 	}
 
@@ -50,8 +51,9 @@ public class RoomBroadcaster {
 		sa.sendToScope(roomId, method, obj);
 	}
 
-	public static void sendUpdatedClient(org.apache.openmeetings.db.entity.basic.Client client) {
-		StreamClient rcl = Application.get().updateClient(getClient(client.getUid()), true);
+	public static void sendUpdatedClient(Client client) {
+		String uid = client.getUid();
+		StreamClient rcl = Application.get().updateClient(getClient(uid), true);
 		log.debug("-----------  sendUpdatedClient ");
 
 		if (rcl == null) {
@@ -59,7 +61,7 @@ public class RoomBroadcaster {
 		}
 
 		// Put the mod-flag to true for this client
-		getBean(SessionManager.class).updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+		getBean(SessionManager.class).update(rcl);
 		// Notify all clients of the same scope (room)
 		broadcast(client.getRoomId(), "clientUpdated", rcl);
 	}

@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.admin.rooms;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
-import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -32,7 +31,6 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.IUserService;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -42,6 +40,7 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.app.Application;
@@ -97,9 +96,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						StreamClient c = item.getModelObject();
-						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
-								, c.getServer() == null ? 0 : c.getServer().getId());
-
+						getBean(UserManager.class).kickById(c.getId());
 						updateClients(target);
 					}
 				});

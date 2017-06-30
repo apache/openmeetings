@@ -24,8 +24,9 @@ import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.db.entity.room.StreamClient;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -39,10 +40,11 @@ public interface IApplication {
 	String getOmString(long id, long languageId);
 	String getOmString(String key, long languageId);
 	String getOmString(String key, final Locale loc, String... params);
-	org.apache.openmeetings.db.entity.basic.Client getOmClient(String uid);
+	Client getOmClient(String uid);
+	Client getOmClientBySid(String sid);
 	StreamClient updateClient(StreamClient rcl, boolean forceSize);
-	List<org.apache.openmeetings.db.entity.basic.Client> getOmRoomClients(Long roomId);
-	List<org.apache.openmeetings.db.entity.basic.Client> getOmClients(Long userId);
+	List<Client> getOmRoomClients(Long roomId);
+	List<Client> getOmClients(Long userId);
 	String getOmContactsLink();
 	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
