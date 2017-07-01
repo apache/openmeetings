@@ -445,16 +445,20 @@ public class UserManager implements IUserManager {
 			}
 
 			String scopeName = "hibernate";
-			if (rcl.getRoomId() != null) {
-				scopeName = rcl.getRoomId().toString();
+			if (rcl.getScope() != null) {
+				scopeName = rcl.getScope();
 			}
-			IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
+			IScope scope = scopeApplicationAdapter.getRoomScope(scopeName);
+			if (scope == null) {
+				log.warn("### kickById ### The scope is NULL");
+				return false;
+			}
 
 			Map<Integer, String> messageObj = new HashMap<>();
 			messageObj.put(0, "kick");
-			scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), currentScope);
+			scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), scope);
 
-			scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+			scopeApplicationAdapter.roomLeaveByScope(rcl, scope);
 
 			return true;
 		} catch (Exception err) {

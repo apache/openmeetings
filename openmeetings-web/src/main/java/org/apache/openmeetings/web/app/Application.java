@@ -44,11 +44,13 @@ import java.util.function.Predicate;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MainService;
+import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -59,6 +61,7 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.StreamClient;
+import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
@@ -308,8 +311,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Client client = getClientBySid(rcl.getOwnerSid());
 		if (client == null) {
 			if (rcl.isMobile()) {
+				Sessiondata sd = getBean(SessiondataDao.class).check(rcl.getOwnerSid());
+				UserDao udao = getBean(UserDao.class);
+				User u = udao.get(sd.getUserId());
+				rcl = getBean(MobileService.class).create(rcl, u);
 				//Mobile client enters the room
-				client = new Client(rcl, getBean(UserDao.class));
+				client = new Client(rcl, udao);
 				addOnlineUser(client);
 				if (rcl.getRoomId() != null) {
 					client.setCam(0);
@@ -327,10 +334,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			//TODO mobile
 			return null;
 		}
-		rcl.setUserId(client.getUser().getId());
-		rcl.setUsername(client.getUser().getLogin());
-		rcl.setFirstname(client.getUser().getFirstname());
-		rcl.setLastname(client.getUser().getLastname());
+		User u = client.getUser();
+		rcl.setUserId(u.getId());
+		rcl.setUsername(u.getLogin());
+		rcl.setFirstname(u.getFirstname());
+		rcl.setLastname(u.getLastname());
+		rcl.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 		rcl.setSuperMod(client.hasRight(Right.superModerator));
 		rcl.setMod(client.hasRight(Right.moderator));
 		rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));

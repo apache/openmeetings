@@ -63,15 +63,11 @@ public class HashMapStore implements IClientPersistenceStore {
 
 	@Override
 	public StreamClient put(StreamClient rcl) {
-		if (rcl.getId() != null) {
-			log.error("Tried to add Client with not NULL ID {}", rcl.getId());
-			return null;
-		} else {
+		if (rcl.getId() == null) {
 			rcl.setId(nextId.getAndIncrement());
 		}
 		if (clientsById.containsKey(rcl.getId())) {
-			log.error("Tried to add an existing Client {}", rcl.getId());
-			return null;
+			log.debug("Updating Client {}", rcl.getId());
 		}
 		clientsById.put(rcl.getId(), rcl);
 		return rcl;

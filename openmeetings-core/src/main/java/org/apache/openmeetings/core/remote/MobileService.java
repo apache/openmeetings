@@ -22,7 +22,6 @@ import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
@@ -112,7 +111,6 @@ public class MobileService {
 	public Map<String, Object> checkServer() {
 		Map<String, Object> result = new HashMap<>();
 		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0")));
-		result.put("allowSoapRegister",  "1".equals(cfgDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0")));
 		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0")));
 		return result;
 	}
@@ -213,52 +211,47 @@ public class MobileService {
 		return result;
 	}
 
+	public StreamClient create(User u, Sessiondata sd) {
+		StreamClient c = new StreamClient();
+		c.setMobile(true);
+		c.setOwnerSid(sd.getSessionId());
+		c.setUid(UUID.randomUUID().toString());
+		return create(c, u);
+	}
+
+	public StreamClient create(StreamClient c, User u) {
+		c.setUserId(u.getId());
+		c.setFirstname(u.getFirstname());
+		c.setLastname(u.getLastname());
+		if (c.getUserId() != null) {
+			c.setUsername(u.getLogin());
+			c.setFirstname(u.getFirstname());
+			c.setLastname(u.getLastname());
+			c.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
+		}
+		c.setBroadCastId(UUID.randomUUID().toString());
+		return c;
+	}
+
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		if (u != null) {
 			IConnection conn = Red5.getConnectionLocal();
-			StreamClient c = sessionManager.get(IClientUtil.getId(conn.getClient()));
-			if (c == null) {
-				// Failed to create client
-				result.put("status", -1);
-			} else {
-				Sessiondata sd = sessionDao.check(c.getOwnerSid());
-				sd.setUserId(u.getId());
-				sd.setLanguageId(u.getLanguageId());
-				sessionDao.update(sd);
-				c.setUserId(u.getId());
-				c.setFirstname(u.getFirstname());
-				c.setLastname(u.getLastname());
-				/*TODO check this
-				rcm.setMobile(true);
-				rcm.setUserId(sd.getUserId());
-				if (rcm.getUserId() != null) {
-					User u = userDao.get(rcm.getUserId());
-					if (u == null) {
-						_log.error("Attempt of unauthorized room enter: USER not found, client is rejected");
-						return rejectClient();
-					}
-					rcm.setUsername(u.getLogin());
-					rcm.setFirstname(u.getFirstname());
-					rcm.setLastname(u.getLastname());
-					rcm.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
-				}
-				rcm.setSecurityCode(sd.getSessionId());
-				rcm.setPublicSID(UUID.randomUUID().toString());
-				*/
-				sessionManager.update(c);
-				IClientUtil.init(conn.getClient(), c.getId(), false);
+			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
+			StreamClient c = create(u, sd);
+			c.setScope(conn.getScope().getName());
+			sessionManager.add(c, null);
+			IClientUtil.init(conn.getClient(), c.getId(), false);
 
-				add(result, "sid", sd.getSessionId());
-				add(result, "uid", c.getUid());
-				add(result, "status", 0);
-				add(result, "userId", u.getId());
-				add(result, "firstname", u.getFirstname());
-				add(result, "lastname", u.getLastname());
-				add(result, "login", u.getLogin());
-				add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
-				add(result, "language", u.getLanguageId());
-				add(result, "version", getVersion());
-			}
+			add(result, "sid", sd.getSessionId());
+			add(result, "publicSid", c.getUid());
+			add(result, "status", 0);
+			add(result, "userId", u.getId());
+			add(result, "firstname", u.getFirstname());
+			add(result, "lastname", u.getLastname());
+			add(result, "login", u.getLogin());
+			add(result, "email", u.getAddress() == null ? "" : u.getAddress().getEmail());
+			add(result, "language", u.getLanguageId());
+			add(result, "version", getVersion());
 		}
 		return result;
 	}
@@ -273,12 +266,12 @@ public class MobileService {
 				if (!Strings.isEmpty(c.getAvsettings()) && !c.isSharing()) {
 					//TODO duplicates !!!!!!!!!!!!!!
 					Map<String, Object> map = new HashMap<>();
-					add(map, "id", c.getId());
+					add(map, "streamId", c.getId());
 					add(map, "broadCastId", c.getBroadCastId());
 					add(map, "userId", c.getUserId());
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
-					add(map, "uid", c.getUid());
+					add(map, "publicSid", c.getUid());
 					add(map, "login", c.getUsername());
 					add(map, "email", c.getEmail());
 					add(map, "avsettings", c.getAvsettings());
@@ -351,7 +344,8 @@ public class MobileService {
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		Map<String, Object> result = new HashMap<>();
-		//FIXME TODO result.put("publicSid", c.getPublicSID());
+		result.put("publicSid", c.getUid());
+		result.put("broadCastId", c.getBroadCastId());
 		return result;
 	}
 
@@ -360,6 +354,7 @@ public class MobileService {
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		c.setAvsettings(avMode);
 		if (!"n".equals(avMode)) {
+			c.setBroadCastId(UUID.randomUUID().toString());
 			c.setBroadcasting(true);
 		}
 		c.setWidth(Double.valueOf(width).intValue());
@@ -371,9 +366,13 @@ public class MobileService {
 		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
+		Map<String, Object> result = new HashMap<>();
+		if (!"n".equals(avMode)) {
+			result.put("broadcastId", c.getBroadCastId());
+		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
-		return new HashMap<>();
+		return result;
 	}
 
 	public void sendChatMessage(String msg) {

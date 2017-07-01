@@ -53,7 +53,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -86,8 +85,11 @@ import com.github.openjson.JSONObject;
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger _log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String OWNER_SID_PARAM = "ownerSid";
+	private static final String PARENT_SID_PARAM = "parentSid"; //mobile
+	private static final String MOBILE_PARAM = "mobileClient";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
+	public static final String HIBERNATE_SCOPE = "hibernate";
 	public static final String FLASH_SECURE = "secure";
 	public static final String FLASH_NATIVE_SSL = "native";
 	public static final String FLASH_PORT = "rtmpPort";
@@ -102,8 +104,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private RecordingService recordingService;
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private SessiondataDao sessiondataDao;
 	@Autowired
 	private ConferenceLogDao conferenceLogDao;
 	@Autowired
@@ -198,14 +198,24 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 		String ownerSid = (String)connParams.get(OWNER_SID_PARAM);
 		if (Strings.isEmpty(ownerSid)) {
+			ownerSid = (String)connParams.get(PARENT_SID_PARAM);
+		}
+		if (Strings.isEmpty(ownerSid)) {
 			_log.warn("No Owner SID is provided, client is rejected");
 			return rejectClient();
 		}
 		StreamClient rcm = new StreamClient();
 		rcm.setScope(conn.getScope().getName());
-		if (rcm.getRoomId() == null && !"hibernate".equals(rcm.getScope())) {
+		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
+		if (hibernate) {
+			return true; //mobile initial connect
+		}
+		if (rcm.getRoomId() == null && !hibernate) {
 			_log.warn("Bad room specified, client is rejected");
 			return rejectClient();
+		}
+		if (Boolean.TRUE.equals(connParams.get(MOBILE_PARAM))) {
+			rcm.setMobile(true);
 		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
 		rcm.setOwnerSid(ownerSid);
@@ -581,14 +591,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	private void sendSharingStoped(StreamClient rcl) {
+	private static void sendSharingStoped(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
 				.put("ownerSid", rcl.getOwnerSid())
 				.put("uid", rcl.getUid());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.sharingStoped, obj.toString()));
 	}
 
-	private void sendStreamClosed(StreamClient rcl) {
+	private static void sendStreamClosed(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
 				.put("uid", rcl.getUid())
 				.put("ownerSid", rcl.getOwnerSid())
