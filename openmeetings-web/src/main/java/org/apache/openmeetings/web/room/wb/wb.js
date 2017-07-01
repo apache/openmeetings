@@ -200,6 +200,8 @@ var ShapeBase = function(wb) {
 var Text = function(wb, s) {
 	var text = ShapeBase(wb);
 	text.obj = null;
+	text.stroke.width = 1;
+	text.style = {bold: false, italic: false};
 
 	text.mouseDown = function(o) {
 		var canvas = this;
@@ -212,10 +214,17 @@ var Text = function(wb, s) {
 				left: pointer.x
 				, top: pointer.y
 				, padding: 7
-				, stroke: text.stroke.color
-				, fill: text.fill.color
+				, fill: text.fill.enabled ? text.fill.color : 'rgba(0,0,0,0)'
+				, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
+				, strokeWidth: text.stroke.width
 				, opacity: text.opacity
 			});
+			if (text.style.bold) {
+				text.obj.fontWeight = 'bold'
+			}
+			if (text.style.italic) {
+				text.obj.fontStyle = 'italic'
+			}
 			canvas.add(text.obj).setActiveObject(text.obj);
 		}
 		text.obj.enterEditing();
@@ -231,6 +240,18 @@ var Text = function(wb, s) {
 			});
 		});
 		text.enableAllProps(s);
+		var b = s.find('.wb-prop-b').button("enable");
+		if (text.style.bold) {
+			b.addClass('ui-state-active selected');
+		} else {
+			b.removeClass('ui-state-active selected');
+		}
+		var i = s.find('.wb-prop-i').button("enable");
+		if (text.style.italic) {
+			i.addClass('ui-state-active selected');
+		} else {
+			i.removeClass('ui-state-active selected');
+		}
 	};
 	text.deactivate = function() {
 		wb.eachCanvas(function(canvas) {
@@ -605,6 +626,9 @@ var Wb = function() {
 					.button()
 					.click(function() {
 						$(this).toggleClass('ui-state-active selected');
+						var btn = getBtn();
+						var isB = $(this).hasClass('wb-prop-b');
+						btn.data().obj.style[isB ? 'bold' : 'italic'] = $(this).hasClass('selected');
 					});
 				s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
 					.button({icon: 'ui-icon-locked', showLabel: false})
@@ -615,13 +639,13 @@ var Wb = function() {
 						var enabled = $(this).button('option', 'icon') == 'ui-icon-locked';
 						$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
 						c.prop('disabled', !enabled);
-						btn.data('obj')[isColor ? 'stroke' : 'fill'].enabled = enabled;
+						btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
 					});
 				s.find('.wb-prop-color').change(function() {
 					var btn = getBtn();
 					if (btn.length == 1) {
 						var v = $(this).val();
-						btn.data('obj').stroke.color = v;
+						btn.data().obj.stroke.color = v;
 						if ('paint' == mode) {
 							wb.eachCanvas(function(canvas) {
 								canvas.freeDrawingBrush.color = v;
@@ -633,7 +657,7 @@ var Wb = function() {
 					var btn = getBtn();
 					if (btn.length == 1) {
 						var v = 1 * $(this).val();
-						btn.data('obj').stroke.width = v;
+						btn.data().obj.stroke.width = v;
 						if ('paint' == mode) {
 							wb.eachCanvas(function(canvas) {
 								canvas.freeDrawingBrush.width = v;
@@ -641,11 +665,18 @@ var Wb = function() {
 						}
 					}
 				});
+				s.find('.wb-prop-fill').change(function() {
+					var btn = getBtn();
+					if (btn.length == 1) {
+						var v = $(this).val();
+						btn.data().obj.fill.color = v;
+					}
+				});
 				s.find('.wb-prop-opacity').change(function() {
 					var btn = getBtn();
 					if (btn.length == 1) {
 						var v = (1 * $(this).val()) / 100;
-						btn.data('obj').opacity = v;
+						btn.data().obj.opacity = v;
 						if ('paint' == mode) {
 							wb.eachCanvas(function(canvas) {
 								canvas.freeDrawingBrush.opacity = v;
