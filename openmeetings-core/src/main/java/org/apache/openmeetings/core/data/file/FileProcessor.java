@@ -98,9 +98,6 @@ public class FileProcessor {
 			}
 			f.setHash(hash);
 
-			f = fileDao.update(f);
-			log.debug("fileId: " + f.getId());
-
 			File file = f.getFile(ext);
 			log.debug("writing file to: " + file);
 			if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
@@ -130,6 +127,8 @@ public class FileProcessor {
 					result.addItem("processVideo " + i++, returnMap);
 				}
 			}
+			f = fileDao.update(f);
+			log.debug("fileId: " + f.getId());
 
 			// has to happen at the end, otherwise it will be overwritten
 			//cause the variable is new initialized

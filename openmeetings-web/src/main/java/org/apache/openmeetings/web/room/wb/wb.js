@@ -200,8 +200,11 @@ var ShapeBase = function(wb) {
 var Text = function(wb, s) {
 	var text = ShapeBase(wb);
 	text.obj = null;
+	text.fill.color = '#000000';
 	text.stroke.width = 1;
+	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
+	//TODO font size, background color
 
 	text.mouseDown = function(o) {
 		var canvas = this;

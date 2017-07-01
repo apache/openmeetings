@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -27,13 +25,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
+import org.apache.openmeetings.util.NullStringer;
 
 import com.github.openjson.JSONObject;
 
 public class Whiteboard {
-	private static final Logger log = Red5LoggerFactory.getLogger(Whiteboard.class, webAppRootKey);
 	private long id;
 	private Integer x = 0;
 	private Integer y = 0;
@@ -42,7 +38,6 @@ public class Whiteboard {
 	private Map<String, JSONObject> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
 	private Date created = new Date();
 	private int slide = 0;
-	private int zIndex = 1;
 	private String name;
 
 	public Whiteboard() {}
@@ -101,10 +96,8 @@ public class Whiteboard {
 
 	public void clear() {
 		roomItems.clear();
-		zIndex = 1;
 	}
 
-	//getter is required, otherwise roomItems are not available in red5
 	public Map<String, JSONObject> getRoomItems() {
 		return roomItems;
 	}
@@ -143,11 +136,13 @@ public class Whiteboard {
 
 	public JSONObject toJson() {
 		//deep-copy
-		JSONObject json = new JSONObject(new JSONObject(this).toString());
+		JSONObject json = new JSONObject(new JSONObject(this).toString(new NullStringer()));
 		json.remove("id"); //filtering
 		JSONObject items = json.getJSONObject("roomItems");
 		for (String uid : items.keySet()) {
-			items.getJSONObject(uid).remove("_src"); //filtering
+			JSONObject o = items.getJSONObject(uid);
+			o.remove("_src");
+			o.remove("src"); //filtering
 		}
 		return json;
 	}

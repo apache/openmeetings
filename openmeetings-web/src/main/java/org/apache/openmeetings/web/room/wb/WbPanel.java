@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
@@ -76,7 +77,6 @@ import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
-import com.github.openjson.JSONStringer;
 import com.github.openjson.JSONTokener;
 
 public class WbPanel extends Panel {
@@ -105,6 +105,7 @@ public class WbPanel extends Panel {
 		, clearAll
 		, clearSlide
 		, save
+		, load
 	}
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -242,7 +243,7 @@ public class WbPanel extends Panel {
 			f.setName(getModelObject());
 			f = getBean(FileExplorerItemDao.class).update(f);
 			try (BufferedWriter writer = Files.newBufferedWriter(f.getFile().toPath())) {
-				writer.write(wb.toJson().toString(2));
+				writer.write(wb.toJson().toString(new NullStringer(2)));
 			} catch (IOException e) {
 				error("Unexpected error while saving WB: " + e.getMessage());
 				target.add(feedback);
@@ -302,7 +303,7 @@ public class WbPanel extends Panel {
 					.append(getAddWbJson(entry.getKey(), entry.getValue().getName()).toString())
 					.append(");"));
 			JSONArray arr = new JSONArray();
-			for (Entry<String, JSONObject> wbEntry : entry.getValue().getRoomItems().entrySet()) {
+			for (Entry<String, JSONObject> wbEntry : entry.getValue().entrySet()) {
 				JSONObject o = wbEntry.getValue();
 				arr.put(addFileUrl(wbs.getUid(), o));
 			}
@@ -415,19 +416,14 @@ public class WbPanel extends Panel {
 					File f = fi.getFile();
 					if (f.exists() && f.isFile()) {
 						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
-							JSONObject wbo = new JSONObject(new JSONTokener(br));
-							/*WebSocketHelper.sendRoom(
-									roomId
-									, new JSONObject().put("type", "wb")
-									, null
-									, (o, c) -> {
-											return o.put("func", String.format("WbArea.%s(%s);"
-													, Action.createObj.name()
-													, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString())
-												).toString();
-										}
-									);*/
-						} catch (IOException e) {
+							JSONObject items = new JSONObject(new JSONTokener(br)).getJSONObject("roomItems");
+							JSONArray arr = new JSONArray();
+							for (String uid : items.keySet()) {
+								JSONObject o = items.getJSONObject(uid);
+								arr.put(addFileUrl(wbs.getUid(), o));
+							}
+							sendWbAll(Action.load, getObjWbJson(wb.getId(), arr));
+						} catch (Exception e) {
 							log.error("Unexpected error while loading WB", e);
 						}
 					}
@@ -468,16 +464,6 @@ public class WbPanel extends Panel {
 				}
 					break;
 			}
-		}
-	}
-
-	//FIXME TODO openjson 1.0.2
-	//private static class ObjectStringer
-
-	private static class NullStringer extends JSONStringer {
-		@Override
-		public JSONStringer entry(Entry<String, Object> entry) {
-			return this.key(entry.getKey()).value(entry.getValue());
 		}
 	}
 }

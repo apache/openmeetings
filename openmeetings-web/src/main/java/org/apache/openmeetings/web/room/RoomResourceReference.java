@@ -105,7 +105,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
 		if (!Strings.isEmpty(wuid) && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 			for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
-				JSONObject file = e.getValue().getRoomItems().get(wuid);
+				JSONObject file = e.getValue().get(wuid);
 				if (file != null && f.getId().equals(file.optLong("fileId"))) {
 					return f; // item IS on WB
 				}
