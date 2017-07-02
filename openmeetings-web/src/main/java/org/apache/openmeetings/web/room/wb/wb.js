@@ -513,7 +513,7 @@ var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
 	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, minWidth = 0, minHeight = 0, role = null;
+			, minWidth = 0, minHeight = 0, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
@@ -625,6 +625,9 @@ var Wb = function() {
 				t.find('.om-icon.save').click(function() {
 					wbAction('save', JSON.stringify({wbId: wb.id}));
 				});
+				t.find('.om-icon.undo').click(function() {
+					wbAction('undo', JSON.stringify({wbId: wb.id}));
+				});
 				s.find('.wb-prop-b, .wb-prop-i')
 					.button()
 					.click(function() {
@@ -721,14 +724,16 @@ var Wb = function() {
 	function _removeHandler(o) {
 		var __o = _findObject(o);
 		if (!!__o) {
-			canvases[o.slide].remove(__o);
+			var cnvs = canvases[o.slide];
+			if (!!cnvs) {
+				cnvs.discardActiveGroup();
+				cnvs.remove(__o);
+			}
 		}
 	}
 	function _modifyHandler(_o) {
 		_removeHandler(_o);
-		var canvas = canvases[_o.slide];
-		_o.selectable = canvas.selection;
-		canvas.add(_o);
+		_createHandler(_o);
 	}
 	function _createHandler(_o) {
 		switch (_o.fileType) {
@@ -803,7 +808,7 @@ var Wb = function() {
 	};
 
 	function toOmJson(o) {
-		return o.toJSON(['uid', 'fileId', 'fileType', 'count', 'slide']);
+		return o.toJSON(extraProps);
 	}
 	//events
 	function wbObjCreatedHandler(o) {
@@ -843,9 +848,22 @@ var Wb = function() {
 		if (role === NONE && o.type != 'pointer') return;
 
 		o.includeDefaultValues = false;
+		var items = [];
+		if ("group" === o.type) {
+			o.clone(function(_o) {
+				// ungrouping
+				_o.includeDefaultValues = false;
+				var _items = _o.destroy().getObjects();
+				for (var i = 0; i < _items.length; ++i) {
+					items.push(toOmJson(_items[i]));
+				}
+			}, extraProps);
+		} else {
+			items.push(toOmJson(o));
+		}
 		wbAction('modifyObj', JSON.stringify({
 			wbId: wb.id
-			, obj: toOmJson(o)
+			, obj: items
 		}));
 	};
 	function objSelectedHandler(e) {
@@ -898,19 +916,21 @@ var Wb = function() {
 		console.log('Text Changed', obj);
 	};*/
 	function setHandlers(canvas) {
+		// off everything first to prevent duplicates
+		canvas.off({
+			'wb:object:created': wbObjCreatedHandler
+			, 'object:modified': objModifiedHandler
+			, 'object:added': objAddedHandler
+			, 'object:selected': objSelectedHandler
+			, 'path:created': pathCreatedHandler
+			//, 'text:editing:exited': textEditedHandler
+			//, 'text:changed': textChangedHandler
+		});
 		canvas.on({
 			'wb:object:created': wbObjCreatedHandler
 			, 'object:modified': objModifiedHandler
 		});
-		if (role === NONE) {
-			canvas.off({
-				'object:added': objAddedHandler
-				, 'object:selected': objSelectedHandler
-				, 'path:created': pathCreatedHandler
-				//, 'text:editing:exited': textEditedHandler
-				//, 'text:changed': textChangedHandler
-			});
-		} else {
+		if (role !== NONE) {
 			canvas.on({
 				'object:added': objAddedHandler
 				, 'object:selected': objSelectedHandler
@@ -1002,26 +1022,38 @@ var Wb = function() {
 		}
 	};
 	wb.createObj = function(o) {
-		switch(o.type) {
-			case 'pointer':
+		var arr = [];
+		if (!Array.isArray(o)) {
+			if ('pointer' === o.type) {
 				APointer().create(canvases[o.slide], o);
-				break;
-			default:
-				var __o = _findObject(o);
-				if (!__o) {
-					_createObject([o], _createHandler);
-				}
-				/*
-				 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
-				if ('Video' === o.fileType || 'Recording' === o.fileType) {
-					fabric.util.requestAnimFrame(function render() {
-						canvas.renderAll();
-						fabric.util.requestAnimFrame(render);
-					});
-				}
-				*/
-				break;
+				return;
+			}
+			switch(o.type) {
+				case 'pointer':
+					APointer().create(canvases[o.slide], o);
+					break;
+				default:
+					var __o = _findObject(o);
+					if (!__o) {
+						arr.push(o);
+					}
+					break;
+			}
+		} else {
+			arr = o;
 		}
+		if (arr.length > 0) {
+			_createObject(arr, _createHandler);
+		}
+		/* FIXME TODO animation
+		 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
+		if ('Video' === o.fileType || 'Recording' === o.fileType) {
+			fabric.util.requestAnimFrame(function render() {
+				canvas.renderAll();
+				fabric.util.requestAnimFrame(render);
+			});
+		}
+		*/
 	};
 	wb.modifyObj = function(o) { //TODO need to be unified
 		switch(o.type) {
@@ -1029,16 +1061,7 @@ var Wb = function() {
 				_modifyHandler(APointer().create(canvases[o.slide], o))
 				break;
 			default:
-				var arr = [o];
-				if (!!o.objects) {
-					arr = o.objects;
-					for (var i = 0; i < arr.length; ++i) {
-						var _o = arr[i];
-						_o.left += o.left;
-						_o.top += o.top;
-					}
-				}
-				_createObject(o.objects || [o], _modifyHandler);
+				_createObject(o, _modifyHandler);
 				break;
 		}
 	};
@@ -1104,8 +1127,8 @@ var WbArea = (function() {
 					var canvas = wb.getCanvas();
 					if (!!canvas) {
 						var arr = [];
-						if (canvas.getActiveGroup()) {
-							canvas.getActiveGroup().forEachObject(function(o){
+						if (!!canvas.getActiveGroup()) {
+							canvas.getActiveGroup().forEachObject(function(o) {
 								arr.push({
 									uid: o.uid
 									, slide: o.slide
@@ -1309,7 +1332,7 @@ $(function() {
 				}
 			}
 		} catch (err) {
-			//console.log(err);
+			console.log(err);
 			//no-op
 		}
 	});

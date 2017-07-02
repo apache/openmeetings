@@ -102,8 +102,8 @@ public class Whiteboard {
 		return roomItems;
 	}
 
-	public void put(String uid, JSONObject obj) {
-		roomItems.put(uid, obj);
+	public JSONObject put(String uid, JSONObject obj) {
+		return roomItems.put(uid, obj);
 	}
 
 	public JSONObject get(String uid) {
@@ -114,8 +114,8 @@ public class Whiteboard {
 		return roomItems.entrySet();
 	}
 
-	public void remove(Object oid) {
-		roomItems.remove(oid);
+	public JSONObject remove(Object oid) {
+		return roomItems.remove(oid);
 	}
 
 	public String getName() {

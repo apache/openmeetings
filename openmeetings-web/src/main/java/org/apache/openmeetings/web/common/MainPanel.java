@@ -102,11 +102,11 @@ public class MainPanel extends Panel {
 	private static final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	public static final String PARAM_USER_ID = "userId";
 	private String uid = null;
-	private final MenuPanel menu;
+	private final MenuPanel menu = new MenuPanel("menu", getMainMenu());
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
-	private final MarkupContainer contents;
-	private final ChatPanel chat;
+	private final MarkupContainer contents = new WebMarkupContainer("contents");
+	private final ChatPanel chat = new ChatPanel("chatPanel");
 	private final MessageDialog newMessage;
 	private final UserInfoDialog userInfo;
 	private BasePanel panel;
@@ -128,9 +128,7 @@ public class MainPanel extends Panel {
 		super(id);
 		this.panel = _panel;
 		setOutputMarkupId(true);
-		menu = new MenuPanel("menu", getMainMenu());
-		contents = new WebMarkupContainer("contents");
-		add(chat = new ChatPanel("chatPanel"));
+		add(chat);
 		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
 
