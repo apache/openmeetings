@@ -251,10 +251,38 @@
 											Apache Software Licenses|
 											Apache License, Version 2.0 and|
 											ASL, version 2|
-											ASF 2.0
+											ASF 2.0|
+											Apache License, Version 2.0 and
+        Common Development And Distribution License (CDDL) Version 1.0|
+											The SAX License
+										</licenseMerge>
+										<licenseMerge>
+											Eclipse Public License 1.0|
+											Eclipse Public License - v 1.0|
+											Eclipse Public License - Version 1.0
+										</licenseMerge>
+										<licenseMerge>
+											BSD license|
+											BSD|
+											The BSD License
+										</licenseMerge>
+										<licenseMerge>
+											FreeBSD License|
+											The BSD 2-Clause License|
+											BSD-2-Clause|
+											BSD style
+										</licenseMerge>
+										<licenseMerge>
+											BSD License 2.0|
+											BSD 3-clause New License|
+											New BSD License
+										</licenseMerge>
+										<licenseMerge>
+											The W3C License|
+											The W3C Software License
 										</licenseMerge>
 									</licenseMerges>
-									<!-- license.fileTemplate>/org/codehaus/mojo/license/third-party-file-groupByLicense.ftl</license.fileTemplate-->
+									<fileTemplate>/org/codehaus/mojo/license/third-party-file-groupByLicense.ftl</fileTemplate>
 								</configuration>
 							</execution>
 						</executions>
