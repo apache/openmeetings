@@ -314,12 +314,36 @@ public class WbPanel extends Panel {
 			return Application.getString("203");
 		}
 	};
+	private final AbstractDefaultAjaxBehavior wbLoad = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			StringBuilder sb = new StringBuilder("WbArea.init();");
+			WhiteboardCache cache = getBean(WhiteboardCache.class);
+			Whiteboards wbs = cache.get(roomId);
+			for (Entry<Long, Whiteboard> entry : cache.list(roomId, rp.getClient().getUser().getLanguageId())) {
+				sb.append(new StringBuilder("WbArea.create(")
+						.append(getAddWbJson(entry.getKey(), entry.getValue().getName()).toString())
+						.append(");"));
+				JSONArray arr = new JSONArray();
+				for (Entry<String, JSONObject> wbEntry : entry.getValue().entrySet()) {
+					JSONObject o = wbEntry.getValue();
+					arr.put(addFileUrl(wbs.getUid(), o));
+				}
+				sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
+			}
+			sb.append("WbArea.activateWb({wbId: ").append(wbs.getActiveWb()).append("});");
+			target.appendJavaScript(sb);
+		}
+	};
 
 	public WbPanel(String id, RoomPanel rp) {
 		super(id);
 		this.rp = rp;
 		this.roomId = rp.getRoom().getId();
 		setOutputMarkupId(true);
+		add(wbLoad);
 		if (rp.getRoom().isHidden(RoomElement.Whiteboard)) {
 			setVisible(false);
 		} else {
@@ -343,22 +367,7 @@ public class WbPanel extends Panel {
 		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
 		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
-		StringBuilder sb = new StringBuilder("WbArea.init();");
-		WhiteboardCache cache = getBean(WhiteboardCache.class);
-		Whiteboards wbs = cache.get(roomId);
-		for (Entry<Long, Whiteboard> entry : cache.list(roomId, rp.getClient().getUser().getLanguageId())) {
-			sb.append(new StringBuilder("WbArea.create(")
-					.append(getAddWbJson(entry.getKey(), entry.getValue().getName()).toString())
-					.append(");"));
-			JSONArray arr = new JSONArray();
-			for (Entry<String, JSONObject> wbEntry : entry.getValue().entrySet()) {
-				JSONObject o = wbEntry.getValue();
-				arr.put(addFileUrl(wbs.getUid(), o));
-			}
-			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
-		}
-		sb.append("WbArea.activateWb({wbId: ").append(wbs.getActiveWb()).append("});");
-		response.render(OnDomReadyHeaderItem.forScript(sb));
+		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
 	}
 
 	private void sendWbAll(Action meth, JSONObject obj) {

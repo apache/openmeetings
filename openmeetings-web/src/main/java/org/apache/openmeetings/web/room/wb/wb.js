@@ -1323,6 +1323,9 @@ var WbArea = (function() {
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		try {
+			if (msg instanceof Blob) {
+				return; //ping
+			}
 			var m = jQuery.parseJSON(msg);
 			if (m) {
 				switch(m.type) {

@@ -595,6 +595,36 @@
 	border: 1px solid #888888;
 	box-shadow: 5px 5px 5px #888888;
 }
+.wb-area .wb-zoom {
+	display: inline-block;
+	padding: 1px 10px;
+	border-radius: 2px;
+	position: absolute;
+	z-index: 1000;
+}
+.wb-area .wb-zoom, .wb-area .wb-zoom .btn-group button {
+	background-color: grey;
+	line-height: 12px;
+	font-size: 12px;
+}
+.wb-area .wb-zoom .block {
+	display: inline-block;
+}
+.wb-area .wb-zoom button {
+	width: 28px;
+	height: 20px;
+	background-repeat: no-repeat;
+	background-position: 5px 0px;
+}
+.wb-area .wb-zoom input {
+	width: 50px
+}
+.wb-area .wb-zoom button.down {
+	background-image: url(images/page_down.png);
+}
+.wb-area .wb-zoom button.up {
+	background-image: url(images/page_up.png);
+}
 .room.box .user-video {
 	display: inline-block !important;
 }
