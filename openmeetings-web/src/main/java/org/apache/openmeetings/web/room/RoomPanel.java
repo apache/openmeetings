@@ -27,6 +27,7 @@ import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
 
 import java.util.Calendar;
 import java.util.List;
@@ -581,6 +582,7 @@ public class RoomPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "jquery.dialogextend.js"))));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
+		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
 		WebSession ws = WebSession.get();
 		if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(

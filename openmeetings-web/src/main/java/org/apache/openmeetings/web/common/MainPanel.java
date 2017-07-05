@@ -102,11 +102,11 @@ public class MainPanel extends Panel {
 	private static final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	public static final String PARAM_USER_ID = "userId";
 	private String uid = null;
-	private final MenuPanel menu = new MenuPanel("menu", getMainMenu());
+	private final MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
-	private final MarkupContainer contents = new WebMarkupContainer("contents");
-	private final ChatPanel chat = new ChatPanel("chatPanel");
+	private final MarkupContainer contents;
+	private final ChatPanel chat;
 	private final MessageDialog newMessage;
 	private final UserInfoDialog userInfo;
 	private BasePanel panel;
@@ -128,27 +128,10 @@ public class MainPanel extends Panel {
 		super(id);
 		this.panel = _panel;
 		setOutputMarkupId(true);
-		add(chat);
-		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				BasePanel bp = getCurrentPanel();
-				if (send.equals(button) && bp != null) {
-					bp.onNewMessageClose(handler);
-				}
-			}
-		});
-		add(userInfo = new UserInfoDialog("userInfoDialog", newMessage));
-		add(new OmAjaxClientInfoBehavior());
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
-		add(contents.add(getClient() == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));
+		menu = new MenuPanel("menu", getMainMenu());
+		contents = new WebMarkupContainer("contents");
+		add(contents.add(getClient() == null || _panel == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
@@ -175,21 +158,24 @@ public class MainPanel extends Panel {
 				about.open(target);
 			}
 		});
-		add(about);
 		if (getApplication().getDebugSettings().isDevelopmentUtilitiesEnabled()) {
 			add(new DebugBar("dev").setOutputMarkupId(true));
 		} else {
 			add(new EmptyPanel("dev").setVisible(false));
 		}
-		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
+		add(about, chat = new ChatPanel("chatPanel"));
+		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				getSession().invalidate();
-				setResponsePage(Application.get().getSignInPageClass());
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				BasePanel bp = getCurrentPanel();
+				if (send.equals(button) && bp != null) {
+					bp.onNewMessageClose(handler);
+				}
 			}
 		});
+		add(userInfo = new UserInfoDialog("userInfoDialog", newMessage));
 		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -282,6 +268,21 @@ public class MainPanel extends Panel {
 					Application.get().exit(uid);
 					uid = null;
 				}
+			}
+		});
+		add(new OmAjaxClientInfoBehavior());
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				getSession().invalidate();
+				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
 	}

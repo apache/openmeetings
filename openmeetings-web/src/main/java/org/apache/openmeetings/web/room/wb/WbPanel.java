@@ -95,11 +95,12 @@ public class WbPanel extends Panel {
 	public static final String FUNC_ACTION = "wbAction";
 	public static final String PARAM_ACTION = "action";
 	public static final String PARAM_OBJ = "obj";
-	private final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
+	public final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
 	private final RoomPanel rp;
 	private long wb2save = -1;
+	private boolean inited = false;
 	private enum Action {
 		createWb
 		, removeWb
@@ -125,6 +126,9 @@ public class WbPanel extends Panel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
+			if (!inited) {
+				return;
+			}
 			try {
 				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
@@ -335,6 +339,7 @@ public class WbPanel extends Panel {
 			}
 			sb.append("WbArea.activateWb({wbId: ").append(wbs.getActiveWb()).append("});");
 			target.appendJavaScript(sb);
+			inited = true;
 		}
 	};
 
@@ -365,7 +370,6 @@ public class WbPanel extends Panel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
-		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
 		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
 	}

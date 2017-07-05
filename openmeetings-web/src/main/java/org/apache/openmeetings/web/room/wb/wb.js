@@ -1103,7 +1103,7 @@ var Wb = function() {
 	return wb;
 };
 var WbArea = (function() {
-	var container, area, tabs, scroll, role = NONE, self = {};
+	var container, area, tabs, scroll, role = NONE, self = {}, _inited = false;
 
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
@@ -1192,6 +1192,7 @@ var WbArea = (function() {
 		return self.getWb(id).getCanvas();
 	};
 	self.setRole = function(_role) {
+		if (!_inited) return;
 		role = _role;
 		var tabsNav = tabs.find(".ui-tabs-nav");
 		tabsNav.sortable(role === PRESENTER ? "enable" : "disable");
@@ -1251,12 +1252,14 @@ var WbArea = (function() {
 				refreshTabs();
 			}
 		});
+		_inited = true;
 		self.setRole(role);
 	};
 	self.destroy = function() {
 		$(window).off('keyup', deleteHandler);
 	};
 	self.create = function(obj) {
+		if (!_inited) return;
 		var tid = self.getWbTabId(obj.wbId)
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId)
 			, wb = $('#wb-area').clone().attr('id', tid);
@@ -1273,43 +1276,53 @@ var WbArea = (function() {
 		_resizeWbs();
 	}
 	self.createWb = function(obj) {
+		if (!_inited) return;
 		self.create(obj);
 		self.setRole(role);
 		_activateTab(obj.wbId);
 	};
 	self.activateWb = function(obj) {
+		if (!_inited) return;
 		_activateTab(obj.wbId);
 	}
 	self.load = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).load(json.obj);
 	};
 	self.setSlide = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).setSlide(json.slide);
 	};
 	self.createObj = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).createObj(json.obj);
 	};
 	self.modifyObj = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).modifyObj(json.obj);
 	};
 	self.deleteObj = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).removeObj(json.obj);
 	};
 	self.clearAll = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).clearAll();
 		setRoomSizes();
 	};
 	self.clearSlide = function(json) {
+		if (!_inited) return;
 		self.getWb(json.wbId).clearSlide(json.slide);
 	};
 	self.removeWb = function(obj) {
+		if (!_inited) return;
 		var tabId = self.getWbTabId(obj.wbId);
 		tabs.find('li[aria-controls="' + tabId + '"]').remove();
 		$("#" + tabId).remove();
 		refreshTabs();
 	};
 	self.resize = function(posX, w, h) {
-		if (!container) return;
+		if (!container || !_inited) return;
 		var hh = h - 5;
 		container.width(w).height(h).css('left', posX + "px");
 		area.width(w).height(hh);
