@@ -19,19 +19,19 @@
 
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-	xmlns:jaxws="http://cxf.apache.org/jaxws"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
-		>
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+		xmlns:jaxws="http://cxf.apache.org/jaxws"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+			http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+			http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
+	>
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="openmeetings" />
 	</bean>
@@ -170,13 +170,14 @@
 	<bean id="roommanagement" class="org.apache.openmeetings.core.data.conference.RoomManager" />
 	<bean id="roomDao" class="org.apache.openmeetings.db.dao.room.RoomDao"/>
 	<bean id="sipDao" class="org.apache.openmeetings.db.dao.room.SipDao">
-	<!--  Should be uncommented and updated with real values for Asterisk
-		<constructor-arg><value>127.0.0.1</value></constructor-arg>
-		<constructor-arg><value>5038</value></constructor-arg>
-		<constructor-arg><value>openmeetings</value></constructor-arg>
-		<constructor-arg><value>12345</value></constructor-arg>
-		<constructor-arg><value>10000</value></constructor-arg>
-	 -->
+	<!-- Should be uncommented and updated with real values for Asterisk
+		<constructor-arg index="0" value="127.0.0.1"/>
+		<constructor-arg index="1" value="5038" type = "int"/>
+		<constructor-arg index="2" value="openmeetings"/>
+		<constructor-arg index="3" value="12345"/>
+		<constructor-arg index="4" value="10000" type = "long"/>
+		<property name="uid" value="87dddad4-9ca5-475b-860f-2e0825d02b76"/>
+	-->
 	</bean>
 	<bean id="invitationDao" class="org.apache.openmeetings.db.dao.room.InvitationDao" />
 	<bean id="groupDao" class="org.apache.openmeetings.db.dao.user.GroupDao" />

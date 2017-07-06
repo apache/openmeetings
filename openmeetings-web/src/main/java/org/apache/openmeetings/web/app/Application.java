@@ -49,6 +49,7 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -310,7 +311,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 				if (client == null && rcl.isMobile()) {
 					//Mobile client enters the room
-					client = new Client(rcl, getBean(UserDao.class));
+					client = new Client(rcl, getBean(UserDao.class).get(rcl.getUserId()));
 					addOnlineUser(client);
 					if (rcl.getRoomId() != null) {
 						client.setCam(0);
@@ -320,6 +321,21 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 						WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 					}
 					//FIXME TODO rights
+				} else if (client == null && rcl.isSipTransport()) {
+					if (!getBean(SipDao.class).getUid().equals(rcl.getPublicSID())) {
+						return null;
+					}
+					//SipTransport enters the room
+					User u = new User(); //fake
+					u.setFirstname("SIP Transport"); //TODO check this
+					client = new Client(rcl, u);
+					addOnlineUser(client);
+					client.setCam(0);
+					client.setMic(0);
+					client.set(Activity.broadcastA);
+					addUserToRoom(client);
+					//FIXME TODO unify this
+					WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				} else if (client == null) {
 					return null;
 				} else if (!client.hasRight(Right.audio) && !client.hasRight(Right.video)) {

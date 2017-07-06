@@ -82,7 +82,6 @@ import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.wicket.Application;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.MultiThreadedApplicationAdapter;
@@ -106,6 +105,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
 	private static final String NATIVE_SSL_PARAM = "nativeSsl";
+	public static final String HIBERNATE_SCOPE = "hibernate";
+	private static final String SIP_PARAM = "sipClient";
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -207,18 +208,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (parentSid == null) {
 			parentSid = (String)connParams.get("parentSid");
 		}
-		StringValue scn = StringValue.valueOf(conn.getScope().getName());
-		long roomId = scn.toLong(Long.MIN_VALUE);
 		Client rcm = new Client();
+		rcm.setScope(conn.getScope().getName());
+		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
 		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 		if (!Strings.isEmpty(securityCode)) {
 			//this is for external applications like ffmpeg [OPENMEETINGS-1574]
-			if (roomId < 0) {
-				log.warn("Trying to enter invalid scope using security code, client is rejected:: " + roomId);
+			if (rcm.getRoomId() == null) {
+				log.warn("Trying to enter invalid scope using security code, client is rejected:: " + rcm.getRoomId());
 				return rejectClient();
 			}
 			String _uid = null;
-			for (org.apache.openmeetings.db.entity.basic.Client wcl : iapp.getOmRoomClients(roomId)) {
+			for (org.apache.openmeetings.db.entity.basic.Client wcl : iapp.getOmRoomClients(rcm.getRoomId())) {
 				if (wcl.getSid().equals(securityCode)) {
 					_uid = wcl.getUid();
 					break;
@@ -229,7 +230,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				return rejectClient();
 			}
 			Client parent = sessionManager.getClientByPublicSID(_uid, null);
-			if (parent == null || !parent.getScope().equals(scn.toString())) {
+			if (parent == null || !parent.getScope().equals(rcm.getScope())) {
 				log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
 			}
@@ -250,7 +251,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			log.warn("No UIDs are provided, client is rejected");
 			return rejectClient();
 		}
-		if ("networktest".equals(uid)) {
+		if (hibernate && "noclient".equals(uid)) {
 			return true;
 		}
 
@@ -267,17 +268,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcm.setStreamPublishName(parentSid);
 		}
 		rcm.setStreamid(conn.getClient().getId());
-		rcm.setScope(scn.toString());
-		boolean notHibernate = !"hibernate".equals(scn.toString());
-		if (Long.MIN_VALUE != roomId) {
-			rcm.setRoomId(roomId);
-		} else if (notHibernate) {
+		if (rcm.getRoomId() == null && !hibernate) {
 			log.warn("Bad room specified, client is rejected");
 			return rejectClient();
 		}
+		if (Boolean.TRUE.equals(connParams.get(SIP_PARAM))) {
+			rcm.setSipTransport(true);
+		}
 		if (connParams.containsKey("mobileClient")) {
 			Sessiondata sd = sessiondataDao.check(parentSid);
-			if (sd.getUserId() == null && notHibernate) {
+			if (sd.getUserId() == null && !hibernate) {
 				log.warn("Attempt of unauthorized room enter, client is rejected");
 				return rejectClient();
 			}
@@ -666,7 +666,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 			}.start();
 
-			if (client.isMobile()) {
+			if (client.isMobile() || client.isSipTransport()) {
 				IApplication app = (IApplication)Application.get(wicketApplicationName);
 				app.exit(client.getPublicSID());
 			}
@@ -1904,20 +1904,30 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 
-	public List<Long> getActiveRoomIds() {
-		List<Long> result = getVerifiedActiveRoomIds(null);
-		for (Server s : serverDao.getActiveServers()) {
-			result.addAll(getVerifiedActiveRoomIds(s));
-		}
-		return result.isEmpty() ? result : roomDao.getSipRooms(result);
-	}
-
 	private String getSipTransportLastname(Long roomId) {
 		return getSipTransportLastname(roomManager.getSipConferenceMembersNumber(roomId));
 	}
 
 	private static String getSipTransportLastname(Integer c) {
 		return (c != null && c > 0) ? "(" + (c - 1) + ")" : "";
+	}
+
+	public String getSipNumber(Double roomId) {
+		Room r = roomDao.get(roomId.longValue());
+		if (r != null && r.getConfno() != null) {
+			log.debug("getSipNumber: roomId: {}, sipNumber: {}", new Object[]{roomId, r.getConfno()});
+			return r.getConfno();
+		}
+		return null;
+	}
+
+	public List<Long> getActiveRoomIds() {
+		Set<Long> ids = new HashSet<>();
+		ids.addAll(getVerifiedActiveRoomIds(null));
+		for (Server s : serverDao.getActiveServers()) {
+			ids.addAll(getVerifiedActiveRoomIds(s));
+		}
+		return new ArrayList<>(ids);
 	}
 
 	public synchronized int updateSipTransport() {

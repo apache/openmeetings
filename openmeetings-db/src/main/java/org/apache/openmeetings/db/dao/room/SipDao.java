@@ -44,6 +44,7 @@ public class SipDao {
 	private int sipPort;
 	private String sipUsername;
 	private String sipPassword;
+	private String uid;
 	private long timeout;
 	private ManagerConnectionFactory factory;
 
@@ -69,7 +70,7 @@ public class SipDao {
 		con.setSocketTimeout((int)timeout);
 		return con;
 	}
-	
+
 	private ManagerResponse exec(ManagerAction action) {
 		if (factory == null) {
 			log.warn("There is no Asterisk configured");
@@ -158,15 +159,15 @@ public class SipDao {
 		ResponseEvents r = execEvent(da);
 		if (r != null) {
 			log.debug("SipDao::countUsers size == " + r.getEvents().size());
-			// "- 1" here means: ListComplete event 
+			// "- 1" here means: ListComplete event
 			return r.getEvents().size() - 1; // TODO check if was successfull
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * Perform call to specified phone number and join to conference
-	 * 
+	 *
 	 * @param number
 	 *            number to call
 	 * @param r
@@ -187,5 +188,13 @@ public class SipDao {
 		oa.setTimeout(timeout);
 
 		exec(oa); //TODO handle response
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getUid() {
+		return uid;
 	}
 }

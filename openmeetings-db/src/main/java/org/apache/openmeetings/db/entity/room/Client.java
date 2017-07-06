@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.CalendarPatterns;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  * Can be configured to be stored in memory or in database
@@ -475,6 +476,11 @@ public class Client implements IClient {
 
 	public void setScope(String scope) {
 		this.scope = scope;
+		StringValue scn = StringValue.valueOf(scope);
+		long roomId = scn.toLong(Long.MIN_VALUE);
+		if (roomId > 0) {
+			this.roomId = roomId;
+		}
 	}
 
 	public String getFormatedDate() {
