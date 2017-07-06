@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
@@ -325,9 +326,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					if (!getBean(SipDao.class).getUid().equals(rcl.getPublicSID())) {
 						return null;
 					}
+					rcl.setPicture_uri("phone.png");
 					//SipTransport enters the room
-					User u = new User(); //fake
-					u.setFirstname("SIP Transport"); //TODO check this
+					User u = new User();
+					u.setId(SIP_USER_ID);
+					u.setFirstname(SipDao.SIP_USER_NAME);
 					client = new Client(rcl, u);
 					addOnlineUser(client);
 					client.setCam(0);
