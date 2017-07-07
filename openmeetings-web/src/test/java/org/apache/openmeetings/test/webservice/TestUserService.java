@@ -24,6 +24,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
+import java.util.Random;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.ws.rs.core.Form;
@@ -93,6 +95,9 @@ public class TestUserService extends AbstractWebServiceTest {
 
 	@Test
 	public void addUserTest() {
+		Random rnd = new Random();
+		String[] tzList = TimeZone.getAvailableIDs();
+		String tz = tzList[rnd.nextInt(tzList.length)];
 		ServiceResult r = login();
 		UserDTO u = new UserDTO();
 		String uuid = UUID.randomUUID().toString();
@@ -103,6 +108,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		u.setAddress(new Address());
 		u.getAddress().setEmail(uuid + "@local");
 		u.getAddress().setCountry(Locale.getDefault().getCountry());
+		u.setTimeZoneId(tz);
 		u.setExternalId(uuid);
 		u.setExternalType("OmJunitTests");
 		UserDTO user = getClient(USER_SERVICE_URL)
@@ -113,6 +119,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotNull("Valid UserDTO should be returned", user);
 		assertNotNull("Id should not be NULL", user.getId());
 		assertEquals("OM Call should be successful", u.getLogin(), user.getLogin());
+		assertEquals("OM Call should be successful", tz, user.getTimeZoneId());
 	}
 
 	@After
