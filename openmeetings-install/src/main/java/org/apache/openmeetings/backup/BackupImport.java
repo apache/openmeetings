@@ -187,7 +187,6 @@ public class BackupImport {
 	private final Map<Long, Long> roomMap = new HashMap<>();
 	private final Map<Long, Long> messageFolderMap = new HashMap<>();
 	private final Map<Long, Long> userContactMap = new HashMap<>();
-	private final Map<String, Integer> userEmailMap = new HashMap<>();
 	private final Map<String, String> fileMap = new HashMap<>();
 
 	private enum Maps {
@@ -244,7 +243,6 @@ public class BackupImport {
 		roomMap.clear();
 		messageFolderMap.clear();
 		userContactMap.clear();
-		userEmailMap.clear();
 		fileMap.clear();
 		messageFolderMap.put(INBOX_FOLDER_ID, INBOX_FOLDER_ID);
 		messageFolderMap.put(SENT_FOLDER_ID, SENT_FOLDER_ID);
@@ -998,7 +996,8 @@ public class BackupImport {
 
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = dBuilder.parse(xml);
-		userEmailMap.clear();
+		final Map<String, Integer> userEmailMap = new HashMap<>();
+		final Map<String, Integer> userLoginMap = new HashMap<>();
 		//add existence email from database
 		List<User>  users = userDao.getAllUsers();
 		for (User u : users){
@@ -1006,6 +1005,7 @@ public class BackupImport {
 				continue;
 			}
 			userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(-1));
+			userLoginMap.put(u.getLogin(), Integer.valueOf(-1));
 		}
 		Node nList = getNode(getNode(doc, "root"), listNodeName);
 		if (nList != null) {
@@ -1094,11 +1094,17 @@ public class BackupImport {
 				if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
 					if (userEmailMap.containsKey(u.getAddress().getEmail())) {
 						log.warn("Email is duplicated for user " + u.toString());
-						String updateEmail = "modified_by_import_<" + list.size() + ">" + u.getAddress().getEmail();
+						String updateEmail = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getAddress().getEmail());
 						u.getAddress().setEmail(updateEmail);
 					}
 					userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
 				}
+				if (userLoginMap.containsKey(u.getLogin())) {
+					log.warn("Login is duplicated for user " + u.toString());
+					String updateLogin = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getLogin());
+					u.setLogin(updateLogin);
+				}
+				userLoginMap.put(u.getLogin(), Integer.valueOf(userLoginMap.size()));
 				// check old stateId
 				if (!Strings.isEmpty(stateId)) {
 					String country = getCountry(stateId);
