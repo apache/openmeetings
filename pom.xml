@@ -192,6 +192,20 @@
 				<module>openmeetings-db</module>
 			</modules>
 		</profile>
+		<profile>
+			<id>Jenkins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludedGroups>org.apache.openmeetings.util.NonJenkinsTests</excludedGroups>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 	<url>http://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
@@ -214,9 +228,6 @@
 		<system>jenkins</system>
 		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/</url>
 	</ciManagement>
-	<prerequisites>
-		<maven>3.2.1</maven>
-	</prerequisites>
 	<developers>
 		<developer>
 			<id>sebawagner</id>
@@ -915,11 +926,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jarsigner-plugin</artifactId>
 					<version>1.4</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>properties-maven-plugin</artifactId>
-					<version>1.0.0</version>
 				</plugin>
 
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
