@@ -90,7 +90,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		UserDTO u = new UserDTO();
 		String uuid = UUID.randomUUID().toString();
 		u.setLogin("test" + uuid);
-		u.setPassword("aS" + UUID.randomUUID().toString() + "!");
+		u.setPassword(createPass());
 		u.setFirstname("testF" + uuid);
 		u.setLastname("testL" + uuid);
 		u.setAddress(new Address());
