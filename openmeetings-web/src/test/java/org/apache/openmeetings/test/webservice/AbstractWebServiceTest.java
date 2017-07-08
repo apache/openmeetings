@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.test.webservice;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -29,11 +31,18 @@ import java.util.UUID;
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.user.UserDTO;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 
 public class AbstractWebServiceTest extends AbstractJUnitDefaults {
@@ -41,10 +50,17 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	public final static String CONTEXT = "/openmeetings";
 	public final static String BASE_SERVICES_URL = "http://localhost:8080" + CONTEXT + "/services";
 	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
+	public final static String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
+	public final static long TIMEOUT = 5 * 60 * 1000;
+	protected WicketTester tester;
 
 	public static WebClient getClient(String url) {
-		return WebClient.create(url, Arrays.asList(new AppointmentMessageBodyReader()))
+		WebClient c = WebClient.create(url, Arrays.asList(new AppointmentMessageBodyReader()))
 				.accept("application/json").type("application/json");
+		HTTPClientPolicy p = WebClient.getConfig(c).getHttpConduit().getClient();
+		p.setConnectionTimeout(TIMEOUT);
+		p.setReceiveTimeout(TIMEOUT);
+		return c;
 	}
 
 	public static ServiceResult login() {
@@ -76,6 +92,21 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		tomcat.start();
 	}
 
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		tester = getWicketTester();
+		assertNotNull("Web session should not be null", WebSession.get());
+	}
+
+	@After
+	public void tearDown() {
+		if (tester != null) {
+			//can be null in case exception on initialization
+			tester.destroy();
+		}
+	}
+
 	@AfterClass
 	public static void destroy() throws Exception {
 		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
@@ -84,5 +115,18 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 			}
 			tomcat.destroy();
 		}
+	}
+
+	public void webCreateUser(User u) {
+		ServiceResult r = login();
+		UserDTO dto = new UserDTO(u);
+		dto.setPassword(createPass());
+		UserDTO user = getClient(USER_SERVICE_URL)
+				.path("/")
+				.query("sid", r.getMessage())
+				.query("user", dto.toString())
+				.query("confirm", false).post(null, UserDTO.class);
+		Assert.assertNotNull(user.getId());
+		u.setId(user.getId());
 	}
 }

@@ -35,13 +35,11 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -54,13 +52,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/error")
-public class ErrorWebService {
+public class ErrorWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ErrorWebService.class, webAppRootKey);
-
-	@Autowired
-	private ErrorDao errorDao;
-	@Autowired
-	private SessiondataDao sessionDao;
 
 	/**
 	 * loads an Error-Object. If a Method returns a negative Result, its an
@@ -81,7 +74,7 @@ public class ErrorWebService {
 	public ServiceResult get(@WebParam(name="id") @PathParam("id") long id, @WebParam(name="lang") @PathParam("lang") long lang) {
 		try {
 			if (id < 0) {
-				ErrorValue eValues = errorDao.get(-1 * id);
+				ErrorValue eValues = getBean(ErrorDao.class).get(-1 * id);
 				if (eValues != null) {
 					log.debug("eValues.getLabelId() = " + eValues.getLabelId());
 					log.debug("eValues.getErrorType() = " + eValues.getType());
@@ -105,7 +98,7 @@ public class ErrorWebService {
 	@Path("/report/")
 	public void report(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="message") @QueryParam("message") String message) {
 		if (sid != null && message != null) {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			if (sd.getId() != null) {
 				log.error("[CLIENT MESSAGE] " + message);
 			}

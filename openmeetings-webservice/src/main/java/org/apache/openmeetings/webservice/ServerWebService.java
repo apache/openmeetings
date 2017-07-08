@@ -37,8 +37,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.server.ServerDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.server.ServerDTO;
@@ -48,32 +46,28 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * This class provides method implementations necessary for OM to manage servers
  * participating in cluster.
- * 
+ *
  * @author solomax, sebawagner
- * 
+ *
  */
 @WebService(serviceName="org.apache.openmeetings.webservice.ServerWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/server")
-public class ServerWebService {
+public class ServerWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(ServerWebService.class, webAppRootKey);
 
-	@Autowired
-	private SessiondataDao sessionDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private ServerDao serverDao;
+	private static ServerDao getDao() {
+		return getBean(ServerDao.class);
+	}
 
 	/**
 	 * Method to retrieve the list of the servers participating in cluster
-	 * 
+	 *
 	 * @param sid
 	 *            - session id to identify the user making request
 	 * @param start
@@ -91,10 +85,8 @@ public class ServerWebService {
 			) throws ServiceException
 	{
 		log.debug("getServers enter");
-		Sessiondata sd = sessionDao.check(sid);
-
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-			return ServerDTO.list(serverDao.get(start, max));
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
+			return ServerDTO.list(getDao().get(start, max));
 		} else {
 			log.warn("Insuffisient permissions");
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -104,7 +96,7 @@ public class ServerWebService {
 	/**
 	 * Method to retrieve the total count of the servers participating in
 	 * cluster
-	 * 
+	 *
 	 * @param sid
 	 *            - session id to identify the user making request
 	 * @return total count of the servers participating in cluster
@@ -114,10 +106,8 @@ public class ServerWebService {
 	@Path("/count")
 	public long count(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
 		log.debug("getServerCount enter");
-		Sessiondata sd = sessionDao.check(sid);
-
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-			return serverDao.count();
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
+			return getDao().count();
 		} else {
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
@@ -125,7 +115,7 @@ public class ServerWebService {
 
 	/**
 	 * Method to add/update server
-	 * 
+	 *
 	 * @param sid
 	 *            - session id to identify the user making request
 	 * @param server
@@ -137,11 +127,11 @@ public class ServerWebService {
 	@Path("/")
 	public ServerDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="server") @QueryParam("server") ServerDTO server) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Sessiondata sd = sessionDao.check(sid);
+		Sessiondata sd = check(sid);
 		Long userId = sd.getUserId();
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
 			Server s = server.get();
-			return new ServerDTO(serverDao.update(s, userId));
+			return new ServerDTO(getDao().update(s, userId));
 		} else {
 			log.warn("Insuffisient permissions");
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -150,7 +140,7 @@ public class ServerWebService {
 
 	/**
 	 * Method to delete server
-	 * 
+	 *
 	 * @param sid
 	 *            - session id to identify the user making request
 	 * @param id
@@ -162,10 +152,11 @@ public class ServerWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		log.debug("saveServerCount enter");
-		Sessiondata sd = sessionDao.check(sid);
+		Sessiondata sd = check(sid);
 		Long userId = sd.getUserId();
 
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+			ServerDao serverDao = getDao();
 			Server s = serverDao.get(id);
 			if (s != null) {
 				serverDao.delete(s, userId);

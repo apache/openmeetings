@@ -52,7 +52,7 @@ public class TestUserContact extends AbstractWicketTester {
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = userDao.update(u, null);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), getRandomPass(uuid)));
+		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), createPass()));
 
 		User u1 = userDao.get(u.getId());
 		assertNotNull("Just created user should not be null", u1);
@@ -64,7 +64,7 @@ public class TestUserContact extends AbstractWicketTester {
 	public void testCreateUser() throws Exception {
 		String uuid = UUID.randomUUID().toString();
 		User u = createUser(uuid);
-		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), getRandomPass(uuid)));
+		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), createPass()));
 	}
 
 	@Test

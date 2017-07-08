@@ -41,12 +41,8 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
-import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.InvitationDTO;
@@ -58,13 +54,14 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.service.room.InvitationManager;
+import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * RoomService contains methods to manipulate rooms and create invitation hash
@@ -76,21 +73,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/room")
-public class RoomWebService {
+public class RoomWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, webAppRootKey);
-
-	@Autowired
-	private SessiondataDao sessionDao;
-	@Autowired
-	private IUserManager userManager;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private InvitationDao invitationDao;
-	@Autowired
-	private IInvitationManager invitationManager;
-	@Autowired
-	private RoomDao roomDao;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -110,9 +94,8 @@ public class RoomWebService {
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
-			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
-				return RoomDTO.list(roomDao.getPublicRooms(Room.Type.valueOf(type)));
+			if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
+				return RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type)));
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -135,10 +118,9 @@ public class RoomWebService {
 	@GET
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
-		Sessiondata sd = sessionDao.check(sid);
-		Set<User.Right> rights = userDao.getRights(sd.getUserId());
+		Set<User.Right> rights = getRights(sid);
 		if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasUserLevel(rights)) {
-			return new RoomDTO(roomDao.get(id));
+			return new RoomDTO(getRoomDao().get(id));
 		} else {
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
 		}
@@ -173,9 +155,10 @@ public class RoomWebService {
 			, @PathParam("externalid") @WebParam(name="externalid") Long externalId
 			, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+				RoomDao roomDao = getRoomDao();
 				Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
 				if (r == null) {
 					r = room.get();
@@ -211,11 +194,11 @@ public class RoomWebService {
 	@Path("/")
 	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
 				Room r = room.get();
-				r = roomDao.update(r, userId);
+				r = getRoomDao().update(r, userId);
 				return new RoomDTO(r);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -276,9 +259,10 @@ public class RoomWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		Sessiondata sd = sessionDao.check(sid);
+		Sessiondata sd = check(sid);
 		Long userId = sd.getUserId();
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+			RoomDao roomDao = getRoomDao();
 			Room r = roomDao.get(id);
 			if (r != null) {
 				roomDao.delete(r, userId);
@@ -311,11 +295,12 @@ public class RoomWebService {
 	@Path("/close/{id}")
 	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
 			log.debug("close " + id);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+				RoomDao roomDao = getRoomDao();
 				Room room = roomDao.get(id);
 				room.setClosed(true);
 
@@ -356,11 +341,12 @@ public class RoomWebService {
 	@Path("/open/{id}")
 	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
 			log.debug("open " + id);
 
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+				RoomDao roomDao = getRoomDao();
 				Room room = roomDao.get(id);
 				room.setClosed(false);
 				roomDao.update(room, userId);
@@ -394,9 +380,8 @@ public class RoomWebService {
 	@Path("/kick/{id}")
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-				boolean result = userManager.kickUsersByRoomId(id);
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
+				boolean result = getBean(UserManager.class).kickUsersByRoomId(id);
 				return new ServiceResult(result ? 1L : 0L, "Kicked", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -423,10 +408,9 @@ public class RoomWebService {
 	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
 		List<RoomCountDTO> roomBeans = new ArrayList<>();
 		try {
-			Sessiondata sd = sessionDao.check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
 				IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
-				List<Room> rooms = roomDao.get(ids);
+				List<Room> rooms = getRoomDao().get(ids);
 
 				for (Room room : rooms) {
 					RoomCountDTO rCountBean = new RoomCountDTO();
@@ -467,15 +451,15 @@ public class RoomWebService {
 			) throws ServiceException
 	{
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				Invitation i = invite.get(userId, userDao, roomDao);
-				i = invitationDao.update(i);
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+				Invitation i = invite.get(userId, getUserDao(), getRoomDao());
+				i = getBean(InvitationDao.class).update(i);
 
 				if (i != null) {
 					if (sendmail) {
-						invitationManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
+						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
 					}
 					return new ServiceResult(1L, i.getHash(), Type.SUCCESS);
 				} else {

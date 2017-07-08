@@ -483,6 +483,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-util</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-core</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>

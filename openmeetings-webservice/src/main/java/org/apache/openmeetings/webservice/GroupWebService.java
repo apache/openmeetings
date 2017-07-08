@@ -41,7 +41,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -59,7 +58,6 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -73,19 +71,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/group")
-public class GroupWebService {
+public class GroupWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(GroupWebService.class, webAppRootKey);
 
-	@Autowired
-	private GroupDao groupDao;
-	@Autowired
-	private GroupUserDao groupUserDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private RoomDao roomDao;
-	@Autowired
-	private SessiondataDao sessionDao;
+	private static GroupDao getDao() {
+		return getBean(GroupDao.class);
+	}
 
 	/**
 	 * add a new group
@@ -100,12 +91,12 @@ public class GroupWebService {
 	@POST
 	@Path("/")
 	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) throws ServiceException {
-		Sessiondata sd = sessionDao.check(sid);
+		Sessiondata sd = check(sid);
 		Long userId = sd.getUserId();
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
 			Group o = new Group();
 			o.setName(name);
-			return new ServiceResult(groupDao.update(o, userId).getId(), "Success", Type.SUCCESS);
+			return new ServiceResult(getDao().update(o, userId).getId(), "Success", Type.SUCCESS);
 		} else {
 			log.error("Could not create group");
 			return NO_PERMISSION;
@@ -123,9 +114,8 @@ public class GroupWebService {
 	@GET
 	@Path("/")
 	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
-		Sessiondata sd = sessionDao.check(sid);
-		if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-			return groupDao.get(0, Integer.MAX_VALUE);
+		if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
+			return getDao().get(0, Integer.MAX_VALUE);
 		} else {
 			log.error("Insufficient permissions");
 			throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -153,12 +143,13 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long authUserId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				if (!groupUserDao.isUserInGroup(id, userid)) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(authUserId))) {
+				if (!getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
+					UserDao userDao = getUserDao();
 					User u = userDao.get(userid);
-					u.getGroupUsers().add(new GroupUser(groupDao.get(id), u));
+					u.getGroupUsers().add(new GroupUser(getDao().get(id), u));
 					userDao.update(u, authUserId);
 				}
 				return new ServiceResult(userid, "Success", Type.SUCCESS);
@@ -192,10 +183,11 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long authUserId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(authUserId))) {
-				if (groupUserDao.isUserInGroup(id, userid)) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(authUserId))) {
+				if (getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
+					UserDao userDao = getUserDao();
 					User u = userDao.get(userid);
 					for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext(); ) {
 						GroupUser gu = iter.next();
@@ -233,9 +225,10 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+				RoomDao roomDao = getRoomDao();
 				Room r = roomDao.get(roomid);
 				if (r != null) {
 					if (r.getRoomGroups() == null) {
@@ -248,7 +241,7 @@ public class GroupWebService {
 						}
 					}
 					if (!found) {
-						r.getRoomGroups().add(new RoomGroup(groupDao.get(id), r));
+						r.getRoomGroups().add(new RoomGroup(getDao().get(id), r));
 						roomDao.update(r, userId);
 						return new ServiceResult(1L, "Success", Type.SUCCESS);
 					}
@@ -292,14 +285,14 @@ public class GroupWebService {
 			) throws ServiceException
 	{
 		try {
-			Sessiondata sd = sessionDao.check(sid);
 			SearchResult<User> result = new SearchResult<>();
 			result.setObjectName(User.class.getName());
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(sd.getUserId()))) {
-				result.setRecords(groupUserDao.count(id));
+			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
+				GroupUserDao dao = getBean(GroupUserDao.class);
+				result.setRecords(dao.count(id));
 				result.setResult(new ArrayList<User>());
 				String order = isAlphanumeric(orderby) ? orderby : "id";
-				for (GroupUser ou : groupUserDao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
+				for (GroupUser ou : dao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
 					result.getResult().add(ou.getUser());
 				}
 			} else {
@@ -328,11 +321,12 @@ public class GroupWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
-			Sessiondata sd = sessionDao.check(sid);
+			Sessiondata sd = check(sid);
 			Long authUserId = sd.getUserId();
 
-			if (AuthLevelUtil.hasAdminLevel(userDao.getRights(authUserId))) {
-				groupDao.delete(groupDao.get(id), authUserId);
+			if (AuthLevelUtil.hasAdminLevel(getRights(authUserId))) {
+				GroupDao dao = getDao();
+				dao.delete(dao.get(id), authUserId);
 
 				return new ServiceResult(id, "Deleted", Type.SUCCESS);
 			} else {

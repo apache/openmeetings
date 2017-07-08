@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.test.webservice;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -39,23 +38,15 @@ import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.After;
+import org.apache.openmeetings.util.NonJenkinsTests;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class TestFileService extends AbstractWebServiceTest {
 	public final static String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
-	protected WicketTester tester;
-
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		tester = getWicketTester();
-		assertNotNull("Web session should not be null", WebSession.get());
-	}
 
 	@Test
+	@Category(NonJenkinsTests.class)
 	public void addFileTest() throws IOException {
 		ServiceResult r = login();
 
@@ -90,14 +81,6 @@ public class TestFileService extends AbstractWebServiceTest {
 			if (img != null && img.exists()) {
 				img.delete();
 			}
-		}
-	}
-
-	@After
-	public void tearDown() {
-		if (tester != null) {
-			//can be null in case exception on initialization
-			tester.destroy();
 		}
 	}
 }

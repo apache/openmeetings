@@ -33,6 +33,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public interface IApplication {
 	<T> T getOmBean(Class<T> clazz);
+	<T> T _getOmBean(Class<T> clazz);
 	ServletContext getServletContext();
 	IRequestMapper getRootRequestMapper();
 	Supplier<IExceptionMapper> getExceptionMapperProvider();

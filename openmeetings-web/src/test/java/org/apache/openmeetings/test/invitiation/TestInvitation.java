@@ -24,14 +24,12 @@ import java.time.LocalDateTime;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.test.AbstractWicketTester;
-import org.apache.openmeetings.webservice.UserWebService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -39,16 +37,13 @@ public class TestInvitation extends AbstractWicketTester {
 	@Autowired
 	private InvitationManager invitationManager;
 	@Autowired
-	private UserWebService userWebService;
-	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 
 	@Test
 	public void testSendInvitationLink() throws Exception {
-		ServiceResult result = userWebService.login(username, userpass);
-		User us = userDao.get(result.getCode());
+		User us = userDao.getByLogin(username, User.Type.user, null);
 
 		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
 		User invitee = userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId());
