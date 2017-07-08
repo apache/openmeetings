@@ -19,10 +19,7 @@
 package org.apache.openmeetings.util;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
+import java.util.Properties;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -33,38 +30,41 @@ public class Version {
 	private static String version = null;
 	private static String revision = null;
 	private static String buildDate = null;
-	
-	private static Attributes getAttributes() throws MalformedURLException, IOException {
-		String jarUrl = Version.class.getResource(Version.class.getSimpleName() + ".class").toString();
-		return new Manifest(new URL(jarUrl.substring(0, jarUrl.indexOf('!')) + "!/META-INF/MANIFEST.MF").openStream()).getMainAttributes();
+
+	private static void init() throws IOException {
+		Properties props = new Properties();
+		props.load(Version.class.getResourceAsStream("version.properties"));
+		version = props.getProperty("version");
+		revision = props.getProperty("revision");
+		buildDate = props.getProperty("date");
 	}
-	
+
 	public static String getVersion() {
 		if (version == null) {
 			try {
-				version = getAttributes().getValue("Product-Version");
+				init();
 			} catch (Exception e) {
 				log.error("Error", e);
 			}
 		}
 		return version;
 	}
-	
+
 	public static String getRevision() {
 		if (revision == null) {
 			try {
-				revision = getAttributes().getValue("Git-Revision");
+				init();
 			} catch (Exception e) {
 				log.error("Error", e);
 			}
 		}
 		return revision;
 	}
-	
+
 	public static String getBuildDate() {
 		if (buildDate == null) {
 			try {
-				buildDate = getAttributes().getValue("Built-On");
+				init();
 			} catch (Exception e) {
 				log.error("Error", e);
 			}
@@ -85,7 +85,7 @@ public class Version {
 		}
 		sb.append("#\n");
 	}
-	
+
 	public static void logOMStarted() {
 		StringBuilder sb = new StringBuilder("\n");
 		getLine(sb, "", '#');

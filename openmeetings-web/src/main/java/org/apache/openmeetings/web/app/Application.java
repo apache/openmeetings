@@ -607,6 +607,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return Application.getBean(clazz);
 	}
 
+	@Override
+	public <T> T _getOmBean(Class<T> clazz) { //FIXME hack for web services support (should be in separate module for now
+		return Application.get()._getBean(clazz);
+	}
+
 	public static String getContactsLink() {
 		return PROFILE_MESSAGES.getLink();
 	}

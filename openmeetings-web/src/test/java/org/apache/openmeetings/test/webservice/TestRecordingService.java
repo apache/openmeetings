@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -39,18 +38,16 @@ public class TestRecordingService extends AbstractWebServiceTest {
 	private final static String UNIT_TEST_GROUP = "om_unit_tests";
 	@Autowired
 	private RecordingDao recordingDao;
-	@Autowired
-	private UserDao userDao;
 
 	private User getExternalUser() throws Exception {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
 		u.setExternalType(UNIT_TEST_GROUP);
 		u.setExternalId(uuid);
-		u = userDao.update(u, null);
+		webCreateUser(u);
 		return u;
 	}
-	
+
 	@Test
 	public void testExternal() throws Exception {
 		User u = getExternalUser();

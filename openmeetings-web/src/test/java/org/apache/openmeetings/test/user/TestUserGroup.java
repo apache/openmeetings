@@ -87,7 +87,7 @@ public class TestUserGroup extends AbstractJUnitDefaults {
 		assertNotNull("User successfully created", u.getId());
 		checkEmptyGroup("dao.get()", userDao.get(u.getId()));
 		try {
-			checkEmptyGroup("dao.login()", userDao.login(u.getAddress().getEmail(), getRandomPass(uuid)));
+			checkEmptyGroup("dao.login()", userDao.login(u.getAddress().getEmail(), createPass()));
 			fail("User with no Group is unable to login");
 		} catch (OmException e) {
 			assertTrue("Expected Om Exception", "No Group assigned to user".equals(e.getMessage()));

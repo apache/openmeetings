@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.test.webservice;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -26,21 +25,10 @@ import javax.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
-import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.After;
 import org.junit.Test;
 
 public class TestGroupService extends AbstractWebServiceTest {
-	protected WicketTester tester;
 	public final static String GROUP_SERVICE_URL = BASE_SERVICES_URL + "/group";
-
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		tester = getWicketTester();
-		assertNotNull("Web session should not be null", WebSession.get());
-	}
 
 	@Test
 	public void putTest() {
@@ -74,14 +62,6 @@ public class TestGroupService extends AbstractWebServiceTest {
 			assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
 			ServiceResult r1 = resp.readEntity(ServiceResult.class);
 			assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
-		}
-	}
-
-	@After
-	public void tearDown() {
-		if (tester != null) {
-			//can be null in case exception on initialization
-			tester.destroy();
 		}
 	}
 }

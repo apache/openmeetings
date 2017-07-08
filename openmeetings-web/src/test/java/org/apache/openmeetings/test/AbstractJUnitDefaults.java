@@ -135,8 +135,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return getUser(UUID.randomUUID().toString());
 	}
 
-	protected String getRandomPass(String uuid) {
-		return "pass" + uuid;
+	protected String createPass() {
+		return "pass1_!@#$%_A";
 	}
 
 	public User getUser(String uuid) throws Exception {
@@ -149,7 +149,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.getAddress().setEmail(String.format("email%s@local", uuid));
 		u.setRights(UserDao.getDefaultRights());
 		u.setTimeZoneId("Asia/Bangkok");
-		u.updatePassword(cfgDao, getRandomPass(uuid));
+		u.updatePassword(cfgDao, createPass());
 		u.setLanguageId(1L);
 		return u;
 	}

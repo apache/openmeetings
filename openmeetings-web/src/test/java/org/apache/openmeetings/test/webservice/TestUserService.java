@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.test.webservice;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -39,20 +38,9 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.tester.WicketTester;
-import org.junit.After;
 import org.junit.Test;
 
 public class TestUserService extends AbstractWebServiceTest {
-	protected WicketTester tester;
-
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-		tester = getWicketTester();
-		assertNotNull("Web session should not be null", WebSession.get());
-	}
-
 	@Test
 	public void invalidLoginTest() {
 		ServiceResult r = loginNoCheck("invalid-user", "bad pass");
@@ -97,7 +85,7 @@ public class TestUserService extends AbstractWebServiceTest {
 	public void addUserTest() {
 		Random rnd = new Random();
 		String[] tzList = TimeZone.getAvailableIDs();
-		String tz = tzList[rnd.nextInt(tzList.length)];
+		String tz = TimeZone.getTimeZone(tzList[rnd.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();
 		UserDTO u = new UserDTO();
 		String uuid = UUID.randomUUID().toString();
@@ -120,13 +108,5 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotNull("Id should not be NULL", user.getId());
 		assertEquals("OM Call should be successful", u.getLogin(), user.getLogin());
 		assertEquals("OM Call should be successful", tz, user.getTimeZoneId());
-	}
-
-	@After
-	public void tearDown() {
-		if (tester != null) {
-			//can be null in case exception on initialization
-			tester.destroy();
-		}
 	}
 }

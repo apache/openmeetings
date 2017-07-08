@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.Version;
 
 @XmlRootElement
@@ -33,11 +34,13 @@ public class Info implements Serializable {
 	private final String version;
 	private final String revision;
 	private final String buildDate;
+	private final boolean inited;
 
 	public Info() {
 		version = Version.getVersion();
 		revision = Version.getRevision();
 		buildDate = Version.getBuildDate();
+		inited = InitializationContainer.initComplete;
 	}
 
 	public String getVersion() {
@@ -50,5 +53,9 @@ public class Info implements Serializable {
 
 	public String getBuildDate() {
 		return buildDate;
+	}
+
+	public boolean isInited() {
+		return inited;
 	}
 }

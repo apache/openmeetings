@@ -69,8 +69,8 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
-		u = createUser(u);
-		ServiceResult sr = login(u.getLogin(), getRandomPass(uuid));
+		webCreateUser(u);
+		ServiceResult sr = login(u.getLogin(), createPass());
 
 		Date start = new Date();
 		Appointment a = createAppointment(getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
@@ -131,8 +131,8 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
-		u = createUser(u);
-		ServiceResult sr = login(u.getLogin(), getRandomPass(uuid));
+		webCreateUser(u);
+		ServiceResult sr = login(u.getLogin(), createPass());
 		return sr.getMessage();
 	}
 
@@ -176,7 +176,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = createUser(u);
-		ServiceResult sr = login(u.getLogin(), getRandomPass(uuid));
+		ServiceResult sr = login(u.getLogin(), createPass());
 
 		Response resp = getClient(CALENDAR_SERVICE_URL)
 				.path("/")

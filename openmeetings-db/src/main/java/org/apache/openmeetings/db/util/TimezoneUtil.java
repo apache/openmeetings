@@ -25,6 +25,7 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,18 +40,18 @@ public class TimezoneUtil {
 	 * Parameters: ID - the ID for a TimeZone, either an abbreviation such as "PST", a full name such as
 	 * "America/Los_Angeles", or a custom ID such as "GMT-8:00". Note that the support of abbreviations is for JDK 1.1.x
 	 * compatibility only and full names should be used.
-	 * 
+	 *
 	 * Returns: the specified TimeZone, or the GMT zone if the given ID cannot be understood. <br/>
 	 * <br/>
 	 * TODO: Fall-back mechanism and maybe a log output if the given timeZoneId is not found in the list of available
 	 * TimeZones of the current java.util.TimeZone package of the Java SDK the the user is running <br/>
-	 * 
+	 *
 	 * @param timeZoneId
 	 * @return
 	 */
 
 	public TimeZone getTimeZone(String timeZoneId) {
-		if (timeZoneId == null || timeZoneId.equals("")) {
+		if (Strings.isEmpty(timeZoneId)) {
 			return getDefaultTimeZone();
 		}
 
@@ -79,7 +80,7 @@ public class TimezoneUtil {
 
 	/**
 	 * Returns the timezone based on the user profile, if not return the timezone from the server
-	 * 
+	 *
 	 * @param user
 	 * @return
 	 */
