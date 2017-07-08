@@ -65,13 +65,12 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getPublicRooms", query = "SELECT r from Room r WHERE r.ispublic = true and r.deleted = false and r.type = :type"),
-	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "select c from Room as c where c.ownerId = :ownerId "
-					+ "AND c.type = :type AND c.deleted = false"),
-	@NamedQuery(name = "selectMaxFromRooms", query = "select count(c.id) from Room c "
-			+ "where c.deleted = false AND c.name LIKE :search "),
-	@NamedQuery(name = "getRoomByExternalId", query = "select r from Room as r "
-			+ "where r.externalId = :externalId AND c.externalType = :externalType "
-			+ "AND r.type = :type AND c.deleted = false"),
+	@NamedQuery(name = "getRoomByOwnerAndTypeId", query = "SELECT r FROM Room as r WHERE r.ownerId = :ownerId "
+					+ "AND r.type = :type AND r.deleted = false"),
+	@NamedQuery(name = "selectMaxFromRooms", query = "SELECT COUNT(r.id) from Room r WHERE r.deleted = false AND r.name LIKE :search "),
+	@NamedQuery(name = "getRoomByExternalId", query = "SELECT r FROM Room as r "
+			+ "WHERE r.externalId = :externalId AND r.externalType = :externalType "
+			+ "AND r.type = :type AND r.deleted = false"),
 	@NamedQuery(name = "getPublicRoomsOrdered", query = "SELECT r from Room r WHERE r.ispublic= true AND r.deleted= false AND r.appointment = false ORDER BY r.name ASC"),
 	@NamedQuery(name = "getRoomById", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id = :id"),
 	@NamedQuery(name = "getRoomsByIds", query = "SELECT r FROM Room r WHERE r.deleted = false AND r.id IN :ids"),
@@ -79,9 +78,9 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
-	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT c.room FROM RoomGroup c LEFT JOIN FETCH c.room "
-			+ "WHERE c.group.id = :groupId AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
-			+ "AND c.group.deleted = false ORDER BY c.room.name ASC")
+	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT r.room FROM RoomGroup r LEFT JOIN FETCH r.room "
+			+ "WHERE r.group.id = :groupId AND r.deleted = false AND r.room.deleted = false AND r.room.appointment = false "
+			+ "AND r.group.deleted = false ORDER BY r.room.name ASC")
 })
 @Table(name = "room")
 @Root(name = "room")
