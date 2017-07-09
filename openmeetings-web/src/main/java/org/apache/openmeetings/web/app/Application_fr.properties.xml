@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Choisir la salle</entry>
   <entry key="772">Auto-test</entry>
   <entry key="773">Commencer la réunion</entry>
-  <entry key="774">Chronologie d'emploi :</entry>
   <entry key="775">Début d'enreg.</entry>
   <entry key="776">Ne pas montrer le test audio/vidéo (Enregistrement) avant d'entrer en réunion.</entry>
   <entry key="777">Salles publiques</entry>
@@ -817,7 +816,6 @@
   <entry key="801">mois</entry>
   <entry key="802">Description</entry>
   <entry key="803">Participants</entry>
-  <entry key="804">{0}, votre plateforme de conférence web. Suivez les instructions.&lt;br/&gt;Cliquez sur le bouton 'Début' pour commencer une réunion immédiatement ou allez au calendrier pour planifier une réunion.</entry>
   <entry key="805">Planifier</entry>
   <entry key="806">Pour planifier une réunion vous pouvez créer un événement dans le calendrier.</entry>
   <entry key="807">Besoin d'aide ?</entry>
@@ -1915,4 +1913,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Chronologie d'emploi:</entry>
+	<entry key="widget.start.desc">{0}, votre plateforme de conférence web. Suivez les instructions.&lt;br/&gt;Cliquez sur le bouton 'Début' pour commencer une réunion immédiatement ou allez au calendrier pour planifier une réunion.</entry>
 </properties>

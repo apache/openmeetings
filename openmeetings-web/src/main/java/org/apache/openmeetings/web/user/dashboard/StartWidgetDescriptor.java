@@ -26,7 +26,7 @@ public class StartWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getName() {
-		return Application.getString(774L);
+		return Application.getString("widget.start.title");
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class StartWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getDescription() {
-		return Application.getString(804L);
+		return Application.getString("widget.start.desc");
 	}
 
 	@Override

@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Raum wählen</entry>
   <entry key="772">Prüfe Setup</entry>
   <entry key="773">Starte Konferenz</entry>
-  <entry key="774">Wie starte ich eine Konferenz</entry>
   <entry key="775">Starte Aufnahme</entry>
   <entry key="776">Audio-/Video-Test (Aufnahme) vor dem Betreten einer Konferenz nicht zeigen</entry>
   <entry key="777">Öffentliche Räume</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Monat</entry>
   <entry key="802">Beschreibung</entry>
   <entry key="803">Teilnehmer</entry>
-  <entry key="804">{0}, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen "Meetings planen" um eine Konferenz zu planen.</entry>
   <entry key="805">Konferenz planen</entry>
   <entry key="806">Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen.</entry>
   <entry key="807">Brauchen Sie Hilfe?</entry>
@@ -1928,4 +1926,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Wie starte ich eine Konferenz</entry>
+	<entry key="widget.start.desc">{0}, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen "Meetings planen" um eine Konferenz zu planen.</entry>
 </properties>

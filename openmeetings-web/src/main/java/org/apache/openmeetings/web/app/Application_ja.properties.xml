@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">会議室を選択する</entry>
   <entry key="772">設定を確認する</entry>
   <entry key="773">会議を開始する</entry>
-  <entry key="774">使用方法:</entry>
   <entry key="775">録画/録音品質のテスト</entry>
   <entry key="776">入室の際に音声/ビデオのテスト画面を表示しない</entry>
   <entry key="777">パブリック会議室</entry>
@@ -817,7 +816,6 @@
   <entry key="801">月表示</entry>
   <entry key="802">概要</entry>
   <entry key="803">参加者</entry>
-  <entry key="804">{0} (オープン・ミーティングス) ウェブ会議プラットホーム</entry>
   <entry key="805">会議を予約する</entry>
   <entry key="806">イベントをカレンダーに追加して会議を設定します。イベントのそれぞれについて会議室が自動生成されます。</entry>
   <entry key="807">お困りですか?</entry>
@@ -1923,4 +1921,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">使用方法:</entry>
+	<entry key="widget.start.desc">{0} (オープン・ミーティングス) ウェブ会議プラットホーム</entry>
 </properties>

@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Избор на стая</entry>
   <entry key="772">Проба настройки</entry>
   <entry key="773">Старт конференция</entry>
-  <entry key="774">Тип конференция:</entry>
   <entry key="775">Начало запис</entry>
   <entry key="776">Не показвай Аудио/Видео тест запис, преди влизане в конференцията.</entry>
   <entry key="777">Публични стаи</entry>
@@ -817,7 +816,6 @@
   <entry key="801">месец</entry>
   <entry key="802">Описание</entry>
   <entry key="803">Присъстващи</entry>
-  <entry key="804">Моля, следвайте инструкциите и натиснете бутона Start, за да започнете конференция веднага или отидете в календара, за да планирате бъдеща конференция.</entry>
   <entry key="805">Планиране среща</entry>
   <entry key="806">За да планирате среща, добавете събитие към каледара. За всяко събитие в каледара ще бъде автоматично създадена стая за конференция. Вие и всички присъстващи ще получат мейл с линк към стаята&amp;lt;br/&amp;gt;&amp;lt;br/&amp;gt; Може да изберете различни типове стаи с различен тип модерация.</entry>
   <entry key="807">Нужда от помощ?</entry>
@@ -1923,4 +1921,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Create a conference, quickly!</entry>
+	<entry key="widget.start.desc">{0}, your web conferencing platform. Моля, следвайте инструкциите и натиснете бутона Start, за да започнете конференция веднага или отидете в календара, за да планирате бъдеща конференция.</entry>
 </properties>

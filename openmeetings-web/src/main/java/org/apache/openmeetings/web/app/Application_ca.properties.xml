@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Anar a la Sala</entry>
   <entry key="772">Comprovar Config.</entry>
   <entry key="773">Iniciar Conferen.</entry>
-  <entry key="774">Instruccions Conferència:</entry>
   <entry key="775">Iniciar Gravació</entry>
   <entry key="776">No mostrar el test de gravació d'àudio /vídeo abans d'entrar en una Conferència</entry>
   <entry key="777">Salas públiques</entry>
@@ -817,7 +816,6 @@
   <entry key="801">mes</entry>
   <entry key="802">Descripció</entry>
   <entry key="803">Asistents</entry>
-  <entry key="804">{0}, la seva Plataforma Web de Videoconferència. Només segueixi les instruccions, pressioni el botó per a iniciar immediatament o vagi al Calendari per a programar una Trobada més endavant.</entry>
   <entry key="805">Progr. Trobada</entry>
   <entry key="806">Per a planificar una conferència, afegeixi un nou Esdeveniment en el Calendari. Per a cada Esdeveniment es crearà automàticament una Sala de (vídeo)conferència. Vostè i la resta d'assistents rebran un correu amb un enllaç de la sala. &lt;br/&gt;&lt;br/&gt;Pot escollir entre diferents tipus de sales amb diferents dissenys i sistemes de moderació. També pot escollir entre diferents tipus de notificació de correu que s'envien en cada esdeveniment del calendari.</entry>
   <entry key="807">¿Necessita ajuda?</entry>
@@ -1923,4 +1921,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Instruccions Conferència:</entry>
+	<entry key="widget.start.desc">{0}, la seva Plataforma Web de Videoconferència. Només segueixi les instruccions, pressioni el botó per a iniciar immediatament o vagi al Calendari per a programar una Trobada més endavant.</entry>
 </properties>

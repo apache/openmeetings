@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Konferencia szoba választása</entry>
   <entry key="772">Beállítás ellenőrzése</entry>
   <entry key="773">Konferencia indítása</entry>
-  <entry key="774">Hogyan indíthat konferenciát</entry>
   <entry key="775">Felvétel indítása</entry>
   <entry key="776">Ne mutassa az Audio / Video tesztet (Recording) mikor belép akonferenciába.</entry>
   <entry key="777">Nyilvános termek</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Hónap</entry>
   <entry key="802">Leírás</entry>
   <entry key="803">Látogatók</entry>
-  <entry key="804">{0}, az Ön webkonferencia platformja. Kövesse az utasításokat és gombnyomásra nyithat egy konferenciát, vagy bejegyezhet a naptárba és beállíthat egy előadást előre.</entry>
   <entry key="805">Plan a Meeting</entry>
   <entry key="806">A konferencia beállításához adja hozzá az eseményt a naptárhoz.</entry>
   <entry key="807">Segítségre van szüksége?</entry>
@@ -1911,4 +1909,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Hogyan indíthat konferenciát</entry>
+	<entry key="widget.start.desc">{0}, az Ön webkonferencia platformja. Kövesse az utasításokat és gombnyomásra nyithat egy konferenciát, vagy bejegyezhet a naptárba és beállíthat egy előadást előre.</entry>
 </properties>

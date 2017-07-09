@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Vælg rum</entry>
   <entry key="772">Kontroller Setup</entry>
   <entry key="773">Start konference</entry>
-  <entry key="774">Sådan gør du:</entry>
   <entry key="775">Start optagelse</entry>
   <entry key="776">Vis ikke Audio / Video Test (optagelse) før du deltager i en konference</entry>
   <entry key="777">Offentlige Rum</entry>
@@ -817,7 +816,6 @@
   <entry key="801">måned</entry>
   <entry key="802">Beskrivelse</entry>
   <entry key="803">Deltagere</entry>
-  <entry key="804">{0} konferenceplatform. Klik på startknappen for at starte en konference med det samme eller gå til din kalender for at planlægge et møde.</entry>
   <entry key="805">Planlæg et møde</entry>
   <entry key="806">For at sætte en konference op, kan du tilføje en event i din kalender. For hver event der oprettes, vil der automatisk blive oprettet et konferencerum. Alle deltagere samt dig selv, vil få tilsendt en email med en genvej (link) til det pågældende konferencerum.&lt;br/&gt;&lt;br/&gt;Du kan vælge mellem forskellige rumtyper med forskellig layout og funktionalitet. Du kan også vælge mellem forskellige notificeringsmuligheder (email), som sendes for hver kalender event.</entry>
   <entry key="807">Behov for hjælp?</entry>
@@ -1923,4 +1921,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Sådan gør du</entry>
+	<entry key="widget.start.desc">{0}, konferenceplatform. Klik på startknappen for at starte en konference med det samme eller gå til din kalender for at planlægge et møde.</entry>
 </properties>

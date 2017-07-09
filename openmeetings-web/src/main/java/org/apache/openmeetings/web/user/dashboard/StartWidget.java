@@ -33,14 +33,14 @@ public class StartWidget extends AbstractWidget {
 		location = new WidgetLocation(1, 0);
 		init();
 	}
-	
+
 	@Override
 	public void init() {
 		super.init();
-		title = Application.getString(774L);
+		title = Application.getString("widget.start.title");
 		id = "StartWidget";
 	}
-	
+
 	@Override
 	public WidgetView createView(String viewId) {
 		return new StartWidgetView(viewId, new Model<Widget>(this));

@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Vybrať miestnosť</entry>
   <entry key="772">Skontrolovať nastavenie</entry>
   <entry key="773">Začať konferenciu</entry>
-  <entry key="774">Ako konferencovať:</entry>
   <entry key="775">Začať nahrávanie</entry>
   <entry key="776">Nezobrazovať udio/video test pred vstupom do miestnosti</entry>
   <entry key="777">Verejné miestnosti</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Month</entry>
   <entry key="802">Description</entry>
   <entry key="803">Attendees</entry>
-  <entry key="804">Clickjobfair, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up a meeting.</entry>
   <entry key="805">Plan a meeting</entry>
   <entry key="806">To setup a conference you can add a new event in the calendar</entry>
   <entry key="807">Need help?</entry>
@@ -1923,4 +1921,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Ako konferencovať:</entry>
+	<entry key="widget.start.desc">{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up a meeting.</entry>
 </properties>

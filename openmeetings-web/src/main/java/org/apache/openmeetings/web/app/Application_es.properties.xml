@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Ir a la sala</entry>
   <entry key="772">Comprobar Config.</entry>
   <entry key="773">Iniciar Confer.</entry>
-  <entry key="774">Instrucciones Conferencia:</entry>
   <entry key="775">Iniciar Grabación</entry>
   <entry key="776">No mostrar el test de grabación de audio /vídeo antes de entrar en una Conferencia</entry>
   <entry key="777">Salas públicas</entry>
@@ -817,7 +816,6 @@
   <entry key="801">mes</entry>
   <entry key="802">Descripción</entry>
   <entry key="803">Asistentes</entry>
-  <entry key="804">{0}, su Plataforma Web de Videoconferencia. Sólo siga las instrucciones, presione el botón para iniciar inmediatamente o vaya al Calendario para programar un Encuentro más adelante.</entry>
   <entry key="805">Progr. Encuentro</entry>
   <entry key="806">Para planificar una conferencia, añada un nuevo Evento en el Calendario. Para cada Evento se creará automáticamente una sala de (vídeo)conferencia. Usted y el resto de asistentes recibirán un correo con un enlace de la sala.&lt;br/&gt;&lt;br/&gt;Puede escoger entre diferentes tipos de salas con diferentes diseños y sistemas de moderación. También puede escoger entre diferentes tipos de notificación de correo que se envían en cada evento del calendario.</entry>
   <entry key="807">¿Necesita ayuda?</entry>
@@ -1923,4 +1921,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Instrucciones Conferencia:</entry>
+	<entry key="widget.start.desc">{0}, su Plataforma Web de Videoconferencia. Sólo siga las instrucciones, presione el botón para iniciar inmediatamente o vaya al Calendario para programar un Encuentro más adelante.</entry>
 </properties>
