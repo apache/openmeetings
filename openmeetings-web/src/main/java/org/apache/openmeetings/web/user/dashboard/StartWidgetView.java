@@ -42,7 +42,7 @@ public class StartWidgetView extends WidgetView {
 		add(new WebMarkupContainer("step2").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step3").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
-		add(new Label("123msg", Application.getString(804)).setEscapeModelStrings(false));
+		add(new Label("123msg", Application.getString("widget.start.desc")).setEscapeModelStrings(false));
 		add(new Button("start").add(new PublicRoomsEventBehavior()));
 		add(new Button("calendar").add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
@@ -53,14 +53,14 @@ public class StartWidgetView extends WidgetView {
 			}
 		}));
 	}
-	
+
 	private class PublicRoomsEventBehavior extends AjaxEventBehavior {
 		private static final long serialVersionUID = 1L;
 
 		public PublicRoomsEventBehavior() {
 			super("click");
 		}
-		
+
 		@Override
 		protected void onEvent(AjaxRequestTarget target) {
 			((MainPage)getPage()).updateContents(ROOMS_PUBLIC, target);

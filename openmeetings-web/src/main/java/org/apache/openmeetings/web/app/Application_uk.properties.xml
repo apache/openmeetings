@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Вибір кімнати</entry>
   <entry key="772">Налаштування</entry>
   <entry key="773">До форуму</entry>
-  <entry key="774">Як брати участь у конференції:</entry>
   <entry key="775">Почати запис</entry>
   <entry key="776">Не показувати вікно перевірки аудіо/запису відео при вході в конференцію</entry>
   <entry key="777">Публічні кімнати</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Місяць</entry>
   <entry key="802">Опис</entry>
   <entry key="803">Учасники</entry>
-  <entry key="804">{0} - платформа ваших веб-конференцій. Ви можете 1) дотримуючись інструкцій, натиснути кнопку "Старт" і брати участь в конференції або 2) перейти в календар і призначити час.</entry>
   <entry key="805">Планування</entry>
   <entry key="806">Щоб призначити конференцію, додайте нове подію в календар.</entry>
   <entry key="807">Потрібна допомога?</entry>
@@ -1934,4 +1932,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Як брати участь у конференції:</entry>
+	<entry key="widget.start.desc">{0}, платформа ваших веб-конференцій. Ви можете 1) дотримуючись інструкцій, натиснути кнопку "Старт" і брати участь в конференції або 2) перейти в календар і призначити час.</entry>
 </properties>

@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Scegli la stanza</entry>
   <entry key="772">Verifica impostazioni</entry>
   <entry key="773">Avvia conferenza</entry>
-  <entry key="774">Come fare una videoconferenza:</entry>
   <entry key="775">Avvia test registrazione</entry>
   <entry key="776">Non mostrate il test Audio/Video prima di entrare in una conferenza</entry>
   <entry key="777">Stanze pubbliche</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Mese</entry>
   <entry key="802">Descrizione</entry>
   <entry key="803">Partecipanti</entry>
-  <entry key="804">{0}, la tua piattaforma di videoconferenza. Segui le istruzioni premendo il tasto inizio per cominciare una videoconferenza o pianifica una conferenza dal Calendario.</entry>
   <entry key="805">Pianifica una conferenza</entry>
   <entry key="806">Per pianificare una conferenza puoi aggiungere un evento nel calendario. Per ogni evento sar√† creata un apposita stanza. Tu e tutti gli invitati riceverete una mail con un link per accedere alla stanza.&lt;br/&gt;&lt;br/&gt;Puoi scegliere tra diverse tipologie di stanze con differenti tipologie di layout e moderazione. Puoi anche scegliere tra diversi tipi di notifica via email che avvisano dell'evento in calendario.</entry>
   <entry key="807">Serve aiuto?</entry>
@@ -1935,4 +1933,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Come fare una videoconferenza:</entry>
+	<entry key="widget.start.desc">{0}, la tua piattaforma di videoconferenza. Segui le istruzioni premendo il tasto inizio per cominciare una videoconferenza o pianifica una conferenza dal Calendario.</entry>
 </properties>

@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">选择会议室</entry>
   <entry key="772">检查音频视频设置</entry>
   <entry key="773">开始会议</entry>
-  <entry key="774">参加视频会议的步骤如下:</entry>
   <entry key="775">开始录制</entry>
   <entry key="776">下次进入会议前不要再显示视频音频测试（录制）对话框</entry>
   <entry key="777">公共会议室</entry>
@@ -817,7 +816,6 @@
   <entry key="801">月</entry>
   <entry key="802">描述</entry>
   <entry key="803">与会者</entry>
-  <entry key="804">本远程视频会议系统是一个用来召开远程视频会议、培训演讲、审查文件的平台。按照上面的指引，按下开始按钮可以马上进入会议。或者进入日历预约一个会议计划</entry>
   <entry key="805">预约会议</entry>
   <entry key="806">要建立一个会议，您可以添加日历上的一个新的事件。对于每个日历事件将自动创建一个会议室。你和每一个与会者将获得一个到房间链接的电子邮件。&lt;br/&gt;&lt;br/&gt;您可以选择不同的房间类型有不同的布局和适度系统。您也可以为每日历事件选择不同的电子邮件通知发送类型</entry>
   <entry key="807">需要帮助吗？</entry>
@@ -1919,4 +1917,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">参加视频会议的步骤如下:</entry>
+	<entry key="widget.start.desc">{0}, 本远程视频会议系统是一个用来召开远程视频会议、培训演讲、审查文件的平台。按照上面的指引，按下开始按钮可以马上进入会议。或者进入日历预约一个会议计划.</entry>
 </properties>

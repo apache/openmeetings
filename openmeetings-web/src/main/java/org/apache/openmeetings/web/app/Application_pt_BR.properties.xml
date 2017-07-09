@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Selecione a sala</entry>
   <entry key="772">Verifique a configuração</entry>
   <entry key="773">Inicie a Conferência</entry>
-  <entry key="774">Passos para a conferência:</entry>
   <entry key="775">Iniciar Gravação</entry>
   <entry key="776">Não mostrar Áudio/Vídeo teste (gravação) antes de entrar em uma conferência</entry>
   <entry key="777">Salas públicas</entry>
@@ -817,7 +816,6 @@
   <entry key="801">mês</entry>
   <entry key="802">Descrição</entry>
   <entry key="803">Participantes</entry>
-  <entry key="804">{0}, sua plataforma de conferência web. Você pode seguir os passos 1-2-3 para entrar em uma sala de conferência diretamente ou selecione a opcão calendário para planejar uma reunião.</entry>
   <entry key="805">Planejar Reunião</entry>
   <entry key="806">Para configurar uma conferência você pode adicionar um novo evento ao calendário</entry>
   <entry key="807">Precisa de ajuda?</entry>
@@ -1933,4 +1931,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Passos para a conferência:</entry>
+	<entry key="widget.start.desc">{0}, sua plataforma de conferência web. Você pode seguir os passos 1-2-3 para entrar em uma sala de conferência diretamente ou selecione a opcão calendário para planejar uma reunião.</entry>
 </properties>

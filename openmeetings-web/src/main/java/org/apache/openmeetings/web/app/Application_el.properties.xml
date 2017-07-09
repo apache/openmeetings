@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Επιλογή Δωματίου</entry>
   <entry key="772">Έλεγχος</entry>
   <entry key="773">Έναρξη Συνδιάσκεψης</entry>
-  <entry key="774">Διαδικασία Συνδιάσκεψης:</entry>
   <entry key="775">Μαγνητοσκόπηση</entry>
   <entry key="776">Να μην γίνεται Έλεγχος Ήχου/Βίντεο (Μαγνητοσκόπηση) πριν από την είσοδο σε Συνδιάσκεψη.</entry>
   <entry key="777">Δημόσια Δωμάτια</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Μήνας</entry>
   <entry key="802">Περιγραφή</entry>
   <entry key="803">Συμμετέχοντες</entry>
-  <entry key="804">{0}: Η Πλατφόρμα Σας για Web Συνδιασκέψεις. Μπορείτε να ακολουθήσετε τις Οδηγίες, να πατήσετε το κουμπί Έναρξης και να ξεκινήσετε αμέσως μια Συνδιάσκεψη ή να μετα-φερθείτε στο Ημερολόγιο και να προγραμματίσετε μια Συνδιάσκεψη για το μέλλον.</entry>
   <entry key="805">Σχέδιο Συνάντησης</entry>
   <entry key="806">Για να προγραμματίσετε μια Συνδιάσκεψη μπορείτε να προσθέσετε ένα νέο Συμβάν στο Ημερολόγιο. Για κάθε Συμβάν του Ημερολογίου δημιουργείται αυτόματα ένα Δωμάτιο Συνδιασκέψεων. Εσείς, μάζι με όλους τους Συμμετέχοντες στην Συνδιάσκεψη, θα λάβετε ένα mail με σύνδεσμο στο συγκεκριμένο Δωμάτιο.&lt;br/&gt;&lt;br/&gt;Μπορείτε να επιλέξετε μεταξύ διαφορετικών τύπων Δωματίων που έχουν διαφορετικές διατάξεις και διαφορετικά συστήματα Συντονισμού. Μπορείτε επίσης να επιλέξετε μεταξύ διαφορετικών τύπων Ειδοποίησης για το mail που θα σταλεί για κάθε Συμβάν του Ημερολογίου.</entry>
   <entry key="807">Χρειάζεστε Βοήθεια;</entry>
@@ -1933,4 +1931,7 @@
 	<entry key="sound.enable">Enable sound</entry>
 	<entry key="sound.mute">Mute sound</entry>
 	<entry key="current.password">Current password</entry>
+	<entry key="widget.start.title">Getting Started</entry>
+	<entry key="widget.start.header">Διαδικασία Συνδιάσκεψης:</entry>
+	<entry key="widget.start.desc">{0}, Η Πλατφόρμα Σας για Web Συνδιασκέψεις. Μπορείτε να ακολουθήσετε τις Οδηγίες, να πατήσετε το κουμπί Έναρξης και να ξεκινήσετε αμέσως μια Συνδιάσκεψη ή να μετα-φερθείτε στο Ημερολόγιο και να προγραμματίσετε μια Συνδιάσκεψη για το μέλλον.</entry>
 </properties>

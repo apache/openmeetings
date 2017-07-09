@@ -7,16 +7,16 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-  
+
       http://www.apache.org/licenses/LICENSE-2.0
-  
+
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-  
+
 -->
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
@@ -787,7 +787,6 @@
   <entry key="771">Выбор комнаты</entry>
   <entry key="772">Настройки</entry>
   <entry key="773">К конференции</entry>
-  <entry key="774">Как участвовать в конференции:</entry>
   <entry key="775">Начать запись</entry>
   <entry key="776">Не показывать окно проверки аудио/записи видео при входе в конференцию</entry>
   <entry key="777">Публичные комнаты</entry>
@@ -817,7 +816,6 @@
   <entry key="801">Месяц</entry>
   <entry key="802">Описание</entry>
   <entry key="803">Участники</entry>
-  <entry key="804">{0} - платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт" и участвовать в конференции или 2) перейти в календарь и назначить время.</entry>
   <entry key="805">Запланировать</entry>
   <entry key="806">Чтобы назначить конференцию, добавьте новое событие в календарь.</entry>
   <entry key="807">Нужна помощь?</entry>
@@ -1934,4 +1932,7 @@
 	<entry key="sound.enable">Включить звук</entry>
 	<entry key="sound.mute">Выключить звук</entry>
 	<entry key="current.password">Текущий пароль</entry>
+	<entry key="widget.start.title">Быстрый старт</entry>
+	<entry key="widget.start.header">Как участвовать в конференции</entry>
+	<entry key="widget.start.desc">{0}, платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт" и участвовать в конференции или 2) перейти в календарь и назначить время.</entry>
 </properties>
