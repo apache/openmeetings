@@ -103,7 +103,6 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 				, RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType() ? "" : "min.")));
 		if (isRtl()) {
 			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
-			response.render(CssHeaderItem.forUrl("css/admin-rtl.css"));
 		}
 		if (!Strings.isEmpty(getGaCode())) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js"))));

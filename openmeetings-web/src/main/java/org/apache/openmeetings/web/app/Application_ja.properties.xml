@@ -1783,6 +1783,9 @@
   <entry key="room.type.conference">会議(ユーザー数:1〜25)</entry>
   <entry key="room.type.restricted">大人数向け会議(ユーザー数:1〜150)</entry>
   <entry key="room.type.interview">インタビュー(1対1のミーティング；録画付き)</entry>
+  <entry key="room.type.conference.desc">"democratic" by default, every user can directly enable audio/video without need for asking</entry>
+  <entry key="room.type.restricted.desc">"restricted" by default: Every regular user will need to ask if he wants to share audio/video</entry>
+  <entry key="room.type.interview.desc">only 2 users can have audio/video enabled (more users can be in the room and you can switch the audio/video between them of course)</entry>
   <entry key="appointment.reminder.none">リマインダーを送信しない</entry>
   <entry key="appointment.reminder.email">Eメール</entry>
   <entry key="appointment.reminder.ical">iCal Eメール</entry>
