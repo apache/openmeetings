@@ -24,9 +24,9 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,7 +34,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
+import com.googlecode.wicket.jquery.core.JQueryBehavior;
+import com.googlecode.wicket.jquery.core.Options;
+import com.googlecode.wicket.jquery.ui.JQueryIcon;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
+import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 
 public class RoomListPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
@@ -59,6 +64,9 @@ public class RoomListPanel extends UserPanel {
 					}
 				}));
 				roomContainer.add(new Label("roomName", r.getName()));
+				final WebMarkupContainer info = new WebMarkupContainer("info");
+				roomContainer.add(info.setOutputMarkupId(true)
+						.add(AttributeModifier.append("title", getString(String.format("room.type.%s.desc", r.getType().name())))));
 				final Label curUsers = new Label("curUsers", new Model<>(Application.getRoomClients(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
@@ -70,7 +78,7 @@ public class RoomListPanel extends UserPanel {
 						onRoomEnter(target, roomId);
 					}
 				}));
-				roomContainer.add(new AjaxLink<Void>("refresh") {
+				roomContainer.add(new AjaxLink<String>("refresh") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -78,9 +86,16 @@ public class RoomListPanel extends UserPanel {
 						target.add(curUsers.setDefaultModelObject(Application.getRoomClients(r.getId()).size()));
 						onRefreshClick(target, r);
 					}
+
+					@Override
+					public void onConfigure(JQueryBehavior behavior) {
+						behavior.setOption("icon", Options.asString(JQueryIcon.REFRESH));
+						behavior.setOption("showLabel", false);
+					}
 				});
 			}
 		});
+		add(new TooltipBehavior(".info-text"));
 	}
 
 	public void update(IPartialPageRequestHandler handler, List<Room> rooms) {

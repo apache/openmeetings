@@ -1798,6 +1798,9 @@
   <entry key="room.type.conference">конференц зал (1-25 участников)</entry>
   <entry key="room.type.restricted">ограниченная (1-150 участников)</entry>
   <entry key="room.type.interview">интервью (1:1 встреча с записью)</entry>
+  <entry key="room.type.conference.desc">"Демократичная", у каждого пользователя есть права на использование камеры и микрофона. Видео "стартует" автоматически</entry>
+  <entry key="room.type.restricted.desc">"С ограничениями": Каждый пользователь должен получить права на использование камеры/микрофона</entry>
+  <entry key="room.type.interview.desc">только 2 пользователя могут использовать камеру/микрофон (в комнате может находиться любое количество участников, модератор может менять выступающих)</entry>
   <entry key="appointment.reminder.none">не посылать уведомление</entry>
   <entry key="appointment.reminder.email">обычный e-майл</entry>
   <entry key="appointment.reminder.ical">iCal e-майл</entry>

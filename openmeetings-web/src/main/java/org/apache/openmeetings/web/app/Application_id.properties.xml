@@ -1797,6 +1797,9 @@
   <entry key="room.type.conference">conference (1-25 users)</entry>
   <entry key="room.type.restricted">restricted (1-150 users)</entry>
   <entry key="room.type.interview">interview (1:1 meeting with recording)</entry>
+  <entry key="room.type.conference.desc">"democratic" by default, every user can directly enable audio/video without need for asking</entry>
+  <entry key="room.type.restricted.desc">"restricted" by default: Every regular user will need to ask if he wants to share audio/video</entry>
+  <entry key="room.type.interview.desc">only 2 users can have audio/video enabled (more users can be in the room and you can switch the audio/video between them of course)</entry>
   <entry key="appointment.reminder.none">do not send notification</entry>
   <entry key="appointment.reminder.email">simple email</entry>
   <entry key="appointment.reminder.ical">iCal email</entry>

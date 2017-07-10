@@ -90,6 +90,9 @@ span.css-emoticon {
 }
 .chat.dropdown-menu {
 	left: initial !important;
-    right: -50px !important;
+	right: -50px !important;
+	float: right !important;
+}
+.adminForm label, .adminForm input, .adminForm select, .adminForm textarea {
 	float: right !important;
 }

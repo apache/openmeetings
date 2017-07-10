@@ -1781,6 +1781,9 @@
   <entry key="room.type.conference">csoportmunka (n:n) konferencia (1-25 látogatóval)</entry>
   <entry key="room.type.restricted">moderált (1:n) konferencia (1-150 látogatóval)</entry>
   <entry key="room.type.interview">interjú (1:1 megbeszélés felvétellel)</entry>
+  <entry key="room.type.conference.desc">"democratic" by default, every user can directly enable audio/video without need for asking</entry>
+  <entry key="room.type.restricted.desc">"restricted" by default: Every regular user will need to ask if he wants to share audio/video</entry>
+  <entry key="room.type.interview.desc">only 2 users can have audio/video enabled (more users can be in the room and you can switch the audio/video between them of course)</entry>
   <entry key="appointment.reminder.none">ne küldjön értesítést</entry>
   <entry key="appointment.reminder.email">egyszerű e-mail</entry>
   <entry key="appointment.reminder.ical">iCal email</entry>
