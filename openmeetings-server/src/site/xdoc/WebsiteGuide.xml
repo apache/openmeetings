@@ -59,7 +59,7 @@ git checkout asf-site
 						then you run the command:
 						<source><![CDATA[mvn install -P allModules,unpacked -DskipTests=true]]></source>
 						control the output locally in the folder <tt>openmeetings-server/target/server/webapps/openmeetings/docs/</tt><br/>
-						copy site contents into target folder: <source><![CDATA[cp -r openmeetings-server/target/server/webapps/openmeetings/docs/* ../site/]]></source>
+						copy site contents into target folder: <source><![CDATA[cp -r target/site/* ../site/]]></source>
 						And then commit your changes into the Git <i>both</i> the edited xml(s) and generated html files.
 					</div>
 					<p>

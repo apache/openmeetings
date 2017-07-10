@@ -16,9 +16,9 @@
    limitations under the License.
 -->
 <component
-	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/component/1.1.3"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/component/1.1.3 http://maven.apache.org/xsd/component-1.1.3.xsd">
+		xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/component/1.1.3"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/component/1.1.3 http://maven.apache.org/xsd/component-1.1.3.xsd">
 	<fileSets>
 		<fileSet>
 			<directory>${server.dir}</directory>
@@ -141,87 +141,6 @@
 		<fileSet>
 			<directory>target/site</directory>
 			<outputDirectory>${om.webapp}/docs</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-core/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-core</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-db/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-db</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-flash/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-flash</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-install/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-install</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-screenshare/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-screenshare</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-service/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-service</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-util/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-util</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-web</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-webservice/target/site</directory><!-- FIXME should be implemented differently -->
-			<outputDirectory>${om.webapp}/docs/openmeetings-webservice</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
 		</fileSet>
 	</fileSets>
 </component>
