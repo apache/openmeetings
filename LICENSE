@@ -214,11 +214,9 @@ admin.sh
 network_test.sh
 webapps/openmeetings/conf/om_ldap.cfg
 webapps/openmeetings/css/activities.css
-webapps/openmeetings/css/admin.css
 webapps/openmeetings/css/admin-rtl.css
 webapps/openmeetings/css/calendar.css
 webapps/openmeetings/css/chat.css
-webapps/openmeetings/css/forms.css
 webapps/openmeetings/css/history.css
 webapps/openmeetings/css/menu.css
 webapps/openmeetings/css/room.css
