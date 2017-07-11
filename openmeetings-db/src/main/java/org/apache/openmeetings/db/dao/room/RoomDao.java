@@ -274,7 +274,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		}
 	}
 
-	public Room getExternal(Type type, String externalType, Long externalId) {
+	public Room getExternal(Type type, String externalType, String externalId) {
 		log.debug("getExternal : " + externalId + " - " + externalType + " - " + type);
 		List<Room> ll = em.createNamedQuery("getRoomByExternalId", Room.class)
 				.setParameter("externalId", externalId)
