@@ -512,7 +512,7 @@ var Clipart = function(wb, btn) {
 var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
-	var wb = {id: -1}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
+	var wb = {id: -1, name: ''}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
 			, minWidth = 0, minHeight = 0, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
 
 	function getBtn(m) {
@@ -906,7 +906,7 @@ var Wb = function() {
 			}
 		});
 	}
-	/*TODO interactive text chage
+	/*TODO interactive text change
 	var textEditedHandler = function (e) {
 		var obj = e.target;
 		console.log('Text Edit Exit', obj);
@@ -989,8 +989,9 @@ var Wb = function() {
 			internalInit();
 		}
 	};
-	wb.init = function(_wbId, tid, _role) {
-		wb.id = _wbId;
+	wb.init = function(wbo, tid, _role) {
+		wb.id = wbo.wbId;
+		wb.name = wbo.name;
 		a = $('#' + tid);
 		addCanvas();
 		wb.setRole(_role);
@@ -1271,7 +1272,7 @@ var WbArea = (function() {
 		_addCloseBtn(li);
 	
 		var wbo = Wb();
-		wbo.init(obj.wbId, tid, role);
+		wbo.init(obj, tid, role);
 		wb.data(wbo);
 		_resizeWbs();
 	}
@@ -1330,6 +1331,14 @@ var WbArea = (function() {
 		var wbTabs = area.find(".tabs.ui-tabs");
 		wbTabs.height(hh);
 		_resizeWbs();
+	}
+	self.download = function(fmt) {
+		var wb = getActive().data(), cnv = wb.getCanvas()
+			, a = document.createElement('a');
+		a.setAttribute('target', '_blank')
+		a.setAttribute('download', wb.name + '.' + fmt);
+		a.setAttribute('href', cnv.toDataURL({format: fmt, width: cnv.width, height: cnv.height, left: 0, top: 0})); //TODO zoom
+		a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
 	}
 	return self;
 })();

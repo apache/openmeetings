@@ -573,11 +573,6 @@
   <entry key="557">Указатель</entry>
   <entry key="558">Синхронізація</entry>
   <entry key="559">Синхронізація учасників, зачекайте</entry>
-  <entry key="560">&lt;u&gt;Завантажити як SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Завантажити як PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Завантажити як JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Завантажити як PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Завантажити як TIF&lt;/u&gt;</entry>
   <entry key="565">Нагадувач:</entry>
   <entry key="566">Категорія:</entry>
   <entry key="567">Повторення:</entry>
@@ -1929,4 +1924,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Як брати участь у конференції:</entry>
 	<entry key="widget.start.desc">{0}, платформа ваших веб-конференцій. Ви можете 1) дотримуючись інструкцій, натиснути кнопку "Старт" і брати участь в конференції або 2) перейти в календар і призначити час.</entry>
+	<entry key="download.png">Завантажити як PNG</entry>
+	<entry key="download.jpg">Завантажити як JPG</entry>
+	<entry key="download.pdf">Завантажити як PDF</entry>
 </properties>

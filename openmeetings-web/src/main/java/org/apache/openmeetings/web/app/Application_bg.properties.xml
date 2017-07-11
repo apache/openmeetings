@@ -573,11 +573,6 @@
   <entry key="557">Указател</entry>
   <entry key="558">Синхронизация</entry>
   <entry key="559">Синхронизация на потребители, моля изчакайте</entry>
-  <entry key="560">&amp;lt;u&amp;gt;Сваляне в SVG&amp;lt;/u&amp;gt;</entry>
-  <entry key="561">&amp;lt;u&amp;gt;Сваляне в PNG&amp;lt;/u&amp;gt;</entry>
-  <entry key="562">&amp;lt;u&amp;gt;Сваляне в JPG&amp;lt;/u&amp;gt;</entry>
-  <entry key="563">&amp;lt;u&amp;gt;Сваляне в PDF&amp;lt;/u&amp;gt;</entry>
-  <entry key="564">&amp;lt;u&amp;gt;Сваляне в TIF&amp;lt;/u&amp;gt;</entry>
   <entry key="565">Напомняне:</entry>
   <entry key="566">Категория:</entry>
   <entry key="567">Повтаряне:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Create a conference, quickly!</entry>
 	<entry key="widget.start.desc">{0}, your web conferencing platform. Моля, следвайте инструкциите и натиснете бутона Start, за да започнете конференция веднага или отидете в календара, за да планирате бъдеща конференция.</entry>
+	<entry key="download.png">Сваляне в PNG</entry>
+	<entry key="download.jpg">Сваляне в JPG</entry>
+	<entry key="download.pdf">Сваляне в PDF</entry>
 </properties>

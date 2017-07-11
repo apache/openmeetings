@@ -573,11 +573,6 @@
   <entry key="557">Pointer</entry>
   <entry key="558">Synchronizing</entry>
   <entry key="559">Synchronizing, please wait</entry>
-  <entry key="560">&lt;u&gt;Download as SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Download as PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Download as JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Download as PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Download as TIF&lt;/u&gt;</entry>
   <entry key="565">Notification type</entry>
   <entry key="566">Category</entry>
   <entry key="567">Repetition</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Create a conference, quickly!</entry>
 	<entry key="widget.start.desc">{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.</entry>
+	<entry key="download.png">Download as PNG</entry>
+	<entry key="download.jpg">Download as JPG</entry>
+	<entry key="download.pdf">Download as PDF</entry>
 </properties>

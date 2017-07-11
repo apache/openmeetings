@@ -573,11 +573,6 @@
   <entry key="557">Puntatore</entry>
   <entry key="558">Sincronizzazione</entry>
   <entry key="559">Sincronizzazione, prego attendere</entry>
-  <entry key="560">Scarica come SVG</entry>
-  <entry key="561">Scarica come PNG</entry>
-  <entry key="562">Scarica come JPG</entry>
-  <entry key="563">Scarica come PDF</entry>
-  <entry key="564">Scarica come TIF</entry>
   <entry key="565">Tipo di notifica</entry>
   <entry key="566">Categoria</entry>
   <entry key="567">Ripetizione</entry>
@@ -1929,4 +1924,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Come fare una videoconferenza:</entry>
 	<entry key="widget.start.desc">{0}, la tua piattaforma di videoconferenza. Segui le istruzioni premendo il tasto inizio per cominciare una videoconferenza o pianifica una conferenza dal Calendario.</entry>
+	<entry key="download.png">Scarica come PNG</entry>
+	<entry key="download.jpg">Scarica come JPG</entry>
+	<entry key="download.pdf">Scarica come PDF</entry>
 </properties>

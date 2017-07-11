@@ -573,11 +573,6 @@
   <entry key="557">Mutató</entry>
   <entry key="558">Szinkronizálás</entry>
   <entry key="559">Szinkronizálás a látogatókkal, kérem várjon</entry>
-  <entry key="560">&lt;u&gt;Letöltés mint SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Letöltés mint PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Letöltés mint JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Letöltés mint PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Letöltés mint TIF&lt;/u&gt;</entry>
   <entry key="565">Emlékeztető:</entry>
   <entry key="566">Kategória:</entry>
   <entry key="567">Ismétlés:</entry>
@@ -1915,4 +1910,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Hogyan indíthat konferenciát</entry>
 	<entry key="widget.start.desc">{0}, az Ön webkonferencia platformja. Kövesse az utasításokat és gombnyomásra nyithat egy konferenciát, vagy bejegyezhet a naptárba és beállíthat egy előadást előre.</entry>
+	<entry key="download.png">Letöltés mint PNG</entry>
+	<entry key="download.jpg">Letöltés mint JPG</entry>
+	<entry key="download.pdf">Letöltés mint PDF</entry>
 </properties>

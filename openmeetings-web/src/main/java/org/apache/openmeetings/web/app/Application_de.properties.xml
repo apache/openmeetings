@@ -573,11 +573,6 @@
   <entry key="557">Pointer</entry>
   <entry key="558">Synchronisiere</entry>
   <entry key="559">Synchroniziere Benutzer, bitte warten Sie</entry>
-  <entry key="560">&lt;u&gt;Download als SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Download als PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Download als JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Download als PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Download als TIF&lt;/u&gt;</entry>
   <entry key="565">Erinnerung</entry>
   <entry key="566">Kategorie</entry>
   <entry key="567">Wiederholung</entry>
@@ -1932,4 +1927,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Wie starte ich eine Konferenz</entry>
 	<entry key="widget.start.desc">{0}, Ihre Web Konferenz Plattform. Entweder starten Sie sofort ein Meeting indem Sie den 1-2-3 Anweisungen folgen oder Sie benutzen "Meetings planen" um eine Konferenz zu planen.</entry>
+	<entry key="download.png">Download als PNG</entry>
+	<entry key="download.jpg">Download als JPG</entry>
+	<entry key="download.pdf">Download als PDF</entry>
 </properties>

@@ -573,11 +573,6 @@
   <entry key="557">ポインタ</entry>
   <entry key="558">同期しています</entry>
   <entry key="559">ユーザーを同期しています。しばらくお待ちください。</entry>
-  <entry key="560">&lt;u&gt;SVGとしてダウンロード&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;PNGとしてダウンロード&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;JPGとしてダウンロード&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;PDFとしてダウンロード&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;TIFとしてダウンロード&lt;/u&gt;</entry>
   <entry key="565">リマインダ:</entry>
   <entry key="566">カテゴリ:</entry>
   <entry key="567">繰り返し:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">使用方法:</entry>
 	<entry key="widget.start.desc">{0} (オープン・ミーティングス) ウェブ会議プラットホーム</entry>
+	<entry key="download.png">PNGとしてダウンロード</entry>
+	<entry key="download.jpg">JPGとしてダウンロード</entry>
+	<entry key="download.pdf">PDFとしてダウンロード</entry>
 </properties>

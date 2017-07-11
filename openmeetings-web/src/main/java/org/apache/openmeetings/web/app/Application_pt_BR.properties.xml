@@ -573,11 +573,6 @@
   <entry key="557">Ponteiro</entry>
   <entry key="558">Sincronizando</entry>
   <entry key="559">Sincronizando usuários, aguarde.</entry>
-  <entry key="560">&lt;u&gt;Download como SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Download como PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Download como JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Download como PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Download como TIF&lt;/u&gt;</entry>
   <entry key="565">Lembrete:</entry>
   <entry key="566">Categoria:</entry>
   <entry key="567">Repetição:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Passos para a conferência:</entry>
 	<entry key="widget.start.desc">{0}, sua plataforma de conferência web. Você pode seguir os passos 1-2-3 para entrar em uma sala de conferência diretamente ou selecione a opcão calendário para planejar uma reunião.</entry>
+	<entry key="download.png">Download como PNG</entry>
+	<entry key="download.jpg">Download como JPG</entry>
+	<entry key="download.pdf">Download como PDF</entry>
 </properties>

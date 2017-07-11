@@ -573,11 +573,6 @@
   <entry key="557">Указатель</entry>
   <entry key="558">Синхронизация</entry>
   <entry key="559">Синхронизация участников, подождите</entry>
-  <entry key="560"></entry>
-  <entry key="561"></entry>
-  <entry key="562"></entry>
-  <entry key="563"></entry>
-  <entry key="564"></entry>
   <entry key="565">Напоминатель:</entry>
   <entry key="566">Категория:</entry>
   <entry key="567">Повторение:</entry>
@@ -1928,4 +1923,7 @@
 	<entry key="widget.start.title">Быстрый старт</entry>
 	<entry key="widget.start.header">Как участвовать в конференции</entry>
 	<entry key="widget.start.desc">{0}, платформа ваших веб-конференций. Вы можете 1) следуя инструкциям, нажать кнопку "Старт" и участвовать в конференции или 2) перейти в календарь и назначить время.</entry>
+	<entry key="download.png">Сохранить как PNG</entry>
+	<entry key="download.jpg">Сохранить как JPG</entry>
+	<entry key="download.pdf">Сохранить как PDF</entry>
 </properties>

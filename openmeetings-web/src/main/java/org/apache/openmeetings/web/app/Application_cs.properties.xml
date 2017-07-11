@@ -573,11 +573,6 @@
   <entry key="557">Ukazovátko</entry>
   <entry key="558">Synchronizuji</entry>
   <entry key="559">Synchronizuji uživatele, čekejte prosím</entry>
-  <entry key="560">&lt;u&gt;Načti jako SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Načti jako PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Načti jako JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Načti jako PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Načti jako TIF&lt;/u&gt;</entry>
   <entry key="565">Připomínka:</entry>
   <entry key="566">Kategorie:</entry>
   <entry key="567">Opakování:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Create a conference, quickly!</entry>
 	<entry key="widget.start.desc">{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.</entry>
+	<entry key="download.png">Načti jako PNG</entry>
+	<entry key="download.jpg">Načti jako JPG</entry>
+	<entry key="download.pdf">Načti jako PDF</entry>
 </properties>

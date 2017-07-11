@@ -573,11 +573,6 @@
   <entry key="557">Punter</entry>
   <entry key="558">Sincronitzant</entry>
   <entry key="559">Sincronitzant usuaris. Per favor, esperi.</entry>
-  <entry key="560">&lt;u&gt;Descarregar com SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Descarregar com PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Descarregar com JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Descarregar com PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Descarregar com TIF&lt;/u&gt;</entry>
   <entry key="565">Recordi:</entry>
   <entry key="566">Categoria:</entry>
   <entry key="567">Repetició:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Instruccions Conferència:</entry>
 	<entry key="widget.start.desc">{0}, la seva Plataforma Web de Videoconferència. Només segueixi les instruccions, pressioni el botó per a iniciar immediatament o vagi al Calendari per a programar una Trobada més endavant.</entry>
+	<entry key="download.png">Descarregar com PNG</entry>
+	<entry key="download.jpg">Descarregar com JPG</entry>
+	<entry key="download.pdf">Descarregar com PDF</entry>
 </properties>

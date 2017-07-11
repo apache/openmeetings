@@ -266,6 +266,22 @@ public class RoomMenuPanel extends Panel {
 		actionsMenu.getItems().add(pollResultMenuItem); //FIXME enable/disable
 		actionsMenu.getItems().add(pollVoteMenuItem); //FIXME enable/disable
 		actionsMenu.getItems().add(sipDialerMenuItem);
+		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.png"), Application.getString("download.png")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.appendJavaScript("WbArea.download('png');");
+			}
+		});
+		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.jpg"), Application.getString("download.jpg")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				target.appendJavaScript("WbArea.download('jpeg');");
+			}
+		});
 		//TODO seems need to be removed actionsMenu.getItems().add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
 		menu.add(actionsMenu);
 		return menu;
@@ -351,4 +367,3 @@ public class RoomMenuPanel extends Panel {
 		}
 	}
 }
-

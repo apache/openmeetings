@@ -573,11 +573,6 @@
   <entry key="557">Peger</entry>
   <entry key="558">Synkroniserer</entry>
   <entry key="559">Synkroniserer brugere, vent venligst</entry>
-  <entry key="560">&lt;u&gt;Dovnload som SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Download som PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Download som JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Download som PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Download som TIF&lt;/u&gt;</entry>
   <entry key="565">Påmindelse:</entry>
   <entry key="566">Kategori:</entry>
   <entry key="567">Repetition:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Sådan gør du</entry>
 	<entry key="widget.start.desc">{0}, konferenceplatform. Klik på startknappen for at starte en konference med det samme eller gå til din kalender for at planlægge et møde.</entry>
+	<entry key="download.png">Download som PNG</entry>
+	<entry key="download.jpg">Download som JPG</entry>
+	<entry key="download.pdf">Download som PDF</entry>
 </properties>

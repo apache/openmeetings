@@ -54,4 +54,3 @@ public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuIt
 		return this;
 	}
 }
-

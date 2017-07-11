@@ -573,11 +573,6 @@
   <entry key="557">พอยเตอร์</entry>
   <entry key="558">กำลังซิงค์โครไนซ์</entry>
   <entry key="559">กำลังซิงค์โครไนซ์กับผู้ใช้ โปรดรอสักครู่</entry>
-  <entry key="560">&lt;u&gt;ดาวน์โหลดเป็น SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;ดาวน์โหลดเป็น PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;ดาวน์โหลดเป็น JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;ดาวน์โหลดเป็น PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;ดาวน์โหลดเป็น TIF&lt;/u&gt;</entry>
   <entry key="565">เตือนความจำ:</entry>
   <entry key="566">ประเภท:</entry>
   <entry key="567">การทำซ้ำ:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Create a conference, quickly!</entry>
 	<entry key="widget.start.desc">{0}, your web conferencing platform. You can either follow the 1-2-3 steps to enter a conference room directly or you choose the Calendar to set up and plan a meeting.</entry>
+	<entry key="download.png">ดาวน์โหลดเป็น PNG</entry>
+	<entry key="download.jpg">ดาวน์โหลดเป็น JPG</entry>
+	<entry key="download.pdf">ดาวน์โหลดเป็น PDF</entry>
 </properties>

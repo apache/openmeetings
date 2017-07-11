@@ -573,11 +573,6 @@
   <entry key="557">Pointeur</entry>
   <entry key="558">Synchronisation</entry>
   <entry key="559">Synchronisation des utilisateurs, patientez s'il vous plait...</entry>
-  <entry key="560">&lt;u&gt;Télécharger en SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Télécharger en PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Télécharger en JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Télécharger en PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Télécharger en TIF&lt;/u&gt;</entry>
   <entry key="565">Rappel :</entry>
   <entry key="566">Catégorie:</entry>
   <entry key="567">Répétition:</entry>
@@ -1919,4 +1914,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Chronologie d'emploi:</entry>
 	<entry key="widget.start.desc">{0}, votre plateforme de conférence web. Suivez les instructions.&lt;br/&gt;Cliquez sur le bouton 'Début' pour commencer une réunion immédiatement ou allez au calendrier pour planifier une réunion.</entry>
+	<entry key="download.png">Télécharger en PNG</entry>
+	<entry key="download.jpg">Télécharger en JPG</entry>
+	<entry key="download.pdf">Télécharger en PDF</entry>
 </properties>

@@ -573,11 +573,6 @@
   <entry key="557">Δείκτης</entry>
   <entry key="558">Συγχρονισμός</entry>
   <entry key="559">Συγχρονισμός Χρηστών. Παρακαλούμε περιμένετε.</entry>
-  <entry key="560">&lt;u&gt;Αποθήκευση ως SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;Αποθήκευση ως PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;Αποθήκευση ως JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;Αποθήκευση ως PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;Αποθήκευση ως TIF&lt;/u&gt;</entry>
   <entry key="565">Υπενθύμιση:</entry>
   <entry key="566">Κατηγορία:</entry>
   <entry key="567">Επανάληψη:</entry>
@@ -1927,4 +1922,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">Διαδικασία Συνδιάσκεψης:</entry>
 	<entry key="widget.start.desc">{0}, Η Πλατφόρμα Σας για Web Συνδιασκέψεις. Μπορείτε να ακολουθήσετε τις Οδηγίες, να πατήσετε το κουμπί Έναρξης και να ξεκινήσετε αμέσως μια Συνδιάσκεψη ή να μετα-φερθείτε στο Ημερολόγιο και να προγραμματίσετε μια Συνδιάσκεψη για το μέλλον.</entry>
+	<entry key="download.png">Αποθήκευση ως PNG</entry>
+	<entry key="download.jpg">Αποθήκευση ως JPG</entry>
+	<entry key="download.pdf">Αποθήκευση ως PDF</entry>
 </properties>

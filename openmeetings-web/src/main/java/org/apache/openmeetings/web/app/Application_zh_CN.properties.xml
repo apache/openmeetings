@@ -573,11 +573,6 @@
   <entry key="557">指针</entry>
   <entry key="558">同步</entry>
   <entry key="559">正在同步用户, 请等待</entry>
-  <entry key="560">&lt;u&gt;下载为 SVG&lt;/u&gt;</entry>
-  <entry key="561">&lt;u&gt;下载为 PNG&lt;/u&gt;</entry>
-  <entry key="562">&lt;u&gt;下载为 JPG&lt;/u&gt;</entry>
-  <entry key="563">&lt;u&gt;下载为 PDF&lt;/u&gt;</entry>
-  <entry key="564">&lt;u&gt;下载为 TIF&lt;/u&gt;</entry>
   <entry key="565">提醒:</entry>
   <entry key="566">类别:</entry>
   <entry key="567">重复:</entry>
@@ -1917,4 +1912,7 @@
 	<entry key="widget.start.title">Getting Started</entry>
 	<entry key="widget.start.header">参加视频会议的步骤如下:</entry>
 	<entry key="widget.start.desc">{0}, 本远程视频会议系统是一个用来召开远程视频会议、培训演讲、审查文件的平台。按照上面的指引，按下开始按钮可以马上进入会议。或者进入日历预约一个会议计划.</entry>
+	<entry key="download.png">下载为 PNG</entry>
+	<entry key="download.jpg">下载为 JPG</entry>
+	<entry key="download.pdf">下载为 PDF</entry>
 </properties>
