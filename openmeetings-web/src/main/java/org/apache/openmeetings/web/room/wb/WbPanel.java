@@ -495,7 +495,10 @@ public class WbPanel extends Panel {
 					File f = fi.getFile();
 					if (f.exists() && f.isFile()) {
 						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
-							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), (o) -> addFileUrl(wbs.getUid(), o));
+							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), (o) -> {
+									wb.getRoomItems().put(o.getString("uid"), o);
+									return addFileUrl(wbs.getUid(), o);
+								});
 							sendWbAll(Action.load, getObjWbJson(wb.getId(), arr));
 						} catch (Exception e) {
 							log.error("Unexpected error while loading WB", e);
