@@ -152,7 +152,7 @@ public class RoomWebService extends BaseWebService {
 	public RoomDTO getExternal(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("type") @WebParam(name="type") String type
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
-			, @PathParam("externalid") @WebParam(name="externalid") Long externalId
+			, @PathParam("externalid") @WebParam(name="externalid") String externalId
 			, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
 		try {
 			Sessiondata sd = check(sid);
@@ -161,9 +161,15 @@ public class RoomWebService extends BaseWebService {
 				RoomDao roomDao = getRoomDao();
 				Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
 				if (r == null) {
-					r = room.get();
-					r = roomDao.update(r, userId);
-					return new RoomDTO(r);
+					if (room == null) {
+						return null;
+					} else {
+						r = room.get();
+						r.setExternalType(externalType);
+						r.setExternalId(externalId);
+						r = roomDao.update(r, userId);
+						return new RoomDTO(r);
+					}
 				} else {
 					return new RoomDTO(r);
 				}

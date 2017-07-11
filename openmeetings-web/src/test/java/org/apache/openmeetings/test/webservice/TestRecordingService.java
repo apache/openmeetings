@@ -35,14 +35,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestRecordingService extends AbstractWebServiceTest {
 	public final static String RECORD_SERVICE_URL = BASE_SERVICES_URL + "/record";
-	private final static String UNIT_TEST_GROUP = "om_unit_tests";
 	@Autowired
 	private RecordingDao recordingDao;
 
 	private User getExternalUser() throws Exception {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
-		u.setExternalType(UNIT_TEST_GROUP);
+		u.setExternalType(UNIT_TEST_EXT_TYPE);
 		u.setExternalId(uuid);
 		webCreateUser(u);
 		return u;
@@ -57,7 +56,7 @@ public class TestRecordingService extends AbstractWebServiceTest {
 		r.setRoomId(5L);
 		r = recordingDao.update(r);
 		ServiceResult sr = login();
-		Collection<? extends RecordingDTO> recs = getClient(RECORD_SERVICE_URL).path("/" + UNIT_TEST_GROUP).query("sid", sr.getMessage())
+		Collection<? extends RecordingDTO> recs = getClient(RECORD_SERVICE_URL).path("/" + UNIT_TEST_EXT_TYPE).query("sid", sr.getMessage())
 				.getCollection(RecordingDTO.class);
 		assertNotNull("Valid collection should be returned", recs);
 		assertFalse("Collection of the recordings should not be empty", recs.isEmpty());
