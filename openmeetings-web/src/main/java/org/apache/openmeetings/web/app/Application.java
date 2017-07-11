@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_ID;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
@@ -50,6 +52,7 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -316,7 +319,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				User u = udao.get(sd.getUserId());
 				rcl = getBean(MobileService.class).create(rcl, u);
 				//Mobile client enters the room
-				client = new Client(rcl, udao);
+				client = new Client(rcl, udao.get(rcl.getUserId()));
 				addOnlineUser(client);
 				if (rcl.getRoomId() != null) {
 					client.setCam(0);
@@ -326,6 +329,23 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				}
 				//FIXME TODO rights
+			} else if (client == null && rcl.isSipTransport()) {
+				if (!getBean(SipDao.class).getUid().equals(rcl.getUid())) {
+					return null;
+				}
+				rcl.setPicture_uri("phone.png");
+				//SipTransport enters the room
+				User u = new User();
+				u.setId(SIP_USER_ID);
+				u.setFirstname(SIP_USER_NAME);
+				client = new Client(rcl, u);
+				addOnlineUser(client);
+				client.setCam(0);
+				client.setMic(0);
+				client.set(Activity.broadcastA);
+				addUserToRoom(client);
+				//FIXME TODO unify this
+				WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 			} else {
 				return null;
 			}

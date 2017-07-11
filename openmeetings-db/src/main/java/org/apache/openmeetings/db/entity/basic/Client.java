@@ -150,10 +150,10 @@ public class Client implements IClient {
 		sid = UUID.randomUUID().toString();
 	}
 
-	public Client(StreamClient rcl, UserDao dao) {
+	public Client(StreamClient rcl, User user) {
 		this.sessionId = UUID.randomUUID().toString();
 		this.pageId = 0;
-		this.user = dao.get(rcl.getUserId());
+		this.user = user;
 		this.connectedSince = new Date();
 		uid = rcl.getUid();
 		sid = rcl.getOwnerSid();

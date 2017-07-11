@@ -36,10 +36,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
@@ -89,6 +91,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String MOBILE_PARAM = "mobileClient";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
+	private static final String SIP_PARAM = "sipClient";
 	public static final String HIBERNATE_SCOPE = "hibernate";
 	public static final String FLASH_SECURE = "secure";
 	public static final String FLASH_NATIVE_SSL = "native";
@@ -193,7 +196,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String tcUrl = map.containsKey("tcUrl") ? (String)map.get("tcUrl") : "";
 		Map<String, Object> connParams = getConnParams(params);
 		String uid = (String)connParams.get("uid");
-		if ("noclient".equals(uid)) {
+		StreamClient rcm = new StreamClient();
+		rcm.setScope(conn.getScope().getName());
+		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
+		if (hibernate && "noclient".equals(uid)) {
 			return true;
 		}
 		String ownerSid = (String)connParams.get(OWNER_SID_PARAM);
@@ -204,9 +210,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.warn("No Owner SID is provided, client is rejected");
 			return rejectClient();
 		}
-		StreamClient rcm = new StreamClient();
-		rcm.setScope(conn.getScope().getName());
-		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
 		if (hibernate) {
 			return true; //mobile initial connect
 		}
@@ -216,6 +219,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 		if (Boolean.TRUE.equals(connParams.get(MOBILE_PARAM))) {
 			rcm.setMobile(true);
+		}
+		if (Boolean.TRUE.equals(connParams.get(SIP_PARAM))) {
+			rcm.setSipTransport(true);
 		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
 		rcm.setOwnerSid(ownerSid);
@@ -448,7 +454,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// and room except the current disconnected cause it could throw an exception
 			_log.debug("currentScope " + scope);
 
-			if (client.isMobile()) {
+			if (client.isMobile() || client.isSipTransport()) {
 				IApplication app = (IApplication)Application.get(wicketApplicationName);
 				app.exit(client.getUid());
 			}
@@ -1081,14 +1087,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return result.isEmpty() ? result : roomDao.getSipRooms(result);
 	}
 
-	public List<Long> getActiveRoomIds() {
-		List<Long> result = getVerifiedActiveRoomIds(null);
-		for (Server s : serverDao.getActiveServers()) {
-			result.addAll(getVerifiedActiveRoomIds(s));
-		}
-		return result.isEmpty() ? result : roomDao.getSipRooms(result);
-	}
-
 	/**
 	 * Returns number of SIP conference participants
 	 * @param roomId id of room
@@ -1105,6 +1103,24 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	private static String getSipTransportLastname(Integer c) {
 		return (c != null && c > 0) ? "(" + (c - 1) + ")" : "";
+	}
+
+	public String getSipNumber(Double roomId) {
+		Room r = roomDao.get(roomId.longValue());
+		if (r != null && r.getConfno() != null) {
+			log.debug("getSipNumber: roomId: {}, sipNumber: {}", new Object[]{roomId, r.getConfno()});
+			return r.getConfno();
+		}
+		return null;
+	}
+
+	public List<Long> getActiveRoomIds() {
+		Set<Long> ids = new HashSet<>();
+		ids.addAll(getVerifiedActiveRoomIds(null));
+		for (Server s : serverDao.getActiveServers()) {
+			ids.addAll(getVerifiedActiveRoomIds(s));
+		}
+		return new ArrayList<>(ids);
 	}
 
 	public synchronized int updateSipTransport() {
@@ -1125,27 +1141,17 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return count != null && count > 0 ? count - 1 : 0;
 	}
 
-	public void setSipTransport(Long roomId, String publicSID, String broadCastId) {
+	public void setSipTransport(String broadCastId) {
 		_log.debug("-----------  setSipTransport");
 		IConnection current = Red5.getConnectionLocal();
-		IClient c = current.getClient();
+		IClient client = current.getClient();
 		// Notify all clients of the same scope (room)
-		StreamClient currentClient = sessionManager.get(IClientUtil.getId(c));
-		currentClient.setSipTransport(true);
-		currentClient.setScope("" + roomId);
-		currentClient.setRoomEnter(new Date());
-		currentClient.setFirstname("SIP Transport");
-		currentClient.setLastname(getSipTransportLastname(roomId));
-		currentClient.setBroadCastId(broadCastId);
-		currentClient.setBroadcasting(true);
-		currentClient.setUid(publicSID);
-		currentClient.setWidth(120);
-		currentClient.setHeight(90);
-		currentClient.setPicture_uri("phone.png");
-		sessionManager.update(currentClient);
-		IClientUtil.init(c, currentClient.getId(), false);
+		StreamClient c = sessionManager.get(IClientUtil.getId(client));
+		c.setLastname(getSipTransportLastname(c.getRoomId()));
+		c.setBroadCastId(broadCastId);
+		sessionManager.update(c);
 
-		sendMessageToCurrentScope("addNewUser", currentClient, false);
+		sendMessageToCurrentScope("addNewUser", c, false);
 	}
 
 	public JSONObject getFlashSettings() {
