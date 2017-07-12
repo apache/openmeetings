@@ -52,7 +52,6 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
-import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -330,9 +329,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 				//FIXME TODO rights
 			} else if (client == null && rcl.isSipTransport()) {
-				if (!getBean(SipDao.class).getUid().equals(rcl.getUid())) {
-					return null;
-				}
 				rcl.setPicture_uri("phone.png");
 				//SipTransport enters the room
 				User u = new User();
@@ -397,6 +393,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static Client getOnlineClient(String uid) {
 		return uid == null ? null : ONLINE_USERS.get(uid);
+	}
+
+	@Override
+	public Client getOmOnlineClient(String uid) {
+		return getOnlineClient(uid);
 	}
 
 	@Override

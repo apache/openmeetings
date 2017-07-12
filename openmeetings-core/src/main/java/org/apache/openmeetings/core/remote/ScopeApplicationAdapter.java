@@ -91,7 +91,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String MOBILE_PARAM = "mobileClient";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
-	private static final String SIP_PARAM = "sipClient";
 	public static final String HIBERNATE_SCOPE = "hibernate";
 	public static final String FLASH_SECURE = "secure";
 	public static final String FLASH_NATIVE_SSL = "native";
@@ -220,11 +219,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (Boolean.TRUE.equals(connParams.get(MOBILE_PARAM))) {
 			rcm.setMobile(true);
 		}
-		if (Boolean.TRUE.equals(connParams.get(SIP_PARAM))) {
-			rcm.setSipTransport(true);
-		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
 		rcm.setOwnerSid(ownerSid);
+		if (sipDao.getUid() != null && sipDao.getUid().equals(rcm.getOwnerSid())) {
+			rcm.setSipTransport(true);
+		}
 		rcm.setUserport(conn.getRemotePort());
 		rcm.setUserip(conn.getRemoteAddress());
 		rcm.setSwfurl(swfURL);
@@ -1132,10 +1131,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String newNumber = getSipTransportLastname(count);
 		_log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {
+			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+			org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(client.getUid());
+			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
 			sessionManager.update(client);
 			_log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[] { client.getUid(), client.getRoomId(),
 					client.getFirstname(), client.getLastname(), client.getAvsettings() });
+			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.rightUpdated, client.getUid()));
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;
@@ -1147,10 +1150,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		IClient client = current.getClient();
 		// Notify all clients of the same scope (room)
 		StreamClient c = sessionManager.get(IClientUtil.getId(client));
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getUid());
+		String newNumber = getSipTransportLastname(c.getRoomId());
+		cl.getUser().setLastname(newNumber);
+		c.setLastname(newNumber);
 		c.setLastname(getSipTransportLastname(c.getRoomId()));
 		c.setBroadCastId(broadCastId);
 		sessionManager.update(c);
 
+		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.rightUpdated, c.getUid()));
 		sendMessageToCurrentScope("addNewUser", c, false);
 	}
 
