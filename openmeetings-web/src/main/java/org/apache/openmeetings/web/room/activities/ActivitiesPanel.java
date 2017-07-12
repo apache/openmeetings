@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_ID;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
@@ -183,7 +183,7 @@ public class ActivitiesPanel extends BasePanel {
 			}
 			String name;
 			if (SIP_USER_ID.equals(a.getSender())) {
-				name = SIP_USER_NAME;
+				name = SIP_FIRST_NAME;
 			} else {
 				User u = getBean(UserDao.class).get(a.getSender());
 				name = self ? getString("1362") : String.format("%s %s", u.getFirstname(), u.getLastname());

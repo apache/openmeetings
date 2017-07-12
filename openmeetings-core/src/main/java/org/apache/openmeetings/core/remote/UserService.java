@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;

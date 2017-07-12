@@ -130,6 +130,12 @@ public class Client implements IClient {
 	private String publicSID = "";
 
 	/**
+	 * {@link Client#getSid()} of the client who initiated the connection
+	 */
+	@Column(name = "owner_sid")
+	private String ownerSid = null;
+
+	/**
 	 * @see Client#getIsMod()
 	 */
 	@Column(name = "is_mod", nullable = false)
@@ -649,6 +655,14 @@ public class Client implements IClient {
 
 	public void setPublicSID(String publicSID) {
 		this.publicSID = publicSID;
+	}
+
+	public String getOwnerSid() {
+		return ownerSid;
+	}
+
+	public void setOwnerSid(String ownerSid) {
+		this.ownerSid = ownerSid;
 	}
 
 	public boolean getZombieCheckFlag() {

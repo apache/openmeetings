@@ -29,7 +29,6 @@ import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.documents.LibraryChartLoader;
 import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.core.documents.LibraryWmlLoader;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;

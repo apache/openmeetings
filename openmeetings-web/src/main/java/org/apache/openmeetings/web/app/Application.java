@@ -19,7 +19,9 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_ID;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
@@ -45,12 +47,11 @@ import java.util.function.Predicate;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MainService;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
-import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
@@ -323,14 +324,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					}
 					//FIXME TODO rights
 				} else if (client == null && rcl.isSipTransport()) {
-					if (!getBean(SipDao.class).getUid().equals(rcl.getPublicSID())) {
-						return null;
-					}
 					rcl.setPicture_uri("phone.png");
 					//SipTransport enters the room
 					User u = new User();
 					u.setId(SIP_USER_ID);
-					u.setFirstname(SipDao.SIP_USER_NAME);
+					u.setLogin(SIP_USER_NAME);
+					u.setFirstname(SIP_FIRST_NAME);
 					client = new Client(rcl, u);
 					addOnlineUser(client);
 					client.setCam(0);
@@ -389,6 +388,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static Client getOnlineClient(String uid) {
 		return uid == null ? null : ONLINE_USERS.get(uid);
+	}
+
+	@Override
+	public Client getOmOnlineClient(String uid) {
+		return getOnlineClient(uid);
 	}
 
 	public static boolean isUserOnline(Long userId) {

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.remote.red5;
+package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
@@ -48,8 +48,6 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
-import org.apache.openmeetings.core.remote.RecordingService;
-import org.apache.openmeetings.core.remote.WhiteboardService;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -58,6 +56,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
@@ -101,12 +100,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger _log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
+	private static final String OWNER_SID_PARAM = "ownerSid";
 	private static final String SECURITY_CODE_PARAM = "securityCode";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
 	private static final String NATIVE_SSL_PARAM = "nativeSsl";
 	public static final String HIBERNATE_SCOPE = "hibernate";
-	private static final String SIP_PARAM = "sipClient";
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -136,6 +135,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private RecordingDao recordingDao;
 	@Autowired
 	private ServerDao serverDao;
+	@Autowired
+	private SipDao sipDao;
 
 	private static AtomicLong broadCastCounter = new AtomicLong(0);
 
@@ -193,7 +194,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		IServiceCapableConnection service = (IServiceCapableConnection) conn;
 		String streamId = conn.getClient().getId();
 
-		_log.debug("### Client connected to OpenMeetings, register Client StreamId: " + streamId + " scope " + conn.getScope().getName());
+		_log.debug("### Client connected to OpenMeetings, register Client StreamId: {} scope {}", streamId, conn.getScope().getName());
 
 		// Set StreamId in Client
 		service.invoke("setId", new Object[] { streamId }, this);
@@ -204,12 +205,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		Map<String, Object> connParams = getConnParams(params);
 		String uid = (String)connParams.get("uid");
 		String securityCode = (String)connParams.get(SECURITY_CODE_PARAM);
+		String ownerSid = (String)connParams.get(OWNER_SID_PARAM);
 		String parentSid = (String)map.get("parentSid");
 		if (parentSid == null) {
 			parentSid = (String)connParams.get("parentSid");
 		}
 		Client rcm = new Client();
 		rcm.setScope(conn.getScope().getName());
+		rcm.setOwnerSid(ownerSid);
 		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
 		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 		if (!Strings.isEmpty(securityCode)) {
@@ -247,7 +250,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				rcm.setVHeight(height.intValue());
 			}
 		}
-		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid)) {
+		if (Strings.isEmpty(uid) && Strings.isEmpty(securityCode) && Strings.isEmpty(parentSid) && Strings.isEmpty(ownerSid)) {
 			_log.warn("No UIDs are provided, client is rejected");
 			return rejectClient();
 		}
@@ -272,9 +275,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.warn("Bad room specified, client is rejected");
 			return rejectClient();
 		}
-		if (Boolean.TRUE.equals(connParams.get(SIP_PARAM))) {
-			rcm.setSipTransport(true);
-		}
 		if (connParams.containsKey("mobileClient")) {
 			Sessiondata sd = sessiondataDao.check(parentSid);
 			if (sd.getUserId() == null && !hibernate) {
@@ -296,6 +296,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			rcm.setSecurityCode(sd.getSessionId());
 			rcm.setPublicSID(UUID.randomUUID().toString());
+		}
+		if (sipDao.getUid() != null && sipDao.getUid().equals(rcm.getOwnerSid())) {
+			rcm.setSipTransport(true);
 		}
 		rcm.setUserport(conn.getRemotePort());
 		rcm.setUserip(conn.getRemoteAddress());
@@ -1927,10 +1930,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String newNumber = getSipTransportLastname(count);
 		_log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {
+			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+			org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(client.getPublicSID());
+			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
 			sessionManager.updateClientByStreamId(streamid, client, false, null);
 			_log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[] { client.getPublicSID(), client.getRoomId(),
 					client.getFirstname(), client.getLastname(), client.getAvsettings() });
+			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.rightUpdated, client.getPublicSID()));
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;
@@ -1942,10 +1949,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String streamid = current.getClient().getId();
 		// Notify all clients of the same scope (room)
 		Client c = sessionManager.getClientByStreamId(streamid, null);
-		c.setLastname(getSipTransportLastname(c.getRoomId()));
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getPublicSID());
+		String newNumber = getSipTransportLastname(c.getRoomId());
+		cl.getUser().setLastname(newNumber);
+		c.setLastname(newNumber);
 		c.setBroadCastID(Long.parseLong(broadCastId));
 		sessionManager.updateClientByStreamId(streamid, c, false, null);
 
+		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.rightUpdated, c.getPublicSID()));
 		sendMessageToCurrentScope("addNewUser", c, false);
 	}
 }

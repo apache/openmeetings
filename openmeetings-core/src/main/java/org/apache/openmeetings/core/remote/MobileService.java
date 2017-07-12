@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.nextBroadCastId;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.nextBroadCastId;
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
@@ -39,8 +39,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.LanguageService.Language;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter;
-import org.apache.openmeetings.core.remote.red5.ScopeApplicationAdapter.MessageSender;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter.MessageSender;
 import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
