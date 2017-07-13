@@ -245,6 +245,7 @@ service asterisk restart
 					<source>
 <![CDATA[
 git clone https://github.com/openmeetings/red5sip.git
+git checkout red5sip_3.1
 ]]>
 					</source>
 				</li>
