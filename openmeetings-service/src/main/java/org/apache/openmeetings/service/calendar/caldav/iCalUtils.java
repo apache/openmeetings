@@ -18,13 +18,17 @@
  */
 package org.apache.openmeetings.service.calendar.caldav;
 
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.*;
-import net.fortuna.ical4j.model.component.CalendarComponent;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.parameter.Cn;
-import net.fortuna.ical4j.model.parameter.Role;
-import net.fortuna.ical4j.model.property.*;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.net.URI;
+import java.text.ParsePosition;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.UUID;
+
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -38,13 +42,31 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.net.URI;
-import java.text.ParsePosition;
-import java.util.*;
-import java.util.Date;
-import java.util.TimeZone;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.ComponentList;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Parameter;
+import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.Recur;
+import net.fortuna.ical4j.model.TimeZoneRegistry;
+import net.fortuna.ical4j.model.TimeZoneRegistryFactory;
+import net.fortuna.ical4j.model.component.CalendarComponent;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.parameter.Cn;
+import net.fortuna.ical4j.model.parameter.Role;
+import net.fortuna.ical4j.model.property.Attendee;
+import net.fortuna.ical4j.model.property.CalScale;
+import net.fortuna.ical4j.model.property.DateProperty;
+import net.fortuna.ical4j.model.property.Description;
+import net.fortuna.ical4j.model.property.Location;
+import net.fortuna.ical4j.model.property.Organizer;
+import net.fortuna.ical4j.model.property.ProdId;
+import net.fortuna.ical4j.model.property.Sequence;
+import net.fortuna.ical4j.model.property.Transp;
+import net.fortuna.ical4j.model.property.Uid;
+import net.fortuna.ical4j.model.property.Version;
 
 /**
  * Class which provides iCalendar Utilities.
@@ -139,34 +161,34 @@ public class iCalUtils {
 	 * @return Updated Appointment
 	 */
 	private Appointment addVEventPropertiestoAppointment(Appointment a, CalendarComponent event, TimeZone tz) {
-		Property dtstart = event.getProperty(Property.DTSTART),
-				dtend = event.getProperty(Property.DTEND),
-				uid = event.getProperty(Property.UID),
-				dtstamp = event.getProperty(Property.DTSTAMP),
+		DateProperty dtstart = (DateProperty)event.getProperty(Property.DTSTART)
+				, dtend = (DateProperty)event.getProperty(Property.DTEND)
+				, dtstamp = (DateProperty)event.getProperty(Property.DTSTAMP)
+				, lastmod = (DateProperty)event.getProperty(Property.LAST_MODIFIED);
+		Property uid = event.getProperty(Property.UID),
 				description = event.getProperty(Property.DESCRIPTION),
 				summary = event.getProperty(Property.SUMMARY),
 				location = event.getProperty(Property.LOCATION),
-				lastmod = event.getProperty(Property.LAST_MODIFIED),
 				organizer = event.getProperty(Property.ORGANIZER),
 				recur = event.getProperty(Property.RRULE);
-		PropertyList attendees = event.getProperties(Property.ATTENDEE);
+		PropertyList<Attendee> attendees = event.getProperties(Property.ATTENDEE);
 
 		if (uid != null) {
 			a.setIcalId(uid.getValue());
 		}
 
-		Date d = parseDate(dtstart, tz);
+		Date d = dtstart.getDate();
 		a.setStart(d);
 		if (dtend == null) {
 			a.setEnd(addTimetoDate(d, java.util.Calendar.HOUR_OF_DAY, 1));
 		} else {
-			a.setEnd(parseDate(dtend, tz));
+			a.setEnd(dtend.getDate());
 		}
 
-		a.setInserted(parseDate(dtstamp, tz));
+		a.setInserted(dtstamp.getDate());
 
 		if (lastmod != null) {
-			a.setUpdated(parseDate(lastmod, tz));
+			a.setUpdated(lastmod.getDate());
 		}
 
 		if (description != null) {
