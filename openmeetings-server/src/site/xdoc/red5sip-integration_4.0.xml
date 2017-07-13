@@ -21,7 +21,7 @@
 	</properties>
 	<body>
 		<section name="SIP-Transport Integration">
-			<p>You need Apache OpenMeetings <strong>version 3.1+</strong> to apply this guide!</p>
+			<p>You need Apache OpenMeetings <strong>version 4.0+</strong> to apply this guide!</p>
 			<p>You need Asterisk <strong>version 13+</strong> to apply this guide!</p>
 			<p>Here is instruction how-to set up red5sip transport integration with OpenMeetings on Ubuntu 16.04.</p>
 		</section>
@@ -41,9 +41,9 @@ sudo apt-get update && sudo apt-get upgrade
 				<source>
 <![CDATA[
 sudo mkdir /usr/src/asterisk && cd /usr/src/asterisk
-sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-13.9.0.tar.gz
-sudo tar -xvzf asterisk-13.9.0.tar.gz
-cd ./asterisk-13.9.0
+sudo wget http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-13.17.0.tar.gz
+sudo tar -xvzf asterisk-13.17.0.tar.gz
+cd ./asterisk-13.17.0
 sudo make clean
 sudo contrib/scripts/install_prereq install
 sudo ./configure
@@ -247,7 +247,6 @@ service asterisk restart
 					<source>
 <![CDATA[
 git clone https://github.com/openmeetings/red5sip.git
-git checkout red5sip_3.3
 ]]>
 					</source>
 				</li>

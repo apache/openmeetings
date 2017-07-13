@@ -33,6 +33,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +52,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
@@ -485,6 +487,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					c.setWidth(320);
 					c.setHeight(240);
 				}
+			}
+			if (c.isSipTransport()) {
+				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+				org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getUid());
+				String newNumber = getSipTransportLastname(c.getRoomId());
+				cl.getUser().setLastname(newNumber);
+				c.setLastname(newNumber);
+				c.setLastname(getSipTransportLastname(c.getRoomId()));
 			}
 			sessionManager.update(c);
 
@@ -1064,6 +1074,19 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/*
 	 * SIP transport methods
 	 */
+	public List<String> listRoomBroadcast() {
+		List<String> ids = new ArrayList<>();
+		IConnection current = Red5.getConnectionLocal();
+		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		for (Client c: iapp.getOmRoomClients(client.getRoomId()) ) {
+			for (Client.Stream s : c.getStreams()) {
+				ids.add(s.getBroadcastId());
+			}
+		}
+		return ids;
+	}
+
 	/**
 	 * Returns number of SIP conference participants
 	 * @param roomId id of room
@@ -1115,25 +1138,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;
-	}
-
-	public void setSipTransport(String broadCastId) {
-		_log.debug("-----------  setSipTransport");
-		IConnection current = Red5.getConnectionLocal();
-		IClient client = current.getClient();
-		// Notify all clients of the same scope (room)
-		StreamClient c = sessionManager.get(IClientUtil.getId(client));
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getUid());
-		String newNumber = getSipTransportLastname(c.getRoomId());
-		cl.getUser().setLastname(newNumber);
-		c.setLastname(newNumber);
-		c.setLastname(getSipTransportLastname(c.getRoomId()));
-		c.setBroadCastId(broadCastId);
-		sessionManager.update(c);
-
-		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.rightUpdated, c.getUid()));
-		sendMessageToCurrentScope("addNewUser", c, false);
 	}
 
 	public JSONObject getFlashSettings() {
