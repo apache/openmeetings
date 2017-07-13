@@ -18,16 +18,10 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IClient;
-import org.slf4j.Logger;
 
 public class IClientUtil {
-	private static final Logger log = Red5LoggerFactory.getLogger(IClientUtil.class, webAppRootKey);
-
 	private enum ConAttrs {
 		omId
 		, sharing
