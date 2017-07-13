@@ -45,6 +45,7 @@ public interface IApplication {
 	Client getOmClientBySid(String sid);
 	StreamClient updateClient(StreamClient rcl, boolean forceSize);
 	Client getOmOnlineClient(String uid);
+	List<Long> getActiveRooms();
 	List<Client> getOmRoomClients(Long roomId);
 	List<Client> getOmClients(Long userId);
 	String getOmContactsLink();

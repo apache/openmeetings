@@ -33,15 +33,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
@@ -54,12 +50,10 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -116,8 +110,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private SipDao sipDao;
 	@Autowired
 	private RecordingDao recordingDao;
-	@Autowired
-	private ServerDao serverDao;
 
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
@@ -1072,20 +1064,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/*
 	 * SIP transport methods
 	 */
-
-	private List<Long> getVerifiedActiveRoomIds(Server s) {
-		List<Long> result = new ArrayList<>(sessionManager.getActiveRoomIdsByServer(s));
-		//verify
-		for (Iterator<Long> i = result.iterator(); i.hasNext();) {
-			Long id = i.next();
-			List<StreamClient> rcs = sessionManager.getClientListByRoom(id);
-			if (rcs.size() == 0 || (rcs.size() == 1 && rcs.get(0).isSipTransport())) {
-				i.remove();
-			}
-		}
-		return result.isEmpty() ? result : roomDao.getSipRooms(result);
-	}
-
 	/**
 	 * Returns number of SIP conference participants
 	 * @param roomId id of room
@@ -1114,12 +1092,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public List<Long> getActiveRoomIds() {
-		Set<Long> ids = new HashSet<>();
-		ids.addAll(getVerifiedActiveRoomIds(null));
-		for (Server s : serverDao.getActiveServers()) {
-			ids.addAll(getVerifiedActiveRoomIds(s));
-		}
-		return new ArrayList<>(ids);
+		return ((IApplication)Application.get(wicketApplicationName)).getActiveRooms();
 	}
 
 	public synchronized int updateSipTransport() {

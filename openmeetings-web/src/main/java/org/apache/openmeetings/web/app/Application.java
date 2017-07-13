@@ -101,9 +101,7 @@ import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.CsrfPreventionRequestCycleListener;
-import org.apache.wicket.protocol.ws.api.WebSocketMessageBroadcastHandler;
-import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
+import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleListener;
 import org.apache.wicket.protocol.ws.api.WebSocketResponse;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.Response;
@@ -155,7 +153,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		//Resource Loader for a the property key
 		getResourceSettings().getStringResourceLoaders().add(0, new LabelResourceLoader());
 		getJavaScriptLibrarySettings().setJQueryReference(getV3());
-		getRequestCycleListeners().add(new CsrfPreventionRequestCycleListener() {
+		getRequestCycleListeners().add(new WebSocketAwareCsrfPreventionRequestCycleListener() {
 			@Override
 			public void onEndRequest(RequestCycle cycle) {
 				Response resp = cycle.getResponse();
@@ -167,14 +165,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					wresp.setHeader("X-Frame-Options", xFrameOptions);
 					wresp.setHeader("Content-Security-Policy", contentSecurityPolicy);
 				}
-			}
-
-			@Override
-			protected boolean isChecked(IRequestHandler handler) {
-				if (handler instanceof WebSocketRequestHandler || handler instanceof WebSocketMessageBroadcastHandler) {
-					return false;
-				}
-				return super.isChecked(handler);
 			}
 		});
 
@@ -398,6 +388,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public Client getOmOnlineClient(String uid) {
 		return getOnlineClient(uid);
+	}
+
+	@Override
+	public List<Long> getActiveRooms() {
+		Set<Long> ids = new HashSet<>();
+		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {
+			if (e.getValue().getRoomId() != null) {
+				ids.add(e.getValue().getRoomId());
+			}
+		}
+		return new ArrayList<>(ids);
 	}
 
 	@Override
