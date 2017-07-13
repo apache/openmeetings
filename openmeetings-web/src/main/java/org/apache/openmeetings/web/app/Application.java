@@ -334,6 +334,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					addOnlineUser(client);
 					client.setCam(0);
 					client.setMic(0);
+					client.allow(Room.Right.audio, Room.Right.video);
 					client.set(Activity.broadcastA);
 					addUserToRoom(client);
 					//FIXME TODO unify this
