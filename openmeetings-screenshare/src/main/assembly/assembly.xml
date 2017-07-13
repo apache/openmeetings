@@ -35,7 +35,6 @@
 				<include>org.apache.commons:commons-lang3</include>
 				<include>org.apache.httpcomponents:httpclient</include>
 				<include>org.apache.httpcomponents:httpcore</include>
-				<include>org.bouncycastle:bcprov-jdk15on</include>
 				<include>net.sf.ehcache:ehcache-core</include>
 				<include>org.slf4j:slf4j-api</include>
 				<include>org.slf4j:jcl-over-slf4j</include>
