@@ -19,7 +19,6 @@
 package org.apache.openmeetings.screenshare.util;
 
 import static org.quartz.impl.StdSchedulerFactory.PROP_SCHED_INSTANCE_NAME;
-import static org.quartz.impl.StdSchedulerFactory.PROP_SCHED_SKIP_UPDATE_CHECK;
 
 import java.util.Map;
 import java.util.Properties;
@@ -27,7 +26,6 @@ import java.util.Properties;
 public class Util {
 	public static Properties getQurtzProps(String name) {
 		final Properties p = new Properties();
-		p.put(PROP_SCHED_SKIP_UPDATE_CHECK, "true");
 		p.put(PROP_SCHED_INSTANCE_NAME, name);
 		p.put("org.quartz.threadPool.threadCount", "10");
 		return p;
