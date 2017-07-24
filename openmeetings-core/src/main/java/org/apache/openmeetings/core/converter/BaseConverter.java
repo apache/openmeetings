@@ -95,10 +95,6 @@ public abstract class BaseConverter {
 		return getPath(CONFIG_IMAGEMAGIC_PATH, "convert") + EXEC_EXT;
 	}
 
-	protected String getPathToIdentify() {
-		return getPath(CONFIG_IMAGEMAGIC_PATH, "identify") + EXEC_EXT;
-	}
-
 	protected File getStreamFolder(Recording recording) {
 		return getStreamsSubDir(recording.getRoomId());
 	}

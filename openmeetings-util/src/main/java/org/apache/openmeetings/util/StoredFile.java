@@ -189,4 +189,8 @@ public class StoredFile {
 	public String getExt() {
 		return ext;
 	}
+
+	public MediaType getMime() {
+		return mime;
+	}
 }

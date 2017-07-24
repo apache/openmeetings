@@ -21,15 +21,21 @@ package org.apache.openmeetings.core.converter;
 import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.process.ConverterProcessResult.ZERO;
+import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -41,9 +47,15 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TIFF;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.image.ImageParser;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class ImageConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImageConverter.class, webAppRootKey);
@@ -64,7 +76,7 @@ public class ImageConverter extends BaseConverter {
 			log.debug("##### convertImage destinationFile: " + jpg);
 			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
 		}
-		returnMap.addItem("get JPG dimensions", initSize(f, jpg));
+		returnMap.addItem("get JPG dimensions", initSize(f, jpg, JPG_MIME_TYPE));
 		return returnMap;
 	}
 
@@ -116,20 +128,23 @@ public class ImageConverter extends BaseConverter {
 		return cfgDao.getConfValue(CONFIG_DOCUMENT_QUALITY, String.class, "90"); //TODO constant
 	}
 
-	/**
-	 * This method determines and set image size
-	 *
-	 * @param f - file item to set size
-	 * @param img - image file used to determine size
-	 * @return result of the operation
-	 * @throws IOException in case exception is occured
-	 */
-	public ConverterProcessResult initSize(FileItem f, File img) throws IOException {
-		ConverterProcessResult res = ProcessHelper.executeScript("get image dimensions :: " + f.getId()
-				, new String[] {getPathToIdentify(), "-format", "%wx%h", img.getCanonicalPath()});
-		Dimension dim = getDimension(res.getOut());
-		f.setWidth(dim.width);
-		f.setHeight(dim.height);
+	private static ConverterProcessResult initSize(FileItem f, File img, String mime) {
+		ConverterProcessResult res = new ConverterProcessResult();
+		res.setProcess("get image dimensions :: " + f.getId());
+		final Parser parser = new ImageParser();
+		try (InputStream is = new FileInputStream(img)) {
+			Metadata metadata = new Metadata();
+			metadata.set(CONTENT_TYPE, mime);
+			parser.parse(is, new DefaultHandler(), metadata, new ParseContext());
+			f.setWidth(Integer.valueOf(metadata.get(TIFF.IMAGE_WIDTH)));
+			f.setHeight(Integer.valueOf(metadata.get(TIFF.IMAGE_LENGTH)));
+			res.setExitCode(ZERO);
+		} catch (Exception e) {
+			log.error("Error while getting dimensions", e);
+			res.setError("Error while getting dimensions");
+			res.setException(e.getMessage());
+			res.setExitCode(-1);
+		}
 		return res;
 	}
 
@@ -159,7 +174,7 @@ public class ImageConverter extends BaseConverter {
 	 *
 	 * @param pdf - input PDF document
 	 * @return - result of conversion
-	 * @throws IOException in case IO exception occured
+	 * @throws IOException in case IO exception occurred
 	 */
 	public ConverterProcessResultList convertDocument(ConverterProcessResultList list, FileItem f, File pdf) throws IOException {
 		log.debug("convertDocument");
@@ -184,7 +199,7 @@ public class ImageConverter extends BaseConverter {
 			} else {
 				f.setCount(pages.length);
 			}
-			list.addItem("get PNG page dimensions", initSize(f, pages[0]));
+			list.addItem("get PNG page dimensions", initSize(f, pages[0], PNG_MIME_TYPE));
 		}
 		return list;
 	}
