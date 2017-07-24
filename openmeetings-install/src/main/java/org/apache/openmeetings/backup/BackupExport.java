@@ -133,11 +133,10 @@ public class BackupExport {
 	private RoomGroupDao roomGroupDao;
 
 	public void performExport(File zip, boolean includeFiles, ProgressHolder progressHolder) throws Exception {
-		if (!zip.getParentFile().exists()) {
+		if (zip.getParentFile() != null && !zip.getParentFile().exists()) {
 			zip.getParentFile().mkdirs();
 		}
 		try (FileOutputStream fos = new FileOutputStream(zip); ZipOutputStream zos = new ZipOutputStream(fos)) {
-
 			Serializer ser = new Persister();
 
 			progressHolder.setProgress(0);
