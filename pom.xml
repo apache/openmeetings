@@ -49,7 +49,7 @@
 		<mina.version>2.0.16</mina.version>
 		<tomcat.version>8.5.15</tomcat.version>
 		<ical4j.version>2.0.2</ical4j.version>
-		<cxf.version>3.1.11</cxf.version>
+		<cxf.version>3.1.12</cxf.version>
 		<selenium.version>3.4.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.3.8</jettison.version>
