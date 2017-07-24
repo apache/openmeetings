@@ -30,7 +30,7 @@
 	<name>Openmeetings Util</name>
 	<description>Module for utility classes being used by all OpenMeetings modules</description>
 	<properties>
-		<dom4j.version>2.0.0</dom4j.version>
+		<dom4j.version>2.0.1</dom4j.version>
 		<commons-codec.version>1.10</commons-codec.version>
 		<commons-io.version>2.5</commons-io.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
