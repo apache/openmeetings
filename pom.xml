@@ -207,6 +207,9 @@
 									<goal>aggregate-add-third-party</goal>
 								</goals>
 								<configuration>
+									<properties>
+										<license.excludedScopes>test</license.excludedScopes>
+									</properties>
 									<outputDirectory>${project.build.directory}</outputDirectory>
 									<useMissingFile>true</useMissingFile>
 									<licenseMerges>
