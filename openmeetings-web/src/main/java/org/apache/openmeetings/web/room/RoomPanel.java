@@ -120,7 +120,7 @@ public class RoomPanel extends BasePanel {
 					, cp.getRemoteAddress()
 					, "" + r.getId());
 			//TODO add all broadcasting clients
-			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getUid());
+			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getSid());
 			options.put("interview", Room.Type.interview == r.getType());
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
@@ -435,7 +435,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (getClient().getUid().equals(c.getUid())) {
-							c.removeStream(obj.getString("broadcastId"));
+							c.removeStream(obj.optString("broadcastId"));
 						}
 						handler.appendJavaScript(String.format("VideoManager.close('%s');", obj.getString("uid")));
 					}

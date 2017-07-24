@@ -301,6 +301,9 @@ public class Client implements IClient {
 	}
 
 	public void removeStream(String broadcastId) {
+		if (broadcastId == null) {
+			return;
+		}
 		streams.remove(new Stream(1L, broadcastId, false));
 	}
 
