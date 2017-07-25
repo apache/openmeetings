@@ -1446,7 +1446,7 @@
   <entry key="1439">Hide actions menu</entry>
   <entry key="1440">Hide screen sharing</entry>
   <entry key="1441">Hide whiteboard</entry>
-  <entry key="1442">Show micro status in video</entry>
+  <entry key="1442">Show microphone status in video</entry>
   <entry key="1443">Layout options</entry>
   <entry key="1444">New Event</entry>
   <entry key="1445">Password protected are the links to the conference that are send to the participents when you save the calendar event, not the room! That means if you save the event multiple times but with different passwords every participent receives a new link that has a different password. But old links still work once send!</entry>
@@ -1485,7 +1485,7 @@
   <entry key="1479">Upload new file to file explorer</entry>
   <entry key="1480">Open new dialog with sharing settings</entry>
   <entry key="1481">An existing moderator must approve it</entry>
-  <entry key="1482">Ask moderator to share your webcam/micro</entry>
+  <entry key="1482">Ask moderator to share your webcam/microphone</entry>
   <entry key="1483">Gather feedback by creating a poll</entry>
   <entry key="1484">Past and current poll results as charts</entry>
   <entry key="1485">Vote if there is a poll for this conference room</entry>
@@ -1599,7 +1599,7 @@
   <entry key="1599">Access denied. You have no rights to enter this room.</entry>
   <entry key="1600">Re-convert</entry>
   <entry key="1601">Apply for audio access</entry>
-  <entry key="1602">Ask moderator to share your micro</entry>
+  <entry key="1602">Ask moderator to share your microphone</entry>
   <entry key="1603">would like to share his audio</entry>
   <entry key="1604">Allow this user to publish their audio</entry>
   <entry key="1605">Remove audio of this user</entry>
@@ -1830,8 +1830,8 @@
 	<entry key="install.room.public.video.only">Public Video Only Room</entry>
 	<entry key="install.room.public.video.wb">Public Video And Whiteboard Room</entry>
 	<entry key="install.room.public.restricted">Public Restricted Room</entry>
-	<entry key="install.room.restricted.micro">Restricted room with micro option set</entry>
-	<entry key="install.room.conference.micro">Conference room with micro option set</entry>
+	<entry key="install.room.restricted.micro">Restricted room with microphone option set</entry>
+	<entry key="install.room.conference.micro">Conference room with microphone option set</entry>
 	<entry key="install.room.private.conference">Private Conference Room</entry>
 	<entry key="appointment.tab.general">General</entry>
 	<entry key="appointment.tab.advanced">Advanced</entry>

@@ -1599,7 +1599,7 @@
   <entry key="1599">この会議室へは入れません</entry>
   <entry key="1600">再録音開始</entry>
   <entry key="1601">Apply for audio access</entry>
-  <entry key="1602">Ask moderator to share your micro</entry>
+  <entry key="1602">Ask moderator to share your microphone</entry>
   <entry key="1603">would like to share his audio</entry>
   <entry key="1604">Allow this user to publish their audio</entry>
   <entry key="1605">Remove audio of this user</entry>
@@ -1830,8 +1830,8 @@
 	<entry key="install.room.public.video.only">Public Video Only Room</entry>
 	<entry key="install.room.public.video.wb">Public Video And Whiteboard Room</entry>
 	<entry key="install.room.public.restricted">Public Restricted Room</entry>
-	<entry key="install.room.restricted.micro">Restricted room with micro option set</entry>
-	<entry key="install.room.conference.micro">Conference room with micro option set</entry>
+	<entry key="install.room.restricted.micro">Restricted room with microphone option set</entry>
+	<entry key="install.room.conference.micro">Conference room with microphone option set</entry>
 	<entry key="install.room.private.conference">Private Conference Room</entry>
 	<entry key="appointment.tab.general">General</entry>
 	<entry key="appointment.tab.advanced">Advanced</entry>

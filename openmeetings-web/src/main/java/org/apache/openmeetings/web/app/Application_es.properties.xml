@@ -1485,11 +1485,11 @@
   <entry key="1479">Subir nuevo archivo al explorador de archivos</entry>
   <entry key="1480">Abrir nuevo diálogo de configuraciones compartidas</entry>
   <entry key="1481">Un moderador debe aprobarlo</entry>
-  <entry key="1482">Decir al moderador que quieres compartir tu webcam/micro</entry>
+  <entry key="1482">Decir al moderador que quieres compartir tu webcam/microphone</entry>
   <entry key="1483">Reunir feedback al crear una encuesta</entry>
   <entry key="1484">Resultados de las encuestas pasadas y actual como gráfico</entry>
   <entry key="1485">Vote si hay una encuesta para esta sala de conferencias</entry>
-  <entry key="1486">Editar configuraciones de cam y micro</entry>
+  <entry key="1486">Editar configuraciones de cam y microphone</entry>
   <entry key="1487">Confirmar y dejar la sala</entry>
   <entry key="1488">Llamada a gente externa via VoIP/SIP</entry>
   <entry key="1489">Enviar un correo con un link directo a esta sala</entry>
@@ -1599,7 +1599,7 @@
   <entry key="1599">Access denied. You have no rights to enter this room.</entry>
   <entry key="1600">Re-convert</entry>
   <entry key="1601">Apply for audio access</entry>
-  <entry key="1602">Ask moderator to share your micro</entry>
+  <entry key="1602">Ask moderator to share your microphone</entry>
   <entry key="1603">would like to share his audio</entry>
   <entry key="1604">Allow this user to publish their audio</entry>
   <entry key="1605">Remove audio of this user</entry>
@@ -1830,8 +1830,8 @@
 	<entry key="install.room.public.video.only">Public Video Only Room</entry>
 	<entry key="install.room.public.video.wb">Public Video And Whiteboard Room</entry>
 	<entry key="install.room.public.restricted">Public Restricted Room</entry>
-	<entry key="install.room.restricted.micro">Restricted room with micro option set</entry>
-	<entry key="install.room.conference.micro">Conference room with micro option set</entry>
+	<entry key="install.room.restricted.micro">Restricted room with microphone option set</entry>
+	<entry key="install.room.conference.micro">Conference room with microphone option set</entry>
 	<entry key="install.room.private.conference">Private Conference Room</entry>
 	<entry key="appointment.tab.general">General</entry>
 	<entry key="appointment.tab.advanced">Advanced</entry>
