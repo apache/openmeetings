@@ -65,6 +65,34 @@
 							</li>
 						</ul>
 					</li>
+					<li>
+						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/3.3.0">https://github.com/openmeetings/openmeetings-docker/tree/3.3.0</a>
+					</li>
+					<li>
+						ISO: <a href="https://om.alteametasoft.com/om_3.3.0.qcow2">https://om.alteametasoft.com/om_3.3.0.qcow2</a> (QEMU qcow2 format)
+						<source>
+<![CDATA[
+#######      PLEASE CHANGE ALL PASSWORDS !!
+system:            user/pass
+SSH user:      om_admin/12345
+MySql root:        root/12345
+MySql user:    om_admin/12345
+OM:            om_admin/1Q2w3e4r5t^y
+#######      PLEASE CHANGE ALL PASSWORDS !!
+
+# run
+#   memory          ==: "-m 2G"
+#   number of cores ==: "-smp 1"
+qemu-system-x86_64 -boot d -smp 1 -m 2G -drive format=qcow2,file=om_3.3.0.qcow2 -net user,hostfwd=tcp::10022-:22,hostfwd=tcp::15080-:5080 -net nic
+
+# connect
+ssh om_admin@localhost -p10022
+
+# OM URL
+http://localhost:15080/openmeetings
+]]>
+						</source>
+					</li>
 				</ul>
 			</subsection>
 			<subsection name="Previous Official Releases">
