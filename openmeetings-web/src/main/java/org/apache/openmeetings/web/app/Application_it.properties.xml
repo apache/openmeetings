@@ -1851,8 +1851,8 @@
 	<entry key="install.room.public.video.only">Stanza Solo Video Pubblica</entry>
 	<entry key="install.room.public.video.wb">Stanza Video e Lavagna Pubblica</entry>
 	<entry key="install.room.public.restricted">Stanza Seminario Publica</entry>
-	<entry key="install.room.restricted.micro">Stanza seminario con impostazione micro</entry>
-	<entry key="install.room.conference.micro">Stanza conferenze con impostazione micro</entry>
+	<entry key="install.room.restricted.micro">Stanza seminario con impostazione microfono</entry>
+	<entry key="install.room.conference.micro">Stanza conferenze con impostazione microfono</entry>
 	<entry key="install.room.private.conference">Stanza Conferenze Privata</entry>
 	<entry key="appointment.tab.general">Generale</entry>
 	<entry key="appointment.tab.advanced">Avanzate</entry>
