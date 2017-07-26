@@ -74,6 +74,10 @@ public class OmFileHelper {
 	public static final String BCKP_ROOM_FILES = "roomFiles";
 	public static final String BCKP_RECORD_FILES = "recordingFiles";
 
+	//Sip related stuff
+	public static final Long SIP_USER_ID = -1L;
+	public static final String SIP_PICTURE_URI = "phone.png";
+
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
 	}
@@ -137,7 +141,9 @@ public class OmFileHelper {
 
 	public static File getUserProfilePicture(Long userId, String uri) {
 		File img = null;
-		if (userId != null) {
+		if (SIP_USER_ID.equals(userId)) {
+			img = new File(getImagesDir(), SIP_PICTURE_URI);
+		} else if (userId != null) {
 			img = new File(getUploadProfilesUserDir(userId), uri == null ? "" : profileImagePrefix + uri);
 		}
 		if (img == null || !img.exists() || img.isDirectory()) {

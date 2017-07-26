@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.util;
 
+import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
@@ -75,7 +77,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 
 	@Override
 	public IResource getResource() {
-		return new ByteArrayResource("image/jpeg") {
+		return new ByteArrayResource(JPG_MIME_TYPE) {
 			private static final long serialVersionUID = 1L;
 			private Long userId = null;
 			private String uri = null;
@@ -87,7 +89,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 					PageParameters params = attributes.getParameters();
 					try {
 						userId = params.get("id").toOptionalLong();
-						uri = getBean(UserDao.class).get(userId).getPictureuri();
+						uri = SIP_USER_ID.equals(userId) ? null : getBean(UserDao.class).get(userId).getPictureuri();
 					} catch (Exception e) {
 						// no-op, junk filter
 					}

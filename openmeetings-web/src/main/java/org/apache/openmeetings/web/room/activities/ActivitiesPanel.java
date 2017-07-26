@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_ID;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
