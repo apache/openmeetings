@@ -19,8 +19,9 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_ID;
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
@@ -319,11 +320,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 				//FIXME TODO rights
 			} else if (client == null && rcl.isSipTransport()) {
-				rcl.setPicture_uri("phone.png");
+				rcl.setUsername(SIP_USER_NAME);
+				rcl.setUserId(SIP_USER_ID);
 				//SipTransport enters the room
 				User u = new User();
 				u.setId(SIP_USER_ID);
-				u.setFirstname(SIP_USER_NAME);
+				u.setLogin(SIP_USER_NAME);
+				u.setFirstname(SIP_FIRST_NAME);
 				client = new Client(rcl, u);
 				addOnlineUser(client);
 				client.setCam(0);

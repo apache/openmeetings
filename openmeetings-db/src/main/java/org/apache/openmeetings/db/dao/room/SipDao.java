@@ -40,8 +40,8 @@ public class SipDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(SipDao.class);
 	public static final String ASTERISK_OM_FAMILY = "openmeetings";
 	public static final String ASTERISK_OM_KEY = "rooms";
-	public static final Long SIP_USER_ID = -1L;
-	public static final String SIP_USER_NAME = "SIP Transport";
+	public static final String SIP_FIRST_NAME = "SIP Transport";
+	public static final String SIP_USER_NAME = "--SIP--";
 	private String sipHostname;
 	private int sipPort;
 	private String sipUsername;
