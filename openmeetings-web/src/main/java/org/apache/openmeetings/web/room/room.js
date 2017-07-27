@@ -210,7 +210,7 @@ var VideoManager = (function() {
 })();
 function setRoomSizes() {
 	var sb = $(".room.sidebar.left")
-		, w = $(window).width() - sb.width() - 5
+		, w = $(window).width() - sb.width() - 8
 		, h = $(window).height() - $('#menu').height()
 		, p = sb.find('.tabs');
 	sb.height(h);
@@ -218,7 +218,7 @@ function setRoomSizes() {
 	p.height(hh);
 	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
 	if (!!WbArea) {
-		WbArea.resize(sb.width(), w, h);
+		WbArea.resize(sb.width() + 5, w, h);
 	}
 }
 function roomReload(event, ui) {

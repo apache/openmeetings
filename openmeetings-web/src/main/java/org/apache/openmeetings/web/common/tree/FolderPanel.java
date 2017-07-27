@@ -117,8 +117,9 @@ public class FolderPanel extends Panel {
 				}
 			}
 		};
-		drag.add(name.add(AttributeModifier.append("title", r.getName())));
+		drag.add(name);
 		add(drop.add(drag).setOutputMarkupId(true));
+		add(AttributeModifier.append("title", r.getName()));
 	}
 
 	private static void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p) {
