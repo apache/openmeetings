@@ -97,7 +97,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
-	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO, SelectOption.YES);
+	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO_NUM, SelectOption.YES_NUM);
 	private final static List<SelectOption> yesNoTextList = Arrays.asList(SelectOption.NO_TEXT, SelectOption.YES_TEXT);
 	private final static List<String> allFonts = Arrays.asList("TimesNewRoman", "Verdana", "Arial");
 	private final IDynamicWizardStep welcomeStep;
@@ -211,11 +211,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private final class DbStep extends BaseStep {
 		private static final long serialVersionUID = 1L;
-		private final WebMarkupContainer hostelem = new WebMarkupContainer("hostelem");
-		private final WebMarkupContainer portelem = new WebMarkupContainer("portelem");
 		private final RequiredTextField<String> host = new RequiredTextField<>("host", Model.of(""));
 		private final RequiredTextField<Integer> port = new RequiredTextField<>("port", Model.of(0));
 		private final RequiredTextField<String> dbname = new RequiredTextField<>("dbname", Model.of(""));
+		private final RequiredTextField<String> user = new RequiredTextField<>("login");
+		private final TextField<String> pass = new TextField<>("password");
 		private final Form<ConnectionProperties> form = new Form<ConnectionProperties>("form", new CompoundPropertyModel<>(getProps(null))) {
 			private static final long serialVersionUID = 1L;
 			private final DropDownChoice<DbType> db = new DropDownChoice<>("dbType", Arrays.asList(DbType.values()), new ChoiceRenderer<DbType>() {
@@ -231,8 +231,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					return object.name();
 				}
 			});
-			private final RequiredTextField<String> user = new RequiredTextField<>("login");
-			private final TextField<String> pass = new TextField<>("password");
 			{
 				add(db.add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
@@ -243,8 +241,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 						initForm(true, target);
 					}
 				}));
-				add(hostelem.add(host), portelem.add(port));
-				add(dbname, user, pass);
+				add(host, port, dbname, user, pass);
 				add(new IndicatingAjaxButton("check") {
 					private static final long serialVersionUID = 1L;
 
@@ -330,9 +327,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			try {
 				File conf = OmFileHelper.getPersistence(type);
 				props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
-				// resetting default login/password
-				props.setLogin(null);
-				props.setPassword(null);
+				if (DbType.derby != props.getDbType()) {
+					// resetting default login/password
+					props.setLogin(null);
+					props.setPassword(null);
+				}
 			} catch (Exception e) {
 				form.warn(getString("install.wizard.db.step.errorprops"));
 			}
@@ -342,8 +341,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private void initForm(boolean getProps, AjaxRequestTarget target) {
 			ConnectionProperties props = getProps ? getProps(form.getModelObject().getDbType()) : form.getModelObject();
 			form.setModelObject(props);
-			hostelem.setVisible(props.getDbType() != DbType.derby);
-			portelem.setVisible(props.getDbType() != DbType.derby);
+			host.setVisible(props.getDbType() != DbType.derby);
+			port.setVisible(props.getDbType() != DbType.derby);
+			user.setVisible(props.getDbType() != DbType.derby);
+			pass.setVisible(props.getDbType() != DbType.derby);
 			try {
 				switch (props.getDbType()) {
 					case mssql: {
@@ -750,9 +751,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private static class SelectOption implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private static SelectOption NO = new SelectOption("0", "No");
+		private static SelectOption NO_NUM = new SelectOption("0", "No");
 		private static SelectOption NO_TEXT = new SelectOption("no", "No");
-		private static SelectOption YES = new SelectOption("1", "Yes");
+		private static SelectOption YES_NUM = new SelectOption("1", "Yes");
 		private static SelectOption YES_TEXT = new SelectOption("yes", "Yes");
 		public String key;
 		@SuppressWarnings("unused")
@@ -838,8 +839,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		YesNoDropDown(String id) {
 			super(id);
 			setChoices(yesNoList);
-			this.option = SelectOption.NO.key.equals(propModel.getObject()) ?
-					SelectOption.NO : SelectOption.YES;
+			this.option = SelectOption.NO_NUM.key.equals(propModel.getObject()) ?
+					SelectOption.NO_NUM : SelectOption.YES_NUM;
 		}
 	}
 

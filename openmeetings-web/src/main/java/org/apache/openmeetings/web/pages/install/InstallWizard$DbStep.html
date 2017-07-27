@@ -27,19 +27,19 @@
 			<div class="formelement">
 				<label wicket:for="dbType"><wicket:message key="install.wizard.db.step.dbtype" /></label> <select wicket:id="dbType"></select>
 			</div>
-			<div wicket:id="hostelem" class="formelement">
+			<div wicket:enclosure="host" class="formelement">
 				<label wicket:for="host"><wicket:message key="install.wizard.db.step.host" /></label> <input type="text" wicket:id="host"/>
 			</div>
-			<div wicket:id="portelem" class="formelement">
+			<div wicket:enclosure="port" class="formelement">
 				<label wicket:for="port"><wicket:message key="install.wizard.db.step.port" /></label> <input type="text" wicket:id="port"/>
 			</div>
 			<div class="formelement">
 				<label wicket:for="dbname"><wicket:message key="install.wizard.db.step.dbname" /></label> <input type="text" wicket:id="dbname"/>
 			</div>
-			<div class="formelement">
+			<div wicket:enclosure="login" class="formelement">
 				<label wicket:for="login"><wicket:message key="install.wizard.db.step.user" /></label> <input type="text" wicket:id="login"/>
 			</div>
-			<div class="formelement">
+			<div wicket:enclosure="password" class="formelement">
 				<label wicket:for="password"><wicket:message key="install.wizard.db.step.pass" /></label> <input type="text" wicket:id="password"/>
 			</div>
 			<div class="formelement" style="max-width:860px;">

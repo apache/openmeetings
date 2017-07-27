@@ -74,8 +74,8 @@
 						MaxActive=100,
 						MaxWait=10000,
 						TestOnBorrow=true,
-						Username=${db_user},
-						Password=${db_pass}" />
+						Username=omdbuser,
+						Password=" />
 			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
 			<property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO" />
 			<property name="openjpa.DataCache" value="true" />
