@@ -18,7 +18,7 @@
  */
 function setRoomSizes() {
 	var sb = $(".room.sidebar.left")
-		, w = $(window).width() - sb.width() - 5
+		, w = $(window).width() - sb.width() - 8
 		, h = $(window).height() - $('#menu').height()
 		, p = sb.find('.tabs');
 	sb.height(h);
@@ -28,7 +28,7 @@ function setRoomSizes() {
 
 	var container = $(".room.wb.area")
 		, area = container.find(".wb-area");
-	container.width(w).height(h).css('left', sb.width() + "px");
+	container.width(w).height(h).css('left', sb.width() + 5 + "px");
 	area.width(w).height(hh);
 }
 function roomReload(event, ui) {

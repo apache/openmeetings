@@ -90,6 +90,15 @@
 	width: 315px;
 	position: absolute;
 }
+.room.sidebar.left .ui-resizable-handle {
+	width: 4px;
+	background-color: #f3f3f4;
+	border: 1px solid #dedee0;
+}
+.room.sidebar.left .ui-resizable-handle:hover {
+	background-color: #b6bdca;
+	border-color: #bebec3;
+}
 .room.wb.area {
 	position: absolute;
 }
@@ -200,14 +209,14 @@
 	overflow-y: auto;
 }
 .room.sidebar.left .user.list .user {
-	height: 40px;
+	min-height: 40px;
 	padding-left: 5px;
 	padding-top: 5px;
 	background-size: 40px 40px;
 	background-repeat: no-repeat;
 	background-position: 2px 2px;
 }
-.room.sidebar.left .user.list .user .name {
+.room.sidebar.left .user.list .user.name {
 	line-height: 18px;
 	height: 18px;
 	padding: 0;
@@ -216,7 +225,7 @@
 }
 .room.sidebar.left .user.list .user .actions {
 	position: relative;
-	height: 18px;
+	min-height: 18px;
 	padding: 0;
 	padding-left: 44px;
 	visibility: hidden;
@@ -501,4 +510,28 @@
 	height: 20px;
 	padding: 0;
 }
-
+@media screen and (max-width: 1280px) {
+	.room.sidebar.left {
+		width: 150px;
+		min-width: 150px;
+	}
+	.room.sidebar.left .tab.om-icon.big {
+		max-width: 0px;
+		padding-right: 0;
+	}
+	.room.sidebar.left .user.list .user.name {
+		display: none;
+	}
+	.room.sidebar.left .file.tree .file.item .name, .room.sidebar.left .file.tree .file.item .name span {
+		width: 40px;
+	}
+	.room.sidebar.left .file.tree .file.item .name span {
+		padding: 0;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+	.room.sidebar.left .file.tree .file.item {
+		width: 80px;
+	}
+}
