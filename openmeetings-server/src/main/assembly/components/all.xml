@@ -101,7 +101,7 @@
 				<exclude>WEB-INF/lib/aopalliance*</exclude>
 				<exclude>WEB-INF/lib/cglib-nodep*</exclude>
 				<exclude>WEB-INF/lib/slf4j-*</exclude>
-				<exclude>WEB-INF/lib/tomcat-embed-*</exclude>
+				<exclude>WEB-INF/lib/tomcat-*</exclude>
 				<exclude>WEB-INF/lib/spring-*</exclude>
 				<exclude>WEB-INF/lib/mina-core-*</exclude>
 				<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
@@ -135,7 +135,7 @@
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory><!-- FIXME should be implemented differently -->
 			<outputDirectory>plugins</outputDirectory>
 			<includes>
-				<include>tomcat-embed-*</include>
+				<include>tomcat-*</include>
 			</includes>
 		</fileSet>
 		<fileSet>
