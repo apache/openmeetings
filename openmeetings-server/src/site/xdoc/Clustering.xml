@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Clustering</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -23,8 +23,8 @@
 	<body>
 		<section name="Description">
 			<p>
-				OpenMeetings 2.1 or later is required to use clustering. One database is used for all OpenMeetings 
-				servers, so all database tables are shared across OM instances. Certain folders should be shared 
+				OpenMeetings 2.1 or later is required to use clustering. One database is used for all OpenMeetings
+				servers, so all database tables are shared across OM instances. Certain folders should be shared
 				between all servers to allow access to the files/recording.</p>
 		</section>
 		<section name="Configuration">
@@ -41,71 +41,125 @@
 				<li>All servers should be configured to use the same DB</li>
 				<li>Servers should be added in Administration -&gt; Servers section</li>
 			</ul>
-		</section>
-		<section name="Database">
-			<p>All servers should be configured to use the same database. It can be on the server or on the one node 
-			of the cluster.</p> 
-			<ul>
-				<li>Add users who can connect to the database remotely</li>
-				<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
-					set correct server address, login and password. Also add the following section:
-					<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" />]]></source>
-					Instead of the 10.1.1.1 and 10.1.1.2 set semicolon separated IPs of all nodes of the cluster.
-				</li>
-			</ul>
-		</section>
-		<section name="File systems">
-			<p>If files and recordings using the same physical folders the files and recordings will be available for 
-			each node. You can do this using Samba or NFS, for example. For using NFS do the following:</p>
-			<ul>
-				<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
-					<source>
+			<subsection name="Network">
+				<p>Multicast should be set up on all servers<br/>
+					Here are the steps for *nix like systems <a href="https://blogs.agilefaqs.com/2009/11/08/enabling-multicast-on-your-macos-unix/">Reference article</a>
+				</p>
+				<ol>
+					<li>Check your network interface supports multicast by running the following
+						command in a terminal window: <source>ifconfig -a</source>
+						When you see <tt>MULTICAST</tt> against your network interface, it means your
+						kernel is complied with Multicast option and your network interface supports it.
+					</li>
+					<li>Check if multicast routing is configured:
+						<source>netstat -nr</source>
+						If you don’t see an IP in the range of <tt>224.0.0.0 – 239.255.255.255</tt> in the first table,
+						it means you need to add your desired mutlicast address to your routes table.
+					</li>
+					<li>To add the multicast address:
+						<source>sudo route add -net 224.0.0.0 netmask 240.0.0.0 dev eth0</source>
+						NOTE: ensure <tt>eth0</tt> corresponds to your network interface name<br/>
+						Make sure you run this command on all servers you want to be multicast enabled.
+					</li>
+					<li>Using netstat check if the multicast IP is visible in your route table (see step 2.)</li>
+					<li>
+						Using tcpdump and ping check if your server is able to multicast.<br/>
+						Run the following command on <b>all</b> the servers. <source>sudo tcpdump -ni en0 host 228.0.0.4</source>
+						Run the following command on <b>any</b> server. <source>ping -t 1 -c 2 228.0.0.4</source>
+						Check all servers receiving pings
+					</li>
+					<li>
+						Run <source>sudo route -v delete -net 224.0.0.0 netmask 240.0.0.0</source> to disable multicast
+					</li>
+				</ol>
+			</subsection>
+			<subsection name="Database">
+				<p>All servers should be configured to use the same database. It can be on the server or on the one node
+				of the cluster.</p>
+				<ul>
+					<li>Add users who can connect to the database remotely</li>
+					<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
+						set correct server address, login and password. Also add the following section:
+						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" />]]></source>
+						Instead of the 10.1.1.1 and 10.1.1.2 set semicolon separated IPs of all nodes of the cluster.
+					</li>
+				</ul>
+			</subsection>
+			<subsection name="File systems">
+				<p>If files and recordings using the same physical folders the files and recordings will be available for
+				each node. You can do this using Samba or NFS, for example. For using NFS do the following:</p>
+				<ul>
+					<li>Install NFS to the data server. In the file <tt>/etc/exports</tt> add the following lines:
+						<source>
 /opt/red5/webapps/openmeetings/upload 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
 /opt/red5/webapps/openmeetings/streams 10.1.1.2(rw,sync,no_subtree_check,no_root_squash)
-					</source>
-					Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with 
-					folders.
-				</li>
-				<li>
-					Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
-					<source>
+						</source>
+						Here 10.1.1.2 - is node ip for NFS remote access. Add these lines for all nodes except node with
+						folders.
+					</li>
+					<li>
+						Install NFS common tools to other nodes. In the file <tt>/etc/fstab</tt> do the following:
+						<source>
 10.1.1.1:/opt/red5/webapps/openmeetings/upload/
 /opt/red5/webapps/openmeetings/upload nfs timeo=50,hard,intr
 10.1.1.1:/opt/red5/webapps/openmeetings/streams/
 /opt/red5/webapps/openmeetings/streams nfs timeo=50,hard,intr
-					</source>
-					Here 10.1.1.1 – data server ip. And run the command:
-					<source>mount -a</source>
-				</li>
-			</ul> 
-		</section>
-		<section name="OM nodes configuration">
-			<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt>:</p>
-			<ul>
-				<li>
-					For each node uncomment line:
-					<source>
+						</source>
+						Here 10.1.1.1 – data server ip. And run the command:
+						<source>mount -a</source>
+					</li>
+				</ul>
+			</subsection>
+			<subsection name="OM nodes configuration">
+				<ol>
+					<li>
+						<p>In the file <tt>/opt/red5/conf/jee-container.xml</tt> add following block to <tt>baseHost</tt> property:</p>
+						<source><![CDATA[
+<property name="cluster">
+	<bean class="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+</property>
+						]]></source>
+						So the result will be:
+						<source><![CDATA[
+<property name="baseHost">
+	<bean class="org.apache.catalina.core.StandardHost">
+		<property name="name" value="${http.host}" />
+		<property name="cluster">
+			<bean class="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+		</property>
+	</bean>
+</property>
+						]]></source>
+					</li>
+					<li>
+						<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt>:</p>
+						<ul>
+							<li>
+								For each node uncomment line:
+								<source>
 <![CDATA[
 <!-- Need to be uncommented and set to the real ID if in cluster mode-->
 <property name="serverId" value="1" />
 ]]>
-					</source>
-					and input the unique value for each node.
-				</li>
-				<li> 
-					Replace <tt>&lt;ref bean="openmeetings.HashMapStore" /&gt;  &lt;!-- Memory based session cache by default --&gt;</tt><br/>
-					with <tt>&lt;ref bean="openmeetings.DatabaseStore" /&gt;</tt> 
-					(Currently commented out with following comment: <tt>"The following section should be used in clustering mode"</tt>)
-				</li>
-			</ul>
-		</section>
-		<section name="Configuring cluster in Administration">
-			<p>Run red5 on each node. Login to the system as admin.</p>
-			<ul>
-				<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
-				<li>
-					Go to the <tt>Administration -&gt; Servers</tt> and add all cluster nodes with the following settings:
-					<source>
+								</source>
+								and input the unique value for each node.
+							</li>
+							<li>
+								Replace <tt>&lt;ref bean="openmeetings.HashMapStore" /&gt;  &lt;!-- Memory based session cache by default --&gt;</tt><br/>
+								with <tt>&lt;ref bean="openmeetings.DatabaseStore" /&gt;</tt>
+								(Currently commented out with following comment: <tt>"The following section should be used in clustering mode"</tt>)
+							</li>
+						</ul>
+					</li>
+				</ol>
+			</subsection>
+			<subsection name="Configuring cluster in Administration">
+				<p>Run red5 on each node. Login to the system as admin.</p>
+				<ul>
+					<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
+					<li>
+						Go to the <tt>Administration -&gt; Servers</tt> and add all cluster nodes with the following settings:
+						<source>
 Server Name = node name;
 Active = check the checkbox. If the checkbox is checked it means node is active and you can use this node;
 Server Address = node ip;
@@ -114,26 +168,27 @@ User (SOAP Access) = login of Webservice user from the previous step;
 Password = password of Webservise user;
 Webapp path = openmeetings - path where OM installed on this node, it would be better if this path will be the same for all nodes;
 Protocol = http.
-					</source>
-				</li> 
-			</ul>
-			<img src="images/cluster1.png" alt="" width="650" height="461" />
-		</section>
-		<section name="Ensure everything works as expected">
-			<ul>
-				<li>Set up the cluster and loggin with two users, go to the same room (also check before room 
-				entering that the status page with the room list shows the correct number of participants before 
-				entering the room). You should login to the same server initially, the server will redirect you 
-				for the conference room to the appropriate server automatically. Both users should be in the same room.
-				</li>
-				<li>Do the same with only two users but go to _different_ rooms. The calculation should send 
-				both users to different servers, cause based on the calculation two different rooms on a cluster 
-				with two nodes should go exactly one room for each node. You can now loggin really to node1 
-				and node2 of your cluster while those users are loggedin and go to <tt>Administration &gt; Connections</tt>
-				and check in the column "servers" where they are located. They should be on different server.
-				</li>
-			</ul>
-			<img src="images/cluster2.png" alt="" width="650" height="369" />
+						</source>
+					</li>
+				</ul>
+				<img src="images/cluster1.png" alt="" width="650" height="461" />
+			</subsection>
+			<subsection name="Ensure everything works as expected">
+				<ul>
+					<li>Set up the cluster and loggin with two users, go to the same room (also check before room
+					entering that the status page with the room list shows the correct number of participants before
+					entering the room). You should login to the same server initially, the server will redirect you
+					for the conference room to the appropriate server automatically. Both users should be in the same room.
+					</li>
+					<li>Do the same with only two users but go to _different_ rooms. The calculation should send
+					both users to different servers, cause based on the calculation two different rooms on a cluster
+					with two nodes should go exactly one room for each node. You can now loggin really to node1
+					and node2 of your cluster while those users are loggedin and go to <tt>Administration &gt; Connections</tt>
+					and check in the column "servers" where they are located. They should be on different server.
+					</li>
+				</ul>
+				<img src="images/cluster2.png" alt="" width="650" height="369" />
+			</subsection>
 		</section>
 	</body>
 </document>
