@@ -33,11 +33,10 @@ import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -113,13 +112,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * @param fi - FileItem of the Wml being loaded
 	 */
 	public void sendToWhiteboard(String uid, Long wbId, FileItem fi) {
-		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
-		if (csi == null) {
-			log.warn("No client was found to send Wml:: {}", uid);
-			return;
-		}
-		Client client = csi.getRcl();
-
+		StreamClient client = sessionManager.get(uid);
 		if (client == null) {
 			log.warn("No client was found to send Wml:: {}", uid);
 			return;

@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -202,7 +203,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				.getResultList();
 	}
 
-	public long getRoomsCapacityByIds(List<Long> ids) {
+	public long getRoomsCapacityByIds(Collection<Long> ids) {
 		return ids == null || ids.isEmpty() ? 0L
 			: em.createNamedQuery("getRoomsCapacityByIds", Long.class).setParameter("ids", ids).getSingleResult();
 	}

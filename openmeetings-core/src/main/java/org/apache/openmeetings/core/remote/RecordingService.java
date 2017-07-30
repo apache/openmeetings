@@ -29,6 +29,7 @@ import org.apache.openmeetings.core.converter.BaseConverter;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
+import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
@@ -39,12 +40,13 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.scope.IScope;
@@ -94,7 +96,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public String recordMeetingStream(IConnection current, Client client, String roomRecordingName, String comment, boolean isInterview) {
+	public String recordMeetingStream(IConnection current, StreamClient client, String roomRecordingName, String comment, boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
@@ -134,13 +136,13 @@ public class RecordingService implements IPendingServiceCallback {
 			// Update Client and set Flag
 			client.setIsRecording(true);
 			client.setRecordingId(recordingId);
-			sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
+			sessionManager.update(client);
 
 			// get all stream and start recording them
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 						// Send every user a notification that the recording did start
 						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getPublicSID()));
@@ -160,7 +162,7 @@ public class RecordingService implements IPendingServiceCallback {
 								// Add Meta Data
 								rcl.setRecordingMetaDataId(metaDataId);
 
-								sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+								sessionManager.update(rcl);
 							}
 						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 							// if the user does publish av, a, v
@@ -185,7 +187,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 							rcl.setRecordingMetaDataId(metaId);
 
-							sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+							sessionManager.update(rcl);
 
 							// Start FLV recording
 							recordShow(conn, broadcastId, streamName, metaId, !isAudioOnly, isInterview);
@@ -306,7 +308,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public void stopRecordAndSave(IScope scope, Client client, Long storedRecordingId) {
+	public void stopRecordAndSave(IScope scope, StreamClient client, Long storedRecordingId) {
 		try {
 			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
 			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getPublicSID()));
@@ -315,7 +317,7 @@ public class RecordingService implements IPendingServiceCallback {
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 						if (rcl == null) {
 							continue;
@@ -356,7 +358,7 @@ public class RecordingService implements IPendingServiceCallback {
 				client.setRecordingId(null);
 				client.setIsRecording(false);
 
-				sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
+				sessionManager.update(client);
 				log.debug("recordingConverterTask ", recordingConverterTask);
 
 				Recording recording = recordingDao.get(recordingId);
@@ -371,18 +373,18 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public Client checkLzRecording() {
+	public StreamClient checkLzRecording() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
+			IClient client = current.getClient();
 
-			log.debug("getCurrentRoomClient -2- " + streamid);
+			log.debug("getCurrentRoomClient -2- {} ", client.getId());
 
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(client));
 
 			log.debug("getCurrentRoomClient -#########################- " + currentClient.getRoomId());
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
+			for (StreamClient rcl : sessionManager.listByRoomAll(currentClient.getRoomId())) {
 				if (rcl.getIsRecording()) {
 					return rcl;
 				}
@@ -394,7 +396,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return null;
 	}
 
-	public void stopRecordingShowForClient(IScope scope, Client rcl) {
+	public void stopRecordingShowForClient(IScope scope, StreamClient rcl) {
 		try {
 			// this cannot be handled here, as to stop a stream and to leave a
 			// room is not
@@ -432,7 +434,7 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public void addRecordingByStreamId(IConnection conn, Client rcl, Long recordingId) {
+	public void addRecordingByStreamId(IConnection conn, StreamClient rcl, Long recordingId) {
 		try {
 			Recording recording = recordingDao.get(recordingId);
 
@@ -454,7 +456,7 @@ public class RecordingService implements IPendingServiceCallback {
 					// Add Meta Data
 					rcl.setRecordingMetaDataId(metaDataId);
 
-					sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+					sessionManager.update(rcl);
 				}
 			} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
 				// if the user does publish av, a, v
@@ -480,7 +482,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 				rcl.setRecordingMetaDataId(metaDataId);
 
-				sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+				sessionManager.update(rcl);
 
 			}
 

@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -37,9 +37,9 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -48,6 +48,7 @@ import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
+import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.service.IPendingServiceCall;
@@ -103,15 +104,14 @@ public class MainService implements IPendingServiceCallback {
 		return users;
 	}
 
-	public Client getCurrentRoomClient(String SID) {
+	public StreamClient getCurrentRoomClient(String SID) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
+			IClient client = current.getClient();
 
-			log.debug("getCurrentRoomClient -1- " + SID);
-			log.debug("getCurrentRoomClient -2- " + streamid);
+			log.debug("getCurrentRoomClient {}, {}", SID, client.getId());
 
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(client));
 			return currentClient;
 		} catch (Exception err) {
 			log.error("[getCurrentRoomClient]", err);
@@ -177,21 +177,19 @@ public class MainService implements IPendingServiceCallback {
 			log.debug("[loginWicket] user and roomid are not empty: " + userId + ", " + wicketroomid);
 			if (wicketroomid.equals(sd.getRoomId()) || isRoomAllowedToUser(r, u)) {
 				IConnection current = Red5.getConnectionLocal();
-				String streamId = current.getClient().getId();
-				Client currentClient = sessionManager.getClientByStreamId(streamId, null);
+				StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 				if (User.Type.user != u.getType() || (User.Type.user == u.getType() && !u.getGroupUsers().isEmpty())) {
 					u.setSessionData(sd);
 					currentClient.setUserId(u.getId());
 					currentClient.setRoomId(wicketroomid);
-					SessionVariablesUtil.setUserId(current.getClient(), u.getId());
 
 					currentClient.setUsername(u.getLogin());
 					currentClient.setFirstname(u.getFirstname());
 					currentClient.setLastname(u.getLastname());
 					currentClient.setPicture_uri(u.getPictureuri());
 					currentClient.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
-					sessionManager.updateClientByStreamId(streamId, currentClient, false, null);
+					sessionManager.update(currentClient);
 
 					scopeApplicationAdapter.sendMessageToCurrentScope("roomConnect", currentClient, false);
 

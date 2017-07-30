@@ -26,14 +26,12 @@ import static org.apache.openmeetings.web.app.WebSession.getSid;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.ServerDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
@@ -58,6 +56,9 @@ import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Member;
+import com.hazelcast.instance.MemberImpl;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
@@ -184,38 +185,45 @@ public class SwfPanel extends BasePanel {
 		return arr.toString();
 	}
 
-	private static PageParameters addServer(PageParameters pp, Server s) {
-		return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
+	private static PageParameters addServer(PageParameters pp, Member m) {
+		//TODO check this return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
+		return pp;
 	}
 
-	public static PageParameters addServer(Long roomId, boolean addBasic) {
+	private static PageParameters addServer(Long roomId, boolean addBasic) {
 		PageParameters pp = new PageParameters();
 		if (addBasic) {
 			pp.add("wicketsid", getSid()).add(WICKET_ROOM_ID, roomId).add("language", getLanguage());
 		}
-		List<Server> serverList = getBean(ServerDao.class).getActiveServers();
 
 		long minimum = -1;
-		Server result = null;
-		Map<Server, List<Long>> activeRoomsMap = new HashMap<>();
-		for (Server server : serverList) {
-			List<Long> roomIds = getBean(SessionManager.class).getActiveRoomIdsByServer(server);
+		Member result = null;
+		Map<Member, Set<Long>> activeRoomsMap = new HashMap<>();
+		for (Member _m : Application.get(). getServers()) {
+			String serverId = null;
+			MemberImpl m = (MemberImpl)_m;
+			try {
+				HazelcastInstance ins = (HazelcastInstance)MemberImpl.class.getDeclaredField("instance").get(m);
+				serverId = ins.getName();
+			} catch (Exception e) {
+				//no-op
+			}
+			Set<Long> roomIds = getBean(ISessionManager.class).getActiveRoomIds(serverId);
 			if (roomIds.contains(roomId)) {
 				// if the room is already opened on a server, redirect the user to that one,
-				log.debug("Room is already opened on a server " + server.getAddress());
-				return addServer(pp, server);
+				log.debug("Room is already opened on a server {}", m.getAddress());
+				return addServer(pp, m);
 			}
-			activeRoomsMap.put(server, roomIds);
+			activeRoomsMap.put(m, roomIds);
 		}
-		for (Map.Entry<Server, List<Long>> entry : activeRoomsMap.entrySet()) {
-			List<Long> roomIds = entry.getValue();
+		for (Map.Entry<Member, Set<Long>> entry : activeRoomsMap.entrySet()) {
+			Set<Long> roomIds = entry.getValue();
 			long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
 			if (minimum < 0 || capacity < minimum) {
 				minimum = capacity;
 				result = entry.getKey();
 			}
-			log.debug("Checking server: " + entry.getKey() + " Number of rooms " + roomIds.size() + " RoomIds: "
-					+ roomIds + " max(Sum): " + capacity);
+			log.debug("Checking server: {} Number of rooms {} RoomIds: {} max(Sum): {}", entry.getKey(), roomIds.size(), roomIds, capacity);
 		}
 		return result == null ? pp : addServer(pp, result);
 	}

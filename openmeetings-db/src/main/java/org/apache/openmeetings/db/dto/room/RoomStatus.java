@@ -20,18 +20,18 @@ package org.apache.openmeetings.db.dto.room;
 
 import java.util.List;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 
 public class RoomStatus {
-	List<Client> clientList;
+	List<StreamClient> clientList;
 	BrowserStatus browserStatus;
 	
 	public RoomStatus() {}
 	
-	public List<Client> getClientList() {
+	public List<StreamClient> getClientList() {
 		return clientList;
 	}
-	public void setClientList(List<Client> clientList) {
+	public void setClientList(List<StreamClient> clientList) {
 		this.clientList = clientList;
 	}
 	public BrowserStatus getBrowserStatus() {

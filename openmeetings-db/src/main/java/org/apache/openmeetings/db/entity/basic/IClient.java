@@ -22,10 +22,12 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 /**
  * Temporary interface, will be removed after 2 types of cliens will be merged
- * {@link org.apache.openmeetings.db.entity.room.Client}
+ * {@link org.apache.openmeetings.db.entity.room.StreamClient}
  * {@link org.apache.openmeetings.db.entity.basic.Client}
  * @author solomax
  *
  */
 public interface IClient extends IDataProviderEntity {
+	String getUid();
+	String getServerId();
 }

@@ -28,7 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -205,7 +205,7 @@ public class SessiondataDao {
 	 */
 	public void clearSessionByRoomId(Long roomId) {
 		try {
-			for (Client rcl : sessionManager.getClientListByRoom(roomId)) {
+			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
 				String aux = rcl.getSwfurl();
 
 				//FIXME TODO this need to be refactored !

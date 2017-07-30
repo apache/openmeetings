@@ -20,23 +20,7 @@ package org.apache.openmeetings.db.entity.room;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.apache.openmeetings.db.entity.basic.IClient;
-import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.wicket.util.string.StringValue;
 
@@ -45,368 +29,70 @@ import org.apache.wicket.util.string.StringValue;
  *
  * @author sebawagner
  */
-@Entity
-@NamedQueries({
-	@NamedQuery(name = "deleteAll", query = "DELETE FROM Client"),
-	@NamedQuery(name = "deletedById", query = "DELETE FROM Client c WHERE c.id = :id"),
-	@NamedQuery(name = "deleteClientsByServer", query = "DELETE FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "deletedByServerAndStreamId", query = "DELETE FROM Client c WHERE c.server = :server AND c.streamid LIKE :streamid"),
-	@NamedQuery(name = "countClients", query = "SELECT count(c.id) FROM Client c"),
-	@NamedQuery(name = "countClientsByServer", query = "SELECT count(c.id) FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "countClientsByServerAndStreamId", query = "SELECT count(c.id) FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
-	@NamedQuery(name = "getClientByServerAndStreamId", query = "SELECT c FROM Client c WHERE c.streamid LIKE :streamid AND c.server = :server"),
-	@NamedQuery(name = "getClientsByPublicSIDAndServer", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID AND c.server = :server"),
-	@NamedQuery(name = "getClientsByPublicSID", query = "SELECT c FROM Client c WHERE c.publicSID LIKE :publicSID"),
-	@NamedQuery(name = "getClientsByServer", query = "SELECT c FROM Client c WHERE c.server = :server"),
-	@NamedQuery(name = "getClients", query = "SELECT c FROM Client c"),
-	@NamedQuery(name = "getClientsWithServer", query = "SELECT c FROM Client c LEFT JOIN FETCH c.server"),
-	@NamedQuery(name = "getClientsByUserId", query = "SELECT c FROM Client c WHERE c.server = :server AND c.userId = :userId"),
-	@NamedQuery(name = "getClientsByRoomId", query = "SELECT c FROM Client c WHERE c.roomId = :roomId"),
-	@NamedQuery(name = "getRoomsIdsByServer", query = "SELECT c.roomId FROM Client c WHERE c.server = :server GROUP BY c.roomId")
-})
-@Table(name = "client")
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-public class Client implements IClient {
+public class StreamClient implements IClient {
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-
-	/**
-	 * @see Client#getUsername()
-	 */
-	@Column(name = "username")
 	private String username = "";
-
-	/**
-	 * @see Client#getStreamid()
-	 */
-	@Column(name = "streamid")
 	private String streamid = "";
-
-	/**
-	 * @see Client#getScope()
-	 */
-	@Column(name = "scope")
 	private String scope = "";
-
-	/**
-	 * @see Client#getVWidth()
-	 */
-	@Column(name = "vwidth")
 	private int vWidth = 0;
-
-	/**
-	 * @see Client#getVHeight()
-	 */
-	@Column(name = "vheight")
 	private int vHeight = 0;
-
-	/**
-	 * @see Client#getVX()
-	 */
-	@Column(name = "vx")
 	private int vX = 0;
-
-	/**
-	 * @see Client#getVY()
-	 */
-	@Column(name = "vy")
 	private int vY = 0;
-
-	/**
-	 * @see Client#getStreamPublishName()
-	 */
-	@Column(name = "stream_publish_name")
 	private String streamPublishName = "";
-
-	/**
-	 * @see Client#getPublicSID()
-	 */
-	@Column(name = "public_sid")
 	private String publicSID = "";
-
-	/**
-	 * {@link Client#getSid()} of the client who initiated the connection
-	 */
-	@Column(name = "owner_sid")
 	private String ownerSid = null;
-
-	/**
-	 * @see Client#getIsMod()
-	 */
-	@Column(name = "is_mod", nullable = false)
 	private boolean isMod = false;
-
-	/**
-	 * @see Client#getIsSuperModerator()
-	 */
-	@Column(name = "is_supermoderator", nullable = false)
 	private boolean isSuperModerator = false;
-
-	/**
-	 * @see Client#getCanDraw()
-	 */
-	@Column(name = "can_draw", nullable = false)
 	private boolean canDraw = false;
-
-	/**
-	 * @see Client#getCanShare()
-	 */
-	@Column(name = "can_share", nullable = false)
 	private boolean canShare = false;
-
-	/**
-	 * @see Client#getCanRemote()
-	 */
-	@Column(name = "can_remote", nullable = false)
 	private boolean canRemote = false;
-
-	/**
-	 * @see Client#getCanGiveAudio()
-	 */
-	@Column(name = "can_giveaudio", nullable = false)
 	private boolean canGiveAudio = false;
-
-	@Column(name = "can_video", nullable = false)
 	private boolean canVideo = false;
-
-	/**
-	 * @see Client#getConnectedSince()
-	 */
-	@Column(name = "connected_since")
 	private Date connectedSince;
-
-	/**
-	 * @see Client#getFormatedDate()
-	 */
-	@Column(name = "formated_date")
 	private String formatedDate;
-
-	/**
-	 * @see Client#isScreenClient()
-	 */
-	@Column(name = "is_screenclient", nullable = false)
 	private boolean screenClient;
-
-	/**
-	 * @see Client#getUsercolor()
-	 */
-	@Column(name = "usercolor")
 	private String usercolor;
-
-	/**
-	 * @see Client#getUserpos()
-	 */
-	@Column(name = "userpos")
 	private Integer userpos;
-
-	/**
-	 * @see Client#getUserip()
-	 */
-	@Column(name = "userip")
 	private String userip;
-
-	/**
-	 * @see Client#getUserport()
-	 */
-	@Column(name = "userport")
 	private int userport;
-
-	/**
-	 * @see Client#getRoomId()
-	 */
-	@Column(name = "room_id")
 	private Long roomId;
-
-	/**
-	 * @see Client#getRoomEnter()
-	 */
-	@Column(name = "room_enter")
 	private Date roomEnter = null;
-
-	/**
-	 * @see Client#getBroadCastID()
-	 */
-	@Column(name = "broadcast_id")
 	private long broadCastID = -2;
-
-	/**
-	 * @see Client#getUserId()
-	 */
-	@Column(name = "user_id")
 	private Long userId = null;
-
-	/**
-	 * @see Client#getFirstname()
-	 */
-	@Column(name = "firstname")
 	private String firstname = "";
-
-	/**
-	 * @see Client#getLastname()
-	 */
-	@Column(name = "lastname")
 	private String lastname = "";
-
-	/**
-	 * @see Client#getMail()
-	 */
-	@Column(name = "email")
 	private String email;
-
-	/**
-	 * @see Client#getLastLogin()
-	 */
-	@Column(name = "last_login")
 	private String lastLogin;
-
-	/**
-	 * @see Client#getSecurityCode()
-	 */
-	@Column(name = "security_code")
 	private String securityCode;
-
-	/**
-	 * @see Client#getPicture_uri()
-	 */
-	@Column(name = "picture_uri")
 	private String picture_uri;
-
-	/**
-	 * @see Client#getLanguage()
-	 */
-	@Column(name = "language")
 	private String language = "";
-
-	/**
-	 * @see Client#getAvsettings()
-	 */
-	@Column(name = "avsettings")
 	private String avsettings = "";
-
-	/**
-	 * @see Client#getSwfurl()
-	 */
-	// FIXME: Move to {@link ClientSession}
-	@Column(name = "swfurl", length=2048)
 	private String swfurl;
-
-	@Column(name = "tcurl", length=2048)
 	private String tcUrl;
-
-	@Column(name = "nativeSsl", nullable = false)
 	private boolean nativeSsl = false;
-
-	/**
-	 * @see Client#getIsRecording()
-	 */
-	@Column(name = "is_recording", nullable = false)
 	private boolean isRecording = false;
-
-	/**
-	 * @see Client#getRoomRecordingName()
-	 */
-	@Column(name = "room_recording_name")
 	private String roomRecordingName;
-
-	/**
-	 * @see Client#getRecordingId()
-	 */
-	@Column(name = "recording_id")
 	private Long recordingId;
-
-	/**
-	 * @see Client#getRecordingMetaDataId()
-	 */
-	@Column(name = "recording_metadata_id")
 	private Long recordingMetaDataId;
-
-	/**
-	 * @see Client#isStartRecording()
-	 */
-	@Column(name = "start_recording", nullable = false)
 	private boolean startRecording = false;
-
-	/**
-	 * @see Client#isStartStreaming()
-	 */
-	@Column(name = "start_streaming", nullable = false)
 	private boolean startStreaming = false;
-
-	/**
-	 * @see Client#isScreenPublishStarted()
-	 */
-	@Column(name = "screen_publish_started", nullable = false)
 	private boolean screenPublishStarted = false;
-
-	/**
-	 * @see Client#isStreamPublishStarted()
-	 */
-	@Column(name = "stream_publish_started", nullable = false)
 	private boolean streamPublishStarted = false;
-
-	/**
-	 * @see Client#getIsBroadcasting()
-	 */
-	@Column(name = "is_broadcasting", nullable = false)
 	private boolean isBroadcasting = false;
-
-	/**
-	 * @see Client#getExternalUserId()
-	 */
-	@Column(name = "external_user_id")
 	private String externalUserId;
-
-	/**
-	 * @see Client#getExternalUserType()
-	 */
-	@Column(name = "external_user_type")
 	private String externalUserType;
-
-	/**
-	 * @see Client#getInterviewPodId()
-	 */
-	@Column(name = "interview_pod_id")
 	private Integer interviewPodId = null;
-
-	/**
-	 * @see Client#isAllowRecording()
-	 */
-	@Column(name = "allow_recording", nullable = false)
 	private boolean allowRecording = true;
-
-	/**
-	 * @see Client#getZombieCheckFlag()
-	 */
-	@Column(name = "zombie_check_flag", nullable = false)
 	private boolean zombieCheckFlag = false;
-
-	/**
-	 * @see Client#getMicMuted()
-	 */
-	@Column(name = "mic_muted", nullable = false)
 	private boolean micMuted = false;
-
-	/**
-	 * @see Client#isSipTransport()
-	 */
-	@Column(name = "sip_transport", nullable = false)
 	private boolean sipTransport = false;
-
-	@Column(name = "mobile", nullable = false)
 	private boolean mobile = false;
+	private String serverId = null;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "server_id")
-	private Server server;
+	public StreamClient() {}
 
-	public Client() {}
-
-	public Client(String streamid, String publicSID, Long roomId,
+	public StreamClient(String streamid, String publicSID, Long roomId,
 			Long userId, String firstname, String lastname,
 			String username, String connectedSince, String scope) {
 		super();
@@ -436,12 +122,16 @@ public class Client implements IClient {
 
 	@Override
 	public Long getId() {
-		return id;
+		return null;
 	}
 
 	@Override
 	public void setId(Long id) {
-		this.id = id;
+	}
+
+	@Override
+	public String getUid() {
+		return publicSID;
 	}
 
 	public Date getConnectedSince() {
@@ -873,12 +563,13 @@ public class Client implements IClient {
 		this.sipTransport = sipTransport;
 	}
 
-	public Server getServer() {
-		return server;
+	@Override
+	public String getServerId() {
+		return serverId;
 	}
 
-	public void setServer(Server server) {
-		this.server = server;
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
 	}
 
 	public boolean isMobile() {
@@ -911,6 +602,6 @@ public class Client implements IClient {
 				+ ", isMobile = " + mobile + ", roomId=" + roomId + ", broadCastID=" + broadCastID + ", userId="
 				+ userId + ", avsettings=" + avsettings + ", isRecording=" + isRecording + ", recordingId="
 				+ recordingId + ", recordingMetaDataId=" + recordingMetaDataId + ", screenPublishStarted="
-				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + server + "]";
+				+ screenPublishStarted + ", interviewPodId=" + interviewPodId + ", server=" + serverId + "]";
 	}
 }

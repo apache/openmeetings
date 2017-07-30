@@ -41,7 +41,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 import org.apache.directory.api.util.Strings;
@@ -61,6 +60,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
@@ -86,6 +86,7 @@ import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
+import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseException;
@@ -98,6 +99,7 @@ import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.protocol.http.CsrfPreventionRequestCycleListener;
 import org.apache.wicket.protocol.ws.api.WebSocketMessageBroadcastHandler;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
@@ -119,13 +121,21 @@ import org.wicketstuff.dashboard.WidgetRegistry;
 import org.wicketstuff.dashboard.web.DashboardContext;
 import org.wicketstuff.dashboard.web.DashboardContextInjector;
 import org.wicketstuff.dashboard.web.DashboardSettings;
+import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
+
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Member;
+import com.hazelcast.core.MembershipEvent;
+import com.hazelcast.core.MembershipListener;
 
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
 	private static boolean isInstalled;
-	private static ConcurrentHashMap<String, Client> ONLINE_USERS = new ConcurrentHashMap<>();
-	private static ConcurrentHashMap<String, Client> INVALID_SESSIONS = new ConcurrentHashMap<>();
-	private static ConcurrentHashMap<Long, Set<String>> ROOMS = new ConcurrentHashMap<>();
+	private final static String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
+	private final static String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
+	private final static String ROOMS_KEY = "ROOMS_KEY";
+	private final static String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
@@ -139,6 +149,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NOTINIT_MAPPING = "/notinited";
 	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
+	private final HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance();
 
 	@Override
 	protected void init() {
@@ -146,6 +157,22 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
+		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
+			@Override
+			public void memberRemoved(MembershipEvent membershipEvent) {
+				//server down, need to remove all online clients
+			}
+
+			@Override
+			public void memberAdded(MembershipEvent membershipEvent) {
+			}
+		});
+		setPageManagerProvider(new DefaultPageManagerProvider(this) {
+			@Override
+			protected IDataStore newDataStore() {
+				return new HazelcastDataStore(hazelcast);
+			}
+		});
 		//Add custom resource loader at the beginning, so it will be checked first in the
 		//chain of Resource Loaders, if not found it will search in Wicket's internal
 		//Resource Loader for a the property key
@@ -257,9 +284,38 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return get().dashboardContext;
 	}
 
+	private Map<String, Client> getOnlineUsers() {
+		return hazelcast.getMap(ONLINE_USERS_KEY);
+	}
+
+	private Map<String, String> getInvalidSessions() {
+		return hazelcast.getMap(INVALID_SESSIONS_KEY);
+	}
+
+	private Map<Long, Set<String>> getRooms() {
+		return hazelcast.getMap(ROOMS_KEY);
+	}
+
+	@Override
+	public Set<Long> getActiveRoomIds() {
+		return getRooms().keySet();
+	}
+
+	@Override
+	public Map<String, StreamClient> getStreamClients() {
+		return hazelcast.getMap(STREAM_CLIENT_KEY);
+	}
+
+	@Override
+	public StreamClient update(StreamClient c) {
+		hazelcast.getMap(STREAM_CLIENT_KEY).put(c.getUid(), c);
+		return c;
+	}
+
 	public static void addOnlineUser(Client c) {
 		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoomId());
-		ONLINE_USERS.put(c.getUid(), c);
+		c.setServerId(get().getServerId());
+		get().getOnlineUsers().put(c.getUid(), c);
 	}
 
 	public static void exitRoom(Client c) {
@@ -278,7 +334,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public void exit(String uid) {
 		if (uid != null) {
-			exit(ONLINE_USERS.get(uid));
+			exit(getOnlineUsers().get(uid));
 		}
 	}
 
@@ -288,11 +344,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				exitRoom(c);
 			}
 			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoomId());
-			ONLINE_USERS.remove(c.getUid());
+			get().getOnlineUsers().remove(c.getUid());
 		}
 	}
 
-	private static boolean hasVideo(org.apache.openmeetings.db.entity.room.Client rcl) {
+	private static boolean hasVideo(StreamClient rcl) {
 		return rcl != null && rcl.getAvsettings().contains("v");
 	}
 
@@ -301,7 +357,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public org.apache.openmeetings.db.entity.room.Client updateClient(org.apache.openmeetings.db.entity.room.Client rcl, boolean forceSize) {
+	public StreamClient updateClient(StreamClient rcl, boolean forceSize) {
 		if (rcl == null) {
 			return null;
 		}
@@ -389,7 +445,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Client getOnlineClient(String uid) {
-		return uid == null ? null : ONLINE_USERS.get(uid);
+		return uid == null ? null : get().getOnlineUsers().get(uid);
 	}
 
 	@Override
@@ -399,7 +455,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static boolean isUserOnline(Long userId) {
 		boolean isUserOnline = false;
-		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {
+		for (Map.Entry<String, Client> e : get().getOnlineUsers().entrySet()) {
 			if (e.getValue().getUserId().equals(userId)) {
 				isUserOnline = true;
 				break;
@@ -409,12 +465,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static List<Client> getClients() {
-		return new ArrayList<>(ONLINE_USERS.values());
+		return new ArrayList<>(get().getOnlineUsers().values());
 	}
 
 	public static List<Client> getClients(Long userId) {
 		List<Client> result =  new ArrayList<>();
-		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {
+		for (Map.Entry<String, Client> e : get().getOnlineUsers().entrySet()) {
 			if (e.getValue().getUserId().equals(userId)) {
 				result.add(e.getValue());
 				break;
@@ -425,7 +481,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static Client getClientByKeys(Long userId, String sessionId) {
 		Client client = null;
-		for (Map.Entry<String, Client> e : ONLINE_USERS.entrySet()) {
+		for (Map.Entry<String, Client> e : get().getOnlineUsers().entrySet()) {
 			Client c = e.getValue();
 			if (c.getUserId().equals(userId) && c.getSessionId().equals(sessionId)) {
 				client = c;
@@ -439,27 +495,37 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public void invalidateClient(Long userId, String sessionId) {
 		Client client = getClientByKeys(userId, sessionId);
 		if (client != null) {
-			if (!INVALID_SESSIONS.containsKey(client.getSessionId())) {
-				INVALID_SESSIONS.put(client.getSessionId(), client);
+			Map<String, String> invalid = getInvalidSessions();
+			if (!invalid.containsKey(client.getSessionId())) {
+				invalid.put(client.getSessionId(), client.getUid());
 				exit(client);
 			}
 		}
 	}
 
 	public static boolean isInvaldSession(String sessionId) {
-		return sessionId == null ? false : INVALID_SESSIONS.containsKey(sessionId);
+		return sessionId == null ? false : get().getInvalidSessions().containsKey(sessionId);
 	}
 
 	public static void removeInvalidSession(String sessionId) {
 		if (sessionId != null){
-			INVALID_SESSIONS.remove(sessionId);
+			get().getInvalidSessions().remove(sessionId);
 		}
+	}
+
+	public static Client update(Client c) {
+		get().getOnlineUsers().put(c.getUid(), c); // update in storage
+		return c;
 	}
 
 	public static Client addUserToRoom(Client c) {
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), c.getRoomId());
-		ROOMS.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<String>());
-		ROOMS.get(c.getRoomId()).add(c.getUid());
+		Map<Long, Set<String>> rooms = get().getRooms();
+		rooms.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<String>());
+		Set<String> set = rooms.get(c.getRoomId());
+		set.add(c.getUid());
+		rooms.put(c.getRoomId(), set);
+		update(c);
 		return c;
 	}
 
@@ -467,14 +533,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Long roomId = c.getRoomId();
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
 		if (roomId != null) {
-			Set<String> clients = ROOMS.get(roomId);
+			Set<String> clients = get().getRooms().get(roomId);
 			if (clients != null) {
 				clients.remove(c.getUid());
-				c.setRoomId(null);
 			}
 			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), roomId);
-			c.getActivities().clear();
+			c.clearActivities();
 			c.clearRights();
+			update(c);
 		}
 		return c;
 	}
@@ -495,7 +561,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static List<Client> getRoomClients(Long roomId, Predicate<Client> filter) {
 		List<Client> clients = new ArrayList<>();
 		if (roomId != null) {
-			Set<String> uids = ROOMS.get(roomId);
+			Set<String> uids = get().getRooms().get(roomId);
 			if (uids != null) {
 				for (String uid : uids) {
 					Client c = getOnlineClient(uid);
@@ -510,7 +576,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static Set<Long> getUserRooms(Long userId) {
 		Set<Long> result = new HashSet<>();
-		for (Entry<Long, Set<String>> me : ROOMS.entrySet()) {
+		for (Entry<Long, Set<String>> me : get().getRooms().entrySet()) {
 			for (String uid : me.getValue()) {
 				Client c = getOnlineClient(uid);
 				if (c != null && c.getUserId().equals(userId)) {
@@ -522,7 +588,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static boolean isUserInRoom(long roomId, long userId) {
-		Set<String> clients = ROOMS.get(roomId);
+		Set<String> clients = get().getRooms().get(roomId);
 		if (clients != null) {
 			for (String uid : clients) {
 				if (getOnlineClient(uid).getUserId().equals(userId)) {
@@ -705,5 +771,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public void setContentSecurityPolicy(String contentSecurityPolicy) {
 		this.contentSecurityPolicy = contentSecurityPolicy;
+	}
+
+	@Override
+	public String getServerId() {
+		return hazelcast.getName();
+	}
+
+	public List<Member> getServers() {
+		return new ArrayList<>(hazelcast.getCluster().getMembers());
 	}
 }

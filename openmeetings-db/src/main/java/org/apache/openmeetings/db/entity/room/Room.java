@@ -302,7 +302,7 @@ public class Room implements IDataProviderEntity {
 	private List<RoomGroup> roomGroups = new ArrayList<>();
 
 	@Transient
-	private List<Client> currentusers;
+	private List<StreamClient> currentusers;
 
 	public String getComment() {
 		return comment;
@@ -370,11 +370,11 @@ public class Room implements IDataProviderEntity {
 		this.ispublic = ispublic;
 	}
 
-	public List<Client> getCurrentusers() {
+	public List<StreamClient> getCurrentusers() {
 		return currentusers;
 	}
 
-	public void setCurrentusers(List<Client> currentusers) {
+	public void setCurrentusers(List<StreamClient> currentusers) {
 		this.currentusers = currentusers;
 	}
 

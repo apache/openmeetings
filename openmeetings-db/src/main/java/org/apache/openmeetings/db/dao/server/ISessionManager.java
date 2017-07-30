@@ -20,126 +20,50 @@ package org.apache.openmeetings.db.dao.server;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.openmeetings.db.dto.basic.SearchResult;
-import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
-import org.apache.openmeetings.db.entity.room.Client;
-import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 
 /**
- * Methods to add/get/remove {@link Client}s to the session
+ * Methods to add/get/remove {@link StreamClient}s to the session
  *
  *
  * @author sebawagner
  *
  */
 public interface ISessionManager {
-	void clearCache();
-
-	/**
-	 * Notified on server start, when the session manager should be started and
-	 * eventually caches cleared/setup
-	 */
-	void sessionStart();
-
-	Client add(Client c, Server server);
-	/**
-	 * add a new client item
-	 *
-	 * @param streamId
-	 * @param scopeName
-	 * @param remotePort
-	 * @param remoteAddress
-	 * @param swfUrl
-	 * @param server
-	 * @return
-	 */
-	Client addClientListItem(String streamId, String scopeName, int remotePort, String remoteAddress, String swfUrl, Server server);
-
-	Collection<Client> getClients();
+	StreamClient add(StreamClient c);
 
 	/**
 	 * loads the server into the client (only if database cache is used)
 	 *
 	 * @return
 	 */
-	Collection<Client> getClientsWithServer();
+	Collection<StreamClient> list();
 
 	/**
-	 * Get a client by its streamId
+	 * Get a client by its UID
 	 *
-	 * @param streamId
-	 * @param server
+	 * @param uid
 	 * @return
 	 */
-	Client getClientByStreamId(String streamId, Server server);
+	StreamClient get(String uid);
 
 	/**
-	 * get a client by its publicSID and the server,
+	 * Updates {@link StreamClient} in the cache
 	 *
-	 * @param publicSID
-	 * @param server
-	 * @return
-	 */
-	Client getClientByPublicSID(String publicSID, Server server);
-
-	/**
-	 * same as {@link #getClientByPublicSID(String, boolean, Server)} but it ignores
-	 * if the server part, so it will deliver any client just by its publicSID.<br/>
-	 * <br/>
-	 * <b>Note:</b>
-	 * This method requires more time to find the user, so under normal circumstances
-	 * you should use {@link #getClientByPublicSID(String, boolean, Server)}!
-	 *
-	 * @param publicSID
-	 * @return
-	 */
-	ClientSessionInfo getClientByPublicSIDAnyServer(String publicSID);
-
-	/**
-	 *
-	 * @param userId
-	 * @return
-	 *
-	 * @deprecated There could be multiple users logged in with the same userid,
-	 *             then this call would return a list not a single user
-	 */
-	@Deprecated
-	Client getClientByUserId(Long userId);
-
-	/**
-	 * Update the session object of the audio/video-connection and additionally
-	 * swap the values to the session object of the user that holds the full
-	 * session object
-	 *
-	 * @param streamId
 	 * @param rcm
-	 * @return
+	 * @return updated client
 	 */
-	boolean updateAVClientByStreamId(String streamId, Client rcm, Server server);
-
-	/**
-	 * Update the session object
-	 *
-	 * updateRoomCount is only <i>one</i> time true, in
-	 * ScopeApplicationAdapter#setRoomValues(Long, Boolean, Boolean, String)
-	 * .
-	 *
-	 * @param streamId
-	 * @param rcm
-	 * @param updateRoomCount
-	 *            true means the count for the room has to be updated
-	 * @return
-	 */
-	boolean updateClientByStreamId(String streamId, Client rcm, boolean updateRoomCount, Server server);
+	StreamClient update(StreamClient rcm);
 
 	/**
 	 * Remove a client from the session store
 	 *
-	 * @param streamId
-	 * @return
+	 * @param uid
+	 * @return true if client was removed
 	 */
-	boolean removeClient(String streamId, Server server);
+	boolean remove(String uid);
 
 	/**
 	 * Get all ClientList Objects of that room and domain This Function is
@@ -149,28 +73,17 @@ public interface ISessionManager {
 	 * @param roomId
 	 * @return
 	 */
-	List<Client> getClientListByRoom(Long roomId);
+	List<StreamClient> listByRoom(Long roomId);
 
-	Collection<Client> getClientListByRoomAll(Long roomId);
+	Collection<StreamClient> listByRoomAll(Long roomId);
 
 	/**
 	 * get the current Moderator in this room
 	 *
-	 * @param roomname
+	 * @param roomId
 	 * @return
 	 */
-	List<Client> getCurrentModeratorByRoom(Long roomId);
-
-	/**
-	 * Get list of current client sessions
-	 *
-	 * @param start
-	 * @param max
-	 * @param orderby
-	 * @param asc
-	 * @return
-	 */
-	SearchResult<Client> getListByStartAndMax(int start, int max, String orderby, boolean asc);
+	List<StreamClient> listModeratorByRoom(Long roomId);
 
 	/**
 	 * returns number of current users recording
@@ -178,7 +91,7 @@ public interface ISessionManager {
 	 * @param roomId
 	 * @return
 	 */
-	long getRecordingCount(long roomId);
+	long getRecordingCount(Long roomId);
 
 	/**
 	 * returns a number of current users publishing screensharing
@@ -186,21 +99,20 @@ public interface ISessionManager {
 	 * @param roomId
 	 * @return
 	 */
-	long getPublishingCount(long roomId);
+	long getPublishingCount(Long roomId);
 
 	/**
-	 * Get a list of all servers of all rooms on that server, serverId = null
-	 * means it is a local session on the master.
+	 * Get a list of all rooms with users in the system.
+	 *
+	 * @return a set, a roomId can be only one time in this list
+	 */
+	Set<Long> getActiveRoomIds();
+
+	/**
+	 * Get a list of rooms with users on particular cluster node.
 	 *
 	 * @param server
 	 * @return a set, a roomId can be only one time in this list
 	 */
-	List<Long> getActiveRoomIdsByServer(Server server);
-
-	/**
-	 * Get some statistics about the current sessions
-	 *
-	 * @return
-	 */
-	String getSessionStatistics();
+	Set<Long> getActiveRoomIds(String serverId);
 }

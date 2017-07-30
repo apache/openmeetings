@@ -34,6 +34,7 @@ import java.util.Map;
 import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardObjectSyncManager;
+import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
@@ -43,7 +44,7 @@ import org.apache.openmeetings.db.dto.room.Cliparts;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -82,8 +83,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public boolean getNewWhiteboardId(String name) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			Long whiteBoardId = wbCache.getNewWhiteboardId(roomId, name);
@@ -98,8 +98,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public boolean deleteWhiteboard(Long whiteBoardId) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			Whiteboards whiteboards = wbCache.get(roomId);
@@ -122,8 +121,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 		Map<Long, Whiteboard> result = new LinkedHashMap<>();
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			log.debug("getRoomItems: " + roomId);
@@ -155,8 +153,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public boolean rename(Long wbId, String name) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			Whiteboards whiteboards = wbCache.get(roomId);
@@ -185,17 +182,16 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public boolean setCanDraw(String sid, String publicSID, boolean canDraw) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
+					StreamClient rcl = sessionManager.get(publicSID);
 
 					if (rcl != null) {
 						rcl.setCanDraw(canDraw);
-						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+						sessionManager.update(rcl);
 
 						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateDrawStatus");
@@ -214,17 +210,16 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public boolean setCanShare(String sid, String publicSID, boolean canShare) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
+					StreamClient rcl = sessionManager.get(publicSID);
 
 					if (rcl != null) {
 						rcl.setCanShare(canShare);
-						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+						sessionManager.update(rcl);
 
 						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateDrawStatus");
@@ -243,17 +238,16 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public boolean setCanRemote(String sid, String publicSID, boolean canRemote) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
+					StreamClient rcl = sessionManager.get(publicSID);
 
 					if (rcl != null) {
 						rcl.setCanRemote(canRemote);
-						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+						sessionManager.update(rcl);
 
 						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateDrawStatus");
@@ -273,17 +267,16 @@ public class WhiteboardService implements IPendingServiceCallback {
 		try {
 			log.debug("[setCanGiveAudio] " + sid + ", " + publicSID + ", " + canGiveAudio);
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			Sessiondata sd = sessionDao.check(sid);
 			if (AuthLevelUtil.hasUserLevel(userDao.getRights(sd.getUserId()))) {
 				if (currentClient.getIsMod()) {
-					Client rcl = sessionManager.getClientByPublicSID(publicSID, null);
+					StreamClient rcl = sessionManager.get(publicSID);
 
 					if (rcl != null) {
 						rcl.setCanGiveAudio(canGiveAudio);
-						sessionManager.updateClientByStreamId(rcl.getStreamid(), rcl, false, null);
+						sessionManager.update(rcl);
 
 						Map<Integer, Object> newMessage = new HashMap<>();
 						newMessage.put(0, "updateGiveAudioStatus");
@@ -302,8 +295,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public WhiteboardSyncLockObject startNewSyncprocess() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
@@ -332,8 +324,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 	public void sendCompletedSyncEvent() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			Map<String, WhiteboardSyncLockObject> syncListRoom = wbListManager.getWhiteBoardSyncListByRoomid(roomId);
@@ -384,8 +375,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 			log.debug("startNewObjectSyncprocess: " + objectId);
 
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			WhiteboardSyncLockObject wSyncLockObject = new WhiteboardSyncLockObject();
@@ -412,8 +402,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 			log.debug("sendCompletedObjectSyncEvent: " + objectId);
 
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = currentClient.getRoomId();
 
 			Map<String, WhiteboardSyncLockObject> syncListImage = wbListManager.getWhiteBoardObjectSyncListByRoomAndObjectId(roomId, objectId);
@@ -449,7 +438,7 @@ public class WhiteboardService implements IPendingServiceCallback {
 		return -1;
 	}
 
-	public synchronized void removeUserFromAllLists(IScope scope, Client currentClient) {
+	public synchronized void removeUserFromAllLists(IScope scope, StreamClient currentClient) {
 		try {
 			Long roomId = currentClient.getRoomId();
 

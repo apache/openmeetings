@@ -159,8 +159,7 @@ public class ImportInitvalues {
 		navimanagement.addMainStructure("adminModuleLDAP", null, 20, "1103", LEVEL_ADMIN, "Administration of LDAP Configs", admin.getId(), "1460");
 		navimanagement.addMainStructure("adminModuleOAuth", null, 21, "1571", LEVEL_ADMIN, "Administration of OAuth2 servers", admin.getId(), "1572");
 		navimanagement.addMainStructure("adminModuleBackup", null, 22, "367", LEVEL_ADMIN, "Administration of Backups", admin.getId(), "1461");
-		navimanagement.addMainStructure("adminModuleServers", null, 23, "1498", LEVEL_ADMIN, "Administration of Servers", admin.getId(), "1499");
-		navimanagement.addMainStructure("adminModuleEmail", null, 24, "main.menu.admin.email", LEVEL_ADMIN, "Administration of Emails", admin.getId(), "main.menu.admin.email.desc");
+		navimanagement.addMainStructure("adminModuleEmail", null, 23, "main.menu.admin.email", LEVEL_ADMIN, "Administration of Emails", admin.getId(), "main.menu.admin.email.desc");
 		log.debug("MainMenu ADDED");
 	}
 

@@ -48,7 +48,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.data.conference.RoomManager;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
-import org.apache.openmeetings.core.remote.util.SessionVariablesUtil;
+import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -58,18 +58,16 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
-import org.apache.openmeetings.db.dto.server.ClientSessionInfo;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.db.entity.server.Server;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -134,8 +132,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
-	private ServerDao serverDao;
-	@Autowired
 	private SipDao sipDao;
 
 	private static AtomicLong broadCastCounter = new AtomicLong(0);
@@ -172,7 +168,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			EXT_PROCESS_TTL = cfgDao.getConfValue(CONFIG_EXT_PROCESS_TTL, Integer.class, "" + EXT_PROCESS_TTL);
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
-			sessionManager.clearCache(); // 'sticky' clients should be cleaned up from DB
 		} catch (Exception err) {
 			_log.error("[appStart]", err);
 		}
@@ -210,7 +205,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (parentSid == null) {
 			parentSid = (String)connParams.get("parentSid");
 		}
-		Client rcm = new Client();
+		StreamClient rcm = new StreamClient();
 		rcm.setScope(conn.getScope().getName());
 		rcm.setOwnerSid(ownerSid);
 		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
@@ -222,7 +217,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				return rejectClient();
 			}
 			String _uid = null;
-			for (org.apache.openmeetings.db.entity.basic.Client wcl : iapp.getOmRoomClients(rcm.getRoomId())) {
+			for (Client wcl : iapp.getOmRoomClients(rcm.getRoomId())) {
 				if (wcl.getSid().equals(securityCode)) {
 					_uid = wcl.getUid();
 					break;
@@ -232,7 +227,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				_log.warn("Client is not found by security id, client is rejected");
 				return rejectClient();
 			}
-			Client parent = sessionManager.getClientByPublicSID(_uid, null);
+			StreamClient parent = sessionManager.get(_uid);
 			if (parent == null || !parent.getScope().equals(rcm.getScope())) {
 				_log.warn("Security code is invalid, client is rejected");
 				return rejectClient();
@@ -259,12 +254,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 
 		if (map.containsKey("screenClient")) {
-			Client parent = sessionManager.getClientByPublicSID(parentSid, null);
+			StreamClient parent = sessionManager.get(parentSid);
 			if (parent == null) {
 				_log.warn("Bad parent for screen-sharing client, client is rejected");
 				return rejectClient();
 			}
-			SessionVariablesUtil.setIsScreenClient(conn.getClient());
 			rcm.setUserId(parent.getUserId());
 			rcm.setScreenClient(true);
 			rcm.setPublicSID(UUID.randomUUID().toString());
@@ -308,19 +302,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (!Strings.isEmpty(uid)) {
 			rcm.setPublicSID(uid);
 		}
-		rcm = sessionManager.add(iapp.updateClient(rcm, false), null);
+		rcm = sessionManager.add(iapp.updateClient(rcm, false));
 		if (rcm == null) {
 			_log.warn("Failed to create Client on room connect");
 			return false;
 		}
 
-		SessionVariablesUtil.initClient(conn.getClient(), rcm.getPublicSID());
+		IClientUtil.init(conn.getClient(), rcm.getUid(), rcm.isScreenClient());
 		//TODO add similar code for other connections, merge with above block
 		if (map.containsKey("screenClient")) {
 			//TODO add check for room rights
 			User u = null;
 			Long userId = rcm.getUserId();
-			SessionVariablesUtil.setUserId(conn.getClient(), userId);
 			if (userId != null) {
 				long _uid = userId.longValue();
 				u = userDao.get(_uid < 0 ? -_uid : _uid);
@@ -331,7 +324,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				rcm.setLastname(u.getLastname());
 			}
 			_log.debug("publishName :: " + rcm.getStreamPublishName());
-			sessionManager.updateClientByStreamId(streamId, rcm, false, null);
+			sessionManager.update(rcm);
 		}
 
 		// Log the User
@@ -347,7 +340,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.debug("-----------  screenSharerAction ENTER");
 			IConnection current = Red5.getConnectionLocal();
 
-			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			if (client != null) {
 				boolean changed = false;
@@ -379,7 +372,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 
 				if (changed) {
-					sessionManager.updateClientByStreamId(client.getStreamid(), client, false, null);
+					sessionManager.update(client);
 
 					if (!client.isStartStreaming() && !client.isStartRecording() && !client.isStreamPublishStarted()) {
 						returnMap.put("result", "stopAll");
@@ -393,18 +386,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return returnMap;
 	}
 
-	public List<Client> checkScreenSharing() {
+	public List<StreamClient> checkScreenSharing() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
+			IClient client = current.getClient();
 
-			_log.debug("checkScreenSharing -2- " + streamid);
+			_log.debug("checkScreenSharing -2- {}", client.getId());
 
-			List<Client> screenSharerList = new LinkedList<>();
+			List<StreamClient> screenSharerList = new LinkedList<>();
 
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(client));
 
-			for (Client rcl : sessionManager.getClientListByRoomAll(currentClient.getRoomId())) {
+			for (StreamClient rcl : sessionManager.listByRoomAll(currentClient.getRoomId())) {
 				if (rcl.isStartStreaming()) {
 					screenSharerList.add(rcl);
 				}
@@ -429,7 +422,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.debug("-----------  setConnectionAsSharingClient");
 			IConnection current = Red5.getConnectionLocal();
 
-			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			if (client != null) {
 				boolean startRecording = Boolean.parseBoolean("" + map.get("startRecording"));
@@ -453,7 +446,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				client.setVWidth(Double.valueOf("" + map.get("screenWidth")).intValue());
 				client.setVHeight(Double.valueOf("" + map.get("screenHeight")).intValue());
 				client.setStreamPublishName("" + map.get("publishName"));
-				sessionManager.updateClientByStreamId(current.getClient().getId(), client, false, null);
+				sessionManager.update(client);
 
 				Map<String, Object> returnMap = new HashMap<>();
 				returnMap.put("alreadyPublished", false);
@@ -511,7 +504,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String streamid = current.getClient().getId();
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null) {
-				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 				if (rcl == null) {
 					// continue;
 				} else if (rcl.isScreenClient()) {
@@ -536,30 +529,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	/**
-	 * this function is invoked after a reconnect
-	 *
-	 * @param newPublicSID
-	 */
-	public boolean overwritePublicSID(String newPublicSID) {
-		try {
-			_log.debug("-----------  overwritePublicSID");
-			IConnection current = Red5.getConnectionLocal();
-			IClient c = current.getClient();
-			Client currentClient = sessionManager.getClientByStreamId(c.getId(), null);
-			if (currentClient == null) {
-				return false;
-			}
-			SessionVariablesUtil.initClient(c, newPublicSID);
-			currentClient.setPublicSID(newPublicSID);
-			sessionManager.updateClientByStreamId(c.getId(), currentClient, false, null);
-			return true;
-		} catch (Exception err) {
-			_log.error("[overwritePublicSID]", err);
-		}
-		return false;
-	}
-
-	/**
 	 * Logic must be before roomDisconnect cause otherwise you cannot throw a
 	 * message to each one
 	 *
@@ -569,7 +538,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			_log.debug("[roomLeave] {} {} {} {}", client.getId(), room.getClients().size(), room.getContextPath(), room.getName());
 
-			Client rcl = sessionManager.getClientByStreamId(client.getId(), null);
+			StreamClient rcl = sessionManager.get(IClientUtil.getId(client));
 
 			// The Room Client can be null if the Client left the room by using
 			// logicalRoomLeave
@@ -583,7 +552,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void roomLeaveByScope(String uid, Long roomId) {
-		Client rcl = sessionManager.getClientByPublicSID(uid, null);
+		StreamClient rcl = sessionManager.get(uid);
 		IScope scope = getRoomScope("" + roomId);
 		_log.debug("[roomLeaveByScope] {} {} {} {}", uid, roomId, rcl, scope);
 		if (rcl != null && scope != null) {
@@ -601,7 +570,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param client
 	 * @param scope
 	 */
-	public void roomLeaveByScope(Client client, IScope scope) {
+	public void roomLeaveByScope(StreamClient client, IScope scope) {
 		try {
 			_log.debug("[roomLeaveByScope] currentClient " + client);
 			Long roomId = client.getRoomId();
@@ -643,7 +612,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			new MessageSender(scope, "roomDisconnect", client, this) {
 				@Override
 				public boolean filter(IConnection conn) {
-					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 					if (rcl == null) {
 						return true;
 					}
@@ -660,7 +629,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				IApplication app = (IApplication)Application.get(wicketApplicationName);
 				app.exit(client.getPublicSID());
 			}
-			sessionManager.removeClient(client.getStreamid(), null);
+			sessionManager.remove(client.getUid());
 		} catch (Exception err) {
 			_log.error("[roomLeaveByScope]", err);
 		}
@@ -679,12 +648,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			_log.debug("-----------  streamPublishStart");
 			IConnection current = Red5.getConnectionLocal();
-			final String streamid = current.getClient().getId();
-			final Client c = sessionManager.getClientByStreamId(streamid, null);
+			final StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			//We make a second object the has the reference to the object
 			//that we will use to send to all participents
-			Client clientObjectSendToSync = c;
+			StreamClient clientObjectSendToSync = c;
 
 			// Notify all the clients that the stream had been started
 			_log.debug("start streamPublishStart broadcast start: " + stream.getPublishedName() + " CONN " + current);
@@ -692,7 +660,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// In case its a screen sharing we start a new Video for that
 			if (c.isScreenClient()) {
 				c.setScreenPublishStarted(true);
-				sessionManager.updateClientByStreamId(streamid, c, false, null);
+				sessionManager.update(c);
 			}
 			if (!c.isMobile() && !Strings.isEmpty(c.getSecurityCode())) {
 				c.setBroadCastID(Long.parseLong(stream.getPublishedName()));
@@ -702,7 +670,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					c.setVWidth(320);
 					c.setVHeight(240);
 				}
-				sessionManager.updateClientByStreamId(streamid, c, false, null);
+				sessionManager.update(c);
 			}
 
 			_log.debug("newStream SEND: " + c);
@@ -712,7 +680,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			new MessageSender(current, "newStream", clientObjectSendToSync, this) {
 				@Override
 				public boolean filter(IConnection conn) {
-					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 					if (rcl == null) {
 						_log.debug("RCL IS NULL newStream SEND");
@@ -770,8 +738,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		_log.debug("start streamBroadcastClose broadcast close: " + stream.getPublishedName());
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			String streamId = current.getClient().getId();
-			Client rcl = sessionManager.getClientByStreamId(streamId, null);
+			StreamClient rcl = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			if (rcl == null) {
 
@@ -796,7 +763,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				rcl.setIsBroadcasting(false);
 				rcl.setAvsettings("n");
 			}
-			sessionManager.updateClientByStreamId(streamId, rcl, false, null);
+			sessionManager.update(rcl);
 			// Notify all clients of the same scope (room)
 			sendMessageToCurrentScope("closeStream", rcl, rcl.isMobile());
 		} catch (Exception e) {
@@ -808,7 +775,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void setNewCursorPosition(Object item) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			@SuppressWarnings("rawtypes")
 			Map cursor = (Map) item;
@@ -824,7 +791,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			_log.debug("-----------  removeModerator: " + publicSID);
 
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
+			StreamClient currentClient = sessionManager.get(publicSID);
 
 			if (currentClient == null) {
 				return -1L;
@@ -833,9 +800,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			currentClient.setIsMod(false);
 			// Put the mod-flag to true for this client
-			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
+			sessionManager.update(currentClient);
 
-			List<Client> currentMods = sessionManager.getCurrentModeratorByRoom(roomId);
+			List<StreamClient> currentMods = sessionManager.listModeratorByRoom(roomId);
 
 			sendMessageToCurrentScope("setNewModeratorByList", currentMods, true);
 		} catch (Exception err) {
@@ -848,13 +815,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			_log.debug("-----------  switchMicMuted: " + publicSID);
 
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
+			StreamClient currentClient = sessionManager.get(publicSID);
 			if (currentClient == null) {
 				return -1L;
 			}
 
 			currentClient.setMicMuted(mute);
-			sessionManager.updateClientByStreamId(currentClient.getStreamid(), currentClient, false, null);
+			sessionManager.update(currentClient);
 
 			Map<Integer, Object> newMessage = new HashMap<>();
 			newMessage.put(0, "updateMuteStatus");
@@ -868,7 +835,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public boolean getMicMutedByPublicSID(String publicSID) {
 		try {
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
+			StreamClient currentClient = sessionManager.get(publicSID);
 			if (currentClient == null) {
 				return true;
 			}
@@ -896,14 +863,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			String streamid = Red5.getConnectionLocal().getClient().getId();
 			_log.debug("-----------  setUserAVSettings {}", streamid);
-			Client rcl = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient rcl = sessionManager.get(IClientUtil.getId(Red5.getConnectionLocal().getClient()));
 			if (rcl == null) {
 				_log.warn("Failed to find appropriate clients");
 				return -1;
 			}
 			if (updateBroadcastId) {
 				rcl.setBroadCastID(nextBroadCastId());
-				sessionManager.updateAVClientByStreamId(streamid, rcl, null);
+				sessionManager.update(rcl);
 			}
 			return rcl.getBroadCastID();
 		} catch (Exception err) {
@@ -925,7 +892,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			if (!room.isAppointment() && room.isModerated()) {
 				// if this is a Moderated Room then the Room can be only
 				// locked off by the Moderator Bit
-				List<Client> clientModeratorListRoom = sessionManager.getCurrentModeratorByRoom(roomId);
+				List<StreamClient> clientModeratorListRoom = sessionManager.listModeratorByRoom(roomId);
 
 				// If there is no Moderator yet and we are asking for it
 				// then deny it
@@ -981,8 +948,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			_log.debug("-----------  setRoomValues");
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client client = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 			client.setRoomId(roomId);
 			client.setRoomEnter(new Date());
 
@@ -1000,10 +966,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			if (!r.isHidden(RoomElement.MicrophoneStatus)) {
 				client.setCanGiveAudio(true);
 			}
-			sessionManager.updateClientByStreamId(streamid, client, true, null); // first save to get valid room count
+			sessionManager.update(client); // first save to get valid room count
 
 			// Check for Moderation LogicalRoom ENTER
-			List<Client> roomClients = sessionManager.getClientListByRoom(roomId);
+			List<StreamClient> roomClients = sessionManager.listByRoom(roomId);
 
 			// Return Object
 			RoomStatus roomStatus = new RoomStatus();
@@ -1019,9 +985,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			if (client.getIsMod()) {
 				// Update the Client List
-				sessionManager.updateClientByStreamId(streamid, client, false, null);
+				sessionManager.update(client);
 
-				List<Client> modRoomList = sessionManager.getCurrentModeratorByRoom(client.getRoomId());
+				List<StreamClient> modRoomList = sessionManager.listModeratorByRoom(client.getRoomId());
 
 				//Sync message to everybody
 				sendMessageToCurrentScope("setNewModeratorByList", modRoomList, false);
@@ -1060,16 +1026,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param lastname - lastname of the user
 	 * @return RoomClient in case of everything is OK, null otherwise
 	 */
-	public Client setUsernameAndSession(String SID, Long userId, String username, String firstname, String lastname) {
+	public StreamClient setUsernameAndSession(String SID, Long userId, String username, String firstname, String lastname) {
 		try {
 			_log.debug("-----------  setUsernameAndSession");
 			IConnection current = Red5.getConnectionLocal();
-			String streamid = current.getClient().getId();
-			Client currentClient = sessionManager.getClientByStreamId(streamid, null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			currentClient.setUsername(username);
 			currentClient.setUserId(userId);
-			SessionVariablesUtil.setUserId(current.getClient(), userId);
 			currentClient.setUserObject(userId, username, firstname, lastname);
 
 			// Update Session Data
@@ -1091,7 +1055,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				// set Picture-URI
 				currentClient.setPicture_uri(us.getPictureuri());
 			}
-			sessionManager.updateClientByStreamId(streamid, currentClient, false, null);
+			sessionManager.update(currentClient);
 			return currentClient;
 		} catch (Exception err) {
 			_log.error("[setUsername]", err);
@@ -1106,8 +1070,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param message
 	 * @return the list of room clients
 	 */
-	public Map<String, Client> sendMessageByRoomAndDomain(Long roomId, Object message) {
-		Map<String, Client> roomClientList = new HashMap<>();
+	public Map<String, StreamClient> sendMessageByRoomAndDomain(Long roomId, Object message) {
+		Map<String, StreamClient> roomClientList = new HashMap<>();
 		try {
 
 			_log.debug("sendMessageByRoomAndDomain " + roomId);
@@ -1118,7 +1082,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				@Override
 				public boolean filter(IConnection conn) {
 					IClient client = conn.getClient();
-					return SessionVariablesUtil.isScreenClient(client);
+					return IClientUtil.isSharing(client);
 				}
 			}.start();
 		} catch (Exception err) {
@@ -1127,14 +1091,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return roomClientList;
 	}
 
-	public List<Client> getCurrentModeratorList() {
+	public List<StreamClient> getCurrentModeratorList() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 			Long roomId = client.getRoomId();
 			Room r = roomDao.get(roomId);
 			if (r != null) {
-				return sessionManager.getCurrentModeratorByRoom(roomId);
+				return sessionManager.listModeratorByRoom(roomId);
 			}
 		} catch (Exception err) {
 			_log.error("[getCurrentModerator]", err);
@@ -1152,7 +1116,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public int sendVarsByWhiteboardId(List<?> whiteboardObjParam, Long whiteboardId) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client client = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 			return sendToWhiteboard(client, whiteboardObjParam, whiteboardId);
 		} catch (Exception err) {
 			_log.error("[sendVarsByWhiteboardId]", err);
@@ -1251,12 +1215,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url, boolean clean) {
-		ClientSessionInfo csi = sessionManager.getClientByPublicSIDAnyServer(uid);
-		if (csi == null) {
-			_log.warn("No client was found to send Wml:: {}", uid);
-			return;
-		}
-		Client client = csi.getRcl();
+		StreamClient client = sessionManager.get(uid);
 
 		List<?> wbObject = new ArrayList<>();
 		switch (fi.getType()) {
@@ -1284,7 +1243,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
 	}
 
-	private int sendToWhiteboard(Client client, List<?> wbObj, Long wbId) {
+	private int sendToWhiteboard(StreamClient client, List<?> wbObj, Long wbId) {
 		try {
 			// Check if this User is the Mod:
 			if (client == null) {
@@ -1430,7 +1389,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		new MessageSender(getRoomScope("" + roomId), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
-				Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 				return rcl == null || rcl.isScreenClient()
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
 			}
@@ -1480,7 +1439,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
-				return (!sendScreen && SessionVariablesUtil.isScreenClient(client))
+				return (!sendScreen && IClientUtil.isSharing(client))
 						|| (!sendSelf && current != null && client.getId().equals(current.getClient().getId()));
 			}
 		}.start();
@@ -1570,7 +1529,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("client", currentClient);
@@ -1628,7 +1587,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public int sendMessageWithClientById(Object newMessage, String clientId) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("client", currentClient);
@@ -1655,7 +1614,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 
 			// Get Room Id to send it to the correct Scope
-			Client currentClient = sessionManager.getClientByPublicSID(publicSID, null);
+			StreamClient currentClient = sessionManager.get(publicSID);
 
 			if (currentClient == null) {
 				throw new Exception("Could not Find RoomClient on List publicSID: " + publicSID);
@@ -1669,12 +1628,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 				for (IConnection conn : scope.getClientConnections()) {
 					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
+					if (IClientUtil.isSharing(client)) {
 						// screen sharing clients do not receive events
 						continue;
 					}
 
-					if (publicSID.equals(SessionVariablesUtil.getPublicSID(client))) {
+					if (publicSID.equals(IClientUtil.getId(client))) {
 						((IServiceCapableConnection) conn).invoke("newMessageByRoomAndDomain", new Object[] { message }, this);
 					}
 				}
@@ -1699,7 +1658,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
-					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 					if (rcl.getIsRecording()) {
 						return true;
@@ -1724,19 +1683,19 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
-					Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
 					if (rcl != null && rcl.getIsRecording()) {
 						return false;
 					}
 				}
 			}
-			Client current_rcl = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient current_rcl = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			// Also set the Recording Flag to Record all Participants that enter
 			// later
 			current_rcl.setIsRecording(true);
-			sessionManager.updateClientByStreamId(current.getClient().getId(), current_rcl, false, null);
+			sessionManager.update(current_rcl);
 
 			Map<String, String> interviewStatus = new HashMap<>();
 			interviewStatus.put("action", "start");
@@ -1744,7 +1703,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (IConnection conn : current.getScope().getClientConnections()) {
 				if (conn != null) {
 					IClient client = conn.getClient();
-					if (SessionVariablesUtil.isScreenClient(client)) {
+					if (IClientUtil.isSharing(client)) {
 						// screen sharing clients do not receive events
 						continue;
 					}
@@ -1771,7 +1730,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
-				return !SessionVariablesUtil.isScreenClient(client) || !conn.getClient().getId().equals(streamid);
+				return !IClientUtil.isSharing(client) || !conn.getClient().getId().equals(streamid);
 			}
 		}.start();
 		return true;
@@ -1780,7 +1739,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private Long checkRecordingClient(IConnection conn) {
 		Long recordingId = null;
 		if (conn != null) {
-			Client rcl = sessionManager.getClientByStreamId(conn.getClient().getId(), null);
+			StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 			if (rcl != null && rcl.getIsRecording()) {
 				rcl.setIsRecording(false);
 				recordingId = rcl.getRecordingId();
@@ -1788,7 +1747,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 				// Reset the Recording Flag to Record all
 				// Participants that enter later
-				sessionManager.updateClientByStreamId(conn.getClient().getId(), rcl, false, null);
+				sessionManager.update(rcl);
 			}
 		}
 		return recordingId;
@@ -1801,7 +1760,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 	public boolean stopInterviewRecording() {
 		IConnection current = Red5.getConnectionLocal();
-		Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+		StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 		return _stopInterviewRecording(currentClient, current.getScope());
 	}
 
@@ -1810,7 +1769,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 *
 	 * @return true if interview was found
 	 */
-	private boolean _stopInterviewRecording(Client currentClient, IScope currentScope) {
+	private boolean _stopInterviewRecording(StreamClient currentClient, IScope currentScope) {
 		try {
 			_log.debug("-----------  stopInterviewRecording");
 			Long clientRecordingId = currentClient.getRecordingId();
@@ -1846,12 +1805,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 *
 	 * @return all ClientList Objects of that room
 	 */
-	public List<Client> getClientListScope() {
+	public List<StreamClient> getClientListScope() {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			Client currentClient = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
-			return sessionManager.getClientListByRoom(currentClient.getRoomId());
+			return sessionManager.listByRoom(currentClient.getRoomId());
 		} catch (Exception err) {
 			_log.debug("[getClientListScope]", err);
 		}
@@ -1881,12 +1840,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * SIP transport methods
 	 */
 
-	private List<Long> getVerifiedActiveRoomIds(Server s) {
-		List<Long> result = new ArrayList<>(sessionManager.getActiveRoomIdsByServer(s));
+	private List<Long> getVerifiedActiveRoomIds() {
+		List<Long> result = new ArrayList<>(sessionManager.getActiveRoomIds());
 		//verify
 		for (Iterator<Long> i = result.iterator(); i.hasNext();) {
 			Long id = i.next();
-			List<Client> rcs = sessionManager.getClientListByRoom(id);
+			List<StreamClient> rcs = sessionManager.listByRoom(id);
 			if (rcs.size() == 0 || (rcs.size() == 1 && rcs.get(0).isSipTransport())) {
 				i.remove();
 			}
@@ -1913,28 +1872,24 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public List<Long> getActiveRoomIds() {
 		Set<Long> ids = new HashSet<>();
-		ids.addAll(getVerifiedActiveRoomIds(null));
-		for (Server s : serverDao.getActiveServers()) {
-			ids.addAll(getVerifiedActiveRoomIds(s));
-		}
+		ids.addAll(getVerifiedActiveRoomIds());
 		return new ArrayList<>(ids);
 	}
 
 	public synchronized int updateSipTransport() {
 		_log.debug("-----------  updateSipTransport");
 		IConnection current = Red5.getConnectionLocal();
-		String streamid = current.getClient().getId();
-		Client client = sessionManager.getClientByStreamId(streamid, null);
+		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 		Long roomId = client.getRoomId();
 		Integer count = roomManager.getSipConferenceMembersNumber(roomId);
 		String newNumber = getSipTransportLastname(count);
 		_log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {
 			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-			org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(client.getPublicSID());
+			Client cl = iapp.getOmOnlineClient(client.getPublicSID());
 			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
-			sessionManager.updateClientByStreamId(streamid, client, false, null);
+			sessionManager.update(client);
 			_log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[] { client.getPublicSID(), client.getRoomId(),
 					client.getFirstname(), client.getLastname(), client.getAvsettings() });
 			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.rightUpdated, client.getPublicSID()));
@@ -1946,16 +1901,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void setSipTransport(String broadCastId) {
 		_log.debug("-----------  setSipTransport");
 		IConnection current = Red5.getConnectionLocal();
-		String streamid = current.getClient().getId();
 		// Notify all clients of the same scope (room)
-		Client c = sessionManager.getClientByStreamId(streamid, null);
+		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getPublicSID());
+		Client cl = iapp.getOmOnlineClient(c.getPublicSID());
 		String newNumber = getSipTransportLastname(c.getRoomId());
 		cl.getUser().setLastname(newNumber);
 		c.setLastname(newNumber);
 		c.setBroadCastID(Long.parseLong(broadCastId));
-		sessionManager.updateClientByStreamId(streamid, c, false, null);
+		sessionManager.update(c);
 
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.rightUpdated, c.getPublicSID()));
 		sendMessageToCurrentScope("addNewUser", c, false);

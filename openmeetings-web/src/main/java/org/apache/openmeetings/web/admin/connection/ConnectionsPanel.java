@@ -28,9 +28,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.server.ISessionManager;
-import org.apache.openmeetings.db.dao.user.IUserService;
+import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.web.admin.AdminPanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
@@ -58,7 +59,7 @@ public class ConnectionsPanel extends AdminPanel {
 
 			private List<IClient> list() {
 				List<IClient> l = new ArrayList<>();
-				l.addAll(getBean(ISessionManager.class).getClientsWithServer());
+				l.addAll(getBean(ISessionManager.class).list());
 				l.addAll(Application.getClients());
 				return l;
 			}
@@ -89,33 +90,25 @@ public class ConnectionsPanel extends AdminPanel {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						IClient _c = item.getModelObject();
-						if (_c instanceof Client) {
-							Client c = (Client)_c;
-							getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
-									, c.getServer() == null ? 0 : c.getServer().getId());
-						} else {
-							org.apache.openmeetings.db.entity.basic.Client c = (org.apache.openmeetings.db.entity.basic.Client)_c;
-							getBean(IUserService.class).kickUserBySessionId(getSid(), c.getUserId(), c.getSessionId());
-						}
+						getBean(IUserManager.class).kickClient(getSid(), _c.getUid());
 						target.add(container, details.setVisible(false));
 					}
 				};
-				if (_c instanceof Client) {
-					Client c = (Client)_c;
+				if (_c instanceof StreamClient) {
+					StreamClient c = (StreamClient)_c;
 					item.add(new Label("streamid"));
 					item.add(new Label("login", c.getUsername()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope"));
-					item.add(new Label("server", c.getServer() == null ? "no cluster" : c.getServer().getAddress())); //FIXME localization
 					confirm.setEnabled(!c.isScreenClient());
 				} else {
-					org.apache.openmeetings.db.entity.basic.Client c = (org.apache.openmeetings.db.entity.basic.Client)_c;
+					Client c = (Client)_c;
 					item.add(new Label("streamid", ""));
 					item.add(new Label("login", c.getUser().getLogin()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));
-					item.add(new Label("server", ""));
 				}
+				item.add(new Label("server", _c.getServerId()));
 				item.add(confirm);
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;

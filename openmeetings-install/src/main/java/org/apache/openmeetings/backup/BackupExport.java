@@ -49,7 +49,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
@@ -123,8 +122,6 @@ public class BackupExport {
 	private ChatDao chatDao;
 	@Autowired
 	private OAuth2Dao auth2Dao;
-	@Autowired
-	private ServerDao serverDao;
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired
@@ -247,12 +244,6 @@ public class BackupExport {
 			}
 			writeList(ser, zos, "ldapconfigs.xml", "ldapconfigs", ldapList);
 			progressHolder.setProgress(35);
-
-			/*
-			 * ##################### Cluster servers
-			 */
-			writeList(ser, zos, "servers.xml", "servers", serverDao.get(0, Integer.MAX_VALUE));
-			progressHolder.setProgress(40);
 
 			/*
 			 * ##################### OAuth2 servers

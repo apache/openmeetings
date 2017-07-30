@@ -47,6 +47,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -62,7 +63,6 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.apache.openmeetings.webservice.cluster.UserService;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
@@ -85,13 +85,15 @@ import org.slf4j.Logger;
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
-public class UserWebService extends BaseWebService implements UserService {
+public class UserWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#login(java.lang.String, java.lang.String)
+	/**
+	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
+	 * @param pass - password
+	 *
+	 * @return - {@link ServiceResult} with error code or SID and userId
 	 */
-	@Override
 	@WebMethod
 	@GET
 	@Path("/login")
@@ -114,10 +116,15 @@ public class UserWebService extends BaseWebService implements UserService {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#get(java.lang.String)
+	/**
+	 * Lists all users in the system!
+	 *
+	 * @param sid
+	 *            The SID from getSession
+	 *
+	 * @return - list of users
+	 * @throws ServiceException
 	 */
-	@Override
 	@WebMethod
 	@GET
 	@Path("/")
@@ -134,10 +141,20 @@ public class UserWebService extends BaseWebService implements UserService {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#add(java.lang.String, org.apache.openmeetings.db.dto.user.UserDTO, java.lang.Boolean)
+	/**
+	 * Adds a new User like through the Frontend, but also does activates the
+	 * Account To do SSO see the methods to create a hash and use those ones!
+	 *
+	 * @param sid
+	 *            The SID from getSession
+	 * @param user
+	 *            user object
+	 * @param confirm
+	 *            whatever or not to send email, leave empty for auto-send
+	 *
+	 * @return - id of the user added or error code
+	 * @throws ServiceException
 	 */
-	@Override
 	@WebMethod
 	@POST
 	@Path("/")
@@ -217,10 +234,18 @@ public class UserWebService extends BaseWebService implements UserService {
 
 	//FIXME no update
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#delete(java.lang.String, long)
+	/**
+	 *
+	 * Delete a certain user by its id
+	 *
+	 * @param sid
+	 *            The SID from getSession
+	 * @param id
+	 *            the openmeetings user id
+	 *
+	 * @return - id of the user deleted, error code otherwise
+	 * @throws ServiceException
 	 */
-	@Override
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
@@ -241,10 +266,20 @@ public class UserWebService extends BaseWebService implements UserService {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#deleteExternal(java.lang.String, java.lang.String, java.lang.String)
+	/**
+	 *
+	 * Delete a certain user by its external user id
+	 *
+	 * @param sid
+	 *            The SID from getSession
+	 * @param externalId
+	 *            externalUserId
+	 * @param externalType
+	 *            externalUserId
+	 *
+	 * @return - id of user deleted, or error code
+	 * @throws ServiceException
 	 */
-	@Override
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
 	public ServiceResult deleteExternal(
@@ -272,10 +307,21 @@ public class UserWebService extends BaseWebService implements UserService {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#getRoomHash(java.lang.String, org.apache.openmeetings.db.dto.user.ExternalUserDTO, org.apache.openmeetings.db.dto.room.RoomOptionsDTO)
+	/**
+	 * Description: sets the SessionObject for a certain SID, after setting this
+	 * Session-Object you can use the SID + a RoomId to enter any Room. ...
+	 * Session-Hashs are deleted 15 minutes after the creation if not used.
+	 *
+	 * @param sid
+	 *            The SID from getSession
+	 * @param user
+	 *            user details to set
+	 * @param options
+	 *            room options to set
+	 *
+	 * @return - secure hash or error code
+	 * @throws ServiceException
 	 */
-	@Override
 	@WebMethod
 	@POST
 	@Path("/hash")
@@ -325,17 +371,21 @@ public class UserWebService extends BaseWebService implements UserService {
 		return new ServiceResult(-1L, "Unknown error", Type.ERROR);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#kick(java.lang.String, java.lang.String)
+	/**
+	 * Kick a user by its public SID
+	 *
+	 * @param sid
+	 *            The SID from getSession
+	 * @param uid the uid of the client
+	 * @return - <code>true</code> if user was kicked
 	 */
-	@Override
 	@WebMethod
 	@POST
-	@Path("/kick/{publicsid}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="publicsid") @PathParam("publicsid") String publicSID) throws ServiceException {
+	@Path("/kick/{uid}")
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) throws ServiceException {
 		try {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				Boolean success = getBean(UserManager.class).kickUserByPublicSID(sid, publicSID);
+				Boolean success = getBean(IUserManager.class).kickClient(sid, uid);
 
 				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
 			} else {
@@ -347,10 +397,14 @@ public class UserWebService extends BaseWebService implements UserService {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see org.apache.openmeetings.webservice.cluster.UserService#count(java.lang.String, java.lang.Long)
+	/**
+	 * Returns the count of users currently in the Room with given id
+	 * No admin rights are necessary for this call
+	 *
+	 * @param sid The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return number of users as int
 	 */
-	@Override
 	@WebMethod
 	@GET
 	@Path("/count/{roomid}")

@@ -26,11 +26,12 @@ import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room.Right;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 
 /**
- * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.Client}
+ * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.StreamClient}
  * @author solomax
  *
  */
@@ -65,6 +66,7 @@ public class Client implements IClient {
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
+	private String serverId = null;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -75,7 +77,7 @@ public class Client implements IClient {
 		sid = UUID.randomUUID().toString();
 	}
 
-	public Client(org.apache.openmeetings.db.entity.room.Client rcl, User user) {
+	public Client(StreamClient rcl, User user) {
 		this.sessionId = UUID.randomUUID().toString();
 		this.pageId = 0;
 		this.user = user;
@@ -107,14 +109,16 @@ public class Client implements IClient {
 		return user;
 	}
 
-	public void updateUser(UserDao dao) {
+	public Client updateUser(UserDao dao) {
 		user = dao.get(user.getId());
+		return this;
 	}
 
 	public Long getUserId() {
 		return user.getId();
 	}
 
+	@Override
 	public String getUid() {
 		return uid;
 	}
@@ -153,8 +157,8 @@ public class Client implements IClient {
 		}
 	}
 
-	public Set<Activity> getActivities() {
-		return activities;
+	public void clearActivities() {
+		activities.clear();
 	}
 
 	public boolean hasActivity(Activity a) {
@@ -169,7 +173,7 @@ public class Client implements IClient {
 		}
 	}
 
-	public void set(Activity a) {
+	public Client set(Activity a) {
 		activities.add(a);
 		switch (a) {
 			case broadcastV:
@@ -184,9 +188,10 @@ public class Client implements IClient {
 				break;
 			default:
 		}
+		return this;
 	}
 
-	public void remove(Activity a) {
+	public Client remove(Activity a) {
 		activities.remove(a);
 		switch (a) {
 			case broadcastV:
@@ -199,6 +204,7 @@ public class Client implements IClient {
 				break;
 			default:
 		}
+		return this;
 	}
 
 	public Date getConnectedSince() {
@@ -281,6 +287,15 @@ public class Client implements IClient {
 
 	public void setRemoteAddress(String remoteAddress) {
 		this.remoteAddress = remoteAddress;
+	}
+
+	@Override
+	public String getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
 	}
 
 	@Override

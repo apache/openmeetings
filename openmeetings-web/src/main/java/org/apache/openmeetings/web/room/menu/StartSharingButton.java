@@ -36,12 +36,13 @@ import java.util.Properties;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
-import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -60,7 +61,7 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
-	private final org.apache.openmeetings.db.entity.basic.Client c;
+	private final Client c;
 	private enum Protocol {
 		rtmp
 		, rtmpe
@@ -68,7 +69,7 @@ public class StartSharingButton extends OmButton {
 		, rtmpt
 	}
 
-	public StartSharingButton(String id, org.apache.openmeetings.db.entity.basic.Client c) {
+	public StartSharingButton(String id, Client c) {
 		super(id);
 		this.c = c;
 		setOutputMarkupPlaceholderTag(true);
@@ -92,7 +93,7 @@ public class StartSharingButton extends OmButton {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
 			String publicSid = c.getUid();
-			Client rc = getClient(publicSid);
+			StreamClient rc = getClient(publicSid);
 			if (rc == null || rc.getUserId() == null) {
 				throw new RuntimeException(String.format("Unable to find client by publicSID '%s'", publicSid));
 			}
@@ -100,7 +101,7 @@ public class StartSharingButton extends OmButton {
 			URI url = new URI(_url);
 			long roomId = c.getRoomId();
 			Room room = getBean(RoomDao.class).get(roomId);
-			SessionManager sessionManager = getBean(SessionManager.class);
+			ISessionManager sessionManager = getBean(ISessionManager.class);
 			String path = url.getPath();
 			path = path.substring(path.lastIndexOf('/') + 1);
 			if (Strings.isEmpty(path) || rc.getRoomId() == null || !path.equals(rc.getRoomId().toString()) || !rc.getRoomId().equals(roomId)) {
@@ -151,7 +152,7 @@ public class StartSharingButton extends OmButton {
 		return result.toString();
 	}
 
-	private static String addKeystore(Client rc, String app, Protocol protocol) {
+	private static String addKeystore(StreamClient rc, String app, Protocol protocol) {
 		log.debug("RTMP Sharer Keystore :: start");
 		String keystore = "--dummy--", password = "--dummy--";
 		if (Protocol.rtmps == protocol) {

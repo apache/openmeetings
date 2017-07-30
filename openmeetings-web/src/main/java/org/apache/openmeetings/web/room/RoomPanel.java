@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
+import static org.apache.openmeetings.web.app.Application.update;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -52,6 +53,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -169,7 +171,7 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		//let's refresh user in client
-		getClient().updateUser(getBean(UserDao.class));
+		update(getClient().updateUser(getBean(UserDao.class)));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
@@ -342,7 +344,7 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user has stopped recording {} !!!!", uid);
 								return;
 							}
-							c.getActivities().remove(Client.Activity.record);
+							update(c.remove(Client.Activity.record));
 						}
 						break;
 					case recordingStarted:
@@ -354,7 +356,7 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user has started recording {} !!!!", recordingUser);
 								return;
 							}
-							c.getActivities().add(Client.Activity.record);
+							update(c.set(Client.Activity.record));
 						}
 						break;
 					case sharingStoped:
@@ -448,11 +450,13 @@ public class RoomPanel extends BasePanel {
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
 				c.allow(Right.superModerator);
+				update(c);
 			} else {
 				//FIXME TODO !!! c.getUser != getUserId
 				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
 				if (!rr.isEmpty()) {
 					c.allow(rr);
+					update(c);
 				}
 			}
 		}
@@ -536,7 +540,7 @@ public class RoomPanel extends BasePanel {
 				return;
 			} else {
 				// we found no-one we can ask, allow right
-				broadcast(getClient().allow(right));
+				broadcast(update(getClient().allow(right)));
 			}
 		}
 		// ask
@@ -575,6 +579,7 @@ public class RoomPanel extends BasePanel {
 
 	public void allowRight(Client client, Right... rights) {
 		client.allow(rights);
+		update(client);
 		broadcast(client);
 	}
 
@@ -588,6 +593,7 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.broadcastV);
 		}
+		update(client);
 		broadcast(client);
 	}
 
@@ -610,7 +616,7 @@ public class RoomPanel extends BasePanel {
 
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
-		org.apache.openmeetings.db.entity.room.Client rcl = RoomBroadcaster.getClient(getMainPanel().getClient().getUid());
+		StreamClient rcl = RoomBroadcaster.getClient(getMainPanel().getClient().getUid());
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
 				&& getSharingUser() == null && rcl != null && rcl.getUserId() != null;

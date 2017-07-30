@@ -32,13 +32,13 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.IUserService;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
@@ -83,12 +83,12 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private final TextField<String> pin = new TextField<>("pin");
 	private final WebMarkupContainer moderatorContainer = new WebMarkupContainer("moderatorContainer");
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
-	private final ListView<Client> clients = new ListView<Client>("clients", new ArrayList<>()) {
+	private final ListView<StreamClient> clients = new ListView<StreamClient>("clients", new ArrayList<>()) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void populateItem(final ListItem<Client> item) {
-			Client client = item.getModelObject();
+		protected void populateItem(final ListItem<StreamClient> item) {
+			StreamClient client = item.getModelObject();
 			item.add(new Label("clientId", "" + client.getId()))
 				.add(new Label("clientLogin", "" + client.getUsername()))
 				.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
@@ -96,9 +96,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						Client c = item.getModelObject();
-						getBean(IUserService.class).kickUserByStreamId(getSid(), c.getStreamid()
-								, c.getServer() == null ? 0 : c.getServer().getId());
+						StreamClient c = item.getModelObject();
+						getBean(IUserManager.class).kickClient(getSid(), c.getUid());
 
 						updateClients(target);
 					}
@@ -324,7 +323,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);
-		final List<Client> clientsInRoom = getBean(ISessionManager.class).getClientListByRoom(roomId);
+		final List<StreamClient> clientsInRoom = getBean(ISessionManager.class).listByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}

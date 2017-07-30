@@ -20,12 +20,15 @@ package org.apache.openmeetings;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.db.entity.room.Client;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
+import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -40,10 +43,9 @@ public interface IApplication {
 	String getOmString(long id, long languageId);
 	String getOmString(String key, long languageId);
 	String getOmString(String key, final Locale loc, String... params);
-	Client updateClient(Client rcl, boolean forceSize);
-	org.apache.openmeetings.db.entity.basic.Client getOmOnlineClient(String uid);
-	List<org.apache.openmeetings.db.entity.basic.Client> getOmRoomClients(Long roomId);
-	List<org.apache.openmeetings.db.entity.basic.Client> getOmClients(Long userId);
+	Client getOmOnlineClient(String uid);
+	List<Client> getOmRoomClients(Long roomId);
+	List<Client> getOmClients(Long userId);
 	String getOmContactsLink();
 	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
@@ -51,4 +53,11 @@ public interface IApplication {
 	void exit(String uid);
 	void setXFrameOptions(String xFrameOptions);
 	void setContentSecurityPolicy(String contentSecurityPolicy);
+
+	// stream client
+	StreamClient updateClient(StreamClient rcl, boolean forceSize);
+	String getServerId();
+	Map<String, StreamClient> getStreamClients();
+	StreamClient update(StreamClient c);
+	Set<Long> getActiveRoomIds();
 }

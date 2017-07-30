@@ -249,14 +249,6 @@
 		</handler>
 	</netRemoteCallHib>
 
-	<netRemoteCallHib name="overwritePublicSID" funcname="overwritePublicSID" >
-		<netparam><method name="getValue"> return canvas.publicSID;</method></netparam>
-		<handler name="ondata" args="value">
-			//The onResult-Handler will be called be the rtmpconnection
-			if ($debug) Debug.write("overwritePublicSID: ",value);
-		</handler>
-	</netRemoteCallHib>
-
 	<method name="setDefaultUserLanguage">
 		<![CDATA[
 			if (userlang == -1 && canvas.language_id != 0) {
