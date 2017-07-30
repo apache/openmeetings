@@ -239,8 +239,8 @@ public class MobileService {
 			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
 			StreamClient c = create(u, sd);
 			c.setScope(conn.getScope().getName());
-			sessionManager.add(c, null);
-			IClientUtil.init(conn.getClient(), c.getId(), false);
+			sessionManager.add(c);
+			IClientUtil.init(conn.getClient(), c.getUid(), false);
 
 			add(result, "sid", sd.getSessionId());
 			add(result, "publicSid", c.getUid());
@@ -295,7 +295,7 @@ public class MobileService {
 			room.put("org", org);
 		}
 		room.put("first", first);
-		room.put("users", sessionManager.getClientListByRoom(r.getId()).size());
+		room.put("users", sessionManager.listByRoom(r.getId()).size());
 		room.put("total", r.getNumberOfPartizipants());
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
@@ -394,7 +394,7 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
-		sendChatMessage(sessionManager.getClientByUid(uid, null), m, fmt);
+		sendChatMessage(sessionManager.get(uid), m, fmt);
 	}
 
 	public void sendChatMessage(StreamClient c, ChatMessage m, FastDateFormat fmt) {

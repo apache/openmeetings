@@ -132,22 +132,12 @@
 						]]></source>
 					</li>
 					<li>
-						<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt>:</p>
+						<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</tt>:</p>
 						<ul>
+							<li>Set <tt>instance-name</tt> for each server to unique value</li>
 							<li>
-								For each node uncomment line:
-								<source>
-<![CDATA[
-<!-- Need to be uncommented and set to the real ID if in cluster mode-->
-<property name="serverId" value="1" />
-]]>
-								</source>
-								and input the unique value for each node.
-							</li>
-							<li>
-								Replace <tt>&lt;ref bean="openmeetings.HashMapStore" /&gt;  &lt;!-- Memory based session cache by default --&gt;</tt><br/>
-								with <tt>&lt;ref bean="openmeetings.DatabaseStore" /&gt;</tt>
-								(Currently commented out with following comment: <tt>"The following section should be used in clustering mode"</tt>)
+								In case there are more than one network interface with multicast support and/or additional hazelcast configuration is required
+								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html</a>
 							</li>
 						</ul>
 					</li>

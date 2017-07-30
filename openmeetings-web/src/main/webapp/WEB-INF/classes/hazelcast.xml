@@ -18,7 +18,15 @@
   under the License.
 
 -->
-<rebel-remote>
-	<id>Openmeetings</id>
-	<url>http://localhost:5080/openmeetings/</url>
-</rebel-remote>
+<hazelcast
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns="http://www.hazelcast.com/schema/config"
+		xsi:schemaLocation="http://www.hazelcast.com/schema/config https://hazelcast.com/schema/config/hazelcast-config-3.9.xsd"
+	>
+	<instance-name>server-1</instance-name><!-- MAKE SURE THIS ONE IS UNIQUE -->
+	<!--network>
+		<interfaces enabled="true">
+			<interface>192.168.1.*</interface>
+		</interfaces>
+	</network-->
+</hazelcast>

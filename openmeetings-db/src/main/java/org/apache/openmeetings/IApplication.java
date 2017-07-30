@@ -20,6 +20,8 @@ package org.apache.openmeetings;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
@@ -43,9 +45,7 @@ public interface IApplication {
 	String getOmString(String key, final Locale loc, String... params);
 	Client getOmClient(String uid);
 	Client getOmClientBySid(String sid);
-	StreamClient updateClient(StreamClient rcl, boolean forceSize);
 	Client getOmOnlineClient(String uid);
-	List<Long> getActiveRooms();
 	List<Client> getOmRoomClients(Long roomId);
 	List<Client> getOmClients(Long userId);
 	String getOmContactsLink();
@@ -55,4 +55,11 @@ public interface IApplication {
 	void exit(String uid);
 	void setXFrameOptions(String xFrameOptions);
 	void setContentSecurityPolicy(String contentSecurityPolicy);
+
+	// stream client
+	StreamClient updateClient(StreamClient rcl, boolean forceSize);
+	String getServerId();
+	Map<String, StreamClient> getStreamClients();
+	StreamClient update(StreamClient c);
+	Set<Long> getActiveRoomIds();
 }

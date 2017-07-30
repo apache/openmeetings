@@ -27,8 +27,13 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
@@ -49,6 +54,9 @@ import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.Member;
+import com.hazelcast.instance.MemberImpl;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
@@ -162,5 +170,48 @@ public class SwfPanel extends BasePanel {
 			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
 		}
 		return arr.toString();
+	}
+
+	private static PageParameters addServer(PageParameters pp, Member m) {
+		//TODO check this return pp.add("protocol", s.getProtocol()).add("host", s.getAddress()).add("port", s.getPort()).add("context", s.getWebapp());
+		return pp;
+	}
+
+	private static PageParameters addServer(Long roomId, boolean addBasic) {
+		PageParameters pp = new PageParameters();
+		if (addBasic) {
+			//pp.add("wicketsid", getSid()).add(WICKET_ROOM_ID, roomId).add("language", getLanguage());
+		}
+
+		long minimum = -1;
+		Member result = null;
+		Map<Member, Set<Long>> activeRoomsMap = new HashMap<>();
+		for (Member _m : Application.get(). getServers()) {
+			String serverId = null;
+			MemberImpl m = (MemberImpl)_m;
+			try {
+				HazelcastInstance ins = (HazelcastInstance)MemberImpl.class.getDeclaredField("instance").get(m);
+				serverId = ins.getName();
+			} catch (Exception e) {
+				//no-op
+			}
+			Set<Long> roomIds = getBean(ISessionManager.class).getActiveRoomIds(serverId);
+			if (roomIds.contains(roomId)) {
+				// if the room is already opened on a server, redirect the user to that one,
+				log.debug("Room is already opened on a server {}", m.getAddress());
+				return addServer(pp, m);
+			}
+			activeRoomsMap.put(m, roomIds);
+		}
+		for (Map.Entry<Member, Set<Long>> entry : activeRoomsMap.entrySet()) {
+			Set<Long> roomIds = entry.getValue();
+			long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
+			if (minimum < 0 || capacity < minimum) {
+				minimum = capacity;
+				result = entry.getKey();
+			}
+			log.debug("Checking server: {} Number of rooms {} RoomIds: {} max(Sum): {}", entry.getKey(), roomIds.size(), roomIds, capacity);
+		}
+		return result == null ? pp : addServer(pp, result);
 	}
 }

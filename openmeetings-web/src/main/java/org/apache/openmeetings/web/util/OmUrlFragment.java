@@ -37,7 +37,6 @@ import org.apache.openmeetings.web.admin.labels.LangPanel;
 import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.admin.oauth.OAuthPanel;
 import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
-import org.apache.openmeetings.web.admin.servers.ServersPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -67,7 +66,6 @@ public class OmUrlFragment implements Serializable {
 	public static final String TYPE_LANG = "lang";
 	public static final String TYPE_LDAP = "ldap";
 	public static final String TYPE_BACKUP = "backup";
-	public static final String TYPE_SERVER = "server";
 	public static final String TYPE_OAUTH2 = "oauth2";
 	public static final String TYPE_EMAIL = "email";
 	public static final OmUrlFragment DASHBOARD = new OmUrlFragment(AreaKeys.user, TYPE_DASHBOARD);
@@ -100,7 +98,6 @@ public class OmUrlFragment implements Serializable {
 		, adminModuleLanguages
 		, adminModuleLDAP
 		, adminModuleBackup
-		, adminModuleServers
 		, adminModuleOAuth
 		, adminModuleEmail
 	}
@@ -198,10 +195,6 @@ public class OmUrlFragment implements Serializable {
 				setArea(AreaKeys.admin);
 				setType(TYPE_BACKUP);
 				break;
-			case adminModuleServers:
-				setArea(AreaKeys.admin);
-				setType(TYPE_SERVER);
-				break;
 			case adminModuleOAuth:
 				setArea(AreaKeys.admin);
 				setType(TYPE_OAUTH2);
@@ -249,8 +242,6 @@ public class OmUrlFragment implements Serializable {
 					basePanel = new LdapsPanel(CHILD_ID);
 				} else if (TYPE_BACKUP.equals(type)) {
 					basePanel = new BackupPanel(CHILD_ID);
-				} else if (TYPE_SERVER.equals(type)) {
-					basePanel = new ServersPanel(CHILD_ID);
 				} else if (TYPE_OAUTH2.equals(type)) {
 					basePanel = new OAuthPanel(CHILD_ID);
 				} else if (TYPE_EMAIL.equals(type)) {

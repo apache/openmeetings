@@ -31,7 +31,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.core.session.SessionManager;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -52,7 +52,7 @@ public class CleanupJob extends AbstractJob {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private SessionManager sessionManager;
+	private ISessionManager sessionManager;
 	@Autowired
 	private WhiteboardCache wbManager;
 	@Autowired
@@ -128,7 +128,7 @@ public class CleanupJob extends AbstractJob {
 							}
 						}
 					}
-					if (folder.isDirectory() && roomId != null && sessionManager.getClientListByRoom(roomId).isEmpty()) {
+					if (folder.isDirectory() && roomId != null && sessionManager.listByRoom(roomId).isEmpty()) {
 						File[] files = folder.listFiles();
 						//TODO need to rework this and remove hardcodings
 						if (files != null) {

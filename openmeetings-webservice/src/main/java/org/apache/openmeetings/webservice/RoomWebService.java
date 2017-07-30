@@ -43,6 +43,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.InvitationDTO;
@@ -55,7 +56,6 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -387,7 +387,7 @@ public class RoomWebService extends BaseWebService {
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
 		try {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				boolean result = getBean(UserManager.class).kickUsersByRoomId(id);
+				boolean result = getBean(IUserManager.class).kickUsersByRoomId(id);
 				return new ServiceResult(result ? 1L : 0L, "Kicked", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26

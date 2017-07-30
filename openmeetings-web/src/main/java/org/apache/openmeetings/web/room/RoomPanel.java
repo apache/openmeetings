@@ -25,6 +25,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getClientBySid;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
+import static org.apache.openmeetings.web.app.Application.update;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
@@ -160,7 +161,7 @@ public class RoomPanel extends BasePanel {
 		for (Client c: getRoomClients(getRoom().getId()) ) {
 			boolean self = getClient().getUid().equals(c.getUid());
 			for (Client.Stream s : c.getStreams()) {
-				JSONObject jo = RoomHelper.videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getStreamClientId());
+				JSONObject jo = RoomHelper.videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getUid());
 				sb.append(String.format("VideoManager.play(%s);", jo));
 			}
 		}
@@ -173,7 +174,7 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		//let's refresh user in client
-		getClient().updateUser(getBean(UserDao.class));
+		update(getClient().updateUser(getBean(UserDao.class)));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
@@ -341,7 +342,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							recordingUser = null;
-							c.remove(Client.Activity.record);
+							update(c.remove(Client.Activity.record));
 							menu.update(handler);
 						}
 						break;
@@ -354,7 +355,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							recordingUser = uid;
-							c.set(Client.Activity.record);
+							update(c.set(Client.Activity.record));
 							menu.update(handler);
 						}
 						break;
@@ -415,14 +416,14 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						boolean self = getClient().getUid().equals(uid);
-						String broadcastId = obj.getString("stream");
-						Long streamClientId = obj.getLong("streamClientId");
+						String broadcastId = obj.getString("streamName");
+						Long streamId = obj.getLong("streamId");
 						if (!self) {
-							JSONObject jo = RoomHelper.videoJson(c, self, getClient().getSid(), getBean(ISessionManager.class), streamClientId);
+							JSONObject jo = RoomHelper.videoJson(c, self, getClient().getSid(), getBean(ISessionManager.class), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
 						if (getClient().getSid().equals(c.getSid())) {
-							c.addStream(streamClientId, broadcastId, share);
+							c.addStream(uid, streamId, broadcastId, share);
 						}
 					}
 						break;
@@ -519,11 +520,13 @@ public class RoomPanel extends BasePanel {
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
 				c.allow(Right.superModerator);
+				update(c);
 			} else {
 				//FIXME TODO !!! c.getUser != getUserId
 				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
 				if (!rr.isEmpty()) {
 					c.allow(rr);
+					update(c);
 				}
 			}
 		}
@@ -604,7 +607,7 @@ public class RoomPanel extends BasePanel {
 				return;
 			} else {
 				// we found no-one we can ask, allow right
-				broadcast(getClient().allow(right));
+				broadcast(update(getClient().allow(right)));
 			}
 		}
 		// ask
@@ -646,6 +649,7 @@ public class RoomPanel extends BasePanel {
 
 	public void allowRight(Client client, Right... rights) {
 		client.allow(rights);
+		update(client);
 		broadcast(client);
 	}
 
@@ -659,6 +663,7 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.broadcastV);
 		}
+		update(client);
 		broadcast(client);
 	}
 

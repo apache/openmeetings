@@ -82,7 +82,7 @@ public class RoomManager {
 					asc);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
+				room.setCurrentusers(sessionManager.listByRoom(room.getId()));
 			}
 
 			sResult.setResult(rooms);
@@ -99,7 +99,7 @@ public class RoomManager {
 					asc);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
+				room.setCurrentusers(sessionManager.listByRoom(room.getId()));
 			}
 
 			return rooms;
@@ -114,7 +114,7 @@ public class RoomManager {
 			List<Room> rooms = this.getRoomsInternatlbyType(start, max, orderby, asc, externalType);
 
 			for (Room room : rooms) {
-				room.setCurrentusers(sessionManager.getClientListByRoom(room.getId()));
+				room.setCurrentusers(sessionManager.listByRoom(room.getId()));
 			}
 
 			return rooms;

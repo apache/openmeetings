@@ -60,38 +60,32 @@ public class Client implements IClient {
 	}
 	public static class Stream implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private Long streamClientId = null;
-		private String broadcastId = null;
-		private boolean sharing;
+		private final Long streamId;
+		private final String uid;
+		private final String broadcastId;
+		private final boolean sharing;
 
-		public Stream(Long streamClientId, String broadcastId, boolean sharing) {
-			this.streamClientId = streamClientId;
+		public Stream(String uid, Long streamId, String broadcastId, boolean sharing) {
+			this.streamId = streamId;
 			this.broadcastId = broadcastId;
+			this.uid = uid;
 			this.sharing= sharing;
 		}
 
-		public Long getStreamClientId() {
-			return streamClientId;
-		}
-
-		public void setStreamClientId(Long streamClientId) {
-			this.streamClientId = streamClientId;
+		public Long getStreamId() {
+			return streamId;
 		}
 
 		public String getBroadcastId() {
 			return broadcastId;
 		}
 
-		public void setBroadcastId(String broadcastId) {
-			this.broadcastId = broadcastId;
-		}
-
 		public boolean isSharing() {
 			return sharing;
 		}
 
-		public void setSharing(boolean sharing) {
-			this.sharing = sharing;
+		public String getUid() {
+			return uid;
 		}
 
 		@Override
@@ -121,7 +115,7 @@ public class Client implements IClient {
 
 		@Override
 		public String toString() {
-			return "Stream [id=" + streamClientId + ", broadcastId=" + broadcastId + ", sharing=" + sharing + "]";
+			return "Stream [id=" + streamId + ", broadcastId=" + broadcastId + ", sharing=" + sharing + "]";
 		}
 	}
 	private final String sessionId;
@@ -140,6 +134,7 @@ public class Client implements IClient {
 	private int mic = -1;
 	private int width = 0;
 	private int height = 0;
+	private String serverId = null;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -182,14 +177,16 @@ public class Client implements IClient {
 		return user;
 	}
 
-	public void updateUser(UserDao dao) {
+	public Client updateUser(UserDao dao) {
 		user = dao.get(user.getId());
+		return this;
 	}
 
 	public Long getUserId() {
 		return user.getId();
 	}
 
+	@Override
 	public String getUid() {
 		return uid;
 	}
@@ -230,8 +227,8 @@ public class Client implements IClient {
 		}
 	}
 
-	public Set<Activity> getActivities() {
-		return activities;
+	public void clearActivities() {
+		activities.clear();
 	}
 
 	public boolean hasAnyActivity(Activity... aa) {
@@ -256,7 +253,7 @@ public class Client implements IClient {
 		}
 	}
 
-	public void set(Activity a) {
+	public Client set(Activity a) {
 		activities.add(a);
 		switch (a) {
 			case broadcastV:
@@ -271,9 +268,10 @@ public class Client implements IClient {
 				break;
 			default:
 		}
+		return this;
 	}
 
-	public void remove(Activity a) {
+	public Client remove(Activity a) {
 		activities.remove(a);
 		switch (a) {
 			case broadcastV:
@@ -294,17 +292,18 @@ public class Client implements IClient {
 				break;
 			default:
 		}
+		return this;
 	}
 
-	public void addStream(Long streamClientId, String broadcastId, boolean sharing) {
-		streams.add(new Stream(streamClientId, broadcastId, sharing));
+	public void addStream(String uid, Long streamId, String broadcastId, boolean sharing) {
+		streams.add(new Stream(uid, streamId, broadcastId, sharing));
 	}
 
 	public void removeStream(String broadcastId) {
 		if (broadcastId == null) {
 			return;
 		}
-		streams.remove(new Stream(1L, broadcastId, false));
+		streams.remove(new Stream(null, 1L, broadcastId, false));
 	}
 
 	public List<Stream> getStreams() {
@@ -396,6 +395,15 @@ public class Client implements IClient {
 	public Client setRemoteAddress(String remoteAddress) {
 		this.remoteAddress = remoteAddress;
 		return this;
+	}
+
+	@Override
+	public String getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
 	}
 
 	@Override
