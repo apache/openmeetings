@@ -128,6 +128,7 @@ import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
+import com.hazelcast.core.MemberAttributeEvent;
 import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
 
@@ -164,6 +165,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			public void memberRemoved(MembershipEvent membershipEvent) {
 				//server down, need to remove all online clients, process persistent addresses
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
+			}
+
+			@Override
+			public void memberAttributeChanged(MemberAttributeEvent arg0) {
 			}
 
 			@Override
@@ -221,7 +226,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		// add dashboard context injector
 		getComponentInstantiationListeners().add(new DashboardContextInjector(dashboardContext));
 		DashboardSettings dashboardSettings = DashboardSettings.get();
-		dashboardSettings.setIncludeJQuery(false);
 		dashboardSettings.setIncludeJQueryUI(false);
 
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(getHomePage()));
@@ -792,7 +796,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		StringBuilder sb = new StringBuilder();
 		String delim = "";
 		for (Member m : hazelcast.getCluster().getMembers()) {
-			sb.append(delim).append(m.getInetSocketAddress().getAddress().getHostAddress());
+			sb.append(delim).append(m.getAddress().getHost());
 			delim = ";";
 		}
 		if (Strings.isEmpty(delim)) {
