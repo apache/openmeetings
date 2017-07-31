@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.StreamClient;
@@ -60,4 +61,7 @@ public interface IApplication {
 	Map<String, StreamClient> getStreamClients();
 	StreamClient update(StreamClient c);
 	Set<Long> getActiveRoomIds();
+
+	//JPA
+	void updateJpaAddresses(ConfigurationDao dao);
 }
