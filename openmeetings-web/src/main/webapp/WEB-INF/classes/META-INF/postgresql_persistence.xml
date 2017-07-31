@@ -79,7 +79,7 @@
 			<property name="openjpa.DataCache" value="true" />
 			<property name="openjpa.QueryCache" value="true" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
-			<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />
+			<!--property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" /-->
 		</properties>
 	</persistence-unit>
 </persistence>
