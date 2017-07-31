@@ -32,6 +32,7 @@ import static org.apache.wicket.resource.JQueryResourceReference.getV3;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -96,6 +97,7 @@ import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.ThreadContext;
+import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
@@ -163,7 +165,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent membershipEvent) {
-				//server down, need to remove all online clients
+				//server down, need to remove all online clients, process persistent addresses
+				updateJpaAddresses(_getBean(ConfigurationDao.class));
 			}
 
 			@Override
@@ -172,6 +175,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 			@Override
 			public void memberAdded(MembershipEvent membershipEvent) {
+				//server added, need to process persistent addresses
+				updateJpaAddresses(_getBean(ConfigurationDao.class));
 			}
 		});
 		setPageManagerProvider(new DefaultPageManagerProvider(this) {
@@ -802,5 +807,24 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public List<Member> getServers() {
 		return new ArrayList<>(hazelcast.getCluster().getMembers());
+	}
+
+	@Override
+	public void updateJpaAddresses(ConfigurationDao dao) {
+		StringBuilder sb = new StringBuilder();
+		String delim = "";
+		for (Member m : hazelcast.getCluster().getMembers()) {
+			sb.append(delim).append(m.getInetSocketAddress().getAddress().getHostAddress());
+			delim = ";";
+		}
+		if (Strings.isEmpty(delim)) {
+			sb.append("localhost");
+		}
+		try {
+			dao.updateClusterAddresses(sb.toString());
+		} catch (UnknownHostException e) {
+			log.error("Uexpected exception while updating JPA addresses", e);
+			throw new WicketRuntimeException(e);
+		}
 	}
 }

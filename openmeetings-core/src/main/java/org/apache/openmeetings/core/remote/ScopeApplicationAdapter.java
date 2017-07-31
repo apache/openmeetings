@@ -154,6 +154,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 			iapp.setXFrameOptions(cfgDao.getConfValue(CONFIG_HEADER_XFRAME, String.class, HEADER_XFRAME_SAMEORIGIN));
 			iapp.setContentSecurityPolicy(cfgDao.getConfValue(CONFIG_HEADER_CSP, String.class, HEADER_CSP_SELF));
+			iapp.updateJpaAddresses(cfgDao);
 			EXT_PROCESS_TTL = cfgDao.getConfValue(CONFIG_EXT_PROCESS_TTL, Integer.class, "" + EXT_PROCESS_TTL);
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
