@@ -887,10 +887,11 @@
 			var item = this.baseactionobjectList[eg];
 			var px = item[item.length - 5], py = item[item.length - 4], pwidth = item[item.length - 3], pheight = item[item.length - 2];
 			//FIXME TODO rotation is not taken into account
-			if (px <= x && px + pwidth >=x && py <= y && py + pheight >=y) {
+			if (px <= x && px + pwidth >=x && py <= y && py + pheight >= y) {
 				if (item[0] != "mindMapNode" && item[0] != "mindMapCenter")	{
 					var swfObject = item[item.length - 7];
-					if (swfObject == null) {
+					if ($debug) Debug.info("!!!!!!! swfObject ", typeof(swfObject), swfObject);
+					if (typeof(swfObject) != 'object' || swfObject == null) {
 						tempList.push(item);
 					} else {
 						if ($debug) Debug.write("getObjectInBounds :: swfObject ", swfObject.isVisible);
