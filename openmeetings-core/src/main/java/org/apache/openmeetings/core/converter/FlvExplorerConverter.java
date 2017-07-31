@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -25,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class FlvExplorerConverter extends BaseConverter {
 			Path tmp = null;
 			if (sameExt) {
 				//we should do in-place conversion
-				tmp = Files.createTempFile("video", "mp4");
-				input = Files.move(mp4.toPath(), tmp, StandardCopyOption.ATOMIC_MOVE).toFile().getCanonicalPath();
+				tmp = Files.createTempFile("video", ".mp4");
+				input = Files.move(mp4.toPath(), tmp, REPLACE_EXISTING).toFile().getCanonicalPath();
 			}
 			String[] args = new String[] { getPathToFFMPEG(), "-y"
 					, "-i", input //
@@ -66,7 +66,7 @@ public class FlvExplorerConverter extends BaseConverter {
 					Files.delete(tmp);
 				} else {
 					//conversion fails, need to move temp file back
-					Files.move(tmp, mp4.toPath(), StandardCopyOption.ATOMIC_MOVE);
+					Files.move(tmp, mp4.toPath(), REPLACE_EXISTING);
 				}
 			}
 			//Parse the width height from the FFMPEG output
