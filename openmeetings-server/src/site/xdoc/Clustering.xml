@@ -81,7 +81,7 @@
 					<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
 						set correct server address, login and password. Also add the following section:
 						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" />]]></source>
-						Instead of the 10.1.1.1 and 10.1.1.2 set semicolon separated IPs of all nodes of the cluster.
+						Instead of the <tt>10.1.1.1</tt> and <tt>10.1.1.2</tt> set semicolon separated IPs of all nodes of the cluster.
 					</li>
 				</ul>
 			</subsection>
