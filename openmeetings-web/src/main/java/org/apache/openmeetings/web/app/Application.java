@@ -814,7 +814,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		StringBuilder sb = new StringBuilder();
 		String delim = "";
 		for (Member m : hazelcast.getCluster().getMembers()) {
-			sb.append(delim).append(m.getInetSocketAddress().getAddress().getHostAddress());
+			sb.append(delim).append(m.getAddress().getHost());
 			delim = ";";
 		}
 		if (Strings.isEmpty(delim)) {
