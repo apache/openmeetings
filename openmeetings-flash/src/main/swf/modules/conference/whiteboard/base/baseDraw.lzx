@@ -890,7 +890,6 @@
 			if (px <= x && px + pwidth >=x && py <= y && py + pheight >= y) {
 				if (item[0] != "mindMapNode" && item[0] != "mindMapCenter")	{
 					var swfObject = item[item.length - 7];
-					if ($debug) Debug.info("!!!!!!! swfObject ", typeof(swfObject), swfObject);
 					if (typeof(swfObject) != 'object' || swfObject == null) {
 						tempList.push(item);
 					} else {
