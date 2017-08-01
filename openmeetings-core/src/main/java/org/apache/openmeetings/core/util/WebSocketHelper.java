@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
 import java.io.IOException;
@@ -31,6 +32,11 @@ import java.util.function.Predicate;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.util.ws.WsMessageAll;
+import org.apache.openmeetings.core.util.ws.WsMessageChat;
+import org.apache.openmeetings.core.util.ws.WsMessageRoom;
+import org.apache.openmeetings.core.util.ws.WsMessageRoomMsg;
+import org.apache.openmeetings.core.util.ws.WsMessageUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -38,6 +44,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
+import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.Application;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
@@ -56,23 +63,6 @@ public class WebSocketHelper {
 	public static final String ID_ALL = ID_TAB_PREFIX + "all";
 	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
 	public static final String ID_USER_PREFIX = ID_TAB_PREFIX + "u";
-
-	public static void sendClient(final Client _c, byte[] b) {
-		if (_c != null) {
-			send(a -> Arrays.asList(_c), (t, c) -> {
-				try {
-					t.sendMessage(b, 0, b.length);
-				} catch (IOException e) {
-					log.error("Error while broadcasting byte[] to room", e);
-				}
-			}, null);
-		}
-	}
-
-	public static void sendRoom(final RoomMessage m) {
-		log.debug("Sending WebSocket message: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
-		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
-	}
 
 	private static String getName(User u) {
 		return escapeMarkup(String.format("%s %s", u.getFirstname(), u.getLastname())).toString();
@@ -116,28 +106,55 @@ public class WebSocketHelper {
 			.put("msg", arr);
 	}
 
+	public static void sendClient(final Client _c, byte[] b) {
+		if (_c != null) {
+			send(a -> Arrays.asList(_c), (t, c) -> {
+				try {
+					t.sendMessage(b, 0, b.length);
+				} catch (IOException e) {
+					log.error("Error while broadcasting byte[] to room", e);
+				}
+			}, null);
+		}
+	}
+
+	public static void send(IClusterWsMessage _m) {
+		if (_m instanceof WsMessageRoomMsg) {
+			sendRoom(((WsMessageRoomMsg)_m).getMsg());
+		} else if (_m instanceof WsMessageRoom) {
+			WsMessageRoom m = (WsMessageRoom)_m;
+			sendRoom(m.getRoomId(), m.getMsg());
+		} else if (_m instanceof WsMessageChat) {
+			WsMessageChat m = (WsMessageChat)_m;
+			sendRoom(m.getChatMessage(), m.getMsg());
+		} else if (_m instanceof WsMessageUser) {
+			WsMessageUser m = (WsMessageUser)_m;
+			sendUser(m.getUserId(), m.getMsg());
+		} else if (_m instanceof WsMessageAll) {
+			sendAll(((WsMessageAll)_m).getMsg());
+		}
+	}
+
+	public static void sendRoom(final RoomMessage m) {
+		publish(new WsMessageRoomMsg(m));
+		log.debug("Sending WebSocket message: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
+		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
+	}
+
 	public static void sendRoom(final Long roomId, final JSONObject m) {
+		publish(new WsMessageRoom(roomId, m));
 		sendRoom(roomId, m, null, null);
 	}
 
 	public static void sendRoom(ChatMessage m, JSONObject msg) {
+		publish(new WsMessageChat(m, msg));
 		sendRoom(m.getToRoom().getId(), msg
 				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator))
 				, null);
 	}
 
-	public static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
-		log.debug("Sending WebSocket message: {}", m);
-		sendRoom(roomId, (t, c) -> {
-			try {
-				t.sendMessage(func == null ? m.toString() : func.apply(m, c));
-			} catch (IOException e) {
-				log.error("Error while broadcasting message to room", e);
-			}
-		}, check);
-	}
-
 	public static void sendUser(final Long userId, final String m) {
+		publish(new WsMessageUser(userId, m));
 		send(a -> ((IApplication)a).getOmClients(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
@@ -149,6 +166,7 @@ public class WebSocketHelper {
 
 	//TODO should this be unified???
 	public static void sendAll(final String m) {
+		publish(new WsMessageAll(m));
 		Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
 		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
@@ -164,11 +182,27 @@ public class WebSocketHelper {
 		}
 	}
 
-	public static void sendRoom(final Long roomId, BiConsumer<IWebSocketConnection, Client> consumer, Predicate<Client> check) {
+	private static void publish(IClusterWsMessage m) {
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		iapp.publishWsTopic(m);
+	}
+
+	private static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
+		log.debug("Sending WebSocket message: {}", m);
+		sendRoom(roomId, (t, c) -> {
+			try {
+				t.sendMessage(func == null ? m.toString() : func.apply(m, c));
+			} catch (IOException e) {
+				log.error("Error while broadcasting message to room", e);
+			}
+		}, check);
+	}
+
+	private static void sendRoom(final Long roomId, BiConsumer<IWebSocketConnection, Client> consumer, Predicate<Client> check) {
 		send(a -> ((IApplication)a).getOmRoomClients(roomId), consumer, check);
 	}
 
-	public static void send(
+	private static void send(
 			final Function<Application, List<Client>> func
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
