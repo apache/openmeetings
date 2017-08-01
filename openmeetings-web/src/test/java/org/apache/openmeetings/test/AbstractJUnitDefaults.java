@@ -191,5 +191,4 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		assertNotNull("Cann't add user", user);
 		return user;
 	}
-
 }

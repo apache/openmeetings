@@ -142,6 +142,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private final static String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	private final static String ROOMS_KEY = "ROOMS_KEY";
 	private final static String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
+	private final static String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
@@ -163,10 +164,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
+		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
-			public void memberRemoved(MembershipEvent membershipEvent) {
+			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
+				for (Map.Entry<String, Client> e : getOnlineUsers().entrySet()) {
+					String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+					if (serverId.equals(e.getValue().getServerId())) {
+						exit(e.getValue());
+					}
+				}
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
 			}
 
