@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
-import org.apache.openmeetings.core.util.WbAction;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
 import com.github.openjson.JSONObject;

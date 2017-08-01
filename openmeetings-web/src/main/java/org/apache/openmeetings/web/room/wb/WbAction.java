@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.util;
+package org.apache.openmeetings.web.room.wb;
 
 public enum WbAction {
 	createWb

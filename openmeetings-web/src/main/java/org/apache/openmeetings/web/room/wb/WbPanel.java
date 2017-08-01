@@ -41,7 +41,6 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.core.util.WbAction;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;

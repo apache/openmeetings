@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.wb;
 
 import java.util.function.Predicate;
 
-import org.apache.openmeetings.core.util.WbAction;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileItem;
