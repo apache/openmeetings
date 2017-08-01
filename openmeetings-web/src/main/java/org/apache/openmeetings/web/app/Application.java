@@ -126,6 +126,7 @@ import org.wicketstuff.dashboard.web.DashboardContextInjector;
 import org.wicketstuff.dashboard.web.DashboardSettings;
 import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 
+import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
@@ -141,6 +142,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private final static String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	private final static String ROOMS_KEY = "ROOMS_KEY";
 	private final static String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
+	public final static String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
@@ -154,7 +156,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NOTINIT_MAPPING = "/notinited";
 	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
-	private final HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance();
+	private final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
 
 	@Override
 	protected void init() {
@@ -162,21 +164,43 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
+		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
-			public void memberRemoved(MembershipEvent membershipEvent) {
+			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
+				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+				for (Map.Entry<String, Client> e : getOnlineUsers().entrySet()) {
+					if (serverId.equals(e.getValue().getServerId())) {
+						exit(e.getValue());
+					}
+				}
+				Map<String, StreamClient> streams = getStreamClients();
+				for (Map.Entry<String, StreamClient> e : streams.entrySet()) {
+					if (serverId.equals(e.getValue().getServerId())) {
+						streams.remove(e.getKey());
+					}
+				}
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
 			}
 
 			@Override
-			public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
+			public void memberAttributeChanged(MemberAttributeEvent evt) {
 			}
 
 			@Override
-			public void memberAdded(MembershipEvent membershipEvent) {
+			public void memberAdded(MembershipEvent evt) {
 				//server added, need to process persistent addresses
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
+				//check for duplicate instance-names
+				Set<String> names = new HashSet<>();
+				for (Member m : evt.getMembers()) {
+					String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+					if (names.contains(serverId)) {
+						log.warn("Duplicate cluster instance with name {} found {}", serverId, m);
+					}
+					names.add(serverId);
+				}
 			}
 		});
 		setPageManagerProvider(new DefaultPageManagerProvider(this) {
