@@ -125,6 +125,7 @@ import org.wicketstuff.dashboard.web.DashboardContextInjector;
 import org.wicketstuff.dashboard.web.DashboardSettings;
 import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 
+import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
@@ -152,7 +153,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NOTINIT_MAPPING = "/notinited";
 	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
-	private final HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance();
+	private final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
 
 	@Override
 	protected void init() {
