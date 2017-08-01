@@ -70,6 +70,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
@@ -129,10 +130,13 @@ import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Member;
 import com.hazelcast.core.MemberAttributeEvent;
 import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
+import com.hazelcast.core.Message;
+import com.hazelcast.core.MessageListener;
 
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, webAppRootKey);
@@ -157,6 +161,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
 	private final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
+	private ITopic<IClusterWsMessage> hazelWsTopic;
 
 	@Override
 	protected void init() {
@@ -165,6 +170,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
+		hazelWsTopic = hazelcast.getTopic("default");
+		hazelWsTopic.addMessageListener(new MessageListener<IClusterWsMessage>() {
+			@Override
+			public void onMessage(Message<IClusterWsMessage> msg) {
+				String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
+				if (serverId.equals(hazelcast.getName())) {
+					return;
+				}
+				WebSocketHelper.send(msg.getMessageObject());
+			}
+		});
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
@@ -850,5 +866,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			log.error("Uexpected exception while updating JPA addresses", e);
 			throw new WicketRuntimeException(e);
 		}
+	}
+
+	@Override
+	public void publishWsTopic(IClusterWsMessage msg) {
+		hazelWsTopic.publish(msg);
 	}
 }

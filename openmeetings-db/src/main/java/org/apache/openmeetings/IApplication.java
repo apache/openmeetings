@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.StreamClient;
+import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -66,4 +67,7 @@ public interface IApplication {
 
 	//JPA
 	void updateJpaAddresses(ConfigurationDao dao);
+
+	//WS
+	void publishWsTopic(IClusterWsMessage msg);
 }
