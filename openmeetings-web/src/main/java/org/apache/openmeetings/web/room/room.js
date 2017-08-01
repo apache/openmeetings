@@ -217,6 +217,12 @@ function setRoomSizes() {
 	var hh = h - 5;
 	p.height(hh);
 	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
+	var holder = $('.room.holder');
+	if (sb.width() > 230) {
+		holder.addClass('big').removeClass('small');
+	} else {
+		holder.removeClass('big').addClass('small');
+	}
 	if (!!WbArea) {
 		WbArea.resize(sb.width() + 5, w, h);
 	}
