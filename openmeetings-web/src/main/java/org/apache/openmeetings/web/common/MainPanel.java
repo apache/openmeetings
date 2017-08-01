@@ -382,6 +382,10 @@ public class MainPanel extends Panel {
 		return chat;
 	}
 
+	public String getUid() {
+		return uid;
+	}
+
 	public Client getClient() {
 		return getOnlineClient(uid);
 	}

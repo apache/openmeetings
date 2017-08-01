@@ -309,7 +309,7 @@ public class RoomSidebar extends Panel {
 				return t;
 			}
 		}).setOutputMarkupId(true));
-		selfRights = new SelfIconsPanel("icons", room.getClient(), room, true);
+		selfRights = new SelfIconsPanel("icons", room.getUid(), room, true);
 	}
 
 	@Override

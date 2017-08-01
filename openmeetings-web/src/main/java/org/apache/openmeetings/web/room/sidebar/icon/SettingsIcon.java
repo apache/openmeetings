@@ -18,14 +18,13 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class SettingsIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 
-	public SettingsIcon(String id, Client client, RoomPanel room) {
-		super(id, client, room);
+	public SettingsIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, room);
 		mainCssClass = "settings ";
 	}
 

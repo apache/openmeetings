@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.right.AudioRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ExclusiveRightIcon;
@@ -42,18 +41,18 @@ public class ClientIconsPanel extends Panel {
 	private final VideoRightIcon rightVideo;
 	private final ExclusiveRightIcon rightExclsv;
 
-	public ClientIconsPanel(String id, Client client, RoomPanel room) {
+	public ClientIconsPanel(String id, String uid, RoomPanel room) {
 		super(id);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
-		add(rightModer = new ModeratorRightIcon("right-moder", client, room));
-		add(rightPresenter = new PresenterRightIcon("right-presenter", client, room));
-		add(rightWb = new WhiteboardRightIcon("right-wb", client, room));
-		add(rightScreen = new ScreenShareRightIcon("right-screen-share", client, room));
-		add(rightRemote = new RemoteControlRightIcon("right-remote-control", client, room));
-		add(rightAudio = new AudioRightIcon("right-audio", client, room));
-		add(rightVideo = new VideoRightIcon("right-video", client, room));
-		add(rightExclsv = new ExclusiveRightIcon("right-exclsv", client, room));
+		add(rightModer = new ModeratorRightIcon("right-moder", uid, room));
+		add(rightPresenter = new PresenterRightIcon("right-presenter", uid, room));
+		add(rightWb = new WhiteboardRightIcon("right-wb", uid, room));
+		add(rightScreen = new ScreenShareRightIcon("right-screen-share", uid, room));
+		add(rightRemote = new RemoteControlRightIcon("right-remote-control", uid, room));
+		add(rightAudio = new AudioRightIcon("right-audio", uid, room));
+		add(rightVideo = new VideoRightIcon("right-video", uid, room));
+		add(rightExclsv = new ExclusiveRightIcon("right-exclsv", uid, room));
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class ClientIconsPanel extends Panel {
 		super.onInitialize();
 		update(null);
 	}
-	
+
 	public void update(IPartialPageRequestHandler handler) {
 		rightModer.update(handler);
 		rightPresenter.update(handler);

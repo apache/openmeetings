@@ -18,15 +18,14 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class ExclusiveRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public ExclusiveRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.exclusive, room);
+	public ExclusiveRightIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, Right.exclusive, room);
 		mainCssClass = "exclsv-audio ";
 	}
 

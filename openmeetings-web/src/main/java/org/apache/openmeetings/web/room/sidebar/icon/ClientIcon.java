@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
+
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
@@ -32,15 +34,15 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	protected static final String CLS_CLICKABLE = "clickable ";
 	protected final RoomPanel room;
 	protected final boolean self;
-	protected final Client client;
+	protected final String uid;
 	protected String mainCssClass;
 	protected final StringBuilder cssClass = new StringBuilder(ICON_CLASS);
 
-	public ClientIcon(String id, Client client, RoomPanel room) {
+	public ClientIcon(String id, String uid, RoomPanel room) {
 		super(id);
 		this.room = room;
-		this.client = client;
-		self = room.getClient().getUid().equals(client.getUid());
+		this.uid = uid;
+		self = room.getClient().getUid().equals(uid);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 	}
@@ -81,5 +83,9 @@ public abstract class ClientIcon extends WebMarkupContainer {
 		if (handler != null) {
 			handler.add(this);
 		}
+	}
+
+	protected Client getClient() {
+		return getOnlineClient(uid);
 	}
 }

@@ -27,15 +27,15 @@ import org.apache.openmeetings.web.room.RoomPanel;
 public class WhiteboardRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.whiteBoard, room);
+	public WhiteboardRightIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, Right.whiteBoard, room);
 		mainCssClass = "right wb bumper ";
 	}
 
 	@Override
 	protected String getTitle() {
 		String title;
-		if (client.hasRight(right)) {
+		if (getClient().hasRight(right)) {
 			title = self ? "689" : "612";
 		} else {
 			title = self ? "686" : "694";
@@ -45,7 +45,8 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 
 	@Override
 	protected boolean hasRight() {
-		return client.hasRight(Right.presenter) || client.hasRight(right);
+		final Client c = getClient();
+		return c.hasRight(Right.presenter) || c.hasRight(right);
 	}
 
 	@Override

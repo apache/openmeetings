@@ -684,6 +684,10 @@ public class RoomPanel extends BasePanel {
 		return getMainPanel().getClient();
 	}
 
+	public String getUid() {
+		return getMainPanel().getUid();
+	}
+
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
