@@ -25,6 +25,7 @@
 	<attribute name="labelid" value="0" type="number" />
 	<attribute name="setSelectionToItem" value="true" type="boolean" />
 	<attribute name="_isselected" value="false" type="boolean" />
+	<attribute name="isEraser" value="false" type="boolean" />
 
 	<handler name="oninit">
 		if (this._isselected) parent.parent.parent.setSelection(this);

@@ -44,6 +44,11 @@
 						labelid="557" x_insetResource="1" y_insetResource="1"
 						resourceItem="pointer_whiteboard_menu_rsc" />
 	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
+	<mainToolsPanelItem name="erase" modi="rectangle" isEraser="true" resourceItem="erase_rsc">
+		<handler name="oninit">
+			this.__labeltooltip.setAttribute('text', "White-Out");
+		</handler>
+	</mainToolsPanelItem>
 	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
 	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
 	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resourceItem="uline_rsc" />
@@ -94,6 +99,11 @@
 	<mainToolsPanelItem name="hand" modi="hand" labelid="72" _isselected="true" resourceItem="menupointer_rsc" />
 	<mainToolsPanelItem name="pointerWhiteboard" modi="pointerWhiteboard" labelid="557" resourceItem="pointer_whiteboard_menu_rsc" />
 	<mainToolsPanelItem name="letter" modi="letter" labelid="73" resourceItem="letter" />
+	<mainToolsPanelItem name="erase" modi="rectangle" isEraser="true" resourceItem="erase_rsc">
+		<handler name="oninit">
+			this.__labeltooltip.setAttribute('text', "White-Out");
+		</handler>
+	</mainToolsPanelItem>
 	<mainToolsPanelItem name="paint" modi="paint" labelid="74" resourceItem="paint" />
 	<mainToolsPanelItem name="line" modi="line" labelid="75" resourceItem="line_rsc" />
 	<mainToolsPanelItem name="uline" modi="uline" labelid="76" resourceItem="uline_rsc" />
@@ -128,7 +138,7 @@
 </class>
 
 <class name="mainToolsTopPanel" extends="baseTopPanel"
-		width="420" height="33" title="" docking="true"
+		width="448" height="33" title="" docking="true"
 		activationClassBounding="mainToolsLeftPanel"
 		activationVClassBounding="mainToolsTopPanel"
 		leftClassPanel="mainToolsLeftPanel"
@@ -153,7 +163,7 @@
 </class>
 
 <class name="mainToolsLeftPanel" extends="baseLeftPanel"
-		width="33" height="420" title="" docking="true"
+		width="33" height="448" title="" docking="true"
 		activationClassBounding="mainToolsLeftPanel"
 		activationVClassBounding="mainToolsTopPanel"
 		topClassPanel="mainToolsTopPanel"

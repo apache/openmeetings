@@ -70,12 +70,36 @@
 				drawArea.currentdrawarrowlinestrokeFillDis);
 			this._content.changeOpacitySlider.setSliderValue(drawArea.currentdrawarrowOpacity*100);
 		} else if (drawArea.drawmodus == 'rectangle') {
-			this._content.lineColorChoose.setSelectedColorWithDis(drawArea.currentrectanglestroke,
-				drawArea.currentrectanglestrokeDis);
-			this._content.fillColorChoose.setSelectedColorWithDis(drawArea.currentrectanglestrokeFill,
-				drawArea.currentrectanglestrokeFillDis);
-			this._content.changeWidthSlider.setSliderValue(drawArea.currentrectangleineWidth);
-			this._content.changeOpacitySlider.setSliderValue(drawArea.currentrectangleOpacity*100);
+			if (drawArea.parent.parent.panelArea.objectRef.isEraser) {
+				if ($debug) Debug.write("loadPanelByModus :: isErase is TRUE");
+				this._content.fillColorChoose.setEnabled(false);
+				this._content.lineColorChoose.setEnabled(false);
+				this._content.changeWidthSlider.setEnabled(false);
+				this._content.changeOpacitySlider.setEnabled(false);
+				drawArea.rectSettings = {
+					stroke: drawArea.currentrectanglestroke
+					, strokeDis: drawArea.currentrectanglestrokeDis
+					, strokeFill: drawArea.currentrectanglestrokeFill
+					, strokeFillDis: drawArea.currentrectanglestrokeFillDis
+				};
+				drawArea.currentrectanglestroke = "16777215";
+				drawArea.currentrectanglestrokeDis = "16777215";
+				drawArea.currentrectanglestrokeFill = "16777215";
+				drawArea.currentrectanglestrokeFillDis = "16777215";
+			} else {
+				if (!!drawArea.rectSettings) {
+					drawArea.currentrectanglestroke = drawArea.rectSettings.stroke;
+					drawArea.currentrectanglestrokeDis = drawArea.rectSettings.strokeDis;
+					drawArea.currentrectanglestrokeFill = drawArea.rectSettings.strokeFill;
+					drawArea.currentrectanglestrokeFillDis = drawArea.rectSettings.strokeFillDis;
+				}
+				this._content.lineColorChoose.setSelectedColorWithDis(drawArea.currentrectanglestroke,
+					drawArea.currentrectanglestrokeDis);
+				this._content.fillColorChoose.setSelectedColorWithDis(drawArea.currentrectanglestrokeFill,
+					drawArea.currentrectanglestrokeFillDis);
+				this._content.changeWidthSlider.setSliderValue(drawArea.currentrectangleineWidth);
+				this._content.changeOpacitySlider.setSliderValue(drawArea.currentrectangleOpacity * 100);
+			}
 		} else if (drawArea.drawmodus == 'ellipse') {
 			this._content.lineColorChoose.setSelectedColorWithDis(drawArea.currentellipsestroke,
 				drawArea.currentellipsestrokeDis);

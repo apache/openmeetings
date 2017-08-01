@@ -327,4 +327,5 @@
 				description="Conference Room Tab Icon"
 				license="APL author sebawagner"
 				src="themes/basic-theme/dashboard/conference_icon_normal.png" />
+	<resource name="erase_rsc" description="Toolbar Icon" license="APL Author sebawagner" src="themes/basic-theme/whiteboard/clear-icon.png"/>
 </theme>
