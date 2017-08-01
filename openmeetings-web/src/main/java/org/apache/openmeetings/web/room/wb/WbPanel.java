@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.room.wb;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.PARAM_OBJ;
+import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.AttributeModifier.append;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -37,10 +39,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.core.util.WbAction;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -56,9 +57,6 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.RoomResourceReference;
-import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
-import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -72,10 +70,8 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.resource.FileSystemResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -94,27 +90,12 @@ public class WbPanel extends Panel {
 	private static final int UNDO_SIZE = 20;
 	public static final String FUNC_ACTION = "wbAction";
 	public static final String PARAM_ACTION = "action";
-	public static final String PARAM_OBJ = "obj";
 	public final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
 	private final RoomPanel rp;
 	private long wb2save = -1;
 	private boolean inited = false;
-	private enum Action {
-		createWb
-		, removeWb
-		, activateWb
-		, setSlide
-		, createObj
-		, modifyObj
-		, deleteObj
-		, clearAll
-		, clearSlide
-		, save
-		, load
-		, undo
-	}
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -130,10 +111,10 @@ public class WbPanel extends Panel {
 				return;
 			}
 			try {
-				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
+				WbAction a = WbAction.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
 				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
-				if (Action.createObj == a || Action.modifyObj == a) {
+				if (WbAction.createObj == a || WbAction.modifyObj == a) {
 					JSONObject o = obj.optJSONObject("obj");
 					if (o != null && "pointer".equals(o.getString("type"))) {
 						sendWbOthers(a, obj);
@@ -148,7 +129,7 @@ public class WbPanel extends Panel {
 						case createWb:
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).add(roomId, c.getUser().getLanguageId());
-							sendWbAll(Action.createWb, getAddWbJson(wb.getId(), wb.getName()));
+							sendWbAll(WbAction.createWb, getAddWbJson(wb.getId(), wb.getName()));
 						}
 							break;
 						case removeWb:
@@ -156,7 +137,7 @@ public class WbPanel extends Panel {
 							long _id = obj.optLong("wbId", -1);
 							Long id = _id < 0 ? null : _id;
 							getBean(WhiteboardCache.class).remove(roomId, id);
-							sendWbAll(Action.removeWb, obj);
+							sendWbAll(WbAction.removeWb, obj);
 						}
 							break;
 						case activateWb:
@@ -165,7 +146,7 @@ public class WbPanel extends Panel {
 							if (_id > -1) {
 								Whiteboards wbs = getBean(WhiteboardCache.class).get(roomId);
 								wbs.setActiveWb(_id);
-								sendWbAll(Action.activateWb, obj);
+								sendWbAll(WbAction.activateWb, obj);
 							}
 						}
 							break;
@@ -173,7 +154,7 @@ public class WbPanel extends Panel {
 						{
 							Whiteboard wb = getBean(WhiteboardCache.class).get(roomId).get(obj.getLong("wbId"));
 							wb.setSlide(obj.optInt("slide", 0));
-							sendWbOthers(Action.setSlide, obj);
+							sendWbOthers(WbAction.setSlide, obj);
 						}
 							break;
 						case clearAll:
@@ -195,7 +176,7 @@ public class WbPanel extends Panel {
 							JSONObject o = obj.getJSONObject("obj");
 							wb.put(o.getString("uid"), o);
 							addUndo(wb.getId(), new UndoObject(UndoObject.Type.add, o));
-							sendWbOthers(Action.createObj, obj);
+							sendWbOthers(WbAction.createObj, obj);
 						}
 							break;
 						case modifyObj:
@@ -212,7 +193,7 @@ public class WbPanel extends Panel {
 							if (arr.length() != 0) {
 								addUndo(wb.getId(), new UndoObject(UndoObject.Type.modify, undo));
 							}
-							sendWbOthers(Action.modifyObj, obj);
+							sendWbOthers(WbAction.modifyObj, obj);
 						}
 							break;
 						case deleteObj:
@@ -230,7 +211,7 @@ public class WbPanel extends Panel {
 							if (undo.length() != 0) {
 								addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, undo));
 							}
-							sendWbAll(Action.deleteObj, obj);
+							sendWbAll(WbAction.deleteObj, obj);
 						}
 							break;
 						case clearSlide:
@@ -247,7 +228,7 @@ public class WbPanel extends Panel {
 							if (arr.length() != 0) {
 								addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
 							}
-							sendWbAll(Action.clearSlide, obj);
+							sendWbAll(WbAction.clearSlide, obj);
 						}
 							break;
 						case save:
@@ -261,13 +242,13 @@ public class WbPanel extends Panel {
 							if (uo != null) {
 								switch (uo.getType()) {
 									case add:
-										sendWbAll(Action.deleteObj, obj.put("obj", new JSONArray().put(new JSONObject(uo.getObject()))));
+										sendWbAll(WbAction.deleteObj, obj.put("obj", new JSONArray().put(new JSONObject(uo.getObject()))));
 										break;
 									case remove:
-										sendWbAll(Action.createObj, obj.put("obj", new JSONArray(uo.getObject())));
+										sendWbAll(WbAction.createObj, obj.put("obj", new JSONArray(uo.getObject())));
 										break;
 									case modify:
-										sendWbAll(Action.modifyObj, obj.put("obj", new JSONArray(uo.getObject())));
+										sendWbAll(WbAction.modifyObj, obj.put("obj", new JSONArray(uo.getObject())));
 										break;
 								}
 							}
@@ -374,27 +355,6 @@ public class WbPanel extends Panel {
 		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
 	}
 
-	private void sendWbAll(Action meth, JSONObject obj) {
-		sendWb(meth, obj, null);
-	}
-
-	private void sendWbOthers(Action meth, JSONObject obj) {
-		sendWb(meth, obj, c -> !rp.getClient().getUid().equals(c.getUid()));
-	}
-
-	private void sendWb(Action meth, JSONObject obj, Predicate<Client> check) {
-		WebSocketHelper.sendRoom(
-				roomId
-				, new JSONObject().put("type", "wb")
-				, check
-				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);", meth.name(), obj.toString(new NullStringer()))).toString()
-			);
-	}
-
-	private static JSONObject getObjWbJson(Long wbId, Object o) {
-		return new JSONObject().put("wbId", wbId).put(PARAM_OBJ, o);
-	}
-
 	private static JSONObject getAddWbJson(Long id, String name) {
 		return new JSONObject().put("wbId", id).put("name", name);
 	}
@@ -420,43 +380,13 @@ public class WbPanel extends Panel {
 						? getBean(RecordingDao.class).get(fid)
 						: getBean(FileExplorerItemDao.class).get(fid);
 				if (fi != null) {
-					return addFileUrl(ruid, _file, fi, rp.getClient());
+					return WbWebSocketHelper.addFileUrl(ruid, _file, fi, rp.getClient());
 				}
 			}
 		} catch (Exception e) {
 			//no-op, non-file object
 		}
 		return _file;
-	}
-
-	private JSONObject addFileUrl(String ruid, JSONObject _file, FileItem fi, Client c) {
-		JSONObject file = new JSONObject(_file.toString(new NullStringer()));
-		final FileSystemResourceReference ref;
-		final PageParameters pp = new PageParameters()
-				.add("id", fi.getId()).add("uid", c.getUid())
-				.add("ruid", ruid).add("wuid", _file.optString("uid"));
-		switch (fi.getType()) {
-			case Video:
-				ref = new RoomResourceReference();
-				file.put("_src", urlFor(ref, pp));
-				file.put("_poster", urlFor(ref, new PageParameters(pp).add("preview", true)));
-				break;
-			case Recording:
-				ref = new Mp4RecordingResourceReference();
-				file.put("_src", urlFor(ref, pp));
-				file.put("_poster", urlFor(new JpgRecordingResourceReference(), pp));
-				break;
-			case Presentation:
-				ref = new RoomResourceReference();
-				file.put("_src", urlFor(ref, pp));
-				file.put("deleted", !fi.exists());
-				break;
-			default:
-				ref = new RoomResourceReference();
-				file.put("src", urlFor(ref, pp));
-				break;
-		}
-		return file;
 	}
 
 	private static JSONArray getArray(JSONObject wb, Function<JSONObject, JSONObject> postprocess) {
@@ -478,7 +408,7 @@ public class WbPanel extends Panel {
 			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
 		}
 		wb.clear();
-		sendWbAll(Action.clearAll, new JSONObject().put("wbId", wb.getId()));
+		sendWbAll(WbAction.clearAll, new JSONObject().put("wbId", wb.getId()));
 	}
 
 	public void sendFileToWb(FileItem fi, boolean clean) {
@@ -499,7 +429,7 @@ public class WbPanel extends Panel {
 									wb.getRoomItems().put(o.getString("uid"), o);
 									return addFileUrl(wbs.getUid(), o);
 								});
-							sendWbAll(Action.load, getObjWbJson(wb.getId(), arr));
+							sendWbAll(WbAction.load, getObjWbJson(wb.getId(), arr));
 						} catch (Exception e) {
 							log.error("Unexpected error while loading WB", e);
 						}
@@ -527,21 +457,19 @@ public class WbPanel extends Panel {
 						clearAll(wb);
 					}
 					wb.put(wuid, file);
-					WebSocketHelper.sendRoom(
-							roomId
-							, new JSONObject().put("type", "wb")
-							, null
-							, (o, c) -> {
-									return o.put("func", String.format("WbArea.%s(%s);"
-											, Action.createObj.name()
-											, getObjWbJson(wb.getId(), addFileUrl(ruid, file, fi, c)).toString())
-										).toString();
-								}
-							);
+					WbWebSocketHelper.sendWbFile(roomId, wb.getId(), ruid, file, fi);
 				}
 					break;
 			}
 		}
+	}
+
+	private void sendWbOthers(WbAction a, JSONObject obj) {
+		WbWebSocketHelper.sendWbOthers(roomId, a, obj, rp.getClient().getUid());
+	}
+
+	private void sendWbAll(WbAction a, JSONObject obj) {
+		WbWebSocketHelper.sendWbAll(roomId, a, obj);
 	}
 
 	private void addUndo(Long wbId, UndoObject u) {

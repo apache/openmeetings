@@ -182,12 +182,12 @@ public class WebSocketHelper {
 		}
 	}
 
-	private static void publish(IClusterWsMessage m) {
+	protected static void publish(IClusterWsMessage m) {
 		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 		iapp.publishWsTopic(m);
 	}
 
-	private static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
+	protected static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
 		log.debug("Sending WebSocket message: {}", m);
 		sendRoom(roomId, (t, c) -> {
 			try {
