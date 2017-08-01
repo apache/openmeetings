@@ -140,7 +140,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private final static String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	private final static String ROOMS_KEY = "ROOMS_KEY";
 	private final static String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
-	private final static String NAME_ATTR_KEY = "name";
+	public final static String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
@@ -167,23 +167,38 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
+				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
 				for (Map.Entry<String, Client> e : getOnlineUsers().entrySet()) {
-					String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
 					if (serverId.equals(e.getValue().getServerId())) {
 						exit(e.getValue());
+					}
+				}
+				Map<String, StreamClient> streams = getStreamClients();
+				for (Map.Entry<String, StreamClient> e : streams.entrySet()) {
+					if (serverId.equals(e.getValue().getServerId())) {
+						streams.remove(e.getKey());
 					}
 				}
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
 			}
 
 			@Override
-			public void memberAttributeChanged(MemberAttributeEvent arg0) {
+			public void memberAttributeChanged(MemberAttributeEvent evt) {
 			}
 
 			@Override
-			public void memberAdded(MembershipEvent membershipEvent) {
+			public void memberAdded(MembershipEvent evt) {
 				//server added, need to process persistent addresses
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
+				//check for duplicate instance-names
+				Set<String> names = new HashSet<>();
+				for (Member m : evt.getMembers()) {
+					String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+					if (names.contains(serverId)) {
+						log.warn("Duplicate cluster instance with name {} found {}", serverId, m);
+					}
+					names.add(serverId);
+				}
 			}
 		});
 		setPageManagerProvider(new DefaultPageManagerProvider(this) {
