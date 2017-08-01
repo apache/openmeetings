@@ -81,7 +81,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
-import org.apache.openmeetings.db.dao.server.ServerDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
@@ -104,7 +103,6 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
-import org.apache.openmeetings.db.entity.server.Server;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -171,8 +169,6 @@ public class BackupImport {
 	private TimezoneUtil tzUtil;
 	@Autowired
 	private ChatDao chatDao;
-	@Autowired
-	private ServerDao serverDao;
 	@Autowired
 	private OAuth2Dao auth2Dao;
 	@Autowired
@@ -519,19 +515,7 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Meeting members import complete, starting cluster server import");
-		/*
-		 * ##################### Cluster servers
-		 */
-		{
-			List<Server> list = readList(simpleSerializer, f, "servers.xml", "servers", Server.class, true);
-			for (Server s : list) {
-				s.setId(null);
-				serverDao.update(s, null);
-			}
-		}
-
-		log.info("Cluster servers import complete, starting recordings import");
+		log.info("Meeting members import complete, starting recordings server import");
 		/*
 		 * ##################### Import Recordings
 		 */

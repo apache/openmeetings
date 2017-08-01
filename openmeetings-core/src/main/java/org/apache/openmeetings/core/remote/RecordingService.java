@@ -370,7 +370,6 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	//TODO copy/paste
 	public void stopRecordingShowForClient(IScope scope, StreamClient rcl) {
 		try {
 			// this cannot be handled here, as to stop a stream and to leave a
@@ -453,7 +452,6 @@ public class RecordingService implements IPendingServiceCallback {
 				recordShow(conn, rcl.getBroadCastId(), streamName, metaDataId, false, recording.isInterview());
 
 				rcl.setMetaId(metaDataId);
-
 				sessionManager.update(rcl);
 			}
 		} catch (Exception err) {

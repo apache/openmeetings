@@ -37,6 +37,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawS
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.lang.reflect.Constructor;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,6 +47,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openjpa.conf.OpenJPAConfiguration;
+import org.apache.openjpa.event.RemoteCommitProvider;
+import org.apache.openjpa.event.TCPRemoteCommitProvider;
+import org.apache.openjpa.persistence.OpenJPAEntityManagerSPI;
+import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -79,6 +85,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	@Autowired
 	private UserDao userDao;
+
+	public void updateClusterAddresses(String addresses) throws UnknownHostException {
+		OpenJPAConfiguration cfg = ((OpenJPAEntityManagerSPI)OpenJPAPersistence.cast(em)).getConfiguration();
+		RemoteCommitProvider prov = cfg.getRemoteCommitEventManager().getRemoteCommitProvider();
+		if (prov instanceof TCPRemoteCommitProvider) {
+			((TCPRemoteCommitProvider)prov).setAddresses(addresses);
+		}
+	}
 
 	/**
 	 * Retrieves Configuration regardless of its deleted status

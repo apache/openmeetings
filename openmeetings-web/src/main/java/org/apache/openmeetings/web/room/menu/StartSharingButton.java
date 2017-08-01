@@ -32,10 +32,10 @@ import static org.apache.wicket.util.time.Duration.NONE;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.openmeetings.core.session.SessionManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Application;
@@ -96,7 +96,7 @@ public class StartSharingButton extends OmButton {
 			String _url = s.getString(VideoSettings.URL);
 			long roomId = c.getRoomId();
 			Room room = getBean(RoomDao.class).get(roomId);
-			SessionManager sessionManager = getBean(SessionManager.class);
+			ISessionManager sessionManager = getBean(ISessionManager.class);
 			app = app.replace("$native", "" + s.getBoolean(FLASH_NATIVE_SSL))
 					.replace("$codebase", WebSession.get().getExtendedProperties().getCodebase())
 					.replace("$applicationName", cfgDao.getAppName())

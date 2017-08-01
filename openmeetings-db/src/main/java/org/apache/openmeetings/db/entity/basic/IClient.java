@@ -28,4 +28,6 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
  *
  */
 public interface IClient extends IDataProviderEntity {
+	String getUid();
+	String getServerId();
 }

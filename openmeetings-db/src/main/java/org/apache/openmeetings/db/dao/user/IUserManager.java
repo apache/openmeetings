@@ -52,9 +52,8 @@ public interface IUserManager {
 	Long getLanguage(Locale loc);
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 
-	boolean kickUsersByRoomId(Long roomId);
-
-	boolean kickById(Long id);
+	boolean kickById(String uid);
+	boolean kickUsersByRoomId(Long room_id);
 
 	List<Userdata> getUserdataDashBoard(Long userId);
 }

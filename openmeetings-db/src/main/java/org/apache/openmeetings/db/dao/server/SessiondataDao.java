@@ -205,7 +205,7 @@ public class SessiondataDao {
 	 */
 	public void clearSessionByRoomId(Long roomId) {
 		try {
-			for (StreamClient rcl : sessionManager.getClientListByRoom(roomId)) {
+			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
 				String aux = rcl.getSwfurl();
 
 				//FIXME TODO this need to be refactored !

@@ -27,8 +27,8 @@ public class IClientUtil {
 		, sharing
 	}
 
-	public static void init(IClient client, Long id, boolean sharing) {
-		client.setAttribute(ConAttrs.omId.name(), id);
+	public static void init(IClient client, String uid, boolean sharing) {
+		client.setAttribute(ConAttrs.omId.name(), uid);
 		client.setAttribute(ConAttrs.sharing.name(), sharing);
 	}
 
@@ -38,9 +38,9 @@ public class IClientUtil {
 	 * @param conn
 	 * @return - Id of {@link StreamClient} for this IConnection, or <code>null</code>
 	 */
-	public static Long getId(IClient client) {
+	public static String getId(IClient client) {
 		Object o = client.getAttribute(ConAttrs.omId.name());
-		return o instanceof Long ? (Long)o : null;
+		return o instanceof String ? (String)o : null;
 	}
 
 	public static boolean isSharing(IClient client) {

@@ -96,7 +96,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						StreamClient c = item.getModelObject();
-						getBean(UserManager.class).kickById(c.getId());
+						getBean(UserManager.class).kickById(c.getUid());
 						updateClients(target);
 					}
 				});
@@ -321,7 +321,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);
-		final List<StreamClient> clientsInRoom = getBean(ISessionManager.class).getClientListByRoom(roomId);
+		final List<StreamClient> clientsInRoom = getBean(ISessionManager.class).listByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}

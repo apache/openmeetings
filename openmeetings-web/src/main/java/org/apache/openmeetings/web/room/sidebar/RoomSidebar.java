@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
+import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
@@ -38,7 +39,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.common.NameDialog;
-import org.apache.openmeetings.web.room.RoomBroadcaster;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
@@ -141,6 +141,7 @@ public class RoomSidebar extends Panel {
 								} else {
 									c.remove(Activity.broadcastA);
 								}
+								Application.update(c);
 								room.broadcast(c);
 							}
 						}
@@ -223,7 +224,7 @@ public class RoomSidebar extends Panel {
 						toggleActivity(c, Activity.broadcastAV);
 					}
 				}
-				RoomBroadcaster.sendUpdatedClient(c);
+				sendUpdatedClient(c);
 				room.broadcast(c);
 			}
 		}
@@ -393,11 +394,14 @@ public class RoomSidebar extends Panel {
 		if (c == null) {
 			return;
 		}
+		boolean updated = false;
 		if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
 			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
+				updated = true;
 				c.allow(Room.Right.audio);
 			}
 			if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
+				updated = true;
 				c.allow(Room.Right.video);
 			}
 		}
@@ -412,6 +416,7 @@ public class RoomSidebar extends Panel {
 				return;
 			}
 			Pod pod = c.getPod();
+			updated = true;
 			c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
 			if (pod != null && pod != Pod.none && pod != c.getPod()) {
 				//pod has changed, no need to toggle
@@ -420,6 +425,9 @@ public class RoomSidebar extends Panel {
 				c.toggle(a);
 			}
 			room.broadcast(c);
+		}
+		if (updated) {
+			Application.update(c);
 		}
 	}
 

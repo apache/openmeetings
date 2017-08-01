@@ -154,10 +154,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 			iapp.setXFrameOptions(cfgDao.getConfValue(CONFIG_HEADER_XFRAME, String.class, HEADER_XFRAME_SAMEORIGIN));
 			iapp.setContentSecurityPolicy(cfgDao.getConfValue(CONFIG_HEADER_CSP, String.class, HEADER_CSP_SELF));
+			iapp.updateJpaAddresses(cfgDao);
 			EXT_PROCESS_TTL = cfgDao.getConfValue(CONFIG_EXT_PROCESS_TTL, Integer.class, "" + EXT_PROCESS_TTL);
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
-			sessionManager.clearCache(); // 'sticky' clients should be cleaned up from DB
 		} catch (Exception err) {
 			_log.error("[appStart]", err);
 		}
@@ -233,12 +233,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (map.containsKey("screenClient")) {
 			rcm.setSharing(true);
 		}
-		rcm = sessionManager.add(iapp.updateClient(rcm, false), null);
+		rcm = sessionManager.add(iapp.updateClient(rcm, false));
 		if (rcm == null) {
 			_log.warn("Failed to create Client on room connect");
 			return false;
 		}
-		IClientUtil.init(conn.getClient(), rcm.getId(), rcm.isSharing());
+		IClientUtil.init(conn.getClient(), rcm.getUid(), rcm.isSharing());
 
 		// Log the User
 		conferenceLogDao.add(ConferenceLog.Type.clientConnect,
@@ -400,7 +400,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void roomLeaveByScope(String uid, Long roomId) {
-		StreamClient rcl = sessionManager.getClientByUid(uid, null);
+		StreamClient rcl = sessionManager.get(uid);
 		IScope scope = getRoomScope("" + roomId);
 		_log.debug("[roomLeaveByScope] {} {} {} {}", uid, roomId, rcl, scope);
 		if (rcl != null && scope != null) {
@@ -451,7 +451,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				IApplication app = (IApplication)Application.get(wicketApplicationName);
 				app.exit(client.getUid());
 			}
-			sessionManager.remove(client.getId());
+			sessionManager.remove(client.getUid());
 		} catch (Exception err) {
 			_log.error("[roomLeaveByScope]", err);
 		}
@@ -539,8 +539,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.put("ownerSid", c.getOwnerSid())
 					.put("uid", c.getUid())
 					.put("screenShare", c.isSharing())
-					.put("streamClientId", c.getId())
-					.put("stream", streamName);
+					.put("streamId", c.getId())
+					.put("streamName", streamName);
 			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.newStream, obj.toString()));
 		} catch (Exception err) {
 			_log.error("[streamPublishStart]", err);
@@ -617,7 +617,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void setNewCursorPosition(Map<String, Object> cursor) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			StreamClient c = sessionManager.getClientByStreamId(current.getClient().getId(), null);
+			StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			cursor.put("streamPublishName", c.getStreamPublishName());
 
@@ -632,7 +632,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			_log.debug("-----------  switchMicMuted: " + publicSID);
 
-			StreamClient currentClient = sessionManager.getClientByUid(publicSID, null);
+			StreamClient currentClient = sessionManager.get(publicSID);
 			if (currentClient == null) {
 				return -1L;
 			}
@@ -1115,7 +1115,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public List<Long> getActiveRoomIds() {
-		return ((IApplication)Application.get(wicketApplicationName)).getActiveRooms();
+		return new ArrayList<>(((IApplication)Application.get(wicketApplicationName)).getActiveRoomIds());
 	}
 
 	public synchronized int updateSipTransport() {
@@ -1128,7 +1128,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		_log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {
 			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-			org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(client.getUid());
+			Client cl = iapp.getOmOnlineClient(client.getUid());
 			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
 			sessionManager.update(client);

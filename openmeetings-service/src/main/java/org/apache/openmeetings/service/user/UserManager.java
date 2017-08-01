@@ -413,7 +413,7 @@ public class UserManager implements IUserManager {
 		try {
 			sessionDao.clearSessionByRoomId(roomId);
 
-			for (StreamClient rcl : sessionManager.getClientListByRoom(roomId)) {
+			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
 				if (rcl == null) {
 					return true;
 				}
@@ -436,9 +436,9 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public boolean kickById(Long id) {
+	public boolean kickById(String uid) {
 		try {
-			StreamClient rcl = sessionManager.get(id);
+			StreamClient rcl = sessionManager.get(uid);
 
 			if (rcl == null) {
 				return true;

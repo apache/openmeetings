@@ -25,8 +25,8 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import com.github.openjson.JSONObject;
 
 public class RoomHelper {
-	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, Long streamClientId) {
-		StreamClient sc = mgr.get(streamClientId);
+	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, String uid) {
+		StreamClient sc = mgr.get(uid);
 		return c.toJson(self)
 				.put("sid", sid)
 				.put("uid", sc.getUid())

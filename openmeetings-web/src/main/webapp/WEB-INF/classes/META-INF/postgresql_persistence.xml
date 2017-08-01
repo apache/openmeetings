@@ -32,7 +32,6 @@
 		<class>org.apache.openmeetings.db.entity.basic.Navimain</class>
 		<class>org.apache.openmeetings.db.entity.server.Sessiondata</class>
 		<class>org.apache.openmeetings.db.entity.server.SOAPLogin</class>
-		<class>org.apache.openmeetings.db.entity.server.Server</class>
 		<class>org.apache.openmeetings.db.entity.calendar.Appointment</class>
 		<class>org.apache.openmeetings.db.entity.calendar.MeetingMember</class>
 		<class>org.apache.openmeetings.db.entity.calendar.OmCalendar</class>
@@ -46,7 +45,6 @@
 		<class>org.apache.openmeetings.db.entity.log.ConferenceLog</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPoll</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
-		<class>org.apache.openmeetings.db.entity.room.StreamClient</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomGroup</class>
@@ -81,6 +79,7 @@
 			<property name="openjpa.DataCache" value="true" />
 			<property name="openjpa.QueryCache" value="true" />
 			<property name="openjpa.jdbc.QuerySQLCache" value="false" />
+			<!--property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" /-->
 		</properties>
 	</persistence-unit>
 </persistence>

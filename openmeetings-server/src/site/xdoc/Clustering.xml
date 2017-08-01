@@ -74,14 +74,15 @@
 				</ol>
 			</subsection>
 			<subsection name="Database">
-				<p>All servers should be configured to use the same database. It can be on the server or on the one node
-				of the cluster.</p>
+				<div>All servers should be configured to use the same database. It can be on the server or on the one node
+					of the cluster.<br/>
+					<div class="bs-callout bs-callout-danger">NOTE: Db other than Derby should be used</div>
+				</div>
 				<ul>
 					<li>Add users who can connect to the database remotely</li>
 					<li>Update <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/META-INF/persistence.xml</tt>
-						set correct server address, login and password. Also add the following section:
-						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=10.1.1.1;10.1.1.2)" />]]></source>
-						Instead of the <tt>10.1.1.1</tt> and <tt>10.1.1.2</tt> set semicolon separated IPs of all nodes of the cluster.
+						set correct server address, login and password. Also uncomment following line:
+						<source><![CDATA[<property name="openjpa.RemoteCommitProvider" value="tcp(Addresses=127.0.0.1)" />]]></source>
 					</li>
 				</ul>
 			</subsection>
@@ -113,65 +114,16 @@
 			<subsection name="OM nodes configuration">
 				<ol>
 					<li>
-						<p>In the file <tt>/opt/red5/conf/jee-container.xml</tt> add following block to <tt>baseHost</tt> property:</p>
-						<source><![CDATA[
-<property name="cluster">
-	<bean class="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
-</property>
-						]]></source>
-						So the result will be:
-						<source><![CDATA[
-<property name="baseHost">
-	<bean class="org.apache.catalina.core.StandardHost">
-		<property name="name" value="${http.host}" />
-		<property name="cluster">
-			<bean class="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
-		</property>
-	</bean>
-</property>
-						]]></source>
-					</li>
-					<li>
-						<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/applicationContext.xml</tt>:</p>
+						<p>In the file <tt>/opt/red5/webapps/openmeetings/WEB-INF/classes/hazelcast.xml</tt>:</p>
 						<ul>
+							<li>Set <tt>instance-name</tt> for each server to unique value</li>
 							<li>
-								For each node uncomment line:
-								<source>
-<![CDATA[
-<!-- Need to be uncommented and set to the real ID if in cluster mode-->
-<property name="serverId" value="1" />
-]]>
-								</source>
-								and input the unique value for each node.
-							</li>
-							<li>
-								Replace <tt>&lt;ref bean="openmeetings.HashMapStore" /&gt;  &lt;!-- Memory based session cache by default --&gt;</tt><br/>
-								with <tt>&lt;ref bean="openmeetings.DatabaseStore" /&gt;</tt>
-								(Currently commented out with following comment: <tt>"The following section should be used in clustering mode"</tt>)
+								In case there are more than one network interface with multicast support and/or additional hazelcast configuration is required
+								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html</a>
 							</li>
 						</ul>
 					</li>
 				</ol>
-			</subsection>
-			<subsection name="Configuring cluster in Administration">
-				<p>Run red5 on each node. Login to the system as admin.</p>
-				<ul>
-					<li>Go to the <tt>Administration -&gt; Users</tt> and create Webservice user (only access via SOAP).</li>
-					<li>
-						Go to the <tt>Administration -&gt; Servers</tt> and add all cluster nodes with the following settings:
-						<source>
-Server Name = node name;
-Active = check the checkbox. If the checkbox is checked it means node is active and you can use this node;
-Server Address = node ip;
-HTTP Port = 5080 - port for http part of Openmeetings;
-User (SOAP Access) = login of Webservice user from the previous step;
-Password = password of Webservise user;
-Webapp path = openmeetings - path where OM installed on this node, it would be better if this path will be the same for all nodes;
-Protocol = http.
-						</source>
-					</li>
-				</ul>
-				<img src="images/cluster1.png" alt="" width="650" height="461" />
 			</subsection>
 			<subsection name="Ensure everything works as expected">
 				<ul>
