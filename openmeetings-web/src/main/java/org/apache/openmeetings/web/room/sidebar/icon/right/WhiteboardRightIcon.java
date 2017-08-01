@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -27,15 +26,15 @@ import org.apache.openmeetings.web.room.RoomPanel;
 public class WhiteboardRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public WhiteboardRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.whiteBoard, room);
+	public WhiteboardRightIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, Right.whiteBoard, room);
 		mainCssClass = "right wb bumper ";
 	}
 
 	@Override
 	protected String getTitle() {
 		String title;
-		if (client.hasRight(right)) {
+		if (getClient().hasRight(right)) {
 			title = self ? "689" : "612";
 		} else {
 			title = self ? "686" : "694";

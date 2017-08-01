@@ -18,22 +18,21 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class ModeratorRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public ModeratorRightIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Right.moderator, room);
+	public ModeratorRightIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, Right.moderator, room);
 		mainCssClass = "right moderator bumper ";
 	}
 
 	@Override
 	protected String getTitle() {
 		String title;
-		if (client.hasRight(right)) {
+		if (getClient().hasRight(right)) {
 			title = self ? "688" : "675";
 		} else {
 			title = self ? "81" : "676";

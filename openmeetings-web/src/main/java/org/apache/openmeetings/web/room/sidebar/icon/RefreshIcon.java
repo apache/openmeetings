@@ -25,8 +25,8 @@ import org.apache.openmeetings.web.room.RoomPanel;
 public class RefreshIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 
-	public RefreshIcon(String id, Client client, RoomPanel room) {
-		super(id, client, room);
+	public RefreshIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, room);
 		mainCssClass = "restart ";
 	}
 
@@ -42,12 +42,13 @@ public class RefreshIcon extends ClientIcon {
 
 	@Override
 	protected boolean isClickable() {
-		return client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV);
+		final Client c = getClient();
+		return c.hasActivity(Activity.broadcastA) || c.hasActivity(Activity.broadcastV);
 	}
 
 	@Override
 	protected String getScript() {
-		return String.format("document.getElementById('lzapp').refreshAv('%s');", client.getUid());
+		return String.format("document.getElementById('lzapp').refreshAv('%s');", uid);
 	}
 
 	@Override

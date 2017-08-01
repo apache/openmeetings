@@ -26,18 +26,19 @@ import org.apache.openmeetings.web.room.RoomPanel;
 public class CamActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
-	public CamActivityIcon(String id, Client client, RoomPanel room) {
-		super(id, client, Activity.broadcastV, room);
+	public CamActivityIcon(String id, String uid, RoomPanel room) {
+		super(id, uid, Activity.broadcastV, room);
 		mainCssClass = "activity cam ";
 	}
 
 	@Override
 	protected String getTitle() {
-		return getString(client.hasRight(Right.audio) &&  client.hasRight(Right.video) ? "690" : "687");
+		final Client c = getClient();
+		return getString(c.hasRight(Right.audio) && c.hasRight(Right.video) ? "690" : "687");
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return client.isCamEnabled();
+		return getClient().isCamEnabled();
 	}
 }

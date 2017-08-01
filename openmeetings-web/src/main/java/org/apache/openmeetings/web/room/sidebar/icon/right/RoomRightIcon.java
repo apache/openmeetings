@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_RIGHT;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
@@ -30,8 +29,8 @@ public abstract class RoomRightIcon extends ClientIcon {
 	private static final String CLS_GRANTED = "granted ";
 	protected final Right right;
 
-	public RoomRightIcon(String id, Client client, Right right, RoomPanel room) {
-		super(id, client, room);
+	public RoomRightIcon(String id, String uid, Right right, RoomPanel room) {
+		super(id, uid, room);
 		this.right = right;
 	}
 
@@ -41,16 +40,16 @@ public abstract class RoomRightIcon extends ClientIcon {
 	}
 
 	protected boolean hasRight() {
-		return client.hasRight(right);
+		return getClient().hasRight(right);
 	}
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s');", FUNC_TOGGLE_RIGHT, right.name(), client.getUid());
+		return String.format("%s('%s', '%s');", FUNC_TOGGLE_RIGHT, right.name(), uid);
 	}
 
 	protected boolean visible() {
-		return !client.hasRight(Right.superModerator) && (
+		return !getClient().hasRight(Right.superModerator) && (
 				(self && !hasRight() && room.getRoom().isAllowUserQuestions())
 				|| (!self && room.getClient().hasRight(Right.moderator))
 			);

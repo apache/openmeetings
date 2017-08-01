@@ -18,10 +18,9 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
-import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.activityAllowed;
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_ACTIVITY;
+import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.activityAllowed;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -35,19 +34,19 @@ public abstract class RoomActivityIcon extends ClientIcon {
 	protected final Activity activity;
 	protected final Pod pod = Pod.none;
 
-	public RoomActivityIcon(String id, Client client, Activity activity, RoomPanel room) {
-		super(id, client, room);
+	public RoomActivityIcon(String id, String uid, Activity activity, RoomPanel room) {
+		super(id, uid, room);
 		this.activity = activity;
 	}
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), client.getUid(), pod.ordinal());
+		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid, pod.ordinal());
 	}
 
 	protected boolean visible() {
 		return Room.Type.interview != room.getRoom().getType()
-				&& activityAllowed(client, activity, room.getRoom());
+				&& activityAllowed(getClient(), activity, room.getRoom());
 	}
 
 	@Override
@@ -60,7 +59,7 @@ public abstract class RoomActivityIcon extends ClientIcon {
 		setVisible(visible());
 		if (!isEnabled()) {
 			cssClass.append(CLS_DISABLED);
-		} else if (client.hasActivity(activity)) {
+		} else if (getClient().hasActivity(activity)) {
 			cssClass.append(CLS_ENABLED);
 		}
 	}

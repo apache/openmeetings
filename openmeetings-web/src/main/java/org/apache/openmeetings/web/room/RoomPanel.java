@@ -614,6 +614,10 @@ public class RoomPanel extends BasePanel {
 		return getMainPanel().getClient();
 	}
 
+	public String getUid() {
+		return getMainPanel().getUid();
+	}
+
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
 		StreamClient rcl = RoomBroadcaster.getClient(getMainPanel().getClient().getUid());

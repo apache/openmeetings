@@ -26,8 +26,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.MENU_ROOMS_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
-import static org.apache.openmeetings.web.app.Application.exit;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
@@ -100,7 +100,7 @@ public class MainPanel extends Panel {
 	private static final String DELIMITER = "     ";
 	private static final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	public static final String PARAM_USER_ID = "userId";
-	private Client client = null;
+	private String uid = null;
 	private final MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
@@ -115,7 +115,7 @@ public class MainPanel extends Panel {
 		@Override
 		protected void onTimer(AjaxRequestTarget target) {
 			log.debug("Sending WebSocket PING");
-			WebSocketHelper.sendClient(client, new byte[1]);
+			WebSocketHelper.sendClient(getClient(), new byte[1]);
 		}
 	};
 
@@ -130,7 +130,7 @@ public class MainPanel extends Panel {
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
-		add(contents.add(client == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
+		add(contents.add(getClient() == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
@@ -224,8 +224,9 @@ public class MainPanel extends Panel {
 			@Override
 			protected void onConnect(ConnectedMessage msg) {
 				super.onConnect(msg);
-				client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
+				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
 				client.setRemoteAddress(WebSession.get().getClientInfo().getProperties().getRemoteAddress());
+				uid = client.getUid();
 				addOnlineUser(client);
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
@@ -261,10 +262,10 @@ public class MainPanel extends Panel {
 
 			private void closeHandler(AbstractClientMessage msg) {
 				//no chance to stop pingTimer here :(
-				if (client != null) {
-					log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
-					exit(client);
-					client = null;
+				if (uid != null) {
+					log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
+					Application.get().exit(uid);
+					uid = null;
 				}
 			}
 		});
@@ -341,7 +342,7 @@ public class MainPanel extends Panel {
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
 		BasePanel panel = getPanel(f.getArea(), f.getType());
 		if (panel != null) {
-			if (client != null) {
+			if (getClient() != null) {
 				updateContents(panel, handler);
 			} else {
 				this.panel = panel;
@@ -380,7 +381,11 @@ public class MainPanel extends Panel {
 		return chat;
 	}
 
+	public String getUid() {
+		return uid;
+	}
+
 	public Client getClient() {
-		return client;
+		return getOnlineClient(uid);
 	}
 }

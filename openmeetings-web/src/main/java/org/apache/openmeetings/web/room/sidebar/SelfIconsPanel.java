@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.SettingsIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.activity.CamActivityIcon;
@@ -32,12 +31,12 @@ public class SelfIconsPanel extends ClientIconsPanel {
 	private final MicActivityIcon mic;
 	private final boolean header;
 
-	public SelfIconsPanel(String id, Client client, RoomPanel room, boolean header) {
-		super(id, client, room);
+	public SelfIconsPanel(String id, String uid, RoomPanel room, boolean header) {
+		super(id, uid, room);
 		this.header = header;
-		add(settings = new SettingsIcon("settings", client, room)
-			, cam = new CamActivityIcon("cam", client, room)
-			, mic = new MicActivityIcon("mic", client, room));
+		add(settings = new SettingsIcon("settings", uid, room)
+			, cam = new CamActivityIcon("cam", uid, room)
+			, mic = new MicActivityIcon("mic", uid, room));
 	}
 
 	@Override
