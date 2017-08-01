@@ -26,6 +26,12 @@ function setRoomSizes() {
 	p.height(hh);
 	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
 
+	var holder = $('.room.holder');
+	if (sb.width() > 230) {
+		holder.addClass('big').removeClass('small');
+	} else {
+		holder.removeClass('big').addClass('small');
+	}
 	var container = $(".room.wb.area")
 		, area = container.find(".wb-area");
 	container.width(w).height(h).css('left', sb.width() + 5 + "px");

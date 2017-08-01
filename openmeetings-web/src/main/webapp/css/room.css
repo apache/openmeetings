@@ -86,7 +86,7 @@
 	width: 28px;
 }
 .room.sidebar.left {
-	min-width: 200px;
+	min-width: 150px;
 	width: 315px;
 	position: absolute;
 }
@@ -222,6 +222,9 @@
 	padding: 0;
 	padding-left: 44px;
 	overflow: hidden;
+}
+.room.holder.small .room.sidebar.left .user.list .user.name {
+	display: none;
 }
 .room.sidebar.left .user.list .user .actions {
 	position: relative;
@@ -372,6 +375,15 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+.room.holder.small .room.sidebar.left .tab.om-icon.big {
+	max-width: 0px;
+	padding-right: 0;
+}
+.room.holder.small .room.sidebar.left .file.tree .file.item .name
+	, .room.holder.small .room.sidebar.left .file.tree .file.item .name span
+{
+	width: 40px;
+}
 .room.sidebar.left .tab.om-icon.big.user {
 	background-image: url(images/group.png);
 }
@@ -513,25 +525,38 @@
 @media screen and (max-width: 1280px) {
 	.room.sidebar.left {
 		width: 150px;
-		min-width: 150px;
 	}
-	.room.sidebar.left .tab.om-icon.big {
+	.room.holder .room.sidebar.left .tab.om-icon.big {
 		max-width: 0px;
 		padding-right: 0;
 	}
-	.room.sidebar.left .user.list .user.name {
+	.room.holder.big .room.sidebar.left .tab.om-icon.big {
+		max-width: 80px;
+		padding: 0em 1em 0 2.5em;
+	}
+	.room.holder .room.sidebar.left .user.list .user.name {
 		display: none;
 	}
-	.room.sidebar.left .file.tree .file.item .name, .room.sidebar.left .file.tree .file.item .name span {
+	.room.holder.big .room.sidebar.left .user.list .user.name {
+		display: block;
+	}
+	.room.holder .room.sidebar.left .file.tree .file.item .name
+		, .room.holder .room.sidebar.left .file.tree .file.item .name span
+	{
 		width: 40px;
+	}
+	.room.holder.big .room.sidebar.left .file.tree .file.item .name
+		, .room.holder.big .room.sidebar.left .file.tree .file.item .name span
+	{
+		width: 230px;
 	}
 	.room.sidebar.left .file.tree .file.item .name span {
 		padding: 0;
-		text-overflow: ellipsis;
-		overflow: hidden;
-		white-space: nowrap;
 	}
-	.room.sidebar.left .file.tree .file.item {
+	.room.holder .room.sidebar.left .file.tree .file.item {
 		width: 80px;
+	}
+	.room.holder.big .room.sidebar.left .file.tree .file.item {
+		width: auto;
 	}
 }
