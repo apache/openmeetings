@@ -46,6 +46,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
+import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
+
 public class ConnectionsPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -84,7 +86,7 @@ public class ConnectionsPanel extends AdminPanel {
 			@Override
 			protected void populateItem(final Item<IClient> item) {
 				IClient _c = item.getModelObject();
-				ConfirmableAjaxBorder confirm = new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
+				final ConfirmableAjaxBorder confirm = new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -94,6 +96,7 @@ public class ConnectionsPanel extends AdminPanel {
 						target.add(container, details.setVisible(false));
 					}
 				};
+				confirm.setOutputMarkupId(true).add(new ButtonBehavior(String.format("#%s", confirm.getMarkupId())));
 				if (_c instanceof StreamClient) {
 					StreamClient c = (StreamClient)_c;
 					item.add(new Label("streamid"));
