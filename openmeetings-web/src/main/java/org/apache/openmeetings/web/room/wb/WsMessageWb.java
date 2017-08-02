@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
 import com.github.openjson.JSONObject;
@@ -32,7 +33,7 @@ public class WsMessageWb implements IClusterWsMessage {
 	public WsMessageWb(Long roomId, WbAction meth, JSONObject obj, String uid) {
 		this.roomId = roomId;
 		this.meth = meth;
-		this.obj = obj.toString();
+		this.obj = obj.toString(new NullStringer());
 		this.uid = uid;
 	}
 

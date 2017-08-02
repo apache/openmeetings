@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.wb;
 
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
 import com.github.openjson.JSONObject;
@@ -35,7 +36,7 @@ public class WsMessageWbFile implements IClusterWsMessage {
 		this.roomId = roomId;
 		this.wbId = wbId;
 		this.ruid = ruid;
-		this.file = file.toString();
+		this.file = file.toString(new NullStringer());
 		this.fi = fi;
 	}
 
