@@ -18,24 +18,28 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.openmeetings.util.NullStringer;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-public class Whiteboard {
+public class Whiteboard implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private long id;
 	private Integer x = 0;
 	private Integer y = 0;
 	private Integer zoom = 100;
 	private Boolean fullFit = true;
-	private Map<String, JSONObject> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
+	private Map<String, String> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
 	private Date created = new Date();
 	private int slide = 0;
 	private String name;
@@ -98,24 +102,44 @@ public class Whiteboard {
 		roomItems.clear();
 	}
 
-	public Map<String, JSONObject> getRoomItems() {
-		return roomItems;
-	}
-
-	public JSONObject put(String uid, JSONObject obj) {
-		return roomItems.put(uid, obj);
+	public void put(String uid, JSONObject obj) {
+		roomItems.put(uid, obj.toString(new NullStringer()));
 	}
 
 	public JSONObject get(String uid) {
-		return roomItems.get(uid);
+		return new JSONObject(roomItems.get(uid));
 	}
 
-	public Set<Entry<String, JSONObject>> entrySet() {
-		return roomItems.entrySet();
+	public boolean contains(String uid) {
+		return roomItems.containsKey(uid);
+	}
+
+	public JSONArray clearSlide(int slide) {
+		JSONArray arr = new JSONArray();
+		roomItems.entrySet().removeIf(e -> {
+				boolean match = new JSONObject(e.getValue()).optInt("slide", -1) == slide;
+				if (match) {
+					arr.put(e);
+				}
+				return match;
+			});
+		return arr;
+	}
+
+	public List<JSONObject> list() {
+		List<JSONObject> items = new LinkedList<>();
+		for (Entry<String, String> e : roomItems.entrySet()) {
+			items.add(new JSONObject(e.getValue()));
+		}
+		return items;
 	}
 
 	public JSONObject remove(Object oid) {
-		return roomItems.remove(oid);
+		return new JSONObject(roomItems.remove(oid));
+	}
+
+	public boolean isEmpty() {
+		return roomItems.isEmpty();
 	}
 
 	public String getName() {

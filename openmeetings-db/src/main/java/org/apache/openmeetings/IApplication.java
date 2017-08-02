@@ -27,6 +27,7 @@ import java.util.function.Supplier;
 import javax.servlet.ServletContext;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.StreamClient;
@@ -70,4 +71,6 @@ public interface IApplication {
 
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);
+
+	Map<Long, Whiteboards> getWhiteboards();
 }

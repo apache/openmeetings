@@ -54,8 +54,6 @@ public class CleanupJob extends AbstractJob {
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
-	private WhiteboardCache wbCache;
-	@Autowired
 	private UserDao userDao;
 
 	public void setSessionTimeout(long sessionTimeout) {
@@ -120,9 +118,9 @@ public class CleanupJob extends AbstractJob {
 					Long roomId = null;
 					if (NumberUtils.isCreatable(folder.getName())) {
 						roomId = Long.valueOf(folder.getName());
-						Whiteboards wbList = wbCache.get(roomId);
+						Whiteboards wbList = WhiteboardCache.get(roomId);
 						for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
-							if (!e.getValue().getRoomItems().isEmpty()) {
+							if (!e.getValue().isEmpty()) {
 								roomId = null;
 								break;
 							}

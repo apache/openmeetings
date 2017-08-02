@@ -18,14 +18,17 @@
  */
 package org.apache.openmeetings.core.data.whiteboard;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.apache.wicket.Application;
 
 /**
  * Memory based cache, configured as singleton in spring configuration
@@ -34,7 +37,10 @@ import org.apache.openmeetings.db.dto.room.Whiteboards;
  *
  */
 public class WhiteboardCache {
-	private Map<Long, Whiteboards> cache = new ConcurrentHashMap<>();
+	private static Map<Long, Whiteboards> getCache() {
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		return iapp.getWhiteboards();
+	}
 
 	private static String getDefaultName(Long langId, int num) {
 		StringBuilder sb = new StringBuilder(LabelDao.getString("615", langId));
@@ -44,47 +50,70 @@ public class WhiteboardCache {
 		return sb.toString();
 	}
 
-	public Set<Entry<Long, Whiteboard>> list(Long roomId, Long langId) {
+	public static Whiteboards get(Long roomId) {
+		if (roomId == null) {
+			return null;
+		}
+		Whiteboards wbs = getCache().get(roomId);
+		if (wbs == null) {
+			wbs = new Whiteboards(roomId);
+			update(wbs);
+		}
+		return wbs;
+	}
+
+	public static Set<Entry<Long, Whiteboard>> list(Long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
 		if (wbs.getWhiteboards().isEmpty()) {
 			Whiteboard wb = add(wbs, langId);
 			wbs.setActiveWb(wb.getId());
+			update(wbs);
 		}
 		return wbs.getWhiteboards().entrySet();
 	}
 
-	public Whiteboard add(Long roomId, Long langId) {
+	public static Whiteboard add(Long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
-		return add(wbs, langId);
+		Whiteboard wb = add(wbs, langId);
+		update(wbs);
+		return wb;
 	}
 
-	public Whiteboard add(Whiteboards wbs, Long langId) {
+	private static Whiteboard add(Whiteboards wbs, Long langId) {
 		Whiteboard wb = new Whiteboard(getDefaultName(langId, wbs.count()));
 		wbs.add(wb);
 		return wb;
 	}
 
-	public Whiteboards get(Long roomId) {
-		if (roomId == null) {
-			return null;
-		}
-		Whiteboards wbs = cache.get(roomId);
-		if (wbs == null) {
-			wbs = new Whiteboards(roomId);
-			cache.put(roomId, wbs);
-		}
-		return wbs;
-	}
-
-	public void clear(Long roomId, Long wbId) {
-		Whiteboard wb = get(roomId).get(wbId);
+	public static void clear(Long roomId, Long wbId) {
+		Whiteboards wbs = get(roomId);
+		Whiteboard wb = wbs.get(wbId);
 		if (wb != null) {
 			wb.clear();
+			update(wbs);
 		}
 	}
 
-	public Whiteboard remove(Long roomId, Long wbId) {
+	public static Whiteboard remove(Long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
-		return wbs.getWhiteboards().remove(wbId);
+		Whiteboard wb = wbs.getWhiteboards().remove(wbId);
+		update(wbs);
+		return wb;
+	}
+
+	public static void activate(Long roomId, Long wbId) {
+		Whiteboards wbs = get(roomId);
+		wbs.setActiveWb(wbId);
+		update(wbs);
+	}
+
+	public static void update(Long roomId, Whiteboard wb) {
+		Whiteboards wbs = get(roomId);
+		wbs.update(wb);
+		update(wbs);
+	}
+
+	private static void update(Whiteboards wbs) {
+		getCache().put(wbs.getRoomId(), wbs);
 	}
 }

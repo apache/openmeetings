@@ -44,8 +44,6 @@
 
 	<bean id="openmeetings.SessionManager" class="org.apache.openmeetings.core.session.SessionManager"/>
 	
-	<bean id="whiteboardCache" scope="singleton" class="org.apache.openmeetings.core.data.whiteboard.WhiteboardCache" />
-
 	<!-- Start of Services -->
 	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />

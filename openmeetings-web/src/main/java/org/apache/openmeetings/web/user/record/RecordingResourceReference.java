@@ -94,10 +94,10 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		}
 		Client c = getOnlineClient(uid);
 		if (c != null) {
-			Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
+			Whiteboards wbs = WhiteboardCache.get(c.getRoomId());
 			if (wbs != null && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
-					if (e.getValue().getRoomItems().containsKey(r.getHash())) {
+					if (e.getValue().contains(r.getHash())) {
 						return r; // item IS on WB
 					}
 				}

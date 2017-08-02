@@ -55,6 +55,7 @@ import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
@@ -146,6 +147,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private final static String UID_BY_SID_KEY = "UID_BY_SID_KEY";
 	private final static String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	private final static String ROOMS_KEY = "ROOMS_KEY";
+	private final static String WBS_KEY = "WBS_KEY";
 	private final static String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
 	public final static String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
@@ -346,6 +348,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	private Map<String, String> getUidBySid() {
 		return hazelcast.getMap(UID_BY_SID_KEY);
+	}
+
+	@Override
+	public Map<Long, Whiteboards> getWhiteboards() {
+		return hazelcast.getMap(WBS_KEY);
 	}
 
 	@Override

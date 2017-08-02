@@ -102,7 +102,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		FileExplorerItem f = getBean(FileExplorerItemDao.class).get(id);
 		String ruid = params.get("ruid").toString();
 		String wuid = params.get("wuid").toString();
-		Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
+		Whiteboards wbs = WhiteboardCache.get(c.getRoomId());
 		if (!Strings.isEmpty(wuid) && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 			for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
 				JSONObject file = e.getValue().get(wuid);
