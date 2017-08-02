@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.util.ws;
 
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
 import com.github.openjson.JSONObject;
@@ -30,7 +31,7 @@ public class WsMessageChat implements IClusterWsMessage {
 
 	public WsMessageChat(ChatMessage m, JSONObject msg) {
 		this.m = m;
-		this.msg = msg.toString();
+		this.msg = msg.toString(new NullStringer());
 	}
 
 	public ChatMessage getChatMessage() {
