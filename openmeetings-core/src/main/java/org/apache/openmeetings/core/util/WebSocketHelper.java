@@ -120,41 +120,65 @@ public class WebSocketHelper {
 
 	public static void send(IClusterWsMessage _m) {
 		if (_m instanceof WsMessageRoomMsg) {
-			sendRoom(((WsMessageRoomMsg)_m).getMsg());
+			sendRoom(((WsMessageRoomMsg)_m).getMsg(), false);
 		} else if (_m instanceof WsMessageRoom) {
 			WsMessageRoom m = (WsMessageRoom)_m;
-			sendRoom(m.getRoomId(), m.getMsg());
+			sendRoom(m.getRoomId(), m.getMsg(), false);
 		} else if (_m instanceof WsMessageChat) {
 			WsMessageChat m = (WsMessageChat)_m;
-			sendRoom(m.getChatMessage(), m.getMsg());
+			sendRoom(m.getChatMessage(), m.getMsg(), false);
 		} else if (_m instanceof WsMessageUser) {
 			WsMessageUser m = (WsMessageUser)_m;
-			sendUser(m.getUserId(), m.getMsg());
+			sendUser(m.getUserId(), m.getMsg(), false);
 		} else if (_m instanceof WsMessageAll) {
-			sendAll(((WsMessageAll)_m).getMsg());
+			sendAll(((WsMessageAll)_m).getMsg(), false);
 		}
 	}
 
 	public static void sendRoom(final RoomMessage m) {
-		publish(new WsMessageRoomMsg(m));
+		sendRoom(m, true);
+	}
+
+	protected static void sendRoom(final RoomMessage m, boolean publish) {
+		if (publish) {
+			publish(new WsMessageRoomMsg(m));
+		}
 		log.debug("Sending WebSocket message: {} {}", m.getType(), m instanceof TextRoomMessage ? ((TextRoomMessage)m).getText() : "");
 		sendRoom(m.getRoomId(), (t, c) -> t.sendMessage(m), null);
 	}
 
 	public static void sendRoom(final Long roomId, final JSONObject m) {
-		publish(new WsMessageRoom(roomId, m));
+		sendRoom(roomId, m, true);
+	}
+
+	protected static void sendRoom(final Long roomId, final JSONObject m, boolean publish) {
+		if (publish) {
+			publish(new WsMessageRoom(roomId, m));
+		}
 		sendRoom(roomId, m, null, null);
 	}
 
 	public static void sendRoom(ChatMessage m, JSONObject msg) {
-		publish(new WsMessageChat(m, msg));
+		sendRoom(m, msg, true);
+	}
+
+	protected static void sendRoom(ChatMessage m, JSONObject msg, boolean publish) {
+		if (publish) {
+			publish(new WsMessageChat(m, msg));
+		}
 		sendRoom(m.getToRoom().getId(), msg
 				, c -> !m.isNeedModeration() || (m.isNeedModeration() && c.hasRight(Right.moderator))
 				, null);
 	}
 
 	public static void sendUser(final Long userId, final String m) {
-		publish(new WsMessageUser(userId, m));
+		sendUser(userId, m, true);
+	}
+
+	protected static void sendUser(final Long userId, final String m, boolean publish) {
+		if (publish) {
+			publish(new WsMessageUser(userId, m));
+		}
 		send(a -> ((IApplication)a).getOmClients(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
@@ -164,9 +188,15 @@ public class WebSocketHelper {
 		}, null);
 	}
 
-	//TODO should this be unified???
 	public static void sendAll(final String m) {
-		publish(new WsMessageAll(m));
+		sendAll(m, true);
+	}
+
+	//TODO should this be unified???
+	protected static void sendAll(final String m, boolean publish) {
+		if (publish) {
+			publish(new WsMessageAll(m));
+		}
 		Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
 		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
