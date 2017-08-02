@@ -21,6 +21,9 @@ html, body {
 	margin: 0;
 	font-family: Arial, Helvetica, sans-serif;
 }
+* {
+	box-sizing: initial; /*reset bootstrap box sizing*/
+}
 #header {
 	font-size: 28px;
 	line-height: 40px;
