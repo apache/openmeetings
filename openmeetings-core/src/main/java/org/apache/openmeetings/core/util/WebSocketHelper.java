@@ -139,7 +139,7 @@ public class WebSocketHelper {
 		sendRoom(m, true);
 	}
 
-	protected static void sendRoom(final RoomMessage m, boolean publish) {
+	private static void sendRoom(final RoomMessage m, boolean publish) {
 		if (publish) {
 			publish(new WsMessageRoomMsg(m));
 		}
@@ -151,7 +151,7 @@ public class WebSocketHelper {
 		sendRoom(roomId, m, true);
 	}
 
-	protected static void sendRoom(final Long roomId, final JSONObject m, boolean publish) {
+	private static void sendRoom(final Long roomId, final JSONObject m, boolean publish) {
 		if (publish) {
 			publish(new WsMessageRoom(roomId, m));
 		}
@@ -162,7 +162,7 @@ public class WebSocketHelper {
 		sendRoom(m, msg, true);
 	}
 
-	protected static void sendRoom(ChatMessage m, JSONObject msg, boolean publish) {
+	private static void sendRoom(ChatMessage m, JSONObject msg, boolean publish) {
 		if (publish) {
 			publish(new WsMessageChat(m, msg));
 		}
@@ -175,7 +175,7 @@ public class WebSocketHelper {
 		sendUser(userId, m, true);
 	}
 
-	protected static void sendUser(final Long userId, final String m, boolean publish) {
+	private static void sendUser(final Long userId, final String m, boolean publish) {
 		if (publish) {
 			publish(new WsMessageUser(userId, m));
 		}
@@ -193,7 +193,7 @@ public class WebSocketHelper {
 	}
 
 	//TODO should this be unified???
-	protected static void sendAll(final String m, boolean publish) {
+	private static void sendAll(final String m, boolean publish) {
 		if (publish) {
 			publish(new WsMessageAll(m));
 		}

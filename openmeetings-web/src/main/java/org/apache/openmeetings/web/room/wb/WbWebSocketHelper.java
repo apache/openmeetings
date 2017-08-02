@@ -42,25 +42,37 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		if (_m instanceof WsMessageWb) {
 			WsMessageWb m = (WsMessageWb)_m;
 			if (m.getUid() == null) {
-				sendWbAll(m.getRoomId(), m.getMeth(), m.getObj());
+				sendWbAll(m.getRoomId(), m.getMeth(), m.getObj(), false);
 			} else {
-				sendWbOthers(m.getRoomId(), m.getMeth(), m.getObj(), m.getUid());
+				sendWbOthers(m.getRoomId(), m.getMeth(), m.getObj(), m.getUid(), false);
 			}
 		} else if (_m instanceof WsMessageWbFile) {
 			WsMessageWbFile m = (WsMessageWbFile)_m;
-			sendWbFile(m.getRoomId(), m.getWbId(), m.getRoomUid(), m.getFile(), m.getFileItem());
+			sendWbFile(m.getRoomId(), m.getWbId(), m.getRoomUid(), m.getFile(), m.getFileItem(), false);
 		} else {
 			WebSocketHelper.send(_m);
 		}
 	}
 
 	public static void sendWbAll(Long roomId, WbAction meth, JSONObject obj) {
-		publish(new WsMessageWb(roomId, meth, obj, null));
+		sendWbAll(roomId, meth, obj, true);
+	}
+
+	private static void sendWbAll(Long roomId, WbAction meth, JSONObject obj, boolean publish) {
+		if (publish) {
+			publish(new WsMessageWb(roomId, meth, obj, null));
+		}
 		sendWb(roomId, meth, obj, null);
 	}
 
 	public static void sendWbOthers(Long roomId, WbAction meth, JSONObject obj, final String uid) {
-		publish(new WsMessageWb(roomId, meth, obj, uid));
+		sendWbOthers(roomId, meth, obj, uid, true);
+	}
+
+	private static void sendWbOthers(Long roomId, WbAction meth, JSONObject obj, final String uid, boolean publish) {
+		if (publish) {
+			publish(new WsMessageWb(roomId, meth, obj, uid));
+		}
 		sendWb(roomId, meth, obj, c -> !uid.equals(c.getUid()));
 	}
 
@@ -103,7 +115,13 @@ public class WbWebSocketHelper extends WebSocketHelper {
 	}
 
 	public static void sendWbFile(Long roomId, long wbId, String ruid, JSONObject file, FileItem fi) {
-		publish(new WsMessageWbFile(roomId, wbId, ruid, file, fi));
+		sendWbFile(roomId, wbId, ruid, file, fi, true);
+	}
+
+	private static void sendWbFile(Long roomId, long wbId, String ruid, JSONObject file, FileItem fi, boolean publish) {
+		if (publish) {
+			publish(new WsMessageWbFile(roomId, wbId, ruid, file, fi));
+		}
 		WebSocketHelper.sendRoom(
 				roomId
 				, new JSONObject().put("type", "wb")
