@@ -209,11 +209,15 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				//check for duplicate instance-names
 				Set<String> names = new HashSet<>();
 				for (Member m : evt.getMembers()) {
-					String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
-					if (names.contains(serverId)) {
-						log.warn("Duplicate cluster instance with name {} found {}", serverId, m);
+					if (evt.getMember().getUuid().equals(m.getUuid())) {
+						continue;
 					}
+					String serverId = m.getStringAttribute(NAME_ATTR_KEY);
 					names.add(serverId);
+				}
+				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
+				if (names.contains(serverId)) {
+					log.warn("Duplicate cluster instance with name {} found {}", serverId, evt.getMember());
 				}
 			}
 		});
