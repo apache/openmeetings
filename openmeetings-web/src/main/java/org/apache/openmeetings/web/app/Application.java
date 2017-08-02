@@ -80,6 +80,7 @@ import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.room.RoomResourceReference;
+import org.apache.openmeetings.web.room.wb.WbWebSocketHelper;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RecentRoomsWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
@@ -178,7 +179,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				if (serverId.equals(hazelcast.getName())) {
 					return;
 				}
-				WebSocketHelper.send(msg.getMessageObject());
+				WbWebSocketHelper.send(msg.getMessageObject());
 			}
 		});
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
