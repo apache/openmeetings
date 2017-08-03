@@ -1,0 +1,170 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+.file.tree.container {
+	border: 1px solid #ccc;
+	max-width: 350px;
+}
+.file.tree {
+	width: 100%;
+	display: inline-block;
+}
+.file.tree .trees {
+	min-height: 400px;
+	max-height: 600px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.trash-toolbar {
+	font-weight: bold;
+	line-height: 20px;
+	color: transparent;
+}
+.trash-toolbar .fileitem, .trash-toolbar .recorditem {
+	display: none;
+}
+.trash-toolbar-hover {
+	color: inherit;
+}
+.file.tree .files .sizes table, .file.tree .files .info table {
+	width: 100%;
+}
+.file.tree .files .info input {
+	width: 100%;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+.trees a.om-icon {
+	width: auto;
+}
+.trees a.om-icon span {
+	white-space: nowrap;
+	padding-right: 20px;
+	vertical-align: top;
+}
+.refresh.om-icon {
+	background-image: url(images/refresh.png);
+}
+.trash.om-icon {
+	background-image: url(images/bin_closed.png);
+}
+.ui-state-hover.trash-toolbar-hover .trash.om-icon {
+	background-image: url(images/bin_empty.png);
+} 
+.folder-create.om-icon {
+	background-image: url(images/folder_add.png);
+}
+.recording.om-icon {
+	background-image: url(images/film.png);
+}
+.broken.recording.om-icon {
+	background-image: url(images/film_error.png);
+}
+.processing.recording.om-icon {
+	background-image: url(images/film_processing.png);
+}
+.file.om-icon, .recording.om-icon {
+	padding-left: 34px;
+}
+.my.file.om-icon {
+	background-image: url(images/house_link.png);
+}
+.public.file.om-icon {
+	background-image: url(images/world_link.png);
+}
+.image.file.om-icon {
+	background-image: url(images/picture.png);
+}
+.broken.image.file.om-icon {
+	background-image: url(images/picture_error.png);
+}
+.chart.file.om-icon {
+	background-image: url(images/chart_pie.png);
+}
+.broken.chart.file.om-icon {
+	background-image: url(images/chart_pie_error.png);
+}
+.wml.file.om-icon {
+	background-image: url(images/layout.png);
+}
+.broken.wml.file.om-icon {
+	background-image: url(images/layout_error.png);
+}
+.doc.file.om-icon {
+	background-image: url(images/page.png);
+}
+.broken.doc.file.om-icon {
+	background-image: url(images/page_error.png);
+}
+.folder.file.om-icon {
+	background-image: url(images/folder.png);
+}
+.folder-open.file.om-icon {
+	background-image: url(images/folder_open.png);
+}
+.chart.file.om-icon {
+	background-image: url(images/chart_pie.png);
+}
+.selected .file.item {
+	background-color: #0099FF;
+}
+.tree-theme-windows span.tree-content {
+	display: flex !important;
+}
+.file.item {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+}
+.file.item .name, .file.item .name span {
+	color: black;
+	display: block;
+	width: 230px;
+	max-width: 230px;
+	/* Required for text-overflow to do anything */
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.file.item .name {
+	padding-top: 10px;
+}
+.file.item .errors {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background-image: url(images/script_error.png);
+	width: 32px;
+	height: 32px;
+	background-repeat: no-repeat;
+}
+.dialog.errors {
+	width: 600px;
+	height: 500px;
+	font-size: small;
+}
+.dialog.errors .alert {
+	color: red;
+}
+.dialog.errors .message {
+	display: block;
+	unicode-bidi: embed;
+	font-family: monospace;
+	white-space: pre;
+	margin: 0;
+}

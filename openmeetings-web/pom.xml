@@ -67,6 +67,49 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>com.samaxes.maven</groupId>
+				<artifactId>minify-maven-plugin</artifactId>
+				<version>1.7.6</version>
+				<executions>
+					<execution>
+						<id>theme-minify</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<cssSourceDir>css</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>general.css</cssSourceFile>
+								<cssSourceFile>activities.css</cssSourceFile>
+								<cssSourceFile>admin.css</cssSourceFile>
+								<cssSourceFile>calendar.css</cssSourceFile>
+								<cssSourceFile>chat.css</cssSourceFile>
+								<cssSourceFile>menu.css</cssSourceFile>
+								<cssSourceFile>room.css</cssSourceFile>
+								<cssSourceFile>tree.css</cssSourceFile>
+								<cssSourceFile>wb.css</cssSourceFile>
+							</cssSourceFiles>
+							<cssFinalFile>theme.css</cssFinalFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>theme-rtl-minify</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<cssSourceDir>css</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>general-rtl.css</cssSourceFile>
+							</cssSourceFiles>
+							<cssFinalFile>theme-rtl.css</cssFinalFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
