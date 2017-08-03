@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,6 @@ import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -99,10 +99,11 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
-		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui.%scss"
-				, RuntimeConfigurationType.DEVELOPMENT == getApplication().getConfigurationType() ? "" : "min.")));
+		final String suffix = DEVELOPMENT == getApplication().getConfigurationType() ? "" : ".min";
+		response.render(CssHeaderItem.forUrl(String.format("css/theme_om/jquery-ui%s.css", suffix)));
+		response.render(CssHeaderItem.forUrl(String.format("css/theme%s.css", suffix)));
 		if (isRtl()) {
-			response.render(CssHeaderItem.forUrl("css/theme-rtl.css"));
+			response.render(CssHeaderItem.forUrl(String.format("css/theme-rtl%s.css", suffix)));
 		}
 		if (!Strings.isEmpty(getGaCode())) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(BasePage.class, "om-ga.js"))));

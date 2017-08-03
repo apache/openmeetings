@@ -38,20 +38,23 @@ import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
-import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.AjaxDownload;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.AbstractResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -172,17 +175,18 @@ public class LangPanel extends AdminPanel {
 		});
 
 		// Add a component to download a file without page refresh
-		final AjaxDownload download = new AjaxDownload();
-		langForm.add(download);
-
-		langForm.add(new AjaxButton("export"){
+		final AjaxDownload download = new AjaxDownload(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 
+			{
+				setContentDisposition(ContentDisposition.ATTACHMENT);
+			}
+
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			protected IResourceStream getResourceStream(Attributes attributes) {
 				final String name = LabelDao.getLabelFileName(language.getValue());
-				download.setFileName(name);
-				download.setResourceStream(new AbstractResourceStream() {
+				setFileName(name);
+				return new AbstractResourceStream() {
 					private static final long serialVersionUID = 1L;
 					private transient InputStream is;
 
@@ -203,7 +207,16 @@ public class LangPanel extends AdminPanel {
 							is = null;
 						}
 					}
-				});
+				};
+			}
+		});
+		langForm.add(download);
+
+		langForm.add(new AjaxButton("export"){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
 				download.initiate(target);
 
 				// repaint the feedback panel so that it is hidden

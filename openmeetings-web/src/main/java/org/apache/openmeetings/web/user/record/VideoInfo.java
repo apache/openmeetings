@@ -22,8 +22,10 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,15 +40,16 @@ import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.common.InvitationDialog;
-import org.apache.openmeetings.web.util.AjaxDownload;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.AjaxDownload;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.resource.FileSystemResource;
 
 import com.googlecode.wicket.jquery.ui.JQueryIcon;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
@@ -77,7 +80,24 @@ public class VideoInfo extends Panel {
 			}.start();
 		}
 	};
-	private final AjaxDownload download = new AjaxDownload();
+	private final AjaxDownload download = new AjaxDownload(new IResource() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void respond(Attributes attributes) {
+			File f = rm.getObject().getFile(EXTENSION_MP4);
+			new FileSystemResource(f.toPath()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected ResourceResponse createResourceResponse(Attributes attr, Path path) {
+					ResourceResponse response = super.createResourceResponse(attr, path);
+					response.setCacheDuration(NONE);
+					return response;
+				}
+			}.respond(attributes);
+		}
+	});
 	private final IModel<Recording> rm = new CompoundPropertyModel<>(new Recording());
 	private final IModel<String> roomName = Model.of((String)null);
 	private boolean isInterview = false;
@@ -184,9 +204,6 @@ public class VideoInfo extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				File f = rm.getObject().getFile(EXTENSION_MP4);
-				download.setFileName(f.getName());
-				download.setResourceStream(new FileResourceStream(f));
 				download.initiate(target);
 			}
 		});

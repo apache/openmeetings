@@ -31,7 +31,6 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.util.resource.FileResourceStream;
 
 import com.googlecode.wicket.jquery.ui.JQueryIcon;
 import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
@@ -67,8 +66,7 @@ public class DownloadMenuItem extends MenuItem {
 					f = ff[0];
 				}
 			}
-			tree.downloader.setFileName(f.getName());
-			tree.downloader.setResourceStream(new FileResourceStream(f));
+			tree.dwnldFile = f;
 			tree.downloader.initiate(target);
 		}
 	}

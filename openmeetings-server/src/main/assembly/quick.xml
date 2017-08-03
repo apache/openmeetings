@@ -29,9 +29,6 @@
 			<directory>${project.parent.basedir}/openmeetings-web/src/main/webapp</directory>
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<includes>
-				<include>css/**</include>
-				<include>js/**</include>
-				<include>images/**</include>
 				<include>WEB-INF/**</include>
 			</includes>
 			<excludes>
@@ -81,6 +78,15 @@
 			<outputDirectory>${om.webapp}/WEB-INF/lib</outputDirectory>
 			<includes>
 				<include>openmeetings-*.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/</directory>
+			<outputDirectory>${om.webapp}</outputDirectory>
+			<includes>
+				<include>css/**</include>
+				<include>js/**</include>
+				<include>images/**</include>
 			</includes>
 		</fileSet>
 		<fileSet>

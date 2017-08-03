@@ -1,0 +1,116 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+.wb-settings {
+	position: absolute;
+}
+.wb-settings, .wb-settings .tab.props {
+	display: inline-block;
+	width: 310px;
+}
+.wb-settings .ui-dialog-titlebar-close {
+	position: absolute;
+	right: .3em;
+	top: 5px;
+	width: 20px;
+	padding: 1px;
+	height: 20px;
+}
+.wb-settings .header {
+	padding: 5px;
+}
+.wb-settings .header .ui-dialog-title {
+	padding-left: 10px;
+}
+.wb-settings .tab.props {
+	padding: 5px 10px;
+}
+.wb-settings .tab.props .prop-row {
+	padding-top: 5px;
+	margin: 0;
+	font-size: small;
+}
+.wb-settings .tab.props .block {
+	display: inline;
+	padding-left: 5px;
+}
+.wb-settings .tab.props .block.lbl {
+	width: 1em;
+}
+.wb-settings .tab.props .block.but {
+	width: 2.5em;
+}
+.wb-settings .tab.props .block.input {
+	width: 40px;
+}
+.wb-settings .tab.props .block.input input {
+	width: 30px;
+}
+.wb-settings .tab.props .block.input input[type=number] {
+	width: 40px;
+}
+.wb-settings .tab.props .block.input input[type=color] {
+	padding: 0;
+}
+.wb-settings .tab.props .block.input input[type=color]:disabled {
+	opacity:.3;
+}
+.wb-settings .tab.props .block.but button {
+	width: 2.5em;
+}
+.wb-settings .tab.props  .wb-prop-i.selected {
+	font-style: italic;
+}
+.wb-settings .tab.props .wb-prop-b.selected {
+	font-weight: bold;
+}
+.dropdown-menu.om-left {
+	right: 0;
+	left: auto !important;
+}
+.wb-tabbar {
+	padding-left: 70px !important;
+	padding-right: 35px !important;
+}
+.wb-tabbar .scroll-container {
+	overflow: hidden;
+}
+.wb-tabbar .scroll-container .scrollable, .wb-tabbar .scroll-container .scrollable li {
+	display: flex;
+}
+.wb-tabbar .add.disabled, .wb-tabbar .prev.disabled, .wb-tabbar .next.disabled {
+	opacity: .3;
+}
+.wb-tabbar .add, .wb-tabbar .prev, .wb-tabbar .next {
+	position: absolute;
+	top: 3px;
+}
+.wb-tabbar .add {
+	left: 2px;
+}
+.wb-tabbar .prev {
+	left: 35px;
+}
+.wb-tabbar .next {
+	right: 2px;
+}
+.wb-tabbar li button {
+	width: 20px;
+	height: 20px;
+	padding: 0;
+}

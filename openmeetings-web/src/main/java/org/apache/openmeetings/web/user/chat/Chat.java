@@ -154,7 +154,6 @@ public class Chat extends Panel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(EMOTIONS_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(Chat.class, "chat.js"))));
 		response.render(CssHeaderItem.forReference(EMOTIONS_CSS_REFERENCE));
-		response.render(CssHeaderItem.forUrl("css/chat.css"));
 		response.render(new PriorityHeaderItem(getNamedFunction("chatActivity", chatActivity, explicit(PARAM_TYPE), explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 
 		ChatDao dao = getBean(ChatDao.class);
