@@ -76,8 +76,12 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		sendWb(roomId, meth, obj, c -> !uid.equals(c.getUid()));
 	}
 
+	public static JSONObject getWbJson(Long wbId) {
+		return new JSONObject().put("wbId", wbId);
+	}
+
 	public static JSONObject getObjWbJson(Long wbId, Object o) {
-		return new JSONObject().put("wbId", wbId).put(PARAM_OBJ, o);
+		return getWbJson(wbId).put(PARAM_OBJ, o);
 	}
 
 	private static CharSequence urlFor(final ResourceReference resourceReference, PageParameters parameters) {

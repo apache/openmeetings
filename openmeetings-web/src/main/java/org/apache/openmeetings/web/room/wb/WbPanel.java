@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.PARAM_OBJ;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
+import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.AttributeModifier.append;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -311,7 +313,12 @@ public class WbPanel extends Panel {
 				}
 				sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
 			}
-			sb.append("WbArea.activateWb({wbId: ").append(wbs.getActiveWb()).append("});");
+			JSONObject wbj = getWbJson(wbs.getActiveWb());
+			sb.append("WbArea.activateWb(").append(wbj).append(");");
+			Whiteboard wb = wbs.get(wbs.getActiveWb());
+			if (wb != null) {
+				sb.append("WbArea.setSlide(").append(wbj.put("slide", wb.getSlide())).append(");");
+			}
 			target.appendJavaScript(sb);
 			inited = true;
 		}
@@ -383,7 +390,7 @@ public class WbPanel extends Panel {
 	}
 
 	private static JSONArray getArray(JSONObject wb, Function<JSONObject, JSONObject> postprocess) {
-		JSONObject items = wb.getJSONObject("roomItems");
+		JSONObject items = wb.getJSONObject(ITEMS_KEY);
 		JSONArray arr = new JSONArray();
 		for (String uid : items.keySet()) {
 			JSONObject o = items.getJSONObject(uid);

@@ -34,6 +34,7 @@ import com.github.openjson.JSONObject;
 
 public class Whiteboard implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static final String ITEMS_KEY = "roomItems";
 	private long id;
 	private Integer x = 0;
 	private Integer y = 0;
@@ -162,7 +163,10 @@ public class Whiteboard implements Serializable {
 		//deep-copy
 		JSONObject json = new JSONObject(new JSONObject(this).toString(new NullStringer()));
 		json.remove("id"); //filtering
-		JSONObject items = json.getJSONObject("roomItems");
+		if (!json.has(ITEMS_KEY)) {
+			json.put(ITEMS_KEY, new JSONObject());
+		}
+		JSONObject items = json.getJSONObject(ITEMS_KEY);
 		for (String uid : items.keySet()) {
 			JSONObject o = items.getJSONObject(uid);
 			o.remove("_src");

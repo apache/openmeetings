@@ -58,18 +58,18 @@
 		</div>
 		<div id="wb-zoom" class="wb-zoom">
 			<div class="doc-group btn-group btn-group-xs block" role="group" aria-label="...">
-				<button type="button" class="btn btn-default up">&nbsp;</button>
-				<button type="button" class="btn btn-default down">&nbsp;</button>
+				<button type="button" class="btn btn-default up" wicket:message="title:256">&nbsp;</button>
+				<button type="button" class="btn btn-default down" wicket:message="title:256">&nbsp;</button>
 			</div>
 			<div class="doc-group input-group input-group-xs block">
-				<input type="number" />
-				<span class="input-group-addon">of</span>
-				<span class="input-group-addon">14</span>
+				<input class="curr-slide" type="number" min="1" max="1"/>
+				<span class="input-group-addon"><wicket:message key="254"/></span>
+				<span class="last-page input-group-addon">1</span>
 			</div>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<div class="btn-group btn-group-xs block" role="group" aria-label="...">
-				<button type="button" class="btn btn-default"><span class="ui-icon ui-icon-minusthick"></span></button>
-				<button type="button" class="btn btn-default"><span class="ui-icon ui-icon-plusthick"></span></button>
+				<button type="button" class="btn btn-default" wicket:message="title:259"><span class="ui-icon ui-icon-minusthick"></span></button>
+				<button type="button" class="btn btn-default" wicket:message="title:260"><span class="ui-icon ui-icon-plusthick"></span></button>
 			</div>
 			<select>
 				<option value="auto">Automatic Zoom</option>

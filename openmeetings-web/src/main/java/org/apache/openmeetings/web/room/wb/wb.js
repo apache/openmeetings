@@ -581,6 +581,16 @@ var Wb = function() {
 		});
 		return confirm;
 	}
+	function _updateZoom() {
+		var ccount = canvases.length;
+		if (ccount > 1 && role === PRESENTER) {
+			z.find('.doc-group').show();
+			z.find('.doc-group .curr-slide').val(slide).attr('max', ccount);
+			z.find('.doc-group .last-page').text(ccount);
+		} else {
+			z.find('.doc-group').hide();
+		}
+	}
 	function internalInit() {
 		t.draggable({
 			snap: "parent"
@@ -608,6 +618,7 @@ var Wb = function() {
 					confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
 				}).removeClass('disabled');
 			case WHITEBOARD:
+				_updateZoom();
 				if (role === WHITEBOARD) {
 					clearAll.addClass('disabled');
 				}
@@ -775,6 +786,7 @@ var Wb = function() {
 					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {})
 							.setWidth(width).setHeight(height);
 				}
+				_updateZoom();
 				if (ccount != canvases.length) {
 					var b = getBtn();
 					if (b.length && b.hasClass(ACTIVE)) {
@@ -894,14 +906,16 @@ var Wb = function() {
 					wbId: wb.id
 					, slide: idx
 				}));
+				_updateZoom();
 				return false;
 			}
 		});
 	}
-	function showCurentSlide() {
+	function showCurrentSlide() {
 		a.find('.scroll-container .canvas-container').each(function(idx) {
 			if (role === PRESENTER) {
 				$(this).show();
+				a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
 			} else {
 				if (idx == slide) {
 					$(this).show();
@@ -994,7 +1008,7 @@ var Wb = function() {
 				, of: '#'+a[0].id
 				, collision: "fit"
 			});
-			showCurentSlide();
+			showCurrentSlide();
 			t = a.find('.tools'), s = a.find(".wb-settings");
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
@@ -1029,11 +1043,7 @@ var Wb = function() {
 	};
 	wb.setSlide = function(_sl) {
 		slide = _sl;
-		if (role === NONE) {
-			showCurentSlide();
-		} else {
-			a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
-		}
+		showCurrentSlide();
 	};
 	wb.createObj = function(o) {
 		var arr = [];
@@ -1093,6 +1103,7 @@ var Wb = function() {
 		canvases.splice(1);
 		canvases[0].clear();
 		minWidth = minHeight = 0;
+		_updateZoom();
 	};
 	wb.clearSlide = function(_sl) {
 		if (canvases.length > _sl) {
