@@ -512,7 +512,7 @@ var Clipart = function(wb, btn) {
 var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
-	var wb = {id: -1, name: ''}, a, t, s, canvases = [], mode, slide = 0, width = 0, height = 0
+	var wb = {id: -1, name: ''}, a, t, z, s, canvases = [], mode, slide = 0, width = 0, height = 0
 			, minWidth = 0, minHeight = 0, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
 
 	function getBtn(m) {
@@ -594,6 +594,11 @@ var Wb = function() {
 					ui.helper.removeClass('vertical').addClass('horisontal');
 				}
 			}
+		});
+		z.draggable({
+			snap: "parent"
+			, containment: "parent"
+			, scroll: false
 		});
 		var _firstToolItem = true;
 		var clearAll = t.find('.om-icon.clear-all');
@@ -969,18 +974,26 @@ var Wb = function() {
 			}
 			a.find('.tools').remove();
 			a.find('.wb-settings').remove();
+			a.find('.wb-zoom').remove();
 			role = _role;
 			var sc = a.find('.scroll-container');
+			z = $('#wb-zoom').clone().attr('id', '');
 			if (role === NONE) {
 				t = $('#wb-tools-readonly').clone().attr('id', '');
-				a.append(t);
 				sc.off('scroll', scrollHandler);
 			} else {
 				t = $('#wb-tools').clone().attr('id', '');
 				s = $("#wb-settings").clone().attr('id', '');
-				a.append(t).append(s);
+				a.append(s);
 				sc.on('scroll', scrollHandler);
 			}
+			a.append(t).append(z);
+			z.position({
+				my: "left top"
+				, at: "center top"
+				, of: '#'+a[0].id
+				, collision: "fit"
+			});
 			showCurentSlide();
 			t = a.find('.tools'), s = a.find(".wb-settings");
 			wb.eachCanvas(function(canvas) {
