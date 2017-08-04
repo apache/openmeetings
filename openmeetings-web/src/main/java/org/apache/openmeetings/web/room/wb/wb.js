@@ -585,11 +585,22 @@ var Wb = function() {
 		var ccount = canvases.length;
 		if (ccount > 1 && role === PRESENTER) {
 			z.find('.doc-group').show();
-			z.find('.doc-group .curr-slide').val(slide).attr('max', ccount);
+			var ns = 1 * slide;
+			z.find('.doc-group .curr-slide').val(ns + 1).attr('max', ccount);
+			z.find('.doc-group .up').prop('disabled', ns < 1);
+			z.find('.doc-group .down').prop('disabled', ns > ccount - 2);
 			z.find('.doc-group .last-page').text(ccount);
 		} else {
 			z.find('.doc-group').hide();
 		}
+	}
+	function _setSlide(_sld) {
+		slide = _sld;
+		wbAction('setSlide', JSON.stringify({
+			wbId: wb.id
+			, slide: _sld
+		}));
+		_updateZoom();
 	}
 	function internalInit() {
 		t.draggable({
@@ -617,6 +628,18 @@ var Wb = function() {
 				clearAll.click(function() {
 					confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
 				}).removeClass('disabled');
+				z.find('.curr-slide').change(function() {
+					_setSlide($(this).val() - 1);
+					showCurrentSlide();
+				});
+				z.find('.doc-group .up').click(function () {
+					_setSlide(1 * slide - 1);
+					showCurrentSlide();
+				});
+				z.find('.doc-group .down').click(function () {
+					_setSlide(1 * slide + 1);
+					showCurrentSlide();
+				});
 			case WHITEBOARD:
 				_updateZoom();
 				if (role === WHITEBOARD) {
@@ -898,15 +921,10 @@ var Wb = function() {
 	function scrollHandler(e) {
 		$(this).find('.canvas-container').each(function(idx) {
 			var h = $(this).height(), pos = $(this).position();
-			if (slide != idx &&pos.top > BUMPER - h && pos.top < BUMPER) {
+			if (slide != idx && pos.top > BUMPER - h && pos.top < BUMPER) {
 				//TODO FIXME might be done without iterating
 				//console.log("Found:", idx);
-				slide = idx;
-				wbAction('setSlide', JSON.stringify({
-					wbId: wb.id
-					, slide: idx
-				}));
-				_updateZoom();
+				_setSlide(idx);
 				return false;
 			}
 		});
