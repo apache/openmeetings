@@ -211,7 +211,7 @@ var VideoManager = (function() {
 function setRoomSizes() {
 	var sb = $(".room.sidebar.left")
 		, w = $(window).width() - sb.width() - 8
-		, h = $(window).height() - $('#menu').height()
+		, h = $(window).height() - $('#menu').height() - 3
 		, p = sb.find('.tabs');
 	sb.height(h);
 	var hh = h - 5;

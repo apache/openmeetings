@@ -237,15 +237,37 @@ public class WbPanel extends Panel {
 							Long wbId = obj.getLong("wbId");
 							UndoObject uo = getUndo(wbId);
 							if (uo != null) {
+								Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
 								switch (uo.getType()) {
 									case add:
-										sendWbAll(WbAction.deleteObj, obj.put("obj", new JSONArray().put(new JSONObject(uo.getObject()))));
+									{
+										JSONObject o = new JSONObject(uo.getObject());
+										wb.remove(o.getString("uid"));
+										WhiteboardCache.update(roomId, wb);
+										sendWbAll(WbAction.deleteObj, obj.put("obj", new JSONArray().put(o)));
+									}
 										break;
 									case remove:
+									{
+										JSONArray arr = new JSONArray(uo.getObject());
+										for (int i  = 0; i < arr.length(); ++i) {
+											JSONObject o = arr.getJSONObject(i);
+											wb.put(o.getString("uid"), o);
+										}
+										WhiteboardCache.update(roomId, wb);
 										sendWbAll(WbAction.createObj, obj.put("obj", new JSONArray(uo.getObject())));
+									}
 										break;
 									case modify:
-										sendWbAll(WbAction.modifyObj, obj.put("obj", new JSONArray(uo.getObject())));
+									{
+										JSONArray arr = new JSONArray(uo.getObject());
+										for (int i  = 0; i < arr.length(); ++i) {
+											JSONObject o = arr.getJSONObject(i);
+											wb.put(o.getString("uid"), o);
+										}
+										WhiteboardCache.update(roomId, wb);
+										sendWbAll(WbAction.modifyObj, obj.put("obj", arr));
+									}
 										break;
 								}
 							}

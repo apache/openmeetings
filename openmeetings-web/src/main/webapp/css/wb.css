@@ -192,6 +192,11 @@
 .wb-settings .tab.props .wb-prop-b.selected {
 	font-weight: bold;
 }
+.wb-settings .tab.props .block.but .wb-prop-i
+	, .wb-settings .tab.props .block.but .wb-prop-b
+{
+	width: 5px;
+}
 .dropdown-menu.om-left {
 	right: 0;
 	left: auto !important;

@@ -513,7 +513,8 @@ var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
 	var wb = {id: -1, name: ''}, a, t, z, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, minWidth = 0, minHeight = 0, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
+			, wbWidth = 0, wbHeight = 0, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
+	var minWidth = 0, minHeight = 0; //TODO TEMP
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
@@ -796,10 +797,10 @@ var Wb = function() {
 			case 'Presentation':
 			{
 				var ccount = canvases.length;
-				minWidth = Math.max(minWidth, _o.width);
-				minHeight = Math.max(minHeight, _o.height);
-				width = Math.max(minWidth, width);
-				height = Math.max(minHeight, height);
+				minWidth = Math.max(minWidth, _o.width); //TODO TEMP
+				minHeight = Math.max(minHeight, _o.height); //TODO TEMP
+				width = Math.max(minWidth, width); //TODO TEMP
+				height = Math.max(minHeight, height); //TODO TEMP
 				var count = _o.deleted ? 1 : _o.count;
 				for (var i = 0; i < count; ++i) {
 					if (canvases.length < i + 1) {

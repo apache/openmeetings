@@ -35,11 +35,13 @@ import com.github.openjson.JSONObject;
 public class Whiteboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String ITEMS_KEY = "roomItems";
+	private static final int DEFAULT_WIDTH = 1920;
+	private static final int DEFAULT_HEIGHT = 1080;
 	private long id;
-	private Integer x = 0;
-	private Integer y = 0;
-	private Integer zoom = 100;
-	private Boolean fullFit = true;
+	private double zoom = 1.;
+	private boolean fullFit = true;
+	private int width = DEFAULT_WIDTH;
+	private int height = DEFAULT_HEIGHT;
 	private Map<String, String> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
 	private Date created = new Date();
 	private int slide = 0;
@@ -49,6 +51,7 @@ public class Whiteboard implements Serializable {
 
 	public Whiteboard(String name) {
 		this.name = name;
+		this.created = new Date();
 	}
 
 	public long getId() {
@@ -59,22 +62,6 @@ public class Whiteboard implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getX() {
-		return x;
-	}
-
-	public void setX(Integer x) {
-		this.x = x;
-	}
-
-	public Integer getY() {
-		return y;
-	}
-
-	public void setY(Integer y) {
-		this.y = y;
-	}
-
 	public Date getCreated() {
 		return created;
 	}
@@ -83,24 +70,26 @@ public class Whiteboard implements Serializable {
 		this.created = created;
 	}
 
-	public Integer getZoom() {
+	public double getZoom() {
 		return zoom;
 	}
 
-	public void setZoom(Integer zoom) {
+	public void setZoom(double zoom) {
 		this.zoom = zoom;
 	}
 
-	public Boolean getFullFit() {
+	public boolean getFullFit() {
 		return fullFit;
 	}
 
-	public void setFullFit(Boolean fullFit) {
+	public void setFullFit(boolean fullFit) {
 		this.fullFit = fullFit;
 	}
 
 	public void clear() {
 		roomItems.clear();
+		width = DEFAULT_WIDTH;
+		height = DEFAULT_HEIGHT;
 	}
 
 	public void put(String uid, JSONObject obj) {
@@ -157,6 +146,22 @@ public class Whiteboard implements Serializable {
 
 	public void setSlide(int slide) {
 		this.slide = slide;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	public JSONObject toJson() {
