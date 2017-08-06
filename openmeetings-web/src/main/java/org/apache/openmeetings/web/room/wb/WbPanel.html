@@ -68,26 +68,23 @@
 			</div>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<div class="btn-group btn-group-xs block" role="group" aria-label="...">
-				<button type="button" class="btn btn-default" wicket:message="title:259"><span class="ui-icon ui-icon-minusthick"></span></button>
-				<button type="button" class="btn btn-default" wicket:message="title:260"><span class="ui-icon ui-icon-plusthick"></span></button>
+				<button type="button" class="btn btn-default zoom-out" wicket:message="title:259"><span class="ui-icon ui-icon-minusthick"></span></button>
+				<button type="button" class="btn btn-default zoom-in" wicket:message="title:260"><span class="ui-icon ui-icon-plusthick"></span></button>
 			</div>
-			<select>
-				<option value="auto">Automatic Zoom</option>
-				<option value="page-actual">Actual Size</option>
-				<option value="page-fit">Page Fit</option>
-				<option value="page-width">Page Width</option>
-				<option value="custom" disabled="disabled">120%</option>
-				<option value="0.5">50%</option>
+			<select class="zoom">
+				<option value="full-fit"><wicket:message key="847"/></option>
+				<option value="custom">120%</option>
+				<option value="0.50">50%</option>
 				<option value="0.75">75%</option>
-				<option value="1">100%</option>
+				<option value="1.00">100%</option>
 				<option value="1.25">125%</option>
-				<option value="1.5">150%</option>
-				<option value="2">200%</option>
-				<option value="3">300%</option>
-				<option value="4">400%</option>
+				<option value="1.50">150%</option>
+				<option value="2.00">200%</option>
+				<option value="3.00">300%</option>
+				<option value="4.00">400%</option>
 			</select>
 		</div>
-		<div id="wb-tools" class="tools ui-state-active vertical clear" style="position: absolute; top: 20px; right: 0px;">
+		<div id="wb-tools" class="tools ui-state-active vertical clear" style="position: absolute; top: 20px; right: 20px;">
 			<div class="bumper"></div>
 			<div wicket:message="title:62" class="ui-widget-header clickable om-icon big clear-all"></div>
 			<div wicket:message="title:1005" class="ui-widget-header clickable om-icon big clear-slide"></div>

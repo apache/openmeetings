@@ -78,7 +78,7 @@ public class Whiteboard implements Serializable {
 		this.zoom = zoom;
 	}
 
-	public boolean getFullFit() {
+	public boolean isFullFit() {
 		return fullFit;
 	}
 

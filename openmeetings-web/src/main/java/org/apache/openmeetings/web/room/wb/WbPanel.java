@@ -130,7 +130,7 @@ public class WbPanel extends Panel {
 						case createWb:
 						{
 							Whiteboard wb = WhiteboardCache.add(roomId, c.getUser().getLanguageId());
-							sendWbAll(WbAction.createWb, getAddWbJson(wb.getId(), wb.getName()));
+							sendWbAll(WbAction.createWb, getAddWbJson(wb));
 						}
 							break;
 						case removeWb:
@@ -326,11 +326,10 @@ public class WbPanel extends Panel {
 			StringBuilder sb = new StringBuilder("WbArea.init();");
 			Whiteboards wbs = WhiteboardCache.get(roomId);
 			for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
-				sb.append(new StringBuilder("WbArea.create(")
-						.append(getAddWbJson(entry.getKey(), entry.getValue().getName()).toString())
-						.append(");"));
+				Whiteboard wb = entry.getValue();
+				sb.append(new StringBuilder("WbArea.create(").append(getAddWbJson(wb)).append(");"));
 				JSONArray arr = new JSONArray();
-				for (JSONObject o : entry.getValue().list()) {
+				for (JSONObject o : wb.list()) {
 					arr.put(addFileUrl(wbs.getUid(), o));
 				}
 				sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
@@ -377,8 +376,13 @@ public class WbPanel extends Panel {
 		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
 	}
 
-	private static JSONObject getAddWbJson(Long id, String name) {
-		return new JSONObject().put("wbId", id).put("name", name);
+	private static JSONObject getAddWbJson(Whiteboard wb) {
+		return new JSONObject().put("wbId", wb.getId())
+				.put("name", wb.getName())
+				.put("width", wb.getWidth())
+				.put("height", wb.getHeight())
+				.put("zoom", wb.getZoom())
+				.put("fullFit", wb.isFullFit());
 	}
 
 	public WbPanel update(IPartialPageRequestHandler handler) {

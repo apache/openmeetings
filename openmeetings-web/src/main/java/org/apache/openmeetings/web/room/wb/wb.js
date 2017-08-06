@@ -513,8 +513,7 @@ var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
 	var wb = {id: -1, name: ''}, a, t, z, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, wbWidth = 0, wbHeight = 0, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
-	var minWidth = 0, minHeight = 0; //TODO TEMP
+			, zoom = 1., fullFit = true, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
@@ -582,7 +581,7 @@ var Wb = function() {
 		});
 		return confirm;
 	}
-	function _updateZoom() {
+	function _updateZoomPanel() {
 		var ccount = canvases.length;
 		if (ccount > 1 && role === PRESENTER) {
 			z.find('.doc-group').show();
@@ -601,7 +600,7 @@ var Wb = function() {
 			wbId: wb.id
 			, slide: _sld
 		}));
-		_updateZoom();
+		_updateZoomPanel();
 	}
 	function internalInit() {
 		t.draggable({
@@ -642,7 +641,6 @@ var Wb = function() {
 					showCurrentSlide();
 				});
 			case WHITEBOARD:
-				_updateZoom();
 				if (role === WHITEBOARD) {
 					clearAll.addClass('disabled');
 				}
@@ -748,6 +746,28 @@ var Wb = function() {
 					}
 				});
 			case NONE:
+				_updateZoomPanel();
+				z.find('.zoom-out').click(function() {
+					wb.zoom -= .2;
+					_setSize();
+				});
+				z.find('.zoom-in').click(function() {
+					wb.zoom += .2;
+					_setSize();
+				});
+				z.find('.zoom').change(function() {
+					var zzz = $(this).val();
+					if (isNaN(zzz)) {
+						if ('custom' === zzz) {
+							wb.zoom = $(this).data('val');
+						}
+						//TODO handle custom, full-fit
+					} else {
+						wb.zoom = 1. * zzz;
+					}
+					_setSize();
+				});
+				_setSize();
 				initToolBtn('apointer', _firstToolItem, APointer(wb));
 		}
 	}
@@ -797,10 +817,6 @@ var Wb = function() {
 			case 'Presentation':
 			{
 				var ccount = canvases.length;
-				minWidth = Math.max(minWidth, _o.width); //TODO TEMP
-				minHeight = Math.max(minHeight, _o.height); //TODO TEMP
-				width = Math.max(minWidth, width); //TODO TEMP
-				height = Math.max(minHeight, height); //TODO TEMP
 				var count = _o.deleted ? 1 : _o.count;
 				for (var i = 0; i < count; ++i) {
 					if (canvases.length < i + 1) {
@@ -810,7 +826,7 @@ var Wb = function() {
 					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {})
 							.setWidth(width).setHeight(height);
 				}
-				_updateZoom();
+				_updateZoomPanel();
 				if (ccount != canvases.length) {
 					var b = getBtn();
 					if (b.length && b.hasClass(ACTIVE)) {
@@ -999,6 +1015,21 @@ var Wb = function() {
 		}
 		setHandlers(canvas);
 	}
+	function _setSize() {
+		//TODO fullFit
+		var oo = z.find('.zoom').find('option[value="' + wb.zoom.toFixed(2) + '"]');
+		if (oo.length == 1) {
+			oo.prop('selected', true);
+		} else {
+			z.find('.zoom').find('option[value=custom]')
+				.text(100. * wb.zoom.toFixed(2) + '%')
+				.data('val', wb.zoom)
+				.prop('selected', true);
+		}
+		wb.eachCanvas(function(canvas) {
+			canvas.setWidth(wb.zoom * wb.width).setHeight(wb.zoom * wb.height).setZoom(wb.zoom);
+		});
+	}
 	wb.setRole = function(_role) {
 		if (role != _role) {
 			var btn = getBtn();
@@ -1038,6 +1069,10 @@ var Wb = function() {
 	wb.init = function(wbo, tid, _role) {
 		wb.id = wbo.wbId;
 		wb.name = wbo.name;
+		wb.width = wbo.width;
+		wb.height = wbo.height;
+		wb.zoom = wbo.zoom;
+		wb.fullFit = wbo.fullFit;
 		a = $('#' + tid);
 		addCanvas();
 		wb.setRole(_role);
@@ -1046,16 +1081,11 @@ var Wb = function() {
 		if (t.position().left + t.width() > a.width()) {
 			t.position({
 				my: "right"
-				, at: "right"
+				, at: "right-10"
 				, of: a.selector
 				, collision: "fit"
 			});
 		}
-		width = Math.max(minWidth, w);
-		height = Math.max(minHeight, h);
-		wb.eachCanvas(function(canvas) {
-			canvas.setWidth(width).setHeight(height);
-		});
 	};
 	wb.load = function(arr) {
 		_createObject(arr, _createHandler);
@@ -1121,8 +1151,7 @@ var Wb = function() {
 		}
 		canvases.splice(1);
 		canvases[0].clear();
-		minWidth = minHeight = 0;
-		_updateZoom();
+		_updateZoomPanel();
 	};
 	wb.clearSlide = function(_sl) {
 		if (canvases.length > _sl) {
