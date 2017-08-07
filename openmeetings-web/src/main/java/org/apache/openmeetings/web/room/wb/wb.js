@@ -749,19 +749,26 @@ var Wb = function() {
 				_updateZoomPanel();
 				z.find('.zoom-out').click(function() {
 					wb.zoom -= .2;
+					wb.fullFit = false;
 					_setSize();
 				});
 				z.find('.zoom-in').click(function() {
 					wb.zoom += .2;
+					wb.fullFit = false;
 					_setSize();
 				});
 				z.find('.zoom').change(function() {
 					var zzz = $(this).val();
+					wb.fullFit = false;
 					if (isNaN(zzz)) {
-						if ('custom' === zzz) {
-							wb.zoom = $(this).data('val');
+						switch (zzz) {
+							case 'full-fit':
+								wb.fullFit = true;
+								break;
+							case 'custom':
+								wb.zoom = $(this).data('custom-val');
+								break;
 						}
-						//TODO handle custom, full-fit
 					} else {
 						wb.zoom = 1. * zzz;
 					}
@@ -1016,15 +1023,17 @@ var Wb = function() {
 		setHandlers(canvas);
 	}
 	function _setSize() {
-		//TODO fullFit
-		var oo = z.find('.zoom').find('option[value="' + wb.zoom.toFixed(2) + '"]');
-		if (oo.length == 1) {
-			oo.prop('selected', true);
+		if (wb.fullFit) {
+			wb.zoom = (a.width() - 10) / wb.width;
 		} else {
-			z.find('.zoom').find('option[value=custom]')
-				.text(100. * wb.zoom.toFixed(2) + '%')
-				.data('val', wb.zoom)
-				.prop('selected', true);
+			var oo = z.find('.zoom').find('option[value="' + wb.zoom.toFixed(2) + '"]');
+			if (oo.length == 1) {
+				oo.prop('selected', true);
+			} else {
+				z.find('.zoom').data('custom-val', wb.zoom).find('option[value=custom]')
+					.text(100. * wb.zoom.toFixed(2) + '%')
+					.prop('selected', true);
+			}
 		}
 		wb.eachCanvas(function(canvas) {
 			canvas.setWidth(wb.zoom * wb.width).setHeight(wb.zoom * wb.height).setZoom(wb.zoom);
