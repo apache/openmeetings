@@ -28,8 +28,7 @@ public class NullStringer extends JSONStringer {
 	}
 
 	public NullStringer(int indent) {
-		//super(indent); FIXME TODO uncomment
-		super();
+		super(indent);
 	}
 
 	@Override
