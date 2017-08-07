@@ -851,7 +851,6 @@
   <entry key="844">Toon muis positie aan kijkers</entry>
   <entry key="845">Deel geluid middels SIP</entry>
   <entry key="846">Deel geluid middels SIP en beeld via flash</entry>
-  <entry key="847">Beeldvullend</entry>
   <entry key="848">Toon scherm</entry>
   <entry key="849">De gebruiker</entry>
   <entry key="850">wil zijn scherm delen, wil je dit zien?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Opslaan als PNG</entry>
 	<entry key="download.jpg">Opslaan als JPG</entry>
 	<entry key="download.pdf">Opslaan als PDF</entry>
+	<entry key="zoom.fullFit">Beeldvullend</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

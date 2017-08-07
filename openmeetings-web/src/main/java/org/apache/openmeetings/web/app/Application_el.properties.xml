@@ -851,7 +851,6 @@
   <entry key="844">Εμφάνιση θέσης ποντικιού στους θεατές</entry>
   <entry key="845">Share Audio with SIP Applet</entry>
   <entry key="846">Share Audio with SIP and Video with Flash</entry>
-  <entry key="847">Full-Fit</entry>
   <entry key="848">View Screen</entry>
   <entry key="849">The user</entry>
   <entry key="850">wants to share its screen. Do you want to see it?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Αποθήκευση ως PNG</entry>
 	<entry key="download.jpg">Αποθήκευση ως JPG</entry>
 	<entry key="download.pdf">Αποθήκευση ως PDF</entry>
+	<entry key="zoom.fullFit">Full-Fit</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

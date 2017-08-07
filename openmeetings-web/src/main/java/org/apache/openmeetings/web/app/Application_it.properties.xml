@@ -851,7 +851,6 @@
   <entry key="844">Visualizza posizione del mouse ai partecipanti</entry>
   <entry key="845">Condividi Audio con Applet SIP</entry>
   <entry key="846">Condividi Audio con SIP ed il Video con Flash</entry>
-  <entry key="847">Schermo-Intero</entry>
   <entry key="848">Visualizza Schermo</entry>
   <entry key="849">L'utente</entry>
   <entry key="850">vuole condividero il suo schermo. Vuoi vederlo?</entry>
@@ -1927,4 +1926,6 @@
 	<entry key="download.png">Scarica come PNG</entry>
 	<entry key="download.jpg">Scarica come JPG</entry>
 	<entry key="download.pdf">Scarica come PDF</entry>
+	<entry key="zoom.fullFit">Schermo-Intero</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

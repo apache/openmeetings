@@ -851,7 +851,6 @@
   <entry key="844">Mostrar la posició del ratolí als participants</entry>
   <entry key="845">Compartir Àudio amb el applet SIP</entry>
   <entry key="846">Compartir Àudio amb SIP i Vídeo amb Flash</entry>
-  <entry key="847">Pantalla completa</entry>
   <entry key="848">Veure pantalla</entry>
   <entry key="849">El usuari</entry>
   <entry key="850">desitja compartir la seva pantalla. Desitja visualitzar-la?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Descarregar com PNG</entry>
 	<entry key="download.jpg">Descarregar com JPG</entry>
 	<entry key="download.pdf">Descarregar com PDF</entry>
+	<entry key="zoom.fullFit">Pantalla completa</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

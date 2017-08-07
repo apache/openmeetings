@@ -34,12 +34,17 @@ import com.github.openjson.JSONObject;
 
 public class Whiteboard implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public enum ZoomMode {
+		fullFit
+		, pageWidth
+		, zoom
+	}
 	public static final String ITEMS_KEY = "roomItems";
 	private static final int DEFAULT_WIDTH = 1920;
 	private static final int DEFAULT_HEIGHT = 1080;
 	private long id;
 	private double zoom = 1.;
-	private boolean fullFit = true;
+	private ZoomMode zoomMode = ZoomMode.fullFit;
 	private int width = DEFAULT_WIDTH;
 	private int height = DEFAULT_HEIGHT;
 	private Map<String, String> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -78,12 +83,12 @@ public class Whiteboard implements Serializable {
 		this.zoom = zoom;
 	}
 
-	public boolean isFullFit() {
-		return fullFit;
+	public ZoomMode getZoomMode() {
+		return zoomMode;
 	}
 
-	public void setFullFit(boolean fullFit) {
-		this.fullFit = fullFit;
+	public void setZoomMode(ZoomMode zoomMode) {
+		this.zoomMode = zoomMode;
 	}
 
 	public void clear() {

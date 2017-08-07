@@ -851,7 +851,6 @@
   <entry key="844">ビューア上でマウス・ポインタを表示する</entry>
   <entry key="845">SIPアプレットと音声を共有する</entry>
   <entry key="846">SIPと音声を、Flashと画像を共有する</entry>
-  <entry key="847">画面サイズに合わせる</entry>
   <entry key="848">デスクトップを表示する</entry>
   <entry key="849">ユーザー「</entry>
   <entry key="850">」さんがデスクトップ共有を要求してます。表示しますか?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">PNGとしてダウンロード</entry>
 	<entry key="download.jpg">JPGとしてダウンロード</entry>
 	<entry key="download.pdf">PDFとしてダウンロード</entry>
+	<entry key="zoom.fullFit">画面サイズに合わせる</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

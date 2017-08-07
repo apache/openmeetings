@@ -851,7 +851,6 @@
   <entry key="844">Montrer la souris sur l'écran</entry>
   <entry key="845">Partager l'audio avec l'applet SIP</entry>
   <entry key="846">Partager l'audio avec SIP et la vidéo avec Flash</entry>
-  <entry key="847">Zoom 100%</entry>
   <entry key="848">Voir écran</entry>
   <entry key="849">L'utilisateur</entry>
   <entry key="850">souhaite partager son écran. Voulez-vous le voir ?</entry>
@@ -1917,4 +1916,6 @@
 	<entry key="download.png">Télécharger en PNG</entry>
 	<entry key="download.jpg">Télécharger en JPG</entry>
 	<entry key="download.pdf">Télécharger en PDF</entry>
+	<entry key="zoom.fullFit">Full-Fit</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

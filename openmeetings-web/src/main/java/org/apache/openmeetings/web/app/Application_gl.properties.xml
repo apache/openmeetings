@@ -851,7 +851,6 @@
   <entry key="844">Mostrar a posición do rato aos participantes</entry>
   <entry key="845">Compartir o son co miniaplicativo SIP</entry>
   <entry key="846">Compartir o son con SIP e o vídeo con Flash</entry>
-  <entry key="847">Pantalla completa</entry>
   <entry key="848">Ver o escritorio</entry>
   <entry key="849">O usuario</entry>
   <entry key="850">desexa compartir o seu escritorio. Desexa visualizalo?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Descargar como PNG</entry>
 	<entry key="download.jpg">Descargar como JPG</entry>
 	<entry key="download.pdf">Descargar como PDF</entry>
+	<entry key="zoom.fullFit">Pantalla completa</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

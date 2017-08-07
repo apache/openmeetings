@@ -382,7 +382,7 @@ public class WbPanel extends Panel {
 				.put("width", wb.getWidth())
 				.put("height", wb.getHeight())
 				.put("zoom", wb.getZoom())
-				.put("fullFit", wb.isFullFit());
+				.put("zoomMode", wb.getZoomMode());
 	}
 
 	public WbPanel update(IPartialPageRequestHandler handler) {

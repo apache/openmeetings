@@ -851,7 +851,6 @@
   <entry key="844">Mutasd az egér pozíciót a nézőknek</entry>
   <entry key="845">Audio megosztása SIP alkalmazáson</entry>
   <entry key="846">Audio megosztása SIP-n és video flash alatt</entry>
-  <entry key="847">Teljes méret</entry>
   <entry key="848">Képernyő nézete</entry>
   <entry key="849">A felhasználó</entry>
   <entry key="850">megosztotta a képernyőjét. Megnézi?</entry>
@@ -1913,4 +1912,6 @@
 	<entry key="download.png">Letöltés mint PNG</entry>
 	<entry key="download.jpg">Letöltés mint JPG</entry>
 	<entry key="download.pdf">Letöltés mint PDF</entry>
+	<entry key="zoom.fullFit">Teljes méret</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

@@ -851,7 +851,6 @@
   <entry key="844">Teilnehmern Mauszeiger anzeigen</entry>
   <entry key="845">Audio mit SIP Applet übertragen</entry>
   <entry key="846">Audio mit SIP und Video mit Flash übertragen</entry>
-  <entry key="847">Vollformat</entry>
   <entry key="848">Bildschirm zeigen</entry>
   <entry key="849">Der Nutzer</entry>
   <entry key="850">möchte den Bildschirm übertragen. Wollen Sie ihn sehen?</entry>
@@ -1930,4 +1929,6 @@
 	<entry key="download.png">Download als PNG</entry>
 	<entry key="download.jpg">Download als JPG</entry>
 	<entry key="download.pdf">Download als PDF</entry>
+	<entry key="zoom.fullFit">Vollformat</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

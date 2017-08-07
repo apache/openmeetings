@@ -851,7 +851,6 @@
   <entry key="844">Показувати позицію миші глядачам</entry>
   <entry key="845">Спільно використовувати аудіо і SIP</entry>
   <entry key="846">Совмистно використовувати аудіо з SIP і відео з флеш</entry>
-  <entry key="847">Full-Fit</entry>
   <entry key="848">Дивитися екран</entry>
   <entry key="849">Користувач</entry>
   <entry key="850">хоче зробити екран загальним. Хочете бачити його?</entry>
@@ -1927,4 +1926,6 @@
 	<entry key="download.png">Завантажити як PNG</entry>
 	<entry key="download.jpg">Завантажити як JPG</entry>
 	<entry key="download.pdf">Завантажити як PDF</entry>
+	<entry key="zoom.fullFit">Full-Fit</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

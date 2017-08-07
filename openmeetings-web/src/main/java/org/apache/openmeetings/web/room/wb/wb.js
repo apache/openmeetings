@@ -513,7 +513,7 @@ var Wb = function() {
 	const ACTIVE = 'active';
 	const BUMPER = 100;
 	var wb = {id: -1, name: ''}, a, t, z, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, zoom = 1., fullFit = true, role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
+			, zoom = 1., zoomMode = 'fullFit', role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
@@ -749,24 +749,25 @@ var Wb = function() {
 				_updateZoomPanel();
 				z.find('.zoom-out').click(function() {
 					wb.zoom -= .2;
-					wb.fullFit = false;
+					wb.zoomMode = 'zoom';
 					_setSize();
 				});
 				z.find('.zoom-in').click(function() {
 					wb.zoom += .2;
-					wb.fullFit = false;
+					wb.zoomMode = 'zoom';
 					_setSize();
 				});
 				z.find('.zoom').change(function() {
 					var zzz = $(this).val();
-					wb.fullFit = false;
+					wb.zoomMode = 'zoom';
 					if (isNaN(zzz)) {
 						switch (zzz) {
-							case 'full-fit':
-								wb.fullFit = true;
+							case 'fullFit':
+							case 'pageWidth':
+								wb.zoomMode = zzz;
 								break;
 							case 'custom':
-								wb.zoom = $(this).data('custom-val');
+								wb.zoom = 1. * $(this).data('custom-val');
 								break;
 						}
 					} else {
@@ -1023,17 +1024,25 @@ var Wb = function() {
 		setHandlers(canvas);
 	}
 	function _setSize() {
-		if (wb.fullFit) {
-			wb.zoom = (a.width() - 10) / wb.width;
-		} else {
-			var oo = z.find('.zoom').find('option[value="' + wb.zoom.toFixed(2) + '"]');
-			if (oo.length == 1) {
-				oo.prop('selected', true);
-			} else {
-				z.find('.zoom').data('custom-val', wb.zoom).find('option[value=custom]')
-					.text(100. * wb.zoom.toFixed(2) + '%')
-					.prop('selected', true);
+		switch (wb.zoomMode) {
+			case 'fullFit':
+				wb.zoom = Math.min((a.width() - 10) / wb.width, (a.height() - 10) / wb.height);
+				break;
+			case 'pageWidth':
+				wb.zoom = (a.width() - 10) / wb.width;
+				break;
+			default:
+			{
+				var oo = z.find('.zoom').find('option[value="' + wb.zoom.toFixed(2) + '"]');
+				if (oo.length == 1) {
+					oo.prop('selected', true);
+				} else {
+					z.find('.zoom').data('custom-val', wb.zoom).find('option[value=custom]')
+						.text(100. * wb.zoom.toFixed(2) + '%')
+						.prop('selected', true);
+				}
 			}
+				break;
 		}
 		wb.eachCanvas(function(canvas) {
 			canvas.setWidth(wb.zoom * wb.width).setHeight(wb.zoom * wb.height).setZoom(wb.zoom);
@@ -1081,7 +1090,7 @@ var Wb = function() {
 		wb.width = wbo.width;
 		wb.height = wbo.height;
 		wb.zoom = wbo.zoom;
-		wb.fullFit = wbo.fullFit;
+		wb.zoomMode = wbo.zoomMode;
 		a = $('#' + tid);
 		addCanvas();
 		wb.setRole(_role);

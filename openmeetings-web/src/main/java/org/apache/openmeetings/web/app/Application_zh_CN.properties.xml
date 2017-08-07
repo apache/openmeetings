@@ -851,7 +851,6 @@
   <entry key="844">在共享器中显示鼠标位置</entry>
   <entry key="845">使用SIP小应用程序共享音频</entry>
   <entry key="846">使用SIP小应用程序共享音频，用flash共享视频</entry>
-  <entry key="847">满屏</entry>
   <entry key="848">显示屏幕</entry>
   <entry key="849">用户</entry>
   <entry key="850">想分享他的屏幕。你想看到它吗？</entry>
@@ -1915,4 +1914,6 @@
 	<entry key="download.png">下载为 PNG</entry>
 	<entry key="download.jpg">下载为 JPG</entry>
 	<entry key="download.pdf">下载为 PDF</entry>
+	<entry key="zoom.fullFit">满屏</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

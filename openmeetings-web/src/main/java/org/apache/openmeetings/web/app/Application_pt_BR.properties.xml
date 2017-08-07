@@ -851,7 +851,6 @@
   <entry key="844">Mostra a posição do mouse para os espectadores</entry>
   <entry key="845">Compartilhar Audio com o SIP Applet</entry>
   <entry key="846">Compartilhar Áudio e Vídeo via SIP com Flash</entry>
-  <entry key="847">Ajuste</entry>
   <entry key="848">Ver Tela</entry>
   <entry key="849">O Usuário</entry>
   <entry key="850">quer compartihar sua tela. Você quer ver?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Download como PNG</entry>
 	<entry key="download.jpg">Download como JPG</entry>
 	<entry key="download.pdf">Download como PDF</entry>
+	<entry key="zoom.fullFit">Ajuste</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

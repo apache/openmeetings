@@ -851,7 +851,6 @@
   <entry key="844">Zobraziť pozíciu kurzora</entry>
   <entry key="845">Zdieľať audio cez SIP applet</entry>
   <entry key="846">Zdieľať audio cez SIP a video cez Flash</entry>
-  <entry key="847">Napasovanie</entry>
   <entry key="848">Vidieť plochu</entry>
   <entry key="849">Používateľ</entry>
   <entry key="850">chce zdieľať svoju plochu. Zobraziť?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Stiahnúť ako PNG</entry>
 	<entry key="download.jpg">Stiahnúť ako JPG</entry>
 	<entry key="download.pdf">Stiahnúť ako PDF</entry>
+	<entry key="zoom.fullFit">Napasovanie</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

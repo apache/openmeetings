@@ -851,7 +851,6 @@
   <entry key="844">Vis musens position for brugerne</entry>
   <entry key="845">Del lyd med SIP Appletten</entry>
   <entry key="846">Del lyd med SIP og video med Flash</entry>
-  <entry key="847">Fyldig</entry>
   <entry key="848">Se skærm</entry>
   <entry key="849">Brugeren</entry>
   <entry key="850">ønsker at dele sin skærm. Vil du se?</entry>
@@ -1925,4 +1924,6 @@
 	<entry key="download.png">Download som PNG</entry>
 	<entry key="download.jpg">Download som JPG</entry>
 	<entry key="download.pdf">Download som PDF</entry>
+	<entry key="zoom.fullFit">Fyldig</entry>
+	<entry key="zoom.pageWidth">Page Width</entry>
 </properties>

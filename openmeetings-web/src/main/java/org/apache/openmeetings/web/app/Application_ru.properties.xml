@@ -850,8 +850,7 @@
   <entry key="843">Свойства</entry>
   <entry key="844">Показывать позицию мыши зрителям</entry>
   <entry key="845">Совместно использовать аудио и SIP</entry>
-  <entry key="846">Совмистно использовать аудио с SIP и видео с флеш</entry>
-  <entry key="847">Full-Fit</entry>
+  <entry key="846">Совместно использовать аудио с SIP и видео с флеш</entry>
   <entry key="848">Смотреть экран</entry>
   <entry key="849">Пользователь</entry>
   <entry key="850">хочет сделать экран общим. Хотите видеть его?</entry>
@@ -1926,4 +1925,6 @@
 	<entry key="download.png">Сохранить как PNG</entry>
 	<entry key="download.jpg">Сохранить как JPG</entry>
 	<entry key="download.pdf">Сохранить как PDF</entry>
+	<entry key="zoom.fullFit">По размеру страницы</entry>
+	<entry key="zoom.pageWidth">По ширине страницы</entry>
 </properties>
