@@ -19,9 +19,14 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
@@ -58,6 +63,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
@@ -94,6 +100,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public static final String FLASH_SSL_PORT = "rtmpsPort";
 	public static final String FLASH_VIDEO_CODEC = "videoCodec";
 	public static final String FLASH_FPS = "fps";
+	public static final String FLASH_BANDWIDTH = "bandwidth";
+	public static final String FLASH_QUALITY = "quality";
+	public static final String FLASH_ECHO_PATH = "echoPath";
+	public static final String FLASH_MIC_RATE = "micRate";
 	private JSONObject flashSettings;
 
 	@Autowired
@@ -142,7 +152,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.put(FLASH_PORT, props.getProperty("rtmp.port"))
 					.put(FLASH_SSL_PORT, props.getProperty("rtmps.port"))
 					.put(FLASH_VIDEO_CODEC, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
-					.put(FLASH_FPS, cfgDao.getConfValue(OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
+					.put(FLASH_FPS, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
+					.put(FLASH_BANDWIDTH, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_BANDWIDTH, Integer.class, "0"))
+					.put(FLASH_QUALITY, cfgDao.getConfValue(CONFIG_FLASH_CAM_QUALITY, Integer.class, "90"))
+					.put(FLASH_ECHO_PATH, cfgDao.getConfValue(CONFIG_FLASH_ECHO_PATH, Integer.class, "128"))
+					.put(FLASH_MIC_RATE, cfgDao.getConfValue(CONFIG_FLASH_MIC_RATE, Integer.class, "22"))
 					;
 
 			for (String scopeName : scope.getScopeNames()) {
@@ -539,9 +553,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.put("ownerSid", c.getOwnerSid())
 					.put("uid", c.getUid())
 					.put("screenShare", c.isSharing())
-					.put("streamId", c.getId())
+					.put("streamId", current.getClient().getId())
 					.put("streamName", streamName);
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.newStream, obj.toString()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.newStream, obj.toString(new NullStringer())));
 		} catch (Exception err) {
 			_log.error("[streamPublishStart]", err);
 		}

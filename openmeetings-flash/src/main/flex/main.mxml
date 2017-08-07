@@ -39,7 +39,7 @@
 		private var quality:int = 100;
 		private var echoPath:int = 256;
 		private var echoSuppression:Boolean = true;
-		private var microphoneRateBest:int = 22;//5, 8, 11, 22, and 44
+		private var micRate:int = 22;//5, 8, 11, 22, and 44
 		private var selectedMic:int = -1;
 		private var selectedCam:int = -1;
 		private var video:OmVideo;
@@ -67,6 +67,14 @@
 			interview = 'true' == params.interview;
 			var _fps:int = parseInt(params.fps);
 			FPS = (isNaN(_fps) || _fps < 1 ? 30 : _fps);
+			var _bandwidth:int = parseInt(params.bandwidth);
+			bandwidth = (isNaN(_bandwidth) || _bandwidth < 1 ? 0 : _bandwidth);
+			var _quality:int = parseInt(params.quality);
+			quality = (isNaN(_quality) || _quality < 1 ? 90 : _quality);
+			var _echoPath:int = parseInt(params.echoPath);
+			echoPath = (isNaN(_echoPath) || _echoPath < 1 ? 128 : _echoPath);
+			var _micRate:int = parseInt(params.micRate);
+			micRate = (isNaN(_micRate) || _micRate < 1 ? 22 : _micRate);
 			video = new OmVideo(videoDisplay, params);
 			switch (params.mode) {
 				case 'settings':
@@ -157,8 +165,8 @@
 					_micro.codec = SoundCodec.NELLYMOSER;
 					_micro.framesPerPacket = 1;
 					_micro.setSilenceLevel(0, 2000);
-					debug("canvas.microphoneRateBest: " + microphoneRateBest);
-					_micro.rate = microphoneRateBest;
+					debug("canvas.micRate: " + micRate);
+					_micro.rate = micRate;
 					_micro.gain = 50;
 					// this has no effect if enhanced microphone is obtained
 					//Microphone setUseEchoSupression(bool)

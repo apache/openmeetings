@@ -33,8 +33,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
@@ -360,7 +364,10 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_FLASH_SECURE_PROXY, "none", null, "The setting for the NetConnection default settings is 'none'\n set to value 'best' if you are trying to use rtmp over native SSL");
 		cfgDao.add(CONFIG_FLASH_VIDEO_CODEC, "h263", null, "Camera codecType, possible values: 'h263', 'h264'");
 		cfgDao.add(CONFIG_FLASH_VIDEO_FPS, "30", null, "Camera FPS, should be positive number in range (0, 60]");
-
+		cfgDao.add(CONFIG_FLASH_VIDEO_BANDWIDTH, "0", null, "An integer that specifies the maximum amount of bandwidth that the current outgoing video feed can use, in bytes per second. To specify that Flash video can use as much bandwidth as needed to maintain the value of frameQuality, pass 0 for bandwidth.");
+		cfgDao.add(CONFIG_FLASH_CAM_QUALITY, "90", null, "An integer that specifies the required level of picture quality, as determined by the amount of compression being applied to each video frame. Acceptable values range from 1 (lowest quality, maximum compression) to 100 (highest quality, no compression). To specify that picture quality can vary as needed to avoid exceeding bandwidth, pass 0 for quality.");
+		cfgDao.add(CONFIG_FLASH_MIC_RATE, "22", null, "The rate at which the microphone should capture sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The default value is 22 kHz if your sound capture device supports this value.");
+		cfgDao.add(CONFIG_FLASH_ECHO_PATH, "128", null, "Specifies the echo path length (in milliseconds). A longer echo path means better echo cancellation but also introduces longer delays and requires more processing power. The default value is 128; the only other possible value is 256. To disable AEC please specify 0.");
 		cfgDao.add(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, null, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options");
 		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, null, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
 		cfgDao.add(CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, null, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL));

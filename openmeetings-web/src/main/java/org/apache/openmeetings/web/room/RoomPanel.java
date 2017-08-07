@@ -417,7 +417,7 @@ public class RoomPanel extends BasePanel {
 						}
 						boolean self = getClient().getUid().equals(uid);
 						String broadcastId = obj.getString("streamName");
-						Long streamId = obj.getLong("streamId");
+						String streamId = obj.getString("streamId");
 						if (!self) {
 							JSONObject jo = RoomHelper.videoJson(c, self, getClient().getSid(), getBean(ISessionManager.class), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));

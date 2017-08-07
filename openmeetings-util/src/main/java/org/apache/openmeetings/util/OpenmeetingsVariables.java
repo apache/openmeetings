@@ -55,6 +55,10 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_FLASH_SECURE_PROXY = "flash.secure.proxy";
 	public static final String CONFIG_FLASH_VIDEO_CODEC = "flash.video.codec";
 	public static final String CONFIG_FLASH_VIDEO_FPS = "flash.video.fps";
+	public static final String CONFIG_FLASH_VIDEO_BANDWIDTH = "flash.video.bandwidth";
+	public static final String CONFIG_FLASH_CAM_QUALITY = "flash.cam.quality";
+	public static final String CONFIG_FLASH_MIC_RATE = "flash.mic.rate";
+	public static final String CONFIG_FLASH_ECHO_PATH = "flash.echoPath";
 	public static final String CONFIG_HEADER_XFRAME = "header.x.frame.options";
 	public static final String CONFIG_EXT_PROCESS_TTL = "external.process.ttl";
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";

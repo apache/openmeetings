@@ -60,19 +60,19 @@ public class Client implements IClient {
 	}
 	public static class Stream implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private final Long streamId;
+		private final String streamId;
 		private final String uid;
 		private final String broadcastId;
 		private final boolean sharing;
 
-		public Stream(String uid, Long streamId, String broadcastId, boolean sharing) {
+		public Stream(String uid, String streamId, String broadcastId, boolean sharing) {
 			this.streamId = streamId;
 			this.broadcastId = broadcastId;
 			this.uid = uid;
 			this.sharing= sharing;
 		}
 
-		public Long getStreamId() {
+		public String getStreamId() {
 			return streamId;
 		}
 
@@ -295,7 +295,7 @@ public class Client implements IClient {
 		return this;
 	}
 
-	public void addStream(String uid, Long streamId, String broadcastId, boolean sharing) {
+	public void addStream(String uid, String streamId, String broadcastId, boolean sharing) {
 		streams.add(new Stream(uid, streamId, broadcastId, sharing));
 	}
 
@@ -303,7 +303,7 @@ public class Client implements IClient {
 		if (broadcastId == null) {
 			return;
 		}
-		streams.remove(new Stream(null, 1L, broadcastId, false));
+		streams.remove(new Stream(null, null, broadcastId, false));
 	}
 
 	public List<Stream> getStreams() {
