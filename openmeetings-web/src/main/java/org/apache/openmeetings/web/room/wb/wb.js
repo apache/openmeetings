@@ -751,11 +751,21 @@ var Wb = function() {
 					wb.zoom -= .2;
 					wb.zoomMode = 'zoom';
 					_setSize();
+					wbAction('setSize', JSON.stringify({
+						wbId: wb.id
+						, zoom: wb.zoom
+						, zoomMode: wb.zoomMode
+					}));
 				});
 				z.find('.zoom-in').click(function() {
 					wb.zoom += .2;
 					wb.zoomMode = 'zoom';
 					_setSize();
+					wbAction('setSize', JSON.stringify({
+						wbId: wb.id
+						, zoom: wb.zoom
+						, zoomMode: wb.zoomMode
+					}));
 				});
 				z.find('.zoom').change(function() {
 					var zzz = $(this).val();
@@ -774,6 +784,11 @@ var Wb = function() {
 						wb.zoom = 1. * zzz;
 					}
 					_setSize();
+					wbAction('setSize', JSON.stringify({
+						wbId: wb.id
+						, zoom: wb.zoom
+						, zoomMode: wb.zoomMode
+					}));
 				});
 				_setSize();
 				initToolBtn('apointer', _firstToolItem, APointer(wb));
@@ -1030,9 +1045,11 @@ var Wb = function() {
 		switch (wb.zoomMode) {
 			case 'fullFit':
 				wb.zoom = Math.min((a.width() - 10) / wb.width, (a.height() - 10) / wb.height);
+				z.find('.zoom').val(wb.zoomMode);
 				break;
 			case 'pageWidth':
 				wb.zoom = (a.width() - 10) / wb.width;
+				z.find('.zoom').val(wb.zoomMode);
 				break;
 			default:
 			{
@@ -1113,6 +1130,9 @@ var Wb = function() {
 				, of: a.selector
 				, collision: "fit"
 			});
+		}
+		if (wb.zoomMode !== 'zoom') {
+			_setSize();
 		}
 	};
 	wb.load = function(arr) {

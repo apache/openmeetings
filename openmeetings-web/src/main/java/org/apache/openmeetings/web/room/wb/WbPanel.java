@@ -47,6 +47,7 @@ import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboard.ZoomMode;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
@@ -162,6 +163,16 @@ public class WbPanel extends Panel {
 						case clearAll:
 						{
 							clearAll(roomId, obj.getLong("wbId"));
+						}
+							break;
+						case setSize:
+						{
+							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+							wb.setZoom(obj.getDouble("zoom"));
+							wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
+							WhiteboardCache.update(roomId, wb);
+							sendWbOthers(WbAction.setSize, getAddWbJson(wb));
+							//TODO scroll????
 						}
 							break;
 						default:
