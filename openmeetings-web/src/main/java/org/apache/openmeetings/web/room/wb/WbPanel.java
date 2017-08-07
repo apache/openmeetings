@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
@@ -399,6 +400,10 @@ public class WbPanel extends Panel {
 	}
 
 	private JSONObject addFileUrl(String ruid, JSONObject _file) {
+		return addFileUrl(ruid, _file, null);
+	}
+
+	private JSONObject addFileUrl(String ruid, JSONObject _file, Consumer<FileItem> consumer) {
 		try {
 			final long fid = _file.optLong("fileId", -1);
 			if (fid > 0) {
@@ -406,6 +411,9 @@ public class WbPanel extends Panel {
 						? getBean(RecordingDao.class).get(fid)
 						: getBean(FileExplorerItemDao.class).get(fid);
 				if (fi != null) {
+					if (consumer != null) {
+						consumer.accept(fi);
+					}
 					return WbWebSocketHelper.addFileUrl(ruid, _file, fi, rp.getClient());
 				}
 			}
@@ -435,11 +443,19 @@ public class WbPanel extends Panel {
 		if (arr.length() != 0) {
 			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
 		}
-		WhiteboardCache.clear(roomId, wbId);
-		sendWbAll(WbAction.clearAll, new JSONObject().put("wbId", wb.getId()));
+		wb = WhiteboardCache.clear(roomId, wbId);
+		sendWbAll(WbAction.clearAll, new JSONObject().put("wbId", wbId));
+		sendWbAll(WbAction.setSize, getAddWbJson(wb));
 	}
 
-	public void sendFileToWb(FileItem fi, boolean clean) {
+	private static void updateWbSize(Whiteboard wb, final FileItem fi) {
+		int w = fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth();
+		int h = fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight();
+		wb.setWidth(Math.max(wb.getWidth(), w));
+		wb.setHeight(Math.max(wb.getHeight(), h));
+	}
+
+	public void sendFileToWb(final FileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = WhiteboardCache.get(roomId);
 			String wuid = UUID.randomUUID().toString();
@@ -457,8 +473,11 @@ public class WbPanel extends Panel {
 							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), (o) -> {
 									wb.put(o.getString("uid"), o);
 									updated[0] = true;
-									return addFileUrl(wbs.getUid(), o);
+									return addFileUrl(wbs.getUid(), o, _f -> {
+										updateWbSize(wb, _f);
+									});
 								});
+							sendWbAll(WbAction.setSize, getAddWbJson(wb));
 							sendWbAll(WbAction.load, getObjWbJson(wb.getId(), arr));
 						} catch (Exception e) {
 							log.error("Unexpected error while loading WB", e);
@@ -487,7 +506,9 @@ public class WbPanel extends Panel {
 						clearAll(roomId, wb.getId());
 					}
 					wb.put(wuid, file);
+					updateWbSize(wb, fi);
 					updated[0] = true;
+					sendWbAll(WbAction.setSize, getAddWbJson(wb));
 					WbWebSocketHelper.sendWbFile(roomId, wb.getId(), ruid, file, fi);
 				}
 					break;

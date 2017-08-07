@@ -85,13 +85,14 @@ public class WhiteboardCache {
 		return wb;
 	}
 
-	public static void clear(Long roomId, Long wbId) {
+	public static Whiteboard clear(Long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = wbs.get(wbId);
 		if (wb != null) {
 			wb.clear();
 			update(wbs);
 		}
+		return wb;
 	}
 
 	public static Whiteboard remove(Long roomId, Long wbId) {

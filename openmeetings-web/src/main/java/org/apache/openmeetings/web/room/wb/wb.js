@@ -831,8 +831,7 @@ var Wb = function() {
 						addCanvas();
 					}
 					var canvas = canvases[i];
-					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {})
-							.setWidth(width).setHeight(height);
+					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {});
 				}
 				_updateZoomPanel();
 				if (ccount != canvases.length) {
@@ -1021,7 +1020,11 @@ var Wb = function() {
 				cc.hide();
 			}
 		}
+		__setSize(canvas);
 		setHandlers(canvas);
+	}
+	function __setSize(_cnv) {
+		_cnv.setWidth(wb.zoom * wb.width).setHeight(wb.zoom * wb.height).setZoom(wb.zoom);
 	}
 	function _setSize() {
 		switch (wb.zoomMode) {
@@ -1045,7 +1048,7 @@ var Wb = function() {
 				break;
 		}
 		wb.eachCanvas(function(canvas) {
-			canvas.setWidth(wb.zoom * wb.width).setHeight(wb.zoom * wb.height).setZoom(wb.zoom);
+			__setSize(canvas);
 		});
 	}
 	wb.setRole = function(_role) {
@@ -1095,11 +1098,18 @@ var Wb = function() {
 		addCanvas();
 		wb.setRole(_role);
 	};
+	wb.setSize = function(wbo) {
+		wb.width = wbo.width;
+		wb.height = wbo.height;
+		wb.zoom = wbo.zoom;
+		wb.zoomMode = wbo.zoomMode;
+		_setSize();
+	}
 	wb.resize = function(w, h) {
 		if (t.position().left + t.width() > a.width()) {
 			t.position({
 				my: "right"
-				, at: "right-10"
+				, at: "right-20"
 				, of: a.selector
 				, collision: "fit"
 			});
@@ -1421,6 +1431,10 @@ var WbArea = (function() {
 		var wbTabs = area.find(".tabs.ui-tabs");
 		wbTabs.height(hh);
 		_resizeWbs();
+	}
+	self.setSize = function(json) {
+		if (!_inited) return;
+		self.getWb(json.wbId).setSize(json);
 	}
 	self.download = function(fmt) {
 		var wb = getActive().data(), cnv = wb.getCanvas()

@@ -31,4 +31,5 @@ public enum WbAction {
 	, save
 	, load
 	, undo
+	, setSize
 }
