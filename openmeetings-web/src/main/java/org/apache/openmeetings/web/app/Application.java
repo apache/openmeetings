@@ -424,7 +424,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		Client client = getClientBySid(rcl.getOwnerSid());
 		if (client == null) {
-			if (rcl.isMobile()) {
+			if (Client.Type.mobile == rcl.getType()) {
 				Sessiondata sd = getBean(SessiondataDao.class).check(rcl.getOwnerSid());
 				UserDao udao = getBean(UserDao.class);
 				User u = udao.get(sd.getUserId());
@@ -440,7 +440,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				}
 				//FIXME TODO rights
-			} else if (client == null && rcl.isSipTransport()) {
+			} else if (client == null && Client.Type.sip == rcl.getType()) {
 				rcl.setUsername(SIP_USER_NAME);
 				rcl.setUserId(SIP_USER_ID);
 				//SipTransport enters the room

@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
@@ -90,7 +91,7 @@ public class SessionManager implements ISessionManager {
 	@Override
 	public List<StreamClient> listByRoom(Long roomId) {
 		return list().stream()
-				.filter(c -> roomId.equals(c.getRoomId()) && !c.isSharing())
+				.filter(c -> roomId.equals(c.getRoomId()) && Client.Type.sharing != c.getType())
 				.collect(Collectors.toList());
 	}
 

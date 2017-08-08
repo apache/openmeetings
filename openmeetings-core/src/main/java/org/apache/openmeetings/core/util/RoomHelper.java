@@ -33,6 +33,6 @@ public class RoomHelper {
 				.put("broadcastId", sc.getBroadCastId())
 				.put("width", sc.getWidth())
 				.put("height", sc.getHeight())
-				.put("screenShare", sc.isSharing());
+				.put("type", sc.getType());
 	}
 }

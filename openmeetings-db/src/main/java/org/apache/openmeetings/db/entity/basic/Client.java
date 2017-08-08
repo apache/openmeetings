@@ -63,13 +63,13 @@ public class Client implements IClient {
 		private final String streamId;
 		private final String uid;
 		private final String broadcastId;
-		private final boolean sharing;
+		private final Type type;
 
-		public Stream(String uid, String streamId, String broadcastId, boolean sharing) {
+		public Stream(String uid, String streamId, String broadcastId, Type type) {
 			this.streamId = streamId;
 			this.broadcastId = broadcastId;
 			this.uid = uid;
-			this.sharing= sharing;
+			this.type = type;
 		}
 
 		public String getStreamId() {
@@ -80,8 +80,8 @@ public class Client implements IClient {
 			return broadcastId;
 		}
 
-		public boolean isSharing() {
-			return sharing;
+		public Type getType() {
+			return type;
 		}
 
 		public String getUid() {
@@ -115,7 +115,7 @@ public class Client implements IClient {
 
 		@Override
 		public String toString() {
-			return "Stream [id=" + streamId + ", broadcastId=" + broadcastId + ", sharing=" + sharing + "]";
+			return "Stream [id=" + streamId + ", broadcastId=" + broadcastId + ", type=" + type + "]";
 		}
 	}
 	private final String sessionId;
@@ -284,7 +284,7 @@ public class Client implements IClient {
 				break;
 			case share:
 				for (Stream s : streams) {
-					if (s.isSharing()) {
+					if (Type.sharing == s.getType()) {
 						streams.remove(s);
 						break;
 					}
@@ -295,15 +295,15 @@ public class Client implements IClient {
 		return this;
 	}
 
-	public void addStream(String uid, String streamId, String broadcastId, boolean sharing) {
-		streams.add(new Stream(uid, streamId, broadcastId, sharing));
+	public void addStream(String uid, String streamId, String broadcastId, Type type) {
+		streams.add(new Stream(uid, streamId, broadcastId, type));
 	}
 
 	public void removeStream(String broadcastId) {
 		if (broadcastId == null) {
 			return;
 		}
-		streams.remove(new Stream(null, null, broadcastId, false));
+		streams.remove(new Stream(null, null, broadcastId, Type.video));
 	}
 
 	public List<Stream> getStreams() {

@@ -404,7 +404,7 @@ public class RoomPanel extends BasePanel {
 					case newStream:
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						boolean share = obj.optBoolean("screenShare", false);
+						Client.Type type = Client.Type.valueOf(obj.getString("type"));
 						String uid = obj.getString("uid");
 						Client c = getOnlineClient(uid);
 						if (c == null) {
@@ -423,7 +423,7 @@ public class RoomPanel extends BasePanel {
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
 						if (getClient().getSid().equals(c.getSid())) {
-							c.addStream(uid, streamId, broadcastId, share);
+							c.addStream(uid, streamId, broadcastId, type);
 						}
 					}
 						break;
@@ -672,8 +672,8 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void broadcast(Client client) {
-		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated, client.getUid()));
 		RoomBroadcaster.sendUpdatedClient(client);
+		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated, client.getUid()));
 	}
 
 	public Room getRoom() {

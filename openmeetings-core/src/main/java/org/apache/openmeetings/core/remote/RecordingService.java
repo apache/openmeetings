@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
@@ -146,7 +147,7 @@ public class RecordingService implements IPendingServiceCallback {
 						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getOwnerSid()));
 
 						// If its the recording client we need another type of Meta Data
-						if (rcl.isSharing()) {
+						if (Client.Type.sharing == rcl.getType()) {
 							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
 								String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId());
 
@@ -322,7 +323,7 @@ public class RecordingService implements IPendingServiceCallback {
 						}
 						log.debug("is this users still alive? stop it :" + rcl);
 
-						if (rcl.isSharing()) {
+						if (Client.Type.sharing == rcl.getType()) {
 							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
 								// Stop FLV Recording
 								stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
@@ -379,7 +380,7 @@ public class RecordingService implements IPendingServiceCallback {
 			// rcl.getUserip(), false);
 			log.debug("### stopRecordingShowForClient: " + rcl);
 
-			if (rcl.isSharing()) {
+			if (Client.Type.sharing == rcl.getType()) {
 				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
 
 					// Stop FLV Recording
@@ -412,7 +413,7 @@ public class RecordingService implements IPendingServiceCallback {
 			Date now = new Date();
 
 			// If its the recording client we need another type of Meta Data
-			if (rcl.isSharing()) {
+			if (Client.Type.sharing == rcl.getType()) {
 				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
 					String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId().toString());
 

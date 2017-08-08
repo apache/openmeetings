@@ -49,6 +49,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
@@ -213,7 +214,7 @@ public class MobileService {
 
 	public StreamClient create(User u, Sessiondata sd) {
 		StreamClient c = new StreamClient();
-		c.setMobile(true);
+		c.setType(StreamClient.Type.mobile);
 		c.setOwnerSid(sd.getSessionId());
 		c.setUid(UUID.randomUUID().toString());
 		return create(c, u);
@@ -263,7 +264,7 @@ public class MobileService {
 		for (IConnection conn : current.getScope().getClientConnections()) {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				StreamClient c = sessionManager.get(IClientUtil.getId(conn.getClient()));
-				if (!Strings.isEmpty(c.getAvsettings()) && !c.isSharing()) {
+				if (!Strings.isEmpty(c.getAvsettings()) && Client.Type.sharing != c.getType()) {
 					//TODO duplicates !!!!!!!!!!!!!!
 					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getId());
@@ -411,7 +412,7 @@ public class MobileService {
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-				return rcl.isSharing()
+				return Client.Type.sharing == rcl.getType()
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
 			}
 		}.start();

@@ -54,6 +54,9 @@ public class RoomBroadcaster {
 		String uid = client.getUid();
 		StreamClient rcl = Application.get().updateClient(getClient(uid), true);
 		log.debug("-----------  sendUpdatedClient ");
+		// Notify all clients of the same scope (room)
+		update(client);
+		broadcast(client.getRoomId(), "clientUpdated", rcl);
 
 		if (rcl == null) {
 			return;
@@ -61,8 +64,5 @@ public class RoomBroadcaster {
 
 		// Put the mod-flag to true for this client
 		getBean(ISessionManager.class).update(rcl);
-		// Notify all clients of the same scope (room)
-		broadcast(client.getRoomId(), "clientUpdated", rcl);
-		update(client);
 	}
 }

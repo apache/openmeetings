@@ -57,8 +57,6 @@ public class StreamClient implements IClient {
 	private String swfurl;
 	private String tcUrl;
 	private boolean nativeSsl = false;
-	private boolean mobile = false;
-	private boolean sharing = false;
 	private boolean recordingStarted = false;
 	private boolean sharingStarted = false;
 	private boolean publishStarted = false;
@@ -70,9 +68,9 @@ public class StreamClient implements IClient {
 	private Integer interviewPodId = null;
 	private boolean allowRecording = true;
 	private boolean micMuted = false;
-	private boolean sipTransport = false;
 	private String serverId;
 	private Long roomId;
+	private Type type = Type.video;
 
 	public StreamClient() {}
 
@@ -299,22 +297,6 @@ public class StreamClient implements IClient {
 		this.nativeSsl = nativeSsl;
 	}
 
-	public boolean isMobile() {
-		return mobile;
-	}
-
-	public void setMobile(boolean mobile) {
-		this.mobile = mobile;
-	}
-
-	public boolean isSharing() {
-		return sharing;
-	}
-
-	public void setSharing(boolean sharing) {
-		this.sharing = sharing;
-	}
-
 	public boolean isRecordingStarted() {
 		return recordingStarted;
 	}
@@ -403,14 +385,6 @@ public class StreamClient implements IClient {
 		this.micMuted = micMuted;
 	}
 
-	public boolean isSipTransport() {
-		return sipTransport;
-	}
-
-	public void setSipTransport(boolean sipTransport) {
-		this.sipTransport = sipTransport;
-	}
-
 	@Override
 	public String getServerId() {
 		return serverId;
@@ -424,10 +398,18 @@ public class StreamClient implements IClient {
 		return roomId;
 	}
 
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
 		return "StreamClient [scope=" + scope + ", uid=" + uid + ", ownerSid=" + ownerSid + ", broadCastId="
-				+ broadCastId + ", username=" + username + ", userId=" + userId + ", avsettings=" + avsettings + ", sharing=" + sharing
+				+ broadCastId + ", username=" + username + ", userId=" + userId + ", avsettings=" + avsettings + ", type=" + type
 				+ ", isBroadcasting=" + broadcasting + "]";
 	}
 }

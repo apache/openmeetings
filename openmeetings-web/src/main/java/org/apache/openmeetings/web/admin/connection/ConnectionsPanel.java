@@ -107,7 +107,7 @@ public class ConnectionsPanel extends AdminPanel {
 					item.add(new Label("login", c.getUsername()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope"));
-					confirm.setEnabled(!c.isSharing());
+					confirm.setEnabled(Client.Type.sharing != c.getType());
 				} else {
 					Client c = (Client)_c;
 					item.add(new Label("id", ""));

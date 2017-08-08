@@ -225,12 +225,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return rejectClient();
 		}
 		if (Boolean.TRUE.equals(connParams.get(MOBILE_PARAM))) {
-			rcm.setMobile(true);
+			rcm.setType(Client.Type.mobile);
 		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
 		rcm.setOwnerSid(ownerSid);
 		if (sipDao.getUid() != null && sipDao.getUid().equals(rcm.getOwnerSid())) {
-			rcm.setSipTransport(true);
+			rcm.setType(Client.Type.sip);
 		}
 		rcm.setUserport(conn.getRemotePort());
 		rcm.setUserip(conn.getRemoteAddress());
@@ -245,14 +245,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcm.setHeight(height.intValue());
 		}
 		if (map.containsKey("screenClient")) {
-			rcm.setSharing(true);
+			rcm.setType(Client.Type.sharing);
 		}
 		rcm = sessionManager.add(iapp.updateClient(rcm, false));
 		if (rcm == null) {
 			_log.warn("Failed to create Client on room connect");
 			return false;
 		}
-		IClientUtil.init(conn.getClient(), rcm.getUid(), rcm.isSharing());
+		IClientUtil.init(conn.getClient(), rcm.getUid(), Client.Type.sharing == rcm.getType());
 
 		// Log the User
 		conferenceLogDao.add(ConferenceLog.Type.clientConnect,
@@ -435,7 +435,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void roomLeaveByScope(StreamClient client, IScope scope) {
 		try {
 			_log.debug("[roomLeaveByScope] currentClient " + client);
-			if (client.isSharing() && client.isSharingStarted()) {
+			if (Client.Type.sharing == client.getType() && client.isSharingStarted()) {
 				sendSharingStoped(client);
 			}
 			if (client.isBroadcasting()) {
@@ -461,7 +461,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// and room except the current disconnected cause it could throw an exception
 			_log.debug("currentScope " + scope);
 
-			if (client.isMobile() || client.isSipTransport()) {
+			if (Client.Type.mobile == client.getType() || Client.Type.sip == client.getType()) {
 				IApplication app = (IApplication)Application.get(wicketApplicationName);
 				app.exit(client.getUid());
 			}
@@ -491,10 +491,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.debug("start streamPublishStart broadcast start: {}, CONN {}", streamName, current);
 			c.setBroadCastId(streamName);
 
-			// In case its a screen sharing we start a new Video for that
-			if (c.isSharing()) {
-				c.setSharingStarted(true);
-			} else if (!c.isMobile()) {
+			if (Client.Type.sharing != c.getType() && Client.Type.mobile != c.getType()) {
 				c.setAvsettings("av");
 				c.setBroadcasting(true);
 				if (c.getWidth() == 0 || c.getHeight() == 0) {
@@ -502,7 +499,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					c.setHeight(240);
 				}
 			}
-			if (c.isSipTransport()) {
+			if (Client.Type.sip == c.getType()) {
 				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 				org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getUid());
 				String newNumber = getSipTransportLastname(c.getRoomId());
@@ -536,7 +533,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						_log.debug("RCL getIsRecording newStream SEND");
 						recordingService.addRecordingByStreamId(current, c, rcl.getRecordingId());
 					}
-					if (rcl.isSharing()) {
+					if (Client.Type.sharing == rcl.getType()) {
 						_log.debug("RCL getisSharing newStream SEND");
 						return true;
 					}
@@ -552,7 +549,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			JSONObject obj = new JSONObject()
 					.put("ownerSid", c.getOwnerSid())
 					.put("uid", c.getUid())
-					.put("screenShare", c.isSharing())
+					.put("type", c.getType())
 					.put("streamId", current.getClient().getId())
 					.put("streamName", streamName);
 			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.newStream, obj.toString(new NullStringer())));
@@ -603,8 +600,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			sessionManager.update(rcl);
 			// Notify all clients of the same scope (room)
-			sendMessageToCurrentScope("closeStream", rcl, rcl.isMobile());
-			if (rcl.isSharing()) {
+			sendMessageToCurrentScope("closeStream", rcl, Client.Type.mobile == rcl.getType());
+			if (Client.Type.sharing == rcl.getType()) {
 				sendSharingStoped(rcl);
 			}
 		} catch (Exception e) {
@@ -710,7 +707,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-				return rcl == null || rcl.isSharing()
+				return rcl == null || Client.Type.sharing == rcl.getType()
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
 			}
 		}.start();
