@@ -108,7 +108,7 @@ public class VideoInfo extends Panel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			rif.setRecording(rm.getObject());
+			rif.setRecordingId(rm.getObject().getId());
 			invite.updateModel(target);
 			invite.open(target);
 		}

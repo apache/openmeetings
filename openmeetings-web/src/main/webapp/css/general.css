@@ -237,14 +237,6 @@ html, body {
 #feeds.ui-accordion .ui-accordion-header {
 	margin-bottom: 2px;
 }
-.recording .video .player {
-	width: 100%;
-	display: inline-block;
-	box-shadow: 0 0 10px 1px rgba(74, 137, 151, 0.5);
-}
-.recording .video .player video {
-	width: 100%;
-}
 .align-left {
 	float: left;
 }
@@ -456,6 +448,14 @@ select.messages.selector {
 }
 .om-select2.full-width .select2.select2-container {
 	width: 100% !important;
+}
+.recording .video {
+	width: 100%;
+	display: inline-block;
+	box-shadow: 0 0 10px 1px rgba(74, 137, 151, 0.5);
+}
+.recording .video video {
+	width: 100%;
 }
 .page.recording {
 	padding-top: 40px;
