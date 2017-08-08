@@ -367,10 +367,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				if (startRecording) {
 					if (!alreadyRecording) {
 						returnMap.put("modus", "startRecording");
-
-						String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
-
-						recordingService.recordMeetingStream(current, client, recordingName, "", false);
 					} else {
 						_log.warn("Recording is already started for the client id={}. Second request is ignored.", client.getId());
 					}
@@ -508,6 +504,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				c.setLastname(getSipTransportLastname(c.getRoomId()));
 			}
 			sessionManager.update(c);
+			if (Client.Type.sharing == c.getType() && c.isRecordingStarted()) {
+				String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
+				recordingService.recordMeetingStream(current, c, recordingName, "", false);
+			}
 
 			_log.debug("newStream SEND: {}", c);
 

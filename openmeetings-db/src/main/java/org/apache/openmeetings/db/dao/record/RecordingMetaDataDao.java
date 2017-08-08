@@ -116,11 +116,8 @@ public class RecordingMetaDataDao {
 
 			metaData.setInteriewPodId(interiewPodId);
 
-			metaData = em.merge(metaData);
-			Long metaDataId = metaData.getId();
-
-			return metaDataId;
-
+			metaData = update(metaData);
+			return metaData.getId();
 		} catch (Exception ex2) {
 			log.error("[add]: ", ex2);
 		}

@@ -145,7 +145,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 						// If its the recording client we need another type of Meta Data
 						if (Client.Type.sharing == rcl.getType()) {
-							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
+							if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
 								String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId());
 
 								Long metaDataId = metaDataDao.add(
@@ -323,7 +323,7 @@ public class RecordingService implements IPendingServiceCallback {
 						log.debug("is this users still alive? stop it :" + rcl);
 
 						if (Client.Type.sharing == rcl.getType()) {
-							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
+							if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
 								// Stop FLV Recording
 								stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
 
