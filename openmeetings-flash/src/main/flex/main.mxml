@@ -60,21 +60,21 @@
 			return Microphone.names.length > 0;
 		}
 
+		private function getIntParam(param:String, def:int):int {
+			var val:int = parseInt(param);
+			return (isNaN(val) || val < 1 ? def : val);
+		}
+
 		private function appInit(evt:Event):void {
 			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			debug("appInit()", params);
 			audioOnly = 'true' == params.audioOnly;
 			interview = 'true' == params.interview;
-			var _fps:int = parseInt(params.fps);
-			FPS = (isNaN(_fps) || _fps < 1 ? 30 : _fps);
-			var _bandwidth:int = parseInt(params.bandwidth);
-			bandwidth = (isNaN(_bandwidth) || _bandwidth < 1 ? 0 : _bandwidth);
-			var _quality:int = parseInt(params.quality);
-			quality = (isNaN(_quality) || _quality < 1 ? 90 : _quality);
-			var _echoPath:int = parseInt(params.echoPath);
-			echoPath = (isNaN(_echoPath) || _echoPath < 1 ? 128 : _echoPath);
-			var _micRate:int = parseInt(params.micRate);
-			micRate = (isNaN(_micRate) || _micRate < 1 ? 22 : _micRate);
+			FPS = getIntParam("fps", 30);
+			bandwidth = getIntParam(params.bandwidth, 0);
+			quality = getIntParam(params.quality, 90);
+			echoPath = getIntParam(params.echoPath, 128);
+			micRate = getIntParam(params.micRate, 22);
 			video = new OmVideo(videoDisplay, params);
 			switch (params.mode) {
 				case 'settings':
