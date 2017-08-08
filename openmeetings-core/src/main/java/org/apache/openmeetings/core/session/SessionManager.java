@@ -73,6 +73,9 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public StreamClient get(String uid) {
+		if (uid == null) {
+			return null;
+		}
 		return getClients().get(uid);
 	}
 
@@ -84,6 +87,9 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public boolean remove(String uid) {
+		if (uid == null) {
+			return false;
+		}
 		StreamClient c = getClients().remove(uid);
 		return c != null;
 	}
@@ -111,6 +117,9 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public long getRecordingCount(Long roomId) {
+		if (roomId == null) {
+			return 0;
+		}
 		return list().stream()
 				.filter(c -> roomId.equals(c.getRoomId()) && c.isRecordingStarted())
 				.collect(Collectors.toList()).size();
@@ -118,6 +127,9 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public long getPublishingCount(Long roomId) {
+		if (roomId == null) {
+			return 0;
+		}
 		return list().stream()
 				.filter(c -> roomId.equals(c.getRoomId()) && c.isPublishStarted())
 				.collect(Collectors.toList()).size();

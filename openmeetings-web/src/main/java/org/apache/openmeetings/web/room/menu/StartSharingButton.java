@@ -26,6 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -59,12 +60,12 @@ public class StartSharingButton extends OmButton {
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownload download;
-	private final Client c;
+	private final String uid;
 	private String app = "";
 
-	public StartSharingButton(String id, Client c) {
+	public StartSharingButton(String id, String uid) {
 		super(id);
-		this.c = c;
+		this.uid = uid;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
 		add(new AttributeAppender("title", Application.getString(1480)));
@@ -77,7 +78,7 @@ public class StartSharingButton extends OmButton {
 
 			@Override
 			protected IResourceStream getResourceStream(Attributes attributes) {
-				setFileName(String.format("public_%s.jnlp", StartSharingButton.this.c.getRoomId()));
+				setFileName(String.format("public_%s.jnlp", getOnlineClient(uid).getRoomId()));
 				StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
 				srs.setCharset(UTF_8);
 				return srs;
@@ -91,6 +92,7 @@ public class StartSharingButton extends OmButton {
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
+			Client c = getOnlineClient(uid);
 			String sid = c.getSid();
 			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + c.getRoomId(), sid);
 			String _url = s.getString(VideoSettings.URL);
