@@ -49,11 +49,11 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.AjaxDownload;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.IResourceStream;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -103,6 +103,7 @@ public class StartSharingButton extends OmButton {
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
+			Client c = getOnlineClient(uid);
 			String publicSid = c.getUid();
 			StreamClient rc = getClient(publicSid);
 			if (rc == null || rc.getUserId() == null) {
@@ -110,7 +111,6 @@ public class StartSharingButton extends OmButton {
 			}
 			String _url = rc.getTcUrl();
 			URI url = new URI(_url);
-			Client c = getOnlineClient(uid);
 			long roomId = c.getRoomId();
 			Room room = getBean(RoomDao.class).get(roomId);
 			ISessionManager sessionManager = getBean(ISessionManager.class);
