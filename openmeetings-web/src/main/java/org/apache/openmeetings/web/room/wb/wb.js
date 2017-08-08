@@ -1090,12 +1090,6 @@ var Wb = function() {
 				sc.on('scroll', scrollHandler);
 			}
 			a.append(t).append(z);
-			z.position({
-				my: "left top"
-				, at: "center top"
-				, of: '#'+a[0].id
-				, collision: "fit"
-			});
 			showCurrentSlide();
 			t = a.find('.tools'), s = a.find(".wb-settings");
 			wb.eachCanvas(function(canvas) {
@@ -1127,7 +1121,15 @@ var Wb = function() {
 			t.position({
 				my: "right"
 				, at: "right-20"
-				, of: a.selector
+				, of: '#' + a[0].id
+				, collision: "fit"
+			});
+		}
+		if (z.position().left + z.width() > a.width()) {
+			z.position({
+				my: "left top"
+				, at: "center top"
+				, of: '#' + a[0].id
 				, collision: "fit"
 			});
 		}

@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.getClientBySid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
@@ -33,12 +34,10 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage.Type;
@@ -316,20 +315,20 @@ public class RoomMenuPanel extends Panel {
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {
-			ISessionManager sessMngr = getBean(ISessionManager.class);
-			StreamClient recUser = sessMngr.get(room.getRecordingUser());
-			if (recUser != null) {
+			Client recClient = getClientBySid(room.getRecordingUser());
+			if (recClient != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
-						, recUser.getUsername(), recUser.getFirstname(), recUser.getLastname(), df.format(recUser.getConnectedSince())));
+						, recClient.getUser().getLogin(), recClient.getUser().getFirstname(), recClient.getUser().getLastname(), df.format(recClient.getConnectedSince())));
+				//FIXME TODO get ConnectedSince of StreamClient
 				roomClass.append(" screen");
 			}
-			StreamClient pubUser = sessMngr.get(room.getPublishingUser());
-			if (pubUser != null) {
-				if (recUser != null) {
+			Client pubClient = getClientBySid(room.getPublishingUser());
+			if (pubClient != null) {
+				if (recClient != null) {
 					roomTitle.append('\n');
 				}
 				roomTitle.append(String.format("%s %s %s %s %s", getString("1504")
-						, recUser.getUsername(), pubUser.getFirstname(), pubUser.getLastname(), "URL")); //TODO add URL
+						, pubClient.getUser().getLogin(), pubClient.getUser().getFirstname(), pubClient.getUser().getLastname(), "URL")); //TODO add URL
 				roomClass.append(" screen");
 			}
 		}

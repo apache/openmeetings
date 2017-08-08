@@ -22,17 +22,31 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class RoomHelper {
 	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, String uid) {
 		StreamClient sc = mgr.get(uid);
-		return c.toJson(self)
+		JSONObject o = c.toJson(self)
 				.put("sid", sid)
 				.put("uid", sc.getUid())
 				.put("broadcastId", sc.getBroadCastId())
 				.put("width", sc.getWidth())
 				.put("height", sc.getHeight())
 				.put("type", sc.getType());
+		JSONArray a = new JSONArray();
+		if (Client.Type.sharing == sc.getType()) {
+			if (sc.isSharingStarted()) {
+				a.put("sharing");
+			}
+			if (sc.isRecordingStarted()) {
+				a.put("recording");
+			}
+			if (sc.isPublishStarted()) {
+				a.put("publish");
+			}
+		}
+		return o.put("screenActivities", a);
 	}
 }

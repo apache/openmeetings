@@ -21,11 +21,11 @@ var VideoUtil = (function() {
 	function _getVid(uid) {
 		return "video" + uid;
 	}
-	function _getShareVid(uid) {
-		return "video-share" + uid;
+	function _isSharing(c) {
+		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
 	}
 	self.getVid = _getVid;
-	self.getShareVid = _getShareVid;
+	self.isSharing = _isSharing;
 	return self;
 })();
 var Video = (function() {
@@ -47,7 +47,7 @@ var Video = (function() {
 		c = _c;
 		box = _box;
 		size = {width: c.width, height: c.height};
-		var _id = !!c.screenShare ? VideoUtil.getShareVid(c.uid) : VideoUtil.getVid(c.uid)
+		var _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
 			, _w = c.self ? Math.max(300, c.width) : c.width
 			, _h = c.self ? Math.max(200, c.height) : c.height;
@@ -71,12 +71,12 @@ var Video = (function() {
 			icons: {
 				'collapse': 'ui-icon-minus'
 			}
-			, closable: !!c.screenShare
+			, closable: VideoUtil.isSharing(c)
 			, collapsable: true
 			, dblclick: "collapse"
 		});
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
-		if (!c.screenShare) {
+		if (!VideoUtil.isSharing(c)) {
 			v.parent().find('.ui-dialog-titlebar-buttonpane').append($('#video-volume-btn').children().clone());
 			var volume = v.parent().find('.dropdown-menu.video.volume');
 			v.parent().find('.ui-dialog-titlebar-volume').click(function(e) {
@@ -165,28 +165,30 @@ var VideoManager = (function() {
 		v.remove();
 	}
 	function _play(c) {
-		if (!!c.screenShare) {
-			_highlight(share.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text')).show(), 10);
+		if (VideoUtil.isSharing(c)) {
+			_highlight(share
+					.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text'))
+					.data('uid', c.uid)
+					.show(), 10);
 			share.tooltip().off('click').click(function() {
-				var v = $('#' + VideoUtil.getShareVid(c.uid))
+				var v = $('#' + VideoUtil.getVid(c.uid))
 				if (v.length != 1) {
 					Video().init(box, options.uid, c);
 				} else {
 					v.dialog('open');
 				}
 			});
-		} else {
+		} else if ('sharing' !== c.type) {
 			Video().init(box, options.uid, c);
 		}
 	}
-	function _close(uid, screenShare) {
-		var _id = !!screenShare ? VideoUtil.getShareVid(uid) : VideoUtil.getVid(uid)
-				, v = $('#' + _id);
+	function _close(uid) {
+		var _id = VideoUtil.getVid(uid), v = $('#' + _id);
 		if (v.length == 1) {
-			if (v.data().client().screenShare) {
-				share.off('click').hide();
-			}
 			_closeV(v);
+		}
+		if (uid === share.data('uid')) {
+			share.off('click').hide();
 		}
 	}
 	function _highlight(el, count) {

@@ -143,9 +143,6 @@ public class RecordingService implements IPendingServiceCallback {
 					if (conn instanceof IServiceCapableConnection) {
 						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
-						// Send every user a notification that the recording did start
-						WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getOwnerSid()));
-
 						// If its the recording client we need another type of Meta Data
 						if (Client.Type.sharing == rcl.getType()) {
 							if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
@@ -194,6 +191,8 @@ public class RecordingService implements IPendingServiceCallback {
 					}
 				}
 			}
+			// Send every user a notification that the recording did start
+			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getOwnerSid()));
 			return roomRecordingName;
 
 		} catch (Exception err) {

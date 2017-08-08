@@ -394,8 +394,9 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
+							Client _c = getClient();
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.toJson(getClient().getUid().equals(c.getUid())).put("sid", getClient().getSid())));
+									, c.toJson(_c.getUid().equals(c.getUid())).put("sid", _c.getSid())));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -415,14 +416,15 @@ public class RoomPanel extends BasePanel {
 							log.error("Not existing user in newStream {} !!!!", uid);
 							return;
 						}
-						boolean self = getClient().getUid().equals(uid);
+						Client _c = getClient();
+						boolean self = _c.getSid().equals(c.getSid());
 						String broadcastId = obj.getString("streamName");
 						String streamId = obj.getString("streamId");
 						if (!self) {
-							JSONObject jo = RoomHelper.videoJson(c, self, getClient().getSid(), getBean(ISessionManager.class), uid);
+							JSONObject jo = RoomHelper.videoJson(c, self, _c.getSid(), getBean(ISessionManager.class), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
-						if (getClient().getSid().equals(c.getSid())) {
+						if (_c.getSid().equals(c.getSid())) {
 							c.addStream(uid, streamId, broadcastId, type);
 						}
 					}
