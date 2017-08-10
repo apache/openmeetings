@@ -77,11 +77,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	}
 
 	private void createRoom(Long roomId) {
-		error = false;
 		getHeader().setVisible(false);
 		// need to re-fetch Room object to initialize all collections
 		Room room = getBean(RoomDao.class).get(roomId);
 		if (room != null && !room.isDeleted()) {
+			error = false;
 			rp = new RoomPanel(CHILD_ID, room);
 			mp = new MainPanel(PANEL_MAIN, rp);
 			replace(mp);
