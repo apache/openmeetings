@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
@@ -273,7 +273,7 @@ public class RoomMenuPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript(String.format("WbArea.download('%s');", PNG_MIME_TYPE));
+				target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PNG));
 			}
 		});
 		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.jpg"), Application.getString("download.jpg")) {
@@ -281,7 +281,7 @@ public class RoomMenuPanel extends Panel {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript(String.format("WbArea.download('%s');", JPG_MIME_TYPE));
+				target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_JPG));
 			}
 		});
 		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.pdf"), Application.getString("download.pdf")) {

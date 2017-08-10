@@ -29,7 +29,11 @@ import static org.apache.openmeetings.web.app.Application.update;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
+import static org.apache.wicket.util.time.Duration.NONE;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
@@ -74,6 +78,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.extensions.ajax.AjaxDownload;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -81,6 +86,10 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.resource.AbstractResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -149,6 +158,44 @@ public class RoomPanel extends BasePanel {
 	private final WbPanel wb;
 	private String sharingUser = null;
 	private String recordingUser = null;
+	private byte[] pdfWb;
+	private final AjaxDownload download = new AjaxDownload(new ResourceStreamResource() {
+		private static final long serialVersionUID = 1L;
+
+		{
+			setCacheDuration(NONE);
+			setFileName("whiteboard.pdf");
+		}
+
+		@Override
+		protected IResourceStream getResourceStream(Attributes attributes) {
+			return new AbstractResourceStream() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public InputStream getInputStream() throws ResourceStreamNotFoundException {
+					return new ByteArrayInputStream(pdfWb);
+				}
+
+				@Override
+				public void close() throws IOException {
+				}
+			};
+		}
+	}) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onDownloadCompleted(AjaxRequestTarget target) {
+			super.onDownloadCompleted(target);
+			pdfWb = null;
+		}
+	};
+
+	public void startDownload(AjaxRequestTarget target, byte[] bb) {
+		pdfWb = bb;
+		download.initiate(target);
+	}
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -306,6 +353,7 @@ public class RoomPanel extends BasePanel {
 		}
 		if (room.isVisible()) {
 			add(new NicknameDialog("nickname", this));
+			add(download);
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}

@@ -32,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -143,23 +144,27 @@ public class WbPanel extends Panel {
 					boolean moder = c.hasRight(Room.Right.moderator);
 					Room r = rp.getRoom();
 					if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
-						PDDocument doc = new PDDocument();
-						JSONArray arr = obj.getJSONArray("slides");
-						for (int i = 0; i < arr.length(); ++i) {
-							String base64Image = arr.getString(i).split(",")[1];
-							byte[] bb = Base64.decodeBase64(base64Image);
-							BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
-							float width = img.getWidth();
-							float height = img.getHeight();
-							PDPage page = new PDPage(new PDRectangle(width, height));
-							PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
-							try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
-								contentStream.drawImage(pdImageXObject, 0, 0, width, height);
+						try (PDDocument doc = new PDDocument()) {
+							JSONArray arr = obj.getJSONArray("slides");
+							for (int i = 0; i < arr.length(); ++i) {
+								String base64Image = arr.getString(i).split(",")[1];
+								byte[] bb = Base64.decodeBase64(base64Image);
+								BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
+								float width = img.getWidth();
+								float height = img.getHeight();
+								PDPage page = new PDPage(new PDRectangle(width, height));
+								PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
+								try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
+									contentStream.drawImage(pdImageXObject, 0, 0, width, height);
+								}
+								doc.addPage(page);
 							}
-							doc.addPage(page);
+							ByteArrayOutputStream baos = new ByteArrayOutputStream();
+							doc.save(baos);
+							rp.startDownload(target, baos.toByteArray());
 						}
-						//TODO check object
 					}
+					return;
 				}
 				//presenter-right
 				if (c.hasRight(Right.presenter)) {

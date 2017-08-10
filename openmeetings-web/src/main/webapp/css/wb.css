@@ -246,7 +246,7 @@
 	padding: 1px 10px;
 	border-radius: 2px;
 	position: absolute;
-	z-index: 1000;
+	cursor: default;
 }
 .wb-area .wb-zoom, .wb-area .wb-zoom .btn-group button {
 	background-color: grey;
