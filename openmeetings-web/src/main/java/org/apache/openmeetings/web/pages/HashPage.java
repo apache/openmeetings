@@ -81,7 +81,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		getHeader().setVisible(false);
 		// need to re-fetch Room object to initialize all collections
 		Room room = getBean(RoomDao.class).get(roomId);
-		if (room != null) {
+		if (room != null && !room.isDeleted()) {
 			rp = new RoomPanel(CHILD_ID, room);
 			mp = new MainPanel(PANEL_MAIN, rp);
 			replace(mp);
@@ -118,7 +118,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 					error = false;
 				}
 				Room r = i.getRoom();
-				if (r != null) {
+				if (r != null && !r.isDeleted()) {
 					createRoom(r.getId());
 					if (i.isPasswordProtected() && rp != null) {
 						mp.getChat().setVisible(false);
