@@ -1458,13 +1458,28 @@ var WbArea = (function() {
 		if (!_inited) return;
 		self.getWb(json.wbId).setSize(json);
 	}
+	function _getImage(cnv, fmt) {
+		//TODO zoom ???
+		return cnv.toDataURL({format: fmt, width: cnv.width, height: cnv.height, left: 0, top: 0});
+	}
 	self.download = function(fmt) {
-		var wb = getActive().data(), cnv = wb.getCanvas()
-			, a = document.createElement('a');
-		a.setAttribute('target', '_blank')
-		a.setAttribute('download', wb.name + '.' + fmt);
-		a.setAttribute('href', cnv.toDataURL({format: fmt, width: cnv.width, height: cnv.height, left: 0, top: 0})); //TODO zoom
-		a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
+		var wb = getActive().data();
+		if ('pdf' === fmt) {
+			var arr = [];
+			wb.eachCanvas(function(cnv) {
+				arr.push(_getImage(cnv, 'image/png'));
+			});
+			wbAction('downloadPdf', JSON.stringify({
+				slides: arr
+			}));
+		} else {
+			var cnv = wb.getCanvas()
+				, a = document.createElement('a');
+			a.setAttribute('target', '_blank')
+			a.setAttribute('download', wb.name + '.' + fmt);
+			a.setAttribute('href', _getImage(cnv, fmt));
+			a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
+		}
 	}
 	return self;
 })();

@@ -28,8 +28,10 @@ import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFu
 import static org.apache.wicket.AttributeModifier.append;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +45,9 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -53,6 +58,7 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.util.NullStringer;
@@ -60,6 +66,13 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -126,6 +139,28 @@ public class WbPanel extends Panel {
 				}
 
 				Client c = rp.getClient();
+				if (WbAction.downloadPdf == a) {
+					boolean moder = c.hasRight(Room.Right.moderator);
+					Room r = rp.getRoom();
+					if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
+						PDDocument doc = new PDDocument();
+						JSONArray arr = obj.getJSONArray("slides");
+						for (int i = 0; i < arr.length(); ++i) {
+							String base64Image = arr.getString(i).split(",")[1];
+							byte[] bb = Base64.decodeBase64(base64Image);
+							BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
+							float width = img.getWidth();
+							float height = img.getHeight();
+							PDPage page = new PDPage(new PDRectangle(width, height));
+							PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
+							try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
+								contentStream.drawImage(pdImageXObject, 0, 0, width, height);
+							}
+							doc.addPage(page);
+						}
+						//TODO check object
+					}
+				}
 				//presenter-right
 				if (c.hasRight(Right.presenter)) {
 					switch (a) {

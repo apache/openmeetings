@@ -33,6 +33,7 @@
 		<mysql.version>5.1.43</mysql.version>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
+		<pdfbox.version>2.0.6</pdfbox.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -602,6 +603,17 @@
 			<artifactId>derbynet</artifactId>
 			<version>${derby.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>${pdfbox.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.pdfbox</groupId>
+					<artifactId>pdfbox-tools</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 </project>
