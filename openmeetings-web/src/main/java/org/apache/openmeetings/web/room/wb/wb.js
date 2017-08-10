@@ -748,46 +748,46 @@ var Wb = function() {
 			case NONE:
 				_updateZoomPanel();
 				z.find('.zoom-out').click(function() {
-					wb.zoom -= .2;
-					wb.zoomMode = 'zoom';
+					zoom -= .2;
+					zoomMode = 'zoom';
 					_setSize();
 					wbAction('setSize', JSON.stringify({
 						wbId: wb.id
-						, zoom: wb.zoom
-						, zoomMode: wb.zoomMode
+						, zoom: zoom
+						, zoomMode: zoomMode
 					}));
 				});
 				z.find('.zoom-in').click(function() {
-					wb.zoom += .2;
-					wb.zoomMode = 'zoom';
+					zoom += .2;
+					zoomMode = 'zoom';
 					_setSize();
 					wbAction('setSize', JSON.stringify({
 						wbId: wb.id
-						, zoom: wb.zoom
-						, zoomMode: wb.zoomMode
+						, zoom: zoom
+						, zoomMode: zoomMode
 					}));
 				});
 				z.find('.zoom').change(function() {
 					var zzz = $(this).val();
-					wb.zoomMode = 'zoom';
+					zoomMode = 'zoom';
 					if (isNaN(zzz)) {
 						switch (zzz) {
 							case 'fullFit':
 							case 'pageWidth':
-								wb.zoomMode = zzz;
+								zoomMode = zzz;
 								break;
 							case 'custom':
-								wb.zoom = 1. * $(this).data('custom-val');
+								zoom = 1. * $(this).data('custom-val');
 								break;
 						}
 					} else {
-						wb.zoom = 1. * zzz;
+						zoom = 1. * zzz;
 					}
 					_setSize();
 					wbAction('setSize', JSON.stringify({
 						wbId: wb.id
-						, zoom: wb.zoom
-						, zoomMode: wb.zoomMode
+						, zoom: zoom
+						, zoomMode: zoomMode
 					}));
 				});
 				_setSize();
@@ -1039,26 +1039,26 @@ var Wb = function() {
 		setHandlers(canvas);
 	}
 	function __setSize(_cnv) {
-		_cnv.setWidth(wb.zoom * wb.width).setHeight(wb.zoom * wb.height).setZoom(wb.zoom);
+		_cnv.setWidth(zoom * width).setHeight(zoom * height).setZoom(zoom);
 	}
 	function _setSize() {
-		switch (wb.zoomMode) {
+		switch (zoomMode) {
 			case 'fullFit':
-				wb.zoom = Math.min((a.width() - 10) / wb.width, (a.height() - 10) / wb.height);
-				z.find('.zoom').val(wb.zoomMode);
+				zoom = Math.min((a.width() - 10) / width, (a.height() - 10) / height);
+				z.find('.zoom').val(zoomMode);
 				break;
 			case 'pageWidth':
-				wb.zoom = (a.width() - 10) / wb.width;
-				z.find('.zoom').val(wb.zoomMode);
+				zoom = (a.width() - 10) / width;
+				z.find('.zoom').val(zoomMode);
 				break;
 			default:
 			{
-				var oo = z.find('.zoom').find('option[value="' + wb.zoom.toFixed(2) + '"]');
+				var oo = z.find('.zoom').find('option[value="' + zoom.toFixed(2) + '"]');
 				if (oo.length == 1) {
 					oo.prop('selected', true);
 				} else {
-					z.find('.zoom').data('custom-val', wb.zoom).find('option[value=custom]')
-						.text(100. * wb.zoom.toFixed(2) + '%')
+					z.find('.zoom').data('custom-val', zoom).find('option[value=custom]')
+						.text(100. * zoom.toFixed(2) + '%')
 						.prop('selected', true);
 				}
 			}
@@ -1101,19 +1101,19 @@ var Wb = function() {
 	wb.init = function(wbo, tid, _role) {
 		wb.id = wbo.wbId;
 		wb.name = wbo.name;
-		wb.width = wbo.width;
-		wb.height = wbo.height;
-		wb.zoom = wbo.zoom;
-		wb.zoomMode = wbo.zoomMode;
+		width = wbo.width;
+		height = wbo.height;
+		zoom = wbo.zoom;
+		zoomMode = wbo.zoomMode;
 		a = $('#' + tid);
 		addCanvas();
 		wb.setRole(_role);
 	};
 	wb.setSize = function(wbo) {
-		wb.width = wbo.width;
-		wb.height = wbo.height;
-		wb.zoom = wbo.zoom;
-		wb.zoomMode = wbo.zoomMode;
+		width = wbo.width;
+		height = wbo.height;
+		zoom = wbo.zoom;
+		zoomMode = wbo.zoomMode;
 		_setSize();
 	}
 	wb.resize = function(w, h) {
@@ -1133,7 +1133,7 @@ var Wb = function() {
 				, collision: "fit"
 			});
 		}
-		if (wb.zoomMode !== 'zoom') {
+		if (zoomMode !== 'zoom') {
 			_setSize();
 		}
 	};
@@ -1460,7 +1460,14 @@ var WbArea = (function() {
 	}
 	function _getImage(cnv, fmt) {
 		//TODO zoom ???
-		return cnv.toDataURL({format: fmt, width: cnv.width, height: cnv.height, left: 0, top: 0});
+		return cnv.toDataURL({
+			format: fmt
+			, width: cnv.width
+			, height: cnv.height
+			, multiplier: 1. / cnv.getZoom()
+			, left: 0
+			, top: 0
+		});
 	}
 	self.download = function(fmt) {
 		var wb = getActive().data();
