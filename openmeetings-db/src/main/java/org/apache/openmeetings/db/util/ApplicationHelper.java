@@ -80,7 +80,7 @@ public class ApplicationHelper {
 		return ensureApplication(-1L);
 	}
 
-	public static IApplication ensureApplication(Long langId) {
+	public static IApplication _ensureApplication(Long langId) {
 		IApplication a = null;
 		if (Application.exists()) {
 			a = (IApplication)Application.get();
@@ -112,6 +112,11 @@ public class ApplicationHelper {
 			}
 			a = (IApplication)Application.get(wicketApplicationName);
 		}
+		return a;
+	}
+
+	public static IApplication ensureApplication(Long langId) {
+		IApplication a = _ensureApplication(langId);
 		if (ThreadContext.getRequestCycle() == null) {
 			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get());
