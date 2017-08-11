@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.label;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.db.util.ApplicationHelper._ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -103,11 +103,11 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static String getString(long fieldValuesId, long langId) {
-		return ensureApplication(langId).getOmString(fieldValuesId, langId);
+		return _ensureApplication(langId).getOmString(fieldValuesId, langId);
 	}
 
 	public static String getString(String key, long langId) {
-		return ensureApplication(langId).getOmString(key, langId);
+		return _ensureApplication(langId).getOmString(key, langId);
 	}
 
 	private static File getLangFile() {
