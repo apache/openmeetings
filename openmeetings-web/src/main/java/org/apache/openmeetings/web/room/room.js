@@ -24,12 +24,23 @@ var VideoUtil = (function() {
 	function _isSharing(c) {
 		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
 	}
+	function _isSharing(c) {
+		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
+	}
+	function _hasAudio(c) {
+		return c.activities.indexOf('broadcastA') > -1;
+	}
+	function _hasVideo(c) {
+		return c.activities.indexOf('broadcastV') > -1;
+	}
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
+	self.hasAudio = _hasAudio;
+	self.hasVideo = _hasVideo;
 	return self;
 })();
 var Video = (function() {
-	var self = {}, c, box, v, vc, t, swf, size;
+	var self = {}, c, box, v, vc, t, swf, size, vol;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -79,7 +90,7 @@ var Video = (function() {
 		if (!VideoUtil.isSharing(c)) {
 			v.parent().find('.ui-dialog-titlebar-buttonpane').append($('#video-volume-btn').children().clone());
 			var volume = v.parent().find('.dropdown-menu.video.volume');
-			v.parent().find('.ui-dialog-titlebar-volume').click(function(e) {
+			vol = v.parent().find('.ui-dialog-titlebar-volume').click(function(e) {
 				e.stopImmediatePropagation();
 				volume.toggle();
 			}).dblclick(function(e) {
@@ -101,6 +112,9 @@ var Video = (function() {
 					handle.text(ui.value);
 				}
 			});
+			if (!VideoUtil.hasAudio(c)) {
+				vol.hide();
+			}
 			//TODO add mute, ADD refresh
 		}
 		vc = v.find('.video');
@@ -112,6 +126,7 @@ var Video = (function() {
 			o.mic = c.mic;
 			o.mode = 'broadcast';
 			o.uid = _uid;
+			o.av = c.activities.join();
 		} else {
 			o.mode = 'play';
 			o.uid = c.uid;
@@ -125,8 +140,13 @@ var Video = (function() {
 		swf.attr('width', _w).attr('height', _h);
 	}
 	function _update(_c) {
-		// TODO check, update video
 		c = _c;
+		if (VideoUtil.hasAudio(c)) {
+			vol.show();
+		} else {
+			vol.hide();
+		}
+		swf[0].update(c);
 	}
 
 	self.update = _update;
@@ -146,9 +166,7 @@ var VideoManager = (function() {
 	}
 	function _update(c) {
 		var _id = VideoUtil.getVid(c.uid)
-			, video = c.activities.indexOf('broadcastV') > -1
-			, audio = c.activities.indexOf('broadcastA') > -1
-			, av = audio || video
+			, av = VideoUtil.hasAudio(c) || VideoUtil.hasVideo(c)
 			, v = $('#' + _id);
 		if (av && v.length != 1 && !!c.self) {
 			Video().init(box, options.uid, c);

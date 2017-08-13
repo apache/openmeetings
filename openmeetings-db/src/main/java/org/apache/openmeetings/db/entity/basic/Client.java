@@ -295,15 +295,18 @@ public class Client implements IClient {
 		return this;
 	}
 
-	public void addStream(String uid, String streamId, String broadcastId, Type type) {
-		streams.add(new Stream(uid, streamId, broadcastId, type));
+	public Client addStream(String uid, String streamId, String broadcastId, Type type) {
+		if (broadcastId != null) {
+			streams.add(new Stream(uid, streamId, broadcastId, type));
+		}
+		return this;
 	}
 
-	public void removeStream(String broadcastId) {
-		if (broadcastId == null) {
-			return;
+	public Client removeStream(String broadcastId) {
+		if (broadcastId != null) {
+			streams.remove(new Stream(null, null, broadcastId, Type.video));
 		}
-		streams.remove(new Stream(null, null, broadcastId, Type.video));
+		return this;
 	}
 
 	public List<Stream> getStreams() {

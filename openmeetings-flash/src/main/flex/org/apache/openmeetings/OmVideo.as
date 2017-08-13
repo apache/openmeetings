@@ -136,10 +136,9 @@ public class OmVideo {
 		this.mode = mode;
 		createStream();
 
+		ns.attachCamera(cam);
+		attachCamera(cam);
 		if (cam != null) {
-			ns.attachCamera(cam);
-			attachCamera(cam);
-
 			var videoStreamSettings:VideoStreamSettings = null;
 			debug("codec = " + params.videoCodec);
 			if (params.videoCodec === CODEC_H264) {
@@ -155,8 +154,8 @@ public class OmVideo {
 			videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
 			ns.videoStreamSettings = videoStreamSettings;
 		}
+		ns.attachAudio(mic);
 		if (mic != null) {
-			ns.attachAudio(mic);
 			//FIXME !!! no mute !!! muteMicro(this.micMuted);
 		}
 
