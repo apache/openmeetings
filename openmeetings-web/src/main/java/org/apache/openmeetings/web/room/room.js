@@ -102,14 +102,13 @@ var Video = (function() {
 				, range: 'min'
 				, min: 0
 				, max: 100
-				, value: 60
-				, slide: function(event, ui) {
-				}
+				, value: 50
 				, create: function() {
 					handle.text($(this).slider("value"));
 				}
 				, slide: function(event, ui) {
 					handle.text(ui.value);
+					swf[0].setVolume(ui.value);
 				}
 			});
 			if (!VideoUtil.hasAudio(c)) {
@@ -145,8 +144,11 @@ var Video = (function() {
 			vol.show();
 		} else {
 			vol.hide();
+			v.parent().find('.dropdown-menu.video.volume').hide();
 		}
-		swf[0].update(c);
+		if (c.self) {
+			swf[0].update(c);
+		}
 	}
 
 	self.update = _update;

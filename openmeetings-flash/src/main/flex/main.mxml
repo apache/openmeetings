@@ -61,6 +61,22 @@
 			return Microphone.names.length > 0;
 		}
 
+		private function _hasAudio(act:Array):Boolean {
+			return act.indexOf('broadcastA') > -1;
+		}
+
+		private function hasAudio():Boolean {
+			return _hasAudio(activities);
+		}
+
+		private function _hasVideo(act:Array):Boolean {
+			return act.indexOf('broadcastV') > -1;
+		}
+
+		private function hasVideo():Boolean {
+			return _hasVideo(activities);
+		}
+
 		private function getIntParam(param:String, def:int):int {
 			var val:int = parseInt(param);
 			return (isNaN(val) || val < 1 ? def : val);
@@ -119,16 +135,26 @@
 					selectedMic = params.mic;
 					video.resize(Math.max(300, params.width), Math.max(200, params.height));
 					ExternalInterface.addCallback("update", function (c:Object):void {
+						if (_hasVideo(c.activities) && hasVideo()) {
+							_hasAudio(c.activities) ? video.unmute() : video.mute();
+						}
+						activities = c.activities;
 						debug("Client updated: ", c);
+					});
+					ExternalInterface.addCallback("setVolume", function (vol:int):void {
+						if (hasAudio()) {
+							video.setVolume(vol);
+						}
 					});
 					attachCamera(function ():void {
 						video.resize(params.width, params.height);
 						video.reset();
 						var broadcastId:String = UIDUtil.createUID();
 						debug("BroadcastId = " + broadcastId);
-						video.broadcast(broadcastId
-								, activities.indexOf('broadcastV') > -1 ? getCam() : null
-								, activities.indexOf('broadcastA') > -1 ? getMic() : null);
+						video.broadcast(broadcastId, hasVideo() ? getCam() : null, getMic());
+						if (!hasAudio()) {
+							video.mute();
+						}
 						ExternalInterface.call("VideoManager.resetSize", params.uid);
 					});
 				}
