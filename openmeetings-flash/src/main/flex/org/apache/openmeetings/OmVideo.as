@@ -167,8 +167,7 @@ public class OmVideo {
 
 	private function _connect(url:String):void {
 		nc.connect(url, {
-			uid: params.uid
-			, ownerSid: params.sid
+			ownerSid: params.sid
 			, nativeSsl: 'best' == params.proxyType
 		});
 	}
