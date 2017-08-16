@@ -27,6 +27,7 @@ import flash.media.H264VideoStreamSettings;
 import flash.media.Microphone;
 import flash.media.Video;
 import flash.media.VideoStreamSettings;
+import flash.media.SoundTransform;
 import flash.net.NetConnection;
 import flash.net.NetStream;
 import mx.core.UIComponent;
@@ -41,12 +42,15 @@ public class OmVideo {
 	private var ui:UIComponent;
 	private var nc:NetConnection;
 	private var ns:NetStream;
+	private var mic:Microphone;
 	public var width:int;
 	public var height:int;
 	private var mode:String;
 	private var params:Object;
 	private var url:String;
 	private var fallback:Boolean;
+	private var volume:int = 50;
+	private var lastVolume:int = 50;
 
 	public function OmVideo(ui:UIComponent, params:Object) {
 		this.ui = ui;
@@ -94,6 +98,41 @@ public class OmVideo {
 		vid = null;
 	}
 
+	public function setVolume(vol:int):void {
+		volume = vol;
+		_setVolume(volume);
+	}
+
+	/**
+	 * This method to set volume of other stream
+	 * @param vol - new volume
+	 */
+	public function setStreamVolume(vol:int):void {
+		debug("setStreamVolume: " + vol);
+		if (ns != null) {
+			debug("setStreamVolume: not null");
+			ns.soundTransform = new SoundTransform(vol / 100.0);
+		}
+	}
+	private function _setVolume(vol:int):void {
+		debug("_setVolume: " + vol);
+		if (mic != null) {
+			debug("_setVolume: not null");
+			mic.gain = vol;
+		}
+	}
+
+	public function mute():void {
+		debug("mute");
+		lastVolume = volume;
+		setVolume(0);
+	}
+
+	public function unmute():void {
+		debug("unmute");
+		setVolume(lastVolume);
+	}
+
 	private function debug(... rest):void {
 		ExternalInterface.call("console.log", rest);
 	}
@@ -134,12 +173,12 @@ public class OmVideo {
 			reset();
 		}
 		this.mode = mode;
+		this.mic = mic;
 		createStream();
 
+		ns.attachCamera(cam);
+		attachCamera(cam);
 		if (cam != null) {
-			ns.attachCamera(cam);
-			attachCamera(cam);
-
 			var videoStreamSettings:VideoStreamSettings = null;
 			debug("codec = " + params.videoCodec);
 			if (params.videoCodec === CODEC_H264) {
@@ -155,10 +194,8 @@ public class OmVideo {
 			videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
 			ns.videoStreamSettings = videoStreamSettings;
 		}
-		if (mic != null) {
-			ns.attachAudio(mic);
-			//FIXME !!! no mute !!! muteMicro(this.micMuted);
-		}
+		ns.attachAudio(mic);
+		_setVolume(volume);
 
 		ns.publish(name, (mode == BROADCAST) ? LIVE : mode);
 		if (f != null) {
@@ -168,8 +205,7 @@ public class OmVideo {
 
 	private function _connect(url:String):void {
 		nc.connect(url, {
-			uid: params.uid
-			, ownerSid: params.sid
+			ownerSid: params.sid
 			, nativeSsl: 'best' == params.proxyType
 		});
 	}

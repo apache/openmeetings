@@ -103,14 +103,14 @@ public class ConnectionsPanel extends AdminPanel {
 				confirm.setOutputMarkupId(true).add(new ButtonBehavior(String.format("#%s", confirm.getMarkupId())));
 				if (_c instanceof StreamClient) {
 					StreamClient c = (StreamClient)_c;
-					item.add(new Label("id"));
+					item.add(new Label("type", "flash"));
 					item.add(new Label("login", c.getUsername()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope"));
 					confirm.setEnabled(Client.Type.sharing != c.getType());
 				} else {
 					Client c = (Client)_c;
-					item.add(new Label("id", ""));
+					item.add(new Label("type", "html5"));
 					item.add(new Label("login", c.getUser().getLogin()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));

@@ -45,6 +45,7 @@
 		private var video:OmVideo;
 		private var recName:String;
 		private var mic:Microphone = null;
+		private var activities:Array = [];
 		[Bindable]
 		private var interview:Boolean = false;
 
@@ -58,6 +59,22 @@
 
 		private function micAvail():Boolean {
 			return Microphone.names.length > 0;
+		}
+
+		private function _hasAudio(act:Array):Boolean {
+			return act.indexOf('broadcastA') > -1;
+		}
+
+		private function hasAudio():Boolean {
+			return _hasAudio(activities);
+		}
+
+		private function _hasVideo(act:Array):Boolean {
+			return act.indexOf('broadcastV') > -1;
+		}
+
+		private function hasVideo():Boolean {
+			return _hasVideo(activities);
 		}
 
 		private function getIntParam(param:String, def:int):int {
@@ -76,9 +93,9 @@
 			echoPath = getIntParam(params.echoPath, 128);
 			micRate = getIntParam(params.micRate, 22);
 			video = new OmVideo(videoDisplay, params);
+			activities = params.av == null ? [] : params.av.split(',');
 			switch (params.mode) {
-				case 'settings':
-				{
+				case 'settings': {
 					ExternalInterface.addCallback("getDevices", function ():Object {
 						return {
 							cams: Camera.names
@@ -113,25 +130,36 @@
 					ExternalInterface.call("VideoSettings.initSwf");
 				}
 					break;
-				case OmVideo.BROADCAST:
-				{
+				case OmVideo.BROADCAST: {
 					selectedCam = params.cam;
 					selectedMic = params.mic;
 					video.resize(Math.max(300, params.width), Math.max(200, params.height));
-					attachCamera(function():void {
+					ExternalInterface.addCallback("update", function (c:Object):void {
+						if (_hasVideo(c.activities) && hasVideo()) {
+							_hasAudio(c.activities) ? video.unmute() : video.mute();
+						}
+						activities = c.activities;
+						debug("Client updated: ", c);
+					});
+					ExternalInterface.addCallback("setVolume", function (vol:int):void {
+						if (hasAudio()) {
+							video.setVolume(vol);
+						}
+					});
+					attachCamera(function ():void {
 						video.resize(params.width, params.height);
 						video.reset();
-						var cam:Camera = getCam();
-						video.attachCamera(cam);
 						var broadcastId:String = UIDUtil.createUID();
 						debug("BroadcastId = " + broadcastId);
-						video.broadcast(broadcastId, cam, getMic());
+						video.broadcast(broadcastId, hasVideo() ? getCam() : null, getMic());
+						if (!hasAudio()) {
+							video.mute();
+						}
 						ExternalInterface.call("VideoManager.resetSize", params.uid);
 					});
 				}
 					break;
-				case OmVideo.PLAY:
-				{
+				case OmVideo.PLAY: {
 					video.resize(params.width, params.height);
 					video.play(params.broadcastId); // TODO audio/video
 				}
@@ -207,7 +235,7 @@
 			}
 			debug("Camera selected:: " + selectedCam);
 			var cam:Camera = getCam();
-			debug("Camera selected:: " + cam, cam.muted);
+			debug("Camera selected:: " + cam, cam == null ? '' : cam.muted);
 			if (cam != null) {
 				if (cam.muted) {
 					debug("Camera Muted");
@@ -220,6 +248,7 @@
 								debug("Unable to connect to active camera.");
 								break;
 							case 'Camera.Unmuted':
+								ExternalInterface.call("VideoSettings.allowRec", true);
 								callback();
 								break;
 						}
@@ -244,16 +273,19 @@
 								debug("Unable to connect to active microphone.");
 							} else {
 								ExternalInterface.call("VideoSettings.allowRec", true);
+								callback();
 							}
 						});
+					} else {
+						callback();
 					}
 				}
 			}
 		}
 
 		private function _attachCamera(cam:Camera):void {
-			debug("_attachCamera():: muted ? " + cam.muted);
-			if (cam.muted) {
+			debug("_attachCamera():: muted ? " + (cam == null ? '' : cam.muted));
+			if (cam != null && cam.muted) {
 				debug("Unable to connect to active camera.");
 			} else {
 				try {
@@ -284,6 +316,7 @@
 		}
 
 		private function camChanged(e:Event):void {
+			debug("camChanged");
 			attachCamera(settingsCameraCallback);
 		}
 

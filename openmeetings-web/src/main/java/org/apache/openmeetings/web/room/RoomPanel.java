@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.core.util.RoomHelper.videoJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
@@ -40,7 +41,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.openmeetings.core.util.RoomHelper;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -208,7 +208,7 @@ public class RoomPanel extends BasePanel {
 		for (Client c: getRoomClients(getRoom().getId()) ) {
 			boolean self = getClient().getUid().equals(c.getUid());
 			for (Client.Stream s : c.getStreams()) {
-				JSONObject jo = RoomHelper.videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getUid());
+				JSONObject jo = videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getUid());
 				sb.append(String.format("VideoManager.play(%s);", jo));
 			}
 		}
@@ -417,7 +417,7 @@ public class RoomPanel extends BasePanel {
 							}
 							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", obj.getString("uid")));
 							sharingUser = null;
-							c.remove(Client.Activity.share);
+							update(c.remove(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
@@ -430,7 +430,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							sharingUser = uid;
-							c.set(Client.Activity.share);
+							update(c.set(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
@@ -469,11 +469,11 @@ public class RoomPanel extends BasePanel {
 						String broadcastId = obj.getString("streamName");
 						String streamId = obj.getString("streamId");
 						if (!self) {
-							JSONObject jo = RoomHelper.videoJson(c, self, _c.getSid(), getBean(ISessionManager.class), uid);
+							JSONObject jo = videoJson(c, self, _c.getSid(), getBean(ISessionManager.class), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
 						if (_c.getSid().equals(c.getSid())) {
-							c.addStream(uid, streamId, broadcastId, type);
+							update(c.addStream(uid, streamId, broadcastId, type));
 						}
 					}
 						break;
@@ -486,7 +486,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (getClient().getUid().equals(c.getUid())) {
-							c.removeStream(obj.optString("broadcastId"));
+							update(c.removeStream(obj.optString("broadcastId")));
 						}
 						handler.appendJavaScript(String.format("VideoManager.close('%s');", obj.getString("uid")));
 					}
