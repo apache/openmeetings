@@ -76,7 +76,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 			}
 			String p1 = pass.getConvertedInput();
 			if (!Strings.isEmpty(p1) && !p1.equals(pass2.getConvertedInput())) {
-				error(Application.getString(232));
+				error(Application.getString("232"));
 			}
 			super.onValidate();
 		}

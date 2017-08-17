@@ -144,7 +144,7 @@ public class CalendarPanel extends UserPanel {
 		final Form<Date> form = new Form<>("form");
 		add(form);
 
-		dialog = new AppointmentDialog("appointment", Application.getString(815)
+		dialog = new AppointmentDialog("appointment", Application.getString("815")
 				, this, new CompoundPropertyModel<>(getDefault()));
 		add(dialog);
 
@@ -160,24 +160,24 @@ public class CalendarPanel extends UserPanel {
 		options.set("timeFormat", Options.asString("H(:mm)"));
 
 		options.set("buttonText", new JSONObject()
-				.put("month", Application.getString(801))
-				.put("week", Application.getString(800))
-				.put("day", Application.getString(799))
-				.put("today", Application.getString(1555)).toString());
+				.put("month", Application.getString("801"))
+				.put("week", Application.getString("800"))
+				.put("day", Application.getString("799"))
+				.put("today", Application.getString("1555")).toString());
 
 		JSONArray monthes = new JSONArray();
 		JSONArray shortMonthes = new JSONArray();
 		JSONArray days = new JSONArray();
 		JSONArray shortDays = new JSONArray();
 		// first week day must be Sunday
-		days.put(0, Application.getString(466));
-		shortDays.put(0, Application.getString(459));
+		days.put(0, Application.getString("466"));
+		shortDays.put(0, Application.getString("459"));
 		for (int i = 0; i < 12; i++) {
-			monthes.put(i, Application.getString(469 + i));
-			shortMonthes.put(i, Application.getString(1556 + i));
+			monthes.put(i, Application.getString("" + (469 + i)));
+			shortMonthes.put(i, Application.getString("" + (1556 + i)));
 			if (i + 1 < 7) {
-				days.put(i + 1, Application.getString(460 + i));
-				shortDays.put(i + 1, Application.getString(453 + i));
+				days.put(i + 1, Application.getString("" + (460 + i)));
+				shortDays.put(i + 1, Application.getString("" + (453 + i)));
 			}
 		}
 		options.set("monthNames", monthes.toString());
@@ -407,7 +407,7 @@ public class CalendarPanel extends UserPanel {
 		Appointment a = new Appointment();
 		a.setReminder(Reminder.ical); //TODO: Make configurable
 		a.setOwner(getBean(UserDao.class).get(getUserId()));
-		a.setTitle(Application.getString(1444));
+		a.setTitle(Application.getString("1444"));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;
 	}

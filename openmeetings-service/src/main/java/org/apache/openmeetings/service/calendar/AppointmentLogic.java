@@ -97,7 +97,7 @@ public class AppointmentLogic {
 		// Get the required labels one time for all meeting members. The
 		// Language of the email will be the system default language
 
-		String smsSubject = generateSMSSubject(LabelDao.getString(1158L, langId), a);
+		String smsSubject = generateSMSSubject(LabelDao.getString("1158", langId), a);
 
 		AbstractSubjectEmailTemplate t = AppointmentReminderTemplate.get(u, a, tz);
 		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);

@@ -65,7 +65,7 @@ public class UserProfilePanel extends UserPanel {
 			address.add(new Label("address.comment"));
 		} else {
 			address.setVisible(false);
-			addressDenied.setDefaultModelObject(Application.getString(model.getObject().isShowContactDataToContacts() ? 1269 : 1268));
+			addressDenied.setDefaultModelObject(Application.getString(model.getObject().isShowContactDataToContacts() ? "1269" : "1268"));
 		}
 		add(address.setDefaultModel(model));
 		add(addressDenied);

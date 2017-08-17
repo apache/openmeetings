@@ -42,7 +42,7 @@ public class TestGroupService extends AbstractWebServiceTest {
 	@Test
 	public void addRemoveTest() {
 		ServiceResult r = login();
-		long groupId = -1;
+		Long groupId = -1L;
 		{
 			Response resp = getClient(GROUP_SERVICE_URL)
 					.path("/")
@@ -51,7 +51,7 @@ public class TestGroupService extends AbstractWebServiceTest {
 			assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
 			ServiceResult r1 = resp.readEntity(ServiceResult.class);
 			assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
-			groupId = r1.getCode();
+			groupId = Long.valueOf(r1.getMessage());
 		}
 		//delete group created
 		{

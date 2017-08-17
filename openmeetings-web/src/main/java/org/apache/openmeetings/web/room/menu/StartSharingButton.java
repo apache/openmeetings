@@ -68,7 +68,7 @@ public class StartSharingButton extends OmButton {
 		this.uid = uid;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
-		add(new AttributeAppender("title", Application.getString(1480)));
+		add(new AttributeAppender("title", Application.getString("1480")));
 		add(download = new AjaxDownload(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 
@@ -105,14 +105,14 @@ public class StartSharingButton extends OmButton {
 					.replace("$url", _url)
 					.replace("$fallback", s.getString(VideoSettings.FALLBACK))
 					.replace("$sid", sid)
-					.replace("$labels", getLabels(730,  731,  732,  733,  734
-							,  735,  737,  738,  739,  740
-							,  741,  742,  844,  869,  870
-							,  871,  872,  878, 1089, 1090
-							, 1091, 1092, 1093, 1465, 1466
-							, 1467, 1468, 1469, 1470, 1471
-							, 1472, 1473, 1474, 1475, 1476
-							, 1477, 1589, 1598, 1078))
+					.replace("$labels", getLabels("730",  "731",  "732",  "733",  "734"
+							,  "735",  "737",  "738",  "739",  "740"
+							,  "741",  "742",  "844",  "869",  "870"
+							,  "871",  "872",  "878", "1089", "1090"
+							, "1091", "1092", "1093", "1465", "1466"
+							, "1467", "1468", "1469", "1470", "1471"
+							, "1472", "1473", "1474", "1475", "1476"
+							, "1477", "1589", "1598", "1078"))
 					.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
 					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
 					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
@@ -126,10 +126,10 @@ public class StartSharingButton extends OmButton {
 		}
 	}
 
-	private static String getLabels(int ... ids) {
+	private static String getLabels(String ... ids) {
 		StringBuilder result = new StringBuilder(CDATA_BEGIN);
 		boolean delim = false;
-		for (int id : ids) {
+		for (String id : ids) {
 			if (delim) {
 				result.append(';');
 			}

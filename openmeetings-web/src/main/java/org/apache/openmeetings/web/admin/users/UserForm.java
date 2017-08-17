@@ -108,7 +108,7 @@ public class UserForm extends AdminBaseForm<User> {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		add(password.setResetPassword(false).setLabel(Model.of(getString("133")))
 				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getModelObject())));
-		login.setLabel(Model.of(Application.getString(132)));
+		login.setLabel(Model.of(Application.getString("132")));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
@@ -188,10 +188,7 @@ public class UserForm extends AdminBaseForm<User> {
 			u = getBean(UserDao.class).update(u, password.getConvertedInput(), getUserId());
 			if (isNew && sendEmailAtRegister) {
 				String email = u.getAddress().getEmail();
-				String sendMail = getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
-				if (!sendMail.equals("success")) {
-					throw new Exception("Mail for new user is not sent");
-				}
+				getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
 			}
 		} catch (Exception e) {
 			// FIXME update feedback with the error details
@@ -282,7 +279,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onValidate() {
 		User u = getModelObject();
 		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
-			error(getString("105"));
+			error(getString("error.login.inuse"));
 		}
 		super.onValidate();
 	}

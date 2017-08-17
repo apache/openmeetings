@@ -28,9 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestSmokeBasic extends AbstractJUnitDefaults {
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Test
 	public void createErrorValueAndTest() {
-        assertNotNull(userDao.get(1L));
-	}	
+		assertNotNull(userDao.get(1L));
+	}
 }

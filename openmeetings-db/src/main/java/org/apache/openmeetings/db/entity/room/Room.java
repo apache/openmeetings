@@ -89,7 +89,7 @@ import org.simpleframework.xml.Root;
 public class Room implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int CONFERENCE_TYPE_ID = 1;
-	public static final int RESTRICTED_TYPE_ID = 3;
+	public static final int PRESENTATION_TYPE_ID = 3;
 	public static final int INTERVIEW_TYPE_ID = 4;
 
 	public enum Right {
@@ -119,8 +119,7 @@ public class Room implements IDataProviderEntity {
 
 	public enum Type {
 		conference(CONFERENCE_TYPE_ID)
-		//, audience(2)
-		, restricted(RESTRICTED_TYPE_ID)
+		, presentation(PRESENTATION_TYPE_ID)
 		, interview(INTERVIEW_TYPE_ID);
 		//, custom(5)
 		private int id;
@@ -145,8 +144,8 @@ public class Room implements IDataProviderEntity {
 		public static Type get(int type) {
 			Type rt = Type.conference;
 			switch (type) {
-				case RESTRICTED_TYPE_ID:
-					rt = Type.restricted;
+				case PRESENTATION_TYPE_ID:
+					rt = Type.presentation;
 					break;
 				case INTERVIEW_TYPE_ID:
 					rt = Type.interview;

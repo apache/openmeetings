@@ -95,7 +95,7 @@ public class FileWebService extends BaseWebService {
 			FileExplorerItemDao dao = getDao();
 			FileExplorerItem f = dao.get(id);
 			if (f == null) {
-				return new ServiceResult(-1L, "Bad id", Type.ERROR);
+				return new ServiceResult("Bad id", Type.ERROR);
 			}
 			Long userId = sd.getUserId();
 			Set<Right> rights = getRights(userId);
@@ -103,7 +103,7 @@ public class FileWebService extends BaseWebService {
 				|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))
 			{
 				dao.delete(f);
-				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -138,7 +138,7 @@ public class FileWebService extends BaseWebService {
 				FileExplorerItemDao dao = getDao();
 				FileExplorerItem f = dao.get(externalId, externalType);
 				dao.delete(f);
-				return new ServiceResult(f.getId(), "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			}
 		} catch (Exception err) {
 			log.error("[deleteFileOrFolderByExternalIdAndType]", err);
@@ -195,7 +195,7 @@ public class FileWebService extends BaseWebService {
 				}
 				return new FileExplorerItemDTO(f);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -242,7 +242,7 @@ public class FileWebService extends BaseWebService {
 
 				return fileExplorerObject;
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -293,7 +293,7 @@ public class FileWebService extends BaseWebService {
 				}
 				return FileExplorerItemDTO.list(list);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -331,7 +331,7 @@ public class FileWebService extends BaseWebService {
 				FileExplorerItem f = getDao().rename(id, name);
 				return f == null ? null : new FileExplorerItemDTO(f);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -370,7 +370,7 @@ public class FileWebService extends BaseWebService {
 				FileExplorerItem f = getDao().move(id, parentId, userId, roomId);
 				return f == null ? null : new FileExplorerItemDTO(f);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (ServiceException e) {
 			throw e;

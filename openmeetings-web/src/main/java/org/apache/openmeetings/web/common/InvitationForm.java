@@ -86,7 +86,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		setOutputMarkupId(true);
 
 		add(subject, message);
-		recipients.setLabel(Model.of(Application.getString(216))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+		recipients.setLabel(Model.of(Application.getString("216"))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -120,7 +120,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 				, new Radio<>("endless", Model.of(Valid.Endless))));
 		add(passwd = new PasswordTextField("password"));
 		Invitation i = getModelObject();
-		passwd.setLabel(Model.of(Application.getString(525))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
+		passwd.setLabel(Model.of(Application.getString("525"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
 		add(from, to, timeZoneId);
 		from.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
 		to.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
@@ -146,7 +146,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	@Override
 	protected void onValidate() {
 		if (from.getConvertedInput() != null && to.getConvertedInput() != null && from.getConvertedInput().isAfter(to.getConvertedInput())) {
-			error(Application.getString(1592));
+			error(Application.getString("1592"));
 		}
 	}
 

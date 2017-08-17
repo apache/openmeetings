@@ -69,7 +69,7 @@ public class MainService implements IPendingServiceCallback {
 						allowed = true;
 					} else {
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-						deniedMessage = Application.getString(1271) + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
+						deniedMessage = Application.getString("error.hash.period") + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
 					}
 					*/
 				}

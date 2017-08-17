@@ -114,7 +114,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onInitialize() {
 		super.onInitialize();
 		RequiredTextField<String> name = new RequiredTextField<>("name");
-		name.setLabel(new Model<>(Application.getString(193)));
+		name.setLabel(new Model<>(Application.getString("193")));
 		add(name);
 
 		add(new DropDownChoice<>("numberOfPartizipants", //
@@ -131,7 +131,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(Application.getString(194))));
+		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(Application.getString("194"))));
 
 		add(new TextArea<String>("comment"));
 
@@ -180,7 +180,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new CheckBox("isDemoRoom"));
 		TextField<Integer> demoTime = new TextField<>("demoTime");
-		demoTime.setLabel(new Model<>(Application.getString(637)));
+		demoTime.setLabel(new Model<>(Application.getString("637")));
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("audioOnly"));

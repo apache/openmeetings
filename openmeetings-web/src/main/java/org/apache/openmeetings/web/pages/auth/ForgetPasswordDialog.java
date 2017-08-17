@@ -64,13 +64,13 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
-	private final DialogButton send = new DialogButton("send", Application.getString(317));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString(122));
+	private final DialogButton send = new DialogButton("send", Application.getString("317"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("122"));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
 	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
-	private final Label label = new Label("label", Model.of(Application.getString(315)));
+	private final Label label = new Label("label", Model.of(Application.getString("315")));
 	private final Captcha captcha = new Captcha("captcha");
 	private Form<String> form;
 	private SignInDialog s;
@@ -82,7 +82,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	public ForgetPasswordDialog(String id) {
-		super(id, Application.getString(312));
+		super(id, Application.getString("312"));
 		add(form = new Form<String>("form") {
 			private static final long serialVersionUID = 1L;
 
@@ -136,7 +136,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				}
 			}
 		});
-		confirmDialog = new NonClosableMessageDialog("confirmDialog", Application.getString(312), Application.getString(321)){
+		confirmDialog = new NonClosableMessageDialog("confirmDialog", Application.getString("312"), Application.getString("321")){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -148,7 +148,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	private void updateLabel(IPartialPageRequestHandler handler) {
-		String lbl = Application.getString(rg.getModelObject() == Type.email ? 315 : 316);
+		String lbl = Application.getString(rg.getModelObject() == Type.email ? "315" : "316");
 		name.setLabel(Model.of(lbl));
 		label.setDefaultModelObject(lbl);
 		if (handler != null) {
@@ -257,7 +257,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 		String template = ResetPasswordTemplate.getEmail(reset_link);
 
-		getBean(MailHandler.class).send(email, Application.getString(517), template);
+		getBean(MailHandler.class).send(email, Application.getString("517"), template);
 	}
 
 }

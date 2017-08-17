@@ -96,7 +96,7 @@ public class GroupWebService extends BaseWebService {
 		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
 			Group o = new Group();
 			o.setName(name);
-			return new ServiceResult(getDao().update(o, userId).getId(), "Success", Type.SUCCESS);
+			return new ServiceResult("" + getDao().update(o, userId).getId(), Type.SUCCESS);
 		} else {
 			log.error("Could not create group");
 			return NO_PERMISSION;
@@ -118,7 +118,7 @@ public class GroupWebService extends BaseWebService {
 			return getDao().get(0, Integer.MAX_VALUE);
 		} else {
 			log.error("Insufficient permissions");
-			throw new ServiceException("Insufficient permissions"); //TODO code -26
+			throw ServiceException.NO_PERMISSION;
 		}
 	}
 
@@ -152,7 +152,7 @@ public class GroupWebService extends BaseWebService {
 					u.getGroupUsers().add(new GroupUser(getDao().get(id), u));
 					userDao.update(u, authUserId);
 				}
-				return new ServiceResult(userid, "Success", Type.SUCCESS);
+				return new ServiceResult("" + userid, Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -197,7 +197,7 @@ public class GroupWebService extends BaseWebService {
 					}
 					userDao.update(u, authUserId);
 				}
-				return new ServiceResult(userid, "Success", Type.SUCCESS);
+				return new ServiceResult("" + userid, Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -243,10 +243,10 @@ public class GroupWebService extends BaseWebService {
 					if (!found) {
 						r.getRoomGroups().add(new RoomGroup(getDao().get(id), r));
 						roomDao.update(r, userId);
-						return new ServiceResult(1L, "Success", Type.SUCCESS);
+						return new ServiceResult("Success", Type.SUCCESS);
 					}
 				}
-				return new ServiceResult(0L, "Not added", Type.SUCCESS);
+				return new ServiceResult("Not added", Type.ERROR);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -297,7 +297,7 @@ public class GroupWebService extends BaseWebService {
 				}
 			} else {
 				log.error("Need Administration Account");
-				result.setErrorId(-26L);
+				result.setErrorKey(NO_PERMISSION.getMessage());
 			}
 			return new UserSearchResult(result);
 		} catch (Exception err) {
@@ -328,7 +328,7 @@ public class GroupWebService extends BaseWebService {
 				GroupDao dao = getDao();
 				dao.delete(dao.get(id), authUserId);
 
-				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}

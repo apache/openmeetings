@@ -26,7 +26,7 @@ public class WelcomeWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getName() {
-		return Application.getString(1546L);
+		return Application.getString("1546");
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class WelcomeWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getDescription() {
-		return Application.getString(1547L);
+		return Application.getString("1547");
 	}
 
 	@Override

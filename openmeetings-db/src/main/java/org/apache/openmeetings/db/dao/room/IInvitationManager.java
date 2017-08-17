@@ -30,24 +30,20 @@ import org.apache.openmeetings.db.entity.user.User;
 
 public interface IInvitationManager {
 	void processInvitation(Appointment a, MeetingMember member, MessageType type);
-	
+
 	void processInvitation(Appointment a, MeetingMember mm, MessageType type, boolean sendMail);
-	
+
 	Invitation getInvitation(Invitation _invitation, User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
-	
+
 	Invitation getInvitation(User inveetee, Room room
 			, boolean isPasswordProtected, String invitationpass, Valid valid,
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
-	
+
 	void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception ;
-	
-	Object checkInvitationPass(String hashCode, String pass);
-	
-	Object getInvitationByHashCode(String hashCode, boolean hidePass);
-	
+
 	boolean sendInvitationReminderSMS(String phone, String subject, long languageId);
 }

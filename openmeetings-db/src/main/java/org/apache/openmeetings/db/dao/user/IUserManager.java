@@ -29,31 +29,29 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.entity.user.Userdata;
+import org.apache.openmeetings.util.OmException;
 
 //FIXME HACK to bypass cross project compilation
 public interface IUserManager {
 
-	Long registerUser(String login, String Userpass, String lastname,
+	Object registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation);
 
-	Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
+	Object registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, boolean sendWelcomeMessage,
 			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String activatedHash) throws Exception;
+			Boolean showContactDataToContacts, String activatedHash) throws OmException, NoSuchAlgorithmException;
 
 	Long getLanguage(Locale loc);
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 
 	boolean kickById(String uid);
 	boolean kickUsersByRoomId(Long room_id);
-
-	List<Userdata> getUserdataDashBoard(Long userId);
 }

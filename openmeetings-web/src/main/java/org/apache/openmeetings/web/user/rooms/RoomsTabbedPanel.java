@@ -37,11 +37,11 @@ import org.apache.wicket.model.Model;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 
 public class RoomsTabbedPanel extends UserPanel {
-	private static final long serialVersionUID = 3642004664480074881L;
+	private static final long serialVersionUID = 1L;
 
 	public RoomsTabbedPanel(String id) {
 		super(id);
-		
+
 		User u = getBean(UserDao.class).get(getUserId());
 		add(new ListView<GroupUser>("orgTabs", u.getGroupUsers()) {
 			private static final long serialVersionUID = 1L;

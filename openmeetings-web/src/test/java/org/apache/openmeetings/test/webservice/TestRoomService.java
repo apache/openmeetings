@@ -35,7 +35,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 	public void testExternal() {
 		ServiceResult sr = login();
 		String extId = UUID.randomUUID().toString();
-		Room.Type type = Room.Type.restricted;
+		Room.Type type = Room.Type.presentation;
 		String name = "Unit Test Ext Room";
 		String comment = "Unit Test Ext Room Comments";
 		long num = 666L;
@@ -51,7 +51,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 		assertNotNull("Valid room should be returned", room);
 		assertNotNull("Room ID should be not empty", room.getId());
 
-		RoomDTO room1 = getClient(ROOM_SERVICE_URL).path(String.format("/%s/%s/%s", Room.Type.restricted, UNIT_TEST_EXT_TYPE, extId)).query("sid", sr.getMessage())
+		RoomDTO room1 = getClient(ROOM_SERVICE_URL).path(String.format("/%s/%s/%s", Room.Type.presentation, UNIT_TEST_EXT_TYPE, extId)).query("sid", sr.getMessage())
 				.get(RoomDTO.class);
 		assertNotNull("Valid room should be returned", room1);
 		assertEquals("Same Room should be returned", room.getId(), room1.getId());

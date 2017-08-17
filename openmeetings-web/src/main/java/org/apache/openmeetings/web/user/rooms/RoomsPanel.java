@@ -56,7 +56,7 @@ public class RoomsPanel extends UserPanel {
 
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
-		add(new RoomListPanel("list", rooms, Application.getString(131)) {
+		add(new RoomListPanel("list", rooms, Application.getString("131")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

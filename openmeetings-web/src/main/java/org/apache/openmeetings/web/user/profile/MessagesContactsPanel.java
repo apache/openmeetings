@@ -44,8 +44,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -85,11 +85,11 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 public class MessagesContactsPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
 	private final static Long MOVE_CHOOSE = Long.valueOf(-1);
-	private final static int SELECT_CHOOSE = 1252;
-	private final static int SELECT_ALL = 1239;
-	private final static int SELECT_NONE = 1240;
-	private final static int SELECT_UNREAD = 1241;
-	private final static int SELECT_READ = 1242;
+	private final static String SELECT_CHOOSE = "1252";
+	private final static String SELECT_ALL = "1239";
+	private final static String SELECT_NONE = "1240";
+	private final static String SELECT_UNREAD = "1241";
+	private final static String SELECT_READ = "1242";
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final WebMarkupContainer folders = new WebMarkupContainer("folders");
 	private final Label unread = new Label("unread", Model.of(0L));
@@ -114,20 +114,20 @@ public class MessagesContactsPanel extends UserPanel {
 	private final Button readBtn = new Button("readBtn");
 	private final Button unreadBtn = new Button("unreadBtn");
 	private final FixedHeaderTableBehavior fixedTable = new FixedHeaderTableBehavior("#messagesTable", new Options("height", 100));
-	private final DropDownChoice<Integer> selectDropDown = new DropDownChoice<>(
+	private final DropDownChoice<String> selectDropDown = new DropDownChoice<>(
 		"msgSelect", Model.of(SELECT_CHOOSE)
 		, Arrays.asList(SELECT_CHOOSE, SELECT_ALL, SELECT_NONE, SELECT_UNREAD, SELECT_READ)
-		, new ChoiceRenderer<Integer>() {
+		, new ChoiceRenderer<String>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object getDisplayValue(Integer object) {
+			public Object getDisplayValue(String object) {
 				return Application.getString(object);
 			}
 
 			@Override
-			public String getIdValue(Integer object, int index) {
-				return "" + object;
+			public String getIdValue(String object, int index) {
+				return object;
 			}
 		});
 	private PrivateMessageFolder NOT_MOVE_FOLDER = new PrivateMessageFolder();
@@ -216,7 +216,7 @@ public class MessagesContactsPanel extends UserPanel {
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
 		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
-		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? 1256 : 1245)));
+		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "1245")));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
 		if (target != null) {
@@ -261,7 +261,7 @@ public class MessagesContactsPanel extends UserPanel {
 	public MessagesContactsPanel(String id) {
 		super(id);
 		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
-		NOT_MOVE_FOLDER.setFolderName(Application.getString(1243));
+		NOT_MOVE_FOLDER.setFolderName(Application.getString("1243"));
 		foldersModel.setObject(getBean(PrivateMessageFolderDao.class).get(0, Integer.MAX_VALUE));
 		updateMoveModel();
 

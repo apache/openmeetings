@@ -40,14 +40,14 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InviteUserMessageDialog extends AbstractFormDialog<String>  {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton send = new DialogButton("send", Application.getString(1139));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
+	private final DialogButton send = new DialogButton("send", Application.getString("1139"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
 	private final Form<Void> form = new Form<>("form");
 	private final TextArea<String> message = new TextArea<>("message", Model.of(""));
 	private final CheckBox enterRoom = new CheckBox("enterRoom", Model.of(false));
 
 	public InviteUserMessageDialog(String id) {
-		super(id, Application.getString(1138));
+		super(id, Application.getString("1138"));
 		add(form.add(message.setRequired(true), enterRoom.setOutputMarkupId(true)).setOutputMarkupId(true));
 	}
 

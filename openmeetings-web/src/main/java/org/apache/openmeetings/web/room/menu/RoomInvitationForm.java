@@ -83,7 +83,7 @@ public class RoomInvitationForm extends InvitationForm {
 			}
 		}));
 		groupContainer.add(
-			groups.setLabel(Model.of(Application.getString(126))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+			groups.setLabel(Model.of(Application.getString("126"))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
 
 				@Override

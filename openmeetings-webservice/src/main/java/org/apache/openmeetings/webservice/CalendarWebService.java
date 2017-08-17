@@ -20,6 +20,7 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
+import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -96,7 +97,7 @@ public class CalendarWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(sd.getUserId()))) {
 				return AppointmentDTO.list(getDao().getInRange(sd.getUserId(), start.getTime(), end.getTime()));
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -135,7 +136,7 @@ public class CalendarWebService extends BaseWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
 				return AppointmentDTO.list(getDao().getInRange(userid, start.getTime(), end.getTime()));
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -162,7 +163,7 @@ public class CalendarWebService extends BaseWebService {
 				Appointment a = getDao().getNext(sd.getUserId(), new Date());
 				return a == null ? null : new AppointmentDTO(a);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -191,7 +192,7 @@ public class CalendarWebService extends BaseWebService {
 				Appointment a = getDao().getNext(userid, new Date());
 				return a == null ? null : new AppointmentDTO(a);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -221,7 +222,7 @@ public class CalendarWebService extends BaseWebService {
 					return new AppointmentDTO(app);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -251,7 +252,7 @@ public class CalendarWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(sd.getUserId()))) {
 				return AppointmentDTO.list(getDao().searchAppointmentsByTitle(sd.getUserId(), title));
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -290,7 +291,7 @@ public class CalendarWebService extends BaseWebService {
 			{
 				//TODO maybe additional checks are required
 				log.error("USER/Room modification as SOAP");
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 			//TODO check if objects passed with IDs are correct
 			if (AuthLevelUtil.hasUserLevel(u.getRights())) {
@@ -306,7 +307,7 @@ public class CalendarWebService extends BaseWebService {
 				return new AppointmentDTO(dao.update(a, u.getId()));
 			} else {
 				log.error("save : wrong user level");
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -354,7 +355,7 @@ public class CalendarWebService extends BaseWebService {
 			}
 			dao.delete(a, sd.getUserId());
 
-			return new ServiceResult(id, "Deleted", Type.SUCCESS);
+			return new ServiceResult("Deleted", Type.SUCCESS);
 		} catch (ServiceException err) {
 			throw err;
 		} catch (Exception err) {

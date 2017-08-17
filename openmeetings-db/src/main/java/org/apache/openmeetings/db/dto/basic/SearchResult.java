@@ -20,37 +20,43 @@ package org.apache.openmeetings.db.dto.basic;
 
 import java.util.Collection;
 
-
 public class SearchResult<T> {
 	private String objectName;
 	private Long records;
 	private Collection<T> result;
-	private Long errorId;
-	
+	private String errorKey;
+
 	public SearchResult() {}
-	
+
 	public String getObjectName() {
 		return objectName;
 	}
+
 	public void setObjectName(String objectName) {
 		this.objectName = objectName;
 	}
+
 	public Long getRecords() {
 		return records;
 	}
+
 	public void setRecords(Long records) {
 		this.records = records;
 	}
+
 	public Collection<T> getResult() {
 		return result;
 	}
+
 	public void setResult(Collection<T> result) {
 		this.result = result;
 	}
-	public Long getErrorId() {
-		return errorId;
+
+	public String getErrorKey() {
+		return errorKey;
 	}
-	public void setErrorId(Long errorId) {
-		this.errorId = errorId;
+
+	public void setErrorKey(String errorKey) {
+		this.errorKey = errorKey;
 	}
 }

@@ -33,10 +33,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
-import org.apache.openmeetings.db.entity.basic.ErrorValue;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -61,8 +60,8 @@ public class ErrorWebService extends BaseWebService {
 	 * display/read the error-message. English has the Language-ID one, for
 	 * different one see the list of languages
 	 *
-	 * @param id
-	 *            the error id (negative Value here!)
+	 * @param key
+	 *            the error key for ex. `error.unknown`
 	 * @param lang
 	 *            The id of the language
 	 *
@@ -70,23 +69,11 @@ public class ErrorWebService extends BaseWebService {
 	 */
 	@WebMethod
 	@GET
-	@Path("/{id}/{lang}")
-	public ServiceResult get(@WebParam(name="id") @PathParam("id") long id, @WebParam(name="lang") @PathParam("lang") long lang) {
+	@Path("/{key}/{lang}")
+	public ServiceResult get(@WebParam(name="key") @PathParam("key") String key, @WebParam(name="lang") @PathParam("lang") long lang) {
 		try {
-			if (id < 0) {
-				ErrorValue eValues = getBean(ErrorDao.class).get(-1 * id);
-				if (eValues != null) {
-					log.debug("eValues.getLabelId() = " + eValues.getLabelId());
-					log.debug("eValues.getErrorType() = " + eValues.getType());
-					String eValue = LabelDao.getString(eValues.getLabelId(), lang);
-					String tValue = LabelDao.getString("error.type." + eValues.getType().name(), lang);
-					if (eValue != null) {
-						return new ServiceResult(id, eValue, tValue);
-					}
-				}
-			} else {
-				return new ServiceResult(id, "Error ... please check your input", "Error");
-			}
+			String eValue = LabelDao.getString(key, lang);
+			return new ServiceResult(eValue, Type.SUCCESS);
 		} catch (Exception err) {
 			log.error("[get] ", err);
 		}

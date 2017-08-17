@@ -102,10 +102,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
 
 	private AppointmentForm form;
-	private DialogButton save = new DialogButton("save", Application.getString(813));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString(1130));
-	private DialogButton delete = new DialogButton("delete", Application.getString(814));
-	private DialogButton enterRoom = new DialogButton("enterRoom", Application.getString(1282));
+	private DialogButton save = new DialogButton("save", Application.getString("813"));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("1130"));
+	private DialogButton delete = new DialogButton("delete", Application.getString("814"));
+	private DialogButton enterRoom = new DialogButton("enterRoom", Application.getString("1282"));
 	private final CalendarPanel calendarPanel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	final MessageDialog confirmDelete;
@@ -159,7 +159,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		setOutputMarkupId(true);
 		form = new AppointmentForm("appForm", model);
 		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", Application.getString(814), Application.getString(833), DialogButtons.OK_CANCEL, DialogIcon.WARN){
+		confirmDelete = new MessageDialog("confirmDelete", Application.getString("814"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -374,7 +374,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 			add(feedback.setOutputMarkupId(true));
 			//General
-			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString(572))));
+			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString("572"))));
 			add(ownerPanel.add(owner));
 			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
@@ -387,7 +387,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}));
 			groupContainer.add(
-				groups.setLabel(Model.of(Application.getString(126))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true)
+				groups.setLabel(Model.of(Application.getString("126"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true)
 				, new Radio<>("group", Model.of(InviteeType.group))
 			);
 			if (showGroups) {
@@ -428,7 +428,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			});
 			add(createRoomBlock.add(roomType, new CheckBox("moderated")).setEnabled(createRoom).setOutputMarkupId(true));
-			add(groom.setRequired(true).setLabel(Model.of(Application.getString(406))).setEnabled(!createRoom).setOutputMarkupId(true));
+			add(groom.setRequired(true).setLabel(Model.of(Application.getString("406"))).setEnabled(!createRoom).setOutputMarkupId(true));
 			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 
@@ -503,7 +503,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		@Override
 		protected void onValidate() {
 			if (null != start.getConvertedInput() && null != end.getConvertedInput() && end.getConvertedInput().isBefore(start.getConvertedInput())) {
-				error(Application.getString(1592));
+				error(Application.getString("1592"));
 			}
 		}
 	}

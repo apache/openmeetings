@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
+import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
@@ -166,7 +167,7 @@ public class MobileService {
 				String baseURL = cfgDao.getBaseUrl();
 				boolean sendConfirmation = !Strings.isEmpty(baseURL)
 						&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
-				Long userId = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
+				Object user = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
 						, firstname, email, null /* age/birthday */, "" /* street */
 						, "" /* additionalname */, "" /* fax */, "" /* zip */, country
 						, "" /* town */, langId, true /* sendWelcomeMessage */
@@ -174,17 +175,17 @@ public class MobileService {
 						"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzId),
 						false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 						true /* showContactDataToContacts */, hash);
-				if (userId == null) {
+				if (user == null) {
 					//do nothing
-				} else if (userId > 0) {
-					User u = userDao.get(userId);
+				} else if (user instanceof User) {
+					User u = (User)user;
 					if (sendConfirmation) {
 						add(result, "status", -666L);
 					} else {
 						result = login(u, result);
 					}
 				} else {
-					add(result, "status", userId);
+					add(result, "status", user);
 				}
 			}
 		} catch (Exception e) {
@@ -199,7 +200,7 @@ public class MobileService {
 			User u = userDao.login(login, password);
 			result = login(u, result);
 		} catch (OmException e) {
-			result.put("status", e.getCode());
+			result.put("status", e.getKey());
 		} catch (Exception e) {
 			log.error("[loginUser]", e);
 		}
@@ -208,7 +209,7 @@ public class MobileService {
 
 	private static Map<String, Object> getResult() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("status", -1);
+		result.put("status", UNKNOWN.getKey());
 		return result;
 	}
 
@@ -310,8 +311,8 @@ public class MobileService {
 		User u = userDao.get(c.getUserId());
 		//my rooms
 		List<Room> myl = new ArrayList<>();
-		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, LabelDao.getString(1306L, u.getLanguageId())));
-		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.restricted, LabelDao.getString(1307L, u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, LabelDao.getString("my.room.conference", u.getLanguageId())));
+		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.presentation, LabelDao.getString("my.room.presentation", u.getLanguageId())));
 		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
 		for (Room r : myl) {
 			addRoom("my", null, false, result, r);

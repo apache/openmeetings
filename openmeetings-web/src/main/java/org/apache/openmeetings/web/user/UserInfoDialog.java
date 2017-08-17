@@ -37,14 +37,14 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class UserInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer container = new WebMarkupContainer("container");
-	private DialogButton cancel = new DialogButton("cancel", Application.getString(61));
-	private DialogButton message = new DialogButton("message", Application.getString(1253));
-	private DialogButton contacts = new DialogButton("contacts", Application.getString(1186));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("61"));
+	private DialogButton message = new DialogButton("message", Application.getString("1253"));
+	private DialogButton contacts = new DialogButton("contacts", Application.getString("1186"));
 	private MessageDialog newMessage;
 	private long userId;
-	
+
 	public UserInfoDialog(String id, MessageDialog newMessage) {
-		super(id, Application.getString(1235));
+		super(id, Application.getString("1235"));
 		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
 		this.newMessage = newMessage;
 	}
@@ -57,21 +57,21 @@ public class UserInfoDialog extends AbstractDialog<String> {
 		handler.add(container);
 		open(handler);
 	}
-	
+
 	public WebMarkupContainer getContainer() {
 		return container;
 	}
-	
+
 	@Override
 	public int getWidth() {
 		return 600;
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(contacts, message, cancel);
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 		if (message.equals(button)) {

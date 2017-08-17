@@ -31,13 +31,13 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
-	public final DialogButton generate = new DialogButton("generate", Application.getString(1526));
-	public final DialogButton send = new DialogButton("send", Application.getString(218));
-	public final DialogButton cancel = new DialogButton("cancel", Application.getString(219));
+	public final DialogButton generate = new DialogButton("generate", Application.getString("1526"));
+	public final DialogButton send = new DialogButton("send", Application.getString("218"));
+	public final DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
-		super(id, Application.getString(214),_form.getModel());
+		super(id, Application.getString("214"),_form.getModel());
 		add(form = _form);
 	}
 
@@ -59,7 +59,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 		}
 		return super.getForm(button);
 	}
-	
+
 	@Override
 	public InvitationForm getForm() {
 		return form;
@@ -74,7 +74,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(generate, send, cancel);
 	}
-	
+
 	@Override
 	protected void onError(AjaxRequestTarget target) {
 		form.onError(target);

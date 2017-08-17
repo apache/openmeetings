@@ -73,7 +73,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 	}
 
 	public ConvertingErrorsDialog(String id, IModel<FileItem> model) {
-		super(id, Application.getString(887), model);
+		super(id, Application.getString("887"), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 
@@ -84,7 +84,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 		List<FileItemLog> logs = getBean(FileItemLogDao.class).get(f);
 		if (f.getHash() == null) {
 			message.setVisible(true);
-			message.setDefaultModelObject(Application.getString(888));
+			message.setDefaultModelObject(Application.getString("888"));
 		} else if (!f.exists()) {
 			message.setVisible(true);
 			message.setDefaultModelObject(getString(f.getType() == FileItem.Type.Recording ? "1595" : "convert.errors.file.missing"));

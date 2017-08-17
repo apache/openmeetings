@@ -32,14 +32,13 @@ import org.apache.wicket.resource.loader.IStringResourceLoader;
  *
  */
 public class LabelResourceLoader implements IStringResourceLoader {
-
-	private static Map<String,Long> STRING_LABEL_MAPPING = new HashMap<>();
+	private static Map<String, String> STRING_LABEL_MAPPING = new HashMap<>();
 
 	static {
-		STRING_LABEL_MAPPING.put("PagingNavigator.first", 368L);
-		STRING_LABEL_MAPPING.put("PagingNavigator.previous", 369L);
-		STRING_LABEL_MAPPING.put("PagingNavigator.next", 370L);
-		STRING_LABEL_MAPPING.put("PagingNavigator.last", 371L);
+		STRING_LABEL_MAPPING.put("PagingNavigator.first", "goto.first");
+		STRING_LABEL_MAPPING.put("PagingNavigator.previous", "goto.prev");
+		STRING_LABEL_MAPPING.put("PagingNavigator.next", "goto.next");
+		STRING_LABEL_MAPPING.put("PagingNavigator.last", "goto.last");
 	}
 
 	@Override
@@ -55,11 +54,10 @@ public class LabelResourceLoader implements IStringResourceLoader {
 	}
 
 	private static String getStringByPropertyKey(String key) {
-		Long labelId = STRING_LABEL_MAPPING.get(key);
+		String labelId = STRING_LABEL_MAPPING.get(key);
 		if (labelId == null) {
 			return null;
 		}
 		return Application.getString(labelId);
 	}
-
 }

@@ -31,18 +31,18 @@ import org.apache.openmeetings.service.mail.template.RequestContactTemplate;
 import org.apache.openmeetings.web.app.Application;
 
 public class ContactsHelper {
-	public static Long addUserToContactList(long userIdToAdd) {
+	public static Object addUserToContactList(long userIdToAdd) {
 		boolean isContact = getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
 
 		if (isContact) {
-			return -45L;
+			return "error.contact.added";
 		}
 		UserContact contact = getBean(UserContactDao.class).add(userIdToAdd, getUserId(), true);
 
 		User user = contact.getOwner();
 		User userToAdd = contact.getContact();
 
-		String subj = user.getFirstname() + " " + user.getLastname() + " " + Application.getString(1193);
+		String subj = user.getFirstname() + " " + user.getLastname() + " " + Application.getString("1193");
 		String message = RequestContactTemplate.getEmail(userToAdd, user);
 
 		getBean(PrivateMessageDao.class).addPrivateMessage(
@@ -52,19 +52,19 @@ public class ContactsHelper {
 			getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
 		}
 
-		return contact.getId();
+		return contact;
 	}
 
-	public static Long acceptUserContact(long userContactId) {
+	public static Object acceptUserContact(long userContactId) {
 		UserContactDao dao = getBean(UserContactDao.class);
 		UserContact contact = dao.get(userContactId);
 
 		if (contact == null) {
-			return -46L;
+			return "error.contact.denied";
 		}
 
 		if (!contact.isPending()) {
-			return -47L;
+			return "error.contact.approved";
 		}
 
 		dao.updateContactStatus(userContactId, false);
@@ -77,7 +77,7 @@ public class ContactsHelper {
 		if (user.getAddress() != null) {
 			String message = RequestContactConfirmTemplate.getEmail(contact);
 
-			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + Application.getString(1198);
+			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + Application.getString("1198");
 
 			getBean(PrivateMessageDao.class).addPrivateMessage(
 					subj, message,

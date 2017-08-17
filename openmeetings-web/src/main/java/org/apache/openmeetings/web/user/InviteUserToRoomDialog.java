@@ -39,10 +39,10 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InviteUserToRoomDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton cancel = new DialogButton("cancel", Application.getString(219));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
 	private final RoomListPanel publicRooms;
 	private final RoomListPanel privateRooms;
-	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg"); 
+	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg");
 	private Long userId;
 
 	private class InviteRoomListPanel extends RoomListPanel {
@@ -51,21 +51,21 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 		public InviteRoomListPanel(String id, List<Room> rooms, final String label) {
 			super(id, rooms, label);
 		}
-		
+
 		@Override
 		public void onRoomEnter(AjaxRequestTarget target, Long roomId) {
 			//FIXME TODO only show message if other user is online
 			inviteMsg.open(target, roomId, userId);
 		}
 	}
-	
+
 	public InviteUserToRoomDialog(String id) {
-		super(id, Application.getString(1131));
-		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<Room>(), Application.getString(1135)));
-		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<Room>(), Application.getString(1135)));
+		super(id, Application.getString("1131"));
+		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<Room>(), Application.getString("1135")));
+		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<Room>(), Application.getString("1135")));
 		add(inviteMsg);
 	}
-	
+
 	private static List<Room> getPrivateRooms(Long userId1, Long userId2, RoomDao roomDao) {
 		List<Long> orgIds = new ArrayList<>();
 		List<Long> orgIds2 = new ArrayList<>();
@@ -83,7 +83,7 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 		}
 		return result;
 	}
-	
+
 	public void open(IPartialPageRequestHandler handler, Long userId) {
 		this.userId = userId;
 		RoomDao roomDao = getBean(RoomDao.class);
@@ -91,12 +91,12 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 		privateRooms.update(handler, getPrivateRooms(getUserId(), userId, roomDao));
 		open(handler);
 	}
-	
+
 	@Override
 	protected List<DialogButton> getButtons() {
 		return Arrays.asList(cancel);
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 	}

@@ -57,7 +57,7 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 
 	public OmTreeProvider(Long roomId) {
 		this.roomId = roomId;
-		PUBLIC = Application.getString(861);
+		PUBLIC = Application.getString("861");
 		GROUP_FILE = Application.getString("files.root.group");
 		GROUP_REC = Application.getString("recordings.root.group");
 		refreshRoots(true);
@@ -67,19 +67,19 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		List<FileItem> fRoot = new ArrayList<>(), rRoot = new ArrayList<>();
 		if (all) {
 			if (roomId != null) {
-				FileItem r = createRoot(Application.getString(706), FILES_MY, false);
+				FileItem r = createRoot(Application.getString("706"), FILES_MY, false);
 				r.setOwnerId(getUserId());
 				fRoot.add(r);
 			}
 		}
 		if (roomId != null) {
-			FileItem r = createRoot(Application.getString(707), FILES_ROOM, false);
+			FileItem r = createRoot(Application.getString("707"), FILES_ROOM, false);
 			r.setRoomId(roomId);
 			fRoot.add(r);
 		}
 		if (all) {
 			{
-				FileItem r = createRoot(Application.getString(860), RECORDINGS_MY, true);
+				FileItem r = createRoot(Application.getString("860"), RECORDINGS_MY, true);
 				r.setOwnerId(getUserId());
 				rRoot.add(r);
 			}

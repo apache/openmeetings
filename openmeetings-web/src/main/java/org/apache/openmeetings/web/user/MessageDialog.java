@@ -80,8 +80,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	protected DialogButton send = new DialogButton("send", Application.getString(218));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString(219));
+	protected DialogButton send = new DialogButton("send", Application.getString("218"));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
@@ -131,7 +131,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
-		super(id, Application.getString(1209), model);
+		super(id, Application.getString("1209"), model);
 		form = new Form<>("form", getModel());
 
 		form.add(feedback.setOutputMarkupId(true));
@@ -234,7 +234,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			msgDao.update(p, getUserId());
 			if (to.getAddress() != null) {
 				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
-							+ Application.getString(1302, to.getLanguageId()) + "</a><br/>" : "";
+							+ Application.getString("1302", to.getLanguageId()) + "</a><br/>" : "";
 				String invitation_link = "";
 				if (p.isBookedRoom()) {
 					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
@@ -248,16 +248,16 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 						invitation_link = "";
 					} else {
 						invitation_link = "<br/>" //
-								+ Application.getString(503, to.getLanguageId())
+								+ Application.getString("503", to.getLanguageId())
 								+ "<br/><a href='" + invitation_link
 								+ "'>"
-								+ Application.getString(504, to.getLanguageId()) + "</a><br/>";
+								+ Application.getString("504", to.getLanguageId()) + "</a><br/>";
 					}
 				}
 
 				String subj = p.getSubject() == null ? "" : p.getSubject();
 				getBean(MailHandler.class).send(to.getAddress().getEmail(),
-						Application.getString(1301, to.getLanguageId()) + subj,
+						Application.getString("1301", to.getLanguageId()) + subj,
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
 			}
 		}

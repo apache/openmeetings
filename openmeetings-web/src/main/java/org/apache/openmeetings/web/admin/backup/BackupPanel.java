@@ -212,7 +212,7 @@ public class BackupPanel extends AdminPanel {
 					target.add(feedback);
 				}
 			}));
-			add(new Label("cmdLineDesc", Application.getString(1505)).setEscapeModelStrings(false));
+			add(new Label("cmdLineDesc", Application.getString("1505")).setEscapeModelStrings(false));
 		}
 
 		@Override

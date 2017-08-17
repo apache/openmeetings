@@ -26,7 +26,7 @@ public class MyRoomsWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getName() {
-		return Application.getString(781L);
+		return Application.getString("781");
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class MyRoomsWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getDescription() {
-		return Application.getString(782L);
+		return Application.getString("782");
 	}
 
 	@Override

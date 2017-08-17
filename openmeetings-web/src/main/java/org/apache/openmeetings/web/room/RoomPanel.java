@@ -140,7 +140,7 @@ public class RoomPanel extends BasePanel {
 			if (r.isFilesOpened()) {
 				sidebar.setFilesActive(target);
 			}
-			if (Room.Type.restricted != r.getType()) {
+			if (Room.Type.presentation != r.getType()) {
 				List<Client> mods = Application.getRoomClients(r.getId(), c -> c.hasRight(Room.Right.moderator));
 				if (mods.isEmpty()) {
 					waitApplyModeration.open(target);
@@ -286,7 +286,7 @@ public class RoomPanel extends BasePanel {
 							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
 						} else {
 							allowed = false;
-							deniedMessage = getString("1271") + String.format(" %s - %s", getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
+							deniedMessage = getString("error.hash.period") + String.format(" %s - %s", getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
 						}
 					}
 				}

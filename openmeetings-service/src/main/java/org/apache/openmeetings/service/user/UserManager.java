@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
@@ -30,7 +31,6 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -59,10 +59,10 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.db.entity.user.Userdata;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -159,96 +159,6 @@ public class UserManager implements IUserManager {
 		return null;
 	}
 
-	@Override
-	public List<Userdata> getUserdataDashBoard(Long userId) {
-		if (userId != null && userId.longValue() > 0) {
-			try {
-				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.userId = :userId AND c.deleted = false", Userdata.class);
-				query.setParameter("userId", userId);
-				List<Userdata> ll = query.getResultList();
-				return ll;
-			} catch (Exception ex2) {
-				log.error("getUserdataDashBoard", ex2);
-			}
-		}
-		return null;
-	}
-
-	public Userdata getUserdataByKey(Long userId, String key) {
-		Userdata userdata = new Userdata();
-		if (userId != null && userId.longValue() > 0) {
-			try {
-				TypedQuery<Userdata> query = em.createQuery("select c from Userdata as c where c.userId = :userId AND c.key = :key AND c.deleted = false", Userdata.class);
-				query.setParameter("userId", userId);
-				query.setParameter("key", key);
-				for (Iterator<Userdata> it2 = query.getResultList().iterator(); it2.hasNext();) {
-					userdata = it2.next();
-				}
-			} catch (Exception ex2) {
-				log.error("getUserdataByKey", ex2);
-			}
-		} else {
-			userdata.setComment("Error: No user id given");
-		}
-		return userdata;
-	}
-
-	public String updateUserdata(int dataId, long userId, String key,
-			String data, String comment) {
-		String res = "Fehler beim Update";
-		try {
-			String hqlUpdate = "update userdata set key= :key, userId = :userId, data = :data, updated = :updated, comment = :comment where id= :id";
-			int updatedEntities = em.createQuery(hqlUpdate)
-					.setParameter("key", key)
-					.setParameter("userId", userId)
-					.setParameter("data", data)
-					.setParameter("updated", -1L)
-					.setParameter("comment", comment)
-					.setParameter("id", dataId).executeUpdate();
-			res = "Success" + updatedEntities;
-		} catch (Exception ex2) {
-			log.error("updateUserdata", ex2);
-		}
-		return res;
-	}
-
-	public String updateUserdataByKey(Long userId, String key, String data, String comment) {
-		String res = "Fehler beim Update";
-		try {
-			String hqlUpdate = "UPDATE Userdata set data = :data, updated = :updated, "
-					+ "comment = :comment where userId= :userId AND key = :key";
-			int updatedEntities = em.createQuery(hqlUpdate)
-					.setParameter("data", data)
-					.setParameter("updated", -1L)
-					.setParameter("comment", comment)
-					.setParameter("userId", userId)
-					.setParameter("key", key).executeUpdate();
-			res = "Success" + updatedEntities;
-		} catch (Exception ex2) {
-			log.error("updateUserdataByKey", ex2);
-		}
-		return res;
-	}
-
-	public String addUserdata(long userId, String key, String data, String comment) {
-		String ret = "Fehler beim speichern der Userdata";
-		Userdata userdata = new Userdata();
-		userdata.setKey(key);
-		userdata.setData(data);
-		userdata.setInserted(new Date());
-		userdata.setUpdated(null);
-		userdata.setComment(comment);
-		userdata.setUserId(userId);
-		userdata.setDeleted(false);
-		try {
-			em.merge(userdata);
-			ret = "success";
-		} catch (Exception ex2) {
-			log.error("addUserdata", ex2);
-		}
-		return ret;
-	}
-
 	/**
 	 * Method to register a new User, User will automatically be added to the
 	 * default user_level(1) new users will be automatically added to the
@@ -276,7 +186,7 @@ public class UserManager implements IUserManager {
 	 * @return
 	 */
 	@Override
-	public Long registerUser(String login, String Userpass, String lastname,
+	public Object registerUser(String login, String Userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
@@ -292,19 +202,19 @@ public class UserManager implements IUserManager {
 				}
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
-				Long userId = registerUserInit(UserDao.getDefaultRights(), login,
+				Object user = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, country, town, languageId,
 						true, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
-				if (userId > 0 && sendConfirmation) {
+				if (user instanceof User && sendConfirmation) {
 					return -40L;
 				}
 
-				return userId;
+				return user;
 			} else {
-				return -14L;
+				return "error.reg.disabled";
 			}
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
@@ -340,20 +250,19 @@ public class UserManager implements IUserManager {
 	 * @param userSearchs
 	 * @param showContactData
 	 * @param showContactDataToContacts
-	 * @return new users_id OR null if an exception, -1 if an error, -4 if mail
-	 *         already taken, -5 if username already taken, -3 if login or pass
-	 *         or mail is empty
+	 * @return new user OR error code
+	 * @throws NoSuchAlgorithmException
 	 * @throws Exception
 	 */
 	@Override
-	public Long registerUserInit(Set<Right> rights, String login, String password, String lastname,
+	public Object registerUserInit(Set<Right> rights, String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, boolean sendWelcomeMessage,
 			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String activatedHash) throws Exception {
+			Boolean showContactDataToContacts, String activatedHash) throws OmException, NoSuchAlgorithmException {
 		// TODO: make phone number persistent
 		// Check for required data
 		if (login.length() >= getMinLoginLength(cfgDao)) {
@@ -363,10 +272,7 @@ public class UserManager implements IUserManager {
 			if (checkName && checkEmail) {
 				String hash = Strings.isEmpty(activatedHash) ? UUID.randomUUID().toString() : activatedHash;
 				if (sendWelcomeMessage && email.length() != 0) {
-					String sendMail = emailManagement.sendMail(login, email, hash, sendConfirmation, languageId);
-					if (!sendMail.equals("success")) {
-						return -19L;
-					}
+					emailManagement.sendMail(login, email, hash, sendConfirmation, languageId);
 				}
 				Address adr =  userDao.getAddress(street, zip, town, country, additionalname, fax, phone, email);
 
@@ -386,21 +292,21 @@ public class UserManager implements IUserManager {
 				log.debug("Added user-Id " + u.getId());
 
 				if (adr.getId() != null && u.getId() != null) {
-					return u.getId();
+					return u;
 				} else {
-					return -16L;
+					return UNKNOWN.getKey();
 				}
 			} else {
 				if (!checkName) {
-					return -15L;
+					return "error.login.inuse";
 				} else if (!checkEmail) {
-					return -17L;
+					return "error.email.inuse";
 				}
 			}
 		} else {
-			return -13L;
+			return "error.short.login";
 		}
-		return -1L;
+		return UNKNOWN.getKey();
 	}
 
 	/**

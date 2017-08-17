@@ -34,14 +34,14 @@ public class MyRoomsWidget extends AbstractWidget {
 		location = new WidgetLocation(0, 1);
 		init();
 	}
-	
+
 	@Override
 	public void init() {
 		super.init();
-		title = Application.getString(781L);
+		title = Application.getString("781");
 		id = WIDGET_ID_MY_ROOMS;
 	}
-	
+
 	@Override
 	public WidgetView createView(String viewId) {
 		return new MyRoomsWidgetView(viewId, new Model<Widget>(this));

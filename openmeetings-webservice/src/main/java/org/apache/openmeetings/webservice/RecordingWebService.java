@@ -78,7 +78,7 @@ public class RecordingWebService extends BaseWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
 				RecordingDao dao = getDao();
 				dao.delete(dao.get(id));
-				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			} else {
 				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
 			}

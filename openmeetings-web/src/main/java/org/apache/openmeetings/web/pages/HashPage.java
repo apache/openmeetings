@@ -102,9 +102,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		if (!invitation.isEmpty()) {
 			Invitation i = ws.getInvitation();
 			if (i == null) {
-				errorKey = "535";
+				errorKey = "error.hash.invalid";
 			} else if (!i.isAllowEntry()) {
-				errorKey = Valid.OneTime == i.getValid() ? "534" : "1271";
+				errorKey = Valid.OneTime == i.getValid() ? "error.hash.used" : "error.hash.period";
 			} else {
 				Recording rec = i.getRecording();
 				if (rec != null) {

@@ -679,10 +679,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return wac == null ? null : wac.getBean(clazz);
 	}
 
-	public static String getString(long id) {
-		return getString(id, WebSession.getLanguage());
-	}
-
 	public static String getString(String id) {
 		return getString(id, WebSession.getLanguage());
 	}
@@ -697,14 +693,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static String getString(String key, final long languageId) {
 		return getString(key, getLocale(languageId));
-	}
-
-	public static String getString(long id, final long languageId) {
-		return getString(id, getLocale(languageId));
-	}
-
-	public static String getString(long id, final Locale loc) {
-		return getString("" + id, loc);
 	}
 
 	public static String getString(String key, final Locale loc, String... params) {
@@ -818,18 +806,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public String getOmString(long id) {
-		return getString(id);
-	}
-
-	@Override
-	public String getOmString(long id, long languageId) {
-		return getString(id, languageId);
-	}
-
-	@Override
 	public String getOmString(String key, long languageId) {
 		return getString(key, languageId);
+	}
+
+	@Override
+	public String getOmString(String key) {
+		return getString(key);
 	}
 
 	@Override

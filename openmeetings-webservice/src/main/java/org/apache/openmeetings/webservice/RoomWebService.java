@@ -20,6 +20,7 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
+import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class RoomWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
 				return RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type)));
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -122,7 +123,7 @@ public class RoomWebService extends BaseWebService {
 		if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasUserLevel(rights)) {
 			return new RoomDTO(getRoomDao().get(id));
 		} else {
-			throw new ServiceException("Insufficient permissions"); //TODO code -26
+			throw NO_PERMISSION;
 		}
 	}
 
@@ -174,7 +175,7 @@ public class RoomWebService extends BaseWebService {
 					return new RoomDTO(r);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -207,7 +208,7 @@ public class RoomWebService extends BaseWebService {
 				r = getRoomDao().update(r, userId);
 				return new RoomDTO(r);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException e) {
 			throw e;
@@ -243,7 +244,7 @@ public class RoomWebService extends BaseWebService {
 				r = roomDao.update(r, userId);
 				return new RoomDTO(r);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -272,12 +273,12 @@ public class RoomWebService extends BaseWebService {
 			Room r = roomDao.get(id);
 			if (r != null) {
 				roomDao.delete(r, userId);
-				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			} else {
-				return new ServiceResult(0, "Not found", Type.SUCCESS);
+				return new ServiceResult("Not found", Type.SUCCESS);
 			}
 		} else {
-			throw new ServiceException("Insufficient permissions"); //TODO code -26
+			throw NO_PERMISSION;
 		}
 	}
 
@@ -314,9 +315,9 @@ public class RoomWebService extends BaseWebService {
 
 				WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
 
-				return new ServiceResult(1L, "Closed", Type.SUCCESS);
+				return new ServiceResult("Closed", Type.SUCCESS);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -357,9 +358,9 @@ public class RoomWebService extends BaseWebService {
 				room.setClosed(false);
 				roomDao.update(room, userId);
 
-				return new ServiceResult(1L, "Opened", Type.SUCCESS);
+				return new ServiceResult("Opened", Type.SUCCESS);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -388,9 +389,9 @@ public class RoomWebService extends BaseWebService {
 		try {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
 				boolean result = getBean(IUserManager.class).kickUsersByRoomId(id);
-				return new ServiceResult(result ? 1L : 0L, "Kicked", Type.SUCCESS);
+				return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -428,7 +429,7 @@ public class RoomWebService extends BaseWebService {
 					roomBeans.add(rCountBean);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;
@@ -467,12 +468,12 @@ public class RoomWebService extends BaseWebService {
 					if (sendmail) {
 						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
 					}
-					return new ServiceResult(1L, i.getHash(), Type.SUCCESS);
+					return new ServiceResult(i.getHash(), Type.SUCCESS);
 				} else {
-					return new ServiceResult(0L, "Sys - Error", Type.ERROR);
+					return new ServiceResult("error.unknown", Type.ERROR);
 				}
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw NO_PERMISSION;
 			}
 		} catch (ServiceException err) {
 			throw err;

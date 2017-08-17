@@ -75,20 +75,20 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private final Long roomId;
 	private final PollSelectForm selForm;
 	private final PollResultsForm dispForm;
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
-	private final DialogButton close = new DialogButton("close", Application.getString(1418));
-	private final DialogButton delete = new DialogButton("delete", Application.getString(1420));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("25"));
+	private final DialogButton close = new DialogButton("close", Application.getString("1418"));
+	private final DialogButton delete = new DialogButton("delete", Application.getString("1420"));
 	private boolean moderator = false;
 	private final MessageDialog closeConfirm;
 	private final MessageDialog deleteConfirm;
 	private boolean opened = false;
 
 	public PollResultsDialog(String id, Long _roomId) {
-		super(id, Application.getString(37));
+		super(id, Application.getString("37"));
 		this.roomId = _roomId;
 		add(selForm = new PollSelectForm("selForm"));
 		add(dispForm = new PollResultsForm("dispForm"));
-		add(closeConfirm = new MessageDialog("closeConfirm", Application.getString(1418), Application.getString(1419), DialogButtons.YES_NO, DialogIcon.WARN) {
+		add(closeConfirm = new MessageDialog("closeConfirm", Application.getString("1418"), Application.getString("1419"), DialogButtons.YES_NO, DialogIcon.WARN) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -106,7 +106,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 				}
 			}
 		});
-		add(deleteConfirm = new MessageDialog("deleteConfirm", Application.getString(1420), Application.getString(1421), DialogButtons.YES_NO, DialogIcon.WARN) {
+		add(deleteConfirm = new MessageDialog("deleteConfirm", Application.getString("1420"), Application.getString("1421"), DialogButtons.YES_NO, DialogIcon.WARN) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -212,7 +212,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private static String[] getTicks(RoomPoll p) {
 		return p != null && RoomPoll.Type.numeric == p.getType()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
-				: new String[] {Application.getString(34), Application.getString(35)};
+				: new String[] {Application.getString("34"), Application.getString("35")};
 	}
 
 	private static Integer[] initValues(int size) {
@@ -293,7 +293,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 				@Override
 				public Object getDisplayValue(RoomPoll object) {
-					return object == null ? "" : String.format("%s%s", object.getName(), object.isArchived() ? "" : String.format(" (%s)", Application.getString(1413)));
+					return object == null ? "" : String.format("%s%s", object.getName(), object.isArchived() ? "" : String.format(" (%s)", Application.getString("1413")));
 				}
 
 				@Override
@@ -328,8 +328,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 	private class PollResultsForm extends Form<RoomPoll> {
 		private static final long serialVersionUID = 1L;
-		private final String SIMPLE_CHART = Application.getString(1414);
-		private final String PIE_CHART = Application.getString(1415);
+		private final String SIMPLE_CHART = Application.getString("1414");
+		private final String PIE_CHART = Application.getString("1415");
 		private final IModel<String> name = Model.of((String)null);
 		private final IModel<String> question = Model.of((String)null);
 		private final IModel<Integer> count = Model.of(0);

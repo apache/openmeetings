@@ -45,21 +45,21 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final DialogButton check = new DialogButton("check", Application.getString(537));
+	private final DialogButton check = new DialogButton("check", Application.getString("537"));
 	private final Form<Void> form = new Form<>("form");
 	private final PasswordTextField password = new PasswordTextField("password", Model.of((String)null));
 	private final IUpdatable comp;
 
 	public InvitationPasswordDialog(String id, IUpdatable comp) {
-		super(id, Application.getString(230));
+		super(id, Application.getString("230"));
 		this.comp = comp;
-		password.setLabel(Model.of(Application.getString(536))).add(new IValidator<String>(){
+		password.setLabel(Model.of(Application.getString("536"))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void validate(IValidatable<String> validatable) {
 				if (!CryptProvider.get().verify(validatable.getValue(), WebSession.get().getInvitation().getPassword())) {
-					validatable.error(new ValidationError(Application.getString(538L)));
+					validatable.error(new ValidationError(Application.getString("error.bad.password")));
 				}
 			}
 		});

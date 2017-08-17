@@ -654,12 +654,12 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		// Check if activated
 		if (!AuthLevelUtil.hasLoginLevel(u.getRights())) {
 			log.debug("Not activated: {}", u);
-			throw new OmException(-41L);
+			throw new OmException("error.notactivated");
 		}
 		log.debug("loginUser " + u.getGroupUsers());
 		if (u.getGroupUsers().isEmpty()) {
 			log.debug("No Group assigned: {}", u);
-			throw new OmException("No Group assigned to user");
+			throw new OmException("error.nogroup");
 		}
 
 		u.setLastlogin(new Date());

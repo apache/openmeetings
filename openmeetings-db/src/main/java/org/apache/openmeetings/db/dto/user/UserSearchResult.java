@@ -31,7 +31,7 @@ public class UserSearchResult {
 	private String objectName;
 	private Long records;
 	private List<UserDTO> result;
-	private Long errorId;
+	private String errorKey;
 
 	public UserSearchResult() {}
 
@@ -42,7 +42,7 @@ public class UserSearchResult {
 		for (User u : copy.getResult()) {
 			result.add(new UserDTO(u));
 		}
-		this.errorId = copy.getErrorId();
+		this.errorKey = copy.getErrorKey();
 	}
 
 	public String getObjectName() {
@@ -69,12 +69,11 @@ public class UserSearchResult {
 		this.result = result;
 	}
 
-	public Long getErrorId() {
-		return errorId;
+	public String getErrorKey() {
+		return errorKey;
 	}
 
-	public void setErrorId(Long errorId) {
-		this.errorId = errorId;
+	public void setErrorKey(String errorKey) {
+		this.errorKey = errorKey;
 	}
-
 }

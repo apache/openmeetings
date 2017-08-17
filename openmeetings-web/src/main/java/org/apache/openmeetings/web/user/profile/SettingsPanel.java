@@ -49,7 +49,7 @@ public class SettingsPanel extends UserPanel {
 		super(id);
 
 		List<ITab> tabs = new ArrayList<>();
-		tabs.add(new AjaxTab(Model.of(Application.getString(1170))) {
+		tabs.add(new AjaxTab(Model.of(Application.getString("1170"))) {
 			private static final long serialVersionUID = 1L;
 			UserProfilePanel profilePanel = null;
 
@@ -71,7 +71,7 @@ public class SettingsPanel extends UserPanel {
 				return super.load(target);
 			}
 		});
-		tabs.add(new AjaxTab(Model.of(Application.getString(1188))) {
+		tabs.add(new AjaxTab(Model.of(Application.getString("1188"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -79,7 +79,7 @@ public class SettingsPanel extends UserPanel {
 				return new MessagesContactsPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(Application.getString(1171))) {
+		tabs.add(new AbstractTab(Model.of(Application.getString("1171"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -87,7 +87,7 @@ public class SettingsPanel extends UserPanel {
 				return new ProfilePanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(Application.getString(1172))) {
+		tabs.add(new AbstractTab(Model.of(Application.getString("1172"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -95,7 +95,7 @@ public class SettingsPanel extends UserPanel {
 				return new UserSearchPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(Application.getString(1548))) {
+		tabs.add(new AbstractTab(Model.of(Application.getString("1548"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

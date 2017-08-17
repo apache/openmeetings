@@ -78,11 +78,11 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private final RoomPanel room;
 
 	public UploadDialog(String id, RoomPanel room, RoomFilePanel roomFiles) {
-		super(id, Application.getString(304));
+		super(id, Application.getString("304"));
 		this.roomFiles = roomFiles;
 		this.room = room;
 		add(form = new Form<>("form"));
-		upload = new DialogButton("upload", Application.getString(593), false) {
+		upload = new DialogButton("upload", Application.getString("593"), false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -90,7 +90,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				return true;
 			}
 		};
-		cancel = new DialogButton("close", Application.getString(85));
+		cancel = new DialogButton("close", Application.getString("85"));
 		toWb.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 

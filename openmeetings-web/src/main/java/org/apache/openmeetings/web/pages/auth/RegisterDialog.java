@@ -62,8 +62,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class RegisterDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
-	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString(122));
-	private DialogButton registerBtn = new DialogButton("register", Application.getString(121)) {
+	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString("122"));
+	private DialogButton registerBtn = new DialogButton("register", Application.getString("121")) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -89,11 +89,11 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	private boolean sendEmailAtRegister = false;
 
 	public RegisterDialog(String id) {
-		super(id, Application.getString(113));
+		super(id, Application.getString("113"));
 		add(form = new RegisterForm("form"));
 		form.setOutputMarkupId(true);
 
-		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", Application.getString(235), Application.getString(674)) {
+		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", Application.getString("235"), Application.getString("warn.notverified")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -142,13 +142,13 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		sendEmailAtRegister = 1 == cfgDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 		sendConfirmation = !Strings.isEmpty(baseURL)
 				&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
-		long messageCode = 236;
+		String messageCode = "account.created";
 		if (sendConfirmation && sendEmailAtRegister) {
-			messageCode = 674;
+			messageCode = "warn.notverified";
 		} else if (sendConfirmation) {
-			messageCode = 1591;
+			messageCode = "1591";
 		}
-		confirmRegistration.setModelObject(getString("" + messageCode));
+		confirmRegistration.setModelObject(getString(messageCode));
 		reset(handler);
 		handler.add(form);
 	}
@@ -255,10 +255,10 @@ public class RegisterDialog extends NonClosableDialog<String> {
 				error(getString("232"));
 			}
 			if (!getBean(UserDao.class).checkEmail(emailField.getConvertedInput(), User.Type.user, null, null)) {
-				error(getString("1000"));
+				error(getString("error.email.inuse"));
 			}
 			if (!getBean(UserDao.class).checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
-				error(getString("105"));
+				error(getString("error.login.inuse"));
 			}
 			if (hasErrorMessage()) {
 				// add random timeout

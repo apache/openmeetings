@@ -332,7 +332,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				u = getBean(UserDao.class).getByLogin(login, Type.oauth, domainId);
 				break;
 			default:
-				throw new OmException(-1L);
+				throw new OmException("error.unknown");
 		}
 		if (u == null) {
 			return false;

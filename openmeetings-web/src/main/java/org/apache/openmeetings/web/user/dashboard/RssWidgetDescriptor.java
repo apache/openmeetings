@@ -26,7 +26,7 @@ public class RssWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getName() {
-		return Application.getString(277L);
+		return Application.getString("277");
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class RssWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getDescription() {
-		return Application.getString(277L);
+		return Application.getString("277");
 	}
 
 	@Override

@@ -20,25 +20,21 @@ package org.apache.openmeetings.util;
 
 public class OmException extends Exception {
 	private static final long serialVersionUID = 1L;
-	private Long code;
+	public final static OmException UNKNOWN = new OmException("error.unknown");
+	public final static OmException BAD_CREDENTIALS = new OmException("error.bad.credentials");
+	private final String key;
 
-	public OmException(String msg) {
-		super(msg);
-	}
-
-	public OmException(long code) {
-		this.code = Long.valueOf(code);
+	public OmException(String key) {
+		super();
+		this.key = key;
 	}
 
 	public OmException(Throwable cause) {
 		super(cause);
+		this.key = null;
 	}
 
-	public Long getCode() {
-		return code;
-	}
-
-	public void setCode(Long code) {
-		this.code = code;
+	public String getKey() {
+		return key;
 	}
 }

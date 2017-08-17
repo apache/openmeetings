@@ -74,12 +74,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
-import java.io.File;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -87,7 +84,6 @@ import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.basic.ErrorValue;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -99,11 +95,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.util.string.StringValue;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,8 +109,6 @@ public class ImportInitvalues {
 	private UserDao userDao;
 	@Autowired
 	private NavigationDao navimanagement;
-	@Autowired
-	private ErrorDao errorDao;
 	@Autowired
 	private SipDao sipDao;
 	@Autowired
@@ -171,41 +161,6 @@ public class ImportInitvalues {
 		navimanagement.addMainStructure("adminModuleBackup", null, 22, "367", LEVEL_ADMIN, "Administration of Backups", admin.getId(), "1461");
 		navimanagement.addMainStructure("adminModuleEmail", null, 23, "main.menu.admin.email", LEVEL_ADMIN, "Administration of Emails", admin.getId(), "main.menu.admin.email.desc");
 		log.debug("MainMenu ADDED");
-	}
-
-	public void loadErrorMappingsFromXML() throws Exception {
-		SAXReader reader = new SAXReader();
-		Document document = reader.read(new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfErrorFile));
-
-		Element root = document.getRootElement();
-
-		for (Iterator<Element> it = root.elementIterator("row"); it.hasNext();) {
-			Element row = it.next();
-
-			Long errorvalueId = null;
-			Long labelId = null;
-			ErrorValue.Type type = null;
-
-			for (Iterator<Element> itSub = row.elementIterator("field"); itSub.hasNext();) {
-				Element field = itSub.next();
-
-				String name = field.attributeValue("name");
-				String text = field.getText();
-				// System.out.println("NAME | TEXT "+name+" | "+text);
-				if (name.equals("errorvalues_id")) {
-					errorvalueId = Long.valueOf(text);
-				}
-				if (name.equals("fieldvalues_id")) {
-					labelId = Long.valueOf(text);
-				}
-				if (name.equals("type")) {
-					type = ErrorValue.Type.valueOf(text);
-				}
-			}
-
-			errorDao.add(errorvalueId, type, labelId);
-		}
-		log.debug("ErrorMappings ADDED");
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
@@ -422,8 +377,8 @@ public class ImportInitvalues {
 			r.hide(RoomElement.Whiteboard);
 			roomDao.update(r, null);
 			createRoom(LabelDao.getString("install.room.public.video.wb", langId), Type.conference, 32L, true, null);
-			createRoom(LabelDao.getString("install.room.public.restricted", langId), Type.restricted, 100L, true, null);
-			r = createRoom(LabelDao.getString("install.room.restricted.micro", langId), Type.restricted, 100L, true, null);
+			createRoom(LabelDao.getString("install.room.public.presentation", langId), Type.presentation, 100L, true, null);
+			r = createRoom(LabelDao.getString("install.room.presentation.micro", langId), Type.presentation, 100L, true, null);
 			r.getHiddenElements().clear();
 			roomDao.update(r, null);
 
@@ -528,15 +483,13 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 14;
+		progress = 16;
 		loadMainMenu();
-		progress = 28;
-		loadErrorMappingsFromXML();
-		progress = 42;
+		progress = 32;
 		loadConfiguration(cfg);
-		progress = 56;
+		progress = 48;
 		loadInitialOAuthServers();
-		progress = 70;
+		progress = 64;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
@@ -547,7 +500,7 @@ public class ImportInitvalues {
 		}
 		loadSystem(cfg, force);
 		loadInitUserAndGroup(cfg);
-		progress = 84;
+		progress = 80;
 
 		loadDefaultRooms("1".equals(cfg.createDefaultRooms), StringValue.valueOf(cfg.defaultLangId).toLong(1L));
 		progress = 100;

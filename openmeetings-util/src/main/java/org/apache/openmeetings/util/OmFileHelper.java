@@ -52,7 +52,6 @@ public class OmFileHelper {
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String profilesPrefix = "profile_";
 	public static final String nameOfLanguageFile = "languages.xml";
-	public static final String nameOfErrorFile = "errorvalues.xml";
 	public static final String libraryFileName = "library.xml";
 	public static final String defaultProfileImageName = "profile.jpg";
 	public static final String profileFileName = "profile";

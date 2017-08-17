@@ -46,8 +46,8 @@ public class EmailManager {
 	@Autowired
 	private MailHandler mailHandler;
 
-	public static String getString(long id) {
-		return ((IApplication)Application.get(wicketApplicationName)).getOmString(id);
+	public static String getString(String key) {
+		return ((IApplication)Application.get(wicketApplicationName)).getOmString(key);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class EmailManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public String sendMail(String username, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
+	public void sendMail(String username, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		Integer sendEmailAtRegister = configurationDao.getConfValue("sendEmailAtRegister", Integer.class, "0");
 
@@ -68,14 +68,13 @@ public class EmailManager {
 		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
 
 		if (sendEmailAtRegister == 1) {
-			mailHandler.send(email, getString(512)
+			mailHandler.send(email, getString("512")
 				, RegisterUserTemplate.getEmail(username, email, sendEmailWithVerficationCode ? link : null));
 		}
-		return "success";
 	}
 
 	//FIXME, seems to be not used
 	public void sendFeedback(String username, String email, String message) {
-		mailHandler.send("user@openmeetings.apache.org", getString(499), FeedbackTemplate.getEmail(username, email, message));
+		mailHandler.send("user@openmeetings.apache.org", getString("499"), FeedbackTemplate.getEmail(username, email, message));
 	}
 }

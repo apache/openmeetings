@@ -76,8 +76,8 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	// to diagnose the test issue
 	public boolean doTearDownAfterTest = false;
 
-	public String getString(long id) {
-		return LabelDao.getString(id, getLanguageId());
+	public String getString(String key) {
+		return LabelDao.getString(key, getLanguageId());
 	}
 
 	/**

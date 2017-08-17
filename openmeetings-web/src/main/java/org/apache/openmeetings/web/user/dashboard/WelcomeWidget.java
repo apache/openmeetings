@@ -33,14 +33,14 @@ public class WelcomeWidget extends AbstractWidget {
 		location = new WidgetLocation(0, 0);
 		init();
 	}
-	
+
 	@Override
 	public void init() {
 		super.init();
-		title = Application.getString(1546L);
+		title = Application.getString("1546");
 		id = "WelcomeWidget";
 	}
-	
+
 	@Override
 	public WidgetView createView(String viewId) {
 		return new WelcomeWidgetView(viewId, new Model<Widget>(this));

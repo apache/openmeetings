@@ -93,7 +93,7 @@ public class RoomMenuPanel extends Panel {
 		}
 	};
 	private final RoomPanel room;
-	private final RoomMenuItem exitMenuItem = new RoomMenuItem(Application.getString(308), Application.getString(309), "room menu exit") {
+	private final RoomMenuItem exitMenuItem = new RoomMenuItem(Application.getString("308"), Application.getString("309"), "room menu exit") {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -101,9 +101,9 @@ public class RoomMenuPanel extends Panel {
 			exit(target);
 		}
 	};
-	private final RoomMenuItem filesMenu = new RoomMenuItem(Application.getString(245), null, false);
-	private final RoomMenuItem actionsMenu = new RoomMenuItem(Application.getString(635), null, false);
-	private final RoomMenuItem inviteMenuItem = new RoomMenuItem(Application.getString(213), Application.getString(1489), false) {
+	private final RoomMenuItem filesMenu = new RoomMenuItem(Application.getString("245"), null, false);
+	private final RoomMenuItem actionsMenu = new RoomMenuItem(Application.getString("635"), null, false);
+	private final RoomMenuItem inviteMenuItem = new RoomMenuItem(Application.getString("213"), Application.getString("1489"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -112,7 +112,7 @@ public class RoomMenuPanel extends Panel {
 			invite.open(target);
 		}
 	};
-	private final RoomMenuItem shareMenuItem = new RoomMenuItem(Application.getString(239), Application.getString(1480), false) {
+	private final RoomMenuItem shareMenuItem = new RoomMenuItem(Application.getString("239"), Application.getString("1480"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -120,7 +120,7 @@ public class RoomMenuPanel extends Panel {
 			shareBtn.onClick(target);
 		}
 	};
-	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(Application.getString(784), Application.getString(1481), false) {
+	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(Application.getString("784"), Application.getString("1481"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -128,7 +128,7 @@ public class RoomMenuPanel extends Panel {
 			room.requestRight(Room.Right.moderator, target);
 		}
 	};
-	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString(785), Application.getString(1492), false) {
+	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString("785"), Application.getString("1492"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -136,7 +136,7 @@ public class RoomMenuPanel extends Panel {
 			room.requestRight(Room.Right.whiteBoard, target);
 		}
 	};
-	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString(786), Application.getString(1482), false) {
+	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString("786"), Application.getString("1482"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -144,7 +144,7 @@ public class RoomMenuPanel extends Panel {
 			room.requestRight(Room.Right.video, target);
 		}
 	};
-	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString(24), Application.getString(1483), false) {
+	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString("24"), Application.getString("1483"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -153,7 +153,7 @@ public class RoomMenuPanel extends Panel {
 			createPoll.open(target);
 		}
 	};
-	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString(42), Application.getString(1485), false) {
+	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString("42"), Application.getString("1485"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -165,7 +165,7 @@ public class RoomMenuPanel extends Panel {
 			}
 		}
 	};
-	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(Application.getString(37), Application.getString(1484), false) {
+	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(Application.getString("37"), Application.getString("1484"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -174,7 +174,7 @@ public class RoomMenuPanel extends Panel {
 			pollResults.open(target);
 		}
 	};
-	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(Application.getString(1447), Application.getString(1488), false) {
+	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(Application.getString("1447"), Application.getString("1488"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -248,7 +248,7 @@ public class RoomMenuPanel extends Panel {
 		exitMenuItem.setEnabled(false);
 		menu.add(exitMenuItem.setTop(true));
 
-		filesMenu.getItems().add(new RoomMenuItem(Application.getString(15), Application.getString(1479)) {
+		filesMenu.getItems().add(new RoomMenuItem(Application.getString("15"), Application.getString("1479")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -133,14 +133,14 @@ public class Chat extends Panel {
 
 	public static CharSequence getReinit() {
 		StringBuilder sb = new StringBuilder("Chat.reinit(");
-		sb.append('\'').append(Application.getString(1494)).append('\'')
-				.append(',').append('\'').append(Application.getString(406)).append('\'');
+		sb.append('\'').append(Application.getString("1494")).append('\'')
+				.append(',').append('\'').append(Application.getString("406")).append('\'');
 		return sb.append("); ");
 	}
 
 	public CharSequence addRoom(Room r) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), Application.getString(406)));
+		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), Application.getString("406")));
 		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
 		if (list.size() > 0) {
 			sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");

@@ -25,12 +25,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.openmeetings.util.OmException;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceResult implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static ServiceResult NO_PERMISSION = new ServiceResult(-26L, "Insufficient permissions", Type.ERROR);
-	private long code;
+	public static ServiceResult UNKNOWN = new ServiceResult(OmException.UNKNOWN.getKey(), Type.ERROR);
+	public static ServiceResult NO_PERMISSION = new ServiceResult("error.notallowed", Type.ERROR);
 	private String message;
 	private String type;
 	@XmlType(namespace="org.apache.openmeetings.db.dto.basic.type")
@@ -41,26 +43,14 @@ public class ServiceResult implements Serializable {
 
 	public ServiceResult() {}
 
-	public ServiceResult(long code, String message, String type) {
+	public ServiceResult(String message, String type) {
 		super();
-		this.code = code;
 		this.message = message;
 		this.type = type;
 	}
 
-	public ServiceResult(long code, String message, Type type) {
-		super();
-		this.code = code;
-		this.message = message;
-		this.type = type.name();
-	}
-
-	public long getCode() {
-		return code;
-	}
-
-	public void setCode(long code) {
-		this.code = code;
+	public ServiceResult(String message, Type type) {
+		this(message, type.name());
 	}
 
 	public String getMessage() {

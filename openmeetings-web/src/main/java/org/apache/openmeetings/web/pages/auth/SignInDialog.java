@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
@@ -83,7 +82,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SignInDialog.class, webAppRootKey);
 	private Form<String> form;
-	private DialogButton loginBtn = new DialogButton("login", Application.getString(112)) {
+	private DialogButton loginBtn = new DialogButton("login", Application.getString("112")) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -91,7 +90,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 			return true;
 		}
 	};
-	private DialogButton registerBtn = new DialogButton("register", Application.getString(123));
+	private DialogButton registerBtn = new DialogButton("register", Application.getString("123"));
 	private String password;
 	private String login;
 	private boolean rememberMe = false;
@@ -101,7 +100,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public SignInDialog(String id) {
-		super(id, Application.getString(108));
+		super(id, Application.getString("108"));
 		add(form = new SignInForm("signin"));
 		add(new OmAjaxClientInfoBehavior());
 	}
@@ -187,7 +186,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 		try {
 			signIn = ws.signIn(login, password, type, domain.getId());
 		} catch (OmException e) {
-			error(e.getCode() == null ? e.getMessage() : getBean(ErrorDao.class).getMessage(e.getCode(), ws.getOmLanguage()));
+			error(getString(e.getKey()));
 			target.add(feedback);
 		}
 		if (signIn) {
@@ -199,7 +198,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 			}
 		} else {
 			if (!hasErrorMessage()) {
-				error(getString("335"));
+				error(getString("error.bad.credentials"));
 				target.add(feedback);
 			}
 			// add random timeout
@@ -226,9 +225,9 @@ public class SignInDialog extends NonClosableDialog<String> {
 			}
 			add(feedback.setOutputMarkupId(true));
 			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(SignInDialog.this, "login")));
-			loginField.setLabel(Model.of(Application.getString(114)));
+			loginField.setLabel(Model.of(Application.getString("114")));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
-			passField.setLabel(Model.of(Application.getString(115)));
+			passField.setLabel(Model.of(Application.getString("115")));
 			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).get();
 			int selectedLdap = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LDAP_ID, Integer.class, "0");
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);

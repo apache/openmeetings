@@ -87,7 +87,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 	@Test
 	public void testGetByPublicRoom() throws Exception {
-		actualTest(roomDao.get(5L)); //default public restricted room
+		actualTest(roomDao.get(5L)); //default public presentation room
 	}
 
 	private static JSONObject createAppointment() {

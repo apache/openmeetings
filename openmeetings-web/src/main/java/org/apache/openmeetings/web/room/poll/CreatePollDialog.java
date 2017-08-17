@@ -49,14 +49,14 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton create = new DialogButton("create", Application.getString(22));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString(25));
+	private final DialogButton create = new DialogButton("create", Application.getString("22"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("25"));
 	private final Long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public CreatePollDialog(String id, Long roomId) {
-		super(id, Application.getString(18), new CompoundPropertyModel<>(new RoomPoll()));
+		super(id, Application.getString("18"), new CompoundPropertyModel<>(new RoomPoll()));
 		this.roomId = roomId;
 		add(form = new PollForm("form", getModel()));
 	}
@@ -104,7 +104,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 		public PollForm(String id, IModel<RoomPoll> model) {
 			super(id, model);
-			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString(1410))));
+			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("1410"))));
 			add(new TextArea<String>("question"));
 			add(new DropDownChoice<>("type", Arrays.asList(RoomPoll.Type.values())
 					, new ChoiceRenderer<RoomPoll.Type>() {
@@ -120,7 +120,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 							return pt.name();
 						}
 					})
-					.setRequired(true).setLabel(Model.of(Application.getString(21))));
+					.setRequired(true).setLabel(Model.of(Application.getString("21"))));
 			add(feedback);
 		}
 	}

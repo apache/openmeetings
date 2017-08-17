@@ -38,7 +38,7 @@ public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 
 	public AboutDialog(String id) {
-		super(id, Application.getString(1549));
+		super(id, Application.getString("1549"));
 
 		add(new Label("name", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("version", getVersion()));

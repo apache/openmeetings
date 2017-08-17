@@ -20,6 +20,8 @@ package org.apache.openmeetings.core.ldap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
+import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
+import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -199,7 +201,7 @@ public class LdapLoginManagement {
 								Entry e = cursor.get();
 								if (userDn != null) {
 									log.error("more than 1 user found in LDAP");
-									throw new OmException(-1L);
+									throw UNKNOWN;
 								}
 								userDn = e.getDn();
 								if (w.options.useAdminForAttrs) {
@@ -212,7 +214,7 @@ public class LdapLoginManagement {
 					}
 					if (userDn == null) {
 						log.error("NONE users found in LDAP");
-						throw new OmException(-10L);
+						throw BAD_CREDENTIALS;
 					}
 					w.conn.bind(userDn, passwd);
 				}
@@ -232,7 +234,7 @@ public class LdapLoginManagement {
 			log.debug("getByLogin:: authenticated ? {}, login = '{}', domain = {}, user = {}", authenticated, login, domainId, u);
 			if (u == null && Provisionning.AUTOCREATE != w.options.prov) {
 				log.error("User not found in OM DB and Provisionning.AUTOCREATE was not set");
-				throw new OmException(-10L);
+				throw BAD_CREDENTIALS;
 			}
 			if (authenticated && entry == null) {
 				if (w.options.useAdminForAttrs) {
@@ -255,7 +257,7 @@ public class LdapLoginManagement {
 			}
 		} catch (LdapAuthenticationException ae) {
 			log.error("Not authenticated.", ae);
-			throw new OmException(-10L);
+			throw BAD_CREDENTIALS;
 		} catch (OmException e) {
 			throw e;
 		} catch (Exception e) {
@@ -296,7 +298,7 @@ public class LdapLoginManagement {
 			}
 		} catch (LdapAuthenticationException ae) {
 			log.error("Not authenticated.", ae);
-			throw new OmException(-10L);
+			throw BAD_CREDENTIALS;
 		} catch (OmException e) {
 			throw e;
 		} catch (Exception e) {
@@ -334,7 +336,7 @@ public class LdapLoginManagement {
 		public User getUser(Entry entry, User u) throws LdapException, CursorException, OmException, IOException {
 			if (entry == null) {
 				log.error("LDAP entry is null, search or lookup by Dn failed");
-				throw new OmException(-10L);
+				throw BAD_CREDENTIALS;
 			}
 			if (u == null) {
 				u = userDao.getNewUserInstance(null);

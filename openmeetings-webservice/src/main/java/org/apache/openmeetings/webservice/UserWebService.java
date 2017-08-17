@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
+import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
@@ -102,17 +103,17 @@ public class UserWebService extends BaseWebService {
 			log.debug("Login user");
 			User u = getUserDao().login(user, pass);
 			if (u == null) {
-				return new ServiceResult(-1L, "Login failed", Type.ERROR);
+				return new ServiceResult("error.bad.credentials", Type.ERROR);
 			}
 
 			Sessiondata sd = getSessionDao().create(u.getId(), u.getLanguageId());
 			log.debug("Login user: {}", u.getId());
-			return new ServiceResult(u.getId(), sd.getSessionId(), Type.SUCCESS);
+			return new ServiceResult(sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
-			return new ServiceResult(oe.getCode() == null ? -1 : oe.getCode(), oe.getMessage(), Type.ERROR);
+			return oe.getKey() == null ? UNKNOWN : new ServiceResult(oe.getKey(), Type.ERROR);
 		} catch (Exception err) {
 			log.error("[login]", err);
-			return new ServiceResult(-1L, err.getMessage(), Type.ERROR);
+			return UNKNOWN;
 		}
 	}
 
@@ -133,7 +134,7 @@ public class UserWebService extends BaseWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
 				return UserDTO.list(getUserDao().getAllUsers());
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("addNewUser", err);
@@ -197,18 +198,18 @@ public class UserWebService extends BaseWebService {
 					log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
 					throw new ServiceException(sb.toString());
 				}
-				Long userId = getBean(UserManager.class).registerUser(user.getLogin(), user.getPassword(),
+				Object _user = getBean(UserManager.class).registerUser(user.getLogin(), user.getPassword(),
 						user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
 						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
 						, user.getAddress().getTown(), user.getLanguageId(),
 						"", false, true, // generate SIP Data if the config is enabled
 						tz, confirm);
 
-				if (userId == null || userId < 0) {
-					throw new ServiceException("Unknown error");
+				if (_user == null || _user instanceof String) {
+					throw new ServiceException(UNKNOWN.getMessage());
 				}
 
-				User u = userDao.get(userId);
+				User u = (User)_user;
 
 				u.getRights().add(Right.Room);
 				if (Strings.isEmpty(user.getExternalId()) && Strings.isEmpty(user.getExternalType())) {
@@ -225,7 +226,7 @@ public class UserWebService extends BaseWebService {
 
 				return new UserDTO(u);
 			} else {
-				throw new ServiceException("Insufficient permissions"); //TODO code -26
+				throw ServiceException.NO_PERMISSION;
 			}
 		} catch (Exception err) {
 			log.error("addNewUser", err);
@@ -257,7 +258,7 @@ public class UserWebService extends BaseWebService {
 				UserDao userDao = getUserDao();
 				userDao.delete(userDao.get(id), sd.getUserId());
 
-				return new ServiceResult(id, "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -298,7 +299,7 @@ public class UserWebService extends BaseWebService {
 				// Setting user deleted
 				userDao.delete(user, sd.getUserId());
 
-				return new ServiceResult(user.getId(), "Deleted", Type.SUCCESS);
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -360,7 +361,7 @@ public class UserWebService extends BaseWebService {
 					}
 					sd.setXml(xmlString);
 					getSessionDao().update(sd);
-					return new ServiceResult(0, hash, Type.SUCCESS);
+					return new ServiceResult(hash, Type.SUCCESS);
 				}
 			} else {
 				return NO_PERMISSION;
@@ -369,7 +370,7 @@ public class UserWebService extends BaseWebService {
 			log.error("getRoomHash", err);
 			throw new ServiceException(err.getMessage());
 		}
-		return new ServiceResult(-1L, "Unknown error", Type.ERROR);
+		return UNKNOWN;
 	}
 
 	/**
@@ -388,7 +389,7 @@ public class UserWebService extends BaseWebService {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
 				boolean success = getBean(IUserManager.class).kickById(uid);
 
-				return new ServiceResult(Boolean.TRUE.equals(success) ? 1L : 0L, Boolean.TRUE.equals(success) ? "deleted" : "not deleted", Type.SUCCESS);
+				return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
 			} else {
 				return NO_PERMISSION;
 			}
@@ -412,7 +413,7 @@ public class UserWebService extends BaseWebService {
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
 			IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
-			return new ServiceResult(app.getOmRoomClients(roomId).size(), "count", Type.SUCCESS);
+			return new ServiceResult("" + app.getOmRoomClients(roomId).size(), Type.SUCCESS);
 		}
 		return NO_PERMISSION;
 	}

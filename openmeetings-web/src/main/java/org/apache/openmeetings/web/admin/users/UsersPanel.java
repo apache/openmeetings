@@ -48,7 +48,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class UsersPanel extends AdminPanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-	private final MessageDialog warning = new MessageDialog("warning", Application.getString(797), Application.getString(343), DialogButtons.OK, DialogIcon.WARN) {
+	private final MessageDialog warning = new MessageDialog("warning", Application.getString("797"), Application.getString("warn.nogroup"), DialogButtons.OK, DialogIcon.WARN) {
 		private static final long serialVersionUID = 1L;
 
 		@Override

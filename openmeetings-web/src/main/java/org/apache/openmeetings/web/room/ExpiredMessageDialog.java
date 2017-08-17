@@ -33,7 +33,7 @@ public class ExpiredMessageDialog extends MessageDialog {
 	private final RoomMenuPanel menu;
 
 	public ExpiredMessageDialog(String id, String message, RoomMenuPanel menu) {
-		super(id, Application.getString(204), message, DialogButtons.OK, DialogIcon.ERROR);
+		super(id, Application.getString("204"), message, DialogButtons.OK, DialogIcon.ERROR);
 		this.menu = menu;
 	}
 

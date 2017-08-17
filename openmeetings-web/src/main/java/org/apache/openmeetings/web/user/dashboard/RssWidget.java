@@ -34,14 +34,14 @@ public class RssWidget extends AbstractWidget {
 		location = new WidgetLocation(1, 1);
 		init();
 	}
-	
+
 	@Override
 	public void init() {
 		super.init();
-		title = Application.getString(277L);
+		title = Application.getString("277");
 		id = WIDGET_ID_RSS;
 	}
-	
+
 	@Override
 	public WidgetView createView(String viewId) {
 		return new RssWidgetView(viewId, new Model<Widget>(this));

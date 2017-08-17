@@ -30,7 +30,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- </xsl:comment>
+</xsl:comment>
 	<properties>
 		<title>Openmeetings Errors table</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Documentation Robot</author>
@@ -52,14 +52,14 @@
 	
 	<xsl:template match="row">
 		<xsl:variable name="englishPath"><xsl:value-of select="concat($languagesDir, '/Application.properties.xml')"/></xsl:variable>
+		<xsl:variable name="descId" select="field[@name='labelKey']"/>
 			<tr>
-				<td>-<xsl:value-of select="field[@name='errorvalues_id']"/></td>
+				<td>-<xsl:value-of select="$descId"/></td>
 				<td>
 					<xsl:variable name="type" select="concat('error.type.', field[@name='type'])"/>
 					<xsl:value-of select="document($englishPath)/properties/entry[@key=$type]/text()" />
 				</td>
 				<td>
-					<xsl:variable name="descId" select="field[@name='fieldvalues_id']"/>
 					<xsl:value-of select="document($englishPath)/properties/entry[@key=$descId]/text()" />
 				</td>
 			</tr>

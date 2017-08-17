@@ -143,7 +143,7 @@
 							</ol>
 						</li>
 						<li>
-							Restricted room testing – general issues (should be tested with at least 3 attendees)
+							Presentation room testing – general issues (should be tested with at least 3 attendees)
 							<ol>
 								<li>Enter the room: different cases for the cam/micro, choosing of the cam resolution, test recording, allow/deny of video </li>
 								<li>User list should be shown correctly </li>
@@ -166,7 +166,7 @@
 							</ol>
 						</li>
 						<li>
-							Restricted room testing: file uploading + documents
+							Presentation room testing: file uploading + documents
 							<ol>
 								<li>Upload a document with "Load directly to whiteboard" switch turned on </li>
 								<li>Upload a with "Load directly to whiteboard" switch turned on off </li>
@@ -180,7 +180,7 @@
 							</ol>
 						</li>
 						<li>
-							Restricted room testing – whiteboard and properties panels (should be tested with at least 3 attendees)
+							Presentation room testing – whiteboard and properties panels (should be tested with at least 3 attendees)
 							<ol>
 								<li>Adding a removing a whiteboard </li>
 								<li>Full-fit switch </li>
@@ -201,7 +201,7 @@
 							</ol>						
 						</li>
 						<li>
-							Restricted room testing – chat (should be tested with at least 3 attendees)
+							Presentation room testing – chat (should be tested with at least 3 attendees)
 							<ol>
 								<li>Send a message </li>
 								<li>Start a private chat </li>
@@ -213,7 +213,7 @@
 							</ol>
 						</li>
 						<li>
-							Restricted room testing – screen sharing and recordings (should be tested with at least 3 attendees)
+							Presentation room testing – screen sharing and recordings (should be tested with at least 3 attendees)
 							<ol>
 								<li>"Share record/screen" button in the room </li>
 								<li>Desktop sharer: start/stop sharing </li>
@@ -223,7 +223,7 @@
 							</ol>
 						</li>
 						<li>
-							Restricted room testing – Actions menu
+							Presentation room testing – Actions menu
 							<ol>
 								<li>Send invitation: send English and localized message </li>
 								<li>Send invitation with password </li>
@@ -243,7 +243,6 @@
 						<li>
 							Conference room testing
 							<ol>
-								<li>User list should look in another way in compare with restricted type </li>
 								<li>Generally, all should look OK when enter the room </li>
 							</ol>
 						</li>
@@ -348,7 +347,7 @@
 					</ol>
 				</li>
 				<li>
-					<b>SIP integration tests</b> (should be tested with at least 3 attendees in the room; for restricted and interview rooms)
+					<b>SIP integration tests</b> (should be tested with at least 3 attendees in the room; for presentation and interview rooms)
 					<ol>
 						<li>Call from the room to the external phone number </li>
 						<li>Call from external phone number to the room </li>

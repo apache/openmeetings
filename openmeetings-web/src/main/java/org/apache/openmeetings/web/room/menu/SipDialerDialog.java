@@ -40,8 +40,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class SipDialerDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final DialogButton call = new DialogButton("call", Application.getString(1448));
-	private final DialogButton close = new DialogButton("close", Application.getString(85));
+	private final DialogButton call = new DialogButton("call", Application.getString("1448"));
+	private final DialogButton close = new DialogButton("close", Application.getString("85"));
 	private final Form<String> form = new Form<>("form", Model.of(""));
 	private final TextField<String> number = new TextField<>("number", Model.of(""));
 	private final RoomPanel room;

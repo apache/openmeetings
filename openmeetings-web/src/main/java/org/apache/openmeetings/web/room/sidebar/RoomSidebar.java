@@ -101,7 +101,7 @@ public class RoomSidebar extends Panel {
 			item.add(new RoomClientPanel("user", item, room));
 		}
 	};
-	private final NameDialog addFolder = new NameDialog("addFolder", Application.getString(712)) {
+	private final NameDialog addFolder = new NameDialog("addFolder", Application.getString("712")) {
 		private static final long serialVersionUID = 1L;
 
 		@Override

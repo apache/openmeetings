@@ -30,23 +30,23 @@ public class RoomsSelectorPanel extends UserPanel {
 	public RoomsSelectorPanel(String id, MenuParams param) {
 		super(id);
 
-		long title, desc;
+		String title, desc;
 		RoomDao roomDao = Application.getBean(RoomDao.class);
 		switch (param) {
 			case myTabButton:
-				title = 781L;
-				desc = 782L;
+				title = "781";
+				desc = "782";
 				add(new RoomsPanel("rooms", getMyRooms()));
 				break;
 			case privateTabButton:
-				title = 779L;
-				desc = 780L;
-				add(new RoomsTabbedPanel("rooms")); 
+				title = "779";
+				desc = "780";
+				add(new RoomsTabbedPanel("rooms"));
 				break;
 			case publicTabButton:
 			default:
-				title = 777L;
-				desc = 778L;
+				title = "777";
+				desc = "778";
 				add(new RoomsPanel("rooms", roomDao.getPublicRooms()));
 				break;
 		}

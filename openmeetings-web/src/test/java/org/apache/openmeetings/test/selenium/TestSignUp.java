@@ -46,7 +46,7 @@ public class TestSignUp extends AbstractTestDefaults {
 			super.testIsInstalledAndDoInstallation();
 
 			WebElement signUpButton = SeleniumUtils.findElement(driver,
-					"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
+					"//button[span[contains(text(), '" + getString("123") + "')]]", true, true);
 			signUpButton.click();
 
 			// ##################################
@@ -55,7 +55,7 @@ public class TestSignUp extends AbstractTestDefaults {
 			doSignUp("Hans","Muster", userName, "pw", "pw2", email);
 
 			//Find Error label-id 232 "Please enter two identical passwords"
-			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(232) + "')]", true, true);
+			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString("232") + "')]", true, true);
 
 			// ##################################
 			// Sign up with user and sign in
@@ -63,8 +63,7 @@ public class TestSignUp extends AbstractTestDefaults {
 			doSignUp("Hans","Muster", userName, pass, pass, email);
 
 			//Check for popup with success message and email to check
-			//Labelid 674
-			SeleniumUtils.findElement(driver, "//span[contains(text(), '" + getString(674) + "')]", true, true);
+			SeleniumUtils.findElement(driver, "//span[contains(text(), '" + getString("warn.notverified") + "')]", true, true);
 
 			//click button to close popup
 			WebElement signUpSucessPopUpOkButton = SeleniumUtils.findElement(driver,
@@ -77,16 +76,16 @@ public class TestSignUp extends AbstractTestDefaults {
 
 			//click labelid 112 "Sign In"
 			WebElement signInButton = SeleniumUtils.findElement(driver,
-					"//button[span[contains(text(), '" + getString(112) + "')]]", true, true);
+					"//button[span[contains(text(), '" + getString("112") + "')]]", true, true);
 			signInButton.click();
 
 			// check for some text in dashbaord, labelid 281, "Help and support"
 			SeleniumUtils.elementExists(driver,
-					"//h3[contains(text(), '" + getString(281) + "')]", true);
+					"//h3[contains(text(), '" + getString("281") + "')]", true);
 
 			//sign out
 			WebElement signOutLink = SeleniumUtils.findElement(driver,
-					"//a[contains(text(), '" + getString(310) + "')]", true, true);
+					"//a[contains(text(), '" + getString("310") + "')]", true, true);
 			signOutLink.click();
 
 			Alert alert = driver.switchTo().alert();
@@ -97,16 +96,14 @@ public class TestSignUp extends AbstractTestDefaults {
 			// ##################################
 
 			signUpButton = SeleniumUtils.findElement(driver,
-					"//button[span[contains(text(), '" + getString(123) + "')]]", true, true);
+					"//button[span[contains(text(), '" + getString("123") + "')]]", true, true);
 			signUpButton.click();
 
 			doSignUp("Hans","Muster", userName, pass, pass, email);
 
-			//Find Error label-id 105, The username is already used
-			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(105) + "')]", true, true);
+			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString("error.login.inuse") + "')]", true, true);
 
-			//Find Error label-id 1000, This email is already used by another user.
-			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString(1000) + "')]", true, true);
+			SeleniumUtils.findElement(driver, "//span[@class='feedbackPanelERROR'][contains(text(), '" + getString("error.email.inuse") + "')]", true, true);
 		} catch (Exception e) {
 			SeleniumUtils.makeScreenShot(this.getClass().getSimpleName(), e,
 					driver);

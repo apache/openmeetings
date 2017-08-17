@@ -120,11 +120,6 @@
   <entry key="100">Kreis</entry>
   <entry key="101">Schließen</entry>
   <entry key="102">Eingabefehler</entry>
-  <entry key="103">Der Benutzername muss mindestens 4 Zeichen lang sein</entry>
-  <entry key="104">Login is too short</entry>
-  <entry key="105">Der Benutzername ist bereits vergeben</entry>
-  <entry key="106">Die E-Mail ist bereits registriert</entry>
-  <entry key="107">Ein Fehler trat auf. Bitte kontaktieren Sie den Administrator</entry>
   <entry key="108">Login</entry>
   <entry key="109">Benutzer/E-Mail:</entry>
   <entry key="110">Passwort:</entry>
@@ -253,7 +248,6 @@
   <entry key="233">Ungültige E-Mail</entry>
   <entry key="234">Die angegebene E-Mail-Adresse ist ungültig</entry>
   <entry key="235">Registration abgeschlossen</entry>
-  <entry key="236">Ihr Benutzer wurde angelegt. Sie können sich nun einloggen.</entry>
   <entry key="237">Sie können Ihren Bildschirm im Moment nicht veröffentlichen, da dies bereits ein anderer Benutzer in diesem Konferenzraum tut.</entry>
   <entry key="238">Veröffentlichung abgelehnt</entry>
   <entry key="239">Desktop veröffentlichen</entry>
@@ -291,7 +285,6 @@
   <entry key="273">Benutzer</entry>
   <entry key="274">Benutzer aus Organisation entfernen</entry>
   <entry key="275">Löschen</entry>
-  <entry key="276">Dieser Benutzer ist bereits Teil dieser Organisation.</entry>
   <entry key="277">Neuigkeiten</entry>
   <entry key="278">Quicklinks</entry>
   <entry key="279">Zu den Konferenzräumen (max. 50 Teilnehmer)</entry>
@@ -347,20 +340,9 @@
   <entry key="331">Benutzername oder Passwort sind zu kurz, bitte geben Sie mindestens folgende Anzahl an Zeichen für Benutzername / Passwort ein:</entry>
   <entry key="332">Passwort gespeichert. Sie können sich nun damit einloggen.</entry>
   <entry key="333">OK</entry>
-  <entry key="334">Unbekannter Fehler. Bitte melden Sie das dem Service-Team.</entry>
-  <entry key="335">Username/email and/or password are incorrect.</entry>
   <entry key="336">Ungültiges Passwort</entry>
   <entry key="337">Erfolgreich ausgeloggt</entry>
-  <entry key="338">Registrierung ist ausgeschaltet.</entry>
-  <entry key="339">Ungültige E-Mail-Adresse</entry>
-  <entry key="340">Dieser Dateiname wird schon verwendet. Bitte geben Sie einen anderen an.</entry>
-  <entry key="341">Dateiname zu kurz</entry>
-  <entry key="342">Adresse konnte nicht gespeichert werden.</entry>
-  <entry key="343">Benutzer hinzugefügt. Vergessen Sie nicht diesem Benutzer auch eine Organisation hinzuzufügen. Benutzer ohne Organisation können sich nicht einloggen.</entry>
   <entry key="344">Neuer Datensatz</entry>
-  <entry key="345">Es konnte kein Feld zu dieser ID ermittelt werden.</entry>
-  <entry key="346">Es konnte kein Label für diese ID ermittelt werden.</entry>
-  <entry key="347">Sie müssen Administrator sein, um diese Aktion auszuführen.</entry>
   <entry key="348">Sprach-Editor</entry>
   <entry key="349">Sprache</entry>
   <entry key="350">Label-ID</entry>
@@ -370,8 +352,6 @@
   <entry key="354">LabelName</entry>
   <entry key="355">LabelWert</entry>
   <entry key="356">Label-ID</entry>
-  <entry key="357">Sie haben nur das Label gelöscht nicht das Feld! Das Feld könnte noch Referenzen in anderen Sprachen beinhalten.</entry>
-  <entry key="358">Ungültige Labelid. FieldLanguagesvalues_Id kann in der Datenbank nicht gefunden werden.</entry>
   <entry key="359">Sie können dieses Feld nicht löschen. Sie können nur Labels, nicht aber Felder löschen. Zur Zeit ist kein Label geladen, entweder ist kein Feld ausgewählt oder es gibt kein Label in dieser Sprache für das Feld.</entry>
   <entry key="360">Exportieren</entry>
   <entry key="361">Sie müssen sich neu anmelden, um Änderungen zu sehen.</entry>
@@ -381,10 +361,6 @@
   <entry key="365">Name</entry>
   <entry key="366">Sprache anlegen</entry>
   <entry key="367">Sicherung</entry>
-  <entry key="368">Zum Ersten</entry>
-  <entry key="369">Zum Letzten</entry>
-  <entry key="370">Zum Nächsten</entry>
-  <entry key="371">Zum Letzten</entry>
   <entry key="372">Benutzer spricht (By clicking here you can give exclusive audio / mute the microphone of others)</entry>
   <entry key="373">Sound an/ausschalten</entry>
   <entry key="374">Übersicht</entry>
@@ -416,7 +392,6 @@
   <entry key="400"></entry>
   <entry key="401">Benutzer in diesem Raum:</entry>
   <entry key="402">Neu laden</entry>
-  <entry key="403">Dieser Raum ist voll. Bitte versuchen Sie es später noch einmal.</entry>
   <entry key="404">Wählen Sie einen Raum aus, um Details zu erhalten.</entry>
   <entry key="405">Chatten Sie mit Benutzern in diesem Raum:</entry>
   <entry key="406">Raum:</entry>
@@ -546,12 +521,8 @@
   <entry key="530">Gültig ab:</entry>
   <entry key="531">Gültig bis:</entry>
   <entry key="532">Einladung für diese Konferenz</entry>
-  <entry key="533">Keine Einladung für diesen Code</entry>
-  <entry key="534">Die Einladung ist nicht mehr gültig.</entry>
-  <entry key="535">Die Einladung ist nicht mehr gültig.</entry>
   <entry key="536">Passwort:</entry>
   <entry key="537">Überprüfen Sie das Passwort</entry>
-  <entry key="538">Falsches Passwort!</entry>
   <entry key="539">Browser</entry>
   <entry key="540">Ton/Video neu starten</entry>
   <entry key="541">Sitzung abgelaufen oder ungültig.</entry>
@@ -671,18 +642,12 @@
   <entry key="660">Räume innerhalb der Organisation hinzufügen oder löschen</entry>
   <entry key="661">Wollen Sie diese Aufnahme wirklich löschen?</entry>
   <entry key="662">Wollen Sie diesen Benutzer aus Ihrer Organisation wirklich löschen? Sie werden nur die Verbindung zwischen dem Benutzer und Ihrer Organisation löschen können, um den Benutzer wirklich zu löschen brauchen Sie Administrator-Rechte.</entry>
-  <entry key="663">Sie können Ihren eigenen Nutzeraccount nicht löschen!</entry>
-  <entry key="664">Diese Methode benötigt ein Administrator-Account um aufgerufen zu werden.</entry>
-  <entry key="665">Es ist keine Sitzung mit dieser ID verbungen.</entry>
-  <entry key="666">Dies ist ein Administrator- oder Moderator-Account. Dieses Account können Sie nur mittels eines Administrator-Tableau bearbeiten.</entry>
   <entry key="667">Um Ihre Registration abzuschließen klicken Sie bitte auf den folgenden Link. Oder kopieren Sie die URL(Link) in Ihre Browser-Adressleiste.</entry>
   <entry key="668">Klicken Sie um Ihre E-Mail zu bestätigen</entry>
   <entry key="669">Es wurde kein Benutzer für diesen Hash gefunden.</entry>
   <entry key="670">Dieser Benutzer ist bereits aktiviert!</entry>
   <entry key="671">Sie haben Ihr Account erfolgreich aktiviert!</entry>
   <entry key="672">Jetzt einloggen</entry>
-  <entry key="673">Ihr Account ist nicht aktiviert. Benutzen Sie zuerst den Link in der E-Mail die Sie während der Registrierung erhalten haben.</entry>
-  <entry key="674">Sie haben sich erfolgreich angemeldet. Wir haben eine E-Mail mit einem Verifizierungscode an Ihre E-Mail-Adresse geschickt. Bitte überprüfen Sie Ihren Posteingang.</entry>
   <entry key="675">Diesem Benutzer die Moderationsrechte entziehen.</entry>
   <entry key="676">Diesem Benutzer Moderatoionsrechte übertragen</entry>
   <entry key="677">Benutzer</entry>
@@ -794,7 +759,6 @@
   <entry key="784">Moderation beantragen</entry>
   <entry key="785">Zeichenbrett beantragen</entry>
   <entry key="786">WebCam/Mikrofon beantragen</entry>
-  <entry key="787">Dieser SessionHasgh wird bereits genutzt. Er kann nicht zweifach vergeben werden.</entry>
   <entry key="788">START</entry>
   <entry key="789">EXIT</entry>
   <entry key="790">Wollen Sie die Konferenz wirklich verlassen? Vielleicht sollten Sie zuerst Dokumente, Zeichenbrett und Chat History leeren. Andernfalls werden die Dateien einfach in diesem Raum bis zu Ihrem nächsten Besuch bleiben.</entry>
@@ -814,7 +778,6 @@
   <entry key="805">Konferenz planen</entry>
   <entry key="806">Um eine Konferenz zu planen können Sie einen Event im Kalender hinzufügen.</entry>
   <entry key="807">Brauchen Sie Hilfe?</entry>
-  <entry key="808">Webinar</entry>
   <entry key="809">Suche</entry>
   <entry key="810">Ok</entry>
   <entry key="811">Es ist kein Benutzer ausgewählt. Wählen Sie zuerst einen Benutzer und drücken dann Ok.</entry>
@@ -923,7 +886,6 @@
   <entry key="917">Die Aufzeichnung des Interviews wurde bereits gestartet.</entry>
   <entry key="918">Abbrechen</entry>
   <entry key="919">Die Nachbearbeitung eines Interview benötigt fünf Minuten für jede aufgezeichnete Minute. Die Anzeige zeigt den Fortschritt:</entry>
-  <entry key="920">Sie müssen das Passwort erneut eingeben, um SIP Daten automatisch zu erzeugen.</entry>
   <entry key="921">SIP Daten neu erzeugen</entry>
   <entry key="922">Sie können die Datei oder Ordner nicht in einen eigenen Unterordner verschieben.</entry>
   <entry key="923">Größe Homeverzeichnis</entry>
@@ -1003,7 +965,6 @@
   <entry key="997">Rechnung</entry>
   <entry key="998"></entry>
   <entry key="999">Zum Versand von Einladungen oder zur Erstellung von Sitzungen über den Kalender benötigen Sie eine Volumenflatrate. Mit Pay-per-minute Tarifen können Sie selber das Angebot von {0} nutzen, nicht aber Dritte zur Teilnahme an einem Meeting einladen.</entry>
-  <entry key="1000">Diese E-Mail-Adresse wird bereits durch einen anderen Nutzer verwandt.</entry>
   <entry key="1001">SIP-Einstellungen</entry>
   <entry key="1002">Die Konferenznummer und PIN ist automatisch über das OpenXG RPC-Gateway erstellt worden.</entry>
   <entry key="1003">SIP Nummer</entry>
@@ -1198,7 +1159,6 @@
   <entry key="1192">Guten Tag,</entry>
   <entry key="1193">ich würde Sie gerne als Kontakt hinzufügen.</entry>
   <entry key="1194">Prüfen Sie Ihre Kontaktanfragen in {0} oder klicken Sie auf die Links zum Akzeptieren oder Ablehnen der Anfragen.</entry>
-  <entry key="1195">Der Nutzer ist bereits in Ihrer Kontaktliste oder hat von Ihnen eine Benachrichtigung erhalten, die noch nicht beantwortet wurde.</entry>
   <entry key="1196">Ihre Kontaktliste</entry>
   <entry key="1197">Kontakte und Nachrichten bearbeiten,&lt;br/&gt; wartende Kontakte bearbeiten</entry>
   <entry key="1198">hat Sie als Kontakt bestätigt</entry>
@@ -1229,12 +1189,8 @@
   <entry key="1223">Gesendet</entry>
   <entry key="1224">Gelöscht</entry>
   <entry key="1225">Sie können sich nicht selbst als Kontakt einfügen.</entry>
-  <entry key="1226">Der Nutzer wurde bereits abgelehnt.</entry>
-  <entry key="1227">Der Nutzer wurde bereits bestätigt.</entry>
-  <entry key="1228">Nutzerkontakt Hash-Wert ist ungültig</entry>
   <entry key="1229">Nutzer wurde zu Kontaktliste hinzugefügt.</entry>
   <entry key="1230">Kontakt für Nutzer abgelehnt und von Warteliste entfernt.</entry>
-  <entry key="1231">Kein Kontakt gefunden.</entry>
   <entry key="1232">Wollen Sie den Kontakt tatsächlich entfernen?</entry>
   <entry key="1233">Kontakt entfernen bestätigen</entry>
   <entry key="1234">Kontakt von Liste entfernen</entry>
@@ -1274,7 +1230,6 @@
   <entry key="1268">Der Nutzer veröffentlicht die persönlichen Kontaktdaten nicht.</entry>
   <entry key="1269">Der Nutzer zeigt die persönlichen Kontaktdaten nur seinen bestätigten Kontakten.</entry>
   <entry key="1270">Adresse &amp; Telefon</entry>
-  <entry key="1271">Ihr Einladungscode ist ungültig. Er kann nur im angegebenen Zeitraum genutzt werden:</entry>
   <entry key="1272">Der Termin ist in den Kalendern anderer Nutzer eingetragen. Die Änderungen werden auch dort vorgenommen. Wollen Sie den Termine wirklich aktualisieren?</entry>
   <entry key="1273">Aktualisierung bestätigen</entry>
   <entry key="1274">Dieser Kontakt darfen meinen Kalender einsehen (nur Ansicht)</entry>
@@ -1309,11 +1264,7 @@
   <entry key="1303">Anworten</entry>
   <entry key="1304">Räume und Chat</entry>
   <entry key="1305">Meine Räume</entry>
-  <entry key="1306">Mein Konferenzraum (für 1-16 Benutzer)</entry>
-  <entry key="1307">Mein Webinarraum (für 1-120 Benutzer)</entry>
   <entry key="1308">Eigne ID</entry>
-  <entry key="1309">Bitte Passwort eingeben</entry>
-  <entry key="1310">Sie benötigen einen Nutzeraccount als Teilnehmer, Moderator oder Administrator</entry>
   <entry key="1311">Web-Service (nur SOAP)</entry>
   <entry key="1312">Direkt auf Whiteboard ablegen</entry>
   <entry key="1313">Soll dieses Whiteboard wirklich entfernt werden? Die Aktion kann nicht rückgängig gemacht werden.</entry>
@@ -1419,7 +1370,6 @@
   <entry key="1413">aktiv</entry>
   <entry key="1414">Einfache Grafik</entry>
   <entry key="1415">Tortengrafik</entry>
-  <entry key="1416">Bitte geben Sie eine E-Mail-Adresse an</entry>
   <entry key="1417">Neue Nachricht(en)</entry>
   <entry key="1418">Abstimmung schließen</entry>
   <entry key="1419">Wollen Sie die Abstimmung wirklich schließen? Danach kann sich niemand mehr beteiligen.</entry>
@@ -1434,7 +1384,6 @@
   <entry key="1428">Recht für exklusives Audio geben.</entry>
   <entry key="1429">Kamera-Auflösung</entry>
   <entry key="1430">Die Kamera-Auflösung hat einen direkten Einfluss auf die verbrauchte Upload-Bandbreite!</entry>
-  <entry key="1431">Sie verfügen nicht über das Recht sich selbst oder anderen exklusives Audiorecht zu geben. Sie können jedoch den Moderator bitten, Ihnen diese Berechtigung zuzuweisen.</entry>
   <entry key="1432">Ich würde gerne das Recht auf exklusives Audio erhalten.</entry>
   <entry key="1433">Mir exklusives Rederecht geben (alternativ: klick auf Video Pod oder F12)</entry>
   <entry key="1434">Mikrofon ist an</entry>
@@ -1542,8 +1491,6 @@
   <entry key="1537">beinhaltet hochgeladene Dateien und Aufnahmen im Backup</entry>
   <entry key="1538">Aktivieren Sie SIP-Verkehr im Raum</entry>
   <entry key="1539">Wollen Sie wirklich diesem Benutzer exklusive Audiorechte geben?</entry>
-  <entry key="1540">Bitte Ihre Zeitzone angeben</entry>
-  <entry key="1544">Eine Konfiguration mit diesem Schlüssel gibt es bereits. Bitte benutzen Sie einen neuen Schlüssel oder ändern die vorhanden Konfiguration</entry>
   <entry key="1545">Inhalt wird gespeichert, bitte warten.</entry>
   <entry key="1546">Wilkommen</entry>
   <entry key="1547">Anzeige von Informationen und Support-Links</entry>
@@ -1604,6 +1551,26 @@
   <entry key="1605">Audio dieses Benutzers entfernen</entry>
   <entry key="1606">Ich würde gerne mein Audio übertragen</entry>
   <entry key="1607">Du kannst das Audio übertragen</entry>
+	<entry key="error.unknown">Unbekannter Fehler. Bitte melden Sie das dem Service-Team.</entry>
+	<entry key="error.bad.credentials">Username/email and/or password are incorrect.</entry>
+	<entry key="error.short.login">Login is too short</entry>
+	<entry key="error.reg.disabled">Registrierung ist ausgeschaltet.</entry>
+	<entry key="error.login.inuse">Der Benutzername ist bereits vergeben</entry>
+	<entry key="error.email.inuse">Die E-Mail ist bereits registriert</entry>
+	<entry key="error.notallowed">Sie müssen Administrator sein, um diese Aktion auszuführen.</entry>
+	<entry key="error.hash.used">Die Einladung ist nicht mehr gültig.</entry>
+	<entry key="error.hash.invalid">Die Einladung ist nicht mehr gültig.</entry>
+	<entry key="error.hash.period">Ihr Einladungscode ist ungültig. Er kann nur im angegebenen Zeitraum genutzt werden:</entry>
+	<entry key="error.bad.password">Falsches Passwort!</entry>
+	<entry key="error.nogroup">User is not assigned to group.</entry>
+	<entry key="error.notactivated">Ihr Account ist nicht aktiviert. Benutzen Sie zuerst den Link in der E-Mail die Sie während der Registrierung erhalten haben.</entry>
+	<entry key="error.contact.added">Der Nutzer ist bereits in Ihrer Kontaktliste oder hat von Ihnen eine Benachrichtigung erhalten, die noch nicht beantwortet wurde.</entry>
+	<entry key="error.contact.denied">Der Nutzer wurde bereits abgelehnt.</entry>
+	<entry key="error.contact.approved">Der Nutzer wurde bereits bestätigt.</entry>
+	<entry key="error.cfg.exist">Eine Konfiguration mit diesem Schlüssel gibt es bereits. Bitte benutzen Sie einen neuen Schlüssel oder ändern die vorhanden Konfiguration</entry>
+	<entry key="warn.nogroup">Benutzer hinzugefügt. Vergessen Sie nicht diesem Benutzer auch eine Organisation hinzuzufügen. Benutzer ohne Organisation können sich nicht einloggen.</entry>
+	<entry key="warn.notverified">Sie haben sich erfolgreich angemeldet. Wir haben eine E-Mail mit einem Verifizierungscode an Ihre E-Mail-Adresse geschickt. Bitte überprüfen Sie Ihren Posteingang.</entry>
+	<entry key="account.created">Ihr Benutzer wurde angelegt. Sie können sich nun einloggen.</entry>
 	<entry key="install.wizard.install.header">Installation</entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
@@ -1780,10 +1747,10 @@
 	<entry key="install.wizard.congrats.commercial"><![CDATA[Einige Unternehmen bieten kommerziellen Support
 		f&uuml;r Apache OpenMeetings an:]]></entry>
 	<entry key="room.type.conference">Konferenz (1-25 User)</entry>
-	<entry key="room.type.restricted">Limitiert (1-150 User)</entry>
+	<entry key="room.type.presentation">Präsentation (1-150 User)</entry>
 	<entry key="room.type.interview">Interview (1:1 meeting with recording)</entry>
 	<entry key="room.type.conference.desc">"democratic" by default, every user can directly enable audio/video without need for asking</entry>
-	<entry key="room.type.restricted.desc">"restricted" by default: Every regular user will need to ask if he wants to share audio/video</entry>
+	<entry key="room.type.presentation.desc">"restricted" by default: Every regular user will need to ask if he wants to share audio/video</entry>
 	<entry key="room.type.interview.desc">only 2 users can have audio/video enabled (more users can be in the room and you can switch the audio/video between them of course)</entry>
 	<entry key="appointment.reminder.none">keine Erinnerung senden</entry>
 	<entry key="appointment.reminder.email">Einfache E-Mail</entry>
@@ -1833,8 +1800,8 @@
 	<entry key="install.room.public.conference">Public Conference Room</entry>
 	<entry key="install.room.public.video.only">Public Video Only Room</entry>
 	<entry key="install.room.public.video.wb">Public Video And Whiteboard Room</entry>
-	<entry key="install.room.public.restricted">Public Restricted Room</entry>
-	<entry key="install.room.restricted.micro">Restricted room with microphone option set</entry>
+	<entry key="install.room.public.presentation">Public Presentation Room</entry>
+	<entry key="install.room.presentation.micro">Presentation room with microphone option set</entry>
 	<entry key="install.room.conference.micro">Conference room with microphone option set</entry>
 	<entry key="install.room.private.conference">Private Conference Room</entry>
 	<entry key="appointment.tab.general">General</entry>
@@ -1931,4 +1898,10 @@
 	<entry key="download.pdf">Download als PDF</entry>
 	<entry key="zoom.fullFit">Vollformat</entry>
 	<entry key="zoom.pageWidth">Page Width</entry>
+	<entry key="my.room.conference">Mein Konferenzraum (für 1-16 Benutzer)</entry>
+	<entry key="my.room.presentation">My presentation room (for 1-120 users)</entry>
+	<entry key="goto.first">Zum Ersten</entry>
+	<entry key="goto.prev">Zum Letzten</entry>
+	<entry key="goto.next">Zum Nächsten</entry>
+	<entry key="goto.last">Zum Letzten</entry>
 </properties>

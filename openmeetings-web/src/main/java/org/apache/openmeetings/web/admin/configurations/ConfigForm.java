@@ -61,18 +61,18 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString(267))).add(new IValidator<String>(){
+		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString("267"))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void validate(IValidatable<String> validatable) {
 				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
 				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {
-					validatable.error(new ValidationError(Application.getString(1544L)));
+					validatable.error(new ValidationError(Application.getString("error.cfg.exist")));
 				}
 			}
 		}));
-		add(new TextField<String>("value").setLabel(Model.of(Application.getString(271))));
+		add(new TextField<String>("value").setLabel(Model.of(Application.getString("271"))));
 		add(forDatePattern("updated", WEB_DATE_PATTERN));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
