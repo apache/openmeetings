@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Hot Keys</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -35,9 +35,8 @@
 					<td>exclusive.audio.keycode</td>
 				</tr>
 				<tr>
-					<td>F8 (code 119)</td>
-					<td>If 1 or 2 video windows are present in the room they will be
-						"rearranged" to take all the place available</td>
+					<td>Shift+F8 (code 119)</td>
+					<td>Room video windows will be "rearranged" using masonry layout</td>
 					<td>No</td>
 					<td>
 					</td>
