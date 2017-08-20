@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+const WBA_SELECTOR = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
 var VideoUtil = (function() {
 	var self = {};
 	function _getVid(uid) {
@@ -33,10 +34,90 @@ var VideoUtil = (function() {
 	function _hasVideo(c) {
 		return c.activities.indexOf('broadcastV') > -1;
 	}
+	function _getRects(sel, excl) {
+		var list = [];
+		var elems = $(sel);
+		for (let i = 0; i < elems.length; ++i) {
+			if (excl !== $(elems[i]).attr('aria-describedby')) {
+				list.push(_getRect(elems[i]));
+			}
+		}
+		return list;
+	}
+	function _getRect(e) {
+		let win = $(e), winoff = win.offset();
+		return {left: winoff.left
+			, top: winoff.top
+			, right: winoff.left + win.width()
+			, bottom: winoff.top + win.height()};
+	}
+	function _getPos(list, w, h) {
+		/* TODO
+		if (isInterview) {
+			return [0, 0];
+		}
+		*/
+		var wba = $(WBA_SELECTOR);
+		var woffset = wba.offset();
+		const offsetX = 40, offsetY = 10
+			, area = {left: woffset.left, top: woffset.top, right: woffset.left + wba.width(), bottom: woffset.top + wba.height()};
+		var rectNew = {
+				_left: area.left
+				, _top: area.top
+				, right: area.left + w
+				, bottom: area.top + h
+				, get left() {
+					return this._left
+				}
+				, set left(l) {
+					this._left = l;
+					this.right = l + w;
+				}
+				, get top() {
+					return this._top
+				}
+				, set top(t) {
+					this._top = t;
+					this.bottom = t + h;
+				}
+			};
+		//console.log("Area " + JSON.stringify(area));
+		do {
+			let minY = area.bottom;
+			var posFound = true;
+			//console.log("Checking RECT " + JSON.stringify(rectNew));
+			for (let i = 0; i < list.length; ++i) {
+				let rect = list[i];
+				minY = Math.min(minY, rect.bottom);
+
+				if (rectNew.left < rect.right && rectNew.right > rect.left && rectNew.top < rect.bottom && rectNew.bottom > rect.top) {
+					rectNew.left = rect.right + offsetX;
+					//console.log("Intersecting with " + JSON.stringify(rect) + ", new RECT " + JSON.stringify(rectNew));
+					posFound = false;
+				}
+				if (rectNew.right >= area.right) {
+					rectNew.left = area.left;
+					rectNew.top = minY + offsetY;
+					//console.log("End of the row, new RECT " + JSON.stringify(rectNew));
+					posFound = false;
+				}
+				if (rectNew.bottom >= area.bottom) {
+					rectNew.top = area.top;
+					//console.log("Bottom of the area, new RECT " + JSON.stringify(rectNew));
+					posFound = true;
+					break;
+				}
+			}
+		} while (!posFound);
+		return {left: rectNew.left, top: rectNew.top};
+	}
+
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
 	self.hasAudio = _hasAudio;
 	self.hasVideo = _hasVideo;
+	self.getRects = _getRects;
+	self.getPos = _getPos;
 	return self;
 })();
 var Video = (function() {
@@ -45,18 +126,28 @@ var Video = (function() {
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
 	}
-	function _resetSize(_w, _h) {
-		var w = _w || size.width, h = _h || size.height;
-		v.dialog("option", "width", w).dialog("option", "height", t.height() + h + 2);
-		_setSize(w, h);
+	function _securityMode(on) {
+		if (on) {
+			//TODO buttons
+			v.dialog({
+				position: {my: "center", at: "center", of: WBA_SELECTOR}
+			});
+		} else {
+			let h = size.height + t.height() + 2;
+			v.dialog("option", "width", size.width)
+				.dialog("option", "height", h);
+			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects('.video.user-video', VideoUtil.getVid(c.uid)), c.width, h));
+			_setSize(size.width, size.height);
+		}
 	}
 	function _setSize(w, h) {
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
-	function _init(_box, _uid, _c) {
+	function _init(_box, _uid, _c, _pos) {
 		c = _c;
 		box = _box;
+		pos = _pos;
 		size = {width: c.width, height: c.height};
 		var _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
@@ -137,6 +228,7 @@ var Video = (function() {
 		o.broadcastId = c.broadcastId;
 		swf = initVideo(vc, _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
+		v.dialog("widget").css(_pos);
 	}
 	function _update(_c) {
 		c = _c;
@@ -153,7 +245,7 @@ var Video = (function() {
 
 	self.update = _update;
 	self.init = _init;
-	self.resetSize = _resetSize;
+	self.securityMode = _securityMode;
 	self.client = function() { return c; };
 	return self;
 });
@@ -171,7 +263,7 @@ var VideoManager = (function() {
 			, av = VideoUtil.hasAudio(c) || VideoUtil.hasVideo(c)
 			, v = $('#' + _id);
 		if (av && v.length != 1 && !!c.self) {
-			Video().init(box, options.uid, c);
+			Video().init(box, options.uid, c, VideoUtil.getPos(VideoUtil.getRects('.video.user-video'), c.width, c.height + 25));
 		} else if (av && v.length == 1) {
 			v.data().update(c);
 		} else if (!av && v.length == 1) {
@@ -193,13 +285,13 @@ var VideoManager = (function() {
 			share.tooltip().off('click').click(function() {
 				var v = $('#' + VideoUtil.getVid(c.uid))
 				if (v.length != 1) {
-					Video().init(box, options.uid, c);
+					Video().init(box, options.uid, c, $(WBA_SELECTOR).offset());
 				} else {
 					v.dialog('open');
 				}
 			});
 		} else if ('sharing' !== c.type) {
-			Video().init(box, options.uid, c);
+			Video().init(box, options.uid, c, VideoUtil.getPos(VideoUtil.getRects('.video.user-video'), c.width, c.height + 25));
 		}
 	}
 	function _close(uid) {
@@ -227,7 +319,7 @@ var VideoManager = (function() {
 	self.update = _update;
 	self.play = _play;
 	self.close = _close;
-	self.resetSize = function(uid) { $('#' + VideoUtil.getVid(uid)).data().resetSize(); };
+	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
 	return self;
 })();
 function setRoomSizes() {

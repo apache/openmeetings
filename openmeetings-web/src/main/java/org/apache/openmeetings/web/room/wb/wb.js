@@ -1195,7 +1195,7 @@ var Wb = function() {
 	};
 	wb.clearAll = function() {
 		for (var i = 1; i < canvases.length; ++i) {
-			var cc = $('#can-wb-tab-0-slide-' + i).closest('.canvas-container');
+			let cc = $('#can-wb-tab-0-slide-' + i).closest('.canvas-container');
 			cc.remove();
 			canvases[i].dispose();
 		}

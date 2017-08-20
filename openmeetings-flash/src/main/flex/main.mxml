@@ -155,7 +155,7 @@
 						if (!hasAudio()) {
 							video.mute();
 						}
-						ExternalInterface.call("VideoManager.resetSize", params.uid);
+						ExternalInterface.call("VideoManager.securityMode", params.uid, false);
 					});
 				}
 					break;
@@ -233,12 +233,14 @@
 			if (!camAvail()) {
 				return;
 			}
+			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			debug("Camera selected:: " + selectedCam);
 			var cam:Camera = getCam();
 			debug("Camera selected:: " + cam, cam == null ? '' : cam.muted);
 			if (cam != null) {
 				if (cam.muted) {
 					debug("Camera Muted");
+					ExternalInterface.call("VideoManager.securityMode", params.uid, true);
 					video.attachCamera(cam);
 					cam.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
 						debug("cameraStatusHandler! " + event);
@@ -260,6 +262,8 @@
 				var _mic:Microphone = getMic();
 				if (_mic != null) {
 					if (_mic.muted) {
+						debug("Mic Muted");
+						ExternalInterface.call("VideoManager.securityMode", params.uid, true);
 						var nc:NetConnection = new NetConnection();
 						nc.connect(null);
 						var ns:NetStream = new NetStream(nc);
