@@ -870,9 +870,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * @param clientId
 	 * @return 1 in case of success, -1 otherwise
 	 */
-	public int sendMessageById(Object newMessage, final Long id, IScope scope) {
+	public int sendMessageById(Object newMessage, final String uid, IScope scope) {
 		try {
-			_log.debug("### sendMessageById ### {}", id);
+			_log.debug("### sendMessageById ### {}", uid);
 
 			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("message", newMessage);
@@ -881,7 +881,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						if (id.equals(IClientUtil.getId(conn.getClient()))) {
+						if (uid.equals(IClientUtil.getId(conn.getClient()))) {
 							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 						}
 					}
@@ -1080,6 +1080,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			return webAppKeyScope.getScope(room);
 		}
+	}
+
+	public void micActivity(boolean active) {
+		IConnection current = Red5.getConnectionLocal();
+		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.audioActivity
+				, new JSONObject().put("sid", client.getOwnerSid()).put("active", active).toString()));
 	}
 
 	/*

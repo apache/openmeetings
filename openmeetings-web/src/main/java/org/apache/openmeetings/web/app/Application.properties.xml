@@ -168,7 +168,6 @@
   <entry key="153">Cancel</entry>
   <entry key="154">Delete</entry>
   <entry key="155">New record</entry>
-  <entry key="156">Refresh record</entry>
   <entry key="157">Delete record</entry>
   <entry key="158">Status</entry>
   <entry key="159">Disabled</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Joined</entry>
   <entry key="400"></entry>
   <entry key="401">Users in this room</entry>
-  <entry key="402">Refresh</entry>
+  <entry key="refresh.label">Refresh</entry>
   <entry key="404">Click on a room to get the room details</entry>
   <entry key="405">Chat with the users in this room</entry>
   <entry key="406">Room</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Year</entry>
   <entry key="702">Upload file</entry>
   <entry key="703">Add folder</entry>
-  <entry key="704">Refresh</entry>
   <entry key="705">Trash (drag and drop item here)</entry>
   <entry key="706">My files (home drive)</entry>
   <entry key="707">Room files (public drive)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

@@ -46,9 +46,14 @@
 		<div id="user-video">
 			<div class="video"></div>
 		</div>
+		<div id="video-refresh-btn">
+			<a class="ui-dialog-titlebar-volume ui-corner-all ui-state-default" href="#" wicket:message="title:refresh.label" role="button" data-toggle="dropdown">
+				<span class="ui-icon ui-icon-refresh"><wicket:message key="refresh.label"/></span>
+			</a>
+		</div>
 		<div id="video-volume-btn">
-			<a class="ui-dialog-titlebar-volume ui-corner-all ui-state-default" href="#" title="volume" role="button" data-toggle="dropdown">
-				<span class="ui-icon ui-icon-triangle-2-n-s">volume</span>
+			<a class="ui-dialog-titlebar-volume ui-corner-all ui-state-default" href="#" wicket:message="title:volume.label" role="button" data-toggle="dropdown">
+				<span class="ui-icon ui-icon-volume-off"><wicket:message key="volume.label"/></span>
 			</a>
 			<ul class="dropdown-menu video volume">
 				<li>

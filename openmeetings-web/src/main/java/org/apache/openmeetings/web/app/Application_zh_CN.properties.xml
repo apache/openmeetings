@@ -168,7 +168,6 @@
   <entry key="153">取消</entry>
   <entry key="154">删除</entry>
   <entry key="155">新记录</entry>
-  <entry key="156">刷新记录</entry>
   <entry key="157">删除记录</entry>
   <entry key="158">状态</entry>
   <entry key="159">禁止</entry>
@@ -391,7 +390,7 @@
   <entry key="399">已参加:</entry>
   <entry key="400"></entry>
   <entry key="401">此房间的用户:</entry>
-  <entry key="402">刷新</entry>
+  <entry key="refresh.label">刷新</entry>
   <entry key="404">点击房间获取详细信息</entry>
   <entry key="405">与此房间内的用户讨论:</entry>
   <entry key="406">房间:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">年</entry>
   <entry key="702">上载文件</entry>
   <entry key="703">新建目录</entry>
-  <entry key="704">刷新</entry>
   <entry key="705">回收站</entry>
   <entry key="706">我的文件(Home Drive)</entry>
   <entry key="707">会议室文件 (Public Drive)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">当前用户的房间</entry>
   <entry key="1509">创建/修改特别约见室</entry>
   <entry key="1510">您可以在格式中输入多个地址: 名1 姓1 &lt;email1&gt;,"名2 姓2" &lt;email2&gt;,'名3 姓3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">调整流体积</entry>
+  <entry key="volume.label">调整流体积</entry>
   <entry key="1512">调整麦克风音量</entry>
   <entry key="1513">聊天有主持吗</entry>
   <entry key="1514">允许消息</entry>

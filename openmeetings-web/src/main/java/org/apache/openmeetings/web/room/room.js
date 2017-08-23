@@ -325,6 +325,14 @@ var VideoManager = (function() {
 			});
 		});
 	}
+	function _micActivity(uid, active) {
+		var u = $('#user' + uid + ' .audio-activity.ui-icon');
+		if (active) {
+			u.addClass("speaking");
+		} else {
+			u.removeClass("speaking");
+		}
+	}
 
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.init = _init;
@@ -332,6 +340,7 @@ var VideoManager = (function() {
 	self.play = _play;
 	self.close = _close;
 	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
+	self.micActivity = _micActivity;
 	return self;
 })();
 function setRoomSizes() {
@@ -444,14 +453,6 @@ function sipKeyUp(evt) {
 }
 
 /***** functions required by SWF   ******/
-function audioActivity(uid, active) {
-	var u = $('#user' + uid + ' .audio-activity.ui-icon');
-	if (active) {
-		u.addClass("speaking");
-	} else {
-		u.removeClass("speaking");
-	}
-}
 function typingActivity(uid, active) {
 	var u = $('#user' + uid + ' .typing-activity.ui-icon');
 	if (active) {

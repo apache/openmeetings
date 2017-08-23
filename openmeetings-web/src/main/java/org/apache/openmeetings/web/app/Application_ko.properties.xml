@@ -168,7 +168,6 @@
   <entry key="153">삭제</entry>
   <entry key="154">삭제</entry>
   <entry key="155">새로운 기록</entry>
-  <entry key="156">기록을 다시 재생하다</entry>
   <entry key="157">기록을 지우다</entry>
   <entry key="158">상태</entry>
   <entry key="159">무력하게 하다</entry>
@@ -393,7 +392,7 @@
   <entry key="399">Joined:</entry>
   <entry key="400"></entry>
   <entry key="401">Users in this Room:</entry>
-  <entry key="402">refresh</entry>
+  <entry key="refresh.label">refresh</entry>
   <entry key="404">click on a room to get details</entry>
   <entry key="405">Chat with the users in this Room:</entry>
   <entry key="406">Room:</entry>
@@ -679,7 +678,6 @@
   <entry key="701">Year</entry>
   <entry key="702">Upload File</entry>
   <entry key="703">Add Folder</entry>
-  <entry key="704">Refresh</entry>
   <entry key="705">Trash (Drag and Drop item here)</entry>
   <entry key="706">My Files (Home Drive)</entry>
   <entry key="707">Room Files (Public Drive)</entry>
@@ -1464,7 +1462,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

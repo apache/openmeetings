@@ -168,7 +168,6 @@
   <entry key="153">Annuller</entry>
   <entry key="154">Slet</entry>
   <entry key="155">Nyt indhold</entry>
-  <entry key="156">Opdater indhold</entry>
   <entry key="157">Slet indhold</entry>
   <entry key="158">Status</entry>
   <entry key="159">Ikke tilgængelig</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Tlsluttede:</entry>
   <entry key="400"></entry>
   <entry key="401">Brugere i dette rum:</entry>
-  <entry key="402">Opdater</entry>
+  <entry key="refresh.label">Opdater</entry>
   <entry key="404">Klik på et rum for at få flere detaljer</entry>
   <entry key="405">Chat med brugere i dette rum:</entry>
   <entry key="406">Rum:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">År</entry>
   <entry key="702">Indlæs fil</entry>
   <entry key="703">Tilføj mappe</entry>
-  <entry key="704">Opdater</entry>
   <entry key="705">Papirkurv</entry>
   <entry key="706">Mine filer (Privat drev)</entry>
   <entry key="707">Rum filer (Offentligt drev)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

@@ -168,7 +168,6 @@
   <entry key="153">Cancelar</entry>
   <entry key="154">Eliminar</entry>
   <entry key="155">Novo rexistro</entry>
-  <entry key="156">Actualizar o rexistro</entry>
   <entry key="157">Eliminar o rexistro</entry>
   <entry key="158">Estado</entry>
   <entry key="159">desactivado</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Unido:</entry>
   <entry key="400"></entry>
   <entry key="401">Usuarios na sala:</entry>
-  <entry key="402">actualizar</entry>
+  <entry key="refresh.label">actualizar</entry>
   <entry key="404">prema nunha sala para ver os detalles</entry>
   <entry key="405">Conversar cos usuarios desta sala:</entry>
   <entry key="406">Sala:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Ano</entry>
   <entry key="702">Cargar un ficheiro</entry>
   <entry key="703">Engadir un ficheiro</entry>
-  <entry key="704">Actualizar</entry>
   <entry key="705">Lixo</entry>
   <entry key="706">Meus ficheiros Files (Dispositivo personal)</entry>
   <entry key="707">Ficheiros da sala (Dispositivo público)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

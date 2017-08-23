@@ -168,7 +168,6 @@
   <entry key="153">الغاء</entry>
   <entry key="154">حذف</entry>
   <entry key="155">قياسيه جديدة</entry>
-  <entry key="156">تجديد السجل</entry>
   <entry key="157">حذف سجل</entry>
   <entry key="158">المركز</entry>
   <entry key="159">فاقد الاهليه</entry>
@@ -391,7 +390,7 @@
   <entry key="399">إنضم:</entry>
   <entry key="400"></entry>
   <entry key="401">المستخدمين في هذه الغرفة:</entry>
-  <entry key="402">تحديث</entry>
+  <entry key="refresh.label">تحديث</entry>
   <entry key="404">إضغط على الغرفة للحصول على تفاصيل</entry>
   <entry key="405">دردشة مع المستخدمين في هذه الغرفة:</entry>
   <entry key="406">غرفة:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">سنة</entry>
   <entry key="702">إيداع ملف</entry>
   <entry key="703">إضافة مجلد</entry>
-  <entry key="704">تحديث</entry>
   <entry key="705">قمامة</entry>
   <entry key="706">ملفاتي (Home Drive)</entry>
   <entry key="707">غرفة الملفات (Public Drive)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

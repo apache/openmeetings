@@ -168,7 +168,6 @@
   <entry key="153">mégse</entry>
   <entry key="154">törlés</entry>
   <entry key="155">új bejegyzés</entry>
-  <entry key="156">bejegyzés frissítése</entry>
   <entry key="157">bejegyzés törlése</entry>
   <entry key="158">státusz</entry>
   <entry key="159">tiltott</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Csatlakozott:</entry>
   <entry key="400"></entry>
   <entry key="401">Felhasználók ebben a szobában:</entry>
-  <entry key="402">frissítés</entry>
+  <entry key="refresh.label">frissítés</entry>
   <entry key="404">kattints a szobára az információkér</entry>
   <entry key="405">Csevegés a felhasználókkal a szobában:</entry>
   <entry key="406">Szoba:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Év</entry>
   <entry key="702">File feltöltése</entry>
   <entry key="703">Könyvtár létrehozása</entry>
-  <entry key="704">Frissít</entry>
   <entry key="705">Kuka (húzza bele a kiválasztott elemet)</entry>
   <entry key="706">Saját fileok (Home Drive)</entry>
   <entry key="707">Terem fileok (Public Drive)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">A felhasználó termei</entry>
   <entry key="1509">Speciális találkzó szoba étrehozás/módosítás</entry>
   <entry key="1510">Több cím megadása az alábbiak szerint: vezetéknév1 keresztnév1 &lt;email1&gt;,"vezetéknév2 keresztnév2" &lt;email2&gt;,'vezetéknév3 keresztnév3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Stream hangerő változtatása</entry>
+	<entry key="volume.label">Hangerő változtatása</entry>
   <entry key="1512">Mikrofon hangerő változtatása</entry>
   <entry key="1513">A chat moderált</entry>
   <entry key="1514">Üzenet engedélyezése</entry>

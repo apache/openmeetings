@@ -168,7 +168,6 @@
   <entry key="153">Скасувати</entry>
   <entry key="154">Стери</entry>
   <entry key="155">Створити запис</entry>
-  <entry key="156">Оновити запис</entry>
   <entry key="157">Стерти запис</entry>
   <entry key="158">Статус</entry>
   <entry key="159">Заблоковано</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Під'єднано:</entry>
   <entry key="400"></entry>
   <entry key="401">Користувачів в кімнаті:</entry>
-  <entry key="402">Оновити</entry>
+  <entry key="refresh.label">Оновити</entry>
   <entry key="404">Виберіть кімнату щоб взнати деталі</entry>
   <entry key="405">Чат з користувачами даної кімнати:</entry>
   <entry key="406">Кімната:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Рік</entry>
   <entry key="702">Завантажити файл</entry>
   <entry key="703">Додати папку</entry>
-  <entry key="704">Оновити</entry>
   <entry key="705">Кошик</entry>
   <entry key="706">Мої файли (Локальний пристрій)</entry>
   <entry key="707">Файли з кімнати (Загальне пристрій)</entry>
@@ -1463,7 +1461,7 @@
   <entry key="1508">Кімнати даного користувача</entry>
   <entry key="1509">Створити/редагувати кімнату для цієї події</entry>
   <entry key="1510">Ви можете ввести декілька адрес у форматі: Имя1 Фамилия1 &lt;адрес1&gt;,"Имя2 Фамилия2" &lt;адрес2&gt;,'Имя3 Фамилия3' &lt;адрес3&gt; ...</entry>
-  <entry key="1511">Регулювати потік</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Регулювати микрфон</entry>
   <entry key="1513">Премодерируемый чат</entry>
   <entry key="1514">Опублікувати повідомлення</entry>

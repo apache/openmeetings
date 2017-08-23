@@ -168,7 +168,6 @@
   <entry key="153">Отменить</entry>
   <entry key="154">Удалить</entry>
   <entry key="155">Создать запись</entry>
-  <entry key="156">Заново загрузить запись</entry>
   <entry key="157">Удалить запись</entry>
   <entry key="158">Статус</entry>
   <entry key="159">заблокировано</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Присоединившиеся:</entry>
   <entry key="400"></entry>
   <entry key="401">Участники в этой комнате:</entry>
-  <entry key="402">обновить</entry>
+  <entry key="refresh.label">обновить</entry>
   <entry key="404">Нажмите на комнату для деталей</entry>
   <entry key="405">Чат с пользователями этой комнаты:</entry>
   <entry key="406">Комната:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Год</entry>
   <entry key="702">Загрузить файл</entry>
   <entry key="703">Добавить папку</entry>
-  <entry key="704">Обновить</entry>
   <entry key="705">Корзина</entry>
   <entry key="706">Мои файлы (Локальное устройство)</entry>
   <entry key="707">Файлы из комнаты (Общее устройство)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Комнаты данного пользователя</entry>
   <entry key="1509">Создать/редактировать комнату для этого события</entry>
   <entry key="1510">Вы можете ввести несколько адресов в формате: Имя1 Фамилия1 &lt;адрес1&gt;,"Имя2 Фамилия2" &lt;адрес2&gt;,'Имя3 Фамилия3' &lt;адрес3&gt;, ...</entry>
-  <entry key="1511">Регулировать поток</entry>
+	<entry key="volume.label">Регулировать громкость</entry>
   <entry key="1512">Регулировать микрфон</entry>
   <entry key="1513">Премодерируемый чат</entry>
   <entry key="1514">Опубликовать сообщение</entry>

@@ -56,6 +56,7 @@
 		<site.basedir>${project.basedir}</site.basedir>
 		<src.pack.skip>false</src.pack.skip>
 		<derby.version>10.13.1.1</derby.version>
+		<license.excludedScopes>test</license.excludedScopes>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
@@ -207,9 +208,6 @@
 									<goal>aggregate-add-third-party</goal>
 								</goals>
 								<configuration>
-									<properties>
-										<license.excludedScopes>test</license.excludedScopes>
-									</properties>
 									<outputDirectory>${project.build.directory}</outputDirectory>
 									<useMissingFile>true</useMissingFile>
 									<licenseMerges>

@@ -168,7 +168,6 @@
   <entry key="153">Cancelar</entry>
   <entry key="154">Borrar</entry>
   <entry key="155">Nuevo registro</entry>
-  <entry key="156">Actualizar registro</entry>
   <entry key="157">Borrar registro</entry>
   <entry key="158">Estado</entry>
   <entry key="159">desactivado</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Unido:</entry>
   <entry key="400"/>
   <entry key="401">Usuarios en la sala:</entry>
-  <entry key="402">actualizar</entry>
+  <entry key="refresh.label">actualizar</entry>
   <entry key="404">Pulse sobre una sala para ver los detalles</entry>
   <entry key="405">Conversar con los usuarios de esta sala:</entry>
   <entry key="406">Sala:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Año</entry>
   <entry key="702">Subir archivo</entry>
   <entry key="703">Añadir carpeta</entry>
-  <entry key="704">Actualizar</entry>
   <entry key="705">Papelera</entry>
   <entry key="706">Mis archivos (Dispositivo personal)</entry>
   <entry key="707">Archivos de la sala (Dispositivo público)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Salas del usuario actual</entry>
   <entry key="1509">Crear/Modificar sala especial de cita</entry>
   <entry key="1510">Puede insertar múltiples direcciones en el formato: nombre1 apellidos1 &lt;correo1&gt;,"nombre2 apellidos2" &lt;correo2&gt;,'nombre3 apellidos3' &lt;correo3&gt;, ...</entry>
-  <entry key="1511">Ajustar volumen de flujo</entry>
+	<entry key="volume.label">Ajustar volumen</entry>
   <entry key="1512">Ajustar volumen del micrófono</entry>
   <entry key="1513">Es un chat moderado</entry>
   <entry key="1514">Permitir mensajes</entry>

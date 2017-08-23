@@ -168,7 +168,6 @@
   <entry key="153">キャンセル</entry>
   <entry key="154">削除</entry>
   <entry key="155">新規作成</entry>
-  <entry key="156">更新</entry>
   <entry key="157">削除</entry>
   <entry key="158">ステータス</entry>
   <entry key="159">無効</entry>
@@ -391,7 +390,7 @@
   <entry key="399">参加者数:</entry>
   <entry key="400">会議室リスト</entry>
   <entry key="401">会議室内のユーザー:</entry>
-  <entry key="402">更新</entry>
+  <entry key="refresh.label">更新</entry>
   <entry key="404">詳細表示</entry>
   <entry key="405">会議室内のユーザーとチャット:</entry>
   <entry key="406">会議室:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">年</entry>
   <entry key="702">ファイルをアップロードする</entry>
   <entry key="703">フォルダを追加する</entry>
-  <entry key="704">リフレッシュ</entry>
   <entry key="705">ゴミ箱 (アイテムをここにドラッグ&amp;ドロップ)</entry>
   <entry key="706">私のファイル (ホーム・ドライブ)</entry>
   <entry key="707">会議室のファイル (パブリック・ドライブ)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">現ユーザーの会議室</entry>
   <entry key="1509">イベント専用会議室を作成／編集する</entry>
   <entry key="1510">複数のアドレスを書式に含めることができます: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">ストリーミング音量を調整する</entry>
+	<entry key="volume.label">ストリーミング音量を調整する</entry>
   <entry key="1512">マイク音量を調整する</entry>
   <entry key="1513">チャットを制限</entry>
   <entry key="1514">メッセージを許可</entry>

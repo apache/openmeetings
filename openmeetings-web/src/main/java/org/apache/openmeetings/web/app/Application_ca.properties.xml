@@ -168,7 +168,6 @@
   <entry key="153">cancel·lar</entry>
   <entry key="154">borrar</entry>
   <entry key="155">Nou registre</entry>
-  <entry key="156">Actualitzar registre</entry>
   <entry key="157">Esborrar registre</entry>
   <entry key="158">Estat</entry>
   <entry key="159">no actiu</entry>
@@ -391,7 +390,7 @@
   <entry key="399">En el sistema:</entry>
   <entry key="400"></entry>
   <entry key="401">Usuaris en la sala:</entry>
-  <entry key="402">actualitzar</entry>
+  <entry key="refresh.label">actualitzar</entry>
   <entry key="404">Premi sobre una sala per a veure els detalls</entry>
   <entry key="405">Escriure als usuaris d'aquesta sala:</entry>
   <entry key="406">Sala:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Any</entry>
   <entry key="702">Pujar fitxer</entry>
   <entry key="703">Fitxer carpeta</entry>
-  <entry key="704">Actualizar</entry>
   <entry key="705">Papelera</entry>
   <entry key="706">Els meus Arxius (Dispositiu personal)</entry>
   <entry key="707">Arxius de la Sala (Dispositiu públic)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

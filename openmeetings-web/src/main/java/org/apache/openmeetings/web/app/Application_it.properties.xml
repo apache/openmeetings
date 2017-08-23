@@ -168,7 +168,6 @@
   <entry key="153">Annulla</entry>
   <entry key="154">Elimina</entry>
   <entry key="155">Nuovo record</entry>
-  <entry key="156">Aggiorna record</entry>
   <entry key="157">Elimina record</entry>
   <entry key="158">Stato</entry>
   <entry key="159">Disabilitato</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Connessi</entry>
   <entry key="400"></entry>
   <entry key="401">Utenti nella stanza:</entry>
-  <entry key="402">Aggiorna</entry>
+  <entry key="refresh.label">Aggiorna</entry>
   <entry key="404">Clicca su una stanza per avere dettagli</entry>
   <entry key="405">Parla con gli utenti nella stanza:</entry>
   <entry key="406">Stanza:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Anno</entry>
   <entry key="702">Carica File</entry>
   <entry key="703">Carica cartella</entry>
-  <entry key="704">Aggiorna</entry>
   <entry key="705">Cestino (Trascina le voci qui)</entry>
   <entry key="706">Miei File (Spazio privato)</entry>
   <entry key="707">Files della stanza (Spazio pubblico)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Stanze dell'utente corrente</entry>
   <entry key="1509">Crea/Modifica stanza speciale per l'appuntamento</entry>
   <entry key="1510">Puoi inserire diversi indirizzi nel formato: nome1 cognome1 &lt;email1&gt;,"nome2 cognome2" &lt;email2&gt;,'nome3 cognome3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Regola il volume del flusso</entry>
+	<entry key="volume.label">Regola il volume</entry>
   <entry key="1512">Regola il volume del microfono</entry>
   <entry key="1513">E' una chat moderata</entry>
   <entry key="1514">Permetti messaggi</entry>

@@ -30,6 +30,7 @@ import flash.media.VideoStreamSettings;
 import flash.media.SoundTransform;
 import flash.net.NetConnection;
 import flash.net.NetStream;
+import flash.net.Responder;
 import mx.core.UIComponent;
 
 public class OmVideo {
@@ -65,6 +66,10 @@ public class OmVideo {
 			ui.addChild(vid);
 		}
 		return vid;
+	}
+
+	public function getMic():Microphone {
+		return mic;
 	}
 
 	public function resize(width:int, height:int):void {
@@ -304,6 +309,10 @@ public class OmVideo {
 			clear();
 		}
 		ns = null;
+	}
+
+	public function getNc():NetConnection {
+		return nc;
 	}
 }
 }

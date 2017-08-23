@@ -168,7 +168,6 @@
   <entry key="153">Zrušiť</entry>
   <entry key="154">Zmazať</entry>
   <entry key="155">Nové nahrávanie</entry>
-  <entry key="156">Obnoviť nahrávanie</entry>
   <entry key="157">Zmazať nahrávku</entry>
   <entry key="158">Status</entry>
   <entry key="159">Zablokované</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Pripojený</entry>
   <entry key="400"></entry>
   <entry key="401">Používatelia v tejto miestnosti</entry>
-  <entry key="402">Obnoviť</entry>
+  <entry key="refresh.label">Obnoviť</entry>
   <entry key="404">Kliknite na miestnosť pre informácie o miestnosti</entry>
   <entry key="405">Chat s používateľmi v tejto miestnosti</entry>
   <entry key="406">Miestnosť</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Rok</entry>
   <entry key="702">Nahrať súbor</entry>
   <entry key="703">Pridať súbor</entry>
-  <entry key="704">Obnoviť</entry>
   <entry key="705">Kôš</entry>
   <entry key="706">Moje súbory</entry>
   <entry key="707">Súbory v miestnosti(verejné)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

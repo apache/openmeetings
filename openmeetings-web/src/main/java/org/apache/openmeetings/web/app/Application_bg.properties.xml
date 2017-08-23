@@ -168,7 +168,6 @@
   <entry key="153">Отказ</entry>
   <entry key="154">Изтриване</entry>
   <entry key="155">Нов запис</entry>
-  <entry key="156">Опресняване на записа</entry>
   <entry key="157">Изтриване на запис</entry>
   <entry key="158">Статус</entry>
   <entry key="159">изключен</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Включили се:</entry>
   <entry key="400"></entry>
   <entry key="401">Потребители в тази стая:</entry>
-  <entry key="402">опресняване</entry>
+  <entry key="refresh.label">опресняване</entry>
   <entry key="404">натиснете върху стая за детайли</entry>
   <entry key="405">Чат с потребителите от тази стая:</entry>
   <entry key="406">Стая:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Година</entry>
   <entry key="702">Качване на файл</entry>
   <entry key="703">Нова папка</entry>
-  <entry key="704">Опресняване</entry>
   <entry key="705">Кошче</entry>
   <entry key="706">Моите файлове (home)</entry>
   <entry key="707">Файлове за стаята</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Rooms of the current user</entry>
   <entry key="1509">Create/Modify appointment special room</entry>
   <entry key="1510">You can enter multiple addresses in the format: firstname1 lastname1 &lt;email1&gt;,"firstname2 lastname2" &lt;email2&gt;,'firstname3 lastname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Adjust stream volume</entry>
+	<entry key="volume.label">Adjust volume</entry>
   <entry key="1512">Adjust microphone volume</entry>
   <entry key="1513">Is chat moderated</entry>
   <entry key="1514">Allow message</entry>

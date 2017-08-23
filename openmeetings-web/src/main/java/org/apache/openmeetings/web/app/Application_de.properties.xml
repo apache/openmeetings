@@ -168,7 +168,6 @@
   <entry key="153">Abbrechen</entry>
   <entry key="154">Enfernen</entry>
   <entry key="155">Datensatz anlegen</entry>
-  <entry key="156">Datensatz neu laden</entry>
   <entry key="157">Datensatz entfernen</entry>
   <entry key="158">Status</entry>
   <entry key="159">gesperrt</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Mitglied seit:</entry>
   <entry key="400"></entry>
   <entry key="401">Benutzer in diesem Raum:</entry>
-  <entry key="402">Neu laden</entry>
+  <entry key="refresh.label">Neu laden</entry>
   <entry key="404">Wählen Sie einen Raum aus, um Details zu erhalten.</entry>
   <entry key="405">Chatten Sie mit Benutzern in diesem Raum:</entry>
   <entry key="406">Raum:</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Jahr</entry>
   <entry key="702">Datei hochladen</entry>
   <entry key="703">Ordner hinzufügen</entry>
-  <entry key="704">Aktualisieren</entry>
   <entry key="705">Papierkorb (Ziehen Sie eine Datei mit der Maus hierher)</entry>
   <entry key="706">Meine Dateien (persönliches Laufwerk)</entry>
   <entry key="707">Konferenzdokumente (öffentliches Laufwerk)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Räume des aktuellen Benutzers</entry>
   <entry key="1509">Erstellen/Ändern Termin spezieller Raum</entry>
   <entry key="1510">Sie können mehrere Adressen im folgenden Format angeben: vorname1 nachname1 &lt;email1&gt;,"vorname2 nachname2" &lt;email2&gt;,'vorname nachname3' &lt;email3&gt;, ...</entry>
-  <entry key="1511">Stream-Volumen anpassen</entry>
+	<entry key="volume.label">Volumen anpassen</entry>
   <entry key="1512">Mikrofon-Volumen anpassen</entry>
   <entry key="1513">Chat ist moderiert</entry>
   <entry key="1514">Erlaube Nachrichten</entry>

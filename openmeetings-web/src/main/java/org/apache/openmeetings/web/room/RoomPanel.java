@@ -554,6 +554,19 @@ public class RoomPanel extends BasePanel {
 							}
 						}
 						break;
+					case audioActivity:
+					{
+						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+						Client c = getClientBySid(obj.getString("sid"));
+						if (c == null) {
+							log.error("Not existing user in audioActivity {} !!!!", obj);
+							return;
+						}
+						if (!getClient().getUid().equals(c.getUid())) {
+							handler.appendJavaScript(String.format("VideoManager.micActivity('%s', %s);", c.getUid(), obj.getBoolean("active")));
+						}
+					}
+						break;
 				}
 			}
 		}

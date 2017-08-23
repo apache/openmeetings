@@ -168,7 +168,6 @@
   <entry key="153">Annuler</entry>
   <entry key="154">Effacer</entry>
   <entry key="155">Nouvel enregistrement</entry>
-  <entry key="156">Actualiser l'enregistrement</entry>
   <entry key="157">Effacer l'enregistrement</entry>
   <entry key="158">Statut</entry>
   <entry key="159">Désactivé</entry>
@@ -391,7 +390,7 @@
   <entry key="399">Inscrits :</entry>
   <entry key="400"></entry>
   <entry key="401">Utilisateur dans la salle :</entry>
-  <entry key="402">Rafraichir</entry>
+  <entry key="refresh.label">Rafraichir</entry>
   <entry key="404">Infos : Cliquez sur une salle</entry>
   <entry key="405">Discutez avec les utilisateurs de cette salle :</entry>
   <entry key="406">Salle :</entry>
@@ -677,7 +676,6 @@
   <entry key="701">Année</entry>
   <entry key="702">Ajouter un fichier</entry>
   <entry key="703">Ajouter un dossier</entry>
-  <entry key="704">Rafraichir</entry>
   <entry key="705">Poubelle</entry>
   <entry key="706">Mes fichiers personnels</entry>
   <entry key="707">Les fichiers de la salle (Public)</entry>
@@ -1462,7 +1460,7 @@
   <entry key="1508">Salles de l'utilisateur</entry>
   <entry key="1509">Créer/Modifier salle particulière</entry>
   <entry key="1510">Vous pouvez entrer plusieurs adresses sous le format : prénom1 nom1 &lt;courriel1&gt;,"prénom2 nom2" &lt;courriel2&gt;,'prénom3 nom3' &lt;courriel3&gt;, ...</entry>
-  <entry key="1511">Ajuster le volume</entry>
+	<entry key="volume.label">Ajuster le volume</entry>
   <entry key="1512">Ajuster le volume du micro</entry>
   <entry key="1513">T'chat est-t-il modéré</entry>
   <entry key="1514">Autoriser les messages</entry>

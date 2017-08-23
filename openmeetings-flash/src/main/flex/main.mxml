@@ -29,6 +29,7 @@
 	</fx:Declarations>
 	<fx:Script><![CDATA[
 		import mx.core.FlexGlobals;
+		import mx.graphics.SolidColor;
 		import mx.utils.UIDUtil;
 
 		import org.apache.openmeetings.OmVideo;
@@ -46,6 +47,8 @@
 		private var recName:String;
 		private var mic:Microphone = null;
 		private var activities:Array = [];
+		private var activityTimer:Timer = new Timer(100);
+		private var active:Boolean = false;
 		[Bindable]
 		private var interview:Boolean = false;
 
@@ -138,8 +141,13 @@
 						if (_hasVideo(c.activities) && hasVideo()) {
 							_hasAudio(c.activities) ? video.unmute() : video.mute();
 						}
+						if (mic != null) {
+							activityTimer.start();
+						} else {
+							activityTimer.stop();
+						}
 						activities = c.activities;
-						debug("Client updated: ", c);
+						//debug("Client updated: ", c);
 					});
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						if (hasAudio()) {
@@ -151,7 +159,14 @@
 						video.reset();
 						var broadcastId:String = UIDUtil.createUID();
 						debug("BroadcastId = " + broadcastId);
-						video.broadcast(broadcastId, hasVideo() ? getCam() : null, getMic());
+						activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
+						mic = getMic();
+						if (mic != null) {
+							volumeRect.visible = true;
+							volumeRect.fill = new SolidColor(0x00FF00);
+							activityTimer.start();
+						}
+						video.broadcast(broadcastId, hasVideo() ? getCam() : null, mic);
 						if (!hasAudio()) {
 							video.mute();
 						}
@@ -328,6 +343,25 @@
 			video.play(recName + ".flv");
 		}
 
+		private function testTimerListener(event:TimerEvent):void {
+			ExternalInterface.call("VideoSettings.micActivity", mic.activityLevel);
+		}
+
+		private function broadcastTimerListener(event:TimerEvent):void {
+			var params:Object = FlexGlobals.topLevelApplication.parameters;
+			var _active:Boolean = mic.activityLevel > 8;
+			var h:int = video.height - 10;
+			var ah:int = Math.round(mic.activityLevel * h / 100);
+			volumeRect.y = 5 + h - ah;
+			volumeRect.height = ah;
+			if (active !== _active) {
+				active = _active;
+				video.getNc().call("micActivity", new Responder(function (res:Object):void {
+				}), active);
+				ExternalInterface.call("VideoManager.micActivity", params.uid, active);
+			}
+		}
+
 		private function startTestRecording():void {
 			try {
 				var counter:int = 5;
@@ -337,10 +371,7 @@
 				var t:Date = new Date();
 				recName = "TEST_SETUP_" + t.getTime();
 				mic = getMic();
-				var activityTimer:Timer = new Timer(100);
-				activityTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
-					ExternalInterface.call("VideoSettings.micActivity", mic.activityLevel);
-				});
+				activityTimer.addEventListener(TimerEvent.TIMER, testTimerListener);
 				video.record(recName, getCam(), mic, function ():void {
 					if (mic != null) {
 						activityTimer.start();
@@ -352,6 +383,7 @@
 							ExternalInterface.call("VideoSettings.allowPlay");
 							playTestRecording();
 							activityTimer.stop();
+							activityTimer.removeEventListener(TimerEvent.TIMER, testTimerListener);
 							mic = null;
 						}
 					});
@@ -364,6 +396,7 @@
 		]]></fx:Script>
 
 	<mx:UIComponent id="videoDisplay" width="0" height="0" />
+	<s:Rect id="volumeRect" x="5" y="5" width="10" height="100" visible="false" />
 	<s:Label id="timerText" height="20" width="45" x="20" y="5" paddingLeft="5" paddingTop="5"
 			 visible="false" backgroundColor="0xf5f5f5" fontWeight="bold"><s:text></s:text></s:Label>
 </s:Application>

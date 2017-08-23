@@ -332,7 +332,7 @@ public class UserManager implements IUserManager {
 
 				Map<Integer, String> messageObj = new HashMap<>();
 				messageObj.put(0, "kick");
-				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), currentScope);
+				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getUid(), currentScope);
 			}
 			return true;
 		} catch (Exception err) {
@@ -362,7 +362,7 @@ public class UserManager implements IUserManager {
 
 			Map<Integer, String> messageObj = new HashMap<>();
 			messageObj.put(0, "kick");
-			scopeApplicationAdapter.sendMessageById(messageObj, rcl.getId(), scope);
+			scopeApplicationAdapter.sendMessageById(messageObj, uid, scope);
 
 			scopeApplicationAdapter.roomLeaveByScope(rcl, scope);
 
