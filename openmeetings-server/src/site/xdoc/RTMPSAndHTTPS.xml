@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Using OpenMeetings with RTMPS and HTTPS</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -37,20 +37,20 @@
 				</li>
 			</ul>
 		</section>
-		<section name="Prerequisites">
+		<section name="'Real' certificate">
+			<h3>Prerequisites</h3>
 			<ul>
 				<li>You need OpenMeetings 1.9.x or later for this, OpenMeetings 1.8.x does not have those options.</li>
 				<li>Install OpenMeetings according to the install instructions and check that it runs without problems</li>
 				<li>Rename the existing keystore file <tt>red5/conf/keystore.jmx</tt> to <tt>red5/conf/keystore.bak</tt></li>
 				<li>Rename the existing truststore file <tt>red5/conf/truststore.jmx</tt> to <tt>red5/conf/truststore.bak</tt></li>
 			</ul>
-		</section>
-		<section name="Create Keystore from the scratch (*)">
+			<h3>Create Keystore from the scratch</h3>
 			<ol>
 				<li>
 					Create a new keystore and key, use the same password for both:<br/>
 					<br/><source><![CDATA[
-keytool -keysize 2048 -genkey -alias red5 -keyalg RSA -keystore red5/conf/keystore
+keytool -keysize 2048 -genkey -alias red5 -keyalg RSA -keystore red5/conf/keystore.jks
 Enter keystore password:
 Re-enter new password:
 What is your first and last name?
@@ -70,41 +70,41 @@ Is CN=demo.openmeetings.de, OU=Dev, O=OpenMeetings, L=Henderson, ST=Nevada, C=US
 Enter key password for <red5>
 ]]></source>
 				</li>
-				<li>Generate a CSR: <source><![CDATA[keytool -certreq -keyalg RSA -alias red5 -file red5.csr -keystore red5/conf/keystore]]></source>
+				<li>Generate a CSR: <source><![CDATA[keytool -certreq -keyalg RSA -alias red5 -file red5.csr -keystore red5/conf/keystore.jks]]></source>
 				</li>
 				<li>Submit CSR to your CA of choice and receive a signed certificate
 				</li>
 				<li>Import your chosen CA's root certificate into the keystore (may
 					need to download it from their site - make sure to get the root CA and
 					not the intermediate one): 
-					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore -trustcacerts -file root.crt]]></source>
+					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore.jks -trustcacerts -file root.crt]]></source>
 					(note: you may receive a warning that the certificate already exists in the system wide keystore - import
 					anyway)
 				</li>
 				<li>Import the intermediate certificate(s) you normally receive with
 					the certificate:
-					<source><![CDATA[keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts -file intermediate.crt]]></source>
+					<source><![CDATA[keytool -import -alias intermed -keystore red5/conf/keystore.jks -trustcacerts -file intermediate.crt]]></source>
 				</li>
 				<li>Import the certificate you received:
-					<source><![CDATA[keytool -import -alias red5 -keystore red5/conf/keystore -trustcacerts -file demo.openmeetings.de.crt]]></source>
+					<source><![CDATA[keytool -import -alias red5 -keystore red5/conf/keystore.jks -trustcacerts -file demo.openmeetings.de.crt]]></source>
 				</li>
 				<li>Please NOTE according to this <a href="http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html">http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html</a>
 					guide you can split keystore and truststore (OPTIONAL you might just copy keystore to truststore)
 				</li>
 				<li>Create additional certificate as described above.
-					Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>. (This step is required to be able to use
+					Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore.jks</tt>. (This step is required to be able to use
 					screen-sharing web application, you can copy "main" keystore while testing)
 				</li>
 			</ol>
-		</section>
-		<section name="Create Keystore using existing key-pair (**)">
-			<p>Prerequicites:</p>
+			<h3>Create Keystore using existing key-pair</h3>
+			<h4>Prerequisites</h4>
 			<ul>
 				<li>Server key: red5.key</li>
 				<li>Signed CSR: red5.crt</li>
 				<li>CA's root certificate: root.crt</li>
 				<li>** Intermediate certificate(s): intermedXX.crt</li>
 			</ul>
+			<h4>Steps</h4>
 			<ol>
 				<li>
 					Export existing keys into PKCS12 format:<br/>
@@ -116,26 +116,87 @@ Verifying - Enter Export Password: password
 ]]></source>
 				</li>
 				<li>Import resulting red5.p12 into keystore: <source><![CDATA[
-keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstoretype PKCS12 -deststorepass password -destkeystore red5/conf/keystore -alias red5
+keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstoretype PKCS12 -deststorepass password -destkeystore red5/conf/keystore.jks -alias red5
 ]]></source>
 				</li>
 				<li>Import your chosen CA's root certificate into the keystore (may
 					need to download it from their site - make sure to get the root CA and
 					not the intermediate one): 
-					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore -trustcacerts -file root.crt]]></source>
+					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore.jks -trustcacerts -file root.crt]]></source>
 					(note: you may receive a warning that the certificate already exists in the system wide keystore - import
 					anyway)
 				</li>
 				<li>Import the intermediate certificate(s) you normally receive with
 					the certificate:
-					<source><![CDATA[keytool -import -alias intermed -keystore red5/conf/keystore -trustcacerts -file intermedXX.crt]]></source>
+					<source><![CDATA[keytool -import -alias intermed -keystore red5/conf/keystore.jks -trustcacerts -file intermedXX.crt]]></source>
 				</li>
 				<li>Please NOTE according to this <a href="http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html">http://javarevisited.blogspot.com/2012/09/difference-between-truststore-vs-keyStore-Java-SSL.html</a>
 					guide you can split keystore and truststore (OPTIONAL you might just copy keystore to truststore)
 				</li>
 				<li>Create additional certificate as described above.
-					Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore</tt>. (This step is required to be able to use
+					Add this certificate to the following keystores: <tt>red5/conf/keystore.screen</tt> and <tt>red5/conf/keystore.jks</tt>. (This step is required to be able to use
 					screen-sharing web application, you can copy "main" keystore while testing)
+				</li>
+			</ol>
+		</section>
+		<section name="Self-signed certificate">
+			<h3>Prerequisites</h3>
+			<ul>
+				<li>Create CA's root certificate: ca.crt</li>
+				<li>Create self-signed server certificate: red5.crt <tt>Common Name (CN) while creating certificate 
+					should be assign to FQDN of your site, for example - vkc.company.com</tt></li>
+				<li>Rename the existing keystore file <tt>red5/conf/keystore.jmx</tt> to <tt>red5/conf/keystore.bak</tt></li>
+				<li>Rename the existing truststore file <tt>red5/conf/truststore.jmx</tt> to <tt>red5/conf/truststore.bak</tt></li>
+			</ul>
+			<h3>Steps</h3>
+			<ol>
+				<li>Export existing keys into PKCS12 format:<source><![CDATA[
+cd _folder_with_certificates_
+openssl pkcs12 -export -in red5.crt -inkey red5.key -out red5.p12 -name red5 -certfile ca.crt
+]]></source>
+				</li>
+				<li>Import resulting red5.p12 into keystore:<source><![CDATA[
+keytool -importkeystore -srcstorepass changeit -srckeystore red5.p12 -srcstoretype PKCS12 -deststorepass changeit -destkeystore /opt/red5/conf/keystore.jks -alias red5
+]]></source>
+					This command creates the keystore.jks with password changeit (may be any password)
+				</li>
+				<li>Import your CA's root certificate into the keystore:<source><![CDATA[
+keytool -import -alias root -keystore /opt/red5/conf/keystore.jks -keystorepass changeit -trustcacerts -file ca.crt
+]]></source>
+				</li>
+				<li>copy keystore to truststore<source><![CDATA[
+cp /opt/red5/conf/keystore.jks /opt/red5/conf/truststore.jks
+]]></source>
+				</li>
+				<li>Change passwords in  /opt/red5/conf/red5.properties<source><![CDATA[
+rtmps.keystorepass=changeit
+rtmps.truststorepass=changeit
+jmx.keystorepass=changeit
+]]></source>
+				</li>
+				<li>Set up SSL according <a href="#SSL_for_the_web_interface" title="SSL for the web interface">SSL for the web interface</a> section.</li>
+				<li>Set up RTMPS according <a href="#Tunneling_RTMPS" title="Tunneling RTMPS">Tunneling RTMPS</a> or <a href="#Native_RTMPS" title="Native RTMPS">Native RTMPS</a> sections.</li>
+				<li>Restart OM service or whole OM server. Now OM server is ready to accept SSL-connections.</li>
+			</ol>
+			<h3>Steps for client machines</h3>
+			<p>Windows specific steps are marked with (**)</p>
+			<ol>
+				<li>(**)Add the ca.crt certificate as trusted into the CA's list on all windows PC at the system level (certmgr.msc applet)</li>
+				<li>Add the ca.crt certificate as trusted into Chrome/Firefox if it used</li>
+				<li>
+					Add the ca.crt certificate into ${JAVA_HOME}/lib/security/cacerts with keytool utility on a PC that organizes screensharing
+					<p> (**) <br/>
+						For example, Java Version 8 Update 144 has been installed on Windows machine by default location path.<br/>
+						Copy ca.crt to a folder :  c:\ca.crt<br/>
+						Start command line interface as administrator:<br/>
+						runas /user:AdminAccount cmd.exe<br/>
+						Enter admin password<br/>
+						Enter to bin directory of java:<br/>
+						cd "c:\Program Files\Java\jre1.8.0_144\bin"<br/>
+						Import ca.crt into keystore:<br/>
+						keytool -import -alias root -keystore ..\lib\security\cacerts -file c:\ca.crt<br/>
+						Enter the password to keystore: changeit<br/>
+   					</p>
 				</li>
 			</ol>
 		</section>
@@ -210,8 +271,8 @@ keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstorety
 			</ol>
 		</section>
 		<section name="Credits">
-			<p>Credits goto: Nexus and Holger Rabbach for their help and
-				contribution and configuration documention! </p>
+			<p>Thanks to Nexus, Holger Rabbach and Yakovlev Nick for their help and
+				contribution to configuration and documentation! </p>
 		</section>
 	</body>
 </document>
