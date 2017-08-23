@@ -29,6 +29,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
 @Category(SeleniumTests.class)
@@ -93,7 +94,7 @@ public abstract class AbstractTestDefaults extends AbstractSpringTest {
 	public void setUp() {
 		FirefoxProfile profile = new FirefoxProfile();
 		profile.setPreference("intl.accept_languages", getLocale());
-		driver = new FirefoxDriver(profile);
+		driver = new FirefoxDriver(new FirefoxOptions().setProfile(profile));
 	}
 
 	/**
