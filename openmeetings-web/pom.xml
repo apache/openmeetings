@@ -16,8 +16,8 @@
    limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.apache.openmeetings</groupId>
@@ -31,6 +31,7 @@
 	<description>Module for all Wicket based UI OpenMeetings components</description>
 	<properties>
 		<mysql.version>5.1.43</mysql.version>
+		<mssql.version>6.2.1.jre8</mssql.version>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
@@ -39,12 +40,29 @@
 			<id>mysql</id>
 			<properties>
 				<db>mysql</db>
+				<db_user>root</db_user>
+				<db_pass></db_pass>
 			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>mysql</groupId>
 					<artifactId>mysql-connector-java</artifactId>
 					<version>${mysql.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>mssql</id>
+			<properties>
+				<db>mssql</db>
+				<db_user>sa</db_user>
+				<db_pass>ass</db_pass>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>com.microsoft.sqlserver</groupId>
+					<artifactId>mssql-jdbc</artifactId>
+					<version>${mssql.version}</version>
 				</dependency>
 			</dependencies>
 		</profile>
