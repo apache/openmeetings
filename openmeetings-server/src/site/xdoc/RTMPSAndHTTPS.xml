@@ -148,7 +148,7 @@ keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstorety
 				<li>Rename the existing keystore file <tt>red5/conf/keystore.jmx</tt> to <tt>red5/conf/keystore.bak</tt></li>
 				<li>Rename the existing truststore file <tt>red5/conf/truststore.jmx</tt> to <tt>red5/conf/truststore.bak</tt></li>
 			</ul>
-			<h3>Steps</h3>
+			<h3>Steps for OM server</h3>
 			<ol>
 				<li>Export existing keys into PKCS12 format:<source><![CDATA[
 cd _folder_with_certificates_
@@ -196,7 +196,7 @@ jmx.keystorepass=changeit
 						Import ca.crt into keystore:<br/>
 						keytool -import -alias root -keystore ..\lib\security\cacerts -file c:\ca.crt<br/>
 						Enter the password to keystore: changeit<br/>
-   					</p>
+					</p>
 				</li>
 			</ol>
 		</section>
