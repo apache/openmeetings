@@ -42,13 +42,15 @@
 
 		<!--- Change the video resolution by chaning pod size -->
 		<method name="setDefaultVideoSize" args="w,h">
+		<![CDATA[
 			this.initRatio = w / h;
 			this.setAttribute("width", w + this.videoInsetX);
 
-			if (canvas.currentRoomObj.showMicrophoneStatus) {
+			if (canvas.currentRoomObj.hiddenElements.indexOf('MicrophoneStatus') < 0) {
 				this.setAttribute("bottomBarHeight", this._innertop.height + 1);
 			}
 			this.setAttribute("height", (minimized ? 0 : h) + this.videoInsetY + this.bottomBarHeight);
+		]]>
 		</method>
 
 		<view name="_chatvideoinner" x="$once{ parent.videoInsetX-1 }" y="$once{ parent.videoInsetY-1 }"
