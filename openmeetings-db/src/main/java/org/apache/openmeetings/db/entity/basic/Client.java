@@ -443,7 +443,8 @@ public class Client implements IClient {
 		JSONObject u = new JSONObject();
 		if (user != null) {
 			JSONObject a = new JSONObject();
-			u.put("firstName", user.getFirstname())
+			u.put("id", user.getId())
+				.put("firstName", user.getFirstname())
 				.put("lastName", user.getLastname())
 				.put("address", a);
 			if (user.getAddress() != null) {

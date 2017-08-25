@@ -129,7 +129,6 @@ public class RoomPanel extends BasePanel {
 					, getUserId(), "0", r.getId()
 					, cp.getRemoteAddress()
 					, "" + r.getId());
-			//TODO add all broadcasting clients
 			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getSid());
 			options.put("interview", Room.Type.interview == r.getType());
 			options.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
@@ -564,7 +563,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (!getClient().getUid().equals(c.getUid())) {
-							handler.appendJavaScript(String.format("VideoManager.micActivity('%s', %s);", c.getUid(), obj.getBoolean("active")));
+							handler.appendJavaScript(String.format("if (!!VideoManager) {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
 						}
 					}
 						break;

@@ -49,6 +49,7 @@
 		private var activities:Array = [];
 		private var activityTimer:Timer = new Timer(100);
 		private var active:Boolean = false;
+		private var userId:String = null;
 		[Bindable]
 		private var interview:Boolean = false;
 
@@ -97,6 +98,7 @@
 			micRate = getIntParam(params.micRate, 22);
 			video = new OmVideo(videoDisplay, params);
 			activities = params.av == null ? [] : params.av.split(',');
+			userId = params.userId;
 			switch (params.mode) {
 				case 'settings': {
 					ExternalInterface.addCallback("getDevices", function ():Object {
@@ -155,6 +157,7 @@
 						}
 					});
 					attachCamera(function ():void {
+						addImage(params.width, params.height);
 						video.resize(params.width, params.height);
 						video.reset();
 						var broadcastId:String = UIDUtil.createUID();
@@ -175,15 +178,25 @@
 				}
 					break;
 				case OmVideo.PLAY: {
+					addImage(params.width, params.height);
 					video.resize(params.width, params.height);
 					video.play(params.broadcastId); // TODO audio/video
 				}
 					break;
 			}
-			ExternalInterface.addCallback("vidResize", function (width:int, height:int):void {
-				video.resize(width, height);
-				video.vidResize(width, height);
+			ExternalInterface.addCallback("vidResize", function (_width:int, _height:int):void {
+				userImage.width = _width;
+				userImage.height = _height;
+				video.resize(_width, _height);
+				video.vidResize(_width, _height);
 			});
+		}
+
+		private function addImage(_width:int, _height:int):void {
+			userImage.source = 'profile/' + userId + '?anti=' + new Date().time;
+			userImage.width = _width;
+			userImage.height = _height;
+			userImage.visible = true;
 		}
 
 		private function uncaughtError(e:UncaughtErrorEvent):void {
@@ -395,6 +408,7 @@
 		}
 		]]></fx:Script>
 
+	<s:Image id="userImage" visible="false" width="0" height="0" />
 	<mx:UIComponent id="videoDisplay" width="0" height="0" />
 	<s:Rect id="volumeRect" x="5" y="5" width="10" height="100" visible="false" />
 	<s:Label id="timerText" height="20" width="45" x="20" y="5" paddingLeft="5" paddingTop="5"

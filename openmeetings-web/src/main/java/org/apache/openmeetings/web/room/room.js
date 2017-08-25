@@ -284,6 +284,7 @@ var Video = (function() {
 		o.height = c.height;
 		o.sid = c.sid;
 		o.uid = c.uid;
+		o.userId = c.user.id;
 		o.broadcastId = c.broadcastId;
 		swf = initVideo(vc, _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
