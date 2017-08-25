@@ -275,7 +275,7 @@
 	border-radius: 0;
 	border: 0;
 	box-shadow: initial;
-	left: 50px;
+	left: 70px;
 	top: -50px;
 	background-color: transparent;
 }
@@ -319,6 +319,19 @@
 }
 .ui-dialog.video .sett-row select, .ui-dialog.video .level-meter {
 	width: 250px;
+}
+.ui-dialog.video .ui-dialog-titlebar-collapse span
+, .ui-dialog.video .ui-dialog-titlebar-volume span
+, .ui-dialog.video .ui-dialog-titlebar-refresh span
+{
+	display: block;
+	margin: 1px;
+}
+.ui-dialog.video .footer {
+	display: none;
+}
+.ui-dialog.video.mic-status .footer {
+	display: block;
 }
 .input .select2-container {
 	max-height: 100px;

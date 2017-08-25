@@ -45,9 +45,13 @@
 	<div style="display:none">
 		<div id="user-video">
 			<div class="video"></div>
+			<div class="footer ui-state-highlight">
+				<div class="on"><wicket:message key="1434"/></div>
+				<div class="off" style="display:none;"><wicket:message key="1435"/></div>
+			</div>
 		</div>
 		<div id="video-refresh-btn">
-			<a class="ui-dialog-titlebar-volume ui-corner-all ui-state-default" href="#" wicket:message="title:refresh.label" role="button" data-toggle="dropdown">
+			<a class="ui-dialog-titlebar-refresh ui-corner-all ui-state-default" href="#" wicket:message="title:refresh.label" role="button">
 				<span class="ui-icon ui-icon-refresh"><wicket:message key="refresh.label"/></span>
 			</a>
 		</div>

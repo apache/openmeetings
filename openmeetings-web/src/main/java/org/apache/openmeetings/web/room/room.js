@@ -133,7 +133,7 @@ var VideoUtil = (function() {
 	return self;
 })();
 var Video = (function() {
-	var self = {}, c, box, v, vc, t, swf, size, vol;
+	var self = {}, c, box, v, vc, t, f, swf, size, vol;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -145,7 +145,7 @@ var Video = (function() {
 				position: {my: "center", at: "center", of: WBA_SEL}
 			});
 		} else {
-			let h = size.height + t.height() + 2;
+			let h = size.height + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
 			v.dialog("option", "width", size.width)
 				.dialog("option", "height", h);
 			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
@@ -160,12 +160,23 @@ var Video = (function() {
 		handle.text(val);
 		var ico = vol.find('.ui-icon');
 		if (val > 0 && ico.hasClass('ui-icon-volume-off')) {
-			//vol.find('.ui-icon').removeClass('ui-icon-volume-off').addClass('ui-icon-volume-on');
 			ico.toggleClass('ui-icon-volume-off ui-icon-volume-on');
 			vol.removeClass('ui-state-error');
+			if (f.is(":visible")) {
+				f.find('.off').hide();
+				f.find('.on').show();
+				f.addClass('ui-state-highlight');
+				t.addClass('ui-state-highlight');
+			}
 		} else if (val == 0 && ico.hasClass('ui-icon-volume-on')) {
 			ico.toggleClass('ui-icon-volume-on ui-icon-volume-off');
 			vol.addClass('ui-state-error');
+			if (f.is(":visible")) {
+				f.find('.off').show();
+				f.find('.on').hide();
+				f.removeClass('ui-state-highlight');
+				t.removeClass('ui-state-highlight');
+			}
 		}
 		swf[0].setVolume(val);
 	}
@@ -177,12 +188,14 @@ var Video = (function() {
 		var _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
 			, _w = c.self ? Math.max(300, c.width) : c.width
-			, _h = c.self ? Math.max(200, c.height) : c.height;
+			, _h = c.self ? Math.max(200, c.height) : c.height
+			, opts = VideoManager.getOptions();
 		box.append($('#user-video').clone().attr('id', _id).attr('title', name).data(self));
 		v = $('#' + _id);
 		v.dialog({
 			classes: {
-				'ui-dialog': 'ui-corner-all video user-video'
+				'ui-dialog': 'ui-corner-all video user-video' + (opts.showMicStatus ? ' mic-status' : '')
+				, 'ui-dialog-titlebar': 'ui-corner-all' + (opts.showMicStatus ? ' ui-state-highlight' : '')
 			}
 			, width: _w
 			, minWidth: 40
@@ -190,7 +203,8 @@ var Video = (function() {
 			, autoOpen: true
 			, modal: false
 			, resizeStop: function(event, ui) {
-				var w = ui.size.width - 2, h = ui.size.height - t.height() - 4;
+				var w = ui.size.width - 2
+					, h = ui.size.height - t.height() - 4 - (f.is(":visible") ? f.height() : 0);
 				_setSize(w, h);
 				swf[0].vidResize(w, h);
 			}
@@ -203,8 +217,11 @@ var Video = (function() {
 			, dblclick: "collapse"
 		});
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
+		f = v.find('.footer');
 		if (!VideoUtil.isSharing(c)) {
-			v.parent().find('.ui-dialog-titlebar-buttonpane').append($('#video-volume-btn').children().clone());
+			v.parent().find('.ui-dialog-titlebar-buttonpane')
+				.append($('#video-volume-btn').children().clone())
+				.append($('#video-refresh-btn').children().clone());
 			var volume = v.parent().find('.dropdown-menu.video.volume');
 			let slider = v.parent().find('.slider');
 			let prevVolume = 0;

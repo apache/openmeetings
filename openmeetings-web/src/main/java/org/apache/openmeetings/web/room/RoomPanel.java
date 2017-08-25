@@ -132,6 +132,7 @@ public class RoomPanel extends BasePanel {
 			//TODO add all broadcasting clients
 			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getSid());
 			options.put("interview", Room.Type.interview == r.getType());
+			options.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			// play video from other participants
