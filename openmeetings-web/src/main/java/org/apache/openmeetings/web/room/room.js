@@ -280,7 +280,7 @@ var Video = (function() {
 			vol.hide();
 			v.parent().find('.dropdown-menu.video.volume').hide();
 		}
-		if (c.self) {
+		if (c.self && swf[0].update !== undefined) {
 			swf[0].update(c);
 		}
 	}
@@ -301,6 +301,9 @@ var VideoManager = (function() {
 		share = box.find('.icon.shared.ui-button');
 	}
 	function _update(c) {
+		if (options === undefined) {
+			return;
+		}
 		var _id = VideoUtil.getVid(c.uid)
 			, av = VideoUtil.hasAudio(c) || VideoUtil.hasVideo(c)
 			, v = $('#' + _id);
@@ -319,6 +322,9 @@ var VideoManager = (function() {
 		v.remove();
 	}
 	function _play(c) {
+		if (options === undefined) {
+			return;
+		}
 		if (VideoUtil.isSharing(c)) {
 			_highlight(share
 					.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text'))

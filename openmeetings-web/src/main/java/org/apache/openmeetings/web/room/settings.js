@@ -100,6 +100,7 @@ var VideoSettings = (function() {
 			rr.hide();
 		}
 		_load();
+		_save(); // trigger settings update
 	}
 	function _updateRec() {
 		recBtn.prop('disabled', !recAllowed && (s.video.cam > -1 || s.video.mic > -1)).button('refresh');

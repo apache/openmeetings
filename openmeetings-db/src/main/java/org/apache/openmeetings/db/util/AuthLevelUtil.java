@@ -86,7 +86,7 @@ public class AuthLevelUtil {
 				}
 			}
 		}
-		if (Room.Type.conference == r.getType() && !result.contains(Room.Right.video)) {
+		if (Room.Type.conference == r.getType() && !result.contains(Room.Right.superModerator) && !result.contains(Room.Right.moderator) && !result.contains(Room.Right.video)) {
 			result.add(Room.Right.audio);
 			result.add(Room.Right.video);
 		}
