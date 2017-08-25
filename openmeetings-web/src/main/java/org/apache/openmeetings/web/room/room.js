@@ -206,23 +206,32 @@ var Video = (function() {
 		if (!VideoUtil.isSharing(c)) {
 			v.parent().find('.ui-dialog-titlebar-buttonpane').append($('#video-volume-btn').children().clone());
 			var volume = v.parent().find('.dropdown-menu.video.volume');
+			let slider = v.parent().find('.slider');
+			let prevVolume = 0;
 			vol = v.parent().find('.ui-dialog-titlebar-volume')
 				.on('mouseenter', function(e) {
 					e.stopImmediatePropagation();
 					volume.toggle();
 				})
 				.click(function(e) {
-					//MUTE
 					e.stopImmediatePropagation();
-					//volume.toggle();
+					if (prevVolume == 0) {
+						prevVolume = slider.slider("option", "value");
+						slider.slider("option", "value", 0);
+						_handleVolume(handle, 0);
+					} else {
+						slider.slider("option", "value", prevVolume);
+						_handleVolume(handle, prevVolume);
+						prevVolume = 0;
+					}
 				}).dblclick(function(e) {
 					e.stopImmediatePropagation();
 				});
-			volume.on('mouseout', function() {
+			volume.on('mouseleave', function() {
 				$(this).hide();
 			});
 			var handle = v.parent().find('.slider .handle');
-			v.parent().find('.slider').slider({
+			slider.slider({
 				orientation: 'vertical'
 				, range: 'min'
 				, min: 0
