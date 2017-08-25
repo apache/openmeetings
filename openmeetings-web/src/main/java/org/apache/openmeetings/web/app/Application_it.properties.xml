@@ -1384,8 +1384,8 @@
   <entry key="1430">Cambiando risoluzione influenzerà la banda, immagini più grandi hanno bisogno di più banda!</entry>
   <entry key="1432">Vorrei ottenere i permessi per l'audio esclusivo</entry>
   <entry key="1433">Dai l'audio esclusivo a me (In alternativa clicca nel riquadro del tuo video o premi F12)</entry>
-  <entry key="1434">Il microfono è attivo!</entry>
-  <entry key="1435">Il microfono è disattivato muted</entry>
+	<entry key="video.mic.on">Il microfono è attivo!</entry>
+	<entry key="video.mic.off">Il microfono è disattivato muted</entry>
   <entry key="1436">Nasconde chat</entry>
   <entry key="1437">Nasconde attività</entry>
   <entry key="1438">Nasconde files explorer</entry>

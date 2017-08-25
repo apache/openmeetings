@@ -1384,8 +1384,8 @@
   <entry key="1430">Cambiando la resolución a efecto de ancho de banda, fotos grandes necesitan más ancho de banda!</entry>
   <entry key="1432">Quisiera obtener los derechos para audio exclusivo</entry>
   <entry key="1433">Darme audio exclusivo a mí mismo (alternativamente hacer click en la ventana de video o pulsar F12)</entry>
-  <entry key="1434">El micrófono está abierto!</entry>
-  <entry key="1435">El micrófono esta silenciado</entry>
+	<entry key="video.mic.on">El micrófono está abierto!</entry>
+	<entry key="video.mic.off">El micrófono esta silenciado</entry>
   <entry key="1436">Ocultar chat</entry>
   <entry key="1437">Ocultar actividades</entry>
   <entry key="1438">Ocultar explorador de archivos</entry>

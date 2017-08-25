@@ -1384,8 +1384,8 @@
   <entry key="1430">Alterar a resolução afeta a largura de banda, foto maior precisa de mais largura de banda!</entry>
   <entry key="1432">Gostaria de obter o direito exclusivo para áudio</entry>
   <entry key="1433">Dê áudio exclusivo para mim (em alternativa clique sobre o vídeo pod ou pressione F12)</entry>
-  <entry key="1434">Microfone está ligado!</entry>
-  <entry key="1435">Microfone está mudo</entry>
+	<entry key="video.mic.on">Microfone está ligado!</entry>
+	<entry key="video.mic.off">Microfone está mudo</entry>
   <entry key="1436">Ocultar bate-papo</entry>
   <entry key="1437">Ocultar atividades</entry>
   <entry key="1438">Ocultar o explorador de arquivos</entry>

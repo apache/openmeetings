@@ -1384,8 +1384,8 @@
   <entry key="1430">更改像素会影响频宽，较大的图片需要较高频宽</entry>
   <entry key="1432">希望得到独家音频的权利</entry>
   <entry key="1433">赋予我独家音频（或点击你的视频，或点击F12）</entry>
-  <entry key="1434">麦克风已打开</entry>
-  <entry key="1435">麦克风已被静音</entry>
+	<entry key="video.mic.on">麦克风已打开</entry>
+	<entry key="video.mic.off">麦克风已被静音</entry>
   <entry key="1436">隐藏对话</entry>
   <entry key="1437">隐藏活动</entry>
   <entry key="1438">隐藏档案总管</entry>

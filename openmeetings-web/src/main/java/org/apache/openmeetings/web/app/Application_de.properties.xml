@@ -1384,8 +1384,8 @@
   <entry key="1430">Die Kamera-Auflösung hat einen direkten Einfluss auf die verbrauchte Upload-Bandbreite!</entry>
   <entry key="1432">Ich würde gerne das Recht auf exklusives Audio erhalten.</entry>
   <entry key="1433">Mir exklusives Rederecht geben (alternativ: klick auf Video Pod oder F12)</entry>
-  <entry key="1434">Mikrofon ist an</entry>
-  <entry key="1435">Mikrofon ist abgeschaltet</entry>
+	<entry key="video.mic.on">Mikrofon ist an</entry>
+	<entry key="video.mic.off">Mikrofon ist abgeschaltet</entry>
   <entry key="1436">Chat verbergen</entry>
   <entry key="1437">Aktivitäten verbergen</entry>
   <entry key="1438">Dateiverwaltung verbergen</entry>

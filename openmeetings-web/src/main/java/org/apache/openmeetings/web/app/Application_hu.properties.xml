@@ -1384,8 +1384,8 @@
   <entry key="1430">Sávszélességének (Feltöltési irány) megfelelően válassza meg a felbontás. Nagyobb felbontás, nagyobb sávszélességet igényel!</entry>
   <entry key="1432">Egyéni audio hozzáférést kérek a hozzászóláshoz!</entry>
   <entry key="1433">Egyéni audio/video kapcsolat velem (kattintson a panelen, vagy F12)</entry>
-  <entry key="1434">Mikrofon aktív!</entry>
-  <entry key="1435">Mikrofon némítva</entry>
+	<entry key="video.mic.on">Mikrofon aktív!</entry>
+	<entry key="video.mic.off">Mikrofon némítva</entry>
   <entry key="1436">Chat elrejtése</entry>
   <entry key="1437">Aktivitások elrejtése</entry>
   <entry key="1438">File böngésző elrejtése</entry>

@@ -1384,8 +1384,8 @@
   <entry key="1430">Changing the resolution affects bandwidth, bigger picture needs more bandwith.</entry>
   <entry key="1432">I would like to get the right for exclusive audio</entry>
   <entry key="1433">You have the right to give exclusive audio. Click here to make yourself exclusive audio (alternatively click on your video pod or press F12)</entry>
-  <entry key="1434">Microphone is on!</entry>
-  <entry key="1435">Microphone is muted</entry>
+	<entry key="video.mic.on">Microphone is on!</entry>
+	<entry key="video.mic.off">Microphone is muted</entry>
   <entry key="1436">Hide chat</entry>
   <entry key="1437">Hide activities</entry>
   <entry key="1438">Hide files explorer</entry>

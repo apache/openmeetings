@@ -1384,8 +1384,8 @@
   <entry key="1430">Changer la résolution affecte la bande passante, une image plus grande à besoin de plus de bande passante !</entry>
   <entry key="1432">Je souhaite avoir le droit d'avoir l'audio exclusif</entry>
   <entry key="1433">Me donne l'audio exclusif (alternativement cliquez sur votre fenêtre vidéo ou appuyez sur F12)</entry>
-  <entry key="1434">Microphone est allumé !</entry>
-  <entry key="1435">Microphone est coupé !</entry>
+	<entry key="video.mic.on">Microphone est allumé !</entry>
+	<entry key="video.mic.off">Microphone est coupé !</entry>
   <entry key="1436">Cacher le t'chat</entry>
   <entry key="1437">Cacher les activités</entry>
   <entry key="1438">Cacher l'explorateur de fichiers</entry>
