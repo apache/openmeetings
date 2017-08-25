@@ -89,12 +89,15 @@ public class SessiondataDao {
 	}
 
 	/**
+	 * Serches {@link Sessiondata} object by sessionId
 	 *
-	 * @param SID
-	 * @return
+	 * @param SID - sessionId
+	 * @return {@link Sessiondata} with sessionId == SID, or null if not found
 	 */
 	public Sessiondata find(String SID) {
-		List<Sessiondata> sessions = em.createNamedQuery("getSessionById", Sessiondata.class).setParameter("sessionId", SID).getResultList();
+		//MSSql find nothing in case SID is passed as-is without wildcarting '%SID%'
+		List<Sessiondata> sessions = em.createNamedQuery("getSessionById", Sessiondata.class)
+				.setParameter("sessionId", String.format("%%%s%%", SID)).getResultList();
 
 		Sessiondata sd = null;
 		if (sessions != null && sessions.size() > 0) {
