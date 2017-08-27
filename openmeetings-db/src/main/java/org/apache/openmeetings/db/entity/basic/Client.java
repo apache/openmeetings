@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -467,6 +468,14 @@ public class Client implements IClient {
 			json.put("cam", cam).put("mic", mic);
 		}
 		return json;
+	}
+
+	public JSONArray streamArray(boolean self) {
+		// stream `uid` is unknown at the time of self stream creation
+		// so we will replace stream `uid` with client `uid` for self
+		return new JSONArray(streams.stream().map(
+				s -> self && Type.room == s.getType() ? uid : s.getUid()
+			).collect(Collectors.toList()));
 	}
 
 	@Override

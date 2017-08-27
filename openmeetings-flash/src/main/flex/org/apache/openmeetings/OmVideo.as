@@ -108,21 +108,30 @@ public class OmVideo {
 		_setVolume(volume);
 	}
 
+	public function resetVolume():void {
+		_setVolume(volume);
+	}
+
+	public function resetStreamVolume():void {
+		setStreamVolume(volume);
+	}
+
 	/**
 	 * This method to set volume of other stream
 	 * @param vol - new volume
 	 */
 	public function setStreamVolume(vol:int):void {
-		debug("setStreamVolume: " + vol);
+		volume = vol;
+		//debug("setStreamVolume: " + vol);
 		if (ns != null) {
-			debug("setStreamVolume: not null");
+			//debug("setStreamVolume: not null");
 			ns.soundTransform = new SoundTransform(vol / 100.0);
 		}
 	}
 	private function _setVolume(vol:int):void {
-		debug("_setVolume: " + vol);
+		//debug("_setVolume: " + vol);
 		if (mic != null) {
-			debug("_setVolume: not null");
+			//debug("_setVolume: not null");
 			mic.gain = vol;
 		}
 	}
@@ -211,6 +220,7 @@ public class OmVideo {
 	private function _connect(url:String):void {
 		nc.connect(url, {
 			ownerSid: params.sid
+			, roomClient: true
 			, nativeSsl: 'best' == params.proxyType
 		});
 	}
@@ -294,17 +304,15 @@ public class OmVideo {
 			switch (mode) {
 				case PLAY:
 					ns.pause();
-					ns.dispose();
-					clear();
 					break;
 				case BROADCAST:
 				case RECORD:
 					ns.publish(null); //false in original code
 				default:
-					clear();
-					ns.dispose();
 					break;
 			}
+			clear();
+			ns.dispose();
 		} else {
 			clear();
 		}

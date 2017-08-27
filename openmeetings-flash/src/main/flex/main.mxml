@@ -159,28 +159,24 @@
 					attachCamera(function ():void {
 						addImage(params.width, params.height);
 						video.resize(params.width, params.height);
-						video.reset();
-						var broadcastId:String = UIDUtil.createUID();
-						debug("BroadcastId = " + broadcastId);
 						activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
-						mic = getMic();
-						if (mic != null) {
-							volumeRect.visible = true;
-							volumeRect.fill = new SolidColor(0x00FF00);
-							activityTimer.start();
-						}
-						video.broadcast(broadcastId, hasVideo() ? getCam() : null, mic);
-						if (!hasAudio()) {
-							video.mute();
-						}
+						refreshBroadcast();
 						ExternalInterface.call("VideoManager.securityMode", params.uid, false);
+						ExternalInterface.addCallback("refresh", refreshBroadcast);
 					});
 				}
 					break;
 				case OmVideo.PLAY: {
 					addImage(params.width, params.height);
 					video.resize(params.width, params.height);
-					video.play(params.broadcastId); // TODO audio/video
+					refreshPlayback();
+					ExternalInterface.addCallback("setVolume", function (vol:int):void {
+						video.setStreamVolume(vol);
+					});
+					ExternalInterface.addCallback("update", function (c:Object):void {
+						//no-op for now
+					});
+					ExternalInterface.addCallback("refresh", refreshPlayback);
 				}
 					break;
 			}
@@ -190,6 +186,32 @@
 				video.resize(_width, _height);
 				video.vidResize(_width, _height);
 			});
+		}
+
+		private function refreshBroadcast():void {
+			video.reset();
+			activityTimer.stop();
+			var broadcastId:String = UIDUtil.createUID();
+			debug("BroadcastId = " + broadcastId);
+			mic = getMic();
+			if (mic != null) {
+				volumeRect.visible = true;
+				volumeRect.fill = new SolidColor(0x00FF00);
+				activityTimer.start();
+			}
+			video.broadcast(broadcastId, hasVideo() ? getCam() : null, mic);
+			if (!hasAudio()) {
+				video.mute();
+			} else {
+				video.resetVolume();
+			}
+		}
+
+		private function refreshPlayback():void {
+			var params:Object = FlexGlobals.topLevelApplication.parameters;
+			video.reset();
+			video.play(params.broadcastId); // TODO audio/video
+			video.resetStreamVolume();
 		}
 
 		private function addImage(_width:int, _height:int):void {

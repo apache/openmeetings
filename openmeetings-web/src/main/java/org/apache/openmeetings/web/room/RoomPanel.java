@@ -443,8 +443,11 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							Client _c = getClient();
-							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.toJson(_c.getUid().equals(c.getUid())).put("sid", _c.getSid())));
+							boolean self = _c.getUid().equals(c.getUid());
+							handler.appendJavaScript(String.format("VideoManager.update(%s, %s);"
+									, c.toJson(self).put("sid", _c.getSid())
+									, c.streamArray(self).toString()
+									));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -563,7 +566,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (!getClient().getUid().equals(c.getUid())) {
-							handler.appendJavaScript(String.format("if (!!VideoManager) {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
+							handler.appendJavaScript(String.format("if (VideoManager !== undefined) {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
 						}
 					}
 						break;

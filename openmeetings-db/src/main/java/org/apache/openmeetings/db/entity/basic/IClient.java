@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 public interface IClient extends IDataProviderEntity {
 	enum Type {
 		video
+		, room // room flash client
 		, sip
 		, mobile
 		, sharing

@@ -178,7 +178,9 @@ var Video = (function() {
 				t.removeClass('ui-state-highlight');
 			}
 		}
-		swf[0].setVolume(val);
+		if (swf[0].setVolume !== undefined) {
+			swf[0].setVolume(val);
+		}
 	}
 	function _init(_box, _uid, _c, _pos) {
 		c = _c;
@@ -244,6 +246,15 @@ var Video = (function() {
 				}).dblclick(function(e) {
 					e.stopImmediatePropagation();
 				});
+			let refresh = v.parent().find('.ui-dialog-titlebar-refresh')
+				.click(function(e) {
+					e.stopImmediatePropagation();
+					if (swf[0].refresh !== undefined) {
+						swf[0].refresh();
+					}
+				}).dblclick(function(e) {
+					e.stopImmediatePropagation();
+				});
 			volume.on('mouseleave', function() {
 				$(this).hide();
 			});
@@ -291,7 +302,8 @@ var Video = (function() {
 		v.dialog("widget").css(_pos);
 	}
 	function _update(_c) {
-		c = _c;
+		c.screenActivities = _c.screenActivities;
+		c.activities = _c.activities;
 		if (VideoUtil.hasAudio(c)) {
 			vol.show();
 		} else {
@@ -318,19 +330,26 @@ var VideoManager = (function() {
 		box = $('.room.box');
 		share = box.find('.icon.shared.ui-button');
 	}
-	function _update(c) {
+	function _update(c, uids) {
 		if (options === undefined) {
 			return;
 		}
-		var _id = VideoUtil.getVid(c.uid)
-			, av = VideoUtil.hasAudio(c) || VideoUtil.hasVideo(c)
-			, v = $('#' + _id);
-		if (av && v.length != 1 && !!c.self) {
-			Video().init(box, options.uid, c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
-		} else if (av && v.length == 1) {
-			v.data().update(c);
-		} else if (!av && v.length == 1) {
-			_closeV(v);
+		if (uids.length === 0) {
+			uids.push(c.uid);
+		}
+		for (let i = 0; i < uids.length; ++i) {
+			//TODO different features for different streams
+			// TODO width, height, AV
+			let _id = VideoUtil.getVid(uids[i])
+				, av = VideoUtil.hasAudio(c) || VideoUtil.hasVideo(c)
+				, v = $('#' + _id);
+			if (av && v.length != 1 && !!c.self) {
+				Video().init(box, options.uid, c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
+			} else if (av && v.length == 1) {
+				v.data().update(c);
+			} else if (!av && v.length == 1) {
+				_closeV(v);
+			}
 		}
 	}
 	function _closeV(v) {

@@ -91,6 +91,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String OWNER_SID_PARAM = "ownerSid";
 	private static final String PARENT_SID_PARAM = "parentSid"; //mobile
 	private static final String MOBILE_PARAM = "mobileClient";
+	private static final String ROOM_PARAM = "roomClient";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
 	public static final String HIBERNATE_SCOPE = "hibernate";
@@ -226,6 +227,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 		if (Boolean.TRUE.equals(connParams.get(MOBILE_PARAM))) {
 			rcm.setType(Client.Type.mobile);
+		} else if (Boolean.TRUE.equals(connParams.get(ROOM_PARAM))) {
+			rcm.setType(Client.Type.room);
 		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
 		rcm.setOwnerSid(ownerSid);
