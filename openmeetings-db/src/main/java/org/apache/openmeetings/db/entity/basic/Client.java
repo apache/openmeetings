@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
@@ -122,7 +123,7 @@ public class Client implements IClient {
 	private final String sessionId;
 	private int pageId;
 	private User user;
-	private Long roomId;
+	private Room room;
 	private final String uid;
 	private final String sid;
 	private String remoteAddress;
@@ -153,7 +154,6 @@ public class Client implements IClient {
 		this.connectedSince = new Date();
 		uid = rcl.getUid();
 		sid = rcl.getOwnerSid();
-		this.roomId = rcl.getRoomId();
 		this.remoteAddress = rcl.getUserip();
 	}
 
@@ -327,12 +327,12 @@ public class Client implements IClient {
 	public void setId(Long id) {
 	}
 
-	public Long getRoomId() {
-		return roomId;
+	public Room getRoom() {
+		return room;
 	}
 
-	public Client setRoomId(Long roomId) {
-		this.roomId = roomId;
+	public Client setRoom(Room room) {
+		this.room = room;
 		return this;
 	}
 
@@ -480,7 +480,7 @@ public class Client implements IClient {
 
 	@Override
 	public String toString() {
-		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", roomId=" + roomId
+		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
 				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + ", pod = " + pod + "]";
 	}
 }

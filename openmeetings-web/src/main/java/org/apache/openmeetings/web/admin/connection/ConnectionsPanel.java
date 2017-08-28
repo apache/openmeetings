@@ -113,7 +113,7 @@ public class ConnectionsPanel extends AdminPanel {
 					item.add(new Label("type", "html5"));
 					item.add(new Label("login", c.getUser().getLogin()));
 					item.add(new Label("since", c.getConnectedSince()));
-					item.add(new Label("scope", c.getRoomId() == null ? "html5" : "" + c.getRoomId()));
+					item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
 				}
 				item.add(new Label("server", _c.getServerId()));
 				item.add(confirm);

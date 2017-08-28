@@ -591,7 +591,7 @@ public class RoomPanel extends BasePanel {
 		if (room.isVisible()) {
 			//We are setting initial rights here
 			Client c = getClient();
-			addUserToRoom(c.setRoomId(getRoom().getId()));
+			addUserToRoom(c.setRoom(getRoom()));
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
 				c.allow(Right.superModerator);
@@ -747,7 +747,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void kickUser(Client client) {
-		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), Type.kick, client.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client.getUserId(), Type.kick, client.getUid()));
 	}
 
 	public void broadcast(Client client) {

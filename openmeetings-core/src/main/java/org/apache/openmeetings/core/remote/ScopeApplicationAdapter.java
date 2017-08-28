@@ -57,6 +57,7 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.room.CheckDto;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -500,7 +501,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			if (Client.Type.sip == c.getType()) {
 				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-				org.apache.openmeetings.db.entity.basic.Client cl = iapp.getOmOnlineClient(c.getUid());
+				Client cl = iapp.getOmClientBySid(c.getOwnerSid());
 				String newNumber = getSipTransportLastname(c.getRoomId());
 				cl.getUser().setLastname(newNumber);
 				c.setLastname(newNumber);
@@ -1149,7 +1150,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		_log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {
 			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-			Client cl = iapp.getOmOnlineClient(client.getUid());
+			Client cl = iapp.getOmClientBySid(client.getOwnerSid());
 			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
 			sessionManager.update(client);
@@ -1163,5 +1164,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public JSONObject getFlashSettings() {
 		return flashSettings;
+	}
+
+	public CheckDto check() {
+		IConnection current = Red5.getConnectionLocal();
+		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
+		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		Client cl = iapp.getOmClientBySid(c.getOwnerSid());
+		return new CheckDto(cl);
 	}
 }

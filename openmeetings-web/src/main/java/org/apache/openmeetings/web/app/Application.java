@@ -53,6 +53,7 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
@@ -372,22 +373,22 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static void addOnlineUser(Client c) {
-		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoomId());
+		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoom());
 		c.setServerId(get().getServerId());
 		get().getOnlineUsers().put(c.getUid(), c);
 		get().getUidBySid().put(c.getSid(), c.getUid());
 	}
 
 	public static void exitRoom(Client c) {
-		Long roomId = c.getRoomId();
+		Room room = c.getRoom();
 		removeUserFromRoom(c);
-		if (roomId != null) {
-			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
+		if (room != null) {
+			sendRoom(new RoomMessage(room.getId(), c.getUserId(), RoomMessage.Type.roomExit));
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomLeave
-					, c.getUserId(), "0", roomId
+					, c.getUserId(), "0", room.getId()
 					, c.getRemoteAddress()
-					, "" + roomId);
+					, "" + room);
 		}
 	}
 
@@ -400,10 +401,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	private static void exit(Client c) {
 		if (c != null) {
-			if (c.getRoomId() != null) {
+			if (c.getRoom() != null) {
 				exitRoom(c);
 			}
-			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoomId());
+			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoom());
 			get().getOnlineUsers().remove(c.getUid());
 			get().getUidBySid().remove(c.getSid());
 		}
@@ -435,9 +436,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				if (rcl.getRoomId() != null) {
 					client.setCam(0);
 					client.setMic(0);
+					client.setRoom(getBean(RoomDao.class).get(rcl.getRoomId()));
 					addUserToRoom(client);
 					//FIXME TODO unify this
-					WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
+					WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				}
 				//FIXME TODO rights
 			} else if (client == null && Client.Type.sip == rcl.getType()) {
@@ -456,12 +458,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				client.set(Activity.broadcastA);
 				addUserToRoom(client);
 				//FIXME TODO unify this
-				WebSocketHelper.sendRoom(new RoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.roomEnter));
+				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
 			} else {
 				return null;
 			}
 		}
-		if (rcl.getRoomId() == null || !rcl.getRoomId().equals(client.getRoomId())) {
+		if (rcl.getRoomId() == null || !rcl.getRoomId().equals(client.getRoom().getId())) {
 			//TODO mobile
 			return null;
 		}
@@ -594,25 +596,26 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Client addUserToRoom(Client c) {
-		log.debug("Adding online room client: {}, room: {}", c.getUid(), c.getRoomId());
+		Long roomId = c.getRoom().getId();
+		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
 		Map<Long, Set<String>> rooms = get().getRooms();
-		rooms.putIfAbsent(c.getRoomId(), new ConcurrentHashSet<String>());
-		Set<String> set = rooms.get(c.getRoomId());
+		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
+		Set<String> set = rooms.get(roomId);
 		set.add(c.getUid());
-		rooms.put(c.getRoomId(), set);
+		rooms.put(roomId, set);
 		update(c);
 		return c;
 	}
 
 	public static Client removeUserFromRoom(Client c) {
-		Long roomId = c.getRoomId();
-		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
-		if (roomId != null) {
-			Set<String> clients = get().getRooms().get(roomId);
+		Room room = c.getRoom();
+		log.debug("Removing online room client: {}, room: {}", c.getUid(), room);
+		if (room != null) {
+			Set<String> clients = get().getRooms().get(room.getId());
 			if (clients != null) {
 				clients.remove(c.getUid());
 			}
-			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), roomId);
+			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), room.getId());
 			c.clear();
 			update(c);
 		}

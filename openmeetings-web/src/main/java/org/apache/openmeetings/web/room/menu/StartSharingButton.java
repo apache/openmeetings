@@ -78,7 +78,7 @@ public class StartSharingButton extends OmButton {
 
 			@Override
 			protected IResourceStream getResourceStream(Attributes attributes) {
-				setFileName(String.format("public_%s.jnlp", getOnlineClient(uid).getRoomId()));
+				setFileName(String.format("public_%s.jnlp", getOnlineClient(uid).getRoom().getId()));
 				StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
 				srs.setCharset(UTF_8);
 				return srs;
@@ -94,9 +94,9 @@ public class StartSharingButton extends OmButton {
 			app = IOUtils.toString(jnlp, UTF_8);
 			Client c = getOnlineClient(uid);
 			String sid = c.getSid();
-			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + c.getRoomId(), sid);
+			long roomId = c.getRoom().getId();
+			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + roomId, sid);
 			String _url = s.getString(VideoSettings.URL);
-			long roomId = c.getRoomId();
 			Room room = getBean(RoomDao.class).get(roomId);
 			ISessionManager sessionManager = getBean(ISessionManager.class);
 			app = app.replace("$native", "" + s.getBoolean(FLASH_NATIVE_SSL))

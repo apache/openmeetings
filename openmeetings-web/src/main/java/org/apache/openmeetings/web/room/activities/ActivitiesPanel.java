@@ -95,7 +95,7 @@ public class ActivitiesPanel extends BasePanel {
 							break;
 						case accept:
 							Client client = getOnlineClient(a.getUid());
-							if (room.getClient().hasRight(Right.moderator) && client != null && roomId == client.getRoomId()) {
+							if (room.getClient().hasRight(Right.moderator) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
 								switch (a.getType()) {
 									case reqRightModerator:
 										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));

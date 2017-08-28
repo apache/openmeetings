@@ -139,30 +139,43 @@
 					selectedCam = params.cam;
 					selectedMic = params.mic;
 					video.resize(Math.max(300, params.width), Math.max(200, params.height));
-					ExternalInterface.addCallback("update", function (c:Object):void {
-						if (_hasVideo(c.activities) && hasVideo()) {
-							_hasAudio(c.activities) ? video.unmute() : video.mute();
-						}
-						if (mic != null) {
-							activityTimer.start();
-						} else {
-							activityTimer.stop();
-						}
-						activities = c.activities;
-						//debug("Client updated: ", c);
+					ExternalInterface.addCallback("update", function ():void {
+						video.getNc().call("check", new Responder(function (check:Object):void {
+							debug("check", check);
+							if (_hasVideo(check.activities) && hasVideo()) {
+								_hasAudio(check.activities) ? video.unmute() : video.mute();
+							}
+							if (mic != null) {
+								activityTimer.start();
+							} else {
+								activityTimer.stop();
+							}
+							activities = check.activities;
+							//debug("Client updated: ", c);
+						}));
 					});
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						if (hasAudio()) {
 							video.setVolume(vol);
 						}
 					});
-					attachCamera(function ():void {
-						addImage(params.width, params.height);
-						video.resize(params.width, params.height);
-						activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
-						refreshBroadcast();
-						ExternalInterface.call("VideoManager.securityMode", params.uid, false);
-						ExternalInterface.addCallback("refresh", refreshBroadcast);
+					video.connect(function ():void {
+						debug("Going to call :: check", video.getNc());
+						// trust no-one
+						video.getNc().call("check", new Responder(function (check:Object):void {
+							debug("check", check);
+							audioOnly = check.audioOnly;
+							activities = check.activities;
+							interview = 'interview' == check.roomType;
+							attachCamera(function ():void {
+								addImage(params.width, params.height);
+								video.resize(params.width, params.height);
+								activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
+								refreshBroadcast();
+								ExternalInterface.call("VideoManager.securityMode", params.uid, false);
+								ExternalInterface.addCallback("refresh", refreshBroadcast);
+							});
+						}))
 					});
 				}
 					break;

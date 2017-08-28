@@ -311,7 +311,7 @@ var Video = (function() {
 			v.parent().find('.dropdown-menu.video.volume').hide();
 		}
 		if (c.self && swf[0].update !== undefined) {
-			swf[0].update(c);
+			swf[0].update();
 		}
 	}
 

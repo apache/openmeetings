@@ -477,7 +477,7 @@ public class ImportInitvalues {
 
 	// ------------------------------------------------------------------------------
 
-	public void loadSystem(InstallationConfig cfg, boolean force) throws Exception {
+	public void loadSystem(InstallationConfig cfg, boolean force) {
 		// FIXME dummy check if installation was performed before
 		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");

@@ -225,7 +225,7 @@ public class OmVideo {
 		});
 	}
 
-	private function connect(callback:Function):void {
+	public function connect(callback:Function):void {
 		if (nc == null || !nc.connected) {
 			url = params.url;
 			debug("NetConnection is not connected", url);

@@ -56,7 +56,7 @@ public class RoomBroadcaster {
 		log.debug("-----------  sendUpdatedClient ");
 		// Notify all clients of the same scope (room)
 		update(client);
-		broadcast(client.getRoomId(), "clientUpdated", rcl);
+		broadcast(client.getRoom().getId(), "clientUpdated", rcl);
 
 		if (rcl == null) {
 			return;
