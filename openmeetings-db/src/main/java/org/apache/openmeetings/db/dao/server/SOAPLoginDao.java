@@ -26,7 +26,6 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.red5.logging.Red5LoggerFactory;
@@ -76,10 +75,10 @@ public class SOAPLoginDao {
 
 	public SOAPLogin get(String hash) {
 		try {
-			String hql = "select sl from SOAPLogin as sl WHERE sl.hash LIKE :hash";
-			TypedQuery<SOAPLogin> query = em.createQuery(hql, SOAPLogin.class);
-			query.setParameter("hash", hash);
-			List<SOAPLogin> sList = query.getResultList();
+			//MSSql find nothing in case SID is passed as-is without wildcarting '%hash%'
+			List<SOAPLogin> sList = em.createNamedQuery("getSoapLoginByHash", SOAPLogin.class)
+					.setParameter("hash", String.format("%%%s%%", hash))
+					.getResultList();
 
 			if (sList.size() > 1) {
 				throw new Exception("there are more then one SOAPLogin with identical hash! " + hash);
