@@ -43,9 +43,10 @@ public class RecordingDTO implements Serializable {
 	private Date end;
 	private Integer width;
 	private Integer height;
+	private Long ownerId;
 
 	public RecordingDTO() {}
-	
+
 	public RecordingDTO(Recording r) {
 		this.id = r.getId();
 		this.name = r.getName();
@@ -57,6 +58,7 @@ public class RecordingDTO implements Serializable {
 		this.end = r.getRecordEnd();
 		this.width = r.getWidth();
 		this.height = r.getHeight();
+		this.ownerId = r.getOwnerId();
 	}
 
 	public Long getId() {
@@ -122,23 +124,31 @@ public class RecordingDTO implements Serializable {
 	public void setEnd(Date end) {
 		this.end = end;
 	}
-	
+
 	public Integer getWidth() {
 		return width;
 	}
-	
+
 	public void setWidth(Integer width) {
 		this.width = width;
 	}
-	
+
 	public Integer getHeight() {
 		return height;
 	}
-	
+
 	public void setHeight(Integer height) {
 		this.height = height;
 	}
-	
+
+	public Long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
+	}
+
 	public static List<RecordingDTO> list(List<Recording> l) {
 		List<RecordingDTO> list = new ArrayList<>();
 		if (l != null) {
