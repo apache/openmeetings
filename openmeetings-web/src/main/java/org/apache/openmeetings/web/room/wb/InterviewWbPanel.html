@@ -20,5 +20,22 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
+	<div class="pod-row">
+		<div class="pod-container">
+			<div class="pod">
+				<a href="#" onclick="return false;" data-pod="left"><wicket:message key="910"/></a>
+			</div>
+		</div>
+		<div class="pod-container">
+			<div class="pod">
+				<a href="#" onclick="return false;" data-pod="right"><wicket:message key="910"/></a>
+			</div>
+		</div>
+	</div>
+	<div id="interview-choose-video" wicket:message="title:910,data-btn-ok:54, data-btn-cancel:55" style="display: none">
+		<div><wicket:message key="911"/></div>
+		<select class="users"></select>
+		<input type="hidden" class="pod-name"/>
+	</div>
 </wicket:panel>
 </html>

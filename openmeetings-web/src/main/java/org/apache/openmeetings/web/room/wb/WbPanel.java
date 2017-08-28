@@ -82,7 +82,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -110,7 +109,6 @@ public class WbPanel extends AbstractWbPanel {
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
 	private long wb2save = -1;
-	private boolean inited = false;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -368,38 +366,10 @@ public class WbPanel extends AbstractWbPanel {
 			return Application.getString("203");
 		}
 	};
-	private final AbstractDefaultAjaxBehavior wbLoad = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			StringBuilder sb = new StringBuilder("WbArea.init();");
-			Whiteboards wbs = WhiteboardCache.get(roomId);
-			for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
-				Whiteboard wb = entry.getValue();
-				sb.append(new StringBuilder("WbArea.create(").append(getAddWbJson(wb)).append(");"));
-				JSONArray arr = new JSONArray();
-				for (JSONObject o : wb.list()) {
-					arr.put(addFileUrl(wbs.getUid(), o));
-				}
-				sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
-			}
-			JSONObject wbj = getWbJson(wbs.getActiveWb());
-			sb.append("WbArea.activateWb(").append(wbj).append(");");
-			Whiteboard wb = wbs.get(wbs.getActiveWb());
-			if (wb != null) {
-				sb.append("WbArea.setSlide(").append(wbj.put("slide", wb.getSlide())).append(");");
-			}
-			target.appendJavaScript(sb);
-			inited = true;
-		}
-	};
 
 	public WbPanel(String id, RoomPanel rp) {
 		super(id, rp);
 		this.roomId = rp.getRoom().getId();
-		setOutputMarkupId(true);
-		add(wbLoad);
 		if (rp.getRoom().isHidden(RoomElement.Whiteboard)) {
 			setVisible(false);
 		} else {
@@ -422,7 +392,26 @@ public class WbPanel extends AbstractWbPanel {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
-		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
+	}
+
+	@Override
+	void internalWbLoad(StringBuilder sb) {
+		Whiteboards wbs = WhiteboardCache.get(roomId);
+		for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
+			Whiteboard wb = entry.getValue();
+			sb.append(new StringBuilder("WbArea.create(").append(getAddWbJson(wb)).append(");"));
+			JSONArray arr = new JSONArray();
+			for (JSONObject o : wb.list()) {
+				arr.put(addFileUrl(wbs.getUid(), o));
+			}
+			sb.append("WbArea.load(").append(getObjWbJson(entry.getKey(), arr).toString(new NullStringer())).append(");");
+		}
+		JSONObject wbj = getWbJson(wbs.getActiveWb());
+		sb.append("WbArea.activateWb(").append(wbj).append(");");
+		Whiteboard wb = wbs.get(wbs.getActiveWb());
+		if (wb != null) {
+			sb.append("WbArea.setSlide(").append(wbj.put("slide", wb.getSlide())).append(");");
+		}
 	}
 
 	private static JSONObject getAddWbJson(Whiteboard wb) {

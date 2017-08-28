@@ -125,12 +125,14 @@
 	background-size: 40px 40px;
 	background-repeat: no-repeat;
 	background-position: 2px 2px;
+	position: relative;
 }
 .room.sidebar.left .user.list .user.name {
 	line-height: 18px;
 	height: 18px;
 	padding: 0;
 	padding-left: 44px;
+	margin-right: 20px;
 	overflow: hidden;
 }
 .room.holder.small .room.sidebar.left .user.list .user.name {
@@ -142,6 +144,7 @@
 	padding: 0;
 	padding-left: 44px;
 	visibility: hidden;
+	padding-right: 20px;
 }
 .room.sidebar.left .user.list .user:hover .user.actions {
 	visibility: visible;
@@ -152,6 +155,11 @@
 }
 .room.sidebar.left .user.list .user .ui-icon {
 	background-size: 16px;
+}
+.room.sidebar.left .user.list .user .ui-icon.audio-activity {
+	position: absolute;
+	bottom: 0px;
+	right: 3px;
 }
 .room.sidebar.left .user.list .user .ui-icon.big {
 	background-size: 32px;
@@ -392,6 +400,22 @@
 	min-width: 40px;
 	min-height: 30px;
 	overflow: hidden;
+}
+.pod-row {
+	text-align: center;
+	padding-top: 30px;
+}
+.pod-row .pod-container, .pod-row .pod-container .pod {
+	display: inline-block;
+	width: 320px;
+}
+.pod-row .pod-container .pod {
+	min-height: 260px;
+	border: 1px solid #CCCCCC;
+}
+.pod-row .pod-container .pod a {
+	margin-top:30%;
+	margin-bottom:30%;
 }
 @media screen and (max-width: 1280px) {
 	.room.sidebar.left {

@@ -17,11 +17,43 @@
  * under the License.
  */
 var WbArea = (function() {
-	var container, area, self = {}, _inited = false;
+	var container, area, self = {}, choose, _inited = false;
 
 	self.init = function() {
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
+		$('.pod-row .pod-container .pod a')
+			.button()
+			.click(function() {
+				choose.dialog('open');
+				let sel = choose.find('.users').html('');
+				let users = $('.user.list .user');
+				for (let i = 0; i < users.length; ++i) {
+					let u = $(users[i]);
+					sel.append($('<option></option>').text(u.attr('title')).val(u.attr('id').substr(4)));
+				}
+				choose.find('.pod-name').val($(this).data('pod'));
+			});
+		choose = $('#interview-choose-video');
+		choose.dialog({
+			modal: true
+			, autoOpen: false
+			, buttons: [
+				{
+					text: choose.data('btn-ok')
+					, click: function() {
+						//okHandler();
+						$(this).dialog('close');
+					}
+				}
+				, {
+					text: choose.data('btn-cancel')
+					, click: function() {
+						$(this).dialog('close');
+					}
+				}
+			]
+		});
 		_inited = true;
 	};
 	self.destroy = function() {

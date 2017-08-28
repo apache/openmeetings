@@ -20,20 +20,47 @@ package org.apache.openmeetings.web.room.wb;
 
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class AbstractWbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	protected final RoomPanel rp;
+	protected boolean inited = false;
+	private final AbstractDefaultAjaxBehavior wbLoad = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			StringBuilder sb = new StringBuilder("WbArea.init();");
+			internalWbLoad(sb);
+			target.appendJavaScript(sb);
+			inited = true;
+		}
+	};
 
 	public AbstractWbPanel(String id, RoomPanel rp) {
 		super(id);
 		this.rp = rp;
+		setOutputMarkupId(true);
+		add(wbLoad);
 	}
 
 	public abstract AbstractWbPanel update(IPartialPageRequestHandler handler);
 
+	void internalWbLoad(StringBuilder sb) {
+	}
+
 	public void sendFileToWb(final FileItem fi, boolean clean) {
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
 	}
 }
