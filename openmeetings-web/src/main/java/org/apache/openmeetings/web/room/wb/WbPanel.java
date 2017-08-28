@@ -86,7 +86,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
@@ -97,7 +96,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.github.openjson.JSONTokener;
 
-public class WbPanel extends Panel {
+public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(WbPanel.class, webAppRootKey);
 	private static final int UPLOAD_WB_LEFT = 0;
@@ -110,7 +109,6 @@ public class WbPanel extends Panel {
 	public final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
-	private final RoomPanel rp;
 	private long wb2save = -1;
 	private boolean inited = false;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();
@@ -398,8 +396,7 @@ public class WbPanel extends Panel {
 	};
 
 	public WbPanel(String id, RoomPanel rp) {
-		super(id);
-		this.rp = rp;
+		super(id, rp);
 		this.roomId = rp.getRoom().getId();
 		setOutputMarkupId(true);
 		add(wbLoad);
@@ -437,6 +434,7 @@ public class WbPanel extends Panel {
 				.put("zoomMode", wb.getZoomMode());
 	}
 
+	@Override
 	public WbPanel update(IPartialPageRequestHandler handler) {
 		String role = "none";
 		if (rp.getClient().hasRight(Right.presenter)) {
@@ -506,6 +504,7 @@ public class WbPanel extends Panel {
 		wb.setHeight(Math.max(wb.getHeight(), h));
 	}
 
+	@Override
 	public void sendFileToWb(final FileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = WhiteboardCache.get(roomId);

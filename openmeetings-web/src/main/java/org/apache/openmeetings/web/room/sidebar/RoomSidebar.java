@@ -362,7 +362,9 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
-		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.presenter);
+		showFiles = Room.Type.interview != room.getRoom().getType()
+				&& !room.getRoom().isHidden(RoomElement.Files)
+				&& room.getClient().hasRight(Right.presenter);
 		roomFiles.setReadOnly(!showFiles, handler);
 	}
 

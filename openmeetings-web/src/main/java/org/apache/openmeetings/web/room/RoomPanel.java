@@ -29,6 +29,7 @@ import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.Application.update;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
 import static org.apache.openmeetings.web.room.wb.WbPanel.WB_JS_REFERENCE;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -69,6 +70,8 @@ import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
+import org.apache.openmeetings.web.room.wb.AbstractWbPanel;
+import org.apache.openmeetings.web.room.wb.InterviewWbPanel;
 import org.apache.openmeetings.web.room.wb.WbPanel;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.AttributeModifier;
@@ -155,7 +158,7 @@ public class RoomPanel extends BasePanel {
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private ActivitiesPanel activities;
-	private final WbPanel wb;
+	private final AbstractWbPanel wb;
 	private String sharingUser = null;
 	private String recordingUser = null;
 	private byte[] pdfWb;
@@ -200,7 +203,9 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
-		this.wb = new WbPanel("whiteboard", this);
+		this.wb = Room.Type.interview == r.getType()
+				? new InterviewWbPanel("whiteboard", this)
+				: new WbPanel("whiteboard", this);
 	}
 
 	private void initVideos(AjaxRequestTarget target) {
@@ -227,32 +232,36 @@ public class RoomPanel extends BasePanel {
 
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
-		Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
-			private static final long serialVersionUID = 1L;
+		if (Room.Type.interview == r.getType()) {
+			room.add(new WebMarkupContainer("wb-area").add(wb));
+		} else {
+			Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public void onConfigure(JQueryBehavior behavior) {
-				super.onConfigure(behavior);
-				behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
-				behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
-			}
+				@Override
+				public void onConfigure(JQueryBehavior behavior) {
+					super.onConfigure(behavior);
+					behavior.setOption("hoverClass", Options.asString("ui-state-hover"));
+					behavior.setOption("accept", Options.asString(".recorditem, .fileitem, .readonlyitem"));
+				}
 
-			@Override
-			public void onDrop(AjaxRequestTarget target, Component component) {
-				Object o = component.getDefaultModelObject();
-				if (wb.isVisible() && o instanceof FileItem) {
-					FileItem f = (FileItem)o;
-					if (sidebar.getFilesPanel().isSelected(f)) {
-						for (Entry<String, FileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
-							wb.sendFileToWb(e.getValue(), false);
+				@Override
+				public void onDrop(AjaxRequestTarget target, Component component) {
+					Object o = component.getDefaultModelObject();
+					if (wb.isVisible() && o instanceof FileItem) {
+						FileItem f = (FileItem)o;
+						if (sidebar.getFilesPanel().isSelected(f)) {
+							for (Entry<String, FileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
+								wb.sendFileToWb(e.getValue(), false);
+							}
+						} else {
+							wb.sendFileToWb(f, false);
 						}
-					} else {
-						wb.sendFileToWb(f, false);
 					}
 				}
-			}
-		};
-		room.add(wbArea.add(wb));
+			};
+			room.add(wbArea.add(wb));
+		}
 		room.add(roomEnter);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
 		room.add(activities = new ActivitiesPanel("activities", this));
@@ -651,7 +660,11 @@ public class RoomPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "jquery.dialogextend.js"))));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
-		response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
+		if (Room.Type.interview == r.getType()) {
+			response.render(JavaScriptHeaderItem.forReference(INTERVIEWWB_JS_REFERENCE));
+		} else {
+			response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
+		}
 		WebSession ws = WebSession.get();
 		if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(
@@ -765,7 +778,7 @@ public class RoomPanel extends BasePanel {
 		return sidebar;
 	}
 
-	public WbPanel getWb() {
+	public AbstractWbPanel getWb() {
 		return wb;
 	}
 

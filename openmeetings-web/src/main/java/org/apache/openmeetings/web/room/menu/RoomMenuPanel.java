@@ -182,6 +182,30 @@ public class RoomMenuPanel extends Panel {
 			sipDialer.open(target);
 		}
 	};
+	private final RoomMenuItem downloadPngMenuItem = new RoomMenuItem(Application.getString("download.png"), Application.getString("download.png")) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PNG));
+		}
+	};
+	private final RoomMenuItem downloadJpgMenuItem = new RoomMenuItem(Application.getString("download.jpg"), Application.getString("download.jpg")) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_JPG));
+		}
+	};
+	private final RoomMenuItem downloadPdfMenuItem = new RoomMenuItem(Application.getString("download.pdf"), Application.getString("download.pdf")) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public void onClick(AjaxRequestTarget target) {
+			target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PDF));
+		}
+	};
 	private final ImagePanel logo = new ImagePanel("logo") {
 		private static final long serialVersionUID = 1L;
 
@@ -268,30 +292,9 @@ public class RoomMenuPanel extends Panel {
 		actionsMenu.getItems().add(pollResultMenuItem); //FIXME enable/disable
 		actionsMenu.getItems().add(pollVoteMenuItem); //FIXME enable/disable
 		actionsMenu.getItems().add(sipDialerMenuItem);
-		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.png"), Application.getString("download.png")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PNG));
-			}
-		});
-		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.jpg"), Application.getString("download.jpg")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_JPG));
-			}
-		});
-		actionsMenu.getItems().add(new RoomMenuItem(Application.getString("download.pdf"), Application.getString("download.pdf")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PDF));
-			}
-		});
+		actionsMenu.getItems().add(downloadPngMenuItem);
+		actionsMenu.getItems().add(downloadJpgMenuItem);
+		actionsMenu.getItems().add(downloadPdfMenuItem);
 		//TODO seems need to be removed actionsMenu.getItems().add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
 		menu.add(actionsMenu);
 		return menu;
@@ -302,12 +305,16 @@ public class RoomMenuPanel extends Panel {
 			return;
 		}
 		Room r = room.getRoom();
+		boolean isInterview = Room.Type.interview == r.getType();
+		downloadPngMenuItem.setEnabled(!isInterview);
+		downloadJpgMenuItem.setEnabled(!isInterview);
+		downloadPdfMenuItem.setEnabled(!isInterview);
 		PollDao pollDao = getBean(PollDao.class);
 		boolean pollExists = pollDao.hasPoll(r.getId());
 		User u = room.getClient().getUser();
 		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);//TODO check this
-		filesMenu.setEnabled(room.getSidebar().isShowFiles());
+		filesMenu.setEnabled(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
 		actionsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
 		inviteMenuItem.setEnabled(notExternalUser && moder);
