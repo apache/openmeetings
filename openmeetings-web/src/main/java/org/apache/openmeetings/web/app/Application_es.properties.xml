@@ -44,7 +44,6 @@
   <entry key="22">Crear</entry>
   <entry key="23">Información: cada usuario conectado recibe un mensaje con la nueva encuesta.</entry>
   <entry key="24">Crear encuesta</entry>
-  <entry key="25">Cancelar</entry>
   <entry key="28">Encuesta</entry>
   <entry key="29">Se necesita ser moderador para crear una encuesta.</entry>
   <entry key="30">Su voto ha sido registrado</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Seleccionar cámara:</entry>
   <entry key="53">Seleccionar micrófono:</entry>
   <entry key="54">Aceptar</entry>
-  <entry key="55">Cancelar</entry>
+  <entry key="lbl.cancel">Cancelar</entry>
   <entry key="56">Necesita reconectarse</entry>
   <entry key="57">Editar configuración</entry>
   <entry key="58">Curso:</entry>
   <entry key="59">Idioma:</entry>
   <entry key="60">Aceptar</entry>
-  <entry key="61">Cancelar</entry>
   <entry key="62">Borrar pizarra</entry>
   <entry key="63">¿Desea limpiar la pizarra antes de añadir una nueva imagen?</entry>
   <entry key="64">No volver a preguntar</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Borrar el ítem escogido</entry>
   <entry key="81">Solicitar ser moderador</entry>
   <entry key="82">Solicitar</entry>
-  <entry key="83">Cancelar</entry>
   <entry key="84">Tengo una pregunta</entry>
   <entry key="85">Cerrar</entry>
   <entry key="86">Itálica</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Un usuario solicita la moderación; puede concederle acceso sólo a la pizarra o cambiar por completo el rol de la moderación. Usuario:</entry>
   <entry key="90">Aceptar</entry>
   <entry key="91">Denegar</entry>
-  <entry key="92">Cancelar</entry>
   <entry key="93">Enviando la solicitud a los siguientes usuarios</entry>
   <entry key="94">Aceptado</entry>
   <entry key="95">Rechazado</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Correo electrónico:</entry>
   <entry key="120">País:</entry>
   <entry key="121">Registrarse</entry>
-  <entry key="122">Cancelar</entry>
   <entry key="123">¿No está registrado?</entry>
   <entry key="124">Inicio</entry>
   <entry key="125">Usuarios</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Mostrar siguiente</entry>
   <entry key="151">Mostrar anterior</entry>
   <entry key="152">Eliminar registro</entry>
-  <entry key="153">Cancelar</entry>
   <entry key="154">Borrar</entry>
   <entry key="155">Nuevo registro</entry>
   <entry key="157">Borrar registro</entry>
@@ -185,7 +179,6 @@
   <entry key="171">nombre</entry>
   <entry key="172">Añadir organización</entry>
   <entry key="173">Añadir organización</entry>
-  <entry key="174">Cancelar</entry>
   <entry key="175">Añadir</entry>
   <entry key="176">Eliminar organización</entry>
   <entry key="177">Usuario</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Guardar como</entry>
   <entry key="200">Archivo</entry>
   <entry key="201">archivo</entry>
-  <entry key="202">Cancelar</entry>
   <entry key="203">Guardar</entry>
   <entry key="204">Error</entry>
   <entry key="205">Cargando</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Destinatario</entry>
   <entry key="217">Mensaje</entry>
   <entry key="218">Enviar</entry>
-  <entry key="219">cancelar</entry>
   <entry key="220">enviar</entry>
   <entry key="221">Datos de usuario</entry>
   <entry key="222">Su nombre para esta conferencia</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Grabación:</entry>
   <entry key="418">Actualmente alguien se encuentra grabando:</entry>
   <entry key="419">Grabando por el usuario:</entry>
-  <entry key="420">cancelar</entry>
   <entry key="421">La grabación será cancelada y no se guardará.</entry>
   <entry key="422">reanudar</entry>
   <entry key="423">Cerrar ventana y reanudar grabación</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Nombre</entry>
   <entry key="436">Sala</entry>
   <entry key="437">Fecha</entry>
-  <entry key="438">cancelar</entry>
   <entry key="439">iniciar</entry>
   <entry key="440">Nombre</entry>
   <entry key="441">Fecha</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Subida completa. Convirtiendo documento...</entry>
   <entry key="593">Iniciar Subida</entry>
   <entry key="594">Diálogo de subir e importar. Por favor, seleccione un archivo de su disco.</entry>
-  <entry key="595">Cancelar</entry>
   <entry key="596">Seleccionar archivo</entry>
   <entry key="597">Conexiones</entry>
   <entry key="598">Valor</entry>
@@ -669,7 +657,6 @@
   <entry key="694">desearía utilizar la pizarra. Utilice los iconos que hay junto al nombre del usuario (en la Lista de Usuarios) para agregar o quitar los permisos correspondientes.</entry>
   <entry key="695">desearía compartir su audio/vídeo. Use los iconos que hay junto al nombre de usuario (en la Lista de Usuarios) para agregar o quitar los permisos para compartir audio/vídeo.</entry>
   <entry key="696">Debe esperar hasta que un moderador ingrese a la sala.</entry>
-  <entry key="697">Cancelar</entry>
   <entry key="698">Guardar</entry>
   <entry key="699">Día</entry>
   <entry key="700">Mes</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Anchura:</entry>
   <entry key="741">Altura:</entry>
   <entry key="742">La conexión ha sido cerrada por el Servidor</entry>
-  <entry key="743">Cancelar</entry>
   <entry key="744">Iniciar Java</entry>
   <entry key="745">Si cierra esta sesión completamente, no será posible reiniciar el visor durante esta sesión.</entry>
   <entry key="746">Confirmar el cierre de la sesión</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Probar configuración</entry>
   <entry key="758">Compruebe la configuración de su micrófono y/o cámara antes de entrar en la sala. Para ello grabe durante algunos segundos y reprodúzcalo.</entry>
   <entry key="759">No volver a mostrar este test</entry>
-  <entry key="760">Cancelar</entry>
   <entry key="761">Iniciar</entry>
   <entry key="762">No volver a preguntar</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">La grabación de la entrevista está ya iniciada.</entry>
   <entry key="916">La grabación está ya parada o bien no ha sido iniciada aún.</entry>
   <entry key="917">¡Ya se ha iniciado la grabación de esta entrevista!</entry>
-  <entry key="918">Cancelar</entry>
   <entry key="919">El post-proceso de una entrevista lleva cinco veces más tiempo que el de la propia entrevista. El progreso actual de este proceso es el siguiente:</entry>
   <entry key="921">Regenerar datos SIP</entry>
   <entry key="922">¡No puede mover este archivo o carpeta dentro de su propio subdirectorio!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"/>
   <entry key="1013">Usuarios para la nueva sala de equipo:</entry>
   <entry key="1014">Crear sala de equipo</entry>
-  <entry key="1015">Cancelar</entry>
   <entry key="1016">Seleccione al menos un usuario para la sala de equipo</entry>
   <entry key="1017">Añadir un usuario al equipo</entry>
   <entry key="1018">Quitar usuarios de la sala de equipo</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">No mostrar la caja de información en el Control Remoto acerca de Copiar y Pegar</entry>
   <entry key="1128">Guardar</entry>
   <entry key="1129">Suprimir</entry>
-  <entry key="1130">Cancelar</entry>
   <entry key="1131">Invitar usuario a sala de conferencias</entry>
   <entry key="1132">Escoja sala de conferencias. El usuario invitado verá un mensaje con tu nombre y un link a la sala.</entry>
   <entry key="1133">Conectado desde:</entry>

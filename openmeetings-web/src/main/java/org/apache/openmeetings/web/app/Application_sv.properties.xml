@@ -44,7 +44,6 @@
   <entry key="22">Skapa</entry>
   <entry key="23">Info: Varje ansluten användare får ett meddelande med den nya röstningen.</entry>
   <entry key="24">Skapa en omröstning</entry>
-  <entry key="25">Avbryt</entry>
   <entry key="28">Röst</entry>
   <entry key="29">Du måste vara Moderator för att skapa en omröstning</entry>
   <entry key="30">Din röst är accepterad</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Välj webcam:</entry>
   <entry key="53">Välj mikrofon:</entry>
   <entry key="54">ok</entry>
-  <entry key="55">Avbryt</entry>
+  <entry key="lbl.cancel">Avbryt</entry>
   <entry key="56">Återanslut.</entry>
   <entry key="57">Ändra setup.</entry>
   <entry key="58">Kurs:</entry>
   <entry key="59">Språk:</entry>
   <entry key="60">Ok</entry>
-  <entry key="61">Avbryt</entry>
   <entry key="62">Rensa skrivbordet</entry>
   <entry key="63">Vill du att skrivbordet skall rensas innan du lägger till en ny bild?</entry>
   <entry key="64">Fråga inte igen</entry>
@@ -100,7 +98,6 @@
   <entry key="80">radera valt objekt</entry>
   <entry key="81">Lägg till för moderation</entry>
   <entry key="82">Lägg till</entry>
-  <entry key="83">Avbryt</entry>
   <entry key="84">Bli moderator</entry>
   <entry key="85">Stäng</entry>
   <entry key="86">italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">En användare väntar för att bli moderator:</entry>
   <entry key="90">Acceptera</entry>
   <entry key="91">Neka</entry>
-  <entry key="92">Avbryt</entry>
   <entry key="93">Skicka fråga till följande användare</entry>
   <entry key="94">Accepterad</entry>
   <entry key="95">Nekad</entry>
@@ -134,7 +130,6 @@
   <entry key="119">E-post:</entry>
   <entry key="120">Land:</entry>
   <entry key="121">Registrera</entry>
-  <entry key="122">Avbryt</entry>
   <entry key="123">Registrera</entry>
   <entry key="124">Hem</entry>
   <entry key="125">Användare</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Visa nästa</entry>
   <entry key="151">Visa föregående</entry>
   <entry key="152">Radera innehåll</entry>
-  <entry key="153">Avbryt</entry>
   <entry key="154">Radera</entry>
   <entry key="155">Nytt innehåll</entry>
   <entry key="157">Radera innehåll</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Namn</entry>
   <entry key="172">Lägg till organisation</entry>
   <entry key="173">Lägg till organisation</entry>
-  <entry key="174">Avbryt</entry>
   <entry key="175">Lägg till</entry>
   <entry key="176">Ta bort organisation</entry>
   <entry key="177">Användare</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Spara som</entry>
   <entry key="200">Filnamn</entry>
   <entry key="201">Filnamn</entry>
-  <entry key="202">Avbryt</entry>
   <entry key="203">Spara</entry>
   <entry key="204">Bearbetar</entry>
   <entry key="205">Laddar</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Mottagare</entry>
   <entry key="217">Meddelande</entry>
   <entry key="218">Skicka</entry>
-  <entry key="219">Avbryt</entry>
   <entry key="220">Skicka</entry>
   <entry key="221">Användardata</entry>
   <entry key="222">Ditt alias i denna konferens</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Inspelning:</entry>
   <entry key="418">Det är redan någon som spelar in:</entry>
   <entry key="419">Inspelning! Av användare:</entry>
-  <entry key="420">Avbryt</entry>
   <entry key="421">Inspelningen kommer att avbryts och inte heller sparas.</entry>
   <entry key="422">Återuppta</entry>
   <entry key="423">Stäng det här fönstret och återuppta inspelningen</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Namn</entry>
   <entry key="436">Rum</entry>
   <entry key="437">Datum</entry>
-  <entry key="438">Avbryt</entry>
   <entry key="439">Starta</entry>
   <entry key="440">Namn</entry>
   <entry key="441">Datum</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Uppladdning klar, konverterar Dokument ...</entry>
   <entry key="593">Påbörja Uppladdning</entry>
   <entry key="594">Dialog för Uppladdning och Importering. Var vänlig välj en Fil från din Hårdskiva.</entry>
-  <entry key="595">Avbryt</entry>
   <entry key="596">Välj Fil</entry>
   <entry key="597">Anslutningar</entry>
   <entry key="598">Värde</entry>
@@ -669,7 +657,6 @@
   <entry key="694">vill rita på Whiteboarden. Använd Statusikonerna i Användarlistan för att dela ut och ta bort rättigheter att rita på Whiteboarden.</entry>
   <entry key="695">vill publicera Ljud/Video. Använd Statusikonerna i Användarlistan för att dela ut och ta bort rättigheter att publicera Ljud/Video.</entry>
   <entry key="696">Du måste vänta tills en Moderator har stigit in i rummet.</entry>
-  <entry key="697">Avbryt</entry>
   <entry key="698">Spara</entry>
   <entry key="699">Dag</entry>
   <entry key="700">Månad</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

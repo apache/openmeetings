@@ -44,7 +44,6 @@
   <entry key="22">Créer</entry>
   <entry key="23">Info : Chaque utilisateur reçoit le nouveau sondage.</entry>
   <entry key="24">Créer un sondage</entry>
-  <entry key="25">Annuler</entry>
   <entry key="28">Sondage</entry>
   <entry key="29">Vous devez être modérateur pour créer un sondage.</entry>
   <entry key="30">Votre vote est enregistré.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Choix de la caméra :</entry>
   <entry key="53">Choix du micro :</entry>
   <entry key="54">Ok</entry>
-  <entry key="55">Annuler</entry>
+  <entry key="lbl.cancel">Annuler</entry>
   <entry key="56">Vous devez vous reconnecter</entry>
   <entry key="57">Edition des réglages</entry>
   <entry key="58">Cours :</entry>
   <entry key="59">Langue :</entry>
   <entry key="60">Ok</entry>
-  <entry key="61">Annuler</entry>
   <entry key="62">Nettoyer le tableau blanc</entry>
   <entry key="63">Voulez-vous nettoyer le tableau blanc avant d'ajouter une nouvelle image ?</entry>
   <entry key="64">Ne pas redemander</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Supprimer l'élément sélectionné</entry>
   <entry key="81">Demander la modération</entry>
   <entry key="82">Appliquer</entry>
-  <entry key="83">Annuler</entry>
   <entry key="84">Devenir modérateur</entry>
   <entry key="85">Fermer</entry>
   <entry key="86">Italique</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Un utilisateur souhaite devenir modérateur :</entry>
   <entry key="90">Accepter</entry>
   <entry key="91">Rejeter</entry>
-  <entry key="92">Annuler</entry>
   <entry key="93">Envoi aux autres utilisateurs</entry>
   <entry key="94">Accepté</entry>
   <entry key="95">Rejeté</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Courriel :</entry>
   <entry key="120">Pays :</entry>
   <entry key="121">Enregistrer</entry>
-  <entry key="122">Annuler</entry>
   <entry key="123">Inscription</entry>
   <entry key="124">Accueil</entry>
   <entry key="125">Utilisateurs</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Suivant</entry>
   <entry key="151">Précédent</entry>
   <entry key="152">Effacer l'enregistrement</entry>
-  <entry key="153">Annuler</entry>
   <entry key="154">Effacer</entry>
   <entry key="155">Nouvel enregistrement</entry>
   <entry key="157">Effacer l'enregistrement</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Nom</entry>
   <entry key="172">Ajouter une organisation</entry>
   <entry key="173">Ajouter une organisation</entry>
-  <entry key="174">Annuler</entry>
   <entry key="175">Ajouter</entry>
   <entry key="176">Effacer organisation</entry>
   <entry key="177">Utilisateur</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Enregistrer sous</entry>
   <entry key="200">Nom du fichier</entry>
   <entry key="201">Nom du fichier</entry>
-  <entry key="202">Annuler</entry>
   <entry key="203">Sauvegarder</entry>
   <entry key="204">Erreur</entry>
   <entry key="205">Chargement</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Destinataire</entry>
   <entry key="217">Message</entry>
   <entry key="218">Envoyer</entry>
-  <entry key="219">Annuler</entry>
   <entry key="220">Envoyer</entry>
   <entry key="221">Détails sur l'utilisateur</entry>
   <entry key="222">Votre pseudonyme pour cette conférence</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Enregistrement :</entry>
   <entry key="418">Quelqu'un est déjà en train d'enregistrer cette session :</entry>
   <entry key="419">Enregistrement par :</entry>
-  <entry key="420">Annuler</entry>
   <entry key="421">Si vous annulez l'enregistrement, il ne sera pas sauvegardé.</entry>
   <entry key="422">Reprendre</entry>
   <entry key="423">Fermer cette fenêtre et reprendre l'enregistrement</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Nom</entry>
   <entry key="436">Salle</entry>
   <entry key="437">Date</entry>
-  <entry key="438">Annuler</entry>
   <entry key="439">Démarrer</entry>
   <entry key="440">Nom</entry>
   <entry key="441">Date</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Téléchargement ok, conversion en cours...</entry>
   <entry key="593">Démarrer l'importation</entry>
   <entry key="594">Sélectionnez un fichier sur votre disque :</entry>
-  <entry key="595">Quitter</entry>
   <entry key="596">Sélectionner un fichier</entry>
   <entry key="597">Connexions</entry>
   <entry key="598">Valeur</entry>
@@ -669,7 +657,6 @@
   <entry key="694">&lt;br/&gt;demande l'accès au tableau blanc. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de dessiner sur le tableau blanc.</entry>
   <entry key="695">&lt;br/&gt;demande le partage audio/vidéo. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de partager l'audio/vidéo.</entry>
   <entry key="696">Vous devez attendre qu'un modérateur entre dans la salle.</entry>
-  <entry key="697">Annuler</entry>
   <entry key="698">Sauver</entry>
   <entry key="699">Jour</entry>
   <entry key="700">Mois</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Largeur :</entry>
   <entry key="741">Hauteur :</entry>
   <entry key="742">La connection a été fermée par le serveur</entry>
-  <entry key="743">Annuler</entry>
   <entry key="744">+ net</entry>
   <entry key="745">Si vous fermez cette session vous ne pourrez plus redemarrer le partage pour cette session.</entry>
   <entry key="746">Confirmez la fermeture de cette session de partage</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Testez votre micro et votre caméra avant d'entrer dans la réunion en enregistrant quelques secondes. Vous pourrez alors rejouer votre enregistrement pour vérification.</entry>
   <entry key="759">Ne plus montrer ce test (modifiable dans le profil)</entry>
-  <entry key="760">Annuler</entry>
   <entry key="761">Début de réunion</entry>
   <entry key="762">Ne plus poser cette question</entry>
   <entry key="763">Enreg.</entry>
@@ -882,7 +867,6 @@
   <entry key="915">L'enregisrement de l'interview est déjà démarré.</entry>
   <entry key="916">L'enregistrement est déjà arrêté ou n'a pas encore démarré.</entry>
   <entry key="917">L'enregistrement pour cette interview a déjà démarré !</entry>
-  <entry key="918">Annuler</entry>
   <entry key="919">Le post traitement d'une interview dure 5 minutes par minute d'interview. L'avancement actuel du post traitement est :</entry>
   <entry key="921">Regénérer les données</entry>
   <entry key="922">Vous ne pouvez déplacer ce fichier ou dossier dans son propre sous-dossier !</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Utilisateurs pour le nouveau groupe de travail :</entry>
   <entry key="1014">Créer un groupe de travail</entry>
-  <entry key="1015">Annuler</entry>
   <entry key="1016">Choisissez au moins un utilisateur pour le groupe de travail !</entry>
   <entry key="1017">Ajouter utilisateur au groupe</entry>
   <entry key="1018">Supprimer utilisateur du groupe de travail</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Ne pas montrer la boite d'info dans le contrôle à distance à propos du copier-coller</entry>
   <entry key="1128">Sauver</entry>
   <entry key="1129">Enlever</entry>
-  <entry key="1130">Annuler</entry>
   <entry key="1131">Inviter l'utilisateur dans la salle de conférence</entry>
   <entry key="1132">Choisissez une salle de conférence. L'utilisateur invité recevra un message avec votre nom et un lien vers la salle.</entry>
   <entry key="1133">Connecté depuis :</entry>

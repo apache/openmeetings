@@ -44,7 +44,6 @@
   <entry key="22">创建</entry>
   <entry key="23">提示:每个连接用户将收到一个新投票的消息提示.</entry>
   <entry key="24">创建投票</entry>
-  <entry key="25">取消</entry>
   <entry key="28">投票</entry>
   <entry key="29">主持人才能提问</entry>
   <entry key="30">已您的投票.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">请选择摄像头:</entry>
   <entry key="53">请选择话筒:</entry>
   <entry key="54">确定</entry>
-  <entry key="55">取消</entry>
+  <entry key="lbl.cancel">取消</entry>
   <entry key="56">需要从新连接.</entry>
   <entry key="57">编辑设置.</entry>
   <entry key="58">课题:</entry>
   <entry key="59">语言:</entry>
   <entry key="60">确定</entry>
-  <entry key="61">取消</entry>
   <entry key="62">清除白板</entry>
   <entry key="63">新图片加入后清除白板?</entry>
   <entry key="64">不再询问</entry>
@@ -100,7 +98,6 @@
   <entry key="80">删除已选项</entry>
   <entry key="81">接受主持</entry>
   <entry key="82">应用</entry>
-  <entry key="83">取消</entry>
   <entry key="84">成为主持</entry>
   <entry key="85">关闭</entry>
   <entry key="86">斜体</entry>
@@ -109,7 +106,6 @@
   <entry key="89">用户想申请为主持:</entry>
   <entry key="90">接受</entry>
   <entry key="91">拒绝</entry>
-  <entry key="92">取消</entry>
   <entry key="93">向下列用户发送请求</entry>
   <entry key="94">接受</entry>
   <entry key="95">拒绝</entry>
@@ -134,7 +130,6 @@
   <entry key="119">邮件:</entry>
   <entry key="120">国家:</entry>
   <entry key="121">注册</entry>
-  <entry key="122">取消</entry>
   <entry key="123">注册</entry>
   <entry key="124">首页</entry>
   <entry key="125">用户管理</entry>
@@ -165,7 +160,6 @@
   <entry key="150">显示下一个</entry>
   <entry key="151">显示前一个</entry>
   <entry key="152">删除记录</entry>
-  <entry key="153">取消</entry>
   <entry key="154">删除</entry>
   <entry key="155">新记录</entry>
   <entry key="157">删除记录</entry>
@@ -185,7 +179,6 @@
   <entry key="171">名称</entry>
   <entry key="172">添加组织</entry>
   <entry key="173">添加组织</entry>
-  <entry key="174">取消</entry>
   <entry key="175">添加</entry>
   <entry key="176">删除组织</entry>
   <entry key="177">用户</entry>
@@ -213,7 +206,6 @@
   <entry key="199">另存为</entry>
   <entry key="200">文件名</entry>
   <entry key="201">文件名</entry>
-  <entry key="202">取消</entry>
   <entry key="203">保存</entry>
   <entry key="204">错误</entry>
   <entry key="205">读取中</entry>
@@ -230,7 +222,6 @@
   <entry key="216">收信人</entry>
   <entry key="217">消息</entry>
   <entry key="218">发送</entry>
-  <entry key="219">取消</entry>
   <entry key="220">发送</entry>
   <entry key="221">用户数据</entry>
   <entry key="222">会议昵称</entry>
@@ -407,7 +398,6 @@
   <entry key="417">记录中:</entry>
   <entry key="418">现在已经有人在记录:</entry>
   <entry key="419">记录中! 记录用户:</entry>
-  <entry key="420">取消</entry>
   <entry key="421">记录将被取消且不被保存.</entry>
   <entry key="422">继续</entry>
   <entry key="423">关闭此窗口并且继续记录</entry>
@@ -425,7 +415,6 @@
   <entry key="435">名称</entry>
   <entry key="436">房间</entry>
   <entry key="437">日期</entry>
-  <entry key="438">取消</entry>
   <entry key="439">开始</entry>
   <entry key="440">名称</entry>
   <entry key="441">日期</entry>
@@ -573,7 +562,6 @@
   <entry key="592">上传结束, 正在转换文档 ...</entry>
   <entry key="593">开始上传</entry>
   <entry key="594">上传，导入对话框. 请从硬盘上选择一个文件.</entry>
-  <entry key="595">取消</entry>
   <entry key="596">选择文件</entry>
   <entry key="597">连接</entry>
   <entry key="598">值</entry>
@@ -669,7 +657,6 @@
   <entry key="694">如果要在演示板上书写，请在用户列表中，通过该用户的状态图标添加或删除此用户的书写权限。</entry>
   <entry key="695">如果要共享声音和视频，请在用户列表中，通过该用户的状态图标设置是否共享此用户的声音和图像。</entry>
   <entry key="696">会议室中必需有一个主持人</entry>
-  <entry key="697">取消</entry>
   <entry key="698">保存</entry>
   <entry key="699">日</entry>
   <entry key="700">月</entry>
@@ -714,7 +701,6 @@
   <entry key="740">宽：</entry>
   <entry key="741">高：</entry>
   <entry key="742">连接被服务器关闭</entry>
-  <entry key="743">取消</entry>
   <entry key="744">启动Java</entry>
   <entry key="745">如果你关闭本次会话，你将不能再重启本次会话的共享浏览器！</entry>
   <entry key="746">确认关闭浏览会话</entry>
@@ -731,7 +717,6 @@
   <entry key="757">测试音频视频配置</entry>
   <entry key="758">你在进入会议室前，可以使用音频视频测试来录制几秒钟的声音图像。然后通过回放你的录像录音来检查你的声音图像是否正常。</entry>
   <entry key="759">下次不要再显示这个测试对话框</entry>
-  <entry key="760">取消</entry>
   <entry key="761">开始进入会议室</entry>
   <entry key="762">不要再次询问</entry>
   <entry key="763">录制</entry>
@@ -882,7 +867,6 @@
   <entry key="915">会议视频录制已经开始</entry>
   <entry key="916">视频录制已经停止，也可能还没开始</entry>
   <entry key="917">会议视频录制已经开始d!</entry>
-  <entry key="918">取消</entry>
   <entry key="919">录制的视频后续处理每1分钟时间需5分钟时间来处理，正在转码处理的录制视频是:</entry>
   <entry key="921">重新产生SIP数据</entry>
   <entry key="922">您不能将文件或者文件夹移入自己所在的子目录!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">新团队会议室的所有成员：</entry>
   <entry key="1014">创建团队会议室</entry>
-  <entry key="1015">取消</entry>
   <entry key="1016">至少为团队会议室选择一个用户</entry>
   <entry key="1017">为团队增加用户</entry>
   <entry key="1018">从团队会议室中移除该用户</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">不要在远程控制中显示拷贝和粘贴的信息框</entry>
   <entry key="1128">保存</entry>
   <entry key="1129">移除</entry>
-  <entry key="1130">取消</entry>
   <entry key="1131">邀请用户参与会议</entry>
   <entry key="1132">选择一个会议室，被邀请者会受到一条您的名字和进入会议室的链接</entry>
   <entry key="1133">连接时间:</entry>

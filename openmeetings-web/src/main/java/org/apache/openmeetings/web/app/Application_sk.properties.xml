@@ -44,7 +44,6 @@
   <entry key="22">Vytvoriť</entry>
   <entry key="23">Všetci pripojení používatelia prijímajú správu s novým hlasovaním</entry>
   <entry key="24">Vytvoriť hlasovanie</entry>
-  <entry key="25">Zrušiť</entry>
   <entry key="28">Hlasovanie</entry>
   <entry key="29">Musíte byť moderátor pre vytvorenie otázky</entry>
   <entry key="30">Váš hlas bol zaznamenaný</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Vybrať webkameru</entry>
   <entry key="53">Vybrať mikrofón</entry>
   <entry key="54">OK</entry>
-  <entry key="55">Zrušiť</entry>
+  <entry key="lbl.cancel">Zrušiť</entry>
   <entry key="56">Musíte sa znovu pripojiť</entry>
   <entry key="57">Upraviť nastavenia</entry>
   <entry key="58">Kurz</entry>
   <entry key="59">Jazyk</entry>
   <entry key="60">OK</entry>
-  <entry key="61">Zrušiť</entry>
   <entry key="62">Zmazať tabuľu</entry>
   <entry key="63">Chcete zmazať tabuľu pred vložením nového obrázka?</entry>
   <entry key="64">Nepýtať sa ma znova</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Zmazať vybranú položku</entry>
   <entry key="81">Požiadať o moderáciu</entry>
   <entry key="82">Aplikovať</entry>
-  <entry key="83">Zrušiť</entry>
   <entry key="84">Nemám otázku</entry>
   <entry key="85">Zatvoriť</entry>
   <entry key="86">ležatý</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Používateľ požiadal o moderáciu. Môžte mu sprístupniť len prístup k tabuli, alebo plnú moderáciu. Používateľ:</entry>
   <entry key="90">Prijať</entry>
   <entry key="91">Odmietnuť</entry>
-  <entry key="92">Zrušiť</entry>
   <entry key="93">Posielanie žiadosti nasledovným používateľom</entry>
   <entry key="94">Potvrdené</entry>
   <entry key="95">Odmietnuté</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Email</entry>
   <entry key="120">Krajina</entry>
   <entry key="121">Registrovať</entry>
-  <entry key="122">Zrušiť</entry>
   <entry key="123">Nie ste členom?</entry>
   <entry key="124">Domov</entry>
   <entry key="125">Používatelia</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Ďalšie</entry>
   <entry key="151">Predchádzajúce</entry>
   <entry key="152">Zmazať nahrávku</entry>
-  <entry key="153">Zrušiť</entry>
   <entry key="154">Zmazať</entry>
   <entry key="155">Nové nahrávanie</entry>
   <entry key="157">Zmazať nahrávku</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Meno</entry>
   <entry key="172">Pridať organizáciu</entry>
   <entry key="173">Pridať organizáciu</entry>
-  <entry key="174">Zrušiť</entry>
   <entry key="175">Pridať</entry>
   <entry key="176">Odstrániť organizáciu</entry>
   <entry key="177">Používateľ</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Uložiť ako</entry>
   <entry key="200">Meno súboru</entry>
   <entry key="201">Meno súboru</entry>
-  <entry key="202">Zrušiť</entry>
   <entry key="203">Uložiť</entry>
   <entry key="204">Chyba</entry>
   <entry key="205">Nahrávanie</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Príjemca</entry>
   <entry key="217">Správa</entry>
   <entry key="218">Poslať</entry>
-  <entry key="219">Zrušiť</entry>
   <entry key="220">Poslať</entry>
   <entry key="221">Informácie o používateľovi</entry>
   <entry key="222">Vaša prezývka pre túto miestnosť</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Nahrávanie</entry>
   <entry key="418">Niekto už nahráva túto miestnosť</entry>
   <entry key="419">Nahrávanie. Používateľ:</entry>
-  <entry key="420">Zrušiť</entry>
   <entry key="421">Nahrávanie bude zrušené a neuloží sa</entry>
   <entry key="422">výsledok</entry>
   <entry key="423">Zavrieť toto okno a zhrnúť nahrávanie</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Meno</entry>
   <entry key="436">Miestnosť</entry>
   <entry key="437">Dátum</entry>
-  <entry key="438">Zrušiť</entry>
   <entry key="439">Začať</entry>
   <entry key="440">Meno</entry>
   <entry key="441">Dátum</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Nahratie kompletné, konvertujem dokument</entry>
   <entry key="593">Začať nahrávanie</entry>
   <entry key="594">Nahrať a importovať dialóg. Prosím vyberte súbor.</entry>
-  <entry key="595">Zrušiť</entry>
   <entry key="596">Vybrať súbor</entry>
   <entry key="597">Pripojenia</entry>
   <entry key="598">Hodnota</entry>
@@ -669,7 +657,6 @@
   <entry key="694">chce písať na tabuľu</entry>
   <entry key="695">chce zdieľať svoje audio/video</entry>
   <entry key="696">Musíte počkať pokiaľ moderátor vstúpi do miestnosti</entry>
-  <entry key="697">Zrušiť</entry>
   <entry key="698">Uložiť</entry>
   <entry key="699">Deň</entry>
   <entry key="700">Mesiac</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Šírka:</entry>
   <entry key="741">Výška:</entry>
   <entry key="742">Spojenie zavreté serverom</entry>
-  <entry key="743">Zrušiť</entry>
   <entry key="744">Začať Java</entry>
   <entry key="745">Ak zavriete toto stretnutie, nebudete môcť reštartovať prehliadač pre toto stretnutie</entry>
   <entry key="746">Potvrdiť zavretie okna</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Testovať nastavenie</entry>
   <entry key="758">Otestovať audio alebo video nastavenie pred vstupom do miestnosti môžte nahratím stretnutia na pár sekúnd. Môžte si potom prehrať nahrávku a skontrolovať svoje audio/video.</entry>
   <entry key="759">Tento test nezobrazovať viac</entry>
-  <entry key="760">Zrušiť</entry>
   <entry key="761">Začať stretnutie</entry>
   <entry key="762">Nepýtať sa znova</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">Nahrávanie rozhovoru už prebieha.</entry>
   <entry key="916">Nahrávanie je zastavené alebo ešte nezačalo.</entry>
   <entry key="917">Nahrávanie rozhovoru už prebieha!</entry>
-  <entry key="918">Zrušiť</entry>
   <entry key="919">Spracovanie rozhovoru zaberie 5 minút za každú 1 min nahrávky. Súčasný status spracovania je:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">Nemôžte premiestniť súbor do jeho podsúboru!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Používatelia pre novú tímovú miestnosť:</entry>
   <entry key="1014">Vytvoriť tímovú miestnosť</entry>
-  <entry key="1015">Zrušiť</entry>
   <entry key="1016">Vyberte aspoň 1 používateľa pre tímovú miestnosť!</entry>
   <entry key="1017">Pridať používateľa pre tím</entry>
   <entry key="1018">Odstrániť používateľa z tímovej miestnosti</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

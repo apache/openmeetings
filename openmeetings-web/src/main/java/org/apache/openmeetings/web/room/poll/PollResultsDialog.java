@@ -75,7 +75,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private final Long roomId;
 	private final PollSelectForm selForm;
 	private final PollResultsForm dispForm;
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("25"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private final DialogButton close = new DialogButton("close", Application.getString("1418"));
 	private final DialogButton delete = new DialogButton("delete", Application.getString("1420"));
 	private boolean moderator = false;

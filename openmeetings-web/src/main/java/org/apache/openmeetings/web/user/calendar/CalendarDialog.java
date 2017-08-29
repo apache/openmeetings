@@ -71,7 +71,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private DialogButton save = new DialogButton("save", Application.getString("813"));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("1130"));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private DialogButton delete = new DialogButton("delete", Application.getString("814"));
 	private UserCalendarForm form;
 	private MessageDialog confirmDelete;

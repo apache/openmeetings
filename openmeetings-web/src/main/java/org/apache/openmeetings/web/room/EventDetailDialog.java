@@ -39,7 +39,7 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 	public EventDetailDialog(String id, final Appointment a) {
 		super(id, "", new CompoundPropertyModel<>(a), false);
 	}
-	
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -52,20 +52,20 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 		add(new Label("owner.firstname"));
 		add(new Label("owner.lastname"));
 	}
-	
+
 	@Override
 	public void onConfigure(JQueryBehavior behavior) {
 		super.onConfigure(behavior);
 		behavior.setOption("autoOpen", true);
 		behavior.setOption("position", "{my: 'right top', at: 'right bottom', of: '.room.menu' }");
 	}
-	
+
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 	}
 
 	@Override
 	protected List<DialogButton> getButtons() {
-		return Arrays.asList(new DialogButton("cancel", Model.of(getString("1130"))));
+		return Arrays.asList(new DialogButton("cancel", Model.of(getString("lbl.cancel"))));
 	}
 }

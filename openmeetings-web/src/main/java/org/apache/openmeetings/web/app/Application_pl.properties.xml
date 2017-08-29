@@ -44,7 +44,6 @@
   <entry key="22">Utwórz</entry>
   <entry key="23">Uwaga: Każdy połączony użytkownik otrzyma wiadomość z nowym głosowaniem.</entry>
   <entry key="24">Utwórz głosowanie.</entry>
-  <entry key="25">Anuluj</entry>
   <entry key="28">Głosowanie</entry>
   <entry key="29">Musisz być moderatorem aby utworzyć pytanie</entry>
   <entry key="30">Twój głos został zarejestrowany.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Wybierz kamerę:</entry>
   <entry key="53">Wybierz mikrofon:</entry>
   <entry key="54">ok</entry>
-  <entry key="55">anuluj</entry>
+  <entry key="lbl.cancel">anuluj</entry>
   <entry key="56">Połącz się powtórnie.</entry>
   <entry key="57">Edytuj ustawienia.</entry>
   <entry key="58">Kurs:</entry>
   <entry key="59">Język:</entry>
   <entry key="60">ok</entry>
-  <entry key="61">anuluj</entry>
   <entry key="62">Wyczyść tablicę</entry>
   <entry key="63">Czy chcesz wyczyściń tablicę przed dodaniem nowego obrazka?</entry>
   <entry key="64">Nie pytaj więcej</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Skasuj wskazany obiekt</entry>
   <entry key="81">Złóż wniosek o moderację</entry>
   <entry key="82">złóż</entry>
-  <entry key="83">anuluj</entry>
   <entry key="84">Zostań moderatorem</entry>
   <entry key="85">zamknij</entry>
   <entry key="86">kursywa</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Użytkownik prosi o prawa moderatora. Możesz nadać mu tylko dostęp do tablicy, albo pełne prawa moderatorskie. Użytkownik:</entry>
   <entry key="90">akceptuj</entry>
   <entry key="91">odrzuć</entry>
-  <entry key="92">anuluj</entry>
   <entry key="93">Wysyłam prośbę do następujących użytkowników:</entry>
   <entry key="94">Przyjęte</entry>
   <entry key="95">Odrzucone</entry>
@@ -134,7 +130,6 @@
   <entry key="119">e-mail:</entry>
   <entry key="120">Kraj:</entry>
   <entry key="121">Zarejestruj</entry>
-  <entry key="122">Anuluj</entry>
   <entry key="123">Nie zapisałeś się jeszcze?</entry>
   <entry key="124">Strona startowa</entry>
   <entry key="125">Użytkownicy</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Pokaż następny</entry>
   <entry key="151">Pokaż poprzedni</entry>
   <entry key="152">Skasuj wpis</entry>
-  <entry key="153">Anuluj</entry>
   <entry key="154">Skasuj</entry>
   <entry key="155">Nowy wpis</entry>
   <entry key="157">Skasuj wpis</entry>
@@ -185,7 +179,6 @@
   <entry key="171">nazwa</entry>
   <entry key="172">Dodaj organizację</entry>
   <entry key="173">Dodaj organizację</entry>
-  <entry key="174">Anuluj</entry>
   <entry key="175">Dodaj</entry>
   <entry key="176">skasuj organizację</entry>
   <entry key="177">Użytkownik</entry>
@@ -213,7 +206,6 @@
   <entry key="199">zapisz jako</entry>
   <entry key="200">Nazwa pliku</entry>
   <entry key="201">nazwa pliku</entry>
-  <entry key="202">anuluj</entry>
   <entry key="203">zapisz</entry>
   <entry key="204">Błąd</entry>
   <entry key="205">wczytuję</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Do</entry>
   <entry key="217">Treść zaproszenia</entry>
   <entry key="218">Wyślij</entry>
-  <entry key="219">anuluj</entry>
   <entry key="220">wyślij</entry>
   <entry key="221">Dane użytkownika</entry>
   <entry key="222">Twój pseudonim na potrzeby tej konferencji</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Nagrywanie:</entry>
   <entry key="418">Już ktoś to w tej chwili nagrywa:</entry>
   <entry key="419">Nagrywane przez użytkownika:</entry>
-  <entry key="420">anuluj</entry>
   <entry key="421">Nagrywanie zostanie anulowane i nie będzie zapisane.</entry>
   <entry key="422">kontynuuj</entry>
   <entry key="423">Zamknij to okno i powróć do nagrywania</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Nazwa</entry>
   <entry key="436">Pokój</entry>
   <entry key="437">Data</entry>
-  <entry key="438">anuluj</entry>
   <entry key="439">start</entry>
   <entry key="440">Nazwa</entry>
   <entry key="441">Data</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Przesyłanie zakończone, przeprowadzam konwersję dokumentu ...</entry>
   <entry key="593">Zacznij przesyłanie</entry>
   <entry key="594">Przesyłanie i import. Proszę wybrać plik z dysku.</entry>
-  <entry key="595">Anuluj</entry>
   <entry key="596">Wybierz plik</entry>
   <entry key="597">Połączenia</entry>
   <entry key="598">Wartość</entry>
@@ -669,7 +657,6 @@
   <entry key="694">rysować na tablicy. Użyj ikonki statusu przy użytkowniku na liście, aby dać lub odebrać mu prawo do rysowania na tablicy.</entry>
   <entry key="695">chciałby transmitować swój głos i obraz wideo. Użyj ikonki statusu przy użytkowniku na liście, aby dać lub odebrać mu prawo do transmitowania głosu i obrazu wideo.</entry>
   <entry key="696">Musisz poczekać, aż moderator wejdzie do pokoju.</entry>
-  <entry key="697">Anuluj</entry>
   <entry key="698">Zapisz</entry>
   <entry key="699">Dzień</entry>
   <entry key="700">Miesiąc</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

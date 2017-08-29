@@ -44,7 +44,6 @@
   <entry key="22">Anlegen</entry>
   <entry key="23">Info: Jeder verbundene Benutzer erhält eine Nachricht mit der neuen Umfrage.</entry>
   <entry key="24">Umfrage anlegen</entry>
-  <entry key="25">Abbrechen</entry>
   <entry key="28">Umfrage</entry>
   <entry key="29">Sie müssen Moderator/Lehrer in diesem Raum sein, um eine Umfrage anzulegen.</entry>
   <entry key="30">Ihr Stimme wurde abgegeben.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Kamera wählen:</entry>
   <entry key="53">Mikrofon wählen:</entry>
   <entry key="54">Ok</entry>
-  <entry key="55">Abbrechen</entry>
+  <entry key="lbl.cancel">Abbrechen</entry>
   <entry key="56">Sie müssen sich erneut verbinden damit die Änderungen wirksam werden.</entry>
   <entry key="57">Einstellungen ändern.</entry>
   <entry key="58">Kurs:</entry>
   <entry key="59">Kurssprache:</entry>
   <entry key="60">Ok</entry>
-  <entry key="61">Abbrechen</entry>
   <entry key="62">Zeichenbrett leeren</entry>
   <entry key="63">Soll das Zeichenbrett geleert werden bevor ein neues Bild hinzugefügt wird?</entry>
   <entry key="64">Nicht nochmal fragen</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Löschen</entry>
   <entry key="81">Moderation beantragen</entry>
   <entry key="82">Beantragen</entry>
-  <entry key="83">Abbrechen</entry>
   <entry key="84">Moderator werden</entry>
   <entry key="85">Schließen</entry>
   <entry key="86">Kursiv</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Ein Benutzer möchte die Moderation übernehmen:</entry>
   <entry key="90">Annehmen</entry>
   <entry key="91">Ablehnen</entry>
-  <entry key="92">Abbrechen</entry>
   <entry key="93">Sende Anfrage an folgende Nutzer</entry>
   <entry key="94">bestätigt</entry>
   <entry key="95">abgelehnt</entry>
@@ -134,7 +130,6 @@
   <entry key="119">E-Mail:</entry>
   <entry key="120">Land:</entry>
   <entry key="121">Registrieren</entry>
-  <entry key="122">Abbrechen</entry>
   <entry key="123">Registrieren</entry>
   <entry key="124">Home</entry>
   <entry key="125">Benutzer</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Vorwärts</entry>
   <entry key="151">Zurück</entry>
   <entry key="152">Datensatz entfernen</entry>
-  <entry key="153">Abbrechen</entry>
   <entry key="154">Enfernen</entry>
   <entry key="155">Datensatz anlegen</entry>
   <entry key="157">Datensatz entfernen</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Name</entry>
   <entry key="172">Organisation hinzufügen</entry>
   <entry key="173">Organisation hinzufügen</entry>
-  <entry key="174">Abbrechen</entry>
   <entry key="175">Hinzufügen</entry>
   <entry key="176">Organisation entfernen</entry>
   <entry key="177">Benutzer</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Speichern unter</entry>
   <entry key="200">Dateiname</entry>
   <entry key="201">Dateiname</entry>
-  <entry key="202">Abbrechen</entry>
   <entry key="203">Speichern</entry>
   <entry key="204">Fehler</entry>
   <entry key="205">Laden</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Empfänger</entry>
   <entry key="217">Nachricht</entry>
   <entry key="218">Abschicken</entry>
-  <entry key="219">Abbrechen</entry>
   <entry key="220">Senden</entry>
   <entry key="221">Benutzerdaten</entry>
   <entry key="222">Nickname für diese Konferenz</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Aufnahmen:</entry>
   <entry key="418">Die Aufnahme ist bereits gestartet.</entry>
   <entry key="419">Aufnahme gestartet von Benutzer:</entry>
-  <entry key="420">Abbrechen</entry>
   <entry key="421">Aufnahme wird abgebrochen und nicht gespeichert.</entry>
   <entry key="422">Fortsetzen</entry>
   <entry key="423">Aufnahme fortsetzen</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Name</entry>
   <entry key="436">Raum</entry>
   <entry key="437">Datum</entry>
-  <entry key="438">Abbrechen</entry>
   <entry key="439">Start</entry>
   <entry key="440">Name</entry>
   <entry key="441">Datum</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Dokument hochgeladen. Konvertiere ...</entry>
   <entry key="593">Starte Upload</entry>
   <entry key="594">Hochladen und importieren. Bitte wählen Sie eine Datei aus.</entry>
-  <entry key="595">Abbrechen</entry>
   <entry key="596">Datei auswählen</entry>
   <entry key="597">Verbindungen</entry>
   <entry key="598">Wert</entry>
@@ -669,7 +657,6 @@
   <entry key="694">würde gerne auf dem Zeichenbrett zeichnen.</entry>
   <entry key="695">würde gerne Audio/Video mit anderen teilen.</entry>
   <entry key="696">Sie müssen warten bis der Moderator den Raum betritt.</entry>
-  <entry key="697">Abbruch</entry>
   <entry key="698">Speichern</entry>
   <entry key="699">Tag</entry>
   <entry key="700">Monat</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Breite:</entry>
   <entry key="741">Höhe:</entry>
   <entry key="742">Die Verbindung wurde vom Server abgebrochen.</entry>
-  <entry key="743">Abbrechen</entry>
   <entry key="744">Extern starten</entry>
   <entry key="745">Wenn Sie diese Session schließen, können Sie die Session nicht wieder starten.</entry>
   <entry key="746">Sitzung wirklich schließen?</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Teste Setup</entry>
   <entry key="758">Überprüfen Sie Ihre Mikrofon- und Kameraeinstellungen bevor Sie einen Raum betreten und Aufzeichnungen durchführen. Sie können Ihre Aufnahmen im Nachhinein abspielen.</entry>
   <entry key="759">Dieses Fenster nicht wieder anzeigen</entry>
-  <entry key="760">Abbrechen</entry>
   <entry key="761">Beginne Konferenz</entry>
   <entry key="762">Nicht wieder fragen</entry>
   <entry key="763">Aufnahme</entry>
@@ -882,7 +867,6 @@
   <entry key="915">Die Interviewaufzeichung wurde bereits gestartet.</entry>
   <entry key="916">Die Aufzeichung wurde bereits gestoppt oder noch nicht gestartet.</entry>
   <entry key="917">Die Aufzeichnung des Interviews wurde bereits gestartet.</entry>
-  <entry key="918">Abbrechen</entry>
   <entry key="919">Die Nachbearbeitung eines Interview benötigt fünf Minuten für jede aufgezeichnete Minute. Die Anzeige zeigt den Fortschritt:</entry>
   <entry key="921">SIP Daten neu erzeugen</entry>
   <entry key="922">Sie können die Datei oder Ordner nicht in einen eigenen Unterordner verschieben.</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Nutzer für neuen Teamrraum:</entry>
   <entry key="1014">Teamraum anlegen</entry>
-  <entry key="1015">Abbrechen</entry>
   <entry key="1016">Wählen Sie zumindest einen Nutzer für den Teamraum</entry>
   <entry key="1017">In Team einfügen</entry>
   <entry key="1018">Aus Teamraum austragen</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Infofeld zum Kopieren/Einfügen nicht in Remote Control anzeigen</entry>
   <entry key="1128">Speichern</entry>
   <entry key="1129">Entfernen</entry>
-  <entry key="1130">Abbrechen</entry>
   <entry key="1131">Nutzer in Konferenzraum einladen</entry>
   <entry key="1132">Konferenzraum auswählen. Die eingeladenen Nutzer erhalten eine Nachricht mit Ihrem Namen und dem Link zum Raum.</entry>
   <entry key="1133">Verbunden seit:</entry>

@@ -44,7 +44,6 @@
   <entry key="22">창안하다</entry>
   <entry key="23">Info: Each connected user receives a message with the new poll.</entry>
   <entry key="24">선거를 만드셨습니다.</entry>
-  <entry key="25">무효</entry>
   <entry key="28">투표</entry>
   <entry key="29">질문을 만들기 위해서 의장이 되어야합니다.</entry>
   <entry key="30">당신의 투표가 등록 되었습니다.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">웹카메라를 선택해 주십시요:</entry>
   <entry key="53">마이크를 선택해 주십시요:</entry>
   <entry key="54">네</entry>
-  <entry key="55">무효</entry>
+  <entry key="lbl.cancel">무효</entry>
   <entry key="56">다시 연결이 필요했습니다.</entry>
   <entry key="57">셋업 편집</entry>
   <entry key="58">진행:</entry>
   <entry key="59">언어:</entry>
   <entry key="60">네</entry>
-  <entry key="61">무효</entry>
   <entry key="62">칠판 지우기</entry>
   <entry key="63">새로운 그림을 넣기전에 칠판을 지우길 원하십니까?</entry>
   <entry key="64">다시 질문을 해주시마십시요</entry>
@@ -100,7 +98,6 @@
   <entry key="80">선택한 항목 삭제</entry>
   <entry key="81">알맞게 신청하십시요.</entry>
   <entry key="82">신청하다.</entry>
-  <entry key="83">삭제</entry>
   <entry key="84">사회자가 돼다</entry>
   <entry key="85">닫다</entry>
   <entry key="86">italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">유저가 사회자 신청을 원합니다:</entry>
   <entry key="90">받아들이다.</entry>
   <entry key="91">거부하다.</entry>
-  <entry key="92">삭제</entry>
   <entry key="93">밑의 유져들에가 요청을 보냄</entry>
   <entry key="94">확임이 됩습니다.</entry>
   <entry key="95">거부가됩습니다.</entry>
@@ -134,7 +130,6 @@
   <entry key="119">주소:</entry>
   <entry key="120">나라:</entry>
   <entry key="121">등록</entry>
-  <entry key="122">취소</entry>
   <entry key="123">등록</entry>
   <entry key="124">집</entry>
   <entry key="125">유저</entry>
@@ -165,7 +160,6 @@
   <entry key="150">다음으로 보여주다</entry>
   <entry key="151">먼저 보여줌.</entry>
   <entry key="152">기록을 지우다.</entry>
-  <entry key="153">삭제</entry>
   <entry key="154">삭제</entry>
   <entry key="155">새로운 기록</entry>
   <entry key="157">기록을 지우다</entry>
@@ -185,7 +179,6 @@
   <entry key="171">이름</entry>
   <entry key="172">조직 추가</entry>
   <entry key="173">조직 추가</entry>
-  <entry key="174">삭제</entry>
   <entry key="175">추가하다</entry>
   <entry key="176">조직 추가</entry>
   <entry key="177">유저</entry>
@@ -213,7 +206,6 @@
   <entry key="199">..와 같이 저장 하다</entry>
   <entry key="200">파일이름</entry>
   <entry key="201">파일이름</entry>
-  <entry key="202">삭제</entry>
   <entry key="203">저장</entry>
   <entry key="204">오류</entry>
   <entry key="205">장전</entry>
@@ -230,7 +222,6 @@
   <entry key="216">수령인</entry>
   <entry key="217">메세지</entry>
   <entry key="218">보내기</entry>
-  <entry key="219">삭제</entry>
   <entry key="220">보내기</entry>
   <entry key="221">유저데이다</entry>
   <entry key="222">이번 회의의 니크네임</entry>
@@ -409,7 +400,6 @@
   <entry key="417">Recording:</entry>
   <entry key="418">There is already somebody recording at the moment:</entry>
   <entry key="419">Recording! By User:</entry>
-  <entry key="420">cancel</entry>
   <entry key="421">Recording will be canceled and not saved.</entry>
   <entry key="422">resume</entry>
   <entry key="423">Close this window and resume recording</entry>
@@ -427,7 +417,6 @@
   <entry key="435">Name</entry>
   <entry key="436">Room</entry>
   <entry key="437">Date</entry>
-  <entry key="438">cancel</entry>
   <entry key="439">start</entry>
   <entry key="440">Name</entry>
   <entry key="441">Date</entry>
@@ -575,7 +564,6 @@
   <entry key="592">Upload complete, converting Document ...</entry>
   <entry key="593">Start Upload</entry>
   <entry key="594">Upload and Import Dialog. Please select a File from your Disk.</entry>
-  <entry key="595">Cancel</entry>
   <entry key="596">Select File</entry>
   <entry key="597">Connections</entry>
   <entry key="598">Value</entry>
@@ -671,7 +659,6 @@
   <entry key="694">would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</entry>
   <entry key="695">would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</entry>
   <entry key="696">You have to wait untill a Moderator enters the room.</entry>
-  <entry key="697">Cancel</entry>
   <entry key="698">Save</entry>
   <entry key="699">Day</entry>
   <entry key="700">Month</entry>
@@ -716,7 +703,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -733,7 +719,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -884,7 +869,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -979,7 +963,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1094,7 +1077,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

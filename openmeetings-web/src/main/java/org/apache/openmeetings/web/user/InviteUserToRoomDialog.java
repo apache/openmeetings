@@ -39,7 +39,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InviteUserToRoomDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private final RoomListPanel publicRooms;
 	private final RoomListPanel privateRooms;
 	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg");

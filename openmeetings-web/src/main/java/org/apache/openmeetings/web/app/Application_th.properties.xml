@@ -44,7 +44,6 @@
   <entry key="22">จัดทำ</entry>
   <entry key="23">ข้อมูล: ผู้ใช้ที่เชื่อมต่ออยู่แต่ละรายได้รับข้อความพร้อมด้วยโพลล์ใหม่</entry>
   <entry key="24">จัดทำโพลล์</entry>
-  <entry key="25">ยกเลิก</entry>
   <entry key="28">โพลล์</entry>
   <entry key="29">ต้องเป็นผู้ดำเนินรายการจึงจะตั้งคำถามได้</entry>
   <entry key="30">การโหวตของคุณได้รับการลงทะเบียนแล้ว</entry>
@@ -72,13 +71,12 @@
   <entry key="52">เลือกเว็บแคม:</entry>
   <entry key="53">เลือกไมโครโฟน:</entry>
   <entry key="54">ตกลง</entry>
-  <entry key="55">ยกเลิก</entry>
+  <entry key="lbl.cancel">ยกเลิก</entry>
   <entry key="56">คุณต้องทำการเชื่อมต่อใหม่</entry>
   <entry key="57">แก้ไขการตั้งค่า</entry>
   <entry key="58">หลักสูตร:</entry>
   <entry key="59">ภาษา:</entry>
   <entry key="60">ตกลง</entry>
-  <entry key="61">ยกเลิก</entry>
   <entry key="62">ลบไวท์บอร์ด</entry>
   <entry key="63">คุณต้องการให้ลบไวท์บอร์ดให้ว่างก่อนที่จะเพิ่มรูปใหม่หรือไม่</entry>
   <entry key="64">ไม่ต้องถามอีก</entry>
@@ -100,7 +98,6 @@
   <entry key="80">ลบรายการที่เลือกไว้</entry>
   <entry key="81">สมัครเพื่อทำหน้าที่ดำเนินรายการ</entry>
   <entry key="82">สมัคร</entry>
-  <entry key="83">ยกเลิก</entry>
   <entry key="84">กลายเป็นผู้ดำเนินรายการ</entry>
   <entry key="85">ปิด</entry>
   <entry key="86">ตัวเอียง</entry>
@@ -109,7 +106,6 @@
   <entry key="89">ผู้ใช้ต้องการสมัครเป็นผู้ดำเนินรายการ:</entry>
   <entry key="90">ยอมรับ</entry>
   <entry key="91">ปฏิเสธ</entry>
-  <entry key="92">ยกเลิก</entry>
   <entry key="93">ส่งคำขอไปยังผู้ใช้ดังต่อไปนี้</entry>
   <entry key="94">ยอมรับแล้ว</entry>
   <entry key="95">ปฏิเสธแล้ว</entry>
@@ -134,7 +130,6 @@
   <entry key="119">อีเมล์:</entry>
   <entry key="120">ประเทศ:</entry>
   <entry key="121">ลงทะเบียน</entry>
-  <entry key="122">ยกเลิก</entry>
   <entry key="123">ไม่ได้เป็นสมาชิก?</entry>
   <entry key="124">หน้าแรก</entry>
   <entry key="125">ผู้ใช้</entry>
@@ -165,7 +160,6 @@
   <entry key="150">แสดงถัดไป</entry>
   <entry key="151">แสดงก่อนหน้านี้</entry>
   <entry key="152">ลบบันทึก</entry>
-  <entry key="153">ยกเลิก</entry>
   <entry key="154">ลบ</entry>
   <entry key="155">บันทึกใหม่</entry>
   <entry key="157">ลบบันทึก</entry>
@@ -185,7 +179,6 @@
   <entry key="171">ชื่อ</entry>
   <entry key="172">เพิ่มองค์กร</entry>
   <entry key="173">เพิ่มองค์กร</entry>
-  <entry key="174">ยกเลิก</entry>
   <entry key="175">เพิ่ม</entry>
   <entry key="176">ย้ายองค์กรออก</entry>
   <entry key="177">ผู้ใช้</entry>
@@ -213,7 +206,6 @@
   <entry key="199">บันทึกเป็น</entry>
   <entry key="200">ชื่อไฟล์</entry>
   <entry key="201">ชื่อไฟล์</entry>
-  <entry key="202">ยกเลิก</entry>
   <entry key="203">ยกเลิก</entry>
   <entry key="204">ขัดข้อง</entry>
   <entry key="205">กำลังโหลด</entry>
@@ -230,7 +222,6 @@
   <entry key="216">ผู้รับ</entry>
   <entry key="217">ข้อความ</entry>
   <entry key="218">ส่ง</entry>
-  <entry key="219">ยกเลิก</entry>
   <entry key="220">ส่ง</entry>
   <entry key="221">ข้อมูลผู้ใช้</entry>
   <entry key="222">ชื่อเล่นของคุณในการประชุมครั้งนี้</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Recording: / บันทึก:</entry>
   <entry key="418">มีคนกำลังบันทึกอยู่ในขณะนี้</entry>
   <entry key="419">กำลังบันทึก! โดยผู้ใช้:</entry>
-  <entry key="420">ยกเลิก</entry>
   <entry key="421">การบันทึกจะถูกยกเลิกและไม่บันทึกไว้</entry>
   <entry key="422">เล่นต่อ</entry>
   <entry key="423">ปิดหน้าต่างนี้และกลับเข้าสู่การบันทึก</entry>
@@ -425,7 +415,6 @@
   <entry key="435">ชื่อ</entry>
   <entry key="436">ห้อง</entry>
   <entry key="437">วันที่</entry>
-  <entry key="438">ยกเลิก</entry>
   <entry key="439">เริ่ม</entry>
   <entry key="440">ชื่อ</entry>
   <entry key="441">วันที่</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Upload complete, converting Document ...</entry>
   <entry key="593">Start Upload</entry>
   <entry key="594">Upload and Import Dialog. Please select a File from your Disk.</entry>
-  <entry key="595">Cancel</entry>
   <entry key="596">Select File</entry>
   <entry key="597">Connections</entry>
   <entry key="598">Value</entry>
@@ -669,7 +657,6 @@
   <entry key="694">would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</entry>
   <entry key="695">would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</entry>
   <entry key="696">You have to wait untill a Moderator enters the room.</entry>
-  <entry key="697">Cancel</entry>
   <entry key="698">Save</entry>
   <entry key="699">Day</entry>
   <entry key="700">Month</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

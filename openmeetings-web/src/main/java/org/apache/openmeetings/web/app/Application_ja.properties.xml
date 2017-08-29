@@ -44,7 +44,6 @@
   <entry key="22">作成</entry>
   <entry key="23">ヒント: 接続中の全参加者に対して、投票を促すメッセージを送信します</entry>
   <entry key="24">投票の作成</entry>
-  <entry key="25">キャンセル</entry>
   <entry key="28">投票</entry>
   <entry key="29">質問を作成するには司会者になる必要があります</entry>
   <entry key="30">投票が登録されました</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Webカメラ:</entry>
   <entry key="53">マイク:</entry>
   <entry key="54">はい</entry>
-  <entry key="55">キャンセル</entry>
+  <entry key="lbl.cancel">キャンセル</entry>
   <entry key="56">再接続が必要です。</entry>
   <entry key="57">デバイス設定の編集</entry>
   <entry key="58">コース:</entry>
   <entry key="59">言語:</entry>
   <entry key="60">OK</entry>
-  <entry key="61">キャンセル</entry>
   <entry key="62">ホワイトボードのクリア</entry>
   <entry key="63">ホワイトボードをクリア</entry>
   <entry key="64">次回から入力を省略</entry>
@@ -100,7 +98,6 @@
   <entry key="80">削除</entry>
   <entry key="81">司会者になる</entry>
   <entry key="82">適用</entry>
-  <entry key="83">キャンセル</entry>
   <entry key="84">司会者になる</entry>
   <entry key="85">閉じる</entry>
   <entry key="86">イタリック</entry>
@@ -109,7 +106,6 @@
   <entry key="89">司会者希望のユーザー:</entry>
   <entry key="90">許可</entry>
   <entry key="91">拒否</entry>
-  <entry key="92">キャンセル</entry>
   <entry key="93">次のユーザーにリクエストを送信</entry>
   <entry key="94">許可されました</entry>
   <entry key="95">拒否されました</entry>
@@ -134,7 +130,6 @@
   <entry key="119">メールアドレス:</entry>
   <entry key="120">国名:</entry>
   <entry key="121">登録</entry>
-  <entry key="122">キャンセル</entry>
   <entry key="123">登録</entry>
   <entry key="124">ホーム</entry>
   <entry key="125">ユーザー管理</entry>
@@ -165,7 +160,6 @@
   <entry key="150">次</entry>
   <entry key="151">前</entry>
   <entry key="152">削除</entry>
-  <entry key="153">キャンセル</entry>
   <entry key="154">削除</entry>
   <entry key="155">新規作成</entry>
   <entry key="157">削除</entry>
@@ -185,7 +179,6 @@
   <entry key="171">名前</entry>
   <entry key="172">組織の追加</entry>
   <entry key="173">組織の追加</entry>
-  <entry key="174">キャンセル</entry>
   <entry key="175">追加</entry>
   <entry key="176">組織の削除</entry>
   <entry key="177">ユーザー</entry>
@@ -213,7 +206,6 @@
   <entry key="199">名前を付けて保存</entry>
   <entry key="200">ファイル名</entry>
   <entry key="201">ファイル名</entry>
-  <entry key="202">キャンセル</entry>
   <entry key="203">保存</entry>
   <entry key="204">エラー</entry>
   <entry key="205">ロード中</entry>
@@ -230,7 +222,6 @@
   <entry key="216">相手</entry>
   <entry key="217">メッセージ</entry>
   <entry key="218">送信</entry>
-  <entry key="219">キャンセル</entry>
   <entry key="220">発言</entry>
   <entry key="221">ユーザーデータ</entry>
   <entry key="222">この会議の別名</entry>
@@ -407,7 +398,6 @@
   <entry key="417">録画:</entry>
   <entry key="418">現在、他の人が録画中です。</entry>
   <entry key="419">録画中です。実行ユーザーは:</entry>
-  <entry key="420">キャンセル</entry>
   <entry key="421">録画はキャンセルされ、保存されません。</entry>
   <entry key="422">再開</entry>
   <entry key="423">このウィンドウを閉じ、録画を再開します</entry>
@@ -425,7 +415,6 @@
   <entry key="435">名前</entry>
   <entry key="436">会議室</entry>
   <entry key="437">日付</entry>
-  <entry key="438">キャンセル</entry>
   <entry key="439">開始</entry>
   <entry key="440">名前</entry>
   <entry key="441">日付</entry>
@@ -573,7 +562,6 @@
   <entry key="592">アップロード完了。ドキュメントを変換しています...</entry>
   <entry key="593">アップロードを開始する</entry>
   <entry key="594">アップロード/インポートを行います。ローカル・ディスク上のファイルを選択してください。</entry>
-  <entry key="595">キャンセル</entry>
   <entry key="596">ファイルを選択する</entry>
   <entry key="597">接続</entry>
   <entry key="598">値</entry>
@@ -669,7 +657,6 @@
   <entry key="694">さんが、ホワイトボードの使用を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。</entry>
   <entry key="695">さんが、ビデオ・音声の共有を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。</entry>
   <entry key="696">司会者が入室するまでしばらくお待ちください。</entry>
-  <entry key="697">キャンセル</entry>
   <entry key="698">保存</entry>
   <entry key="699">日</entry>
   <entry key="700">月</entry>
@@ -714,7 +701,6 @@
   <entry key="740">幅:</entry>
   <entry key="741">高さ:</entry>
   <entry key="742">サーバによって接続が切断されました。</entry>
-  <entry key="743">キャンセル</entry>
   <entry key="744">外部ビューアを開始</entry>
   <entry key="745">ビューアを完全に閉じてしまうと、本セッション中はビューアを再開することができません。</entry>
   <entry key="746">ビューア終了確認</entry>
@@ -731,7 +717,6 @@
   <entry key="757">設定のテスト</entry>
   <entry key="758">入室する前に、マイクとカメラの設定を確認してください。まず録画・録音を数秒間実施してください。続いてそれを再生し、録画・録音状態が適正であることをご確認ください。</entry>
   <entry key="759">以降このテスト画面を表示しない</entry>
-  <entry key="760">キャンセル</entry>
   <entry key="761">会議を開始する</entry>
   <entry key="762">以降表示しない</entry>
   <entry key="763">録画</entry>
@@ -882,7 +867,6 @@
   <entry key="915">インタビュー録画は既に開始されています。</entry>
   <entry key="916">インタビュー録画は既に停止しているか、まだ開始されていません。</entry>
   <entry key="917">インタビュー録画は既に開始されています。!</entry>
-  <entry key="918">キャンセル</entry>
   <entry key="919">インタビュー終了時の変換処理には、インタビュー１分あたり５分を要します。現在の処理の進捗は:</entry>
   <entry key="921">SIPデータを再生成する</entry>
   <entry key="922">このファイル/フォルダを、それ自身のサブフォルダに移動することはできません。</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">ユーザー一覧 チーム・ルーム:</entry>
   <entry key="1014">チーム・ルームを作成する</entry>
-  <entry key="1015">キャンセル</entry>
   <entry key="1016">最低ひとり以上のユーザーをチームに登録する必要があります。</entry>
   <entry key="1017">ユーザーをチームに追加する</entry>
   <entry key="1018">ユーザーをチームから削除する</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">リモート・コントロールでコピー&amp;ペーストについての情報ボックスを表示しない</entry>
   <entry key="1128">保存</entry>
   <entry key="1129">削除</entry>
-  <entry key="1130">キャンセル</entry>
   <entry key="1131">ユーザーを会議室に招待する</entry>
   <entry key="1132">会議室を選択してください。参加依頼を受けるユーザーには、あなたの名前、メッセージとともに会議室へのリンクが発行されます。</entry>
   <entry key="1133">ログイン日時:</entry>

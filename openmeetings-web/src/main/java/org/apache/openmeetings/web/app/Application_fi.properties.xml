@@ -44,7 +44,6 @@
   <entry key="22">Luo</entry>
   <entry key="23">Tiedoksi: Jokainen paikalla oleva käyttäjä vastaanottaa viestin kyselystä.</entry>
   <entry key="24">Luo kysely</entry>
-  <entry key="25">Peruuta</entry>
   <entry key="28">Kysely</entry>
   <entry key="29">Sinun täytyy olla moderaattori luodaksesi kysymyksen.</entry>
   <entry key="30">Äänesi on rekisteröity.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Valitse web-kamera:</entry>
   <entry key="53">Valitse mikrofoni:</entry>
   <entry key="54">ok</entry>
-  <entry key="55">peruuta</entry>
+  <entry key="lbl.cancel">peruuta</entry>
   <entry key="56">Sinun täytyy yhdistä uudelleen.</entry>
   <entry key="57">Muokkaa asetuksia.</entry>
   <entry key="58">Kurssi:</entry>
   <entry key="59">Kieli:</entry>
   <entry key="60">ok</entry>
-  <entry key="61">peruuta</entry>
   <entry key="62">Tyhjää kirjoitustaulu</entry>
   <entry key="63">Haluatko tyhjentää kirjoitustaulun ennen uuden kuvan lisäämistä?</entry>
   <entry key="64">Älä kysy uudestaan</entry>
@@ -100,7 +98,6 @@
   <entry key="80">poista valittu kohde</entry>
   <entry key="81">Pyydä moderaattorin oikeutta</entry>
   <entry key="82">aseta</entry>
-  <entry key="83">peruuta</entry>
   <entry key="84">Muutu moderaattoriksi</entry>
   <entry key="85">sulje</entry>
   <entry key="86">kursivointi</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Käyttäjä hakee moderaattorin oikeutta:</entry>
   <entry key="90">hyväksy</entry>
   <entry key="91">hylkää</entry>
-  <entry key="92">peruuta</entry>
   <entry key="93">Sending request to following Users</entry>
   <entry key="94">Hyväksytty</entry>
   <entry key="95">Hylätty</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Sähköposti:</entry>
   <entry key="120">Maa:</entry>
   <entry key="121">Rekisteröidy</entry>
-  <entry key="122">Peruuta</entry>
   <entry key="123">Etkö ole jäsen?</entry>
   <entry key="124">Koti</entry>
   <entry key="125">Users</entry>
@@ -165,7 +160,6 @@
   <entry key="150">näytä seuraava</entry>
   <entry key="151">näytä edellinen</entry>
   <entry key="152">poista tietue</entry>
-  <entry key="153">peruuta</entry>
   <entry key="154">poista</entry>
   <entry key="155">uusi tietue</entry>
   <entry key="157">poista tietue</entry>
@@ -185,7 +179,6 @@
   <entry key="171">nimi</entry>
   <entry key="172">uusi organisaatio</entry>
   <entry key="173">uusi organisaatio</entry>
-  <entry key="174">peruuta</entry>
   <entry key="175">lisää</entry>
   <entry key="176">poista organisaatio</entry>
   <entry key="177">käyttäjä</entry>
@@ -213,7 +206,6 @@
   <entry key="199">tallenna nimellä</entry>
   <entry key="200">Tiedostonimi</entry>
   <entry key="201">tiedostonimi</entry>
-  <entry key="202">peruuta</entry>
   <entry key="203">tallenna</entry>
   <entry key="204">Virhe</entry>
   <entry key="205">ladataan</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Vastaanottaja</entry>
   <entry key="217">Viesti</entry>
   <entry key="218">Lähetä</entry>
-  <entry key="219">peruuta</entry>
   <entry key="220">lähetä</entry>
   <entry key="221">Käyttäjätieto</entry>
   <entry key="222">Lempinimesi tähän konferenssiin</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Nauhoittaa:</entry>
   <entry key="418">Joku on jo nauhoittamassa tällä hetkellä:</entry>
   <entry key="419">Nauhoitetaan! Käyttäjä:</entry>
-  <entry key="420">peruuta</entry>
   <entry key="421">Nauhoitus peruutetaan ja sitä ei tallenneta.</entry>
   <entry key="422">palaa</entry>
   <entry key="423">Sulje ikkuna ja jatka nauhoitusta</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Nimi</entry>
   <entry key="436">Huone</entry>
   <entry key="437">Aika</entry>
-  <entry key="438">peruuta</entry>
   <entry key="439">aloita</entry>
   <entry key="440">Nimi</entry>
   <entry key="441">Päivämäärä</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Lähetys valmis, muunnetaan dokumenttia ...</entry>
   <entry key="593">Aloita lähetys</entry>
   <entry key="594">Tiedoston lähetys ja tuonti-ikkuna. Ole hyvä ja valitse tiedosto koneeltasi.</entry>
-  <entry key="595">Peruuta</entry>
   <entry key="596">Valitse tiedosto</entry>
   <entry key="597">Yhteydet</entry>
   <entry key="598">Arvo</entry>
@@ -669,7 +657,6 @@
   <entry key="694">pyytää oikeutta piirtää piirtoalueelle. Käytä kuvakkeita listassa käyttäjän vieressä salliaksesi tai poistaaksesi oikeuden.</entry>
   <entry key="695">pyytää oikeutta jakaa ääntä/kuvaa. Käytä kuvakkeita listassa käyttäjän vieressä salliaksesi tai poistaaksesi oikeuden.</entry>
   <entry key="696">Sinun täytyy odottaa kunnes moderaattori liittyy huoneeseen.</entry>
-  <entry key="697">Peruuta</entry>
   <entry key="698">Tallenna</entry>
   <entry key="699">Päivä</entry>
   <entry key="700">Kuukausi</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

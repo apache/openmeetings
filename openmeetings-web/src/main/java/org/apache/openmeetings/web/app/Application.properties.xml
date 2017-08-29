@@ -44,7 +44,6 @@
   <entry key="22">Create</entry>
   <entry key="23">Each connected user receives a message with the new poll</entry>
   <entry key="24">Create a poll</entry>
-  <entry key="25">Cancel</entry>
   <entry key="28">Poll</entry>
   <entry key="29">You must be a moderator to create a question</entry>
   <entry key="30">Your vote has been registered</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Choose webcam</entry>
   <entry key="53">Choose microphone</entry>
   <entry key="54">OK</entry>
-  <entry key="55">Cancel</entry>
+  <entry key="lbl.cancel">Cancel</entry>
   <entry key="56">You need to reconnect</entry>
   <entry key="57">Edit setup</entry>
   <entry key="58">Course</entry>
   <entry key="59">Language</entry>
   <entry key="60">OK</entry>
-  <entry key="61">Cancel</entry>
   <entry key="62">Clear whiteboard</entry>
   <entry key="63">Do you want to empty the whiteboard before a new picture is added?</entry>
   <entry key="64">Don't ask again</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Delete</entry>
   <entry key="81">Apply to be a moderator</entry>
   <entry key="82">Apply</entry>
-  <entry key="83">Cancel</entry>
   <entry key="84">I have a question</entry>
   <entry key="85">Close</entry>
   <entry key="86">italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">A user has applied to be a moderator, you can either grant them only access to the whiteboard or completely switch the moderation role. User:</entry>
   <entry key="90">Accept</entry>
   <entry key="91">Reject</entry>
-  <entry key="92">Cancel</entry>
   <entry key="93">Sending the request to the following users</entry>
   <entry key="94">Accepted</entry>
   <entry key="95">Rejected</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Email address</entry>
   <entry key="120">Country</entry>
   <entry key="121">Register</entry>
-  <entry key="122">Cancel</entry>
   <entry key="123">Not a member?</entry>
   <entry key="124">Home</entry>
   <entry key="125">Users</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Show next</entry>
   <entry key="151">Show previous</entry>
   <entry key="152">Delete record</entry>
-  <entry key="153">Cancel</entry>
   <entry key="154">Delete</entry>
   <entry key="155">New record</entry>
   <entry key="157">Delete record</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Name</entry>
   <entry key="172">Add usergroup</entry>
   <entry key="173">Add usergroup</entry>
-  <entry key="174">Cancel</entry>
   <entry key="175">Add</entry>
   <entry key="176">Remove usergroup</entry>
   <entry key="177">User</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Save as</entry>
   <entry key="200">Filename</entry>
   <entry key="201">Filename</entry>
-  <entry key="202">Cancel</entry>
   <entry key="203">Save</entry>
   <entry key="204">Error</entry>
   <entry key="205">Loading</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Recipient</entry>
   <entry key="217">Message</entry>
   <entry key="218">Send</entry>
-  <entry key="219">Cancel</entry>
   <entry key="220">Send</entry>
   <entry key="221">User details</entry>
   <entry key="222">Your nickname for this conference</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Recording</entry>
   <entry key="418">Someone is already recording this meeting</entry>
   <entry key="419">Recording. User:</entry>
-  <entry key="420">Cancel</entry>
   <entry key="421">Recording will be canceled and not saved</entry>
   <entry key="422">resume</entry>
   <entry key="423">Close this window and resume recording</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Name</entry>
   <entry key="436">Room</entry>
   <entry key="437">Date</entry>
-  <entry key="438">Cancel</entry>
   <entry key="439">Start</entry>
   <entry key="440">Name</entry>
   <entry key="441">Date</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Upload complete, converting document</entry>
   <entry key="593">Start upload</entry>
   <entry key="594">Upload and import dialog. Please select a file.</entry>
-  <entry key="595">Cancel</entry>
   <entry key="596">Select file</entry>
   <entry key="597">Connections</entry>
   <entry key="598">Value</entry>
@@ -669,7 +657,6 @@
   <entry key="694">would like to draw on whiteboard</entry>
   <entry key="695">would like to share his audio/video</entry>
   <entry key="696">You have to wait until a moderator enters the room</entry>
-  <entry key="697">Cancel</entry>
   <entry key="698">Save</entry>
   <entry key="699">Day</entry>
   <entry key="700">Month</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start Java</entry>
   <entry key="745">If you close this session completely you will not be able to restart the viewer for this session</entry>
   <entry key="746">Confirm closing viewer session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test setup</entry>
   <entry key="758">Use audio or video setup before you enter a room by recording for a few seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started.</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder.</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new team room:</entry>
   <entry key="1014">Create team room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the team room.</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from team room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about copy and paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

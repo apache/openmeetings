@@ -44,7 +44,6 @@
   <entry key="22">Vytvoř</entry>
   <entry key="23">Info: Všichni připojení uživatelé obdrželi zprávu o nové anketě.</entry>
   <entry key="24">Vytvoř anketu</entry>
-  <entry key="25">Zrušit</entry>
   <entry key="28">Anketa</entry>
   <entry key="29">Pro vytvoření otázky musíte být moderátor</entry>
   <entry key="30">Vaše hlasování bylo uloženo.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Vyber webcam:</entry>
   <entry key="53">Vyber mikrofon:</entry>
   <entry key="54">ok</entry>
-  <entry key="55">zruš</entry>
+  <entry key="lbl.cancel">zruš</entry>
   <entry key="56">Musíte se znovu připojit.</entry>
   <entry key="57">Uprav nastavení.</entry>
   <entry key="58">Cesta:</entry>
   <entry key="59">Jazyk:</entry>
   <entry key="60">ok</entry>
-  <entry key="61">zruš</entry>
   <entry key="62">Smaž tabuli</entry>
   <entry key="63">Chcete aby tabule byla prázdná před přidáním nového obrázku?</entry>
   <entry key="64">Žádné další dotazy</entry>
@@ -100,7 +98,6 @@
   <entry key="80">smaž vybranou položku</entry>
   <entry key="81">Použít pro moderování</entry>
   <entry key="82">použij</entry>
-  <entry key="83">zruš</entry>
   <entry key="84">Stát se moderátorem</entry>
   <entry key="85">zavřít</entry>
   <entry key="86">italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Uživatel chce použít pro moderování:</entry>
   <entry key="90">akceptuj</entry>
   <entry key="91">odmítni</entry>
-  <entry key="92">zruš</entry>
   <entry key="93">Odeslat dotaz následujícím uživatelům</entry>
   <entry key="94">Akceptováno</entry>
   <entry key="95">Odmítnuto</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Mail:</entry>
   <entry key="120">Země:</entry>
   <entry key="121">Registrace</entry>
-  <entry key="122">Zruš</entry>
   <entry key="123">Nejsi členem?</entry>
   <entry key="124">Domů</entry>
   <entry key="125">Uživatelé</entry>
@@ -165,7 +160,6 @@
   <entry key="150">ukaž další</entry>
   <entry key="151">ukaž předchozí</entry>
   <entry key="152">smaž záznam</entry>
-  <entry key="153">zruš</entry>
   <entry key="154">smaž</entry>
   <entry key="155">nový záznam</entry>
   <entry key="157">smaž záznam</entry>
@@ -185,7 +179,6 @@
   <entry key="171">název</entry>
   <entry key="172">přidej organizaci</entry>
   <entry key="173">přidej organizaci</entry>
-  <entry key="174">zruš</entry>
   <entry key="175">přidej</entry>
   <entry key="176">zruš organizaci</entry>
   <entry key="177">uživatel</entry>
@@ -213,7 +206,6 @@
   <entry key="199">ulož jako</entry>
   <entry key="200">Název souboru</entry>
   <entry key="201">název souboru</entry>
-  <entry key="202">zruš</entry>
   <entry key="203">ulož</entry>
   <entry key="204">Chyba</entry>
   <entry key="205">nahrávám</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Příjemce</entry>
   <entry key="217">Zpráva</entry>
   <entry key="218">Odeslat</entry>
-  <entry key="219">zruš</entry>
   <entry key="220">odeslat</entry>
   <entry key="221">Uživatelská data</entry>
   <entry key="222">Vaše přezdívka v této konferenci</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Záznam:</entry>
   <entry key="418">Zde jsou dostupné záznamy:</entry>
   <entry key="419">Zaznamenáno! Uživatelem:</entry>
-  <entry key="420">zruš</entry>
   <entry key="421">Záznam byl ukončen a neuložen.</entry>
   <entry key="422">opakovat</entry>
   <entry key="423">Zavřete toto okno a zopakujte nahrávání</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Název</entry>
   <entry key="436">Místnost</entry>
   <entry key="437">Datum</entry>
-  <entry key="438">zruš</entry>
   <entry key="439">start</entry>
   <entry key="440">Název</entry>
   <entry key="441">Datum</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Nahráno, konvertuji dokument ...</entry>
   <entry key="593">Odešli</entry>
   <entry key="594">Vyberte soubor z Vašeho disku.</entry>
-  <entry key="595">Zruš</entry>
   <entry key="596">Vyber soubor</entry>
   <entry key="597">Připojení</entry>
   <entry key="598">Hodnota</entry>
@@ -669,7 +657,6 @@
   <entry key="694">would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</entry>
   <entry key="695">would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</entry>
   <entry key="696">You have to wait untill a Moderator enters the room.</entry>
-  <entry key="697">Cancel</entry>
   <entry key="698">Save</entry>
   <entry key="699">Day</entry>
   <entry key="700">Month</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

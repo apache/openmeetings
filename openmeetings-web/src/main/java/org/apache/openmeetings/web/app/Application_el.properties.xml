@@ -44,7 +44,6 @@
   <entry key="22">Δημιουργία</entry>
   <entry key="23">Ενημέρωση: Κάθε συνδεδεμένος Χρήστης λαμβάνει ένα μήνυμα με τη νέα Ψηφοφορία.</entry>
   <entry key="24">Δημιουργία Ψηφοφορίας</entry>
-  <entry key="25">Ακύρωση</entry>
   <entry key="28">Ψηφοφορία</entry>
   <entry key="29">Μόνο ο Συντονιστής μπορεί να δημιουργεί Ερωτήσεις!</entry>
   <entry key="30">Η Ψήφος σας καταχωρήθηκε.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Επιλογή Web Κάμερας:</entry>
   <entry key="53">Επιλογή Μικροφώνου:</entry>
   <entry key="54">Εντάξει</entry>
-  <entry key="55">Ακύρωση</entry>
+  <entry key="lbl.cancel">Ακύρωση</entry>
   <entry key="56">Πρέπει να συνδεθείτε ξανά!</entry>
   <entry key="57">Τροποποίηση Εγκατάστασης.</entry>
   <entry key="58">Μάθημα:</entry>
   <entry key="59">Γλώσσα:</entry>
   <entry key="60">Εντάξει</entry>
-  <entry key="61">Ακύρωση</entry>
   <entry key="62">Εκκαθάριση Πίνακα</entry>
   <entry key="63">Να αδειάζει ο Πίνακας πριν από την προσθήκη Νέας Εικόνας</entry>
   <entry key="64">Να μην ερωτηθώ ξανά!</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Διαγραφή Επιλεγμένου Στοιχείου</entry>
   <entry key="81">Αίτηση για Συντονισμό</entry>
   <entry key="82">Αίτηση</entry>
-  <entry key="83">Ακύρωση</entry>
   <entry key="84">Γίνετε Συντονιστής</entry>
   <entry key="85">Κλείσιμο</entry>
   <entry key="86">Italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Κάποιος Χρήστης θέλει να κάνει Αίτηση για Συντονισμό. Μπορείτε να του παραχωρήσετε πρόσβαση μόνο στον Πίνακα ή να μεταστρέψετε πλήρως το ρόλο Συντονισμού. Χρήστης:</entry>
   <entry key="90">Αποδοχή</entry>
   <entry key="91">Απόρριψη</entry>
-  <entry key="92">Ακύρωση</entry>
   <entry key="93">Αποστολή Αιτήματος στους ακόλουθους Χρήστες:</entry>
   <entry key="94">Αποδεκτό</entry>
   <entry key="95">Μη Αποδεκτό</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Email:</entry>
   <entry key="120">Χώρα:</entry>
   <entry key="121">Καταχώρηση</entry>
-  <entry key="122">Ακύρωση</entry>
   <entry key="123">Δεν είστε Μέλος;</entry>
   <entry key="124">Αρχική Σελίδα</entry>
   <entry key="125">Χρήστες</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Επόμενο</entry>
   <entry key="151">Προηγούμενο</entry>
   <entry key="152">Διαγραφή Εγγραφής</entry>
-  <entry key="153">Ακύρωση</entry>
   <entry key="154">Διαγραφή</entry>
   <entry key="155">Νέα Εγγραφή</entry>
   <entry key="157">Διαγραφή Εγγραφής</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Όνομα</entry>
   <entry key="172">Προσθήκη Οργανισμού</entry>
   <entry key="173">Προσθήκη Οργανισμού</entry>
-  <entry key="174">Ακύρωση</entry>
   <entry key="175">Προσθήκη</entry>
   <entry key="176">Αφαίρεση Οργανισμού</entry>
   <entry key="177">Χρήστης</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Αποθήκευση ως</entry>
   <entry key="200">Όνομα Αρχείου</entry>
   <entry key="201">Όνομα Αρχείου</entry>
-  <entry key="202">Ακύρωση</entry>
   <entry key="203">Αποθήκευση</entry>
   <entry key="204">Μήνυμα</entry>
   <entry key="205">Φόρτωση</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Παραλήπτης</entry>
   <entry key="217">Μήνυμα</entry>
   <entry key="218">Αποστολή</entry>
-  <entry key="219">Ακύρωση</entry>
   <entry key="220">Aποστολή</entry>
   <entry key="221">Στοιχεία Χρήστη</entry>
   <entry key="222">Ψευδώνυμο για αυτήν τη Συνδιάσκεψη</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Μαγνητοσκόπηση:</entry>
   <entry key="418">Κάποιος άλλος μαγνητοσκοπεί ήδη αυτή τη στιγμή:</entry>
   <entry key="419">Μαγνητοσκόπηση! Από τον Χρήστη:</entry>
-  <entry key="420">Ακύρωση</entry>
   <entry key="421">Ακύρωση Μαγνητοσκόπησης χωρίς Αποθήκευση!</entry>
   <entry key="422">Συνέχεια</entry>
   <entry key="423">Κλείσιμο Παραθύρου και Συνέχεια Μαγνητοσκόπησης.</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Όνομα</entry>
   <entry key="436">Δωμάτιο</entry>
   <entry key="437">Ημερομηνία</entry>
-  <entry key="438">Ακύρωση</entry>
   <entry key="439">Έναρξη</entry>
   <entry key="440">Όνομα</entry>
   <entry key="441">Ημερομηνία</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Η Φόρτωση Ολοκληρώθηκε. Μετατροπή Εγγράφου ...</entry>
   <entry key="593">Έναρξη Φόρτωσης</entry>
   <entry key="594">Διάλογος Φόρτωσης και Εισαγωγής: Παρακαλούμε επιλέξτε ένα Αρχείο από το Δίσκο.</entry>
-  <entry key="595">Ακύρωση</entry>
   <entry key="596">Επιλογή Αρχείου</entry>
   <entry key="597">Συνδέσεις</entry>
   <entry key="598">Τιμή</entry>
@@ -669,7 +657,6 @@
   <entry key="694">θα ήθελε να σχεδιάσει πάνω στον Πίνακα. Χρησιμοποιείστε τα Εικονίδια Κατάστασης δίπλα στο Χρήστη (Λίστα Χρηστών) για να παραχωρήσετε ή να αφαιρέσετε δικαιώματα σχεδίασης πάνω στον Πίνακα.</entry>
   <entry key="695">θα ήθελε να μοιραστεί τον Ήχο/Βίντεό του. Χρησιμοποιείστε τα Εικονίδια Κατάστασης δίπλα στο Χρήστη (Λίστα Χρηστών) για να παραχωρήσετε ή να αφαιρέσετε το δικαίωμα οποιουδήποτε Χρήστη να μοιράζεται Ήχο/Βίντεο.</entry>
   <entry key="696">Πρέπει να περιμένετε μέχρι να εισέλθει κάποιος Συντονιστής στο Δωμάτιο.</entry>
-  <entry key="697">Ακύρωση</entry>
   <entry key="698">Αποθήκευση</entry>
   <entry key="699">Ημέρα</entry>
   <entry key="700">Μήνας</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Πλάτος:</entry>
   <entry key="741">Ύψος:</entry>
   <entry key="742">Η Σύνδεση έκλεισε από τον Διακομιστή!</entry>
-  <entry key="743">Ακύρωση</entry>
   <entry key="744">Εξωτερική Έναρξη</entry>
   <entry key="745">Αν κλείσετε πλήρως αυτήν την Σύνοδο δεν θα μπορείτε να επανεκκινήσετε την προβολή για την συγκεκριμένη Σύνοδο!</entry>
   <entry key="746">Επιβεβαίωση Τερματισμού Συνόδου Προβολής</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Δοκιμή Εγκατάστασης</entry>
   <entry key="758">Ελέγξτε την εγκατάσταση του Μικροφώνου και της Κάμεράς σας πριν εισέλθετε σε κάποιο Δωμάτιο, μαγνητοσκοπώντας για κάποια δευτερόλεπτα.</entry>
   <entry key="759">Να μην εμφανιστεί αυτός ο έλεγχος ξανά.</entry>
-  <entry key="760">Ακύρωση</entry>
   <entry key="761">Συνδιάσκεψη</entry>
   <entry key="762">Να μην ερωτηθώ ξανά.</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

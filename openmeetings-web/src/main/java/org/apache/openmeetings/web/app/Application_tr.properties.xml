@@ -44,7 +44,6 @@
   <entry key="22">Yarat</entry>
   <entry key="23">Bilgi: Bağlı her kullanıcı yeni anketle ilgili bir mesaj alır.</entry>
   <entry key="24">Bir anket yarat</entry>
-  <entry key="25">İptal</entry>
   <entry key="28">Anket</entry>
   <entry key="29">Soru oluşturabilmek için Düzenleyici olmanız gerekmekte</entry>
   <entry key="30">Oyunuz kaydedildi.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Web Kamerası seçiniz:</entry>
   <entry key="53">Mikrofon seçiniz:</entry>
   <entry key="54">tamam</entry>
-  <entry key="55">iptal</entry>
+  <entry key="lbl.cancel">iptal</entry>
   <entry key="56">Yeniden bağlanmanız gerekmekte.</entry>
   <entry key="57">Ayarları düzenle.</entry>
   <entry key="58">Ders:</entry>
   <entry key="59">Dil:</entry>
   <entry key="60">tamam</entry>
-  <entry key="61">iptal</entry>
   <entry key="62">Tahtayı temizle</entry>
   <entry key="63">Yeni resim eklenmeden önce tahtanın temizlenmesini istiyor musunuz?</entry>
   <entry key="64">Tekrar sormayın</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Seçili öğeyi sil</entry>
   <entry key="81">Düzenleme için uygula</entry>
   <entry key="82">uygula</entry>
-  <entry key="83">iptal</entry>
   <entry key="84">Düzenleyici ol</entry>
   <entry key="85">kapat</entry>
   <entry key="86">eğik</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Düzenleyicilik için bir kullanıcı bekleniyor:</entry>
   <entry key="90">onay</entry>
   <entry key="91">reddet</entry>
-  <entry key="92">iptal</entry>
   <entry key="93">Bu kullanıcılar için istek gönder</entry>
   <entry key="94">Onaylandı</entry>
   <entry key="95">Reddedildi</entry>
@@ -134,7 +130,6 @@
   <entry key="119">E-posta:</entry>
   <entry key="120">Ülke:</entry>
   <entry key="121">Kayıt</entry>
-  <entry key="122">İptal</entry>
   <entry key="123">Üye değil misiniz?</entry>
   <entry key="124">Ev</entry>
   <entry key="125">Kullanıcılar</entry>
@@ -165,7 +160,6 @@
   <entry key="150">sonrakini göster</entry>
   <entry key="151">öncekini göster</entry>
   <entry key="152">kaydı sil</entry>
-  <entry key="153">iptal</entry>
   <entry key="154">sil</entry>
   <entry key="155">yeni kayıt</entry>
   <entry key="157">kayıt sil</entry>
@@ -185,7 +179,6 @@
   <entry key="171">ad</entry>
   <entry key="172">kurum ekle</entry>
   <entry key="173">kurum ekle</entry>
-  <entry key="174">iptal</entry>
   <entry key="175">ekle</entry>
   <entry key="176">kurumu kaldır</entry>
   <entry key="177">kullanıcı</entry>
@@ -213,7 +206,6 @@
   <entry key="199">farklı kaydet</entry>
   <entry key="200">Dosya adı</entry>
   <entry key="201">dosya adı</entry>
-  <entry key="202">iptal</entry>
   <entry key="203">kaydet</entry>
   <entry key="204">hata</entry>
   <entry key="205">yükleniyor</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Alıcı</entry>
   <entry key="217">Mesaj</entry>
   <entry key="218">Yolla</entry>
-  <entry key="219">İptal</entry>
   <entry key="220">gönder</entry>
   <entry key="221">Kullanıcı verisi</entry>
   <entry key="222">Bu konferans için takma adınız</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Kayıt:</entry>
   <entry key="418">Şu an zaten biri kayıtta:</entry>
   <entry key="419">Kayıt! Kullanıcıya göre:</entry>
-  <entry key="420">iptal</entry>
   <entry key="421">Kayıt iptal edilecek ve kaydedilmeyecek.</entry>
   <entry key="422">devam et</entry>
   <entry key="423">Bu pencereyi kapat ve kayda devam et</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Ad</entry>
   <entry key="436">Oda</entry>
   <entry key="437">Tarih</entry>
-  <entry key="438">iptal</entry>
   <entry key="439">başlat</entry>
   <entry key="440">Ad</entry>
   <entry key="441">Tarih</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Aktarım tamamlandı, belge dönüştürülüyor ...</entry>
   <entry key="593">Aktarımı Başlat</entry>
   <entry key="594">Aktarım ve Yükleme Penceresi. Lütfen Diskinizden bir Dosya seçiniz.</entry>
-  <entry key="595">İptal</entry>
   <entry key="596">Dosya Seç</entry>
   <entry key="597">Bağlantılar</entry>
   <entry key="598">Değer</entry>
@@ -669,7 +657,6 @@
   <entry key="694">tahtayı düzenlemek istiyor. Kullanıcıya bu hakkı vermek istiyorsanız durum simgelerini kullanın.</entry>
   <entry key="695">Ses ve Görüntüsünü paylaşmak istiyor. Kullanıcıya bu hakkı vermek istiyorsanız durum simgelerini kullanın.</entry>
   <entry key="696">Düzenleyici odaya giriş yapana kadar beklemelisiniz.</entry>
-  <entry key="697">İptal</entry>
   <entry key="698">Kaydet</entry>
   <entry key="699">Gün</entry>
   <entry key="700">Ay</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

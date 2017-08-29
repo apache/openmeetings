@@ -44,7 +44,6 @@
   <entry key="22">خلق</entry>
   <entry key="23">معلومات : كل صلة يتلقى المستخدم رسالة مع استطلاع جديد.</entry>
   <entry key="24">انشاء استطلاع</entry>
-  <entry key="25">الغاء</entry>
   <entry key="28">استطلاع الرأى</entry>
   <entry key="29">لا بد من وسيط لتهيئة السؤال</entry>
   <entry key="30">تصويتك مسجلة.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">اختيار كاميرا ويب :</entry>
   <entry key="53">اختيار الجزئي :</entry>
   <entry key="54">الموافقة</entry>
-  <entry key="55">الغاء</entry>
+  <entry key="lbl.cancel">الغاء</entry>
   <entry key="56">انت بحاجة الى اعادة وصل.</entry>
   <entry key="57">تحرير الاعداد.</entry>
   <entry key="58">وبطبيعة الحال :</entry>
   <entry key="59">اللغة :</entry>
   <entry key="60">الموافقة</entry>
-  <entry key="61">الغاء</entry>
   <entry key="62">بيضاء واضحة</entry>
   <entry key="63">هل تريد أن تكون لوحة جديدة قبل ان افرغوا الصورة المضافه؟</entry>
   <entry key="64">لا أسأل مرة اخرى</entry>
@@ -100,7 +98,6 @@
   <entry key="80">اختار حذف البند</entry>
   <entry key="81">طلب للحصول على الاعتدال</entry>
   <entry key="82">تطبيق</entry>
-  <entry key="83">الغاء</entry>
   <entry key="84">لتصبح مشرف</entry>
   <entry key="85">وثيق</entry>
   <entry key="86">مائل</entry>
@@ -109,7 +106,6 @@
   <entry key="89">مستخدم يريد ان يطبق لالاعتدال :</entry>
   <entry key="90">يقبل</entry>
   <entry key="91">نرفض</entry>
-  <entry key="92">الغاء</entry>
   <entry key="93">إرسال طلب الى المستخدمين التالية</entry>
   <entry key="94">مقبول</entry>
   <entry key="95">رفض</entry>
@@ -134,7 +130,6 @@
   <entry key="119">البريد :</entry>
   <entry key="120">البلد :</entry>
   <entry key="121">سجل</entry>
-  <entry key="122">الغاء</entry>
   <entry key="123">سجل</entry>
   <entry key="124">البيت</entry>
   <entry key="125">المستعملون</entry>
@@ -165,7 +160,6 @@
   <entry key="150">وتبين المقبل</entry>
   <entry key="151">وتظهر قبل</entry>
   <entry key="152">حذف سجل</entry>
-  <entry key="153">الغاء</entry>
   <entry key="154">حذف</entry>
   <entry key="155">قياسيه جديدة</entry>
   <entry key="157">حذف سجل</entry>
@@ -185,7 +179,6 @@
   <entry key="171">الاسم</entry>
   <entry key="172">تضيف منظمة</entry>
   <entry key="173">تضيف منظمة</entry>
-  <entry key="174">الغاء</entry>
   <entry key="175">اضف</entry>
   <entry key="176">ازالة منظمة</entry>
   <entry key="177">مستعمل</entry>
@@ -213,7 +206,6 @@
   <entry key="199">باستثناء ما ورد</entry>
   <entry key="200">اسم الملف</entry>
   <entry key="201">اسم الملف</entry>
-  <entry key="202">الغاء</entry>
   <entry key="203">انقاذ</entry>
   <entry key="204">خطأ</entry>
   <entry key="205">التحميل</entry>
@@ -230,7 +222,6 @@
   <entry key="216">المتلقيه</entry>
   <entry key="217">رسالة</entry>
   <entry key="218">أرسل</entry>
-  <entry key="219">الغاء</entry>
   <entry key="220">أرسل</entry>
   <entry key="221">Userdata</entry>
   <entry key="222">الاسم المستعار الخاص بك لهذا المؤتمر</entry>
@@ -407,7 +398,6 @@
   <entry key="417">تسجيل:</entry>
   <entry key="418">هناك شخص آخر يقوم بالتسجيل في هذه الأثناء:</entry>
   <entry key="419">تسجيل! عن طريق المستخدم:</entry>
-  <entry key="420">إلغاء</entry>
   <entry key="421">سيتم إلغاء التسجيل دون حفظه.</entry>
   <entry key="422">إستئناف</entry>
   <entry key="423">اقفل النافذة و إستأنف التسجيل</entry>
@@ -425,7 +415,6 @@
   <entry key="435">إسم</entry>
   <entry key="436">غرفة</entry>
   <entry key="437">تاريخ</entry>
-  <entry key="438">إلغاء</entry>
   <entry key="439">بدء</entry>
   <entry key="440">إسم</entry>
   <entry key="441">تاريخ</entry>
@@ -573,7 +562,6 @@
   <entry key="592">تم الإيداع، تحويل الوثيقة ...</entry>
   <entry key="593">بدء الإيداع</entry>
   <entry key="594">إيداع و إستيراد الحوار. الرجاء إختيار ملف من الإسطوانة.</entry>
-  <entry key="595">إلغاء</entry>
   <entry key="596">إختيار الملف</entry>
   <entry key="597">إتصالات</entry>
   <entry key="598">قيمة</entry>
@@ -669,7 +657,6 @@
   <entry key="694">يود أن يرسم على اللوح. إستخدم أيقونات الحالات جانب المستخدم في قائمة المستخدمين لإضافة أو حذف حق الرسم على اللوح.</entry>
   <entry key="695">يود أن يتشارك الصوت/الصورة. إستخدم أيقونات الحالات جانب المستخدم في قائمة المستخدمين لإضافة أو حذف حق المشاركة صوت/صورة لأي مستخدم.</entry>
   <entry key="696">عليك إنتظار المدير حتى يدخل الغرفة.</entry>
-  <entry key="697">إلغاء</entry>
   <entry key="698">حفظ</entry>
   <entry key="699">يوم</entry>
   <entry key="700">شهر</entry>
@@ -714,7 +701,6 @@
   <entry key="740">العرض:</entry>
   <entry key="741">الطول:</entry>
   <entry key="742">قطع الإتصال من الخادوم</entry>
-  <entry key="743">إلغاء</entry>
   <entry key="744">بدء الخارجي</entry>
   <entry key="745">إذا أقفلت هذه الجلسة كلياً لن يعد بإمكانك البدء من جديد بالمشاهد لهذه الجلسة.</entry>
   <entry key="746">تأكيد إقفال جسلة المشاهد</entry>
@@ -731,7 +717,6 @@
   <entry key="757">فحص الإعداد</entry>
   <entry key="758">إفحص إعدادات الميكروفون و الكاميرا قبل دخولك الغرفة عن طريق التسجيل لبضع ثوان. يمكنك بعدها رؤية التسجيل لفحص الصوت و الصورة.</entry>
   <entry key="759">لا تظهر هذا الإختبار بعد الآن</entry>
-  <entry key="760">إلغاء</entry>
   <entry key="761">بدء المؤتمر</entry>
   <entry key="762">لا تسأل مجدداً</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

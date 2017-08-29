@@ -62,7 +62,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class RegisterDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
-	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString("122"));
+	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private DialogButton registerBtn = new DialogButton("register", Application.getString("121")) {
 		private static final long serialVersionUID = 1L;
 

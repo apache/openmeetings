@@ -54,7 +54,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 			return true;
 		}
 	};
-	private final DialogButton cancel = new DialogButton("cancel", Model.of(Application.getString("25")));
+	private final DialogButton cancel = new DialogButton("cancel", Model.of(Application.getString("lbl.cancel")));
 	private final PasswordTextField current = new PasswordTextField("current", Model.of((String)null));
 	private final PasswordTextField pass = new PasswordTextField("pass", Model.of((String)null));
 	private final PasswordTextField pass2 = new PasswordTextField("pass2", Model.of((String)null));

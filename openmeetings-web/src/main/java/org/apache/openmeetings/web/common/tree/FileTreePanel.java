@@ -173,7 +173,7 @@ public abstract class FileTreePanel extends Panel {
 								statement += "$( '#" + dialogId
 										+ "' ).dialog({ title: '" + escapeEcmaScript(getString("80")) + "', classes: {'ui-dialog-titlebar': 'ui-corner-all no-close'}, buttons: [";
 								statement += "	{ text: '" + escapeEcmaScript(getString("54")) + "', click: function() { $drop.append(ui.draggable); $(this).dialog('close'); " + super.getCallbackFunctionBody(parameters) + " } },";
-								statement += "	{ text: '" + escapeEcmaScript(getString("25")) + "', click: function() { $(this).dialog('close'); } } ";
+								statement += "	{ text: '" + escapeEcmaScript(getString("lbl.cancel")) + "', click: function() { $(this).dialog('close'); } } ";
 								statement += "],";
 								statement += "close: function(event, ui) { $(this).dialog('destroy').remove(); }";
 								statement += "});";

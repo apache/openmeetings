@@ -44,7 +44,6 @@
   <entry key="22">Aanmaken</entry>
   <entry key="23">Informatie: Iedere gebruiker krijgt een bericht over de stembus.</entry>
   <entry key="24">Stembus aanmaken</entry>
-  <entry key="25">Annuleren</entry>
   <entry key="28">Stembus</entry>
   <entry key="29">Je moet een organisator zijn om een vraag aan te maken</entry>
   <entry key="30">Jouw stem is geregistreerd.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Gekozen webcam:</entry>
   <entry key="53">Gekozen microfoon:</entry>
   <entry key="54">OK</entry>
-  <entry key="55">Annuleren</entry>
+  <entry key="lbl.cancel">Annuleren</entry>
   <entry key="56">Je moet opnieuw verbinding maken.</entry>
   <entry key="57">Wijzig instellingen.</entry>
   <entry key="58">Cursus:</entry>
   <entry key="59">Taal:</entry>
   <entry key="60">OK</entry>
-  <entry key="61">Annuleren</entry>
   <entry key="62">Tekenbord schoonmaken</entry>
   <entry key="63">Wil je dat het tekenbord schoon wordt gemaakt bij het toevoegen van een nieuw plaatje?</entry>
   <entry key="64">Niet weer vragen</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Verwijder het geselecteerde object</entry>
   <entry key="81">Toepassen voor aanpassing</entry>
   <entry key="82">Toepassen</entry>
-  <entry key="83">Annuleren</entry>
   <entry key="84">Organisator worden</entry>
   <entry key="85">Afsluiten</entry>
   <entry key="86">italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Een gebruiker wil organisator worden, je kunt hem toegang geven tot het whiteboard of ook organisator maken. Gebruiker:</entry>
   <entry key="90">Accepteren</entry>
   <entry key="91">Afwijzen</entry>
-  <entry key="92">Annuleren</entry>
   <entry key="93">Verstuur verzoek naar de volgende gebruikers</entry>
   <entry key="94">Geaccepteerd</entry>
   <entry key="95">Afgewezen</entry>
@@ -134,7 +130,6 @@
   <entry key="119">E-mail</entry>
   <entry key="120">Land</entry>
   <entry key="121">Registreer</entry>
-  <entry key="122">Annuleren</entry>
   <entry key="123">Geen lid?</entry>
   <entry key="124">Start</entry>
   <entry key="125">Gebruikers</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Volgende tonen</entry>
   <entry key="151">Vorige tonen</entry>
   <entry key="152">Verwijder</entry>
-  <entry key="153">Annuleren</entry>
   <entry key="154">Verwijderen</entry>
   <entry key="155">Toevoegen</entry>
   <entry key="157">Verwijderen</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Naam</entry>
   <entry key="172">Organisatie toevoegen</entry>
   <entry key="173">Organisatie toevoegen</entry>
-  <entry key="174">Annuleren</entry>
   <entry key="175">Toevoegen</entry>
   <entry key="176">Verwijder organisatie</entry>
   <entry key="177">Gebruiker</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Opslaan als</entry>
   <entry key="200">Bestandsnaam</entry>
   <entry key="201">bestandsnaam</entry>
-  <entry key="202">Annuleren</entry>
   <entry key="203">Opslaan</entry>
   <entry key="204">Foutmelding</entry>
   <entry key="205">Laden</entry>
@@ -230,7 +222,6 @@
   <entry key="216">E-mail geadresseerde</entry>
   <entry key="217">Bericht</entry>
   <entry key="218">Verstuur</entry>
-  <entry key="219">annuleren</entry>
   <entry key="220">Verstuur</entry>
   <entry key="221">Gebruikersgegevens</entry>
   <entry key="222">Je naam voor dit overleg</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Opname:</entry>
   <entry key="418">Dit overleg wordt al opgenomen door een andere gebruiker!</entry>
   <entry key="419">Opgenomen! Door gebruiker:</entry>
-  <entry key="420">Annuleren</entry>
   <entry key="421">De opname wordt gestopt en wordt niet bewaard.</entry>
   <entry key="422">hetvatten</entry>
   <entry key="423">Sluit dit scherm en blijf opnemen</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Naam</entry>
   <entry key="436">Overleg</entry>
   <entry key="437">Datum</entry>
-  <entry key="438">Annuleren</entry>
   <entry key="439">Start</entry>
   <entry key="440">Naam</entry>
   <entry key="441">Datum</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Importeren gelukt, nu aan het converteren...</entry>
   <entry key="593">Begin importeren</entry>
   <entry key="594">Importeer scherm. Zoek en selecteer een bestand.</entry>
-  <entry key="595">Annuleren</entry>
   <entry key="596">Selecteer bestand</entry>
   <entry key="597">Active sessies</entry>
   <entry key="598">Waarde</entry>
@@ -669,7 +657,6 @@
   <entry key="694">wil graag tekenen op het tekenbord. Gebruik de status iconen naast de gebruiker om dit in te stellen.</entry>
   <entry key="695">wil graag beeld en geluid delen. Gebruik de status iconen naast de gebruiker om dit in te stellen.</entry>
   <entry key="696">Je moet wachten totdat de organisator er is.</entry>
-  <entry key="697">Annuleren</entry>
   <entry key="698">Opslaan</entry>
   <entry key="699">Dag</entry>
   <entry key="700">Maand</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Breedte:</entry>
   <entry key="741">Hoogte:</entry>
   <entry key="742">Verbinding is beindigd door de server</entry>
-  <entry key="743">Annuleren</entry>
   <entry key="744">Start Java</entry>
   <entry key="745">Als je deze sessie volledig beindigd, kun je hem niet opnieuw bekijken.</entry>
   <entry key="746">Bevestiging van het sluiten van deze sessie</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Test beeld en geluid voordat je aan een overleg begint.</entry>
   <entry key="759">Laat deze test niet weer zien</entry>
-  <entry key="760">Annuleren</entry>
   <entry key="761">Start Overleg</entry>
   <entry key="762">Niet opnieuw vragen</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

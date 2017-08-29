@@ -103,7 +103,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	private AppointmentForm form;
 	private DialogButton save = new DialogButton("save", Application.getString("813"));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("1130"));
+	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private DialogButton delete = new DialogButton("delete", Application.getString("814"));
 	private DialogButton enterRoom = new DialogButton("enterRoom", Application.getString("1282"));
 	private final CalendarPanel calendarPanel;

@@ -38,7 +38,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public abstract class NameDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private final DialogButton add;
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private final Form<String> form;
 	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final String name;

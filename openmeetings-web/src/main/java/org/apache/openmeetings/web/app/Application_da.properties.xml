@@ -44,7 +44,6 @@
   <entry key="22">Opret</entry>
   <entry key="23">INFO: Alle tilsluttede brugere får tilsendt en meddelelse med den nye afstemning.</entry>
   <entry key="24">Opret afstemning</entry>
-  <entry key="25">Annuller</entry>
   <entry key="28">Stem</entry>
   <entry key="29">Du skal vare moderator for at kunne oprette en afstemning</entry>
   <entry key="30">Din afstemning er accepteret</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Vælg webcam:</entry>
   <entry key="53">Vælg mikrofon:</entry>
   <entry key="54">ok</entry>
-  <entry key="55">Afbryd</entry>
+  <entry key="lbl.cancel">Afbryd</entry>
   <entry key="56">Tilslut igen.</entry>
   <entry key="57">Ændre setup.</entry>
   <entry key="58">Kursus:</entry>
   <entry key="59">Sprog:</entry>
   <entry key="60">Ok</entry>
-  <entry key="61">Afbryd</entry>
   <entry key="62">Rens skrivebordet</entry>
   <entry key="63">Ønsker du at skrivebordet skal renses inden du uploader til et nyt billede?</entry>
   <entry key="64">Spørg ikke igen</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Slet valgt objekt</entry>
   <entry key="81">Læg til før moderation</entry>
   <entry key="82">Læg til</entry>
-  <entry key="83">Afbryd</entry>
   <entry key="84">Bliv moderator</entry>
   <entry key="85">Luk</entry>
   <entry key="86">italic</entry>
@@ -109,7 +106,6 @@
   <entry key="89">En bruger venter på at blive moderator:</entry>
   <entry key="90">Accepter</entry>
   <entry key="91">Afvis</entry>
-  <entry key="92">Annuller</entry>
   <entry key="93">Send spørgsmål til følgende brugere</entry>
   <entry key="94">Accepteret</entry>
   <entry key="95">Afvist</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Email:</entry>
   <entry key="120">Land:</entry>
   <entry key="121">Registrer</entry>
-  <entry key="122">Annuller</entry>
   <entry key="123">Registrer</entry>
   <entry key="124">Forside</entry>
   <entry key="125">Brugere</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Vis næste</entry>
   <entry key="151">Vis forrige</entry>
   <entry key="152">Slet indhold</entry>
-  <entry key="153">Annuller</entry>
   <entry key="154">Slet</entry>
   <entry key="155">Nyt indhold</entry>
   <entry key="157">Slet indhold</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Navn</entry>
   <entry key="172">Gem til organisation</entry>
   <entry key="173">Gem til organisation</entry>
-  <entry key="174">Annuller</entry>
   <entry key="175">Gem</entry>
   <entry key="176">Fjern organisation</entry>
   <entry key="177">Brugere</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Gem som</entry>
   <entry key="200">Filnavn</entry>
   <entry key="201">Filnavn</entry>
-  <entry key="202">Annuller</entry>
   <entry key="203">Gem</entry>
   <entry key="204">Fejl</entry>
   <entry key="205">Gemmer</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Modtagere</entry>
   <entry key="217">Meddelelser</entry>
   <entry key="218">Send</entry>
-  <entry key="219">Annuller</entry>
   <entry key="220">Send</entry>
   <entry key="221">Brugerdata</entry>
   <entry key="222">Dit alias i denne konference</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Optagelse:</entry>
   <entry key="418">Der er allerede nogen der optager i øjeblikket:</entry>
   <entry key="419">Optagelse! Af bruger:</entry>
-  <entry key="420">Annuller</entry>
   <entry key="421">Optagelsen vil blive afbrudt og gemmes ikke.</entry>
   <entry key="422">Genoptag</entry>
   <entry key="423">Luk dette vindue og genoptag optagelsen</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Navn</entry>
   <entry key="436">Rum</entry>
   <entry key="437">Dato</entry>
-  <entry key="438">Annuller</entry>
   <entry key="439">Start</entry>
   <entry key="440">Navn</entry>
   <entry key="441">Dato</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Indlæsning færdig, konverterer dokument...</entry>
   <entry key="593">Start indlæsning</entry>
   <entry key="594">Dialog indlæsning og importering. Vælg venligst en fil fra din harddisk.</entry>
-  <entry key="595">Annuller</entry>
   <entry key="596">Vælg fil</entry>
   <entry key="597">Forbindelser</entry>
   <entry key="598">Værdi</entry>
@@ -669,7 +657,6 @@
   <entry key="694">vil tegne på whiteboardet. Brug status ikonerne i brugerlisten for at tildele eller fjerne rettigheder til at tegne på whiteboardet.</entry>
   <entry key="695">vil publicere lyd/video. Brug status ikonerne i brugerlisten for at tildele eller fjerne rettigheder til publicering af lyd/video.</entry>
   <entry key="696">Du skal vente til en moderator er trådt ind i rummet.</entry>
-  <entry key="697">Annuller</entry>
   <entry key="698">Gem</entry>
   <entry key="699">Dag</entry>
   <entry key="700">Måned</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Bredde:</entry>
   <entry key="741">Højde:</entry>
   <entry key="742">Forbindelsen blev lukket af serveren</entry>
-  <entry key="743">Annuller</entry>
   <entry key="744">Start ekstern</entry>
   <entry key="745">Hvis du lukker denne session helt vil du ikke være i stand til at genstarte fremviseren for denne session.</entry>
   <entry key="746">Bekræft lukning af fremviser sessionen.</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test indstillinger</entry>
   <entry key="758">Kontroller mikrofon og kameraindstillinger inden du går ind i et rum ved at optage i et par sek. Du kan efterflg. se din optagelse for at kontrollere din lyd samt dit kamerabillede.</entry>
   <entry key="759">Vis ikke denne test igen</entry>
-  <entry key="760">Annuller</entry>
   <entry key="761">Start konference</entry>
   <entry key="762">Spørg ikke igen</entry>
   <entry key="763">OPTAG</entry>
@@ -882,7 +867,6 @@
   <entry key="915">Optagelsen af interviewet er allerede startet.</entry>
   <entry key="916">Optagelsen er allerede stoppet eller er ikke startet endnu.</entry>
   <entry key="917">Optagelsen af dette interview er allerede startet!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

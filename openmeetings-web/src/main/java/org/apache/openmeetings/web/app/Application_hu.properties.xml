@@ -44,7 +44,6 @@
   <entry key="22">Létrehoz</entry>
   <entry key="23">Infó: Minden bejelentkezett felhasználó értesül az új szavazásról.</entry>
   <entry key="24">Szavazás létrehozása</entry>
-  <entry key="25">Mégse</entry>
   <entry key="28">Szavazás</entry>
   <entry key="29">Előadónak kell lenned, hogy feltehess kérdést</entry>
   <entry key="30">A szavazatot elfogadtuk.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Válassz webkamerát:</entry>
   <entry key="53">Válassz mikrofont:</entry>
   <entry key="54">Rendben</entry>
-  <entry key="55">Mégse</entry>
+  <entry key="lbl.cancel">Mégse</entry>
   <entry key="56">Újra be kell jelentkezned.</entry>
   <entry key="57">Beállítások módosítása.</entry>
   <entry key="58">Téma:</entry>
   <entry key="59">Nyelv:</entry>
   <entry key="60">Rendben</entry>
-  <entry key="61">Mégse</entry>
   <entry key="62">Tábla törlése</entry>
   <entry key="63">Szeretnéd, hogy a tábla törölve legyen mielőtt új kép lesz hozzáadva?</entry>
   <entry key="64">Ne kérdezd többször</entry>
@@ -100,7 +98,6 @@
   <entry key="80">a kiválasztott elem törlése</entry>
   <entry key="81">Jelentkezés előadónak</entry>
   <entry key="82">beállít</entry>
-  <entry key="83">Mégse</entry>
   <entry key="84">Előadóvá válni</entry>
   <entry key="85">bezár</entry>
   <entry key="86">dőlt</entry>
@@ -109,7 +106,6 @@
   <entry key="89">A felhasználó előadónak jelentkezik:</entry>
   <entry key="90">elfogad</entry>
   <entry key="91">elutasít</entry>
-  <entry key="92">mégse</entry>
   <entry key="93">Kérelem küldése felhasználóknak:</entry>
   <entry key="94">Elfogadva</entry>
   <entry key="95">Elutasítva</entry>
@@ -134,7 +130,6 @@
   <entry key="119">E-mail:</entry>
   <entry key="120">Ország:</entry>
   <entry key="121">Regisztráció</entry>
-  <entry key="122">Mégse</entry>
   <entry key="123">Regisztráció</entry>
   <entry key="124">Nyitó oldal</entry>
   <entry key="125">Felhasználók</entry>
@@ -165,7 +160,6 @@
   <entry key="150">következő mutatása</entry>
   <entry key="151">előző mutatása</entry>
   <entry key="152">bejegyzés törlése</entry>
-  <entry key="153">mégse</entry>
   <entry key="154">törlés</entry>
   <entry key="155">új bejegyzés</entry>
   <entry key="157">bejegyzés törlése</entry>
@@ -185,7 +179,6 @@
   <entry key="171">név</entry>
   <entry key="172">szervezet hozzáadása</entry>
   <entry key="173">szervezet hozzáadása</entry>
-  <entry key="174">mégse</entry>
   <entry key="175">hozzáad</entry>
   <entry key="176">szervezet törlése</entry>
   <entry key="177">felhasználó</entry>
@@ -213,7 +206,6 @@
   <entry key="199">mentés mint</entry>
   <entry key="200">Fájlnév</entry>
   <entry key="201">fájlnév</entry>
-  <entry key="202">mégse</entry>
   <entry key="203">mentés</entry>
   <entry key="204">hiba</entry>
   <entry key="205">betöltés</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Címzett</entry>
   <entry key="217">Üzenet</entry>
   <entry key="218">Elküld</entry>
-  <entry key="219">mégse</entry>
   <entry key="220">elküld</entry>
   <entry key="221">Felhasználói adat</entry>
   <entry key="222">A beceneved ehhez a konferenciához</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Felvétel:</entry>
   <entry key="418">Már valaki felvételt készít:</entry>
   <entry key="419">Felvétel! Felhasználó:</entry>
-  <entry key="420">mégse</entry>
   <entry key="421">A felvétel meg lesz szakítva mentés nélkül.</entry>
   <entry key="422">újraindít</entry>
   <entry key="423">Zárd be az ablakot és indítsd újra a felvételt.</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Név</entry>
   <entry key="436">Szoba</entry>
   <entry key="437">Dátum</entry>
-  <entry key="438">mégse</entry>
   <entry key="439">felvétel</entry>
   <entry key="440">Név</entry>
   <entry key="441">Dátum</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Feltöltés kész, konverzió folyamatban ...</entry>
   <entry key="593">Feltöltés indítása</entry>
   <entry key="594">Feltöltő és importáló ablak. Válassza ki a file-t a meghajtóról.</entry>
-  <entry key="595">Megszakít</entry>
   <entry key="596">File választása</entry>
   <entry key="597">Kapcsolatok</entry>
   <entry key="598">Érték</entry>
@@ -669,7 +657,6 @@
   <entry key="694">tábla használatához. Kattintson a névre és a rajztábla ikonra a tábla használatának hozzáadásához, visszavételéhez.</entry>
   <entry key="695">Audio/Video hozzáféréséhez. Kattintson a nevére és a Mikrofon/Kamera ikonra a hozzászólás engedélyezéséhez, visszavételéhez.</entry>
   <entry key="696">Várjon amég a Moderátor belép a terembe.</entry>
-  <entry key="697">Mégsem</entry>
   <entry key="698">Ment</entry>
   <entry key="699">Nap</entry>
   <entry key="700">Hónap</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Szélesség:</entry>
   <entry key="741">Magasság:</entry>
   <entry key="742">A kapcsolat lezárult a szerverrel</entry>
-  <entry key="743">Mégse</entry>
   <entry key="744">Indítás kívülről</entry>
   <entry key="745">Ha bezárja ezt a nézetet, nem fogja tudni újraindítani ebben a munkamenetben.</entry>
   <entry key="746">Megerősíti az aktuális nézet leállítását</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Teszt beállítás</entry>
   <entry key="758">Teztelje a kameráját/mikrofonját pár másodperces felvétellel, mielőtt belépne a konferencia terembe. Visszajátszuk a felvételt, hogy ellenőrizhesse a működést.</entry>
   <entry key="759">Ne mutassa ezt többet</entry>
-  <entry key="760">Mégsem</entry>
   <entry key="761">Belépés a konferenciába</entry>
   <entry key="762">Ne figyelmeztessen többet</entry>
   <entry key="763">Felvétel</entry>
@@ -882,7 +867,6 @@
   <entry key="915">A felvétel már folyamatban van.</entry>
   <entry key="916">A felvétel megállításra került, vagy nem indítható most.</entry>
   <entry key="917">Az interj felvétele sikeresen elindult!</entry>
-  <entry key="918">Mégsem</entry>
   <entry key="919">A felvétel feldolgozása akár 5 perc is lehet 1 perces video esetén. A kiválasztott videó feldolgozása, kódolása:</entry>
   <entry key="921">Újra generált SIP adatok</entry>
   <entry key="922">Nem helyezheti át ezt a filet/könyvtárat ebbe az alkönyvtárba!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Felhasználók az új csoportszobában:</entry>
   <entry key="1014">Csoportszoba létrehozása</entry>
-  <entry key="1015">Mégsem</entry>
   <entry key="1016">Válasszon legalább egy résztvevőt a csoportszobába!</entry>
   <entry key="1017">Felhasználó csoporthoz adása</entry>
   <entry key="1018">Felhazsnáló elvétele a csoporttól</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Ne mutassa a Távvezérlés info dobozt a másolás/beillesztés közben.</entry>
   <entry key="1128">Mentés</entry>
   <entry key="1129">Eltávolítás</entry>
-  <entry key="1130">Mégsem</entry>
   <entry key="1131">Felhasználó meghívása a konferenciába</entry>
   <entry key="1132">Válasszon konferencia szobát. A meghívott felhasználó üzenetet kap a Nevével és a belépési linkkel.</entry>
   <entry key="1133">Kapcsolódva:</entry>

@@ -50,7 +50,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
 	private final DialogButton create = new DialogButton("create", Application.getString("22"));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("25"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private final Long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));

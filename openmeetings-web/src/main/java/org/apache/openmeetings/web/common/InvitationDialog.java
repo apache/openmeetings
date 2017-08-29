@@ -33,7 +33,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	public final DialogButton generate = new DialogButton("generate", Application.getString("1526"));
 	public final DialogButton send = new DialogButton("send", Application.getString("218"));
-	public final DialogButton cancel = new DialogButton("cancel", Application.getString("219"));
+	public final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {

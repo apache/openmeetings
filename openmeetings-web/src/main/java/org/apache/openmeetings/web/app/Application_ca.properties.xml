@@ -44,7 +44,6 @@
   <entry key="22">Crear</entry>
   <entry key="23">Informació: descripció d'enquesta.</entry>
   <entry key="24">Crear enquesta</entry>
-  <entry key="25">Cancel·lar</entry>
   <entry key="28">Enquesta</entry>
   <entry key="29">És necessita ser moderador per crear una enquesta.</entry>
   <entry key="30">El seu vot ha sigut registrat</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Seleccionar camara:</entry>
   <entry key="53">Seleccionar micròfon:</entry>
   <entry key="54">OK</entry>
-  <entry key="55">Cancelar</entry>
+  <entry key="lbl.cancel">Cancelar</entry>
   <entry key="56">Necessita reconectar-se</entry>
   <entry key="57">Editar configuració</entry>
   <entry key="58">Curso:</entry>
   <entry key="59">Idioma:</entry>
   <entry key="60">OK</entry>
-  <entry key="61">cancelar</entry>
   <entry key="62">Eliminar pissarra</entry>
   <entry key="63">Vols netejar la pissarra abans de afegir una nova imatge?</entry>
   <entry key="64">No tornar a preguntar</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Esborrar l'ítem escollit</entry>
   <entry key="81">Solicitar la moderació</entry>
   <entry key="82">Aplicar</entry>
-  <entry key="83">Cancel·lar</entry>
   <entry key="84">Convertir-se en moderador</entry>
   <entry key="85">Tancar</entry>
   <entry key="86">Itálica</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Un usuari sol·licita la moderació:</entry>
   <entry key="90">Aceptar</entry>
   <entry key="91">Denegar</entry>
-  <entry key="92">Cancel·lar</entry>
   <entry key="93">Envian la sol·licitud als següents usuaris</entry>
   <entry key="94">Aceptat</entry>
   <entry key="95">Rebutjat</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Correu electronic:</entry>
   <entry key="120">País:</entry>
   <entry key="121">Registrar-se</entry>
-  <entry key="122">Cancel·lar</entry>
   <entry key="123">Registrar</entry>
   <entry key="124">Inici</entry>
   <entry key="125">Usuaris</entry>
@@ -165,7 +160,6 @@
   <entry key="150">mostrar següent</entry>
   <entry key="151">mostrar anterior</entry>
   <entry key="152">eliminar registre</entry>
-  <entry key="153">cancel·lar</entry>
   <entry key="154">borrar</entry>
   <entry key="155">Nou registre</entry>
   <entry key="157">Esborrar registre</entry>
@@ -185,7 +179,6 @@
   <entry key="171">nom</entry>
   <entry key="172">afegir organització</entry>
   <entry key="173">afegir organització</entry>
-  <entry key="174">cancel·lar</entry>
   <entry key="175">afegir</entry>
   <entry key="176">eliminar organització</entry>
   <entry key="177">usuari</entry>
@@ -213,7 +206,6 @@
   <entry key="199">guardar com</entry>
   <entry key="200">fitxer</entry>
   <entry key="201">fitxer</entry>
-  <entry key="202">cancel·lar</entry>
   <entry key="203">guardar</entry>
   <entry key="204">error</entry>
   <entry key="205">carregan</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Destinatari</entry>
   <entry key="217">Missatge</entry>
   <entry key="218">Enviar</entry>
-  <entry key="219">cancel·lar</entry>
   <entry key="220">enviar</entry>
   <entry key="221">Dades d'usuari</entry>
   <entry key="222">El seu pseudònim per a aquesta conferència</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Gravació:</entry>
   <entry key="418">Actualmente algú es troba graban:</entry>
   <entry key="419">Gravant per l'usuari:</entry>
-  <entry key="420">cancel·lar</entry>
   <entry key="421">La gravació serà cancel·lada i no es guardarà.</entry>
   <entry key="422">reprendre</entry>
   <entry key="423">Tancar finestra i reprendre la gravació</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Nom</entry>
   <entry key="436">Sala</entry>
   <entry key="437">Data</entry>
-  <entry key="438">cancel·lar</entry>
   <entry key="439">iniciar</entry>
   <entry key="440">Nom</entry>
   <entry key="441">Data</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Pujada completa. Convertint l'arxiu...</entry>
   <entry key="593">Iniciar Pujada</entry>
   <entry key="594">Pujar i importar conversa. Per favor, seleccioni un arxiu del seu disc.</entry>
-  <entry key="595">Cancel·lar</entry>
   <entry key="596">Seleccionar Arxiu</entry>
   <entry key="597">Conexions</entry>
   <entry key="598">Valor</entry>
@@ -669,7 +657,6 @@
   <entry key="694">desitjaria utilitzar la pissarra. Utilitzi les icones que hi ha al costat del nom de l'usuari (en la Llista d'Usuaris) per a agregar o llevar els permisos corresponents.</entry>
   <entry key="695">desitjaria compartir el seu Àudio/Vídeo. Usi les icones que hi ha al costat del nom d'usuari (en la Llista d'Usuaris) per a agregar o llevar els permisos per a compartir Àudio/Video.</entry>
   <entry key="696">Ha d'esperar fins que un Moderador ingressi a la sala.</entry>
-  <entry key="697">Cancel·lar</entry>
   <entry key="698">Guardar</entry>
   <entry key="699">Dia</entry>
   <entry key="700">Mes</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Amplària:</entry>
   <entry key="741">Altura:</entry>
   <entry key="742">La connexió ha estat tancada pel servidor</entry>
-  <entry key="743">Cancel·lar</entry>
   <entry key="744">Iniciar Externa</entry>
   <entry key="745">Si tanca aquesta sessió completament, no serà possible reiniciar el visor durant aquesta sessió.</entry>
   <entry key="746">Confirmar el tancament de la sessió</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Provar configuració</entry>
   <entry key="758">Comprovi la configuració del seu micròfon i/o càmera abans d'entrar en la sala. Per a això gravi durant alguns segons i reprodueixi'l.</entry>
   <entry key="759">No tornar a mostrar aquest test</entry>
-  <entry key="760">Cancel·lar</entry>
   <entry key="761">Iniciar</entry>
   <entry key="762">No demanar de nou</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">La gravació de l'entrevista ja ha començat.</entry>
   <entry key="916">La gravació s'ha aturat o no han iniciat encara.</entry>
   <entry key="917">La gravació d'aquesta entrevista ja s'ha iniciat!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

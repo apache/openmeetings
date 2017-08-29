@@ -44,7 +44,6 @@
   <entry key="22">Crea</entry>
   <entry key="23">Ogni utente connesso riceve un messaggio con il nuovo sondaggio.</entry>
   <entry key="24">Crea un sondaggio</entry>
-  <entry key="25">Annulla</entry>
   <entry key="28">Sondaggio</entry>
   <entry key="29">Devi essere moderatore per creare una domanda</entry>
   <entry key="30">Il tuo voto è stato registrato.</entry>
@@ -72,13 +71,12 @@
   <entry key="52">Scegli la webcam:</entry>
   <entry key="53">Scegli il microfono:</entry>
   <entry key="54">ok</entry>
-  <entry key="55">annulla</entry>
+  <entry key="lbl.cancel">annulla</entry>
   <entry key="56">Devi riconnetterti.</entry>
   <entry key="57">Modifica le impostazioni.</entry>
   <entry key="58">Corso:</entry>
   <entry key="59">Lingua:</entry>
   <entry key="60">ok</entry>
-  <entry key="61">annulla</entry>
   <entry key="62">Cancella la lavagna</entry>
   <entry key="63">Vuoi che la lavagna sia pulita prima di aggiungere una nuova immagine?</entry>
   <entry key="64">Non chiedere ancora</entry>
@@ -100,7 +98,6 @@
   <entry key="80">Cancella oggetto selezionato</entry>
   <entry key="81">Sottoponi al moderatore</entry>
   <entry key="82">applica</entry>
-  <entry key="83">cancella</entry>
   <entry key="84">Diventa moderatore</entry>
   <entry key="85">chiudi</entry>
   <entry key="86">corsivo</entry>
@@ -109,7 +106,6 @@
   <entry key="89">Un utente ha chiesto di essere un moderatore, tu puoi condedergli solo l'accesso alla lavagna o cambiare completamente il ruolo di moderazione. Utente::</entry>
   <entry key="90">Accetta</entry>
   <entry key="91">Rifiuta</entry>
-  <entry key="92">Annulla</entry>
   <entry key="93">Invia la richiesta agli utenti seguenti</entry>
   <entry key="94">Accettata</entry>
   <entry key="95">Rifiutata</entry>
@@ -134,7 +130,6 @@
   <entry key="119">Email:</entry>
   <entry key="120">Stato:</entry>
   <entry key="121">Registrati</entry>
-  <entry key="122">Annulla</entry>
   <entry key="123">Registrati</entry>
   <entry key="124">Home</entry>
   <entry key="125">Utenti</entry>
@@ -165,7 +160,6 @@
   <entry key="150">Mostra prossimo</entry>
   <entry key="151">Mostra precedente</entry>
   <entry key="152">Elimina il record</entry>
-  <entry key="153">Annulla</entry>
   <entry key="154">Elimina</entry>
   <entry key="155">Nuovo record</entry>
   <entry key="157">Elimina record</entry>
@@ -185,7 +179,6 @@
   <entry key="171">Nome</entry>
   <entry key="172">Aggiungi un'organizzazione</entry>
   <entry key="173">Aggiungi un'organizzazione</entry>
-  <entry key="174">Annulla</entry>
   <entry key="175">Aggiungi</entry>
   <entry key="176">Rimuovi l'organizzazione</entry>
   <entry key="177">Utente</entry>
@@ -213,7 +206,6 @@
   <entry key="199">Salva con nome</entry>
   <entry key="200">Nome del file</entry>
   <entry key="201">Nome del file</entry>
-  <entry key="202">Annulla</entry>
   <entry key="203">Salva</entry>
   <entry key="204">Errore</entry>
   <entry key="205">Caricamento</entry>
@@ -230,7 +222,6 @@
   <entry key="216">Destinatario</entry>
   <entry key="217">Messaggio</entry>
   <entry key="218">Invia</entry>
-  <entry key="219">Annulla</entry>
   <entry key="220">Invia</entry>
   <entry key="221">Dettagli utente</entry>
   <entry key="222">Il tuo nickname per questa conferenza</entry>
@@ -407,7 +398,6 @@
   <entry key="417">Registrazione:</entry>
   <entry key="418">C'è già qualcuno che sta registrando questa conferenza:</entry>
   <entry key="419">Registrazione. Utente:</entry>
-  <entry key="420">Annulla</entry>
   <entry key="421">La registrazione sarà annullata e non salvata.</entry>
   <entry key="422">riprendi</entry>
   <entry key="423">Chiudi questa finestra e riprendi la registrazione</entry>
@@ -425,7 +415,6 @@
   <entry key="435">Nome</entry>
   <entry key="436">Stanza</entry>
   <entry key="437">Data</entry>
-  <entry key="438">Annulla</entry>
   <entry key="439">Avvia</entry>
   <entry key="440">Nome</entry>
   <entry key="441">Data</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Caricamento completato, conversione in corso</entry>
   <entry key="593">Inizia caricamento</entry>
   <entry key="594">Finestra di caricamento e importazione. Seleziona un file</entry>
-  <entry key="595">Annulla</entry>
   <entry key="596">Seleziona il file</entry>
   <entry key="597">Connessioni</entry>
   <entry key="598">Valore</entry>
@@ -669,7 +657,6 @@
   <entry key="694">vorrebbe disegnare sulla lavagna virtuale.</entry>
   <entry key="695">vorrebbe condividere i suoi Audio e Video.</entry>
   <entry key="696">Devi attendere fino a quando un moderatore entra nella stanza.</entry>
-  <entry key="697">Annulla</entry>
   <entry key="698">Salva</entry>
   <entry key="699">Giorno</entry>
   <entry key="700">Mese</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Larghezza:</entry>
   <entry key="741">Altezza:</entry>
   <entry key="742">Connessione chiusa dal Server!</entry>
-  <entry key="743">Annulla</entry>
   <entry key="744">Avvia External</entry>
   <entry key="745">Se chiudi questa sessione completamente non potrai riavviare il visualizzatore per questa sessione.</entry>
   <entry key="746">Conferma chiusura della sessione del visualizzatore</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test configurazione</entry>
   <entry key="758">Verifica le impostazioni del microfono/webcam prima di entrare nella stanza, registrando qualche secondo. Rivedi il replay per verificare la tua voce e le immagini.</entry>
   <entry key="759">Non mostrare più questo test</entry>
-  <entry key="760">Annulla</entry>
   <entry key="761">Avvia conferenza</entry>
   <entry key="762">Non richiedere ancora</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">La registrazione di questa Intervista è già stata avviata.</entry>
   <entry key="916">La registrazione di questa Intervista è già stata arrestata o non è ancora partita.</entry>
   <entry key="917">La registrazione di questa intervista è già stata avviata!</entry>
-  <entry key="918">Annulla</entry>
   <entry key="919">La post-elaborazione di una Intervista durerà alcuni minuti in base al tempo registrato. L'avanzamento di questo processo di transcodifica è il seguente: </entry>
   <entry key="921">Ri-Genera dati SIP</entry>
   <entry key="922">Non puoi spostare questo file o cartella nella sua sotto cartella!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Utenti per la nuova Stanza Team:</entry>
   <entry key="1014">Creazione Stanza Team</entry>
-  <entry key="1015">Annulla</entry>
   <entry key="1016">Scegli almeno un utente per la Stanza Team!</entry>
   <entry key="1017">Aggiunge l'utente alla Stanza Team</entry>
   <entry key="1018">Rimuovi utente dalla Stanza Team</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Non visualizzare il riquadro informazioni del Controllo Remoto per il Copia e Incolla</entry>
   <entry key="1128">Salva</entry>
   <entry key="1129">Rimuovi</entry>
-  <entry key="1130">Annulla</entry>
   <entry key="1131">Invita un utente nella stanza conferenze</entry>
   <entry key="1132">Scegli una stanza conferenze. Gli utenti invitati riceveranno un messaggio con il nome ed il link alla stanza.</entry>
   <entry key="1133">Connesso da:</entry>

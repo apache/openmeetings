@@ -44,7 +44,6 @@
   <entry key="22">建立</entry>
   <entry key="23">信息:每個接入用戶收到新的民意信息</entry>
   <entry key="24">創造一個新的民調</entry>
-  <entry key="25">取诮</entry>
   <entry key="28">民調</entry>
   <entry key="29">必須是主持人能提出問題</entry>
   <entry key="30">你的投票己登記</entry>
@@ -72,13 +71,12 @@
   <entry key="52">選擇攝像机 :</entry>
   <entry key="53">選擇麥克風 :</entry>
   <entry key="54">设定好了</entry>
-  <entry key="55">取消</entry>
+  <entry key="lbl.cancel">取消</entry>
   <entry key="56">你需要重新連接 .</entry>
   <entry key="57">編輯設定 .</entry>
   <entry key="58">課程 :</entry>
   <entry key="59">語言 :</entry>
   <entry key="60">设定好了</entry>
-  <entry key="61">取消</entry>
   <entry key="62">清掉電子白板</entry>
   <entry key="63">你想要在加圖片之前先清掉白板嗎?</entry>
   <entry key="64">不要再問</entry>
@@ -100,7 +98,6 @@
   <entry key="80">刪除選定項目</entry>
   <entry key="81">申請成為主持人</entry>
   <entry key="82">應用</entry>
-  <entry key="83">取消</entry>
   <entry key="84">成為主持人</entry>
   <entry key="85">關閉</entry>
   <entry key="86">斜體字</entry>
@@ -109,7 +106,6 @@
   <entry key="89">有用户想申請成為主持人</entry>
   <entry key="90">接受</entry>
   <entry key="91">拒绝</entry>
-  <entry key="92">取诮</entry>
   <entry key="93">送出請求到以下的用戶</entry>
   <entry key="94">接受</entry>
   <entry key="95">拒绝</entry>
@@ -134,7 +130,6 @@
   <entry key="119">郵件 :</entry>
   <entry key="120">國家 :</entry>
   <entry key="121">登記</entry>
-  <entry key="122">取消</entry>
   <entry key="123">登記</entry>
   <entry key="124">首頁</entry>
   <entry key="125">用戶管理</entry>
@@ -165,7 +160,6 @@
   <entry key="150">顯示下一個</entry>
   <entry key="151">顯示前一個</entry>
   <entry key="152">刪除紀錄</entry>
-  <entry key="153">取消</entry>
   <entry key="154">刪除</entry>
   <entry key="155">新紀錄</entry>
   <entry key="157">刪除紀錄</entry>
@@ -185,7 +179,6 @@
   <entry key="171">名稱</entry>
   <entry key="172">增加組織</entry>
   <entry key="173">增加組織</entry>
-  <entry key="174">取消</entry>
   <entry key="175">增加</entry>
   <entry key="176">移除組織</entry>
   <entry key="177">用戶</entry>
@@ -213,7 +206,6 @@
   <entry key="199">另存為</entry>
   <entry key="200">文件名稱</entry>
   <entry key="201">文件名稱</entry>
-  <entry key="202">取消</entry>
   <entry key="203">保存</entry>
   <entry key="204">錯誤</entry>
   <entry key="205">輸入中</entry>
@@ -230,7 +222,6 @@
   <entry key="216">受邀者</entry>
   <entry key="217">信息</entry>
   <entry key="218">送出</entry>
-  <entry key="219">取消</entry>
   <entry key="220">送出</entry>
   <entry key="221">用戶資料</entry>
   <entry key="222">你這次會議的別名</entry>
@@ -407,7 +398,6 @@
   <entry key="417">錄影:</entry>
   <entry key="418">現在已經有人在錄影:</entry>
   <entry key="419">錄影！按用戶:</entry>
-  <entry key="420">取消</entry>
   <entry key="421">錄影將被取消，並不會被保存</entry>
   <entry key="422">恢復</entry>
   <entry key="423">關閉此窗口，並恢復錄影</entry>
@@ -425,7 +415,6 @@
   <entry key="435">姓名</entry>
   <entry key="436">房間</entry>
   <entry key="437">日期</entry>
-  <entry key="438">取消</entry>
   <entry key="439">開始</entry>
   <entry key="440">姓名</entry>
   <entry key="441">日期</entry>
@@ -573,7 +562,6 @@
   <entry key="592">Upload complete, converting Document ...</entry>
   <entry key="593">Start Upload</entry>
   <entry key="594">Upload and Import Dialog. Please select a File from your Disk.</entry>
-  <entry key="595">Cancel</entry>
   <entry key="596">Select File</entry>
   <entry key="597">Connections</entry>
   <entry key="598">Value</entry>
@@ -669,7 +657,6 @@
   <entry key="694">would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.</entry>
   <entry key="695">would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.</entry>
   <entry key="696">You have to wait untill a Moderator enters the room.</entry>
-  <entry key="697">Cancel</entry>
   <entry key="698">Save</entry>
   <entry key="699">Day</entry>
   <entry key="700">Month</entry>
@@ -714,7 +701,6 @@
   <entry key="740">Width:</entry>
   <entry key="741">Height:</entry>
   <entry key="742">Connection was closed by Server</entry>
-  <entry key="743">Cancel</entry>
   <entry key="744">Start External</entry>
   <entry key="745">If you close this session completely you are not able to restart the viewer for this session.</entry>
   <entry key="746">Confirm Closing Viewer Session</entry>
@@ -731,7 +717,6 @@
   <entry key="757">Test Setup</entry>
   <entry key="758">Check you Microphone and Camera setup before you enter a room by recording some seconds. You can then replay your recording to check your voice and picture.</entry>
   <entry key="759">Don't show this test anymore</entry>
-  <entry key="760">Cancel</entry>
   <entry key="761">Start Conference</entry>
   <entry key="762">Do not ask again</entry>
   <entry key="763">REC</entry>
@@ -882,7 +867,6 @@
   <entry key="915">The recording of the Interview is already started.</entry>
   <entry key="916">The recording is already stopped or not been started yet.</entry>
   <entry key="917">The recording for this interview is already started!</entry>
-  <entry key="918">Cancel</entry>
   <entry key="919">The post-processing of an interview takes 5 minutes per 1 minute interview. The current progress of the interview post-processing transcoding is:</entry>
   <entry key="921">Re-generate SIP Data</entry>
   <entry key="922">You cannot move this file or folder into its own sub folder!</entry>
@@ -977,7 +961,6 @@
   <entry key="1012"></entry>
   <entry key="1013">Users for the new Team-Room:</entry>
   <entry key="1014">Create Team-Room</entry>
-  <entry key="1015">Cancel</entry>
   <entry key="1016">Choose at least one user for the Team-Room!</entry>
   <entry key="1017">Add user to team</entry>
   <entry key="1018">Remove user from Team-Room</entry>
@@ -1092,7 +1075,6 @@
   <entry key="1127">Do not show info box in Remote Control about Copy and Paste</entry>
   <entry key="1128">Save</entry>
   <entry key="1129">Remove</entry>
-  <entry key="1130">Cancel</entry>
   <entry key="1131">Invite user to conference room</entry>
   <entry key="1132">Choose a conference room. The invited user will get a message with your name and a link to the room.</entry>
   <entry key="1133">Connected since:</entry>

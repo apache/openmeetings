@@ -65,7 +65,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 	private final DialogButton send = new DialogButton("send", Application.getString("317"));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("122"));
+	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
