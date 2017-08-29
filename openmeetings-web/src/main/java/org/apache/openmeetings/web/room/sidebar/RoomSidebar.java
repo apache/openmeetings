@@ -201,8 +201,10 @@ public class RoomSidebar extends Panel {
 					return;
 				}
 				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
+				StringValue podStr = getRequest().getRequestParameters().getParameterValue(PARAM_POD);
+				Pod pod = podStr.isEmpty() ? Pod.none : Pod.valueOf(podStr.toString());
 				Client c = getOnlineClient(uid);
-				toggleActivity(c, a);
+				toggleActivity(c, a, pod);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
 			}
@@ -221,7 +223,7 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
-						toggleActivity(c, Activity.broadcastAV);
+						toggleActivity(c, Activity.broadcastAV, Pod.none);
 					}
 				}
 				sendUpdatedClient(c);
@@ -264,7 +266,7 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			public boolean isVisible() {
-				return true;
+				return Room.Type.interview != room.getRoom().getType();
 			}
 
 			@Override
@@ -362,9 +364,10 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
-		showFiles = Room.Type.interview != room.getRoom().getType()
-				&& !room.getRoom().isHidden(RoomElement.Files)
-				&& room.getClient().hasRight(Right.presenter);
+		if (Room.Type.interview == room.getRoom().getType()) {
+			return;
+		}
+		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.presenter);
 		roomFiles.setReadOnly(!showFiles, handler);
 	}
 
@@ -392,7 +395,7 @@ public class RoomSidebar extends Panel {
 		upload.open(handler);
 	}
 
-	public void toggleActivity(Client c, Activity a) {
+	public void toggleActivity(Client c, Activity a, Pod _pod) {
 		if (c == null) {
 			return;
 		}
@@ -415,7 +418,7 @@ public class RoomSidebar extends Panel {
 				return;
 			}
 			Pod pod = c.getPod();
-			c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
+			c.setPod(_pod);
 			if (pod != null && pod != Pod.none && pod != c.getPod()) {
 				//pod has changed, no need to toggle
 				c.set(a);

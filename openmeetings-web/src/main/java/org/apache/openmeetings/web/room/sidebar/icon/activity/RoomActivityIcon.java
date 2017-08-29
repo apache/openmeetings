@@ -41,7 +41,7 @@ public abstract class RoomActivityIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid, pod.ordinal());
+		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid, pod.name());
 	}
 
 	protected boolean visible() {

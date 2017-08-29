@@ -16,18 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+const NONE = 'none';
 var WbArea = (function() {
-	var container, area, self = {}, choose, _inited = false;
+	var container, area, role = NONE, self = {}, choose, btns, _inited = false;
 
 	self.init = function() {
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
-		$('.pod-row .pod-container .pod a')
-			.button()
+		btns = $('.pod-row .pod-container .pod a.choose-btn');
+		btns.button()
 			.click(function() {
 				choose.dialog('open');
 				let sel = choose.find('.users').html('');
-				let users = $('.user.list .user');
+				let users = $('.user.list .user.entry');
 				for (let i = 0; i < users.length; ++i) {
 					let u = $(users[i]);
 					sel.append($('<option></option>').text(u.attr('title')).val(u.attr('id').substr(4)));
@@ -42,7 +43,7 @@ var WbArea = (function() {
 				{
 					text: choose.data('btn-ok')
 					, click: function() {
-						//okHandler();
+						toggleActivity('broadcastAV', choose.find('.users').val(), choose.find('.pod-name').val());
 						$(this).dialog('close');
 					}
 				}
@@ -56,6 +57,15 @@ var WbArea = (function() {
 		});
 		_inited = true;
 	};
+	self.setRole = function(_role) {
+		if (!_inited) return;
+		role = _role;
+		if (role !== NONE) {
+			btns.show();
+		} else {
+			btns.hide();
+		}
+	}
 	self.destroy = function() {
 	};
 	self.resize = function(posX, w, h) {

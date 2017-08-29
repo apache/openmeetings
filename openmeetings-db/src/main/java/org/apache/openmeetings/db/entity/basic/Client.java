@@ -340,12 +340,8 @@ public class Client implements IClient {
 		return pod;
 	}
 
-	public void setPod(Integer i) {
-		if (i != null && i.intValue() > 0) {
-			this.pod = i.intValue() == 1 ? Pod.left : Pod.right;
-		} else {
-			this.pod = Pod.none;
-		}
+	public void setPod(Pod pod) {
+		this.pod = pod;
 	}
 
 	public boolean isCamEnabled() {

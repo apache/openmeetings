@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.room.wb;
 
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -33,8 +33,8 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	public InterviewWbPanel update(IPartialPageRequestHandler handler) {
-		return this;
+	protected String getRole() {
+		return rp.getClient().hasRight(Right.moderator) ? Right.moderator.name() : ROLE_NONE;
 	}
 
 	@Override

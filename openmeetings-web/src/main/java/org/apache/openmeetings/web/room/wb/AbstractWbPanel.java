@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 public abstract class AbstractWbPanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	protected static final String ROLE_NONE = "none";
 	protected final RoomPanel rp;
 	protected boolean inited = false;
 	private final AbstractDefaultAjaxBehavior wbLoad = new AbstractDefaultAjaxBehavior() {
@@ -50,7 +51,14 @@ public abstract class AbstractWbPanel extends Panel {
 		add(wbLoad);
 	}
 
-	public abstract AbstractWbPanel update(IPartialPageRequestHandler handler);
+	public AbstractWbPanel update(IPartialPageRequestHandler handler) {
+		if (handler != null) {
+			handler.appendJavaScript(String.format("setRoomSizes();WbArea.setRole('%s');", getRole()));
+		}
+		return this;
+	}
+
+	protected abstract String getRole();
 
 	void internalWbLoad(StringBuilder sb) {
 	}

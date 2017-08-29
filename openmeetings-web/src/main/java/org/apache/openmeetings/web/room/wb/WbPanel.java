@@ -79,7 +79,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -424,17 +423,14 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	public WbPanel update(IPartialPageRequestHandler handler) {
-		String role = "none";
+	protected String getRole() {
+		String role = ROLE_NONE;
 		if (rp.getClient().hasRight(Right.presenter)) {
-			role = "presenter";
+			role = Right.presenter.name();
 		} else if (rp.getClient().hasRight(Right.whiteBoard)) {
-			role = "whiteBoard";
+			role = Right.whiteBoard.name();
 		}
-		if (handler != null) {
-			handler.appendJavaScript(String.format("setRoomSizes();WbArea.setRole('%s');", role));
-		}
-		return this;
+		return role;
 	}
 
 	private JSONObject addFileUrl(String ruid, JSONObject _file) {

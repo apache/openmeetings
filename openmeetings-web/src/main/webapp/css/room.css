@@ -403,19 +403,27 @@
 }
 .pod-row {
 	text-align: center;
-	padding-top: 30px;
+	padding-top: 40px;
 }
 .pod-row .pod-container, .pod-row .pod-container .pod {
 	display: inline-block;
 	width: 320px;
 }
-.pod-row .pod-container .pod {
-	min-height: 260px;
-	border: 1px solid #CCCCCC;
+.pod-row .pod-container {
+	padding-right:10px;
 }
-.pod-row .pod-container .pod a {
-	margin-top:30%;
-	margin-bottom:30%;
+.pod-row .pod-container .pod {
+	height: 290px;
+	border: 1px solid #CCCCCC;
+	position: relative;
+}
+.pod-row .pod-container .pod a.middle {
+	margin-top: 30%;
+	margin-bottom: 30%;
+}
+.width250 {
+	min-width: 250px;
+	max-width: 250px;
 }
 @media screen and (max-width: 1280px) {
 	.room.sidebar.left {
