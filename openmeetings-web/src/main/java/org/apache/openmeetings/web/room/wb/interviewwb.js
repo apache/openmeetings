@@ -34,7 +34,16 @@ var WbArea = (function() {
 					sel.append($('<option></option>').text(u.attr('title')).val(u.attr('id').substr(4)));
 				}
 				choose.find('.pod-name').val($(this).data('pod'));
+				return false;
 			});
+		$('.pod-row .pod-container a.rec-btn.start').button({
+			disabled: true
+			, icon: "ui-icon-play"
+		});
+		$('.pod-row .pod-container a.rec-btn.stop').button({
+			disabled: true
+			, icon: "ui-icon-stop"
+		});
 		choose = $('#interview-choose-video');
 		choose.dialog({
 			modal: true

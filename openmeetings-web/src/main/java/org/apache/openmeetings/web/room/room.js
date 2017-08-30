@@ -230,6 +230,9 @@ var Video = (function() {
 			var volume = v.parent().find('.dropdown-menu.video.volume');
 			let slider = v.parent().find('.slider');
 			let prevVolume = 0;
+			if (opts.interview) {
+				v.parent().find('.ui-dialog-titlebar-collapse').hide();
+			}
 			vol = v.parent().find('.ui-dialog-titlebar-volume')
 				.on('mouseenter', function(e) {
 					e.stopImmediatePropagation();
@@ -305,6 +308,7 @@ var Video = (function() {
 		v.dialog("widget").css(_pos);
 	}
 	function _update(_c) {
+		var opts = VideoManager.getOptions();
 		c.screenActivities = _c.screenActivities;
 		c.activities = _c.activities;
 		if (VideoUtil.hasAudio(c)) {
@@ -312,6 +316,10 @@ var Video = (function() {
 		} else {
 			vol.hide();
 			v.parent().find('.dropdown-menu.video.volume').hide();
+		}
+		if (opts.interview && c.pod != _c.pod) {
+			c.pod = _c.pod;
+			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
 		}
 		if (c.self && swf[0].update !== undefined) {
 			swf[0].update();
