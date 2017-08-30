@@ -86,7 +86,7 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 			map.put("instanceId", instanceId);
 			map.put("count", counterCalls);
 			calls.put(counterCalls, new CallObject(new Date()));
-			invoke("loadTestSyncMessage", new Object[] {"syncMessageToCurrentScopeResult", map, true }, this);
+			invoke("sendMessageToCurrentScope", new Object[] {"syncMessageToCurrentScopeResult", map, true, false }, this);
 
 		} else {
 			System.err.println("Call running " + counterCalls);

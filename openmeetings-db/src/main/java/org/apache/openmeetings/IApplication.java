@@ -29,6 +29,7 @@ import javax.servlet.ServletContext;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
@@ -45,11 +46,6 @@ public interface IApplication {
 	String getOmString(String key);
 	String getOmString(String key, long languageId);
 	String getOmString(String key, final Locale loc, String... params);
-	Client getOmClient(String uid);
-	Client getOmClientBySid(String sid);
-	Client getOmOnlineClient(String uid);
-	List<Client> getOmRoomClients(Long roomId);
-	List<Client> getOmClients(Long userId);
 	String getOmContactsLink();
 	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
@@ -58,11 +54,19 @@ public interface IApplication {
 	void setXFrameOptions(String xFrameOptions);
 	void setContentSecurityPolicy(String contentSecurityPolicy);
 
+	IClient update(IClient c);
+
+	// web client
+	Client getOmClient(String uid);
+	Client getOmClientBySid(String sid);
+	Client getOmOnlineClient(String uid);
+	List<Client> getOmRoomClients(Long roomId);
+	List<Client> getOmClients(Long userId);
+
 	// stream client
 	StreamClient updateClient(StreamClient rcl, boolean forceSize);
 	String getServerId();
 	Map<String, StreamClient> getStreamClients();
-	StreamClient update(StreamClient c);
 	Set<Long> getActiveRoomIds();
 
 	//JPA

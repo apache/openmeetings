@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.converter.BaseConverter;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
@@ -37,6 +39,7 @@ import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
@@ -95,7 +98,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public String recordMeetingStream(IConnection current, StreamClient client, String roomRecordingName, String comment, boolean isInterview) {
+	public void startRecording(IScope scope, IClient client, boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
@@ -106,24 +109,23 @@ public class RecordingService implements IPendingServiceCallback {
 			Recording recording = new Recording();
 
 			recording.setHash(UUID.randomUUID().toString());
-			recording.setName(roomRecordingName);
+			recording.setName(String.format("%s %s", isInterview ? "Interview" : "Recording", CalendarPatterns.getDateWithTimeByMiliSeconds(new Date())));
 			Long ownerId = client.getUserId();
-			if (ownerId != null && ownerId < 0) {
-				User c = userDao.get(-ownerId);
-				if (c != null) {
-					ownerId = c.getOwnerId();
-				}
+			User u = userDao.get(ownerId);
+			if (u != null && User.Type.contact == u.getType()) {
+				ownerId = u.getOwnerId();
 			}
 			recording.setInsertedBy(ownerId);
 			recording.setType(Type.Recording);
-			recording.setComment(comment);
 			recording.setInterview(isInterview);
 
 			recording.setRoomId(roomId);
 			recording.setRecordStart(now);
 
-			recording.setWidth(client.getWidth());
-			recording.setHeight(client.getHeight());
+			if (!isInterview) {
+				recording.setWidth(client.getWidth());
+				recording.setHeight(client.getHeight());
+			}
 
 			recording.setOwnerId(ownerId);
 			recording.setStatus(Recording.Status.RECORDING);
@@ -135,10 +137,17 @@ public class RecordingService implements IPendingServiceCallback {
 			// Update Client and set Flag
 			client.setRecordingStarted(true);
 			client.setRecordingId(recordingId);
+			if (!(client instanceof Client)) {
+				IApplication iapp = getApp();
+				Client c = iapp.getOmClientBySid(client.getSid());
+				c.setRecordingId(recordingId);
+				c.setRecordingStarted(true);
+				iapp.update(c);
+			}
 			sessionManager.update(client);
 
 			// get all stream and start recording them
-			for (IConnection conn : current.getScope().getClientConnections()) {
+			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
@@ -192,13 +201,77 @@ public class RecordingService implements IPendingServiceCallback {
 				}
 			}
 			// Send every user a notification that the recording did start
-			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getOwnerSid()));
-			return roomRecordingName;
-
+			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getSid()));
 		} catch (Exception err) {
-			log.error("[recordMeetingStream]", err);
+			log.error("[startRecording]", err);
 		}
-		return null;
+	}
+
+	public void stopRecording(IScope scope, IClient client) {
+		try {
+			log.debug("stopRecordAndSave {}, {}", client.getLogin(), client.getRemoteAddress());
+			IApplication iapp = getApp();
+			Client recClient = null;
+			for (Client c : iapp.getOmRoomClients(client.getRoomId())) {
+				if (c.getRecordingId() != null) {
+					recClient = c;
+					break;
+				}
+			}
+			if (recClient == null) {
+				log.error("Unable to find recordingId on recording stop");
+				return;
+			}
+			WebSocketHelper.sendRoom(new TextRoomMessage(recClient.getRoomId(), recClient.getUserId(), RoomMessage.Type.recordingStoped, recClient.getSid()));
+
+			// get all stream and stop recording them
+			for (IConnection conn : scope.getClientConnections()) {
+				if (conn != null) {
+					if (conn instanceof IServiceCapableConnection) {
+						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
+
+						if (rcl == null) {
+							continue;
+						}
+						log.debug("is this users still alive? stop it : {}", rcl);
+
+						if (Client.Type.sharing == rcl.getType()) {
+							if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
+								// Stop FLV Recording
+								stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
+
+								// Update Meta Data
+								metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
+							}
+						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
+							stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
+
+							// Update Meta Data
+							metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
+						}
+					}
+				}
+			}
+			// Store to database
+			Long recordingId = recClient.getRecordingId();
+
+			recordingDao.updateEndTime(recordingId, new Date());
+
+			// Reset values
+			recClient.setRecordingId(null);
+			recClient.setRecordingStarted(false);
+			sessionManager.update(recClient);
+			log.debug("recordingConverterTask {}", recordingConverterTask);
+
+			Recording recording = recordingDao.get(recordingId);
+			if (recording.isInterview()) {
+				interviewConverterTask.startConversionThread(recordingId);
+			} else {
+				recordingConverterTask.startConversionThread(recordingId);
+			}
+		} catch (Exception err) {
+			log.error("[-- stopRecording --]", err);
+		}
 	}
 
 	/**
@@ -250,8 +323,8 @@ public class RecordingService implements IPendingServiceCallback {
 	 */
 	public void stopRecordingShow(IScope scope, String broadcastId, Long metaId) {
 		try {
-			log.debug("** stopRecordingShow: " + scope);
-			log.debug("### Stop recording show for broadcastId: " + broadcastId + " || " + scope.getContextPath());
+			log.debug("** stopRecordingShow: {}", scope);
+			log.debug("### Stop recording show for broadcastId: {} || {}", broadcastId, scope.getContextPath());
 
 			IBroadcastStream stream = scopeApplicationAdapter.getBroadcastStream(scope, broadcastId);
 
@@ -282,10 +355,10 @@ public class RecordingService implements IPendingServiceCallback {
 			// this would normally happen in the Listener
 			Status s = metaData.getStreamStatus();
 			if (Status.NONE == s) {
-				log.debug("Stream was not started, no need to stop :: stream with id " + metaId);
+				log.debug("Stream was not started, no need to stop :: stream with id {}", metaId);
 			} else {
 				metaData.setStreamStatus(listenerAdapter == null && s == Status.STARTED ? Status.STOPPED : Status.STOPPING);
-				log.debug("Stopping the stream :: New status == " + metaData.getStreamStatus());
+				log.debug("Stopping the stream :: New status == {}", metaData.getStreamStatus());
 			}
 			metaDataDao.update(metaData);
 			if (listenerAdapter == null) {
@@ -293,7 +366,7 @@ public class RecordingService implements IPendingServiceCallback {
 				log.debug("Available Streams :: " + streamListeners.size());
 
 				for (Long entryKey : streamListeners.keySet()) {
-					log.debug("Stored recordingMetaDataId in Map: " + entryKey);
+					log.debug("Stored recordingMetaDataId in Map: {}", entryKey);
 				}
 				throw new IllegalStateException("Could not find Listener to stop! recordingMetaDataId " + metaId);
 			}
@@ -306,78 +379,12 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 	}
 
-	public void stopRecordAndSave(IScope scope, StreamClient client, Long storedRecordingId) {
-		try {
-			log.debug("stopRecordAndSave " + client.getUsername() + "," + client.getUserip());
-			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.recordingStoped, client.getOwnerSid()));
-
-			// get all stream and stop recording them
-			for (IConnection conn : scope.getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-
-						if (rcl == null) {
-							continue;
-						}
-						log.debug("is this users still alive? stop it :" + rcl);
-
-						if (Client.Type.sharing == rcl.getType()) {
-							if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
-								// Stop FLV Recording
-								stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
-
-								// Update Meta Data
-								metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
-							}
-						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
-							stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
-
-							// Update Meta Data
-							metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
-						}
-					}
-				}
-			}
-			// Store to database
-			Long recordingId = client.getRecordingId();
-
-			// In the Case of an Interview the stopping client does not mean
-			// that its actually the recording client
-			if (storedRecordingId != null) {
-				recordingId = storedRecordingId;
-			}
-
-			if (recordingId != null) {
-				recordingDao.updateEndTime(recordingId, new Date());
-
-				// Reset values
-				client.setRecordingId(null);
-				client.setRecordingStarted(false);
-
-				sessionManager.update(client);
-				log.debug("recordingConverterTask {}", recordingConverterTask);
-
-				Recording recording = recordingDao.get(recordingId);
-				if (!recording.isInterview()) {
-					recordingConverterTask.startConversionThread(recordingId);
-				} else {
-					interviewConverterTask.startConversionThread(recordingId);
-				}
-			}
-		} catch (Exception err) {
-			log.error("[-- stopRecordAndSave --]", err);
-		}
-	}
-
 	public void stopRecordingShowForClient(IScope scope, StreamClient rcl) {
 		try {
-			// this cannot be handled here, as to stop a stream and to leave a
-			// room is not
+			// this cannot be handled here, as to stop a stream and to leave a room is not
 			// the same type of event.
-			// StreamService.addRoomClientEnterEventFunc(rcl, roomrecordingName,
-			// rcl.getUserip(), false);
-			log.debug("### stopRecordingShowForClient: " + rcl);
+			// StreamService.addRoomClientEnterEventFunc(rcl, roomrecordingName, rcl.getUserip(), false);
+			log.debug("### stopRecordingShowForClient: {}", rcl);
 
 			if (Client.Type.sharing == rcl.getType()) {
 				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {

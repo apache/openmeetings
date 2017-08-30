@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.session;
 
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
 import java.util.Collection;
 import java.util.Date;
@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.Server;
 import org.slf4j.Logger;
@@ -50,8 +50,7 @@ public class SessionManager implements ISessionManager {
 	protected static final Logger log = Red5LoggerFactory.getLogger(SessionManager.class, webAppRootKey);
 
 	private static Map<String, StreamClient> getClients() {
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		return iapp.getStreamClients();
+		return getApp().getStreamClients();
 	}
 
 	@Override
@@ -59,11 +58,12 @@ public class SessionManager implements ISessionManager {
 		if (c == null) {
 			return null;
 		}
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		IApplication iapp = getApp();
 		c.setServerId(iapp.getServerId());
 		c.setConnectedSince(new Date());
 		c.setRoomEnter(new Date());
-		return iapp.update(c);
+		iapp.update(c);
+		return c;
 	}
 
 	@Override
@@ -80,9 +80,8 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
-	public StreamClient update(StreamClient rcm) {
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		return iapp.update(rcm);
+	public void update(IClient rcm) {
+		getApp().update(rcm);
 	}
 
 	@Override
@@ -98,20 +97,6 @@ public class SessionManager implements ISessionManager {
 	public List<StreamClient> listByRoom(Long roomId) {
 		return list().stream()
 				.filter(c -> roomId.equals(c.getRoomId()) && Client.Type.sharing != c.getType())
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public Collection<StreamClient> listByRoomAll(Long roomId) {
-		return list().stream()
-				.filter(c -> roomId.equals(c.getRoomId()))
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<StreamClient> listModeratorByRoom(Long roomId) {
-		return list().stream()
-				.filter(c -> roomId.equals(c.getRoomId()) && c.isMod())
 				.collect(Collectors.toList());
 	}
 
@@ -137,8 +122,7 @@ public class SessionManager implements ISessionManager {
 
 	@Override
 	public Set<Long> getActiveRoomIds() {
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		return iapp.getActiveRoomIds();
+		return getApp().getActiveRoomIds();
 	}
 
 	@Override

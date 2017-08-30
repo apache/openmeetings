@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 
 /**
@@ -55,7 +56,7 @@ public interface ISessionManager {
 	 * @param rcm
 	 * @return updated client
 	 */
-	StreamClient update(StreamClient rcm);
+	void update(IClient rcm);
 
 	/**
 	 * Remove a client from the session store
@@ -74,16 +75,6 @@ public interface ISessionManager {
 	 * @return
 	 */
 	List<StreamClient> listByRoom(Long roomId);
-
-	Collection<StreamClient> listByRoomAll(Long roomId);
-
-	/**
-	 * get the current Moderator in this room
-	 *
-	 * @param roomId
-	 * @return
-	 */
-	List<StreamClient> listModeratorByRoom(Long roomId);
 
 	/**
 	 * returns number of current users recording

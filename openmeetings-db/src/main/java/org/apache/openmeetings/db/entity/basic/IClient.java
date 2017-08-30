@@ -36,5 +36,15 @@ public interface IClient extends IDataProviderEntity {
 		, sharing
 	}
 	String getUid();
+	String getSid();
+	Long getUserId();
+	String getLogin();
+	String getRemoteAddress();
+	Long getRoomId();
+	int getWidth();
+	int getHeight();
+	void setRecordingStarted(boolean recordingStarted);
+	Long getRecordingId();
+	void setRecordingId(Long recordingId);
 	String getServerId();
 }

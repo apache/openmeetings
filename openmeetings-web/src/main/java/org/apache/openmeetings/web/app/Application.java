@@ -60,6 +60,7 @@ import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
+import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -367,8 +368,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public StreamClient update(StreamClient c) {
-		hazelcast.getMap(STREAM_CLIENT_KEY).put(c.getUid(), c);
+	public IClient update(IClient c) {
+		if (c instanceof StreamClient) {
+			hazelcast.getMap(STREAM_CLIENT_KEY).put(c.getUid(), c);
+		} else {
+			update((Client)c);
+		}
 		return c;
 	}
 
@@ -423,10 +428,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (rcl == null) {
 			return null;
 		}
-		Client client = getClientBySid(rcl.getOwnerSid());
+		Client client = getClientBySid(rcl.getSid());
 		if (client == null) {
 			if (Client.Type.mobile == rcl.getType()) {
-				Sessiondata sd = getBean(SessiondataDao.class).check(rcl.getOwnerSid());
+				Sessiondata sd = getBean(SessiondataDao.class).check(rcl.getSid());
 				UserDao udao = getBean(UserDao.class);
 				User u = udao.get(sd.getUserId());
 				rcl = getBean(MobileService.class).create(rcl, u);
@@ -443,7 +448,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 				//FIXME TODO rights
 			} else if (client == null && Client.Type.sip == rcl.getType()) {
-				rcl.setUsername(SIP_USER_NAME);
+				rcl.setLogin(SIP_USER_NAME);
 				rcl.setUserId(SIP_USER_ID);
 				//SipTransport enters the room
 				User u = new User();
@@ -469,7 +474,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		User u = client.getUser();
 		rcl.setUserId(u.getId());
-		rcl.setUsername(u.getLogin());
+		rcl.setLogin(u.getLogin());
 		rcl.setFirstname(u.getFirstname());
 		rcl.setLastname(u.getLastname());
 		rcl.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
@@ -635,6 +640,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static List<Client> getRoomClients(Long roomId) {
 		return getRoomClients(roomId, null);
 	}
+
 	public static List<Client> getRoomClients(Long roomId, Predicate<Client> filter) {
 		List<Client> clients = new ArrayList<>();
 		if (roomId != null) {

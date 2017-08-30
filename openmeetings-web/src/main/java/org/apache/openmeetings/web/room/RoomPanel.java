@@ -119,6 +119,7 @@ public class RoomPanel extends BasePanel {
 		, exclusive
 	}
 	private final Room r;
+	private final boolean isInterview;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
@@ -133,7 +134,7 @@ public class RoomPanel extends BasePanel {
 					, cp.getRemoteAddress()
 					, "" + r.getId());
 			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getSid());
-			options.put("interview", Room.Type.interview == r.getType());
+			options.put("interview", isInterview);
 			options.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
@@ -203,19 +204,24 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
-		this.wb = Room.Type.interview == r.getType()
-				? new InterviewWbPanel("whiteboard", this)
-				: new WbPanel("whiteboard", this);
+		this.isInterview = Room.Type.interview == r.getType();
+		this.wb = isInterview ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
 	}
 
 	private void initVideos(AjaxRequestTarget target) {
 		StringBuilder sb = new StringBuilder();
+		boolean hasStreams = false;
+		Client _c = getClient();
 		for (Client c: getRoomClients(getRoom().getId()) ) {
-			boolean self = getClient().getUid().equals(c.getUid());
+			boolean self = _c.getUid().equals(c.getUid());
 			for (Client.Stream s : c.getStreams()) {
 				JSONObject jo = videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getUid());
 				sb.append(String.format("VideoManager.play(%s);", jo));
+				hasStreams = true;
 			}
+		}
+		if (isInterview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+			sb.append("WbArea.setRecStartEnabled(true);");
 		}
 		if (!Strings.isEmpty(sb)) {
 			target.appendJavaScript(sb);
@@ -232,7 +238,7 @@ public class RoomPanel extends BasePanel {
 
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
-		if (Room.Type.interview == r.getType()) {
+		if (isInterview) {
 			room.add(new WebMarkupContainer("wb-area").add(wb));
 		} else {
 			Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
@@ -487,6 +493,9 @@ public class RoomPanel extends BasePanel {
 						if (_c.getSid().equals(c.getSid())) {
 							update(c.addStream(uid, streamId, broadcastId, type));
 						}
+						if (isInterview && recordingUser == null && _c.hasRight(Right.moderator)) {
+							handler.appendJavaScript("WbArea.setRecStartEnabled(true);");
+						}
 					}
 						break;
 					case closeStream:
@@ -497,10 +506,21 @@ public class RoomPanel extends BasePanel {
 							log.error("Not existing user in closeStream {} !!!!", obj);
 							return;
 						}
-						if (getClient().getUid().equals(c.getUid())) {
+						Client _c = getClient();
+						if (_c.getUid().equals(c.getUid())) {
 							update(c.removeStream(obj.optString("broadcastId")));
 						}
 						handler.appendJavaScript(String.format("VideoManager.close('%s');", obj.getString("uid")));
+						if (isInterview && recordingUser == null && _c.hasRight(Right.moderator)) {
+							boolean hasStreams = false;
+							for (Client cl : getRoomClients(r.getId())) {
+								if (!cl.getStreams().isEmpty()) {
+									hasStreams = true;
+									break;
+								}
+							}
+							handler.appendJavaScript(String.format("WbArea.setRecStartEnabled(%s);", hasStreams));
+						}
 					}
 						break;
 					case roomEnter:
@@ -660,7 +680,7 @@ public class RoomPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "jquery.dialogextend.js"))));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
-		if (Room.Type.interview == r.getType()) {
+		if (isInterview) {
 			response.render(JavaScriptHeaderItem.forReference(INTERVIEWWB_JS_REFERENCE));
 		} else {
 			response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
@@ -769,7 +789,7 @@ public class RoomPanel extends BasePanel {
 
 	public boolean screenShareAllowed() {
 		Room r = getRoom();
-		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.ScreenSharing)
+		return !isInterview && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
 				&& sharingUser == null;
 	}

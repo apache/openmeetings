@@ -89,7 +89,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		protected void populateItem(final ListItem<StreamClient> item) {
 			StreamClient client = item.getModelObject();
 			item.add(new Label("clientId", "" + client.getId()))
-				.add(new Label("clientLogin", "" + client.getUsername()))
+				.add(new Label("clientLogin", "" + client.getLogin()))
 				.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
 

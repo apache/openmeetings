@@ -21,12 +21,9 @@ package org.apache.openmeetings.web.room.wb;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.PARAM_OBJ;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.AttributeModifier.append;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -74,19 +71,16 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -102,233 +96,11 @@ public class WbPanel extends AbstractWbPanel {
 	private static final int DEFAULT_WIDTH = 640;
 	private static final int DEFAULT_HEIGHT = 480;
 	private static final int UNDO_SIZE = 20;
-	public static final String FUNC_ACTION = "wbAction";
-	public static final String PARAM_ACTION = "action";
 	public final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
 	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
 	private long wb2save = -1;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();
-	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-			attributes.setMethod(Method.POST);
-		}
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			if (!inited) {
-				return;
-			}
-			try {
-				WbAction a = WbAction.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
-				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
-				JSONObject obj = sv.isEmpty() ? new JSONObject() : new JSONObject(sv.toString());
-				if (WbAction.createObj == a || WbAction.modifyObj == a) {
-					JSONObject o = obj.optJSONObject("obj");
-					if (o != null && "pointer".equals(o.getString("type"))) {
-						sendWbOthers(a, obj);
-						return;
-					}
-				}
-
-				Client c = rp.getClient();
-				if (WbAction.downloadPdf == a) {
-					boolean moder = c.hasRight(Room.Right.moderator);
-					Room r = rp.getRoom();
-					if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
-						try (PDDocument doc = new PDDocument()) {
-							JSONArray arr = obj.getJSONArray("slides");
-							for (int i = 0; i < arr.length(); ++i) {
-								String base64Image = arr.getString(i).split(",")[1];
-								byte[] bb = Base64.decodeBase64(base64Image);
-								BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
-								float width = img.getWidth();
-								float height = img.getHeight();
-								PDPage page = new PDPage(new PDRectangle(width, height));
-								PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
-								try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
-									contentStream.drawImage(pdImageXObject, 0, 0, width, height);
-								}
-								doc.addPage(page);
-							}
-							ByteArrayOutputStream baos = new ByteArrayOutputStream();
-							doc.save(baos);
-							rp.startDownload(target, baos.toByteArray());
-						}
-					}
-					return;
-				}
-				//presenter-right
-				if (c.hasRight(Right.presenter)) {
-					switch (a) {
-						case createWb:
-						{
-							Whiteboard wb = WhiteboardCache.add(roomId, c.getUser().getLanguageId());
-							sendWbAll(WbAction.createWb, getAddWbJson(wb));
-						}
-							break;
-						case removeWb:
-						{
-							long _id = obj.optLong("wbId", -1);
-							Long id = _id < 0 ? null : _id;
-							WhiteboardCache.remove(roomId, id);
-							sendWbAll(WbAction.removeWb, obj);
-						}
-							break;
-						case activateWb:
-						{
-							long _id = obj.optLong("wbId", -1);
-							if (_id > -1) {
-								WhiteboardCache.activate(roomId, _id);
-								sendWbAll(WbAction.activateWb, obj);
-							}
-						}
-							break;
-						case setSlide:
-						{
-							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-							wb.setSlide(obj.optInt("slide", 0));
-							WhiteboardCache.update(roomId, wb);
-							sendWbOthers(WbAction.setSlide, obj);
-						}
-							break;
-						case clearAll:
-						{
-							clearAll(roomId, obj.getLong("wbId"));
-						}
-							break;
-						case setSize:
-						{
-							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-							wb.setZoom(obj.getDouble("zoom"));
-							wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
-							WhiteboardCache.update(roomId, wb);
-							sendWbOthers(WbAction.setSize, getAddWbJson(wb));
-							//TODO scroll????
-						}
-							break;
-						default:
-							break;
-					}
-				}
-				//wb-right
-				if (c.hasRight(Right.presenter) || c.hasRight(Right.whiteBoard)) {
-					switch (a) {
-						case createObj:
-						{
-							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-							JSONObject o = obj.getJSONObject("obj");
-							wb.put(o.getString("uid"), o);
-							WhiteboardCache.update(roomId, wb);
-							addUndo(wb.getId(), new UndoObject(UndoObject.Type.add, o));
-							sendWbOthers(WbAction.createObj, obj);
-						}
-							break;
-						case modifyObj:
-						{
-							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-							JSONArray arr = obj.getJSONArray("obj");
-							JSONArray undo = new JSONArray();
-							for (int i = 0; i < arr.length(); ++i) {
-								JSONObject _o = arr.getJSONObject(i);
-								String uid = _o.getString("uid");
-								undo.put(wb.get(uid));
-								wb.put(uid, _o);
-							}
-							if (arr.length() != 0) {
-								WhiteboardCache.update(roomId, wb);
-								addUndo(wb.getId(), new UndoObject(UndoObject.Type.modify, undo));
-							}
-							sendWbOthers(WbAction.modifyObj, obj);
-						}
-							break;
-						case deleteObj:
-						{
-							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-							JSONArray arr = obj.getJSONArray("obj");
-							JSONArray undo = new JSONArray();
-							for (int i = 0; i < arr.length(); ++i) {
-								JSONObject _o = arr.getJSONObject(i);
-								JSONObject u = wb.remove(_o.getString("uid"));
-								if (u != null) {
-									undo.put(u);
-								}
-							}
-							if (undo.length() != 0) {
-								WhiteboardCache.update(roomId, wb);
-								addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, undo));
-							}
-							sendWbAll(WbAction.deleteObj, obj);
-						}
-							break;
-						case clearSlide:
-						{
-							Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-							JSONArray arr = wb.clearSlide(obj.getInt("slide"));
-							if (arr.length() != 0) {
-								WhiteboardCache.update(roomId, wb);
-								addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
-							}
-							sendWbAll(WbAction.clearSlide, obj);
-						}
-							break;
-						case save:
-							wb2save = obj.getLong("wbId");
-							fileName.open(target);
-							break;
-						case undo:
-						{
-							Long wbId = obj.getLong("wbId");
-							UndoObject uo = getUndo(wbId);
-							if (uo != null) {
-								Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
-								switch (uo.getType()) {
-									case add:
-									{
-										JSONObject o = new JSONObject(uo.getObject());
-										wb.remove(o.getString("uid"));
-										WhiteboardCache.update(roomId, wb);
-										sendWbAll(WbAction.deleteObj, obj.put("obj", new JSONArray().put(o)));
-									}
-										break;
-									case remove:
-									{
-										JSONArray arr = new JSONArray(uo.getObject());
-										for (int i  = 0; i < arr.length(); ++i) {
-											JSONObject o = arr.getJSONObject(i);
-											wb.put(o.getString("uid"), o);
-										}
-										WhiteboardCache.update(roomId, wb);
-										sendWbAll(WbAction.createObj, obj.put("obj", new JSONArray(uo.getObject())));
-									}
-										break;
-									case modify:
-									{
-										JSONArray arr = new JSONArray(uo.getObject());
-										for (int i  = 0; i < arr.length(); ++i) {
-											JSONObject o = arr.getJSONObject(i);
-											wb.put(o.getString("uid"), o);
-										}
-										WhiteboardCache.update(roomId, wb);
-										sendWbAll(WbAction.modifyObj, obj.put("obj", arr));
-									}
-										break;
-								}
-							}
-						}
-							break;
-						default:
-							break;
-					}
-				}
-			} catch (Exception e) {
-				log.error("Unexpected error while processing wbAction", e);
-			}
-		}
-	};
 	private final NameDialog fileName = new NameDialog("filename") {
 		private static final long serialVersionUID = 1L;
 
@@ -382,7 +154,6 @@ public class WbPanel extends AbstractWbPanel {
 							, new AttributeAppender("data-image", item.getModelObject()).setSeparator(""));
 				}
 			}, fileName);
-			add(wbAction);
 		}
 	}
 
@@ -390,7 +161,6 @@ public class WbPanel extends AbstractWbPanel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
-		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
 	}
 
 	@Override
@@ -410,6 +180,213 @@ public class WbPanel extends AbstractWbPanel {
 		Whiteboard wb = wbs.get(wbs.getActiveWb());
 		if (wb != null) {
 			sb.append("WbArea.setSlide(").append(wbj.put("slide", wb.getSlide())).append(");");
+		}
+	}
+
+	@Override
+	protected void updateWbActionAttributes(AjaxRequestAttributes attributes) {
+		attributes.setMethod(Method.POST);
+	}
+
+	@Override
+	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
+		if (WbAction.createObj == a || WbAction.modifyObj == a) {
+			JSONObject o = obj.optJSONObject("obj");
+			if (o != null && "pointer".equals(o.getString("type"))) {
+				sendWbOthers(a, obj);
+				return;
+			}
+		}
+
+		Client c = rp.getClient();
+		if (WbAction.downloadPdf == a) {
+			boolean moder = c.hasRight(Room.Right.moderator);
+			Room r = rp.getRoom();
+			if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
+				try (PDDocument doc = new PDDocument()) {
+					JSONArray arr = obj.getJSONArray("slides");
+					for (int i = 0; i < arr.length(); ++i) {
+						String base64Image = arr.getString(i).split(",")[1];
+						byte[] bb = Base64.decodeBase64(base64Image);
+						BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
+						float width = img.getWidth();
+						float height = img.getHeight();
+						PDPage page = new PDPage(new PDRectangle(width, height));
+						PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
+						try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
+							contentStream.drawImage(pdImageXObject, 0, 0, width, height);
+						}
+						doc.addPage(page);
+					}
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					doc.save(baos);
+					rp.startDownload(target, baos.toByteArray());
+				}
+			}
+			return;
+		}
+		//presenter-right
+		if (c.hasRight(Right.presenter)) {
+			switch (a) {
+				case createWb:
+				{
+					Whiteboard wb = WhiteboardCache.add(roomId, c.getUser().getLanguageId());
+					sendWbAll(WbAction.createWb, getAddWbJson(wb));
+				}
+					break;
+				case removeWb:
+				{
+					long _id = obj.optLong("wbId", -1);
+					Long id = _id < 0 ? null : _id;
+					WhiteboardCache.remove(roomId, id);
+					sendWbAll(WbAction.removeWb, obj);
+				}
+					break;
+				case activateWb:
+				{
+					long _id = obj.optLong("wbId", -1);
+					if (_id > -1) {
+						WhiteboardCache.activate(roomId, _id);
+						sendWbAll(WbAction.activateWb, obj);
+					}
+				}
+					break;
+				case setSlide:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					wb.setSlide(obj.optInt("slide", 0));
+					WhiteboardCache.update(roomId, wb);
+					sendWbOthers(WbAction.setSlide, obj);
+				}
+					break;
+				case clearAll:
+				{
+					clearAll(roomId, obj.getLong("wbId"));
+				}
+					break;
+				case setSize:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					wb.setZoom(obj.getDouble("zoom"));
+					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
+					WhiteboardCache.update(roomId, wb);
+					sendWbOthers(WbAction.setSize, getAddWbJson(wb));
+					//TODO scroll????
+				}
+					break;
+				default:
+					break;
+			}
+		}
+		//wb-right
+		if (c.hasRight(Right.presenter) || c.hasRight(Right.whiteBoard)) {
+			switch (a) {
+				case createObj:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					JSONObject o = obj.getJSONObject("obj");
+					wb.put(o.getString("uid"), o);
+					WhiteboardCache.update(roomId, wb);
+					addUndo(wb.getId(), new UndoObject(UndoObject.Type.add, o));
+					sendWbOthers(WbAction.createObj, obj);
+				}
+					break;
+				case modifyObj:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					JSONArray arr = obj.getJSONArray("obj");
+					JSONArray undo = new JSONArray();
+					for (int i = 0; i < arr.length(); ++i) {
+						JSONObject _o = arr.getJSONObject(i);
+						String uid = _o.getString("uid");
+						undo.put(wb.get(uid));
+						wb.put(uid, _o);
+					}
+					if (arr.length() != 0) {
+						WhiteboardCache.update(roomId, wb);
+						addUndo(wb.getId(), new UndoObject(UndoObject.Type.modify, undo));
+					}
+					sendWbOthers(WbAction.modifyObj, obj);
+				}
+					break;
+				case deleteObj:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					JSONArray arr = obj.getJSONArray("obj");
+					JSONArray undo = new JSONArray();
+					for (int i = 0; i < arr.length(); ++i) {
+						JSONObject _o = arr.getJSONObject(i);
+						JSONObject u = wb.remove(_o.getString("uid"));
+						if (u != null) {
+							undo.put(u);
+						}
+					}
+					if (undo.length() != 0) {
+						WhiteboardCache.update(roomId, wb);
+						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, undo));
+					}
+					sendWbAll(WbAction.deleteObj, obj);
+				}
+					break;
+				case clearSlide:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					JSONArray arr = wb.clearSlide(obj.getInt("slide"));
+					if (arr.length() != 0) {
+						WhiteboardCache.update(roomId, wb);
+						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
+					}
+					sendWbAll(WbAction.clearSlide, obj);
+				}
+					break;
+				case save:
+					wb2save = obj.getLong("wbId");
+					fileName.open(target);
+					break;
+				case undo:
+				{
+					Long wbId = obj.getLong("wbId");
+					UndoObject uo = getUndo(wbId);
+					if (uo != null) {
+						Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
+						switch (uo.getType()) {
+							case add:
+							{
+								JSONObject o = new JSONObject(uo.getObject());
+								wb.remove(o.getString("uid"));
+								WhiteboardCache.update(roomId, wb);
+								sendWbAll(WbAction.deleteObj, obj.put("obj", new JSONArray().put(o)));
+							}
+								break;
+							case remove:
+							{
+								JSONArray arr = new JSONArray(uo.getObject());
+								for (int i  = 0; i < arr.length(); ++i) {
+									JSONObject o = arr.getJSONObject(i);
+									wb.put(o.getString("uid"), o);
+								}
+								WhiteboardCache.update(roomId, wb);
+								sendWbAll(WbAction.createObj, obj.put("obj", new JSONArray(uo.getObject())));
+							}
+								break;
+							case modify:
+							{
+								JSONArray arr = new JSONArray(uo.getObject());
+								for (int i  = 0; i < arr.length(); ++i) {
+									JSONObject o = arr.getJSONObject(i);
+									wb.put(o.getString("uid"), o);
+								}
+								WhiteboardCache.update(roomId, wb);
+								sendWbAll(WbAction.modifyObj, obj.put("obj", arr));
+							}
+								break;
+						}
+					}
+				}
+					break;
+				default:
+					break;
+			}
 		}
 	}
 

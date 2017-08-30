@@ -104,7 +104,7 @@ public class ConnectionsPanel extends AdminPanel {
 				if (_c instanceof StreamClient) {
 					StreamClient c = (StreamClient)_c;
 					item.add(new Label("type", "flash"));
-					item.add(new Label("login", c.getUsername()));
+					item.add(new Label("login", c.getLogin()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope"));
 					confirm.setEnabled(Client.Type.sharing != c.getType());

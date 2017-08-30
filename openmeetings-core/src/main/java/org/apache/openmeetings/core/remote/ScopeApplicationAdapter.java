@@ -39,7 +39,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +61,6 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -125,6 +123,10 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	@Autowired
 	private RecordingDao recordingDao;
 
+	public static IApplication getApp() {
+		return (IApplication)Application.get(wicketApplicationName);
+	}
+
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
 		if (_log.isTraceEnabled()) {
@@ -167,7 +169,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			InitializationContainer.initComplete = true;
 			// Init properties
-			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+			IApplication iapp = getApp();
 			iapp.setXFrameOptions(cfgDao.getConfValue(CONFIG_HEADER_XFRAME, String.class, HEADER_XFRAME_SAMEORIGIN));
 			iapp.setContentSecurityPolicy(cfgDao.getConfValue(CONFIG_HEADER_CSP, String.class, HEADER_CSP_SELF));
 			iapp.updateJpaAddresses(cfgDao);
@@ -232,15 +234,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcm.setType(Client.Type.room);
 		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
-		rcm.setOwnerSid(ownerSid);
-		if (sipDao.getUid() != null && sipDao.getUid().equals(rcm.getOwnerSid())) {
+		rcm.setSid(ownerSid);
+		if (sipDao.getUid() != null && sipDao.getUid().equals(rcm.getSid())) {
 			rcm.setType(Client.Type.sip);
 		}
 		rcm.setUserport(conn.getRemotePort());
-		rcm.setUserip(conn.getRemoteAddress());
+		rcm.setRemoteAddress(conn.getRemoteAddress());
 		rcm.setSwfurl(swfURL);
 		rcm.setTcUrl(tcUrl);
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+		IApplication iapp = getApp();
 		Number width = (Number)connParams.get(WIDTH_PARAM);
 		Number height = (Number)connParams.get(HEIGHT_PARAM);
 		if (width != null && height != null) {
@@ -260,7 +262,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 		// Log the User
 		conferenceLogDao.add(ConferenceLog.Type.clientConnect,
-				rcm.getUserId(), streamId, null, rcm.getUserip(),
+				rcm.getUserId(), streamId, null, rcm.getRemoteAddress(),
 				rcm.getScope());
 		return true;
 	}
@@ -289,7 +291,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 					returnMap.put("result", "stopRecordingOnly");
 
-					recordingService.stopRecordAndSave(current.getScope(), client, null);
+					recordingService.stopRecording(current.getScope(), client);
 				}
 				if (Boolean.parseBoolean("" + map.get("stopPublishing")) && client.isPublishStarted()) {
 					changed = true;
@@ -442,7 +444,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				sendStreamClosed(client);
 			}
 
-			_log.debug("removing Username {} {},  streamid: {}", client.getUsername()
+			_log.debug("removing Username {} {},  streamid: {}", client.getLogin()
 					, client.getConnectedSince(), client.getId());
 
 			// stop and save any recordings
@@ -450,9 +452,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				_log.debug("*** roomLeave Current Client is Recording - stop that");
 				if (client.getInterviewPodId() != null) {
 					//interview, TODO need better check
-					_stopInterviewRecording(client, scope);
+					stopInterviewRecording(client);
 				} else {
-					recordingService.stopRecordAndSave(scope, client, null);
+					recordingService.stopRecording(scope, client);
 				}
 			}
 			recordingService.stopRecordingShowForClient(scope, client);
@@ -462,8 +464,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.debug("currentScope " + scope);
 
 			if (Client.Type.mobile == client.getType() || Client.Type.sip == client.getType()) {
-				IApplication app = (IApplication)Application.get(wicketApplicationName);
-				app.exit(client.getUid());
+				getApp().exit(client.getUid());
 			}
 			sessionManager.remove(client.getUid());
 		} catch (Exception err) {
@@ -500,8 +501,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 			}
 			if (Client.Type.sip == c.getType()) {
-				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-				Client cl = iapp.getOmClientBySid(c.getOwnerSid());
+				Client cl = getApp().getOmClientBySid(c.getSid());
 				String newNumber = getSipTransportLastname(c.getRoomId());
 				cl.getUser().setLastname(newNumber);
 				c.setLastname(newNumber);
@@ -509,8 +509,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			}
 			sessionManager.update(c);
 			if (Client.Type.sharing == c.getType() && c.isRecordingStarted()) {
-				String recordingName = "Recording " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
-				recordingService.recordMeetingStream(current, c, recordingName, "", false);
+				recordingService.startRecording(current.getScope(), c, false);
 			}
 
 			_log.debug("newStream SEND: {}", c);
@@ -551,7 +550,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 			}.start();
 			JSONObject obj = new JSONObject()
-					.put("ownerSid", c.getOwnerSid())
+					.put("ownerSid", c.getSid())
 					.put("uid", c.getUid())
 					.put("type", c.getType())
 					.put("streamId", current.getClient().getId())
@@ -615,7 +614,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	private static void sendSharingStoped(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
-				.put("ownerSid", rcl.getOwnerSid())
+				.put("ownerSid", rcl.getSid())
 				.put("uid", rcl.getUid());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.sharingStoped, obj.toString()));
 	}
@@ -623,7 +622,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static void sendStreamClosed(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
 				.put("uid", rcl.getUid())
-				.put("ownerSid", rcl.getOwnerSid())
+				.put("ownerSid", rcl.getSid())
 				.put("broadcastId", rcl.getBroadCastId());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, obj.toString()));
 	}
@@ -715,20 +714,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId) || userDao.get(rcl.getUserId()) == null;
 			}
 		}.start();
-	}
-
-	/**
-	 * Only temporary for load test, with return argument for the client to have a result
-	 *
-	 * @param remoteMethodName
-	 * @param newMessage
-	 * @param sendSelf
-	 * @return true
-	 */
-	@Deprecated
-	public boolean loadTestSyncMessage(String remoteMethodName, Object newMessage, boolean sendSelf) {
-		sendMessageToCurrentScope(remoteMethodName, newMessage, sendSelf, false);
-		return true;
 	}
 
 	/**
@@ -927,83 +912,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return 1;
 	}
 
-	/**
-	 * @deprecated this method should be reworked to use a single SQL query in
-	 *             the cache to get any client in the current room that is
-	 *             recording instead of iterating through connections!
-	 * @return true in case there is recording session, false otherwise, null if any exception happend
-	 */
-	@Deprecated
-	public boolean getInterviewRecordingStatus() {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-
-					if (rcl != null && rcl.isRecordingStarted()) {
-						return true;
-					}
-				}
-			}
-		} catch (Exception err) {
-			_log.error("[getInterviewRecordingStatus]", err);
-		}
-		return false;
-	}
-
-	/**
-	 * @deprecated @see {@link ScopeApplicationAdapter#getInterviewRecordingStatus()}
-	 * @return - false if there were existing recording, true if recording was started successfully, null if any exception happens
-	 */
-	@Deprecated
-	public boolean startInterviewRecording() {
-		try {
-			_log.debug("-----------  startInterviewRecording");
-			IConnection current = Red5.getConnectionLocal();
-
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-
-					if (rcl != null && rcl.isRecordingStarted()) {
-						return false;
-					}
-				}
-			}
-			StreamClient rcl = sessionManager.get(IClientUtil.getId(current.getClient()));
-
-			// Also set the Recording Flag to Record all Participants that enter later
-			rcl.setRecordingStarted(true);
-			sessionManager.update(rcl);
-
-			Map<String, String> interviewStatus = new HashMap<>();
-			interviewStatus.put("action", "start");
-
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn != null) {
-					IClient client = conn.getClient();
-					if (IClientUtil.isSharing(client)) {
-						// screen sharing clients do not receive events
-						continue;
-					}
-
-					((IServiceCapableConnection) conn).invoke("interviewStatus", new Object[] { interviewStatus }, this);
-					_log.debug("-- startInterviewRecording " + interviewStatus);
-				}
-			}
-			String recordingName = "Interview " + CalendarPatterns.getDateWithTimeByMiliSeconds(new Date());
-
-			recordingService.recordMeetingStream(current, rcl, recordingName, "", true);
-
-			return true;
-		} catch (Exception err) {
-			_log.debug("[startInterviewRecording]", err);
-		}
-		return false;
-	}
-
 	@SuppressWarnings({ "rawtypes" })
 	public boolean sendRemoteCursorEvent(final String streamid, Map messageObj) {
 		new MessageSender("sendRemoteCursorEvent", messageObj, this) {
@@ -1018,14 +926,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	/**
-	 * Stop the recording of the streams and send event to connected users of scope
+	 * Starts recording in interview room
 	 *
-	 * @return true if interview was found
+	 * @return - false if there were existing recording, true if recording was started successfully, null if any exception happens
 	 */
-	public boolean stopInterviewRecording() {
-		IConnection current = Red5.getConnectionLocal();
-		StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
-		return _stopInterviewRecording(currentClient, current.getScope());
+	public void startInterviewRecording(Client c) {
+		_log.debug("-----------  startInterviewRecording");
+
+		if (c == null || sessionManager.getRecordingCount(c.getRoom().getId()) > 0) {
+			return;
+		}
+
+		recordingService.startRecording(getRoomScope("" + c.getRoom().getId()), c, true);
 	}
 
 	/**
@@ -1033,46 +945,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 *
 	 * @return true if interview was found
 	 */
-	private boolean _stopInterviewRecording(StreamClient currentClient, IScope currentScope) {
-		try {
-			_log.debug("-----------  stopInterviewRecording");
-			Long clientRecordingId = currentClient.getRecordingId();
-
-			for (IConnection conn : currentScope.getClientConnections()) {
-				Long recordingId = null;
-				if (conn != null) {
-					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-					if (rcl != null && rcl.isRecordingStarted()) {
-						rcl.setRecordingStarted(false);
-						recordingId = rcl.getRecordingId();
-						rcl.setRecordingId(null);
-
-						// Reset the Recording Flag to Record all
-						// Participants that enter later
-						sessionManager.update(rcl);
-					}
-				}
-				if (recordingId != null) {
-					clientRecordingId = recordingId;
-				}
-			}
-			if (clientRecordingId == null) {
-				_log.debug("stopInterviewRecording:: unable to find recording client");
-				return false;
-			}
-
-			recordingService.stopRecordAndSave(scope, currentClient, clientRecordingId);
-
-			Map<String, String> interviewStatus = new HashMap<>();
-			interviewStatus.put("action", "stop");
-
-			sendMessageToCurrentScope("interviewStatus", interviewStatus, true);
-			return true;
-
-		} catch (Exception err) {
-			_log.debug("[stopInterviewRecording]", err);
-		}
-		return false;
+	public void stopInterviewRecording(org.apache.openmeetings.db.entity.basic.IClient c) {
+		_log.debug("-----------  stopInterviewRecording");
+		recordingService.stopRecording(getRoomScope("" + c.getRoomId()), c);
 	}
 
 	public IScope getRoomScope(String room) {
@@ -1090,7 +965,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.audioActivity
-				, new JSONObject().put("sid", client.getOwnerSid()).put("active", active).toString()));
+				, new JSONObject().put("sid", client.getSid()).put("active", active).toString()));
 	}
 
 	/*
@@ -1100,8 +975,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		List<String> ids = new ArrayList<>();
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		for (Client c: iapp.getOmRoomClients(client.getRoomId()) ) {
+		for (Client c: getApp().getOmRoomClients(client.getRoomId()) ) {
 			for (Client.Stream s : c.getStreams()) {
 				ids.add(s.getBroadcastId());
 			}
@@ -1137,7 +1011,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public List<Long> getActiveRoomIds() {
-		return new ArrayList<>(((IApplication)Application.get(wicketApplicationName)).getActiveRoomIds());
+		return new ArrayList<>(getApp().getActiveRoomIds());
 	}
 
 	public synchronized int updateSipTransport() {
@@ -1149,8 +1023,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String newNumber = getSipTransportLastname(count);
 		_log.debug("getSipConferenceMembersNumber: " + newNumber);
 		if (!newNumber.equals(client.getLastname())) {
-			IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-			Client cl = iapp.getOmClientBySid(client.getOwnerSid());
+			Client cl = getApp().getOmClientBySid(client.getSid());
 			cl.getUser().setLastname(newNumber);
 			client.setLastname(newNumber);
 			sessionManager.update(client);
@@ -1169,8 +1042,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public CheckDto check() {
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		Client cl = iapp.getOmClientBySid(c.getOwnerSid());
+		Client cl = getApp().getOmClientBySid(c.getSid());
 		return new CheckDto(cl);
 	}
 }

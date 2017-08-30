@@ -216,7 +216,7 @@ public class MobileService {
 	public StreamClient create(User u, Sessiondata sd) {
 		StreamClient c = new StreamClient();
 		c.setType(StreamClient.Type.mobile);
-		c.setOwnerSid(sd.getSessionId());
+		c.setSid(sd.getSessionId());
 		c.setUid(UUID.randomUUID().toString());
 		return create(c, u);
 	}
@@ -226,7 +226,7 @@ public class MobileService {
 		c.setFirstname(u.getFirstname());
 		c.setLastname(u.getLastname());
 		if (c.getUserId() != null) {
-			c.setUsername(u.getLogin());
+			c.setLogin(u.getLogin());
 			c.setFirstname(u.getFirstname());
 			c.setLastname(u.getLastname());
 			c.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
@@ -274,7 +274,7 @@ public class MobileService {
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
 					add(map, "publicSid", c.getUid());
-					add(map, "login", c.getUsername());
+					add(map, "login", c.getLogin());
 					add(map, "email", c.getEmail());
 					add(map, "avsettings", c.getAvsettings());
 					add(map, "interviewPodId", c.getInterviewPodId());

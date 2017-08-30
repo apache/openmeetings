@@ -40,16 +40,16 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.apache.openmeetings" />
 
+	<!-- Start of Services exposed to red5 -->
 	<bean id="web.handler" class="org.apache.openmeetings.core.remote.ScopeApplicationAdapter" />
+	<bean id="mobile.service" class="org.apache.openmeetings.core.remote.MobileService" />
+	<!-- End of Services exposed to red5 -->
 
+	<bean id="mainservice" class="org.apache.openmeetings.core.remote.MainService" />
+	<bean id="recordingservice" class="org.apache.openmeetings.core.remote.RecordingService" />
 	<bean id="openmeetings.SessionManager" class="org.apache.openmeetings.core.session.SessionManager"/>
-	
-	<!-- Start of Services -->
-	<bean id="xmlcrm.service" class="org.apache.openmeetings.core.remote.MainService" />
 	<bean id="openmeetings.FileProcessor" class="org.apache.openmeetings.core.data.file.FileProcessor" />
 	<bean id="openmeetings.FlvExplorerConverter" class="org.apache.openmeetings.core.converter.FlvExplorerConverter" />
-	<bean id="recordingservice.service" class="org.apache.openmeetings.core.remote.RecordingService" />
-	<bean id="mobile.service" class="org.apache.openmeetings.core.remote.MobileService" />
 	<bean id="openmeetings.RecordingConverterTask" class="org.apache.openmeetings.core.data.record.converter.RecordingConverterTask" />
 	<bean id="openmeetings.InterviewConverterTask" class="org.apache.openmeetings.core.data.record.converter.InterviewConverterTask" />
 	<bean id="openmeetings.InterviewConverter" class="org.apache.openmeetings.core.converter.InterviewConverter" />
@@ -151,7 +151,7 @@
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />
 	<bean id="appointmentDao" class="org.apache.openmeetings.db.dao.calendar.AppointmentDao" />
 	<bean id="appointmentLogic" class="org.apache.openmeetings.service.calendar.AppointmentLogic" />
-	<bean id="sessionManagement" class="org.apache.openmeetings.db.dao.server.SessiondataDao" />
+	<bean id="sessionDao" class="org.apache.openmeetings.db.dao.server.SessiondataDao" />
 	<bean id="userManagement" class="org.apache.openmeetings.service.user.UserManager" />
 	<bean id="roomModeratorDao" class="org.apache.openmeetings.db.dao.room.RoomModeratorDao" />
 	<bean id="roomGroupDao" class="org.apache.openmeetings.db.dao.room.RoomGroupDao"/>

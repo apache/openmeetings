@@ -35,17 +35,17 @@ public class StreamClient implements IClient {
 	private int width = 0;
 	private int height = 0;
 	private String uid = null;
-	private String ownerSid = null;
+	private String sid = null;
 	private boolean mod = false;
 	private boolean superMod = false;
 	private boolean canGiveAudio = false;
 	private boolean canVideo = false;
 	private Date connectedSince;
-	private String userip;
+	private String remoteAddress;
 	private int userport;
 	private Date roomEnter = null;
 	private String broadCastId = null;
-	private String username = "";
+	private String login = "";
 	private Long userId = null;
 	private String firstname = "";
 	private String lastname = "";
@@ -96,6 +96,7 @@ public class StreamClient implements IClient {
 		}
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -104,6 +105,7 @@ public class StreamClient implements IClient {
 		this.width = width;
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -121,12 +123,13 @@ public class StreamClient implements IClient {
 		this.uid = uid;
 	}
 
-	public String getOwnerSid() {
-		return ownerSid;
+	@Override
+	public String getSid() {
+		return sid;
 	}
 
-	public void setOwnerSid(String ownerSid) {
-		this.ownerSid = ownerSid;
+	public void setSid(String sid) {
+		this.sid = sid;
 	}
 
 	public boolean isMod() {
@@ -169,12 +172,13 @@ public class StreamClient implements IClient {
 		this.connectedSince = connectedSince;
 	}
 
-	public String getUserip() {
-		return userip;
+	@Override
+	public String getRemoteAddress() {
+		return remoteAddress;
 	}
 
-	public void setUserip(String userip) {
-		this.userip = userip;
+	public void setRemoteAddress(String remoteAddress) {
+		this.remoteAddress = remoteAddress;
 	}
 
 	public int getUserport() {
@@ -201,14 +205,16 @@ public class StreamClient implements IClient {
 		this.broadCastId = broadCastId;
 	}
 
-	public String getUsername() {
-		return username;
+	@Override
+	public String getLogin() {
+		return login;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLogin(String login) {
+		this.login = login;
 	}
 
+	@Override
 	public Long getUserId() {
 		return userId;
 	}
@@ -301,6 +307,7 @@ public class StreamClient implements IClient {
 		return recordingStarted;
 	}
 
+	@Override
 	public void setRecordingStarted(boolean recordingStarted) {
 		this.recordingStarted = recordingStarted;
 	}
@@ -329,10 +336,12 @@ public class StreamClient implements IClient {
 		this.broadcasting = isBroadcasting;
 	}
 
+	@Override
 	public Long getRecordingId() {
 		return recordingId;
 	}
 
+	@Override
 	public void setRecordingId(Long recordingId) {
 		this.recordingId = recordingId;
 	}
@@ -394,6 +403,7 @@ public class StreamClient implements IClient {
 		this.serverId = serverId;
 	}
 
+	@Override
 	public Long getRoomId() {
 		return roomId;
 	}
@@ -408,8 +418,8 @@ public class StreamClient implements IClient {
 
 	@Override
 	public String toString() {
-		return "StreamClient [scope=" + scope + ", uid=" + uid + ", ownerSid=" + ownerSid + ", broadCastId="
-				+ broadCastId + ", username=" + username + ", userId=" + userId + ", avsettings=" + avsettings + ", type=" + type
+		return "StreamClient [scope=" + scope + ", uid=" + uid + ", ownerSid=" + sid + ", broadCastId="
+				+ broadCastId + ", login=" + login + ", userId=" + userId + ", avsettings=" + avsettings + ", type=" + type
 				+ ", isBroadcasting=" + broadcasting + "]";
 	}
 }

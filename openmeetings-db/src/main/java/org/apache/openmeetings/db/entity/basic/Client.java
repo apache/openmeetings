@@ -66,6 +66,8 @@ public class Client implements IClient {
 		private final String uid;
 		private final String broadcastId;
 		private final Type type;
+		private Integer width;
+		private Integer height;
 
 		public Stream(String uid, String streamId, String broadcastId, Type type) {
 			this.streamId = streamId;
@@ -90,6 +92,22 @@ public class Client implements IClient {
 			return uid;
 		}
 
+		public Integer getWidth() {
+			return width;
+		}
+
+		public void setWidth(Integer width) {
+			this.width = width;
+		}
+
+		public Integer getHeight() {
+			return height;
+		}
+
+		public void setHeight(Integer height) {
+			this.height = height;
+		}
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -100,18 +118,23 @@ public class Client implements IClient {
 
 		@Override
 		public boolean equals(Object obj) {
-			if (this == obj)
+			if (this == obj) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (getClass() != obj.getClass()) {
 				return false;
+			}
 			Stream other = (Stream) obj;
 			if (broadcastId == null) {
-				if (other.broadcastId != null)
+				if (other.broadcastId != null) {
 					return false;
-			} else if (!broadcastId.equals(other.broadcastId))
+				}
+			} else if (!broadcastId.equals(other.broadcastId)) {
 				return false;
+			}
 			return true;
 		}
 
@@ -137,6 +160,7 @@ public class Client implements IClient {
 	private int width = 0;
 	private int height = 0;
 	private String serverId = null;
+	private Long recordingId;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
@@ -153,8 +177,8 @@ public class Client implements IClient {
 		this.user = user;
 		this.connectedSince = new Date();
 		uid = rcl.getUid();
-		sid = rcl.getOwnerSid();
-		this.remoteAddress = rcl.getUserip();
+		sid = rcl.getSid();
+		this.remoteAddress = rcl.getRemoteAddress();
 	}
 
 	public String getSessionId() {
@@ -183,8 +207,14 @@ public class Client implements IClient {
 		return this;
 	}
 
+	@Override
 	public Long getUserId() {
 		return user.getId();
+	}
+
+	@Override
+	public String getLogin() {
+		return user.getLogin();
 	}
 
 	@Override
@@ -192,6 +222,7 @@ public class Client implements IClient {
 		return uid;
 	}
 
+	@Override
 	public String getSid() {
 		return sid;
 	}
@@ -370,6 +401,7 @@ public class Client implements IClient {
 		return this;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -379,6 +411,7 @@ public class Client implements IClient {
 		return this;
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -388,6 +421,7 @@ public class Client implements IClient {
 		return this;
 	}
 
+	@Override
 	public String getRemoteAddress() {
 		return remoteAddress;
 	}
@@ -407,33 +441,27 @@ public class Client implements IClient {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
-		return result;
+	public void setRecordingStarted(boolean recordingStarted) {
+		if (recordingStarted) {
+			activities.add(Activity.record);
+		} else {
+			activities.remove(Activity.record);
+		}
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (!(obj instanceof Client)) {
-			return false;
-		}
-		Client other = (Client) obj;
-		if (uid == null) {
-			if (other.uid != null) {
-				return false;
-			}
-		} else if (!uid.equals(other.uid)) {
-			return false;
-		}
-		return true;
+	public Long getRecordingId() {
+		return recordingId;
+	}
+
+	@Override
+	public void setRecordingId(Long recordingId) {
+		this.recordingId = recordingId;
+	}
+
+	@Override
+	public Long getRoomId() {
+		return room == null ? null : room.getId();
 	}
 
 	public JSONObject toJson(boolean self) {
@@ -472,6 +500,36 @@ public class Client implements IClient {
 		return new JSONArray(streams.stream().map(
 				s -> self && Type.room == s.getType() ? uid : s.getUid()
 			).collect(Collectors.toList()));
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uid == null) ? 0 : uid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Client)) {
+			return false;
+		}
+		Client other = (Client) obj;
+		if (uid == null) {
+			if (other.uid != null) {
+				return false;
+			}
+		} else if (!uid.equals(other.uid)) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

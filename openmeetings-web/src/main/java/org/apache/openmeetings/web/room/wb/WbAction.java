@@ -33,4 +33,6 @@ public enum WbAction {
 	, undo
 	, setSize
 	, downloadPdf
+	, startRecording
+	, stopRecording
 }

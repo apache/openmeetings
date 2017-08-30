@@ -18,9 +18,10 @@
  */
 var NONE = 'none';
 var WbArea = (function() {
-	var container, area, role = NONE, self = {}, choose, btns, _inited = false;
+	var container, area, role = NONE, self = {}, choose, btns
+		, _inited = false, recStart;
 
-	self.init = function() {
+	function _init() {
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
 		btns = $('.pod-row .pod-container .pod a.choose-btn');
@@ -36,9 +37,13 @@ var WbArea = (function() {
 				choose.find('.pod-name').val($(this).data('pod'));
 				return false;
 			});
-		$('.pod-row .pod-container a.rec-btn.start').button({
+		recStart = $('.pod-row .pod-container a.rec-btn.start');
+		recStart.button({
 			disabled: true
 			, icon: "ui-icon-play"
+		}).click(function() {
+			wbAction('startRecording', '');
+			return false;
 		});
 		$('.pod-row .pod-container a.rec-btn.stop').button({
 			disabled: true
@@ -65,8 +70,8 @@ var WbArea = (function() {
 			]
 		});
 		_inited = true;
-	};
-	self.setRole = function(_role) {
+	}
+	function _setRole(_role) {
 		if (!_inited) return;
 		role = _role;
 		if (role !== NONE) {
@@ -75,13 +80,20 @@ var WbArea = (function() {
 			btns.hide();
 		}
 	}
-	self.destroy = function() {
-	};
-	self.resize = function(posX, w, h) {
+	function _resize(posX, w, h) {
 		if (!container || !_inited) return;
 		var hh = h - 5;
 		container.width(w).height(h).css('left', posX + "px");
 		area.width(w).height(hh);
 	}
+	function _setRecStartEnabled(en) {
+		recStart.button("option", "disabled", !en);
+	}
+
+	self.init = _init;
+	self.destroy = function() {};
+	self.setRole = _setRole;
+	self.resize = _resize;
+	self.setRecStartEnabled = _setRecStartEnabled;
 	return self;
 })();
