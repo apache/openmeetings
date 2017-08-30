@@ -22,9 +22,9 @@
  * @license MIT license
  * @link http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
  **/
-const PRESENTER = 'presenter';
-const WHITEBOARD = 'whiteBoard';
-const NONE = 'none';
+var PRESENTER = 'presenter';
+var WHITEBOARD = 'whiteBoard';
+var NONE = 'none';
 var UUID = (function() {
 	var self = {};
 	var lut = [];

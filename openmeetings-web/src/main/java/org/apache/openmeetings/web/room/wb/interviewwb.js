@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const NONE = 'none';
+var NONE = 'none';
 var WbArea = (function() {
 	var container, area, role = NONE, self = {}, choose, btns, _inited = false;
 
