@@ -138,7 +138,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static void storeLabels(Locale l) throws Exception {
 		Document d = XmlExport.createDocument();
 		Element r = XmlExport.createRoot(d);
-		List<StringLabel> labels = labelCache.get(l);
+		List<StringLabel> labels = new ArrayList<>(labelCache.get(l));
+		Collections.sort(labels, new LabelComparator());
 		for (StringLabel sl : labels) {
 			r.addElement(ENTRY_ELEMENT).addAttribute(KEY_ATTR, sl.getKey()).addCDATA(sl.getValue());
 		}
@@ -218,23 +219,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	public List<StringLabel> get(Locale l, final String search, int start, int count, final SortParam<String> sort) {
 		List<StringLabel> result = getLabels(l, search);
 		if (sort != null) {
-			Collections.sort(result, new Comparator<StringLabel>() {
-				@Override
-				public int compare(StringLabel o1, StringLabel o2) {
-					int val = 0;
-					if (KEY_ATTR.equals(sort.getProperty())) {
-						try {
-							int i1 = Integer.parseInt(o1.getKey()), i2 = Integer.parseInt(o2.getKey());
-							val = i1 - i2;
-						} catch (Exception e) {
-							val = o1.getKey().compareTo(o2.getKey());
-						}
-					} else {
-						val = o1.getValue().compareTo(o2.getValue());
-					}
-					return (sort.isAscending() ? 1 : -1) * val;
-				}
-			});
+			Collections.sort(result, new LabelComparator(sort));
 		}
 		return result.subList(start, start + count > result.size() ? result.size() : start + count);
 	}
@@ -300,6 +285,34 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 			}
 		} catch (Exception e) {
 			log.error("Unexpected error while deleting language", e);
+		}
+	}
+
+	private static class LabelComparator implements Comparator<StringLabel> {
+		final SortParam<String> sort;
+
+		LabelComparator() {
+			this.sort = new SortParam<>(KEY_ATTR, true);
+		}
+
+		LabelComparator(SortParam<String> sort) {
+			this.sort = sort;
+		}
+
+		@Override
+		public int compare(StringLabel o1, StringLabel o2) {
+			int val = 0;
+			if (KEY_ATTR.equals(sort.getProperty())) {
+				try {
+					int i1 = Integer.parseInt(o1.getKey()), i2 = Integer.parseInt(o2.getKey());
+					val = i1 - i2;
+				} catch (Exception e) {
+					val = o1.getKey().compareTo(o2.getKey());
+				}
+			} else {
+				val = o1.getValue().compareTo(o2.getValue());
+			}
+			return (sort.isAscending() ? 1 : -1) * val;
 		}
 	}
 }
