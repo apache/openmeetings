@@ -69,24 +69,14 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.3.0 released!</b>
-				<div>Release 3.3.0, provides following improvements:<br/>
-					Security fixes in<br/>
+				<b>Version 3.3.1 released!</b>
+				<div>Release 3.3.1, provides following improvements:<br/>
 					<ul>
-						<li>Chat</li>
-						<li>All requests via security headers</li>
-						<li>More secure password processing rules and storage</li>
-						<li>More strict rules for uploaded files</li>
-						<li>SQL injection in web services</li>
-					</ul>
-					<br/>
-					11 security vulnerabilities were addressed<br/>
-					<br/>
-					Whiteboard<br/>
-					<ul>
-						<li>Room is displayed without overlap in IE</li>
-						<li>Multiple display issues</li>
-						<li>Wb room element can now be hidden</li>
+						<li>Clustering works as expected</li>
+						<li>SIP works as expected</li>
+						<li>Multiple issues in web services were fixed</li>
+						<li>RTMPT mode is fixed</li>
+						<li>Multiple UI improvements</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -95,12 +85,12 @@
 				</div>
 				<br/>
 				<span>
-					21 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.3.0/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12339849">Detailed list</a>
+					15 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12340997">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-06-27)</span>
+				<span class="date">(2017-09-04)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>

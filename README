@@ -8,6 +8,21 @@ Apache OpenMeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
+Release Notes 3.3.1
+=============
+see CHANGELOG file for detailed log
+
+Release 3.3.1, provides following improvements:
+
+* Clustering works as expected
+* SIP works as expected
+* Multiple issues in web services were fixed
+* RTMPT mode is fixed
+* Multiple UI improvements
+
+Other fixes and improvements, 15 issues were fixed
+
+
 Release Notes 3.3.0
 =============
 see CHANGELOG file for detailed log

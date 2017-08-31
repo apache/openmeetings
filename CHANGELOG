@@ -3,7 +3,31 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
-Release Notes - Openmeetings - Version 3.2.1
+Release Notes - Openmeetings - Version 3.3.1
+================================================================================================================
+** Bug
+    * [OPENMEETINGS-1660] - UserWebService.add method is broken
+    * [OPENMEETINGS-1664] - SIP integration is broken
+    * [OPENMEETINGS-1665] - Multiple issues were reported against web services
+    * [OPENMEETINGS-1666] - About RoomWebService getExternal Method Error.SQL bug
+    * [OPENMEETINGS-1668] - About RoomWebService getExternal Method The parameter types of bugs
+    * [OPENMEETINGS-1672] - Backup using command line admin fails if file name was specified
+    * [OPENMEETINGS-1675] - When using the Apache Derby database on Windows the install of OM 3.3.0 can't continue past "user" and "Password" entries if you don't enter a value.  As these values don't appear in the persistence.xml file it causes an Error and OM isn't installed.
+    * [OPENMEETINGS-1677] - Clustering seems to be broken
+    * [OPENMEETINGS-1679] - User session being dropped if RTPMT is being used
+    * [OPENMEETINGS-1684] - MicrophoneStatus room option is broken
+
+** Improvement
+    * [OPENMEETINGS-1623] - Full-Fit for Recordings Video Player
+    * [OPENMEETINGS-1662] - UI is bad..
+    * [OPENMEETINGS-1667] - JS/CSS optimization should be added
+    * [OPENMEETINGS-1676] - Room left panel should be iconized for smaller devices
+
+** New Feature
+    * [OPENMEETINGS-1678] - Eraser tool need to be added to WB
+
+
+Release Notes - Openmeetings - Version 3.3.0
 ================================================================================================================
 ** Vulnerability
     * CVE-2017-7663 - Apache OpenMeetings XSS in chat
