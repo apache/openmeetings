@@ -409,7 +409,7 @@ public class MobileService {
 
 		final Long roomId = c.getRoomId();
 		//Sync to all users of current scope
-		new MessageSender(scopeAdapter.getRoomScope("" + roomId), "sendVarsToMessageWithClient", hsm, scopeAdapter) {
+		new MessageSender(scopeAdapter.getChildScope("" + roomId), "sendVarsToMessageWithClient", hsm, scopeAdapter) {
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));

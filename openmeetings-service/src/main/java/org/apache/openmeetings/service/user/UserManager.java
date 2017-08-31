@@ -38,10 +38,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -51,9 +47,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -61,26 +55,20 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
-import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author swagner
  *
  */
-@Transactional
 public class UserManager implements IUserManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, webAppRootKey);
-
-	@PersistenceContext
-	private EntityManager em;
 
 	@Autowired
 	private SessiondataDao sessionDao;
@@ -93,71 +81,11 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private EmailManager emailManagement;
 	@Autowired
-	private ScopeApplicationAdapter scopeApplicationAdapter;
+	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private ISessionManager sessionManager;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
-
-	public SearchResult<User> getAllUserByRange(String search, int start, int max,
-			String orderby, boolean asc) {
-		try {
-			SearchResult<User> sresult = new SearchResult<>();
-			sresult.setObjectName(User.class.getName());
-			sresult.setRecords(userDao.count(search));
-
-			String sort = null;
-			if (orderby != null && orderby.length() > 0) {
-				sort = orderby;
-			}
-			if (asc) {
-				sort += " ASC ";
-			} else {
-				sort += " DESC ";
-			}
-			String hql = DaoHelper.getSearchQuery("User", "u", search, true, false, sort, UserDao.searchFields);
-
-			log.debug("Show HQL: " + hql);
-
-			TypedQuery<User> query = em.createQuery(hql, User.class);
-			// query.setParameter("macomUserId", userId);
-
-			// query
-			// if (asc) ((Criteria) query).addOrder(Order.asc(orderby));
-			// else ((Criteria) query).addOrder(Order.desc(orderby));
-			query.setFirstResult(start);
-			query.setMaxResults(max);
-			List<User> ll = query.getResultList();
-
-			sresult.setResult(ll);
-
-			return sresult;
-
-		} catch (Exception ex2) {
-			log.error("[getAllUserByRange] ", ex2);
-		}
-		return null;
-	}
-
-	public User loginUserByRemoteHash(String SID, String remoteHash) {
-		try {
-
-			Sessiondata sessionData = sessionDao.check(remoteHash);
-
-			if (sessionData != null) {
-
-				User u = userDao.get(sessionData.getUserId());
-
-				sessionDao.updateUserWithoutSession(SID, u.getId());
-
-				return u;
-			}
-
-		} catch (Exception ex2) {
-			log.error("[loginUserByRemoteHash]: ", ex2);
-		}
-		return null;
-	}
 
 	/**
 	 * Method to register a new User, User will automatically be added to the
@@ -327,12 +255,12 @@ public class UserManager implements IUserManager {
 				if (rcl.getRoomId() != null) {
 					scopeName = rcl.getRoomId().toString();
 				}
-				IScope currentScope = scopeApplicationAdapter.getRoomScope(scopeName);
-				scopeApplicationAdapter.roomLeaveByScope(rcl, currentScope);
+				IScope currentScope = scopeAdapter.getChildScope(scopeName);
+				scopeAdapter.roomLeaveByScope(rcl, currentScope);
 
 				Map<Integer, String> messageObj = new HashMap<>();
 				messageObj.put(0, "kick");
-				scopeApplicationAdapter.sendMessageById(messageObj, rcl.getUid(), currentScope);
+				scopeAdapter.sendMessageById(messageObj, rcl.getUid(), currentScope);
 			}
 			return true;
 		} catch (Exception err) {
@@ -354,7 +282,7 @@ public class UserManager implements IUserManager {
 			if (rcl.getScope() != null) {
 				scopeName = rcl.getScope();
 			}
-			IScope scope = scopeApplicationAdapter.getRoomScope(scopeName);
+			IScope scope = scopeAdapter.getChildScope(scopeName);
 			if (scope == null) {
 				log.warn("### kickById ### The scope is NULL");
 				return false;
@@ -362,9 +290,9 @@ public class UserManager implements IUserManager {
 
 			Map<Integer, String> messageObj = new HashMap<>();
 			messageObj.put(0, "kick");
-			scopeApplicationAdapter.sendMessageById(messageObj, uid, scope);
+			scopeAdapter.sendMessageById(messageObj, uid, scope);
 
-			scopeApplicationAdapter.roomLeaveByScope(rcl, scope);
+			scopeAdapter.roomLeaveByScope(rcl, scope);
 
 			return true;
 		} catch (Exception err) {

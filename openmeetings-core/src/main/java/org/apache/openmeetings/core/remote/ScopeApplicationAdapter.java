@@ -64,7 +64,6 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
@@ -331,9 +330,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 
 			if (client != null) {
-				boolean startRecording = Boolean.parseBoolean("" + map.get("startRecording"));
-				boolean startStreaming = Boolean.parseBoolean("" + map.get("startStreaming"));
-				boolean startPublishing = Boolean.parseBoolean("" + map.get("startPublishing")) && (0 == sessionManager.getPublishingCount(client.getRoomId()));
+				boolean startRecording = Boolean.parseBoolean("" + map.get("startRecording")) && (0 == sessionManager.getRecordingCount(client.getRoomId()));
+				boolean startStreaming = Boolean.parseBoolean("" + map.get("startStreaming")) && (0 == sessionManager.getSharingCount(client.getRoomId()));
+				boolean startPublishing = Boolean.parseBoolean("" + map.get("startPublishing"));
 
 				boolean alreadyStreaming = client.isSharingStarted();
 				if (startStreaming) {
@@ -417,7 +416,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public void roomLeaveByScope(String uid, Long roomId) {
 		StreamClient rcl = sessionManager.get(uid);
-		IScope scope = getRoomScope("" + roomId);
+		IScope scope = getChildScope("" + roomId);
 		_log.debug("[roomLeaveByScope] {} {} {} {}", uid, roomId, rcl, scope);
 		if (rcl != null && scope != null) {
 			roomLeaveByScope(rcl, scope);
@@ -448,16 +447,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					, client.getConnectedSince(), client.getId());
 
 			// stop and save any recordings
-			if (client.isRecordingStarted()) {
+			if (Client.Type.sharing == client.getType() && client.isRecordingStarted()) {
 				_log.debug("*** roomLeave Current Client is Recording - stop that");
-				if (client.getInterviewPodId() != null) {
-					//interview, TODO need better check
-					stopInterviewRecording(client);
-				} else {
-					recordingService.stopRecording(scope, client);
-				}
+				recordingService.stopRecording(scope, client);
 			}
-			recordingService.stopRecordingShowForClient(scope, client);
+			recordingService.stopStreamRecord(scope, client);
 
 			// Notify all clients of the same currentScope (room) with domain
 			// and room except the current disconnected cause it could throw an exception
@@ -534,7 +528,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					}
 					if (rcl.isRecordingStarted()) {
 						_log.debug("RCL getIsRecording newStream SEND");
-						recordingService.addRecordingByStreamId(current, c, rcl.getRecordingId());
+						recordingService.startStreamRecord(current);
 					}
 					if (Client.Type.sharing == rcl.getType()) {
 						_log.debug("RCL getisSharing newStream SEND");
@@ -591,10 +585,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// Notify all the clients that the stream had been started
 			_log.debug("streamBroadcastClose : {} ", rcl);
 			// this close stream event, stop the recording of this stream
-			if (rcl.isRecordingStarted()) {
-				_log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
-				recordingService.stopRecordingShowForClient(current.getScope(), rcl);
-			}
+			_log.debug("***  +++++++ ######## sendClientBroadcastNotifications Any Client is Recording - stop that");
+			recordingService.stopStreamRecord(current.getScope(), rcl);
+
 			sendStreamClosed(rcl);
 			if (stream.getPublishedName().equals(rcl.getBroadCastId())) {
 				rcl.setBroadCastId(null);
@@ -602,6 +595,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				rcl.setAvsettings("n");
 			}
 			sessionManager.update(rcl);
+			IApplication iapp = getApp();
+			Client c = iapp.getOmClientBySid(rcl.getSid());
+			if ((Client.Type.sharing == rcl.getType() && rcl.isRecordingStarted())
+					|| (c != null && Room.Type.interview == c.getRoom().getType() && sessionManager.getBroadcastingCount(rcl.getRoomId()) == 0))
+			{
+				_log.debug("*** Screen sharing client stoped recording, or last broadcasting user stoped in interview room");
+				recordingService.stopRecording(scope, rcl);
+			}
 			// Notify all clients of the same scope (room)
 			sendMessageToCurrentScope("closeStream", rcl, Client.Type.mobile == rcl.getType());
 			if (Client.Type.sharing == rcl.getType()) {
@@ -706,7 +707,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendToScope(final Long roomId, String method, Object obj) {
-		new MessageSender(getRoomScope("" + roomId), method, obj, this) {
+		new MessageSender(getChildScope("" + roomId), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
@@ -741,7 +742,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendMessageToCurrentScope(final String scopeName, final String remoteMethodName, final Object newMessage, final boolean sendSelf, final boolean sendScreen) {
-		new MessageSender(getRoomScope(scopeName), remoteMethodName, newMessage, this) {
+		new MessageSender(getChildScope(scopeName), remoteMethodName, newMessage, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
@@ -937,7 +938,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return;
 		}
 
-		recordingService.startRecording(getRoomScope("" + c.getRoom().getId()), c, true);
+		recordingService.startRecording(getChildScope("" + c.getRoom().getId()), c, true);
 	}
 
 	/**
@@ -947,18 +948,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 	public void stopInterviewRecording(org.apache.openmeetings.db.entity.basic.IClient c) {
 		_log.debug("-----------  stopInterviewRecording");
-		recordingService.stopRecording(getRoomScope("" + c.getRoomId()), c);
-	}
-
-	public IScope getRoomScope(String room) {
-		if (Strings.isEmpty(room)) {
-			return null;
-		} else {
-			IScope globalScope = getContext().getGlobalScope();
-			IScope webAppKeyScope = globalScope.getScope(OpenmeetingsVariables.webAppRootKey);
-
-			return webAppKeyScope.getScope(room);
-		}
+		recordingService.stopRecording(getChildScope("" + c.getRoomId()), c);
 	}
 
 	public void micActivity(boolean active) {

@@ -77,7 +77,7 @@ public interface ISessionManager {
 	List<StreamClient> listByRoom(Long roomId);
 
 	/**
-	 * returns number of current users recording
+	 * returns number of users performing recording
 	 *
 	 * @param roomId
 	 * @return
@@ -91,6 +91,22 @@ public interface ISessionManager {
 	 * @return
 	 */
 	long getPublishingCount(Long roomId);
+
+	/**
+	 * returns a number of users performing screen-sharing
+	 *
+	 * @param roomId
+	 * @return MUST return 0 or 1
+	 */
+	long getSharingCount(Long roomId);
+
+	/**
+	 * returns number of users sending A/V streams to server
+	 *
+	 * @param roomId
+	 * @return
+	 */
+	long getBroadcastingCount(Long roomId);
 
 	/**
 	 * Get a list of all rooms with users in the system.

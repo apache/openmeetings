@@ -121,6 +121,26 @@ public class SessionManager implements ISessionManager {
 	}
 
 	@Override
+	public long getSharingCount(Long roomId) {
+		if (roomId == null) {
+			return 0;
+		}
+		return list().stream()
+				.filter(c -> roomId.equals(c.getRoomId()) && c.isSharingStarted())
+				.collect(Collectors.toList()).size();
+	}
+
+	@Override
+	public long getBroadcastingCount(Long roomId) {
+		if (roomId == null) {
+			return 0;
+		}
+		return list().stream()
+				.filter(c -> roomId.equals(c.getRoomId()) && c.isBroadcasting() && c.getBroadCastId() != null)
+				.collect(Collectors.toList()).size();
+	}
+
+	@Override
 	public Set<Long> getActiveRoomIds() {
 		return getApp().getActiveRoomIds();
 	}

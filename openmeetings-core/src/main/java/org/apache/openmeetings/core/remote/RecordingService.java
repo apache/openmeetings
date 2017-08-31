@@ -77,13 +77,13 @@ public class RecordingService implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private RecordingConverterTask recordingConverterTask;
+	private RecordingConverterTask recordingConverter;
 	@Autowired
-	private InterviewConverterTask interviewConverterTask;
+	private InterviewConverterTask interviewConverter;
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
-	private ScopeApplicationAdapter scopeApplicationAdapter;
+	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private RecordingMetaDeltaDao metaDeltaDao;
 	@Autowired
@@ -98,7 +98,7 @@ public class RecordingService implements IPendingServiceCallback {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public void startRecording(IScope scope, IClient client, boolean isInterview) {
+	public void startRecording(final IScope scope, IClient client, boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
 
@@ -132,7 +132,8 @@ public class RecordingService implements IPendingServiceCallback {
 			recording = recordingDao.update(recording);
 			// Receive recordingId
 			Long recordingId = recording.getId();
-			log.debug("##REC:: recording created by USER: " + ownerId);
+			IClientUtil.setRecordingId(scope, recordingId);
+			log.debug("##REC:: recording created by USER: {}", ownerId);
 
 			// Update Client and set Flag
 			client.setRecordingStarted(true);
@@ -150,53 +151,7 @@ public class RecordingService implements IPendingServiceCallback {
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
-						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-
-						// If its the recording client we need another type of Meta Data
-						if (Client.Type.sharing == rcl.getType()) {
-							if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
-								String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId());
-
-								Long metaDataId = metaDataDao.add(
-										recordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
-										false, true, streamName_Screen, rcl.getInterviewPodId());
-
-								// Start FLV Recording
-								recordShow(conn, rcl.getBroadCastId(), streamName_Screen, metaDataId, true, isInterview);
-
-								// Add Meta Data
-								rcl.setMetaId(metaDataId);
-
-								sessionManager.update(rcl);
-							}
-						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
-							// if the user does publish av, a, v
-							// But we only record av or a, video only is not interesting
-							String broadcastId = rcl.getBroadCastId();
-							String streamName = generateFileName(recordingId, broadcastId);
-
-							// Add Meta Data
-							boolean isAudioOnly = false;
-							if (rcl.getAvsettings().equals("a")) {
-								isAudioOnly = true;
-							}
-
-							boolean isVideoOnly = false;
-							if (rcl.getAvsettings().equals("v")) {
-								isVideoOnly = true;
-							}
-
-							Long metaId = metaDataDao.add(recordingId,
-									rcl.getFirstname() + " " + rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName,
-									rcl.getInterviewPodId());
-
-							rcl.setMetaId(metaId);
-
-							sessionManager.update(rcl);
-
-							// Start FLV recording
-							recordShow(conn, broadcastId, streamName, metaId, !isAudioOnly, isInterview);
-						}
+						startStreamRecord(conn, recordingId, isInterview);
 					}
 				}
 			}
@@ -209,6 +164,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 	public void stopRecording(IScope scope, IClient client) {
 		try {
+			//FIXME TODO The client who started the recording might already left the room !!!!
 			log.debug("stopRecordAndSave {}, {}", client.getLogin(), client.getRemoteAddress());
 			IApplication iapp = getApp();
 			Client recClient = null;
@@ -229,26 +185,7 @@ public class RecordingService implements IPendingServiceCallback {
 				if (conn != null) {
 					if (conn instanceof IServiceCapableConnection) {
 						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-
-						if (rcl == null) {
-							continue;
-						}
-						log.debug("is this users still alive? stop it : {}", rcl);
-
-						if (Client.Type.sharing == rcl.getType()) {
-							if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
-								// Stop FLV Recording
-								stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
-
-								// Update Meta Data
-								metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
-							}
-						} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
-							stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
-
-							// Update Meta Data
-							metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
-						}
+						stopStreamRecord(scope, rcl);
 					}
 				}
 			}
@@ -261,13 +198,13 @@ public class RecordingService implements IPendingServiceCallback {
 			recClient.setRecordingId(null);
 			recClient.setRecordingStarted(false);
 			sessionManager.update(recClient);
-			log.debug("recordingConverterTask {}", recordingConverterTask);
+			log.debug("recordingConverterTask {}", recordingConverter);
 
 			Recording recording = recordingDao.get(recordingId);
 			if (recording.isInterview()) {
-				interviewConverterTask.startConversionThread(recordingId);
+				interviewConverter.startConversionThread(recordingId);
 			} else {
-				recordingConverterTask.startConversionThread(recordingId);
+				recordingConverter.startConversionThread(recordingId);
 			}
 		} catch (Exception err) {
 			log.error("[-- stopRecording --]", err);
@@ -281,52 +218,43 @@ public class RecordingService implements IPendingServiceCallback {
 	 * @param broadcastid
 	 * @param streamName
 	 * @param metaId
-	 * @throws Exception
+	 * @param isScreenSharing
+	 * @param isInterview
 	 */
-	private void recordShow(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenData, boolean isInterview) throws Exception {
-		try {
-			log.debug("Recording show for: {}", conn.getScope().getContextPath());
-			log.debug("Name of CLient and Stream to be recorded: {}", broadcastid);
-			// log.debug("Application.getInstance()"+Application.getInstance());
-			log.debug("Scope " + conn);
-			log.debug("Scope " + conn.getScope());
-			// Get a reference to the current broadcast stream.
-			ClientBroadcastStream stream = (ClientBroadcastStream) scopeApplicationAdapter.getBroadcastStream(conn.getScope(), broadcastid);
+	private void addListener(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenSharing, boolean isInterview) {
+		log.debug("Recording show for: {}", conn.getScope().getContextPath());
+		log.debug("Name of CLient and Stream to be recorded: {}", broadcastid);
+		// log.debug("Application.getInstance()"+Application.getInstance());
+		log.debug("Scope " + conn);
+		log.debug("Scope " + conn.getScope());
+		// Get a reference to the current broadcast stream.
+		ClientBroadcastStream stream = (ClientBroadcastStream) scopeAdapter.getBroadcastStream(conn.getScope(), broadcastid);
 
-			if (stream == null) {
-				log.debug("Unable to get stream: " + streamName);
-				return;
-			}
-			// Save the stream to disk.
-			log.debug("### stream " + stream);
-			log.debug("### streamName " + streamName);
-			log.debug("### conn.getScope() " + conn.getScope());
-			log.debug("### recordingMetaDataId " + metaId);
-			log.debug("### isScreenData " + isScreenData);
-			log.debug("### isInterview " + isInterview);
-			StreamListener streamListener = new StreamListener(!isScreenData, streamName, conn.getScope(), metaId, isScreenData, isInterview, metaDataDao, metaDeltaDao);
-
-			streamListeners.put(metaId, streamListener);
-
-			stream.addStreamListener(streamListener);
-			// Just for Debug Purpose
-			// stream.saveAs(streamName+"_DEBUG", false);
-		} catch (Exception e) {
-			log.error("Error while saving stream: " + streamName, e);
+		if (stream == null) {
+			log.debug("Unable to get stream: {}", streamName);
+			return;
 		}
+		// Save the stream to disk.
+		log.debug("### stream: [{}, name: {}, scope: {}, metaId: {}, sharing ? {}, interview ? {}]"
+				, stream, streamName, conn.getScope(), metaId, isScreenSharing, isInterview);
+		StreamListener streamListener = new StreamListener(!isScreenSharing, streamName, conn.getScope(), metaId, isScreenSharing, isInterview, metaDataDao, metaDeltaDao);
+
+		streamListeners.put(metaId, streamListener);
+		stream.addStreamListener(streamListener);
 	}
 
 	/**
 	 * Stops recording the publishing stream for the specified IConnection.
 	 *
-	 * @param conn
+	 * @param scope
+	 * @param broadcastId
+	 * @param metaId
 	 */
-	public void stopRecordingShow(IScope scope, String broadcastId, Long metaId) {
+	public void removeListener(IScope scope, String broadcastId, Long metaId) {
 		try {
-			log.debug("** stopRecordingShow: {}", scope);
-			log.debug("### Stop recording show for broadcastId: {} || {}", broadcastId, scope.getContextPath());
+			log.debug("** removeListener: scope: {}, broadcastId: {} || {}", scope, broadcastId, scope.getContextPath());
 
-			IBroadcastStream stream = scopeApplicationAdapter.getBroadcastStream(scope, broadcastId);
+			IBroadcastStream stream = scopeAdapter.getBroadcastStream(scope, broadcastId);
 
 			// the stream can be null if the user just closes the browser
 			// without canceling the recording before leaving
@@ -368,101 +296,78 @@ public class RecordingService implements IPendingServiceCallback {
 				for (Long entryKey : streamListeners.keySet()) {
 					log.debug("Stored recordingMetaDataId in Map: {}", entryKey);
 				}
-				throw new IllegalStateException("Could not find Listener to stop! recordingMetaDataId " + metaId);
+				throw new IllegalStateException("Could not find Listener to stop! metaId " + metaId);
 			}
 
 			listenerAdapter.closeStream();
 			streamListeners.remove(metaId);
 
 		} catch (Exception err) {
-			log.error("[stopRecordingShow]", err);
+			log.error("[removeListener]", err);
 		}
 	}
 
-	public void stopRecordingShowForClient(IScope scope, StreamClient rcl) {
-		try {
-			// this cannot be handled here, as to stop a stream and to leave a room is not
-			// the same type of event.
-			// StreamService.addRoomClientEnterEventFunc(rcl, roomrecordingName, rcl.getUserip(), false);
-			log.debug("### stopRecordingShowForClient: {}", rcl);
-
-			if (Client.Type.sharing == rcl.getType()) {
-				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
-
-					// Stop FLV Recording
-					// FIXME: Is there really a need to stop it manually if the
-					// user just
-					// stops the stream?
-					stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
-
-					// Update Meta Data
-					metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
-				}
-			} else if (rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v") || rcl.getAvsettings().equals("av")) {
-				// FIXME: Is there really a need to stop it manually if the user
-				// just stops the stream?
-				stopRecordingShow(scope, rcl.getBroadCastId(), rcl.getMetaId());
-
-				// Update Meta Data
-				metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
-			}
-
-		} catch (Exception err) {
-			log.error("[stopRecordingShowForClient]", err);
+	public void stopStreamRecord(IScope scope, StreamClient rcl) {
+		if (rcl == null || rcl.getMetaId() == null || rcl.getBroadCastId() == null) {
+			return;
 		}
+		log.debug("is this users still alive? stop it : {}", rcl);
+
+		removeListener(scope, rcl.getBroadCastId(), rcl.getMetaId());
+
+		// Update Meta Data
+		metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
+
+		// Remove Meta Data
+		rcl.setMetaId(null);
+		sessionManager.update(rcl);
 	}
 
-	public void addRecordingByStreamId(IConnection conn, StreamClient rcl, Long recordingId) {
-		try {
-			Recording recording = recordingDao.get(recordingId);
+	public void startStreamRecord(IConnection conn) {
+		Long recordingId = IClientUtil.getRecordingId(conn.getScope());
+		Recording rec = recordingDao.get(recordingId);
+		startStreamRecord(conn, recordingId, rec.isInterview());
+	}
 
-			Date now = new Date();
+	public void startStreamRecord(IConnection conn, Long recordingId, boolean isInterview) {
+		Date now = new Date();
 
-			// If its the recording client we need another type of Meta Data
-			if (Client.Type.sharing == rcl.getType()) {
-				if (rcl.getRecordingId() != null && rcl.isSharingStarted()) {
-					String streamName_Screen = generateFileName(recordingId, rcl.getBroadCastId().toString());
+		StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
-					log.debug("##############  ADD SCREEN OF SHARER :: {}", rcl.getBroadCastId());
-
-					Long metaDataId = metaDataDao.add(recordingId, rcl.getFirstname()
-							+ " " + rcl.getLastname(), now, false, false, true, streamName_Screen, rcl.getInterviewPodId());
-
-					// Start FLV Recording
-					recordShow(conn, rcl.getBroadCastId(), streamName_Screen, metaDataId, true, recording.isInterview());
-
-					// Add Meta Data
-					rcl.setMetaId(metaDataId);
-
-					sessionManager.update(rcl);
-				}
-			} else if (rcl.getAvsettings().equals("av") || rcl.getAvsettings().equals("a") || rcl.getAvsettings().equals("v")) {
-				// if the user does publish av, a, v
-				// But we only record av or a, video only is not interesting
-
+		// If its the recording client we need another type of Meta Data
+		boolean audioOnly = "a".equals(rcl.getAvsettings());
+		boolean videoOnly = "v".equals(rcl.getAvsettings());
+		if (Client.Type.sharing == rcl.getType()) {
+			if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
 				String streamName = generateFileName(recordingId, rcl.getBroadCastId());
 
+				Long metaId = metaDataDao.add(
+						recordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
+						false, true, streamName, null);
+
+				// Start FLV Recording
+				addListener(conn, rcl.getBroadCastId(), streamName, metaId, true, isInterview);
+
 				// Add Meta Data
-				boolean isAudioOnly = false;
-				if (rcl.getAvsettings().equals("a")) {
-					isAudioOnly = true;
-				}
-				boolean isVideoOnly = false;
-				if (rcl.getAvsettings().equals("v")) {
-					isVideoOnly = true;
-				}
-
-				Long metaDataId = metaDataDao.add(recordingId, rcl.getFirstname() + " "
-						+ rcl.getLastname(), now, isAudioOnly, isVideoOnly, false, streamName, rcl.getInterviewPodId());
-
-				// Start FLV recording
-				recordShow(conn, rcl.getBroadCastId(), streamName, metaDataId, false, recording.isInterview());
-
-				rcl.setMetaId(metaDataId);
+				rcl.setMetaId(metaId);
 				sessionManager.update(rcl);
 			}
-		} catch (Exception err) {
-			log.error("[addRecordingByStreamId]", err);
+		} else if ("av".equals(rcl.getAvsettings()) || audioOnly || videoOnly) {
+			// if the user does publish av, a, v
+			// But we only record av or a, video only is not interesting
+			String broadcastId = rcl.getBroadCastId();
+			String streamName = generateFileName(recordingId, broadcastId);
+
+			Long metaId = metaDataDao.add(recordingId,
+					rcl.getFirstname() + " " + rcl.getLastname(), now, audioOnly, videoOnly, false, streamName,
+					rcl.getInterviewPodId());
+
+			// Start FLV recording
+			addListener(conn, broadcastId, streamName, metaId, !audioOnly, isInterview);
+
+			// Add Meta Data
+			rcl.setMetaId(metaId);
+			sessionManager.update(rcl);
 		}
 	}
 }

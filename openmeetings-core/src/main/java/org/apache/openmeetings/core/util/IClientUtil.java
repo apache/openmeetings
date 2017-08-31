@@ -20,11 +20,13 @@ package org.apache.openmeetings.core.util;
 
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.red5.server.api.IClient;
+import org.red5.server.api.scope.IScope;
 
 public class IClientUtil {
 	private enum ConAttrs {
 		omId
 		, sharing
+		, recordingId
 	}
 
 	public static void init(IClient client, String uid, boolean sharing) {
@@ -45,5 +47,13 @@ public class IClientUtil {
 
 	public static boolean isSharing(IClient client) {
 		return Boolean.TRUE.equals(client.getAttribute(ConAttrs.sharing.name()));
+	}
+
+	public static Long getRecordingId(IScope scope) {
+		return (Long)scope.getAttribute(ConAttrs.recordingId.name());
+	}
+
+	public static void setRecordingId(IScope scope, Long recordingId) {
+		scope.setAttribute(ConAttrs.recordingId.name(), recordingId);
 	}
 }

@@ -616,11 +616,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Room room = c.getRoom();
 		log.debug("Removing online room client: {}, room: {}", c.getUid(), room);
 		if (room != null) {
-			Set<String> clients = get().getRooms().get(room.getId());
+			Map<Long, Set<String>> rooms = get().getRooms();
+			Set<String> clients = rooms.get(room.getId());
 			if (clients != null) {
 				clients.remove(c.getUid());
+				rooms.put(room.getId(), clients);
 			}
 			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), room.getId());
+			c.setRoom(null);
 			c.clear();
 			update(c);
 		}
