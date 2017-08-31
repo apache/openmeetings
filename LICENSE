@@ -213,15 +213,7 @@ admin.bat
 admin.sh
 network_test.sh
 webapps/openmeetings/conf/om_ldap.cfg
-webapps/openmeetings/css/activities.css
-webapps/openmeetings/css/admin-rtl.css
-webapps/openmeetings/css/calendar.css
-webapps/openmeetings/css/chat.css
-webapps/openmeetings/css/history.css
-webapps/openmeetings/css/menu.css
-webapps/openmeetings/css/room.css
-webapps/openmeetings/css/theme.css
-webapps/openmeetings/css/theme-rtl.css
+webapps/openmeetings/css/*.css
 
 webapps/openmeetings/docs/*
 webapps/openmeetings/js/openmeetings_functions.js
@@ -239,16 +231,9 @@ webapps/openmeetings/upload/*
 webapps/openmeetings/WEB-INF/classes/**
 webapps/openmeetings/WEB-INF/red5-web.properties
 webapps/openmeetings/WEB-INF/red5-web.xml
-webapps/openmeetings/WEB-INF/velocity.properties
 webapps/openmeetings/WEB-INF/web.xml
 
-webapps/openmeetings/WEB-INF/lib/openmeetings-core-*.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-db-*.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-install-*.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-service-*.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-util-*.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-web-*.jar
-webapps/openmeetings/WEB-INF/lib/openmeetings-webservice-*.jar
+webapps/openmeetings/WEB-INF/lib/openmeetings-*.jar
 
 webapps/openmeetings/screenshare/icon.*
 webapps/openmeetings/screenshare/splashicon.*
@@ -262,13 +247,9 @@ projects licensed under the Apache License 2.0:
 red5-*.jar
 commons-daemon-*.jar
 install-service.bat
-red5.bat
-red5.sh
+red5*.bat
+red5*.sh
 red5.service
-red5-debug.sh
-red5-debug.bat
-red5-shutdown.sh
-red5-shutdown.bat
 uninstall-service.bat
 conf/*
 webapps/red5-default.xml
@@ -284,37 +265,39 @@ webapps/root/WEB-INF/red5-web.properties
 webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
+webapps/openmeetings/WEB-INF/lib/animal-sniffer-annotations-1.14.jar
 webapps/openmeetings/WEB-INF/lib/api-all-*.jar
 webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0-final.jar
-webapps/openmeetings/WEB-INF/lib/bndlib-2.3.0.jar
 webapps/openmeetings/WEB-INF/lib/caldav4j-*.jar
 webapps/openmeetings/WEB-INF/lib/commons-*.jar
 webapps/openmeetings/WEB-INF/lib/cxf-*.jar
 webapps/openmeetings/WEB-INF/lib/derby*.jar
-webapps/openmeetings/WEB-INF/lib/dom4j-2.0.0.jar
+webapps/openmeetings/WEB-INF/lib/dom4j-2.0.1.jar
+webapps/openmeetings/WEB-INF/lib/error_prone_annotations-2.0.18.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
-webapps/openmeetings/WEB-INF/lib/groovy-all-2.3.2.jar
-webapps/openmeetings/WEB-INF/lib/gson-2.8.0.jar
-webapps/openmeetings/WEB-INF/lib/guava-21.0.jar
+webapps/openmeetings/WEB-INF/lib/gson-2.8.1.jar
+webapps/openmeetings/WEB-INF/lib/guava-23.0.jar
+webapps/openmeetings/WEB-INF/lib/hazelcast-3.8.3.jar
 webapps/openmeetings/WEB-INF/lib/httpcore-*.jar
+webapps/openmeetings/WEB-INF/lib/j2objc-annotations-1.1.jar
 webapps/openmeetings/WEB-INF/lib/jackrabbit-webdav-2.12.1.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
 webapps/openmeetings/WEB-INF/lib/joda-time-2.9.9.jar
 webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
 webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.3.jar
-webapps/openmeetings/WEB-INF/lib/jqplot-8.0.0-M6.jar
+webapps/openmeetings/WEB-INF/lib/jqplot-8.0.0-M7.jar
 webapps/openmeetings/WEB-INF/lib/json-1.3.jar
+webapps/openmeetings/WEB-INF/lib/jsr305-1.3.9.jar
 webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
 webapps/openmeetings/WEB-INF/lib/neethi-3.0.3.jar
 webapps/openmeetings/WEB-INF/lib/openjpa-2.4.2.jar
-webapps/openmeetings/WEB-INF/lib/openjson-1.0.6.jar
+webapps/openmeetings/WEB-INF/lib/openjson-1.0.8.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
-webapps/openmeetings/WEB-INF/lib/org.osgi.core-4.3.1.jar
 webapps/openmeetings/WEB-INF/lib/ridl-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
 webapps/openmeetings/WEB-INF/lib/smslib-3.5.4.jar
@@ -325,30 +308,27 @@ webapps/openmeetings/WEB-INF/lib/wicket*.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-4.4.1.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
 webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-3.17.jar
+webapps/openmeetings/WEB-INF/lib/xml-apis-1.4.01.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
-webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.1.jar
+webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.2.jar
 
 webapps/openmeetings/screenshare/openmeetings-screenshare-*.jar
 
-lib/apache-mime4j-core-0.7.2.jar
-lib/apache-mime4j-dom-0.7.2.jar
+lib/apache-mime4j-*.jar
 lib/boilerpipe-1.1.0.jar
 lib/commons-*.jar
-lib/cors-filter-2.5.jar
+lib/cors-filter-2.6.jar
 lib/ehcache-core-2.6.11.jar
 lib/geronimo-jpa_2.0_spec-1.1.jar
-lib/gson-2.2.4.jar
 lib/httpclient-4.5.3.jar
 lib/httpcore-4.4.6.jar
-lib/isoparser-1.9.27.jar
-lib/jackson-core-2.8.1.jar
+lib/isoparser-1.9.29.jar
 lib/java-property-utils-1.9.1.jar
-lib/jempbox-1.8.12.jar
+lib/jempbox-1.8.13.jar
 lib/metadata-extractor-2.9.1.jar
 lib/mina-*.jar
-lib/ognl-3.1.11.jar
 lib/pdfbox-*.jar
-lib/quartz-2.2.3.jar
+lib/quartz-2.3.0.jar
 lib/red5-*.jar
 lib/rome-1.5.1.jar
 lib/rome-utils-1.5.1.jar
@@ -373,7 +353,7 @@ conditions of the following licenses.
 For GlassFish components
 
 webapps/openmeetings/WEB-INF/lib/activation-1.1.jar
-webapps/openmeetings/WEB-INF/lib/javax.mail-1.5.6.jar
+webapps/openmeetings/WEB-INF/lib/javax.mail-1.6.0.jar
 
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
@@ -817,7 +797,7 @@ As a special exception, the copyright holders of this library give you permissio
 ======================================================================================================================
 
 For 
-webapps/openmeetings/WEB-INF/lib/jaxen-jar-1.1.6.jar
+webapps/openmeetings/WEB-INF/lib/jaxen-1.1.6.jar
 
  $Id: LICENSE.txt,v 1.5 2006/02/05 21:49:04 elharo Exp $
 
@@ -1425,7 +1405,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
  iCal4j - License
  
-webapps/openmeetings/WEB-INF/lib/ical4j-2.0.0.jar
+webapps/openmeetings/WEB-INF/lib/ical4j-2.0.4.jar
  
 ======================================================================================================================
 
@@ -1467,7 +1447,8 @@ For the components:
 
 lib/logback-classic-*.jar
 lib/logback-core-*.jar
-plugins/ecj-4.5.1.jar
+lib/mchange-commons-java-0.2.11.jar
+plugins/ecj-3.12.3.jar
 
 Eclipse Public License - v 1.0
 
@@ -2590,7 +2571,7 @@ EXHIBIT A -Mozilla Public License.
 
  =======================================================================================
 
-webapps/openmeetings/WEB-INF/lib/jdk-serializable-functional-1.8.2.jar
+webapps/openmeetings/WEB-INF/lib/jdk-serializable-functional-1.8.3.jar
 
 The MIT License (MIT)
 
@@ -2613,3 +2594,42 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+ =======================================================================================
+
+webapps/openmeetings/WEB-INF/lib/threetenbp-1.3.3.jar
+
+BSD 3-clause
+
+/*
+ * Copyright (c) 2007-present, Stephen Colebourne & Michael Nascimento Santos
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *  * Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ *  * Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ *  * Neither the name of JSR-310 nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
