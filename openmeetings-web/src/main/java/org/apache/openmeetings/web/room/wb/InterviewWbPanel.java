@@ -61,6 +61,11 @@ public class InterviewWbPanel extends AbstractWbPanel {
 						getBean(ScopeApplicationAdapter.class).startInterviewRecording(c);
 					}
 					break;
+				case stopRecording:
+					if (getBean(ISessionManager.class).getRecordingCount(c.getRoomId()) < 1) {
+						getBean(ScopeApplicationAdapter.class).stopInterviewRecording(c);
+					}
+					break;
 				default:
 					//no-op
 			}

@@ -337,37 +337,39 @@ public class RecordingService implements IPendingServiceCallback {
 		// If its the recording client we need another type of Meta Data
 		boolean audioOnly = "a".equals(rcl.getAvsettings());
 		boolean videoOnly = "v".equals(rcl.getAvsettings());
-		if (Client.Type.sharing == rcl.getType()) {
-			if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
-				String streamName = generateFileName(recordingId, rcl.getBroadCastId());
+		String broadcastId = rcl.getBroadCastId();
+		if (broadcastId != null) {
+			if (Client.Type.sharing == rcl.getType()) {
+				if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
+					String streamName = generateFileName(recordingId, broadcastId);
 
-				Long metaId = metaDataDao.add(
-						recordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
-						false, true, streamName, null);
+					Long metaId = metaDataDao.add(
+							recordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
+							false, true, streamName, null);
 
-				// Start FLV Recording
-				addListener(conn, rcl.getBroadCastId(), streamName, metaId, true, isInterview);
+					// Start FLV Recording
+					addListener(conn, rcl.getBroadCastId(), streamName, metaId, true, isInterview);
+
+					// Add Meta Data
+					rcl.setMetaId(metaId);
+					sessionManager.update(rcl);
+				}
+			} else if ("av".equals(rcl.getAvsettings()) || audioOnly || videoOnly) {
+				// if the user does publish av, a, v
+				// But we only record av or a, video only is not interesting
+				String streamName = generateFileName(recordingId, broadcastId);
+
+				Long metaId = metaDataDao.add(recordingId,
+						rcl.getFirstname() + " " + rcl.getLastname(), now, audioOnly, videoOnly, false, streamName,
+						rcl.getInterviewPodId());
+
+				// Start FLV recording
+				addListener(conn, broadcastId, streamName, metaId, !audioOnly, isInterview);
 
 				// Add Meta Data
 				rcl.setMetaId(metaId);
 				sessionManager.update(rcl);
 			}
-		} else if ("av".equals(rcl.getAvsettings()) || audioOnly || videoOnly) {
-			// if the user does publish av, a, v
-			// But we only record av or a, video only is not interesting
-			String broadcastId = rcl.getBroadCastId();
-			String streamName = generateFileName(recordingId, broadcastId);
-
-			Long metaId = metaDataDao.add(recordingId,
-					rcl.getFirstname() + " " + rcl.getLastname(), now, audioOnly, videoOnly, false, streamName,
-					rcl.getInterviewPodId());
-
-			// Start FLV recording
-			addListener(conn, broadcastId, streamName, metaId, !audioOnly, isInterview);
-
-			// Add Meta Data
-			rcl.setMetaId(metaId);
-			sessionManager.update(rcl);
 		}
 	}
 }

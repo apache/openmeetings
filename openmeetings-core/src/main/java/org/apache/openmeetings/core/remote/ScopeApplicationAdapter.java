@@ -595,10 +595,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				rcl.setAvsettings("n");
 			}
 			sessionManager.update(rcl);
-			IApplication iapp = getApp();
-			Client c = iapp.getOmClientBySid(rcl.getSid());
+			Room r = roomDao.get(rcl.getRoomId());
 			if ((Client.Type.sharing == rcl.getType() && rcl.isRecordingStarted())
-					|| (c != null && Room.Type.interview == c.getRoom().getType() && sessionManager.getBroadcastingCount(rcl.getRoomId()) == 0))
+					|| (r != null && Room.Type.interview == r.getType() && sessionManager.getBroadcastingCount(rcl.getRoomId()) == 0))
 			{
 				_log.debug("*** Screen sharing client stoped recording, or last broadcasting user stoped in interview room");
 				recordingService.stopRecording(scope, rcl);

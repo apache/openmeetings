@@ -19,7 +19,7 @@
 var NONE = 'none';
 var WbArea = (function() {
 	var container, area, role = NONE, self = {}, choose, btns
-		, _inited = false, recStart;
+		, _inited = false, recStart, recStop;
 
 	function _init() {
 		container = $(".room.wb.area");
@@ -37,17 +37,19 @@ var WbArea = (function() {
 				choose.find('.pod-name').val($(this).data('pod'));
 				return false;
 			});
-		recStart = $('.pod-row .pod-container a.rec-btn.start');
-		recStart.button({
+		recStart = $('.pod-row .pod-container a.rec-btn.start').button({
 			disabled: true
 			, icon: "ui-icon-play"
 		}).click(function() {
 			wbAction('startRecording', '');
 			return false;
 		});
-		$('.pod-row .pod-container a.rec-btn.stop').button({
+		recStop = $('.pod-row .pod-container a.rec-btn.stop').button({
 			disabled: true
 			, icon: "ui-icon-stop"
+		}).click(function() {
+			wbAction('stopRecording', '');
+			return false;
 		});
 		choose = $('#interview-choose-video');
 		choose.dialog({
@@ -89,11 +91,15 @@ var WbArea = (function() {
 	function _setRecStartEnabled(en) {
 		recStart.button("option", "disabled", !en);
 	}
+	function _setRecStopEnabled(en) {
+		recStop.button("option", "disabled", !en);
+	}
 
 	self.init = _init;
 	self.destroy = function() {};
 	self.setRole = _setRole;
 	self.resize = _resize;
 	self.setRecStartEnabled = _setRecStartEnabled;
+	self.setRecStopEnabled = _setRecStopEnabled;
 	return self;
 })();

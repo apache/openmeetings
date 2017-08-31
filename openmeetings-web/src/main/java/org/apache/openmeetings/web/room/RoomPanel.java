@@ -407,6 +407,7 @@ public class RoomPanel extends BasePanel {
 							recordingUser = null;
 							update(c.remove(Client.Activity.record));
 							menu.update(handler);
+							updateInterviewRecordingButtons(handler);
 						}
 						break;
 					case recordingStarted:
@@ -420,6 +421,7 @@ public class RoomPanel extends BasePanel {
 							recordingUser = uid;
 							update(c.set(Client.Activity.record));
 							menu.update(handler);
+							updateInterviewRecordingButtons(handler);
 						}
 						break;
 					case sharingStoped:
@@ -466,6 +468,7 @@ public class RoomPanel extends BasePanel {
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
+							updateInterviewRecordingButtons(handler);
 						}
 						break;
 					case newStream:
@@ -493,9 +496,7 @@ public class RoomPanel extends BasePanel {
 						if (_c.getSid().equals(c.getSid())) {
 							update(c.addStream(uid, streamId, broadcastId, type));
 						}
-						if (isInterview && recordingUser == null && _c.hasRight(Right.moderator)) {
-							handler.appendJavaScript("WbArea.setRecStartEnabled(true);");
-						}
+						updateInterviewRecordingButtons(handler);
 					}
 						break;
 					case closeStream:
@@ -511,16 +512,7 @@ public class RoomPanel extends BasePanel {
 							update(c.removeStream(obj.optString("broadcastId")));
 						}
 						handler.appendJavaScript(String.format("VideoManager.close('%s');", obj.getString("uid")));
-						if (isInterview && recordingUser == null && _c.hasRight(Right.moderator)) {
-							boolean hasStreams = false;
-							for (Client cl : getRoomClients(r.getId())) {
-								if (!cl.getStreams().isEmpty()) {
-									hasStreams = true;
-									break;
-								}
-							}
-							handler.appendJavaScript(String.format("WbArea.setRecStartEnabled(%s);", hasStreams));
-						}
+						updateInterviewRecordingButtons(handler);
 					}
 						break;
 					case roomEnter:
@@ -603,6 +595,24 @@ public class RoomPanel extends BasePanel {
 			}
 		}
 		super.onEvent(event);
+	}
+
+	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
+		Client _c = getClient();
+		if (isInterview && _c.hasRight(Right.moderator)) {
+			if (recordingUser == null) {
+				boolean hasStreams = false;
+				for (Client cl : getRoomClients(r.getId())) {
+					if (!cl.getStreams().isEmpty()) {
+						hasStreams = true;
+						break;
+					}
+				}
+				handler.appendJavaScript(String.format("WbArea.setRecStopEnabled(false);WbArea.setRecStartEnabled(%s);", hasStreams));
+			} else {
+				handler.appendJavaScript("WbArea.setRecStartEnabled(false);WbArea.setRecStopEnabled(true);");
+			}
+		}
 	}
 
 	@Override
