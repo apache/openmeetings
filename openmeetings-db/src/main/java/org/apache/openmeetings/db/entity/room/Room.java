@@ -582,4 +582,9 @@ public class Room implements IDataProviderEntity {
 	public void setPin(String pin) {
 		this.pin = pin;
 	}
+
+	@Override
+	public String toString() {
+		return "Room [id=" + id + ", name=" + name + ", type=" + type + "]";
+	}
 }
