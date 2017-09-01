@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
@@ -92,7 +93,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String ROOM_PARAM = "roomClient";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
-	public static final String HIBERNATE_SCOPE = "hibernate";
 	public static final String FLASH_SECURE = "secure";
 	public static final String FLASH_NATIVE_SSL = "native";
 	public static final String FLASH_PORT = "rtmpPort";
@@ -208,7 +208,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		String uid = (String)connParams.get("uid");
 		StreamClient rcm = new StreamClient();
 		rcm.setScope(conn.getScope().getName());
-		boolean hibernate = HIBERNATE_SCOPE.equals(rcm.getScope());
+		boolean hibernate = HIBERNATE.equals(rcm.getScope());
 		if (hibernate && "noclient".equals(uid)) {
 			return true;
 		}

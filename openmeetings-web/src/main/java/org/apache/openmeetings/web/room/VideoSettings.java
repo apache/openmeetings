@@ -25,11 +25,20 @@ import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SSL_PORT;
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.server.ISessionManager;
+import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -41,6 +50,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.github.openjson.JSONObject;
+import com.hazelcast.core.Member;
 
 public class VideoSettings extends Panel {
 	private final static long serialVersionUID = 1L;
@@ -63,7 +73,8 @@ public class VideoSettings extends Panel {
 		return String.format("%s://%s:%s/%s", protocol, host, port, app);
 	}
 
-	public static JSONObject getInitJson(ExtendedClientProperties cp, String scope, String sid) {
+	public static JSONObject getInitJson(ExtendedClientProperties cp, Long roomId, String sid) {
+		String scope = roomId == null ? OmFileHelper.HIBERNATE : "" + roomId;
 		JSONObject gs = getBean(ScopeApplicationAdapter.class).getFlashSettings();
 		JSONObject s = new JSONObject()
 				.put(FLASH_VIDEO_CODEC, gs.get(FLASH_VIDEO_CODEC))
@@ -75,17 +86,50 @@ public class VideoSettings extends Panel {
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
 			s.put(FLASH_NATIVE_SSL, gs.getBoolean(FLASH_NATIVE_SSL));
+			String host = getHost(roomId, url.getHost());
 			int port = url.getPort() > -1 ? url.getPort() : url.getDefaultPort();
 			if (gs.getBoolean(FLASH_SECURE)) {
-				s.put(URL, getUri("rtmps", url.getHost(), gs.getString(FLASH_SSL_PORT), path));
-				s.put(FALLBACK, getUri("rtmps", url.getHost(), port, path));
+				s.put(URL, getUri("rtmps", host, gs.getString(FLASH_SSL_PORT), path));
+				s.put(FALLBACK, getUri("rtmps", host, port, path));
 			} else {
-				s.put(URL, getUri("rtmp", url.getHost(), gs.getString(FLASH_PORT), path));
-				s.put(FALLBACK, getUri("rtmpt", url.getHost(), port, path));
+				s.put(URL, getUri("rtmp", host, gs.getString(FLASH_PORT), path));
+				s.put(FALLBACK, getUri("rtmpt", host, port, path));
 			}
 		} catch (Exception e) {
 			log.error("Error while constructing video settings parameters", e);
 		}
 		return s;
+	}
+
+	private static String getHost(Long roomId, String _host) {
+		if (roomId == null) {
+			return _host;
+		}
+		long minimum = -1;
+		Member result = null;
+		Map<Member, Set<Long>> activeRoomsMap = new HashMap<>();
+		List<Member> servers = Application.get().getServers();
+		if (servers.size() > 1) {
+			for (Member m : servers) {
+				String serverId = m.getStringAttribute(NAME_ATTR_KEY);
+				Set<Long> roomIds = getBean(ISessionManager.class).getActiveRoomIds(serverId);
+				if (roomIds.contains(roomId)) {
+					// if the room is already opened on a server, redirect the user to that one,
+					log.debug("Room is already opened on a server {}", m.getAddress());
+					return m.getAddress().getHost();
+				}
+				activeRoomsMap.put(m, roomIds);
+			}
+			for (Map.Entry<Member, Set<Long>> entry : activeRoomsMap.entrySet()) {
+				Set<Long> roomIds = entry.getValue();
+				long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
+				if (minimum < 0 || capacity < minimum) {
+					minimum = capacity;
+					result = entry.getKey();
+				}
+				log.debug("Checking server: {} Number of rooms {} RoomIds: {} max(Sum): {}", entry.getKey(), roomIds.size(), roomIds, capacity);
+			}
+		}
+		return result == null ? _host : result.getAddress().getHost();
 	}
 }

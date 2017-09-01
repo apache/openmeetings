@@ -20,6 +20,7 @@ package org.apache.openmeetings.service.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
+import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
@@ -251,10 +252,7 @@ public class UserManager implements IUserManager {
 				if (rcl == null) {
 					return true;
 				}
-				String scopeName = "hibernate";
-				if (rcl.getRoomId() != null) {
-					scopeName = rcl.getRoomId().toString();
-				}
+				String scopeName = rcl.getRoomId() == null ? HIBERNATE : rcl.getRoomId().toString();
 				IScope currentScope = scopeAdapter.getChildScope(scopeName);
 				scopeAdapter.roomLeaveByScope(rcl, currentScope);
 
@@ -278,10 +276,7 @@ public class UserManager implements IUserManager {
 				return true;
 			}
 
-			String scopeName = "hibernate";
-			if (rcl.getScope() != null) {
-				scopeName = rcl.getScope();
-			}
+			String scopeName = rcl.getScope() == null ? HIBERNATE : rcl.getScope();
 			IScope scope = scopeAdapter.getChildScope(scopeName);
 			if (scope == null) {
 				log.warn("### kickById ### The scope is NULL");

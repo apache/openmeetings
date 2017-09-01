@@ -133,7 +133,7 @@ public class RoomPanel extends BasePanel {
 					, getUserId(), "0", r.getId()
 					, cp.getRemoteAddress()
 					, "" + r.getId());
-			JSONObject options = VideoSettings.getInitJson(cp, "" + r.getId(), getClient().getSid());
+			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), getClient().getSid());
 			options.put("interview", isInterview);
 			options.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));

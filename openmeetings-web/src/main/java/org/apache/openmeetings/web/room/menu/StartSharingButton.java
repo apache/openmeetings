@@ -94,8 +94,8 @@ public class StartSharingButton extends OmButton {
 			app = IOUtils.toString(jnlp, UTF_8);
 			Client c = getOnlineClient(uid);
 			String sid = c.getSid();
-			long roomId = c.getRoom().getId();
-			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), "" + roomId, sid);
+			Long roomId = c.getRoom().getId();
+			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), roomId, sid);
 			String _url = s.getString(VideoSettings.URL);
 			Room room = getBean(RoomDao.class).get(roomId);
 			ISessionManager sessionManager = getBean(ISessionManager.class);

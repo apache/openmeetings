@@ -156,7 +156,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 						ExtendedClientProperties cp = (ExtendedClientProperties)info.getProperties();
 						target.appendJavaScript(
 								String.format("VideoSettings.init(%s);VideoSettings.open();"
-										, VideoSettings.getInitJson(cp, "hibernate", "noclient")));
+										, VideoSettings.getInitJson(cp, null, "noclient")));
 					}
 				}));
 				error = false;

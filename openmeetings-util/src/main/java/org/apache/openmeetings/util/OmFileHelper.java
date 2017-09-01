@@ -37,7 +37,6 @@ public class OmFileHelper {
 	private static final String STREAMS_DIR = "streams";
 	private static final String EMOTIONS_DIR = "emoticons";
 	private static final String LANGUAGES_DIR = "languages";
-	private static final String HIBERNATE_DIR = "hibernate";
 	private static final String CONF_DIR = "conf";
 	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
@@ -48,6 +47,7 @@ public class OmFileHelper {
 	public static final String PROFILES_DIR = "profiles";
 	public static final String SCREENSHARING_DIR = "screensharing";
 	public static final String FILES_DIR = "files";
+	public static final String HIBERNATE = "hibernate";
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
 	public static final String profilesPrefix = "profile_";
@@ -177,11 +177,11 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsHibernateDir() {
-		return getDir(getStreamsDir(), HIBERNATE_DIR);
+		return getDir(getStreamsDir(), HIBERNATE);
 	}
 
 	public static File getRecording(String name) {
-		return new File(getDir(getStreamsDir(), HIBERNATE_DIR), name);
+		return new File(getDir(getStreamsDir(), HIBERNATE), name);
 	}
 
 	public static File getStreamsSubDir(Long id) {
