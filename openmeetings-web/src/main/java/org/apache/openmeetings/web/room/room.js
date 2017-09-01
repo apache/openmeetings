@@ -26,6 +26,11 @@ var VideoUtil = (function() {
 	function _isSharing(c) {
 		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
 	}
+	function _isRecording(c) {
+		return 'sharing' === c.type
+			&& c.screenActivities.indexOf('recording') > -1
+			&& c.screenActivities.indexOf('sharing') < 0;
+	}
 	function _isSharing(c) {
 		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
 	}
@@ -123,6 +128,7 @@ var VideoUtil = (function() {
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
+	self.isRecording = _isRecording;
 	self.hasAudio = _hasAudio;
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;
@@ -180,7 +186,7 @@ var Video = (function() {
 			swf[0].setVolume(val);
 		}
 	}
-	function _init(_uid, _c, _pos) {
+	function _init(_c, _pos) {
 		c = _c;
 		pos = _pos;
 		size = {width: c.width, height: c.height};
@@ -291,11 +297,9 @@ var Video = (function() {
 			o.cam = c.cam;
 			o.mic = c.mic;
 			o.mode = 'broadcast';
-			o.uid = _uid;
 			o.av = c.activities.join();
 		} else {
 			o.mode = 'play';
-			o.uid = c.uid;
 		}
 		o.width = c.width;
 		o.height = c.height;
@@ -340,23 +344,24 @@ var VideoManager = (function() {
 		VideoSettings.init(self.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 	}
-	function _update(c, uids) {
+	function _update(c) {
 		if (options === undefined) {
 			return;
 		}
-		if (uids.length === 0) {
-			uids.push(c.uid);
-		}
-		for (let i = 0; i < uids.length; ++i) {
-			//TODO different features for different streams
-			// TODO width, height, AV
-			let _id = VideoUtil.getVid(uids[i])
-				, av = VideoUtil.hasAudio(c) || VideoUtil.hasVideo(c)
+		for (let i = 0; i < c.streams.length; ++i) {
+			let cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
+			delete cl.streams;
+			$.extend(cl, s);
+			if (VideoUtil.isRecording(cl)) {
+				continue;
+			}
+			let _id = VideoUtil.getVid(cl.uid)
+				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
-			if (av && v.length != 1 && !!c.self) {
-				Video().init(options.uid, c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
+			if (av && v.length != 1 && !!cl.self) {
+				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
 			} else if (av && v.length == 1) {
-				v.data().update(c);
+				v.data().update(cl);
 			} else if (!av && v.length == 1) {
 				_closeV(v);
 			}

@@ -86,7 +86,7 @@ import com.github.openjson.JSONObject;
 
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger _log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
-	private static final String OWNER_SID_PARAM = "ownerSid";
+	private static final String SID_PARAM = "sid";
 	private static final String PARENT_SID_PARAM = "parentSid"; //mobile
 	private static final String MOBILE_PARAM = "mobileClient";
 	private static final String ROOM_PARAM = "roomClient";
@@ -212,11 +212,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		if (hibernate && "noclient".equals(uid)) {
 			return true;
 		}
-		String ownerSid = (String)connParams.get(OWNER_SID_PARAM);
-		if (Strings.isEmpty(ownerSid)) {
-			ownerSid = (String)connParams.get(PARENT_SID_PARAM);
+		String sid = (String)connParams.get(SID_PARAM);
+		if (Strings.isEmpty(sid)) {
+			sid = (String)connParams.get(PARENT_SID_PARAM);
 		}
-		if (Strings.isEmpty(ownerSid)) {
+		if (Strings.isEmpty(sid)) {
 			_log.warn("No Owner SID is provided, client is rejected");
 			return rejectClient();
 		}
@@ -233,7 +233,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			rcm.setType(Client.Type.room);
 		}
 		rcm.setUid(Strings.isEmpty(uid) ? UUID.randomUUID().toString() : uid);
-		rcm.setSid(ownerSid);
+		rcm.setSid(sid);
 		if (sipDao.getUid() != null && sipDao.getUid().equals(rcm.getSid())) {
 			rcm.setType(Client.Type.sip);
 		}
@@ -484,7 +484,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			// Notify all the clients that the stream had been started
 			String streamName = stream.getPublishedName();
 			_log.debug("start streamPublishStart broadcast start: {}, CONN {}", streamName, current);
-			c.setBroadCastId(streamName);
+			c.setBroadcastId(streamName);
 
 			if (Client.Type.sharing != c.getType() && Client.Type.mobile != c.getType()) {
 				c.setAvsettings("av");
@@ -544,7 +544,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				}
 			}.start();
 			JSONObject obj = new JSONObject()
-					.put("ownerSid", c.getSid())
+					.put("sid", c.getSid())
 					.put("uid", c.getUid())
 					.put("type", c.getType())
 					.put("streamId", current.getClient().getId())
@@ -589,8 +589,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			recordingService.stopStreamRecord(current.getScope(), rcl);
 
 			sendStreamClosed(rcl);
-			if (stream.getPublishedName().equals(rcl.getBroadCastId())) {
-				rcl.setBroadCastId(null);
+			if (stream.getPublishedName().equals(rcl.getBroadcastId())) {
+				rcl.setBroadcastId(null);
 				rcl.setBroadcasting(false);
 				rcl.setAvsettings("n");
 			}
@@ -614,7 +614,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	private static void sendSharingStoped(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
-				.put("ownerSid", rcl.getSid())
+				.put("sid", rcl.getSid())
 				.put("uid", rcl.getUid());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.sharingStoped, obj.toString()));
 	}
@@ -622,8 +622,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static void sendStreamClosed(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
 				.put("uid", rcl.getUid())
-				.put("ownerSid", rcl.getSid())
-				.put("broadcastId", rcl.getBroadCastId());
+				.put("sid", rcl.getSid());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, obj.toString()));
 	}
 
@@ -965,8 +964,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
 		for (Client c: getApp().getOmRoomClients(client.getRoomId()) ) {
-			for (Client.Stream s : c.getStreams()) {
-				ids.add(s.getBroadcastId());
+			for (String uid : c.getStreams()) {
+				StreamClient rc = sessionManager.get(uid);
+				ids.add(rc.getBroadcastId());
 			}
 		}
 		return ids;

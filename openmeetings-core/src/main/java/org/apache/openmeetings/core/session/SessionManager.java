@@ -136,7 +136,7 @@ public class SessionManager implements ISessionManager {
 			return 0;
 		}
 		return list().stream()
-				.filter(c -> roomId.equals(c.getRoomId()) && c.isBroadcasting() && c.getBroadCastId() != null)
+				.filter(c -> roomId.equals(c.getRoomId()) && c.isBroadcasting() && c.getBroadcastId() != null)
 				.collect(Collectors.toList()).size();
 	}
 

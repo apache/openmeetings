@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,13 +25,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
+import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.RoomHelper;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 import org.apache.wicket.util.string.Strings;
 
@@ -60,89 +60,6 @@ public class Client implements IClient {
 	public enum Pod {
 		none, left, right;
 	}
-	public static class Stream implements Serializable {
-		private static final long serialVersionUID = 1L;
-		private final String streamId;
-		private final String uid;
-		private final String broadcastId;
-		private final Type type;
-		private Integer width;
-		private Integer height;
-
-		public Stream(String uid, String streamId, String broadcastId, Type type) {
-			this.streamId = streamId;
-			this.broadcastId = broadcastId;
-			this.uid = uid;
-			this.type = type;
-		}
-
-		public String getStreamId() {
-			return streamId;
-		}
-
-		public String getBroadcastId() {
-			return broadcastId;
-		}
-
-		public Type getType() {
-			return type;
-		}
-
-		public String getUid() {
-			return uid;
-		}
-
-		public Integer getWidth() {
-			return width;
-		}
-
-		public void setWidth(Integer width) {
-			this.width = width;
-		}
-
-		public Integer getHeight() {
-			return height;
-		}
-
-		public void setHeight(Integer height) {
-			this.height = height;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((broadcastId == null) ? 0 : broadcastId.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj == null) {
-				return false;
-			}
-			if (getClass() != obj.getClass()) {
-				return false;
-			}
-			Stream other = (Stream) obj;
-			if (broadcastId == null) {
-				if (other.broadcastId != null) {
-					return false;
-				}
-			} else if (!broadcastId.equals(other.broadcastId)) {
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public String toString() {
-			return "Stream [id=" + streamId + ", broadcastId=" + broadcastId + ", type=" + type + "]";
-		}
-	}
 	private final String sessionId;
 	private int pageId;
 	private User user;
@@ -152,7 +69,7 @@ public class Client implements IClient {
 	private String remoteAddress;
 	private final Set<Right> rights = new HashSet<>();
 	private final Set<Activity> activities = new HashSet<>();
-	private final Set<Stream> streams = new HashSet<>();
+	private final Set<String> streams = new HashSet<>();
 	private final Date connectedSince;
 	private Pod pod;
 	private int cam = -1;
@@ -314,34 +231,22 @@ public class Client implements IClient {
 				activities.remove(Activity.broadcastA);
 				activities.remove(Activity.broadcastV);
 				break;
-			case share:
-				for (Stream s : streams) {
-					if (Type.sharing == s.getType()) {
-						streams.remove(s);
-						break;
-					}
-				}
-				break;
 			default:
 		}
 		return this;
 	}
 
-	public Client addStream(String uid, String streamId, String broadcastId, Type type) {
-		if (broadcastId != null) {
-			streams.add(new Stream(uid, streamId, broadcastId, type));
-		}
+	public Client addStream(String _uid) {
+		streams.add(_uid);
 		return this;
 	}
 
-	public Client removeStream(String broadcastId) {
-		if (broadcastId != null) {
-			streams.remove(new Stream(null, null, broadcastId, Type.video));
-		}
+	public Client removeStream(String _uid) {
+		streams.remove(_uid);
 		return this;
 	}
 
-	public List<Stream> getStreams() {
+	public List<String> getStreams() {
 		return new ArrayList<>(streams);
 	}
 
@@ -494,12 +399,38 @@ public class Client implements IClient {
 		return json;
 	}
 
-	public JSONArray streamArray(boolean self) {
-		// stream `uid` is unknown at the time of self stream creation
-		// so we will replace stream `uid` with client `uid` for self
-		return new JSONArray(streams.stream().map(
-				s -> self && Type.room == s.getType() ? uid : s.getUid()
-			).collect(Collectors.toList()));
+	public JSONObject streamJson(String _sid, boolean self, ISessionManager mgr) {
+		JSONArray _streams = new JSONArray();
+		boolean avFound = false;
+		for (String _uid : streams) {
+			StreamClient rc = mgr.get(_uid);
+			Type t = rc.getType();
+			if (Type.room == t) {
+				avFound = true;
+			}
+			_streams.put(RoomHelper.addScreenActivities(
+					new JSONObject()
+						.put("type", t.name())
+						// stream `uid` is unknown at the time of self stream creation
+						// so we will replace stream `uid` with client `uid` for self
+						.put("uid", self && Type.room == t ? uid : rc.getUid())
+						.put("broadcastId", rc.getBroadcastId())
+						.put("width", rc.getWidth())
+						.put("height", rc.getHeight())
+					, rc
+				));
+		}
+		if (self && !avFound && hasAnyActivity(Activity.broadcastA, Activity.broadcastV)) {
+			_streams.put(new JSONObject()
+					.put("type", Type.room.name())
+					// stream `uid` is unknown at the time of self stream creation
+					// so we will replace stream `uid` with client `uid` for self
+					.put("uid", uid)
+					.put("width", width)
+					.put("height", height)
+					);
+		}
+		return toJson(self).put("sid", _sid).put("streams", _streams);
 	}
 
 	@Override

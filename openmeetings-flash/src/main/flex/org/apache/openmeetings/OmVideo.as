@@ -219,7 +219,7 @@ public class OmVideo {
 
 	private function _connect(url:String):void {
 		nc.connect(url, {
-			ownerSid: params.sid
+			sid: params.sid
 			, roomClient: true
 			, nativeSsl: 'best' == params.proxyType
 		});

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.core.util.RoomHelper.videoJson;
+import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
@@ -214,8 +214,8 @@ public class RoomPanel extends BasePanel {
 		Client _c = getClient();
 		for (Client c: getRoomClients(getRoom().getId()) ) {
 			boolean self = _c.getUid().equals(c.getUid());
-			for (Client.Stream s : c.getStreams()) {
-				JSONObject jo = videoJson(c, self, c.getSid(), getBean(ISessionManager.class), s.getUid());
+			for (String uid : c.getStreams()) {
+				JSONObject jo = videoJson(c, self, c.getSid(), getBean(ISessionManager.class), uid);
 				sb.append(String.format("VideoManager.play(%s);", jo));
 				hasStreams = true;
 			}
@@ -412,14 +412,16 @@ public class RoomPanel extends BasePanel {
 						break;
 					case recordingStarted:
 						{
-							String uid = ((TextRoomMessage)m).getText();
-							Client c = getClientBySid(uid);
+							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+							String uid = obj.getString("uid");
+							String sid = obj.getString("sid");
+							Client c = getClientBySid(sid);
 							if (c == null) {
-								log.error("Not existing user has started recording {} !!!!", uid);
+								log.error("Not existing user has started recording {} !!!!", sid);
 								return;
 							}
-							recordingUser = uid;
-							update(c.set(Client.Activity.record));
+							recordingUser = sid;
+							update(c.addStream(uid).set(Client.Activity.record));
 							menu.update(handler);
 							updateInterviewRecordingButtons(handler);
 						}
@@ -427,14 +429,15 @@ public class RoomPanel extends BasePanel {
 					case sharingStoped:
 						{
 							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-							Client c = getClientBySid(obj.getString("ownerSid"));
+							String uid = obj.getString("uid");
+							Client c = getClientBySid(obj.getString("sid"));
 							if (c == null) {
 								log.error("Not existing user has started sharing {} !!!!", obj);
 								return;
 							}
-							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", obj.getString("uid")));
+							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", uid));
 							sharingUser = null;
-							update(c.remove(Client.Activity.share));
+							update(c.removeStream(uid).remove(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
@@ -461,9 +464,8 @@ public class RoomPanel extends BasePanel {
 							}
 							Client _c = getClient();
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s, %s);"
-									, c.toJson(self).put("sid", _c.getSid())
-									, c.streamArray(self).toString()
+							handler.appendJavaScript(String.format("VideoManager.update(%s);"
+									, c.streamJson(_c.getSid(), self, getBean(ISessionManager.class)).toString()
 									));
 							sidebar.update(handler);
 							menu.update(handler);
@@ -474,12 +476,11 @@ public class RoomPanel extends BasePanel {
 					case newStream:
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						Client.Type type = Client.Type.valueOf(obj.getString("type"));
 						String uid = obj.getString("uid");
 						Client c = getOnlineClient(uid);
 						if (c == null) {
 							// screen client, ext video stream
-							c = getClientBySid(obj.getString("ownerSid"));
+							c = getClientBySid(obj.getString("sid"));
 						}
 						if (c == null) {
 							log.error("Not existing user in newStream {} !!!!", uid);
@@ -487,14 +488,12 @@ public class RoomPanel extends BasePanel {
 						}
 						Client _c = getClient();
 						boolean self = _c.getSid().equals(c.getSid());
-						String broadcastId = obj.getString("streamName");
-						String streamId = obj.getString("streamId");
 						if (!self) {
 							JSONObject jo = videoJson(c, self, _c.getSid(), getBean(ISessionManager.class), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
 						if (_c.getSid().equals(c.getSid())) {
-							update(c.addStream(uid, streamId, broadcastId, type));
+							update(c.addStream(uid));
 						}
 						updateInterviewRecordingButtons(handler);
 					}
@@ -502,16 +501,17 @@ public class RoomPanel extends BasePanel {
 					case closeStream:
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						Client c = getClientBySid(obj.getString("ownerSid"));
+						String uid = obj.getString("uid");
+						Client c = getClientBySid(obj.getString("sid"));
 						if (c == null) {
 							log.error("Not existing user in closeStream {} !!!!", obj);
 							return;
 						}
 						Client _c = getClient();
 						if (_c.getUid().equals(c.getUid())) {
-							update(c.removeStream(obj.optString("broadcastId")));
+							update(c.removeStream(uid));
 						}
-						handler.appendJavaScript(String.format("VideoManager.close('%s');", obj.getString("uid")));
+						handler.appendJavaScript(String.format("VideoManager.close('%s');", uid));
 						updateInterviewRecordingButtons(handler);
 					}
 						break;

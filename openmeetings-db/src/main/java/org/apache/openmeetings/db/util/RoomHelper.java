@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.util;
+package org.apache.openmeetings.db.util;
 
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -31,10 +31,14 @@ public class RoomHelper {
 		JSONObject o = c.toJson(self)
 				.put("sid", sid)
 				.put("uid", sc.getUid())
-				.put("broadcastId", sc.getBroadCastId())
+				.put("broadcastId", sc.getBroadcastId())
 				.put("width", sc.getWidth())
 				.put("height", sc.getHeight())
 				.put("type", sc.getType());
+		return addScreenActivities(o, sc);
+	}
+
+	public static JSONObject addScreenActivities(JSONObject o, StreamClient sc) {
 		JSONArray a = new JSONArray();
 		if (Client.Type.sharing == sc.getType()) {
 			if (sc.isSharingStarted()) {

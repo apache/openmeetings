@@ -231,7 +231,7 @@ public class MobileService {
 			c.setLastname(u.getLastname());
 			c.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 		}
-		c.setBroadCastId(UUID.randomUUID().toString());
+		c.setBroadcastId(UUID.randomUUID().toString());
 		return c;
 	}
 
@@ -269,7 +269,7 @@ public class MobileService {
 					//TODO duplicates !!!!!!!!!!!!!!
 					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getId());
-					add(map, "broadCastId", c.getBroadCastId());
+					add(map, "broadCastId", c.getBroadcastId());
 					add(map, "userId", c.getUserId());
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
@@ -347,7 +347,7 @@ public class MobileService {
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		Map<String, Object> result = new HashMap<>();
 		result.put("publicSid", c.getUid());
-		result.put("broadCastId", c.getBroadCastId());
+		result.put("broadCastId", c.getBroadcastId());
 		return result;
 	}
 
@@ -356,7 +356,7 @@ public class MobileService {
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		c.setAvsettings(avMode);
 		if (!"n".equals(avMode)) {
-			c.setBroadCastId(UUID.randomUUID().toString());
+			c.setBroadcastId(UUID.randomUUID().toString());
 			c.setBroadcasting(true);
 		}
 		c.setWidth(Double.valueOf(width).intValue());
@@ -370,7 +370,7 @@ public class MobileService {
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
 		Map<String, Object> result = new HashMap<>();
 		if (!"n".equals(avMode)) {
-			result.put("broadcastId", c.getBroadCastId());
+			result.put("broadcastId", c.getBroadcastId());
 		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);

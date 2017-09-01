@@ -61,6 +61,8 @@ import org.red5.server.stream.ClientBroadcastStream;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.openjson.JSONObject;
+
 public class RecordingService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingService.class, webAppRootKey);
 
@@ -156,7 +158,8 @@ public class RecordingService implements IPendingServiceCallback {
 				}
 			}
 			// Send every user a notification that the recording did start
-			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted, client.getSid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted
+					, new JSONObject().put("uid", client.getUid()).put("sid", client.getSid()).toString()));
 		} catch (Exception err) {
 			log.error("[startRecording]", err);
 		}
@@ -308,12 +311,12 @@ public class RecordingService implements IPendingServiceCallback {
 	}
 
 	public void stopStreamRecord(IScope scope, StreamClient rcl) {
-		if (rcl == null || rcl.getMetaId() == null || rcl.getBroadCastId() == null) {
+		if (rcl == null || rcl.getMetaId() == null || rcl.getBroadcastId() == null) {
 			return;
 		}
 		log.debug("is this users still alive? stop it : {}", rcl);
 
-		removeListener(scope, rcl.getBroadCastId(), rcl.getMetaId());
+		removeListener(scope, rcl.getBroadcastId(), rcl.getMetaId());
 
 		// Update Meta Data
 		metaDataDao.updateEndDate(rcl.getMetaId(), new Date());
@@ -337,7 +340,7 @@ public class RecordingService implements IPendingServiceCallback {
 		// If its the recording client we need another type of Meta Data
 		boolean audioOnly = "a".equals(rcl.getAvsettings());
 		boolean videoOnly = "v".equals(rcl.getAvsettings());
-		String broadcastId = rcl.getBroadCastId();
+		String broadcastId = rcl.getBroadcastId();
 		if (broadcastId != null) {
 			if (Client.Type.sharing == rcl.getType()) {
 				if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
@@ -348,7 +351,7 @@ public class RecordingService implements IPendingServiceCallback {
 							false, true, streamName, null);
 
 					// Start FLV Recording
-					addListener(conn, rcl.getBroadCastId(), streamName, metaId, true, isInterview);
+					addListener(conn, rcl.getBroadcastId(), streamName, metaId, true, isInterview);
 
 					// Add Meta Data
 					rcl.setMetaId(metaId);

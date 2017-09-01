@@ -44,7 +44,7 @@ public class StreamClient implements IClient {
 	private String remoteAddress;
 	private int userport;
 	private Date roomEnter = null;
-	private String broadCastId = null;
+	private String broadcastId = null;
 	private String login = "";
 	private Long userId = null;
 	private String firstname = "";
@@ -197,12 +197,12 @@ public class StreamClient implements IClient {
 		this.roomEnter = roomEnter;
 	}
 
-	public String getBroadCastId() {
-		return broadCastId;
+	public String getBroadcastId() {
+		return broadcastId;
 	}
 
-	public void setBroadCastId(String broadCastId) {
-		this.broadCastId = broadCastId;
+	public void setBroadcastId(String broadcastId) {
+		this.broadcastId = broadcastId;
 	}
 
 	@Override
@@ -418,8 +418,8 @@ public class StreamClient implements IClient {
 
 	@Override
 	public String toString() {
-		return "StreamClient [scope=" + scope + ", uid=" + uid + ", ownerSid=" + sid + ", broadCastId="
-				+ broadCastId + ", login=" + login + ", userId=" + userId + ", avsettings=" + avsettings + ", type=" + type
+		return "StreamClient [scope=" + scope + ", uid=" + uid + ", sid=" + sid + ", broadCastId="
+				+ broadcastId + ", login=" + login + ", userId=" + userId + ", avsettings=" + avsettings + ", type=" + type
 				+ ", isBroadcasting=" + broadcasting + "]";
 	}
 }

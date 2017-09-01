@@ -306,7 +306,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		Map<String, Object> map = instance.makeDefaultConnectionParams(host, port, app);
 		map.put("screenClient", true);
 		Map<String, Object> params = new HashMap<>();
-		params.put("ownerSid", sid);
+		params.put("sid", sid);
 		instance.connect(host, port, map, this, new Object[]{params});
 	}
 
