@@ -602,8 +602,8 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void broadcast(Client client) {
-		WebSocketHelper.sendRoom(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 		RoomBroadcaster.sendUpdatedClient(client);
+		WebSocketHelper.sendRoom(new RoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated));
 	}
 
 	public Room getRoom() {

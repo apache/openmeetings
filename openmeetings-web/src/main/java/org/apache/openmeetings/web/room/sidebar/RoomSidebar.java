@@ -394,14 +394,11 @@ public class RoomSidebar extends Panel {
 		if (c == null) {
 			return;
 		}
-		boolean updated = false;
 		if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
 			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
-				updated = true;
 				c.allow(Room.Right.audio);
 			}
 			if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
-				updated = true;
 				c.allow(Room.Right.video);
 			}
 		}
@@ -416,7 +413,6 @@ public class RoomSidebar extends Panel {
 				return;
 			}
 			Pod pod = c.getPod();
-			updated = true;
 			c.setPod(getRequest().getRequestParameters().getParameterValue(PARAM_POD).toOptionalInteger());
 			if (pod != Pod.none && pod != c.getPod()) {
 				//pod has changed, no need to toggle
@@ -424,10 +420,7 @@ public class RoomSidebar extends Panel {
 			} else {
 				c.toggle(a);
 			}
-			room.broadcast(c);
-		}
-		if (updated) {
-			Application.update(c);
+			room.broadcast(c); //will update client
 		}
 	}
 
