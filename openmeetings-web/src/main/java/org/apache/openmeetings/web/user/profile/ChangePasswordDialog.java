@@ -95,7 +95,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 		add(form.add(
 				current.setLabel(Model.of(getString("current.password"))).setRequired(true)
 				, pass.setLabel(Model.of(getString("328"))).add(passValidator)
-				, pass2.setLabel(Model.of(getString("329")))
+				, pass2.setLabel(Model.of(getString("116")))
 				, feedback.setOutputMarkupId(true)
 				));
 	}

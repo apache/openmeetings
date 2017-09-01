@@ -36,7 +36,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 		super(id, form);
 		this.form = form;
 
-		newRecord = new Label("newRecord", Model.of(Application.getString("344")));
+		newRecord = new Label("newRecord", Model.of(Application.getString("155")));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 	}
 

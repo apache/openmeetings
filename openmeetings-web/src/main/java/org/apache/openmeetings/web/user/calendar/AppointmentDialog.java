@@ -102,9 +102,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
 
 	private AppointmentForm form;
-	private DialogButton save = new DialogButton("save", Application.getString("813"));
+	private DialogButton save = new DialogButton("save", Application.getString("144"));
 	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private DialogButton delete = new DialogButton("delete", Application.getString("814"));
+	private DialogButton delete = new DialogButton("delete", Application.getString("80"));
 	private DialogButton enterRoom = new DialogButton("enterRoom", Application.getString("1282"));
 	private final CalendarPanel calendarPanel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
@@ -159,7 +159,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		setOutputMarkupId(true);
 		form = new AppointmentForm("appForm", model);
 		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", Application.getString("814"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
+		confirmDelete = new MessageDialog("confirmDelete", Application.getString("80"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
 			@Override

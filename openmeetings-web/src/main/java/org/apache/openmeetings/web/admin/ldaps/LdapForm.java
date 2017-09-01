@@ -55,7 +55,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 
-		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("1108"))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("165"))));
 		add(new CheckBox("active"));
 		add(forDatePattern("inserted", WEB_DATE_PATTERN));
 		add(new Label("insertedby.login"));

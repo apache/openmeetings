@@ -53,7 +53,7 @@ public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 	public InvitationPasswordDialog(String id, IUpdatable comp) {
 		super(id, Application.getString("230"));
 		this.comp = comp;
-		password.setLabel(Model.of(Application.getString("536"))).add(new IValidator<String>(){
+		password.setLabel(Model.of(Application.getString("110"))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override

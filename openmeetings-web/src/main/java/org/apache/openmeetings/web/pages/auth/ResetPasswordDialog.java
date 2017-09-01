@@ -138,7 +138,7 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			password.setRequired(false).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), user));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
-			confirmPassword.setLabel(Model.of(getString("329"))).setOutputMarkupId(true);
+			confirmPassword.setLabel(Model.of(getString("116"))).setOutputMarkupId(true);
 
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
 				private static final long serialVersionUID = 1L;

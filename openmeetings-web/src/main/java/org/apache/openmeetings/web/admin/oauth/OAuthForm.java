@@ -51,7 +51,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		setOutputMarkupId(true);
 
 		add(new CheckBox("isEnabled"));
-		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("1573"))));
+		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("165"))));
 		add(new TextField<String>("iconUrl").setLabel(Model.of(Application.getString("1575"))));
 		add(new RequiredTextField<String>("clientId").setLabel(Model.of(Application.getString("1576"))));
 		add(new RequiredTextField<String>("clientSecret").setLabel(Model.of(Application.getString("1577"))));

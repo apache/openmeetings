@@ -70,9 +70,9 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	private CalendarPanel calendarPanel;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private DialogButton save = new DialogButton("save", Application.getString("813"));
+	private DialogButton save = new DialogButton("save", Application.getString("144"));
 	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private DialogButton delete = new DialogButton("delete", Application.getString("814"));
+	private DialogButton delete = new DialogButton("delete", Application.getString("80"));
 	private UserCalendarForm form;
 	private MessageDialog confirmDelete;
 	private List<OmCalendar> cals; //List of calendars for syncing
@@ -94,7 +94,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 		this.calendarPanel = calendarPanel;
 		form = new UserCalendarForm("calform", model);
 		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", Application.getString("814"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN) {
+		confirmDelete = new MessageDialog("confirmDelete", Application.getString("80"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -412,7 +412,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 		// Fields required for adding Google Calendar
 		Label urlLabel = new Label("urlLabel", Application.getString("calendar.url")),
 				userLabel = new Label("userLabel", Application.getString("114")),
-				passLabel = new Label("passLabel", Application.getString("115"));
+				passLabel = new Label("passLabel", Application.getString("110"));
 
 		AjaxCheckBox gcal; // Checkbox for Google Calendar
 		UrlTextField url = new UrlTextField("url", Model.of(""), new UrlValidator() {

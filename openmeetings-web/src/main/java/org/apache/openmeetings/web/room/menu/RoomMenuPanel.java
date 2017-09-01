@@ -153,7 +153,7 @@ public class RoomMenuPanel extends Panel {
 			createPoll.open(target);
 		}
 	};
-	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString("42"), Application.getString("1485"), false) {
+	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString("32"), Application.getString("1485"), false) {
 		private static final long serialVersionUID = 1L;
 
 		@Override

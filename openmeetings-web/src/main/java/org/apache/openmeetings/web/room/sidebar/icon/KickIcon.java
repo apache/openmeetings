@@ -34,7 +34,7 @@ public class KickIcon extends ClientIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString("1213");
+		return getString("603");
 	}
 
 	@Override

@@ -120,7 +120,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 				, new Radio<>("endless", Model.of(Valid.Endless))));
 		add(passwd = new PasswordTextField("password"));
 		Invitation i = getModelObject();
-		passwd.setLabel(Model.of(Application.getString("525"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
+		passwd.setLabel(Model.of(Application.getString("110"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
 		add(from, to, timeZoneId);
 		from.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
 		to.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);

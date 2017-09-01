@@ -228,9 +228,9 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			super.onInitialize();
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			firstNameField.setLabel(Model.of(getString("117")));
-			lastNameField.setLabel(Model.of(getString("118")));
+			lastNameField.setLabel(Model.of(getString("149")));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao))).setLabel(Model.of(getString("114")));
-			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao))).setLabel(Model.of(getString("115")));
+			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao))).setLabel(Model.of(getString("110")));
 			confirmPassword.setLabel(Model.of(getString("116")));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(Model.of(getString("119")));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected

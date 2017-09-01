@@ -62,7 +62,7 @@ public class NicknameDialog extends NonClosableDialog<User> {
 		form.add(feedback);
 		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(Application.getString("135"))).add(minimumLength(4)));
 		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(Application.getString("136"))).add(minimumLength(4)));
-		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(Application.getString("137"))).add(RfcCompliantEmailAddressValidator.getInstance()));
+		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(Application.getString("119"))).add(RfcCompliantEmailAddressValidator.getInstance()));
 	}
 
 	private static boolean isVisible(User u) {

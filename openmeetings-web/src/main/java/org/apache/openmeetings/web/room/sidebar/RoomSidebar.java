@@ -251,7 +251,7 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			public IModel<String> getTitle() {
-				return Model.of(getString("613"));
+				return Model.of(getString("398"));
 			}
 
 			@Override
@@ -276,7 +276,7 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			public IModel<String> getTitle() {
-				return Model.of(getString("614"));
+				return Model.of(getString("245"));
 			}
 
 			@Override

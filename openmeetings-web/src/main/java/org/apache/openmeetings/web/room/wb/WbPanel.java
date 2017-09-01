@@ -134,7 +134,7 @@ public class WbPanel extends AbstractWbPanel {
 
 		@Override
 		protected String getAddStr() {
-			return Application.getString("203");
+			return Application.getString("144");
 		}
 	};
 

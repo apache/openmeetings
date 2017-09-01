@@ -216,7 +216,7 @@ public class MessagesContactsPanel extends UserPanel {
 		emptySelection(target);
 		selectDropDown.setModelObject(SELECT_CHOOSE);
 		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
-		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "1245")));
+		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "80")));
 		readBtn.setEnabled(false);
 		unreadBtn.setEnabled(false);
 		if (target != null) {

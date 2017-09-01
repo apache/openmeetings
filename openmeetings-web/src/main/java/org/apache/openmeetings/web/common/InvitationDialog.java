@@ -37,7 +37,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
-		super(id, Application.getString("214"),_form.getModel());
+		super(id, Application.getString("213"),_form.getModel());
 		add(form = _form);
 	}
 

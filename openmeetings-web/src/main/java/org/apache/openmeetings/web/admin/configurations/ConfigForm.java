@@ -61,7 +61,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString("267"))).add(new IValidator<String>(){
+		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString("265"))).add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -43,7 +43,7 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		setTitle(Model.of(getString("1144")));
+		setTitle(Model.of(getString("815")));
 		add(new Label("title"));
 		add(new Label("description"));
 		add(new Label("owner.timeZoneId"));

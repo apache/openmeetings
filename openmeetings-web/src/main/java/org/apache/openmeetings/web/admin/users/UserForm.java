@@ -106,9 +106,9 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onInitialize() {
 		super.onInitialize();
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		add(password.setResetPassword(false).setLabel(Model.of(getString("133"))).setRequired(false)
+		add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getModelObject())));
-		login.setLabel(Model.of(Application.getString("132")));
+		login.setLabel(Model.of(Application.getString("108")));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {

@@ -49,7 +49,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 	private final LangPanel langPanel;
 
 	public AddLanguageDialog(String id, final LangPanel langPanel) {
-		super(id, Application.getString("364"));
+		super(id, Application.getString("362"));
 		this.langPanel = langPanel;
 		add(form.add(feedback, iso.setOutputMarkupId(true)));
 		iso.add(new IValidator<String>() {

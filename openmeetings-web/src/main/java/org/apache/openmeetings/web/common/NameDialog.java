@@ -112,7 +112,7 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	}
 
 	protected String getTitleStr() {
-		return getString("1260");
+		return getString("703");
 	}
 
 	protected String getLabelStr() {

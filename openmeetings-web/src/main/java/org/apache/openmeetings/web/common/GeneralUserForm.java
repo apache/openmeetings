@@ -79,7 +79,7 @@ public class GeneralUserForm extends Form<User> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(email);
-		email.setLabel(Model.of(Application.getString("137")));
+		email.setLabel(Model.of(Application.getString("119")));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new DropDownChoice<>("salutation"
 				, Arrays.asList(Salutation.values())

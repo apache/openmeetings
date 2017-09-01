@@ -114,7 +114,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onInitialize() {
 		super.onInitialize();
 		RequiredTextField<String> name = new RequiredTextField<>("name");
-		name.setLabel(new Model<>(Application.getString("193")));
+		name.setLabel(new Model<>(Application.getString("165")));
 		add(name);
 
 		add(new DropDownChoice<>("numberOfPartizipants", //
@@ -131,7 +131,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(Application.getString("194"))));
+		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(Application.getString("45"))));
 
 		add(new TextArea<String>("comment"));
 
