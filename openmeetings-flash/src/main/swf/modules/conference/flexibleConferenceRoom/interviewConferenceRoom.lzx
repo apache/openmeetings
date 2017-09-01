@@ -25,14 +25,10 @@
 		canvas.currentRoomObj.hideScreenSharing = true;
 	</handler>
 
-	<!--
-		User Panel and Participants List
-	 -->
+	<!-- User Panel and Participants List -->
 	<baseRoomSidebar name="_sidePanel"/>
 
-	<!--
-		Whiteboard in Interview Room Type those are the Video Pods
-	 -->
+	<!-- Whiteboard in Interview Room Type those are the Video Pods -->
 	<interviewWhiteboard name="_whiteboardInterview" x="${ parent._sidePanel.width }"
 			width="${ canvas.width - parent._sidePanel.width }" />
 </class>

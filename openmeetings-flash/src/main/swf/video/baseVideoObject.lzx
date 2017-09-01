@@ -114,7 +114,7 @@
 			}
 			this._giveExclusiveAudioView.bringToFront();
 			
-			this.isMicrophonesRoom = canvas.currentRoomObj.hiddenElements.indexOf('MicrophoneStatus') < 0;
+			this.isMicrophonesRoom = !this.isInterview && canvas.currentRoomObj.hiddenElements.indexOf('MicrophoneStatus') < 0;
 			if (isMicrophonesRoom) {
 				this._innertop.setAttribute("bgcolor", "0xFF6600");
 				this._innerbottom.setAttribute("bgcolor", "0xFF6600");
