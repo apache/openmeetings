@@ -287,7 +287,7 @@ html, body {
 .offline.om-icon {
 	background-image: url(images/bullet_red.png);
 }
-.signin .error .k-notification-wrap, .adminPanel .k-notification-wrap {
+.error .k-notification-wrap {
 	white-space: normal;
 }
 .error {
