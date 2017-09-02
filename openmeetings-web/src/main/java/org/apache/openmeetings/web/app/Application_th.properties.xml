@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[หน้าแรก]]></entry>
 	<entry key="125"><![CDATA[ผู้ใช้]]></entry>
 	<entry key="126"><![CDATA[กลุ่ม]]></entry>
-	<entry key="127"><![CDATA[องค์กร]]></entry>
 	<entry key="131"><![CDATA[เข้าห้อง]]></entry>
 	<entry key="135"><![CDATA[ชื่อ]]></entry>
 	<entry key="136"><![CDATA[นามสกุล]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[ข้อมูลที่อยู่]]></entry>
 	<entry key="143"><![CDATA[ข้อมูลผู้ใช้]]></entry>
 	<entry key="144"><![CDATA[บันทึก]]></entry>
-	<entry key="146"><![CDATA[หมายเลขประจำตัวผู้ใช้]]></entry>
-	<entry key="149"><![CDATA[นามสกุล]]></entry>
 	<entry key="155"><![CDATA[บันทึกใหม่]]></entry>
 	<entry key="157"><![CDATA[ลบบันทึก]]></entry>
 	<entry key="159"><![CDATA[ยกเลิกแล้ว]]></entry>
 	<entry key="161"><![CDATA[องค์กร]]></entry>
 	<entry key="162"><![CDATA[ปฏิทิน]]></entry>
-	<entry key="164"><![CDATA[หมายเลขประจำองค์กร]]></entry>
 	<entry key="165"><![CDATA[ชื่อ]]></entry>
 	<entry key="177"><![CDATA[ผู้ใช้]]></entry>
 	<entry key="178"><![CDATA[เพิ่มผู้ใช้]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[ห้องประชุมกลุ่ม]]></entry>
 	<entry key="188"><![CDATA[หมายเลขประจำตัว]]></entry>
 	<entry key="190"><![CDATA[สาธารณะ]]></entry>
-	<entry key="191"><![CDATA[องค์กร]]></entry>
 	<entry key="196"><![CDATA[ข้อคิดเห็น]]></entry>
 	<entry key="197"><![CDATA[บันทึกและเอ็กซ์พอร์ต]]></entry>
 	<entry key="199"><![CDATA[บันทึกเป็น]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[เปลี่ยนความหนาของเส้น]]></entry>
 	<entry key="433"><![CDATA[แขก]]></entry>
 	<entry key="442"><![CDATA[ลบเซิร์ฟเวอร์-บันทึกการแชท]]></entry>
-	<entry key="447"><![CDATA[เลือกอุปกรณ์ที่ใช้เผยแพร่]]></entry>
-	<entry key="448"><![CDATA[เสียงและภาพวีดีโอ]]></entry>
-	<entry key="449"><![CDATA[เสียงเท่านั้น]]></entry>
-	<entry key="450"><![CDATA[ภาพวีดีโอเท่านั้น]]></entry>
-	<entry key="451"><![CDATA[ไม่มีเสียง/ภาพวีดีโอ (ภาพนิ่ง)]]></entry>
-	<entry key="452"><![CDATA[ไม่เผยแพร่เสียง/ภาพวีดีโอจากเครื่องคอมพิวเตอร์ของคุณสู่สาธารณะ โดยที่จะแสดงภาพจากโปรโฟล์ของคุณแทน ควรเลือกการตั้งค่าเหล่านี้หากคุณมีปัญหากับแบนด์วิธหรืออินเตอร์เน็ตช้ามาก]]></entry>
 	<entry key="453"><![CDATA[จ]]></entry>
 	<entry key="454"><![CDATA[อ]]></entry>
 	<entry key="455"><![CDATA[พ]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Do you really want to kick this Client from the Connection?<br/> This does only remove the Client from the current Room.The Client could re-login again.]]></entry>
 	<entry key="606"><![CDATA[Your session has been closed by an Administrator or Moderator.]]></entry>
 	<entry key="607"><![CDATA[Phone]]></entry>
-	<entry key="610"><![CDATA[(Re) Start Audio/Video or change Device Settings]]></entry>
 	<entry key="612"><![CDATA[Remove ability to draw on whiteboard]]></entry>
 	<entry key="615"><![CDATA[Whiteboard]]></entry>
 	<entry key="619"><![CDATA[Room Type]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[ยกเลิก]]></entry>
+	<entry key="lbl.refresh"><![CDATA[รีเฟรช]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[เลข 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[ใช่/ไม่]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[รีเฟรช]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Domov]]></entry>
 	<entry key="125"><![CDATA[Používatelia]]></entry>
 	<entry key="126"><![CDATA[Skupiny]]></entry>
-	<entry key="127"><![CDATA[Spoločnosti]]></entry>
 	<entry key="131"><![CDATA[Vstup]]></entry>
 	<entry key="135"><![CDATA[Titul/Meno]]></entry>
 	<entry key="136"><![CDATA[Priezvisko]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Adresa]]></entry>
 	<entry key="143"><![CDATA[Údaje používateľa]]></entry>
 	<entry key="144"><![CDATA[Uložiť]]></entry>
-	<entry key="146"><![CDATA[ID používateľa]]></entry>
-	<entry key="149"><![CDATA[Priezvisko]]></entry>
 	<entry key="155"><![CDATA[Nové nahrávanie]]></entry>
 	<entry key="157"><![CDATA[Zmazať nahrávku]]></entry>
 	<entry key="159"><![CDATA[Zablokované]]></entry>
 	<entry key="161"><![CDATA[Spoločnosti]]></entry>
 	<entry key="162"><![CDATA[Kalendár]]></entry>
-	<entry key="164"><![CDATA[ID spoločnosti]]></entry>
 	<entry key="165"><![CDATA[Meno]]></entry>
 	<entry key="177"><![CDATA[Používateľ]]></entry>
 	<entry key="178"><![CDATA[Pridať používateľa]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Miestnosti]]></entry>
 	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[Verejné]]></entry>
-	<entry key="191"><![CDATA[Spoločnosti]]></entry>
 	<entry key="196"><![CDATA[Komentovať]]></entry>
 	<entry key="197"><![CDATA[Uložiť a exportovať]]></entry>
 	<entry key="199"><![CDATA[Uložiť ako]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Zmeniť širku]]></entry>
 	<entry key="433"><![CDATA[Hosť]]></entry>
 	<entry key="442"><![CDATA[Delete server chat log]]></entry>
-	<entry key="447"><![CDATA[Vybrať zariadenie]]></entry>
-	<entry key="448"><![CDATA[Audio a video]]></entry>
-	<entry key="449"><![CDATA[Iba audio]]></entry>
-	<entry key="450"><![CDATA[Video iba]]></entry>
-	<entry key="451"><![CDATA[Žiadne audio/video (obrázok)]]></entry>
-	<entry key="452"><![CDATA[Žiadne audio/video z vášho počítača nie je publikované]]></entry>
 	<entry key="453"><![CDATA[Po]]></entry>
 	<entry key="454"><![CDATA[Ut]]></entry>
 	<entry key="455"><![CDATA[Str]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Naozaj chcete vyhodiť tohto klienta z miestnosti?]]></entry>
 	<entry key="606"><![CDATA[Vaše stretnutie bolo zavreté administrátorom alebo moderátorom.]]></entry>
 	<entry key="607"><![CDATA[Telefón]]></entry>
-	<entry key="610"><![CDATA[(Re) štartovať audio/video alebo zmeniť nastavenia zaradenia]]></entry>
 	<entry key="612"><![CDATA[Odobrať právo kresliť na tabuľu]]></entry>
 	<entry key="615"><![CDATA[Tabuľa]]></entry>
 	<entry key="619"><![CDATA[Typ miestnosti]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Zrušiť]]></entry>
+	<entry key="lbl.refresh"><![CDATA[Obnoviť]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Čísla 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Áno/Nie]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[Obnoviť]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

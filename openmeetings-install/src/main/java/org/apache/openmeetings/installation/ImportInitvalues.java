@@ -152,7 +152,7 @@ public class ImportInitvalues {
 		Naviglobal admin = navimanagement.addGlobalStructure(6, "6", LEVEL_GROUP_ADMIN, "Administration Menu", "586");
 		navimanagement.addMainStructure("adminModuleUser", null, 14, "125", LEVEL_GROUP_ADMIN, "Administration of Users", admin.getId(), "1454");
 		navimanagement.addMainStructure("adminModuleConnections", null, 15, "597", LEVEL_ADMIN, "Aministration of Connections", admin.getId(), "1455");
-		navimanagement.addMainStructure("adminModuleOrg", null, 16, "127", LEVEL_GROUP_ADMIN, "Administration of Groups", admin.getId(), "1456");
+		navimanagement.addMainStructure("adminModuleOrg", null, 16, "126", LEVEL_GROUP_ADMIN, "Administration of Groups", admin.getId(), "1456");
 		navimanagement.addMainStructure("adminModuleRoom", null, 17, "186", LEVEL_GROUP_ADMIN, "Administration of Rooms", admin.getId(), "1457");
 		navimanagement.addMainStructure("adminModuleConfiguration", null, 18, "263", LEVEL_ADMIN, "Administration of Configuration", admin.getId(), "1458");
 		navimanagement.addMainStructure("adminModuleLanguages", null, 19, "348", LEVEL_ADMIN, "Administration of Languages", admin.getId(), "1459");

@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Αρχική Σελίδα]]></entry>
 	<entry key="125"><![CDATA[Χρήστες]]></entry>
 	<entry key="126"><![CDATA[Ομάδες]]></entry>
-	<entry key="127"><![CDATA[Οργανισμοί]]></entry>
 	<entry key="131"><![CDATA[Είσοδος]]></entry>
 	<entry key="135"><![CDATA[Όνομα]]></entry>
 	<entry key="136"><![CDATA[Επώνυμο]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Διεύθυνση]]></entry>
 	<entry key="143"><![CDATA[Στοιχεία Χρήστη]]></entry>
 	<entry key="144"><![CDATA[Αποθήκευση]]></entry>
-	<entry key="146"><![CDATA[ID]]></entry>
-	<entry key="149"><![CDATA[Επώνυμο]]></entry>
 	<entry key="155"><![CDATA[Νέα Εγγραφή]]></entry>
 	<entry key="157"><![CDATA[Διαγραφή Εγγραφής]]></entry>
 	<entry key="159"><![CDATA[Απενεργοποιημένη]]></entry>
 	<entry key="161"><![CDATA[Οργανισμοί]]></entry>
 	<entry key="162"><![CDATA[Ημερολόγιο]]></entry>
-	<entry key="164"><![CDATA[ID]]></entry>
 	<entry key="165"><![CDATA[Όνομα]]></entry>
 	<entry key="177"><![CDATA[Χρήστης]]></entry>
 	<entry key="178"><![CDATA[Προσθήκη Χρήστη]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Δωμάτιο Συνδιάσκέψεων]]></entry>
 	<entry key="188"><![CDATA[Αριθμός]]></entry>
 	<entry key="190"><![CDATA[Δημόσιο]]></entry>
-	<entry key="191"><![CDATA[Οργανισμοί]]></entry>
 	<entry key="196"><![CDATA[Σχόλιο]]></entry>
 	<entry key="197"><![CDATA[Αποθήκευση και Εξαγωγή]]></entry>
 	<entry key="199"><![CDATA[Αποθήκευση ως]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Αλλαγή Πλάτους Γραμμής]]></entry>
 	<entry key="433"><![CDATA[Επισκέπτης]]></entry>
 	<entry key="442"><![CDATA[Διαγραφή Chatlog από το Διακομιστή]]></entry>
-	<entry key="447"><![CDATA[Επιλογή Δημοσιευμένων Συσκευών]]></entry>
-	<entry key="448"><![CDATA[Ήχος και Βίντεο]]></entry>
-	<entry key="449"><![CDATA[Ήχος μόνο]]></entry>
-	<entry key="450"><![CDATA[Βίντεο μόνο]]></entry>
-	<entry key="451"><![CDATA[Χωρίς Ηχό/Βίντεο (Στατική Εικόνα)]]></entry>
-	<entry key="452"><![CDATA[Δεν θα δημοσιεύεται ούτε Ήχος ούτε Βίντεο από το PC σας. Αντί αυτού θα εμφανίζεται η Εικόνα του Προφίλ σας. Επιλέξτε αυτήν τη ρύθμιση αν έχετε προβλήματα με το bandwidth σας ή μια πολύ αργή Σύνδεση Internet.]]></entry>
 	<entry key="453"><![CDATA[ΔΕΥ]]></entry>
 	<entry key="454"><![CDATA[ΤΡΙ]]></entry>
 	<entry key="455"><![CDATA[ΤΕΤ]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Θέλετε πραγματικά να βγάλετε αυτόν τον Πελάτη από τη Σύνδεση;<br/> Με αυτόν τον τρόπο ο Πελάτης αφαιρείται μόνο από το τρέχον Δωμάτιο και μπορεί να συνδεθεί ξανά.]]></entry>
 	<entry key="606"><![CDATA[Η Σύνοδός σας έχει κλείσει από Διαχειριστή ή Συντονιστή.]]></entry>
 	<entry key="607"><![CDATA[Τηλέφωνο]]></entry>
-	<entry key="610"><![CDATA[(Επαν)Εκκίνηση Ήχου/Βίντεο ή Αλλαγή Ρυθμίσεων Συσκευής]]></entry>
 	<entry key="612"><![CDATA[Αφαιρέστε τη δυνατότητα σχεδίασης πάνω στον Πίνακα]]></entry>
 	<entry key="615"><![CDATA[Πίνακας]]></entry>
 	<entry key="619"><![CDATA[Τύπος Δωματίου]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Ακύρωση]]></entry>
+	<entry key="lbl.refresh"><![CDATA[Ανανέωση]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Αριθμός 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Ναι/Όχι]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[Ανανέωση]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

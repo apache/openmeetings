@@ -143,14 +143,17 @@
 						video.getNc().call("check", new Responder(function (check:Object):void {
 							debug("check", check);
 							if (_hasVideo(check.activities) && hasVideo()) {
-								_hasAudio(check.activities) ? video.unmute() : video.mute();
-							}
-							if (mic != null) {
-								activityTimer.start();
+								activities = check.activities;
+								hasAudio() ? video.unmute() : video.mute();
+								if (mic != null) {
+									activityTimer.start();
+								} else {
+									activityTimer.stop();
+								}
 							} else {
-								activityTimer.stop();
+								activities = check.activities;
+								refreshBroadcast(null);
 							}
-							activities = check.activities;
 							//debug("Client updated: ", c);
 						}));
 					});
@@ -171,7 +174,7 @@
 								addImage(params.width, params.height);
 								video.resize(params.width, params.height);
 								activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
-								refreshBroadcast();
+								refreshBroadcast(null);
 								ExternalInterface.call("VideoManager.securityMode", params.uid, false);
 								ExternalInterface.addCallback("refresh", refreshBroadcast);
 							});
@@ -182,7 +185,7 @@
 				case OmVideo.PLAY: {
 					addImage(params.width, params.height);
 					video.resize(params.width, params.height);
-					refreshPlayback();
+					refreshPlayback(null);
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						video.setStreamVolume(vol);
 					});
@@ -193,15 +196,22 @@
 				}
 					break;
 			}
-			ExternalInterface.addCallback("vidResize", function (_width:int, _height:int):void {
-				userImage.width = _width;
-				userImage.height = _height;
-				video.resize(_width, _height);
-				video.vidResize(_width, _height);
-			});
+			ExternalInterface.addCallback("vidResize", vidResize);
 		}
 
-		private function refreshBroadcast():void {
+		private function vidResize(_width:int, _height:int):void {
+			userImage.width = _width;
+			userImage.height = _height;
+			video.resize(_width, _height);
+			video.vidResize(_width, _height);
+		}
+
+		private function refreshBroadcast(opts:Object):void {
+			if (opts && !isNaN(opts.width)) {
+				selectedCam = opts.cam;
+				selectedMic = opts.mic;
+				vidResize(opts.width, opts.height);
+			}
 			video.reset();
 			activityTimer.stop();
 			var broadcastId:String = UIDUtil.createUID();
@@ -220,7 +230,7 @@
 			}
 		}
 
-		private function refreshPlayback():void {
+		private function refreshPlayback(opts:Object):void {
 			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			video.reset();
 			video.play(params.broadcastId); // TODO audio/video
@@ -303,7 +313,9 @@
 			if (cam != null) {
 				if (cam.muted) {
 					debug("Camera Muted");
-					ExternalInterface.call("VideoManager.securityMode", params.uid, true);
+					if (params.mode != 'settings') {
+						ExternalInterface.call("VideoManager.securityMode", params.uid, true);
+					}
 					video.attachCamera(cam);
 					cam.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
 						debug("cameraStatusHandler! " + event);

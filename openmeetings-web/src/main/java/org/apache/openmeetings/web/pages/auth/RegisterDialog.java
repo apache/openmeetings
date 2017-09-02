@@ -228,7 +228,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			super.onInitialize();
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			firstNameField.setLabel(Model.of(getString("117")));
-			lastNameField.setLabel(Model.of(getString("149")));
+			lastNameField.setLabel(Model.of(getString("136")));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao))).setLabel(Model.of(getString("114")));
 			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao))).setLabel(Model.of(getString("110")));
 			confirmPassword.setLabel(Model.of(getString("116")));

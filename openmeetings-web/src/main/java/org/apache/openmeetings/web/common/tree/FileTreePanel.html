@@ -21,26 +21,11 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<form wicket:id="form">
-	<script type="text/javascript">
-		function dragHelper() {
-			var s = $(this);
-			if (s.parents('a').hasClass('ui-state-active')) {
-				s = $('.ui-state-active .ui-draggable.ui-draggable-handle');
-			}
-			var c = $('<div/>').attr('id', 'draggingContainer').width(80).height(36);
-			var h = $('<div class="ui-corner-all ui-widget-header"/>').append(s.clone()).width(s.width());
-			return c.append(h);
-		}
-		function treeRevert(dropped) {
-			$('.file.tree .trees')[0].scrollTop = $(this).parent()[0].offsetTop - 32;
-			return !dropped || (!!dropped && !!dropped.context && $(dropped.context).hasClass('wb', 'room'));
-		}
-	</script>
 	<div class="file tree item drop area">
 		<div class="icons clear trash-toolbar" wicket:id="trash-toolbar" wicket:message="title:705">
 			<span wicket:id="upload" wicket:message="title:702"></span>
 			<span wicket:id="create" wicket:message="title:703"></span>
-			<span wicket:id="refresh" class="refresh om-icon big align-left clickable" wicket:message="title:refresh.label"></span>
+			<span wicket:id="refresh" class="refresh om-icon big align-left clickable" wicket:message="title:lbl.refresh"></span>
 			<span wicket:id="trash"></span>
 			<div class="clear"></div>
 		</div>

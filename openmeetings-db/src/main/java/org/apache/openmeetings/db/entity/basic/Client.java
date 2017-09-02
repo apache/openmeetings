@@ -386,6 +386,7 @@ public class Client implements IClient {
 		}
 		JSONObject json = new JSONObject()
 				.put("user", u)
+				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
 				.put("activities", new JSONArray(activities))

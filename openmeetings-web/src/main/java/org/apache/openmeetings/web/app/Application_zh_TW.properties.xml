@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[首頁]]></entry>
 	<entry key="125"><![CDATA[用戶管理]]></entry>
 	<entry key="126"><![CDATA[團體管理]]></entry>
-	<entry key="127"><![CDATA[組織管理]]></entry>
 	<entry key="131"><![CDATA[進入]]></entry>
 	<entry key="135"><![CDATA[名稱]]></entry>
 	<entry key="136"><![CDATA[姓氏]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[地址-信息]]></entry>
 	<entry key="143"><![CDATA[用户资料]]></entry>
 	<entry key="144"><![CDATA[保存]]></entry>
-	<entry key="146"><![CDATA[用户-ID]]></entry>
-	<entry key="149"><![CDATA[姓氏]]></entry>
 	<entry key="155"><![CDATA[新紀錄]]></entry>
 	<entry key="157"><![CDATA[刪除紀錄]]></entry>
 	<entry key="159"><![CDATA[關閉]]></entry>
 	<entry key="161"><![CDATA[組織]]></entry>
 	<entry key="162"><![CDATA[日曆]]></entry>
-	<entry key="164"><![CDATA[組織 -ID]]></entry>
 	<entry key="165"><![CDATA[名稱]]></entry>
 	<entry key="177"><![CDATA[用戶]]></entry>
 	<entry key="178"><![CDATA[增加用戶]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[會議室]]></entry>
 	<entry key="188"><![CDATA[身份證]]></entry>
 	<entry key="190"><![CDATA[公開]]></entry>
-	<entry key="191"><![CDATA[組織]]></entry>
 	<entry key="196"><![CDATA[評論]]></entry>
 	<entry key="197"><![CDATA[保存]]></entry>
 	<entry key="199"><![CDATA[另存為]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[改變線寬]]></entry>
 	<entry key="433"><![CDATA[客戶]]></entry>
 	<entry key="442"><![CDATA[刪除服務器 聊天記錄]]></entry>
-	<entry key="447"><![CDATA[選擇播放裝置]]></entry>
-	<entry key="448"><![CDATA[音頻和視頻]]></entry>
-	<entry key="449"><![CDATA[僅音頻]]></entry>
-	<entry key="450"><![CDATA[僅視頻]]></entry>
-	<entry key="451"><![CDATA[沒有音頻/視頻（靜態影像）]]></entry>
-	<entry key="452"><![CDATA[沒有音頻/視頻從你的個人電腦將會公佈，而不是一個圖片從你的檔案就會顯示。選擇這些設置，如果您有問題，與你的帶寬還是一個非常緩慢的互聯網連接。]]></entry>
 	<entry key="453"><![CDATA[MO]]></entry>
 	<entry key="454"><![CDATA[TU]]></entry>
 	<entry key="455"><![CDATA[WE]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Do you really want to kick this Client from the Connection?<br/> This does only remove the Client from the current Room.The Client could re-login again.]]></entry>
 	<entry key="606"><![CDATA[Your session has been closed by an Administrator or Moderator.]]></entry>
 	<entry key="607"><![CDATA[Phone]]></entry>
-	<entry key="610"><![CDATA[(Re) Start Audio/Video or change Device Settings]]></entry>
 	<entry key="612"><![CDATA[Remove ability to draw on whiteboard]]></entry>
 	<entry key="615"><![CDATA[Whiteboard]]></entry>
 	<entry key="619"><![CDATA[Room Type]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[取消]]></entry>
+	<entry key="lbl.refresh"><![CDATA[刷新]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[數字的 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[是/否]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[刷新]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

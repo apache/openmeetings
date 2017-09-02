@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Home]]></entry>
 	<entry key="125"><![CDATA[Users]]></entry>
 	<entry key="126"><![CDATA[Groups]]></entry>
-	<entry key="127"><![CDATA[Usergroups]]></entry>
 	<entry key="131"><![CDATA[Enter]]></entry>
 	<entry key="135"><![CDATA[Title/first name]]></entry>
 	<entry key="136"><![CDATA[Last name]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Address]]></entry>
 	<entry key="143"><![CDATA[User details]]></entry>
 	<entry key="144"><![CDATA[Save]]></entry>
-	<entry key="146"><![CDATA[User ID]]></entry>
-	<entry key="149"><![CDATA[Last name]]></entry>
 	<entry key="155"><![CDATA[New record]]></entry>
 	<entry key="157"><![CDATA[Delete record]]></entry>
 	<entry key="159"><![CDATA[Disabled]]></entry>
 	<entry key="161"><![CDATA[Usergroup]]></entry>
 	<entry key="162"><![CDATA[Calendar]]></entry>
-	<entry key="164"><![CDATA[Usergroup ID]]></entry>
 	<entry key="165"><![CDATA[Name]]></entry>
 	<entry key="177"><![CDATA[User]]></entry>
 	<entry key="178"><![CDATA[Add user]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Conference rooms]]></entry>
 	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[Public]]></entry>
-	<entry key="191"><![CDATA[Usergroups]]></entry>
 	<entry key="196"><![CDATA[Comment]]></entry>
 	<entry key="197"><![CDATA[Save and export]]></entry>
 	<entry key="199"><![CDATA[Save as]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Change line width]]></entry>
 	<entry key="433"><![CDATA[Guest]]></entry>
 	<entry key="442"><![CDATA[Delete server chat log]]></entry>
-	<entry key="447"><![CDATA[Choose published devices]]></entry>
-	<entry key="448"><![CDATA[Audio and video]]></entry>
-	<entry key="449"><![CDATA[Audio only]]></entry>
-	<entry key="450"><![CDATA[Video only]]></entry>
-	<entry key="451"><![CDATA[No audio/video (static image)]]></entry>
-	<entry key="452"><![CDATA[No audio/video from your PC will be published, your profile picture will be shown]]></entry>
 	<entry key="453"><![CDATA[MO]]></entry>
 	<entry key="454"><![CDATA[TU]]></entry>
 	<entry key="455"><![CDATA[WE]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Do you really want to unenroll this client from the room?]]></entry>
 	<entry key="606"><![CDATA[Your session has been closed by an administrator or moderator.]]></entry>
 	<entry key="607"><![CDATA[Phone]]></entry>
-	<entry key="610"><![CDATA[(Re) Start audio/video or change device settings]]></entry>
 	<entry key="612"><![CDATA[Remove ability to draw on whiteboard]]></entry>
 	<entry key="615"><![CDATA[Whiteboard]]></entry>
 	<entry key="619"><![CDATA[Room type]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Cancel]]></entry>
+	<entry key="lbl.refresh"><![CDATA[Refresh]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Numeric 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Yes/No]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[Refresh]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[На главную]]></entry>
 	<entry key="125"><![CDATA[Пользователи]]></entry>
 	<entry key="126"><![CDATA[Группы]]></entry>
-	<entry key="127"><![CDATA[Группы]]></entry>
 	<entry key="131"><![CDATA[Вход]]></entry>
 	<entry key="135"><![CDATA[Имя]]></entry>
 	<entry key="136"><![CDATA[Фамилия]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Информация]]></entry>
 	<entry key="143"><![CDATA[Данные пользователя]]></entry>
 	<entry key="144"><![CDATA[Сохранить]]></entry>
-	<entry key="146"><![CDATA[Идент. № пользователя]]></entry>
-	<entry key="149"><![CDATA[Фамилия]]></entry>
 	<entry key="155"><![CDATA[Создать запись]]></entry>
 	<entry key="157"><![CDATA[Удалить запись]]></entry>
 	<entry key="159"><![CDATA[заблокировано]]></entry>
 	<entry key="161"><![CDATA[Организации]]></entry>
 	<entry key="162"><![CDATA[Календарь]]></entry>
-	<entry key="164"><![CDATA[Идент. № орг-ии]]></entry>
 	<entry key="165"><![CDATA[Имя]]></entry>
 	<entry key="177"><![CDATA[Пользователь]]></entry>
 	<entry key="178"><![CDATA[Добавить пользователя]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Комнаты совещаний]]></entry>
 	<entry key="188"><![CDATA[Идент. №]]></entry>
 	<entry key="190"><![CDATA[Публичная комната]]></entry>
-	<entry key="191"><![CDATA[Организации]]></entry>
 	<entry key="196"><![CDATA[Комментарий]]></entry>
 	<entry key="197"><![CDATA[Сохранить]]></entry>
 	<entry key="199"><![CDATA[Сохранить как]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Изменить ширину линий]]></entry>
 	<entry key="433"><![CDATA[Гость]]></entry>
 	<entry key="442"><![CDATA[Удалить лог чата на сервере]]></entry>
-	<entry key="447"><![CDATA[Изменить публичные устройства]]></entry>
-	<entry key="448"><![CDATA[Аудио и видео]]></entry>
-	<entry key="449"><![CDATA[Только аудио]]></entry>
-	<entry key="450"><![CDATA[Только видео]]></entry>
-	<entry key="451"><![CDATA[без аудио и видео (статическое изобр.)]]></entry>
-	<entry key="452"><![CDATA[Аудио/видео с вашего компьютера не будет опубликовано, опубликована будет только картинка из вашего профиля. Выберите эту установку, если вы испытываете проблемы с шириной канала или если у вас медленное соединение с Интернетом]]></entry>
 	<entry key="453"><![CDATA[ПН]]></entry>
 	<entry key="454"><![CDATA[ВТ]]></entry>
 	<entry key="455"><![CDATA[СР]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Вы действительно хотите отключить этого клиента? Клиент может залогиниться вновь]]></entry>
 	<entry key="606"><![CDATA[Ваша сессия завершена администратором или модератором.]]></entry>
 	<entry key="607"><![CDATA[Телефон]]></entry>
-	<entry key="610"><![CDATA[(Ре)старт аудио/видео или изменение установок устройства]]></entry>
 	<entry key="612"><![CDATA[Запретить рисовать на доске]]></entry>
 	<entry key="615"><![CDATA[Доска]]></entry>
 	<entry key="619"><![CDATA[Тип комнаты]]></entry>
@@ -915,6 +903,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Неверный код]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Отменить]]></entry>
+	<entry key="lbl.refresh"><![CDATA[обновить]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Управление письмами]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Проверка статуса отосланных писем]]></entry>
 	<entry key="my.room.conference"><![CDATA[Моя комната для конференций(до 16 участников)]]></entry>
@@ -951,7 +940,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Число 1 - 10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Да/Нет]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Записи группы]]></entry>
-	<entry key="refresh.label"><![CDATA[обновить]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Доступ к групповым файлам ограничен]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[Вы Докладчик в этой комнате.]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Отнять право быть Докладчиком в комнате]]></entry>

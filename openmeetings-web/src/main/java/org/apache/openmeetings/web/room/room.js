@@ -142,6 +142,11 @@ var Video = (function() {
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
 	}
+	function _resizeDlg(_w, _h) {
+		let h = _h + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
+		v.dialog("option", "width", _w).dialog("option", "height", h);
+		_resize(_w, _h);
+	}
 	function _securityMode(on) {
 		if (on) {
 			//TODO buttons
@@ -149,14 +154,11 @@ var Video = (function() {
 				position: {my: "center", at: "center", of: WBA_SEL}
 			});
 		} else {
-			let h = size.height + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
-			v.dialog("option", "width", size.width)
-				.dialog("option", "height", h);
+			_resizeDlg(size.width, size.height);
 			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
-			_setSize(size.width, size.height);
 		}
 	}
-	function _setSize(w, h) {
+	function _resize(w, h) {
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
@@ -197,7 +199,8 @@ var Video = (function() {
 			, opts = VideoManager.getOptions();
 		{ //scope
 			let cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
-			cont.append($('#user-video').clone().attr('id', _id).attr('title', name).data(self));
+			cont.append($('#user-video').clone().attr('id', _id).attr('title', name)
+					.attr('data-client-uid', c.type + c.cuid).data(self));
 		}
 		v = $('#' + _id);
 		v.dialog({
@@ -216,7 +219,7 @@ var Video = (function() {
 			, resizeStop: function(event, ui) {
 				var w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(":visible") ? f.height() : 0);
-				_setSize(w, h);
+				_resize(w, h);
 				swf[0].vidResize(w, h);
 			}
 		}).dialogExtend({
@@ -261,9 +264,7 @@ var Video = (function() {
 			let refresh = v.parent().find('.ui-dialog-titlebar-refresh')
 				.click(function(e) {
 					e.stopImmediatePropagation();
-					if (swf[0].refresh !== undefined) {
-						swf[0].refresh();
-					}
+					_refresh();
 				}).dblclick(function(e) {
 					e.stopImmediatePropagation();
 				});
@@ -329,8 +330,18 @@ var Video = (function() {
 			swf[0].update();
 		}
 	}
+	function _refresh(_opts) {
+		if (swf[0].refresh !== undefined) {
+			let opts = _opts || {};
+			if (!isNaN(opts.width)) {
+				_resizeDlg(opts.width, opts.height);
+			}
+			swf[0].refresh(opts);
+		}
+	}
 
 	self.update = _update;
+	self.refresh = _refresh;
 	self.init = _init;
 	self.securityMode = _securityMode;
 	self.client = function() { return c; };
@@ -385,13 +396,13 @@ var VideoManager = (function() {
 			share.tooltip().off('click').click(function() {
 				var v = $('#' + VideoUtil.getVid(c.uid))
 				if (v.length != 1) {
-					Video().init(options.uid, c, $(WBA_SEL).offset());
+					Video().init(c, $(WBA_SEL).offset());
 				} else {
 					v.dialog('open');
 				}
 			});
 		} else if ('sharing' !== c.type) {
-			Video().init(options.uid, c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
+			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
 		}
 	}
 	function _close(uid) {
@@ -413,12 +424,24 @@ var VideoManager = (function() {
 			});
 		});
 	}
+	function _find(uid) {
+		return $('.video.user-video div[data-client-uid="room' + uid + '"]');
+	}
 	function _micActivity(uid, active) {
 		var u = $('#user' + uid + ' .audio-activity.ui-icon');
+		var v = _find(uid).parent();
 		if (active) {
 			u.addClass("speaking");
+			v.addClass('user-speaks')
 		} else {
 			u.removeClass("speaking");
+			v.removeClass('user-speaks')
+		}
+	}
+	function _refresh(uid, opts) {
+		var v = _find(uid);
+		if (v.length > 0) {
+			v.data().refresh(opts);
 		}
 	}
 
@@ -429,6 +452,7 @@ var VideoManager = (function() {
 	self.close = _close;
 	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
 	self.micActivity = _micActivity;
+	self.refresh = _refresh;
 	return self;
 })();
 function setRoomSizes() {

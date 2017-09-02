@@ -133,9 +133,11 @@ public class RoomPanel extends BasePanel {
 					, getUserId(), "0", r.getId()
 					, cp.getRemoteAddress()
 					, "" + r.getId());
-			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), getClient().getSid());
-			options.put("interview", isInterview);
-			options.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
+			Client _c = getClient();
+			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
+					.put("uid", _c.getUid())
+					.put("interview", isInterview)
+					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
 			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			// play video from other participants
@@ -587,7 +589,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (!getClient().getUid().equals(c.getUid())) {
-							handler.appendJavaScript(String.format("if (VideoManager !== undefined) {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
+							handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
 						}
 					}
 						break;

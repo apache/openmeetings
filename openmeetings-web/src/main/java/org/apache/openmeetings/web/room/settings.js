@@ -29,8 +29,8 @@ function initVideo(el, id, options) {
 	return o;
 }
 var VideoSettings = (function() {
-	var self = {}, vs, lm, swf, s, cam, mic, res,
-		vidScroll, recBtn, playBtn, inited = false, recAllowed = false;
+	var self = {}, vs, lm, swf, s, cam, mic, res, o
+		, vidScroll, recBtn, playBtn, inited = false, recAllowed = false;
 	function _load() {
 		s = {};
 		try {
@@ -46,8 +46,12 @@ var VideoSettings = (function() {
 		if (typeof avSettings === 'function') {
 			avSettings(_s);
 		}
+		if (typeof VideoManager !== 'undefined' && o.uid) {
+			VideoManager.refresh(o.uid, s.video);
+		}
 	}
 	function _init(options) {
+		o = options;
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam');
@@ -87,14 +91,14 @@ var VideoSettings = (function() {
 			]
 		});
 		lm.progressbar({ value: 0 });
-		options.width = 300;
-		options.height = 200;
-		options.mode = 'settings';
-		swf = initVideo(vidScroll, 'video-settings-swf', options)[0];
+		o.width = 300;
+		o.height = 200;
+		o.mode = 'settings';
+		swf = initVideo(vidScroll, 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
 		var rr = vs.find('.cam-resolution').parent('.sett-row');
-		if (!!options.interview) {
+		if (!!o.interview) {
 			rr.show();
 		} else {
 			rr.hide();

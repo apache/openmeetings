@@ -138,13 +138,13 @@
 .room.holder.small .room.sidebar.left .user.list .user.name {
 	display: none;
 }
-.room.sidebar.left .user.list .user .actions {
+.room.sidebar.left .user.list .user .user.actions {
 	position: relative;
 	min-height: 18px;
 	padding: 0;
 	padding-left: 44px;
 	visibility: hidden;
-	padding-right: 20px;
+	margin-right: 35px;
 }
 .room.sidebar.left .user.list .user:hover .user.actions {
 	visibility: visible;
@@ -276,6 +276,9 @@
 }
 .ui-dialog.video .ui-dialog-titlebar {
 	padding-left: 10px
+}
+.ui-dialog.video.user-video.user-speaks{
+	box-shadow: 3px 3px 4px green;
 }
 .dropdown-menu.video.volume, .dropdown-menu.video.volume li {
 	width: 20px;

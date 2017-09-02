@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Home]]></entry>
 	<entry key="125"><![CDATA[Utenti]]></entry>
 	<entry key="126"><![CDATA[Gruppi]]></entry>
-	<entry key="127"><![CDATA[Organizzazioni]]></entry>
 	<entry key="131"><![CDATA[Entra]]></entry>
 	<entry key="135"><![CDATA[Nome]]></entry>
 	<entry key="136"><![CDATA[Cognome]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Informazioni]]></entry>
 	<entry key="143"><![CDATA[Dati utente]]></entry>
 	<entry key="144"><![CDATA[Salva]]></entry>
-	<entry key="146"><![CDATA[ID Utente]]></entry>
-	<entry key="149"><![CDATA[Cognome]]></entry>
 	<entry key="155"><![CDATA[Nuovo record]]></entry>
 	<entry key="157"><![CDATA[Elimina record]]></entry>
 	<entry key="159"><![CDATA[Disabilitato]]></entry>
 	<entry key="161"><![CDATA[Organizzazioni]]></entry>
 	<entry key="162"><![CDATA[Calendario]]></entry>
-	<entry key="164"><![CDATA[ID Organizzazione]]></entry>
 	<entry key="165"><![CDATA[Nome]]></entry>
 	<entry key="177"><![CDATA[Utente]]></entry>
 	<entry key="178"><![CDATA[Aggiungi un'utente]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Stanze delle conferenze]]></entry>
 	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[Pubblico]]></entry>
-	<entry key="191"><![CDATA[Organizzazioni]]></entry>
 	<entry key="196"><![CDATA[Commento]]></entry>
 	<entry key="197"><![CDATA[Salva]]></entry>
 	<entry key="199"><![CDATA[Salva con nome]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Cambia spessore linea]]></entry>
 	<entry key="433"><![CDATA[Ospite]]></entry>
 	<entry key="442"><![CDATA[Cancella i log della chat sul server]]></entry>
-	<entry key="447"><![CDATA[Scegli le periferiche da pubblicare]]></entry>
-	<entry key="448"><![CDATA[Audio e Video]]></entry>
-	<entry key="449"><![CDATA[Solo Audio]]></entry>
-	<entry key="450"><![CDATA[Solo Video]]></entry>
-	<entry key="451"><![CDATA[Nessun Audio/Video (immagine statica)]]></entry>
-	<entry key="452"><![CDATA[Nessun Audio/Video del tuo PC saranno pubblicati, sarà visualizzata solo l'immagine del tuo profilo. Scegli questa impostazione se hai problemi di banda o velocità Internet.]]></entry>
 	<entry key="453"><![CDATA[Lun]]></entry>
 	<entry key="454"><![CDATA[Mar]]></entry>
 	<entry key="455"><![CDATA[Mer]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Sei sicuro di voler chiudere la connessione a questo client?]]></entry>
 	<entry key="606"><![CDATA[La tua sessione è stata chiusa da un amministratore o moderatore]]></entry>
 	<entry key="607"><![CDATA[Telefono]]></entry>
-	<entry key="610"><![CDATA[(Ri) attiva Audio/Video o cambia le impostazioni]]></entry>
 	<entry key="612"><![CDATA[Rimuovi possibilità di disegnare sulla lavagna]]></entry>
 	<entry key="615"><![CDATA[Lavagna]]></entry>
 	<entry key="619"><![CDATA[Tipo stanza]]></entry>
@@ -916,6 +904,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Hash invalido]]></entry>
 	<entry key="lbl.cancel"><![CDATA[annulla]]></entry>
+	<entry key="lbl.refresh"><![CDATA[Aggiorna]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Gestione Email]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Verifica elaborazione e-mails del sistema]]></entry>
 	<entry key="my.room.conference"><![CDATA[Mia stanza conferenza]]></entry>
@@ -952,7 +941,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Numerico 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Si/No]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[Aggiorna]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

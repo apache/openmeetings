@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Domů]]></entry>
 	<entry key="125"><![CDATA[Uživatelé]]></entry>
 	<entry key="126"><![CDATA[Skupiny]]></entry>
-	<entry key="127"><![CDATA[Organizace]]></entry>
 	<entry key="131"><![CDATA[vstup]]></entry>
 	<entry key="135"><![CDATA[Jméno]]></entry>
 	<entry key="136"><![CDATA[Příjmení]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Info o adrese]]></entry>
 	<entry key="143"><![CDATA[Uživatelská data]]></entry>
 	<entry key="144"><![CDATA[ulož]]></entry>
-	<entry key="146"><![CDATA[USER-ID]]></entry>
-	<entry key="149"><![CDATA[Příjmení]]></entry>
 	<entry key="155"><![CDATA[nový záznam]]></entry>
 	<entry key="157"><![CDATA[smaž záznam]]></entry>
 	<entry key="159"><![CDATA[zakázáno]]></entry>
 	<entry key="161"><![CDATA[Organizace]]></entry>
 	<entry key="162"><![CDATA[kalendář]]></entry>
-	<entry key="164"><![CDATA[ID organizace]]></entry>
 	<entry key="165"><![CDATA[Název]]></entry>
 	<entry key="177"><![CDATA[uživatel]]></entry>
 	<entry key="178"><![CDATA[přidej uživatele]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Konferenční místnost]]></entry>
 	<entry key="188"><![CDATA[id]]></entry>
 	<entry key="190"><![CDATA[veřejné]]></entry>
-	<entry key="191"><![CDATA[Organizace]]></entry>
 	<entry key="196"><![CDATA[Komentář]]></entry>
 	<entry key="197"><![CDATA[ulož a exportuj]]></entry>
 	<entry key="199"><![CDATA[ulož jako]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Změň tloušťku čáry]]></entry>
 	<entry key="433"><![CDATA[Host]]></entry>
 	<entry key="442"><![CDATA[Smaž záznam pokecu na serveru]]></entry>
-	<entry key="447"><![CDATA[Vyber zveřejněné zařízení]]></entry>
-	<entry key="448"><![CDATA[Zvuk a obraz]]></entry>
-	<entry key="449"><![CDATA[Pouze zvuk]]></entry>
-	<entry key="450"><![CDATA[Pouze obraz]]></entry>
-	<entry key="451"><![CDATA[Bez zvuku a obrazu (statický obrázek)]]></entry>
-	<entry key="452"><![CDATA[Zvuk a Obraz z Vašeho PC není zveřejněno, bude zobrazen pouze obrázek z Vašeho profilu.Pokud máte problémy zkontrolujte Vaše nastavení, nebo máte velmi pomalé připojení k internetu.]]></entry>
 	<entry key="453"><![CDATA[Po]]></entry>
 	<entry key="454"><![CDATA[Út]]></entry>
 	<entry key="455"><![CDATA[St]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Opravdu chcete odpojit uživatele?<br/> Toto pouze odpojí uživatele od dané místnosti. Uživatel se může opět přihlásit.]]></entry>
 	<entry key="606"><![CDATA[Vaše sezení bylo ukončeno administrátorem, nebo moderátorem.]]></entry>
 	<entry key="607"><![CDATA[Telefon]]></entry>
-	<entry key="610"><![CDATA[(Re) Start Zvuk/Obraz, nebo změna nastavení zařízení]]></entry>
 	<entry key="612"><![CDATA[Odejmout možnost kreslení na tabuli]]></entry>
 	<entry key="615"><![CDATA[Tabule]]></entry>
 	<entry key="619"><![CDATA[Room Type]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[zruš]]></entry>
+	<entry key="lbl.refresh"><![CDATA[aktualizuj]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Čísla 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Ano/Ne]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[aktualizuj]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

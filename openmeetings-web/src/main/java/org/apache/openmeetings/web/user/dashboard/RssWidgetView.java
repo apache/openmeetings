@@ -30,10 +30,12 @@ import java.net.HttpURLConnection;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.wicketstuff.dashboard.Widget;
@@ -41,8 +43,8 @@ import org.wicketstuff.dashboard.web.WidgetView;
 
 public class RssWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
-	private RSSFeedBehavior feed1; 
-	private RSSFeedBehavior feed2; 
+	private final RSSFeedBehavior feed1;
+	private final RSSFeedBehavior feed2;
 
 	public RssWidgetView(String id, Model<Widget> model) {
 		super(id, model);
@@ -50,14 +52,14 @@ public class RssWidgetView extends WidgetView {
 		add(feed1 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_RSS_FEED1_KEY, String.class, "")));
 		add(feed2 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_RSS_FEED2_KEY, String.class, "")));
 	}
-	
+
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(OnDomReadyHeaderItem.forScript("loadRssTab('" + feed1.getCallbackUrl() + "',"
-				+ "'" + feed2.getCallbackUrl() + "');")) ;
+		response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RssWidgetView.class, "rss.js")));
+		response.render(OnDomReadyHeaderItem.forScript(String.format("loadRssTab('%s', '%s');", feed1.getCallbackUrl(), feed2.getCallbackUrl()))) ;
 	}
-	
+
 	static class RSSFeedBehavior extends AbstractAjaxBehavior {
 		private static final long serialVersionUID = 1L;
 		private String url;
@@ -65,18 +67,17 @@ public class RssWidgetView extends WidgetView {
 		RSSFeedBehavior(String url) {
 			this.url = url;
 		}
-		
+
 		@Override
 		public void onRequest() {
 			ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(new AbstractResourceStream() {
 				private static final long serialVersionUID = 1L;
 				transient HttpURLConnection con;
-				
+
 				@Override
 				public InputStream getInputStream() throws ResourceStreamNotFoundException {
 					try {
 						con = getFeedConnection(url);
-						con.connect();
 						return con.getInputStream();
 					} catch (IOException e) {
 						throw new ResourceStreamNotFoundException();
@@ -90,7 +91,7 @@ public class RssWidgetView extends WidgetView {
 					}
 				}
 			}, "feed");
-			handler.setContentDisposition(ContentDisposition.ATTACHMENT);
+			handler.setContentDisposition(ContentDisposition.INLINE);
 			getComponent().getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
 		}
 	}

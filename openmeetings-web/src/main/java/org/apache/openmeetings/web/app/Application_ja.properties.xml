@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[ホーム]]></entry>
 	<entry key="125"><![CDATA[ユーザー管理]]></entry>
 	<entry key="126"><![CDATA[グループ]]></entry>
-	<entry key="127"><![CDATA[組織管理]]></entry>
 	<entry key="131"><![CDATA[入室]]></entry>
 	<entry key="135"><![CDATA[名]]></entry>
 	<entry key="136"><![CDATA[姓]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[その他情報]]></entry>
 	<entry key="143"><![CDATA[ユーザープロフィール]]></entry>
 	<entry key="144"><![CDATA[保存]]></entry>
-	<entry key="146"><![CDATA[ユーザーID]]></entry>
-	<entry key="149"><![CDATA[姓]]></entry>
 	<entry key="155"><![CDATA[新規作成]]></entry>
 	<entry key="157"><![CDATA[削除]]></entry>
 	<entry key="159"><![CDATA[無効]]></entry>
 	<entry key="161"><![CDATA[組織]]></entry>
 	<entry key="162"><![CDATA[カレンダー]]></entry>
-	<entry key="164"><![CDATA[組織-ID]]></entry>
 	<entry key="165"><![CDATA[名前]]></entry>
 	<entry key="177"><![CDATA[ユーザー]]></entry>
 	<entry key="178"><![CDATA[ユーザー追加]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[会議室]]></entry>
 	<entry key="188"><![CDATA[id]]></entry>
 	<entry key="190"><![CDATA[公開]]></entry>
-	<entry key="191"><![CDATA[組織]]></entry>
 	<entry key="196"><![CDATA[コメント]]></entry>
 	<entry key="197"><![CDATA[保存]]></entry>
 	<entry key="199"><![CDATA[名前を付けて保存]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[線の太さ]]></entry>
 	<entry key="433"><![CDATA[ゲスト]]></entry>
 	<entry key="442"><![CDATA[チャット記録の削除]]></entry>
-	<entry key="447"><![CDATA[デバイスの選択]]></entry>
-	<entry key="448"><![CDATA[音声/映像]]></entry>
-	<entry key="449"><![CDATA[音声のみ]]></entry>
-	<entry key="450"><![CDATA[映像のみ]]></entry>
-	<entry key="451"><![CDATA[音声/映像なし(静止画像)]]></entry>
-	<entry key="452"><![CDATA[このPCから音声も映像も送信されません。代わりにユーザープロフィールの画像が表示されます。 このオプションは、ネットワーク帯域に問題がある場合や、インターネット接続が著しく遅い場合に選択してください。]]></entry>
 	<entry key="453"><![CDATA[月]]></entry>
 	<entry key="454"><![CDATA[火]]></entry>
 	<entry key="455"><![CDATA[水]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[本当にこのユーザーを追い出してよろしいですか?<br/> 追い出したとしても、ユーザーは単にこの会議室から追い出されるだけです。ユーザーは、再度ログインすることができます。]]></entry>
 	<entry key="606"><![CDATA[管理者または司会者によって、セッションが切断されました。]]></entry>
 	<entry key="607"><![CDATA[電話]]></entry>
-	<entry key="610"><![CDATA[音声/ビデオを開始（再開）する、またはデバイス設定を変更する]]></entry>
 	<entry key="612"><![CDATA[ホワイトボードの利用を禁止する]]></entry>
 	<entry key="615"><![CDATA[ホワイトボード]]></entry>
 	<entry key="619"><![CDATA[会議室タイプ]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[キャンセル]]></entry>
+	<entry key="lbl.refresh"><![CDATA[更新]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[私の会議室 (ユーザー数 1-16 向け)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[1～10の数字]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[はい/いいえ]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[更新]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

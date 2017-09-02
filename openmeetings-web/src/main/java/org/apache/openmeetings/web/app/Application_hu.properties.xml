@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Nyitó oldal]]></entry>
 	<entry key="125"><![CDATA[Felhasználók]]></entry>
 	<entry key="126"><![CDATA[Csoportok]]></entry>
-	<entry key="127"><![CDATA[Szervezet]]></entry>
 	<entry key="131"><![CDATA[belépés]]></entry>
 	<entry key="135"><![CDATA[Keresztnév]]></entry>
 	<entry key="136"><![CDATA[Családnév]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Megjegyzés]]></entry>
 	<entry key="143"><![CDATA[Felhasználói adatok]]></entry>
 	<entry key="144"><![CDATA[mentés]]></entry>
-	<entry key="146"><![CDATA[USER-ID]]></entry>
-	<entry key="149"><![CDATA[Családnév]]></entry>
 	<entry key="155"><![CDATA[új bejegyzés]]></entry>
 	<entry key="157"><![CDATA[bejegyzés törlése]]></entry>
 	<entry key="159"><![CDATA[tiltott]]></entry>
 	<entry key="161"><![CDATA[Szervezetek]]></entry>
 	<entry key="162"><![CDATA[naptár]]></entry>
-	<entry key="164"><![CDATA[Szervezet-ID]]></entry>
 	<entry key="165"><![CDATA[Név]]></entry>
 	<entry key="177"><![CDATA[felhasználó]]></entry>
 	<entry key="178"><![CDATA[felhasználó hozzáadása]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Konferenciatermek]]></entry>
 	<entry key="188"><![CDATA[id]]></entry>
 	<entry key="190"><![CDATA[nyilvános]]></entry>
-	<entry key="191"><![CDATA[Szervezetek]]></entry>
 	<entry key="196"><![CDATA[Megjegyzés]]></entry>
 	<entry key="197"><![CDATA[mentés]]></entry>
 	<entry key="199"><![CDATA[mentés mint]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Vonalvastagság változtatás]]></entry>
 	<entry key="433"><![CDATA[Vendég]]></entry>
 	<entry key="442"><![CDATA[Szerver-csevegési napló törlés]]></entry>
-	<entry key="447"><![CDATA[Válassz engedélyezett eszközt]]></entry>
-	<entry key="448"><![CDATA[Hang és kép]]></entry>
-	<entry key="449"><![CDATA[Csak hang]]></entry>
-	<entry key="450"><![CDATA[Csak kép]]></entry>
-	<entry key="451"><![CDATA[Hang és kép nélkül (álló kép)]]></entry>
-	<entry key="452"><![CDATA[Sem hang sem kép nem kerül megosztásra a gépedről, hanem a felhasználói adataidból a feltöltött kép. Használd ezt, ha gondjaid vannak a sávszélességgel vagy nagyon lassú az Interneted.]]></entry>
 	<entry key="453"><![CDATA[h]]></entry>
 	<entry key="454"><![CDATA[k]]></entry>
 	<entry key="455"><![CDATA[sz]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Biztosan kitiltja a látogatót?<br/> Csak a jelenlegi konferenciából kerül kitiltásra. A látogató vissza tud jelentkezni.]]></entry>
 	<entry key="606"><![CDATA[Az Adminisztrátor,Moderátor kitiltotta a teremből.]]></entry>
 	<entry key="607"><![CDATA[Telefon]]></entry>
-	<entry key="610"><![CDATA[(Újra) Indítja az Audio/Video eszköz beállítását]]></entry>
 	<entry key="612"><![CDATA[Visszaveszi a táblára rajzolás lehetőségét]]></entry>
 	<entry key="615"><![CDATA[Tábla]]></entry>
 	<entry key="619"><![CDATA[Terem típusa]]></entry>
@@ -902,6 +890,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Mégse]]></entry>
+	<entry key="lbl.refresh"><![CDATA[frissítés]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[Konferencia szobáim (1-16 résztvevő)]]></entry>
@@ -938,7 +927,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Szám 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Igen/Nem]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[frissítés]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

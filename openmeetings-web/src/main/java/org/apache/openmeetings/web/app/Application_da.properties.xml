@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Forside]]></entry>
 	<entry key="125"><![CDATA[Brugere]]></entry>
 	<entry key="126"><![CDATA[Grupper]]></entry>
-	<entry key="127"><![CDATA[Organisationer]]></entry>
 	<entry key="131"><![CDATA[Log ind]]></entry>
 	<entry key="135"><![CDATA[Fornavn]]></entry>
 	<entry key="136"><![CDATA[Efternavn]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Adresse-Info]]></entry>
 	<entry key="143"><![CDATA[Brugerdata]]></entry>
 	<entry key="144"><![CDATA[Gem]]></entry>
-	<entry key="146"><![CDATA[Bruger-ID]]></entry>
-	<entry key="149"><![CDATA[Efternavn]]></entry>
 	<entry key="155"><![CDATA[Nyt indhold]]></entry>
 	<entry key="157"><![CDATA[Slet indhold]]></entry>
 	<entry key="159"><![CDATA[Ikke tilgængelig]]></entry>
 	<entry key="161"><![CDATA[Organisation]]></entry>
 	<entry key="162"><![CDATA[Kalender]]></entry>
-	<entry key="164"><![CDATA[Organisation-ID]]></entry>
 	<entry key="165"><![CDATA[Navn]]></entry>
 	<entry key="177"><![CDATA[Brugere]]></entry>
 	<entry key="178"><![CDATA[Gem til brugere]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Konferencerum]]></entry>
 	<entry key="188"><![CDATA[Id]]></entry>
 	<entry key="190"><![CDATA[Offentlig]]></entry>
-	<entry key="191"><![CDATA[Organisationer]]></entry>
 	<entry key="196"><![CDATA[Kommentar]]></entry>
 	<entry key="197"><![CDATA[Gem og eksport]]></entry>
 	<entry key="199"><![CDATA[Gem som]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Ændre linjebredde]]></entry>
 	<entry key="433"><![CDATA[Gæst]]></entry>
 	<entry key="442"><![CDATA[Slet serverens Chat-log]]></entry>
-	<entry key="447"><![CDATA[Vælg enheder]]></entry>
-	<entry key="448"><![CDATA[Lyd og video]]></entry>
-	<entry key="449"><![CDATA[Kun lyd]]></entry>
-	<entry key="450"><![CDATA[Kun video]]></entry>
-	<entry key="451"><![CDATA[Ingen lyd/video (statisk billede)]]></entry>
-	<entry key="452"><![CDATA[Ingen Lyd/Video vil blive publiceret. I stedet vil et billede fra din profil blive vist. Vælg denne indstilling, hvis du har en dårlig båndbredde.]]></entry>
 	<entry key="453"><![CDATA[MA]]></entry>
 	<entry key="454"><![CDATA[TI]]></entry>
 	<entry key="455"><![CDATA[ON]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Vil du virkelig udelukke denne klient?<br/> Det her udelukker kun klienten fra det aktuelle rum. Vedkommende kan tilslutte sig igen.]]></entry>
 	<entry key="606"><![CDATA[Din session er blevet lukket af administratoren eller moderatoren.]]></entry>
 	<entry key="607"><![CDATA[Telefon]]></entry>
-	<entry key="610"><![CDATA[Genstart lyd/video eller ændre indstillinger]]></entry>
 	<entry key="612"><![CDATA[Fjern muligheden for at tegne på whiteboardet]]></entry>
 	<entry key="615"><![CDATA[Whiteboard]]></entry>
 	<entry key="619"><![CDATA[Rumtyper]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Afbryd]]></entry>
+	<entry key="lbl.refresh"><![CDATA[Opdater]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Numerisk 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Ja/Nej]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[Opdater]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

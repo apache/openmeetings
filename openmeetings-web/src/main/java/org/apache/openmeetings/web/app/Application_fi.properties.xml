@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Koti]]></entry>
 	<entry key="125"><![CDATA[Users]]></entry>
 	<entry key="126"><![CDATA[Ryhmät]]></entry>
-	<entry key="127"><![CDATA[Organisaatiot]]></entry>
 	<entry key="131"><![CDATA[astu sisään]]></entry>
 	<entry key="135"><![CDATA[Etunimi]]></entry>
 	<entry key="136"><![CDATA[Sukunimi]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Osoitteen lisätieto]]></entry>
 	<entry key="143"><![CDATA[Käyttäjätieto]]></entry>
 	<entry key="144"><![CDATA[tallenna]]></entry>
-	<entry key="146"><![CDATA[USER-ID]]></entry>
-	<entry key="149"><![CDATA[Sukunimi]]></entry>
 	<entry key="155"><![CDATA[uusi tietue]]></entry>
 	<entry key="157"><![CDATA[poista tietue]]></entry>
 	<entry key="159"><![CDATA[pois käytöstä]]></entry>
 	<entry key="161"><![CDATA[Organisaatiot]]></entry>
 	<entry key="162"><![CDATA[kalenteri]]></entry>
-	<entry key="164"><![CDATA[Organisaatio-ID]]></entry>
 	<entry key="165"><![CDATA[Nimi]]></entry>
 	<entry key="177"><![CDATA[käyttäjä]]></entry>
 	<entry key="178"><![CDATA[uusi käyttäjä]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Konferenssihuoneet]]></entry>
 	<entry key="188"><![CDATA[id]]></entry>
 	<entry key="190"><![CDATA[julkinen]]></entry>
-	<entry key="191"><![CDATA[Organisaatiot]]></entry>
 	<entry key="196"><![CDATA[Kommentti]]></entry>
 	<entry key="197"><![CDATA[tallenna ja vie]]></entry>
 	<entry key="199"><![CDATA[tallenna nimellä]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Muuta viivan leveyttä]]></entry>
 	<entry key="433"><![CDATA[Vieras]]></entry>
 	<entry key="442"><![CDATA[Poista palvelimen keskusteluloki]]></entry>
-	<entry key="447"><![CDATA[Valitse julkaistavat laitteet]]></entry>
-	<entry key="448"><![CDATA[Ääni ja video]]></entry>
-	<entry key="449"><![CDATA[Vain ääni]]></entry>
-	<entry key="450"><![CDATA[Vain video]]></entry>
-	<entry key="451"><![CDATA[Ei ääntä/videota (kiinteä kuva)]]></entry>
-	<entry key="452"><![CDATA[Ääntä/kuvaa tietokoneelta ei julkaista. Profiilikuvasi näytetään sen sijaan. Valitse tämä asetus jos sinulla on ongelmia yhteytesi kanssa tai yhteytesi on erittäin hidas.]]></entry>
 	<entry key="453"><![CDATA[MA]]></entry>
 	<entry key="454"><![CDATA[TI]]></entry>
 	<entry key="455"><![CDATA[KE]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Haluatko varmasti katkaista tämän asiakkaan yhteyden?<br/> Tämä vain poistaa asiakkaan huoneesta. Asiakas voi kirjautua aina uudestaan.]]></entry>
 	<entry key="606"><![CDATA[Istuntosi on lopetettu ylläpitäjän tai moderaattorin toimesta.]]></entry>
 	<entry key="607"><![CDATA[Puhelin]]></entry>
-	<entry key="610"><![CDATA[(Re) Käynnistä Ääni/Kuva tai muuta laitteiden asetuksia]]></entry>
 	<entry key="612"><![CDATA[Estä käyttäjän piirtäminen piirtoalueelle]]></entry>
 	<entry key="615"><![CDATA[Piirtoalue]]></entry>
 	<entry key="619"><![CDATA[Huoneen tyyppi]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[peruuta]]></entry>
+	<entry key="lbl.refresh"><![CDATA[päivitä]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -951,7 +940,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.yesNo"><![CDATA[Kyllä/Ei]]></entry>
 	<entry key="prof"><![CDATA[Prof]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[päivitä]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

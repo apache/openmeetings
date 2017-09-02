@@ -84,7 +84,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="124"><![CDATA[Start]]></entry>
 	<entry key="125"><![CDATA[Gebruikers]]></entry>
 	<entry key="126"><![CDATA[Groepen]]></entry>
-	<entry key="127"><![CDATA[Organisaties]]></entry>
 	<entry key="131"><![CDATA[Deelnemen]]></entry>
 	<entry key="135"><![CDATA[Voornaam]]></entry>
 	<entry key="136"><![CDATA[Achternaam]]></entry>
@@ -95,14 +94,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="142"><![CDATA[Meer gegevens]]></entry>
 	<entry key="143"><![CDATA[Gebruikersgegevens]]></entry>
 	<entry key="144"><![CDATA[Opslaan]]></entry>
-	<entry key="146"><![CDATA[USER-ID]]></entry>
-	<entry key="149"><![CDATA[Achternaam]]></entry>
 	<entry key="155"><![CDATA[Toevoegen]]></entry>
 	<entry key="157"><![CDATA[Verwijderen]]></entry>
 	<entry key="159"><![CDATA[Blokkeren]]></entry>
 	<entry key="161"><![CDATA[Organisatie(s)]]></entry>
 	<entry key="162"><![CDATA[Kalender]]></entry>
-	<entry key="164"><![CDATA[ID]]></entry>
 	<entry key="165"><![CDATA[Naam]]></entry>
 	<entry key="177"><![CDATA[Gebruiker]]></entry>
 	<entry key="178"><![CDATA[Gebruiker toevoegen]]></entry>
@@ -110,7 +106,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="187"><![CDATA[Kamer]]></entry>
 	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[Openbaar]]></entry>
-	<entry key="191"><![CDATA[Organisaties]]></entry>
 	<entry key="196"><![CDATA[Toelichting]]></entry>
 	<entry key="197"><![CDATA[Opslaan en exporteren]]></entry>
 	<entry key="199"><![CDATA[Opslaan als]]></entry>
@@ -195,12 +190,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="429"><![CDATA[Verander lijn dikte]]></entry>
 	<entry key="433"><![CDATA[Gast]]></entry>
 	<entry key="442"><![CDATA[Verwijder Server-Chatlog]]></entry>
-	<entry key="447"><![CDATA[Choose Published Devices]]></entry>
-	<entry key="448"><![CDATA[Beeld en Geluid]]></entry>
-	<entry key="449"><![CDATA[Alleen geluid]]></entry>
-	<entry key="450"><![CDATA[Alleen beeld]]></entry>
-	<entry key="451"><![CDATA[Geen beeld/geluid (pasfoto afbeelden)]]></entry>
-	<entry key="452"><![CDATA[Als er netwerk problemen zijn, kies dan voor pasfoto afbeelden. Je profiel pasfoto wordt hiervoor gebruikt.]]></entry>
 	<entry key="453"><![CDATA[Ma]]></entry>
 	<entry key="454"><![CDATA[Di]]></entry>
 	<entry key="455"><![CDATA[Wo]]></entry>
@@ -282,7 +271,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Weet je zeker dat je deze gebruiker wilt uitloggen?<br/>De gebruiker zal uit dit overleg worden gehaald. De gebruiker kan wel weer opnieuw deelnemen.]]></entry>
 	<entry key="606"><![CDATA[Je bent door een organisator of beheerder uit het overleg gehaald.]]></entry>
 	<entry key="607"><![CDATA[Telefoon]]></entry>
-	<entry key="610"><![CDATA[(Her) Start beeld/geluid of verander instellingen]]></entry>
 	<entry key="612"><![CDATA[Ontneem gebruiker toestemming om op het tekenbord te tekenen]]></entry>
 	<entry key="615"><![CDATA[Tekenbord]]></entry>
 	<entry key="619"><![CDATA[Kamer soort]]></entry>
@@ -914,6 +902,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Annuleren]]></entry>
+	<entry key="lbl.refresh"><![CDATA[vernieuwen]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
 	<entry key="my.room.conference"><![CDATA[My conference room (for 1-16 users)]]></entry>
@@ -950,7 +939,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.numeric"><![CDATA[Getal 1-10]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[Ja/Nee]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="refresh.label"><![CDATA[vernieuwen]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
 	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
 	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>

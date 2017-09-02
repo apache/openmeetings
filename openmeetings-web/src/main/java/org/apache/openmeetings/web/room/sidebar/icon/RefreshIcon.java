@@ -32,7 +32,7 @@ public class RefreshIcon extends ClientIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString("610");
+		return getString("lbl.refresh");
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class RefreshIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("document.getElementById('lzapp').refreshAv('%s');", uid);
+		return String.format("VideoManager.refresh('%s');", uid);
 	}
 
 	@Override
