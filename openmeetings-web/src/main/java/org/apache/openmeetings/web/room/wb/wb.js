@@ -1500,7 +1500,9 @@ $(function() {
 			if (m) {
 				switch(m.type) {
 					case "wb":
-						eval(m.func);
+						if (typeof WbArea !== 'undefined') {
+							eval(m.func);
+						}
 						break;
 				}
 			}

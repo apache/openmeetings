@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -28,12 +29,15 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
@@ -145,6 +149,23 @@ public class RoomSidebar extends Panel {
 								room.broadcast(c);
 							}
 						}
+						break;
+					case mute:
+					{
+						JSONObject obj = uid.isEmpty() ? new JSONObject() : new JSONObject(uid);
+						Client _c = getOnlineClient(obj.getString("uid"));
+						if (_c == null || !_c.hasActivity(Activity.broadcastA)) {
+							return;
+						}
+						if (cl.hasRight(Right.moderator) || cl.getUid().equals(_c.getUid())) {
+							{
+								// basic checks, will throw in case of missing options
+								obj.getBoolean("mute");
+								obj.put("sid", cl.getSid());
+							}
+							WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.mute, obj.toString()));
+						}
+					}
 						break;
 					default:
 				}

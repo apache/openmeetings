@@ -137,7 +137,8 @@ var VideoUtil = (function() {
 	return self;
 })();
 var Video = (function() {
-	var self = {}, c, v, vc, t, f, swf, size, vol;
+	var self = {}, c, v, vc, t, f, swf, size, vol, slider, handle
+		, prevVolume = 0;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -162,7 +163,7 @@ var Video = (function() {
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
-	function _handleVolume(handle, val) {
+	function _handleVolume(val) {
 		handle.text(val);
 		var ico = vol.find('.ui-icon');
 		if (val > 0 && ico.hasClass('ui-icon-volume-off')) {
@@ -186,6 +187,20 @@ var Video = (function() {
 		}
 		if (swf[0].setVolume !== undefined) {
 			swf[0].setVolume(val);
+		}
+	}
+	function _mute(mute) {
+		if (!slider) {
+			return;
+		}
+		if (mute) {
+			prevVolume = slider.slider("option", "value");
+			slider.slider("option", "value", 0);
+			_handleVolume(0);
+		} else {
+			slider.slider("option", "value", prevVolume);
+			_handleVolume(prevVolume);
+			prevVolume = 0;
 		}
 	}
 	function _init(_c, _pos) {
@@ -237,8 +252,7 @@ var Video = (function() {
 				.append($('#video-volume-btn').children().clone())
 				.append($('#video-refresh-btn').children().clone());
 			var volume = v.parent().find('.dropdown-menu.video.volume');
-			let slider = v.parent().find('.slider');
-			let prevVolume = 0;
+			slider = v.parent().find('.slider');
 			if (opts.interview) {
 				v.parent().find('.ui-dialog-titlebar-collapse').hide();
 			}
@@ -249,29 +263,27 @@ var Video = (function() {
 				})
 				.click(function(e) {
 					e.stopImmediatePropagation();
-					if (prevVolume == 0) {
-						prevVolume = slider.slider("option", "value");
-						slider.slider("option", "value", 0);
-						_handleVolume(handle, 0);
-					} else {
-						slider.slider("option", "value", prevVolume);
-						_handleVolume(handle, prevVolume);
-						prevVolume = 0;
-					}
+					roomAction('mute', JSON.stringify({uid: c.cuid, mute: prevVolume == 0}));
+					_mute(prevVolume == 0);
+					volume.hide();
+					return false;
 				}).dblclick(function(e) {
 					e.stopImmediatePropagation();
+					return false;
 				});
 			let refresh = v.parent().find('.ui-dialog-titlebar-refresh')
 				.click(function(e) {
 					e.stopImmediatePropagation();
 					_refresh();
+					return false;
 				}).dblclick(function(e) {
 					e.stopImmediatePropagation();
+					return false;
 				});
 			volume.on('mouseleave', function() {
 				$(this).hide();
 			});
-			var handle = v.parent().find('.slider .handle');
+			handle = v.parent().find('.slider .handle');
 			slider.slider({
 				orientation: 'vertical'
 				, range: 'min'
@@ -342,6 +354,7 @@ var Video = (function() {
 
 	self.update = _update;
 	self.refresh = _refresh;
+	self.mute = _mute;
 	self.init = _init;
 	self.securityMode = _securityMode;
 	self.client = function() { return c; };
@@ -444,6 +457,12 @@ var VideoManager = (function() {
 			v.data().refresh(opts);
 		}
 	}
+	function _mute(uid, mute) {
+		var v = _find(uid);
+		if (v.length > 0) {
+			v.data().mute(mute);
+		}
+	}
 
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.init = _init;
@@ -453,6 +472,7 @@ var VideoManager = (function() {
 	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
 	self.micActivity = _micActivity;
 	self.refresh = _refresh;
+	self.mute = _mute;
 	return self;
 })();
 function setRoomSizes() {

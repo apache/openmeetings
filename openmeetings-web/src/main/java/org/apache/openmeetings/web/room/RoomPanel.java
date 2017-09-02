@@ -114,9 +114,8 @@ public class RoomPanel extends BasePanel {
 	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {
 		kick
-		, settings
-		, refresh
 		, exclusive
+		, mute
 	}
 	private final Room r;
 	private final boolean isInterview;
@@ -590,6 +589,19 @@ public class RoomPanel extends BasePanel {
 						}
 						if (!getClient().getUid().equals(c.getUid())) {
 							handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
+						}
+					}
+						break;
+					case mute:
+					{
+						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
+						Client c = getClientBySid(obj.getString("sid"));
+						if (c == null) {
+							log.error("Not existing user in mute {} !!!!", obj);
+							return;
+						}
+						if (!getClient().getUid().equals(c.getUid())) {
+							handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.mute('%s', %s);}", obj.getString("uid"), obj.getBoolean("mute")));
 						}
 					}
 						break;
