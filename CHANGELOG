@@ -16,6 +16,10 @@ Release Notes - Openmeetings - Version 3.3.1
     * [OPENMEETINGS-1677] - Clustering seems to be broken
     * [OPENMEETINGS-1679] - User session being dropped if RTPMT is being used
     * [OPENMEETINGS-1684] - MicrophoneStatus room option is broken
+    * [OPENMEETINGS-1686] - Error message is not displayed completely when user change password
+    * [OPENMEETINGS-1687] - Video is closed when user change audio and video settings
+    * [OPENMEETINGS-1689] - Video frame overlaps start record button in the interview room.
+    * [OPENMEETINGS-1690] - Password is required message is displayed when admin try to update any user settings
 
 ** Improvement
     * [OPENMEETINGS-1623] - Full-Fit for Recordings Video Player
