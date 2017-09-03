@@ -39,6 +39,7 @@ var VideoSettings = (function() {
 		if (!s.video) {
 			s.video = {};
 		}
+		return s;
 	}
 	function _save() {
 		var _s = JSON.stringify(s);
@@ -185,5 +186,7 @@ var VideoSettings = (function() {
 		, allowPlay: _allowPlay
 		, micActivity: _micActivity
 		, close: function() { vs.dialog('close'); }
+		, load: _load
+		, save: _save
 	};
 })();

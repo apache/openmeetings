@@ -54,8 +54,6 @@ public class Client implements IClient {
 		, share
 		, record
 		, publish //sends A/V to external server
-		, muted
-		, exclusive
 	}
 	public enum Pod {
 		none, left, right;

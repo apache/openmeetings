@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[ok]]></entry>
 	<entry key="59"><![CDATA[Język:]]></entry>
 	<entry key="62"><![CDATA[Wyczyść tablicę]]></entry>
+	<entry key="64">Nie pytaj więcej</entry>
 	<entry key="70"><![CDATA[Cofnij]]></entry>
 	<entry key="72"><![CDATA[Wskaż obiekt]]></entry>
 	<entry key="73"><![CDATA[Tekst]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[skasuj język]]></entry>
 	<entry key="366"><![CDATA[dodaj język]]></entry>
 	<entry key="367"><![CDATA[Kopia zapasowa]]></entry>
+	<entry key="371"><![CDATA[użytkownik mówi]]></entry>
 	<entry key="372"><![CDATA[użytkownik mówi (By clicking here you can give exclusive audio / mute the microphone of others)]]></entry>
 	<entry key="376"><![CDATA[cześć,]]></entry>
 	<entry key="377"><![CDATA[Edytuj swój profil]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Are you sure you want to delete this Poll? The results will be deleted as well.]]></entry>
 	<entry key="1422"><![CDATA[Language ISO Code]]></entry>
 	<entry key="1427"><![CDATA[want that the moderator gives me a permission for exclusive audio.]]></entry>
+	<entry key="1428">Give a permission for exclusive audio.</entry>
 	<entry key="1429"><![CDATA[Cam resolution]]></entry>
 	<entry key="1430"><![CDATA[Changing the resolution affects bandwidth, bigger picture needs more bandwith!]]></entry>
 	<entry key="1432"><![CDATA[I would like to get the right for exclusive audio]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[System import]]></entry>
 	<entry key="1537"><![CDATA[Include uploaded files and recordings in backup]]></entry>
 	<entry key="1538"><![CDATA[Enable SIP transport in the room]]></entry>
+	<entry key="1539">Do you really want to provide this user an exclusive audio?</entry>
 	<entry key="1546"><![CDATA[Welcome]]></entry>
 	<entry key="1547"><![CDATA[Widget displaying basic user info and support links]]></entry>
 	<entry key="1548"><![CDATA[Widgets]]></entry>

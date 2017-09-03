@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[OK]]></entry>
 	<entry key="59"><![CDATA[Мова:]]></entry>
 	<entry key="62"><![CDATA[Очистити планшет]]></entry>
+	<entry key="64">Больше не спрашивать</entry>
 	<entry key="70"><![CDATA[Відмінити]]></entry>
 	<entry key="72"><![CDATA[Вибрати об'єкт]]></entry>
 	<entry key="73"><![CDATA[Текст]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[Видалити мову]]></entry>
 	<entry key="366"><![CDATA[Додати мову]]></entry>
 	<entry key="367"><![CDATA[Резервні копії]]></entry>
+	<entry key="371"><![CDATA[Розмови користувача]]></entry>
 	<entry key="372"><![CDATA[Розмови користувача (By clicking here you can give exclusive audio / mute the microphone of others)]]></entry>
 	<entry key="376"><![CDATA[Привіт,]]></entry>
 	<entry key="377"><![CDATA[Налаштувати профіль]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Хочете видалити опитування? Результати теж будуть видалені.]]></entry>
 	<entry key="1422"><![CDATA[Код ISO мови]]></entry>
 	<entry key="1427"><![CDATA[хочу, щоб модератор дозволив мені ексклюзивний звук.]]></entry>
+	<entry key="1428">Дозволити ексклюзивний звук.</entry>
 	<entry key="1429"><![CDATA[Роздільна здатність камери]]></entry>
 	<entry key="1430"><![CDATA[Зміна дозволу впливає на пропускну здатність мережі, збільшена картинка вимагає більше дозволу.]]></entry>
 	<entry key="1432"><![CDATA[Я хотів би отримати дозвіл на ексклюзивний звук.]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Системний імпорт]]></entry>
 	<entry key="1537"><![CDATA[Включати завантажені файли і записи в бекап]]></entry>
 	<entry key="1538"><![CDATA[Дозволити SIP транспорт в кімнаті]]></entry>
+	<entry key="1539">Ви дійсно бажаєте дати слово цього учасника?</entry>
 	<entry key="1546"><![CDATA[Ласкаво просимо]]></entry>
 	<entry key="1547"><![CDATA[Віджет, який містить основну інформацію про користувача і посилання на сайти підтримки]]></entry>
 	<entry key="1548"><![CDATA[Віджети]]></entry>

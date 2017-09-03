@@ -463,6 +463,31 @@ var VideoManager = (function() {
 			v.data().mute(mute);
 		}
 	}
+	function _clickExclusive(uid) {
+		let s = VideoSettings.load();
+		if (false !== s.video.confirmExclusive) {
+			let dlg = $('#exclusive-confirm');
+			dlg.dialog({
+				buttons: [
+					{
+						text: dlg.data('btn-ok')
+						, click: function() {
+							s.video.confirmExclusive = !$('#exclusive-confirm-dont-show').prop('checked');
+							VideoSettings.save();
+							roomAction('exclusive', uid);
+							$(this).dialog('close');
+						}
+					}
+					, {
+						text: dlg.data('btn-cancel')
+						, click: function() {
+							$(this).dialog('close');
+						}
+					}
+				]
+			})
+		}
+	}
 
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.init = _init;
@@ -473,6 +498,7 @@ var VideoManager = (function() {
 	self.micActivity = _micActivity;
 	self.refresh = _refresh;
 	self.mute = _mute;
+	self.clickExclusive = _clickExclusive;
 	return self;
 })();
 function setRoomSizes() {

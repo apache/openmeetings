@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Rendben]]></entry>
 	<entry key="59"><![CDATA[Nyelv:]]></entry>
 	<entry key="62"><![CDATA[Tábla törlése]]></entry>
+	<entry key="64">Ne kérdezd többször</entry>
 	<entry key="70"><![CDATA[Vissza]]></entry>
 	<entry key="72"><![CDATA[Válassz objektumot]]></entry>
 	<entry key="73"><![CDATA[Szöveg]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[Nyelv törlése]]></entry>
 	<entry key="366"><![CDATA[nyelv hozzáadása]]></entry>
 	<entry key="367"><![CDATA[Mentés]]></entry>
+	<entry key="371"><![CDATA[a felhasználó beszél]]></entry>
 	<entry key="372"><![CDATA[a felhasználó beszél (Kattints ide a mikrofonja némításhoz, bekapcsoláshoz)]]></entry>
 	<entry key="376"><![CDATA[Üdv,]]></entry>
 	<entry key="377"><![CDATA[Személyes adatok szerkesztése]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Biztosan törli ezt a szavazást? Az eredmények is törlésre kerülnek.]]></entry>
 	<entry key="1422"><![CDATA[Nyelv ISO kódja]]></entry>
 	<entry key="1427"><![CDATA[a moderátor hozzászólási engedélyt adott.]]></entry>
+	<entry key="1428">Hozzászólási engedélyt kérek.</entry>
 	<entry key="1429"><![CDATA[Kamera felbontás]]></entry>
 	<entry key="1430"><![CDATA[Sávszélességének (Feltöltési irány) megfelelően válassza meg a felbontás. Nagyobb felbontás, nagyobb sávszélességet igényel!]]></entry>
 	<entry key="1432"><![CDATA[Egyéni audio hozzáférést kérek a hozzászóláshoz!]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Rendszer import]]></entry>
 	<entry key="1537"><![CDATA[Feltöltött fileok és felvételek betöltése a mentásből]]></entry>
 	<entry key="1538"><![CDATA[SIP átvitel engedélyezése a szobában]]></entry>
+	<entry key="1539">Egyéni hangkapcsolatot kezdeményez ezzel a felhasználóval?</entry>
 	<entry key="1546"><![CDATA[Üdvözöljük]]></entry>
 	<entry key="1547"><![CDATA[Widgeten megjelenő felhasználói adatok és linkek]]></entry>
 	<entry key="1548"><![CDATA[Widgetek]]></entry>

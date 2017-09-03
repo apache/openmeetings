@@ -52,6 +52,7 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, closeStream
 		, audioActivity //user speaks
 		, mute
+		, exclusive
 	}
 	private final Date timestamp;
 	private final String uid;

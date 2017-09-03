@@ -139,6 +139,7 @@ public class RoomSidebar extends Panel {
 						break;
 					case exclusive:
 						if (room.getClient().hasRight(Right.exclusive)) {
+							WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.exclusive, uid));
 							for (Client c : Application.getRoomClients(room.getRoom().getId())) {
 								if (cl.getUid().equals(c.getUid())) {
 									c.set(Activity.broadcastA);

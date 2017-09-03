@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[はい]]></entry>
 	<entry key="59"><![CDATA[言語:]]></entry>
 	<entry key="62"><![CDATA[ホワイトボードのクリア]]></entry>
+	<entry key="64">次回から入力を省略</entry>
 	<entry key="70"><![CDATA[取り消し]]></entry>
 	<entry key="72"><![CDATA[オブジェクト選択]]></entry>
 	<entry key="73"><![CDATA[文字列]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[言語の削除]]></entry>
 	<entry key="366"><![CDATA[言語の追加]]></entry>
 	<entry key="367"><![CDATA[バックアップ]]></entry>
+	<entry key="371"><![CDATA[ユーザーが話し中]]></entry>
 	<entry key="372"><![CDATA[ユーザーが話し中（マイク権の与奪をするにはここをクリック）]]></entry>
 	<entry key="376"><![CDATA[ユーザー:]]></entry>
 	<entry key="377"><![CDATA[プロフィール編集]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[この投票を削除してよろしいですか？同時に投票結果も削除されます。]]></entry>
 	<entry key="1422"><![CDATA[ISO言語コード]]></entry>
 	<entry key="1427"><![CDATA[さんが、単独話者になることを希望しています。]]></entry>
+	<entry key="1428">単独話者になることを許可する。</entry>
 	<entry key="1429"><![CDATA[カメラ解像度]]></entry>
 	<entry key="1430"><![CDATA[解像度の変更はネットワーク帯域に影響します。高解像度のビデオ画像は、より多くのネットワーク帯域を必要とします。]]></entry>
 	<entry key="1432"><![CDATA[私は、単独話者になることができる権限の付与を依頼します。]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[システム・インポート]]></entry>
 	<entry key="1537"><![CDATA[バックアップにアップロード済みファイルと録音・録画を含める]]></entry>
 	<entry key="1538"><![CDATA[会議室のSIPトランスポートを有効にする]]></entry>
+	<entry key="1539">このユーザーに単独話者権限を付与してよろしいですか？</entry>
 	<entry key="1546"><![CDATA[ようこそ]]></entry>
 	<entry key="1547"><![CDATA[ユーザー基本情報／サポート・リンク ウィジェット]]></entry>
 	<entry key="1548"><![CDATA[ウィジェット]]></entry>

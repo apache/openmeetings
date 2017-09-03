@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Aceptar]]></entry>
 	<entry key="59"><![CDATA[Idioma:]]></entry>
 	<entry key="62"><![CDATA[Borrar pizarra]]></entry>
+	<entry key="64">No volver a preguntar</entry>
 	<entry key="70"><![CDATA[Deshacer]]></entry>
 	<entry key="72"><![CDATA[Seleccionar un objeto]]></entry>
 	<entry key="73"><![CDATA[Texto]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[eliminar idioma]]></entry>
 	<entry key="366"><![CDATA[añadir idioma]]></entry>
 	<entry key="367"><![CDATA[Copia de seguridad]]></entry>
+	<entry key="371"><![CDATA[usuario habla]]></entry>
 	<entry key="372"><![CDATA[usuario habla (Haciendo clic aquí usted podrá dar audio exclusivo o silenciar el micrófono de los demás)]]></entry>
 	<entry key="376"><![CDATA[Saludos,]]></entry>
 	<entry key="377"><![CDATA[Editar perfil]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Realmente quiere eliminar esta encuesta? Los resultados tambien se eliminarán.]]></entry>
 	<entry key="1422"><![CDATA[Lenguaje ISO Código]]></entry>
 	<entry key="1427"><![CDATA[Quisiera que el moderador me concediera permiso para tener audio exclusivo.]]></entry>
+	<entry key="1428">Dar permiso para audio exclusivo.</entry>
 	<entry key="1429"><![CDATA[Resolución de cámara]]></entry>
 	<entry key="1430"><![CDATA[Cambiando la resolución a efecto de ancho de banda, fotos grandes necesitan más ancho de banda!]]></entry>
 	<entry key="1432"><![CDATA[Quisiera obtener los derechos para audio exclusivo]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Importar sistema]]></entry>
 	<entry key="1537"><![CDATA[Incluir archivos subidos y grabaciones en el backup]]></entry>
 	<entry key="1538"><![CDATA[Permitir transporte SIP en la sala]]></entry>
+	<entry key="1539">Realmente quiere proveer a este usuario de audio exclusivo?</entry>
 	<entry key="1546"><![CDATA[BienVenidos]]></entry>
 	<entry key="1547"><![CDATA[El Widget muestra información básica del usuario y links soportados]]></entry>
 	<entry key="1548"><![CDATA[Widgets]]></entry>

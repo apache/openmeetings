@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Ok]]></entry>
 	<entry key="59"><![CDATA[Kurssprache:]]></entry>
 	<entry key="62"><![CDATA[Zeichenbrett leeren]]></entry>
+	<entry key="64">Nicht nochmal fragen</entry>
 	<entry key="70"><![CDATA[Rückgängig]]></entry>
 	<entry key="72"><![CDATA[Markieren]]></entry>
 	<entry key="73"><![CDATA[Text]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[Sprache löschen]]></entry>
 	<entry key="366"><![CDATA[Sprache anlegen]]></entry>
 	<entry key="367"><![CDATA[Sicherung]]></entry>
+	<entry key="371"><![CDATA[Benutzer spricht]]></entry>
 	<entry key="372"><![CDATA[Benutzer spricht (By clicking here you can give exclusive audio / mute the microphone of others)]]></entry>
 	<entry key="376"><![CDATA[Hallo,]]></entry>
 	<entry key="377"><![CDATA[Profil bearbeiten]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Wollen Sie die Abstimmung wirklich löschen? Damit werden auch alle Ergebnisse gelöscht.]]></entry>
 	<entry key="1422"><![CDATA[Sprache: ISO Code]]></entry>
 	<entry key="1427"><![CDATA[bittet den Moderator darum ihm exklusives Audio-Recht zu geben.]]></entry>
+	<entry key="1428">Recht für exklusives Audio geben.</entry>
 	<entry key="1429"><![CDATA[Kamera-Auflösung]]></entry>
 	<entry key="1430"><![CDATA[Die Kamera-Auflösung hat einen direkten Einfluss auf die verbrauchte Upload-Bandbreite!]]></entry>
 	<entry key="1432"><![CDATA[Ich würde gerne das Recht auf exklusives Audio erhalten.]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[System Import]]></entry>
 	<entry key="1537"><![CDATA[beinhaltet hochgeladene Dateien und Aufnahmen im Backup]]></entry>
 	<entry key="1538"><![CDATA[Aktivieren Sie SIP-Verkehr im Raum]]></entry>
+	<entry key="1539">Wollen Sie wirklich diesem Benutzer exklusive Audiorechte geben?</entry>
 	<entry key="1546"><![CDATA[Wilkommen]]></entry>
 	<entry key="1547"><![CDATA[Anzeige von Informationen und Support-Links]]></entry>
 	<entry key="1548"><![CDATA[Widgets]]></entry>

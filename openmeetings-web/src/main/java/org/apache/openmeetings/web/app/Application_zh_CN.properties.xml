@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[确定]]></entry>
 	<entry key="59"><![CDATA[语言:]]></entry>
 	<entry key="62"><![CDATA[清除白板]]></entry>
+	<entry key="64">不再询问</entry>
 	<entry key="70"><![CDATA[取消]]></entry>
 	<entry key="72"><![CDATA[选择对象]]></entry>
 	<entry key="73"><![CDATA[文本]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[删除语言]]></entry>
 	<entry key="366"><![CDATA[增加语言]]></entry>
 	<entry key="367"><![CDATA[备份]]></entry>
+	<entry key="371"><![CDATA[user speaks]]></entry>
 	<entry key="372"><![CDATA[用户发言]]></entry>
 	<entry key="376"><![CDATA[你好,]]></entry>
 	<entry key="377"><![CDATA[编辑你的信息]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[确定要删除此调查？调查结果也将会被删除。]]></entry>
 	<entry key="1422"><![CDATA[语言ISO码]]></entry>
 	<entry key="1427"><![CDATA[希望主持人允许本人提供独家音频]]></entry>
+	<entry key="1428">允许提供独家音频</entry>
 	<entry key="1429"><![CDATA[摄像头像素]]></entry>
 	<entry key="1430"><![CDATA[更改像素会影响频宽，较大的图片需要较高频宽]]></entry>
 	<entry key="1432"><![CDATA[希望得到独家音频的权利]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[系统导入]]></entry>
 	<entry key="1537"><![CDATA[包括上传的文件和备份的记录]]></entry>
 	<entry key="1538"><![CDATA[在聊天室启动SIP传输]]></entry>
+	<entry key="1539">你真的想为用户提供一个专用的音频?</entry>
 	<entry key="1546"><![CDATA[欢迎]]></entry>
 	<entry key="1547"><![CDATA[小部件显示基本的用户信息和支持链接]]></entry>
 	<entry key="1548"><![CDATA[小部件]]></entry>

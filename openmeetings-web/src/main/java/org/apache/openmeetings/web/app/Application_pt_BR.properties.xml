@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[ok]]></entry>
 	<entry key="59"><![CDATA[Idioma:]]></entry>
 	<entry key="62"><![CDATA[Limpar a lousa.]]></entry>
+	<entry key="64">Não perguntar de novo.</entry>
 	<entry key="70"><![CDATA[Desfazer]]></entry>
 	<entry key="72"><![CDATA[Selecionar um objeto]]></entry>
 	<entry key="73"><![CDATA[Texto]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[excluir idioma]]></entry>
 	<entry key="366"><![CDATA[adicionar idioma]]></entry>
 	<entry key="367"><![CDATA[Backup]]></entry>
+	<entry key="371"><![CDATA[palestras do usuário]]></entry>
 	<entry key="372"><![CDATA[palestras do usuário]]></entry>
 	<entry key="376"><![CDATA[Olá,]]></entry>
 	<entry key="377"><![CDATA[Editar meu perfil]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Tem certeza de que deseja excluir esta enquete? Os resultados serão excluídos.]]></entry>
 	<entry key="1422"><![CDATA[Language ISO Code]]></entry>
 	<entry key="1427"><![CDATA[gostaria de obter permissão para áudio exclusivo.]]></entry>
+	<entry key="1428">dar permissão para áudio exclusivo.</entry>
 	<entry key="1429"><![CDATA[Resolução da camera]]></entry>
 	<entry key="1430"><![CDATA[Alterar a resolução afeta a largura de banda, foto maior precisa de mais largura de banda!]]></entry>
 	<entry key="1432"><![CDATA[Gostaria de obter o direito exclusivo para áudio]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Importação de sistema]]></entry>
 	<entry key="1537"><![CDATA[Incluir arquivos armazenados e gravações no backup]]></entry>
 	<entry key="1538"><![CDATA[Permitir "SIP transport" na sala]]></entry>
+	<entry key="1539">Dar exclusividade de áudio a este usuário?</entry>
 	<entry key="1546"><![CDATA[Welcome]]></entry>
 	<entry key="1547"><![CDATA[Widget displaying basic user info and support links]]></entry>
 	<entry key="1548"><![CDATA[Widgets]]></entry>

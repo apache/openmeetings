@@ -605,6 +605,10 @@ public class RoomPanel extends BasePanel {
 						}
 					}
 						break;
+					case exclusive:
+					{
+					}
+						break;
 				}
 			}
 		}

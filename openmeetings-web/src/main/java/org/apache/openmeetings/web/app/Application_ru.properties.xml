@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[OK]]></entry>
 	<entry key="59"><![CDATA[Язык курса:]]></entry>
 	<entry key="62"><![CDATA[Очистить доску]]></entry>
+	<entry key="64">Больше не спрашивать</entry>
 	<entry key="70"><![CDATA[Отмена]]></entry>
 	<entry key="72"><![CDATA[Выбрать объект]]></entry>
 	<entry key="73"><![CDATA[Текст]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[удалить язык]]></entry>
 	<entry key="366"><![CDATA[добавить язык]]></entry>
 	<entry key="367"><![CDATA[Резервное копирование]]></entry>
+	<entry key="371"><![CDATA[Участник говорит]]></entry>
 	<entry key="372"><![CDATA[Участник говорит (Нажимая здесь Вы предоставляете этому участнику эксклюзивный микрофон / выключая микрофоны остальных участников)]]></entry>
 	<entry key="376"><![CDATA[Привет,]]></entry>
 	<entry key="377"><![CDATA[Ваш профиль]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Хотите удалить этот опрос? Результаты тоже будут удалены.]]></entry>
 	<entry key="1422"><![CDATA[Код ISO языка]]></entry>
 	<entry key="1427"><![CDATA[хочу, чтобы модератор разрешил мне эксклюзивный звук.]]></entry>
+	<entry key="1428">Разрешить эксклюзивный звук.</entry>
 	<entry key="1429"><![CDATA[Разрешение камеры]]></entry>
 	<entry key="1430"><![CDATA[Изменение разрешения влияет на пропускную способность сети, увеличенная картинка требует больше разрешения.]]></entry>
 	<entry key="1432"><![CDATA[Я хотел бы получить разрешение на эксклюзивный звук.]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Системный импорт]]></entry>
 	<entry key="1537"><![CDATA[Включать загруженные файлы и записи в бэкап]]></entry>
 	<entry key="1538"><![CDATA[Разрешить SIP транспорт в комнате]]></entry>
+	<entry key="1539">Вы действительно хотите дать слово этому участнику?</entry>
 	<entry key="1546"><![CDATA[Добро пожаловать]]></entry>
 	<entry key="1547"><![CDATA[Виджет, содержащий основную информацию о пользователе и ссылки на сайты поддержки]]></entry>
 	<entry key="1548"><![CDATA[Виджеты]]></entry>

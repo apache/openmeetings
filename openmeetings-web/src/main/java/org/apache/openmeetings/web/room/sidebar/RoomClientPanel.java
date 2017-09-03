@@ -27,6 +27,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.KickIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
+import org.apache.openmeetings.web.room.sidebar.icon.UserSpeaksIcon;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -48,6 +49,7 @@ public class RoomClientPanel extends Panel {
 		add(new RefreshIcon("refresh", uid, room));
 		final String name = getName(c);
 		add(new Label("name", name));
+		add(new UserSpeaksIcon("user-speaks", uid, room));
 		item.add(new AttributeModifier("title", name));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new KickIcon("kick", uid, room));

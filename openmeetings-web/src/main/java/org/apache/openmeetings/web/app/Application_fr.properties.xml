@@ -53,6 +53,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="54"><![CDATA[Ok]]></entry>
 	<entry key="59"><![CDATA[Langue :]]></entry>
 	<entry key="62"><![CDATA[Nettoyer le tableau blanc]]></entry>
+	<entry key="64">Ne pas redemander</entry>
 	<entry key="70"><![CDATA[Annuler]]></entry>
 	<entry key="72"><![CDATA[Sélectionner un objet]]></entry>
 	<entry key="73"><![CDATA[Texte]]></entry>
@@ -170,6 +171,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="363"><![CDATA[Effacer un langage]]></entry>
 	<entry key="366"><![CDATA[Ajouter un langage]]></entry>
 	<entry key="367"><![CDATA[Sauvegarde]]></entry>
+	<entry key="371"><![CDATA[L'utilisateur parle]]></entry>
 	<entry key="372"><![CDATA[L'utilisateur parle]]></entry>
 	<entry key="376"><![CDATA[Bonjour,]]></entry>
 	<entry key="377"><![CDATA[Editez votre profil]]></entry>
@@ -531,6 +533,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1421"><![CDATA[Etes-vous sûr de vouloir supprimer ce sondage ? Les résultats seront supprimés également.]]></entry>
 	<entry key="1422"><![CDATA[Code IS de la langue]]></entry>
 	<entry key="1427"><![CDATA[souhaite que le modérateur me donne la permission d'audio exclusif.]]></entry>
+	<entry key="1428">Donner une permission d'audio exclusif.</entry>
 	<entry key="1429"><![CDATA[Résolution caméra]]></entry>
 	<entry key="1430"><![CDATA[Changer la résolution affecte la bande passante, une image plus grande à besoin de plus de bande passante !]]></entry>
 	<entry key="1432"><![CDATA[Je souhaite avoir le droit d'avoir l'audio exclusif]]></entry>
@@ -594,6 +597,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1536"><![CDATA[Importer Système]]></entry>
 	<entry key="1537"><![CDATA[Inclure les fichiers déposés sur le serveur et les enregistrements dans la sauvegarde]]></entry>
 	<entry key="1538"><![CDATA[Activer le transport SIP dans la salle]]></entry>
+	<entry key="1539">Voulez-vous vraiment donner l'audio exclusif à cet utilisateur ?</entry>
 	<entry key="1546"><![CDATA[Bienvenue]]></entry>
 	<entry key="1547"><![CDATA[Widget affichant les infos de base des utilisateurs et les liens pour le support]]></entry>
 	<entry key="1548"><![CDATA[Widgets]]></entry>
