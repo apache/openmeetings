@@ -63,7 +63,7 @@ var VideoUtil = (function() {
 		}
 		var wba = $(WBA_SEL);
 		var woffset = wba.offset();
-		const offsetX = 40, offsetY = 10
+		const offsetX = 20, offsetY = 10
 			, area = {left: woffset.left, top: woffset.top, right: woffset.left + wba.width(), bottom: woffset.top + wba.height()};
 		var rectNew = {
 				_left: area.left
@@ -138,7 +138,7 @@ var VideoUtil = (function() {
 })();
 var Video = (function() {
 	var self = {}, c, v, vc, t, f, swf, size, vol, slider, handle
-		, prevVolume = 0;
+		, lastVolume = 50;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -195,13 +195,15 @@ var Video = (function() {
 			return;
 		}
 		if (mute) {
-			prevVolume = slider.slider("option", "value");
+			let val = slider.slider("option", "value");
+			if (val > 0) {
+				lastVolume = val;
+			}
 			slider.slider("option", "value", 0);
 			_handleVolume(0);
 		} else {
-			slider.slider("option", "value", prevVolume);
-			_handleVolume(prevVolume);
-			prevVolume = 0;
+			slider.slider("option", "value", lastVolume);
+			_handleVolume(lastVolume);
 		}
 	}
 	function _init(_c, _pos) {
@@ -264,8 +266,9 @@ var Video = (function() {
 				})
 				.click(function(e) {
 					e.stopImmediatePropagation();
-					roomAction('mute', JSON.stringify({uid: c.cuid, mute: prevVolume == 0}));
-					_mute(prevVolume == 0);
+					let muted = $(this).find('.ui-icon').hasClass('ui-icon-volume-off');
+					roomAction('mute', JSON.stringify({uid: c.cuid, mute: !muted}));
+					_mute(!muted);
 					volume.hide();
 					return false;
 				}).dblclick(function(e) {
@@ -290,12 +293,12 @@ var Video = (function() {
 				, range: 'min'
 				, min: 0
 				, max: 100
-				, value: 50
+				, value: lastVolume
 				, create: function() {
 					handle.text($(this).slider("value"));
 				}
 				, slide: function(event, ui) {
-					_handleVolume(handle, ui.value);
+					_handleVolume(ui.value);
 				}
 			});
 			if (!VideoUtil.hasAudio(c)) {
@@ -489,6 +492,13 @@ var VideoManager = (function() {
 			})
 		}
 	}
+	function _exclusive(uid) {
+		var windows = $('.video.user-video .ui-dialog-content');
+		for (var i = 0; i < windows.length; ++i) {
+			let w = $(windows[i]);
+			w.data().mute('room' + uid !== w.data('client-uid'));
+		}
+	}
 
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.init = _init;
@@ -500,6 +510,7 @@ var VideoManager = (function() {
 	self.refresh = _refresh;
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
+	self.exclusive = _exclusive;
 	return self;
 })();
 function setRoomSizes() {

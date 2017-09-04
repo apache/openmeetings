@@ -41,13 +41,13 @@ var VideoSettings = (function() {
 		}
 		return s;
 	}
-	function _save() {
+	function _save(refr) {
 		var _s = JSON.stringify(s);
 		localStorage.setItem('openmeetings', _s);
 		if (typeof avSettings === 'function') {
 			avSettings(_s);
 		}
-		if (typeof VideoManager !== 'undefined' && o.uid) {
+		if (refr && typeof VideoManager !== 'undefined' && o.uid) {
 			VideoManager.refresh(o.uid, s.video);
 		}
 	}
@@ -79,7 +79,7 @@ var VideoSettings = (function() {
 						primary: "ui-icon-disk"
 					}
 					, click: function() {
-						_save();
+						_save(true);
 						vs.dialog("close");
 					}
 				}

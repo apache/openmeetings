@@ -504,13 +504,12 @@ public class RoomPanel extends BasePanel {
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
 						String uid = obj.getString("uid");
 						Client c = getClientBySid(obj.getString("sid"));
-						if (c == null) {
-							log.error("Not existing user in closeStream {} !!!!", obj);
-							return;
-						}
-						Client _c = getClient();
-						if (_c.getUid().equals(c.getUid())) {
-							update(c.removeStream(uid));
+						if (c != null) {
+							//c == null means client exits the room
+							Client _c = getClient();
+							if (_c.getUid().equals(c.getUid())) {
+								update(c.removeStream(uid));
+							}
 						}
 						handler.appendJavaScript(String.format("VideoManager.close('%s');", uid));
 						updateInterviewRecordingButtons(handler);
@@ -607,6 +606,13 @@ public class RoomPanel extends BasePanel {
 						break;
 					case exclusive:
 					{
+						String uid = ((TextRoomMessage)m).getText();
+						Client c = getOnlineClient(uid);
+						if (c == null) {
+							// no luck
+							return;
+						}
+						handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.exclusive('%s');}", uid));
 					}
 						break;
 				}

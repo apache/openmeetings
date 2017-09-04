@@ -142,17 +142,21 @@
 					ExternalInterface.addCallback("update", function ():void {
 						video.getNc().call("check", new Responder(function (check:Object):void {
 							debug("check", check);
-							if (_hasVideo(check.activities) && hasVideo()) {
+							var pVideo:Boolean = hasVideo(), nVideo:Boolean = _hasVideo(check.activities)
+									, pAudio:Boolean = hasAudio(), nAudio:Boolean = _hasAudio(check.activities);
+							if (nVideo != pVideo || nAudio != pAudio) {
+								// activities are changed
 								activities = check.activities;
-								hasAudio() ? video.unmute() : video.mute();
-								if (mic != null) {
-									activityTimer.start();
+								if (nVideo && pVideo) {
+									nAudio ? video.unmute() : video.mute();
+									if (mic != null) {
+										activityTimer.start();
+									} else {
+										activityTimer.stop();
+									}
 								} else {
-									activityTimer.stop();
+									refreshBroadcast(null);
 								}
-							} else {
-								activities = check.activities;
-								refreshBroadcast(null);
 							}
 							//debug("Client updated: ", c);
 						}));
