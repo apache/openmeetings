@@ -147,6 +147,7 @@ var Video = (function() {
 		let h = _h + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
 		v.dialog("option", "width", _w).dialog("option", "height", h);
 		_resize(_w, _h);
+		return h;
 	}
 	function _securityMode(on) {
 		if (on) {
@@ -155,7 +156,7 @@ var Video = (function() {
 				position: {my: "center", at: "center", of: WBA_SEL}
 			});
 		} else {
-			_resizeDlg(size.width, size.height);
+			let h = _resizeDlg(size.width, size.height);
 			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
 		}
 	}

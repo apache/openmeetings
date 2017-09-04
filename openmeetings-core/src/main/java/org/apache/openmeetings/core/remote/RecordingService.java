@@ -336,11 +336,15 @@ public class RecordingService implements IPendingServiceCallback {
 		Date now = new Date();
 
 		StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
+		String broadcastId = rcl.getBroadcastId();
+		if (rcl.getMetaId() != null && streamListeners.get(rcl.getMetaId()) != null) {
+			log.debug("startStreamRecord[{}]:: existing metaId: {}", broadcastId, rcl.getMetaId());
+			return;
+		}
 
 		// If its the recording client we need another type of Meta Data
 		boolean audioOnly = "a".equals(rcl.getAvsettings());
 		boolean videoOnly = "v".equals(rcl.getAvsettings());
-		String broadcastId = rcl.getBroadcastId();
 		if (broadcastId != null) {
 			if (Client.Type.sharing == rcl.getType()) {
 				if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
@@ -374,5 +378,6 @@ public class RecordingService implements IPendingServiceCallback {
 				sessionManager.update(rcl);
 			}
 		}
+		log.debug("startStreamRecord[{}]:: resulting metaId: {}", broadcastId, rcl.getMetaId());
 	}
 }
