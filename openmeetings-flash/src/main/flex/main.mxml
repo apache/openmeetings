@@ -52,6 +52,9 @@
 		private var userId:String = null;
 		[Bindable]
 		private var interview:Boolean = false;
+		[Embed(source="assets/micro.png")]
+		[Bindable]
+		public var micImgCls:Class;
 
 		private function debug(...rest):void {
 			ExternalInterface.call("console.log", rest);
@@ -138,7 +141,7 @@
 				case OmVideo.BROADCAST: {
 					selectedCam = params.cam;
 					selectedMic = params.mic;
-					video.resize(Math.max(300, params.width), Math.max(200, params.height));
+					_resize(Math.max(300, params.width), Math.max(200, params.height));
 					ExternalInterface.addCallback("update", function ():void {
 						video.getNc().call("check", new Responder(function (check:Object):void {
 							debug("check", check);
@@ -176,7 +179,7 @@
 							interview = 'interview' == check.roomType;
 							attachCamera(function ():void {
 								addImage(params.width, params.height);
-								video.resize(params.width, params.height);
+								_resize(params.width, params.height);
 								activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
 								refreshBroadcast(null);
 								ExternalInterface.call("VideoManager.securityMode", params.uid, false);
@@ -188,7 +191,7 @@
 					break;
 				case OmVideo.PLAY: {
 					addImage(params.width, params.height);
-					video.resize(params.width, params.height);
+					_resize(params.width, params.height);
 					refreshPlayback(null);
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						video.setStreamVolume(vol);
@@ -203,10 +206,16 @@
 			ExternalInterface.addCallback("vidResize", vidResize);
 		}
 
-		private function vidResize(_width:int, _height:int):void {
+		private function _resize(_width:int, _height:int):void {
 			userImage.width = _width;
 			userImage.height = _height;
+			exclusiveMic.x = (_width - exclusiveMic.width) / 2;
+			exclusiveMic.y = (_height - exclusiveMic.height) / 2;
 			video.resize(_width, _height);
+		}
+
+		private function vidResize(_width:int, _height:int):void {
+			_resize(_width, _height);
 			video.vidResize(_width, _height);
 		}
 
@@ -243,8 +252,6 @@
 
 		private function addImage(_width:int, _height:int):void {
 			userImage.source = 'profile/' + userId + '?anti=' + new Date().time;
-			userImage.width = _width;
-			userImage.height = _height;
 			userImage.visible = true;
 		}
 
@@ -462,6 +469,7 @@
 	<s:Image id="userImage" visible="false" width="0" height="0" />
 	<mx:UIComponent id="videoDisplay" width="0" height="0" />
 	<s:Rect id="volumeRect" x="5" y="5" width="10" height="100" visible="false" />
+	<s:Image id="exclusiveMic" source="{micImgCls}"/>
 	<s:Label id="timerText" height="20" width="45" x="20" y="5" paddingLeft="5" paddingTop="5"
 			 visible="false" backgroundColor="0xf5f5f5" fontWeight="bold"><s:text></s:text></s:Label>
 </s:Application>

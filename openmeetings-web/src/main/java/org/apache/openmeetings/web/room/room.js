@@ -394,6 +394,13 @@ var VideoManager = (function() {
 				_closeV(v);
 			}
 		}
+		if (c.streams.length == 0) {
+			// check for non inited video window
+			let v = $('#' + VideoUtil.getVid(c.uid));
+			if (v.length == 1) {
+				_closeV(v);
+			}
+		}
 	}
 	function _closeV(v) {
 		if (v.dialog('instance') !== undefined) {

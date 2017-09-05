@@ -80,7 +80,6 @@ public class OmVideo {
 	public function vidResize(width:int, height:int):void {
 		vid.width = width;
 		vid.height = height;
-		debug("OmVideo::resize", width, height);
 	}
 
 	public function attachCamera(cam:Camera):void {

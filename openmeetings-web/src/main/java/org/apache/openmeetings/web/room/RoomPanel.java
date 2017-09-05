@@ -136,7 +136,8 @@ public class RoomPanel extends BasePanel {
 			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
 					.put("uid", _c.getUid())
 					.put("interview", isInterview)
-					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
+					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
+					.put("exclusiveTitle", getString("1386"));
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
