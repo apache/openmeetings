@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -385,7 +387,7 @@ public class User implements IDataProviderEntity {
 			if (u == null) {
 				setSipUser(u = new AsteriskSipUser());
 			}
-			String defaultRoomContext = configDao.getConfValue("red5sip.exten_context", String.class, "rooms");
+			String defaultRoomContext = configDao.getConfValue(CONFIG_SIP_EXTEN_CONTEXT, String.class, "rooms");
 			u.setName(login);
 			u.setDefaultuser(login);
 			u.setMd5secret(MD5.checksum(login + ":asterisk:" + pass));

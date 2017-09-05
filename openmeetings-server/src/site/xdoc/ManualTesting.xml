@@ -12,8 +12,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  -->
-<document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Manual Testing</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -198,7 +199,7 @@
 								<li>Ellipse </li>
 								<li>Arrow </li>
 								<li>Cliparts</li>
-							</ol>						
+							</ol>
 						</li>
 						<li>
 							Presentation room testing – chat (should be tested with at least 3 attendees)
@@ -253,8 +254,8 @@
 								<li>Change a user for video pod </li>
 								<li>Start/stop recordings </li>
 							</ol>
-						</li>						
-					</ol>			
+						</li>
+					</ol>
 				</li>
 				<li>
 					<b>Admin GUI tests</b>
@@ -310,27 +311,27 @@
 								<li>Check that "Allow font styles" switch works as expected </li>
 							</ol>
 						</li>
-						<li>					
+						<li>
 							Configuration
 							<ol>
-								<li>Allow_frontend_register </li>
+								<li>allow.frontend.register </li>
 								<li>Mail server settings </li>
 								<li>SMS provider settings </li>
-								<li>Application.name </li>
-								<li>Default_lang_id </li>
+								<li>application.name </li>
+								<li>default.lang.id </li>
 								<li>default time zone </li>
 								<li>SIP settings </li>
 								<li>Reminder minutes </li>
 							</ol>
 						</li>
-						<li>					
+						<li>
 							Language editor 
 							<ol>
 								<li>Add/remove/edit/search a key </li>
 								<li>Import/export of localization files </li>
 							</ol>
 						</li>
-						<li>					
+						<li>
 							LDAP: Add/remove/edit/search a record
 						</li>
 						<li>
@@ -343,7 +344,7 @@
 						</li>
 						<li>
 							Servers: Add/remove/edit/search a server
-						</li>						
+						</li>
 					</ol>
 				</li>
 				<li>
@@ -492,10 +493,7 @@
 						</li>
 					</ol>
 				</li>
-
 			</ol>
 		</section>
-
 	</body>
-
 </document>

@@ -802,11 +802,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Előregisztráció engedélyezése (megjelenik a belépő panelen)]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Beállítások]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Alapértelmezett típusú konferencia szobák létrehozása]]></entry>
-	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[Alapértelmezett betükészlet [default_export_font]]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Alapértelmezett nyelv]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Felhasználó név (email_username)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Felhasználó név]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Adja meg a felhasználó nevet]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Felhasználó jelszó (email_userpass)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Felhasználó jelszó]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Adja meg a jelszót]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Rendszer e-mail cím]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Rendszer e-mail megadása]]></entry>
@@ -814,9 +813,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[A meghívó e-mail címének küldése és beállítása a válasz küldéshez (reply-to) fejlécben(inviter.email.as.replyto)]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Regisztrációs e-mail küldése]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Regisztráció megerősítése e-mailben (megerősítő link küldése)]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-Szerver Port(alapértelmezett Smtp-Server Port 25) (smtp_port)]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-Szerver Port(alapértelmezett Smtp-Server Port 25)]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Enter a SMTP-Server.Port normally 25]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Szerver (smtp_server)]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Szerver]]></entry>
 	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[Enter a SMTP-Server]]></entry>
 	<entry key="install.wizard.params.step3.converters"><![CDATA[Konverterek]]></entry>
 	<entry key="install.wizard.params.step3.docDpi"><![CDATA[Document conversion DPI]]></entry>
@@ -851,13 +850,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		(pl. jelszó, hash kezelés).
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Adja meg a titkosító osztály nevét (class). NE VÁLTOZTASSA, HA NEM BIZTOS BENNE!]]></entry>
-	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[Red5SIP Beállítása]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable"><![CDATA[SIP engedélyezése]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable.text"><![CDATA[Red5SIP integráció engedélyezése]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[SIP kiterjesztés leírása]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Leírás az Asterix konfigurálásához]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix"><![CDATA[SIP szoba prefix]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[Telefonszám prefixum beállítása a konferencia szobához]]></entry>
+	<entry key="install.wizard.params.step4.sip"><![CDATA[Red5SIP Beállítása]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[SIP engedélyezése]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Red5SIP integráció engedélyezése]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[SIP kiterjesztés leírása]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Leírás az Asterix konfigurálásához]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[SIP szoba prefix]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[Telefonszám prefixum beállítása a konferencia szobához]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>

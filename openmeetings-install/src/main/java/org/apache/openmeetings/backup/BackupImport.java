@@ -38,8 +38,31 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -138,6 +161,34 @@ public class BackupImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
 	private static final String LDAP_EXT_TYPE = "LDAP";
 	private static final Properties countries = new Properties();
+	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
+	static {
+		outdatedConfigKeys.put("crypt_ClassName", CONFIG_CRYPT);
+		outdatedConfigKeys.put("system_email_addr", CONFIG_SMTP_SYSTEM_EMAIL);
+		outdatedConfigKeys.put("smtp_server", CONFIG_SMTP_SERVER);
+		outdatedConfigKeys.put("smtp_port", CONFIG_SMTP_PORT);
+		outdatedConfigKeys.put("email_username", CONFIG_SMTP_USER);
+		outdatedConfigKeys.put("email_userpass", CONFIG_SMTP_PASS);
+		outdatedConfigKeys.put("default_lang_id", CONFIG_DEFAULT_LANG);
+		outdatedConfigKeys.put("allow_frontend_register", CONFIG_REGISTER_FRONTEND);
+		outdatedConfigKeys.put("max_upload_size", CONFIG_MAX_UPLOAD_SIZE);
+		outdatedConfigKeys.put("rss_feed1", CONFIG_DASHBOARD_RSS_FEED1);
+		outdatedConfigKeys.put("rss_feed2", CONFIG_DASHBOARD_RSS_FEED2);
+		outdatedConfigKeys.put("oauth2.ignore_bad_ssl", CONFIG_IGNORE_BAD_SSL);
+		outdatedConfigKeys.put("default.quality.screensharing", CONFIG_SCREENSHARING_QUALITY);
+		outdatedConfigKeys.put("default.fps.screensharing", CONFIG_SCREENSHARING_FPS);
+		outdatedConfigKeys.put("ldap_default_id", CONFIG_DEFAULT_LDAP_ID);
+		outdatedConfigKeys.put("default_group_id", CONFIG_DEFAULT_GROUP_ID);
+		outdatedConfigKeys.put("imagemagick_path", CONFIG_PATH_IMAGEMAGIC);
+		outdatedConfigKeys.put("sox_path", CONFIG_PATH_SOX);
+		outdatedConfigKeys.put("ffmpeg_path", CONFIG_PATH_FFMPEG);
+		outdatedConfigKeys.put("office.path", CONFIG_PATH_OFFICE);
+		outdatedConfigKeys.put("red5sip.enable", CONFIG_SIP_ENABLED);
+		outdatedConfigKeys.put("red5sip.room_prefix", CONFIG_SIP_ROOM_PREFIX);
+		outdatedConfigKeys.put("red5sip.exten_context", CONFIG_SIP_EXTEN_CONTEXT);
+		outdatedConfigKeys.put("sendEmailAtRegister", CONFIG_EMAIL_AT_REGISTER);
+		outdatedConfigKeys.put("sendEmailWithVerficationCode", CONFIG_EMAIL_VERIFICATION);
+	}
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -272,7 +323,11 @@ public class BackupImport {
 				if (c.getUser() != null && c.getUser().getId() == null) {
 					c.setUser(null);
 				}
-				if (CONFIG_CRYPT_KEY.equals(c.getKey())) {
+				String newKey = outdatedConfigKeys.get(c.getKey());
+				if (newKey != null) {
+					c.setKey(newKey);
+				}
+				if (CONFIG_CRYPT.equals(c.getKey())) {
 					try {
 						Class<?> clazz = Class.forName(c.getValue());
 						clazz.newInstance();

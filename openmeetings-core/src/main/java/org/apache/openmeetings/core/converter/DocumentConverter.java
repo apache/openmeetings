@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class DocumentConverter {
 	 */
 	public ConverterProcessResult doJodConvert(File in, File out) {
 		try {
-			String officePath = configurationDao.getConfValue("office.path", String.class, null);
+			String officePath = configurationDao.getConfValue(CONFIG_PATH_OFFICE, String.class, null);
 			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
 			if (!Strings.isEmpty(officePath)) {
 				configuration.setOfficeHome(officePath);

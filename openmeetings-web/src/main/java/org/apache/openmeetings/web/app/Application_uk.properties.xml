@@ -800,25 +800,24 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.userdata"><![CDATA[дані]]></entry>
 	<entry key="install.wizard.params.step1.username"><![CDATA[Логін]]></entry>
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[Введіть логін користувача]]></entry>
-	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Дозволити самореєстрацію (allow_frontend_register)]]></entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Дозволити самореєстрацію]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Налаштування]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[За замовчуванням створити кімнати всіх типів]]></entry>
-	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[Шрифт для експорту за замовчуванням [default_export_font]]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Мову за замовчуванням]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Користувач (email_username)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Користувач]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Введіть логін для електронної пошти]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Пароль користувача (email_userpass)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Пароль користувача]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Введіть пароль для електронної пошти]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Електронна пошта розсилки (system_email_addr)]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Електронна пошта розсилки]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Введіть адресу електронної пошти, з якої буде відправлятися інформація]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Увімкнути перевірку TLS на поштовому сервері]]></entry>
 	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Встановлювати адресу електронної
-		пошти організатора, як адреса відповіді на запрошення (inviter.email.as.replyto)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Посилати повідомлення новим користувачам (sendEmailAtRegister)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Нові користувачі повинні підтвердити свій Email (sendEmailWithVerficationCode)]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[Порт SMTP-сервера (за умолчению 25) (smtp_port)]]></entry>
+		пошти організатора, як адреса відповіді на запрошення]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Посилати повідомлення новим користувачам]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Нові користувачі повинні підтвердити свій Email]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[Порт SMTP-сервера (за умолчению 25)]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Введіть порт SMTP-Сервера, зазвичай 25]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Сервер (smtp_server)]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Сервер]]></entry>
 	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[Введіть адресу SMTP-Сервера]]></entry>
 	<entry key="install.wizard.params.step3.converters"><![CDATA[Конвертери]]></entry>
 	<entry key="install.wizard.params.step3.docDpi"><![CDATA[Document conversion DPI]]></entry>
@@ -853,13 +852,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		не доступні в подальшому
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Вкажіть ім'я класу для шифрування. НЕ ЗМІНЮЙТЕ ЗАЗНАЧЕНИЙ КЛАС ЯКЩО ВИ НЕ ВПЕВНЕНІ]]></entry>
-	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[Конфігурація red5SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable"><![CDATA[Дозволити SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable.text"><![CDATA[Дозволити інтеграцію з red5SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[Оточення розширень SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Оточення розширень Asterisk]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix"><![CDATA[Префікс дла кімнат SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[Префікс для номерів телефонів для входу до кімнати]]></entry>
+	<entry key="install.wizard.params.step4.sip"><![CDATA[Конфігурація red5SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[Дозволити SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Дозволити інтеграцію з red5SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[Оточення розширень SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Оточення розширень Asterisk]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[Префікс дла кімнат SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[Префікс для номерів телефонів для входу до кімнати]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>

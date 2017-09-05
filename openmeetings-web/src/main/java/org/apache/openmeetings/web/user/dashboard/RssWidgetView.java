@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.core.rss.LoadAtomRssFeed.getFeedConnection;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.IOException;
@@ -49,8 +49,8 @@ public class RssWidgetView extends WidgetView {
 	public RssWidgetView(String id, Model<Widget> model) {
 		super(id, model);
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		add(feed1 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_RSS_FEED1_KEY, String.class, "")));
-		add(feed2 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_RSS_FEED2_KEY, String.class, "")));
+		add(feed1 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_DASHBOARD_RSS_FEED1, String.class, "")));
+		add(feed2 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_DASHBOARD_RSS_FEED2, String.class, "")));
 	}
 
 	@Override

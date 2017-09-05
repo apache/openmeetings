@@ -99,7 +99,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
 	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO_NUM, SelectOption.YES_NUM);
 	private final static List<SelectOption> yesNoTextList = Arrays.asList(SelectOption.NO_TEXT, SelectOption.YES_TEXT);
-	private final static List<String> allFonts = Arrays.asList("TimesNewRoman", "Verdana", "Arial");
 	private final IDynamicWizardStep welcomeStep;
 	private final IDynamicWizardStep dbStep;
 	private final ParamsStep1 paramsStep1;
@@ -474,7 +473,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			//TODO check mail server
 			add(new YesNoDropDown("replyToOrganizer"));
 			add(new LangDropDown("defaultLangId"));
-			add(new DropDownChoice<>("defaultExportFont", allFonts));
 		}
 
 		@Override
@@ -619,9 +617,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new RequiredTextField<String>("cryptClassName")); //Validate class
 
 			//TODO add check for red5sip connection
-			add(new YesNoTextDropDown("red5SipEnable"));
-			add(new TextField<String>("red5SipRoomPrefix"));
-			add(new TextField<String>("red5SipExtenContext"));
+			add(new YesNoTextDropDown("sipEnable"));
+			add(new TextField<String>("sipRoomPrefix"));
+			add(new TextField<String>("sipExtenContext"));
 		}
 
 		@Override

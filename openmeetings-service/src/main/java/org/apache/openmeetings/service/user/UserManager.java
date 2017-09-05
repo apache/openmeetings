@@ -22,8 +22,9 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.IOException;
@@ -91,8 +92,7 @@ public class UserManager implements IUserManager {
 	/**
 	 * Method to register a new User, User will automatically be added to the
 	 * default user_level(1) new users will be automatically added to the
-	 * Group with the id specified in the configuration value
-	 * default_group_id
+	 * Group with the id specified in the configuration value default.group.id
 	 *
 	 * @param login
 	 * @param Userpass
@@ -122,12 +122,12 @@ public class UserManager implements IUserManager {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(cfgDao.getConfValue(CONFIG_SOAP_REGISTER_KEY, String.class, "0"))) {
+			if ("1".equals(cfgDao.getConfValue(CONFIG_REGISTER_SOAP, String.class, "0"))) {
 				if (sendConfirmation == null) {
 					String baseURL = cfgDao.getBaseUrl();
 					sendConfirmation = baseURL != null
 							&& !baseURL.isEmpty()
-							&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+							&& 1 == cfgDao.getConfValue(CONFIG_EMAIL_VERIFICATION, Integer.class, "0");
 				}
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
@@ -305,7 +305,7 @@ public class UserManager implements IUserManager {
 				}
 			}
 		}
-		return cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
+		return cfgDao.getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1");
 	}
 
 	@Override

@@ -19,7 +19,11 @@
 package org.apache.openmeetings.core.mail;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.ByteArrayInputStream;
@@ -89,11 +93,11 @@ public class MailHandler {
 	private int smtpTimeOut;
 
 	private void init() {
-		smtpServer = cfgDao.getConfValue("smtp_server", String.class, null);
-		smtpPort = cfgDao.getConfValue("smtp_port", String.class, "25");
-		from = cfgDao.getConfValue(CONFIG_SYSTEM_EMAIL, String.class, null);
-		mailAuthUser = cfgDao.getConfValue("email_username", String.class, null);
-		mailAuthPass = cfgDao.getConfValue("email_userpass", String.class, null);
+		smtpServer = cfgDao.getConfValue(CONFIG_SMTP_SERVER, String.class, null);
+		smtpPort = cfgDao.getConfValue(CONFIG_SMTP_PORT, String.class, "25");
+		from = cfgDao.getConfValue(CONFIG_SMTP_SYSTEM_EMAIL, String.class, null);
+		mailAuthUser = cfgDao.getConfValue(CONFIG_SMTP_USER, String.class, null);
+		mailAuthPass = cfgDao.getConfValue(CONFIG_SMTP_PASS, String.class, null);
 		mailTls = "1".equals(cfgDao.getConfValue("mail.smtp.starttls.enable", String.class, "0"));
 		mailAddReplyTo = "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"));
 		smtpConnectionTimeOut = cfgDao.getConfValue("mail.smtp.connection.timeout", Integer.class, "30000");

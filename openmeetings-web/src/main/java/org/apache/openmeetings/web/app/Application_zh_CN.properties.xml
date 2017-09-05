@@ -798,24 +798,23 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.userdata"><![CDATA[用户数据]]></entry>
 	<entry key="install.wizard.params.step1.username"><![CDATA[用户名称]]></entry>
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[输入用户名]]></entry>
-	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[允许自我注册 (allow_frontend_register)]]></entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[允许自我注册]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[配置]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[创建所有类型的默认房间]]></entry>
-	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[导出的默认字体 [default_export_font]]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[默认语言]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-用户名 (email_username)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-用户名]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[输入邮件用户名]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-用户密码 (email_userpass)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-用户密码]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[输入邮件密码]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[邮件地址 (system_email_addr)]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[邮件地址]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[输入一个邮件]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[启用TLS邮件服务器认证]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[设置邀请人的电子邮件地址作为邮件邀请回复 (inviter.email.as.replyto)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[发送电子邮件到新的注册用户 (sendEmailAtRegister)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[新用户需要验证他们的电子邮件 (sendEmailWithVerficationCode)]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-服务器端口(默认Smtp-服务器端口25) (smtp_port)]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[设置邀请人的电子邮件地址作为邮件邀请回复]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[发送电子邮件到新的注册用户]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[新用户需要验证他们的电子邮件]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-服务器端口(默认Smtp-服务器端口25)]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[输入一个SMTP-Server.端口 一般是25]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-服务器 (smtp_server)]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-服务器]]></entry>
 	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[输入一个SMTP-服务器]]></entry>
 	<entry key="install.wizard.params.step3.converters"><![CDATA[转换器]]></entry>
 	<entry key="install.wizard.params.step3.docDpi"><![CDATA[Document conversion DPI]]></entry>
@@ -848,13 +847,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">个性化加密机制</a> 您可以稍后编辑此值，但以前创建的用户和会话可能不可用了
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[输入加密类的类名. 如果你不能肯定，就不要改变]]></entry>
-	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[red5SIP 配置]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable"><![CDATA[激活 SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable.text"><![CDATA[激活 red5SIP 集成]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[SIP 分机号码]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Asterisk分机]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix"><![CDATA[SIP 会议室前缀]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[会议室电话号码前缀]]></entry>
+	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP 配置]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[激活 SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[激活 red5SIP 集成]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[SIP 分机号码]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Asterisk分机]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[SIP 会议室前缀]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[会议室电话号码前缀]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>

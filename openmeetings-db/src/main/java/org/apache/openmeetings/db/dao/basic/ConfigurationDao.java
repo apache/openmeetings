@@ -21,11 +21,11 @@ package org.apache.openmeetings.db.dao.basic;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
@@ -253,7 +253,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity = em.merge(entity);
 		}
 		switch (key) {
-			case CONFIG_CRYPT_KEY:
+			case CONFIG_CRYPT:
 				configKeyCryptClassName = value;
 				CryptProvider.reset();
 				break;
@@ -300,7 +300,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 */
 	public long getMaxUploadSize() {
 		try {
-			return getConfValue(CONFIG_MAX_UPLOAD_SIZE_KEY, Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
+			return getConfValue(CONFIG_MAX_UPLOAD_SIZE, Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {
 			log.error("Invalid value saved for max_upload_size conf key: ", e);
 		}
@@ -309,7 +309,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	public String getCryptKey() {
 		if (configKeyCryptClassName == null) {
-			String cryptClass = getConfValue(CONFIG_CRYPT_KEY, String.class, null);
+			String cryptClass = getConfValue(CONFIG_CRYPT, String.class, null);
 			if (cryptClass != null) {
 				configKeyCryptClassName = cryptClass;
 			}

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.RECENT_ROOMS_COUNT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -210,7 +211,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 
 	private String getSipNumber(long roomId) {
 		if (cfgDao.isSipEnabled()) {
-			return cfgDao.getConfValue("red5sip.room_prefix", String.class, "400") + roomId;
+			return cfgDao.getConfValue(CONFIG_SIP_ROOM_PREFIX, String.class, "400") + roomId;
 		}
 		return null;
 	}

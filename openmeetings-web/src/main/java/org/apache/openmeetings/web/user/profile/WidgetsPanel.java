@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.WebSession.getDashboard;
@@ -61,8 +61,8 @@ public class WidgetsPanel extends Panel {
 		super(id);
 
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
-		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
+		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS, Integer.class, "0");
+		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS, Integer.class, "0");
 		List<WidgetDescriptor> widgets = new ArrayList<>(getDashboardContext().getWidgetRegistry().getWidgetDescriptors());
 		for (Iterator<WidgetDescriptor> i = widgets.iterator(); i.hasNext();) {
 			WidgetDescriptor wd = i.next();

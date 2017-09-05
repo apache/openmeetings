@@ -51,12 +51,12 @@
 					<td> If the RSS-Feed tab should be visible or not </td>
 				</tr>
 				<tr>
-					<td> rss_feed1 </td>
+					<td> dashboard.rss.feed1 </td>
 					<td> http-URL </td>
 					<td> ATOM-Feed URL for the dashboard RSS Tab </td>
 				</tr>
 				<tr>
-					<td> rss_feed2 </td>
+					<td> dashboard.rss.feed2 </td>
 					<td> http-URL </td>
 					<td> ATOM-Feed URL for the dashboard RSS Tab </td>
 				</tr>

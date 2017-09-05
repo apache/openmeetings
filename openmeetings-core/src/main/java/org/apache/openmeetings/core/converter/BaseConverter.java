@@ -23,7 +23,9 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IMAGEMAGIC_PATH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -84,15 +86,15 @@ public abstract class BaseConverter {
 	}
 
 	public String getPathToFFMPEG() {
-		return getPath("ffmpeg_path", "ffmpeg");
+		return getPath(CONFIG_PATH_FFMPEG, "ffmpeg");
 	}
 
 	protected String getPathToSoX() {
-		return getPath("sox_path", "sox");
+		return getPath(CONFIG_PATH_SOX, "sox");
 	}
 
 	protected String getPathToConvert() {
-		return getPath(CONFIG_IMAGEMAGIC_PATH, "convert") + EXEC_EXT;
+		return getPath(CONFIG_PATH_IMAGEMAGIC, "convert") + EXEC_EXT;
 	}
 
 	protected File getStreamFolder(Recording recording) {

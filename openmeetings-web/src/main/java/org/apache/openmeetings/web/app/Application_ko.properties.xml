@@ -803,25 +803,24 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.userdata"><![CDATA[Userdata]]></entry>
 	<entry key="install.wizard.params.step1.username"><![CDATA[Username]]></entry>
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[Enter a username]]></entry>
-	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Allow self-registering (allow_frontend_register)]]></entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Allow self-registering]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Configuration]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Default Rooms of all types will be created]]></entry>
-	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[Default Font for Export [default_export_font]]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Default Language]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Username (email_username)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Username]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Enter the mail-username]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Userpass (email_userpass)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Userpass]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Enter the mail-userpass]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Mail-Referer (system_email_addr)]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Mail-Referer]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Enter a Referer]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Enable TLS in Mail Server Auth]]></entry>
 	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Set inviter's email
-					address as ReplyTo in email invitations (inviter.email.as.replyto)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Send Email to new registered Users (sendEmailAtRegister)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[New Users need to verify their EMail (sendEmailWithVerficationCode)]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-Server Port(default Smtp-Server Port is 25) (smtp_port)]]></entry>
+					address as ReplyTo in email invitations]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Send Email to new registered Users]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[New Users need to verify their EMail]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-Server Port(default Smtp-Server Port is 25)]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Enter a SMTP-Server.Port normally 25]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Server (smtp_server)]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Server]]></entry>
 	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[Enter a SMTP-Server]]></entry>
 	<entry key="install.wizard.params.step3.converters"><![CDATA[Converters]]></entry>
 	<entry key="install.wizard.params.step3.docDpi"><![CDATA[Document conversion DPI]]></entry>
@@ -856,13 +855,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		usable anymore
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE]]></entry>
-	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[red5SIP Configuration]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable"><![CDATA[Enable SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable.text"><![CDATA[Enable red5SIP integration]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[SIP extensions context]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Context of Asterisk extensions]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix"><![CDATA[SIP rooms prefix]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[Prefix for phone number of conference rooms]]></entry>
+	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP Configuration]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[Enable SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Enable red5SIP integration]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[SIP extensions context]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Context of Asterisk extensions]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[SIP rooms prefix]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[Prefix for phone number of conference rooms]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>

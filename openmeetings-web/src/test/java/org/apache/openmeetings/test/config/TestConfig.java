@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.config;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -42,7 +43,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 	public void getConfigKey() {
 		System.err.println("THIS");
 
-		Configuration smtp_server = configurationDao.get("smtp_server").get(0);
+		Configuration smtp_server = configurationDao.get(CONFIG_SMTP_SERVER).get(0);
 
 		System.err.println("smtp_server " + smtp_server.getUser());
 

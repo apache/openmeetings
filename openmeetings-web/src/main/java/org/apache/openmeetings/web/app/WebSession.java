@@ -20,9 +20,9 @@ package org.apache.openmeetings.web.app;
 
 import static java.text.DateFormat.SHORT;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -365,7 +365,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (session.isSignedIn()) {
 				session.languageId = getBean(UserDao.class).get(session.userId).getLanguageId();
 			} else {
-				session.languageId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
+				session.languageId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1");
 			}
 		}
 		return session.languageId;
@@ -490,8 +490,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
-		boolean showRssConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
+		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS, Integer.class, "0");
+		boolean showRssConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS, Integer.class, "0");
 		boolean showAdminWidget = getRights().contains(User.Right.Admin);
 		boolean save = false;
 

@@ -33,6 +33,15 @@
 					<th> availabe since OpenMeetings version </th>
 				</tr>
 				<tr>
+					<td> crypt.class.name </td>
+					<td> org.apache.openmeetings.util.crypt.SCryptImplementation </td>
+					<td> This Class is used for Authentification-Crypting. 
+						Be carefull what you do here! If you change it while 
+						running previous Pass of users will not be workign anymore! 
+						for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html </td>
+					<td> 1.9.x </td>
+				</tr>
+				<tr>
 					<td> dashboard.show.myrooms </td>
 					<td> 0 or 1 </td>
 					<td> Dashboard: If the MyRooms widget should be visible or not </td>
@@ -51,19 +60,19 @@
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> rss_feed1 </td>
+					<td> dashboard.rss.feed1 </td>
 					<td> http-URL </td>
 					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> rss_feed2 </td>
+					<td> dashboard.rss.feed2 </td>
 					<td> http-URL </td>
 					<td> Dashboard: ATOM-Feed URL for the dashboard RSS Tab </td>
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> ldap_default_id </td>
+					<td> default.ldap.id </td>
 					<td> 0 </td>
 					<td> Ldap domain selected by default in the login screen </td>
 					<td> 1.9.x </td>
@@ -89,7 +98,7 @@
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> max_upload_size </td>
+					<td> max.upload.size </td>
 					<td> 104857600 </td>
 					<td> Maximum size of upload file (bytes) 104857600 bytes = 100MB </td>
 					<td> 1.8.x <b>default value changed in 3.3.0</b> </td>
@@ -103,25 +112,25 @@
 					<td> 1.8.x </td>
 				</tr>
 				<tr>
-					<td> smtp_server </td>
+					<td> mail.smtp.server </td>
 					<td> localhost </td>
 					<td> this is the smtp server to send messages </td>
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> smtp_port </td>
+					<td> mail.smtp.port </td>
 					<td> 25 </td>
 					<td> this is the smtp server port normally 25 </td>
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> email_username </td>
+					<td> mail.smtp.user </td>
 					<td> </td>
 					<td> System auth email username </td>
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> email_userpass </td>
+					<td> mail.smtp.pass </td>
 					<td> </td>
 					<td> System auth email password </td>
 					<td> 1.9.x </td>
@@ -145,7 +154,7 @@
 					<td> 1.9.x </td>
 				</tr>
 				<tr>
-					<td> system_email_addr </td>
+					<td> mail.smtp.system.email </td>
 					<td> noreply@openmeetings.apache.org </td>
 					<td> all send e-mails by the system will have this address </td>
 					<td> 1.9.x </td>
@@ -157,7 +166,7 @@
 					<td> 2.0.x </td>
 				</tr>
 				<tr>
-					<td> office.path </td>
+					<td> path.office </td>
 					<td> </td>
 					<td> The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically	</td>
 					<td> 2.0.x </td>
@@ -206,13 +215,13 @@
 					<td> 4.0.x </td>
 				</tr>
 				<tr>
-					<td> sendEmailAtRegister </td>
+					<td> send.email.at.register </td>
 					<td> 0 </td>
 					<td> User get a EMail with their Account data. Values: 0(No) or 1(Yes) </td>
 					<td> 2.0.x </td>
 				</tr>
 				<tr>
-					<td> sendEmailWithVerficationCode </td>
+					<td> send.email.with.verfication </td>
 					<td> 0 </td>
 					<td> User must activate their account by clicking on the 
 								activation-link in the registering Email. Values: 0(No) or 1(Yes) 
@@ -228,7 +237,7 @@
 					<td> 2.2.x </td>
 				</tr>
 				<tr>
-					<td> allow_frontend_register </td>
+					<td> allow.frontend.register </td>
 					<td> (configurable during install) </td>
 					<td> Is user register available on login screen </td>
 					<td> 1.8.x </td>
@@ -252,7 +261,7 @@
 					<td> 3.0.2 </td>
 				</tr>
 				<tr>
-					<td> default.quality.screensharing </td>
+					<td> screensharing.default.quality </td>
 					<td> 1 </td>
 					<td> Default selection in ScreenSharing Quality:<br/>
 						0 - bigger frame rate, no resize<br/>
@@ -262,7 +271,7 @@
 					<td> 3.0.3 </td>
 				</tr>
 				<tr>
-					<td> default.fps.screensharing </td>
+					<td> screensharing.default.fps </td>
 					<td> 10 </td>
 					<td> Default selection in ScreenSharing FPS. </td>
 					<td> 3.0.3 </td>

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.service.mail.template;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 
 import java.util.Locale;
 
@@ -46,7 +46,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	}
 
 	private static Locale getDefault() {
-		long langId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1");
+		long langId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1");
 		return LabelDao.languages.get(langId);
 	}
 

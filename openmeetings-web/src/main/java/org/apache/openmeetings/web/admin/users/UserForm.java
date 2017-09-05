@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -181,7 +182,7 @@ public class UserForm extends AdminBaseForm<User> {
 		User u = getModelObject();
 		try {
 			boolean isNew = (u.getId() == null);
-			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue("sendEmailAtRegister", Integer.class, "0"));
+			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue(CONFIG_EMAIL_AT_REGISTER, Integer.class, "0"));
 			if (isNew && sendEmailAtRegister) {
 				u.setActivatehash(UUID.randomUUID().toString());
 			}

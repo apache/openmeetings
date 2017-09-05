@@ -22,16 +22,20 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
@@ -41,26 +45,32 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IMAGEMAGIC_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED1_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_RSS_FEED2_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SOAP_REGISTER_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
@@ -164,29 +174,29 @@ public class ImportInitvalues {
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
-		cfgDao.add(CONFIG_CRYPT_KEY, cfg.cryptClassName, null,
+		cfgDao.add(CONFIG_CRYPT, cfg.cryptClassName, null,
 				"This Class is used for Authentification-Crypting. "
 						+ "Be carefull what you do here! If you change it while "
 						+ "running previous Pass of users will not be workign anymore! "
 						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
-		cfgDao.add(CONFIG_FRONTEND_REGISTER_KEY, cfg.allowFrontendRegister, null, "Is user register available on login screen");
-		cfgDao.add(CONFIG_SOAP_REGISTER_KEY, "1", null, "Is user register available via SOAP/REST");
-		cfgDao.add(CONFIG_OAUTH_REGISTER_KEY, "1", null, "Is user register available via OAuth");
+		cfgDao.add(CONFIG_REGISTER_FRONTEND, cfg.allowFrontendRegister, null, "Is user register available on login screen");
+		cfgDao.add(CONFIG_REGISTER_SOAP, "1", null, "Is user register available via SOAP/REST");
+		cfgDao.add(CONFIG_REGISTER_OAUTH, "1", null, "Is user register available via OAuth");
 		// this group_id is the Group of users who register through the frontend or SOAP
 		cfgDao.add(CONFIG_DEFAULT_GROUP_ID, "1", null, "");
 
-		cfgDao.add("smtp_server", cfg.smtpServer, null,
+		cfgDao.add(CONFIG_SMTP_SERVER, cfg.smtpServer, null,
 				"this is the smtp server to send messages");
 
-		cfgDao.add("smtp_port", "" + cfg.smtpPort, null,
+		cfgDao.add(CONFIG_SMTP_PORT, "" + cfg.smtpPort, null,
 				"this is the smtp server port normally 25");
 
-		cfgDao.add(CONFIG_SYSTEM_EMAIL, cfg.mailReferer, null, "all send e-mails by the system will have this address");
+		cfgDao.add(CONFIG_SMTP_SYSTEM_EMAIL, cfg.mailReferer, null, "all send e-mails by the system will have this address");
 
-		cfgDao.add("email_username", cfg.mailAuthName, null, "System auth email username");
+		cfgDao.add(CONFIG_SMTP_USER, cfg.mailAuthName, null, "System auth email username");
 
-		cfgDao.add("email_userpass", cfg.mailAuthPass, null, "System auth email password");
+		cfgDao.add(CONFIG_SMTP_PORT, cfg.mailAuthPass, null, "System auth email password");
 
 		cfgDao.add("mail.smtp.starttls.enable", cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 
@@ -199,7 +209,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME, null, "Name of the Browser Title window");
 
 		// "1" == "EN"
-		cfgDao.add(CONFIG_DEFAULT_LANG_KEY, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
+		cfgDao.add(CONFIG_DEFAULT_LANG, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
 
 		cfgDao.add(CONFIG_DOCUMENT_DPI, "" + cfg.docDpi, null,
 				"dpi for conversion of PDF to images (should be an integer between 50 and  600 with a default value of 150 dpi)");
@@ -207,43 +217,37 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_DOCUMENT_QUALITY, "" + cfg.docQuality, null,
 				"compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90)");
 
-		cfgDao.add(CONFIG_IMAGEMAGIC_PATH, cfg.imageMagicPath, null, "Path to ImageMagick tools");
+		cfgDao.add(CONFIG_PATH_IMAGEMAGIC, cfg.imageMagicPath, null, "Path to ImageMagick tools");
 
-		cfgDao.add("sox_path", cfg.soxPath, null, "Path To SoX-Tools");
+		cfgDao.add(CONFIG_PATH_SOX, cfg.soxPath, null, "Path To SoX-Tools");
 
-		cfgDao.add("ffmpeg_path", cfg.ffmpegPath, null, "Path To FFMPEG");
-		cfgDao.add("office.path", cfg.officePath, null,
+		cfgDao.add(CONFIG_PATH_FFMPEG, cfg.ffmpegPath, null, "Path To FFMPEG");
+		cfgDao.add(CONFIG_PATH_OFFICE, cfg.officePath, null,
 				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
 
-		cfgDao.add(CONFIG_RSS_FEED1_KEY, cfg.urlFeed, null, "Feed URL");
+		cfgDao.add(CONFIG_DASHBOARD_RSS_FEED1, cfg.urlFeed, null, "Feed URL 1");
 
-		cfgDao.add(CONFIG_RSS_FEED2_KEY, cfg.urlFeed2, null, "Feed URL 2");
+		cfgDao.add(CONFIG_DASHBOARD_RSS_FEED2, cfg.urlFeed2, null, "Feed URL 2");
 
-		cfgDao.add("sendEmailAtRegister", cfg.sendEmailAtRegister, null,
+		cfgDao.add(CONFIG_EMAIL_AT_REGISTER, cfg.sendEmailAtRegister, null,
 				"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
-		cfgDao.add("sendEmailWithVerficationCode", cfg.sendEmailWithVerficationCode, null,
-				"User must activate their account by clicking on the "
+		cfgDao.add(CONFIG_EMAIL_VERIFICATION, cfg.sendEmailWithVerficationCode, null,
+				String.format("User must activate their account by clicking on the "
 					+ "activation-link in the registering Email. Values: 0(No) or 1(Yes) "
-					+ "It makes no sense to make this(sendEmailWithVerficationCode) 1(Yes) while "
-					+ "sendEmailAtRegister is 0(No) cause you need"
-					+ "to send a EMail.");
-		cfgDao.add("default_export_font", cfg.defaultExportFont, null,
-				"The Name of the Font used for exporting/render Images from Whiteboard"
-					+ "The Font has to exist on the Server which runs Red5");
+					+ "It makes no sense to make this(%s) 1(Yes) while "
+					+ "%s is 0(No) cause you need to send a EMail.", CONFIG_EMAIL_VERIFICATION, CONFIG_EMAIL_AT_REGISTER));
 
 		cfgDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
 
 		// ***************************************
 		// ***************************************
-		// red5SIP Integration Coniguration Values
+		// SIP Integration Coniguration Values
 		// ***************************************
 
-		cfgDao.add(CONFIG_SIP_ENABLED, cfg.red5SipEnable, null, "Enable to enable the red5SIP integration ");
-		cfgDao.add("red5sip.room_prefix", cfg.red5SipRoomPrefix, null,
-				"Numerical prefix for OM rooms created inside the SIP");
-		cfgDao.add("red5sip.exten_context", cfg.red5SipExtenContext, null,
-				"Enable to enable the red5SIP integration ");
+		cfgDao.add(CONFIG_SIP_ENABLED, cfg.sipEnable, null, "Enable to enable the red5SIP integration ");
+		cfgDao.add(CONFIG_SIP_ROOM_PREFIX, cfg.sipRoomPrefix, null, "Numerical prefix for OM rooms created inside the SIP");
+		cfgDao.add(CONFIG_SIP_EXTEN_CONTEXT, cfg.sipExtenContext, null, "Enable to enable the red5SIP integration ");
 
 		// ***************************************
 		// ***************************************
@@ -264,25 +268,25 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
 		cfgDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", null, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS, "1", null, "Show My Rooms Tab");
 
 		cfgDao.add(CONFIG_DASHBOARD_SHOW_CHAT, "1", null, "Show Chat Tab");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS_KEY, "0", null, "Show RSS Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS, "0", null, "Show RSS Tab");
 
 		cfgDao.add("show.whiteboard.draw.status", "0", null,
 				"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
 
-		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE_KEY, "" + DEFAULT_MAX_UPLOAD_SIZE, null,
+		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE, "" + DEFAULT_MAX_UPLOAD_SIZE, null,
 				"Maximum size of upload file (bytes)"); // defaults to 100MB
 
 		cfgDao.add(CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", null,
 				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		cfgDao.add(CONFIG_LOGIN_MIN_LENGTH_KEY, "" + USER_LOGIN_MINIMUM_LENGTH, null,
+		cfgDao.add(CONFIG_LOGIN_MIN_LENGTH, "" + USER_LOGIN_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user login");
 
-		cfgDao.add(CONFIG_PASS_MIN_LENGTH_KEY, "" + USER_PASSWORD_MINIMUM_LENGTH, null,
+		cfgDao.add(CONFIG_PASS_MIN_LENGTH, "" + USER_PASSWORD_MINIMUM_LENGTH, null,
 				"Number of chars needed in a user password");
 
 		cfgDao.add("calendar.conference.rooms.default.size", "50", null,
@@ -311,7 +315,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_IGNORE_BAD_SSL, "no", null,
 				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
 
-		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY, "", null,
+		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", null,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
 		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
 		cfgDao.add(CONFIG_GOOGLE_ANALYTICS_CODE, null, null, "Code for Google Analytics");

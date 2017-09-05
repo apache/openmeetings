@@ -21,8 +21,9 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FRONTEND_REGISTER_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
@@ -112,8 +113,8 @@ public class MobileService {
 
 	public Map<String, Object> checkServer() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0")));
-		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0")));
+		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_REGISTER_FRONTEND, String.class, "0")));
+		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_REGISTER_OAUTH, String.class, "0")));
 		return result;
 	}
 
@@ -132,7 +133,7 @@ public class MobileService {
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if ("1".equals(cfgDao.getConfValue(CONFIG_OAUTH_REGISTER_KEY, String.class, "0"))) {
+			if ("1".equals(cfgDao.getConfValue(CONFIG_REGISTER_OAUTH, String.class, "0"))) {
 				User u = userManager.loginOAuth(umap, 2); //TODO hardcoded
 				result = login(u, result);
 			}
@@ -145,7 +146,7 @@ public class MobileService {
 	public Map<String, Object> registerUser(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if ("1".equals(cfgDao.getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"))) {
+			if ("1".equals(cfgDao.getConfValue(CONFIG_REGISTER_FRONTEND, String.class, "0"))) {
 				String login = umap.get("login");
 				String email = umap.get("email");
 				String lastname = umap.get("lastname");
@@ -166,7 +167,7 @@ public class MobileService {
 
 				String baseURL = cfgDao.getBaseUrl();
 				boolean sendConfirmation = !Strings.isEmpty(baseURL)
-						&& 1 == cfgDao.getConfValue("sendEmailWithVerficationCode", Integer.class, "0");
+						&& 1 == cfgDao.getConfValue(CONFIG_EMAIL_VERIFICATION, Integer.class, "0");
 				Object user = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
 						, firstname, email, null /* age/birthday */, "" /* street */
 						, "" /* additionalname */, "" /* fax */, "" /* zip */, country

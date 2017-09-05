@@ -800,24 +800,23 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.userdata"><![CDATA[Données utilisateur]]></entry>
 	<entry key="install.wizard.params.step1.username"><![CDATA[Nom d'utilisateur]]></entry>
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[Entrez un nom d'utilisateur]]></entry>
-	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Autoriser les  nouveaux utilisateurs de s'enregistrer (allow_frontend_register)]]></entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Autoriser les  nouveaux utilisateurs de s'enregistrer]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Configuration]]></entry>
 	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Installer toutes les salles par défaut]]></entry>
-	<entry key="install.wizard.params.step2.defaultExportFont"><![CDATA[Police par défaut pour l'export [default_export_font]]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Langue par défaut]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[Nom d'utilisateur système SMTP (email_username)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[Nom d'utilisateur système SMTP]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Entrez le nom d'utilisateur du courriel du système]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[Mot de passe SMTP (email_userpass)]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[Mot de passe SMTP]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Entrez le mot de passe du courriel du système]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Adresse de courriel du système (system_email_addr)]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Adresse de courriel du système]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Entrez l'adresse de courriel utilisée par le système]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Activer TLS pour le serveur de courriels]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Inclure l'adresse de courriel de l'organisateur dans le champ des destinataires d'un courriel (inviter.email.as.replyto)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Envoyer un courriel aux nouveaux utilisateurs (sendEmailAtRegister)]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Les nouveaux utilisateurs doivent vérifier leur adresse de courriel (sendEmailWithVerficationCode)]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[Port du serveur SMTP (Le port standard est 25) (smtp_port)]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Inclure l'adresse de courriel de l'organisateur dans le champ des destinataires d'un courriel]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Envoyer un courriel aux nouveaux utilisateurs]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Les nouveaux utilisateurs doivent vérifier leur adresse de courriel]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[Port du serveur SMTP (Le port standard est 25)]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Entrez le port du serveur SMTP Normalement 25]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP (smtp_server)]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP]]></entry>
 	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[Entrez un  serveur SMTP]]></entry>
 	<entry key="install.wizard.params.step3.converters"><![CDATA[Convertisseurs]]></entry>
 	<entry key="install.wizard.params.step3.docDpi"><![CDATA[Document conversion DPI]]></entry>
@@ -850,13 +849,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">Custom Crypt Mechanism</a>. Vous pouvez éditer cette valeur plus tard MAIS les utilisateurs créés précédemment pourraient ne plus être utilisables. 
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Indiquez le nom de la classe de chiffrement. NE MODIFIEZ PAS CECI SI VOUS N'ETES PAS SUR !]]></entry>
-	<entry key="install.wizard.params.step4.red5SIP"><![CDATA[Configuration red5SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable"><![CDATA[Activer SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipEnable.text"><![CDATA[Activer l'intégration red5SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext"><![CDATA[Contexte des extensions SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipExtenContext.text"><![CDATA[Contexte des extensions Asterisk]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix"><![CDATA[Préfix pour les salles SIP]]></entry>
-	<entry key="install.wizard.params.step4.red5SipRoomPrefix.text"><![CDATA[Préfix pour le num. de tél. des salles de conférence]]></entry>
+	<entry key="install.wizard.params.step4.sip"><![CDATA[Configuration red5SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[Activer SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Activer l'intégration red5SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[Contexte des extensions SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Contexte des extensions Asterisk]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[Préfix pour les salles SIP]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[Préfix pour le num. de tél. des salles de conférence]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>

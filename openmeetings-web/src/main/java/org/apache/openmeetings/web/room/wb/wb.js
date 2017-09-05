@@ -87,7 +87,7 @@ var APointer = function(wb) {
 				, originX: 'right'
 				, originY: 'top'
 			});
-			var circle1 = new fabric.Circle({
+			let circle1 = new fabric.Circle({
 				radius: 20
 				, stroke: '#ff6600'
 				, strokeWidth: 2
@@ -95,7 +95,7 @@ var APointer = function(wb) {
 				, originX: 'center'
 				, originY: 'center'
 			});
-			var circle2 = new fabric.Circle({
+			let circle2 = new fabric.Circle({
 				radius: 6
 				, stroke: '#ff6600'
 				, strokeWidth: 2
@@ -103,13 +103,13 @@ var APointer = function(wb) {
 				, originX: 'center'
 				, originY: 'center'
 			});
-			var text = new fabric.Text(o.user, {
+			let text = new fabric.Text(o.user, {
 				fontSize: 12
 				, left: 10
 				, originX: 'left'
 				, originY: 'bottom'
 			});
-			var group = new fabric.Group([circle1, circle2, img, text], {
+			let group = new fabric.Group([circle1, circle2, img, text], {
 				left: o.x - 20
 				, top: o.y - 20
 			});
@@ -118,7 +118,7 @@ var APointer = function(wb) {
 			group.uid = o.uid;
 			group.loaded = !!o.loaded;
 
-			var count = 3;
+			let count = 3;
 			function go(_cnt) {
 				if (_cnt < 0) {
 					canvas.remove(group);
@@ -1027,6 +1027,10 @@ var Wb = function() {
 		canvas.wbId = wb.id;
 		canvas.slide = sl;
 		canvases.push(canvas);
+		fabric.util.requestAnimFrame(function render() {
+			canvas.renderAll();
+			fabric.util.requestAnimFrame(render);
+		});
 		var cc = $('#' + cid).closest('.canvas-container');
 		if (role === NONE) {
 			if (sl == slide) {
@@ -1168,15 +1172,6 @@ var Wb = function() {
 		if (arr.length > 0) {
 			_createObject(arr, _createHandler);
 		}
-		/* FIXME TODO animation
-		 * https://jsfiddle.net/l2aelba/kro7h6rv/2/
-		if ('Video' === o.fileType || 'Recording' === o.fileType) {
-			fabric.util.requestAnimFrame(function render() {
-				canvas.renderAll();
-				fabric.util.requestAnimFrame(render);
-			});
-		}
-		*/
 	};
 	wb.modifyObj = function(o) { //TODO need to be unified
 		switch(o.type) {

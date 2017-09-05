@@ -58,10 +58,9 @@ public class InstallationConfig implements Serializable {
 	public String urlFeed = "http://mail-archives.apache.org/mod_mbox/openmeetings-user/?format=atom";
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "0";
-	public String defaultExportFont = "TimesNewRoman";
-	public String red5SipEnable = "no";
-	public String red5SipRoomPrefix = "400";
-	public String red5SipExtenContext = "rooms";
+	public String sipEnable = "no";
+	public String sipRoomPrefix = "400";
+	public String sipExtenContext = "rooms";
 	public String replyToOrganizer = "1";
 	public String baseUrl = DEFAULT_BASE_URL;
 
@@ -88,10 +87,9 @@ public class InstallationConfig implements Serializable {
 				+ ", defaultLangId=" + defaultLangId + ", sendEmailAtRegister="
 				+ sendEmailAtRegister + ", urlFeed=" + urlFeed + ", urlFeed2="
 				+ urlFeed2 + ", sendEmailWithVerficationCode="
-				+ sendEmailWithVerficationCode + ", defaultExportFont="
-				+ defaultExportFont + ", red5SipEnable="
-				+ red5SipEnable + ", red5SipRoomPrefix=" + red5SipRoomPrefix
-				+ ", red5SipExtenContext=" + red5SipExtenContext
+				+ sendEmailWithVerficationCode + ", sipEnable="
+				+ sipEnable + ", sipRoomPrefix=" + sipRoomPrefix
+				+ ", sipExtenContext=" + sipExtenContext
 				+ ", replyToOrganizer=" + replyToOrganizer
 				+ ", ical_timeZone=" + ical_timeZone
 				+ "]";
