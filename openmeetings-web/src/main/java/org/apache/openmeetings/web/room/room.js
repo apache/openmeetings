@@ -322,6 +322,7 @@ var Video = (function() {
 		o.uid = c.uid;
 		o.userId = c.user.id;
 		o.broadcastId = c.broadcastId;
+		delete o.keycode;
 		swf = initVideo(vc, _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
 		v.dialog("widget").css(_pos);
@@ -357,6 +358,7 @@ var Video = (function() {
 	self.update = _update;
 	self.refresh = _refresh;
 	self.mute = _mute;
+	self.isMuted = function() { return 0 === slider.slider("option", "value"); };
 	self.init = _init;
 	self.securityMode = _securityMode;
 	self.client = function() { return c; };
@@ -517,6 +519,16 @@ var Room = (function() {
 		options = _options;
 		VideoManager.init();
 	}
+	function _getSelfAudioClient() {
+		let vw = $('#video' + Room.getOptions().uid);
+		if (vw.length > 0) {
+			let v = vw.data();
+			if (VideoUtil.hasAudio(v.client())) {
+				return v;
+			}
+		}
+		return null;
+	}
 	function _keyHandler(e) {
 		if (e.shiftKey) {
 			switch (e.which) {
@@ -524,10 +536,20 @@ var Room = (function() {
 					VideoUtil.arrange();
 					break;
 				case options.keycode.exclusive: // Shift+F12 by default
-					//VideoUtil.arrange();
+				{
+					let v = _getSelfAudioClient();
+					if (v !== null) {
+						VideoManager.clickExclusive(Room.getOptions().uid);
+					}
+				}
 					break;
 				case options.keycode.mute: // Shift+F7 by default
-					//VideoUtil.arrange();
+				{
+					let v = _getSelfAudioClient();
+					if (v !== null) {
+						v.mute(!v.isMuted());
+					}
+				}
 					break;
 			}
 		}
