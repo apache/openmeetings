@@ -40,7 +40,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -125,8 +124,9 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			target.appendJavaScript("setRoomSizes();");
-			ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
+			target.appendJavaScript("Room.setSize();");
+			WebSession ws = WebSession.get();
+			ExtendedClientProperties cp = ws.getExtendedProperties();
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomEnter
 					, getUserId(), "0", r.getId()
@@ -137,7 +137,10 @@ public class RoomPanel extends BasePanel {
 					.put("uid", _c.getUid())
 					.put("interview", isInterview)
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus));
-			target.appendJavaScript(String.format("VideoManager.init(%s);", options));
+			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
+				options.put("reloadUrl", r.getRedirectURL());
+			}
+			target.appendJavaScript(String.format("Room.init(%s);", options));
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			// play video from other participants
 			initVideos(target);
@@ -684,7 +687,7 @@ public class RoomPanel extends BasePanel {
 		if (handler != null) {
 			handler.add(getBasePage().getHeader(), getMainPanel().getTopControls());
 			if (isVisible()) {
-				handler.appendJavaScript("roomLoad();");
+				handler.appendJavaScript("Room.load();");
 			}
 		}
 		return this;
@@ -695,7 +698,7 @@ public class RoomPanel extends BasePanel {
 			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.add(this.setVisible(true));
-		handler.appendJavaScript("roomLoad();");
+		handler.appendJavaScript("Room.load();");
 	}
 
 	@Override
@@ -704,7 +707,7 @@ public class RoomPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			getMainPanel().getChat().toggle(handler, true);
 		}
-		handler.appendJavaScript("if (typeof roomUnload == 'function') { roomUnload(); }");
+		handler.appendJavaScript("if (typeof Room !== 'undefined') { Room.unload(); }");
 		Application.exitRoom(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
@@ -718,12 +721,6 @@ public class RoomPanel extends BasePanel {
 			response.render(JavaScriptHeaderItem.forReference(INTERVIEWWB_JS_REFERENCE));
 		} else {
 			response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
-		}
-		WebSession ws = WebSession.get();
-		if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
-			response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(
-					String.format("function roomReload(event, ui) {window.location.href='%s';}", r.getRedirectURL())
-					, String.format("room-reload-%s", UUID.randomUUID()))));
 		}
 		if (room.isVisible()) {
 			response.render(OnDomReadyHeaderItem.forScript(roomEnter.getCallbackScript()));

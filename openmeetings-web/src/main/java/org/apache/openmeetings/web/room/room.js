@@ -58,7 +58,7 @@ var VideoUtil = (function() {
 			, bottom: winoff.top + win.height()};
 	}
 	function _getPos(list, w, h) {
-		if (VideoManager.getOptions().interview) {
+		if (Room.getOptions().interview) {
 			return {left: 0, top: 0};
 		}
 		var wba = $(WBA_SEL);
@@ -115,14 +115,12 @@ var VideoUtil = (function() {
 		} while (!posFound);
 		return {left: rectNew.left, top: rectNew.top};
 	}
-	function _arrange(e) {
-		if (e.which === 119 && e.shiftKey) { // Shift+F8
-			let list = [], elems = $(VID_SEL);
-			for (let i = 0; i < elems.length; ++i) {
-				let v = $(elems[i]);
-				v.css(_getPos(list, v.width(), v.height()));
-				list.push(_getRect(v));
-			}
+	function _arrange() {
+		let list = [], elems = $(VID_SEL);
+		for (let i = 0; i < elems.length; ++i) {
+			let v = $(elems[i]);
+			v.css(_getPos(list, v.width(), v.height()));
+			list.push(_getRect(v));
 		}
 	}
 
@@ -214,7 +212,7 @@ var Video = (function() {
 			, name = _getName()
 			, _w = c.self ? Math.max(300, c.width) : c.width
 			, _h = c.self ? Math.max(200, c.height) : c.height
-			, opts = VideoManager.getOptions();
+			, opts = Room.getOptions();
 		{ //scope
 			let cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
 			cont.append($('#user-video').clone().attr('id', _id).attr('title', name)
@@ -309,7 +307,7 @@ var Video = (function() {
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 		//broadcast
-		var o = VideoManager.getOptions();
+		var o = Room.getOptions();
 		if (c.self) {
 			o.cam = c.cam;
 			o.mic = c.mic;
@@ -329,7 +327,7 @@ var Video = (function() {
 		v.dialog("widget").css(_pos);
 	}
 	function _update(_c) {
-		var opts = VideoManager.getOptions();
+		var opts = Room.getOptions();
 		c.screenActivities = _c.screenActivities;
 		c.activities = _c.activities;
 		if (VideoUtil.hasAudio(c)) {
@@ -365,15 +363,15 @@ var Video = (function() {
 	return self;
 });
 var VideoManager = (function() {
-	var self = {}, options, share;
+	var self = {}, share, inited = false;
 
-	function _init(_options) {
-		options = _options;
-		VideoSettings.init(self.getOptions());
+	function _init() {
+		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
+		inited = true;
 	}
 	function _update(c) {
-		if (options === undefined) {
+		if (!inited) {
 			return;
 		}
 		for (let i = 0; i < c.streams.length; ++i) {
@@ -402,7 +400,7 @@ var VideoManager = (function() {
 		v.remove();
 	}
 	function _play(c) {
-		if (options === undefined) {
+		if (!inited) {
 			return;
 		}
 		if (VideoUtil.isSharing(c)) {
@@ -500,7 +498,6 @@ var VideoManager = (function() {
 		}
 	}
 
-	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.init = _init;
 	self.update = _update;
 	self.play = _play;
@@ -513,75 +510,110 @@ var VideoManager = (function() {
 	self.exclusive = _exclusive;
 	return self;
 })();
-function setRoomSizes() {
-	var sb = $(".room.sidebar.left")
-		, w = $(window).width() - sb.width() - 8
-		, h = $(window).height() - $('#menu').height() - 3
-		, p = sb.find('.tabs');
-	sb.height(h);
-	var hh = h - 5;
-	p.height(hh);
-	$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
-	var holder = $('.room.holder');
-	if (sb.width() > 230) {
-		holder.addClass('big').removeClass('small');
-	} else {
-		holder.removeClass('big').addClass('small');
+var Room = (function() {
+	var self = {}, options;
+
+	function _init(_options) {
+		options = _options;
+		VideoManager.init();
 	}
-	if (!!WbArea) {
-		WbArea.resize(sb.width() + 5, w, h);
-	}
-}
-function roomReload(event, ui) {
-	window.location.reload();
-}
-function roomClosed(jqEvent, msg) {
-	roomUnload();
-	$(".room.holder").remove();
-	$("#chatPanel").remove();
-	var dlg = $('#disconnected-dlg');
-	dlg.dialog({
-		modal: true
-		, close: roomReload
-		, buttons: [
-			{
-				text: dlg.data('reload')
-				, icons: {primary: "ui-icon-refresh"}
-				, click: function() {
-					$(this).dialog("close");
-				}
+	function _keyHandler(e) {
+		if (e.shiftKey) {
+			switch (e.which) {
+				case options.keycode.arrange: // Shift+F8 by default
+					VideoUtil.arrange();
+					break;
+				case options.keycode.exclusive: // Shift+F12 by default
+					//VideoUtil.arrange();
+					break;
+				case options.keycode.mute: // Shift+F7 by default
+					//VideoUtil.arrange();
+					break;
 			}
-		]
-	});
-}
-function roomLoad() {
-	$(".room.sidebar.left").ready(function() {
-		setRoomSizes();
-	});
-	$(window).on('resize.openmeetings', function() {
-		setRoomSizes();
-	});
-	$(".room.sidebar.left").resizable({
-		handles: "e"
-		, stop: function(event, ui) {
-			setRoomSizes();
 		}
-	});
-	Wicket.Event.subscribe("/websocket/closed", roomClosed);
-	Wicket.Event.subscribe("/websocket/error", roomClosed);
-	$(window).keyup(VideoUtil.arrange);
-}
-function roomUnload() {
-	$(window).off('resize.openmeetings');
-	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
-	Wicket.Event.unsubscribe("/websocket/error", roomClosed);
-	if (!!WbArea) {
-		WbArea.destroy();
 	}
-	VideoSettings.close();
-	$('.ui-dialog.user-video').remove();
-	$(window).off('keyup', VideoUtil.arrange);
-}
+	function _setSize() {
+		var sb = $(".room.sidebar.left")
+			, w = $(window).width() - sb.width() - 8
+			, h = $(window).height() - $('#menu').height() - 3
+			, p = sb.find('.tabs');
+		sb.height(h);
+		var hh = h - 5;
+		p.height(hh);
+		$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
+		var holder = $('.room.holder');
+		if (sb.width() > 230) {
+			holder.addClass('big').removeClass('small');
+		} else {
+			holder.removeClass('big').addClass('small');
+		}
+		if (!!WbArea) {
+			WbArea.resize(sb.width() + 5, w, h);
+		}
+	}
+	function _reload(event, ui) {
+		if (!!options.reloadUrl) {
+			window.location.href = options.reloadUrl;
+		} else {
+			window.location.reload();
+		}
+	}
+	function _close(jqEvent, msg) {
+		_unload();
+		$(".room.holder").remove();
+		$("#chatPanel").remove();
+		var dlg = $('#disconnected-dlg');
+		dlg.dialog({
+			modal: true
+			, close: _reload
+			, buttons: [
+				{
+					text: dlg.data('reload')
+					, icons: {primary: "ui-icon-refresh"}
+					, click: function() {
+						$(this).dialog("close");
+					}
+				}
+			]
+		});
+	}
+	function _load() {
+		$(".room.sidebar.left").ready(function() {
+			_setSize();
+		});
+		$(window).on('resize.openmeetings', function() {
+			_setSize();
+		});
+		$(".room.sidebar.left").resizable({
+			handles: "e"
+			, stop: function(event, ui) {
+				_setSize();
+			}
+		});
+		Wicket.Event.subscribe("/websocket/closed", _close);
+		Wicket.Event.subscribe("/websocket/error", _close);
+		$(window).keyup(_keyHandler);
+	}
+	function _unload() {
+		$(window).off('resize.openmeetings');
+		Wicket.Event.unsubscribe("/websocket/closed", _close);
+		Wicket.Event.unsubscribe("/websocket/error", _close);
+		if (!!WbArea) {
+			WbArea.destroy();
+		}
+		VideoSettings.close();
+		$('.ui-dialog.user-video').remove();
+		$(window).off('keyup', _keyHandler);
+	}
+
+	self.init = _init;
+	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
+	self.setSize = _setSize;
+	self.keyHandler = _keyHandler;
+	self.load = _load;
+	self.unload = _unload;
+	return self;
+})();
 function startPrivateChat(el) {
 	Chat.addTab('chatTab-u' + el.parent().parent().data("userid"), el.parent().parent().find('.user.name').text());
 	Chat.open();

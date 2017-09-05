@@ -20,14 +20,6 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
@@ -36,14 +28,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_S
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
@@ -93,17 +81,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private static final String ROOM_PARAM = "roomClient";
 	private static final String WIDTH_PARAM = "width";
 	private static final String HEIGHT_PARAM = "height";
-	public static final String FLASH_SECURE = "secure";
-	public static final String FLASH_NATIVE_SSL = "native";
-	public static final String FLASH_PORT = "rtmpPort";
-	public static final String FLASH_SSL_PORT = "rtmpsPort";
-	public static final String FLASH_VIDEO_CODEC = "videoCodec";
-	public static final String FLASH_FPS = "fps";
-	public static final String FLASH_BANDWIDTH = "bandwidth";
-	public static final String FLASH_QUALITY = "quality";
-	public static final String FLASH_ECHO_PATH = "echoPath";
-	public static final String FLASH_MIC_RATE = "micRate";
-	private JSONObject flashSettings;
 
 	@Autowired
 	private ISessionManager sessionManager;
@@ -145,22 +122,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			cfgDao.getCryptKey();
 
 			// init your handler here
-			Properties props = new Properties();
-			try (InputStream is = new FileInputStream(new File(new File(OmFileHelper.getRootDir(), "conf"), "red5.properties"))) {
-				props.load(is);
-			}
-			flashSettings = new JSONObject()
-					.put(FLASH_SECURE, "yes".equals(cfgDao.getConfValue(CONFIG_FLASH_SECURE, String.class, "no")))
-					.put(FLASH_NATIVE_SSL, "best".equals(cfgDao.getConfValue(CONFIG_FLASH_SECURE_PROXY, String.class, "none")))
-					.put(FLASH_PORT, props.getProperty("rtmp.port"))
-					.put(FLASH_SSL_PORT, props.getProperty("rtmps.port"))
-					.put(FLASH_VIDEO_CODEC, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
-					.put(FLASH_FPS, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
-					.put(FLASH_BANDWIDTH, cfgDao.getConfValue(CONFIG_FLASH_VIDEO_BANDWIDTH, Integer.class, "0"))
-					.put(FLASH_QUALITY, cfgDao.getConfValue(CONFIG_FLASH_CAM_QUALITY, Integer.class, "90"))
-					.put(FLASH_ECHO_PATH, cfgDao.getConfValue(CONFIG_FLASH_ECHO_PATH, Integer.class, "128"))
-					.put(FLASH_MIC_RATE, cfgDao.getConfValue(CONFIG_FLASH_MIC_RATE, Integer.class, "22"))
-					;
+			cfgDao.reloadRoomSettings();
 
 			for (String scopeName : scope.getScopeNames()) {
 				_log.debug("scopeName :: " + scopeName);
@@ -1022,10 +984,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;
-	}
-
-	public JSONObject getFlashSettings() {
-		return flashSettings;
 	}
 
 	public CheckDto check() {

@@ -49,6 +49,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_A
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
@@ -67,6 +70,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
@@ -196,7 +200,7 @@ public class ImportInitvalues {
 
 		cfgDao.add(CONFIG_SMTP_USER, cfg.mailAuthName, null, "System auth email username");
 
-		cfgDao.add(CONFIG_SMTP_PORT, cfg.mailAuthPass, null, "System auth email password");
+		cfgDao.add(CONFIG_SMTP_PASS, cfg.mailAuthPass, null, "System auth email password");
 
 		cfgDao.add("mail.smtp.starttls.enable", cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
 
@@ -274,9 +278,6 @@ public class ImportInitvalues {
 
 		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS, "0", null, "Show RSS Tab");
 
-		cfgDao.add("show.whiteboard.draw.status", "0", null,
-				"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
-
 		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE, "" + DEFAULT_MAX_UPLOAD_SIZE, null,
 				"Maximum size of upload file (bytes)"); // defaults to 100MB
 
@@ -292,12 +293,12 @@ public class ImportInitvalues {
 		cfgDao.add("calendar.conference.rooms.default.size", "50", null,
 				"Default number of participants conference room created via calendar");
 
-		// give exclusive audio key code
-		cfgDao.add("exclusive.audio.keycode", "123", null,
-				"A hot key code for the 'give exclusive audio' functionality. Keycode 123 is F12");
-		// mute/unmute audio key code
-		cfgDao.add("mute.keycode", "118", null,
-				"A hot key code for the 'mute/unmute audio' functionality. Keycode 118 is F7");
+		cfgDao.add(CONFIG_KEYCODE_ARRANGE, "119", null
+				, "A hot key code for arrange video windows functionality. Should be used with Shift key. (Keycode 119 is F8)");
+		cfgDao.add(CONFIG_KEYCODE_EXCLUSIVE, "123", null
+				, "A hot key code for the 'give exclusive audio' functionality. Should be used with Shift key. (Keycode 123 is F12)");
+		cfgDao.add(CONFIG_KEYCODE_MUTE, "118", null
+				, "A hot key code for the 'mute/unmute audio' functionality. Should be used with Shift key. (Keycode 118 is F7)");
 
 		// system-wide ldap params
 		cfgDao.add(CONFIG_DEFAULT_LDAP_ID, "0", null, "Ldap domain selected by default in the login screen");

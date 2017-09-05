@@ -23,25 +23,50 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_BANDWIDTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_ECHO_PATH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_MIC_RATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.whiteboardDrawStatus;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -57,12 +82,15 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.github.openjson.JSONObject;
 
 /**
  * Insert/update/Delete on {@link Configuration}<br/>
@@ -253,12 +281,19 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity = em.merge(entity);
 		}
 		switch (key) {
+			case CONFIG_FLASH_SECURE:
+			case CONFIG_FLASH_SECURE_PROXY:
+			case CONFIG_FLASH_VIDEO_CODEC:
+			case CONFIG_FLASH_VIDEO_FPS:
+			case CONFIG_FLASH_VIDEO_BANDWIDTH:
+			case CONFIG_FLASH_CAM_QUALITY:
+			case CONFIG_FLASH_ECHO_PATH:
+			case CONFIG_FLASH_MIC_RATE:
+				reloadRoomSettings();
+				break;
 			case CONFIG_CRYPT:
 				configKeyCryptClassName = value;
 				CryptProvider.reset();
-				break;
-			case "show.whiteboard.draw.status":
-				whiteboardDrawStatus = Boolean.valueOf("1".equals(value));
 				break;
 			case CONFIG_APPLICATION_NAME:
 				APPLICATION_NAME = value;
@@ -317,11 +352,32 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return configKeyCryptClassName;
 	}
 
-	public boolean getWhiteboardDrawStatus() {
-		if (whiteboardDrawStatus == null) {
-			String drawStatus = getConfValue("show.whiteboard.draw.status", String.class, "0");
-			whiteboardDrawStatus = Boolean.valueOf("1".equals(drawStatus));
+	public JSONObject reloadRoomSettings() {
+		try {
+			Properties props = new Properties();
+			try (InputStream is = new FileInputStream(new File(new File(OmFileHelper.getRootDir(), "conf"), "red5.properties"))) {
+				props.load(is);
+			}
+			ROOM_SETTINGS = new JSONObject()
+				.put(FLASH_SECURE, "yes".equals(getConfValue(CONFIG_FLASH_SECURE, String.class, "no")))
+				.put(FLASH_NATIVE_SSL, "best".equals(getConfValue(CONFIG_FLASH_SECURE_PROXY, String.class, "none")))
+				.put(FLASH_PORT, props.getProperty("rtmp.port"))
+				.put(FLASH_SSL_PORT, props.getProperty("rtmps.port"))
+				.put(FLASH_VIDEO_CODEC, getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
+				.put(FLASH_FPS, getConfValue(CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
+				.put(FLASH_BANDWIDTH, getConfValue(CONFIG_FLASH_VIDEO_BANDWIDTH, Integer.class, "0"))
+				.put(FLASH_QUALITY, getConfValue(CONFIG_FLASH_CAM_QUALITY, Integer.class, "90"))
+				.put(FLASH_ECHO_PATH, getConfValue(CONFIG_FLASH_ECHO_PATH, Integer.class, "128"))
+				.put(FLASH_MIC_RATE, getConfValue(CONFIG_FLASH_MIC_RATE, Integer.class, "22"))
+				.put("keycode", new JSONObject()
+						.put("arrange", getConfValue(CONFIG_KEYCODE_ARRANGE, Integer.class, "119"))
+						.put("exclusive", getConfValue(CONFIG_KEYCODE_EXCLUSIVE, Integer.class, "123"))
+						.put("mute", getConfValue(CONFIG_KEYCODE_MUTE, Integer.class, "118"))
+						)
+				;
+		} catch (Exception e) {
+			log.error("Unexpected exception while reloading room settings: ", e);
 		}
-		return whiteboardDrawStatus.booleanValue();
+		return ROOM_SETTINGS;
 	}
 }

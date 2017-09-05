@@ -18,17 +18,16 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_PORT;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SECURE;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SSL_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
 
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
@@ -124,7 +123,7 @@ public class SwfPanel extends BasePanel {
 				URL url = new URL(cp.getCodebase());
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
-				JSONObject gs = getBean(ScopeApplicationAdapter.class).getFlashSettings();
+				JSONObject gs = ROOM_SETTINGS;
 				s.put("flashProtocol", gs.getBoolean(FLASH_SECURE) ? "rtmps" : "rtmp")
 						.put("flashPort", gs.getBoolean(FLASH_SECURE) ? gs.getString(FLASH_SSL_PORT) : gs.getString(FLASH_PORT))
 						.put("proxy", gs.getBoolean(FLASH_NATIVE_SSL) ? "best" : "none")

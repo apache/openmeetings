@@ -104,14 +104,6 @@
 					<td> 1.8.x <b>default value changed in 3.3.0</b> </td>
 				</tr>
 				<tr>
-					<td> show.whiteboard.draw.status </td>
-					<td> 0 </td>
-					<td> Display name of the user who draw the current object
-						(User Name auto-disapper after 3 seconds.
-					</td>
-					<td> 1.8.x </td>
-				</tr>
-				<tr>
 					<td> mail.smtp.server </td>
 					<td> localhost </td>
 					<td> this is the smtp server to send messages </td>
@@ -253,6 +245,24 @@
 					<td> 1 </td>
 					<td> Is user register available via OAuth </td>
 					<td> 3.0.x </td>
+				</tr>
+				<tr>
+					<td> video.arrange.keycode </td>
+					<td> 119 </td>
+					<td> A hot key code for arrange video windows functionality. Should be used with Shift key. (Keycode 119 is F8) </td>
+					<td> 2.2.x </td>
+				</tr>
+				<tr>
+					<td> exclusive.audio.keycode </td>
+					<td> 123 </td>
+					<td> A hot key code for the 'give exclusive audio' functionality. Should be used with Shift key. (Keycode 123 is F12) </td>
+					<td> 2.2.x </td>
+				</tr>
+				<tr>
+					<td> mute.keycode </td>
+					<td> 118 </td>
+					<td> A hot key code for the 'mute/unmute audio' functionality. Should be used with Shift key. (Keycode 118 is F7) </td>
+					<td> 2.2.x </td>
 				</tr>
 				<tr>
 					<td> application.base.url </td>

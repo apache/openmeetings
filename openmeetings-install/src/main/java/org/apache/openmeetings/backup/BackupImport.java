@@ -315,6 +315,10 @@ public class BackupImport {
 				if (c.getKey() == null || c.isDeleted()) {
 					continue;
 				}
+				String newKey = outdatedConfigKeys.get(c.getKey());
+				if (newKey != null) {
+					c.setKey(newKey);
+				}
 				Configuration cfg = configurationDao.forceGet(c.getKey());
 				if (cfg != null && !cfg.isDeleted()) {
 					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getValue(), c.getValue());
@@ -322,10 +326,6 @@ public class BackupImport {
 				c.setId(cfg == null ? null : cfg.getId());
 				if (c.getUser() != null && c.getUser().getId() == null) {
 					c.setUser(null);
-				}
-				String newKey = outdatedConfigKeys.get(c.getKey());
-				if (newKey != null) {
-					c.setKey(newKey);
 				}
 				if (CONFIG_CRYPT.equals(c.getKey())) {
 					try {

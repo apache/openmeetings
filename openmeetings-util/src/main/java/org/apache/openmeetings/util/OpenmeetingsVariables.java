@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util;
 
+import com.github.openjson.JSONObject;
+
 public class OpenmeetingsVariables {
 	public static final String CONFIG_CRYPT = "crypt.class.name";
 	public static final String CONFIG_DASHBOARD_SHOW_CHAT = "dashboard.show.chat";
@@ -77,23 +79,37 @@ public class OpenmeetingsVariables {
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
 	public static final String MENU_ROOMS_NAME = "Conference Rooms";
+	public static final String CONFIG_KEYCODE_ARRANGE = "video.arrange.keycode";
+	public static final String CONFIG_KEYCODE_EXCLUSIVE = "exclusive.audio.keycode";
+	public static final String CONFIG_KEYCODE_MUTE = "mute.keycode";
 	public static final int RECENT_ROOMS_COUNT = 5;
 	public static final int LEVEL_USER = 1;
 	public static final int LEVEL_GROUP_ADMIN = 2;
 	public static final int LEVEL_ADMIN = 3;
+	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
+	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
+	public static final int USER_PASSWORD_MINIMUM_LENGTH = 8;
+	public static final String DEFAULT_APP_NAME = "OpenMeetings";
+	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // 100MB
+	public static final String FLASH_SECURE = "secure";
+	public static final String FLASH_NATIVE_SSL = "native";
+	public static final String FLASH_PORT = "rtmpPort";
+	public static final String FLASH_SSL_PORT = "rtmpsPort";
+	public static final String FLASH_VIDEO_CODEC = "videoCodec";
+	public static final String FLASH_FPS = "fps";
+	public static final String FLASH_BANDWIDTH = "bandwidth";
+	public static final String FLASH_QUALITY = "quality";
+	public static final String FLASH_ECHO_PATH = "echoPath";
+	public static final String FLASH_MIC_RATE = "micRate";
+
 	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 
-	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;
 	public static String configKeyCryptClassName = null;
-	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
-	public static final int USER_PASSWORD_MINIMUM_LENGTH = 8;
-	public static Boolean whiteboardDrawStatus = null;
 	public static String wicketApplicationName = null;
 	public static String APPLICATION_NAME = null;
-	public static final String DEFAULT_APP_NAME = "OpenMeetings";
-	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // 100MB
 	public static int EXT_PROCESS_TTL = 20;
+	public static JSONObject ROOM_SETTINGS = new JSONObject();
 }

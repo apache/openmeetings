@@ -1426,7 +1426,7 @@ var WbArea = (function() {
 	self.clearAll = function(json) {
 		if (!_inited) return;
 		self.getWb(json.wbId).clearAll();
-		setRoomSizes();
+		Room.setSize();
 	};
 	self.clearSlide = function(json) {
 		if (!_inited) return;

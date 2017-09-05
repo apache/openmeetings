@@ -18,12 +18,10 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_FPS;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_PORT;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SECURE;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_SSL_PORT;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.FLASH_VIDEO_CODEC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -34,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -75,17 +72,14 @@ public class VideoSettings extends Panel {
 
 	public static JSONObject getInitJson(ExtendedClientProperties cp, Long roomId, String sid) {
 		String scope = roomId == null ? OmFileHelper.HIBERNATE : "" + roomId;
-		JSONObject gs = getBean(ScopeApplicationAdapter.class).getFlashSettings();
-		JSONObject s = new JSONObject()
-				.put(FLASH_VIDEO_CODEC, gs.get(FLASH_VIDEO_CODEC))
-				.put(FLASH_FPS, gs.get(FLASH_FPS))
+		JSONObject gs = ROOM_SETTINGS;
+		JSONObject s = new JSONObject(ROOM_SETTINGS.toString())
 				.put("sid", sid)
 				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
 		try {
 			URL url = new URL(cp.getCodebase());
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
-			s.put(FLASH_NATIVE_SSL, gs.getBoolean(FLASH_NATIVE_SSL));
 			String host = getHost(roomId, url.getHost());
 			int port = url.getPort() > -1 ? url.getPort() : url.getDefaultPort();
 			if (gs.getBoolean(FLASH_SECURE)) {
