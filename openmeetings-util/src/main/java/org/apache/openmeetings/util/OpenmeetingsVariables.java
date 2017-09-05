@@ -32,11 +32,11 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_REGISTER_FRONTEND = "allow.frontend.register";
 	public static final String CONFIG_REGISTER_SOAP = "allow.soap.register";
 	public static final String CONFIG_REGISTER_OAUTH = "allow.oauth.register";
-	public static final String CONFIG_LOGIN_MIN_LENGTH = "user.login.minimum.length";
 	public static final String CONFIG_MAX_UPLOAD_SIZE = "max.upload.size";
 	public static final String CONFIG_SIP_ENABLED = "sip.enable";
 	public static final String CONFIG_SIP_ROOM_PREFIX = "sip.room.prefix";
 	public static final String CONFIG_SIP_EXTEN_CONTEXT = "sip.exten.context";
+	public static final String CONFIG_LOGIN_MIN_LENGTH = "user.login.minimum.length";
 	public static final String CONFIG_PASS_MIN_LENGTH = "user.pass.minimum.length";
 	public static final String CONFIG_IGNORE_BAD_SSL = "oauth2.ignore.bad.ssl";
 	public static final String CONFIG_REDIRECT_URL_FOR_EXTERNAL = "redirect.url.for.external.users";
