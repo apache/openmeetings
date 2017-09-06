@@ -229,7 +229,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
 			passField.setLabel(Model.of(Application.getString("110")));
 			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).get();
-			int selectedLdap = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LDAP_ID, Integer.class, "0");
+			int selectedLdap = getBean(ConfigurationDao.class).getInt(CONFIG_DEFAULT_LDAP_ID, 0);
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
 			add(new WebMarkupContainer("ldap")
 				.add(new DropDownChoice<>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")

@@ -60,7 +60,7 @@ public abstract class BaseConverter {
 	public final static String EXEC_EXT = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") < 0 ? "" : ".exe";
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	protected ConfigurationDao cfgDao;
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
 	@Autowired
@@ -77,7 +77,7 @@ public abstract class BaseConverter {
 	}
 
 	private String getPath(String key, String app) {
-		String path = configurationDao.getConfValue(key, String.class, "");
+		String path = cfgDao.getString(key, "");
 		if (!Strings.isEmpty(path) && !path.endsWith(File.separator)) {
 			path += File.separator;
 		}

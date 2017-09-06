@@ -211,7 +211,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 
 	private String getSipNumber(long roomId) {
 		if (cfgDao.isSipEnabled()) {
-			return cfgDao.getConfValue(CONFIG_SIP_ROOM_PREFIX, String.class, "400") + roomId;
+			return cfgDao.getString(CONFIG_SIP_ROOM_PREFIX, "400") + roomId;
 		}
 		return null;
 	}

@@ -19,10 +19,14 @@
 package org.apache.openmeetings.core.mail;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -83,7 +87,7 @@ public class MailHandler {
 	private MailMessageDao mailMessageDao;
 
 	private String smtpServer;
-	private String smtpPort;
+	private int smtpPort;
 	private String from;
 	private String mailAuthUser;
 	private String mailAuthPass;
@@ -93,18 +97,18 @@ public class MailHandler {
 	private int smtpTimeOut;
 
 	private void init() {
-		smtpServer = cfgDao.getConfValue(CONFIG_SMTP_SERVER, String.class, null);
-		smtpPort = cfgDao.getConfValue(CONFIG_SMTP_PORT, String.class, "25");
-		from = cfgDao.getConfValue(CONFIG_SMTP_SYSTEM_EMAIL, String.class, null);
-		mailAuthUser = cfgDao.getConfValue(CONFIG_SMTP_USER, String.class, null);
-		mailAuthPass = cfgDao.getConfValue(CONFIG_SMTP_PASS, String.class, null);
-		mailTls = "1".equals(cfgDao.getConfValue("mail.smtp.starttls.enable", String.class, "0"));
-		mailAddReplyTo = "1".equals(cfgDao.getConfValue("inviter.email.as.replyto", String.class, "1"));
-		smtpConnectionTimeOut = cfgDao.getConfValue("mail.smtp.connection.timeout", Integer.class, "30000");
-		smtpTimeOut = cfgDao.getConfValue("mail.smtp.timeout", Integer.class, "30000");
+		smtpServer = cfgDao.getString(CONFIG_SMTP_SERVER, null);
+		smtpPort = cfgDao.getInt(CONFIG_SMTP_PORT, 25);
+		from = cfgDao.getString(CONFIG_SMTP_SYSTEM_EMAIL, null);
+		mailAuthUser = cfgDao.getString(CONFIG_SMTP_USER, null);
+		mailAuthPass = cfgDao.getString(CONFIG_SMTP_PASS, null);
+		mailTls = cfgDao.getBool(CONFIG_SMTP_TLS, false);
+		mailAddReplyTo = cfgDao.getBool(CONFIG_REPLY_TO_ORGANIZER, true);
+		smtpConnectionTimeOut = cfgDao.getInt(CONFIG_SMTP_TIMEOUT_CON, 30000);
+		smtpTimeOut = cfgDao.getInt(CONFIG_SMTP_TIMEOUT, 30000);
 	}
 
-	public void init(String smtpServer, String smtpPort, String from, String mailAuthUser, String mailAuthPass, boolean mailTls, boolean mailAddReplyTo) {
+	public void init(String smtpServer, int smtpPort, String from, String mailAuthUser, String mailAuthPass, boolean mailTls, boolean mailAddReplyTo) {
 		this.smtpServer = smtpServer;
 		this.smtpPort = smtpPort;
 		this.from = from;

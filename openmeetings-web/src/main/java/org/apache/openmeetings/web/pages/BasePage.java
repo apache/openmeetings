@@ -88,7 +88,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	}
 
 	protected String getGaCode() {
-		return getBean(ConfigurationDao.class).getConfValue(CONFIG_GOOGLE_ANALYTICS_CODE, String.class, null);
+		return getBean(ConfigurationDao.class).getString(CONFIG_GOOGLE_ANALYTICS_CODE, null);
 	}
 
 	protected boolean isMainPage() {

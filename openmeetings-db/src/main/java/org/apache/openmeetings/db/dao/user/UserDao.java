@@ -106,7 +106,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		User user = new User();
 		user.setSalutation(Salutation.mr); // TODO: Fix default selection to be configurable
 		user.setRights(getDefaultRights());
-		user.setLanguageId(cfgDao.getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1"));
+		user.setLanguageId(cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);

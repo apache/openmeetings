@@ -50,10 +50,33 @@
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="266" /></legend>
 					<div class="formelement">
+						<label wicket:for="type"><wicket:message key="45" /></label><select wicket:id="type"></select>
+					</div>
+					<div class="formelement">
 						<label wicket:for="key"><wicket:message key="265" /></label><input type="text" wicket:id="key"/>
 					</div>
 					<div class="formelement">
-						<label wicket:for="value"><wicket:message key="271" /></label><input type="text" wicket:id="value"/>
+						<div wicket:enclosure="valueS">
+							<label wicket:for="valueS"><wicket:message key="271" /></label>
+							<input type="text" wicket:id="valueS"/>
+						</div>
+						<div wicket:enclosure="valueN">
+							<label wicket:for="valueN"><wicket:message key="271" /></label>
+							<input type="number" wicket:id="valueN"/>
+						</div>
+						<div wicket:enclosure="valueB">
+							<label wicket:for="valueB"><wicket:message key="271" /></label>
+							<div class="onoffswitch">
+								<input type="checkbox" class="onoffswitch-checkbox" wicket:id="valueB">
+								<label class="onoffswitch-label" wicket:for="valueB">
+									<span class="onoffswitch-inner">
+										<span class="before"></span>
+										<span class="after"></span>
+									</span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>
+						</div>
 					</div>
 					<div class="formelement">
 						<label><wicket:message key="268" /></label><span wicket:id="updated"/>

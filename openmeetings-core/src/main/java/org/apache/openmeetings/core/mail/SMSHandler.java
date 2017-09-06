@@ -18,8 +18,9 @@
  */
 package org.apache.openmeetings.core.mail;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.smslib.Message.MessageEncodings;
@@ -30,28 +31,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
 /**
- * 
+ *
  * @author iarkh
- * 
+ *
  */
 
 public class SMSHandler {
-
-	private static final Logger log = Red5LoggerFactory.getLogger(
-			SMSHandler.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SMSHandler.class, webAppRootKey);
 
 	@Autowired
-	protected ConfigurationDao configurationDao;
+	protected ConfigurationDao cfgDao;
 	@Autowired
 	protected TaskExecutor taskExecutor;
 
 	private BulkSmsHTTPGateway gateway = null;
-	
+
 	private boolean checkBalance() throws Exception {
 		if (gateway == null) {
-			String smsProvider = configurationDao.getConfValue("sms.provider", String.class, null);
-			String smsUsername = configurationDao.getConfValue("sms.username", String.class, null);
-			String smsUserpass = configurationDao.getConfValue("sms.userpass", String.class, null);
+			String smsProvider = cfgDao.getString("sms.provider", null);
+			String smsUsername = cfgDao.getString("sms.username", null);
+			String smsUserpass = cfgDao.getString("sms.userpass", null);
 
 			if (smsProvider == null || smsProvider.length() == 0 ||
 					smsUsername == null || smsUsername.length() == 0) {
@@ -63,9 +62,9 @@ public class SMSHandler {
 			Service.getInstance().addGateway(gateway);
 			Service.getInstance().startService();
 		}
-		return gateway.queryBalance() >= 1; 
+		return gateway.queryBalance() >= 1;
 	}
-	
+
 	public boolean sendSMS(String phone, String subj, long languageId) {
 		try {
 			taskExecutor.execute(new SMSSenderTask(phone, subj, languageId));
@@ -75,7 +74,7 @@ public class SMSHandler {
 			return false;
 		}
 	}
-	
+
 	protected class SMSSenderTask implements Runnable {
 		private final String phone;
 		private final String subject;
@@ -107,12 +106,12 @@ public class SMSHandler {
 					return Service.getInstance().sendMessage(msg);
 				} else {
 					log.error("Error: insufficient funds on SMS provider account!");
-					return false; 
+					return false;
 				}
 			} catch (Exception ex) {
 				log.error("Error sending sms: ", ex);
 				return false;
-			} 
+			}
 		}
 	}
 }

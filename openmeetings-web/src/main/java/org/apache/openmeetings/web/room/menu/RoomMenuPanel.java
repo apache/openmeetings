@@ -376,9 +376,9 @@ public class RoomMenuPanel extends Panel {
 			exitRoom(room.getClient());
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
-			String url = getBean(ConfigurationDao.class).getConfValue(CONFIG_REDIRECT_URL_FOR_EXTERNAL, String.class, "");
+			String url = getBean(ConfigurationDao.class).getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");
 			if (Strings.isEmpty(url)) {
-				url = getBean(ConfigurationDao.class).getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, "");
+				url = getBean(ConfigurationDao.class).getString(CONFIG_APPLICATION_BASE_URL, "");
 			}
 			throw new RedirectToUrlException(url);
 		}

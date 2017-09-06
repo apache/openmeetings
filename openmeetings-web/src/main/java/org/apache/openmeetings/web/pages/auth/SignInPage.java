@@ -78,7 +78,7 @@ public class SignInPage extends BaseInitedPage {
 	private KickMessageDialog m;
 
 	static boolean allowRegister() {
-		return "1".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_REGISTER_FRONTEND, String.class, "0"));
+		return getBean(ConfigurationDao.class).getBool(CONFIG_REGISTER_FRONTEND, false);
 	}
 
 	static boolean allowOAuthLogin() {
@@ -202,7 +202,7 @@ public class SignInPage extends BaseInitedPage {
 		if (!(_connection instanceof HttpsURLConnection)) {
 			return;
 		}
-		if (!"yes".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_IGNORE_BAD_SSL, String.class, "no"))) {
+		if (!getBean(ConfigurationDao.class).getBool(CONFIG_IGNORE_BAD_SSL, false)) {
 			return;
 		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {

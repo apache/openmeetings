@@ -343,7 +343,7 @@ public class LdapLoginManagement {
 				u.setType(Type.ldap);
 				u.getRights().remove(Right.Login);
 				u.setDomainId(domainId);
-				Group g = groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1"));
+				Group g = groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null));
 				if (g != null) {
 					u.getGroupUsers().add(new GroupUser(g, u));
 				}

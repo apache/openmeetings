@@ -122,19 +122,19 @@ public class UserManager implements IUserManager {
 			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
-			if ("1".equals(cfgDao.getConfValue(CONFIG_REGISTER_SOAP, String.class, "0"))) {
+			if (cfgDao.getBool(CONFIG_REGISTER_SOAP, false)) {
 				if (sendConfirmation == null) {
 					String baseURL = cfgDao.getBaseUrl();
 					sendConfirmation = baseURL != null
 							&& !baseURL.isEmpty()
-							&& 1 == cfgDao.getConfValue(CONFIG_EMAIL_VERIFICATION, Integer.class, "0");
+							&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 				}
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
 				Object user = registerUserInit(UserDao.getDefaultRights(), login,
 						Userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, country, town, languageId,
-						true, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)), phone,
+						true, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
 				if (user instanceof User && sendConfirmation) {
@@ -305,7 +305,7 @@ public class UserManager implements IUserManager {
 				}
 			}
 		}
-		return cfgDao.getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1");
+		return cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L);
 	}
 
 	@Override
@@ -340,7 +340,7 @@ public class UserManager implements IUserManager {
 			u.setType(Type.oauth);
 			u.getRights().remove(Right.Login);;
 			u.setDomainId(serverId);
-			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, "-1")), u));
+			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), u));
 			u.setLogin(login);
 			u.setShowContactDataToContacts(true);
 			u.setLastname(lastname);

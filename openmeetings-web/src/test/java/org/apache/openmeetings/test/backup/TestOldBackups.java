@@ -20,7 +20,6 @@ package org.apache.openmeetings.test.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -28,7 +27,6 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
 
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -73,12 +71,10 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 
 	@After
 	public void tearDown() {
-		List<Configuration> cfgs = cfgDao.get(CONFIG_CRYPT);
-		assertNotNull("Not null list should be returned", cfgs);
-		assertEquals("There should be exactly 1 item", 1, cfgs.size());
-		Configuration c = cfgs.get(0);
-		c.setValue(cryptClass);
-		cfgDao.update(c, null);
+		Configuration cfg = cfgDao.get(CONFIG_CRYPT);
+		assertNotNull("Not null config should be returned", cfg);
+		cfg.setValue(cryptClass);
+		cfgDao.update(cfg, null);
 	}
 
 	@Test

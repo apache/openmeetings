@@ -113,10 +113,10 @@ public class StartSharingButton extends OmButton {
 							, "1467", "1468", "1469", "1470", "1471"
 							, "1472", "1473", "1474", "1475", "1476"
 							, "1477", "1589", "1598", "1078"))
-					.replace("$defaultQuality", cfgDao.getConfValue(CONFIG_SCREENSHARING_QUALITY, String.class, ""))
-					.replace("$defaultFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS, String.class, ""))
-					.replace("$showFps", cfgDao.getConfValue(CONFIG_SCREENSHARING_FPS_SHOW, String.class, "true"))
-					.replace("$allowRemote", cfgDao.getConfValue(CONFIG_SCREENSHARING_ALLOW_REMOTE, String.class, "true"))
+					.replace("$defaultQuality", "" + cfgDao.getLong(CONFIG_SCREENSHARING_QUALITY, 1L))
+					.replace("$defaultFps", "" + cfgDao.getLong(CONFIG_SCREENSHARING_FPS, 10L))
+					.replace("$showFps", "" + cfgDao.getBool(CONFIG_SCREENSHARING_FPS_SHOW, true))
+					.replace("$allowRemote", "" + cfgDao.getBool(CONFIG_SCREENSHARING_ALLOW_REMOTE, true))
 					.replace("$allowRecording", "" + (room.isAllowRecording() && (0 == sessionManager.getRecordingCount(roomId))))
 					.replace("$allowPublishing", "" + (0 == sessionManager.getPublishingCount(roomId)))
 					;

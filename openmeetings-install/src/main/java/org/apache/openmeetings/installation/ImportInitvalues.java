@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
@@ -32,6 +33,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
@@ -74,6 +76,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PAS
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
@@ -98,6 +103,7 @@ import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -109,6 +115,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -178,159 +185,157 @@ public class ImportInitvalues {
 	}
 
 	public void loadConfiguration(InstallationConfig cfg) {
-		cfgDao.add(CONFIG_CRYPT, cfg.cryptClassName, null,
+		cfgDao.add(CONFIG_CRYPT, cfg.cryptClassName, Configuration.Type.string,
 				"This Class is used for Authentification-Crypting. "
 						+ "Be carefull what you do here! If you change it while "
 						+ "running previous Pass of users will not be workign anymore! "
 						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
-		cfgDao.add(CONFIG_REGISTER_FRONTEND, cfg.allowFrontendRegister, null, "Is user register available on login screen");
-		cfgDao.add(CONFIG_REGISTER_SOAP, "1", null, "Is user register available via SOAP/REST");
-		cfgDao.add(CONFIG_REGISTER_OAUTH, "1", null, "Is user register available via OAuth");
+		cfgDao.add(CONFIG_REGISTER_FRONTEND, cfg.allowFrontendRegister, Configuration.Type.bool, "Is user register available on login screen");
+		cfgDao.add(CONFIG_REGISTER_SOAP, "1", Configuration.Type.bool, "Is user register available via SOAP/REST");
+		cfgDao.add(CONFIG_REGISTER_OAUTH, "1", Configuration.Type.bool, "Is user register available via OAuth");
 		// this group_id is the Group of users who register through the frontend or SOAP
-		cfgDao.add(CONFIG_DEFAULT_GROUP_ID, "1", null, "");
+		cfgDao.add(CONFIG_DEFAULT_GROUP_ID, "1", Configuration.Type.number, "");
 
-		cfgDao.add(CONFIG_SMTP_SERVER, cfg.smtpServer, null,
-				"this is the smtp server to send messages");
+		cfgDao.add(CONFIG_SMTP_SERVER, cfg.smtpServer, Configuration.Type.string, "this is the smtp server to send messages");
 
-		cfgDao.add(CONFIG_SMTP_PORT, "" + cfg.smtpPort, null,
-				"this is the smtp server port normally 25");
+		cfgDao.add(CONFIG_SMTP_PORT, "" + cfg.smtpPort, Configuration.Type.number, "this is the smtp server port normally 25");
 
-		cfgDao.add(CONFIG_SMTP_SYSTEM_EMAIL, cfg.mailReferer, null, "all send e-mails by the system will have this address");
+		cfgDao.add(CONFIG_SMTP_SYSTEM_EMAIL, cfg.mailReferer, Configuration.Type.string, "all send e-mails by the system will have this address");
 
-		cfgDao.add(CONFIG_SMTP_USER, cfg.mailAuthName, null, "System auth email username");
+		cfgDao.add(CONFIG_SMTP_USER, cfg.mailAuthName, Configuration.Type.string, "System auth email username");
 
-		cfgDao.add(CONFIG_SMTP_PASS, cfg.mailAuthPass, null, "System auth email password");
+		cfgDao.add(CONFIG_SMTP_PASS, cfg.mailAuthPass, Configuration.Type.string, "System auth email password");
 
-		cfgDao.add("mail.smtp.starttls.enable", cfg.mailUseTls, null, "Enable TLS 1=true, 0=false");
+		cfgDao.add(CONFIG_SMTP_TLS, cfg.mailUseTls, Configuration.Type.bool, "Enable TLS 1=true, 0=false");
 
-		cfgDao.add("mail.smtp.connection.timeout", "30000", null,
+		cfgDao.add(CONFIG_SMTP_TIMEOUT_CON, "30000", Configuration.Type.number,
 				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).");
 
-		cfgDao.add("mail.smtp.timeout", "30000", null,
+		cfgDao.add(CONFIG_SMTP_TIMEOUT, "30000", Configuration.Type.number,
 				"Socket I/O timeout value in milliseconds. Default is 30 seconds (30000).");
 
-		cfgDao.add(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME, null, "Name of the Browser Title window");
+		cfgDao.add(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME, Configuration.Type.string, "Name of the Browser Title window");
 
 		// "1" == "EN"
-		cfgDao.add(CONFIG_DEFAULT_LANG, cfg.defaultLangId, null, "Default System Language ID see languages.xml");
+		cfgDao.add(CONFIG_DEFAULT_LANG, cfg.defaultLangId, Configuration.Type.number, "Default System Language ID see languages.xml");
 
-		cfgDao.add(CONFIG_DOCUMENT_DPI, "" + cfg.docDpi, null,
+		cfgDao.add(CONFIG_DOCUMENT_DPI, "" + cfg.docDpi, Configuration.Type.number,
 				"dpi for conversion of PDF to images (should be an integer between 50 and  600 with a default value of 150 dpi)");
 
-		cfgDao.add(CONFIG_DOCUMENT_QUALITY, "" + cfg.docQuality, null,
+		cfgDao.add(CONFIG_DOCUMENT_QUALITY, "" + cfg.docQuality, Configuration.Type.number,
 				"compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90)");
 
-		cfgDao.add(CONFIG_PATH_IMAGEMAGIC, cfg.imageMagicPath, null, "Path to ImageMagick tools");
+		cfgDao.add(CONFIG_PATH_IMAGEMAGIC, cfg.imageMagicPath, Configuration.Type.string, "Path to ImageMagick tools");
 
-		cfgDao.add(CONFIG_PATH_SOX, cfg.soxPath, null, "Path To SoX-Tools");
+		cfgDao.add(CONFIG_PATH_SOX, cfg.soxPath, Configuration.Type.string, "Path To SoX-Tools");
 
-		cfgDao.add(CONFIG_PATH_FFMPEG, cfg.ffmpegPath, null, "Path To FFMPEG");
-		cfgDao.add(CONFIG_PATH_OFFICE, cfg.officePath, null,
+		cfgDao.add(CONFIG_PATH_FFMPEG, cfg.ffmpegPath, Configuration.Type.string, "Path To FFMPEG");
+		cfgDao.add(CONFIG_PATH_OFFICE, cfg.officePath, Configuration.Type.string,
 				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically");
 
-		cfgDao.add(CONFIG_DASHBOARD_RSS_FEED1, cfg.urlFeed, null, "Feed URL 1");
+		cfgDao.add(CONFIG_DASHBOARD_RSS_FEED1, cfg.urlFeed, Configuration.Type.string, "Feed URL 1");
 
-		cfgDao.add(CONFIG_DASHBOARD_RSS_FEED2, cfg.urlFeed2, null, "Feed URL 2");
+		cfgDao.add(CONFIG_DASHBOARD_RSS_FEED2, cfg.urlFeed2, Configuration.Type.string, "Feed URL 2");
 
-		cfgDao.add(CONFIG_EMAIL_AT_REGISTER, cfg.sendEmailAtRegister, null,
+		cfgDao.add(CONFIG_EMAIL_AT_REGISTER, cfg.sendEmailAtRegister, Configuration.Type.bool,
 				"User get a EMail with their Account data. Values: 0(No) or 1(Yes)");
 
-		cfgDao.add(CONFIG_EMAIL_VERIFICATION, cfg.sendEmailWithVerficationCode, null,
+		cfgDao.add(CONFIG_EMAIL_VERIFICATION, cfg.sendEmailWithVerficationCode, Configuration.Type.bool,
 				String.format("User must activate their account by clicking on the "
 					+ "activation-link in the registering Email. Values: 0(No) or 1(Yes) "
 					+ "It makes no sense to make this(%s) 1(Yes) while "
 					+ "%s is 0(No) cause you need to send a EMail.", CONFIG_EMAIL_VERIFICATION, CONFIG_EMAIL_AT_REGISTER));
 
-		cfgDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, null, "Base URL your OPenmeetings installation will be accessible at.");
+		cfgDao.add(CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, Configuration.Type.string, "Base URL your OPenmeetings installation will be accessible at.");
 
 		// ***************************************
 		// ***************************************
 		// SIP Integration Coniguration Values
 		// ***************************************
 
-		cfgDao.add(CONFIG_SIP_ENABLED, cfg.sipEnable, null, "Enable to enable the red5SIP integration ");
-		cfgDao.add(CONFIG_SIP_ROOM_PREFIX, cfg.sipRoomPrefix, null, "Numerical prefix for OM rooms created inside the SIP");
-		cfgDao.add(CONFIG_SIP_EXTEN_CONTEXT, cfg.sipExtenContext, null, "Enable to enable the red5SIP integration ");
+		cfgDao.add(CONFIG_SIP_ENABLED, cfg.sipEnable, Configuration.Type.bool, "Enable to enable the red5SIP integration ");
+		cfgDao.add(CONFIG_SIP_ROOM_PREFIX, cfg.sipRoomPrefix, Configuration.Type.string, "Numerical prefix for OM rooms created inside the SIP");
+		cfgDao.add(CONFIG_SIP_EXTEN_CONTEXT, cfg.sipExtenContext, Configuration.Type.string, "Enable to enable the red5SIP integration ");
 
 		// ***************************************
 		// ***************************************
 		// Timezone settings
 		// ***************************************
 
-		cfgDao.add("default.timezone", cfg.ical_timeZone, null, "This is the default timezone if nothing is specified");
+		cfgDao.add(CONFIG_DEFAULT_TIMEZONE, cfg.ical_timeZone, Configuration.Type.string, "This is the default timezone if nothing is specified");
 
 		// ***************************************
 		// ***************************************
 		// additional settings
 		// ***************************************
 
-		cfgDao.add(CONFIG_SCREENSHARING_QUALITY, "1", null,
+		cfgDao.add(CONFIG_SCREENSHARING_QUALITY, "1", Configuration.Type.number,
 				"Default selection in ScreenSharing Quality:\n 0 - bigger frame rate, no resize\n 1 - no resize\n 2 - size == 1/2 of selected area\n 3 - size == 3/8 of selected area");
 
-		cfgDao.add(CONFIG_SCREENSHARING_FPS, "10", null, "Default selection in ScreenSharing FPS");
-		cfgDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
-		cfgDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", null, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
+		cfgDao.add(CONFIG_SCREENSHARING_FPS, "10", Configuration.Type.number, "Default selection in ScreenSharing FPS");
+		cfgDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", Configuration.Type.bool, "Is screensharing FPS should be displayed or not (true/false)");
+		cfgDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", Configuration.Type.bool, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS, "1", null, "Show My Rooms Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS, "true", Configuration.Type.bool, "Show My Rooms Tab");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_CHAT, "1", null, "Show Chat Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_CHAT, "true", Configuration.Type.bool, "Show Chat Tab");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS, "0", null, "Show RSS Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS, "false", Configuration.Type.bool, "Show RSS Tab");
 
-		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE, "" + DEFAULT_MAX_UPLOAD_SIZE, null,
+		cfgDao.add(CONFIG_MAX_UPLOAD_SIZE, "" + DEFAULT_MAX_UPLOAD_SIZE, Configuration.Type.number,
 				"Maximum size of upload file (bytes)"); // defaults to 100MB
 
-		cfgDao.add(CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", null,
+		cfgDao.add(CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", Configuration.Type.number,
 				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails");
 
-		cfgDao.add(CONFIG_LOGIN_MIN_LENGTH, "" + USER_LOGIN_MINIMUM_LENGTH, null,
+		cfgDao.add(CONFIG_LOGIN_MIN_LENGTH, "" + USER_LOGIN_MINIMUM_LENGTH, Configuration.Type.number,
 				"Number of chars needed in a user login");
 
-		cfgDao.add(CONFIG_PASS_MIN_LENGTH, "" + USER_PASSWORD_MINIMUM_LENGTH, null,
+		cfgDao.add(CONFIG_PASS_MIN_LENGTH, "" + USER_PASSWORD_MINIMUM_LENGTH, Configuration.Type.number,
 				"Number of chars needed in a user password");
 
-		cfgDao.add("calendar.conference.rooms.default.size", "50", null,
+		cfgDao.add(CONFIG_CALENDAR_ROOM_CAPACITY, "50", Configuration.Type.number,
 				"Default number of participants conference room created via calendar");
 
-		cfgDao.add(CONFIG_KEYCODE_ARRANGE, "119", null
+		cfgDao.add(CONFIG_KEYCODE_ARRANGE, "119", Configuration.Type.number
 				, "A hot key code for arrange video windows functionality. Should be used with Shift key. (Keycode 119 is F8)");
-		cfgDao.add(CONFIG_KEYCODE_EXCLUSIVE, "123", null
+		cfgDao.add(CONFIG_KEYCODE_EXCLUSIVE, "123", Configuration.Type.number
 				, "A hot key code for the 'give exclusive audio' functionality. Should be used with Shift key. (Keycode 123 is F12)");
-		cfgDao.add(CONFIG_KEYCODE_MUTE, "118", null
+		cfgDao.add(CONFIG_KEYCODE_MUTE, "118", Configuration.Type.number
 				, "A hot key code for the 'mute/unmute audio' functionality. Should be used with Shift key. (Keycode 118 is F7)");
 
 		// system-wide ldap params
-		cfgDao.add(CONFIG_DEFAULT_LDAP_ID, "0", null, "Ldap domain selected by default in the login screen");
+		cfgDao.add(CONFIG_DEFAULT_LDAP_ID, "0", Configuration.Type.number, "Ldap domain selected by default in the login screen");
 
 		// set inviter's email address as ReplyTo in email invitations
-		cfgDao.add("inviter.email.as.replyto", cfg.replyToOrganizer, null,
+		cfgDao.add(OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER, cfg.replyToOrganizer, Configuration.Type.bool,
 				"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 
-		cfgDao.add(CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", null
+		cfgDao.add(CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", Configuration.Type.string
 				, "Area to be shown to the user after login. Possible values are: "
 					+ "user/dashboard, user/calendar, user/record, rooms/my, rooms/group, rooms/public, admin/user, admin/connection"
 					+ ", admin/group, admin/room, admin/config, admin/lang, admin/ldap, admin/backup, admin/server, admin/oauth2");
 
 		// oauth2 params
-		cfgDao.add(CONFIG_IGNORE_BAD_SSL, "no", null,
+		cfgDao.add(CONFIG_IGNORE_BAD_SSL, "false", Configuration.Type.bool,
 				"Set \"yes\" or \"no\" to enable/disable ssl certifications checking for OAuth2");
 
-		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", null,
+		cfgDao.add(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "", Configuration.Type.string,
 				"Users entered the room via invitationHash or secureHash will be redirected to this URL on connection lost");
-		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", null, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
-		cfgDao.add(CONFIG_GOOGLE_ANALYTICS_CODE, null, null, "Code for Google Analytics");
-		cfgDao.add(CONFIG_FLASH_SECURE, "no", null, "Wether it should try to connect to rtmps first or not\nValid values: yes / no");
-		cfgDao.add(CONFIG_FLASH_SECURE_PROXY, "none", null, "The setting for the NetConnection default settings is 'none'\n set to value 'best' if you are trying to use rtmp over native SSL");
-		cfgDao.add(CONFIG_FLASH_VIDEO_CODEC, "h263", null, "Camera codecType, possible values: 'h263', 'h264'");
-		cfgDao.add(CONFIG_FLASH_VIDEO_FPS, "30", null, "Camera FPS, should be positive number in range (0, 60]");
-		cfgDao.add(CONFIG_FLASH_VIDEO_BANDWIDTH, "0", null, "An integer that specifies the maximum amount of bandwidth that the current outgoing video feed can use, in bytes per second. To specify that Flash video can use as much bandwidth as needed to maintain the value of frameQuality, pass 0 for bandwidth.");
-		cfgDao.add(CONFIG_FLASH_CAM_QUALITY, "90", null, "An integer that specifies the required level of picture quality, as determined by the amount of compression being applied to each video frame. Acceptable values range from 1 (lowest quality, maximum compression) to 100 (highest quality, no compression). To specify that picture quality can vary as needed to avoid exceeding bandwidth, pass 0 for quality.");
-		cfgDao.add(CONFIG_FLASH_MIC_RATE, "22", null, "The rate at which the microphone should capture sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The default value is 22 kHz if your sound capture device supports this value.");
-		cfgDao.add(CONFIG_FLASH_ECHO_PATH, "128", null, "Specifies the echo path length (in milliseconds). A longer echo path means better echo cancellation but also introduces longer delays and requires more processing power. The default value is 128; the only other possible value is 256. To disable AEC please specify 0.");
-		cfgDao.add(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, null, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options");
-		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, null, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
-		cfgDao.add(CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, null, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL));
+		cfgDao.add(CONFIG_CALENDAR_FIRST_DAY, "0", Configuration.Type.number, "The day that each week begins. The value must be a number that represents the day of the week. Sunday=0, Monday=1, Tuesday=2, etc.");
+		cfgDao.add(CONFIG_GOOGLE_ANALYTICS_CODE, null, Configuration.Type.string, "Code for Google Analytics");
+		cfgDao.add(CONFIG_FLASH_SECURE, "false", Configuration.Type.bool, "Wether it should try to connect to rtmps first or not\nValid values: yes / no");
+		cfgDao.add(CONFIG_FLASH_SECURE_PROXY, "none", Configuration.Type.string, "The setting for the NetConnection default settings is 'none'\n set to value 'best' if you are trying to use rtmp over native SSL");
+		cfgDao.add(CONFIG_FLASH_VIDEO_CODEC, "h263", Configuration.Type.string, "Camera codecType, possible values: 'h263', 'h264'");
+		cfgDao.add(CONFIG_FLASH_VIDEO_FPS, "30", Configuration.Type.number, "Camera FPS, should be positive number in range (0, 60]");
+		cfgDao.add(CONFIG_FLASH_VIDEO_BANDWIDTH, "0", Configuration.Type.number, "An integer that specifies the maximum amount of bandwidth that the current outgoing video feed can use, in bytes per second. To specify that Flash video can use as much bandwidth as needed to maintain the value of frameQuality, pass 0 for bandwidth.");
+		cfgDao.add(CONFIG_FLASH_CAM_QUALITY, "90", Configuration.Type.number, "An integer that specifies the required level of picture quality, as determined by the amount of compression being applied to each video frame. Acceptable values range from 1 (lowest quality, maximum compression) to 100 (highest quality, no compression). To specify that picture quality can vary as needed to avoid exceeding bandwidth, pass 0 for quality.");
+		cfgDao.add(CONFIG_FLASH_MIC_RATE, "22", Configuration.Type.number, "The rate at which the microphone should capture sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The default value is 22 kHz if your sound capture device supports this value.");
+		cfgDao.add(CONFIG_FLASH_ECHO_PATH, "128", Configuration.Type.number, "Specifies the echo path length (in milliseconds). A longer echo path means better echo cancellation but also introduces longer delays and requires more processing power. The default value is 128; the only other possible value is 256. To disable AEC please specify 0.");
+		cfgDao.add(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, Configuration.Type.string, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options");
+		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.string, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
+		cfgDao.add(CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL));
 		log.debug("Configurations ADDED");
 	}
 

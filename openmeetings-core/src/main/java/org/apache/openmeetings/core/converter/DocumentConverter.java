@@ -43,7 +43,7 @@ public class DocumentConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(DocumentConverter.class, webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	protected ConfigurationDao cfgDao;
 	@Autowired
 	private ImageConverter imageConverter;
 
@@ -70,7 +70,7 @@ public class DocumentConverter {
 	 */
 	public ConverterProcessResult doJodConvert(File in, File out) {
 		try {
-			String officePath = configurationDao.getConfValue(CONFIG_PATH_OFFICE, String.class, null);
+			String officePath = cfgDao.getString(CONFIG_PATH_OFFICE, null);
 			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
 			if (!Strings.isEmpty(officePath)) {
 				configuration.setOfficeHome(officePath);

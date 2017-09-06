@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class AppointmentDao {
 		Room r = a.getRoom();
 		if (r.getId() == null) {
 			r.setName(a.getTitle());
-			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
+			r.setNumberOfPartizipants(cfgDao.getLong(CONFIG_CALENDAR_ROOM_CAPACITY, 50L));
 		}
 		roomDao.update(r, userId);
 		if (sendmails) {

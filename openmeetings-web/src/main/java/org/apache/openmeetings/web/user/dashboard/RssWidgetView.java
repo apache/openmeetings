@@ -49,8 +49,8 @@ public class RssWidgetView extends WidgetView {
 	public RssWidgetView(String id, Model<Widget> model) {
 		super(id, model);
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		add(feed1 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_DASHBOARD_RSS_FEED1, String.class, "")));
-		add(feed2 = new RSSFeedBehavior(cfgDao.getConfValue(CONFIG_DASHBOARD_RSS_FEED2, String.class, "")));
+		add(feed1 = new RSSFeedBehavior(cfgDao.getString(CONFIG_DASHBOARD_RSS_FEED1, "")));
+		add(feed2 = new RSSFeedBehavior(cfgDao.getString(CONFIG_DASHBOARD_RSS_FEED2, "")));
 	}
 
 	@Override

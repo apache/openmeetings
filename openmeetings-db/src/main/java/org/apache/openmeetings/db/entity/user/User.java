@@ -387,7 +387,7 @@ public class User implements IDataProviderEntity {
 			if (u == null) {
 				setSipUser(u = new AsteriskSipUser());
 			}
-			String defaultRoomContext = configDao.getConfValue(CONFIG_SIP_EXTEN_CONTEXT, String.class, "rooms");
+			String defaultRoomContext = configDao.getString(CONFIG_SIP_EXTEN_CONTEXT, "rooms");
 			u.setName(login);
 			u.setDefaultuser(login);
 			u.setMd5secret(MD5.checksum(login + ":asterisk:" + pass));

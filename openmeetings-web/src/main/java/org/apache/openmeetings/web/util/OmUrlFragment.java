@@ -109,7 +109,7 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	public static OmUrlFragment get() {
-		String[] arr = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANDING_ZONE, String.class, "").split("/");
+		String[] arr = getBean(ConfigurationDao.class).getString(CONFIG_DEFAULT_LANDING_ZONE, "").split("/");
 		if (arr != null && arr.length == 2) {
 			try {
 				return new OmUrlFragment(AreaKeys.valueOf(arr[0]), arr[1]);

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import static java.lang.Boolean.TRUE;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -41,8 +43,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c "
-				+ "WHERE c.key LIKE :key"),
+		@NamedQuery(name = "forceGetConfigurationByKey", query = "SELECT c FROM Configuration c WHERE c.key LIKE :key"),
 		@NamedQuery(name = "getConfigurationsByKeys", query = "SELECT c FROM Configuration c "
 				+ "WHERE c.key IN :keys and c.deleted = false"),
 		@NamedQuery(name = "getNondeletedConfiguration", query = "SELECT c FROM Configuration c  "
@@ -56,11 +57,20 @@ import org.simpleframework.xml.Root;
 public class Configuration implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
+	public enum Type {
+		string
+		, number
+		, bool
+	}
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	@Element(name = "id", data = true)
 	private Long id;
+
+	@Column(name = "type")
+	@Element(name = "type", data = true, required = false)
+	private Type type = Type.string;
 
 	@Column(name = "om_key", unique = true)
 	@Element(name = "key", data = true, required = false)
@@ -117,6 +127,14 @@ public class Configuration implements IDataProviderEntity {
 		this.value = value;
 	}
 
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
 	@Override
 	public Long getId() {
 		return id;
@@ -157,5 +175,35 @@ public class Configuration implements IDataProviderEntity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	/* proxy methods to perform conversions */
+	public String getValueS() {
+		return value;
+	}
+
+	public void setValueS(String value) {
+		this.value = value;
+	}
+
+	public Long getValueN() {
+		return value == null ? null : Long.valueOf(value);
+	}
+
+	public void setValueN(Long value) {
+		this.value = value == null ? null : value.toString();
+	}
+
+	public boolean getValueB() {
+		return value == null ? false : TRUE.equals(Boolean.valueOf(value));
+	}
+
+	public void setValueB(boolean value) {
+		this.value = "" + value;
+	}
+
+	@Override
+	public String toString() {
+		return "Configuration [id=" + id + ", type=" + type + ", key=" + key + ", value=" + value + "]";
 	}
 }

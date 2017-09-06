@@ -43,7 +43,7 @@ public class EmailManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private MailHandler mailHandler;
 
@@ -63,12 +63,12 @@ public class EmailManager {
 	 */
 	public void sendMail(String username, String email, String hash, Boolean sendEmailWithVerficationCode, Long langId) {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
-		Integer sendEmailAtRegister = configurationDao.getConfValue(CONFIG_EMAIL_AT_REGISTER, Integer.class, "0");
+		boolean sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 
-		ensureApplication(langId != null ? langId : configurationDao.getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1"));
+		ensureApplication(langId != null ? langId : cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
 		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
 
-		if (sendEmailAtRegister == 1) {
+		if (sendEmailAtRegister) {
 			mailHandler.send(email, getString("512")
 				, RegisterUserTemplate.getEmail(username, email, sendEmailWithVerficationCode ? link : null));
 		}

@@ -32,16 +32,16 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * 
+ *
  * @author swagner
  *
  */
 public class TestMailSending {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestMailSending.class, webAppRootKey);
-	
+
 	//Example GMail email server data
 	private String smtpServer = "smtp.gmail.com";
-	private String smtpPort = "587";
+	private int smtpPort = 587;
 	private String from = "test-app@apache.org";
 	private String mailAuthUser = "test-app@gmail.com";
 	private String mailAuthPass = "test-pass";
@@ -49,10 +49,10 @@ public class TestMailSending {
 
 	/**
 	 * @Test
-	 * 
+	 *
 	 * It does not make a lot of send to test this in every test suite, it is more for manual testing.
 	 * Handy to check your server and the JavaMail setting properties
-	 * 
+	 *
 	 */
 	@Test
 	public void doTestSendEmail() {
@@ -63,7 +63,7 @@ public class TestMailSending {
 		}
 		assertTrue(true);
 	}
-	
+
 	private MimeMessage getMimeMessage() throws Exception {
 		MailHandler h = new MailHandler();
 		h.init(smtpServer, smtpPort, from, mailAuthUser, mailAuthPass, mailTls, true);
@@ -71,7 +71,7 @@ public class TestMailSending {
 		MimeMessage msg = h.getBasicMimeMessage();
 		msg.setSubject("getSubject()");
 		msg.addRecipients(Message.RecipientType.TO, InternetAddress.parse("test-recipient@gmail.com", false));
-		
+
 		return h.appendBody(msg, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 	}
 }

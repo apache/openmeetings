@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Calendar;
@@ -25,6 +26,7 @@ import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -34,7 +36,7 @@ public class TimezoneUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
 
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 
 	/**
 	 * Parameters: ID - the ID for a TimeZone, either an abbreviation such as "PST", a full name such as
@@ -61,10 +63,10 @@ public class TimezoneUtil {
 	}
 
 	/**
-	 * @return The current server configured time zone in the table configuration key: "default.timezone"
+	 * @return The current server configured time zone in the table configuration key: {@link OpenmeetingsVariables#CONFIG_DEFAULT_TIMEZONE}
 	 */
 	public TimeZone getDefaultTimeZone() {
-		String defaultTzName = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
+		String defaultTzName = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
 
 		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(defaultTzName);
 

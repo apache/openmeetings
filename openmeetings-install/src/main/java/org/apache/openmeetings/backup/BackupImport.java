@@ -38,22 +38,47 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
@@ -62,6 +87,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PAS
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SYSTEM_EMAIL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -162,6 +190,7 @@ public class BackupImport {
 	private static final String LDAP_EXT_TYPE = "LDAP";
 	private static final Properties countries = new Properties();
 	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
+	private static final Map<String, Configuration.Type> configTypes = new HashMap<>();
 	static {
 		outdatedConfigKeys.put("crypt_ClassName", CONFIG_CRYPT);
 		outdatedConfigKeys.put("system_email_addr", CONFIG_SMTP_SYSTEM_EMAIL);
@@ -188,6 +217,47 @@ public class BackupImport {
 		outdatedConfigKeys.put("red5sip.exten_context", CONFIG_SIP_EXTEN_CONTEXT);
 		outdatedConfigKeys.put("sendEmailAtRegister", CONFIG_EMAIL_AT_REGISTER);
 		outdatedConfigKeys.put("sendEmailWithVerficationCode", CONFIG_EMAIL_VERIFICATION);
+		outdatedConfigKeys.put("swftools_zoom", CONFIG_DOCUMENT_DPI);
+		outdatedConfigKeys.put("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY);
+		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.bool);
+		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.bool);
+		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.bool);
+		configTypes.put(CONFIG_SMTP_TLS, Configuration.Type.bool);
+		configTypes.put(CONFIG_EMAIL_AT_REGISTER, Configuration.Type.bool);
+		configTypes.put(CONFIG_EMAIL_VERIFICATION, Configuration.Type.bool);
+		configTypes.put(CONFIG_SIP_ENABLED, Configuration.Type.bool);
+		configTypes.put(CONFIG_SCREENSHARING_FPS_SHOW, Configuration.Type.bool);
+		configTypes.put(CONFIG_SCREENSHARING_ALLOW_REMOTE, Configuration.Type.bool);
+		configTypes.put(CONFIG_DASHBOARD_SHOW_MYROOMS, Configuration.Type.bool);
+		configTypes.put(CONFIG_DASHBOARD_SHOW_CHAT, Configuration.Type.bool);
+		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.bool);
+		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.bool);
+		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.bool);
+		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.number);
+		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.number);
+		configTypes.put(CONFIG_SMTP_TIMEOUT_CON, Configuration.Type.number);
+		configTypes.put(CONFIG_SMTP_TIMEOUT, Configuration.Type.number);
+		configTypes.put(CONFIG_DEFAULT_LANG, Configuration.Type.number);
+		configTypes.put(CONFIG_DOCUMENT_DPI, Configuration.Type.number);
+		configTypes.put(CONFIG_DOCUMENT_QUALITY, Configuration.Type.number);
+		configTypes.put(CONFIG_SCREENSHARING_QUALITY, Configuration.Type.number);
+		configTypes.put(CONFIG_SCREENSHARING_FPS, Configuration.Type.number);
+		configTypes.put(CONFIG_MAX_UPLOAD_SIZE, Configuration.Type.number);
+		configTypes.put(CONFIG_APPOINTMENT_REMINDER_MINUTES, Configuration.Type.number);
+		configTypes.put(CONFIG_LOGIN_MIN_LENGTH, Configuration.Type.number);
+		configTypes.put(CONFIG_PASS_MIN_LENGTH, Configuration.Type.number);
+		configTypes.put(CONFIG_CALENDAR_ROOM_CAPACITY, Configuration.Type.number);
+		configTypes.put(CONFIG_KEYCODE_ARRANGE, Configuration.Type.number);
+		configTypes.put(CONFIG_KEYCODE_EXCLUSIVE, Configuration.Type.number);
+		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.number);
+		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.number);
+		configTypes.put(CONFIG_CALENDAR_FIRST_DAY, Configuration.Type.number);
+		configTypes.put(CONFIG_FLASH_VIDEO_FPS, Configuration.Type.number);
+		configTypes.put(CONFIG_FLASH_VIDEO_BANDWIDTH, Configuration.Type.number);
+		configTypes.put(CONFIG_FLASH_CAM_QUALITY, Configuration.Type.number);
+		configTypes.put(CONFIG_FLASH_MIC_RATE, Configuration.Type.number);
+		configTypes.put(CONFIG_FLASH_ECHO_PATH, Configuration.Type.number);
+		configTypes.put(CONFIG_EXT_PROCESS_TTL, Configuration.Type.number);
 	}
 
 	@Autowired
@@ -215,7 +285,7 @@ public class BackupImport {
 	@Autowired
 	private PollDao pollDao;
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private TimezoneUtil tzUtil;
 	@Autowired
@@ -319,7 +389,18 @@ public class BackupImport {
 				if (newKey != null) {
 					c.setKey(newKey);
 				}
-				Configuration cfg = configurationDao.forceGet(c.getKey());
+				Configuration.Type type = configTypes.get(c.getKey());
+				if (type != null) {
+					c.setType(type);
+					if (Configuration.Type.bool == type) {
+						if ("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())) {
+							c.setValue("true");
+						} else {
+							c.setValue("false");
+						}
+					}
+				}
+				Configuration cfg = cfgDao.forceGet(c.getKey());
 				if (cfg != null && !cfg.isDeleted()) {
 					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getValue(), c.getValue());
 				}
@@ -335,7 +416,7 @@ public class BackupImport {
 						c.setValue(SCryptImplementation.class.getCanonicalName());
 					}
 				}
-				configurationDao.update(c, null);
+				cfgDao.update(c, null);
 			}
 		}
 
@@ -358,7 +439,7 @@ public class BackupImport {
 		/*
 		 * ##################### Import LDAP Configs
 		 */
-		Long defaultLdapId = configurationDao.getConfValue(CONFIG_DEFAULT_LDAP_ID, Long.class, null);
+		Long defaultLdapId = cfgDao.getLong(CONFIG_DEFAULT_LDAP_ID, null);
 		{
 			List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
 			for (LdapConfig c : list) {
@@ -389,9 +470,9 @@ public class BackupImport {
 		 * ##################### Import Users
 		 */
 		{
-			String jNameTimeZone = configurationDao.getConfValue("default.timezone", String.class, "Europe/Berlin");
+			String jNameTimeZone = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
 			List<User> list = readUserList(f, "users.xml", "users");
-			int minLoginLength = getMinLoginLength(configurationDao);
+			int minLoginLength = getMinLoginLength(cfgDao);
 			for (User u : list) {
 				if (u.getLogin() == null) {
 					continue;

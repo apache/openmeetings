@@ -365,7 +365,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (session.isSignedIn()) {
 				session.languageId = getBean(UserDao.class).get(session.userId).getLanguageId();
 			} else {
-				session.languageId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1");
+				session.languageId = getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_LANG, 1L);
 			}
 		}
 		return session.languageId;
@@ -490,8 +490,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS, Integer.class, "0");
-		boolean showRssConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS, Integer.class, "0");
+		boolean showMyRoomConfValue = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
+		boolean showRssConfValue = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_RSS, false);
 		boolean showAdminWidget = getRights().contains(User.Right.Admin);
 		boolean save = false;
 

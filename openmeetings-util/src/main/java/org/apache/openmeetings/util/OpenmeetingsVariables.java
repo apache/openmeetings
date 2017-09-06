@@ -31,6 +31,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_DEFAULT_LANDING_ZONE = "default.landing.zone";
 	public static final String CONFIG_DEFAULT_LDAP_ID = "default.ldap.id";
 	public static final String CONFIG_DEFAULT_GROUP_ID = "default.group.id";
+	public static final String CONFIG_DEFAULT_TIMEZONE = "default.timezone";
 	public static final String CONFIG_REGISTER_FRONTEND = "allow.frontend.register";
 	public static final String CONFIG_REGISTER_SOAP = "allow.soap.register";
 	public static final String CONFIG_REGISTER_OAUTH = "allow.oauth.register";
@@ -56,6 +57,9 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_SMTP_USER = "mail.smtp.user";
 	public static final String CONFIG_SMTP_PASS = "mail.smtp.pass";
 	public static final String CONFIG_SMTP_SYSTEM_EMAIL = "mail.smtp.system.email";
+	public static final String CONFIG_SMTP_TLS = "mail.smtp.starttls.enable";
+	public static final String CONFIG_SMTP_TIMEOUT_CON = "mail.smtp.connection.timeout";
+	public static final String CONFIG_SMTP_TIMEOUT = "mail.smtp.timeout";
 	public static final String CONFIG_PATH_IMAGEMAGIC = "path.imagemagick";
 	public static final String CONFIG_PATH_SOX = "path.sox";
 	public static final String CONFIG_PATH_FFMPEG = "path.ffmpeg";
@@ -75,6 +79,8 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
 	public static final String CONFIG_EMAIL_AT_REGISTER = "send.email.at.register";
 	public static final String CONFIG_EMAIL_VERIFICATION = "send.email.with.verfication";
+	public static final String CONFIG_CALENDAR_ROOM_CAPACITY = "calendar.conference.rooms.default.size";
+	public static final String CONFIG_REPLY_TO_ORGANIZER = "inviter.email.as.replyto";
 
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";

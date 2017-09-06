@@ -60,7 +60,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,6 +80,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
+import org.apache.openmeetings.db.entity.basic.Configuration.Type;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -150,67 +150,85 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return result;
 	}
 
-	/**
-	 * Return a object using a custom type and a default value if the key is not
-	 * present, or value is not set
-	 *
-	 * Example: Integer my_key = getConfValue("my_key", Integer.class, "15");
-	 *
-	 * @param key
-	 * @param type
-	 * @param defaultValue
-	 * @return
-	 */
-	public <T> T getConfValue(String key, Class<T> type, String defaultValue) {
-		try {
-			List<Configuration> list = get(key);
+	public Configuration get(String key) {
+		List<Configuration> list = get(new String[] {key});
 
-			if (list == null || list.isEmpty() || list.get(0) == null) {
-				log.warn("Could not find key in configurations: " + key);
-			} else {
-				String val = list.get(0).getValue();
-				// Use the custom value as default value
-				if (val != null) {
-					defaultValue = val;
-				}
-			}
-
-			if (defaultValue == null) {
-				return null;
-			}
-			// Either this can be directly assigned or try to find a constructor
-			// that handles it
-			if (type.isAssignableFrom(defaultValue.getClass())) {
-				return type.cast(defaultValue);
-			}
-			Constructor<T> c = type.getConstructor(defaultValue.getClass());
-			return c.newInstance(defaultValue);
-
-		} catch (Exception err) {
-			log.error("cannot be cast to return type, you have misconfigured your configurations: " + key, err);
+		if (list == null || list.isEmpty() || list.get(0) == null) {
+			log.warn("Could not find key in configurations: " + key);
 			return null;
 		}
+		return list.get(0);
+	}
+
+	public boolean getBool(String key, boolean def) {
+		Configuration c = get(key);
+
+		if (c != null) {
+			try {
+				return c.getValueB();
+			} catch (Exception e) {
+				//no-op, parsing exception
+			}
+		}
+		return def;
+	}
+
+	public Long getLong(String key, Long def) {
+		Configuration c = get(key);
+
+		if (c != null) {
+			try {
+				return c.getValueN();
+			} catch (Exception e) {
+				//no-op, parsing exception
+			}
+		}
+		return def;
+	}
+
+	public int getInt(String key, int def) {
+		Configuration c = get(key);
+
+		if (c != null) {
+			try {
+				Long val = c.getValueN();
+				return val == null ? def : val.intValue();
+			} catch (Exception e) {
+				//no-op, parsing exception
+			}
+		}
+		return def;
+	}
+
+	public String getString(String key, String def) {
+		Configuration c = get(key);
+
+		if (c != null) {
+			return c.getValue();
+		}
+		return def;
 	}
 
 	/**
 	 */
-	public Configuration add(String key, String value, Long userId, String comment) {
+	public Configuration add(String key, String value, Type type, String comment) {
 		Configuration c = new Configuration();
+		c.setType(type);
 		c.setKey(key);
 		c.setValue(value);
 		c.setComment(comment);
-		return update(c, userId);
+		return update(c, null);
 	}
 
 	public String getAppName() {
 		if (APPLICATION_NAME == null) {
-			APPLICATION_NAME = getConfValue(CONFIG_APPLICATION_NAME, String.class, DEFAULT_APP_NAME);
+			APPLICATION_NAME = getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME);
 		}
 		return APPLICATION_NAME;
 	}
 
 	public String getBaseUrl() {
-		String val = getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
+		String val = getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
 		if (val != null && !val.endsWith("/")) {
 			val += "/";
 		}
@@ -218,7 +236,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public boolean isSipEnabled() {
-		return "yes".equals(getConfValue(CONFIG_SIP_ENABLED, String.class, "no"));
+		return getBool(CONFIG_SIP_ENABLED, false);
 	}
 
 	@Override
@@ -335,7 +353,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	 */
 	public long getMaxUploadSize() {
 		try {
-			return getConfValue(CONFIG_MAX_UPLOAD_SIZE, Long.class, "" + DEFAULT_MAX_UPLOAD_SIZE);
+			return getLong(CONFIG_MAX_UPLOAD_SIZE, DEFAULT_MAX_UPLOAD_SIZE);
 		} catch (Exception e) {
 			log.error("Invalid value saved for max_upload_size conf key: ", e);
 		}
@@ -344,7 +362,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	public String getCryptKey() {
 		if (configKeyCryptClassName == null) {
-			String cryptClass = getConfValue(CONFIG_CRYPT, String.class, null);
+			String cryptClass = getString(CONFIG_CRYPT, null);
 			if (cryptClass != null) {
 				configKeyCryptClassName = cryptClass;
 			}
@@ -359,20 +377,20 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				props.load(is);
 			}
 			ROOM_SETTINGS = new JSONObject()
-				.put(FLASH_SECURE, "yes".equals(getConfValue(CONFIG_FLASH_SECURE, String.class, "no")))
-				.put(FLASH_NATIVE_SSL, "best".equals(getConfValue(CONFIG_FLASH_SECURE_PROXY, String.class, "none")))
+				.put(FLASH_SECURE, getBool(CONFIG_FLASH_SECURE, false))
+				.put(FLASH_NATIVE_SSL, "best".equals(getString(CONFIG_FLASH_SECURE_PROXY, "none")))
 				.put(FLASH_PORT, props.getProperty("rtmp.port"))
 				.put(FLASH_SSL_PORT, props.getProperty("rtmps.port"))
-				.put(FLASH_VIDEO_CODEC, getConfValue(CONFIG_FLASH_VIDEO_CODEC, String.class, "h263"))
-				.put(FLASH_FPS, getConfValue(CONFIG_FLASH_VIDEO_FPS, Integer.class, "30"))
-				.put(FLASH_BANDWIDTH, getConfValue(CONFIG_FLASH_VIDEO_BANDWIDTH, Integer.class, "0"))
-				.put(FLASH_QUALITY, getConfValue(CONFIG_FLASH_CAM_QUALITY, Integer.class, "90"))
-				.put(FLASH_ECHO_PATH, getConfValue(CONFIG_FLASH_ECHO_PATH, Integer.class, "128"))
-				.put(FLASH_MIC_RATE, getConfValue(CONFIG_FLASH_MIC_RATE, Integer.class, "22"))
+				.put(FLASH_VIDEO_CODEC, getString(CONFIG_FLASH_VIDEO_CODEC, "h263"))
+				.put(FLASH_FPS, getLong(CONFIG_FLASH_VIDEO_FPS, 30L))
+				.put(FLASH_BANDWIDTH, getLong(CONFIG_FLASH_VIDEO_BANDWIDTH, 0L))
+				.put(FLASH_QUALITY, getLong(CONFIG_FLASH_CAM_QUALITY, 90L))
+				.put(FLASH_ECHO_PATH, getLong(CONFIG_FLASH_ECHO_PATH, 128L))
+				.put(FLASH_MIC_RATE, getLong(CONFIG_FLASH_MIC_RATE, 22L))
 				.put("keycode", new JSONObject()
-						.put("arrange", getConfValue(CONFIG_KEYCODE_ARRANGE, Integer.class, "119"))
-						.put("exclusive", getConfValue(CONFIG_KEYCODE_EXCLUSIVE, Integer.class, "123"))
-						.put("mute", getConfValue(CONFIG_KEYCODE_MUTE, Integer.class, "118"))
+						.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
+						.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
+						.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
 						)
 				;
 		} catch (Exception e) {

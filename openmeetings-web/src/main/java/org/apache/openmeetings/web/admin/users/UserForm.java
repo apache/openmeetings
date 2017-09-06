@@ -182,7 +182,7 @@ public class UserForm extends AdminBaseForm<User> {
 		User u = getModelObject();
 		try {
 			boolean isNew = (u.getId() == null);
-			boolean sendEmailAtRegister = (1 == getBean(ConfigurationDao.class).getConfValue(CONFIG_EMAIL_AT_REGISTER, Integer.class, "0"));
+			boolean sendEmailAtRegister = getBean(ConfigurationDao.class).getBool(CONFIG_EMAIL_AT_REGISTER, false);
 			if (isNew && sendEmailAtRegister) {
 				u.setActivatehash(UUID.randomUUID().toString());
 			}

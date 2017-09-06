@@ -113,8 +113,8 @@ public class MobileService {
 
 	public Map<String, Object> checkServer() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("allowSelfRegister",  "1".equals(cfgDao.getConfValue(CONFIG_REGISTER_FRONTEND, String.class, "0")));
-		result.put("allowOauthRegister",  "1".equals(cfgDao.getConfValue(CONFIG_REGISTER_OAUTH, String.class, "0")));
+		result.put("allowSelfRegister",  cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false));
+		result.put("allowOauthRegister",  cfgDao.getBool(CONFIG_REGISTER_OAUTH, false));
 		return result;
 	}
 
@@ -133,7 +133,7 @@ public class MobileService {
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if ("1".equals(cfgDao.getConfValue(CONFIG_REGISTER_OAUTH, String.class, "0"))) {
+			if (cfgDao.getBool(CONFIG_REGISTER_OAUTH, false)) {
 				User u = userManager.loginOAuth(umap, 2); //TODO hardcoded
 				result = login(u, result);
 			}
@@ -146,7 +146,7 @@ public class MobileService {
 	public Map<String, Object> registerUser(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if ("1".equals(cfgDao.getConfValue(CONFIG_REGISTER_FRONTEND, String.class, "0"))) {
+			if (cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false)) {
 				String login = umap.get("login");
 				String email = umap.get("email");
 				String lastname = umap.get("lastname");
@@ -167,12 +167,12 @@ public class MobileService {
 
 				String baseURL = cfgDao.getBaseUrl();
 				boolean sendConfirmation = !Strings.isEmpty(baseURL)
-						&& 1 == cfgDao.getConfValue(CONFIG_EMAIL_VERIFICATION, Integer.class, "0");
+						&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 				Object user = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
 						, firstname, email, null /* age/birthday */, "" /* street */
 						, "" /* additionalname */, "" /* fax */, "" /* zip */, country
 						, "" /* town */, langId, true /* sendWelcomeMessage */
-						, Arrays.asList(cfgDao.getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
+						, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)),
 						"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzId),
 						false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 						true /* showContactDataToContacts */, hash);

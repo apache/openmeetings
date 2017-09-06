@@ -61,8 +61,8 @@ public class WidgetsPanel extends Panel {
 		super(id);
 
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		boolean confShowMyRooms = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS, Integer.class, "0");
-		boolean confShowRss = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS, Integer.class, "0");
+		boolean confShowMyRooms = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
+		boolean confShowRss = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_RSS, false);
 		List<WidgetDescriptor> widgets = new ArrayList<>(getDashboardContext().getWidgetRegistry().getWidgetDescriptors());
 		for (Iterator<WidgetDescriptor> i = widgets.iterator(); i.hasNext();) {
 			WidgetDescriptor wd = i.next();

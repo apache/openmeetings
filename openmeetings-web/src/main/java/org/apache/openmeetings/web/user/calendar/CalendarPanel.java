@@ -184,7 +184,7 @@ public class CalendarPanel extends UserPanel {
 		options.set("monthNamesShort", shortMonthes.toString());
 		options.set("dayNames", days.toString());
 		options.set("dayNamesShort", shortDays.toString());
-		options.set("firstDay", getBean(ConfigurationDao.class).getConfValue(CONFIG_CALENDAR_FIRST_DAY, String.class, "0"));
+		options.set("firstDay", getBean(ConfigurationDao.class).getInt(CONFIG_CALENDAR_FIRST_DAY, 0));
 
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;

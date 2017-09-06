@@ -401,15 +401,15 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}).setEnabled(false);
 			}
 			rdi.add(attendees.add(new AjaxFormComponentUpdatingBehavior("change") {
-						private static final long serialVersionUID = 1L;
+					private static final long serialVersionUID = 1L;
 
-						@Override
-						protected void onUpdate(AjaxRequestTarget target) {
-							// added to update model
-						}
-					})
-					, groupContainer.setVisible(showGroups)
-				);
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						// added to update model
+					}
+				})
+				, groupContainer.setVisible(showGroups)
+			);
 			rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
 
 			add(new TextField<String>("location"));

@@ -141,9 +141,9 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		String baseURL = cfgDao.getBaseUrl();
-		sendEmailAtRegister = 1 == cfgDao.getConfValue(CONFIG_EMAIL_AT_REGISTER, Integer.class, "0");
+		sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 		sendConfirmation = !Strings.isEmpty(baseURL)
-				&& 1 == cfgDao.getConfValue(OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION, Integer.class, "0");
+				&& cfgDao.getBool(OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION, false);
 		String messageCode = "account.created";
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";
@@ -186,7 +186,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 					, firstName, email, null /* age/birthday */, "" /* street */
 					, "" /* additionalname */, "" /* fax */, "" /* zip */, country
 					, "" /* town */, lang, true /* sendWelcomeMessage */
-					, Arrays.asList(getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_GROUP_ID, Long.class, null)),
+					, Arrays.asList(getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_GROUP_ID, null)),
 					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
 					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 					true /* showContactDataToContacts */, hash);

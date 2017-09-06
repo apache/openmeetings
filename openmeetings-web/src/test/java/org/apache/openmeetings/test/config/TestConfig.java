@@ -43,7 +43,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 	public void getConfigKey() {
 		System.err.println("THIS");
 
-		Configuration smtp_server = configurationDao.get(CONFIG_SMTP_SERVER).get(0);
+		Configuration smtp_server = configurationDao.get(CONFIG_SMTP_SERVER);
 
 		System.err.println("smtp_server " + smtp_server.getUser());
 

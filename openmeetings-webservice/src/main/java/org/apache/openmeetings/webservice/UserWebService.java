@@ -21,6 +21,7 @@ package org.apache.openmeetings.webservice;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
@@ -178,7 +179,7 @@ public class UserWebService extends BaseWebService {
 				ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 				String tz = user.getTimeZoneId();
 				if (Strings.isEmpty(tz)) {
-					tz = cfgDao.getConfValue("default.timezone", String.class, "");
+					tz = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "");
 				}
 				if (user.getAddress() == null) {
 					user.setAddress(new Address());

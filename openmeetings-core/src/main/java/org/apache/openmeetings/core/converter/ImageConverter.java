@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
@@ -63,8 +62,6 @@ public class ImageConverter extends BaseConverter {
 
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private ConfigurationDao cfgDao;
 
 	public ConverterProcessResultList convertImage(FileItem f, StoredFile sf) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
@@ -121,11 +118,11 @@ public class ImageConverter extends BaseConverter {
 	}
 
 	private String getDpi() {
-		return cfgDao.getConfValue(CONFIG_DOCUMENT_DPI, String.class, "150"); //TODO constant
+		return cfgDao.getString(CONFIG_DOCUMENT_DPI, "150");
 	}
 
 	private String getQuality() {
-		return cfgDao.getConfValue(CONFIG_DOCUMENT_QUALITY, String.class, "90"); //TODO constant
+		return cfgDao.getString(CONFIG_DOCUMENT_QUALITY, "90");
 	}
 
 	private static ConverterProcessResult initSize(FileItem f, File img, String mime) {

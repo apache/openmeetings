@@ -46,7 +46,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	}
 
 	private static Locale getDefault() {
-		long langId = getBean(ConfigurationDao.class).getConfValue(CONFIG_DEFAULT_LANG, Long.class, "1");
+		Long langId = getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_LANG, 1L);
 		return LabelDao.languages.get(langId);
 	}
 

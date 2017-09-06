@@ -36,7 +36,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 @AuthorizeInstantiation({"Dashboard", "Room"})
 public class ChatPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private boolean showDashboardChat = getBean(ConfigurationDao.class).getConfValue(CONFIG_DASHBOARD_SHOW_CHAT, Integer.class, "1") == 1;
+	private boolean showDashboardChat = getBean(ConfigurationDao.class).getBool(CONFIG_DASHBOARD_SHOW_CHAT, true);
 	private final Chat chat;
 
 	public ChatPanel(String id) {

@@ -59,7 +59,7 @@ public class AppointmentLogic {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private ConfigurationDao configurationDao;
+	private ConfigurationDao cfgDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -115,16 +115,12 @@ public class AppointmentLogic {
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() throws Exception {
 		// log.debug("doScheduledMeetingReminder");
-		String baseUrl = configurationDao.getConfValue(CONFIG_APPLICATION_BASE_URL, String.class, DEFAULT_BASE_URL);
+		String baseUrl = cfgDao.getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
 		if (baseUrl == null || baseUrl.length() < 1) {
 			log.error("Error retrieving baseUrl for application");
 			return;
 		}
-		Integer minutesReminderSend = configurationDao.getConfValue(CONFIG_APPOINTMENT_REMINDER_MINUTES, Integer.class
-				, "" + DEFAULT_MINUTES_REMINDER_SEND);
-		if (minutesReminderSend == null) {
-			throw new Exception("minutesReminderSend is null!");
-		}
+		int minutesReminderSend = cfgDao.getInt(CONFIG_APPOINTMENT_REMINDER_MINUTES, DEFAULT_MINUTES_REMINDER_SEND);
 
 		if (minutesReminderSend == 0) {
 			log.warn("minutesReminderSend is 0, disabling reminder scheduler");
@@ -180,9 +176,8 @@ public class AppointmentLogic {
 	}
 
 	private String generateSMSSubject(String labelid1158, Appointment ment) {
-		String subj = configurationDao.getConfValue("sms.subject", String.class, null);
-		return subj == null || subj.length() == 0 ?
-				labelid1158 + " " + ment.getTitle() : subj;
+		String subj = cfgDao.getString("sms.subject", null);
+		return subj == null || subj.length() == 0 ? labelid1158 + " " + ment.getTitle() : subj;
 	}
 
 	public Appointment getAppointment(String appointmentName,
