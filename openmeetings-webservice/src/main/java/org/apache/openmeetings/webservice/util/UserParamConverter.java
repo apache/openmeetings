@@ -18,31 +18,30 @@
  */
 package org.apache.openmeetings.webservice.util;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.ws.rs.ext.ParamConverter;
-import javax.ws.rs.ext.ParamConverterProvider;
 
-import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 
-public class OmParamConverterProvider implements ParamConverterProvider {
+import com.github.openjson.JSONObject;
 
-	@SuppressWarnings("unchecked")
+public class UserParamConverter implements ParamConverter<UserDTO> {
+	public static final String ROOT = "userDTO";
+
 	@Override
-	public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
-		if (Calendar.class.isAssignableFrom(rawType)) {
-			return (ParamConverter<T>)new CalendarParamConverter();
-		} else if (Date.class.isAssignableFrom(rawType)) {
-			return (ParamConverter<T>)new DateParamConverter();
-		} else if (AppointmentDTO.class.isAssignableFrom(rawType)) {
-			return (ParamConverter<T>)new AppointmentParamConverter();
-		} else if (UserDTO.class.isAssignableFrom(rawType)) {
-			return (ParamConverter<T>)new UserParamConverter();
+	public UserDTO fromString(String val) {
+		JSONObject o = new JSONObject(val);
+		if (o.has(ROOT)) {
+			o = o.getJSONObject(ROOT);
 		}
-		return null;
+		return UserDTO.get(o);
+	}
+
+	public static JSONObject json(UserDTO val) {
+		return new JSONObject(val);
+	}
+
+	@Override
+	public String toString(UserDTO val) {
+		return json(val).toString();
 	}
 }

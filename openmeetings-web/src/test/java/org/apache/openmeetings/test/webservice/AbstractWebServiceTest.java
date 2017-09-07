@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.webservice;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.junit.Assert.assertEquals;
@@ -27,6 +28,8 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
+
+import javax.ws.rs.core.Form;
 
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
@@ -125,8 +128,8 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		UserDTO user = getClient(USER_SERVICE_URL)
 				.path("/")
 				.query("sid", r.getMessage())
-				.query("user", dto.toString())
-				.query("confirm", false).post(null, UserDTO.class);
+				.type(APPLICATION_FORM_URLENCODED)
+				.post(new Form().param("user", dto.toString()).param("confirm", "" + false), UserDTO.class);
 		Assert.assertNotNull(user.getId());
 		u.setId(user.getId());
 	}

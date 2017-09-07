@@ -31,7 +31,6 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.After;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
@@ -58,14 +57,6 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 			fail(e.getMessage());
 		}
 		assertTrue("Web session is not signed in for user: " + (login != null ? login : username), s.isSignedIn());
-	}
-
-	@After
-	public void tearDown() {
-		if (tester != null) {
-			//can be null in case exception on initialization
-			tester.destroy();
-		}
 	}
 
 	public <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(String path, String name) {

@@ -162,8 +162,8 @@ public class UserWebService extends BaseWebService {
 	@Path("/")
 	public UserDTO add(
 			@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="user") @QueryParam("user") UserDTO user
-			, @WebParam(name="confirm") @QueryParam("confirm") Boolean confirm
+			, @WebParam(name="user") @FormParam("user") UserDTO user
+			, @WebParam(name="confirm") @FormParam("confirm") Boolean confirm
 			) throws ServiceException
 	{
 		try {
@@ -206,8 +206,10 @@ public class UserWebService extends BaseWebService {
 						"", false, true, // generate SIP Data if the config is enabled
 						tz, confirm);
 
-				if (_user == null || _user instanceof String) {
+				if (_user == null) {
 					throw new ServiceException(UNKNOWN.getMessage());
+				} else if (_user instanceof String) {
+					throw new ServiceException((String)_user);
 				}
 
 				User u = (User)_user;
