@@ -31,6 +31,7 @@
 		import mx.core.FlexGlobals;
 		import mx.graphics.SolidColor;
 		import mx.utils.UIDUtil;
+		import flash.events.MouseEvent;
 
 		import org.apache.openmeetings.OmVideo;
 
@@ -47,6 +48,7 @@
 		private var recName:String;
 		private var mic:Microphone = null;
 		private var activities:Array = [];
+		private var rights:Array = [];
 		private var activityTimer:Timer = new Timer(100);
 		private var active:Boolean = false;
 		private var userId:String = null;
@@ -104,6 +106,7 @@
 			micRate = getIntParam(params.micRate, 22);
 			video = new OmVideo(videoDisplay, params);
 			activities = params.av == null ? [] : params.av.split(',');
+			rights = params.rights == null ? [] : params.rights.split(',');
 			userId = params.userId;
 			switch (params.mode) {
 				case 'settings': {
@@ -145,35 +148,13 @@
 					selectedCam = params.cam;
 					selectedMic = params.mic;
 					_resize(Math.max(300, params.width), Math.max(200, params.height));
-					ExternalInterface.addCallback("update", function ():void {
-						video.getNc().call("check", new Responder(function (check:Object):void {
-							debug("check", check);
-							var pVideo:Boolean = hasVideo(), nVideo:Boolean = _hasVideo(check.activities)
-									, pAudio:Boolean = hasAudio(), nAudio:Boolean = _hasAudio(check.activities);
-							if (nVideo != pVideo || nAudio != pAudio) {
-								// activities are changed
-								activities = check.activities;
-								if (nVideo && pVideo) {
-									nAudio ? video.unmute() : video.mute();
-									if (mic != null) {
-										activityTimer.start();
-									} else {
-										activityTimer.stop();
-									}
-								} else {
-									refreshBroadcast(null);
-								}
-							}
-							//debug("Client updated: ", c);
-						}));
-					});
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						if (hasAudio()) {
 							video.setVolume(vol);
 						}
 					});
+					ExternalInterface.addCallback("rightsUpdated", rightsUpdatedCallback);
 					video.connect(function ():void {
-						debug("Going to call :: check", video.getNc());
 						// trust no-one
 						video.getNc().call("check", new Responder(function (check:Object):void {
 							debug("check", check);
@@ -181,12 +162,41 @@
 							activities = check.activities;
 							interview = 'interview' == check.roomType;
 							attachCamera(function ():void {
-								addImage(params.width, params.height);
-								_resize(params.width, params.height);
-								activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
-								refreshBroadcast(null);
-								ExternalInterface.call("VideoManager.securityMode", params.uid, false);
-								ExternalInterface.addCallback("refresh", refreshBroadcast);
+								// trust no-one
+								video.getNc().call("check", new Responder(function (check:Object):void {
+									debug("check", check);
+									activities = check.activities;
+									addImage(params.width, params.height);
+									_resize(params.width, params.height);
+									_updateExclusive();
+									activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
+									refreshBroadcast(null);
+									ExternalInterface.call("VideoManager.securityMode", params.uid, false);
+									ExternalInterface.addCallback("refresh", refreshBroadcast);
+									ExternalInterface.addCallback("update", function ():void {
+										video.getNc().call("check", new Responder(function (check:Object):void {
+											debug("check", check);
+											var pVideo:Boolean = hasVideo(), nVideo:Boolean = _hasVideo(check.activities)
+													, pAudio:Boolean = hasAudio(), nAudio:Boolean = _hasAudio(check.activities);
+											if (nVideo != pVideo || nAudio != pAudio) {
+												// activities are changed
+												activities = check.activities;
+												if (nVideo && pVideo) {
+													nAudio ? video.unmute() : video.mute();
+													if (mic != null) {
+														activityTimer.start();
+													} else {
+														activityTimer.stop();
+													}
+												} else {
+													refreshBroadcast(null);
+												}
+											}
+											_updateExclusive();
+											//debug("Client updated: ", c);
+										}));
+									});
+								}));
 							});
 						}))
 					});
@@ -195,18 +205,43 @@
 				case OmVideo.PLAY: {
 					addImage(params.width, params.height);
 					_resize(params.width, params.height);
-					refreshPlayback(null);
+					refreshCallback(null);
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						video.setStreamVolume(vol);
 					});
 					ExternalInterface.addCallback("update", function (c:Object):void {
 						//no-op for now
 					});
-					ExternalInterface.addCallback("refresh", refreshPlayback);
+					ExternalInterface.addCallback("refresh", refreshCallback);
+					ExternalInterface.addCallback("rightsUpdated", rightsUpdatedCallback);
 				}
 					break;
 			}
 			ExternalInterface.addCallback("vidResize", vidResize);
+		}
+
+		private function _updateExclusive():void {
+			if (hasAudio()) {
+				addEventListener(MouseEvent.MOUSE_OUT, exclMouseOutHandler);
+				addEventListener(MouseEvent.MOUSE_OVER, exclMouseOverHandler);
+				addEventListener(MouseEvent.CLICK, exclMouseClickHandler);
+			} else {
+				removeEventListener(MouseEvent.MOUSE_OUT, exclMouseOutHandler);
+				removeEventListener(MouseEvent.MOUSE_OVER, exclMouseOverHandler);
+				removeEventListener(MouseEvent.CLICK, exclMouseClickHandler);
+			}
+		}
+
+		private function exclMouseOutHandler(event:MouseEvent):void {
+			exclusiveMic.visible = false;
+		}
+
+		private function exclMouseOverHandler(event:MouseEvent):void {
+			exclusiveMic.visible = true;
+		}
+
+		private function exclMouseClickHandler(event:MouseEvent):void {
+			//exclusiveMic.visible = true;
 		}
 
 		private function _resize(_width:int, _height:int):void {
@@ -246,7 +281,11 @@
 			}
 		}
 
-		private function refreshPlayback(opts:Object):void {
+		private function rightsUpdatedCallback(rights:Array):void {
+			debug("rightsUpdatedCallback", rights);
+		}
+
+		private function refreshCallback(opts:Object):void {
 			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			video.reset();
 			video.play(params.broadcastId); // TODO audio/video

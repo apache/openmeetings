@@ -316,6 +316,7 @@ var Video = (function() {
 		} else {
 			o.mode = 'play';
 		}
+		o.rights = o.rights.join();
 		o.width = c.width;
 		o.height = c.height;
 		o.sid = c.sid;
@@ -354,6 +355,11 @@ var Video = (function() {
 			swf[0].refresh(opts);
 		}
 	}
+	function _setRights(_r) {
+		if (swf[0].setRights !== undefined) {
+			swf[0].setRights(_r);
+		}
+	}
 
 	self.update = _update;
 	self.refresh = _refresh;
@@ -362,6 +368,7 @@ var Video = (function() {
 	self.init = _init;
 	self.securityMode = _securityMode;
 	self.client = function() { return c; };
+	self.setRights = _setRights;
 	return self;
 });
 var VideoManager = (function() {
@@ -393,6 +400,15 @@ var VideoManager = (function() {
 			} else if (!av && v.length == 1) {
 				_closeV(v);
 			}
+		}
+		if (c.uid === Room.getOptions().uid) {
+			Room.setRights(c.rights);
+			var windows = $(VID_SEL + ' .ui-dialog-content');
+			for (var i = 0; i < windows.length; ++i) {
+				let w = $(windows[i]);
+				w.data().setRights(c.rights);
+			}
+
 		}
 		if (c.streams.length == 0) {
 			// check for non inited video window
@@ -449,7 +465,7 @@ var VideoManager = (function() {
 		});
 	}
 	function _find(uid) {
-		return $('.video.user-video div[data-client-uid="room' + uid + '"]');
+		return $(VID_SEL + ' div[data-client-uid="room' + uid + '"]');
 	}
 	function _micActivity(uid, active) {
 		var u = $('#user' + uid + ' .audio-activity.ui-icon');
@@ -500,7 +516,7 @@ var VideoManager = (function() {
 		}
 	}
 	function _exclusive(uid) {
-		var windows = $('.video.user-video .ui-dialog-content');
+		var windows = $(VID_SEL + ' .ui-dialog-content');
 		for (var i = 0; i < windows.length; ++i) {
 			let w = $(windows[i]);
 			w.data().mute('room' + uid !== w.data('client-uid'));
@@ -637,6 +653,7 @@ var Room = (function() {
 
 	self.init = _init;
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
+	self.setRights = function(_r) { return options.rights = _r; };
 	self.setSize = _setSize;
 	self.keyHandler = _keyHandler;
 	self.load = _load;
