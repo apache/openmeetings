@@ -80,7 +80,6 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.db.entity.basic.Configuration.Type;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -207,17 +206,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			return c.getValue();
 		}
 		return def;
-	}
-
-	/**
-	 */
-	public Configuration add(String key, String value, Type type, String comment) {
-		Configuration c = new Configuration();
-		c.setType(type);
-		c.setKey(key);
-		c.setValue(value);
-		c.setComment(comment);
-		return update(c, null);
 	}
 
 	public String getAppName() {
