@@ -65,6 +65,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -115,7 +116,6 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -309,7 +309,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_DEFAULT_LDAP_ID, "0", Configuration.Type.number, "Ldap domain selected by default in the login screen");
 
 		// set inviter's email address as ReplyTo in email invitations
-		cfgDao.add(OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER, cfg.replyToOrganizer, Configuration.Type.bool,
+		cfgDao.add(CONFIG_REPLY_TO_ORGANIZER, cfg.replyToOrganizer, Configuration.Type.bool,
 				"Set inviter's email address as ReplyTo in email invitations (1 == set, 0 == NOT set)");
 
 		cfgDao.add(CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", Configuration.Type.string

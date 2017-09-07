@@ -76,6 +76,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -231,6 +232,7 @@ public class BackupImport {
 		configTypes.put(CONFIG_DASHBOARD_SHOW_MYROOMS, Configuration.Type.bool);
 		configTypes.put(CONFIG_DASHBOARD_SHOW_CHAT, Configuration.Type.bool);
 		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.bool);
+		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.bool);
 		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.bool);
 		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.bool);
 		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.number);
