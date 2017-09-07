@@ -823,34 +823,179 @@ var Wb = function() {
 			case 'Video':
 			case 'Recording':
 			{
-				var canvas = canvases[_o.slide];
-				var vid = $('<video>').hide().attr('id', 'video-' + _o.uid).attr('poster', _o._poster + '&preview=true')
+				let canvas = canvases[_o.slide];
+				let vid = $('<video>').hide().attr('class', 'wb-video').attr('id', 'wb-video-' + _o.uid)
 					.attr("width", _o.width).attr("height", _o.height)
 					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
+				let mainColor = '#ff6600';
 				$('#wb-tab-' + canvas.wbId).append(vid);
-				var vImg = new fabric.Image(vid[0], {
-					left: _o.left
-					, top: _o.top
+				new fabric.Image.fromURL(_o._poster, function(poster) {
+					new fabric.Image(vid[0], {}, function (video) {
+						let rad = 20;
+						video.visible = false;
+						poster.width = video.width;
+						poster.height = video.height;
+						let group = new fabric.Group([video, poster], {
+							left: 10
+							, top: 10
+							, subTargetCheck: true
+							, width: video.width
+							, height: video.height
+							, objectCaching: false
+							, uid: _o.uid
+							, fileId: _o.fileId
+							, fileType: _o.fileType
+							, slide: canvas.slide
+						});
+						let paused = true;
+						let trg = new fabric.Triangle({
+							left: group.left + 2.7 * rad
+							, top: group.top + group.height - 2.5 * rad
+							, visible: paused
+							, angle: 90
+							, width: rad
+							, height: rad
+							, stroke: mainColor
+							, fill: mainColor
+						});
+						let rectPause1 = new fabric.Rect({
+							left: group.left + 1.6 * rad
+							, top: group.top + group.height - 2.5 * rad
+							, visible: !paused
+							, width: rad / 3
+							, height: rad
+							, stroke: mainColor
+							, fill: mainColor
+						});
+						let rectPause2 = new fabric.Rect({
+							left: group.left + 2.1 * rad
+							, top: group.top + group.height - 2.5 * rad
+							, visible: !paused
+							, width: rad / 3
+							, height: rad
+							, stroke: mainColor
+							, fill: mainColor
+						});
+						let play = new fabric.Group([
+								new fabric.Circle({
+									left: group.left + rad
+									, top: group.top + group.height - 3 * rad
+									, radius: rad
+									, stroke: mainColor
+									, strokeWidth: 2
+									, fill: null
+								})
+								, trg, rectPause1, rectPause2]
+							, {
+								objectCaching: false
+							});
+
+						let cProgress = new fabric.Rect({
+							left: group.left + 3.5 * rad
+							, top: group.top + group.height - 1.5 * rad
+							, visible: !paused
+							, width: video.width - 5 * rad
+							, height: rad / 2
+							, stroke: mainColor
+							, fill: null
+							, rx: 5
+							, ry: 5
+						});
+						let progress = new fabric.Rect({
+							left: group.left + 3.5 * rad
+							, top: group.top + group.height - 1.5 * rad
+							, visible: !paused
+							, width: 0
+							, height: rad / 2
+							, stroke: mainColor
+							, fill: mainColor
+							, rx: 5
+							, ry: 5
+						});
+						let request;
+						let render = function () {
+							progress.set('width', (vid[0].currentTime * cProgress.width) / vid[0].duration);
+							canvas.renderAll();
+							if (paused) {
+								cancelAnimationFrame(request);
+							} else {
+								request = fabric.util.requestAnimFrame(render);
+							}
+						};
+						play.on({
+							/*
+							 * https://github.com/kangax/fabric.js/issues/4115
+							 *
+							'mouseover': function() {
+								circle1.set({strokeWidth: 4});
+								canvas.renderAll();
+							}
+							, 'mouseout': function() {
+								circle1.set({
+									left: pos.left
+									, top: pos.top
+									, strokeWidth: 2
+								});
+								canvas.renderAll();
+							}
+							, */'mousedown': function () {
+								play.set({
+									left: pos.left + 3
+									, top: pos.top + 3
+								});
+								canvas.renderAll();
+							}
+							, 'mouseup': function () {
+								play.set({
+									left: pos.left
+									, top: pos.top
+								});
+								if (paused) {
+									video.visible = true;
+									poster.visible = false;
+									progress.visible = true;
+									cProgress.visible = true;
+									video.getElement().play();
+									fabric.util.requestAnimFrame(render);
+								} else {
+									vid[0].pause();
+								}
+								paused = !paused;
+								trg.visible = paused;
+								rectPause1.visible = !paused;
+								rectPause2.visible = !paused;
+								canvas.renderAll();
+							}
+						});
+
+						group.addWithUpdate(play);
+						group.addWithUpdate(progress);
+						group.addWithUpdate(cProgress);
+						group.selectable = canvas.selection;
+
+						canvas.add(group);
+						canvas.renderAll();
+
+						let pos = {left: play.left, top: play.top};
+					});
 				});
-				vImg.selectable = canvas.selection;
-				canvas.add(vImg);
 				//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
 			}
 				break;
 			case 'Presentation':
 			{
-				var ccount = canvases.length;
-				var count = _o.deleted ? 1 : _o.count;
-				for (var i = 0; i < count; ++i) {
+				let ccount = canvases.length;
+				let count = _o.deleted ? 1 : _o.count;
+				for (let i = 0; i < count; ++i) {
 					if (canvases.length < i + 1) {
 						addCanvas();
 					}
-					var canvas = canvases[i];
+					let canvas = canvases[i];
 					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {});
 				}
 				_updateZoomPanel();
 				if (ccount != canvases.length) {
-					var b = getBtn();
+					let b = getBtn();
 					if (b.length && b.hasClass(ACTIVE)) {
 						b.data().deactivate();
 						b.data().activate();
@@ -860,7 +1005,7 @@ var Wb = function() {
 				break;
 			default:
 			{
-				var canvas = canvases[_o.slide];
+				let canvas = canvases[_o.slide];
 				_o.selectable = canvas.selection;
 				canvas.add(_o);
 			}
@@ -928,7 +1073,7 @@ var Wb = function() {
 
 		o.includeDefaultValues = false;
 		var items = [];
-		if ("group" === o.type) {
+		if ("group" === o.type && o.fileType !== 'Video' && o.fileType !== 'Recording') {
 			o.clone(function(_o) {
 				// ungrouping
 				_o.includeDefaultValues = false;
@@ -1194,6 +1339,7 @@ var Wb = function() {
 			cc.remove();
 			canvases[i].dispose();
 		}
+		$('.room.wb.area .wb-video').remove();
 		canvases.splice(1);
 		canvases[0].clear();
 		_updateZoomPanel();
