@@ -135,6 +135,7 @@ public class RoomPanel extends BasePanel {
 			Client _c = getClient();
 			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
 					.put("uid", _c.getUid())
+					.put("rights", _c.toJson(true).getJSONArray("rights"))
 					.put("interview", isInterview)
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
 					.put("exclusiveTitle", getString("1386"));

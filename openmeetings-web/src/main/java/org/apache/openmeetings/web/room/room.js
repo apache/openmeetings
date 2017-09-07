@@ -312,15 +312,16 @@ var Video = (function() {
 			o.cam = c.cam;
 			o.mic = c.mic;
 			o.mode = 'broadcast';
-			o.av = c.activities.join();
 		} else {
 			o.mode = 'play';
 		}
+		o.av = c.activities.join();
 		o.rights = o.rights.join();
 		o.width = c.width;
 		o.height = c.height;
 		o.sid = c.sid;
 		o.uid = c.uid;
+		o.cuid = c.cuid;
 		o.userId = c.user.id;
 		o.broadcastId = c.broadcastId;
 		delete o.keycode;
@@ -342,8 +343,8 @@ var Video = (function() {
 			c.pod = _c.pod;
 			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
 		}
-		if (c.self && swf[0].update !== undefined) {
-			swf[0].update();
+		if (swf[0].update !== undefined) {
+			c.self ? swf[0].update() : swf[0].update(c);
 		}
 	}
 	function _refresh(_opts) {

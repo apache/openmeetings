@@ -52,6 +52,7 @@
 		private var activityTimer:Timer = new Timer(100);
 		private var active:Boolean = false;
 		private var userId:String = null;
+		private var cuid:String = null;
 		[Bindable]
 		private var interview:Boolean = false;
 		[Embed(source="assets/micro.png")]
@@ -88,6 +89,10 @@
 			return _hasVideo(activities);
 		}
 
+		private function hasRightExclusive():Boolean {
+			return rights.indexOf('exclusive') > -1 || rights.indexOf('moderator') > -1 || rights.indexOf('superModerator') > -1;
+		}
+
 		private function getIntParam(param:String, def:int):int {
 			var val:int = parseInt(param);
 			return (isNaN(val) || val < 1 ? def : val);
@@ -108,6 +113,7 @@
 			activities = params.av == null ? [] : params.av.split(',');
 			rights = params.rights == null ? [] : params.rights.split(',');
 			userId = params.userId;
+			cuid = params.cuid;
 			switch (params.mode) {
 				case 'settings': {
 					ExternalInterface.addCallback("getDevices", function ():Object {
@@ -153,7 +159,7 @@
 							video.setVolume(vol);
 						}
 					});
-					ExternalInterface.addCallback("rightsUpdated", rightsUpdatedCallback);
+					ExternalInterface.addCallback("setRights", setRightsCallback);
 					video.connect(function ():void {
 						// trust no-one
 						video.getNc().call("check", new Responder(function (check:Object):void {
@@ -206,14 +212,17 @@
 					addImage(params.width, params.height);
 					_resize(params.width, params.height);
 					refreshCallback(null);
+					_updateExclusive();
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						video.setStreamVolume(vol);
 					});
 					ExternalInterface.addCallback("update", function (c:Object):void {
-						//no-op for now
+						debug("update Callback", c.activities);
+						activities = c.activities;
+						_updateExclusive();
 					});
 					ExternalInterface.addCallback("refresh", refreshCallback);
-					ExternalInterface.addCallback("rightsUpdated", rightsUpdatedCallback);
+					ExternalInterface.addCallback("setRights", setRightsCallback);
 				}
 					break;
 			}
@@ -221,7 +230,8 @@
 		}
 
 		private function _updateExclusive():void {
-			if (hasAudio()) {
+			debug("_updateExclusive", rights, activities);
+			if (hasAudio() && hasRightExclusive()) {
 				addEventListener(MouseEvent.MOUSE_OUT, exclMouseOutHandler);
 				addEventListener(MouseEvent.MOUSE_OVER, exclMouseOverHandler);
 				addEventListener(MouseEvent.CLICK, exclMouseClickHandler);
@@ -241,7 +251,7 @@
 		}
 
 		private function exclMouseClickHandler(event:MouseEvent):void {
-			//exclusiveMic.visible = true;
+			ExternalInterface.call("VideoManager.clickExclusive", cuid);
 		}
 
 		private function _resize(_width:int, _height:int):void {
@@ -281,8 +291,10 @@
 			}
 		}
 
-		private function rightsUpdatedCallback(rights:Array):void {
-			debug("rightsUpdatedCallback", rights);
+		private function setRightsCallback(_rights:Array):void {
+			debug("setRightsCallback", _rights);
+			rights = _rights;
+			_updateExclusive();
 		}
 
 		private function refreshCallback(opts:Object):void {
