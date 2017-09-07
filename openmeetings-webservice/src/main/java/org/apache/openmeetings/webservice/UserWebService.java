@@ -46,6 +46,7 @@ import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.basic.ErrorDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -160,8 +161,8 @@ public class UserWebService extends BaseWebService {
 	@Path("/")
 	public UserDTO add(
 			@WebParam(name="sid") @QueryParam("sid") String sid
-			, @WebParam(name="user") @QueryParam("user") UserDTO user
-			, @WebParam(name="confirm") @QueryParam("confirm") Boolean confirm
+			, @WebParam(name="user") @FormParam("user") UserDTO user
+			, @WebParam(name="confirm") @FormParam("confirm") Boolean confirm
 			) throws ServiceException
 	{
 		try {
@@ -203,8 +204,10 @@ public class UserWebService extends BaseWebService {
 						"", false, true, // generate SIP Data if the config is enabled
 						tz, confirm);
 
-				if (userId == null || userId < 0) {
+				if (userId == null) {
 					throw new ServiceException("Unknown error");
+				} else if (userId < 0) {
+					throw new ServiceException(getBean(ErrorDao.class).getMessage(userId, 1L));
 				}
 
 				User u = userDao.get(userId);

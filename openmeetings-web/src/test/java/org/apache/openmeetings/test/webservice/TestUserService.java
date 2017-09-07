@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.test.webservice;
 
+import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -102,8 +103,8 @@ public class TestUserService extends AbstractWebServiceTest {
 		UserDTO user = getClient(USER_SERVICE_URL)
 				.path("/")
 				.query("sid", r.getMessage())
-				.query("user", u.toString())
-				.query("confirm", false).post(null, UserDTO.class);
+				.type(APPLICATION_FORM_URLENCODED)
+				.post(new Form().param("user", u.toString()).param("confirm", "" + false), UserDTO.class);
 		assertNotNull("Valid UserDTO should be returned", user);
 		assertNotNull("Id should not be NULL", user.getId());
 		assertEquals("OM Call should be successful", u.getLogin(), user.getLogin());
