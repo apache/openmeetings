@@ -24,16 +24,52 @@
 		<legend class="ui-widget-header"><wicket:message key="install.wizard.params.step2.configuration"/></legend>
 		<ul class="paramList">
 			<li><label wicket:for="allowFrontendRegister"><wicket:message key="install.wizard.params.step2.allowFrontendRegister"/></label>
-				<select wicket:id="allowFrontendRegister"></select>
+				<div class="onoffswitch">
+					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="allowFrontendRegister">
+					<label class="onoffswitch-label" wicket:for="allowFrontendRegister">
+						<span class="onoffswitch-inner">
+							<span class="before"></span>
+							<span class="after"></span>
+						</span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
 			</li>
 			<li><label wicket:for="sendEmailAtRegister"><wicket:message key="install.wizard.params.step2.sendEmailAtRegister"/></label>
-				<select wicket:id="sendEmailAtRegister"></select>
+				<div class="onoffswitch">
+					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="sendEmailAtRegister">
+					<label class="onoffswitch-label" wicket:for="sendEmailAtRegister">
+						<span class="onoffswitch-inner">
+							<span class="before"></span>
+							<span class="after"></span>
+						</span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
 			</li>
 			<li><label wicket:for="sendEmailWithVerficationCode"><wicket:message key="install.wizard.params.step2.sendEmailWithVerficationCode"/></label>
-				<select wicket:id="sendEmailWithVerficationCode"></select>
+				<div class="onoffswitch">
+					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="sendEmailWithVerficationCode">
+					<label class="onoffswitch-label" wicket:for="sendEmailWithVerficationCode">
+						<span class="onoffswitch-inner">
+							<span class="before"></span>
+							<span class="after"></span>
+						</span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
 			</li>
 			<li><label wicket:for="createDefaultRooms"><wicket:message key="install.wizard.params.step2.createDefaultRooms"/></label>
-				<select wicket:id="createDefaultRooms"></select>
+				<div class="onoffswitch">
+					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="createDefaultRooms">
+					<label class="onoffswitch-label" wicket:for="createDefaultRooms">
+						<span class="onoffswitch-inner">
+							<span class="before"></span>
+							<span class="after"></span>
+						</span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
 			</li>
 			<li><label wicket:for="mailReferer"><wicket:message key="install.wizard.params.step2.mailReferer"/></label>
 				<input wicket:id="mailReferer" wicket:message="title:install.wizard.params.step2.mailReferer.title" type="text" />
@@ -51,10 +87,28 @@
 				<input wicket:id="mailAuthPass" wicket:message="title:install.wizard.params.step2.mailAuthPass.title" type="password" />
 			</li>
 			<li><label wicket:for="mailUseTls"><wicket:message key="install.wizard.params.step2.mailUseTls"/></label>
-				<select wicket:id="mailUseTls"></select>
+				<div class="onoffswitch">
+					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="mailUseTls">
+					<label class="onoffswitch-label" wicket:for="mailUseTls">
+						<span class="onoffswitch-inner">
+							<span class="before"></span>
+							<span class="after"></span>
+						</span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
 			</li>
 			<li><label wicket:for="replyToOrganizer"><wicket:message key="install.wizard.params.step2.replyToOrganizer"/></label>
-				<select wicket:id="replyToOrganizer"></select>
+				<div class="onoffswitch">
+					<input type="checkbox" class="onoffswitch-checkbox" wicket:id="replyToOrganizer">
+					<label class="onoffswitch-label" wicket:for="replyToOrganizer">
+						<span class="onoffswitch-inner">
+							<span class="before"></span>
+							<span class="after"></span>
+						</span>
+						<span class="onoffswitch-switch"></span>
+					</label>
+				</div>
 			</li>
 			<li><label wicket:for="defaultLangId"><wicket:message key="install.wizard.params.step2.defaultLangId"/></label>
 				<select wicket:id="defaultLangId"></select>

@@ -46,7 +46,7 @@ public class InstallWizardPage extends BaseNotInitedPage {
 			}
 		});
 	}
-	
+
 	@Override
 	protected String getGaCode() {
 		return null;

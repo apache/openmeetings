@@ -222,10 +222,10 @@ public class Admin {
 					}
 					boolean force = cmdl.hasOption("force");
 					if (cmdl.hasOption("skip-default-rooms")) {
-						cfg.createDefaultRooms = "0";
+						cfg.createDefaultRooms = false;
 					}
 					if (cmdl.hasOption("disable-frontend-register")) {
-						cfg.allowFrontendRegister = "0";
+						cfg.allowFrontendRegister = false;
 					}
 					if (cmdl.hasOption("system-email-address")) {
 						cfg.mailReferer = cmdl.getOptionValue("system-email-address");
@@ -243,7 +243,7 @@ public class Admin {
 						cfg.mailAuthPass = cmdl.getOptionValue("email-auth-pass");
 					}
 					if (cmdl.hasOption("email-use-tls")) {
-						cfg.mailUseTls = "1";
+						cfg.mailUseTls = true;
 					}
 					if (cmdl.hasOption("default-language")) {
 						cfg.defaultLangId = cmdl.getOptionValue("default-language");

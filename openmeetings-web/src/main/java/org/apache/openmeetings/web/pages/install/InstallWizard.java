@@ -64,6 +64,7 @@ import org.apache.wicket.extensions.wizard.dynamic.DynamicWizardStep;
 import org.apache.wicket.extensions.wizard.dynamic.IDynamicWizardStep;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -90,6 +91,7 @@ import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.progressbar.ProgressBar;
+import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 import com.googlecode.wicket.jquery.ui.widget.wizard.AbstractWizard;
 import com.googlecode.wicket.kendo.ui.form.button.IndicatingAjaxButton;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
@@ -97,8 +99,6 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
-	private final static List<SelectOption> yesNoList = Arrays.asList(SelectOption.NO_NUM, SelectOption.YES_NUM);
-	private final static List<SelectOption> yesNoTextList = Arrays.asList(SelectOption.NO_TEXT, SelectOption.YES_TEXT);
 	private final IDynamicWizardStep welcomeStep;
 	private final IDynamicWizardStep dbStep;
 	private final ParamsStep1 paramsStep1;
@@ -460,18 +460,18 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super(paramsStep1);
 			//TODO localize
 			//TODO validation
-			add(new YesNoDropDown("allowFrontendRegister"));
-			add(new YesNoDropDown("sendEmailAtRegister"));
-			add(new YesNoDropDown("sendEmailWithVerficationCode"));
-			add(new YesNoDropDown("createDefaultRooms"));
+			add(new CheckBox("allowFrontendRegister"));
+			add(new CheckBox("sendEmailAtRegister"));
+			add(new CheckBox("sendEmailWithVerficationCode"));
+			add(new CheckBox("createDefaultRooms"));
 			add(new TextField<String>("mailReferer"));
 			add(new TextField<String>("smtpServer"));
 			add(new TextField<Integer>("smtpPort").setRequired(true));
 			add(new TextField<String>("mailAuthName"));
 			add(new PasswordTextField("mailAuthPass").setResetPassword(false).setRequired(false));
-			add(new YesNoDropDown("mailUseTls"));
+			add(new CheckBox("mailUseTls"));
 			//TODO check mail server
-			add(new YesNoDropDown("replyToOrganizer"));
+			add(new CheckBox("replyToOrganizer"));
 			add(new LangDropDown("defaultLangId"));
 		}
 
@@ -540,6 +540,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					target.add(getFeedbackPanel());
 				}
 			});
+			add(new TooltipBehavior(".info-title"));
 		}
 
 		private boolean checkToolPath(TextField<String> path, String[] args) {
@@ -617,9 +618,12 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new RequiredTextField<String>("cryptClassName")); //Validate class
 
 			//TODO add check for red5sip connection
-			add(new YesNoTextDropDown("sipEnable"));
+			add(new CheckBox("sipEnable"));
 			add(new TextField<String>("sipRoomPrefix"));
 			add(new TextField<String>("sipExtenContext"));
+			Options options = new Options();
+			options.set("content", "function () { return $(this).prop('title'); }");
+			add(new TooltipBehavior(".info-title", options));
 		}
 
 		@Override
@@ -749,10 +753,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private static class SelectOption implements Serializable {
 		private static final long serialVersionUID = 1L;
-		private static SelectOption NO_NUM = new SelectOption("0", "No");
-		private static SelectOption NO_TEXT = new SelectOption("no", "No");
-		private static SelectOption YES_NUM = new SelectOption("1", "Yes");
-		private static SelectOption YES_TEXT = new SelectOption("yes", "Yes");
 		public String key;
 		@SuppressWarnings("unused")
 		public String value;
@@ -828,28 +828,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			if (propModel != null && option != null) {
 				propModel.setObject(option.key);
 			}
-		}
-	}
-
-	private final class YesNoDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = 1L;
-
-		YesNoDropDown(String id) {
-			super(id);
-			setChoices(yesNoList);
-			this.option = SelectOption.NO_NUM.key.equals(propModel.getObject()) ?
-					SelectOption.NO_NUM : SelectOption.YES_NUM;
-		}
-	}
-
-	private final class YesNoTextDropDown extends SelectOptionDropDown {
-		private static final long serialVersionUID = 1L;
-
-		YesNoTextDropDown(String id) {
-			super(id);
-			setChoices(yesNoTextList);
-			this.option = SelectOption.NO_TEXT.key.equals(propModel.getObject()) ?
-					SelectOption.NO_TEXT : SelectOption.YES_TEXT;
 		}
 	}
 

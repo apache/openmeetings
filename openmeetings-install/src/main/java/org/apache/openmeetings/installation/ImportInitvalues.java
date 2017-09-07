@@ -206,7 +206,8 @@ public class ImportInitvalues {
 						+ "running previous Pass of users will not be workign anymore! "
 						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html");
 
-		addCfg(list, CONFIG_REGISTER_FRONTEND, cfg.allowFrontendRegister, Configuration.Type.bool, "Is user register available on login screen");
+		addCfg(list, CONFIG_REGISTER_FRONTEND, "" + cfg.allowFrontendRegister, Configuration.Type.bool
+				, "Is user register available on login screen");
 		addCfg(list, CONFIG_REGISTER_SOAP, "true", Configuration.Type.bool, "Is user register available via SOAP/REST");
 		addCfg(list, CONFIG_REGISTER_OAUTH, "true", Configuration.Type.bool, "Is user register available via OAuth");
 		// this group_id is the Group of users who register through the frontend or SOAP
@@ -222,7 +223,7 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_SMTP_PASS, cfg.mailAuthPass, Configuration.Type.string, "System auth email password");
 
-		addCfg(list, CONFIG_SMTP_TLS, cfg.mailUseTls, Configuration.Type.bool, "Enable TLS");
+		addCfg(list, CONFIG_SMTP_TLS, "" + cfg.mailUseTls, Configuration.Type.bool, "Enable TLS");
 
 		addCfg(list, CONFIG_SMTP_TIMEOUT_CON, "30000", Configuration.Type.number,
 				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).");
@@ -253,7 +254,7 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_DASHBOARD_RSS_FEED2, cfg.urlFeed2, Configuration.Type.string, "Feed URL 2");
 
-		addCfg(list, CONFIG_EMAIL_AT_REGISTER, cfg.sendEmailAtRegister, Configuration.Type.bool,
+		addCfg(list, CONFIG_EMAIL_AT_REGISTER, "" + cfg.sendEmailAtRegister, Configuration.Type.bool,
 				"User get a EMail with their Account data.");
 
 		addCfg(list, CONFIG_EMAIL_VERIFICATION, cfg.sendEmailWithVerficationCode, Configuration.Type.bool,
@@ -269,7 +270,7 @@ public class ImportInitvalues {
 		// SIP Integration Coniguration Values
 		// ***************************************
 
-		addCfg(list, CONFIG_SIP_ENABLED, cfg.sipEnable, Configuration.Type.bool, "Enable to enable the red5SIP integration ");
+		addCfg(list, CONFIG_SIP_ENABLED, "" + cfg.sipEnable, Configuration.Type.bool, "Enable to enable the red5SIP integration ");
 		addCfg(list, CONFIG_SIP_ROOM_PREFIX, cfg.sipRoomPrefix, Configuration.Type.string, "Numerical prefix for OM rooms created inside the SIP");
 		addCfg(list, CONFIG_SIP_EXTEN_CONTEXT, cfg.sipExtenContext, Configuration.Type.string, "Enable to enable the red5SIP integration ");
 
@@ -325,7 +326,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_DEFAULT_LDAP_ID, "0", Configuration.Type.number, "Ldap domain selected by default in the login screen");
 
 		// set inviter's email address as ReplyTo in email invitations
-		addCfg(list, CONFIG_REPLY_TO_ORGANIZER, cfg.replyToOrganizer, Configuration.Type.bool,
+		addCfg(list, CONFIG_REPLY_TO_ORGANIZER, "" + cfg.replyToOrganizer, Configuration.Type.bool,
 				"Set inviter's email address as ReplyTo in email invitations");
 
 		addCfg(list, CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", Configuration.Type.string

@@ -33,8 +33,8 @@ public class InstallationConfig implements Serializable {
 	private String password;
 	public String email;
 	public String group;
-	public String allowFrontendRegister = "true";
-	public String createDefaultRooms = "true";
+	public boolean allowFrontendRegister = true;
+	public boolean createDefaultRooms = true;
 	public String ical_timeZone = "Europe/Berlin";
 
 	public String cryptClassName = SCryptImplementation.class.getCanonicalName();
@@ -44,7 +44,7 @@ public class InstallationConfig implements Serializable {
 	public String mailAuthName = "";
 	public String mailAuthPass = "";
 	public String mailReferer = "noreply@openmeetings.apache.org";
-	public String mailUseTls = "false";
+	public boolean mailUseTls = false;
 	//paths
 	public Integer docDpi = 150;
 	public Integer docQuality = 90;
@@ -54,14 +54,14 @@ public class InstallationConfig implements Serializable {
 	public String officePath = "";
 
 	public String defaultLangId = "1";
-	public String sendEmailAtRegister = "false";
+	public boolean sendEmailAtRegister = false;
 	public String urlFeed = "http://mail-archives.apache.org/mod_mbox/openmeetings-user/?format=atom";
 	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
 	public String sendEmailWithVerficationCode = "false";
-	public String sipEnable = "false";
+	public boolean sipEnable = false;
 	public String sipRoomPrefix = "400";
 	public String sipExtenContext = "rooms";
-	public String replyToOrganizer = "true";
+	public boolean replyToOrganizer = true;
 	public String baseUrl = DEFAULT_BASE_URL;
 
 	public String getPassword() {

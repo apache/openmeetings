@@ -366,7 +366,7 @@ table.adminListTable .one_sixth {
 	margin: 0 !important;
 }
 .onoffswitch-label {
-	display: block;
+	display: block !important;
 	float: none !important;
 	margin: 0 !important;
 	overflow: hidden;
