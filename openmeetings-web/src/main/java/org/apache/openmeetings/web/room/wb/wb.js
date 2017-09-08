@@ -824,7 +824,7 @@ var Wb = function() {
 			case 'Recording':
 			{
 				let canvas = canvases[_o.slide];
-				let vid = $('<video>').hide().attr('class', 'wb-video').attr('id', 'wb-video-' + _o.uid)
+				let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
 					.attr("width", _o.width).attr("height", _o.height)
 					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
 				let mainColor = '#ff6600';
@@ -1006,8 +1006,10 @@ var Wb = function() {
 			default:
 			{
 				let canvas = canvases[_o.slide];
-				_o.selectable = canvas.selection;
-				canvas.add(_o);
+				if (!!canvas) {
+					_o.selectable = canvas.selection;
+					canvas.add(_o);
+				}
 			}
 				break;
 		}
@@ -1172,10 +1174,6 @@ var Wb = function() {
 		canvas.wbId = wb.id;
 		canvas.slide = sl;
 		canvases.push(canvas);
-		fabric.util.requestAnimFrame(function render() {
-			canvas.renderAll();
-			fabric.util.requestAnimFrame(render);
-		});
 		var cc = $('#' + cid).closest('.canvas-container');
 		if (role === NONE) {
 			if (sl == slide) {
@@ -1346,12 +1344,14 @@ var Wb = function() {
 	};
 	wb.clearSlide = function(_sl) {
 		if (canvases.length > _sl) {
-			var canvas = canvases[_sl];
+			let canvas = canvases[_sl];
 			canvas.renderOnAddRemove = false;
-			var arr = canvas.getObjects();
+			let arr = canvas.getObjects();
 			while (arr.length > 0) {
-				arr[arr.length - 1].remove();
+				canvas.remove(arr[arr.length - 1]);
+				arr = canvas.getObjects();
 			}
+			$('.room.wb.area .wb-video.slide-' + _sl).remove();
 			canvas.renderOnAddRemove = true;
 			canvas.renderAll();
 		}

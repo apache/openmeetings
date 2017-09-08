@@ -472,7 +472,6 @@ public class WbPanel extends AbstractWbPanel {
 			Whiteboards wbs = WhiteboardCache.get(roomId);
 			String wuid = UUID.randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
-			final boolean[] updated = {false};
 			switch (fi.getType()) {
 				case Folder:
 					//do nothing
@@ -484,7 +483,7 @@ public class WbPanel extends AbstractWbPanel {
 						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
 							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), (o) -> {
 									wb.put(o.getString("uid"), o);
-									updated[0] = true;
+									WhiteboardCache.update(roomId, wb);
 									return addFileUrl(wbs.getUid(), o, _f -> {
 										updateWbSize(wb, _f);
 									});
@@ -519,14 +518,11 @@ public class WbPanel extends AbstractWbPanel {
 					}
 					wb.put(wuid, file);
 					updateWbSize(wb, fi);
-					updated[0] = true;
+					WhiteboardCache.update(roomId, wb);
 					sendWbAll(WbAction.setSize, getAddWbJson(wb));
 					WbWebSocketHelper.sendWbFile(roomId, wb.getId(), ruid, file, fi);
 				}
 					break;
-			}
-			if (updated[0]) {
-				WhiteboardCache.update(roomId, wb);
 			}
 		}
 	}

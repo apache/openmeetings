@@ -112,7 +112,8 @@ public class Whiteboard implements Serializable {
 	public JSONArray clearSlide(int slide) {
 		JSONArray arr = new JSONArray();
 		roomItems.entrySet().removeIf(e -> {
-				boolean match = new JSONObject(e.getValue()).optInt("slide", -1) == slide;
+				JSONObject o = new JSONObject(e.getValue());
+				boolean match = !"Presentation".equals(o.optString("fileType")) && o.optInt("slide", -1) == slide;
 				if (match) {
 					arr.put(e);
 				}
