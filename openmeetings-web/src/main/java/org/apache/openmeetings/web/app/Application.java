@@ -82,6 +82,7 @@ import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
+import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.room.wb.WbWebSocketHelper;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
@@ -281,6 +282,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/recordings/mp4/${id}", new Mp4RecordingResourceReference());
 		mountResource("/recordings/jpg/${id}", new JpgRecordingResourceReference()); //should be in sync with VideoPlayer
 		mountResource("/room/file/${id}", new RoomResourceReference());
+		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
 	}

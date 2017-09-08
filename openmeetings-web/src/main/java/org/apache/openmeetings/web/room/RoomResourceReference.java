@@ -48,8 +48,7 @@ import com.github.openjson.JSONObject;
 
 public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
 	private static final long serialVersionUID = 1L;
-	public static final String DEFAULT_NAME = "wb-room-file";
-	private boolean preview = false;
+	private static final String DEFAULT_NAME = "wb-room-file";
 
 	public RoomResourceReference() {
 		super(DEFAULT_NAME);
@@ -73,7 +72,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 				mime = PNG_MIME_TYPE;
 				break;
 			case Video:
-				mime = preview ? JPG_MIME_TYPE : MP4_MIME_TYPE;
+				mime = MP4_MIME_TYPE;
 				break;
 			default:
 				throw new RuntimeException("Not supported");
@@ -85,8 +84,6 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	protected FileExplorerItem getFileItem(Attributes attr) {
 		PageParameters params = attr.getParameters();
 		StringValue _id = params.get("id");
-		StringValue _preview = params.get("preview");
-		preview = _preview.toBoolean(false);
 		String uid = params.get("uid").toString();
 		Long id = null;
 		try {
@@ -131,11 +128,6 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	protected File getFile(FileExplorerItem f, Attributes attr) {
 		String ext = null;
 		switch (f.getType()) {
-			case Video:
-				if (preview) {
-					ext = EXTENSION_JPG;
-				}
-				break;
 			case Presentation:
 				ext = attr.getParameters().get("slide").toString();
 				break;
@@ -146,6 +138,6 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 
 	@Override
 	protected String getFileName(FileExplorerItem f) {
-		return f.getFileName(preview ? EXTENSION_JPG : null);
+		return f.getFileName(null);
 	}
 }

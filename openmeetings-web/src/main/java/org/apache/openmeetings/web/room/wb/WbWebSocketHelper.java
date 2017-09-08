@@ -25,6 +25,7 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
+import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
 import org.apache.openmeetings.web.room.RoomResourceReference;
 import org.apache.openmeetings.web.user.record.JpgRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
@@ -98,7 +99,7 @@ public class WbWebSocketHelper extends WebSocketHelper {
 			case Video:
 				ref = new RoomResourceReference();
 				file.put("_src", urlFor(ref, pp));
-				file.put("_poster", urlFor(ref, new PageParameters(pp).add("preview", true)));
+				file.put("_poster", urlFor(new RoomPreviewResourceReference(), pp));
 				break;
 			case Recording:
 				ref = new Mp4RecordingResourceReference();

@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 
 public abstract class FileItemResourceReference<T extends FileItem> extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = getLogger(FileItemResourceReference.class, webAppRootKey);
+	protected static final Logger log = getLogger(FileItemResourceReference.class, webAppRootKey);
 
 	public FileItemResourceReference(String name) {
 		super(name);

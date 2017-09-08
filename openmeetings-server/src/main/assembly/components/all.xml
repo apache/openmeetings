@@ -30,8 +30,9 @@
 				<exclude>webapps/oflaDemo/**</exclude>
 				<exclude>webapps/chat/**</exclude>
 				<exclude>webapps/root/demos/**</exclude>
-				<exclude>webapps/root/index.html</exclude>
 				<exclude>webapps/root/crossdomain.xml</exclude>
+				<exclude>webapps/root/favicon.ico</exclude>
+				<exclude>webapps/root/index.html</exclude>
 				<exclude>lib/commons-io*.jar</exclude>
 				<exclude>plugins/websocket*.jar</exclude>
 				<exclude>*.sh</exclude>
@@ -89,6 +90,13 @@
 				<include>LICENSE</include>
 				<include>NOTICE</include>
 				<include>README</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/public</directory><!-- FIXME should be implemented differently -->
+			<outputDirectory>${root.webapp}</outputDirectory>
+			<includes>
+				<include>favicon.ico</include>
 			</includes>
 		</fileSet>
 		<fileSet>
