@@ -44,32 +44,31 @@ var UUID = (function() {
 	return self;
 })();
 var Player = (function() {
-	var player = {};
+	let player = {}, mainColor = '#ff6600', rad = 20;
+	function filter(_o, props) {
+		return props.reduce((result, key) => { result[key] = _o[key]; return result; }, {});
+	}
+
 	player.create = function(canvas, _o) {
 		let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
 			.attr("width", _o.width).attr("height", _o.height)
 			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
-		let mainColor = '#ff6600';
 		$('#wb-tab-' + canvas.wbId).append(vid);
 		new fabric.Image.fromURL(_o._poster, function(poster) {
 			new fabric.Image(vid[0], {}, function (video) {
-				let rad = 20;
 				video.visible = false;
 				poster.width = _o.width;
 				poster.height = _o.height;
 				let opts = $.extend({
-					left: 10
-					, top: 10
-					, subTargetCheck: true
+					subTargetCheck: true
 					, objectCaching: false
 					, omType: 'Video'
-				}, _o);
-				delete opts.type;
+				}, filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height']));
 				let group = new fabric.Group([video, poster], opts);
 				let paused = true;
 				let trg = new fabric.Triangle({
-					left: group.left + 2.7 * rad
-					, top: group.top + group.height - 2.5 * rad
+					left: 2.7 * rad
+					, top: _o.height - 2.5 * rad
 					, visible: paused
 					, angle: 90
 					, width: rad
@@ -78,8 +77,8 @@ var Player = (function() {
 					, fill: mainColor
 				});
 				let rectPause1 = new fabric.Rect({
-					left: group.left + 1.6 * rad
-					, top: group.top + group.height - 2.5 * rad
+					left: 1.6 * rad
+					, top: _o.height - 2.5 * rad
 					, visible: !paused
 					, width: rad / 3
 					, height: rad
@@ -87,8 +86,8 @@ var Player = (function() {
 					, fill: mainColor
 				});
 				let rectPause2 = new fabric.Rect({
-					left: group.left + 2.1 * rad
-					, top: group.top + group.height - 2.5 * rad
+					left: 2.1 * rad
+					, top: _o.height - 2.5 * rad
 					, visible: !paused
 					, width: rad / 3
 					, height: rad
@@ -97,8 +96,8 @@ var Player = (function() {
 				});
 				let play = new fabric.Group([
 						new fabric.Circle({
-							left: group.left + rad
-							, top: group.top + group.height - 3 * rad
+							left: rad
+							, top: _o.height - 3 * rad
 							, radius: rad
 							, stroke: mainColor
 							, strokeWidth: 2
@@ -109,10 +108,10 @@ var Player = (function() {
 						objectCaching: false
 					});
 				let cProgress = new fabric.Rect({
-					left: group.left + 3.5 * rad
-					, top: group.top + group.height - 1.5 * rad
+					left: 3.5 * rad
+					, top: _o.height - 1.5 * rad
 					, visible: !paused
-					, width: video.width - 5 * rad
+					, width: _o.width - 5 * rad
 					, height: rad / 2
 					, stroke: mainColor
 					, fill: null
@@ -120,8 +119,8 @@ var Player = (function() {
 					, ry: 5
 				});
 				let progress = new fabric.Rect({
-					left: group.left + 3.5 * rad
-					, top: group.top + group.height - 1.5 * rad
+					left: 3.5 * rad
+					, top: _o.height - 1.5 * rad
 					, visible: !paused
 					, width: 0
 					, height: rad / 2
@@ -132,7 +131,7 @@ var Player = (function() {
 				});
 				let request;
 				let render = function () {
-					progress.set('width', (vid[0].currentTime * cProgress.width) / vid[0].duration);
+					progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
 					canvas.renderAll();
 					if (paused) {
 						cancelAnimationFrame(request);
@@ -176,7 +175,7 @@ var Player = (function() {
 							video.getElement().play();
 							fabric.util.requestAnimFrame(render);
 						} else {
-							vid[0].pause();
+							video.getElement().pause();
 						}
 						paused = !paused;
 						trg.visible = paused;
@@ -193,21 +192,21 @@ var Player = (function() {
 
 				canvas.add(group);
 				canvas.renderAll();
+				player.modify(group, _o);
 
 				let pos = {left: play.left, top: play.top};
 			});
 		});
 	}
 	player.modify = function(g, _o) {
-		g.set({
-			angle: _o.angle
-			, left: _o.left
-			, scaleX: _o.scaleX
-			, scaleY: _o.scaleY
-			, top: _o.top
-			, width: _o.width
-			, height: _o.height
-		});
+		let opts = $.extend({
+			angle: 0
+			, left: 10
+			, scaleX: 1
+			, scaleY: 1
+			, top: 10
+		}, filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
+		g.set(opts);
 		g.canvas.renderAll();
 	}
 	return player;
