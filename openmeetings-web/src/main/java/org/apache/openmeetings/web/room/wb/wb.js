@@ -978,6 +978,9 @@ var Wb = function() {
 			var cnvs = canvases[o.slide];
 			if (!!cnvs) {
 				cnvs.discardActiveGroup();
+				if ('Video' === __o.omType) {
+					$('#wb-video-' + __o.uid).remove();
+				}
 				cnvs.remove(__o);
 			}
 		}
