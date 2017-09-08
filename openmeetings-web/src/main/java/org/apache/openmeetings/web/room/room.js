@@ -593,7 +593,7 @@ var Room = (function() {
 		} else {
 			holder.removeClass('big').addClass('small');
 		}
-		if (!!WbArea) {
+		if (typeof WbArea !== 'undefined') {
 			WbArea.resize(sb.width() + 5, w, h);
 		}
 	}

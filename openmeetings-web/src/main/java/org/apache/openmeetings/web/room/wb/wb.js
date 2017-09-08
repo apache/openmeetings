@@ -43,6 +43,175 @@ var UUID = (function() {
 	}
 	return self;
 })();
+var Player = (function() {
+	var player = {};
+	player.create = function(canvas, _o) {
+		let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
+			.attr("width", _o.width).attr("height", _o.height)
+			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
+		let mainColor = '#ff6600';
+		$('#wb-tab-' + canvas.wbId).append(vid);
+		new fabric.Image.fromURL(_o._poster, function(poster) {
+			new fabric.Image(vid[0], {}, function (video) {
+				let rad = 20;
+				video.visible = false;
+				poster.width = _o.width;
+				poster.height = _o.height;
+				let opts = $.extend({
+					left: 10
+					, top: 10
+					, subTargetCheck: true
+					, objectCaching: false
+					, omType: 'Video'
+				}, _o);
+				delete opts.type;
+				let group = new fabric.Group([video, poster], opts);
+				let paused = true;
+				let trg = new fabric.Triangle({
+					left: group.left + 2.7 * rad
+					, top: group.top + group.height - 2.5 * rad
+					, visible: paused
+					, angle: 90
+					, width: rad
+					, height: rad
+					, stroke: mainColor
+					, fill: mainColor
+				});
+				let rectPause1 = new fabric.Rect({
+					left: group.left + 1.6 * rad
+					, top: group.top + group.height - 2.5 * rad
+					, visible: !paused
+					, width: rad / 3
+					, height: rad
+					, stroke: mainColor
+					, fill: mainColor
+				});
+				let rectPause2 = new fabric.Rect({
+					left: group.left + 2.1 * rad
+					, top: group.top + group.height - 2.5 * rad
+					, visible: !paused
+					, width: rad / 3
+					, height: rad
+					, stroke: mainColor
+					, fill: mainColor
+				});
+				let play = new fabric.Group([
+						new fabric.Circle({
+							left: group.left + rad
+							, top: group.top + group.height - 3 * rad
+							, radius: rad
+							, stroke: mainColor
+							, strokeWidth: 2
+							, fill: null
+						})
+						, trg, rectPause1, rectPause2]
+					, {
+						objectCaching: false
+					});
+				let cProgress = new fabric.Rect({
+					left: group.left + 3.5 * rad
+					, top: group.top + group.height - 1.5 * rad
+					, visible: !paused
+					, width: video.width - 5 * rad
+					, height: rad / 2
+					, stroke: mainColor
+					, fill: null
+					, rx: 5
+					, ry: 5
+				});
+				let progress = new fabric.Rect({
+					left: group.left + 3.5 * rad
+					, top: group.top + group.height - 1.5 * rad
+					, visible: !paused
+					, width: 0
+					, height: rad / 2
+					, stroke: mainColor
+					, fill: mainColor
+					, rx: 5
+					, ry: 5
+				});
+				let request;
+				let render = function () {
+					progress.set('width', (vid[0].currentTime * cProgress.width) / vid[0].duration);
+					canvas.renderAll();
+					if (paused) {
+						cancelAnimationFrame(request);
+					} else {
+						request = fabric.util.requestAnimFrame(render);
+					}
+				};
+				play.on({
+					/*
+					 * https://github.com/kangax/fabric.js/issues/4115
+					 *
+					'mouseover': function() {
+						circle1.set({strokeWidth: 4});
+						canvas.renderAll();
+					}
+					, 'mouseout': function() {
+						circle1.set({
+							left: pos.left
+							, top: pos.top
+							, strokeWidth: 2
+						});
+						canvas.renderAll();
+					}
+					, */'mousedown': function () {
+						play.set({
+							left: pos.left + 3
+							, top: pos.top + 3
+						});
+						canvas.renderAll();
+					}
+					, 'mouseup': function () {
+						play.set({
+							left: pos.left
+							, top: pos.top
+						});
+						if (paused) {
+							video.visible = true;
+							poster.visible = false;
+							progress.visible = true;
+							cProgress.visible = true;
+							video.getElement().play();
+							fabric.util.requestAnimFrame(render);
+						} else {
+							vid[0].pause();
+						}
+						paused = !paused;
+						trg.visible = paused;
+						rectPause1.visible = !paused;
+						rectPause2.visible = !paused;
+						canvas.renderAll();
+					}
+				});
+	
+				group.addWithUpdate(play);
+				group.addWithUpdate(progress);
+				group.addWithUpdate(cProgress);
+				group.selectable = canvas.selection;
+
+				canvas.add(group);
+				canvas.renderAll();
+
+				let pos = {left: play.left, top: play.top};
+			});
+		});
+	}
+	player.modify = function(g, _o) {
+		g.set({
+			angle: _o.angle
+			, left: _o.left
+			, scaleX: _o.scaleX
+			, scaleY: _o.scaleY
+			, top: _o.top
+			, width: _o.width
+			, height: _o.height
+		});
+		g.canvas.renderAll();
+	}
+	return player;
+})();
 var Base = function() {
 	var base = {};
 	base.objectCreated = function(o, canvas) {
@@ -78,7 +247,7 @@ var Pointer = function(wb, s) {
 	};
 }
 var APointer = function(wb) {
-	var pointer = Base(wb);
+	var pointer = Base();
 	pointer.user = '';
 	pointer.create = function(canvas, o) {
 		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
@@ -169,8 +338,8 @@ var APointer = function(wb) {
 	};
 	return pointer;
 }
-var ShapeBase = function(wb) {
-	var base = Base(wb);
+var ShapeBase = function() {
+	var base = Base();
 	base.fill = {enabled: true, color: '#FFFF33'};
 	base.stroke = {enabled: true, color: '#FF6600', width: 5};
 	base.opacity = 1;
@@ -198,7 +367,7 @@ var ShapeBase = function(wb) {
 	return base;
 }
 var Text = function(wb, s) {
-	var text = ShapeBase(wb);
+	var text = ShapeBase();
 	text.obj = null;
 	text.fill.color = '#000000';
 	text.stroke.width = 1;
@@ -822,165 +991,7 @@ var Wb = function() {
 		switch (_o.fileType) {
 			case 'Video':
 			case 'Recording':
-			{
-				let canvas = canvases[_o.slide];
-				let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
-					.attr("width", _o.width).attr("height", _o.height)
-					.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
-				let mainColor = '#ff6600';
-				$('#wb-tab-' + canvas.wbId).append(vid);
-				new fabric.Image.fromURL(_o._poster, function(poster) {
-					new fabric.Image(vid[0], {}, function (video) {
-						let rad = 20;
-						video.visible = false;
-						poster.width = video.width;
-						poster.height = video.height;
-						let group = new fabric.Group([video, poster], {
-							left: 10
-							, top: 10
-							, subTargetCheck: true
-							, width: video.width
-							, height: video.height
-							, objectCaching: false
-							, uid: _o.uid
-							, fileId: _o.fileId
-							, fileType: _o.fileType
-							, slide: canvas.slide
-						});
-						let paused = true;
-						let trg = new fabric.Triangle({
-							left: group.left + 2.7 * rad
-							, top: group.top + group.height - 2.5 * rad
-							, visible: paused
-							, angle: 90
-							, width: rad
-							, height: rad
-							, stroke: mainColor
-							, fill: mainColor
-						});
-						let rectPause1 = new fabric.Rect({
-							left: group.left + 1.6 * rad
-							, top: group.top + group.height - 2.5 * rad
-							, visible: !paused
-							, width: rad / 3
-							, height: rad
-							, stroke: mainColor
-							, fill: mainColor
-						});
-						let rectPause2 = new fabric.Rect({
-							left: group.left + 2.1 * rad
-							, top: group.top + group.height - 2.5 * rad
-							, visible: !paused
-							, width: rad / 3
-							, height: rad
-							, stroke: mainColor
-							, fill: mainColor
-						});
-						let play = new fabric.Group([
-								new fabric.Circle({
-									left: group.left + rad
-									, top: group.top + group.height - 3 * rad
-									, radius: rad
-									, stroke: mainColor
-									, strokeWidth: 2
-									, fill: null
-								})
-								, trg, rectPause1, rectPause2]
-							, {
-								objectCaching: false
-							});
-
-						let cProgress = new fabric.Rect({
-							left: group.left + 3.5 * rad
-							, top: group.top + group.height - 1.5 * rad
-							, visible: !paused
-							, width: video.width - 5 * rad
-							, height: rad / 2
-							, stroke: mainColor
-							, fill: null
-							, rx: 5
-							, ry: 5
-						});
-						let progress = new fabric.Rect({
-							left: group.left + 3.5 * rad
-							, top: group.top + group.height - 1.5 * rad
-							, visible: !paused
-							, width: 0
-							, height: rad / 2
-							, stroke: mainColor
-							, fill: mainColor
-							, rx: 5
-							, ry: 5
-						});
-						let request;
-						let render = function () {
-							progress.set('width', (vid[0].currentTime * cProgress.width) / vid[0].duration);
-							canvas.renderAll();
-							if (paused) {
-								cancelAnimationFrame(request);
-							} else {
-								request = fabric.util.requestAnimFrame(render);
-							}
-						};
-						play.on({
-							/*
-							 * https://github.com/kangax/fabric.js/issues/4115
-							 *
-							'mouseover': function() {
-								circle1.set({strokeWidth: 4});
-								canvas.renderAll();
-							}
-							, 'mouseout': function() {
-								circle1.set({
-									left: pos.left
-									, top: pos.top
-									, strokeWidth: 2
-								});
-								canvas.renderAll();
-							}
-							, */'mousedown': function () {
-								play.set({
-									left: pos.left + 3
-									, top: pos.top + 3
-								});
-								canvas.renderAll();
-							}
-							, 'mouseup': function () {
-								play.set({
-									left: pos.left
-									, top: pos.top
-								});
-								if (paused) {
-									video.visible = true;
-									poster.visible = false;
-									progress.visible = true;
-									cProgress.visible = true;
-									video.getElement().play();
-									fabric.util.requestAnimFrame(render);
-								} else {
-									vid[0].pause();
-								}
-								paused = !paused;
-								trg.visible = paused;
-								rectPause1.visible = !paused;
-								rectPause2.visible = !paused;
-								canvas.renderAll();
-							}
-						});
-
-						group.addWithUpdate(play);
-						group.addWithUpdate(progress);
-						group.addWithUpdate(cProgress);
-						group.selectable = canvas.selection;
-
-						canvas.add(group);
-						canvas.renderAll();
-
-						let pos = {left: play.left, top: play.top};
-					});
-				});
-				//console.log(vImg.toJSON(['uid', 'fileId', 'fileType']));
-			}
+				//no-op
 				break;
 			case 'Presentation':
 			{
@@ -1034,7 +1045,13 @@ var Wb = function() {
 	};
 
 	function toOmJson(o) {
-		return o.toJSON(extraProps);
+		let r = o.toJSON(extraProps);
+		if (o.omType === 'Video') {
+			r.type = 'video';
+			delete r.objects;
+			return r;
+		}
+		return r;
 	}
 	//events
 	function wbObjCreatedHandler(o) {
@@ -1075,7 +1092,7 @@ var Wb = function() {
 
 		o.includeDefaultValues = false;
 		var items = [];
-		if ("group" === o.type && o.fileType !== 'Video' && o.fileType !== 'Recording') {
+		if ("group" === o.type && o.omType !== 'Video') {
 			o.clone(function(_o) {
 				// ungrouping
 				_o.includeDefaultValues = false;
@@ -1284,23 +1301,20 @@ var Wb = function() {
 			_setSize();
 		}
 	};
-	wb.load = function(arr) {
-		_createObject(arr, _createHandler);
-	};
 	wb.setSlide = function(_sl) {
 		slide = _sl;
 		showCurrentSlide();
 	};
-	wb.createObj = function(o) {
-		var arr = [];
-		if (!Array.isArray(o)) {
-			if ('pointer' === o.type) {
-				APointer().create(canvases[o.slide], o);
-				return;
-			}
+	wb.createObj = function(obj) {
+		let arr = [], _arr = Array.isArray(obj) ? obj : [obj];
+		for (let i = 0; i < _arr.length; ++i) {
+			let o = _arr[i];
 			switch(o.type) {
 				case 'pointer':
 					APointer().create(canvases[o.slide], o);
+					break;
+				case 'video':
+					Player.create(canvases[o.slide], o);
 					break;
 				default:
 					var __o = _findObject(o);
@@ -1309,21 +1323,35 @@ var Wb = function() {
 					}
 					break;
 			}
-		} else {
-			arr = o;
 		}
 		if (arr.length > 0) {
 			_createObject(arr, _createHandler);
 		}
 	};
-	wb.modifyObj = function(o) { //TODO need to be unified
-		switch(o.type) {
-			case 'pointer':
-				_modifyHandler(APointer().create(canvases[o.slide], o))
-				break;
-			default:
-				_createObject(o, _modifyHandler);
-				break;
+	wb.load = wb.createObj;
+	wb.modifyObj = function(obj) { //TODO need to be unified
+		let arr = [], _arr = Array.isArray(obj) ? obj : [obj];
+		for (let i = 0; i < _arr.length; ++i) {
+			let o = _arr[i];
+			switch(o.type) {
+				case 'pointer':
+					_modifyHandler(APointer().create(canvases[o.slide], o))
+					break;
+				case 'video':
+				{
+					let g = _findObject(o);
+					if (!!g) {
+						Player.modify(g, o);
+					}
+				}
+					break;
+				default:
+					arr.push(o);
+					break;
+			}
+		}
+		if (arr.length > 0) {
+			_createObject(arr, _modifyHandler);
 		}
 	};
 	wb.removeObj = function(arr) {

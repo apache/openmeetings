@@ -390,7 +390,7 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
-	private static JSONObject getAddWbJson(Whiteboard wb) {
+	private static JSONObject getAddWbJson(final Whiteboard wb) {
 		return new JSONObject().put("wbId", wb.getId())
 				.put("name", wb.getName())
 				.put("width", wb.getWidth())
@@ -481,13 +481,17 @@ public class WbPanel extends AbstractWbPanel {
 					File f = fi.getFile();
 					if (f.exists() && f.isFile()) {
 						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
+							final boolean[] updated = {false};
 							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), (o) -> {
 									wb.put(o.getString("uid"), o);
-									WhiteboardCache.update(roomId, wb);
+									updated[0] = true;
 									return addFileUrl(wbs.getUid(), o, _f -> {
 										updateWbSize(wb, _f);
 									});
 								});
+							if (updated[0]) {
+								WhiteboardCache.update(roomId, wb);
+							}
 							sendWbAll(WbAction.setSize, getAddWbJson(wb));
 							sendWbAll(WbAction.load, getObjWbJson(wb.getId(), arr));
 						} catch (Exception e) {
@@ -504,7 +508,7 @@ public class WbPanel extends AbstractWbPanel {
 							.put("fileId", fi.getId())
 							.put("fileType", fi.getType().name())
 							.put("count", fi.getCount())
-							.put("type", "image")
+							.put("type", FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType() ? "video" : "image")
 							.put("left", UPLOAD_WB_LEFT)
 							.put("top", UPLOAD_WB_TOP)
 							.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
