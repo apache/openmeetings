@@ -52,19 +52,13 @@ var Player = (function() {
 	player.create = function(canvas, _o) {
 		let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
 			.attr("width", _o.width).attr("height", _o.height)
-			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src))
-		$('#wb-tab-' + canvas.wbId).append(vid);
+			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src));
+		$('body').append(vid);
 		new fabric.Image.fromURL(_o._poster, function(poster) {
 			new fabric.Image(vid[0], {}, function (video) {
 				video.visible = false;
 				poster.width = _o.width;
 				poster.height = _o.height;
-				let opts = $.extend({
-					subTargetCheck: true
-					, objectCaching: false
-					, omType: 'Video'
-				}, filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height']));
-				let group = new fabric.Group([video, poster], opts);
 				let paused = true;
 				let trg = new fabric.Triangle({
 					left: 2.7 * rad
@@ -106,11 +100,12 @@ var Player = (function() {
 						, trg, rectPause1, rectPause2]
 					, {
 						objectCaching: false
+						, visible: false
 					});
 				let cProgress = new fabric.Rect({
 					left: 3.5 * rad
 					, top: _o.height - 1.5 * rad
-					, visible: !paused
+					, visible: false
 					, width: _o.width - 5 * rad
 					, height: rad / 2
 					, stroke: mainColor
@@ -118,10 +113,33 @@ var Player = (function() {
 					, rx: 5
 					, ry: 5
 				});
+				let isDone = function() {
+					return video.getElement().currentTime == video.getElement().duration;
+				};
+				let updateProgress = function() {
+					progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
+					canvas.renderAll();
+				};
+				let updateControls = function() {
+					video.visible = true;
+					poster.visible = false;
+
+					trg.visible = paused;
+					rectPause1.visible = !paused;
+					rectPause2.visible = !paused;
+					canvas.renderAll();
+				};
+				cProgress.on({
+					'mousedown': function (evt) {
+						video.getElement().currentTime = (evt.e.offsetX - evt.target.aCoords.bl.x - cProgress.aCoords.bl.x)
+								* video.getElement().duration / cProgress.width;
+						updateProgress();
+					}
+				});
 				let progress = new fabric.Rect({
 					left: 3.5 * rad
 					, top: _o.height - 1.5 * rad
-					, visible: !paused
+					, visible: false
 					, width: 0
 					, height: rad / 2
 					, stroke: mainColor
@@ -131,8 +149,11 @@ var Player = (function() {
 				});
 				let request;
 				let render = function () {
-					progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
-					canvas.renderAll();
+					if (isDone()) {
+						paused = true;
+						updateControls();
+					}
+					updateProgress();
 					if (paused) {
 						cancelAnimationFrame(request);
 					} else {
@@ -168,28 +189,41 @@ var Player = (function() {
 							, top: pos.top
 						});
 						if (paused) {
-							video.visible = true;
-							poster.visible = false;
-							progress.visible = true;
-							cProgress.visible = true;
+							if (isDone()) {
+								video.getElement().currentTime = 0;
+							}
 							video.getElement().play();
 							fabric.util.requestAnimFrame(render);
 						} else {
 							video.getElement().pause();
 						}
 						paused = !paused;
-						trg.visible = paused;
-						rectPause1.visible = !paused;
-						rectPause2.visible = !paused;
+						updateControls();
+					}
+				});
+
+				let opts = $.extend({
+					subTargetCheck: true
+					, objectCaching: false
+					, omType: 'Video'
+					, selectable: canvas.selection
+				}, filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height']));
+				let group = new fabric.Group([video, poster, play, progress, cProgress], opts);
+
+				group.on({
+					'mouseover': function() {
+						play.visible = true;
+						cProgress.visible = true;
+						progress.visible = true;
+						canvas.renderAll();
+					}
+					, 'mouseout': function() {
+						play.visible = false;
+						cProgress.visible = false;
+						progress.visible = false;
 						canvas.renderAll();
 					}
 				});
-	
-				group.addWithUpdate(play);
-				group.addWithUpdate(progress);
-				group.addWithUpdate(cProgress);
-				group.selectable = canvas.selection;
-
 				canvas.add(group);
 				canvas.renderAll();
 				player.modify(group, _o);
@@ -197,7 +231,7 @@ var Player = (function() {
 				let pos = {left: play.left, top: play.top};
 			});
 		});
-	}
+	};
 	player.modify = function(g, _o) {
 		let opts = $.extend({
 			angle: 0
@@ -208,7 +242,7 @@ var Player = (function() {
 		}, filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
 		g.set(opts);
 		g.canvas.renderAll();
-	}
+	};
 	return player;
 })();
 var Base = function() {
