@@ -49,17 +49,17 @@ var Player = (function() {
 		return props.reduce((result, key) => { result[key] = _o[key]; return result; }, {});
 	}
 
-	player.create = function(canvas, _o) {
+	player.create = function(canvas, _o, _role) {
 		let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
 			.attr("width", _o.width).attr("height", _o.height)
 			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src));
-		$('body').append(vid);
+		$('#wb-tab-' + canvas.wbId).append(vid);
 		new fabric.Image.fromURL(_o._poster, function(poster) {
 			new fabric.Image(vid[0], {}, function (video) {
 				video.visible = false;
 				poster.width = _o.width;
 				poster.height = _o.height;
-				let paused = true;
+				let paused = true, playable = false;
 				let trg = new fabric.Triangle({
 					left: 2.7 * rad
 					, top: _o.height - 2.5 * rad
@@ -131,8 +131,10 @@ var Player = (function() {
 				};
 				cProgress.on({
 					'mousedown': function (evt) {
-						video.getElement().currentTime = (evt.e.offsetX - evt.target.aCoords.bl.x - cProgress.aCoords.bl.x)
-								* video.getElement().duration / cProgress.width;
+						let _ptr = canvas.getPointer(evt.e)
+							, ptr = canvas._normalizePointer(group, _ptr)
+							, l = (group.width / 2 + ptr.x) * canvas.getZoom() - cProgress.aCoords.bl.x;
+						video.getElement().currentTime = l * video.getElement().duration / cProgress.width;
 						updateProgress();
 					}
 				});
@@ -212,9 +214,9 @@ var Player = (function() {
 
 				group.on({
 					'mouseover': function() {
-						play.visible = true;
-						cProgress.visible = true;
-						progress.visible = true;
+						play.visible = playable;
+						cProgress.visible = playable;
+						progress.visible = playable;
 						canvas.renderAll();
 					}
 					, 'mouseout': function() {
@@ -224,6 +226,10 @@ var Player = (function() {
 						canvas.renderAll();
 					}
 				});
+				group.setPlayable = function(_r) {
+					playable = _r !== NONE;
+				};
+				group.setPlayable(_role);
 				canvas.add(group);
 				canvas.renderAll();
 				player.modify(group, _o);
@@ -1294,6 +1300,11 @@ var Wb = function() {
 			t = a.find('.tools'), s = a.find(".wb-settings");
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
+				canvas.forEachObject(function(__o) { //TODO reduce iterations
+					if (!!__o && __o.omType === 'Video') {
+						__o.setPlayable(role);
+					}
+				});
 			});
 			internalInit();
 		}
@@ -1350,7 +1361,7 @@ var Wb = function() {
 					APointer().create(canvases[o.slide], o);
 					break;
 				case 'video':
-					Player.create(canvases[o.slide], o);
+					Player.create(canvases[o.slide], o, role);
 					break;
 				default:
 					var __o = _findObject(o);
