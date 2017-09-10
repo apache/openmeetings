@@ -18,13 +18,11 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getExternalType;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.Map.Entry;
 
@@ -44,11 +42,9 @@ import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.string.StringValue;
-import org.slf4j.Logger;
 
 public abstract class RecordingResourceReference extends FileItemResourceReference<Recording> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = getLogger(RecordingResourceReference.class, webAppRootKey);
 
 	public RecordingResourceReference(String name) {
 		super(name);

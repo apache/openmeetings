@@ -39,7 +39,7 @@ import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -108,7 +108,7 @@ public class BackupPanel extends AdminPanel {
 			setMaxSize(Bytes.bytes(maxBytes));
 
 			// Add a component to download a file without page refresh
-			final AjaxDownload download = new AjaxDownload(new IResource() {
+			final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new IResource() {
 				private static final long serialVersionUID = 1L;
 
 				@Override

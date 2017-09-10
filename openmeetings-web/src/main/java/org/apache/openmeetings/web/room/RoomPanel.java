@@ -80,7 +80,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -169,7 +169,7 @@ public class RoomPanel extends BasePanel {
 	private String sharingUser = null;
 	private String recordingUser = null;
 	private byte[] pdfWb;
-	private final AjaxDownload download = new AjaxDownload(new ResourceStreamResource() {
+	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 		private static final long serialVersionUID = 1L;
 
 		{

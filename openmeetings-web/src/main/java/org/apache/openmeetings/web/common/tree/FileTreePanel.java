@@ -50,7 +50,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.CallbackParameter;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -86,7 +86,7 @@ public abstract class FileTreePanel extends Panel {
 	private FileItem lastSelected = null;
 	private Map<String, FileItem> selected = new HashMap<>();
 	File dwnldFile;
-	final AjaxDownload downloader = new AjaxDownload(new IResource() {
+	final AjaxDownloadBehavior downloader = new AjaxDownloadBehavior(new IResource() {
 		private static final long serialVersionUID = 1L;
 
 		@Override

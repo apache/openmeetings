@@ -40,7 +40,7 @@
 		<maven.javadoc.version>2.10.3</maven.javadoc.version>
 		<maven.surefire.version>2.20</maven.surefire.version>
 		<maven-site.version>3.3</maven-site.version>
-		<wicket.version>8.0.0-M7</wicket.version>
+		<wicket.version>8.0.0-SNAPSHOT</wicket.version>
 		<wicketju.version>8.0.0-M7</wicketju.version>
 		<wickets.version>8.0.0-M7</wickets.version>
 		<red5-server.version>1.0.10-M4</red5-server.version>

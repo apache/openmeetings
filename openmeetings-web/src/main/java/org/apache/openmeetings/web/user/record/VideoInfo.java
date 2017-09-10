@@ -41,7 +41,7 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.common.InvitationDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -80,7 +80,7 @@ public class VideoInfo extends Panel {
 			}.start();
 		}
 	};
-	private final AjaxDownload download = new AjaxDownload(new IResource() {
+	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new IResource() {
 		private static final long serialVersionUID = 1L;
 
 		@Override

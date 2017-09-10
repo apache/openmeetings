@@ -44,7 +44,7 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -175,7 +175,7 @@ public class LangPanel extends AdminPanel {
 		});
 
 		// Add a component to download a file without page refresh
-		final AjaxDownload download = new AjaxDownload(new ResourceStreamResource() {
+		final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 
 			{

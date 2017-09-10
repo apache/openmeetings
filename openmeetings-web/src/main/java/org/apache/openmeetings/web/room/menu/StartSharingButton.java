@@ -45,7 +45,7 @@ import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.AjaxDownload;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
@@ -59,7 +59,7 @@ public class StartSharingButton extends OmButton {
 	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingButton.class, webAppRootKey);
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
-	private final AjaxDownload download;
+	private final AjaxDownloadBehavior download;
 	private final String uid;
 	private String app = "";
 
@@ -69,7 +69,7 @@ public class StartSharingButton extends OmButton {
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
 		add(new AttributeAppender("title", Application.getString("1480")));
-		add(download = new AjaxDownload(new ResourceStreamResource() {
+		add(download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 
 			{
