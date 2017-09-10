@@ -35,4 +35,5 @@ public enum WbAction {
 	, downloadPdf
 	, startRecording
 	, stopRecording
+	, videoStatus
 }

@@ -97,8 +97,9 @@ public class Whiteboard implements Serializable {
 		height = DEFAULT_HEIGHT;
 	}
 
-	public void put(String uid, JSONObject obj) {
+	public Whiteboard put(String uid, JSONObject obj) {
 		roomItems.put(uid, obj.toString(new NullStringer()));
+		return this;
 	}
 
 	public JSONObject get(String uid) {

@@ -299,8 +299,11 @@ public class WbPanel extends AbstractWbPanel {
 					for (int i = 0; i < arr.length(); ++i) {
 						JSONObject _o = arr.getJSONObject(i);
 						String uid = _o.getString("uid");
-						undo.put(wb.get(uid));
-						wb.put(uid, _o);
+						JSONObject po = wb.get(uid);
+						if (po != null) {
+							undo.put(po);
+							wb.put(uid, _o);
+						}
 					}
 					if (arr.length() != 0) {
 						WhiteboardCache.update(roomId, wb);
@@ -381,6 +384,20 @@ public class WbPanel extends AbstractWbPanel {
 							}
 								break;
 						}
+					}
+				}
+					break;
+				case videoStatus:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					String uid = obj.getString("uid");
+					JSONObject po = wb.get(uid);
+					if (po != null && "video".equals(po.getString("type"))) {
+						JSONObject ns = obj.getJSONObject("status");
+						po.put("status", ns.put("updated", System.currentTimeMillis()));
+						WhiteboardCache.update(roomId, wb.put(uid, po));
+						obj.put("slide", po.getInt("slide"));
+						sendWbAll(WbAction.videoStatus, obj);
 					}
 				}
 					break;
@@ -508,7 +525,7 @@ public class WbPanel extends AbstractWbPanel {
 							.put("fileId", fi.getId())
 							.put("fileType", fi.getType().name())
 							.put("count", fi.getCount())
-							.put("type", FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType() ? "video" : "image")
+							.put("type", "image")
 							.put("left", UPLOAD_WB_LEFT)
 							.put("top", UPLOAD_WB_TOP)
 							.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
@@ -516,6 +533,13 @@ public class WbPanel extends AbstractWbPanel {
 							.put("uid", wuid)
 							.put("slide", wb.getSlide())
 							;
+					if (FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType()) {
+						file.put("type", "video");
+						file.put("status", new JSONObject()
+								.put("paused", true)
+								.put("pos", 0.0)
+								.put("updated", System.currentTimeMillis()));
+					}
 					final String ruid = wbs.getUid();
 					if (clean) {
 						clearAll(roomId, wb.getId());

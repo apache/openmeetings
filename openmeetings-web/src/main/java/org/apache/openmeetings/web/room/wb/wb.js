@@ -45,8 +45,20 @@ var UUID = (function() {
 })();
 var Player = (function() {
 	let player = {}, mainColor = '#ff6600', rad = 20;
-	function filter(_o, props) {
+	function _filter(_o, props) {
 		return props.reduce((result, key) => { result[key] = _o[key]; return result; }, {});
+	}
+	function _sendStatus(g, _paused, _pos) {
+		g.status.paused = _paused;
+		g.status.pos = _pos;
+		wbAction('videoStatus', JSON.stringify({
+			wbId: g.canvas.wbId
+			, uid: g.uid
+			, status: {
+				paused: _paused
+				, pos: _pos
+			}
+		}));
 	}
 
 	player.create = function(canvas, _o, _role) {
@@ -59,11 +71,11 @@ var Player = (function() {
 				video.visible = false;
 				poster.width = _o.width;
 				poster.height = _o.height;
-				let paused = true, playable = false;
+				let playable = false;
 				let trg = new fabric.Triangle({
 					left: 2.7 * rad
 					, top: _o.height - 2.5 * rad
-					, visible: paused
+					, visible: _o.status.paused
 					, angle: 90
 					, width: rad
 					, height: rad
@@ -73,7 +85,7 @@ var Player = (function() {
 				let rectPause1 = new fabric.Rect({
 					left: 1.6 * rad
 					, top: _o.height - 2.5 * rad
-					, visible: !paused
+					, visible: !_o.status.paused
 					, width: rad / 3
 					, height: rad
 					, stroke: mainColor
@@ -82,7 +94,7 @@ var Player = (function() {
 				let rectPause2 = new fabric.Rect({
 					left: 2.1 * rad
 					, top: _o.height - 2.5 * rad
-					, visible: !paused
+					, visible: !_o.status.paused
 					, width: rad / 3
 					, height: rad
 					, stroke: mainColor
@@ -120,24 +132,6 @@ var Player = (function() {
 					progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
 					canvas.renderAll();
 				};
-				let updateControls = function() {
-					video.visible = true;
-					poster.visible = false;
-
-					trg.visible = paused;
-					rectPause1.visible = !paused;
-					rectPause2.visible = !paused;
-					canvas.renderAll();
-				};
-				cProgress.on({
-					'mousedown': function (evt) {
-						let _ptr = canvas.getPointer(evt.e)
-							, ptr = canvas._normalizePointer(group, _ptr)
-							, l = (group.width / 2 + ptr.x) * canvas.getZoom() - cProgress.aCoords.bl.x;
-						video.getElement().currentTime = l * video.getElement().duration / cProgress.width;
-						updateProgress();
-					}
-				});
 				let progress = new fabric.Rect({
 					left: 3.5 * rad
 					, top: _o.height - 1.5 * rad
@@ -150,18 +144,44 @@ var Player = (function() {
 					, ry: 5
 				});
 				let request;
+
+				let opts = $.extend({
+					subTargetCheck: true
+					, objectCaching: false
+					, omType: 'Video'
+					, selectable: canvas.selection
+				}, _filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height', 'status']));
+				let group = new fabric.Group([video, poster, play, progress, cProgress], opts);
+
+				let updateControls = function() {
+					video.visible = true;
+					poster.visible = false;
+
+					trg.visible = group.status.paused;
+					rectPause1.visible = !group.status.paused;
+					rectPause2.visible = !group.status.paused;
+					canvas.renderAll();
+				};
 				let render = function () {
 					if (isDone()) {
-						paused = true;
+						_sendStatus(group, true, video.getElement().duration);
 						updateControls();
 					}
 					updateProgress();
-					if (paused) {
+					if (group.status.paused) {
 						cancelAnimationFrame(request);
 					} else {
 						request = fabric.util.requestAnimFrame(render);
 					}
 				};
+				cProgress.on({
+					'mousedown': function (evt) {
+						let _ptr = canvas.getPointer(evt.e)
+							, ptr = canvas._normalizePointer(group, _ptr)
+							, l = (group.width / 2 + ptr.x) * canvas.getZoom() - cProgress.aCoords.bl.x;
+						_sendStatus(group, group.status.paused, l * video.getElement().duration / cProgress.width)
+					}
+				});
 				play.on({
 					/*
 					 * https://github.com/kangax/fabric.js/issues/4115
@@ -190,28 +210,13 @@ var Player = (function() {
 							left: pos.left
 							, top: pos.top
 						});
-						if (paused) {
-							if (isDone()) {
-								video.getElement().currentTime = 0;
-							}
-							video.getElement().play();
-							fabric.util.requestAnimFrame(render);
-						} else {
-							video.getElement().pause();
+						if (!group.status.paused && isDone()) {
+							video.getElement().currentTime = 0;
 						}
-						paused = !paused;
+						_sendStatus(group, !group.status.paused, video.getElement().currentTime)
 						updateControls();
 					}
 				});
-
-				let opts = $.extend({
-					subTargetCheck: true
-					, objectCaching: false
-					, omType: 'Video'
-					, selectable: canvas.selection
-				}, filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height']));
-				let group = new fabric.Group([video, poster, play, progress, cProgress], opts);
-
 				group.on({
 					'mouseover': function() {
 						play.visible = playable;
@@ -229,6 +234,18 @@ var Player = (function() {
 				group.setPlayable = function(_r) {
 					playable = _r !== NONE;
 				};
+				group.videoStatus = function(_status) {
+					group.status = _status;
+					updateControls();
+					video.getElement().currentTime = group.status.pos;
+					updateProgress();
+					if (group.status.paused) {
+						video.getElement().pause();
+					} else {
+						video.getElement().play();
+						fabric.util.requestAnimFrame(render);
+					}
+				}
 				group.setPlayable(_role);
 				canvas.add(group);
 				canvas.renderAll();
@@ -245,7 +262,7 @@ var Player = (function() {
 			, scaleX: 1
 			, scaleY: 1
 			, top: 10
-		}, filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
+		}, _filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
 		g.set(opts);
 		g.canvas.renderAll();
 	};
@@ -1274,6 +1291,12 @@ var Wb = function() {
 			__setSize(canvas);
 		});
 	}
+	function _videoStatus(json) {
+		let g = _findObject(json);
+		if (!!g) {
+			g.videoStatus(json.status);
+		}
+	}
 	wb.setRole = function(_role) {
 		if (role != _role) {
 			var btn = getBtn();
@@ -1439,6 +1462,7 @@ var Wb = function() {
 			func(canvases[i]);
 		}
 	}
+	wb.videoStatus = _videoStatus;
 	return wb;
 };
 var WbArea = (function() {
@@ -1520,6 +1544,20 @@ var WbArea = (function() {
 		li.find('button').click(function() {
 			wbAction('removeWb', JSON.stringify({wbId: li.data().wbId}));
 		});
+	}
+	function _getImage(cnv, fmt) {
+		//TODO zoom ???
+		return cnv.toDataURL({
+			format: fmt
+			, width: cnv.width
+			, height: cnv.height
+			, multiplier: 1. / cnv.getZoom()
+			, left: 0
+			, top: 0
+		});
+	}
+	function _videoStatus(json) {
+		self.getWb(json.wbId).videoStatus(json);
 	}
 	self.getWbTabId = function(id) {
 		return "wb-tab-" + id;
@@ -1674,17 +1712,6 @@ var WbArea = (function() {
 		if (!_inited) return;
 		self.getWb(json.wbId).setSize(json);
 	}
-	function _getImage(cnv, fmt) {
-		//TODO zoom ???
-		return cnv.toDataURL({
-			format: fmt
-			, width: cnv.width
-			, height: cnv.height
-			, multiplier: 1. / cnv.getZoom()
-			, left: 0
-			, top: 0
-		});
-	}
 	self.download = function(fmt) {
 		var wb = getActive().data();
 		if ('pdf' === fmt) {
@@ -1704,6 +1731,7 @@ var WbArea = (function() {
 			a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
 		}
 	}
+	self.videoStatus = _videoStatus;
 	return self;
 })();
 $(function() {
