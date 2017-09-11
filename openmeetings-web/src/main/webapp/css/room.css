@@ -290,6 +290,9 @@
 	top: -50px;
 	background-color: transparent;
 }
+#video-settings {
+	padding: 5px 10px;
+}
 .ui-dialog.video .title {
 	font-weight: bold;
 }

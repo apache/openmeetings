@@ -52,7 +52,7 @@ var VideoSettings = (function() {
 		}
 	}
 	function _init(options) {
-		o = options;
+		o = JSON.parse(JSON.stringify(options));
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam');
@@ -95,6 +95,8 @@ var VideoSettings = (function() {
 		o.width = 300;
 		o.height = 200;
 		o.mode = 'settings';
+		o.rights = o.rights.join();
+		delete o.keycode;
 		swf = initVideo(vidScroll, 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
@@ -137,6 +139,7 @@ var VideoSettings = (function() {
 	function _initSwf() {
 		if (!inited) {
 			var obj = swf.getDevices();
+			cam.find('option[value!="-1"]').remove();
 			for (var i = 0; i < obj.cams.length; ++i) {
 				var o = $('<option></option>').attr('value', i).text(obj.cams[i]);
 				if (i == s.video.cam) {
@@ -148,6 +151,7 @@ var VideoSettings = (function() {
 				_readValues();
 				swf.camChanged(s.video.cam);
 			});
+			mic.find('option[value!="-1"]').remove();
 			for (var i = 0; i < obj.mics.length; ++i) {
 				var o = $('<option></option>').attr('value', i).text(obj.mics[i]);
 				if (i == s.video.mic) {

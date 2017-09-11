@@ -167,7 +167,7 @@
 							audioOnly = check.audioOnly;
 							activities = check.activities;
 							interview = 'interview' == check.roomType;
-							attachCamera(function ():void {
+							checkAvPermissions(function ():void {
 								// trust no-one
 								video.getNc().call("check", new Responder(function (check:Object):void {
 									debug("check", check);
@@ -367,10 +367,7 @@
 			return _camera;
 		}
 
-		private function attachCamera(callback:Function):void {
-			if (!camAvail()) {
-				return;
-			}
+		private function checkAvPermissions(callback:Function):void {
 			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			debug("Camera selected:: " + selectedCam);
 			var cam:Camera = getCam();
@@ -454,14 +451,14 @@
 				video.resize(width, height);
 
 				if (attach) {
-					attachCamera(settingsCameraCallback);
+					checkAvPermissions(settingsCameraCallback);
 				}
 			}
 		}
 
 		private function camChanged(e:Event):void {
 			debug("camChanged");
-			attachCamera(settingsCameraCallback);
+			checkAvPermissions(settingsCameraCallback);
 		}
 
 		private function playTestRecording():void {
