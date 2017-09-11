@@ -451,7 +451,7 @@
 			resetValues();
 			if (!isremote) {
 				canvas.commonVideoViewContent.removeVideoByUser(this.publicSID);
-				canvas.commonVideoViewContent._startAvBroadcast(true);
+				canvas.commonVideoViewContent.startAvBroadcast(true);
 			}
 		</method>
 
