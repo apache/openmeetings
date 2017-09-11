@@ -173,7 +173,7 @@ var Chat = function() {
 			if ($('#chat').length > 0 && m && m.type == "chat") {
 				if (isClosed()) {
 					$('#chatPopup .control.block').addClass('ui-state-highlight');
-					if (s.chat.muted !== true) {
+					if ($('#chatPanel').is(':visible') && s.chat.muted !== true) {
 						var playPromise = audio.play();
 
 						// In browsers that don’t yet support this functionality,

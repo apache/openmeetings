@@ -22,6 +22,7 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
@@ -46,6 +47,7 @@ import java.util.List;
 import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
@@ -79,6 +81,7 @@ public class Chat extends Panel {
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private static final String PARAM_TYPE = "type";
+	private boolean showDashboardChat = getBean(ConfigurationDao.class).getBool(CONFIG_DASHBOARD_SHOW_CHAT, true);
 	private final AbstractDefaultAjaxBehavior chatActivity = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -156,19 +159,21 @@ public class Chat extends Panel {
 		response.render(CssHeaderItem.forReference(EMOTIONS_CSS_REFERENCE));
 		response.render(new PriorityHeaderItem(getNamedFunction("chatActivity", chatActivity, explicit(PARAM_TYPE), explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 
-		ChatDao dao = getBean(ChatDao.class);
-		//FIXME limited count should be loaded with "earlier" link
-		List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
-		for(Long roomId : getUserRooms(getUserId())) {
-			Room r = getBean(RoomDao.class).get(roomId);
-			list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
+		if (showDashboardChat) {
+			ChatDao dao = getBean(ChatDao.class);
+			//FIXME limited count should be loaded with "earlier" link
+			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
+			for(Long roomId : getUserRooms(getUserId())) {
+				Room r = getBean(RoomDao.class).get(roomId);
+				list.addAll(dao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(getUserId(), roomId)));
+			}
+			list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
+			StringBuilder sb = new StringBuilder(getReinit());
+			if (list.size() > 0) {
+				sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
+			}
+			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 		}
-		list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
-		StringBuilder sb = new StringBuilder(getReinit());
-		if (list.size() > 0) {
-			sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
-		}
-		response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 	}
 
 	private class ChatForm extends Form<Void> {
@@ -275,5 +280,9 @@ public class Chat extends Panel {
 			};
 			add(delBtn.setVisible(hasAdminLevel(getRights())));
 		}
+	}
+
+	public boolean isShowDashboardChat() {
+		return showDashboardChat;
 	}
 }

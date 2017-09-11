@@ -19,11 +19,8 @@
 package org.apache.openmeetings.web.user.chat;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.user.chat.Chat.getReinit;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.web.common.BasePanel;
@@ -36,7 +33,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 @AuthorizeInstantiation({"Dashboard", "Room"})
 public class ChatPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private boolean showDashboardChat = getBean(ConfigurationDao.class).getBool(CONFIG_DASHBOARD_SHOW_CHAT, true);
 	private final Chat chat;
 
 	public ChatPanel(String id) {
@@ -54,8 +50,8 @@ public class ChatPanel extends BasePanel {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append("$(function() {");
-		if (!showDashboardChat) {
-			sb.append("$('#chat').show();");
+		if (!chat.isShowDashboardChat()) {
+			sb.append("$('#chatPanel,#chat').show();");
 		}
 		sb.append(chat.addRoom(r));
 		sb.append(r.isChatOpened() ? "Chat.open();" : "Chat.close();");
@@ -68,10 +64,10 @@ public class ChatPanel extends BasePanel {
 			return;
 		}
 		handler.appendJavaScript(String.format("if (typeof Chat == 'object') { Chat.removeTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
-		if (!showDashboardChat) {
+		if (!chat.isShowDashboardChat()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(function() {");
-			sb.append("$('#chat').hide();");
+			sb.append("$('#chatPanel,#chat').hide();");
 			sb.append("});");
 			handler.appendJavaScript(sb);
 		}
@@ -90,11 +86,11 @@ public class ChatPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		if (!showDashboardChat) {
+		if (!chat.isShowDashboardChat()) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("$(document).ready(function(){");
 			sb.append("$('#ui-id-1').hide();");
-			sb.append("$('#chat').hide();");
+			sb.append("$('#chatPanel,#chat').hide();");
 			sb.append("});");
 			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));
 		}
