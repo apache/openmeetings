@@ -31,9 +31,11 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
+import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
@@ -53,6 +55,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.validation.IValidatable;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -232,7 +235,19 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			firstNameField.setLabel(Model.of(getString("117")));
 			lastNameField.setLabel(Model.of(getString("136")));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao))).setLabel(Model.of(getString("114")));
-			passwordField.setResetPassword(true).add(minimumLength(getMinPasswdLength(cfgDao))).setLabel(Model.of(getString("110")));
+			passwordField.setResetPassword(true).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), new User()) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void validate(IValidatable<String> pass) {
+					User u = new User();
+					u.setLogin(loginField.getRawInput());
+					u.setAddress(new Address());
+					u.getAddress().setEmail(emailField.getRawInput());
+					setUser(u);
+					super.validate(pass);
+				}
+			}).setLabel(Model.of(getString("110")));
 			confirmPassword.setLabel(Model.of(getString("116")));
 			emailField.add(RfcCompliantEmailAddressValidator.getInstance()).setLabel(Model.of(getString("119")));
 			add(new AjaxButton("submit") { // FAKE button so "submit-on-enter" works as expected
