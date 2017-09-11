@@ -98,7 +98,7 @@ public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, webAppRootKey);
 	private static final String DELIMITER = "     ";
-	private static final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
+	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	public static final String PARAM_USER_ID = "userId";
 	private String uid = null;
 	private final MenuPanel menu;
@@ -126,11 +126,12 @@ public class MainPanel extends Panel {
 	public MainPanel(String id, BasePanel _panel) {
 		super(id);
 		this.panel = _panel;
+		setAuto(true);
 		setOutputMarkupId(true);
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
-		add(contents.add(getClient() == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
+		add(contents.add(getClient() == null || _panel == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
