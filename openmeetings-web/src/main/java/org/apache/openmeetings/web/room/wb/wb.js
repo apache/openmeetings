@@ -974,6 +974,9 @@ var Wb = function() {
 				_updateZoomPanel();
 				z.find('.zoom-out').click(function() {
 					zoom -= .2;
+					if (zoom < .1) {
+						zoom = .1;
+					}
 					zoomMode = 'zoom';
 					_setSize();
 					wbAction('setSize', JSON.stringify({
@@ -1281,7 +1284,7 @@ var Wb = function() {
 					oo.prop('selected', true);
 				} else {
 					z.find('.zoom').data('custom-val', zoom).find('option[value=custom]')
-						.text(100. * zoom.toFixed(2) + '%')
+						.text((100. * zoom).toFixed(0) + '%')
 						.prop('selected', true);
 				}
 			}
