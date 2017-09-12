@@ -38,7 +38,7 @@ table.adminListTable tr:nth-child(odd), table.adminListTableSmall tr:nth-child(o
 	opacity: .8;
 }
 
-table.adminListTable tr:hover, table.adminListTableSmall tr:hover, tr.room-row:hover {
+table.adminListTable tr:hover, table.adminListTableSmall tr:hover, .room-row:hover {
 	/*SHOULD BE MANUALLY IN SYNC WITH THEME .ui-state-hover */
 	border: 1px solid #74b2e2;
 	background: #e4f1fb;
