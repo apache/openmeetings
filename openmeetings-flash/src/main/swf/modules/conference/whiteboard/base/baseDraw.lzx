@@ -249,94 +249,96 @@
 	</method>
 
 	<method name="setModus" args="modi">
-		<![CDATA[
+	<![CDATA[
+		if (modi == null || modi == '') {
+			if ($debug) Debug.warn("Bad modus was passed, exiting");
+			return;
+		}
+		if ($debug) Debug.write("setModus AAA: ", this.baseactionobjectList);
 
-			if ($debug) Debug.write("setModus AAA: ",this.baseactionobjectList);
-
-			//check if previous modi has been txt, which might not be saved to the board yet
-			var previousModus = this.drawmodus;
-			if ($debug) Debug.write("setModus: ",modi);
-			if (this.drawmodus=='letter'){
-				if (this.letterObjectIsActive){
-					if ($debug) Debug.write("setModus:drawtoArray",modi);
-					this.currentletterObj.drawtoArray();
-				}
+		//check if previous modi has been txt, which might not be saved to the board yet
+		var previousModus = this.drawmodus;
+		if ($debug) Debug.write("setModus: ", modi);
+		if (this.drawmodus == 'letter'){
+			if (this.letterObjectIsActive){
+				if ($debug) Debug.write("setModus:drawtoArray", modi);
+				this.currentletterObj.drawtoArray();
 			}
+		}
 
-			if (modi != 'print' && modi != 'plain') {
-				this.setAttribute('drawmodus',modi);
-			} else if (modi == 'print') {
-				var my_pj = new PrintJob();
-				var myResult = my_pj.start();
+		if (modi != 'print' && modi != 'plain') {
+			this.setAttribute('drawmodus', modi);
+		} else if (modi == 'print') {
+			var my_pj = new PrintJob();
+			var myResult = my_pj.start();
 
-				if ($debug) Debug.write("myResult ",myResult);
+			if ($debug) Debug.write("myResult ",myResult);
 
-				if (myResult) {
+			if (myResult) {
 
-					var mc = this.getDisplayObject();
+				var mc = this.getDisplayObject();
 
-					// boolean to track whether addPage succeeded, change this to a counter
-					// if more than one call to addPage is possible
-					var pageAdded:Boolean = false;
+				// boolean to track whether addPage succeeded, change this to a counter
+				// if more than one call to addPage is possible
+				var pageAdded:Boolean = false;
 
-					// check the user's printer orientation setting
-					// and add appropriate print area to print job
-					if (my_pj.orientation == "portrait") {
-						// Here, the printArea measurements are appropriate for an 8.5" x 11"
-						// portrait page.
-						pageAdded = my_pj.addPage(mc._parent,{xMin:0,xMax:600,yMin:0,yMax:800});
-					} else {
-						// my_pj.orientation is "landscape".
-						// Now, the printArea measurements are appropriate for an 11" x 8.5"
-						// landscape page.
-						pageAdded = my_pj.addPage(mc._parent,{xMin:0,xMax:750,yMin:0,yMax:600});
-					}
-
-					// send pages from the spooler to the printer
-					if (pageAdded) {
-						my_pj.send();
-					}
-
-					//if ($debug) Debug.write("mc ",mc);
-					//if ($debug) Debug.write("mc.name ",mc._name);
-
-					//myResult = my_pj.addPage(mc, null, {printAsBitmap:true}, 1);
-					//my_pj.send();
-					my_pj = null;
+				// check the user's printer orientation setting
+				// and add appropriate print area to print job
+				if (my_pj.orientation == "portrait") {
+					// Here, the printArea measurements are appropriate for an 8.5" x 11"
+					// portrait page.
+					pageAdded = my_pj.addPage(mc._parent,{xMin:0,xMax:600,yMin:0,yMax:800});
+				} else {
+					// my_pj.orientation is "landscape".
+					// Now, the printArea measurements are appropriate for an 11" x 8.5"
+					// landscape page.
+					pageAdded = my_pj.addPage(mc._parent,{xMin:0,xMax:750,yMin:0,yMax:600});
 				}
+
+				// send pages from the spooler to the printer
+				if (pageAdded) {
+					my_pj.send();
+				}
+
+				//if ($debug) Debug.write("mc ",mc);
+				//if ($debug) Debug.write("mc.name ",mc._name);
+
+				//myResult = my_pj.addPage(mc, null, {printAsBitmap:true}, 1);
+				//my_pj.send();
+				my_pj = null;
 			}
+		}
 
-			if (modi=='plainSlide'){
-				this.doClearSlide = true;
-				this.doClearAll = false;
-				new lz.confirmationSingle(canvas.main_content._content.inner,{
-											labelid:1339,labeliderror:1359,
-											refObj:this,showCheckBox:false});
-
-				this.setAttribute('drawmodus',previousModus);
-			} else if (modi=='plainConfirm'){
-				this.doClearSlide = false;
-				this.doClearAll = true;
-				new lz.confirmationSingle(canvas.main_content._content.inner,{
-										labelid:1339,labeliderror:1340,
+		if (modi == 'plainSlide'){
+			this.doClearSlide = true;
+			this.doClearAll = false;
+			new lz.confirmationSingle(canvas.main_content._content.inner,{
+										labelid:1339,labeliderror:1359,
 										refObj:this,showCheckBox:false});
-				//this.clearAll();
-				//if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
-				this.setAttribute('drawmodus',previousModus);
-			} else if (modi=='plain'){
-				this.clearAll();
-				//if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
-				this.setAttribute('drawmodus',previousModus);
-			} else if (modi=='hand' || modi=='letter' || modi=='triangle'
-				|| modi=='paint' || modi=='line' || modi=='uline' || modi=='clipart'
-				|| modi=='rectangle' || modi=='ellipse' || modi=='drawarrow'){
-				if (this.boundingref!=null) this.boundingref.removeIt();
-			}
-			if (modi=='rectangle') {
-				//Open Up Recording
 
+			this.setAttribute('drawmodus', previousModus);
+		} else if (modi == 'plainConfirm') {
+			this.doClearSlide = false;
+			this.doClearAll = true;
+			new lz.confirmationSingle(canvas.main_content._content.inner,{
+									labelid:1339,labeliderror:1340,
+									refObj:this,showCheckBox:false});
+			//this.clearAll();
+			//if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
+			this.setAttribute('drawmodus', previousModus);
+		} else if (modi == 'plain') {
+			this.clearAll();
+			//if ($debug) Debug.write("clearAll and RESET Modus to",previousModus);
+			this.setAttribute('drawmodus',previousModus);
+		} else if (modi == 'hand' || modi == 'letter' || modi =='triangle'
+			|| modi == 'paint' || modi == 'line' || modi == 'uline' || modi == 'clipart'
+			|| modi == 'rectangle' || modi == 'ellipse' || modi == 'drawarrow')
+		{
+			if (this.boundingref != null) {
+				this.boundingref.removeIt();
 			}
-		]]>
+		}
+	]]>
 	</method>
 
 	<method name="sendConfirmation" args="yesno, none" >
@@ -488,11 +490,13 @@
 	 -->
 	<method name="undoredo">
 	<![CDATA[
-		if (this.baseactionobjectList.length>0){
-			if (this.boundingref!=null) this.boundingref.removeIt();
+		if (this.baseactionobjectList.length > 0) {
+			if (this.boundingref != null) {
+				this.boundingref.removeIt();
+			}
 			var lastActionObject = this.baseactionobjectList.pop();
-			this.deleteItemByNameSync(lastActionObject[lastActionObject.length-1]);
-			this.onsharedMessage('undo',lastActionObject);
+			this.deleteItemByNameSync(lastActionObject[lastActionObject.length - 1]);
+			this.onsharedMessage('undo', lastActionObject);
 		}
 	]]>
 	</method>
