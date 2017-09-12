@@ -20,19 +20,17 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-	<table class="room-list">
-		<tr wicket:id="list" class="room-row">
-			<td>
-				<div wicket:id="roomContainer">
-					<div><span wicket:id="roomName">[room name]</span>&nbsp;<span wicket:id="info" class="info-text">&nbsp;</span></div>
-					<div>
-						<wicket:message key="398" />&nbsp;<span wicket:id="curUsers"></span>&nbsp;/&nbsp;<span
-							wicket:id="totalUsers"></span>&nbsp;&nbsp;<span wicket:id="refresh">&nbsp;</span>
-					</div>
+	<div class="room-list">
+		<div wicket:id="list" class="room-row">
+			<div class="container" wicket:id="roomContainer">
+				<div><span wicket:id="roomName">[room name]</span>&nbsp;<span wicket:id="info" class="info-text">&nbsp;</span></div>
+				<div>
+					<wicket:message key="398" />&nbsp;<span wicket:id="curUsers"></span>&nbsp;/&nbsp;<span
+						wicket:id="totalUsers"></span>&nbsp;&nbsp;<span wicket:id="refresh">&nbsp;</span>
 				</div>
-			</td>
-			<td><button wicket:id="btn"><span wicket:id="label"></span></button></td>
-		</tr>
-	</table>
+			</div>
+			<button wicket:id="btn"><span wicket:id="label"></span></button>
+		</div>
+	</div>
 </wicket:panel>
 </html>
