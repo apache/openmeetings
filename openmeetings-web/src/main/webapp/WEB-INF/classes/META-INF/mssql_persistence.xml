@@ -27,8 +27,6 @@
 		<class>org.apache.openmeetings.db.entity.basic.Configuration</class>
 		<class>org.apache.openmeetings.db.entity.server.LdapConfig</class>
 		<class>org.apache.openmeetings.db.entity.basic.MailMessage</class>
-		<class>org.apache.openmeetings.db.entity.basic.Naviglobal</class>
-		<class>org.apache.openmeetings.db.entity.basic.Navimain</class>
 		<class>org.apache.openmeetings.db.entity.server.Sessiondata</class>
 		<class>org.apache.openmeetings.db.entity.server.SOAPLogin</class>
 		<class>org.apache.openmeetings.db.entity.calendar.Appointment</class>

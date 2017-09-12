@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.openmeetings.core.mail.MailHandler;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -153,6 +155,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				target.add(bookedRoom, roomParamsBlock);
 			}
 		}));
+		bookedRoom.setVisible(getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true));
 		roomParamsBlock.add(roomParams);
 		roomParams.add(new RoomTypeDropDown("room.type"));
 		roomParams.add(start);
@@ -202,17 +205,17 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			a.setEnd(CalendarWebHelper.getDate(end.getModelObject()));
 			List<MeetingMember> attendees = new ArrayList<>();
 			for (User to : modelTo.getObject()) {
-        		MeetingMember mm = new MeetingMember();
-        		mm.setUser(to);
-        		mm.setDeleted(false);
-        		mm.setInserted(a.getInserted());
-        		mm.setUpdated(a.getUpdated());
-        		mm.setAppointment(a);
-        		attendees.add(mm);
+				MeetingMember mm = new MeetingMember();
+				mm.setUser(to);
+				mm.setDeleted(false);
+				mm.setInserted(a.getInserted());
+				mm.setUpdated(a.getUpdated());
+				mm.setAppointment(a);
+				attendees.add(mm);
 			}
 			a.setOwner(owner);
 			a.setMeetingMembers(attendees);
-	        getBean(AppointmentDao.class).update(a, getUserId(), false);
+			getBean(AppointmentDao.class).update(a, getUserId(), false);
 			m.setRoom(r);
 		} else {
 			m.setRoom(null);

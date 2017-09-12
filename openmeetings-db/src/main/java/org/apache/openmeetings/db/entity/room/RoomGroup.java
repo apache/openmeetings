@@ -70,25 +70,25 @@ public class RoomGroup implements IDataProviderEntity {
 	@Column(name = "id")
 	@Element(data = true, name = "rooms_organisation_id")
 	private Long id;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="room_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="rooms_id", data=true, required=false)
 	private Room room;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="group_id", nullable=true)
 	@ForeignKey(enabled = true)
 	@Element(name="organisation_id", data=true, required=false)
 	private Group group;
-	
+
 	@Column(name = "inserted")
 	private Date inserted;
-	
+
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Column(name = "deleted", nullable = false)
 	@Element(data=true)
 	private boolean deleted;
@@ -107,7 +107,7 @@ public class RoomGroup implements IDataProviderEntity {
 	public void setGroup(Group group) {
 		this.group = group;
 	}
-	
+
 	public Room getRoom() {
 		return room;
 	}
@@ -123,21 +123,21 @@ public class RoomGroup implements IDataProviderEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-    
+
 	public Date getInserted() {
 		return inserted;
 	}
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
-    
+
 	public Date getUpdated() {
 		return updated;
 	}
 	public void setUpdated(Date updated) {
 		this.updated = updated;
-	}	
-	
+	}
+
 	public boolean isDeleted() {
 		return deleted;
 	}

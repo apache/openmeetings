@@ -18,23 +18,25 @@
  */
 package org.apache.openmeetings.screenshare.gui;
 
-import javax.swing.*;
-import java.awt.Dimension;
 import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.BorderFactory;
+import javax.swing.SwingConstants;
 
 public class BlankArea extends MouseListenerable {
 	private static final long serialVersionUID = 1L;
 	private Dimension minSize = new Dimension(100, 50);
 
-    public BlankArea(Color color) {
-        setBackground(color);
-        setOpaque(false);
+	public BlankArea(Color color) {
+		setBackground(color);
+		setOpaque(false);
 		setHorizontalAlignment(SwingConstants.LEFT);
 		setVerticalAlignment(SwingConstants.TOP);
 		setHorizontalTextPosition(0);
 		setVerticalTextPosition(0);
-        setBorder(BorderFactory.createLineBorder(Color.black));
-        setMinimumSize(minSize);
-        setPreferredSize(minSize);
-    }
+		setBorder(BorderFactory.createLineBorder(Color.black));
+		setMinimumSize(minSize);
+		setPreferredSize(minSize);
+	}
 }

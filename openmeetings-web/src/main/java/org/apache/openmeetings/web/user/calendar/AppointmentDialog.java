@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
@@ -33,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
@@ -283,6 +285,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	private class AppointmentForm extends Form<Appointment> {
 		private static final long serialVersionUID = 1L;
+		private final boolean myRoomsAllowed;
 		private boolean createRoom = true;
 		private Room appRoom = null;
 		private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
@@ -331,7 +334,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			if (a.getRoom() == null) {
 				a.setRoom(createAppRoom());
 			}
-			createRoom = a.getRoom().isAppointment();
+			createRoom = myRoomsAllowed && a.getRoom().isAppointment();
 			if (createRoom) {
 				appRoom = a.getRoom();
 			} else {
@@ -372,6 +375,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super(id, model);
 			setOutputMarkupId(true);
 
+			myRoomsAllowed = getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true);
+			createRoom = myRoomsAllowed;
 			add(feedback.setOutputMarkupId(true));
 			//General
 			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString("572"))));
@@ -426,8 +431,8 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					createRoom = getConvertedInput();
 					target.add(createRoomBlock.setEnabled(createRoom), groom.setEnabled(!createRoom));
 				}
-			});
-			add(createRoomBlock.add(roomType, new CheckBox("moderated")).setEnabled(createRoom).setOutputMarkupId(true));
+			}.setVisible(myRoomsAllowed));
+			add(createRoomBlock.add(roomType, new CheckBox("moderated")).setEnabled(createRoom).setVisible(myRoomsAllowed).setOutputMarkupId(true));
 			add(groom.setRequired(true).setLabel(Model.of(Application.getString("406"))).setEnabled(!createRoom).setOutputMarkupId(true));
 			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 			sipContainer.add(new Label("room.confno", "")).setVisible(false);

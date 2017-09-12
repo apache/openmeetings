@@ -81,17 +81,14 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_EMAIL_VERIFICATION = "send.email.with.verfication";
 	public static final String CONFIG_CALENDAR_ROOM_CAPACITY = "calendar.conference.rooms.default.size";
 	public static final String CONFIG_REPLY_TO_ORGANIZER = "inviter.email.as.replyto";
-
-	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
-	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
-	public static final String MENU_ROOMS_NAME = "Conference Rooms";
 	public static final String CONFIG_KEYCODE_ARRANGE = "video.arrange.keycode";
 	public static final String CONFIG_KEYCODE_EXCLUSIVE = "exclusive.audio.keycode";
 	public static final String CONFIG_KEYCODE_MUTE = "mute.keycode";
+	public static final String CONFIG_MYROOMS_ENABLED = "personal.rooms.enabled";
+
+	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
+	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
 	public static final int RECENT_ROOMS_COUNT = 5;
-	public static final int LEVEL_USER = 1;
-	public static final int LEVEL_GROUP_ADMIN = 2;
-	public static final int LEVEL_ADMIN = 3;
 	public static final String WEB_DATE_PATTERN = "dd.MM.yyyy HH:mm:ss"; //FIXME need to be made locale based
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
 	public static final int USER_PASSWORD_MINIMUM_LENGTH = 8;

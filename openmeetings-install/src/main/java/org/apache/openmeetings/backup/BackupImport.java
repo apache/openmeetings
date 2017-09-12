@@ -68,6 +68,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
@@ -235,6 +236,7 @@ public class BackupImport {
 		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.bool);
 		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.bool);
 		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.bool);
+		configTypes.put(CONFIG_MYROOMS_ENABLED, Configuration.Type.bool);
 		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.number);
 		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.number);
 		configTypes.put(CONFIG_SMTP_TIMEOUT_CON, Configuration.Type.number);

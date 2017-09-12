@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -310,13 +311,15 @@ public class MobileService {
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		User u = userDao.get(c.getUserId());
-		//my rooms
-		List<Room> myl = new ArrayList<>();
-		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, LabelDao.getString("my.room.conference", u.getLanguageId())));
-		myl.add(roomDao.getUserRoom(u.getId(), Room.Type.presentation, LabelDao.getString("my.room.presentation", u.getLanguageId())));
-		myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
-		for (Room r : myl) {
-			addRoom("my", null, false, result, r);
+		if (cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true)) {
+			//my rooms
+			List<Room> myl = new ArrayList<>();
+			myl.add(roomDao.getUserRoom(u.getId(), Room.Type.conference, LabelDao.getString("my.room.conference", u.getLanguageId())));
+			myl.add(roomDao.getUserRoom(u.getId(), Room.Type.presentation, LabelDao.getString("my.room.presentation", u.getLanguageId())));
+			myl.addAll(roomDao.getAppointedRoomsByUser(u.getId()));
+			for (Room r : myl) {
+				addRoom("my", null, false, result, r);
+			}
 		}
 
 		//private rooms
