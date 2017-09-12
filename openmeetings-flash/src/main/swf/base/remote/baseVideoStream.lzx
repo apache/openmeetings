@@ -270,37 +270,27 @@
 	<method name="_stop">
 		if ($debug) Debug.write("STOP: ",this.mode,this._ns);
 		//Stop NetStream
-		if (this._ns == null) return;
-		this.camera = null;
-		this.micro = null;
-		this._ns.attachCamera(null);
-		this._ns.attachAudio(null);
-		if (this.mode == "play") {
-			this.soundRefMC = null;
-			this.soundRef = null;
-			this._ns.pause();
-			this._ns.close();
-			//remove NetStream from Video-Object
+		if (this._ns != null) {
+			this.camera = null;
+			this.micro = null;
+			switch (this.mode) {
+				case "play":
+					this.soundRefMC = null;
+					this.soundRef = null;
+					this._ns.pause();
+					break;
+				case "broadcast":
+				case "record":
+					this._ns.publish(null);
+				default:
+					break;
+			}
 			this.clear();
-			this._ns = null;
-		} else if (this.mode == "broadcast") {
-			this._ns.publish(false);
-			//remove NetStream from Video-Object
-			this.clear();
-			this._ns.close();
-			this._ns = null;
-		} else if (this.mode == "record") {
-			this._ns.publish(false);
-			//remove NetStream from Video-Object
-			this.clear();
-			this._ns.close();
-			this._ns = null;
+			this._ns.dispose();
 		} else {
 			this.clear();
-			this._ns.close();
-			this._ns = null;
-			if ($debug) Debug.warn("Not known Mode: ",this.mode,this);
 		}
+		this._ns = null;
 	</method>
 
 	<method name="restart">
