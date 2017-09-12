@@ -306,7 +306,7 @@ public class OmVideo {
 					break;
 				case BROADCAST:
 				case RECORD:
-					ns.publish(null); //false in original code
+					ns.publish(null);
 				default:
 					break;
 			}
