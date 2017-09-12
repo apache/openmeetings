@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.exit;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
@@ -515,7 +516,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		boolean showMyRoomConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
+		boolean showMyRoomConfValue = "true".equals(cfgDao.getConfValue(CONFIG_MYROOMS_ENABLED, String.class, "true"))
+				&& 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, Integer.class, "0");
 		boolean showRssConfValue = 1 == cfgDao.getConfValue(CONFIG_DASHBOARD_SHOW_RSS_KEY, Integer.class, "0");
 		boolean showAdminWidget = getRights().contains(User.Right.Admin);
 		boolean save = false;

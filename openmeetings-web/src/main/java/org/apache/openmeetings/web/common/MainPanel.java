@@ -20,10 +20,7 @@ package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.MENU_ROOMS_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -42,12 +39,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
-import org.apache.openmeetings.db.dao.basic.NavigationDao;
+import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Naviglobal;
-import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -64,6 +59,8 @@ import org.apache.openmeetings.web.user.chat.ChatPanel;
 import org.apache.openmeetings.web.user.rooms.RoomEnterBehavior;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.openmeetings.web.util.OmUrlFragment;
+import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
+import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -287,43 +284,77 @@ public class MainPanel extends Panel {
 		});
 	}
 
-	private static int getLevel() {
-		Set<Right> r = WebSession.getRights();
-		return hasAdminLevel(r) ? LEVEL_ADMIN : (hasGroupAdminLevel(r) ? LEVEL_GROUP_ADMIN : LEVEL_USER);
+	private IMenuItem getSubItem(String lbl, String title, MenuActions action, MenuParams param) {
+		return new MainMenuItem(lbl, title, action, param) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				onClick(MainPanel.this, target);
+			}
+		};
 	}
 
 	private List<IMenuItem> getMainMenu() {
 		List<IMenuItem> menu = new ArrayList<>();
-		for (Naviglobal gl : getBean(NavigationDao.class).getMainMenu(getLevel())) {
+		{
+			// Dashboard Menu Points
 			List<IMenuItem> l = new ArrayList<>();
-			for (Navimain nm : gl.getMainnavi()) {
-				l.add(new MainMenuItem(nm) {
+			l.add(getSubItem("290", "1450", MenuActions.dashboardModuleStartScreen, null));
+			l.add(getSubItem("291", "1451", MenuActions.dashboardModuleCalendar, null));
+			menu.add(new MenuItem(Application.getString("124"), l));
+		}
+		{
+			// Conference Menu Points
+			List<IMenuItem> l = new ArrayList<>();
+			l.add(getSubItem("777", "1506", MenuActions.conferenceModuleRoomList, MenuParams.publicTabButton));
+			l.add(getSubItem("779", "1507", MenuActions.conferenceModuleRoomList, MenuParams.privateTabButton));
+			if ("true".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_MYROOMS_ENABLED, String.class, "true"))) {
+				l.add(getSubItem("781", "1508", MenuActions.conferenceModuleRoomList, MenuParams.myTabButton));
+			}
+			List<Room> recent = getBean(RoomDao.class).getRecent(getUserId());
+			if (!recent.isEmpty()) {
+				l.add(new MenuItem(DELIMITER, (String)null));
+			}
+			for (Room r : recent) {
+				final Long roomId = r.getId();
+				l.add(new MenuItem(r.getName(), r.getName()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						onClick(MainPanel.this, target);
+						RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);
 					}
 				});
 			}
-			if (MENU_ROOMS_NAME.equals(gl.getName())) {
-				List<Room> recent = getBean(RoomDao.class).getRecent(getUserId());
-				if (!recent.isEmpty()) {
-					l.add(new MenuItem(DELIMITER, (String)null));
-				}
-				for (Room r : recent) {
-					final Long roomId = r.getId();
-					l.add(new MenuItem(r.getName(), r.getName()) {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						public void onClick(AjaxRequestTarget target) {
-							RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);
-						}
-					});
-				}
+			menu.add(new MenuItem(Application.getString("792"), l));
+		}
+		{
+			// Recording Menu Points
+			List<IMenuItem> l = new ArrayList<>();
+			l.add(getSubItem("395", "1452", MenuActions.recordModule, null));
+			menu.add(new MenuItem(Application.getString("395"), l));
+		}
+		Set<Right> r = WebSession.getRights();
+		boolean isAdmin = hasAdminLevel(r);
+		if (isAdmin || hasGroupAdminLevel(r)) {
+			// Administration Menu Points
+			List<IMenuItem> l = new ArrayList<>();
+			l.add(getSubItem("125", "1454", MenuActions.adminModuleUser, null));
+			if (isAdmin) {
+				l.add(getSubItem("597", "1455", MenuActions.adminModuleConnections, null));
 			}
-			menu.add(new MenuItem(Application.getString(gl.getLabelId()), l));
+			l.add(getSubItem("127", "1456", MenuActions.adminModuleOrg, null));
+			l.add(getSubItem("186", "1457", MenuActions.adminModuleRoom, null));
+			if (isAdmin) {
+				l.add(getSubItem("263", "1458", MenuActions.adminModuleConfiguration, null));
+				l.add(getSubItem("348", "1459", MenuActions.adminModuleLanguages, null));
+				l.add(getSubItem("1103", "1454", MenuActions.adminModuleLDAP, null));
+				l.add(getSubItem("1571", "1572", MenuActions.adminModuleOAuth, null));
+				l.add(getSubItem("367", "1461", MenuActions.adminModuleBackup, null));
+				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.adminModuleEmail, null));
+			}
+			menu.add(new MenuItem(Application.getString("6"), l));
 		}
 		return menu;
 	}

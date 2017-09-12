@@ -39,6 +39,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_B
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IMAGEMAGIC_PATH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_OAUTH_REGISTER_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL_KEY;
@@ -56,10 +57,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPL
 import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_ADMIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_GROUP_ADMIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.LEVEL_USER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.MENU_ROOMS_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
@@ -70,7 +67,6 @@ import java.util.Iterator;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.ErrorDao;
-import org.apache.openmeetings.db.dao.basic.NavigationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
@@ -78,7 +74,6 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ErrorValue;
-import org.apache.openmeetings.db.entity.basic.Naviglobal;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
@@ -106,8 +101,6 @@ public class ImportInitvalues {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private NavigationDao navimanagement;
-	@Autowired
 	private ErrorDao errorDao;
 	@Autowired
 	private SipDao sipDao;
@@ -122,45 +115,6 @@ public class ImportInitvalues {
 
 	public int getProgress() {
 		return progress;
-	}
-
-	public void loadMainMenu() {
-		/*
-		 * ######################## Dashboard Menu Points
-		 */
-		Naviglobal home = navimanagement.addGlobalStructure(1, "124", LEVEL_USER, "home", "582");
-		navimanagement.addMainStructure("dashboardModuleStartScreen", null, 1, "290", LEVEL_USER, "Dashboard", home.getId(), "1450");
-		navimanagement.addMainStructure("dashboardModuleCalendar", null, 2, "291", LEVEL_USER, "Calendar", home.getId(), "1451");
-
-		/*
-		 * ######################## Conference Menu Points
-		 */
-		Naviglobal rooms = navimanagement.addGlobalStructure(2, "792", LEVEL_USER, MENU_ROOMS_NAME, "793");
-		navimanagement.addMainStructure("conferenceModuleRoomList", "publicTabButton", 1, "777", LEVEL_USER, "Public Rooms", rooms.getId(), "1506");
-		navimanagement.addMainStructure("conferenceModuleRoomList", "privateTabButton", 2, "779", LEVEL_USER, "Private Rooms", rooms.getId(), "1507");
-		navimanagement.addMainStructure("conferenceModuleRoomList", "myTabButton", 3, "781", LEVEL_USER, "My Rooms", rooms.getId(), "1508");
-
-		/*
-		 * ######################## Recording Menu Points
-		 */
-		Naviglobal rec = navimanagement.addGlobalStructure(3, "395", LEVEL_USER, "record", "583");
-		navimanagement.addMainStructure("recordModule", null, 1, "395", LEVEL_USER, "Recordings", rec.getId(), "1452");
-
-		/*
-		 * ######################## Administration Menu Points
-		 */
-		Naviglobal admin = navimanagement.addGlobalStructure(6, "6", LEVEL_GROUP_ADMIN, "Administration Menu", "586");
-		navimanagement.addMainStructure("adminModuleUser", null, 14, "125", LEVEL_GROUP_ADMIN, "Administration of Users", admin.getId(), "1454");
-		navimanagement.addMainStructure("adminModuleConnections", null, 15, "597", LEVEL_ADMIN, "Aministration of Connections", admin.getId(), "1455");
-		navimanagement.addMainStructure("adminModuleOrg", null, 16, "127", LEVEL_GROUP_ADMIN, "Administration of Groups", admin.getId(), "1456");
-		navimanagement.addMainStructure("adminModuleRoom", null, 17, "186", LEVEL_GROUP_ADMIN, "Administration of Rooms", admin.getId(), "1457");
-		navimanagement.addMainStructure("adminModuleConfiguration", null, 18, "263", LEVEL_ADMIN, "Administration of Configuration", admin.getId(), "1458");
-		navimanagement.addMainStructure("adminModuleLanguages", null, 19, "348", LEVEL_ADMIN, "Administration of Languages", admin.getId(), "1459");
-		navimanagement.addMainStructure("adminModuleLDAP", null, 20, "1103", LEVEL_ADMIN, "Administration of LDAP Configs", admin.getId(), "1460");
-		navimanagement.addMainStructure("adminModuleOAuth", null, 21, "1571", LEVEL_ADMIN, "Administration of OAuth2 servers", admin.getId(), "1572");
-		navimanagement.addMainStructure("adminModuleBackup", null, 22, "367", LEVEL_ADMIN, "Administration of Backups", admin.getId(), "1461");
-		navimanagement.addMainStructure("adminModuleEmail", null, 23, "main.menu.admin.email", LEVEL_ADMIN, "Administration of Emails", admin.getId(), "main.menu.admin.email.desc");
-		log.debug("MainMenu ADDED");
 	}
 
 	public void loadErrorMappingsFromXML() throws Exception {
@@ -301,11 +255,11 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_SCREENSHARING_FPS_SHOW, "true", null, "Is screensharing FPS should be displayed or not (true/false)");
 		cfgDao.add(CONFIG_SCREENSHARING_ALLOW_REMOTE, "true", null, "Is remote control will be enabled while screensharing. Allowing remote control will be not possible in case it is set to 'false' (true/false)");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show My Rooms Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_MYROOMS_KEY, "1", null, "Show 'My Rooms' widget on dashboard");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_CHAT, "1", null, "Show Chat Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_CHAT, "1", null, "Show 'Global Chat' outside the room");
 
-		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS_KEY, "0", null, "Show RSS Tab");
+		cfgDao.add(CONFIG_DASHBOARD_SHOW_RSS_KEY, "0", null, "Show RSS widget on dashboard");
 
 		cfgDao.add("show.whiteboard.draw.status", "0", null,
 				"Display name of the user who draw the current object (User Name auto-disapper after 3 seconds.");
@@ -355,6 +309,7 @@ public class ImportInitvalues {
 		cfgDao.add(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, null, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options");
 		cfgDao.add(CONFIG_HEADER_CSP, HEADER_CSP_SELF, null, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
 		cfgDao.add(CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, null, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL));
+		cfgDao.add(CONFIG_MYROOMS_ENABLED, "" + true, null, "Users are allowed to create personal rooms");
 		log.debug("Configurations ADDED");
 	}
 
@@ -512,15 +467,13 @@ public class ImportInitvalues {
 			log.debug("System contains users, no need to install data one more time.");
 		}
 		sipDao.delete();
-		progress = 14;
-		loadMainMenu();
-		progress = 28;
+		progress = 17;
 		loadErrorMappingsFromXML();
-		progress = 42;
+		progress = 34;
 		loadConfiguration(cfg);
-		progress = 56;
+		progress = 51;
 		loadInitialOAuthServers();
-		progress = 70;
+		progress = 68;
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
@@ -531,7 +484,7 @@ public class ImportInitvalues {
 		}
 		loadSystem(cfg, force);
 		loadInitUserAndGroup(cfg);
-		progress = 84;
+		progress = 85;
 
 		loadDefaultRooms("1".equals(cfg.createDefaultRooms), StringValue.valueOf(cfg.defaultLangId).toLong(1L));
 		progress = 100;

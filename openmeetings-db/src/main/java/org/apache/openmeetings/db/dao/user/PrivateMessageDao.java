@@ -45,8 +45,8 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessageDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
-	
-	public Long addPrivateMessage(String subject, String message, Long parentMessageId, 
+
+	public Long addPrivateMessage(String subject, String message, Long parentMessageId,
 			User from, User to, User owner, Boolean bookedRoom, Room room,
 			boolean isContactRequest, Long userContactId) {
 		try {
@@ -64,41 +64,41 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 			privateMessage.setIsRead(false);
 			privateMessage.setIsContactRequest(isContactRequest);
 			privateMessage.setUserContactId(userContactId);
-			
+
 			privateMessage = em.merge(privateMessage);
 			Long privateMessageId = privateMessage.getFolderId();
-			
-			return privateMessageId;			
+
+			return privateMessageId;
 		} catch (Exception e) {
 			log.error("[addPrivateMessage]",e);
 		}
 		return null;
 	}
-	
+
 	@Override
 	public List<PrivateMessage> get(int first, int count) {
 		return em.createNamedQuery("getPrivateMessages", PrivateMessage.class)
 				.setFirstResult(first).setMaxResults(count)
 				.getResultList();
 	}
-	
+
 	@Override
 	public PrivateMessage get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public PrivateMessage get(Long id) {
-		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class); 
+		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class);
 		query.setParameter("id", id);
 		PrivateMessage privateMessage = null;
 		try {
 			privateMessage = query.getSingleResult();
-	    } catch (NoResultException ex) {
-	    }
+		} catch (NoResultException ex) {
+		}
 		return privateMessage;
 	}
-	
+
 	@Override
 	public PrivateMessage update(PrivateMessage entity, Long userId) {
 		if (entity.getId() == null) {
@@ -109,13 +109,13 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		}
 		return entity;
 	}
-	
+
 	private static String getQuery(boolean isCount, String search, String orderBy, boolean asc) {
 		StringBuilder hql = new StringBuilder("SELECT ");
 		hql.append(isCount ? "COUNT(" : "").append("m").append(isCount ? ")" : "")
 			.append(" FROM PrivateMessage m WHERE m.owner.id = :ownerId ")
 			.append(" AND m.folderId = :folderId ");
-		
+
 		if (!StringUtils.isEmpty(search)) {
 			hql.append(" AND ( ")
 				.append("lower(m.subject) LIKE :search ")
@@ -126,15 +126,15 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 				.append("OR lower(m.from.address.email) LIKE :search ")
 				.append(" ) ");
 		}
-		
+
 		if (!isCount && !StringUtils.isEmpty(orderBy)) {
 			hql.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
 		}
 		return hql.toString();
 	}
-	
+
 	public Long count(Long ownerId, Long folderId, String search) {
-		TypedQuery<Long> query = em.createQuery(getQuery(true, search, null, true), Long.class); 
+		TypedQuery<Long> query = em.createQuery(getQuery(true, search, null, true), Long.class);
 		query.setParameter("ownerId", ownerId);
 		if (!StringUtils.isEmpty(search)) {
 			query.setParameter("search", StringUtils.lowerCase("%" + search + "%"));
@@ -142,9 +142,9 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		query.setParameter("folderId", folderId);
 		return query.getSingleResult();
 	}
-	
+
 	public List<PrivateMessage> get(Long ownerId, Long folderId, String search, String orderBy, boolean asc, int start, int max) {
-		TypedQuery<PrivateMessage> query = em.createQuery(getQuery(false, search, orderBy, asc), PrivateMessage.class); 
+		TypedQuery<PrivateMessage> query = em.createQuery(getQuery(false, search, orderBy, asc), PrivateMessage.class);
 		query.setParameter("ownerId", ownerId);
 		query.setParameter("folderId", folderId);
 		if (!StringUtils.isEmpty(search)) {
@@ -154,27 +154,27 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		query.setMaxResults(max);
 		return query.getResultList();
 	}
-	
+
 	public int updateReadStatus(Collection<Long> ids, Boolean isRead) {
-		Query query = em.createNamedQuery("updatePrivateMessagesReadStatus"); 
+		Query query = em.createNamedQuery("updatePrivateMessagesReadStatus");
 		query.setParameter("isRead", isRead);
 		query.setParameter("ids", ids);
 		return query.executeUpdate();
 	}
 
 	public int moveMailsToFolder(Collection<Long> ids, Long folderId) {
-		Query query = em.createNamedQuery("moveMailsToFolder"); 
+		Query query = em.createNamedQuery("moveMailsToFolder");
 		query.setParameter("folderId", folderId);
 		query.setParameter("ids", ids);
 		return query.executeUpdate();
 	}
-	
+
 	public int delete(Collection<Long> ids) {
-		Query query = em.createNamedQuery("deletePrivateMessages"); 
+		Query query = em.createNamedQuery("deletePrivateMessages");
 		query.setParameter("ids", ids);
 		return query.executeUpdate();
 	}
-	
+
 	public List<PrivateMessage> getByRoom(Long roomId) {
 		return em.createNamedQuery("getPrivateMessagesByRoom", PrivateMessage.class)
 				.setParameter("roomId", roomId).getResultList();

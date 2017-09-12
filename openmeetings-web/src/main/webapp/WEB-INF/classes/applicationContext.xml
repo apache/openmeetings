@@ -154,7 +154,6 @@
 	<bean id="groupDao" class="org.apache.openmeetings.db.dao.user.GroupDao" />
 	<bean id="groupUserDao" class="org.apache.openmeetings.db.dao.user.GroupUserDao" />
 	<bean id="errorManagement" class="org.apache.openmeetings.db.dao.basic.ErrorDao" />
-	<bean id="navimanagement" class="org.apache.openmeetings.db.dao.basic.NavigationDao" />
 	<bean id="pollManagement" class="org.apache.openmeetings.db.dao.room.PollDao" />
 	<bean id="labelDao" class="org.apache.openmeetings.db.dao.label.LabelDao" />
 	<bean id="configurationDaoImpl" class="org.apache.openmeetings.db.dao.basic.ConfigurationDao" />

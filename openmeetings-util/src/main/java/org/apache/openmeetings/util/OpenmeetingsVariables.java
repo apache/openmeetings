@@ -51,14 +51,11 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_IMAGEMAGIC_PATH = "imagemagick_path";
 	public static final String CONFIG_HEADER_XFRAME = "header.x.frame.options";
 	public static final String CONFIG_EXT_PROCESS_TTL = "external.process.ttl";
+	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
+	public static final String CONFIG_MYROOMS_ENABLED = "personal.rooms.enabled";
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';";
-	public static final String CONFIG_HEADER_CSP = "header.content.security.policy";
-	public static final String MENU_ROOMS_NAME = "Conference Rooms";
 	public static final int RECENT_ROOMS_COUNT = 5;
-	public static final int LEVEL_USER = 1;
-	public static final int LEVEL_GROUP_ADMIN = 2;
-	public static final int LEVEL_ADMIN = 3;
 
 	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";

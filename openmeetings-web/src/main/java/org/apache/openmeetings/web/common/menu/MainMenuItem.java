@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
-import org.apache.openmeetings.db.entity.basic.Navimain;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
@@ -30,13 +29,13 @@ public class MainMenuItem extends MenuItem {
 	private static final long serialVersionUID = 1L;
 	private MenuActions action;
 	private MenuParams params;
-	
-	public MainMenuItem(Navimain m) {
-		super(Application.getString(m.getLabelId()), Application.getString(m.getTooltipLabelId()));
-		action = MenuActions.valueOf(m.getAction());
-		params = m.getParams() != null ? MenuParams.valueOf(m.getParams()) : MenuParams.publicTabButton;
+
+	public MainMenuItem(String lbl, String title, MenuActions action, MenuParams param) {
+		super(Application.getString(lbl), Application.getString(title));
+		this.action = action;
+		this.params = param != null ? param : MenuParams.publicTabButton;
 	}
-	
+
 	public void onClick(MainPanel main, AjaxRequestTarget target) {
 		main.updateContents(new OmUrlFragment(action, params), target);
 	}
