@@ -30,7 +30,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.cli.CleanupEntityUnit;
 import org.apache.openmeetings.cli.CleanupUnit;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -111,7 +111,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 		profile.setDefaultModelObject(getProfileUnit(getBean(UserDao.class)));
 		imp.setDefaultModelObject(getImportUnit());
 		backup.setDefaultModelObject(getBackupUnit());
-		files.setDefaultModelObject(getFileUnit(getBean(FileExplorerItemDao.class)));
+		files.setDefaultModelObject(getFileUnit(getBean(FileItemDao.class)));
 		streamsSize.setDefaultModelObject(getHumanSize(getStreamsDir()));
 		fin.setDefaultModelObject(getRecUnit(getBean(RecordingDao.class)));
 		target.add(container);

@@ -26,35 +26,35 @@ import java.util.LinkedList;
  */
 public class PresentationObject {
 	
-	private FileExplorerItemDTO originalDocument;
-	private FileExplorerItemDTO pdfDocument;
-	private FileExplorerItemDTO swfDocument;
-	LinkedList<FileExplorerItemDTO> thumbs;
+	private FileItemDTO originalDocument;
+	private FileItemDTO pdfDocument;
+	private FileItemDTO swfDocument;
+	LinkedList<FileItemDTO> thumbs;
 
 	public PresentationObject() {}
 	
-	public FileExplorerItemDTO getOriginalDocument() {
+	public FileItemDTO getOriginalDocument() {
 		return originalDocument;
 	}
-	public void setOriginalDocument(FileExplorerItemDTO originalDocument) {
+	public void setOriginalDocument(FileItemDTO originalDocument) {
 		this.originalDocument = originalDocument;
 	}
-	public FileExplorerItemDTO getPdfDocument() {
+	public FileItemDTO getPdfDocument() {
 		return pdfDocument;
 	}
-	public void setPdfDocument(FileExplorerItemDTO pdfDocument) {
+	public void setPdfDocument(FileItemDTO pdfDocument) {
 		this.pdfDocument = pdfDocument;
 	}
-	public FileExplorerItemDTO getSwfDocument() {
+	public FileItemDTO getSwfDocument() {
 		return swfDocument;
 	}
-	public void setSwfDocument(FileExplorerItemDTO swfDocument) {
+	public void setSwfDocument(FileItemDTO swfDocument) {
 		this.swfDocument = swfDocument;
 	}
-	public LinkedList<FileExplorerItemDTO> getThumbs() {
+	public LinkedList<FileItemDTO> getThumbs() {
 		return thumbs;
 	}
-	public void setThumbs(LinkedList<FileExplorerItemDTO> thumbs) {
+	public void setThumbs(LinkedList<FileItemDTO> thumbs) {
 		this.thumbs = thumbs;
 	}
 	

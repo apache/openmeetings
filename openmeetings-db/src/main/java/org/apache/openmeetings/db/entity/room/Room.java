@@ -305,7 +305,7 @@ public class Room implements IDataProviderEntity {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "room_id", insertable = true, updatable = true, nullable = false)
 	@ElementDependent
-	private List<RoomFile> roomfiles = new ArrayList<>();
+	private List<RoomFile> roomFiles = new ArrayList<>();
 
 	@Transient
 	private List<StreamClient> currentusers;

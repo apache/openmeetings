@@ -29,13 +29,13 @@ import org.apache.openmeetings.core.data.whiteboard.WhiteboardManager;
 import org.apache.openmeetings.core.documents.LibraryChartLoader;
 import org.apache.openmeetings.core.documents.LibraryDocumentConverter;
 import org.apache.openmeetings.core.documents.LibraryWmlLoader;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -61,7 +61,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private FileExplorerItemDao fileDao;
+	private FileItemDao fileDao;
 	@Autowired
 	private WhiteboardManager whiteboardManager;
 	@Autowired
@@ -92,7 +92,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 
 				log.debug("saveAsObject" + tObject.size());
 
-				FileExplorerItem file = fileDao.add(fileName, null, null, roomId, sd.getUserId(), Type.WmlFile, "", "");
+				FileItem file = fileDao.add(fileName, null, null, roomId, sd.getUserId(), Type.WmlFile, "", "");
 				LibraryDocumentConverter.writeToLocalFolder(file.getHash(), tObject);
 
 				return file.getId();
@@ -111,7 +111,7 @@ public class ConferenceLibrary implements IPendingServiceCallback {
 	 * @param wbId - id of whiteboard
 	 * @param fi - FileItem of the Wml being loaded
 	 */
-	public void sendToWhiteboard(String uid, Long wbId, FileItem fi) {
+	public void sendToWhiteboard(String uid, Long wbId, BaseFileItem fi) {
 		StreamClient client = sessionManager.get(uid);
 		if (client == null) {
 			log.warn("No client was found to send Wml:: {}", uid);

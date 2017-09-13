@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 
 /**
  * @author sebastianwagner
@@ -36,36 +36,36 @@ import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 public class FileExplorerObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private List<FileExplorerItemDTO> userHome;
-	private List<FileExplorerItemDTO> roomHome;
+	private List<FileItemDTO> userHome;
+	private List<FileItemDTO> roomHome;
 	private Long userHomeSize;
 	private Long roomHomeSize;
 
 	public FileExplorerObject() {}
 
-	public List<FileExplorerItemDTO> getUserHome() {
+	public List<FileItemDTO> getUserHome() {
 		return userHome;
 	}
 
-	public void setUserHome(List<FileExplorerItemDTO> userHome) {
+	public void setUserHome(List<FileItemDTO> userHome) {
 		this.userHome = userHome;
 	}
 
-	public void setUser(List<FileExplorerItem> list, long size) {
-		this.userHome = FileExplorerItemDTO.list(list);
+	public void setUser(List<FileItem> list, long size) {
+		this.userHome = FileItemDTO.list(list);
 		this.userHomeSize = size;
 	}
 
-	public List<FileExplorerItemDTO> getRoomHome() {
+	public List<FileItemDTO> getRoomHome() {
 		return roomHome;
 	}
 
-	public void setRoomHome(List<FileExplorerItemDTO> roomHome) {
+	public void setRoomHome(List<FileItemDTO> roomHome) {
 		this.roomHome = roomHome;
 	}
 
-	public void setRoom(List<FileExplorerItem> list, long size) {
-		this.roomHome = FileExplorerItemDTO.list(list);
+	public void setRoom(List<FileItem> list, long size) {
+		this.roomHome = FileItemDTO.list(list);
 		this.roomHomeSize = size;
 	}
 

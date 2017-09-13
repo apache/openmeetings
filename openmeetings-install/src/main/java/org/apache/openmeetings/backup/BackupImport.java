@@ -74,7 +74,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -91,8 +91,8 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -158,7 +158,7 @@ public class BackupImport {
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDao;
+	private FileItemDao fileItemDao;
 	@Autowired
 	private UserContactDao userContactDao;
 	@Autowired
@@ -645,8 +645,8 @@ public class BackupImport {
 		 * ##################### Import File-Explorer Items
 		 */
 		{
-			List<FileExplorerItem> list = readFileExplorerItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
-			for (FileExplorerItem file : list) {
+			List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
+			for (FileItem file : list) {
 				// We need to reset this as openJPA reject to store them otherwise
 				file.setId(null);
 				Long roomId = file.getRoomId();
@@ -660,7 +660,7 @@ public class BackupImport {
 				if (Strings.isEmpty(file.getHash())) {
 					file.setHash(UUID.randomUUID().toString());
 				}
-				fileExplorerItemDao.update(file);
+				fileItemDao.update(file);
 			}
 		}
 
@@ -755,8 +755,8 @@ public class BackupImport {
 	}
 
 	//FIXME (need to be removed in later versions) HACK to fix old properties
-	public List<FileExplorerItem> readFileExplorerItemList(File baseDir, String fileName, String listNodeName) throws Exception {
-		List<FileExplorerItem> list = new ArrayList<>();
+	public List<FileItem> readFileItemList(File baseDir, String fileName, String listNodeName) throws Exception {
+		List<FileItem> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
@@ -777,37 +777,37 @@ public class BackupImport {
 					InputNode item = listNode.getNext();
 					InputNode item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart
 					while (item != null) {
-						FileExplorerItem f = ser.read(FileExplorerItem.class, item, false);
+						FileItem f = ser.read(FileItem.class, item, false);
 
 						//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
 						do {
 							String name = item1.getName();
 							String val = item1.getValue();
 							if ("wmlFilePath".equals(name) && !Strings.isEmpty(val)) {
-								f.setType(FileItem.Type.WmlFile);
+								f.setType(BaseFileItem.Type.WmlFile);
 								f.setHash(val);
 							}
 							if ("isChart".equals(name) && "true".equals(val)) {
-								f.setType(FileItem.Type.PollChart);
+								f.setType(BaseFileItem.Type.PollChart);
 							}
 							if ("isImage".equals(name) && "true".equals(val)) {
-								f.setType(FileItem.Type.Image);
+								f.setType(BaseFileItem.Type.Image);
 							}
 							if ("isVideo".equals(name) && "true".equals(val)) {
-								f.setType(FileItem.Type.Video);
+								f.setType(BaseFileItem.Type.Video);
 							}
 							if ("isRecording".equals(name) && "true".equals(val)) {
 								log.warn("Recording is stored in FileExplorer Items");
-								f.setType(FileItem.Type.Video);
+								f.setType(BaseFileItem.Type.Video);
 							}
 							if ("isPresentation".equals(name) && "true".equals(val)) {
-								f.setType(FileItem.Type.Presentation);
+								f.setType(BaseFileItem.Type.Presentation);
 							}
 							if ("isStoredWmlFile".equals(name) && "true".equals(val)) {
-								f.setType(FileItem.Type.WmlFile);
+								f.setType(BaseFileItem.Type.WmlFile);
 							}
 							if (("folder".equals(name) || "isFolder".equals(name)) && "true".equals(val)) {
-								f.setType(FileItem.Type.Folder);
+								f.setType(BaseFileItem.Type.Folder);
 							}
 							item1 = listNode1.getNext(); //HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
 						} while (item1 != null && !"fileExplorerItem".equals(item1.getName()));
@@ -816,7 +816,7 @@ public class BackupImport {
 						int idx = f.getHash() == null ? -1 : f.getHash().indexOf('.');
 						if (idx > -1) {
 							String hash = f.getHash().substring(0, idx);
-							if (FileItem.Type.Image == f.getType()) {
+							if (BaseFileItem.Type.Image == f.getType()) {
 								fileMap.put(f.getHash(), String.format("%s/%s", hash, f.getHash()));
 							}
 							f.setHash(hash);
@@ -868,7 +868,7 @@ public class BackupImport {
 						} while (item1 != null && !"flvrecording".equals(item1.getName()));
 
 						if (r.getType() == null) {
-							r.setType(isFolder ? FileItem.Type.Folder : FileItem.Type.Recording);
+							r.setType(isFolder ? BaseFileItem.Type.Folder : BaseFileItem.Type.Recording);
 						}
 						list.add(r);
 						item = listNode.getNext();

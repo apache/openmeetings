@@ -68,7 +68,7 @@
 
 	<method name="createFileComplete" args="event">
 		var o = JSON.parse(event.target.data);
-		var f = o.fileExplorerItemDTO;
+		var f = o.fileItemDTO;
 		if ($debug) Debug.info("addFolderComplete ", event, o);
 		this.refObj.setAttribute("fileName", f.name);
 		this.refObj.setAttribute("fileId", f.id);

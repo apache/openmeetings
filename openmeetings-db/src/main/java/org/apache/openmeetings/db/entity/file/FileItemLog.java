@@ -36,7 +36,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 
 @Entity
 @NamedQueries({

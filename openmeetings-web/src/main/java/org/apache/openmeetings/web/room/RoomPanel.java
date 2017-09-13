@@ -47,7 +47,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -177,7 +177,7 @@ public class RoomPanel extends BasePanel {
 
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
-		Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
+		Droppable<BaseFileItem> wbArea = new Droppable<BaseFileItem>("wb-area") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -190,10 +190,10 @@ public class RoomPanel extends BasePanel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (activeWbId > -1 && o instanceof FileItem) {
-					FileItem f = (FileItem)o;
+				if (activeWbId > -1 && o instanceof BaseFileItem) {
+					BaseFileItem f = (BaseFileItem)o;
 					if (sidebar.getFilesPanel().isSelected(f)) {
-						for (Entry<String, FileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
+						for (Entry<String, BaseFileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
 							sendFileToWb(e.getValue(), false);
 						}
 					} else {
@@ -646,9 +646,9 @@ public class RoomPanel extends BasePanel {
 		return publishingUser;
 	}
 
-	public void sendFileToWb(FileItem fi, boolean clean) {
-		if (activeWbId > -1 && fi.getId() != null && FileItem.Type.Folder != fi.getType()) {
-			if (FileItem.Type.WmlFile == fi.getType()) {
+	public void sendFileToWb(BaseFileItem fi, boolean clean) {
+		if (activeWbId > -1 && fi.getId() != null && BaseFileItem.Type.Folder != fi.getType()) {
+			if (BaseFileItem.Type.WmlFile == fi.getType()) {
 				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
 			} else {
 				String url = null;

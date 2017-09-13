@@ -32,21 +32,21 @@ import java.util.Map.Entry;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.string.StringValue;
 
-public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
+public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	private static final long serialVersionUID = 1L;
 	public static final String DEFAULT_NAME = "wb-room-file";
 	private boolean preview = false;
@@ -60,7 +60,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected String getMimeType(FileExplorerItem r) {
+	protected String getMimeType(FileItem r) {
 		String mime = null;
 		switch (r.getType()) {
 			case WmlFile:
@@ -82,7 +82,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected FileExplorerItem getFileItem(Attributes attributes) {
+	protected FileItem getFileItem(Attributes attributes) {
 		PageParameters params = attributes.getParameters();
 		StringValue _id = params.get("id");
 		StringValue _preview = params.get("preview");
@@ -99,7 +99,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		if (id == null || !ws.isSignedIn() || c == null) {
 			return null;
 		}
-		FileExplorerItem f = getBean(FileExplorerItemDao.class).get(id);
+		FileItem f = getBean(FileItemDao.class).get(id);
 		String ruid = params.get("ruid").toString();
 		Whiteboards wbs = getBean(WhiteboardCache.class).get(c.getRoomId());
 		if (!Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
@@ -115,22 +115,22 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		return null;
 	}
 
-	protected File getFile(FileExplorerItem f, String ext) {
+	protected File getFile(FileItem f, String ext) {
 		File file = f.getFile(ext);
 		if (file == null || !file.exists()) {
 			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s"
-					, FileItem.Type.Image == f.getType() ? EXTENSION_JPG : EXTENSION_SWF));
+					, BaseFileItem.Type.Image == f.getType() ? EXTENSION_JPG : EXTENSION_SWF));
 		}
 		return file;
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem f, Attributes attr) {
+	protected File getFile(FileItem f, Attributes attr) {
 		return getFile(f, Type.Video == f.getType() && preview ? EXTENSION_JPG : null);
 	}
 
 	@Override
-	protected String getFileName(FileExplorerItem f) {
+	protected String getFileName(FileItem f) {
 		return f.getFileName(preview ? EXTENSION_JPG : null);
 	}
 }

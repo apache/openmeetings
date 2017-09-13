@@ -26,7 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
@@ -49,7 +49,7 @@ public class DocumentConverter {
 	@Autowired
 	private ImageConverter imageConverter;
 
-	public ConverterProcessResultList convertPDF(FileExplorerItem f, StoredFile sf) throws Exception {
+	public ConverterProcessResultList convertPDF(FileItem f, StoredFile sf) throws Exception {
 		ConverterProcessResultList result = new ConverterProcessResultList();
 
 		boolean fullProcessing = !sf.isPdf();

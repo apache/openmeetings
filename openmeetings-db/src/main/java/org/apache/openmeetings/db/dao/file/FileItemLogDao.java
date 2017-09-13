@@ -26,7 +26,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItemLog;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,22 +39,22 @@ public class FileItemLogDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	public long countErrors(FileItem f) {
+	public long countErrors(BaseFileItem f) {
 		return em.createNamedQuery("countErrorFileLogsByFile", Long.class).setParameter("fileId", f.getId())
 				.setParameter("type", f.getType()).getSingleResult();
 	}
 
-	public List<FileItemLog> get(FileItem f) {
+	public List<FileItemLog> get(BaseFileItem f) {
 		return em.createNamedQuery("getFileLogsByFile", FileItemLog.class).setParameter("fileId", f.getId())
 				.setParameter("type", f.getType()).getResultList();
 	}
 
-	public void delete(FileItem f) {
+	public void delete(BaseFileItem f) {
 		em.createNamedQuery("deleteErrorFileLogsByFile").setParameter("fileId", f.getId())
 				.setParameter("type", f.getType()).executeUpdate();
 	}
 
-	public FileItemLog add(String name, FileItem f, ConverterProcessResult returnMap) {
+	public FileItemLog add(String name, BaseFileItem f, ConverterProcessResult returnMap) {
 		log.trace("Adding log: {}, {}, {}", name, f, returnMap);
 		FileItemLog log = new FileItemLog();
 		log.setInserted(new Date());

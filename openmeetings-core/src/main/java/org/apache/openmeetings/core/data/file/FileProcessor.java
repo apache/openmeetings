@@ -31,9 +31,9 @@ import java.util.UUID;
 import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.core.converter.FlvExplorerConverter;
 import org.apache.openmeetings.core.converter.ImageConverter;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
@@ -48,14 +48,14 @@ public class FileProcessor {
 	@Autowired
 	private FlvExplorerConverter flvExplorerConverter;
 	@Autowired
-	private FileExplorerItemDao fileDao;
+	private FileItemDao fileDao;
 	@Autowired
 	private ImageConverter imageConverter;
 	@Autowired
 	private DocumentConverter generatePDF;
 
 	//FIXME TODO this method need to be refactored to throw exceptions
-	public ConverterProcessResultList processFile(FileExplorerItem f, InputStream is) throws Exception {
+	public ConverterProcessResultList processFile(FileItem f, InputStream is) throws Exception {
 		ConverterProcessResultList result = new ConverterProcessResultList();
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
@@ -136,6 +136,7 @@ public class FileProcessor {
 			result.setCompleteName(file.getName());
 			result.setFileItemId(f.getId());
 		} catch (Exception e) {
+			log.debug("Error while processing the file", e);
 			result.addItem("exception", new ConverterProcessResult("Unexpected exception: " + e.getMessage()));
 			throw e;
 		} finally {

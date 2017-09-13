@@ -21,15 +21,27 @@ package org.apache.openmeetings.web.admin;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 @AuthorizeInstantiation("Admin")
 public abstract class AdminPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
+	private static final JavaScriptResourceReference ADMIN_SCRIPT = new JavaScriptResourceReference(AdminPanel.class, "admin.js");
+
 	protected final static String BASE_ROW_CLASS = "ui-widget-content";
 	protected final static String ROW_CLASS = BASE_ROW_CLASS + " clickable";
 
 	public AdminPanel(String id) {
 		super(id);
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(ADMIN_SCRIPT)));
 	}
 
 	@Override

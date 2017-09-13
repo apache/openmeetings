@@ -63,7 +63,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.BrowserStatus;
 import org.apache.openmeetings.db.dto.room.RoomStatus;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -1125,7 +1125,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	private static Point getSize(FileItem fi) {
+	private static Point getSize(BaseFileItem fi) {
 		Point result = new Point(0, 0);
 		if (fi.getWidth() != null && fi.getHeight() != null) {
 			result.x = fi.getWidth();
@@ -1134,7 +1134,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return result;
 	}
 
-	private static List<?> getWbObject(FileItem fi, String url) {
+	private static List<?> getWbObject(BaseFileItem fi, String url) {
 		Point size = getSize(fi);
 		String type = "n/a";
 		switch (fi.getType()) {
@@ -1178,7 +1178,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				);
 	}
 
-	private static List<?> getMp4WbObject(FileItem fi, String url) {
+	private static List<?> getMp4WbObject(BaseFileItem fi, String url) {
 		Point size = getSize(fi);
 		return Arrays.asList(
 				"flv" // 0: 'flv'
@@ -1198,7 +1198,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				);
 	}
 
-	private static void copyFileToRoom(Long roomId, FileItem f) {
+	private static void copyFileToRoom(Long roomId, BaseFileItem f) {
 		try {
 			if (roomId != null && f != null) {
 				File mp4 = f.getFile(EXTENSION_MP4);
@@ -1215,7 +1215,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	public void sendToWhiteboard(String uid, Long wbId, FileItem fi, String url, boolean clean) {
+	public void sendToWhiteboard(String uid, Long wbId, BaseFileItem fi, String url, boolean clean) {
 		StreamClient client = sessionManager.get(uid);
 
 		List<?> wbObject = new ArrayList<>();

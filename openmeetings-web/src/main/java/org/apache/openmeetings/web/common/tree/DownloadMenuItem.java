@@ -27,8 +27,8 @@ import java.io.FileFilter;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
@@ -57,7 +57,7 @@ public class DownloadMenuItem extends MenuItem {
 
 	@Override
 	public void onClick(AjaxRequestTarget target) {
-		FileItem fi = tree.getLastSelected();
+		BaseFileItem fi = tree.getLastSelected();
 		File f = fi.getFile(ext);
 		if (f != null && f.exists()) {
 			if (ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())) {
@@ -72,10 +72,10 @@ public class DownloadMenuItem extends MenuItem {
 	}
 
 	private static class OriginalFilter implements FileFilter {
-		final FileItem fi;
+		final BaseFileItem fi;
 		Set<String> exclusions = new HashSet<>();
 
-		OriginalFilter(FileItem fi) {
+		OriginalFilter(BaseFileItem fi) {
 			this.fi = fi;
 			exclusions.add(EXTENSION_JPG);
 			if (Type.Presentation == fi.getType()) {

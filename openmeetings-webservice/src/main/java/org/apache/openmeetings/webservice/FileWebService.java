@@ -43,12 +43,12 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.openmeetings.core.data.file.FileProcessor;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
-import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.dto.file.FileItemDTO;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -72,8 +72,8 @@ import org.slf4j.Logger;
 public class FileWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, webAppRootKey);
 
-	private static FileExplorerItemDao getDao() {
-		return getBean(FileExplorerItemDao.class);
+	private static FileItemDao getDao() {
+		return getBean(FileItemDao.class);
 	}
 
 	/**
@@ -92,8 +92,8 @@ public class FileWebService extends BaseWebService {
 		try {
 			Sessiondata sd = check(sid);
 
-			FileExplorerItemDao dao = getDao();
-			FileExplorerItem f = dao.get(id);
+			FileItemDao dao = getDao();
+			FileItem f = dao.get(id);
 			if (f == null) {
 				return new ServiceResult(-1L, "Bad id", Type.ERROR);
 			}
@@ -135,19 +135,19 @@ public class FileWebService extends BaseWebService {
 	{
 		try {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				FileExplorerItemDao dao = getDao();
-				FileExplorerItem f = dao.get(externalId, externalType);
+				FileItemDao dao = getDao();
+				FileItem f = dao.get(externalId, externalType);
 				dao.delete(f);
 				return new ServiceResult(f.getId(), "Deleted", Type.SUCCESS);
 			}
 		} catch (Exception err) {
-			log.error("[deleteFileOrFolderByExternalIdAndType]", err);
+			log.error("[deleteExternal]", err);
 		}
 		return null;
 	}
 
 	/**
-	 * to add a folder to the private drive, set parentFileExplorerItemId = 0 and isOwner to 1/true and
+	 * to add a folder to the private drive, set parentId = 0 and isOwner to 1/true and
 	 * externalUserId/externalUserType to a valid user
 	 *
 	 * @param sid
@@ -163,8 +163,8 @@ public class FileWebService extends BaseWebService {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/")
-	public FileExplorerItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileExplorerItemDTO file
+	public FileItemDTO add(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @Multipart(value = "file", type = MediaType.APPLICATION_JSON) @WebParam(name="file") FileItemDTO file
 			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
 			) throws ServiceException
 	{
@@ -172,7 +172,7 @@ public class FileWebService extends BaseWebService {
 			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
 
-			FileExplorerItem f = file == null ? null : file.get();
+			FileItem f = file == null ? null : file.get();
 			if (f == null || f.getId() != null) {
 				throw new ServiceException("Bad id");//TODO err code -1 ????
 			}
@@ -193,7 +193,7 @@ public class FileWebService extends BaseWebService {
 				} else {
 					f = getDao().update(f);
 				}
-				return new FileExplorerItemDTO(f);
+				return new FileItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -229,15 +229,15 @@ public class FileWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
 				log.debug("roomId " + roomId);
 
-				FileExplorerItemDao dao = getDao();
+				FileItemDao dao = getDao();
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
-				List<FileExplorerItem> fList = dao.getByOwner(userId);
+				List<FileItem> fList = dao.getByOwner(userId);
 				fileExplorerObject.setUser(fList, dao.getSize(fList));
 
 				// Public File List
-				List<FileExplorerItem> rList = dao.getByRoom(roomId);
+				List<FileItem> rList = dao.getByRoom(roomId);
 				fileExplorerObject.setRoom(rList, dao.getSize(rList));
 
 				return fileExplorerObject;
@@ -254,7 +254,7 @@ public class FileWebService extends BaseWebService {
 
 	/**
 	 *
-	 * Get list of {@link FileExplorerItemDTO} by parent
+	 * Get list of {@link FileItemDTO} by parent
 	 *
 	 * @param sid
 	 *            SID The SID of the User. This SID must be marked as logged in
@@ -268,7 +268,7 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/room/{id}/{parent}")
-	public List<FileExplorerItemDTO> getRoomByParent(@WebParam(name="sid") @QueryParam("sid") String sid
+	public List<FileItemDTO> getRoomByParent(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long roomId
 			, @WebParam(name="parent") @PathParam("parent") long parentId
 			) throws ServiceException
@@ -280,8 +280,8 @@ public class FileWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
 				log.debug("getRoomByParent " + parentId);
 
-				FileExplorerItemDao dao = getDao();
-				List<FileExplorerItem> list = new ArrayList<>();
+				FileItemDao dao = getDao();
+				List<FileItem> list = new ArrayList<>();
 				if (parentId < 0) {
 					if (parentId == -1) {
 						list = dao.getByOwner(userId);
@@ -291,7 +291,7 @@ public class FileWebService extends BaseWebService {
 				} else {
 					list = dao.getByParent(parentId);
 				}
-				return FileExplorerItemDTO.list(list);
+				return FileItemDTO.list(list);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -319,7 +319,7 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/rename/{id}/{name}")
-	public FileExplorerItemDTO rename(@WebParam(name="sid") @QueryParam("sid") String sid
+	public FileItemDTO rename(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long id
 			, @WebParam(name="name") @PathParam("name") String name) throws ServiceException
 	{
@@ -328,8 +328,8 @@ public class FileWebService extends BaseWebService {
 				// FIXME TODO: check if this user is allowed to change this file
 
 				log.debug("rename " + id);
-				FileExplorerItem f = getDao().rename(id, name);
-				return f == null ? null : new FileExplorerItemDTO(f);
+				FileItem f = getDao().rename(id, name);
+				return f == null ? null : new FileItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}
@@ -356,7 +356,7 @@ public class FileWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/move/{roomid}/{id}/{parentid}")
-	public FileExplorerItemDTO move(@WebParam(name="sid") @QueryParam("sid") String sid
+	public FileItemDTO move(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="id") @PathParam("id") long id
 			, @WebParam(name="roomid") @PathParam("roomid") long roomId
 			, @WebParam(name="parentid") @PathParam("parentid") long parentId) throws ServiceException
@@ -367,8 +367,8 @@ public class FileWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
 				// FIXME TODO A test is required that checks if the user is allowed to move the file
 				log.debug("move " + id);
-				FileExplorerItem f = getDao().move(id, parentId, userId, roomId);
-				return f == null ? null : new FileExplorerItemDTO(f);
+				FileItem f = getDao().move(id, parentId, userId, roomId);
+				return f == null ? null : new FileItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
 			}

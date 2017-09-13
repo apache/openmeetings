@@ -35,11 +35,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
@@ -80,8 +80,8 @@ public abstract class FileTreePanel extends Panel {
 	private final static String DISABLED_CLASS = " disabled";
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
-	private FileItem lastSelected = null;
-	private Map<String, FileItem> selected = new HashMap<>();
+	private BaseFileItem lastSelected = null;
+	private Map<String, BaseFileItem> selected = new HashMap<>();
 	File dwnldFile;
 	final AjaxDownload downloader = new AjaxDownload(new IResource() {
 		private static final long serialVersionUID = 1L;
@@ -144,7 +144,7 @@ public abstract class FileTreePanel extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 		download.setDefaultModelObject(newDownloadMenuList());
-		Droppable<FileItem> trashToolbar = new Droppable<FileItem>("trash-toolbar") {
+		Droppable<BaseFileItem> trashToolbar = new Droppable<BaseFileItem>("trash-toolbar") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -188,8 +188,8 @@ public abstract class FileTreePanel extends Panel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (o instanceof FileItem) {
-					FileItem f = (FileItem)o;
+				if (o instanceof BaseFileItem) {
+					BaseFileItem f = (BaseFileItem)o;
 					if (isSelected(f)) {
 						deleteAll(target);
 					} else {
@@ -244,8 +244,8 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	private void deleteAll(AjaxRequestTarget target) {
-		for (Entry<String, FileItem> e : selected.entrySet()) {
-			FileItem f = e.getValue();
+		for (Entry<String, BaseFileItem> e : selected.entrySet()) {
+			BaseFileItem f = e.getValue();
 			if (!f.isReadOnly()) {
 				delete(f, target);
 			}
@@ -254,13 +254,13 @@ public abstract class FileTreePanel extends Panel {
 		selected.clear();
 	}
 
-	void delete(FileItem f, IPartialPageRequestHandler handler) {
+	void delete(BaseFileItem f, IPartialPageRequestHandler handler) {
 		Long id = f.getId();
 		if (id != null) {
 			if (f instanceof Recording) {
 				getBean(RecordingDao.class).delete((Recording)f);
 			} else {
-				getBean(FileExplorerItemDao.class).delete((FileExplorerItem)f);
+				getBean(FileItemDao.class).delete((FileItem)f);
 			}
 		}
 		update(handler);
@@ -286,12 +286,12 @@ public abstract class FileTreePanel extends Panel {
 		return readOnly;
 	}
 
-	protected abstract void update(AjaxRequestTarget target, FileItem f);
+	protected abstract void update(AjaxRequestTarget target, BaseFileItem f);
 
 	public void createFolder(AjaxRequestTarget target, String name) {
-		FileItem p = lastSelected;
+		BaseFileItem p = lastSelected;
 		boolean isRecording = p instanceof Recording;
-		FileItem f = isRecording ? new Recording() : new FileExplorerItem();
+		BaseFileItem f = isRecording ? new Recording() : new FileItem();
 		f.setName(name);
 		f.setHash(UUID.randomUUID().toString());
 		f.setInsertedBy(getUserId());
@@ -305,22 +305,22 @@ public abstract class FileTreePanel extends Panel {
 		if (isRecording) {
 			getBean(RecordingDao.class).update((Recording)f);
 		} else {
-			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
+			getBean(FileItemDao.class).update((FileItem)f);
 		}
 		update(target);
 	}
 
 	public abstract void updateSizes();
 
-	public boolean isSelected(FileItem f) {
+	public boolean isSelected(BaseFileItem f) {
 		return selected.containsKey(f.getHash());
 	}
 
-	public Map<String, FileItem> getSelected() {
+	public Map<String, BaseFileItem> getSelected() {
 		return selected;
 	}
 
-	public FileItem getLastSelected() {
+	public BaseFileItem getLastSelected() {
 		return lastSelected;
 	}
 
@@ -330,12 +330,12 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	private void updateSelected(AjaxRequestTarget target) {
-		for (Entry<String, FileItem> e : selected.entrySet()) {
+		for (Entry<String, BaseFileItem> e : selected.entrySet()) {
 			updateNode(target, e.getValue());
 		}
 	}
 
-	void updateNode(AjaxRequestTarget target, FileItem fi) {
+	void updateNode(AjaxRequestTarget target, BaseFileItem fi) {
 		if (fi != null && target != null) {
 			if (Type.Folder == fi.getType()) {
 				tree.updateBranch(fi, target);
@@ -345,8 +345,8 @@ public abstract class FileTreePanel extends Panel {
 		}
 	}
 
-	private static boolean sameParent(Long roomId, FileItem f1, FileItem f2) {
-		if (f1 instanceof Recording && f2 instanceof FileExplorerItem) {
+	private static boolean sameParent(Long roomId, BaseFileItem f1, BaseFileItem f2) {
+		if (f1 instanceof Recording && f2 instanceof FileItem) {
 			return false;
 		}
 		if (f1.getParentId() != null && f1.getParentId().equals(f2.getParentId())) {
@@ -359,18 +359,18 @@ public abstract class FileTreePanel extends Panel {
 			if (f1.getRoomId() != null && f1.getRoomId().equals(f2.getRoomId())) {
 				return true;
 			}
-			if (f2 instanceof FileExplorerItem && roomId != null && f1.getRoomId() == null && f2.getRoomId() == null && f1.getOwnerId() == null && f2.getOwnerId() == null) {
+			if (f2 instanceof FileItem && roomId != null && f1.getRoomId() == null && f2.getRoomId() == null && f1.getOwnerId() == null && f2.getOwnerId() == null) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private static boolean isDownloadable(FileItem f) {
+	private static boolean isDownloadable(BaseFileItem f) {
 		return !f.isReadOnly() && (f.getType() == Type.Presentation || f.getType() == Type.Image);
 	}
 
-	public void select(FileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
+	public void select(BaseFileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
 		updateSelected(target); //all previously selected are in update list
 		if (ctrl) {
 			if (isSelected(fi)) {
@@ -382,7 +382,7 @@ public abstract class FileTreePanel extends Panel {
 		} else if (shift && lastSelected != null && !lastSelected.getHash().equals(fi.getHash()) && sameParent(roomId, fi, lastSelected)) {
 			selected.clear();
 			String lastHash = null;
-			for (FileItem f : tree.getProvider().getByParent(fi, fi.getParentId())) {
+			for (BaseFileItem f : tree.getProvider().getByParent(fi, fi.getParentId())) {
 				if (lastHash == null) {
 					if (f.getHash().equals(lastSelected.getHash())) {
 						lastHash = fi.getHash();

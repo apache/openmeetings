@@ -36,7 +36,7 @@ import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;

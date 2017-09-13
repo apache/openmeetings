@@ -18,317 +18,82 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_SWF;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
-import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
-import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
-
-import java.io.File;
-import java.util.Date;
-import java.util.List;
-
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlType;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
-@MappedSuperclass
-public abstract class FileItem implements IDataProviderEntity {
+@Entity
+@NamedQueries({
+	@NamedQuery(name = "getAllFiles", query = "SELECT f FROM FileItem f ORDER BY f.id")
+	, @NamedQuery(name = "getFileById", query = "SELECT f FROM FileItem f WHERE f.id = :id")
+	, @NamedQuery(name = "getFileByHash", query = "SELECT f FROM FileItem f WHERE f.hash = :hash")
+	, @NamedQuery(name = "getFilesByRoom", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.roomId = :roomId " +
+			"AND f.ownerId IS NULL AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFilesByOwner", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId = :ownerId "
+			+ "AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFilesByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
+			+ "AND f.parentId = :parentId ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFilesFilteredByParent", query = "SELECT f FROM FileItem f WHERE f.deleted = false "
+			+ "AND f.parentId = :parentId AND f.type IN :filter ORDER BY f.type ASC, f.name ")
+	, @NamedQuery(name = "getFileExternal", query = "SELECT f FROM FileItem f WHERE f.externalId = :externalId AND f.externalType LIKE :externalType")
+	, @NamedQuery(name = "getFileByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.groupId = :groupId AND f.parentId IS NULL "
+			+ "ORDER BY f.type ASC, f.name")
+	, @NamedQuery(name = "getFileFilteredByGroup", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId IS NULL "
+			+ "AND f.groupId = :groupId AND f.parentId IS NULL AND f.type IN :filter "
+			+ "ORDER BY f.type ASC, f.name")
+})
+@Root
+public class FileItem extends BaseFileItem {
 	private static final long serialVersionUID = 1L;
 
-	@XmlType(namespace = "org.apache.openmeetings.file")
-	public enum Type {
-		// Folder need to be alphabetically first, for correct sorting
-		Folder, Image, PollChart, Presentation, Recording, Video, WmlFile
-	}
-
-	@Column(name = "name")
-	@Element(name = "fileName", data = true, required = false)
-	private String name;
-
-	@Column(name = "hash")
-	@Element(name = "fileHash", data = true, required = false)
-	private String hash;
-
-	@Column(name = "parent_item_id")
-	@Element(data = true, name = "parentFileExplorerItemId", required = false)
-	private Long parentId;
-
-	@Column(name = "room_id")
-	@Element(data = true, required = false, name = "room_id")
-	private Long roomId;
-
-	// OwnerID => only set if its directly root in Owner Directory, other Folders and Files
-	// maybe are also in a Home directory but just because their parent is
-	@Column(name = "owner_id")
+	@Column(name = "filesize")
 	@Element(data = true, required = false)
-	private Long ownerId;
+	private Long size;
 
-	@Column(name = "inserted_by")
-	@Element(data = true, required = false)
-	private Long insertedBy;
+	@Column(name = "external_id")
+	private String externalId;
 
-	@Column(name = "inserted")
-	@Element(data = true, required = false)
-	private Date inserted;
+	@Column(name = "external_type")
+	private String externalType;
 
-	@Column(name = "updated")
-	@Element(data = true, required = false)
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
-
-	@Column(name = "flv_width")
-	@Element(data = true, required = false)
-	private Integer width;
-
-	@Column(name = "flv_height")
-	@Element(data = true, required = false)
-	private Integer height;
-
-	@Column(name = "type")
-	@Element(data = true, required = false)
-	@Enumerated(EnumType.STRING)
-	private Type type;
-
-	@Column(name = "group_id")
-	@Element(data = true, required = false)
-	private Long groupId;
-
-	// Not Mapped
-	@Transient
-	private List<FileItemLog> log;
-
-	@Transient
-	private boolean readOnly;
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getHash() {
-		return hash;
-	}
-
-	public void setHash(String hash) {
-		this.hash = hash;
-	}
-
-	public Long getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(Long parentId) {
-		this.parentId = parentId;
-	}
-
-	public Long getRoomId() {
-		return roomId;
-	}
-
-	public void setRoomId(Long roomId) {
-		this.roomId = roomId;
-	}
-
-	public Long getOwnerId() {
-		return ownerId;
-	}
-
-	public void setOwnerId(Long ownerId) {
-		this.ownerId = ownerId;
-	}
-
-	public Long getInsertedBy() {
-		return insertedBy;
-	}
-
-	public void setInsertedBy(Long insertedBy) {
-		this.insertedBy = insertedBy;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public Integer getWidth() {
-		return width;
-	}
-
-	public void setWidth(Integer flvWidth) {
-		this.width = flvWidth;
-	}
-
-	public Integer getHeight() {
-		return height;
-	}
-
-	public void setHeight(Integer flvHeight) {
-		this.height = flvHeight;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
-	}
-
-	public List<FileItemLog> getLog() {
-		return log;
-	}
-
-	public void setLog(List<FileItemLog> log) {
-		this.log = log;
-	}
-
-	public String getFileName(String ext) {
-		return ext == null ? name : String.format("%s.%s", name, ext);
-	}
-
-	public File getFile() {
-		return getFile(null);
-	}
-
-	public Long getGroupId() {
-		return groupId;
-	}
-
-	public void setGroupId(Long groupId) {
-		this.groupId = groupId;
-	}
-
-	public boolean isReadOnly() {
-		return readOnly;
-	}
-
-	public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-	}
-
-	public final File getFile(String ext) {
-		File f = null;
-		if (getHash() != null) {
-			File d = new File(getUploadFilesDir(), getHash());
-			switch (getType()) {
-				case WmlFile:
-					f = new File(getUploadWmlDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_WML : ext));
-					break;
-				case Image:
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
-					break;
-				case Recording:
-					f = new File(getStreamsHibernateDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
-					break;
-				case Video:
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
-					break;
-				case Presentation:
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_SWF : ext));
-					break;
-				case PollChart:
-				case Folder:
-				default:
-			}
-		}
-		return f;
-	}
-
-	public final boolean exists() {
-		return exists(null);
-	}
-
-	public final boolean exists(String ext) {
-		if (getId() != null && !isDeleted()) {
-			File f = getFile(ext);
-			return f != null && f.exists() && f.isFile();
-		}
-		return false;
+	@Override
+	@Element(data = true, name = "fileExplorerItemId")
+	public Long getId() {
+		return super.getId();
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
-		result = prime * result + ((parentId == null) ? 0 : parentId.hashCode());
-		result = prime * result + ((roomId == null) ? 0 : roomId.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
+	@Element(data = true, name = "fileExplorerItemId")
+	public void setId(Long id) {
+		super.setId(id);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FileItem other = (FileItem) obj;
-		if (hash == null) {
-			if (other.hash != null)
-				return false;
-		} else if (!hash.equals(other.hash))
-			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		if (ownerId == null) {
-			if (other.ownerId != null)
-				return false;
-		} else if (!ownerId.equals(other.ownerId))
-			return false;
-		if (parentId == null) {
-			if (other.parentId != null)
-				return false;
-		} else if (!parentId.equals(other.parentId))
-			return false;
-		if (roomId == null) {
-			if (other.roomId != null)
-				return false;
-		} else if (!roomId.equals(other.roomId))
-			return false;
-		if (type != other.type)
-			return false;
-		return true;
+	public Long getSize() {
+		return size;
+	}
+
+	public void setSize(Long fileSize) {
+		this.size = fileSize;
+	}
+
+	public String getExternalId() {
+		return externalId;
+	}
+
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
+
+	public String getExternalType() {
+		return externalType;
+	}
+
+	public void setExternalType(String externalType) {
+		this.externalType = externalType;
 	}
 }

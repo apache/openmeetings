@@ -22,7 +22,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 
 import java.io.File;
 
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.wicket.request.resource.IResource.Attributes;
 
 public class RoomFileResourceReference extends RoomResourceReference {
@@ -33,17 +33,17 @@ public class RoomFileResourceReference extends RoomResourceReference {
 	}
 
 	@Override
-	protected String getMimeType(FileExplorerItem r) {
+	protected String getMimeType(FileItem r) {
 		return "application/octet-stream";
 	}
 
 	@Override
-	protected String getFileName(FileExplorerItem r) {
+	protected String getFileName(FileItem r) {
 		return r.getName();
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem r, Attributes attr) {
+	protected File getFile(FileItem r, Attributes attr) {
 		return getFile(r, getFileExt(r.getName()));
 	}
 }

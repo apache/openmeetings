@@ -29,9 +29,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -43,9 +43,9 @@ public class FlvExplorerConverter extends BaseConverter {
 
 	// Spring loaded Beans
 	@Autowired
-	private FileExplorerItemDao fileDao;
+	private FileItemDao fileDao;
 
-	public List<ConverterProcessResult> convertToMP4(FileExplorerItem f, String ext) {
+	public List<ConverterProcessResult> convertToMP4(FileItem f, String ext) {
 		List<ConverterProcessResult> logs = new ArrayList<>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);
