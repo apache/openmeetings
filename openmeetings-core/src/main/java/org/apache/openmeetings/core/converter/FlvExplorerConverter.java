@@ -29,8 +29,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
 
-	public List<ConverterProcessResult> convertToMP4(FileExplorerItem f, String ext) {
+	public List<ConverterProcessResult> convertToMP4(FileItem f, String ext) {
 		List<ConverterProcessResult> logs = new ArrayList<>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);

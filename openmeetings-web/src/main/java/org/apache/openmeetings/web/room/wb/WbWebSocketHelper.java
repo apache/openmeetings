@@ -22,7 +22,7 @@ import java.util.function.Predicate;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
@@ -89,7 +89,7 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		return RequestCycle.get().urlFor(resourceReference, parameters);
 	}
 
-	public static JSONObject addFileUrl(String ruid, JSONObject _file, FileItem fi, Client c) {
+	public static JSONObject addFileUrl(String ruid, JSONObject _file, BaseFileItem fi, Client c) {
 		JSONObject file = new JSONObject(_file.toString(new NullStringer()));
 		final FileSystemResourceReference ref;
 		final PageParameters pp = new PageParameters()
@@ -119,11 +119,11 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		return file;
 	}
 
-	public static void sendWbFile(Long roomId, long wbId, String ruid, JSONObject file, FileItem fi) {
+	public static void sendWbFile(Long roomId, long wbId, String ruid, JSONObject file, BaseFileItem fi) {
 		sendWbFile(roomId, wbId, ruid, file, fi, true);
 	}
 
-	private static void sendWbFile(Long roomId, long wbId, String ruid, JSONObject file, FileItem fi, boolean publish) {
+	private static void sendWbFile(Long roomId, long wbId, String ruid, JSONObject file, BaseFileItem fi, boolean publish) {
 		if (publish) {
 			publish(new WsMessageWbFile(roomId, wbId, ruid, file, fi));
 		}

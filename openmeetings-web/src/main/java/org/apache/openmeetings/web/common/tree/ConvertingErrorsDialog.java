@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItemLog;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
@@ -39,7 +39,7 @@ import org.apache.wicket.model.Model;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
-public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
+public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Label message = new Label("message", Model.of((String)null));
@@ -72,22 +72,22 @@ public class ConvertingErrorsDialog extends AbstractDialog<FileItem> {
 		return true;
 	}
 
-	public ConvertingErrorsDialog(String id, IModel<FileItem> model) {
+	public ConvertingErrorsDialog(String id, IModel<BaseFileItem> model) {
 		super(id, Application.getString("887"), model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		FileItem f = getModelObject();
-		setTitle(handler, Model.of(getString(f.getType() == FileItem.Type.Recording ? "887" : "convert.errors.file")));
+		BaseFileItem f = getModelObject();
+		setTitle(handler, Model.of(getString(f.getType() == BaseFileItem.Type.Recording ? "887" : "convert.errors.file")));
 		List<FileItemLog> logs = getBean(FileItemLogDao.class).get(f);
 		if (f.getHash() == null) {
 			message.setVisible(true);
 			message.setDefaultModelObject(Application.getString("888"));
 		} else if (!f.exists()) {
 			message.setVisible(true);
-			message.setDefaultModelObject(getString(f.getType() == FileItem.Type.Recording ? "1595" : "convert.errors.file.missing"));
+			message.setDefaultModelObject(getString(f.getType() == BaseFileItem.Type.Recording ? "1595" : "convert.errors.file.missing"));
 		} else {
 			message.setVisible(false);
 		}

@@ -30,20 +30,16 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -97,11 +93,10 @@ import org.simpleframework.xml.Root;
 			+ "    OR rec.roomId IN (SELECT rg.room.id FROM RoomGroup rg WHERE rg.group.id = :groupId)"
 			+ "  ) order by rec.inserted ASC")
 })
-@Table(name = "recording")
 @Root(name = "flvrecording")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Recording extends FileItem {
+public class Recording extends BaseFileItem {
 	private static final long serialVersionUID = 1L;
 
 	@XmlType(namespace="org.apache.openmeetings.record")
@@ -112,12 +107,6 @@ public class Recording extends FileItem {
 		, PROCESSED
 		, ERROR
 	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	@Element(data = true, name = "flvRecordingId")
-	private Long id;
 
 	@Column(name = "comment")
 	@Element(data = true, required = false)
@@ -139,9 +128,9 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private String recorderStreamId;
 
-	@Column(name = "is_interview", nullable = false)
+	@Column(name = "is_interview")
 	@Element(data = true, required = false)
-	private boolean interview;
+	private Boolean interview = false;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "recording_id")
@@ -153,18 +142,20 @@ public class Recording extends FileItem {
 	@Element(data = true, required = false)
 	private Status status = Status.NONE;
 
-	@Column(name = "notified", nullable = false)
+	@Column(name = "notified")
 	@Element(data = true, required = false)
-	private boolean notified = false;
+	private Boolean notified = false;
 
 	@Override
+	@Element(data = true, name = "flvRecordingId")
 	public Long getId() {
-		return id;
+		return super.getId();
 	}
 
 	@Override
+	@Element(data = true, name = "flvRecordingId")
 	public void setId(Long id) {
-		this.id = id;
+		super.setId(id);
 	}
 
 	public String getComment() {
@@ -216,7 +207,7 @@ public class Recording extends FileItem {
 	}
 
 	public boolean isInterview() {
-		return interview;
+		return Boolean.TRUE.equals(interview);
 	}
 
 	public void setInterview(boolean interview) {
@@ -232,7 +223,7 @@ public class Recording extends FileItem {
 	}
 
 	public boolean isNotified() {
-		return notified;
+		return Boolean.TRUE.equals(notified);
 	}
 
 	public void setNotified(boolean notified) {
@@ -241,6 +232,6 @@ public class Recording extends FileItem {
 
 	@Override
 	public String getFileName(String ext) {
-		return String.format("%s%s.%s", recordingFileName, id, ext == null ? EXTENSION_MP4 : ext);
+		return String.format("%s%s.%s", recordingFileName, getId(), ext == null ? EXTENSION_MP4 : ext);
 	}
 }

@@ -19,18 +19,6 @@
 
 -->
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<script type="text/javascript">
-		function adminPanelInit() {
-			if (typeof extAdminPanelInit === 'function') {
-				extAdminPanelInit();
-			}
-			var h = $(window).height() - 5;
-			$('#adminForm').height(h - $('#adminForm').position().top);
-			$('#adminTable').height(h - $('#adminTable').position().top);
-		}
-	</script>
-</wicket:head>
 <wicket:panel>
 	<div class="adminPanel">
 		<wicket:child/>

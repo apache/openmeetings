@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.room.RoomResourceReference;
@@ -67,7 +67,7 @@ public class VideoPlayer extends Panel {
 		update(null, null);
 	}
 
-	public VideoPlayer update(AjaxRequestTarget target, FileItem r) {
+	public VideoPlayer update(AjaxRequestTarget target, BaseFileItem r) {
 		boolean videoExists = r != null && r.exists();
 		if (videoExists) {
 			PageParameters pp = new PageParameters();

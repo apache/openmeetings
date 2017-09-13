@@ -27,10 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -71,13 +71,13 @@ public class CleanupHelper {
 		return new CleanupUnit(OmFileHelper.getUploadBackupDir());
 	}
 
-	public static CleanupEntityUnit getFileUnit(final FileExplorerItemDao fileDao) {
+	public static CleanupEntityUnit getFileUnit(final FileItemDao fileDao) {
 		File parent = OmFileHelper.getUploadFilesDir();
 		List<File> invalid = new ArrayList<>();
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
 		for (File f : list(parent, null)) {
-			FileExplorerItem item = fileDao.getByHash(f.getName()); // TODO probable extension should be stripped
+			FileItem item = fileDao.getByHash(f.getName()); // TODO probable extension should be stripped
 			if (item == null) {
 				invalid.add(f);
 			} else if (item.isDeleted()) {
@@ -85,7 +85,7 @@ public class CleanupHelper {
 			}
 		}
 		//TODO WML_DIR should also be checked
-		for (FileExplorerItem item : fileDao.get()) {
+		for (FileItem item : fileDao.get()) {
 			if (!item.isDeleted() && item.getHash() != null && !new File(parent, item.getHash()).exists()) {
 				missing++;
 			}

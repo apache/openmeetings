@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.common.tree;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -33,12 +33,12 @@ public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer errors = new WebMarkupContainer("errors");
 
-	public FileItemPanel(String id, final IModel<? extends FileItem> model, final FileTreePanel fileTreePanel) {
+	public FileItemPanel(String id, final IModel<? extends BaseFileItem> model, final FileTreePanel fileTreePanel) {
 		super(id, model, fileTreePanel);
-		FileItem f = model.getObject();
+		BaseFileItem f = model.getObject();
 		long errorCount = getBean(FileItemLogDao.class).countErrors(f);
 		boolean visible = errorCount != 0;
-		if (FileItem.Type.Recording == f.getType()) {
+		if (BaseFileItem.Type.Recording == f.getType()) {
 			Recording r = (Recording)f;
 			visible |= (Status.RECORDING != r.getStatus() && Status.CONVERTING != r.getStatus() && !f.exists());
 		} else {

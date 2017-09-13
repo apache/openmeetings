@@ -153,7 +153,7 @@
 	<bean id="roomGroupDao" class="org.apache.openmeetings.db.dao.room.RoomGroupDao"/>
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
 	<bean id="fileItemLogDao" class="org.apache.openmeetings.db.dao.file.FileItemLogDao" />
-	<bean id="fileExplorerItemDao" class="org.apache.openmeetings.db.dao.file.FileExplorerItemDao" />
+	<bean id="fileItemDao" class="org.apache.openmeetings.db.dao.file.FileItemDao" />
 	<bean id="recordingDao" class="org.apache.openmeetings.db.dao.record.RecordingDao" />
 	<bean id="recordingMetaDataDao" class="org.apache.openmeetings.db.dao.record.RecordingMetaDataDao" />
 	<bean id="recordingMetaDeltaDao" class="org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao" />

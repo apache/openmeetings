@@ -51,7 +51,7 @@ import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.core.ldap.LdapLoginManagement;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -347,7 +347,7 @@ public class Admin {
 							back.cleanup();
 						}
 						//Files
-						FileExplorerItemDao fileDao = ctx.getBean(FileExplorerItemDao.class);
+						FileItemDao fileDao = ctx.getBean(FileItemDao.class);
 						CleanupEntityUnit files = CleanupHelper.getFileUnit(fileDao);
 						restSize -= files.getSizeTotal();
 						report.append("\t\tfiles: ").append(files.getHumanTotal()).append("\n");

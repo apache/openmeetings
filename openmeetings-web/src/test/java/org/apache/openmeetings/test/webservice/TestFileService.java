@@ -36,8 +36,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
-import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.dto.file.FileItemDTO;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.util.NonJenkinsTests;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -60,20 +60,20 @@ public class TestFileService extends AbstractWebServiceTest {
 			g.drawString("Hello World!!!", 10, 20);
 			ImageIO.write(image, "jpg", img);
 			try (InputStream is = new FileInputStream(img)) {
-				FileExplorerItemDTO file = new FileExplorerItemDTO();
+				FileItemDTO file = new FileItemDTO();
 				file.setName("test.txt");
 				file.setHash(UUID.randomUUID().toString());
-				file.setType(FileItem.Type.Presentation);
+				file.setType(BaseFileItem.Type.Presentation);
 				List<Attachment> atts = new ArrayList<>();
 				atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));
 				atts.add(new Attachment("stream", MediaType.APPLICATION_OCTET_STREAM, is));
-				FileExplorerItemDTO f1 = getClient(FILE_SERVICE_URL)
+				FileItemDTO f1 = getClient(FILE_SERVICE_URL)
 						.path("/")
 						.query("sid", r.getMessage())
-						.type(MediaType.MULTIPART_FORM_DATA_TYPE).postCollection(atts, Attachment.class, FileExplorerItemDTO.class);
+						.type(MediaType.MULTIPART_FORM_DATA_TYPE).postCollection(atts, Attachment.class, FileItemDTO.class);
 				assertNotNull("Valid FileItem should be returned", f1);
 				assertNotNull("Valid FileItem should be returned", f1.getId());
-				assertEquals("Type should be Image", FileItem.Type.Image, f1.getType());
+				assertEquals("Type should be Image", BaseFileItem.Type.Image, f1.getType());
 				assertEquals("Width should be determined", width, f1.getWidth());
 				assertEquals("Height should be Image", height, f1.getHeight());
 			}

@@ -244,6 +244,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				return String.format("\"%s %s\" <%s>", choice.getFirstname(), choice.getLastname(), a == null ? "" : a.getEmail());
 			}
 		});
+		moderatorChoice.getSettings().setCloseOnSelect(true);
 		add(moderatorChoice.add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
 

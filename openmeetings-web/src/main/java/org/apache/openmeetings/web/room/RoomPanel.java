@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -248,7 +248,7 @@ public class RoomPanel extends BasePanel {
 		if (isInterview) {
 			room.add(new WebMarkupContainer("wb-area").add(wb));
 		} else {
-			Droppable<FileItem> wbArea = new Droppable<FileItem>("wb-area") {
+			Droppable<BaseFileItem> wbArea = new Droppable<BaseFileItem>("wb-area") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -261,10 +261,10 @@ public class RoomPanel extends BasePanel {
 				@Override
 				public void onDrop(AjaxRequestTarget target, Component component) {
 					Object o = component.getDefaultModelObject();
-					if (wb.isVisible() && o instanceof FileItem) {
-						FileItem f = (FileItem)o;
+					if (wb.isVisible() && o instanceof BaseFileItem) {
+						BaseFileItem f = (BaseFileItem)o;
 						if (sidebar.getFilesPanel().isSelected(f)) {
-							for (Entry<String, FileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
+							for (Entry<String, BaseFileItem> e : sidebar.getFilesPanel().getSelected().entrySet()) {
 								wb.sendFileToWb(e.getValue(), false);
 							}
 						} else {

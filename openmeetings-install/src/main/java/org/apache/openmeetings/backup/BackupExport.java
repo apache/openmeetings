@@ -42,7 +42,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -58,7 +58,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
@@ -99,7 +99,7 @@ public class BackupExport {
 	@Autowired
 	private OmCalendarDao calendarDao;
 	@Autowired
-	private FileExplorerItemDao fileExplorerItemDao;
+	private FileItemDao fileItemDao;
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
@@ -296,7 +296,7 @@ public class BackupExport {
 			 * ##################### File-Explorer
 			 */
 			{
-				List<FileExplorerItem> list = fileExplorerItemDao.get();
+				List<FileItem> list = fileItemDao.get();
 				Registry registry = new Registry();
 				Strategy strategy = new RegistryStrategy(registry);
 				Serializer serializer = new Persister(strategy);

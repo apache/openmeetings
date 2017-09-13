@@ -39,6 +39,7 @@ import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -63,7 +64,7 @@ public class ImageConverter extends BaseConverter {
 	@Autowired
 	private UserDao userDao;
 
-	public ConverterProcessResultList convertImage(FileItem f, StoredFile sf) throws IOException {
+	public ConverterProcessResultList convertImage(BaseFileItem f, StoredFile sf) throws IOException {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
 		File jpg = f.getFile(EXTENSION_JPG);
@@ -125,7 +126,7 @@ public class ImageConverter extends BaseConverter {
 		return cfgDao.getString(CONFIG_DOCUMENT_QUALITY, "90");
 	}
 
-	private static ConverterProcessResult initSize(FileItem f, File img, String mime) {
+	private static ConverterProcessResult initSize(BaseFileItem f, File img, String mime) {
 		ConverterProcessResult res = new ConverterProcessResult();
 		res.setProcess("get image dimensions :: " + f.getId());
 		final Parser parser = new ImageParser();

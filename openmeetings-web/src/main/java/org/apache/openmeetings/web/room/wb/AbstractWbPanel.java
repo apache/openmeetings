@@ -25,7 +25,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.io.IOException;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -116,7 +116,7 @@ public abstract class AbstractWbPanel extends Panel {
 	 * @param fi - File being dropped
 	 * @param clean - should WB be cleaned up
 	 */
-	public void sendFileToWb(final FileItem fi, boolean clean) {}
+	public void sendFileToWb(final BaseFileItem fi, boolean clean) {}
 
 	/**
 	 * This method allows to set additional attributes to wbAction

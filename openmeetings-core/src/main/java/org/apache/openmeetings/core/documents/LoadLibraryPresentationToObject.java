@@ -21,7 +21,7 @@ package org.apache.openmeetings.core.documents;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.apache.openmeetings.db.dto.file.FileExplorerItemDTO;
+import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.dto.file.PresentationObject;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.dom4j.Document;
@@ -81,11 +81,11 @@ public class LoadLibraryPresentationToObject {
 		}
 	}
 
-	public FileExplorerItemDTO createListObjectLibraryByFileDocument(Element fileElement){
+	public FileItemDTO createListObjectLibraryByFileDocument(Element fileElement){
 		try {
 
 			log.info("createListObjectLibraryByFileDocument"+fileElement);
-			FileExplorerItemDTO fileObject = new FileExplorerItemDTO();
+			FileItemDTO fileObject = new FileItemDTO();
 			fileObject.setName(fileElement.getText());
 			//FIXME TODO fileObject.setLastModified(fileElement.attribute("lastmod").getText());
 			//FIXME TODO fileObject.setSize(fileElement.attribute("size").getText());
@@ -96,15 +96,15 @@ public class LoadLibraryPresentationToObject {
 		return null;
 	}
 
-	public LinkedList<FileExplorerItemDTO> createListObjectLibraryByFileDocumentThumbs(Element fileElement){
+	public LinkedList<FileItemDTO> createListObjectLibraryByFileDocumentThumbs(Element fileElement){
 		try {
 
-			LinkedList<FileExplorerItemDTO> thumbMap = new LinkedList<>();
+			LinkedList<FileItemDTO> thumbMap = new LinkedList<>();
 
 			for (Iterator<Element> i = fileElement.elementIterator(); i.hasNext(); ) {
 				Element thumbElement = i.next();
 				log.info("createListObjectLibraryByFileDocumentThumbs"+thumbElement);
-				FileExplorerItemDTO singleThumb = new FileExplorerItemDTO();
+				FileItemDTO singleThumb = new FileItemDTO();
 				singleThumb.setName(thumbElement.getName());
 				//FIXME TODO singleThumb.setFileNamePure(thumbElement.getText());
 				//FIXME TODO singleThumb.setLastModified(thumbElement.attribute("lastmod").getText());

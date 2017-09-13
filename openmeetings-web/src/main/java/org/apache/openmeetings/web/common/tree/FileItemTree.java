@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.common.tree;
 
 import java.util.Optional;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.wicket.Component;
@@ -39,7 +39,7 @@ import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONObject;
 
-public class FileItemTree extends DefaultNestedTree<FileItem> {
+public class FileItemTree extends DefaultNestedTree<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
 	private final static String CSS_CLASS_FILE = "file ";
 	private final static String PARAM_MOD = "mod";
@@ -47,13 +47,13 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 	private final static String PARAM_CTRL = "c";
 	final FileTreePanel treePanel;
 
-	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<FileItem> tp) {
+	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<BaseFileItem> tp) {
 		super(id, tp);
 		this.treePanel = treePanel;
 		setItemReuseStrategy(new ReuseIfModelsEqualStrategy());
 	}
 
-	private void onClick(AjaxRequestTarget target, FileItem f) {
+	private void onClick(AjaxRequestTarget target, BaseFileItem f) {
 		String mod = getRequest().getRequestParameters().getParameterValue(PARAM_MOD).toOptionalString();
 		boolean shift = false, ctrl = false;
 		if (!Strings.isEmpty(mod)) {
@@ -83,17 +83,17 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 		getModelObject().clear();
 		modelChanged();
 		getProvider().refreshRoots(all);
-		replace(newSubtree("subtree", Model.of((FileItem)null)));
+		replace(newSubtree("subtree", Model.of((BaseFileItem)null)));
 	}
 
 	@Override
-	protected Component newContentComponent(String id, IModel<FileItem> node) {
-		return new Folder<FileItem>(id, this, node) {
+	protected Component newContentComponent(String id, IModel<BaseFileItem> node) {
+		return new Folder<BaseFileItem>(id, this, node) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected Component newLabelComponent(String id, final IModel<FileItem> lm) {
-				FileItem r = lm.getObject();
+			protected Component newLabelComponent(String id, final IModel<BaseFileItem> lm) {
+				BaseFileItem r = lm.getObject();
 				return Type.Folder == r.getType() || r.getId() == null
 						? new FolderPanel(id, lm, treePanel)
 						: new FileItemPanel(id, lm, treePanel);
@@ -115,8 +115,8 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 			}
 
 			@Override
-			protected MarkupContainer newLinkComponent(String id, IModel<FileItem> model) {
-				final FileItem f = getModelObject();
+			protected MarkupContainer newLinkComponent(String id, IModel<BaseFileItem> model) {
+				final BaseFileItem f = getModelObject();
 				return new AjaxLink<Void>(id) {
 					private static final long serialVersionUID = 1L;
 
@@ -141,7 +141,7 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 			}
 
 			@Override
-			protected String getOtherStyleClass(FileItem r) {
+			protected String getOtherStyleClass(BaseFileItem r) {
 				return getItemStyle(r, false);
 			}
 
@@ -161,13 +161,13 @@ public class FileItemTree extends DefaultNestedTree<FileItem> {
 			}
 
 			@Override
-			protected IModel<String> newLabelModel(IModel<FileItem> model) {
+			protected IModel<String> newLabelModel(IModel<BaseFileItem> model) {
 				return Model.of(model.getObject().getName());
 			}
 		};
 	}
 
-	private static String getItemStyle(FileItem f, boolean open) {
+	private static String getItemStyle(BaseFileItem f, boolean open) {
 		StringBuilder style = new StringBuilder("big om-icon ");
 		if (f.getId() == null) {
 			style.append(CSS_CLASS_FILE).append(f.getHash().indexOf("my") > -1 ? "my" : "public");

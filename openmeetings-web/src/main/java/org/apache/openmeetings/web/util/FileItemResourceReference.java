@@ -26,14 +26,14 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
 import org.slf4j.Logger;
 
-public abstract class FileItemResourceReference<T extends FileItem> extends FileSystemResourceReference {
+public abstract class FileItemResourceReference<T extends BaseFileItem> extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
 	protected static final Logger log = getLogger(FileItemResourceReference.class, webAppRootKey);
 

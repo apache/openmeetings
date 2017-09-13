@@ -26,8 +26,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 
 /**
  * This Object will represent a File on the File-System
@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.entity.file.FileItem.Type;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FileExplorerItemDTO implements Serializable {
+public class FileItemDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String name;
@@ -53,9 +53,9 @@ public class FileExplorerItemDTO implements Serializable {
 	private Integer width;
 	private Integer height;
 
-	public FileExplorerItemDTO() {}
+	public FileItemDTO() {}
 
-	public FileExplorerItemDTO(FileExplorerItem f) {
+	public FileItemDTO(FileItem f) {
 		id = f.getId();
 		name = f.getName();
 		hash = f.getHash();
@@ -71,8 +71,8 @@ public class FileExplorerItemDTO implements Serializable {
 		height = f.getHeight();
 	}
 
-	public FileExplorerItem get() {
-		FileExplorerItem f = new FileExplorerItem();
+	public FileItem get() {
+		FileItem f = new FileItem();
 		f.setId(id);
 		f.setName(name);
 		f.setHash(hash);
@@ -193,11 +193,11 @@ public class FileExplorerItemDTO implements Serializable {
 		this.height = height;
 	}
 
-	public static List<FileExplorerItemDTO> list(List<FileExplorerItem> l) {
-		List<FileExplorerItemDTO> list = new ArrayList<>();
+	public static List<FileItemDTO> list(List<FileItem> l) {
+		List<FileItemDTO> list = new ArrayList<>();
 		if (l != null) {
-			for (FileExplorerItem f : l) {
-				list.add(new FileExplorerItemDTO(f));
+			for (FileItem f : l) {
+				list.add(new FileItemDTO(f));
 			}
 		}
 		return list;

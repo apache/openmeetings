@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
@@ -45,7 +45,7 @@ public class RoomFilePanel extends FileTreePanel {
 
 	@Override
 	public void updateSizes() {
-		FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
+		FileItemDao dao = getBean(FileItemDao.class);
 		RecordingContainerData sizeData = getBean(RecordingDao.class).getContainerData(getUserId());
 		long userSize = dao.getOwnSize(getUserId());
 		long roomSize = dao.getRoomSize(room.getRoom().getId());
@@ -58,7 +58,7 @@ public class RoomFilePanel extends FileTreePanel {
 	}
 
 	@Override
-	protected void update(AjaxRequestTarget target, FileItem f) {
+	protected void update(AjaxRequestTarget target, BaseFileItem f) {
 	}
 
 	@Override

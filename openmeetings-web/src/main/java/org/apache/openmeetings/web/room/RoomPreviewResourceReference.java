@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 
 import java.io.File;
 
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.wicket.request.resource.IResource.Attributes;
 
@@ -40,13 +39,13 @@ public class RoomPreviewResourceReference extends RoomResourceReference {
 	}
 
 	@Override
-	protected String getMimeType(FileExplorerItem r) {
+	protected String getMimeType(FileItem r) {
 		return JPG_MIME_TYPE;
 	}
 
 	@Override
-	protected FileExplorerItem getFileItem(Attributes attr) {
-		FileExplorerItem f = super.getFileItem(attr);
+	protected FileItem getFileItem(Attributes attr) {
+		FileItem f = super.getFileItem(attr);
 		if (f != null && FileItem.Type.Video == f.getType()) {
 			return f;
 		}
@@ -54,12 +53,12 @@ public class RoomPreviewResourceReference extends RoomResourceReference {
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem f, Attributes attr) {
+	protected File getFile(FileItem f, Attributes attr) {
 		return getFile(f, EXTENSION_JPG);
 	}
 
 	@Override
-	protected String getFileName(FileExplorerItem f) {
+	protected String getFileName(FileItem f) {
 		return f.getFileName(EXTENSION_JPG);
 	}
 }

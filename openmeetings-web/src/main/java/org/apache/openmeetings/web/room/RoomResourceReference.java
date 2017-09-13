@@ -32,12 +32,12 @@ import java.util.Map.Entry;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -46,7 +46,7 @@ import org.apache.wicket.util.string.StringValue;
 
 import com.github.openjson.JSONObject;
 
-public class RoomResourceReference extends FileItemResourceReference<FileExplorerItem> {
+public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private static final String DEFAULT_NAME = "wb-room-file";
 
@@ -59,7 +59,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected String getMimeType(FileExplorerItem r) {
+	protected String getMimeType(FileItem r) {
 		String mime = null;
 		switch (r.getType()) {
 			case WmlFile:
@@ -81,7 +81,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected FileExplorerItem getFileItem(Attributes attr) {
+	protected FileItem getFileItem(Attributes attr) {
 		PageParameters params = attr.getParameters();
 		StringValue _id = params.get("id");
 		String uid = params.get("uid").toString();
@@ -96,7 +96,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		if (id == null || !ws.isSignedIn() || c == null) {
 			return null;
 		}
-		FileExplorerItem f = getBean(FileExplorerItemDao.class).get(id);
+		FileItem f = getBean(FileItemDao.class).get(id);
 		String ruid = params.get("ruid").toString();
 		String wuid = params.get("wuid").toString();
 		if (c.getRoom() != null) {
@@ -116,7 +116,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 		return null;
 	}
 
-	protected File getFile(FileExplorerItem f, String ext) {
+	protected File getFile(FileItem f, String ext) {
 		File file = f.getFile(ext);
 		if (file == null || !file.exists()) {
 			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s", EXTENSION_JPG));
@@ -125,7 +125,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected File getFile(FileExplorerItem f, Attributes attr) {
+	protected File getFile(FileItem f, Attributes attr) {
 		String ext = null;
 		switch (f.getType()) {
 			case Presentation:
@@ -137,7 +137,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileExplore
 	}
 
 	@Override
-	protected String getFileName(FileExplorerItem f) {
+	protected String getFileName(FileItem f) {
 		return f.getFileName(null);
 	}
 }

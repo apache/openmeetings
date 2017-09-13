@@ -24,7 +24,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.UserBasePanel;
@@ -60,7 +60,7 @@ public class RecordingsPanel extends UserBasePanel {
 			}
 
 			@Override
-			protected void update(AjaxRequestTarget target, FileItem f) {
+			protected void update(AjaxRequestTarget target, BaseFileItem f) {
 				video.update(target, f);
 				info.update(target, f);
 			}

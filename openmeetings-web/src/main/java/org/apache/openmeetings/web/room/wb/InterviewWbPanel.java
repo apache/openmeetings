@@ -25,7 +25,7 @@ import java.io.IOException;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -49,7 +49,7 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	public void sendFileToWb(final FileItem fi, boolean clean) {}
+	public void sendFileToWb(final BaseFileItem fi, boolean clean) {}
 
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {

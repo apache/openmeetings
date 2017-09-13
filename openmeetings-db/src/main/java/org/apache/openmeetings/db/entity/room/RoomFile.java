@@ -20,12 +20,17 @@ package org.apache.openmeetings.db.entity.room;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 
 @Entity
 @Table(name = "room_file")
@@ -36,8 +41,19 @@ public class RoomFile implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "room_id")
+	@Column(name = "room_id", nullable = false)
 	private Long roomId;
+
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "file_id", insertable = true, updatable = true, nullable = false)
+	@ForeignKey(enabled = true)
+	private BaseFileItem file;
+
+	/*
+	 * Index of whiteboard for this file, zero based
+	 */
+	@Column(name = "wb_idx", nullable = false)
+	private long wbIdx = 0;
 
 	@Override
 	public Long getId() {
@@ -47,5 +63,29 @@ public class RoomFile implements IDataProviderEntity {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(Long roomId) {
+		this.roomId = roomId;
+	}
+
+	public BaseFileItem getFile() {
+		return file;
+	}
+
+	public void setFile(BaseFileItem file) {
+		this.file = file;
+	}
+
+	public long getWbIdx() {
+		return wbIdx;
+	}
+
+	public void setWbIdx(long wbIdx) {
+		this.wbIdx = wbIdx;
 	}
 }

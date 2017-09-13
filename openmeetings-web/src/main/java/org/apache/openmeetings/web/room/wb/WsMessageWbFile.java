@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
@@ -30,9 +30,9 @@ public class WsMessageWbFile implements IClusterWsMessage {
 	private final long wbId;
 	private final String ruid;
 	private final String file;
-	private final FileItem fi;
+	private final BaseFileItem fi;
 
-	public WsMessageWbFile(Long roomId, long wbId, String ruid, JSONObject file, FileItem fi) {
+	public WsMessageWbFile(Long roomId, long wbId, String ruid, JSONObject file, BaseFileItem fi) {
 		this.roomId = roomId;
 		this.wbId = wbId;
 		this.ruid = ruid;
@@ -56,7 +56,7 @@ public class WsMessageWbFile implements IClusterWsMessage {
 		return new JSONObject(file);
 	}
 
-	public FileItem getFileItem() {
+	public BaseFileItem getFileItem() {
 		return fi;
 	}
 }

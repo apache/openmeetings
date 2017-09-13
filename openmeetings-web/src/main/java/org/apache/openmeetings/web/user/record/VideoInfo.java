@@ -34,7 +34,7 @@ import org.apache.openmeetings.core.converter.InterviewConverter;
 import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
@@ -132,7 +132,7 @@ public class VideoInfo extends Panel {
 		update(null, r);
 	}
 
-	public VideoInfo update(AjaxRequestTarget target, FileItem _r) {
+	public VideoInfo update(AjaxRequestTarget target, BaseFileItem _r) {
 		boolean reConvEnabled = false;
 		boolean exists = false;
 		if (_r instanceof Recording) {
@@ -198,7 +198,7 @@ public class VideoInfo extends Panel {
 
 			@Override
 			public boolean isEnabled() {
-				FileItem r = rm.getObject();
+				BaseFileItem r = rm.getObject();
 				return r != null && r.exists(EXTENSION_MP4) && !r.isReadOnly();
 			}
 

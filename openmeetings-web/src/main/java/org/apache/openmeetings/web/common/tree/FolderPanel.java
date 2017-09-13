@@ -22,11 +22,11 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Map.Entry;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -49,11 +49,11 @@ public class FolderPanel extends Panel {
 	protected final MarkupContainer drop;
 	protected final MarkupContainer drag;
 
-	public FolderPanel(String id, final IModel<? extends FileItem> model, final FileTreePanel treePanel) {
+	public FolderPanel(String id, final IModel<? extends BaseFileItem> model, final FileTreePanel treePanel) {
 		super(id, model);
-		FileItem r = model.getObject();
+		BaseFileItem r = model.getObject();
 		boolean editable = !treePanel.isReadOnly() && !r.isReadOnly();
-		drop = r.getType() == Type.Folder && editable ? new Droppable<FileItem>("drop", Model.of(r)) {
+		drop = r.getType() == Type.Folder && editable ? new Droppable<BaseFileItem>("drop", Model.of(r)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -66,9 +66,9 @@ public class FolderPanel extends Panel {
 			@Override
 			public void onDrop(AjaxRequestTarget target, Component component) {
 				Object o = component.getDefaultModelObject();
-				if (o instanceof FileItem) {
-					FileItem p = (FileItem)drop.getDefaultModelObject();
-					FileItem f = (FileItem)o;
+				if (o instanceof BaseFileItem) {
+					BaseFileItem p = (BaseFileItem)drop.getDefaultModelObject();
+					BaseFileItem f = (BaseFileItem)o;
 					if (treePanel.isSelected(f)) {
 						moveAll(treePanel, target, p);
 					} else {
@@ -82,7 +82,7 @@ public class FolderPanel extends Panel {
 		if (r.getId() == null || treePanel.isReadOnly()) {
 			drag = new WebMarkupContainer("drag");
 		} else {
-			drag = new Draggable<FileItem>("drag", Model.of(r)) {
+			drag = new Draggable<BaseFileItem>("drag", Model.of(r)) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -108,12 +108,12 @@ public class FolderPanel extends Panel {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				super.onSubmit(target);
-				FileItem fi = model.getObject();
+				BaseFileItem fi = model.getObject();
 				fi.setName(getEditor().getModelObject());
 				if (fi instanceof Recording) {
 					getBean(RecordingDao.class).update((Recording)fi);
 				} else {
-					getBean(FileExplorerItemDao.class).update((FileExplorerItem)fi);
+					getBean(FileItemDao.class).update((FileItem)fi);
 				}
 			}
 		};
@@ -122,13 +122,13 @@ public class FolderPanel extends Panel {
 		add(AttributeModifier.append("title", r.getName()));
 	}
 
-	private static void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p) {
-		for (Entry<String, FileItem> e : treePanel.getSelected().entrySet()) {
+	private static void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p) {
+		for (Entry<String, BaseFileItem> e : treePanel.getSelected().entrySet()) {
 			move(treePanel, target, p, e.getValue());
 		}
 	}
 
-	private static void move(final FileTreePanel treePanel, AjaxRequestTarget target, FileItem p, FileItem f) {
+	private static void move(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
 		Long pid = p.getId();
 		//FIXME parent should not be moved to child !!!!!!!
 		if (pid != null && pid.equals(f.getId())) {
@@ -141,7 +141,7 @@ public class FolderPanel extends Panel {
 		if (f instanceof Recording) {
 			getBean(RecordingDao.class).update((Recording)f);
 		} else {
-			getBean(FileExplorerItemDao.class).update((FileExplorerItem)f);
+			getBean(FileItemDao.class).update((FileItem)f);
 		}
 		treePanel.updateNode(target, f);
 	}

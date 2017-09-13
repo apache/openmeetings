@@ -47,15 +47,14 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboard.ZoomMode;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -107,12 +106,12 @@ public class WbPanel extends AbstractWbPanel {
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
 			Whiteboard wb = WhiteboardCache.get(roomId).get(wb2save);
-			FileExplorerItem f = new FileExplorerItem();
-			f.setType(Type.WmlFile);
+			FileItem f = new FileItem();
+			f.setType(BaseFileItem.Type.WmlFile);
 			f.setRoomId(roomId);
 			f.setHash(UUID.randomUUID().toString());
 			f.setName(getModelObject());
-			f = getBean(FileExplorerItemDao.class).update(f);
+			f = getBean(FileItemDao.class).update(f);
 			try (BufferedWriter writer = Files.newBufferedWriter(f.getFile().toPath())) {
 				writer.write(wb.toJson().toString(new NullStringer(2)));
 			} catch (IOException e) {
@@ -431,13 +430,13 @@ public class WbPanel extends AbstractWbPanel {
 		return addFileUrl(ruid, _file, null);
 	}
 
-	private JSONObject addFileUrl(String ruid, JSONObject _file, Consumer<FileItem> consumer) {
+	private JSONObject addFileUrl(String ruid, JSONObject _file, Consumer<BaseFileItem> consumer) {
 		try {
 			final long fid = _file.optLong("fileId", -1);
 			if (fid > 0) {
-				FileItem fi = FileItem.Type.Recording.name().equals(_file.optString("fileType"))
+				BaseFileItem fi = FileItem.Type.Recording.name().equals(_file.optString("fileType"))
 						? getBean(RecordingDao.class).get(fid)
-						: getBean(FileExplorerItemDao.class).get(fid);
+						: getBean(FileItemDao.class).get(fid);
 				if (fi != null) {
 					if (consumer != null) {
 						consumer.accept(fi);
@@ -476,7 +475,7 @@ public class WbPanel extends AbstractWbPanel {
 		sendWbAll(WbAction.setSize, getAddWbJson(wb));
 	}
 
-	private static void updateWbSize(Whiteboard wb, final FileItem fi) {
+	private static void updateWbSize(Whiteboard wb, final BaseFileItem fi) {
 		int w = fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth();
 		int h = fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight();
 		wb.setWidth(Math.max(wb.getWidth(), w));
@@ -484,7 +483,7 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	public void sendFileToWb(final FileItem fi, boolean clean) {
+	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = WhiteboardCache.get(roomId);
 			String wuid = UUID.randomUUID().toString();

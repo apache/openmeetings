@@ -28,12 +28,12 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.file.FileExplorerItemDao;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.db.entity.file.FileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -42,7 +42,7 @@ import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class OmTreeProvider implements ITreeProvider<FileItem> {
+public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
 	private static final List<Type> VIDEO_TYPES = Arrays.asList(Type.Folder, Type.Video);
 	public static String RECORDINGS_MY = "recordings-my";
@@ -52,7 +52,7 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 	public static String FILES_ROOM = "files-room";
 	public static String FILES_GROUP = "files-group-%s";
 	private final Long roomId;
-	private final List<FileItem> roots = new ArrayList<>();
+	private final List<BaseFileItem> roots = new ArrayList<>();
 	private final String PUBLIC, GROUP_FILE, GROUP_REC;
 
 	public OmTreeProvider(Long roomId) {
@@ -64,27 +64,27 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 	}
 
 	public void refreshRoots(boolean all) {
-		List<FileItem> fRoot = new ArrayList<>(), rRoot = new ArrayList<>();
+		List<BaseFileItem> fRoot = new ArrayList<>(), rRoot = new ArrayList<>();
 		if (all) {
 			if (roomId != null) {
-				FileItem r = createRoot(Application.getString("706"), FILES_MY, false);
+				BaseFileItem r = createRoot(Application.getString("706"), FILES_MY, false);
 				r.setOwnerId(getUserId());
 				fRoot.add(r);
 			}
 		}
 		if (roomId != null) {
-			FileItem r = createRoot(Application.getString("707"), FILES_ROOM, false);
+			BaseFileItem r = createRoot(Application.getString("707"), FILES_ROOM, false);
 			r.setRoomId(roomId);
 			fRoot.add(r);
 		}
 		if (all) {
 			{
-				FileItem r = createRoot(Application.getString("860"), RECORDINGS_MY, true);
+				BaseFileItem r = createRoot(Application.getString("860"), RECORDINGS_MY, true);
 				r.setOwnerId(getUserId());
 				rRoot.add(r);
 			}
 			{
-				FileItem r = createRoot(PUBLIC, RECORDINGS_PUBLIC, true);
+				BaseFileItem r = createRoot(PUBLIC, RECORDINGS_PUBLIC, true);
 				rRoot.add(r);
 			}
 		}
@@ -92,12 +92,12 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 			Group g = gu.getGroup();
 			boolean readOnly = g.isRestricted() && !hasAdminLevel(getRights()) && !gu.isModerator();
 			if (all) {
-				FileItem r = createRoot(String.format("%s (%s)", GROUP_REC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
+				BaseFileItem r = createRoot(String.format("%s (%s)", GROUP_REC, g.getName()), String.format(RECORDINGS_GROUP, g.getId()), true);
 				r.setReadOnly(readOnly);
 				r.setGroupId(g.getId());
 				rRoot.add(r);
 			}
-			FileItem r = createRoot(String.format("%s (%s)", GROUP_FILE, g.getName()), String.format(FILES_GROUP, g.getId()), false);
+			BaseFileItem r = createRoot(String.format("%s (%s)", GROUP_FILE, g.getName()), String.format(FILES_GROUP, g.getId()), false);
 			r.setGroupId(g.getId());
 			//group videos are read-only in recordings tree
 			r.setReadOnly(roomId == null || readOnly);
@@ -113,25 +113,25 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 		}
 	}
 
-	static FileItem createRoot(String name, String hash, boolean rec) {
-		FileItem f = rec ? new Recording() : new FileExplorerItem();
+	static BaseFileItem createRoot(String name, String hash, boolean rec) {
+		BaseFileItem f = rec ? new Recording() : new FileItem();
 		f.setType(Type.Folder);
 		f.setName(name);
 		f.setHash(hash);
 		return f;
 	}
 
-	public FileItem getRoot() {
+	public BaseFileItem getRoot() {
 		return roots.get(0);
 	}
 
 	@Override
-	public Iterator<FileItem> getRoots() {
+	public Iterator<BaseFileItem> getRoots() {
 		return roots.iterator();
 	}
 
-	public List<FileItem> getByParent(FileItem node, Long id) {
-		List<FileItem> list = new ArrayList<>();
+	public List<BaseFileItem> getByParent(BaseFileItem node, Long id) {
+		List<BaseFileItem> list = new ArrayList<>();
 		if (node instanceof Recording) {
 			Recording rec = (Recording)node;
 			RecordingDao dao = getBean(RecordingDao.class);
@@ -147,8 +147,8 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 			}
 			list.addAll(_list);
 		} else {
-			FileExplorerItemDao dao = getBean(FileExplorerItemDao.class);
-			List<FileExplorerItem> _list;
+			FileItemDao dao = getBean(FileItemDao.class);
+			List<FileItem> _list;
 			if (id == null) {
 				if (node.getRoomId() != null) {
 					_list = dao.getByRoom(node.getRoomId());
@@ -163,7 +163,7 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 			list.addAll(_list);
 		}
 		if (node.isReadOnly()) {
-			for (FileItem f : list) {
+			for (BaseFileItem f : list) {
 				f.setReadOnly(true);
 			}
 		}
@@ -171,17 +171,17 @@ public class OmTreeProvider implements ITreeProvider<FileItem> {
 	}
 
 	@Override
-	public Iterator<FileItem> getChildren(FileItem node) {
+	public Iterator<BaseFileItem> getChildren(BaseFileItem node) {
 		return getByParent(node, node.getId()).iterator();
 	}
 
 	@Override
-	public boolean hasChildren(FileItem node) {
+	public boolean hasChildren(BaseFileItem node) {
 		return node.getId() == null || Type.Folder == node.getType();
 	}
 
 	@Override
-	public IModel<FileItem> model(FileItem object) {
+	public IModel<BaseFileItem> model(BaseFileItem object) {
 		// TODO LDM should be used
 		return Model.of(object);
 	}

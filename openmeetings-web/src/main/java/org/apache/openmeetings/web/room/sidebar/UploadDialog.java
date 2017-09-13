@@ -29,7 +29,7 @@ import java.util.Map.Entry;
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
-import org.apache.openmeetings.db.entity.file.FileExplorerItem;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
@@ -183,18 +183,18 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		if (ful != null) {
 			boolean clean = cleanWb.getModelObject();
 			for (FileUpload fu : ful) {
-				FileExplorerItem f = new FileExplorerItem();
+				FileItem f = new FileItem();
 				f.setSize(fu.getSize());
 				f.setName(fu.getClientFileName());
-				FileItem parent = roomFiles.getLastSelected();
-				if (parent == null || !(parent instanceof FileExplorerItem)) {
+				BaseFileItem parent = roomFiles.getLastSelected();
+				if (parent == null || !(parent instanceof FileItem)) {
 					f.setOwnerId(getUserId());
 				} else {
 					f.setRoomId(parent.getRoomId());
 					f.setOwnerId(parent.getOwnerId());
 					f.setGroupId(parent.getGroupId());
 					if (parent.getId() != null) {
-						f.setParentId(FileItem.Type.Folder == parent.getType() ? parent.getId() : parent.getParentId());
+						f.setParentId(BaseFileItem.Type.Folder == parent.getType() ? parent.getId() : parent.getParentId());
 					}
 				}
 				f.setInsertedBy(getUserId());
