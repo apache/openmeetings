@@ -504,7 +504,7 @@
 	<method name="closeStream" args="value">
 		//The onResult-Handler will be called be the rtmpconnection
 		if ($debug) Debug.write("**** closeStream: ", value);
-		if (value == null) {
+		if (value == null || value.isBroadcasting) {
 			return;
 		}
 		if (value.screenClient) {
