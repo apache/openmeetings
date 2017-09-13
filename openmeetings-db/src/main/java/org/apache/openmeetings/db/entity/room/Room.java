@@ -61,6 +61,7 @@ import org.simpleframework.xml.Root;
 @FetchGroups({
 	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators") })
 	, @FetchGroup(name = "roomGroups", attributes = { @FetchAttribute(name = "groups") })
+	, @FetchGroup(name = "roomFiles", attributes = { @FetchAttribute(name = "roomFiles") })
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
@@ -300,6 +301,11 @@ public class Room implements IDataProviderEntity {
 	@ElementDependent
 	@org.simpleframework.xml.Transient
 	private List<RoomGroup> groups = new ArrayList<>();
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "room_id", insertable = true, updatable = true, nullable = false)
+	@ElementDependent
+	private List<RoomFile> roomfiles = new ArrayList<>();
 
 	@Transient
 	private List<StreamClient> currentusers;
