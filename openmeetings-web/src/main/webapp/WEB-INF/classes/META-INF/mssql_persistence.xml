@@ -45,9 +45,10 @@
 		<class>org.apache.openmeetings.db.entity.room.RoomPollAnswer</class>
 		<class>org.apache.openmeetings.db.entity.room.RoomModerator</class>
 		<class>org.apache.openmeetings.db.entity.room.Room</class>
+		<class>org.apache.openmeetings.db.entity.room.RoomGroup</class>
+		<class>org.apache.openmeetings.db.entity.room.RoomFile</class>
 		<class>org.apache.openmeetings.db.entity.room.Whiteboard</class>
 		<class>org.apache.openmeetings.db.entity.room.WhiteboardItem</class>
-		<class>org.apache.openmeetings.db.entity.room.RoomGroup</class>
 		<class>org.apache.openmeetings.db.entity.user.Address</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessage</class>
 		<class>org.apache.openmeetings.db.entity.user.PrivateMessageFolder</class>
