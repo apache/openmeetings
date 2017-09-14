@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -170,16 +171,19 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 			@Override
 			public void query(String term, int page, Response<RoomGroup> response) {
-				for (RoomGroup or : orgRooms) {
-					if (Strings.isEmpty(term) || or.getGroup().getName().contains(term)) {
-						response.add(or);
-					}
-				}
+				response.addAll(orgRooms.stream()
+						.filter(rg -> Strings.isEmpty(term) || rg.getGroup().getName().contains(term))
+						.collect(Collectors.toList())
+						);
 			}
 
 			@Override
 			public RoomGroup fromId(String _id) {
 				Long id = Long.valueOf(_id);
+
+				if (!orgList.stream().filter(g -> g.getId().equals(id)).findFirst().isPresent()) {
+					return null; // seems to be hacked
+				}
 				Group g = getBean(GroupDao.class).get(id);
 				return new RoomGroup(g, RoomForm.this.getModelObject());
 			}
