@@ -3,6 +3,21 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 3.3.2
+================================================================================================================
+** Bug
+    * [OPENMEETINGS-1688] - Selected icon tool is not availble after Undo
+    * [OPENMEETINGS-1693] - UserWebService.add method parameters are badly annotated
+    * [OPENMEETINGS-1696] - Microphone is not switched on when user disabled video
+    * [OPENMEETINGS-1697] - Strong password is not enforced during self registration
+    * [OPENMEETINGS-1698] - dashboard.show.chat option is not fully works
+    * [OPENMEETINGS-1700] - Internal error during simultaneous room enter
+    * [OPENMEETINGS-1702] - List of rooms is not scrolled when user exit from the room
+
+** New Feature
+    * [OPENMEETINGS-1008] - New Setting: Can user create rooms
+
+
 Release Notes - Openmeetings - Version 3.3.1
 ================================================================================================================
 ** Bug
