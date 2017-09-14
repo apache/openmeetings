@@ -119,7 +119,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		name.setLabel(new Model<>(Application.getString(193)));
 		add(name);
 
-		add(new DropDownChoice<>("numberOfPartizipants", //
+		add(new DropDownChoice<>("capacity", //
 				DROPDOWN_NUMBER_OF_PARTICIPANTS, //
 				new ChoiceRenderer<Long>() {
 					private static final long serialVersionUID = 1L;

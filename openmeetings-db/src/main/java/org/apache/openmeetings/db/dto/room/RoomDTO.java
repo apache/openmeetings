@@ -46,7 +46,7 @@ public class RoomDTO implements Serializable {
 	private String name;
 	private String comment;
 	private Room.Type type;
-	private Long numberOfPartizipants = new Long(4);
+	private Long capacity = new Long(4);
 	private boolean appointment;
 	private String confno;
 	private boolean isPublic;
@@ -70,7 +70,7 @@ public class RoomDTO implements Serializable {
 		name = r.getName();
 		comment = r.getComment();
 		type = r.getType();
-		numberOfPartizipants = r.getNumberOfPartizipants();
+		capacity = r.getCapacity();
 		appointment = r.isAppointment();
 		confno = r.getConfno();
 		isPublic = r.getIspublic();
@@ -94,7 +94,7 @@ public class RoomDTO implements Serializable {
 		r.setName(name);
 		r.setComment(comment);
 		r.setType(type);
-		r.setNumberOfPartizipants(numberOfPartizipants);
+		r.setCapacity(capacity);
 		r.setAppointment(appointment);
 		r.setConfno(confno);
 		r.setIspublic(isPublic);
@@ -144,12 +144,12 @@ public class RoomDTO implements Serializable {
 		this.type = type;
 	}
 
-	public Long getNumberOfPartizipants() {
-		return numberOfPartizipants;
+	public Long getCapacity() {
+		return capacity;
 	}
 
-	public void setNumberOfPartizipants(Long numberOfPartizipants) {
-		this.numberOfPartizipants = numberOfPartizipants;
+	public void setCapacity(Long capacity) {
+		this.capacity = capacity;
 	}
 
 	public boolean isAppointment() {
@@ -295,7 +295,7 @@ public class RoomDTO implements Serializable {
 		r.name = o.optString("name");
 		r.comment = o.optString("comment");
 		r.type = optEnum(Room.Type.class, o, "type");
-		r.numberOfPartizipants = o.optLong("numberOfPartizipants", 4);
+		r.capacity = o.optLong("capacity", 4);
 		r.appointment = o.optBoolean("appointment", false);
 		r.confno = o.optString("confno");
 		r.isPublic = o.optBoolean("isPublic", false);

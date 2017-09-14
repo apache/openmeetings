@@ -78,7 +78,7 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "getSipRoomIdsByIds", query = "SELECT r.id FROM Room r WHERE r.deleted = false AND r.sipEnabled = true AND r.id IN :ids"),
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
-	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.numberOfPartizipants) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
+	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.capacity) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
 	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT r.room FROM RoomGroup r LEFT JOIN FETCH r.room "
 			+ "WHERE r.group.id = :groupId AND r.deleted = false AND r.room.deleted = false AND r.room.appointment = false "
 			+ "AND r.group.deleted = false ORDER BY r.room.name ASC")
@@ -192,9 +192,9 @@ public class Room implements IDataProviderEntity {
 	@Element(name = "ispublic", data = true, required = false)
 	private boolean ispublic;
 
-	@Column(name = "numberOfPartizipants")
-	@Element(data = true, required = false)
-	private long numberOfPartizipants = 4L;
+	@Column(name = "capacity")
+	@Element(name = "numberOfPartizipants", data = true, required = false)
+	private long capacity = 4L;
 
 	@Column(name = "appointment", nullable = false)
 	@Element(data = true, required = false)
@@ -384,12 +384,12 @@ public class Room implements IDataProviderEntity {
 		this.currentusers = currentusers;
 	}
 
-	public long getNumberOfPartizipants() {
-		return numberOfPartizipants;
+	public long getCapacity() {
+		return capacity;
 	}
 
-	public void setNumberOfPartizipants(long numberOfPartizipants) {
-		this.numberOfPartizipants = numberOfPartizipants;
+	public void setCapacity(long capacity) {
+		this.capacity = capacity;
 	}
 
 	public boolean isAppointment() {
