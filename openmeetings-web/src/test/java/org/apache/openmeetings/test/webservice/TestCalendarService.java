@@ -101,7 +101,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 					.put("name", "test24")
 					.put("comment", "appointment test room")
 					.put("type", "conference")
-					.put("numberOfPartizipants", 15)
+					.put("capacity", 15)
 					.put("appointment", true)
 					.put("isPublic", false)
 					.put("demo", false)

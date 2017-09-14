@@ -69,7 +69,7 @@ public class RoomListPanel extends UserPanel {
 						.add(AttributeModifier.append("title", getString(String.format("room.type.%s.desc", r.getType().name())))));
 				final Label curUsers = new Label("curUsers", new Model<>(Application.getRoomClients(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
-				roomContainer.add(new Label("totalUsers", r.getNumberOfPartizipants()));
+				roomContainer.add(new Label("totalUsers", r.getCapacity()));
 				item.add(new Button("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
 					private static final long serialVersionUID = 1L;
 

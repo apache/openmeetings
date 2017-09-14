@@ -423,7 +423,7 @@ public class RoomWebService extends BaseWebService {
 					RoomCountDTO rCountBean = new RoomCountDTO();
 					rCountBean.setRoomId(room.getId());
 					rCountBean.setRoomName(room.getName());
-					rCountBean.setMaxUser(room.getNumberOfPartizipants());
+					rCountBean.setMaxUser(room.getCapacity());
 					rCountBean.setRoomCount(app.getOmRoomClients(room.getId()).size());
 
 					roomBeans.add(rCountBean);

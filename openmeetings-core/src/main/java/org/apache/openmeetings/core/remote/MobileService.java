@@ -300,7 +300,7 @@ public class MobileService {
 		}
 		room.put("first", first);
 		room.put("users", sessionManager.listByRoom(r.getId()).size());
-		room.put("total", r.getNumberOfPartizipants());
+		room.put("total", r.getCapacity());
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
 	}

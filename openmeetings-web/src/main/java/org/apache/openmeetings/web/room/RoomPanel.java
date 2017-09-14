@@ -280,7 +280,7 @@ public class RoomPanel extends BasePanel {
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);
-		} else if (getRoomClients(r.getId()).size() >= r.getNumberOfPartizipants()) {
+		} else if (getRoomClients(r.getId()).size() >= r.getCapacity()) {
 			accessDenied = new ExpiredMessageDialog(ACCESS_DENIED_ID, getString("99"), menu);
 			room.setVisible(false);
 		} else if (r.getId().equals(WebSession.get().getRoomId())) {
