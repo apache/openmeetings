@@ -1,4 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+var HtmlOverflow;
 function setRoomSizes() {
 	var sb = $(".room.sidebar.left")
 		, w = $(window).width() - sb.width() - 8
@@ -55,10 +56,13 @@ function roomLoad() {
 			setRoomSizes();
 		}
 	});
+	HtmlOverflow = $('html,body').css('overflow');
+	$('html,body').css('overflow', 'hidden');
 	Wicket.Event.subscribe("/websocket/closed", roomClosed);
 	Wicket.Event.subscribe("/websocket/error", roomClosed);
 }
 function roomUnload() {
+	$('html,body').css('overflow', HtmlOverflow);
 	$(window).off('resize.openmeetings');
 	Wicket.Event.unsubscribe("/websocket/closed", roomClosed);
 	Wicket.Event.unsubscribe("/websocket/error", roomClosed);
