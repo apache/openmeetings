@@ -22,6 +22,30 @@
 	<body>
 		<section name="News">
 			<div class="bs-callout bs-callout-info">
+				<b>Version 3.3.1 released!</b>
+				<div>Release 3.3.1, provides following improvements:<br/>
+					<ul>
+						<li>Clustering works as expected</li>
+						<li>SIP works as expected</li>
+						<li>Multiple issues in web services were fixed</li>
+						<li>RTMPT mode is fixed</li>
+						<li>Multiple UI improvements</li>
+					</ul>
+					<br/>
+					Other fixes and improvements
+					<br/>
+					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
+				</div>
+				<br/>
+				<span>
+					19 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12340997">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2017-09-07)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 3.3.0 released!</b>
 				<div>Release 3.3.0, provides following improvements:<br/>
 					Security fixes in<br/>
