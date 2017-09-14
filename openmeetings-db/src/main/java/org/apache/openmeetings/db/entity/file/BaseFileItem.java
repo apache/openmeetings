@@ -41,6 +41,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlType;
@@ -49,6 +51,17 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.simpleframework.xml.Element;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "getAllFileItemsForRoom", query = "SELECT f FROM BaseFileItem f"
+			+ " WHERE f.deleted = false AND f.type <> :folder"
+			+ " AND (f.roomId IS NULL OR f.roomId = :roomId)"
+			+ " AND (f.groupId IS NULL OR f.groupId IN :groups)"
+			//+ " AND (f.ownerId IS NULL OR f.ownerId = :ownerId)"
+			+ " AND f.name LIKE :name"
+			+ " ORDER BY f.name")
+	, @NamedQuery(name = "getFileItemsByIds", query = "SELECT f FROM BaseFileItem f"
+			+ " WHERE f.deleted = false AND f.id IN :ids)")
+})
 @Table(name = "file")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class BaseFileItem implements IDataProviderEntity {
