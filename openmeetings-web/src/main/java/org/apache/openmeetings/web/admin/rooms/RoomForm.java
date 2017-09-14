@@ -28,6 +28,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.StreamClient;
@@ -80,6 +82,9 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Select2MultiChoice;
 
+import com.googlecode.wicket.jquery.ui.JQueryIcon;
+import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
+
 public class RoomForm extends AdminBaseForm<Room> {
 	private static final long serialVersionUID = 1L;
 	private final static List<Long> DROPDOWN_NUMBER_OF_PARTICIPANTS = Arrays.asList(2L, 4L, 6L, 8L, 10L, 12L, 14L, 16L, 20L, 25L, 32L, 50L,
@@ -87,6 +92,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private final WebMarkupContainer roomList;
 	private final TextField<String> pin = new TextField<>("pin");
 	private final WebMarkupContainer moderatorContainer = new WebMarkupContainer("moderatorContainer");
+	private final WebMarkupContainer filesContainer = new WebMarkupContainer("filesContainer");
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
 	private final ListView<StreamClient> clients = new ListView<StreamClient>("clients", new ArrayList<>()) {
 		private static final long serialVersionUID = 1L;
@@ -111,6 +117,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	};
 	private IModel<User> moderator2add = Model.of((User)null);
 	private IModel<Collection<BaseFileItem>> files2add = new CollectionModel<>(new ArrayList<BaseFileItem>());
+	private IModel<Long> wbIdx = Model.of(0L);
 
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<>(room));
@@ -311,30 +318,83 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("moderated"));
 
 		// Files
-		add(new Select2MultiChoice<>("files2add", files2add, new ChoiceProvider<BaseFileItem>() {
+		Form<Void> filesForm = new Form<>("files");
+		add(filesForm.add(new Select2MultiChoice<>("files2add", files2add, new ChoiceProvider<BaseFileItem>() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public String getDisplayValue(BaseFileItem f) {
+					return f.getName();
+				}
+
+				@Override
+				public String getIdValue(BaseFileItem f) {
+					return "" + f.getId();
+				}
+
+				@Override
+				public void query(String term, int page, Response<BaseFileItem> response) {
+					response.addAll(getBean(FileItemDao.class).getAllRoomFiles(term, page * PAGE_SIZE, PAGE_SIZE, RoomForm.this.getModelObject().getId(), orgList));
+					response.setHasMore(PAGE_SIZE == response.getResults().size());
+				}
+
+				@Override
+				public Collection<BaseFileItem> toChoices(Collection<String> ids) {
+					return getBean(FileItemDao.class).get(ids);
+				}
+			}).setLabel(Model.of(getString("245"))))
+			.add(new TextField<Long>("wbidx", wbIdx) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected String[] getInputTypes() {
+					return new String[] {"number"};
+				}
+			})
+			.add(new AjaxButton("addFiles") {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					Room r = RoomForm.this.getModelObject();
+					for (BaseFileItem f : files2add.getObject()) {
+						r.getFiles().add(new RoomFile(r.getId(), f, wbIdx.getObject()));
+					}
+					target.add(filesContainer, filesForm);
+				}
+
+				@Override
+				protected String getIcon() {
+					return JQueryIcon.PLUSTHICK;
+				}
+			}).setOutputMarkupId(true)
+		);
+		add(filesContainer.add(new ListView<RoomFile>("files") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public String getDisplayValue(BaseFileItem f) {
-				return f.getName();
-			}
+			protected void populateItem(final ListItem<RoomFile> item) {
+				final RoomFile rf = item.getModelObject();
+				item.add(new Label("name", new PropertyModel<>(rf.getFile(), "name")))
+					.add(new Label("wbIdx", new PropertyModel<>(rf, "wbIdx")))
+					.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
+						private static final long serialVersionUID = 1L;
 
-			@Override
-			public String getIdValue(BaseFileItem f) {
-				return "" + f.getId();
+						@Override
+						protected void onSubmit(AjaxRequestTarget target) {
+							Room r = RoomForm.this.getModelObject();
+							for (Iterator<RoomFile> iter = r.getFiles().iterator(); iter.hasNext();) {
+								RoomFile _rf = iter.next();
+								if (_rf.getFile().getId().equals(rf.getFile().getId())) {
+									iter.remove();
+									break;
+								}
+							}
+							target.add(filesContainer);
+						}
+					});
 			}
-
-			@Override
-			public void query(String term, int page, Response<BaseFileItem> response) {
-				response.addAll(getBean(FileItemDao.class).getAllRoomFiles(term, page * PAGE_SIZE, PAGE_SIZE, RoomForm.this.getModelObject().getId(), orgList));
-				response.setHasMore(PAGE_SIZE == response.getResults().size());
-			}
-
-			@Override
-			public Collection<BaseFileItem> toChoices(Collection<String> ids) {
-				return getBean(FileItemDao.class).get(ids);
-			}
-		}).setLabel(Model.of(getString("245"))));
+		}).setOutputMarkupId(true));
 
 		// Users in this Room
 		add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
@@ -372,6 +432,9 @@ public class RoomForm extends AdminBaseForm<Room> {
 		if (newRoom) {
 			for (RoomModerator rm : r.getModerators()) {
 				rm.setRoomId(r.getId());
+			}
+			for (RoomFile rf : r.getFiles()) {
+				rf.setRoomId(r.getId());
 			}
 			// FIXME double update
 			getBean(RoomDao.class).update(getModelObject(), getUserId());
@@ -427,9 +490,16 @@ public class RoomForm extends AdminBaseForm<Room> {
 	}
 
 	public void updateView(AjaxRequestTarget target) {
+		moderator2add.setObject(null);
+		files2add.getObject().clear();
+		wbIdx.setObject(0L);
+		Room r = getModelObject();
+		if (r.getFiles() == null) {
+			r.setFiles(new ArrayList<>());
+		}
 		target.add(this);
 		target.add(roomList);
-		target.add(pin.setEnabled(getModelObject().isSipEnabled()));
+		target.add(pin.setEnabled(r.isSipEnabled()));
 		updateClients(target);
 		target.appendJavaScript("adminPanelInit();");
 	}
@@ -437,6 +507,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 	@Override
 	protected void onDetach() {
 		moderator2add.detach();
+		files2add.detach();
+		wbIdx.detach();
 		super.onDetach();
 	}
 }
