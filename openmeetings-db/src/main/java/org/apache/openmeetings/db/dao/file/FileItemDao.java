@@ -290,7 +290,7 @@ public class FileItemDao {
 		return em.createNamedQuery("getAllFileItemsForRoom", BaseFileItem.class)
 				.setParameter("folder", Type.Folder)
 				.setParameter("roomId", roomId)
-				.setParameter("groups", groups.stream().map(Group::getId).collect(Collectors.toList()))
+				.setParameter("groups", groups.parallelStream().map(Group::getId).collect(Collectors.toList()))
 				.setParameter("name", String.format("%%%s%%", search == null ? "" : search))
 				.setFirstResult(start)
 				.setMaxResults(count)
@@ -299,7 +299,7 @@ public class FileItemDao {
 
 	public List<BaseFileItem> get(Collection<String> ids) {
 		return em.createNamedQuery("getFileItemsByIds", BaseFileItem.class)
-				.setParameter("ids", ids.stream().map(Long::valueOf).collect(Collectors.toList()))
+				.setParameter("ids", ids.parallelStream().map(Long::valueOf).collect(Collectors.toList()))
 				.getResultList();
 	}
 

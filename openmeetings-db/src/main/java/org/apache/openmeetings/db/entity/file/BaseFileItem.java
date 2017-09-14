@@ -54,7 +54,7 @@ import org.simpleframework.xml.Element;
 			+ " WHERE f.deleted = false AND f.type <> :folder"
 			+ " AND (f.roomId IS NULL OR f.roomId = :roomId)"
 			+ " AND (f.groupId IS NULL OR f.groupId IN :groups)"
-			//+ " AND (f.ownerId IS NULL OR f.ownerId = :ownerId)"
+			+ " AND f.ownerId IS NULL" // not loading personal files
 			+ " AND f.name LIKE :name"
 			+ " ORDER BY f.name")
 	, @NamedQuery(name = "getFileItemsByIds", query = "SELECT f FROM BaseFileItem f"
