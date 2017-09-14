@@ -69,14 +69,13 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.3.1 released!</b>
-				<div>Release 3.3.1, provides following improvements:<br/>
+				<b>Version 3.3.2 released!</b>
+				<div>Release 3.3.2, provides following improvements:<br/>
 					<ul>
-						<li>Clustering works as expected</li>
-						<li>SIP works as expected</li>
-						<li>Multiple issues in web services were fixed</li>
-						<li>RTMPT mode is fixed</li>
-						<li>Multiple UI improvements</li>
+						<li>Audio/Video in conference room is fixed</li>
+						<li>Strong password is enforced during self registration</li>
+						<li>'dashboard.show.chat' should work as expected</li>
+						<li>New Setting is added 'user can create rooms'</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -85,12 +84,12 @@
 				</div>
 				<br/>
 				<span>
-					19 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.3.1/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12340997">Detailed list</a>
+					8 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/3.3.2/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12341445">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-09-07)</span>
+				<span class="date">(2017-09-18)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
