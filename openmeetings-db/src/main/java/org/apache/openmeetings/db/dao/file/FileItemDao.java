@@ -23,17 +23,21 @@ import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -280,6 +284,23 @@ public class FileItemDao {
 			updateChilds(f);
 		}
 		return update(f);
+	}
+
+	public List<BaseFileItem> getAllRoomFiles(String search, int start, int count, Long roomId/*, Long ownerId*/, List<Group> groups) {
+		return em.createNamedQuery("getAllFileItemsForRoom", BaseFileItem.class)
+				.setParameter("folder", Type.Folder)
+				.setParameter("roomId", roomId)
+				.setParameter("groups", groups.stream().map(Group::getId).collect(Collectors.toList()))
+				.setParameter("name", String.format("%%%s%%", search == null ? "" : search))
+				.setFirstResult(start)
+				.setMaxResults(count)
+				.getResultList();
+	}
+
+	public List<BaseFileItem> get(Collection<String> ids) {
+		return em.createNamedQuery("getFileItemsByIds", BaseFileItem.class)
+				.setParameter("ids", ids.stream().map(Long::valueOf).collect(Collectors.toList()))
+				.getResultList();
 	}
 
 	public long getOwnSize(Long userId) {
