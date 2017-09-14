@@ -260,7 +260,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			room.setName(name);
 			room.setType(type);
 			room.setComment("My Rooms of ownerId " + ownerId);
-			room.setCapacity(Room.Type.conference == type ? 25L : 120L);
+			room.setNumberOfPartizipants(Room.Type.conference == type ? 25L : 120L);
 			room.setAllowUserQuestions(true);
 			room.setOwnerId(ownerId);
 			room.setAllowRecording(true);

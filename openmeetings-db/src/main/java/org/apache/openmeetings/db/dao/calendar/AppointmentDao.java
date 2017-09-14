@@ -107,7 +107,7 @@ public class AppointmentDao {
 		Room r = a.getRoom();
 		if (r.getId() == null) {
 			r.setName(a.getTitle());
-			r.setCapacity(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
+			r.setNumberOfPartizipants(cfgDao.getConfValue("calendar.conference.rooms.default.size", Long.class, "50"));
 		}
 		roomDao.update(r, userId);
 		if (sendmails) {

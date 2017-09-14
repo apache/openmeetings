@@ -318,7 +318,7 @@ public class ImportInitvalues {
 		r.setName(name);
 		r.setComment("");
 		r.setInserted(new Date());
-		r.setCapacity(capacity);
+		r.setNumberOfPartizipants(capacity);
 		r.setType(type);
 		r.setIspublic(isPublic);
 		r.setAllowUserQuestions(true);

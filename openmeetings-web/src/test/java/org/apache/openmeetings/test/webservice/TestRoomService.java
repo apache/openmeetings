@@ -43,7 +43,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 		r.setType(type);
 		r.setName(name);
 		r.setComment(comment);
-		r.setCapacity(num);
+		r.setNumberOfPartizipants(num);
 		RoomDTO room = getClient(ROOM_SERVICE_URL).path(String.format("/%s/%s/%s", type, UNIT_TEST_EXT_TYPE, extId))
 				.query("sid", sr.getMessage())
 				.query("room", r.toString())

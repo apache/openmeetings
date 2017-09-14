@@ -193,7 +193,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			Room r = m.getRoom();
 			r.setName(m.getSubject());
 			r.setComment("");
-			r.setCapacity(100L);
+			r.setNumberOfPartizipants(100L);
 			r.setAppointment(true);
 			r.setAllowUserQuestions(true);
 			r = getBean(RoomDao.class).update(r, getUserId());
