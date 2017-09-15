@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.webservice.util;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +49,7 @@ public class AppointmentMessageBodyReader implements MessageBodyReader<Appointme
 			MediaType mediaType, MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
 			throws IOException, WebApplicationException
 	{
-		BufferedReader br = new BufferedReader(new InputStreamReader(entityStream));
+		BufferedReader br = new BufferedReader(new InputStreamReader(entityStream, UTF_8));
 		String line = null;
 		StringBuilder sb = new StringBuilder();
 		while ((line = br.readLine()) != null) {

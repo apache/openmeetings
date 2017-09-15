@@ -308,12 +308,16 @@ public abstract class BaseFileItem implements IDataProviderEntity {
 					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
 				case Presentation:
-					int slide = (ext == null) ? 0 : -1;
-					try {
-						//ext is used for slide here
-						slide = Integer.parseInt(ext);
-					} catch (Exception e) {
-						//no-op
+					int slide;
+					if (ext == null) {
+						slide = 0;
+					} else {
+						try {
+							//ext is used for slide here
+							slide = Integer.parseInt(ext);
+						} catch (Exception e) {
+							slide = -1;
+						}
 					}
 					if (slide > -1) {
 						f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));

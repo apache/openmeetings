@@ -61,7 +61,7 @@ public class DownloadMenuItem extends MenuItem {
 		if (f != null && f.exists()) {
 			if (ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())) {
 				File[] ff = f.getParentFile().listFiles(new OriginalFilter(fi));
-				if (ff.length > 0) {
+				if (ff != null && ff.length > 0) {
 					f = ff[0];
 				}
 			}

@@ -465,7 +465,9 @@ public class WbPanel extends AbstractWbPanel {
 
 	private void clearAll(Long roomId, long wbId) {
 		Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
-
+		if (wb == null) {
+			return;
+		}
 		JSONArray arr = getArray(wb.toJson(), null);
 		if (arr.length() != 0) {
 			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));

@@ -196,8 +196,8 @@ public class ImageConverter extends BaseConverter {
 				f.setCount(0);
 			} else {
 				f.setCount(pages.length);
+				list.addItem("get PNG page dimensions", initSize(f, pages[0], PNG_MIME_TYPE));
 			}
-			list.addItem("get PNG page dimensions", initSize(f, pages[0], PNG_MIME_TYPE));
 		}
 		return list;
 	}

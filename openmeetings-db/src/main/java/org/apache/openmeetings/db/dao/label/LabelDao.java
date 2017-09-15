@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -288,7 +289,8 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 	}
 
-	private static class LabelComparator implements Comparator<StringLabel> {
+	private static class LabelComparator implements Comparator<StringLabel>, Serializable {
+		private static final long serialVersionUID = 1L;
 		final SortParam<String> sort;
 
 		LabelComparator() {

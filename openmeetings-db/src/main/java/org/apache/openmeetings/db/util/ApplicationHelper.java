@@ -80,7 +80,7 @@ public class ApplicationHelper {
 		return ensureApplication(-1L);
 	}
 
-	public static IApplication _ensureApplication(Long langId) {
+	public static IApplication _ensureApplication() {
 		IApplication a = null;
 		if (Application.exists()) {
 			a = (IApplication)Application.get();
@@ -116,7 +116,7 @@ public class ApplicationHelper {
 	}
 
 	public static IApplication ensureApplication(Long langId) {
-		IApplication a = _ensureApplication(langId);
+		IApplication a = _ensureApplication();
 		if (ThreadContext.getRequestCycle() == null) {
 			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get());
@@ -133,9 +133,11 @@ public class ApplicationHelper {
 
 	public static void destroyApplication() {
 		WebApplication app = (WebApplication)Application.get(wicketApplicationName);
-		app.internalDestroy(); //need to be called to
 		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
-		((XmlWebApplicationContext)ctx).destroy();
+		app.internalDestroy(); //need to be called to
+		if (ctx != null) {
+			((XmlWebApplicationContext)ctx).destroy();
+		}
 		ThreadContext.setApplication(null);
 		ThreadContext.setRequestCycle(null);
 		ThreadContext.setSession(null);
