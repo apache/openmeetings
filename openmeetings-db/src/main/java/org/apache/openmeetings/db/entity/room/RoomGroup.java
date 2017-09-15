@@ -72,15 +72,15 @@ public class RoomGroup implements IDataProviderEntity {
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="room_id", nullable=true)
+	@JoinColumn(name = "room_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="rooms_id", data=true, required=false)
+	@Element(name="rooms_id", data = true, required = false)
 	private Room room;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="group_id", nullable=true)
+	@JoinColumn(name = "group_id", nullable = true)
 	@ForeignKey(enabled = true)
-	@Element(name="organisation_id", data=true, required=false)
+	@Element(name = "organisation_id", data = true, required = false)
 	private Group group;
 
 	@Column(name = "inserted")
@@ -90,7 +90,7 @@ public class RoomGroup implements IDataProviderEntity {
 	private Date updated;
 
 	@Column(name = "deleted", nullable = false)
-	@Element(data=true)
+	@Element(data = true)
 	private boolean deleted;
 
 	public RoomGroup(Group org, Room room) {

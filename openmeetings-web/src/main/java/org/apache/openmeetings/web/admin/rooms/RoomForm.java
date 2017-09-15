@@ -355,6 +355,9 @@ public class RoomForm extends AdminBaseForm<Room> {
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					Room r = RoomForm.this.getModelObject();
+					if (r.getFiles() == null) {
+						r.setFiles(new ArrayList<>());
+					}
 					for (BaseFileItem f : files2add.getObject()) {
 						r.getFiles().add(new RoomFile(r.getId(), f, wbIdx.getObject()));
 					}
@@ -491,13 +494,9 @@ public class RoomForm extends AdminBaseForm<Room> {
 		moderator2add.setObject(null);
 		files2add.getObject().clear();
 		wbIdx.setObject(0L);
-		Room r = getModelObject();
-		if (r.getFiles() == null) {
-			r.setFiles(new ArrayList<>());
-		}
 		target.add(this);
 		target.add(roomList);
-		target.add(pin.setEnabled(r.isSipEnabled()));
+		target.add(pin.setEnabled(getModelObject().isSipEnabled()));
 		updateClients(target);
 		target.appendJavaScript("adminPanelInit();");
 	}

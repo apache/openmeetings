@@ -179,6 +179,21 @@ public class BackupExport {
 			}
 
 			/*
+			 * ##################### Backup Room Files
+			 */
+			{
+				Registry registry = new Registry();
+				Strategy strategy = new RegistryStrategy(registry);
+				Serializer serializer = new Persister(strategy);
+
+				registry.bind(FileItem.class, BaseFileItemConverter.class);
+				registry.bind(Recording.class, BaseFileItemConverter.class);
+
+				writeList(serializer, zos, "roomFiles.xml", "RoomFiles", roomDao.getFiles());
+				progressHolder.setProgress(17);
+			}
+
+			/*
 			 * ##################### Backup Calendars
 			 */
 			{
