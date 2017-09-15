@@ -28,21 +28,21 @@ import org.simpleframework.xml.stream.OutputNode;
 public class GroupConverter extends OmConverter<Group> {
 	private GroupDao groupDao;
 	private Map<Long, Long> idMap;
-	
+
 	public GroupConverter() {
 		//default constructor is for export
 	}
-	
+
 	public GroupConverter(GroupDao groupDao, Map<Long, Long> idMap) {
 		this.groupDao = groupDao;
 		this.idMap = idMap;
 	}
-	
+
 	@Override
 	public Group read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
-		
+
 		Group o = groupDao.get(newId);
 		return o == null ? new Group() : o;
 	}
