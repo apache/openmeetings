@@ -37,6 +37,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -198,9 +199,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					}
 				}
 				Map<String, StreamClient> streams = getStreamClients();
-				for (Map.Entry<String, StreamClient> e : streams.entrySet()) {
+				for (Iterator<Map.Entry<String, StreamClient>> iter = streams.entrySet().iterator(); iter.hasNext(); ) {
+					Map.Entry<String, StreamClient> e = iter.next();
 					if (serverId.equals(e.getValue().getServerId())) {
-						streams.remove(e.getKey());
+						iter.remove();
 					}
 				}
 				updateJpaAddresses(_getBean(ConfigurationDao.class));

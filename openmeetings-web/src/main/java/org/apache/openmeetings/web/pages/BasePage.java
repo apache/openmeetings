@@ -68,7 +68,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 				.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr")));
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
-		add(loader.setVisible(isMainPage()).setOutputMarkupId(true));
+		add(loader.setVisible(isMainPage()).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 	}
 
 	protected OmUrlFragment getUrlFragment(IRequestParameters params) {

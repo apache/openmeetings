@@ -18,11 +18,12 @@
  */
 package org.apache.openmeetings.webservice.util;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.webservice.util.AppointmentParamConverter.ROOT;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -66,7 +67,7 @@ public class AppointmentListMessageBodyWriter implements MessageBodyWriter<List<
 			MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream out)
 			throws IOException, WebApplicationException
 	{
-		Writer writer = new PrintWriter(out);
+		Writer writer = new OutputStreamWriter(out, UTF_8);
 		JSONArray rr = new JSONArray();
 		for (AppointmentDTO dto : t) {
 			rr.put(AppointmentParamConverter.json(dto));

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.util.crypt;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
@@ -43,7 +44,7 @@ public class SCryptImplementation implements ICrypt {
 	}
 
 	private static String hash(String str, byte[] salt) {
-		byte[] dk = SCrypt.generate(str.getBytes(), salt, COST, 8, 8, KEY_LENGTH);
+		byte[] dk = SCrypt.generate(str.getBytes(UTF_8), salt, COST, 8, 8, KEY_LENGTH);
 		return Base64.encodeBase64String(dk);
 	}
 

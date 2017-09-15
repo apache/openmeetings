@@ -493,11 +493,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private final class ParamsStep3 extends BaseStep {
 		private static final long serialVersionUID = 1L;
+		private static final String regex = "\\r\\n|\\r|\\n";
 		private final TextField<String> ffmpegPath;
 		private final TextField<String> imageMagicPath;
 		private final TextField<String> soxPath;
 		private final TextField<String> officePath;
-		private final String regex = "\\r\\n|\\r|\\n";
 		private boolean isAllChecked = false;
 		public ParamsStep3() {
 			super(paramsStep2);

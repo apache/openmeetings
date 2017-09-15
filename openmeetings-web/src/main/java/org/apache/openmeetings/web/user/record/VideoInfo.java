@@ -136,7 +136,7 @@ public class VideoInfo extends Panel {
 		boolean reConvEnabled = false;
 		boolean exists = false;
 		if (_r instanceof Recording) {
-			Recording r = _r == null ? new Recording() : (Recording)_r;
+			Recording r = (Recording)_r;
 			rm.setObject(r);
 			exists = r.exists();
 			try {

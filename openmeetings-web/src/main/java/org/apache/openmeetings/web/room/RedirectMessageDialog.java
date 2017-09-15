@@ -36,9 +36,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 
 public class RedirectMessageDialog extends NonClosableMessageDialog {
 	private static final long serialVersionUID = 1L;
+	private static final int delay = 5;
 	private final String labelId;
 	private final String url;
-	private final int delay = 5;
 	private final boolean autoOpen;
 	private Component label;
 

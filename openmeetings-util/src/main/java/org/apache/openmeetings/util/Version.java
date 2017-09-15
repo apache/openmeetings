@@ -19,6 +19,7 @@
 package org.apache.openmeetings.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.red5.logging.Red5LoggerFactory;
@@ -33,7 +34,9 @@ public class Version {
 
 	private static void init() throws IOException {
 		Properties props = new Properties();
-		props.load(Version.class.getResourceAsStream("version.properties"));
+		try (InputStream is = Version.class.getResourceAsStream("version.properties")) {
+			props.load(is);
+		}
 		version = props.getProperty("version");
 		revision = props.getProperty("revision");
 		buildDate = props.getProperty("date");

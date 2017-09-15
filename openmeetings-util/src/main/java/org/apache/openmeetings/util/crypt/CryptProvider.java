@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 
 public class CryptProvider {
 	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, webAppRootKey);
-	private static ICrypt crypt;
+	private static volatile ICrypt crypt;
 
 	public static ICrypt get() {
 		if (crypt == null) {

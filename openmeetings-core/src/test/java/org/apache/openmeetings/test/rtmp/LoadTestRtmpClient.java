@@ -31,8 +31,7 @@ import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.rtmp.event.Notify;
 
 public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCallback, INetStreamEventHandler, ClientExceptionHandler {
-
-	private class CallObject {
+	private static class CallObject {
 		Date started;
 		Date ended;
 

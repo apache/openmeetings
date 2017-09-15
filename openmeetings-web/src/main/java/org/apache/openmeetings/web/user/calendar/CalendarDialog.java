@@ -380,6 +380,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 					getBean(AppointmentDao.class).update(appointment, getUserId());
 					calendarPanel.refresh(handler);
 				}
+				break;
 			case DELETE_APPOINTMENT:
 				appointment = null;
 				break;
@@ -561,8 +562,9 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 			if (!hasError()) {
 				switch (type) {
 					case UPDATE_CALENDAR:
-						if (getModelObject().getId() != null || gcal.getModelObject())
+						if (getModelObject().getId() != null || gcal.getModelObject()) {
 							return;
+						}
 					case UPDATE_APPOINTMENT:
 					case DELETE_APPOINTMENT:
 					case SYNC_CALENDAR:

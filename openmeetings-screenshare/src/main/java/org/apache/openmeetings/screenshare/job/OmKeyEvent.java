@@ -163,7 +163,7 @@ public class OmKeyEvent {
 				if (UMLAUTS.contains(ch)) {
 					list.add(KeyEvent.VK_ALT);
 					list.add(KeyEvent.VK_ADD);
-					String code = String.format("%04", (int)ch);
+					String code = String.format("%04d", (int)ch);
 					for (int i = 0; i < code.length(); ++i) {
 						list.add(KeyEvent.VK_NUMPAD0 + code.charAt(i));
 					}

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.data;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -30,16 +29,14 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 public class SearchableGroupAdminDataProvider<T extends IDataProviderEntity> extends SearchableDataProvider<T> {
 	private static final long serialVersionUID = 1L;
-	protected Class<? extends IGroupAdminDataProviderDao<T>> clazz;
 
 	public SearchableGroupAdminDataProvider(Class<? extends IGroupAdminDataProviderDao<T>> c) {
 		super(c);
-		this.clazz = c;
 	}
 
 	@Override
 	protected IGroupAdminDataProviderDao<T> getDao() {
-		return getBean(clazz);
+		return (IGroupAdminDataProviderDao<T>)super.getDao();
 	}
 
 	@Override

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
@@ -96,7 +98,7 @@ public class Captcha extends Panel {
 		for (int i = 0; i < num; ++i) {
 			b[i] = (byte)randomInt('a', 'z');
 		}
-		return new String(b);
+		return new String(b, UTF_8);
 	}
 
 	public Image refresh(IPartialPageRequestHandler handler) {

@@ -215,15 +215,10 @@ public class UserManager implements IUserManager {
 						password, adr, sendSMS, age, hash, timezone,
 						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
 						showContactDataToContacts, null, null, groups, null);
-				if (u == null) {
-					return -111L;
-				}
 				log.debug("Added user-Id " + u.getId());
 
 				if (adr.getId() != null && u.getId() != null) {
 					return u;
-				} else {
-					return UNKNOWN.getKey();
 				}
 			} else {
 				if (!checkName) {

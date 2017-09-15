@@ -232,7 +232,7 @@ public class iCalUtils {
 				if (org == null) {
 					org = userDao.getContact(email, a.getOwner());
 					attList.add(createMeetingMember(a, org));
-				} else if (org.getId() != a.getOwner().getId()) {
+				} else if (!org.getId().equals(a.getOwner().getId())) {
 					attList.add(createMeetingMember(a, org));
 				}
 			}
