@@ -51,7 +51,7 @@ public class BaseFileItemConverter extends OmConverter<BaseFileItem> {
 	@Override
 	public void write(OutputNode node, BaseFileItem value) throws Exception {
 		node.setData(true);
-		node.setAttribute("type", Long.class.getCanonicalName());
+		node.getAttributes().forEach(name -> node.getAttributes().remove(name));
 		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

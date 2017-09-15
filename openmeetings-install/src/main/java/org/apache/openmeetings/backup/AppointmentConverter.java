@@ -28,21 +28,21 @@ import org.simpleframework.xml.stream.OutputNode;
 public class AppointmentConverter extends OmConverter<Appointment> {
 	private AppointmentDao appointmentDao;
 	private Map<Long, Long> idMap;
-	
+
 	public AppointmentConverter() {
 		//default constructor is for export
 	}
-	
+
 	public AppointmentConverter(AppointmentDao appointmentDao, Map<Long, Long> idMap) {
 		this.appointmentDao = appointmentDao;
 		this.idMap = idMap;
 	}
-	
+
 	@Override
 	public Appointment read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
-		
+
 		Appointment a = appointmentDao.getAny(newId);
 		return a == null ? new Appointment() : a;
 	}

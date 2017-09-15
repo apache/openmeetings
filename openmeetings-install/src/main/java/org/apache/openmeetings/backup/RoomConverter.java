@@ -28,16 +28,16 @@ import org.simpleframework.xml.stream.OutputNode;
 public class RoomConverter extends OmConverter<Room> {
 	private RoomDao roomDao;
 	private Map<Long, Long> idMap;
-	
+
 	public RoomConverter() {
 		//default constructor is for export
 	}
-	
+
 	public RoomConverter(RoomDao roomDao, Map<Long, Long> idMap) {
 		this.roomDao = roomDao;
 		this.idMap = idMap;
 	}
-	
+
 	@Override
 	public Room read(InputNode node) throws Exception {
 		long oldId = getLong(node);

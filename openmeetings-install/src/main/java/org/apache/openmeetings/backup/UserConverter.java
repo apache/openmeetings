@@ -28,21 +28,21 @@ import org.simpleframework.xml.stream.OutputNode;
 public class UserConverter extends OmConverter<User> {
 	private UserDao userDao;
 	private Map<Long, Long> idMap;
-	
+
 	public UserConverter() {
 		//default constructor is for export
 	}
-	
+
 	public UserConverter(UserDao userDao, Map<Long, Long> idMap) {
 		this.userDao = userDao;
 		this.idMap = idMap;
 	}
-	
+
 	@Override
 	public User read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
-		
+
 		User u = userDao.get(newId);
 		return u == null ? new User() : u;
 	}

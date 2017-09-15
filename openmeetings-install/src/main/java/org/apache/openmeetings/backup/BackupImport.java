@@ -716,9 +716,16 @@ public class BackupImport {
 
 			registry.bind(BaseFileItem.class, new BaseFileItemConverter(fileItemDao, fileItemMap));
 
-			List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class);
+			List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class, true);
 			for (RoomFile rf : list) {
-				int i = 0;
+				Room r = roomDao.get(roomMap.get(rf.getRoomId()));
+				if (r.getFiles() == null) {
+					r.setFiles(new ArrayList<>());
+				}
+				rf.setId(null);
+				rf.setRoomId(r.getId());
+				r.getFiles().add(rf);
+				roomDao.update(r, null);
 			}
 		}
 
