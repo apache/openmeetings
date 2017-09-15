@@ -18,13 +18,15 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+import static org.apache.openmeetings.web.common.UserPanel.getMyRooms;
+
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
 
-public class RoomsSelectorPanel extends UserPanel {
+public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 
 	public RoomsSelectorPanel(String id, MenuParams param) {

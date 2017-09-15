@@ -23,15 +23,15 @@ import static org.apache.openmeetings.web.user.chat.Chat.getReinit;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.panel.Panel;
 
 @AuthorizeInstantiation({"Dashboard", "Room"})
-public class ChatPanel extends BasePanel {
+public class ChatPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Chat chat;
 

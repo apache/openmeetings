@@ -60,7 +60,7 @@ import org.simpleframework.xml.Root;
 @Entity
 @FetchGroups({
 	@FetchGroup(name = "roomModerators", attributes = { @FetchAttribute(name = "moderators") })
-	, @FetchGroup(name = "roomGroups", attributes = { @FetchAttribute(name = "roomGroups") })
+	, @FetchGroup(name = "roomGroups", attributes = { @FetchAttribute(name = "groups") })
 })
 @NamedQueries({
 	@NamedQuery(name = "getNondeletedRooms", query = "SELECT r FROM Room r WHERE r.deleted = false"),
@@ -299,7 +299,7 @@ public class Room implements IDataProviderEntity {
 	@JoinColumn(name = "room_id", insertable = true, updatable = true)
 	@ElementDependent
 	@org.simpleframework.xml.Transient
-	private List<RoomGroup> roomGroups = new ArrayList<>();
+	private List<RoomGroup> groups = new ArrayList<>();
 
 	@Transient
 	private List<StreamClient> currentusers;
@@ -527,12 +527,12 @@ public class Room implements IDataProviderEntity {
 		return hiddenElements.add(e);
 	}
 
-	public List<RoomGroup> getRoomGroups() {
-		return roomGroups;
+	public List<RoomGroup> getGroups() {
+		return groups;
 	}
 
-	public void setRoomGroups(List<RoomGroup> roomGroups) {
-		this.roomGroups = roomGroups;
+	public void setGroups(List<RoomGroup> groups) {
+		this.groups = groups;
 	}
 
 	public boolean isChatOpened() {

@@ -21,8 +21,9 @@ package org.apache.openmeetings.web.common;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.Panel;
 
-public abstract class ImagePanel extends BasePanel {
+public abstract class ImagePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	protected final WebMarkupContainer profile = new TransparentWebMarkupContainer("profile");
 

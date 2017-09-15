@@ -16,34 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.web.admin;
+package org.apache.openmeetings.web.common;
 
-import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
-import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.model.IModel;
 
-@AuthorizeInstantiation("Admin")
-public abstract class AdminPanel extends BasePanel {
+@AuthorizeInstantiation("Dashboard")
+public abstract class UserBasePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	protected final static String BASE_ROW_CLASS = "ui-widget-content";
-	protected final static String ROW_CLASS = BASE_ROW_CLASS + " clickable";
 
-	public AdminPanel(String id) {
+	public UserBasePanel(String id) {
 		super(id);
 	}
 
-	@Override
-	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
-		super.onMenuPanelLoad(handler);
-		handler.appendJavaScript("adminPanelInit();");
-		return this;
-	}
-
-	protected StringBuilder getRowClass(Long id, Long selectedId) {
-		StringBuilder sb = new StringBuilder(ROW_CLASS);
-		if (id != null && id.equals(selectedId)) {
-			sb.append(" ui-state-default");
-		}
-		return sb;
+	public UserBasePanel(String id, IModel<?> model) {
+		super(id, model);
 	}
 }

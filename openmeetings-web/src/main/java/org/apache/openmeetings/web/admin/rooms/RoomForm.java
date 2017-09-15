@@ -146,7 +146,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
 		}
-		add(new Select2MultiChoice<>("roomGroups", null, new RestrictiveChoiceProvider<RoomGroup>() {
+		add(new Select2MultiChoice<>("groups", null, new RestrictiveChoiceProvider<RoomGroup>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override

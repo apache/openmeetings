@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -37,7 +37,7 @@ import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.tabs.AjaxTab;
 import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 
-public class SettingsPanel extends UserPanel {
+public class SettingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	public static final int PROFILE_TAB_ID = 0;
 	public static final int MESSAGES_TAB_ID = 1;

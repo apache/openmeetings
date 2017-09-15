@@ -250,7 +250,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					wresp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
 					wresp.setHeader("X-Content-Type-Options", "nosniff");
 					wresp.setHeader("X-Frame-Options", xFrameOptions);
-					wresp.setHeader("Content-Security-Policy", contentSecurityPolicy);
+					Url reqUrl = cycle.getRequest().getUrl();
+					wresp.setHeader("Content-Security-Policy", String.format("%s; connect-src 'self' %s://%s:%s;"
+							, contentSecurityPolicy
+							, "http".equalsIgnoreCase(reqUrl.getProtocol()) ? "ws" : "wss"
+							, reqUrl.getHost()
+							, reqUrl.getPort()
+						));
 				}
 			}
 		});

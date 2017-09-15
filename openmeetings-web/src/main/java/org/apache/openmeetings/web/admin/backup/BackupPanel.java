@@ -33,7 +33,7 @@ import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -64,7 +64,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  * @author swagner
  *
  */
-public class BackupPanel extends AdminPanel {
+public class BackupPanel extends AdminBasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 

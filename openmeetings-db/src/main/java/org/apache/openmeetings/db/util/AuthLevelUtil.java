@@ -72,8 +72,8 @@ public class AuthLevelUtil {
 				}
 			}
 			//no need to loop if client is moderator
-			if (result.isEmpty() && !r.getRoomGroups().isEmpty()) {
-				for (RoomGroup rg : r.getRoomGroups()) {
+			if (result.isEmpty() && r.getGroups() != null && !r.getGroups().isEmpty()) {
+				for (RoomGroup rg : r.getGroups()) {
 					for (GroupUser gu : u.getGroupUsers()) {
 						if (gu.getGroup().getId().equals(rg.getGroup().getId()) && gu.isModerator()) {
 							result.add(Room.Right.moderator);

@@ -20,10 +20,10 @@ package org.apache.openmeetings.web.common.menu;
 
 import java.util.List;
 
-import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -36,7 +36,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
  * @author sebawagner
  *
  */
-public class MenuPanel extends BasePanel {
+public class MenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	public MenuPanel(String id, List<IMenuItem> menus) {

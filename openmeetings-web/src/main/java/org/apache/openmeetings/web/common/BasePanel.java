@@ -22,6 +22,7 @@ import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.BasePage;
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -54,26 +55,27 @@ public abstract class BasePanel extends Panel {
 	/**
 	 * Overwrite this method to execute Java code after Panel is loaded by the
 	 * {@link MenuPanel}
-	 * 
+	 *
 	 * @param target
 	 */
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getMenu().setVisible(true)
-				, getMainPanel().getTopLinks().setVisible(true));
+				, getMainPanel().getTopLinks().setVisible(true)
+				, ((MainPage)getPage()).getLoader().setVisible(false));
 		return this;
 	}
 
 	/**
 	 * This method should be overridden to perform necessary cleanup: remove timers etc.
-	 * 
+	 *
 	 * @param handler
 	 */
 	public void cleanup(IPartialPageRequestHandler handler) {
 	}
-	
+
 	/**
 	 * This method should be overridden to perform after "new message" dialog was closed.
-	 * 
+	 *
 	 * @param handler
 	 */
 	public void onNewMessageClose(IPartialPageRequestHandler handler) {

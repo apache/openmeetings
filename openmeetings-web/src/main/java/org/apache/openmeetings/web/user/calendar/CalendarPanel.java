@@ -43,7 +43,7 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -69,7 +69,7 @@ import com.googlecode.wicket.jquery.ui.calendar.CalendarView;
 import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
-public class CalendarPanel extends UserPanel {
+public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";

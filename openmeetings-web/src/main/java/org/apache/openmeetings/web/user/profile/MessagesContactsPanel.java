@@ -47,7 +47,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -82,7 +82,7 @@ import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
 
-public class MessagesContactsPanel extends UserPanel {
+public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final static Long MOVE_CHOOSE = Long.valueOf(-1);
 	private final static String SELECT_CHOOSE = "1252";

@@ -31,12 +31,12 @@ public abstract class BaseInitedPage extends BasePage {
 	protected String getApplicationName() {
 		return getBean(ConfigurationDao.class).getAppName();
 	}
-	
+
 	@Override
 	protected String getLanguageCode() {
 		return WebSession.get().getLocale().toLanguageTag();
 	}
-	
+
 	@Override
 	protected boolean isRtl() {
 		return FormatHelper.isRtlLanguage(getLanguageCode());

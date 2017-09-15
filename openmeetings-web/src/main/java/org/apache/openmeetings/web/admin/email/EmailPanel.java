@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.email;
 
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -33,7 +33,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
-public class EmailPanel extends AdminPanel {
+public class EmailPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer list = new WebMarkupContainer("list");
 	private final EmailForm form;

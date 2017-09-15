@@ -27,11 +27,12 @@ import org.apache.openmeetings.web.data.SearchableDataProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
-public abstract class PagedEntityListPanel extends BasePanel {
+public abstract class PagedEntityListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private List<Integer> numbers = Arrays.asList(10, 25, 50, 75, 100, 200);
 

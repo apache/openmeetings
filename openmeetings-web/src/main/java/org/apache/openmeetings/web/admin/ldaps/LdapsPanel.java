@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.ldaps;
 
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -34,12 +34,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 
 /**
- * {@link AdminPanel} to list and modify {@link LdapConfig}
+ * {@link AdminBasePanel} to list and modify {@link LdapConfig}
  *
  * @author swagner
  *
  */
-public class LdapsPanel extends AdminPanel {
+public class LdapsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private LdapForm form;

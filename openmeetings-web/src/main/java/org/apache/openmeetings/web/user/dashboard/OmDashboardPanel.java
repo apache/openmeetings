@@ -20,11 +20,11 @@ package org.apache.openmeetings.web.user.dashboard;
 
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.model.Model;
 import org.wicketstuff.dashboard.web.DashboardPanel;
 
-public class OmDashboardPanel extends UserPanel {
+public class OmDashboardPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 
 	public OmDashboardPanel(String id) {

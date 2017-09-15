@@ -231,17 +231,17 @@ public class GroupWebService extends BaseWebService {
 				RoomDao roomDao = getRoomDao();
 				Room r = roomDao.get(roomid);
 				if (r != null) {
-					if (r.getRoomGroups() == null) {
-						r.setRoomGroups(new ArrayList<RoomGroup>());
+					if (r.getGroups() == null) {
+						r.setGroups(new ArrayList<RoomGroup>());
 					}
 					boolean found = false;
-					for (RoomGroup ro : r.getRoomGroups()) {
+					for (RoomGroup ro : r.getGroups()) {
 						if (ro.getGroup().getId().equals(id)) {
 							found = true;
 						}
 					}
 					if (!found) {
-						r.getRoomGroups().add(new RoomGroup(getDao().get(id), r));
+						r.getGroups().add(new RoomGroup(getDao().get(id), r));
 						roomDao.update(r, userId);
 						return new ServiceResult("Success", Type.SUCCESS);
 					}

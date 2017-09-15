@@ -37,7 +37,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param id
 	 *            the markup-id
 	 */
@@ -47,7 +47,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param id
 	 *            the markup-id
 	 * @param model
@@ -55,11 +55,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	 */
 	public ChatToolbar(String id, IModel<String> model) {
 		super(id, model);
-
-		toolbar = new WebMarkupContainer("toolbar");
-		toolbar.setMarkupId("bToolbar");
-		add(toolbar);
-
+		add(toolbar = new WebMarkupContainer("toolbar"));
 	}
 
 	@Override

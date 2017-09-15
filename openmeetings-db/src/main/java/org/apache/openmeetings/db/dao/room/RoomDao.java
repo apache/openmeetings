@@ -84,7 +84,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				q.setParameter("id", id);
 				@SuppressWarnings("unchecked")
 				OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-				kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups");
+				kq.getFetchPlan().addFetchGroups("roomModerators", "groups");
 				List<Room> l = kq.getResultList();
 				r = l.isEmpty() ? r : l.get(0);
 			} finally {
@@ -104,7 +104,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			TypedQuery<Room> q = oem.createNamedQuery("getBackupRooms", Room.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups");
+			kq.getFetchPlan().addFetchGroups("roomModerators", "groups");
 			return kq.getResultList();
 		} finally {
 			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);

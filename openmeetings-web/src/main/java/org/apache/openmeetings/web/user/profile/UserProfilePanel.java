@@ -27,13 +27,13 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 
-public class UserProfilePanel extends UserPanel {
+public class UserProfilePanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer address = new WebMarkupContainer("address");
 	private final Label addressDenied = new Label("addressDenied", "");

@@ -65,6 +65,7 @@ import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
+import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
@@ -316,7 +317,7 @@ public class RoomPanel extends BasePanel {
 				log.debug("public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
 				if (!allowed) {
 					User u = getClient().getUser();
-					for (RoomGroup ro : r.getRoomGroups()) {
+					for (RoomGroup ro : r.getGroups()) {
 						for (GroupUser ou : u.getGroupUsers()) {
 							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
 								allowed = true;
@@ -683,11 +684,12 @@ public class RoomPanel extends BasePanel {
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		getBasePage().getHeader().setVisible(false);
 		getMainPanel().getTopControls().setVisible(false);
+		Component loader = ((MainPage)getPage()).getLoader().setVisible(false);
 		if (r.isHidden(RoomElement.Chat) || !isVisible()) {
 			getMainPanel().getChat().toggle(handler, false);
 		}
 		if (handler != null) {
-			handler.add(getBasePage().getHeader(), getMainPanel().getTopControls());
+			handler.add(loader, getBasePage().getHeader(), getMainPanel().getTopControls());
 			if (isVisible()) {
 				handler.appendJavaScript("Room.load();");
 			}

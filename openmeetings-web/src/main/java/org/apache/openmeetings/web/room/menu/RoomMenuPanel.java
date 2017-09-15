@@ -217,9 +217,9 @@ public class RoomMenuPanel extends Panel {
 
 	private Group getGroup() {
 		Room r = room.getRoom();
-		return r.getRoomGroups() == null || r.getRoomGroups().isEmpty()
+		return r.getGroups() == null || r.getGroups().isEmpty()
 				? new Group()
-				: r.getRoomGroups().get(0).getGroup();
+				: r.getGroups().get(0).getGroup();
 	}
 
 	public RoomMenuPanel(String id, final RoomPanel room) {

@@ -76,8 +76,8 @@ public class MainService implements IPendingServiceCallback {
 			} else {
 				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()));
 				log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
-				if (!allowed && null != r.getRoomGroups()) {
-					for (RoomGroup ro : r.getRoomGroups()) {
+				if (!allowed && null != r.getGroups()) {
+					for (RoomGroup ro : r.getGroups()) {
 						for (GroupUser ou : u.getGroupUsers()) {
 							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
 								allowed = true;

@@ -28,10 +28,11 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 @AuthorizeInstantiation("Dashboard")
-public abstract class UserPanel extends BasePanel {
+public abstract class UserPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
 	public UserPanel(String id) {

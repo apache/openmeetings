@@ -647,7 +647,9 @@ var Room = (function() {
 		if (!!WbArea) {
 			WbArea.destroy();
 		}
-		VideoSettings.close();
+		if (typeof VideoSettings !== 'undefined') {
+			VideoSettings.close();
+		}
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup', _keyHandler);
 	}

@@ -30,7 +30,7 @@ public class MyRoomsWidgetView extends WidgetView {
 
 	public MyRoomsWidgetView(String id, Model<Widget> model) {
 		super(id, model);
-		
+
 		add(new RoomsPanel("rooms", getMyRooms()));
 	}
 }

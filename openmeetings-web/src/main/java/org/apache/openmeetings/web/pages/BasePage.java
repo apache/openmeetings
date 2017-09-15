@@ -38,6 +38,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -48,6 +49,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
 	private final Map<String, String> options;
 	private final HeaderPanel header;
+	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader");
 
 	protected abstract boolean isRtl();
 	protected abstract String getLanguageCode();
@@ -66,6 +68,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 				.add(new AttributeModifier("dir", isRtl() ? "rtl" : "ltr")));
 		add(new Label("pageTitle", appName));
 		add(header = new HeaderPanel("header", appName));
+		add(loader.setVisible(isMainPage()).setOutputMarkupId(true));
 	}
 
 	protected OmUrlFragment getUrlFragment(IRequestParameters params) {
@@ -95,8 +98,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		return false;
 	}
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
+	protected void internalRenderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
 		super.renderHead(response);
 		final String suffix = DEVELOPMENT == getApplication().getConfigurationType() ? "" : ".min";
@@ -111,5 +113,14 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 			script.append(getGaCode()).append("');").append(isMainPage() ? "initHash()" : "init()").append(';');
 			response.render(OnDomReadyHeaderItem.forScript(script));
 		}
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		internalRenderHead(response);
+	}
+
+	public WebMarkupContainer getLoader() {
+		return loader;
 	}
 }

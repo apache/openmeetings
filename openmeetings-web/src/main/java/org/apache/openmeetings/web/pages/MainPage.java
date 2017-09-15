@@ -18,63 +18,62 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import static org.apache.openmeetings.web.common.MainPanel.PARAM_USER_ID;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
-import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
-
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.MainPanel;
-import org.apache.openmeetings.web.user.InviteUserToRoomDialog;
 import org.apache.openmeetings.web.util.OmUrlFragment;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.util.time.Duration;
 
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
-	private final AbstractAjaxTimerBehavior areaBehavior;
-	private final MainPanel main = new MainPanel("main");
-	private final InviteUserToRoomDialog inviteUser;
+	private static final String MAIN_PANEL_ID = "main";
+	private final WebMarkupContainer mainContainer = new WebMarkupContainer("main-container");
+	private final AbstractAjaxTimerBehavior areaBehavior = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onTimer(AjaxRequestTarget target) {
+			OmUrlFragment area = WebSession.get().getArea();
+			main.updateContents(area == null ? OmUrlFragment.get() : area, target);
+			stop(target);
+			WebSession.get().setArea(null);
+		}
+	};
+	private final MainPanel main = new MainPanel(MAIN_PANEL_ID);
+	private final AbstractDefaultAjaxBehavior delayedLoad = new AbstractDefaultAjaxBehavior() {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void respond(AjaxRequestTarget target) {
+			target.add(
+				mainContainer.replace(main)
+				.add(areaBehavior, new Behavior() {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public void renderHead(org.apache.wicket.Component component, IHeaderResponse response) {
+						internalRenderHead(response);
+					}
+				}));
+		}
+	};
 
 	public MainPage() {
 		super();
 		getHeader().setVisible(false);
-		add(main, inviteUser = new InviteUserToRoomDialog("invite-to-room"));
-		//load preselected content
-		add(areaBehavior = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onTimer(AjaxRequestTarget target) {
-				OmUrlFragment area = WebSession.get().getArea();
-				main.updateContents(area == null ? OmUrlFragment.get() : area, target);
-				stop(target);
-				WebSession.get().setArea(null);
-			}
-		});
-		add(new AbstractDefaultAjaxBehavior() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void respond(AjaxRequestTarget target) {
-				inviteUser.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
-			}
-
-			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
-				response.render(new PriorityHeaderItem(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID))));
-			}
-		});
+		add(mainContainer.add(new EmptyPanel(MAIN_PANEL_ID)).setOutputMarkupId(true));
+		add(delayedLoad);
 	}
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
@@ -93,5 +92,10 @@ public class MainPage extends BaseInitedPage {
 			areaBehavior.stop(target);
 			main.updateContents(uf, target, false);
 		}
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		response.render(OnDomReadyHeaderItem.forScript(delayedLoad.getCallbackScript()));
 	}
 }

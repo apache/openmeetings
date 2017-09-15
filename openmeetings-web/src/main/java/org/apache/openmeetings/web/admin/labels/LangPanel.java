@@ -30,7 +30,7 @@ import java.util.Map;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.label.StringLabel;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
@@ -69,7 +69,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  * @author solomax, swagner
  *
  */
-public class LangPanel extends AdminPanel {
+public class LangPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));

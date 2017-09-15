@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.admin.groups;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -43,7 +43,7 @@ import org.apache.wicket.markup.repeater.Item;
  *
  */
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
-public class GroupsPanel extends AdminPanel {
+public class GroupsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private GroupForm form;
 

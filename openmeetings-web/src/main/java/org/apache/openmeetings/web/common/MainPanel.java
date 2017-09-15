@@ -53,6 +53,7 @@ import org.apache.openmeetings.web.common.menu.MenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.AboutDialog;
+import org.apache.openmeetings.web.user.InviteUserToRoomDialog;
 import org.apache.openmeetings.web.user.MessageDialog;
 import org.apache.openmeetings.web.user.UserInfoDialog;
 import org.apache.openmeetings.web.user.chat.ChatPanel;
@@ -103,10 +104,11 @@ public class MainPanel extends Panel {
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
 	private final MarkupContainer contents;
-	private final ChatPanel chat;
-	private final MessageDialog newMessage;
-	private final UserInfoDialog userInfo;
+	private ChatPanel chat;
+	private MessageDialog newMessage;
+	private UserInfoDialog userInfo;
 	private BasePanel panel;
+	private InviteUserToRoomDialog inviteUser;
 	private AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
 		private static final long serialVersionUID = 1L;
 
@@ -126,10 +128,68 @@ public class MainPanel extends Panel {
 		this.panel = _panel;
 		setAuto(true);
 		setOutputMarkupId(true);
-		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
+		setOutputMarkupPlaceholderTag(true);
 		menu = new MenuPanel("menu", getMainMenu());
 		contents = new WebMarkupContainer("contents");
-		add(contents.add(getClient() == null || _panel == null ? EMPTY : _panel).setOutputMarkupId(true).setMarkupId("contents"));
+		pingTimer.stop(null);
+		add(pingTimer, new WebSocketBehavior() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onConnect(ConnectedMessage msg) {
+				super.onConnect(msg);
+				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
+				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
+				uid = client.getUid();
+				addOnlineUser(cp.update(client));
+				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
+			}
+
+			@Override
+			protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
+				if ("socketConnected".equals(msg.getText())) {
+					if (panel != null) {
+						updateContents(panel, handler);
+					}
+					log.debug("WebSocketBehavior:: pingTimer is attached");
+					pingTimer.restart(handler);
+				}
+			}
+
+			@Override
+			protected void onAbort(AbortedMessage msg) {
+				super.onAbort(msg);
+				closeHandler(msg);
+			}
+
+			@Override
+			protected void onClose(ClosedMessage msg) {
+				super.onClose(msg);
+				closeHandler(msg);
+			}
+
+			@Override
+			protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
+				super.onError(handler, msg);
+				closeHandler(msg);
+			}
+
+			private void closeHandler(AbstractClientMessage msg) {
+				//no chance to stop pingTimer here :(
+				if (uid != null) {
+					log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
+					Application.get().exit(uid);
+					uid = null;
+				}
+			}
+		});
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
+		add(contents.add(getClient() == null || panel == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
 		topLinks.add(new AjaxLink<Void>("messages") {
 			private static final long serialVersionUID = 1L;
@@ -216,64 +276,22 @@ public class MainPanel extends Panel {
 				response.render(new PriorityHeaderItem(getNamedFunction("privateMessage", this, explicit(PARAM_USER_ID))));
 			}
 		});
-		pingTimer.stop(null);
-		add(pingTimer, new WebSocketBehavior() {
+		add(inviteUser = new InviteUserToRoomDialog("invite-to-room"));
+		add(new AbstractDefaultAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onConnect(ConnectedMessage msg) {
-				super.onConnect(msg);
-				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
-				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
-				uid = client.getUid();
-				addOnlineUser(cp.update(client));
-				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
+			protected void respond(AjaxRequestTarget target) {
+				inviteUser.open(target, getParam(getComponent(), PARAM_USER_ID).toLong());
 			}
 
 			@Override
-			protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
-				if ("socketConnected".equals(msg.getText())) {
-					if (panel != null) {
-						updateContents(panel, handler);
-					}
-					log.debug("WebSocketBehavior:: pingTimer is attached");
-					pingTimer.restart(handler);
-				}
-			}
-
-			@Override
-			protected void onAbort(AbortedMessage msg) {
-				super.onAbort(msg);
-				closeHandler(msg);
-			}
-
-			@Override
-			protected void onClose(ClosedMessage msg) {
-				super.onClose(msg);
-				closeHandler(msg);
-			}
-
-			@Override
-			protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
-				super.onError(handler, msg);
-				closeHandler(msg);
-			}
-
-			private void closeHandler(AbstractClientMessage msg) {
-				//no chance to stop pingTimer here :(
-				if (uid != null) {
-					log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
-					Application.get().exit(uid);
-					uid = null;
-				}
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				response.render(new PriorityHeaderItem(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID))));
 			}
 		});
 		add(new OmAjaxClientInfoBehavior());
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
 			private static final long serialVersionUID = 1L;
 
@@ -345,7 +363,7 @@ public class MainPanel extends Panel {
 			if (isAdmin) {
 				l.add(getSubItem("597", "1455", MenuActions.adminModuleConnections, null));
 			}
-			l.add(getSubItem("127", "1456", MenuActions.adminModuleOrg, null));
+			l.add(getSubItem("126", "1456", MenuActions.adminModuleOrg, null));
 			l.add(getSubItem("186", "1457", MenuActions.adminModuleRoom, null));
 			if (isAdmin) {
 				l.add(getSubItem("263", "1458", MenuActions.adminModuleConfiguration, null));

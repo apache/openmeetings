@@ -23,7 +23,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
@@ -45,7 +45,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
-public class UsersPanel extends AdminPanel {
+public class UsersPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private final MessageDialog warning = new MessageDialog("warning", Application.getString("797"), Application.getString("warn.nogroup"), DialogButtons.OK, DialogIcon.WARN) {

@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.admin.configurations;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
@@ -39,7 +39,7 @@ import org.apache.wicket.markup.repeater.Item;
  * @author swagner
  *
  */
-public class ConfigsPanel extends AdminPanel {
+public class ConfigsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private ConfigForm form;
 	private final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");

@@ -27,11 +27,11 @@ import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
-import org.apache.openmeetings.web.common.UserPanel;
+import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public class RecordingsPanel extends UserPanel {
+public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");

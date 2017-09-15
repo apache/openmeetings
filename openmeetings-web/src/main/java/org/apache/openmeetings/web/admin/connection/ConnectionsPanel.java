@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.web.admin.AdminPanel;
+import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
@@ -47,7 +47,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
 
-public class ConnectionsPanel extends AdminPanel {
+public class ConnectionsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 
 	public ConnectionsPanel(String id) {
