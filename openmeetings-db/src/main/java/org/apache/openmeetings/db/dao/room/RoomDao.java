@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Type;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -103,7 +104,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			TypedQuery<Room> q = oem.createNamedQuery("getBackupRooms", Room.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<Room> kq = OpenJPAPersistence.cast(q);
-			kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups");
+			kq.getFetchPlan().addFetchGroups("roomModerators", "roomGroups", "roomFiles");
 			return kq.getResultList();
 		} finally {
 			oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
@@ -311,5 +312,10 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			}
 		}
 		return result;
+	}
+
+	public List<RoomFile> getFiles() {
+		return em.createQuery("SELECT rf FROM RoomFile rf", RoomFile.class)
+				.getResultList();
 	}
 }

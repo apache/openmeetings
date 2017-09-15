@@ -31,22 +31,28 @@ import javax.persistence.Table;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "room_file")
+@Root(name = "RoomFile")
 public class RoomFile implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Element(data = true, required = true)
 	private Long id;
 
 	@Column(name = "room_id", nullable = false)
+	@Element(data = true, required = true)
 	private Long roomId;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "file_id", insertable = true, updatable = true, nullable = false)
 	@ForeignKey(enabled = true)
+	@Element(data = true, required = true)
 	private BaseFileItem file;
 
 	/*

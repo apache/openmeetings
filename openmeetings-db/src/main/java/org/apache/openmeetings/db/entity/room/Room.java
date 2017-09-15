@@ -281,7 +281,7 @@ public class Room implements IDataProviderEntity {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
 	@ForeignKey(enabled = true)
-	@ElementList(name = "room_moderators", required=false)
+	@ElementList(name = "room_moderators", required = false)
 	private List<RoomModerator> moderators = new ArrayList<>();
 
 	@Column(name = "sip_enabled", nullable = false)
@@ -305,6 +305,7 @@ public class Room implements IDataProviderEntity {
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "room_id", insertable = true, updatable = true, nullable = false)
 	@ElementDependent
+	@org.simpleframework.xml.Transient
 	private List<RoomFile> files = new ArrayList<>();
 
 	@Transient

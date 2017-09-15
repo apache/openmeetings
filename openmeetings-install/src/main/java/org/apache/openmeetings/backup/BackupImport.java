@@ -91,12 +91,13 @@ import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
@@ -181,6 +182,7 @@ public class BackupImport {
 	private final Map<Long, Long> calendarMap = new HashMap<>();
 	private final Map<Long, Long> appointmentMap = new HashMap<>();
 	private final Map<Long, Long> roomMap = new HashMap<>();
+	private final Map<Long, Long> fileItemMap = new HashMap<>();
 	private final Map<Long, Long> messageFolderMap = new HashMap<>();
 	private final Map<Long, Long> userContactMap = new HashMap<>();
 	private final Map<String, String> fileMap = new HashMap<>();
@@ -522,6 +524,7 @@ public class BackupImport {
 		{
 			List<Recording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
 			for (Recording r : list) {
+				Long recId = r.getId();
 				r.setId(null);
 				if (r.getRoomId() != null) {
 					r.setRoomId(roomMap.get(r.getRoomId()));
@@ -544,7 +547,8 @@ public class BackupImport {
 				if (Strings.isEmpty(r.getHash())) {
 					r.setHash(UUID.randomUUID().toString());
 				}
-				recordingDao.update(r);
+				r = recordingDao.update(r);
+				fileItemMap.put(recId, r.getId());
 			}
 		}
 
@@ -647,6 +651,7 @@ public class BackupImport {
 		{
 			List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
 			for (FileItem file : list) {
+				Long fId = file.getId();
 				// We need to reset this as openJPA reject to store them otherwise
 				file.setId(null);
 				Long roomId = file.getRoomId();
@@ -660,7 +665,8 @@ public class BackupImport {
 				if (Strings.isEmpty(file.getHash())) {
 					file.setHash(UUID.randomUUID().toString());
 				}
-				fileItemDao.update(file);
+				file = fileItemDao.update(file);
+				fileItemMap.put(fId, file.getId());
 			}
 		}
 
@@ -699,7 +705,24 @@ public class BackupImport {
 			}
 		}
 
-		log.info("Poll import complete, starting copy of files and folders");
+		log.info("Poll import complete, starting room files import");
+		/*
+		 * ##################### Import Room Files
+		 */
+		{
+			Registry registry = new Registry();
+			Strategy strategy = new RegistryStrategy(registry);
+			Serializer serializer = new Persister(strategy);
+
+			registry.bind(BaseFileItem.class, new BaseFileItemConverter(fileItemDao, fileItemMap));
+
+			List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class);
+			for (RoomFile rf : list) {
+				int i = 0;
+			}
+		}
+
+		log.info("Room files import complete, starting copy of files and folders");
 		/*
 		 * ##################### Import real files and folders
 		 */
@@ -781,6 +804,9 @@ public class BackupImport {
 
 						//HACK to handle old isFolder, isImage, isVideo, isRecording, isPresentation, isStoredWmlFile, isChart, wmlFilePath
 						do {
+							if (item1 == null) {
+								break;
+							}
 							String name = item1.getName();
 							String val = item1.getValue();
 							if ("wmlFilePath".equals(name) && !Strings.isEmpty(val)) {
