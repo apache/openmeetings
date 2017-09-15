@@ -316,7 +316,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("moderated"));
 
 		// Files
-		Form<Void> filesForm = new Form<>("files");
+		Form<Void> filesForm = new Form<>("filesForm");
 		add(filesForm.add(new Select2MultiChoice<>("files2add", files2add, new ChoiceProvider<BaseFileItem>() {
 				private static final long serialVersionUID = 1L;
 

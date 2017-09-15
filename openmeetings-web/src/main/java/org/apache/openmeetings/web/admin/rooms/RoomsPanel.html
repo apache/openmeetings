@@ -143,23 +143,23 @@
 				<!-- Room files -->
 				<fieldset class="ui-widget-content">
 					<legend class="ui-widget-header"><wicket:message key="245" /></legend>
-					<div wicket:id="files">
-					<div class="formelement">
-						<label wicket:for="files2add"><wicket:message key="245" /></label>
-						<div class="om-select2"><select class="input" wicket:id="files2add"></select></div>
-					</div>
-					<div class="formelement">
-						<label wicket:for="wbidx"><wicket:message key="615" /></label>
-						<input type="number" class="input" wicket:id="wbidx"/>
-					</div>
-					<button type="button" wicket:id="addFiles"><wicket:message key="175"/></button>
-					</div>
+					<form wicket:id="filesForm">
+						<div class="formelement">
+							<label wicket:for="files2add"><wicket:message key="245" /></label>
+							<div class="om-select2"><select class="input" wicket:id="files2add"></select></div>
+						</div>
+						<div class="formelement">
+							<label wicket:for="wbidx"><wicket:message key="615" /></label>
+							<input type="number" class="input" wicket:id="wbidx"/>
+						</div>
+						<button type="button" wicket:id="addFiles"><wicket:message key="1261"/></button>
+					</form>
 					<table class="adminListTable">
 						<thead>
 							<tr>
 								<th class="ui-widget-header" style="width: 380px"><wicket:message key="165" /></th>
 								<th class="ui-widget-header" style="width: 80px"><wicket:message key="615" /></th>
-								<th class="ui-widget-header" style="width: 50px"><wicket:message key="590" /></th>
+								<th class="ui-widget-header" style="width: 50px"><wicket:message key=275 /></th>
 							</tr>
 						</thead>
 					</table>
