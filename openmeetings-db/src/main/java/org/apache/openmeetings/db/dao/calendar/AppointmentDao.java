@@ -205,7 +205,7 @@ public class AppointmentDao {
 	}
 
 	public List<Appointment> searchAppointmentsByTitle(Long userId, String title) {
-		return em.createNamedQuery("getNextAppointment", Appointment.class)
+		return em.createNamedQuery("getAppointmentsByTitle", Appointment.class)
 				.setParameter("title", title).setParameter("userId", userId).getResultList();
 	}
 
