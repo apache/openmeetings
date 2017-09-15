@@ -90,9 +90,9 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		actualTest(roomDao.get(5L)); //default public restricted room
 	}
 
-	private static JSONObject createAppointment() {
+	private static JSONObject createAppointment(String title) {
 		return new JSONObject()
-			.put("title", "test")
+			.put("title", title)
 			.put("start", "2025-01-20T20:30:03+0300")
 			.put("end", "2025-01-20T21:30:03+0300")
 			.put("description", "Русский Тест")
@@ -136,9 +136,8 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		return sr.getMessage();
 	}
 
-	@Test
-	public void testCreate() throws Exception {
-		JSONObject o = createAppointment();
+	private String createApp(String title) throws Exception {
+		JSONObject o = createAppointment(title);
 
 		String sid = loginNewUser();
 
@@ -152,6 +151,13 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		AppointmentDTO dto = resp.readEntity(AppointmentDTO.class);
 		assertNotNull("Valid DTO should be returned", dto);
 		assertNotNull("DTO id should be valid", dto.getId());
+
+		return sid;
+	}
+
+	@Test
+	public void testCreate() throws Exception {
+		createApp("test");
 	}
 
 	@Test
@@ -167,7 +173,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 	@Test
 	public void testCreateWithOmMm() throws Exception {
-		JSONObject o = createAppointment()
+		JSONObject o = createAppointment("test")
 				.put("meetingMembers", new JSONArray()
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("id", 1))));
@@ -191,7 +197,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	}
 
 	private static AppointmentDTO createEventWithGuests(String sid) throws Exception {
-		JSONObject o = createAppointment()
+		JSONObject o = createAppointment("test")
 				.put("meetingMembers", new JSONArray()
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("firstname", "John 1")
@@ -276,5 +282,27 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		User uc = userDao.get(mmUserId);
 		assertNotNull("Meeting member user should not be deleted", uc);
 		assertFalse("Meeting member user should not be deleted", uc.isDeleted());
+	}
+
+	@Test
+	public void testGetByTitle() throws Exception {
+		String title = "title" + UUID.randomUUID().toString();
+		String sid = createApp(title);
+		@SuppressWarnings("unchecked")
+		List<AppointmentDTO> list = (List<AppointmentDTO>)getClient(CALENDAR_SERVICE_URL)
+			.path(String.format("/title/%s", title))
+			.query("sid", sid)
+			.getCollection(AppointmentDTO.class);
+
+		assertEquals("List of one item should be returned", 1, list.size());
+		assertEquals("Title should match", title, list.get(0).getTitle());
+
+		title = UUID.randomUUID().toString();
+		@SuppressWarnings("unchecked")
+		List<AppointmentDTO> list1 = (List<AppointmentDTO>)getClient(CALENDAR_SERVICE_URL)
+			.path(String.format("/title/%s", title))
+			.query("sid", sid)
+			.getCollection(AppointmentDTO.class);
+		assertEquals("None items should be returned", 0, list1.size());
 	}
 }
