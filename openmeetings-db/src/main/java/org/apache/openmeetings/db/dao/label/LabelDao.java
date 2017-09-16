@@ -92,7 +92,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static String getString(String key, long langId) {
-		return _ensureApplication(langId).getOmString(key, langId);
+		return _ensureApplication().getOmString(key, langId);
 	}
 
 	private static File getLangFile() {
