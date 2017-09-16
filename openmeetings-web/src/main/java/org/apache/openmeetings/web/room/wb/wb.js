@@ -147,6 +147,7 @@ var Player = (function() {
 					updateProgress();
 					if (group.status.paused) {
 						cancelAnimationFrame(request);
+						canvas.renderAll();
 					} else {
 						request = fabric.util.requestAnimFrame(render);
 					}
@@ -1539,6 +1540,12 @@ var WbArea = (function() {
 	function _videoStatus(json) {
 		self.getWb(json.wbId).videoStatus(json);
 	}
+	function _initVideos(arr) {
+		for (let i = 0; i < arr.length; ++i) {
+			 _videoStatus(arr[i]);
+		}
+	}
+
 	self.getWbTabId = function(id) {
 		return "wb-tab-" + id;
 	};
@@ -1712,6 +1719,8 @@ var WbArea = (function() {
 		}
 	}
 	self.videoStatus = _videoStatus;
+	self.loadVideos = function() { wbAction('loadVideos'); };
+	self.initVideos = _initVideos;
 	return self;
 })();
 $(function() {

@@ -180,6 +180,7 @@ public class WbPanel extends AbstractWbPanel {
 		if (wb != null) {
 			sb.append("WbArea.setSlide(").append(wbj.put("slide", wb.getSlide())).append(");");
 		}
+		sb.append("WbArea.loadVideos();");
 	}
 
 	@Override
@@ -189,41 +190,76 @@ public class WbPanel extends AbstractWbPanel {
 
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
-		if (WbAction.createObj == a || WbAction.modifyObj == a) {
-			JSONObject o = obj.optJSONObject("obj");
-			if (o != null && "pointer".equals(o.getString("type"))) {
-				sendWbOthers(a, obj);
-				return;
-			}
-		}
-
 		Client c = rp.getClient();
-		if (WbAction.downloadPdf == a) {
-			boolean moder = c.hasRight(Room.Right.moderator);
-			Room r = rp.getRoom();
-			if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
-				try (PDDocument doc = new PDDocument()) {
-					JSONArray arr = obj.getJSONArray("slides");
-					for (int i = 0; i < arr.length(); ++i) {
-						String base64Image = arr.getString(i).split(",")[1];
-						byte[] bb = Base64.decodeBase64(base64Image);
-						BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
-						float width = img.getWidth();
-						float height = img.getHeight();
-						PDPage page = new PDPage(new PDRectangle(width, height));
-						PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
-						try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
-							contentStream.drawImage(pdImageXObject, 0, 0, width, height);
-						}
-						doc.addPage(page);
-					}
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					doc.save(baos);
-					rp.startDownload(target, baos.toByteArray());
+		switch (a) {
+			case createObj:
+			case modifyObj:
+			{
+				JSONObject o = obj.optJSONObject("obj");
+				if (o != null && "pointer".equals(o.getString("type"))) {
+					sendWbOthers(a, obj);
+					return;
 				}
 			}
-			return;
+				break;
+			case downloadPdf:
+			{
+				boolean moder = c.hasRight(Room.Right.moderator);
+				Room r = rp.getRoom();
+				if ((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions())) {
+					try (PDDocument doc = new PDDocument()) {
+						JSONArray arr = obj.getJSONArray("slides");
+						for (int i = 0; i < arr.length(); ++i) {
+							String base64Image = arr.getString(i).split(",")[1];
+							byte[] bb = Base64.decodeBase64(base64Image);
+							BufferedImage img = ImageIO.read(new ByteArrayInputStream(bb));
+							float width = img.getWidth();
+							float height = img.getHeight();
+							PDPage page = new PDPage(new PDRectangle(width, height));
+							PDImageXObject pdImageXObject = LosslessFactory.createFromImage(doc, img);
+							try (PDPageContentStream contentStream = new PDPageContentStream(doc, page, AppendMode.APPEND, false)) {
+								contentStream.drawImage(pdImageXObject, 0, 0, width, height);
+							}
+							doc.addPage(page);
+						}
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						doc.save(baos);
+						rp.startDownload(target, baos.toByteArray());
+					}
+				}
+				return;
+			}
+			case loadVideos:
+			{
+				StringBuilder sb = new StringBuilder("WbArea.initVideos(");
+				JSONArray arr = new JSONArray();
+				for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
+					Whiteboard wb = entry.getValue();
+					for (JSONObject o : wb.list()) {
+						String ft = o.optString("fileType");
+						if (BaseFileItem.Type.Recording.name().equals(ft) || BaseFileItem.Type.Video.name().equals(ft)) {
+							JSONObject _sts = o.optJSONObject("status");
+							if (_sts == null) {
+								continue;
+							}
+							JSONObject sts = new JSONObject(_sts.toString()); //copy
+							sts.put("pos", sts.getDouble("pos") + (System.currentTimeMillis() - sts.getLong("updated")) * 1. / 1000);
+							arr.put(new JSONObject()
+									.put("wbId", wb.getId())
+									.put("uid", o.getString("uid"))
+									.put("slide", o.getString("slide"))
+									.put("status", sts));
+						}
+					}
+				}
+				sb.append(arr.toString()).append(");");
+				target.appendJavaScript(sb);
+				return;
+			}
+			default:
+				break;
 		}
+
 		//presenter-right
 		if (c.hasRight(Right.presenter)) {
 			switch (a) {

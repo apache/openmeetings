@@ -36,4 +36,5 @@ public enum WbAction {
 	, startRecording
 	, stopRecording
 	, videoStatus
+	, loadVideos
 }
