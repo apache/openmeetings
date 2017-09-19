@@ -282,9 +282,31 @@
 		}
 
 		private function remoteMouseDownHandler(evt:MouseEvent):void {
+			video.getNc().call(
+				"sendRemoteCursorEvent"
+				, new Responder(function (res:Object):void {})
+				, params.uid, {
+					action: 'mouseDown'
+					, x: evt.stageX
+					, y: evt.stageY
+					, alt: evt.altKey
+					, ctrl: evt.ctrlKey
+					, shift: evt.shiftKey
+				});
 		}
 
 		private function remoteMouseUpHandler(evt:MouseEvent):void {
+			video.getNc().call(
+				"sendRemoteCursorEvent"
+				, new Responder(function (res:Object):void {})
+				, params.uid, {
+					action: 'mouseUp'
+					, x: evt.stageX
+					, y: evt.stageY
+					, alt: evt.altKey
+					, ctrl: evt.ctrlKey
+					, shift: evt.shiftKey
+				});
 		}
 
 		private function remoteMouseMoveHandler(evt:MouseEvent):void {
@@ -293,11 +315,8 @@
 				, new Responder(function (res:Object):void {})
 				, params.uid, {
 					action: 'mousePos'
-					, x: evt.localX
-					, y: evt.localY
-					, alt: evt.altKey
-					, ctrl: evt.ctrlKey
-					, shift: evt.shiftKey
+					, x: evt.stageX
+					, y: evt.stageY
 				});
 		}
 
