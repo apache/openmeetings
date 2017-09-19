@@ -130,9 +130,7 @@ var Video = (function() {
 	function _securityMode(on) {
 		if (on) {
 			//TODO buttons
-			v.dialog({
-				position: {my: "center", at: "center", of: WBA_SEL}
-			});
+			v.dialog("option", "position", {my: "center", at: "center", of: WBA_SEL});
 		} else {
 			let h = _resizeDlg(size.width, size.height);
 			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
@@ -217,6 +215,9 @@ var Video = (function() {
 					, h = ui.size.height - t.height() - 4 - (f.is(":visible") ? f.height() : 0);
 				_resize(w, h);
 				swf[0].vidResize(w, h);
+			}
+			, close: function(event, ui) {
+				VideoManager.close(c.uid, true);
 			}
 		}).dialogExtend({
 			icons: {
@@ -369,7 +370,7 @@ var VideoManager = (function() {
 			let cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
 			delete cl.streams;
 			$.extend(cl, s);
-			if (VideoUtil.isRecording(cl)) {
+			if (cl.self && VideoUtil.isSharing(cl) || VideoUtil.isRecording(cl)) {
 				continue;
 			}
 			let _id = VideoUtil.getVid(cl.uid)
@@ -427,12 +428,12 @@ var VideoManager = (function() {
 			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
 		}
 	}
-	function _close(uid) {
+	function _close(uid, showShareBtn) {
 		var _id = VideoUtil.getVid(uid), v = $('#' + _id);
 		if (v.length == 1) {
 			_closeV(v);
 		}
-		if (uid === share.data('uid')) {
+		if (!showShareBtn && uid === share.data('uid')) {
 			share.off('click').hide();
 		}
 	}
