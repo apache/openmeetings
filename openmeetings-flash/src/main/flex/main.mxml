@@ -321,6 +321,18 @@
 		}
 
 		private function remoteKeyDownHandler(evt:KeyboardEvent):void {
+			debug("remoteKeyDownHandler", evt);
+			video.getNc().call(
+				"sendRemoteCursorEvent"
+				, new Responder(function (res:Object):void {})
+				, params.uid, {
+					action: evt.type
+					, alt: evt.altKey
+					, ctrl: evt.ctrlKey
+					, shift: evt.shiftKey
+					, char: evt.charCode
+					, key: evt.keyCode
+				});
 		}
 
 		private function _resize(_width:int, _height:int):void {
