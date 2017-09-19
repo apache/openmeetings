@@ -52,10 +52,12 @@ public class OmVideo {
 	private var fallback:Boolean;
 	private var volume:int = 50;
 	private var lastVolume:int = 50;
+	private var cursorCbk:Function = null;
 
-	public function OmVideo(ui:UIComponent, params:Object) {
+	public function OmVideo(ui:UIComponent, params:Object, cursorCbk:Function = null) {
 		this.ui = ui;
 		this.params = params;
+		this.cursorCbk = cursorCbk;
 	}
 
 	private function getVideo():Video {
@@ -261,6 +263,11 @@ public class OmVideo {
 				}
 				, setId: function (id:Number):void {
 					debug("id: " + id); //TODO save connection id
+				}
+				, newScreenCursor: function(arr:Array):void {
+					if (arr.length > 2 && params.uid == arr[0]) {
+						cursorCbk(arr[1] * width / params.width, arr[2] * height / params.height);
+					}
 				}
 			};
 			_connect(url);

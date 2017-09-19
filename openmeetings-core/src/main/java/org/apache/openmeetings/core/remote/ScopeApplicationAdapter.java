@@ -574,6 +574,17 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
+	public void setNewCursorPosition(Double x, Double y) {
+		try {
+			IConnection current = Red5.getConnectionLocal();
+			StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
+
+			sendMessageToCurrentScope("newScreenCursor", new Object[] {c.getUid(), x, y}, true, false);
+		} catch (Exception err) {
+			_log.error("[setNewCursorPosition]", err);
+		}
+	}
+
 	private static void sendSharingStoped(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
 				.put("sid", rcl.getSid())
@@ -587,21 +598,6 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				.put("sid", rcl.getSid());
 		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, obj.toString()));
 	}
-
-	/** TODO need to be implemented in Flex
-	public void setNewCursorPosition(Map<String, Object> cursor) {
-		try {
-			IConnection current = Red5.getConnectionLocal();
-			StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
-
-			cursor.put("streamPublishName", c.getStreamPublishName());
-
-			sendMessageToCurrentScope("newRed5ScreenCursor", cursor, true, false);
-		} catch (Exception err) {
-			_log.error("[setNewCursorPosition]", err);
-		}
-	}
-	*/
 
 	public long switchMicMuted(String publicSID, boolean mute) {
 		try {

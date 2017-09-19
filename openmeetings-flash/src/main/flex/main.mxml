@@ -58,6 +58,9 @@
 		[Embed(source="assets/micro.png")]
 		[Bindable]
 		public var micImgCls:Class;
+		[Embed(source="assets/cursor.png")]
+		[Bindable]
+		public var cursorImgCls:Class;
 		[Bindable]
 		private var exclusiveTitle:String;
 
@@ -109,7 +112,7 @@
 			quality = getIntParam(params.quality, 90);
 			echoPath = getIntParam(params.echoPath, 128);
 			micRate = getIntParam(params.micRate, 22);
-			video = new OmVideo(videoDisplay, params);
+			video = new OmVideo(videoDisplay, params, setCursor);
 			activities = params.av == null ? [] : params.av.split(',');
 			rights = params.rights == null ? [] : params.rights.split(',');
 			userId = params.userId;
@@ -515,7 +518,13 @@
 				debug("ERROR: " + err);
 			}
 		}
-		]]></fx:Script>
+
+		public function setCursor(x:int, y:int):void {
+			cursor.visible = true;
+			cursor.x = x;
+			cursor.y = y;
+		}
+	]]></fx:Script>
 
 	<s:Image id="userImage" visible="false" width="0" height="0" />
 	<mx:UIComponent id="videoDisplay" width="0" height="0" />
@@ -523,4 +532,5 @@
 	<s:Image id="exclusiveMic" source="{micImgCls}" toolTip="{exclusiveTitle}" visible="false"/>
 	<s:Label id="timerText" height="20" width="45" x="20" y="5" paddingLeft="5" paddingTop="5"
 			 visible="false" backgroundColor="0xf5f5f5" fontWeight="bold"><s:text></s:text></s:Label>
+	<s:Image id="cursor" source="{cursorImgCls}" visible="false"/>
 </s:Application>

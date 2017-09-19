@@ -228,15 +228,11 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			int x = (int)(Ampl_factor * (mouseP.getX() - spinnerX) * scaleFactor);
 			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
 
-			Map<String, Object> cursorPosition = new HashMap<>();
-			cursorPosition.put("cursor_x", x);
-			cursorPosition.put("cursor_y", y);
-
 			if (instance.getConnection() != null) {
 				if (Red5.getConnectionLocal() == null) {
 					Red5.setConnectionLocal(instance.getConnection());
 				}
-				instance.invoke("setNewCursorPosition", new Object[] { cursorPosition }, this);
+				instance.invoke("setNewCursorPosition", new Object[] { x, y }, this);
 			}
 		} catch (NullPointerException npe) {
 			//noop
