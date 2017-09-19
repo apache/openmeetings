@@ -77,42 +77,62 @@ public class RemoteJob implements Job {
 				String action = "" + obj.get("action");
 				log.trace("Action polled:: {}, count: {}", action, core.getRemoteEvents().size());
 
-				if (action.equals("onmouseup")) {
-					Point p = getCoordinates(obj);
-					robot.mouseMove(p.x, p.y);
-					robot.mouseRelease(InputEvent.BUTTON1_MASK);
-				} else if (action.equals("onmousedown")) {
-					Point p = getCoordinates(obj);
-					robot.mouseMove(p.x, p.y);
-					robot.mousePress(InputEvent.BUTTON1_MASK);
-				} else if (action.equals("mousePos")) {
-					Point p = getCoordinates(obj);
-					robot.mouseMove(p.x, p.y);
-				} else if (action.equals("keyDown")) {
-					new OmKeyEvent(obj).press(this);
-				} else if (action.equals("paste")) {
-					String paste = obj.get("paste").toString();
-					paste(paste);
-				} else if (action.equals("copy")) {
-					String paste = getHighlightedText();
+				switch (action) {
+					case "mouseUp":
+					{
+						Point p = getCoordinates(obj);
+						robot.mouseMove(p.x, p.y);
+						robot.mouseRelease(InputEvent.BUTTON1_MASK);
+					}
+						break;
+					case "mouseDown":
+					{
+						Point p = getCoordinates(obj);
+						robot.mouseMove(p.x, p.y);
+						robot.mousePress(InputEvent.BUTTON1_MASK);
+					}
+						break;
+					case "mousePos":
+					{
+						Point p = getCoordinates(obj);
+						robot.mouseMove(p.x, p.y);
+					}
+						break;
+					case "keyDown":
+						new OmKeyEvent(obj).press(this);
+						break;
+					case "paste":
+					{
+						String paste = obj.get("paste").toString();
+						paste(paste);
+					}
+						break;
+					case "copy":
+					{
+						String paste = getHighlightedText();
 
-					Map<Integer, String> map = new HashMap<>();
-					map.put(0, "copiedText");
-					map.put(1, paste);
+						Map<Integer, String> map = new HashMap<>();
+						map.put(0, "copiedText");
+						map.put(1, paste);
 
-					String clientId = obj.get("clientId").toString();
+						String clientId = obj.get("clientId").toString();
 
-					core.getInstance().invoke("sendMessageWithClientById", new Object[]{map, clientId}, core);
-				} else if (action.equals("show")) {
-					String paste = getClipboardText();
+						core.getInstance().invoke("sendMessageWithClientById", new Object[]{map, clientId}, core);
+					}
+						break;
+					case "show": //FIXME TODO
+					{
+						String paste = getClipboardText();
 
-					Map<Integer, String> map = new HashMap<>();
-					map.put(0, "copiedText");
-					map.put(1, paste);
+						Map<Integer, String> map = new HashMap<>();
+						map.put(0, "copiedText");
+						map.put(1, paste);
 
-					String clientId = obj.get("clientId").toString();
+						String clientId = obj.get("clientId").toString();
 
-					core.getInstance().invoke("sendMessageWithClientById", new Object[]{map, clientId}, core);
+						core.getInstance().invoke("sendMessageWithClientById", new Object[]{map, clientId}, core);
+					}
+						break;
 				}
 			}
 		} catch (Exception err) {

@@ -32,6 +32,7 @@
 		import mx.graphics.SolidColor;
 		import mx.utils.UIDUtil;
 		import flash.events.MouseEvent;
+		import flash.events.KeyboardEvent;
 
 		import org.apache.openmeetings.OmVideo;
 
@@ -53,6 +54,9 @@
 		private var active:Boolean = false;
 		private var userId:String = null;
 		private var cuid:String = null;
+		private var type:String = null;
+		private var params:Object;
+
 		[Bindable]
 		private var interview:Boolean = false;
 		[Embed(source="assets/micro.png")]
@@ -92,6 +96,10 @@
 			return _hasVideo(activities);
 		}
 
+		private function hasRightRemoteControl():Boolean {
+			return rights.indexOf('remoteControl') > -1 || rights.indexOf('moderator') > -1 || rights.indexOf('superModerator') > -1;
+		}
+
 		private function hasRightExclusive():Boolean {
 			return rights.indexOf('exclusive') > -1 || rights.indexOf('moderator') > -1 || rights.indexOf('superModerator') > -1;
 		}
@@ -102,7 +110,7 @@
 		}
 
 		private function appInit(evt:Event):void {
-			var params:Object = FlexGlobals.topLevelApplication.parameters;
+			this.params = FlexGlobals.topLevelApplication.parameters;
 			debug("appInit()", params);
 			audioOnly = 'true' == params.audioOnly;
 			interview = 'true' == params.interview;
@@ -117,6 +125,7 @@
 			rights = params.rights == null ? [] : params.rights.split(',');
 			userId = params.userId;
 			cuid = params.cuid;
+			type = params.type;
 			switch (params.mode) {
 				case 'settings': {
 					ExternalInterface.addCallback("getDevices", function ():Object {
@@ -216,6 +225,7 @@
 					_resize(params.width, params.height);
 					refreshCallback(null);
 					_updateExclusive();
+					_updateRemote();
 					ExternalInterface.addCallback("setVolume", function (vol:int):void {
 						video.setStreamVolume(vol);
 					});
@@ -245,16 +255,53 @@
 			}
 		}
 
-		private function exclMouseOutHandler(event:MouseEvent):void {
+		private function exclMouseOutHandler(evt:MouseEvent):void {
 			exclusiveMic.visible = false;
 		}
 
-		private function exclMouseOverHandler(event:MouseEvent):void {
+		private function exclMouseOverHandler(evt:MouseEvent):void {
 			exclusiveMic.visible = true;
 		}
 
-		private function exclMouseClickHandler(event:MouseEvent):void {
+		private function exclMouseClickHandler(evt:MouseEvent):void {
 			ExternalInterface.call("VideoManager.clickExclusive", cuid);
+		}
+
+		private function _updateRemote():void {
+			if ("sharing" === type && hasRightRemoteControl()) {
+				addEventListener(MouseEvent.MOUSE_DOWN, remoteMouseDownHandler);
+				addEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
+				addEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
+				addEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+			} else {
+				removeEventListener(MouseEvent.MOUSE_DOWN, remoteMouseDownHandler);
+				removeEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
+				removeEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
+				removeEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+			}
+		}
+
+		private function remoteMouseDownHandler(evt:MouseEvent):void {
+		}
+
+		private function remoteMouseUpHandler(evt:MouseEvent):void {
+		}
+
+		private function remoteMouseMoveHandler(evt:MouseEvent):void {
+			video.getNc().call(
+				"sendRemoteCursorEvent"
+				, new Responder(function (res:Object):void {})
+				, params.uid, {
+					action: 'mousePos'
+					, x: evt.localX
+					, y: evt.localY
+					, alt: evt.altKey
+					, ctrl: evt.ctrlKey
+					, shift: evt.shiftKey
+				});
+		}
+
+		private function remoteKeyDownHandler(evt:KeyboardEvent):void {
 		}
 
 		private function _resize(_width:int, _height:int):void {
@@ -298,10 +345,10 @@
 			debug("setRightsCallback", _rights);
 			rights = _rights;
 			_updateExclusive();
+			_updateRemote();
 		}
 
 		private function refreshCallback(opts:Object):void {
-			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			video.reset();
 			video.play(params.broadcastId); // TODO audio/video
 			video.resetStreamVolume();
@@ -371,7 +418,6 @@
 		}
 
 		private function checkAvPermissions(callback:Function):void {
-			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			debug("Camera selected:: " + selectedCam);
 			var cam:Camera = getCam();
 			debug("Camera selected:: " + cam, cam == null ? '' : cam.muted);
@@ -473,7 +519,6 @@
 		}
 
 		private function broadcastTimerListener(event:TimerEvent):void {
-			var params:Object = FlexGlobals.topLevelApplication.parameters;
 			var _active:Boolean = mic.activityLevel > 8;
 			var h:int = video.height - 10;
 			var ah:int = Math.round(mic.activityLevel * h / 100);

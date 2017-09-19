@@ -14,9 +14,6 @@ var VideoUtil = (function() {
 			&& c.screenActivities.indexOf('recording') > -1
 			&& c.screenActivities.indexOf('sharing') < 0;
 	}
-	function _isSharing(c) {
-		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
-	}
 	function _hasAudio(c) {
 		return c.activities.indexOf('broadcastA') > -1;
 	}
@@ -307,6 +304,7 @@ var Video = (function() {
 		o.cuid = c.cuid;
 		o.userId = c.user.id;
 		o.broadcastId = c.broadcastId;
+		o.type = c.type;
 		delete o.keycode;
 		swf = initVideo(vc, _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);

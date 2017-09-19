@@ -869,14 +869,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return 1;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
-	public boolean sendRemoteCursorEvent(final String streamid, Map messageObj) {
+	public boolean sendRemoteCursorEvent(final String uid, Map<String, Object> messageObj) {
 		new MessageSender("sendRemoteCursorEvent", messageObj, this) {
 
 			@Override
 			public boolean filter(IConnection conn) {
 				IClient client = conn.getClient();
-				return !IClientUtil.isSharing(client) || !conn.getClient().getId().equals(streamid);
+				return uid == null || !IClientUtil.isSharing(client) || !IClientUtil.getId(client).equals(uid);
 			}
 		}.start();
 		return true;
