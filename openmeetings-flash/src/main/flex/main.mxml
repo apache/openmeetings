@@ -21,7 +21,7 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		xmlns:mx="library://ns.adobe.com/flex/mx"
-		width="570" height="900" pageTitle="Openmeetings" fontSize="12"
+		width="570" height="900" pageTitle="Openmeetings" fontSize="12" focusEnabled="true"
 		applicationComplete="appInit(event)" uncaughtError="uncaughtError(event)">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
@@ -269,19 +269,23 @@
 
 		private function _updateRemote():void {
 			if ("sharing" === type && hasRightRemoteControl()) {
+				fakeTa.text = "";
+				fakeTa.setFocus();
 				addEventListener(MouseEvent.MOUSE_DOWN, remoteMouseDownHandler);
 				addEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
 				addEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
-				addEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+				this.addEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler, false, 0, true);
 			} else {
 				removeEventListener(MouseEvent.MOUSE_DOWN, remoteMouseDownHandler);
 				removeEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
 				removeEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
-				removeEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+				this.removeEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
 			}
 		}
 
 		private function remoteMouseDownHandler(evt:MouseEvent):void {
+			fakeTa.text = "";
+			fakeTa.setFocus();
 			video.getNc().call(
 				"sendRemoteCursorEvent"
 				, new Responder(function (res:Object):void {})
@@ -321,7 +325,6 @@
 		}
 
 		private function remoteKeyDownHandler(evt:KeyboardEvent):void {
-			debug("remoteKeyDownHandler", evt);
 			video.getNc().call(
 				"sendRemoteCursorEvent"
 				, new Responder(function (res:Object):void {})
@@ -602,6 +605,7 @@
 		}
 	]]></fx:Script>
 
+	<s:TextArea id="fakeTa" width="1" height="1" editable="true"/>
 	<s:Image id="userImage" visible="false" width="0" height="0" />
 	<mx:UIComponent id="videoDisplay" width="0" height="0" />
 	<s:Rect id="volumeRect" x="5" y="5" width="10" height="100" visible="false" />
