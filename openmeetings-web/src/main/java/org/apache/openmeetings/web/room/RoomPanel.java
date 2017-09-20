@@ -65,7 +65,7 @@ import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
-import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
@@ -684,7 +684,7 @@ public class RoomPanel extends BasePanel {
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		getBasePage().getHeader().setVisible(false);
 		getMainPanel().getTopControls().setVisible(false);
-		Component loader = ((MainPage)getPage()).getLoader().setVisible(false);
+		Component loader = ((BasePage)getPage()).getLoader().setVisible(false);
 		if (r.isHidden(RoomElement.Chat) || !isVisible()) {
 			getMainPanel().getChat().toggle(handler, false);
 		}

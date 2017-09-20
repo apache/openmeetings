@@ -77,6 +77,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	}
 
 	private void createRoom(Long roomId) {
+		getLoader().setVisible(true);
 		getHeader().setVisible(false);
 		// need to re-fetch Room object to initialize all collections
 		Room room = getBean(RoomDao.class).get(roomId);

@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -32,6 +31,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -41,7 +41,7 @@ import com.googlecode.wicket.jquery.ui.form.button.Button;
 import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 
-public class RoomListPanel extends UserPanel {
+public class RoomListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final ListView<Room> list;
 
