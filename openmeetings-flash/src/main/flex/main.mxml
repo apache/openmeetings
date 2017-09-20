@@ -31,8 +31,12 @@
 		import mx.core.FlexGlobals;
 		import mx.graphics.SolidColor;
 		import mx.utils.UIDUtil;
+		import flash.desktop.Clipboard;
+		import flash.desktop.ClipboardFormats;
+		import flash.events.ContextMenuEvent;
 		import flash.events.MouseEvent;
 		import flash.events.KeyboardEvent;
+		import flash.ui.ContextMenu;
 
 		import org.apache.openmeetings.OmVideo;
 
@@ -56,6 +60,7 @@
 		private var cuid:String = null;
 		private var type:String = null;
 		private var params:Object;
+		private var copyPasteCtxMenu:ContextMenu = new ContextMenu();
 
 		[Bindable]
 		private var interview:Boolean = false;
@@ -236,6 +241,7 @@
 					});
 					ExternalInterface.addCallback("refresh", refreshCallback);
 					ExternalInterface.addCallback("setRights", setRightsCallback);
+					copyPasteCtxMenu.clipboardMenu = true;
 				}
 					break;
 			}
@@ -244,14 +250,13 @@
 
 		private function _updateExclusive():void {
 			debug("_updateExclusive", rights, activities);
+			removeEventListener(MouseEvent.MOUSE_OUT, exclMouseOutHandler);
+			removeEventListener(MouseEvent.MOUSE_OVER, exclMouseOverHandler);
+			removeEventListener(MouseEvent.CLICK, exclMouseClickHandler);
 			if (hasAudio() && hasRightExclusive()) {
 				addEventListener(MouseEvent.MOUSE_OUT, exclMouseOutHandler);
 				addEventListener(MouseEvent.MOUSE_OVER, exclMouseOverHandler);
 				addEventListener(MouseEvent.CLICK, exclMouseClickHandler);
-			} else {
-				removeEventListener(MouseEvent.MOUSE_OUT, exclMouseOutHandler);
-				removeEventListener(MouseEvent.MOUSE_OVER, exclMouseOverHandler);
-				removeEventListener(MouseEvent.CLICK, exclMouseClickHandler);
 			}
 		}
 
@@ -268,6 +273,12 @@
 		}
 
 		private function _updateRemote():void {
+			removeEventListener(MouseEvent.MOUSE_DOWN, remoteMouseDownHandler);
+			removeEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
+			removeEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
+			this.removeEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+			copyPasteCtxMenu.removeEventListener(ContextMenuEvent.MENU_SELECT, menuSelectHandler);
+			this.contextMenu = null;
 			if ("sharing" === type && hasRightRemoteControl()) {
 				fakeTa.text = "";
 				fakeTa.setFocus();
@@ -275,11 +286,8 @@
 				addEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
 				addEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
 				this.addEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler, false, 0, true);
-			} else {
-				removeEventListener(MouseEvent.MOUSE_DOWN, remoteMouseDownHandler);
-				removeEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
-				removeEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
-				this.removeEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+				copyPasteCtxMenu.addEventListener(ContextMenuEvent.MENU_SELECT, menuSelectHandler);
+				this.contextMenu = copyPasteCtxMenu;
 			}
 		}
 
@@ -336,6 +344,16 @@
 					, char: evt.charCode
 					, key: evt.keyCode
 				});
+		}
+
+		private function menuSelectHandler(event:ContextMenuEvent):void {
+			debug("menuSelectHandler");
+			var pasteData:String  = Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
+			debug("menuSelectHandler :: " + pasteData);
+			/*
+			event.contextMenuOwner.contextMenu.clipboardItems.copy = true;
+			event.contextMenuOwner.contextMenu.clipboardItems.paste = true;
+			*/
 		}
 
 		private function _resize(_width:int, _height:int):void {
