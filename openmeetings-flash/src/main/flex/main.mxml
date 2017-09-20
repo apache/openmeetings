@@ -31,6 +31,7 @@
 		import mx.core.FlexGlobals;
 		import mx.graphics.SolidColor;
 		import mx.utils.UIDUtil;
+
 		import flash.desktop.Clipboard;
 		import flash.desktop.ClipboardFormats;
 		import flash.events.ContextMenuEvent;
@@ -277,6 +278,8 @@
 			removeEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
 			removeEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
 			this.removeEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler);
+			this.removeEventListener(Event.COPY, copyHandler);
+			this.removeEventListener(Event.PASTE, pasteHandler);
 			copyPasteCtxMenu.removeEventListener(ContextMenuEvent.MENU_SELECT, menuSelectHandler);
 			this.contextMenu = null;
 			if ("sharing" === type && hasRightRemoteControl()) {
@@ -286,6 +289,8 @@
 				addEventListener(MouseEvent.MOUSE_UP, remoteMouseUpHandler);
 				addEventListener(MouseEvent.MOUSE_MOVE, remoteMouseMoveHandler);
 				this.addEventListener(KeyboardEvent.KEY_DOWN, remoteKeyDownHandler, false, 0, true);
+				this.addEventListener(Event.COPY, copyHandler);
+				this.addEventListener(Event.PASTE, pasteHandler);
 				copyPasteCtxMenu.addEventListener(ContextMenuEvent.MENU_SELECT, menuSelectHandler);
 				this.contextMenu = copyPasteCtxMenu;
 			}
@@ -347,13 +352,32 @@
 		}
 
 		private function menuSelectHandler(event:ContextMenuEvent):void {
-			debug("menuSelectHandler");
-			var pasteData:String  = Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
-			debug("menuSelectHandler :: " + pasteData);
-			/*
 			event.contextMenuOwner.contextMenu.clipboardItems.copy = true;
 			event.contextMenuOwner.contextMenu.clipboardItems.paste = true;
-			*/
+		}
+
+		private function copyHandler(e:Event):void {
+			debug("copyHandler :: ", params);
+			video.getNc().call(
+				"sendRemoteCursorEvent"
+				, new Responder(function (res:Object):void {})
+				, params.uid, {
+					action: "copy"
+					, uid: params.uid
+				});
+		}
+
+		private function pasteHandler(e:Event):void {
+			if (Clipboard.generalClipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)) {
+				var data:String = Clipboard.generalClipboard.getData(ClipboardFormats.TEXT_FORMAT) as String;
+				video.getNc().call(
+					"sendRemoteCursorEvent"
+					, new Responder(function (res:Object):void {})
+					, params.uid, {
+						action: "paste"
+						, paste: data
+					});
+			}
 		}
 
 		private function _resize(_width:int, _height:int):void {

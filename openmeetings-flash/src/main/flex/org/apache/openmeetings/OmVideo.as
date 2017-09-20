@@ -264,10 +264,17 @@ public class OmVideo {
 				, setId: function (id:Number):void {
 					debug("id: " + id); //TODO save connection id
 				}
+				, setUid: function (_uid:String):void {
+					params.selfUid = _uid;
+					debug("setUid :: ", params);
+				}
 				, newScreenCursor: function(arr:Array):void {
 					if (arr.length > 2 && params.uid == arr[0]) {
 						cursorCbk(arr[1] * width / params.width, arr[2] * height / params.height);
 					}
+				}
+				, sendVarsToMessageWithClient: function(obj:Object):void {
+					debug("sendVarsToMessageWithClient :: ", obj);
 				}
 			};
 			_connect(url);

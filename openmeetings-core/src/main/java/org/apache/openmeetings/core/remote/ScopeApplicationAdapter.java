@@ -221,6 +221,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 		IClientUtil.init(conn.getClient(), rcm.getUid(), Client.Type.sharing == rcm.getType());
 
+		service.invoke("setUid", new Object[] { rcm.getUid() }, this);
+
 		// Log the User
 		conferenceLogDao.add(ConferenceLog.Type.clientConnect,
 				rcm.getUserId(), streamId, null, rcm.getRemoteAddress(),
@@ -843,11 +845,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * Sends a message to a user in the same room by its clientId
 	 *
+	 * @param uid
 	 * @param newMessage
-	 * @param clientId
 	 * @return 1 in case of no exceptions, -1 otherwise
 	 */
-	public int sendMessageWithClientById(Object newMessage, String clientId) {
+	public int sendMessageToClient(final String uid, Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
@@ -858,12 +860,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			// broadcast Message to specific user with id inside the same Scope
 			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (conn.getClient().getId().equals(clientId)) {
+				if (IClientUtil.getId(conn.getClient()).equals(uid)) {
 					((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
 				}
 			}
 		} catch (Exception err) {
-			_log.error("[sendMessageWithClient] ", err);
+			_log.error("[sendMessageToClient] ", err);
 			return -1;
 		}
 		return 1;

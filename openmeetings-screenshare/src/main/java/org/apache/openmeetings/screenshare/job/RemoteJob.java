@@ -74,7 +74,7 @@ public class RemoteJob implements Job {
 		try {
 			Map<String, Object> obj = null;
 			while ((obj = core.getRemoteEvents().poll(1, TimeUnit.MILLISECONDS)) != null) {
-				String action = "" + obj.get("action");
+				String action = String.valueOf(obj.get("action"));
 				log.trace("Action polled:: {}, count: {}", action, core.getRemoteEvents().size());
 
 				switch (action) {
@@ -102,10 +102,7 @@ public class RemoteJob implements Job {
 						new OmKeyEvent(obj).press(this);
 						break;
 					case "paste":
-					{
-						String paste = obj.get("paste").toString();
-						paste(paste);
-					}
+						paste(String.valueOf(obj.get("paste")));
 						break;
 					case "copy":
 					{
@@ -115,22 +112,9 @@ public class RemoteJob implements Job {
 						map.put(0, "copiedText");
 						map.put(1, paste);
 
-						String clientId = obj.get("clientId").toString();
+						String uid = String.valueOf(obj.get("uid"));
 
-						core.getInstance().invoke("sendMessageWithClientById", new Object[]{map, clientId}, core);
-					}
-						break;
-					case "show": //FIXME TODO
-					{
-						String paste = getClipboardText();
-
-						Map<Integer, String> map = new HashMap<>();
-						map.put(0, "copiedText");
-						map.put(1, paste);
-
-						String clientId = obj.get("clientId").toString();
-
-						core.getInstance().invoke("sendMessageWithClientById", new Object[]{map, clientId}, core);
+						core.getInstance().invoke("sendMessageToClient", new Object[]{uid, map}, core);
 					}
 						break;
 				}
@@ -172,18 +156,14 @@ public class RemoteJob implements Job {
 
 	public String getClipboardText() {
 		try {
-			// get the system clipboard
-			Clipboard systemClipboard = getDefaultToolkit().getSystemClipboard();
 			// get the contents on the clipboard in a transferable object
-			Transferable clipboardContents = systemClipboard.getContents(null);
+			Transferable data = getDefaultToolkit().getSystemClipboard().getContents(null);
 			// check if clipboard is empty
-			if (clipboardContents == null) {
+			if (data == null) {
 				// Clipboard is empty!!!
-			} else if (clipboardContents.isDataFlavorSupported(stringFlavor)) {
-				// see if DataFlavor of DataFlavor.stringFlavor is supported
-				// return text content
-				String returnText = (String) clipboardContents.getTransferData(stringFlavor);
-				return returnText;
+			} else if (data.isDataFlavorSupported(stringFlavor)) {
+				// see if DataFlavor of DataFlavor.stringFlavor is supported return text content
+				return (String) data.getTransferData(stringFlavor);
 			}
 		} catch (Exception e) {
 			log.error("Unexpected exception while getting clipboard text", e);
