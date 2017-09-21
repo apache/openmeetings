@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[Ha negedélyezi a "Tartomány hozzáadása a felhasználó névhez" a "Tartomány" (domain) mező értéke hozzáadódik minden bejelentkezéshez mikor a felhasználó belép. Használja ezt, ha az LDAP bejelentezés támogatja a tartomány kezelést. Pl.: Felhasználó belép "hans", tartomány meghatározva mint "localhost.com", a belpést az LDAP ellenőrzi mint: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Tartomány hozzáadása a felhasználó névhez]]></entry>
 	<entry key="1118"><![CDATA[Tartomány]]></entry>
+	<entry key="1121">Távoli vágólap tartalma</entry>
 	<entry key="1131"><![CDATA[Felhasználó meghívása a konferenciába]]></entry>
 	<entry key="1132"><![CDATA[Válasszon konferencia szobát. A meghívott felhasználó üzenetet kap a Nevével és a belépési linkkel.]]></entry>
 	<entry key="1134"><![CDATA[Belépés a konferencia szobába a meghívó küldés után]]></entry>

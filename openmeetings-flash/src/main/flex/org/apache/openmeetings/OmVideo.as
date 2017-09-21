@@ -17,8 +17,6 @@
  * under the License.
  */
 package org.apache.openmeetings {
-import flash.desktop.Clipboard;
-import flash.desktop.ClipboardFormats;
 import flash.events.AsyncErrorEvent;
 import flash.events.NetStatusEvent;
 import flash.external.ExternalInterface;
@@ -277,9 +275,7 @@ public class OmVideo {
 				}
 				, sendVarsToMessageWithClient: function(obj:Object):void {
 					if ("copiedText" === obj[0]) {
-						debug("sendVarsToMessageWithClient :: copiedText " + obj[1]);
-						Clipboard.generalClipboard.clear();
-						Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, obj[1] as String);
+						ExternalInterface.call("Room.showClipboard", obj[1]);
 					}
 				}
 			};

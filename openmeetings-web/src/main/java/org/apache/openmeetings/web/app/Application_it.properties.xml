@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[Se abiliti "Aggiungi Dominio al nome utente" il valore del campo "Dominio" sarà aggiunto a quanto inserito nella finestra di accesso. Questo è utile se il Login nel server LDAP è memorizzato con il dominio compreso. Esempio: L'utente inserisce "hans", nel dominio è specificato "localhost.com", verrà verificato il login sul server LDAP con: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Aggiunge dominio all'utente]]></entry>
 	<entry key="1118"><![CDATA[Dominio]]></entry>
+	<entry key="1121">Testo della Clipboard remota</entry>
 	<entry key="1131"><![CDATA[Invita un utente nella stanza conferenze]]></entry>
 	<entry key="1132"><![CDATA[Scegli una stanza conferenze. Gli utenti invitati riceveranno un messaggio con il nome ed il link alla stanza.]]></entry>
 	<entry key="1134"><![CDATA[Entra nella stanza dopo l'invio degli inviti]]></entry>

@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[如果您勾选了“增加域选项”，则在登录界面中将出现“域”选择下拉框选项。这项功能在LDAP目录服务的配置中是非常有用的。如：如果用户使用hans@localhost.com作为ldap目录服务的登录名，则在用户名中只需要输入hans，而域选项则选择localhost.com]]></entry>
 	<entry key="1117"><![CDATA[在用户名后加入域名]]></entry>
 	<entry key="1118"><![CDATA[域名]]></entry>
+	<entry key="1121">远程粘贴板中的文本</entry>
 	<entry key="1131"><![CDATA[邀请用户参与会议]]></entry>
 	<entry key="1132"><![CDATA[选择一个会议室，被邀请者会受到一条您的名字和进入会议室的链接]]></entry>
 	<entry key="1134"><![CDATA[邀请后进入会议室]]></entry>

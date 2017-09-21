@@ -129,8 +129,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="256"><![CDATA[Go to previous Page]]></entry>
 	<entry key="259"><![CDATA[Zoom --]]></entry>
 	<entry key="260"><![CDATA[Zoom ++]]></entry>
-	<entry key="261"><![CDATA[Mr.]]></entry>
-	<entry key="262"><![CDATA[Ms.]]></entry>
 	<entry key="263"><![CDATA[Configuration]]></entry>
 	<entry key="265"><![CDATA[Key]]></entry>
 	<entry key="266"><![CDATA[Configuration]]></entry>
@@ -424,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[If you enable "Add Domain to username" the value of the field "domain" is added to each login that the user enters in the login box. This is useful if the Login in the Ldap is stored including the domain name. Example: User enters "hans" domain is specified as "localhost.com", login that is verified against Ldap is: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Add Domain to username]]></entry>
 	<entry key="1118"><![CDATA[Domain]]></entry>
+	<entry key="1121">Remote clipboard text</entry>
 	<entry key="1131"><![CDATA[Invite user to conference room]]></entry>
 	<entry key="1132"><![CDATA[Choose a conference room. The invited user will get a message with your name and a link to the room.]]></entry>
 	<entry key="1134"><![CDATA[Enter room after sending invitation]]></entry>

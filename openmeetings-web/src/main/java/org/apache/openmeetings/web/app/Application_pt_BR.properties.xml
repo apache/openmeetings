@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[Se você escolheu "Adicionar domínio para nome de usuário" o valor no campo "domínio" é adicionado para cada login que o usuário digitar no box de login. Isso é útil se o login no LDAP é salvo incluindo o nome do domínio. Exemplo: Usuário entra com "Maria" especificado como "localhost.com". O login que é verificado em relação ao LDAP é maria@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Adicionar Domínio ao usuário]]></entry>
 	<entry key="1118"><![CDATA[Domain]]></entry>
+	<entry key="1121">Texto da área de transferência remota</entry>
 	<entry key="1131"><![CDATA[Convidar usuário a sala de conferência]]></entry>
 	<entry key="1132"><![CDATA[Escolha uma sala de conferência. O usuário convidado irá receber uma mensagem com seu nome e um link para a sala.]]></entry>
 	<entry key="1134"><![CDATA[Entre na sala após o envio de convite]]></entry>

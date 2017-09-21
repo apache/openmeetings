@@ -635,6 +635,24 @@ var Room = (function() {
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup', _keyHandler);
 	}
+	function _showClipboard(txt) {
+		let dlg = $('#clipboard-dialog');
+		dlg.find('p .text').text(txt);
+		dlg.dialog({
+			resizable: false
+			, height: "auto"
+			, width: 400
+			, modal: true
+			, buttons: [
+				{
+					text: dlg.data('btn-ok')
+					, click: function() {
+						$(this).dialog('close');
+					}
+				}
+			]
+		});
+	}
 
 	self.init = _init;
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
@@ -643,6 +661,7 @@ var Room = (function() {
 	self.keyHandler = _keyHandler;
 	self.load = _load;
 	self.unload = _unload;
+	self.showClipboard = _showClipboard;
 	return self;
 })();
 function startPrivateChat(el) {

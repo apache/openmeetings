@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[「ドメインをユーザー名に付加する」を選択すると、指定したドメインが、ログイン画面で指定したログイン名に自動的に付加されます。もしLDAPに、ドメイン名付きのログイン名が保存されている場合に利用してください。例: ログイン名「hans」、ドメイン名「localhost.com」の場合、「hans@localhost.com」でLDAP認証を行います。]]></entry>
 	<entry key="1117"><![CDATA[ドメインをユーザー名に付加する]]></entry>
 	<entry key="1118"><![CDATA[ドメイン]]></entry>
+	<entry key="1121">リモートPCのクリップボード・テキスト</entry>
 	<entry key="1131"><![CDATA[ユーザーを会議室に招待する]]></entry>
 	<entry key="1132"><![CDATA[会議室を選択してください。参加依頼を受けるユーザーには、あなたの名前、メッセージとともに会議室へのリンクが発行されます。]]></entry>
 	<entry key="1134"><![CDATA[参加依頼の送信後に入室する]]></entry>

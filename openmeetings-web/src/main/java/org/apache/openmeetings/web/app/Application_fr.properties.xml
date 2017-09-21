@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[Si vous activez "Ajouter le domaine au nom d'utilisateur" la veleur du champ "domaine" sera ajoutée à chaque login entré dans la fenêtre de login. Ceci peut-être utile si le login dans le Ldap est enregistré en incluant le nom de domaine. Par exemple : un utilisateur entre "hans" le domaine spécifié étant "localhost.com", le login vérifié avec Ldap sera : hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Ajouter le domaine]]></entry>
 	<entry key="1118"><![CDATA[Domaine]]></entry>
+	<entry key="1121">Texte du presse-papier distant</entry>
 	<entry key="1131"><![CDATA[Inviter l'utilisateur dans la salle de conférence]]></entry>
 	<entry key="1132"><![CDATA[Choisissez une salle de conférence. L'utilisateur invité recevra un message avec votre nom et un lien vers la salle.]]></entry>
 	<entry key="1134"><![CDATA[Entrer dans la salle après l'envoi de l'invitation]]></entry>

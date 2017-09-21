@@ -422,6 +422,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1116"><![CDATA[Si activa "Añadir Dominio al nombre de usuario" el valor del campo "dominio" se añade a cada registro que el usuario introduce en la casilla de login. Esto es útil si el Login en el Ldap se almacena incluyendo el nombre de dominio. Ejemplo: supongamos que el usuario introduce "hans" y el dominio está especificado como "localhost.com". El login que se verificará contra el Ldap será: hans@localhost.com]]></entry>
 	<entry key="1117"><![CDATA[Añadir Dominio al nombre de usuario]]></entry>
 	<entry key="1118"><![CDATA[Dominio]]></entry>
+	<entry key="1121">Texto remoto en Portapapeles</entry>
 	<entry key="1131"><![CDATA[Invitar usuario a sala de conferencias]]></entry>
 	<entry key="1132"><![CDATA[Escoja sala de conferencias. El usuario invitado verá un mensaje con tu nombre y un link a la sala.]]></entry>
 	<entry key="1134"><![CDATA[Entrar a sala tras enviar invitación]]></entry>
