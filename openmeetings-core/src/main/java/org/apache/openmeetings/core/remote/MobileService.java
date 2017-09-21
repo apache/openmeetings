@@ -68,7 +68,9 @@ import org.red5.server.api.Red5;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service("mobile.service")
 public class MobileService {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, webAppRootKey);
 	@Autowired

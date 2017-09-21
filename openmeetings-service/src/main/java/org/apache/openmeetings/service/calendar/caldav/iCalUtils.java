@@ -72,6 +72,7 @@ import net.fortuna.ical4j.model.property.Version;
  * Class which provides iCalendar Utilities.
  * This class's functions could be made static, as they are not instantiated anyway.
  */
+@org.springframework.stereotype.Component
 public class iCalUtils {
 	private static final Logger log = Red5LoggerFactory.getLogger(iCalUtils.class, webAppRootKey);
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";

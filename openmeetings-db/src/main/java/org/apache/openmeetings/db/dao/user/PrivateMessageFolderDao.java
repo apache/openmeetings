@@ -32,58 +32,60 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageFolder> {
 	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessageFolderDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	public Long addPrivateMessageFolder(String folderName, Long userId) {
 		try {
 			PrivateMessageFolder privateMessageFolder = new PrivateMessageFolder();
 			privateMessageFolder.setFolderName(folderName);
 			privateMessageFolder.setUserId(userId);
 			privateMessageFolder.setInserted(new Date());
-			
+
 			privateMessageFolder = em.merge(privateMessageFolder);
 			Long privateMessageFolderId = privateMessageFolder.getId();
-			
-			return privateMessageFolderId;	
+
+			return privateMessageFolderId;
 		} catch (Exception e) {
 			log.error("[addPrivateMessageFolder]",e);
 		}
 		return null;
 	}
-	
+
 	public Long addPrivateMessageFolderObj(PrivateMessageFolder folder) {
 		folder.setInserted(new Date());
-		
+
 		folder = em.merge(folder);
 		Long privateMessageFolderId = folder.getId();
-		
-		return privateMessageFolderId;	
+
+		return privateMessageFolderId;
 	}
-	
+
 	@Override
 	public PrivateMessageFolder get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public PrivateMessageFolder get(Long id) {
 		String hql = "select c from PrivateMessageFolder c where c.id = :id ";
 
-		TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
+		TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class);
 		query.setParameter("id", id);
-		
+
 		PrivateMessageFolder folder = null;
 		try {
 			folder = query.getSingleResult();
 		} catch (NoResultException ex) {
 		}
-		
+
 		return folder;
 	}
 
@@ -103,14 +105,14 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		}
 		return folder;
 	}
-	
+
 	public List<PrivateMessageFolder> getPrivateMessageFolderByUserId(Long userId) {
 		try {
 			String hql = "select c from PrivateMessageFolder c where c.userId = :userId ";
 
-			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class); 
+			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class);
 			query.setParameter("userId", userId);
-			
+
 			return query.getResultList();
 		} catch (Exception e) {
 			log.error("[getPrivateMessageFolderByUserId]",e);

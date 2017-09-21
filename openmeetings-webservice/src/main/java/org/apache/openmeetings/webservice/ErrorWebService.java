@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -47,6 +48,7 @@ import org.slf4j.Logger;
  * @author solomax
  *
  */
+@Service("errorWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})

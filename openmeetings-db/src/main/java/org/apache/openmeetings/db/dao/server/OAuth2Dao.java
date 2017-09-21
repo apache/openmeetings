@@ -28,25 +28,27 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.util.DaoHelper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 
 	public final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	public List<OAuthServer> getActive() {
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getEnabledOAuthServers", OAuthServer.class);
 		return query.getResultList();
 	}
-	
+
 	@Override
 	public OAuthServer get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public OAuthServer get(Long id) {
 		TypedQuery<OAuthServer> query = em.createNamedQuery("getOAuthServerById", OAuthServer.class);

@@ -111,14 +111,14 @@ public class IcalHandler {
 	// ---------------------------------------------------------------------------------------
 	public String addNewMeeting(Date startDate, Date endDate, String name,
 			List<Map<String, String>> attendees, String description,
-			Map<String, String> organizer, String uid, String javaTzId) throws Exception
+			Map<String, String> organizer, String uid, String javaTzId)
 	{
 
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
 
 		TimeZone timeZone = registry.getTimeZone(javaTzId);
 		if (timeZone == null) {
-			throw new Exception("Unable to get time zone by id provided: " + javaTzId);
+			throw new RuntimeException("Unable to get time zone by id provided: " + javaTzId);
 		}
 
 		DateTime start = new DateTime(startDate);

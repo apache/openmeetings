@@ -35,7 +35,9 @@ import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, webAppRootKey);
 

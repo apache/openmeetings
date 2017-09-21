@@ -34,11 +34,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author swagner
  *
  */
+@Component
 public class EmailManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
 

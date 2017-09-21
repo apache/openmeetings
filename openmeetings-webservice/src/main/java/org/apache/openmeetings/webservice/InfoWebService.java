@@ -29,14 +29,16 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dto.basic.Info;
+import org.springframework.stereotype.Service;
 
 /**
- * 
+ *
  * The Service contains methods to get localized errors
- * 
+ *
  * @author solomax
- * 
+ *
  */
+@Service("infoWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.InfoWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
@@ -44,7 +46,7 @@ import org.apache.openmeetings.db.dto.basic.Info;
 public class InfoWebService {
 	/**
 	 * Method to get current OpenMeetings version
-	 * 
+	 *
 	 * @return - version
 	 */
 	@WebMethod

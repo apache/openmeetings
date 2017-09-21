@@ -79,12 +79,14 @@ import org.simpleframework.xml.stream.NodeBuilder;
 import org.simpleframework.xml.stream.OutputNode;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author sebastianwagner
  *
  */
+@Component
 public class BackupExport {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupExport.class, webAppRootKey);
 	private static final String BACKUP_COMMENT =

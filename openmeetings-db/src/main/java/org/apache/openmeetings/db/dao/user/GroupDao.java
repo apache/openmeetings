@@ -30,8 +30,10 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.util.DaoHelper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	public final static String[] searchFields = {"name"};
@@ -42,7 +44,7 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	public Group get(long id) {
 		return get(Long.valueOf(id));
 	}
-	
+
 	@Override
 	public Group get(Long id) {
 		TypedQuery<Group> query = em.createNamedQuery("getGroupById", Group.class);

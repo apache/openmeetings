@@ -55,8 +55,10 @@ import org.apache.tika.parser.image.ImageParser;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.xml.sax.helpers.DefaultHandler;
 
+@Component
 public class ImageConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImageConverter.class, webAppRootKey);
 	private static final String PAGE_TMPLT = DOC_PAGE_PREFIX + "-%04d." + EXTENSION_PNG;

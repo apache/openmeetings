@@ -50,8 +50,10 @@ import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomDao.class, webAppRootKey);

@@ -74,6 +74,7 @@ import org.apache.wicket.validation.Validatable;
 import org.apache.wicket.validation.ValidationError;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -83,6 +84,7 @@ import org.slf4j.Logger;
  * @author sebawagner
  *
  */
+@Service("userWebService")
 @WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})

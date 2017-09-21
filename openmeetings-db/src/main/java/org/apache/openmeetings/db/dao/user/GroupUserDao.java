@@ -27,8 +27,10 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.util.DaoHelper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	@PersistenceContext

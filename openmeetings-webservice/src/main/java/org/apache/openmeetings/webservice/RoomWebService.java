@@ -63,6 +63,7 @@ import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
 /**
  * RoomService contains methods to manipulate rooms and create invitation hash
@@ -70,6 +71,7 @@ import org.slf4j.Logger;
  * @author sebawagner
  *
  */
+@Service("roomWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
@@ -452,7 +454,7 @@ public class RoomWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/hash")
-	private ServiceResult hash(@WebParam(name="sid") @QueryParam("sid") String sid
+	public ServiceResult hash(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="invite") @QueryParam("invite") InvitationDTO invite
 			, @WebParam(name="sendmail") @QueryParam("sendmail") boolean sendmail
 			) throws ServiceException

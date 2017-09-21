@@ -70,6 +70,7 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Management of optional LDAP Login
@@ -77,6 +78,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author o.becherer
  *
  */
+@Component
 public class LdapLoginManagement {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
 	// LDAP custom attribute mapping keys

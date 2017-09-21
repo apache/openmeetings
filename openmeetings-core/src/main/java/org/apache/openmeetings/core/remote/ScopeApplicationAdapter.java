@@ -70,9 +70,11 @@ import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.github.openjson.JSONObject;
 
+@Service("web.handler")
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
 	private static final Logger _log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
 	private static final String SID_PARAM = "sid";

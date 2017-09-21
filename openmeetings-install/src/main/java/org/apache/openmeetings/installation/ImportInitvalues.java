@@ -66,6 +66,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
@@ -117,7 +118,9 @@ import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ImportInitvalues {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, webAppRootKey);
 
@@ -308,6 +311,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.string, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/");
 		addCfg(list, CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL));
 		addCfg(list, CONFIG_MYROOMS_ENABLED, "" + true, Configuration.Type.bool, "Users are allowed to create personal rooms");
+		addCfg(list, CONFIG_REMINDER_MESSAGE, null, Configuration.Type.string, "Reminder message to notify about upcoming appointment, generated message will be used if not set");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

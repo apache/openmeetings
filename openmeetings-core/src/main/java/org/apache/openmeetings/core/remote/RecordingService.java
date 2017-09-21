@@ -60,9 +60,11 @@ import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.stream.ClientBroadcastStream;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.github.openjson.JSONObject;
 
+@Service
 public class RecordingService implements IPendingServiceCallback {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingService.class, webAppRootKey);
 

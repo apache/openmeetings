@@ -25,7 +25,9 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InterviewConverterTask {
 	private static final Logger log = Red5LoggerFactory.getLogger(InterviewConverterTask.class, webAppRootKey);
 
@@ -38,11 +40,8 @@ public class InterviewConverterTask {
 		try {
 			log.debug("[-1-]" + taskExecutor);
 
-			taskExecutor.execute(new Runnable() {
-				@Override
-				public void run() {
-					interviewConverter.startConversion(recordingId);
-				}
+			taskExecutor.execute(() -> {
+				interviewConverter.startConversion(recordingId);
 			});
 		} catch (Exception err) {
 			log.error("[startConversionThread]", err);

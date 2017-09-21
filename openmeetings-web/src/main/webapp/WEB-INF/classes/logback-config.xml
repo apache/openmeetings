@@ -23,7 +23,7 @@
 
 	<jmxConfigurator contextName="${current_openmeetings_context_name}" />
 
-	<appender name="FLOG2" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<File>log/${current_openmeetings_context_name}.log</File>
 		<Append>false</Append>
 		<Encoding>UTF-8</Encoding>
@@ -45,7 +45,7 @@
 			<maxHistory>50</maxHistory>
 		</rollingPolicy>
 	</appender>
-	<appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %r %L %c{15} [%.15thread] - %m%n</pattern>
 		</layout>
@@ -59,7 +59,7 @@
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
 	<logger name="org.apache.wicket" level="WARN" />
 	<root level="DEBUG">
-		<appender-ref ref="FLOG2" />
-		<appender-ref ref="CONSOLE2" />
+		<appender-ref ref="FILE" />
+		<appender-ref ref="CONSOLE" />
 	</root>
 </configuration>

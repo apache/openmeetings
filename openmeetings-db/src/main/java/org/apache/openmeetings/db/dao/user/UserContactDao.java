@@ -32,8 +32,10 @@ import org.apache.openmeetings.db.entity.user.UserContact;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class UserContactDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserContactDao.class, webAppRootKey);
@@ -49,23 +51,23 @@ public class UserContactDao {
 			userContact.setOwner(userDao.get(ownerId));
 			userContact.setContact(userDao.get(userId));
 			userContact.setPending(pending);
-			
+
 			userContact = update(userContact);
-			
+
 			return userContact;
 		} catch (Exception e) {
 			log.error("[addUserContact]",e);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @param id
 	 */
 	public void delete(Long id) {
 		em.createNamedQuery("deleteUserContact").setParameter("id", id).executeUpdate();
 	}
-	
+
 	/**
 	 * @param ownerId
 	 * @return rowcount of update
@@ -73,7 +75,7 @@ public class UserContactDao {
 	public Integer deleteAllUserContacts(Long ownerId) {
 		return em.createNamedQuery("deleteAllUserContacts").setParameter("ownerId",ownerId).executeUpdate();
 	}
-	
+
 	public UserContact get(Long userId, Long ownerId) {
 		List<UserContact> ll = em.createNamedQuery("getContactByUserOwner", UserContact.class)
 				.setParameter("userId", userId)
@@ -82,12 +84,12 @@ public class UserContactDao {
 		log.info("number of contacts:: " + (ll == null ? null : ll.size()));
 		return ll != null && ll.size() == 1 ? ll.get(0) : null;
 	}
-	
+
 	public boolean isContact(Long userId, Long ownerId) {
 		UserContact c = get(userId, ownerId);
 		return c == null ? false : !c.isPending();
 	}
-	
+
 	public List<UserContact> get(long ownerId, int first, int count) {
 		TypedQuery<UserContact> q = em.createNamedQuery("getContactsByUser", UserContact.class);
 		q.setParameter("userId", ownerId);
@@ -95,13 +97,13 @@ public class UserContactDao {
 		q.setMaxResults(count);
 		return q.getResultList();
 	}
-	
+
 	public long count(long ownerId) {
 		TypedQuery<Long> q = em.createNamedQuery("countContactsByUser", Long.class);
 		q.setParameter("userId", ownerId);
 		return q.getSingleResult();
 	}
-	
+
 	public List<UserContact> getContactsByUserAndStatus(Long ownerId, boolean pending) {
 		try {
 			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByUserAndStatus", UserContact.class);
@@ -113,7 +115,7 @@ public class UserContactDao {
 		}
 		return null;
 	}
-	
+
 	public UserContact getUserContactByShareCalendar(Long contactId,
 			Boolean shareCalendar, Long userId) {
 		try {
@@ -134,7 +136,7 @@ public class UserContactDao {
 
 	public List<UserContact> getContactsByShareCalendar(Long contactId, Boolean shareCalendar) {
 		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByShareCalendar", UserContact.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByShareCalendar", UserContact.class);
 			query.setParameter("contactId", contactId);
 			query.setParameter("shareCalendar", shareCalendar);
 			return query.getResultList();
@@ -143,10 +145,10 @@ public class UserContactDao {
 		}
 		return null;
 	}
-	
+
 	public List<UserContact> getContactRequestsByUserAndStatus(Long userId, boolean pending) {
 		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class);
 			query.setParameter("userId", userId);
 			query.setParameter("pending", pending);
 			return query.getResultList();
@@ -155,10 +157,10 @@ public class UserContactDao {
 		}
 		return null;
 	}
-	
+
 	public UserContact get(Long id) {
 		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactsById", UserContact.class); 
+			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactsById", UserContact.class);
 			query.setParameter("id", id);
 			UserContact userContacts = null;
 			try {
@@ -171,11 +173,11 @@ public class UserContactDao {
 		}
 		return null;
 	}
-	
+
 	public List<UserContact> get() {
 		return em.createNamedQuery("getUserContacts", UserContact.class).getResultList();
 	}
-	
+
 	public Long updateContactStatus(Long id, boolean pending) {
 		try {
 			UserContact uc = get(id);
@@ -187,7 +189,7 @@ public class UserContactDao {
 		}
 		return null;
 	}
-	
+
 	public UserContact update(UserContact c) {
 		if (c.getId() == null) {
 			c.setInserted(new Date());

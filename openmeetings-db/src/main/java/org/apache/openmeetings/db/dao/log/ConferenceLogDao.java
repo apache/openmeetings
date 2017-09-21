@@ -29,12 +29,14 @@ import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class ConferenceLogDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDao.class, webAppRootKey);
-	
+
 	@PersistenceContext
 	private EntityManager em;
 
@@ -47,7 +49,7 @@ public class ConferenceLogDao {
 		confLog.setScopeName(scopeName);
 		confLog.setRoomId(roomId);
 		confLog.setUserip(userip);
-		
+
 		em.persist(confLog);
 		log.debug("[addConferenceLog]: " + confLog);
 		return confLog;

@@ -40,16 +40,18 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author sebastianwagner
- * 
+ *
  */
+@Repository
 @Transactional
 public class RecordingDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingDao.class, webAppRootKey);
-	
+
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
@@ -207,7 +209,7 @@ public class RecordingDao {
 		update(f);
 		return true;
 	}
-	
+
 	public Recording update(Recording f) {
 		try {
 			if (f.getId() == null) {
@@ -236,24 +238,24 @@ public class RecordingDao {
 			.setParameter("converting", Status.CONVERTING)
 			.executeUpdate();
 	}
-	
+
 	public RecordingContainerData getContainerData(long userId) {
 		try {
 			RecordingContainerData containerData = new RecordingContainerData();
-	
+
 			// User Home Recordings
 			List<Recording> homes = getRootByOwner(userId);
 			long homeFileSize = 0;
-	
+
 			for (Recording home : homes) {
 				homeFileSize += getSize(home);
 			}
-	
+
 			containerData.setUserHomeSize(homeFileSize);
-			
+
 			// Public Recordings
 			long publicFileSize = 0;
-			
+
 			//get all groups the user can view
 			for (GroupUser ou : userDao.get(userId).getGroupUsers()) {
 				List<Recording> publicRecordings = getRootByPublic(ou.getGroup().getId());
@@ -270,7 +272,7 @@ public class RecordingDao {
 		}
 		return null;
 	}
-	
+
 	private long getSize(Recording r) {
 		long size = 0;
 

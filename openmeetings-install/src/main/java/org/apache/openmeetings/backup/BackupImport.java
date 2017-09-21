@@ -77,6 +77,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
@@ -183,11 +184,13 @@ import org.simpleframework.xml.stream.NodeBuilder;
 import org.simpleframework.xml.transform.RegistryMatcher;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+@Component
 public class BackupImport {
 	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
 	private static final String LDAP_EXT_TYPE = "LDAP";
@@ -222,6 +225,7 @@ public class BackupImport {
 		outdatedConfigKeys.put("sendEmailWithVerficationCode", CONFIG_EMAIL_VERIFICATION);
 		outdatedConfigKeys.put("swftools_zoom", CONFIG_DOCUMENT_DPI);
 		outdatedConfigKeys.put("swftools_jpegquality", CONFIG_DOCUMENT_QUALITY);
+		outdatedConfigKeys.put("sms.subject", CONFIG_REMINDER_MESSAGE);
 		configTypes.put(CONFIG_REGISTER_FRONTEND, Configuration.Type.bool);
 		configTypes.put(CONFIG_REGISTER_SOAP, Configuration.Type.bool);
 		configTypes.put(CONFIG_REGISTER_OAUTH, Configuration.Type.bool);

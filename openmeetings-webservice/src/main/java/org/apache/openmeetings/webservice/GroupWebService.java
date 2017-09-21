@@ -58,6 +58,7 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -67,6 +68,7 @@ import org.slf4j.Logger;
  * @author sebawagner
  *
  */
+@Service("groupWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})

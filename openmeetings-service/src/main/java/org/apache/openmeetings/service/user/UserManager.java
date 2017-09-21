@@ -63,12 +63,14 @@ import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author swagner
  *
  */
+@Component
 public class UserManager implements IUserManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, webAppRootKey);
 

@@ -65,6 +65,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -74,6 +75,7 @@ import org.springframework.core.task.TaskExecutor;
  * http://connector.sourceforge.net/doc-files/Properties.html
  *
  */
+@Component("mailHandler")
 public class MailHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, webAppRootKey);
 	private static final int MAIL_SEND_TIMEOUT = 60 * 60 * 1000; // 1 hour
@@ -238,29 +240,26 @@ public class MailHandler {
 				m.setStatus(Status.SENDING);
 				mailMessageDao.update(m, null);
 			}
-			taskExecutor.execute(new Runnable() {
-				@Override
-				public void run() {
-					log.debug("Message sending in progress");
-					log.debug("  To: " + m.getRecipients());
-					log.debug("  Subject: " + m.getSubject());
+			taskExecutor.execute(() -> {
+				log.debug("Message sending in progress");
+				log.debug("  To: " + m.getRecipients());
+				log.debug("  Subject: " + m.getSubject());
 
-					// -- Send the message --
-					try {
-						Transport.send(getMimeMessage(m));
-						m.setLastError("");
-						m.setStatus(Status.DONE);
-					} catch (Exception e) {
-						log.error("Error while sending message", e);
-						m.setErrorCount(m.getErrorCount() + 1);
-						StringWriter sw = new StringWriter();
-						e.printStackTrace(new PrintWriter(sw));
-						m.setLastError(sw.getBuffer().toString());
-						m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
-					}
-					if (m.getId() != null) {
-						mailMessageDao.update(m, null);
-					}
+				// -- Send the message --
+				try {
+					Transport.send(getMimeMessage(m));
+					m.setLastError("");
+					m.setStatus(Status.DONE);
+				} catch (Exception e) {
+					log.error("Error while sending message", e);
+					m.setErrorCount(m.getErrorCount() + 1);
+					StringWriter sw = new StringWriter();
+					e.printStackTrace(new PrintWriter(sw));
+					m.setLastError(sw.getBuffer().toString());
+					m.setStatus(m.getErrorCount() < MAXIMUM_ERROR_COUNT ? Status.NONE : Status.ERROR);
+				}
+				if (m.getId() != null) {
+					mailMessageDao.update(m, null);
 				}
 			});
 		} else {

@@ -29,8 +29,10 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
 import org.apache.wicket.util.string.Strings;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 	@PersistenceContext

@@ -33,8 +33,10 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class PollDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(PollDao.class, webAppRootKey);
@@ -81,7 +83,7 @@ public class PollDao {
 		List<RoomPoll> list = em.createNamedQuery("getPollById", RoomPoll.class).setParameter("id", id).getResultList();
 		return list.isEmpty() ? null : list.get(0);
 	}
-	
+
 	public RoomPoll getByRoom(Long roomId) {
 		try {
 			log.debug(" :: getPoll :: " + roomId);
@@ -95,7 +97,7 @@ public class PollDao {
 		}
 		return null;
 	}
-	
+
 	public List<RoomPoll> get() {
 		try {
 			TypedQuery<RoomPoll> q = em.createNamedQuery("getPollListBackup", RoomPoll.class);
@@ -107,7 +109,7 @@ public class PollDao {
 		}
 		return null;
 	}
-	
+
 	public List<RoomPoll> getArchived(Long roomId) {
 		try {
 			log.debug(" :: getArchived :: " + roomId);
@@ -121,7 +123,7 @@ public class PollDao {
 		}
 		return null;
 	}
-	
+
 	public boolean hasPoll(Long roomId) {
 		try {
 			log.debug(" :: hasPoll :: " + roomId);
@@ -136,7 +138,7 @@ public class PollDao {
 		}
 		return false;
 	}
-	
+
 	public boolean hasVoted(Long roomId, Long userId) {
 		try {
 			log.debug(" :: hasVoted :: " + roomId + ", " + userId);

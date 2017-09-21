@@ -30,7 +30,6 @@
 	<name>Openmeetings Core</name>
 	<description>Module for OpenMeetings core and red5 related classes and services</description>
 	<properties>
-		<smslib.version>3.5.4</smslib.version>
 		<mail.version>1.6.0</mail.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
@@ -71,11 +70,6 @@
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 			<version>1.4.10</version>
-		</dependency>
-		<dependency>
-			<groupId>org.smslib</groupId>
-			<artifactId>smslib</artifactId>
-			<version>${smslib.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.wicket</groupId>

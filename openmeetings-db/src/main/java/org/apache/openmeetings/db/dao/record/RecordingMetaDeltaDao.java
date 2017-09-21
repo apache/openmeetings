@@ -28,39 +28,41 @@ import javax.persistence.PersistenceContext;
 import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author sebastianwagner
  *
  */
+@Repository
 @Transactional
 public class RecordingMetaDeltaDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingMetaDeltaDao.class, webAppRootKey);
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	public List<RecordingMetaDelta> getByMetaId(Long metaDataId) {
 		return em.createNamedQuery("getRecordingMetaDeltaByMetaDataId", RecordingMetaDelta.class).setParameter("metaDataId", metaDataId).getResultList();
 	}
-	
-	
-	
+
+
+
 	public Long add(RecordingMetaDelta metaDelta) {
-		try { 
-			
+		try {
+
 			metaDelta = em.merge(metaDelta);
 			Long metaDeltaId = metaDelta.getId();
-			
+
 			log.debug("metaDeltaId "+metaDeltaId);
-			
+
 			return metaDeltaId;
 		} catch (Exception ex2) {
 			log.error("[add]: ",ex2);
 		}
 		return null;
 	}
-	
+
 	public RecordingMetaDelta update(RecordingMetaDelta metaDelta) {
 		log.debug("[update]: ");
 		if (metaDelta.getMetaDataId() == null) {
@@ -68,8 +70,8 @@ public class RecordingMetaDeltaDao {
 		} else {
 			metaDelta = em.merge(metaDelta);
 		}
-			
+
 		return metaDelta;
-	}	
-	
+	}
+
 }

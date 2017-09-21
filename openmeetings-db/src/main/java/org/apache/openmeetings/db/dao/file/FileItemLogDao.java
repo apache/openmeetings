@@ -31,8 +31,10 @@ import org.apache.openmeetings.db.entity.file.FileItemLog;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class FileItemLogDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(FileItemLogDao.class, webAppRootKey);

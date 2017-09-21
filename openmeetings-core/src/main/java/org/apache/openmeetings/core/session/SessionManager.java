@@ -37,6 +37,7 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.Server;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Component;
 
 /**
  * Handle {@link StreamClient} objects.
@@ -46,6 +47,7 @@ import org.slf4j.Logger;
  * @author sebawagner
  *
  */
+@Component
 public class SessionManager implements ISessionManager {
 	protected static final Logger log = Red5LoggerFactory.getLogger(SessionManager.class, webAppRootKey);
 

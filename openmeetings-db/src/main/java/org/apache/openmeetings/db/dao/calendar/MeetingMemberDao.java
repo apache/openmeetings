@@ -31,8 +31,10 @@ import javax.persistence.PersistenceContext;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class MeetingMemberDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(MeetingMemberDao.class, webAppRootKey);

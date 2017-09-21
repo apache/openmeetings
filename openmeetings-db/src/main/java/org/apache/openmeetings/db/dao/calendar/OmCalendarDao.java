@@ -27,8 +27,10 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class OmCalendarDao {
 	@PersistenceContext

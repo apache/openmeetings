@@ -41,7 +41,9 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RecordingConverter extends BaseConverter implements IRecordingConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingConverter.class, webAppRootKey);
 
@@ -66,7 +68,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			List<ConverterProcessResult> logs = new ArrayList<>();
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
-			
+
 			RecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(r.getId());
 
 			if (screenMetaData == null) {

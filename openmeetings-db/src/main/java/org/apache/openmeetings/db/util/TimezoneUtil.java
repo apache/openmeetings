@@ -31,7 +31,9 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TimezoneUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
 

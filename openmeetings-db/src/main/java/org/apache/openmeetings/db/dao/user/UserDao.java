@@ -64,6 +64,7 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -72,6 +73,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author swagner, solomax, vasya
  *
  */
+@Repository
 @Transactional
 public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, webAppRootKey);

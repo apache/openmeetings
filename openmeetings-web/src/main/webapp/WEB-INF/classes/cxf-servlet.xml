@@ -20,10 +20,12 @@
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
 		xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 		xmlns:jaxws="http://cxf.apache.org/jaxws"
 		xsi:schemaLocation="
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 			http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 			http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd"
 	>
@@ -31,15 +33,8 @@
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
 	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
 
-	<bean id="calendarWebService" class="org.apache.openmeetings.webservice.CalendarWebService" />
-	<bean id="errorWebService" class="org.apache.openmeetings.webservice.ErrorWebService" />
-	<bean id="fileWebService" class="org.apache.openmeetings.webservice.FileWebService" />
-	<bean id="groupWebService" class="org.apache.openmeetings.webservice.GroupWebService" />
-	<bean id="infoWebService" class="org.apache.openmeetings.webservice.InfoWebService" />
-	<bean id="recordWebService" class="org.apache.openmeetings.webservice.RecordingWebService" />
-	<bean id="roomWebService" class="org.apache.openmeetings.webservice.RoomWebService" />
-	<bean id="userWebService" class="org.apache.openmeetings.webservice.UserWebService"/>
-	<bean id="netTestWebService" class="org.apache.openmeetings.webservice.NetTestWebService" />
+	<context:annotation-config />
+	<context:component-scan base-package="org.apache.openmeetings.webservice" />
 
 	<!-- (writeXsiType=false) -->
 	<jaxrs:server id="server" address="/">
@@ -49,10 +44,10 @@
 			<ref bean="fileWebService"/>
 			<ref bean="groupWebService"/>
 			<ref bean="infoWebService"/>
+			<ref bean="netTestWebService"/> <!-- JaxRs only -->
 			<ref bean="recordWebService"/>
 			<ref bean="roomWebService"/>
 			<ref bean="userWebService"/>
-			<ref bean="netTestWebService"/> <!-- JaxRs only -->
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean id="appDtoMessageBodyWriter" class="org.apache.openmeetings.webservice.util.AppointmentMessageBodyWriter" />

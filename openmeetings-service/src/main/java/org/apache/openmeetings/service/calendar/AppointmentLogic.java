@@ -26,15 +26,13 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.core.notifier.NotifierService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
-import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -42,17 +40,16 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
-import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
-import org.apache.openmeetings.service.mail.template.subject.AppointmentReminderTemplate;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AppointmentLogic {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, webAppRootKey);
 
@@ -63,8 +60,6 @@ public class AppointmentLogic {
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
-	private IInvitationManager invitationManager;
-	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private InvitationDao invitationDao;
@@ -72,6 +67,8 @@ public class AppointmentLogic {
 	private UserDao userDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
+	@Autowired
+	private NotifierService notifierService;
 
 	// --------------------------------------------------------------------------------------------
 
@@ -85,26 +82,8 @@ public class AppointmentLogic {
 	}
 
 	private void sendReminder(User u, Appointment a, Invitation inv) throws Exception {
-		if (inv == null) {
-			log.error(String.format("Error retrieving Invitation for member %s in Appointment %s"
-					, u.getAddress().getEmail(), a.getTitle()));
-			return;
-		}
-
-		TimeZone tz = timezoneUtil.getTimeZone(u.getTimeZoneId());
-
-		long langId = u.getLanguageId();
-		// Get the required labels one time for all meeting members. The
-		// Language of the email will be the system default language
-
-		String smsSubject = generateSMSSubject(LabelDao.getString("1158", langId), a);
-
-		AbstractSubjectEmailTemplate t = AppointmentReminderTemplate.get(u, a, tz);
-		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
-
-		invitationManager.sendInvitationReminderSMS(u.getAddress().getPhone(), smsSubject, langId);
+		notifierService.notify(u, a, inv);
 		if (inv.getHash() != null) {
-			inv.setUpdated(new Date());
 			invitationDao.update(inv);
 		}
 	}
@@ -173,11 +152,6 @@ public class AppointmentLogic {
 				sendReminder(mm.getUser(), a, inv);
 			}
 		}
-	}
-
-	private String generateSMSSubject(String labelid1158, Appointment ment) {
-		String subj = cfgDao.getString("sms.subject", null);
-		return subj == null || subj.length() == 0 ? labelid1158 + " " + ment.getTitle() : subj;
 	}
 
 	public Appointment getAppointment(String appointmentName,

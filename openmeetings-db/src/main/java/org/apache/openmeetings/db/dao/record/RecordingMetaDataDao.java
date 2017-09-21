@@ -33,8 +33,10 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class RecordingMetaDataDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingMetaDataDao.class, webAppRootKey);

@@ -43,7 +43,5 @@ public interface IInvitationManager {
 			User createdBy, Long languageId, Date gmtTimeStart, Date gmtTimeEnd
 			, Appointment appointment);
 
-	void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception ;
-
-	boolean sendInvitationReminderSMS(String phone, String subject, long languageId);
+	void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception;
 }

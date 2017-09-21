@@ -171,27 +171,9 @@
 					<td> 2.1.x, <b> values are changed in 3.0.0</b> </td>
 				</tr>
 				<tr>
-					<td> sms.provider </td>
+					<td> reminder.message </td>
 					<td>  </td>
-					<td> SMS service provider (bulksms.http.1) </td>
-					<td> 2.1.x </td>
-				</tr>
-				<tr>
-					<td> sms.Username </td>
-					<td>  </td>
-					<td> Login for SMS service provider </td>
-					<td> 2.1.x </td>
-				</tr>
-				<tr>
-					<td> sms.Userpass </td>
-					<td>  </td>
-					<td> Password for SMS service provider </td>
-					<td> 2.1.x </td>
-				</tr>
-				<tr>
-					<td> sms.subject </td>
-					<td>  </td>
-					<td> Subject of SMS reminder message </td>
+					<td> Reminder message to notify about upcoming appointment, generated message will be used if not set </td>
 					<td> 2.1.x </td>
 				</tr>
 				<tr>

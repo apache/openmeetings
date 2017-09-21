@@ -43,6 +43,10 @@
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.github.caldav4j</groupId>
 			<artifactId>caldav4j</artifactId>
 			<version>0.9-om</version>

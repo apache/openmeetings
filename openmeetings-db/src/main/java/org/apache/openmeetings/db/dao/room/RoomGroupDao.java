@@ -25,8 +25,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 @Transactional
 public class RoomGroupDao {
 	@PersistenceContext

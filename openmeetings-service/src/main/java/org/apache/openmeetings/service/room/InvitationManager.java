@@ -30,7 +30,6 @@ import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.core.mail.SMSHandler;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
@@ -55,12 +54,14 @@ import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author swagner
  *
  */
+@Component
 public class InvitationManager implements IInvitationManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, webAppRootKey);
 
@@ -68,8 +69,6 @@ public class InvitationManager implements IInvitationManager {
 	private InvitationDao invitationDao;
 	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private SMSHandler smsHandler;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
@@ -147,25 +146,6 @@ public class InvitationManager implements IInvitationManager {
 		} else {
 			mailHandler.send(email, replyToEmail, subject, template);
 		}
-	}
-
-	/**
-	 * This method sends invitation reminder SMS
-	 * @param phone user's phone
-	 * @param subject
-	 * @return
-	 */
-	@Override
-	public boolean sendInvitationReminderSMS(String phone, String subject, long languageId) {
-		if (!Strings.isEmpty(phone)) {
-			log.debug("sendInvitationReminderSMS to " + phone + ": " + subject);
-			try {
-				return smsHandler.sendSMS(phone, subject, languageId);
-			} catch (Exception e) {
-				log.error("sendInvitationReminderSMS", e);
-			}
-		}
-		return false;
 	}
 
 	/**
