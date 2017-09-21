@@ -357,13 +357,12 @@
 		}
 
 		private function copyHandler(e:Event):void {
-			debug("copyHandler :: ", params);
 			video.getNc().call(
 				"sendRemoteCursorEvent"
 				, new Responder(function (res:Object):void {})
 				, params.uid, {
 					action: "copy"
-					, uid: params.uid
+					, uid: params.selfUid
 				});
 		}
 

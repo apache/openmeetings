@@ -815,7 +815,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * it sends a general message to a specific clientId
 	 *
 	 * @param newMessage
-	 * @param clientId
+	 * @param uid
+	 * @param scope
 	 * @return 1 in case of success, -1 otherwise
 	 */
 	public int sendMessageById(Object newMessage, final String uid, IScope scope) {
@@ -825,16 +826,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			Map<String, Object> hsm = new HashMap<>();
 			hsm.put("message", newMessage);
 
-			// broadcast Message to specific user with id inside the same Scope
-			for (IConnection conn : scope.getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						if (uid.equals(IClientUtil.getId(conn.getClient()))) {
-							((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
-						}
-					}
-				}
-			}
+			_sendMessageToClient(uid, hsm, scope);
 		} catch (Exception err) {
 			_log.error("[sendMessageWithClient] ", err);
 			return -1;
@@ -852,23 +844,24 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public int sendMessageToClient(final String uid, Object newMessage) {
 		try {
 			IConnection current = Red5.getConnectionLocal();
-			StreamClient currentClient = sessionManager.get(IClientUtil.getId(current.getClient()));
 
-			Map<String, Object> hsm = new HashMap<>();
-			hsm.put("client", currentClient);
-			hsm.put("message", newMessage);
-
-			// broadcast Message to specific user with id inside the same Scope
-			for (IConnection conn : current.getScope().getClientConnections()) {
-				if (IClientUtil.getId(conn.getClient()).equals(uid)) {
-					((IServiceCapableConnection) conn).invoke("sendVarsToMessageWithClient", new Object[] { hsm }, this);
-				}
-			}
+			_sendMessageToClient(uid, newMessage, current.getScope());
 		} catch (Exception err) {
 			_log.error("[sendMessageToClient] ", err);
 			return -1;
 		}
 		return 1;
+	}
+
+	private void _sendMessageToClient(final String uid, Object msg, IScope scope) {
+		new MessageSender(scope, "sendVarsToMessageWithClient", msg, this) {
+
+			@Override
+			public boolean filter(IConnection conn) {
+				IClient client = conn.getClient();
+				return uid == null || !IClientUtil.getId(client).equals(uid);
+			}
+		}.start();
 	}
 
 	public boolean sendRemoteCursorEvent(final String uid, Map<String, Object> messageObj) {
