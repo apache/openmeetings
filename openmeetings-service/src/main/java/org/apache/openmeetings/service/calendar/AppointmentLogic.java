@@ -72,7 +72,7 @@ public class AppointmentLogic {
 
 	// --------------------------------------------------------------------------------------------
 
-	private void sendReminder(User u, Appointment a) throws Exception {
+	private void sendReminder(User u, Appointment a) {
 		Invitation i = new Invitation();
 		i.setInvitedBy(u);
 		i.setInvitee(u);
@@ -81,7 +81,7 @@ public class AppointmentLogic {
 		sendReminder(u, a, i);
 	}
 
-	private void sendReminder(User u, Appointment a, Invitation inv) throws Exception {
+	private void sendReminder(User u, Appointment a, Invitation inv) {
 		notifierService.notify(u, a, inv);
 		if (inv.getHash() != null) {
 			invitationDao.update(inv);
@@ -92,7 +92,7 @@ public class AppointmentLogic {
 	 * Sending Reminder in Simple mail format 5 minutes before Meeting begins
 	 */
 	// ----------------------------------------------------------------------------------------------
-	public void doScheduledMeetingReminder() throws Exception {
+	public void doScheduledMeetingReminder() {
 		// log.debug("doScheduledMeetingReminder");
 		String baseUrl = cfgDao.getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
 		if (baseUrl == null || baseUrl.length() < 1) {
