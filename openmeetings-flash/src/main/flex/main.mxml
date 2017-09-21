@@ -304,8 +304,8 @@
 				, new Responder(function (res:Object):void {})
 				, params.uid, {
 					action: 'mouseDown'
-					, x: evt.stageX
-					, y: evt.stageY
+					, x: evt.stageX / video.zoomX()
+					, y: evt.stageY / video.zoomY()
 					, alt: evt.altKey
 					, ctrl: evt.ctrlKey
 					, shift: evt.shiftKey
@@ -318,8 +318,8 @@
 				, new Responder(function (res:Object):void {})
 				, params.uid, {
 					action: 'mouseUp'
-					, x: evt.stageX
-					, y: evt.stageY
+					, x: evt.stageX / video.zoomX()
+					, y: evt.stageY / video.zoomY()
 					, alt: evt.altKey
 					, ctrl: evt.ctrlKey
 					, shift: evt.shiftKey
@@ -332,8 +332,8 @@
 				, new Responder(function (res:Object):void {})
 				, params.uid, {
 					action: 'mousePos'
-					, x: evt.stageX
-					, y: evt.stageY
+					, x: evt.stageX / video.zoomX()
+					, y: evt.stageY / video.zoomY()
 				});
 		}
 

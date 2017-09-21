@@ -270,7 +270,7 @@ public class OmVideo {
 				}
 				, newScreenCursor: function(arr:Array):void {
 					if (arr.length > 2 && params.uid == arr[0]) {
-						cursorCbk(arr[1] * width / params.width, arr[2] * height / params.height);
+						cursorCbk(arr[1] * zoomX(), arr[2] * zoomY());
 					}
 				}
 				, sendVarsToMessageWithClient: function(obj:Object):void {
@@ -283,6 +283,14 @@ public class OmVideo {
 		} else {
 			callback();
 		}
+	}
+
+	public function zoomX():Number {
+		return width / params.width;
+	}
+
+	public function zoomY():Number {
+		return height / params.height;
 	}
 
 	public function broadcast(name:String, cam:Camera, mic:Microphone):void {
