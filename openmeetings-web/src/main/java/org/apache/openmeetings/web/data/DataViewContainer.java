@@ -38,6 +38,7 @@ public class DataViewContainer<T extends IDataProviderEntity> implements Seriali
 		this.container = container;
 		this.view = view;
 		this.navigator = navigator;
+		navigator.setOutputMarkupId(true);
 	}
 
 	public DataViewContainer<T> addLink(OmOrderByBorder<T> link) {
