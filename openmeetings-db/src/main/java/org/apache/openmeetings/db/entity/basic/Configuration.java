@@ -65,7 +65,7 @@ public class Configuration implements IDataProviderEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	@Element(name = "id", data = true)
+	@Element(name = "id", data = true, required = false)
 	private Long id;
 
 	@Column(name = "type")

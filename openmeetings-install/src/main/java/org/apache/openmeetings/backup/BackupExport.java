@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -67,6 +70,8 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
+import org.apache.openmeetings.installation.ImportInitvalues;
+import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
@@ -368,14 +373,7 @@ public class BackupExport {
 			 */
 			{
 				List<Configuration> list = configurationDao.get(0, Integer.MAX_VALUE);
-				Registry registry = new Registry();
-				registry.bind(User.class, UserConverter.class);
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				if (list != null && !list.isEmpty()) {
-					registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-				}
+				Serializer serializer = getConfigSerializer(list);
 
 				writeList(serializer, zos, "configs.xml", "configs", list);
 				progressHolder.setProgress(80);
@@ -421,11 +419,28 @@ public class BackupExport {
 		log.debug("---Done");
 	}
 
+	private static Serializer getConfigSerializer(List<Configuration> list) throws Exception {
+		Registry registry = new Registry();
+		registry.bind(User.class, UserConverter.class);
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		if (list != null && !list.isEmpty() && list.get(0).getInserted() != null) {
+			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
+		}
+		return serializer;
+	}
+
+	private static <T> ByteArrayOutputStream stream(Serializer ser, String listElement, List<T> list) throws Exception {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream(10 * 1024); //10K
+		writeList(ser, baos, listElement, list);
+		return baos;
+	}
+
 	private static <T> void writeList(Serializer ser, ZipOutputStream zos, String fileName, String listElement, List<T> list) throws Exception {
 		ZipEntry e = new ZipEntry(fileName);
 		zos.putNextEntry(e);
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(10 * 1024); //10K
-		writeList(ser, baos, listElement, list);
+		ByteArrayOutputStream baos = stream(ser, listElement, list);
 		zos.write(baos.toByteArray());
 		zos.closeEntry();
 	}
@@ -478,5 +493,16 @@ public class BackupExport {
 				zos.closeEntry();
 			}
 		}
+	}
+
+	public static void main(String[] args) throws Exception {
+		List<Configuration> list = ImportInitvalues.initialCfgs(new InstallationConfig());
+		Serializer ser = getConfigSerializer(list);
+		ByteArrayOutputStream baos = stream(ser, "configs", list);
+		File f = new File(args[0]);
+		if (!f.exists() && !f.getParentFile().exists()) {
+			f.getParentFile().mkdirs();
+		}
+		Files.write(Paths.get(args[0]), baos.toByteArray(), StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 }

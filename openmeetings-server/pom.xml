@@ -173,6 +173,37 @@
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<id>generate-configs-xml-site</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-configs-xml-build</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<workingDirectory>${project.build.directory}</workingDirectory>
+					<includeProjectDependencies>true</includeProjectDependencies>
+					<includePluginDependencies>true</includePluginDependencies>
+					<addOutputToClasspath>true</addOutputToClasspath>
+					<mainClass>org.apache.openmeetings.backup.BackupExport</mainClass>
+					<arguments>
+						<argument>${project.build.directory}/generated-sources/configs.xml</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>xml-maven-plugin</artifactId>
 				<executions>
 					<execution>
@@ -418,6 +449,11 @@
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-flash</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openmeetings</groupId>
+			<artifactId>openmeetings-install</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 </project>
