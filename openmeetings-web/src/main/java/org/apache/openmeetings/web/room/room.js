@@ -140,27 +140,33 @@ var Video = (function() {
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
+	function _handleMicStatus(state) {
+		if (!f.is(":visible")) {
+			return;
+		}
+		if (state) {
+			f.find('.off').hide();
+			f.find('.on').show();
+			f.addClass('ui-state-highlight');
+			t.addClass('ui-state-highlight');
+		} else {
+			f.find('.off').show();
+			f.find('.on').hide();
+			f.removeClass('ui-state-highlight');
+			t.removeClass('ui-state-highlight');
+		}
+	}
 	function _handleVolume(val) {
 		handle.text(val);
 		var ico = vol.find('.ui-icon');
 		if (val > 0 && ico.hasClass('ui-icon-volume-off')) {
 			ico.toggleClass('ui-icon-volume-off ui-icon-volume-on');
 			vol.removeClass('ui-state-error');
-			if (f.is(":visible")) {
-				f.find('.off').hide();
-				f.find('.on').show();
-				f.addClass('ui-state-highlight');
-				t.addClass('ui-state-highlight');
-			}
+			_handleMicStatus(true);
 		} else if (val == 0 && ico.hasClass('ui-icon-volume-on')) {
 			ico.toggleClass('ui-icon-volume-on ui-icon-volume-off');
 			vol.addClass('ui-state-error');
-			if (f.is(":visible")) {
-				f.find('.off').show();
-				f.find('.on').hide();
-				f.removeClass('ui-state-highlight');
-				t.removeClass('ui-state-highlight');
-			}
+			_handleMicStatus(false);
 		}
 		if (swf[0].setVolume !== undefined) {
 			swf[0].setVolume(val);
@@ -280,10 +286,11 @@ var Video = (function() {
 					_handleVolume(ui.value);
 				}
 			});
-			if (!VideoUtil.hasAudio(c)) {
+			let hasAudio = VideoUtil.hasAudio(c);
+			_handleMicStatus(hasAudio);
+			if (!hasAudio) {
 				vol.hide();
 			}
-			//TODO add mute, ADD refresh
 		}
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
@@ -315,7 +322,9 @@ var Video = (function() {
 		var opts = Room.getOptions();
 		c.screenActivities = _c.screenActivities;
 		c.activities = _c.activities;
-		if (VideoUtil.hasAudio(c)) {
+		let hasAudio = VideoUtil.hasAudio(c);
+		_handleMicStatus(hasAudio);
+		if (hasAudio) {
 			vol.show();
 		} else {
 			vol.hide();
