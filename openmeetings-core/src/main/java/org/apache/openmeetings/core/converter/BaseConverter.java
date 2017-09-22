@@ -20,7 +20,7 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -42,6 +42,7 @@ import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
@@ -348,8 +349,12 @@ public abstract class BaseConverter {
 		}
 	}
 
+	protected String getDimensions(Recording r, char delim) {
+		return String.format("%s%s%s", r.getWidth(), delim, r.getHeight());
+	}
+
 	protected String getDimensions(Recording r) {
-		return String.format("%sx%s", r.getWidth(), r.getHeight());
+		return getDimensions(r, 'x');
 	}
 
 	protected List<String> addMp4OutParams(Recording r, List<String> argv, String mp4path) {
@@ -378,21 +383,18 @@ public abstract class BaseConverter {
 		return mp4path;
 	}
 
-	protected void convertToJpg(Recording r, String mp4path, List<ConverterProcessResult> returnLog) throws IOException {
+	protected void convertToPng(BaseFileItem f, String mp4path, List<ConverterProcessResult> logs) throws IOException {
 		// Extract first Image for preview purpose
-		// ffmpeg -i movie.flv -vcodec mjpeg -vframes 1 -an -f rawvideo -s
-		// 320x240 movie.jpg
-		File jpg = r.getFile(EXTENSION_JPG);
+		// ffmpeg -i movie.mp4 -vf  "thumbnail,scale=640:-1" -frames:v 1 movie.png
+		File png = f.getFile(EXTENSION_PNG);
 		String[] argv = new String[] { //
-				getPathToFFMPEG(), "-y", //
-				"-i", mp4path, //
-				"-vcodec", "mjpeg", //
-				"-vframes", "100", "-an", //
-				"-f", "rawvideo", //
-				"-s", getDimensions(r), //
-				jpg.getCanonicalPath() };
+				getPathToFFMPEG(), "-y" //
+				, "-i", mp4path //
+				, "-vf", "thumbnail,scale=640:-1" //
+				, "-frames:v", "1" //
+				, png.getCanonicalPath() };
 
-		returnLog.add(ProcessHelper.executeScript("generate preview JPG", argv));
+		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: ", f.getHash()), argv));
 	}
 
 	protected static Dimension getDimension(String txt) {

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.core.converter;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
@@ -75,14 +74,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			Dimension dim = getDimension(res.getError());
 			f.setWidth(dim.width);
 			f.setHeight(dim.height);
-			File jpeg = f.getFile(EXTENSION_JPG);
-
-			args = new String[] { getPathToFFMPEG(), "-y", "-i",
-					mp4.getCanonicalPath(), "-codec:v", "mjpeg", "-vframes", "1", "-an",
-					"-f", "rawvideo", "-s", dim.width + "x" + dim.height,
-					jpeg.getCanonicalPath() };
-
-			logs.add(ProcessHelper.executeScript("previewUpload ID :: " + f.getHash(), args));
+			convertToPng(f, mp4.getCanonicalPath(), logs);
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
 			logs.add(new ConverterProcessResult("convertToMP4", err.getMessage(), err));

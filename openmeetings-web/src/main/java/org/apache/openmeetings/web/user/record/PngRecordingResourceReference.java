@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
 
 import java.io.File;
@@ -27,25 +27,25 @@ import java.io.File;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.wicket.request.resource.IResource.Attributes;
 
-public class JpgRecordingResourceReference extends RecordingResourceReference {
+public class PngRecordingResourceReference extends RecordingResourceReference {
 	private static final long serialVersionUID = 1L;
 
-	public JpgRecordingResourceReference() {
-		super("jpg-recording-cover");
+	public PngRecordingResourceReference() {
+		super("png-recording-cover");
 	}
 
 	@Override
 	public String getMimeType() {
-		return JPG_MIME_TYPE;
+		return PNG_MIME_TYPE;
 	}
 
 	@Override
 	protected String getFileName(Recording r) {
-		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_JPG);
+		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_PNG);
 	}
 
 	@Override
 	protected File getFile(Recording r, Attributes attr) {
-		return r.getFile(EXTENSION_JPG);
+		return r.getFile(EXTENSION_PNG);
 	}
 }

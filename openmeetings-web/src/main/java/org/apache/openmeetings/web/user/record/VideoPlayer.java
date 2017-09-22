@@ -36,7 +36,7 @@ public class VideoPlayer extends Panel {
 	private final WebMarkupContainer wait = new WebMarkupContainer("wait"); //FIXME not used
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Mp4RecordingResourceReference mp4RecRes = new Mp4RecordingResourceReference();
-	private final JpgRecordingResourceReference posterRecRes = new JpgRecordingResourceReference();
+	private final PngRecordingResourceReference posterRecRes = new PngRecordingResourceReference();
 	private final RoomResourceReference mp4FileRes = new RoomResourceReference();
 	private final RoomResourceReference posterFileRes = new RoomResourceReference();
 	private final Video player = new Video("player") {

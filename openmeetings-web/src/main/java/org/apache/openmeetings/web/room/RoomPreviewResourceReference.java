@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 
 import java.io.File;
 
@@ -40,7 +40,7 @@ public class RoomPreviewResourceReference extends RoomResourceReference {
 
 	@Override
 	protected String getMimeType(FileItem r) {
-		return JPG_MIME_TYPE;
+		return PNG_MIME_TYPE;
 	}
 
 	@Override
@@ -54,11 +54,11 @@ public class RoomPreviewResourceReference extends RoomResourceReference {
 
 	@Override
 	protected File getFile(FileItem f, Attributes attr) {
-		return getFile(f, EXTENSION_JPG);
+		return getFile(f, EXTENSION_PNG);
 	}
 
 	@Override
 	protected String getFileName(FileItem f) {
-		return f.getFileName(EXTENSION_JPG);
+		return f.getFileName(EXTENSION_PNG);
 	}
 }

@@ -140,7 +140,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);
 
-			convertToJpg(r, mp4path, logs);
+			convertToPng(r, mp4path, logs);
 
 			updateDuration(r);
 			r.setStatus(Recording.Status.PROCESSED);

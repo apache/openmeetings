@@ -258,7 +258,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			String mp4path = convertToMp4(r, args, logs);
 
-			convertToJpg(r, mp4path, logs);
+			convertToPng(r, mp4path, logs);
 
 			updateDuration(r);
 			r.setStatus(Recording.Status.PROCESSED);
