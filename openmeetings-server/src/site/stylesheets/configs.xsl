@@ -13,10 +13,9 @@
    limitations under the License.
  -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-	<xsl:param name="languagesDir"/>
 	<xsl:output method="xml"/>
 
-	<xsl:template match="ROOT">
+	<xsl:template match="root">
 <document>
 <xsl:comment>
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,36 +31,35 @@
    limitations under the License.
 </xsl:comment>
 	<properties>
-		<title>Openmeetings Errors table</title>
-		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Documentation Robot</author>
+		<title>List of general configuration options</title>
+		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 	<body>
-		<section name="Openmeetings Errors table">
-		<table>
-			<tr>
-				<th>Code</th>
-				<th>Type</th>
-				<th>Description</th>
-			</tr>
+		<section name="List of general configuration options">
+			<p>In Administration &gt; Configuration there are a number of
+				configuration values.
+			</p>
+			<p></p>
+			<table>
+				<tr>
+					<th> key </th>
+					<th> default </th>
+					<th> meaning </th>
+					<th> availabe since OpenMeetings version </th>
+				</tr>
 			<xsl:apply-templates/>
-		</table>
+			</table>
 		</section>
 	</body>
 </document>
 	</xsl:template>
 
-	<xsl:template match="row">
-		<xsl:variable name="englishPath"><xsl:value-of select="concat($languagesDir, '/Application.properties.xml')"/></xsl:variable>
-		<xsl:variable name="descId" select="field[@name='labelKey']"/>
-			<tr>
-				<td>-<xsl:value-of select="$descId"/></td>
-				<td>
-					<xsl:variable name="type" select="concat('error.type.', field[@name='type'])"/>
-					<xsl:value-of select="document($englishPath)/properties/entry[@key=$type]/text()" />
-				</td>
-				<td>
-					<xsl:value-of select="document($englishPath)/properties/entry[@key=$descId]/text()" />
-				</td>
-			</tr>
+	<xsl:template match="config">
+				<tr>
+					<td><xsl:value-of select="key"/></td>
+					<td><xsl:value-of select="value"/></td>
+					<td><xsl:value-of select="comment"/></td>
+					<td><xsl:value-of select="fromVersion"/></td>
+				</tr>
 	</xsl:template>
 </xsl:stylesheet>

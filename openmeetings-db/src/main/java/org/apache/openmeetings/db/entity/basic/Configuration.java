@@ -97,6 +97,10 @@ public class Configuration implements IDataProviderEntity {
 	@Element(data = true)
 	private boolean deleted;
 
+	@Column(name = "fromVersion")
+	@Element(data = true, required = false)
+	private String fromVersion;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
@@ -200,6 +204,14 @@ public class Configuration implements IDataProviderEntity {
 
 	public void setValueB(boolean value) {
 		this.value = "" + value;
+	}
+
+	public String getFromVersion() {
+		return fromVersion;
+	}
+
+	public void setFromVersion(String fromVersion) {
+		this.fromVersion = fromVersion;
 	}
 
 	@Override

@@ -23,7 +23,6 @@
 
 	<body>
 		<section name="Apache OpenMeetings Demo Servers">
-
 			<p>
 				There are currently some technical issues with demo servers.
 			</p>
@@ -31,10 +30,10 @@
 				This is a list of servers that you can use for testing OpenMeetings.
 			</p>
 			<p>
-				<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">https://demo-openmeetings.apache.org/openmeetings</a>
+				<a href="https://om.alteametasoft.com/openmeetings" target="_blank" rel="nofollow">https://om.alteametasoft.com/openmeetings</a> Latest release version of OpenMeetings
 			</p>
 			<p>
-				<a href="https://om.alteametasoft.com/openmeetings" target="_blank" rel="nofollow">https://om.alteametasoft.com/openmeetings</a>
+				<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">https://demo-openmeetings.apache.org/openmeetings</a> Next major version of OpenMeetings
 			</p>
 			<p>
 				<a href="https://om.alteametasoft.com:8443/next" target="_blank" rel="nofollow">https://om.alteametasoft.com:8443/next</a> Next major version of OpenMeetings

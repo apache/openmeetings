@@ -198,7 +198,7 @@
 					<addOutputToClasspath>true</addOutputToClasspath>
 					<mainClass>org.apache.openmeetings.backup.BackupExport</mainClass>
 					<arguments>
-						<argument>${project.build.directory}/generated-sources/configs.xml</argument>
+						<argument>${project.build.directory}/generated-sources/GeneralConfiguration.xml</argument>
 					</arguments>
 				</configuration>
 			</plugin>
@@ -207,14 +207,14 @@
 				<artifactId>xml-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>generate-errors-doc-site</id>
+						<id>generate-doc-site</id>
 						<phase>pre-site</phase>
 						<goals>
 							<goal>transform</goal>
 						</goals>
 					</execution>
 					<execution>
-						<id>generate-errors-doc-build</id>
+						<id>generate-doc-build</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>transform</goal>
@@ -236,6 +236,14 @@
 									<value>${project.baseUri}/${languages.dir}</value>
 								</parameter>
 							</parameters>
+						</transformationSet>
+						<transformationSet>
+							<dir>${project.build.directory}/generated-sources</dir>
+							<includes>
+								<include>GeneralConfiguration.xml</include>
+							</includes>
+							<stylesheet>src/site/stylesheets/configs.xsl</stylesheet>
+							<outputDir>${project.build.directory}/generated-site/xdoc</outputDir>
 						</transformationSet>
 					</transformationSets>
 					<skip>${om.quick.build}</skip>

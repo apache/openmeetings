@@ -27,6 +27,8 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -56,12 +58,14 @@ import org.osaf.caldav4j.CalDAVConstants;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
 
 /**
  * Class which does syncing and provides respective API's required for performing CalDAV Operations.
  * @author Ankush Mishra
  */
+@Component
 public class AppointmentManager {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentManager.class, webAppRootKey);
 
@@ -580,6 +584,7 @@ public class AppointmentManager {
 	/**
 	 * Method which is called when the Context is destroyed.
 	 */
+	@PreDestroy
 	public void destroy() {
 		MultiThreadedHttpConnectionManager.shutdownAll();
 		connmanager = null;
