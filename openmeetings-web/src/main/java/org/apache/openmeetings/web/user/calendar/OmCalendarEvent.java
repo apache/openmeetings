@@ -26,7 +26,7 @@ import com.googlecode.wicket.jquery.ui.calendar.CalendarEvent;
 
 public class OmCalendarEvent extends CalendarEvent {
 	private static final long serialVersionUID = 1L;
-	
+
 	public OmCalendarEvent(Appointment a) {
 		super(a.getId().intValue(), a.getTitle(), null);
 		setStart(getDateTime(a.getStart()));

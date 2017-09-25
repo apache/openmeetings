@@ -32,7 +32,7 @@
 		</section>
 
 		<section name="These instructions are for 3.0.x version only"/>
-		
+
 		<section name="How to Build a Distribution">
 			<div>
 				<p>To build a binary release of OpenMeetings you need: </p>

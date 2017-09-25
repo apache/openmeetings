@@ -28,7 +28,7 @@ import org.simpleframework.xml.stream.OutputNode;
 public class OmCalendarConverter extends OmConverter<OmCalendar> {
 	private OmCalendarDao calendarDao;
 	private Map<Long, Long> idMap;
-	
+
 	public OmCalendarConverter() {
 		//default constructor is for export
 	}
@@ -42,7 +42,7 @@ public class OmCalendarConverter extends OmConverter<OmCalendar> {
 	public OmCalendar read(InputNode node) throws Exception {
 		long oldId = getLong(node);
 		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
-		
+
 		OmCalendar c = calendarDao.get(newId);
 		return c == null ? new OmCalendar() : c;
 	}

@@ -28,7 +28,7 @@ public class AudioTone {
 
 	public static void play() {
 		byte[] buf = new byte[1];
-		
+
 		AudioFormat af = new AudioFormat(SAMPLE_RATE, 8, 1, true, false);
 		try (SourceDataLine sdl = AudioSystem.getSourceDataLine(af)) {
 			sdl.open(af);

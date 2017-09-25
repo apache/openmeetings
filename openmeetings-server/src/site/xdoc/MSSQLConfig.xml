@@ -30,7 +30,7 @@
 						before you start the installation process of OpenMeetings!
 					</li>
 					<li>
-						make sure MSSQL is listening on TCP/IP connections! and username/password 
+						make sure MSSQL is listening on TCP/IP connections! and username/password
 						authentication is enabled for it
 						<br />
 						To verify if MSSQL connection is working: OpenMeetings will

@@ -49,7 +49,7 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 
 		User us = userDao.get(1L);
 		assertNotNull("User should exist", us);
-		
+
 		assertNotNull("Group User list should exist", us.getGroupUsers());
 		us.getGroupUsers().add(new GroupUser(o, us));
 		us = userDao.update(us, null);

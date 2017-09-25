@@ -24,7 +24,7 @@
 		xmlns:context="http://www.springframework.org/schema/context"
 		xmlns:p="http://www.springframework.org/schema/p"
 		xsi:schemaLocation="
-			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
 	>
@@ -94,7 +94,7 @@
 			p:targetObject-ref="mailHandler" p:targetMethod="sendMails" p:concurrent="false" />
 	<bean id="triggerSendMails" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
 			p:jobDetail-ref="sendMails" p:startDelay="60000" p:repeatInterval="60000" />
-	
+
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>

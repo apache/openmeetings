@@ -45,13 +45,13 @@ public class ScreenDimensions {
 	public static int spinnerHeight = 0;
 	public static int spinnerX = 0;
 	public static int spinnerY = 0;
-	
+
 	public static ScreenQuality quality = ScreenQuality.Medium;
 	public static int FPS = 10;
-	
+
 	public static int resizeX = 640;
 	public static int resizeY = 480;
-	
+
 	static {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		ratio = screenSize.getHeight() / screenSize.getWidth();
@@ -65,7 +65,7 @@ public class ScreenDimensions {
 		resizeX = 640;
 		resizeY = 400;
 	}
-	
+
 	public enum ScreenQuality {
 		VeryHigh
 		, High

@@ -42,109 +42,109 @@ public class SOAPLogin implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long id;
-	
+
 	@Column(name="hash")
 	private String hash;
-	
+
 	@Column(name="room_id")
 	private Long roomId;
-	
+
 	@Column(name="session_hash")
 	private String sessionHash;
-	
+
 	@Column(name="created")
 	private Date created;
-	
+
 	@Column(name="used", nullable = false)
 	private boolean used;
-	
+
 	@Column(name="use_date")
 	private Date useDate;
-	
+
 	@Column(name="moderator", nullable = false)
 	private boolean moderator;
-	
+
 	@Column(name="showaudiovideotest", nullable = false)
 	private boolean showAudioVideoTest;
-	
+
 	@Column(name="allow_same_url_multiple_times", nullable = false)
 	private boolean allowSameURLMultipleTimes;
-	
+
 	@Column(name="client_url")
 	private String clientURL;
-	
+
 	@Column(name="recording_id")
 	private Long recordingId;
-	
+
 	@Column(name="landing_zone")
 	private String landingZone;
-	
+
 	@Column(name="allow_recording", nullable = false)
 	private boolean allowRecording;
-	
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public String getHash() {
 		return hash;
 	}
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
-	
+
 	public Long getRoomId() {
 		return roomId;
 	}
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
-	
+
 	public String getSessionHash() {
 		return sessionHash;
 	}
 	public void setSessionHash(String sessionHash) {
 		this.sessionHash = sessionHash;
 	}
-	
+
 	public Date getCreated() {
 		return created;
 	}
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-	
+
 	public boolean isUsed() {
 		return used;
 	}
 	public void setUsed(boolean used) {
 		this.used = used;
 	}
-	
+
 	public Date getUseDate() {
 		return useDate;
 	}
 	public void setUseDate(Date useDate) {
 		this.useDate = useDate;
 	}
-	
+
 	public boolean isModerator() {
 		return moderator;
 	}
 	public void setModerator(boolean moderator) {
 		this.moderator = moderator;
 	}
-	
+
 	public boolean getShowAudioVideoTest() {
 		return showAudioVideoTest;
 	}
 	public void setShowAudioVideoTest(boolean showAudioVideoTest) {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
-	
+
 	public boolean getAllowSameURLMultipleTimes() {
 		return allowSameURLMultipleTimes;
 	}
@@ -158,26 +158,26 @@ public class SOAPLogin implements Serializable {
 	public void setClientURL(String clientURL) {
 		this.clientURL = clientURL;
 	}
-	
+
 	public Long getRecordingId() {
 		return recordingId;
 	}
 	public void setRecordingId(Long recordingId) {
 		this.recordingId = recordingId;
 	}
-	
+
 	public String getLandingZone() {
 		return landingZone;
 	}
 	public void setLandingZone(String landingZone) {
 		this.landingZone = landingZone;
 	}
-	
+
 	public boolean isAllowRecording() {
 		return allowRecording;
 	}
 	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
-	
+
 }

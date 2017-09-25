@@ -36,7 +36,7 @@
 					<b>User GUI tests</b>
 					<ol>
 						<li>
-							Login/logout 
+							Login/logout
 							<ol>
 								<li>Password recovering </li>
 								<li>Self-registering </li>
@@ -53,10 +53,10 @@
 								<li>Links in the "Help and support" section </li>
 								<li>It should be possible to enter user’s room from the dashboard </li>
 								<li>Room details should be shown correctly in the "Rooms in this section…" part of the screen </li>
-							</ol>					
+							</ol>
 						</li>
 						<li>
-							Global chat 
+							Global chat
 							<ol>
 								<li>Send/receive message where at least 3 users in the system </li>
 								<li>Adding a contact to the contact list </li>
@@ -68,7 +68,7 @@
 								<li>Changing font style in the massage </li>
 								<li>Adding emotions to the message </li>
 							</ol>
-							Attention! Correct RTL support does not work in the current implementation 
+							Attention! Correct RTL support does not work in the current implementation
 						</li>
 						<li>
 							Calendar view
@@ -94,12 +94,12 @@
 							</ol>
 						</li>
 						<li>
-							My Profile: User profile should contain correct user info and allow to edit this 
+							My Profile: User profile should contain correct user info and allow to edit this
 						</li>
 						<li>
 							Contacts and Messages
 							<ol>
-								<li>Add/remove a message </li> 
+								<li>Add/remove a message </li>
 								<li>Creating a new folder </li>
 								<li>Moving between the folders </li>
 								<li>Marking messages as read/unread </li>
@@ -113,7 +113,7 @@
 								<li>Possibility to change the user info </li>
 								<li>Changing time zone and language (should start to work after user re-login </li>
 								<li>Community settings or different users </li>
-								<li>Display settings</li> 
+								<li>Display settings</li>
 							</ol>
 						</li>
 						<li>
@@ -125,7 +125,7 @@
 							</ol>
 						</li>
 						<li>
-							Room lists 
+							Room lists
 							<ol>
 								<li>Public rooms, private rooms and my rooms should contain correct room lists </li>
 								<li>User list for the selected room </li>
@@ -134,7 +134,7 @@
 						</li>
 						<li>
 							Recordings
-							<ol> 
+							<ol>
 								<li>The list should contain available recordings in public and private folders </li>
 								<li>Info panel should contain actual info about the recording </li>
 								<li>Downloading a recording is different formats (AVI/FLV) </li>
@@ -285,7 +285,7 @@
 							</ol>
 						</li>
 						<li>
-							Groups 
+							Groups
 							<ol>
 								<li>Add/remove/edit/search an group </li>
 								<li>Add/remove a user from the user list of selected group </li>
@@ -325,7 +325,7 @@
 							</ol>
 						</li>
 						<li>
-							Language editor 
+							Language editor
 							<ol>
 								<li>Add/remove/edit/search a key </li>
 								<li>Import/export of localization files </li>
@@ -340,7 +340,7 @@
 								<li>System import </li>
 								<li>System backup </li>
 								<li>TBD – need to add tests for command line admin here </li>
-							</ol> 
+							</ol>
 						</li>
 						<li>
 							Servers: Add/remove/edit/search a server
@@ -426,7 +426,7 @@
 						</li>
 						<li>
 							<b>Conference room testing</b>
-							<ol>				
+							<ol>
 								<li>
 									Screen sharing
 									<ol>
@@ -442,7 +442,7 @@
 										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose "Medium quality" on the step 2.1.5</li>
 										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose "Low quality" on the step 2.1.5</li>
 										<li>Repeat steps 2.1.1-2.1.7 one more time, but choose some random height and width on the step 2.1.5</li>
-										<li>Repeat steps 2.1.1-2.1.7 one more time, but turn the "Notify on disconnect" switch on the step 2.1.5</li>									
+										<li>Repeat steps 2.1.1-2.1.7 one more time, but turn the "Notify on disconnect" switch on the step 2.1.5</li>
 									</ol>
 								</li>
 								<li>

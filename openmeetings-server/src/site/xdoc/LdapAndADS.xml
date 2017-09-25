@@ -85,7 +85,7 @@ TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
 				Successful integration is also reported with Novell eDirectory
 			</p>
 			<p>
-				You can configure multiple domains or different user-paths in the Administration of OpenMeetings. 
+				You can configure multiple domains or different user-paths in the Administration of OpenMeetings.
 			</p>
 			<p>
 				<b>NOTE: </b>You should specify file name <i>RELATIVE</i> to <tt>$RED5_HOME/webapps/openmeetings/conf</tt>

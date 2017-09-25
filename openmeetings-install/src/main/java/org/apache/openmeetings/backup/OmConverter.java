@@ -29,7 +29,7 @@ public abstract class OmConverter<T> implements Converter<T> {
 	static long getLong(String value) {
 		return getLong(value, 0);
 	}
-	
+
 	static long getLong(String value, long def) {
 		long result = def;
 		try {
@@ -43,7 +43,7 @@ public abstract class OmConverter<T> implements Converter<T> {
 	static int getInt(InputNode node) throws Exception {
 		return getInt(node.getValue(), 0);
 	}
-	
+
 	static int getInt(String value, int def) {
 		int result = def;
 		try {

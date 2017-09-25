@@ -49,64 +49,64 @@ public class OAuthServer implements IDataProviderEntity {
 	@Column(name = "id")
 	@Element(data = true)
 	private Long id;
-	
+
 	@Column(name = "name")
 	@Element(data = true)
 	private String name;
-	
+
 	@Column(name = "icon_url")
 	@Element(data = true)
 	private String iconUrl;
-	
+
 	@Column(name = "enabled", nullable = false)
 	@Element(data = true)
 	private boolean enabled;
-	
+
 	@Column(name = "client_id")
 	@Element(data = true)
 	private String clientId;
-	
+
 	@Column(name = "client_secret")
 	@Element(data = true)
 	private String clientSecret;
-	
+
 	@Column(name = "request_key_url")
 	@Element(data = true)
 	private String requestKeyUrl;
-	
+
 	@Column(name = "request_token_url")
 	@Element(data = true)
 	private String requestTokenUrl;
-	
+
 	@Column(name = "request_token_attributes")
 	@Element(data = true)
 	private String requestTokenAttributes;
-	
+
 	@Column(name = "request_method")
 	@Element(data = true)
 	@Enumerated(EnumType.STRING)
 	private RequestMethod requestTokenMethod = RequestMethod.POST;
-	
+
 	@Column(name = "request_info_url")
 	@Element(data = true)
 	private String requestInfoUrl;
-	
+
 	@Column(name = "login_param_name")
 	@Element(data = true)
 	private String loginParamName;
-	
+
 	@Column(name = "email_param_name")
 	@Element(data = true, required = false)
 	private String emailParamName;
-	
+
 	@Column(name = "firstname_param_name")
 	@Element(data = true, required = false)
 	private String firstnameParamName;
-	
+
 	@Column(name = "lastname_param_name")
 	@Element(data = true, required = false)
 	private String lastnameParamName;
-	
+
 	@Column(name = "deleted", nullable = false)
 	@Element(data = true)
 	private boolean deleted;

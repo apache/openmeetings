@@ -18,8 +18,13 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
@@ -39,12 +44,8 @@ import org.osaf.caldav4j.model.response.CalendarDataProperty;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
 
 /**
  * Class used to sync a given list of hrefs and update or add new Appointments, whenever feasible.
@@ -81,7 +82,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 		}
 	}
 
-	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client, 
+	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client,
 			AppointmentDao appointmentDao, iCalUtils utils)
 	{
 		this(hrefs, false, path, calendar, client, appointmentDao, utils);

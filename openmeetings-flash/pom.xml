@@ -37,7 +37,6 @@
 	</properties>
 	<build>
 		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
-		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

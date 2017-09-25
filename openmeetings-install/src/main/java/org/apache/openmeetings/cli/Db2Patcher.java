@@ -23,6 +23,6 @@ public class Db2Patcher extends ConnectionPropertiesPatcher {
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String port = (_port == null) ? "50000" : _port;
 		String db = (_db == null) ? "openmeet" : _db;
-		return "jdbc:db2://" + host + ":" + port + "/" + db; 
+		return "jdbc:db2://" + host + ":" + port + "/" + db;
 	}
 }

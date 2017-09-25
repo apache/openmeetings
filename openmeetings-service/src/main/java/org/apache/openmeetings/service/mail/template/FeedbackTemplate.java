@@ -34,7 +34,7 @@ public class FeedbackTemplate extends AbstractTemplatePanel {
 		add(new Label("message", message));
 		add(new ExternalLink("invitation_link", ""));
 	}
-	
+
 	public static String getEmail(String username, String email, String message) {
 		return ComponentRenderer.renderComponent(new FeedbackTemplate(username, email, message)).toString();
 	}

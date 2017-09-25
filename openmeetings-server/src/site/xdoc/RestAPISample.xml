@@ -13,8 +13,8 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>REST API sample</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -22,11 +22,10 @@
 	<body>
 		<section name="Introduction">
 			<p> For a detailed instruction which services, methods and params are available see the list in the <a href="/openmeetings-webservice/apidocs/index.html" target="_blank">SOAP/REST API</a> .
-				ALL methods that are implemented for the SOAP API are also available via REST. 
+				ALL methods that are implemented for the SOAP API are also available via REST.
 			</p>
 			<div>
 				you can query methods of each service using following suffixes
-				
 				<ul>
 					<li>SOAP: <tt>?wsdl</tt> suffix, for example <tt>http://localhost:5080/openmeetings/services/UserService?wsdl</tt></li>
 					<li>REST: as xml <tt>?_wadl</tt> for example <tt>http://localhost:5080/openmeetings/services/user?_wadl</tt></li>
@@ -35,7 +34,7 @@
 				<div class="bs-callout bs-callout-info">
 					The full list of services with All WSDLs/WADLs is available at following URL: <tt>http://localhost:5080/openmeetings/services/services</tt>
 				</div>
-			</div> 
+			</div>
 		</section>
 		<section name="How to get room hash via REST">
 			<ul>
@@ -83,7 +82,7 @@ $.ajax({
 					</table>
 				</li>
 				<li>
-					In case of error you can get detailed error message in your language as result of following query 
+					In case of error you can get detailed error message in your language as result of following query
 					<tt>http://localhost:5080/openmeetings/services/error/<b>ERROR_ID</b>/<b>LANGUAGE_ID</b></tt>
 					(for ex. http://localhost:5080/openmeetings/services/error/<b>-11</b>/<b>9</b>)
 				</li>

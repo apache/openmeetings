@@ -22,6 +22,6 @@ import java.io.Serializable;
 
 public interface IDataProviderEntity extends Serializable {
 	Long getId();
-	
+
 	void setId(Long id);
 }

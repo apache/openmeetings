@@ -25,9 +25,9 @@ import org.apache.wicket.model.IModel;
 /**
  * provides basic functionality to insert, update, remove, refresh record in
  * admin section
- * 
+ *
  * @author swagner
- * 
+ *
  * @param <T>
  */
 public abstract class AdminBaseForm<T> extends Form<T> {
@@ -36,7 +36,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 
 	public AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
-		
+
 		savePanel = new AdminSavePanel<T>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
@@ -116,66 +116,66 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	}
 	/**
 	 * invoked when user press save button
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked when save has error
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked when new button is pressed
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked if new has error
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked when refresh button is pressed
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked when refresh has error
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onRefreshError(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked when delete button is pressed
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onDeleteSubmit(AjaxRequestTarget target, Form<?> form);
-	
+
 	/**
 	 * invoked when delete has error
-	 * 
+	 *
 	 * @param target
 	 * @param form
 	 */
 	protected abstract void onDeleteError(AjaxRequestTarget target, Form<?> form);
-	
+
 }

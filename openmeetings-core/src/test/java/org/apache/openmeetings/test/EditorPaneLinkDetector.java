@@ -51,9 +51,9 @@ import org.slf4j.Logger;
  * A "HTML" JEditorPane embedded with a special HTMLDocument that detects urls
  * and displays them as hyperlinks. When CTRL is pressed, the urls are
  * clickable.
- * 
+ *
  * @author David Bismut
- *  
+ *
  */
 public class EditorPaneLinkDetector extends JEditorPane {
 	private static final long serialVersionUID = 1L;
@@ -111,7 +111,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
+
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 					if (isEditable()) {
 						setEditable(false);
@@ -126,7 +126,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				
+
 				if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
 					setEditable(true);
 				}
@@ -140,7 +140,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 
 		public HTMLDocLinkDetector(StyleSheet ss) {
 			super(ss);
-			
+
 			setAsynchronousLoadPriority(4);
 			setTokenThreshold(100);
 			setParser(new ParserDelegator());
@@ -149,13 +149,13 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		/**
 		 * Returns true if the Element contains a HTML.Tag.A attribute, false
 		 * otherwise.
-		 * 
+		 *
 		 * @param e
 		 *            the Element to be checkd
 		 * @return
 		 */
 		protected boolean isLink(Element e) {
-			
+
 			return (e.getAttributes().getAttribute(HTML.Tag.A) != null);
 
 		}
@@ -163,13 +163,13 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		/**
 		 * This method corrects or creates a url contained in an Element as an
 		 * hyperlink.
-		 * 
+		 *
 		 * @param e
 		 *            the Element to be computed
 		 * @throws BadLocationException
 		 */
 		protected void computeLinks(Element e) throws BadLocationException {
-			
+
 			int caretPos = getCaretPosition();
 			try {
 				if (isLink(e))
@@ -188,7 +188,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		 * when the url is beeing edited. What the function does is to remove
 		 * the html tags, so the url is actually edited in plain text and not as
 		 * an hyperlink.
-		 * 
+		 *
 		 * @param e
 		 *            the Element that contains the url
 		 * @throws BadLocationException
@@ -196,7 +196,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		 */
 		protected void correctLink(Element e) throws BadLocationException,
 				IOException {
-			
+
 			int length = e.getEndOffset() - e.getStartOffset();
 
 			boolean endOfDoc = e.getEndOffset() == getLength() + 1;
@@ -223,7 +223,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		 * The method check if the element contains a url in plain text, and if
 		 * so, it creates the html tag HTML.Tag.A to have the url displayed as
 		 * an hyperlink.
-		 * 
+		 *
 		 * @param e
 		 *            element that contains the url
 		 * @throws BadLocationException
@@ -231,7 +231,7 @@ public class EditorPaneLinkDetector extends JEditorPane {
 		 */
 		protected void createLink(Element e) throws BadLocationException,
 				IOException {
-			
+
 			int caretPos = getCaretPosition();
 
 			int startOffset = e.getStartOffset();

@@ -25,7 +25,7 @@
 
 			<subsection name="Before you start">
 				<ul>
-					<li>Make sure that you have set utf8 as default/server-character-set 
+					<li>Make sure that you have set utf8 as default/server-character-set
 					</li>
 					<li>
 						make sure PostgreSQL is listening on TCP/IP connections!

@@ -21,15 +21,15 @@ package org.apache.openmeetings.util.process;
 /**
  * Object created by each conversion step, each conversion step that invokes and
  * external tool like ImageMagick is one single ConverterProcessMessage
- * 
+ *
  * if exitValue equals "-1" then there was an issue.
- * 
+ *
  * @author sebawagner
  *
  */
 public class ConverterProcessResult {
 	public static final Integer ZERO = new Integer(0);
-	
+
 	private String process;
 	private String command;
 	private String exception;

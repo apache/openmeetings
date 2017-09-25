@@ -28,7 +28,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 public class RoomEnterBehavior extends AjaxEventBehavior {
 	private static final long serialVersionUID = 1L;
 	protected final Long roomId;
-	
+
 	public RoomEnterBehavior(Long roomId) {
 		super("click");
 		this.roomId = roomId;
@@ -37,11 +37,11 @@ public class RoomEnterBehavior extends AjaxEventBehavior {
 	public static OmUrlFragment getRoomUrlFragment(Long roomId) {
 		return new OmUrlFragment(AreaKeys.room, "" + roomId);
 	}
-	
+
 	public static void roomEnter(MainPage page, IPartialPageRequestHandler handler, Long roomId) {
 		page.updateContents(getRoomUrlFragment(roomId), handler);
 	}
-	
+
 	@Override
 	protected void onEvent(AjaxRequestTarget target) {
 		roomEnter((MainPage)getComponent().getPage(), target, roomId);

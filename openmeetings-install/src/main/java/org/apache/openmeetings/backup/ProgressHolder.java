@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 public class ProgressHolder implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private int progress;
 
 	public int getProgress() {

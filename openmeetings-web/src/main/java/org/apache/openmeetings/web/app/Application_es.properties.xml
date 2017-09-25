@@ -765,7 +765,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.nodriver"><![CDATA[Incapaz cargar driver apropiado de base de datos, por favor descargue el archivo jar apropiado, y reinicie OM. Instrucciones: {0}]]></entry>
 	<entry key="install.wizard.db.step.note"><![CDATA[
 		<h4>
-			<a id="Recommendation_for_production_environment"></a>Recomendación 
+			<a id="Recommendation_for_production_environment"></a>Recomendación
 			para medios de producción<a target="_blank"
 				href="#Recommendation_for_production_environment"
 				class="section_anchor"></a>
@@ -869,7 +869,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 			<ul>
 				<li>Instale <strong>GhostScript</strong> en el servidor, puede tener
 					más información en <a target="_blank" href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
-					mire en instalación. Las instrucciones para la instalación se encuentran allí, 
+					mire en instalación. Las instrucciones para la instalación se encuentran allí,
 					de todos modos en la mayoría de los sistemas linux puede conseguirlo
 					via su paquete favorito de administración (apt-get it)
 				</li>
@@ -882,7 +882,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<br />
 	<br />
 
-	
 	<b><span style="font-size: 1.2em">Soporte-Comunidad:</span></b>
 	<br />
 	<br />
@@ -890,18 +889,17 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		href="http://openmeetings.apache.org/mail-lists.html"
 		target="_blank">Listas de correo</a></span>
 	<br />
-	
 	<b> <span style="font-size: 1.4em">Hay algunas compañias
-            que tambien ofrecen soporte comercial para Apache OpenMeetings:</span></b>
-    <br />
-    <br />
-    <br />
-    <br />
-    <span style="font-size: 1.3em"><a
-        href="http://openmeetings.apache.org/commercial-support.html"
-        target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
-    <br />
-    ]]></entry>
+			que tambien ofrecen soporte comercial para Apache OpenMeetings:</span></b>
+	<br />
+	<br />
+	<br />
+	<br />
+	<span style="font-size: 1.3em"><a
+		href="http://openmeetings.apache.org/commercial-support.html"
+		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
+	<br />
+	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Cancelar]]></entry>
 	<entry key="lbl.refresh"><![CDATA[actualizar]]></entry>
@@ -956,7 +954,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

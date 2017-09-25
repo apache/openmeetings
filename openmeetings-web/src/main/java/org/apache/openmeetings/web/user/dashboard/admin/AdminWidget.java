@@ -34,14 +34,14 @@ public class AdminWidget extends AbstractWidget {
 		location = new WidgetLocation(0, 2);
 		init();
 	}
-	
+
 	@Override
 	public void init() {
 		super.init();
 		title = Application.getString("dashboard.widget.admin.title");
 		id = WIDGET_ID_ADMIN;
 	}
-	
+
 	@Override
 	public WidgetView createView(String viewId) {
 		return new AdminWidgetView(viewId, new Model<Widget>(this));

@@ -13,14 +13,12 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Edit Templates</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
 		<section name="Changing Labels and text strings">
 			<p>
@@ -34,7 +32,7 @@
 				To lookup the labelids in the GUI you can simply run OpenMeetings
 				client with the debug enabled. That way every text-string has the
 				labelid in brackets additionally in the textfield. To start the
-				client in debug mode please check "Tips and Tricks" section of 
+				client in debug mode please check "Tips and Tricks" section of
 				<a href="installation.html" rel="nofollow">Installation guide</a>
 			</p>
 		</section>
@@ -47,12 +45,12 @@
 				<ul>
 					<li>Stop the Red5/OpenMeetings service</li>
 					<li>Goto: <tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/</tt></li>
-					<li>Change HTML file(s) according to your needs, BUT do not remove 
-						elements with <tt>wicket:id</tt> attributes! You can hide those 
+					<li>Change HTML file(s) according to your needs, BUT do not remove
+						elements with <tt>wicket:id</tt> attributes! You can hide those
 						elements by adding <tt>wicket:visible="false"</tt> attribute
 					</li>
 					<li>Starting OM 3.1.4 you can change Appointment reminder subject by
-						modifying "subject" fragment in file 
+						modifying "subject" fragment in file
 						<tt>$RED5_HOME/webapps/openmeetings/WEB-INF/classes/org/apache/openmeetings/service/mail/template/subject/AbstractSubjectEmailTemplate.html</tt>
 						as described in previous bullet.
 					</li>

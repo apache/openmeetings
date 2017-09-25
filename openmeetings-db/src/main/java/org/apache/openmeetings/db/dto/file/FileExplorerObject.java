@@ -35,7 +35,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class FileExplorerObject implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private List<FileItemDTO> userHome;
 	private List<FileItemDTO> roomHome;
 	private Long userHomeSize;

@@ -31,17 +31,17 @@ public class TestFileParser extends AbstractJUnitDefaults {
 
 	@Test
 	public void testLoadWmlFile(){
-		
+
 		try {
-			
+
 			LibraryWmlLoader.loadWmlFile("filename1");
-			
+
 		} catch (Exception err) {
-			
+
 			log.error("TestLoadWmlFile",err);
-			
+
 		}
-		
+
 	}
-	
+
 }

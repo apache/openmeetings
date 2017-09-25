@@ -25,6 +25,6 @@ public class TestGui {
 
 	@Test
 	public void testNoop() {
-		
+		// no-op
 	}
 }

@@ -32,7 +32,7 @@ public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
 
 	@Autowired
 	private UserDao userDao;
-	
+
 	@Test
 	public void testAddingGroup() {
 		try {

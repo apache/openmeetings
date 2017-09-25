@@ -22,12 +22,12 @@ import java.io.Serializable;
 
 public class RecordingContainerData implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private long userHomeSize;
 	private long publicFileSize;
-	
+
 	public RecordingContainerData() {}
-	
+
 	public long getUserHomeSize() {
 		return userHomeSize;
 	}
@@ -40,5 +40,4 @@ public class RecordingContainerData implements Serializable {
 	public void setPublicFileSize(long publicFileSize) {
 		this.publicFileSize = publicFileSize;
 	}
-	
 }

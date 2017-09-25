@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getSessionById", query = "SELECT s FROM Sessiondata s WHERE s.sessionId LIKE :sessionId"),
-		@NamedQuery(name = "getSessionToDelete", query = "SELECT s FROM Sessiondata s WHERE s.refreshed < :refreshed AND s.permanent = false") 
+		@NamedQuery(name = "getSessionToDelete", query = "SELECT s FROM Sessiondata s WHERE s.refreshed < :refreshed AND s.permanent = false")
 })
 @Table(name = "sessiondata")
 @XmlRootElement

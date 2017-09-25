@@ -27,7 +27,7 @@ public class NumberSpinner extends JSpinner {
 	public NumberSpinner(int value, int min, int max, int step) {
 		super(new SpinnerNumberModel(value, min, max, step));
 	}
-	
+
 	@Override
 	public Integer getValue() {
 		return (Integer)super.getValue();

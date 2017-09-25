@@ -35,11 +35,11 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	private final CaptureScreen publishScreen;
 	private String id;
 	private Core core;
-	
+
 	public void setCore(Core core) {
 		this.core = core;
 	}
-	
+
 	RTMPClientPublish(Core core, String host, String app, String id) {
 		this.id = id;
 		this.core = core;
@@ -49,7 +49,7 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	public void connect() {
 		super.connect(publishScreen.getHost(), 1935, publishScreen.getApp(), this);
 	}
-	
+
 	@Override
 	public void handleException(Throwable throwable) {
 		logger.error("ERROR", throwable);
@@ -60,24 +60,24 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 		super.connectionOpened(conn);
 		createStream(this);
 	}
-	
+
 	@Override
 	public void connectionClosed(RTMPConnection conn) {
 		super.connectionClosed(conn);
 		connectionClosed();
 	}
-	
+
 	private void connectionClosed() {
 		publishScreen.setStartPublish(false);
 		publishScreen.release();
 		core.publishingStop();
 	}
-	
+
 	@Override
 	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
 		super.onCommand(conn, channel, source, command);
 	}
-	
+
 	@Override
 	public void resultReceived(IPendingServiceCall call) {
 		String method = call == null ? null : call.getServiceMethodName();

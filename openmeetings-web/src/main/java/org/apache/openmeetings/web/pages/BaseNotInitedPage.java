@@ -27,18 +27,18 @@ import org.apache.wicket.request.IRequestParameters;
 
 public abstract class BaseNotInitedPage extends BasePage {
 	private static final long serialVersionUID = 1L;
-	private static final InstallationConfig installCfg = new InstallationConfig(); 
+	private static final InstallationConfig installCfg = new InstallationConfig();
 
 	@Override
 	protected String getApplicationName() {
 		return installCfg.appName;
 	}
-	
+
 	@Override
 	protected String getLanguageCode() {
 		return WebSession.get().getLocale().getCountry();
 	}
-	
+
 	@Override
 	protected boolean isRtl() {
 		boolean rtl = false;
@@ -47,7 +47,7 @@ public abstract class BaseNotInitedPage extends BasePage {
 		}
 		return rtl;
 	}
-	
+
 	@Override
 	protected void onParameterArrival(IRequestParameters arg0, AjaxRequestTarget arg1) {
 	}

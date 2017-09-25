@@ -22,11 +22,11 @@
 
 	<body>
 		<section name="Security Vulnerabilities">
-			<p>Please note that binary patches are not produced for individual vulnerabilities. To obtain the 
-				binary fix for a particular vulnerability you should upgrade to an Apache OpenMeetings version 
+			<p>Please note that binary patches are not produced for individual vulnerabilities. To obtain the
+				binary fix for a particular vulnerability you should upgrade to an Apache OpenMeetings version
 				where that vulnerability has been fixed.<br/>
 				<br/>
-				For more information about reporting vulnerabilities, see the 
+				For more information about reporting vulnerabilities, see the
 				<a href="https://www.apache.org/security/">Apache Security Team</a> page.<br/>
 				<br/>
 				<a href="https://www.apache.org/security/committers.html#vulnerability-handling">Vulnerability handling guide</a>
@@ -65,7 +65,7 @@
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>
 			<p>Versions Affected: Apache OpenMeetings 1.0.0</p>
-			<p>Description: Apache Openmeetings is vulnerable to Cross-Site Request Forgery (CSRF) 
+			<p>Description: Apache Openmeetings is vulnerable to Cross-Site Request Forgery (CSRF)
 					attacks, XSS attacks, click-jacking, and MIME based attacks<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-7666">CVE-2017-7666</a>
 			</p>
@@ -188,7 +188,7 @@
 			<p>Severity: Moderate</p>
 			<p>Vendor: The Apache Software Foundation</p>
 			<p>Versions Affected: Apache OpenMeetings 3.1.0</p>
-			<p>Description: The value of the URL's "swf" query parameter is interpolated into the JavaScript tag without 
+			<p>Description: The value of the URL's "swf" query parameter is interpolated into the JavaScript tag without
 				being escaped, leading to the reflected XSS.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-3089">CVE-2016-3089</a>
 			</p>

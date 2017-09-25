@@ -77,79 +77,79 @@ public class UserContact implements Serializable {
 	@Column(name="id")
 	@Element(data = true, name = "userContactId")
 	private Long id;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="user_id")
 	@Element(data=true, required=false)
 	private User contact;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="owner_id")
 	@ForeignKey(enabled = true)
 	@Element(data=true, required=false)
 	private User owner;
-	
+
 	@Column(name="pending", nullable = false)
 	@Element(data=true)
 	private boolean pending;
-	
+
 	@Column(name="inserted")
 	private Date inserted;
-	
+
 	@Column(name="updated")
 	private Date updated;
-	
+
 	@Column(name="share_calendar", nullable = false)
 	@Element(data=true, required=false)
 	private boolean shareCalendar;
-	
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public User getContact() {
 		return contact;
 	}
 	public void setContact(User contact) {
 		this.contact = contact;
 	}
-	
+
 	public User getOwner() {
 		return owner;
 	}
 	public void setOwner(User owner) {
 		this.owner = owner;
 	}
-	
+
 	public boolean isPending() {
 		return pending;
 	}
 	public void setPending(boolean pending) {
 		this.pending = pending;
 	}
-	
+
 	public Date getInserted() {
 		return inserted;
 	}
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
-	
+
 	public Date getUpdated() {
 		return updated;
 	}
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	public boolean getShareCalendar() {
 		return shareCalendar;
 	}
 	public void setShareCalendar(boolean shareCalendar) {
 		this.shareCalendar = shareCalendar;
 	}
-	
+
 }

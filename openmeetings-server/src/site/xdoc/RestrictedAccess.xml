@@ -21,9 +21,7 @@
 	</properties>
 
 	<body>
-	
 		<section name="Server Side">
-	
 			<p>You can protect your OpenMeetings instance from beeing accessed
 				from 3th party by using the file:
 			</p>
@@ -36,9 +34,7 @@
 				rel="nofollow">https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties;hb=HEAD
 			</a>
 		</section>
-
 		<section name="Client Side">
-
 			<p>And you can restrict the access also for the client side: Every
 				Flash Plugin will check a file called "crossdomain.xml" before it
 				tries to access the server using rtmp/RPC. This file is located: </p>
@@ -54,7 +50,6 @@
 </cross-domain-policy>
 ]]>
 			</source>
-			
 			<p>
 				If you accessing your application behind an Apache Webservre (using
 				mod_proxy or mod_jk2) be careful to make the crossdomain.xml
@@ -64,9 +59,6 @@
 				</a>
 				for example to lookup requests.
 			</p>
-
 		</section>
-
 	</body>
-
 </document>

@@ -765,13 +765,13 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.nodriver"><![CDATA[Unable to load proper DB driver, please download appropriate jar file, and restart the OM. Instructions: {0}]]></entry>
 	<entry key="install.wizard.db.step.note"><![CDATA[
 		<h4>
-			<a id="Recommendation_for_production_environment"></a>Empfehlung 
+			<a id="Recommendation_for_production_environment"></a>Empfehlung
 				f&uuml;r Produktivumgebungen<a target="_blank"
 				href="#Recommendation_for_production_environment"
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			Standardm&auml;&szlig;ig verwendet {0} die integrierte 
+			Standardm&auml;&szlig;ig verwendet {0} die integrierte
 			{1} Datenbank. In Produktivumgebungen wird jedoch der Einsatz von {2}, {3}, {4}, {5} or {6} empfohlen.
 		</blockquote>
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
@@ -843,16 +843,16 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step4.crypt"><![CDATA[Krypto-Typ]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Krypto-Klasse]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
-		Sie k&ouml;nnen den voreingestellten Krypto-Typ (welcher der 
-		PHP-MD5-Funktion entspricht) benutzen, oder Sie geben 
+		Sie k&ouml;nnen den voreingestellten Krypto-Typ (welcher der
+		PHP-MD5-Funktion entspricht) benutzen, oder Sie geben
 		<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-		ein, um BSD-artige Verschl&uuml;sselung zu benutzen. F&uuml;r 
-		weitergehende Informationen, auch zum Schreiben einer eigenen 
+		ein, um BSD-artige Verschl&uuml;sselung zu benutzen. F&uuml;r
+		weitergehende Informationen, auch zum Schreiben einer eigenen
 		Krypto-Klasse, siehe <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-		target="_blank">Custom Crypt Mechanism</a>. Sie k&ouml;nnen diesen 
-		Wert sp&auml;ter ver&auml;ndern, ABER vorher erstellte Nutzer und 
-		Sitzungen k&ouml;nnten anschlie&szlig;end unbenutzbar sein. 
+		target="_blank">Custom Crypt Mechanism</a>. Sie k&ouml;nnen diesen
+		Wert sp&auml;ter ver&auml;ndern, ABER vorher erstellte Nutzer und
+		Sitzungen k&ouml;nnten anschlie&szlig;end unbenutzbar sein.
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Geben Sie den Klassennamen der Krypto-Klasse an. &Auml;NDERN SIE DIESEN WERT NICHT, WENN SIE SICH NICHT SICHER SIND!]]></entry>
 	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP Konfiguration]]></entry>
@@ -873,7 +873,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 			<ul>
 				<li>Installieren Sie <strong>GhostScript</strong> auf dem Server. Weitere
 					Informationen (Installationsanleitungen etc.) finden Sie unter <a target="_blank"
-					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>. 
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>.
 					In den meisten Linux-Distributionen l&auml;sst es sich bequem per Paketmanager
 					(z.B. apt-get) installieren.
 				</li>
@@ -882,11 +882,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">Falls Sie weitere Fragen haben oder Support bei Installation und Hosting 
+	<b> <span style="font-size: 1.2em">Falls Sie weitere Fragen haben oder Support bei Installation und Hosting
 			ben&ouml;tigen:</span></b>
 	<br />
 	<br />
-    <br />
+	<br />
 	<br />
 	<b><span style="font-size: 1.2em">Support durch die OpenMeetings-Community:</span></b>
 	<br />
@@ -898,7 +898,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<br />
 
 	<b> <span style="font-size: 1.4em">Einige Unternehmen bieten kommerziellen Support
-	    f&uuml;r Apache OpenMeetings an:</span></b>
+		f&uuml;r Apache OpenMeetings an:</span></b>
 	<br />
 	<br />
 
@@ -961,7 +961,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

@@ -31,7 +31,7 @@ public class ScreenHeightMouseListener extends MouseInputAdapter  {
 	public ScreenHeightMouseListener(ScreenSharerFrame frame) {
 		this.frame = frame;
 	}
-	
+
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		frame.setCursor(Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR));

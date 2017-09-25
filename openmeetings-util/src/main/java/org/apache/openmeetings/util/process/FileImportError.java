@@ -19,12 +19,11 @@
 package org.apache.openmeetings.util.process;
 
 public class FileImportError {
-	
 	private int exitValue = 0;
 	private String error = "";
 	private String process = "";
 	private String command = "";
-	
+
 	public int getExitValue() {
 		return exitValue;
 	}

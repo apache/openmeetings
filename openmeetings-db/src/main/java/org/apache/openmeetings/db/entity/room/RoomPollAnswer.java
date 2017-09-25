@@ -52,29 +52,29 @@ public class RoomPollAnswer implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	
+
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
 	@Element(name="voteduserid", data=false, required=false)
 	private User votedUser;
-	
+
 	@Column(name = "answer")
 	@Element(data=false, required=false)
 	private Boolean answer;
-	
+
 	@Column(name = "pointList")
 	@Element(name="pointlist", data=false, required=false)
 	private Integer pointList;
-	
+
 	@Column(name = "voteDate")
 	@Element(name="votedate", data=false)
 	private Date voteDate;
-	
+
 	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "poll_id")
 	private RoomPoll roomPoll;
-	
+
 	@Override
 	public Long getId() {
 		return id;

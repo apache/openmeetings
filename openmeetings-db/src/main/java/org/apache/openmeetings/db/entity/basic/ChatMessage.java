@@ -70,13 +70,13 @@ public class ChatMessage implements IDataProviderEntity {
 	@Element(name = "fromUserId", data = true, required = false)
 	@ForeignKey(enabled = true)
 	private User fromUser;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "to_room_id")
 	@Element(name = "toRoomId", data = true, required = false)
 	@ForeignKey(enabled = true)
 	private Room toRoom;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "to_user_id")
 	@Element(name = "toUserId", data = true, required = false)
@@ -87,7 +87,7 @@ public class ChatMessage implements IDataProviderEntity {
 	@Lob
 	@Element(name = "message", data = true, required = false)
 	private String message;
-	
+
 	@Column(name = "sent")
 	@Element(name = "sent", data = true, required = false)
 	private Date sent;
@@ -95,7 +95,7 @@ public class ChatMessage implements IDataProviderEntity {
 	@Column(name = "need_moderation", nullable = false)
 	@Element(name = "needModeration", data = true, required = false)
 	private boolean needModeration;
-	
+
 	@Override
 	public Long getId() {
 		return id;

@@ -19,12 +19,11 @@
 package org.apache.openmeetings.db.dto.room;
 
 public class BrowserStatus {
-	
 	private boolean browserInited = false;
 	private String currentURL = "";
-	
+
 	public BrowserStatus() {}
-	
+
 	public boolean isBrowserInited() {
 		return browserInited;
 	}
@@ -37,5 +36,4 @@ public class BrowserStatus {
 	public void setCurrentURL(String currentURL) {
 		this.currentURL = currentURL;
 	}
-
 }

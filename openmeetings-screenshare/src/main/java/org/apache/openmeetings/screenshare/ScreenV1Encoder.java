@@ -49,15 +49,15 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 	private Deflater d = new Deflater(Deflater.DEFAULT_COMPRESSION);
 	private byte[] zipBuf = null;
 	private VideoData unalteredFrame = null;
-	
+
 	public ScreenV1Encoder() {
 		this(KEY_FRAME_INDEX, DEFAULT_BLOCK_SIZE);
 	}
-	
+
 	public ScreenV1Encoder(int keyFrameIndex) {
 		this(keyFrameIndex, DEFAULT_BLOCK_SIZE);
 	}
-	
+
 	//will create square blocks
 	public ScreenV1Encoder(int keyFrameIndex, int blockSize) {
 		this.keyFrameIndex = keyFrameIndex;
@@ -77,7 +77,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		buf.flip();
 		return new VideoData(buf);
 	}
-	
+
 	@Override
 	public void createUnalteredFrame() throws IOException {
 		if (last == null) {
@@ -85,7 +85,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		}
 		if (unalteredFrame == null) {
 			ByteArrayOutputStream ba = new ByteArrayOutputStream(200);
-			
+
 			Rectangle _area = new Rectangle(resizeX, resizeY);
 			//header
 			ba.write(getTag(FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
@@ -99,7 +99,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 			unalteredFrame = getData(ba.toByteArray());
 		}
 	}
-	
+
 	@Override
 	public VideoData getUnalteredFrame() {
 		if (unalteredFrame != null && (frameCount % keyFrameIndex) != 0) {
@@ -107,19 +107,19 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		}
 		return unalteredFrame;
 	}
-	
+
 	@Override
 	public synchronized VideoData encode(int[][] img) throws IOException {
 		ba.reset();
 		Rectangle imgArea = new Rectangle(img.length, img[0].length);
 		Rectangle area = getNextBlock(imgArea, null);
 		boolean isKeyFrame = (frameCount++ % keyFrameIndex) == 0 || last == null;
-		
+
 		//header
 		ba.write(getTag(isKeyFrame ? FLAG_FRAMETYPE_KEYFRAME : FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
 		writeShort(ba, imgArea.width + ((blockSize / 16 - 1) << 12));
 		writeShort(ba, imgArea.height + ((blockSize / 16 - 1) << 12));
-		
+
 		while (area.width > 0 && area.height > 0) {
 			writeBytesIfChanged(ba, isKeyFrame, img, area);
 			area = getNextBlock(imgArea, area);
@@ -127,13 +127,13 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		last = img;
 		return getData(ba.toByteArray());
 	}
-	
+
 	@Override
 	public void reset() {
 		last = null;
 		unalteredFrame = null;
 	}
-	
+
 	private Rectangle getNextBlock(Rectangle img, Rectangle _prev) {
 		Rectangle prev;
 		if (_prev == null) {
@@ -151,7 +151,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 				prev.x += blockSize;
 			}
 		}
-		return img.intersection(prev); 
+		return img.intersection(prev);
 	}
 
 	private void writeBytesIfChanged(ByteArrayOutputStream ba, boolean isKeyFrame, int[][] img, Rectangle area) throws IOException {
@@ -183,12 +183,12 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 	public int getTag(final int frame, final int codec) {
 		return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
 	}
-	
+
 	private static void writeShort(OutputStream os, final int n) throws IOException {
 		os.write((n >> 8) & 0xFF);
 		os.write((n >> 0) & 0xFF);
 	}
-	
+
 	public static int[][] getImage(Rectangle screen, Robot robot) {
 		int[][] buffer = new int[resizeX][resizeY];
 		BufferedImage image = resize(robot.createScreenCapture(screen), new Rectangle(resizeX, resizeY));

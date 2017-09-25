@@ -40,7 +40,7 @@
 	--email-auth-user noreply@webbase-design.de --password 123qweasd --system-email-address noreply@webbase-design.de --email-auth-pass 123qweasd
 			</source>
 		</section>
-		<section name="Command reference">	
+		<section name="Command reference">
 <source><![CDATA[
  -v,--verbose                        verbose error messages
 --------------------------------------------------------------------------------------------------

@@ -121,7 +121,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 					// That will be not bigger then long value
 					startTimeStamp = streampacket.getTimestamp();
-				
+
 					RecordingMetaData metaData = metaDataDao.get(metaDataId);
 					metaData.setRecordStart(virtualTime);
 					metaDataDao.update(metaData);

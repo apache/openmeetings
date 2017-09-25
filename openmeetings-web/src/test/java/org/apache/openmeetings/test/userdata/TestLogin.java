@@ -28,18 +28,18 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestLogin extends AbstractJUnitDefaults {
-	
+
 	@Autowired
 	private UserDao userDao;
 
 	@Test
 	public void testTestLogin() throws OmException {
 		User us = userDao.login(username, userpass);
-		
+
 		assertNotNull("User is unable to login", us);
-		
+
 		//mService.getLanguageById(1);
-		
+
 	}
 
 }

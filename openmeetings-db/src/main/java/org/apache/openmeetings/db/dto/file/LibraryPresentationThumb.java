@@ -19,14 +19,14 @@
 package org.apache.openmeetings.db.dto.file;
 
 public class LibraryPresentationThumb {
-	
+
 	private String name = null;
 	private String filename = null;
 	private String lastmod = null;
 	private Long size = null;
-	
+
 	public LibraryPresentationThumb() {}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -51,5 +51,4 @@ public class LibraryPresentationThumb {
 	public void setSize(Long size) {
 		this.size = size;
 	}
-
 }

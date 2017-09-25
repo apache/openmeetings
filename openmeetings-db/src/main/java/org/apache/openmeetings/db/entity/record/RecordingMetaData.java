@@ -46,11 +46,11 @@ import org.simpleframework.xml.Root;
  * {@link #streamStatus}, as long as this variable is not set
  * to {@link Status.STOPPED}, the recording process will not proceed and start to convert all
  * input sources to a single recording file.
- * 
+ *
  * @author sebawagner
  */
 @Entity
-@NamedQueries({ 
+@NamedQueries({
 	@NamedQuery(name = "getMetaById", query = "SELECT c FROM RecordingMetaData c WHERE c.id = :id")
 	, @NamedQuery(name = "getMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.deleted = false")
 	, @NamedQuery(name = "getAudioMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId "
@@ -69,7 +69,7 @@ public class RecordingMetaData implements IDataProviderEntity {
 		, STOPPING
 		, STOPPED
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

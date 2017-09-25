@@ -20,7 +20,7 @@ function toggleDatePicker(id) {
 	return false;
 }
 function addCalButton(rtl, id) {
-	var my_button = 
+	var my_button =
 		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left" onclick="return toggleDatePicker(\'' + id + '\');">' +
 		'<input type="text" id="' + id + '" /></button>';
 
@@ -29,7 +29,7 @@ function addCalButton(rtl, id) {
 	} else {
 		$(".fc .fc-toolbar .fc-left").append(my_button);
 	}
-	 
+
 	var dp = $("#" + id);
 	dp.datepicker({
 		showOn: "button",

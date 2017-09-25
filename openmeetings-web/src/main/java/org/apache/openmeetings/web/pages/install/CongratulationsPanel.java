@@ -29,7 +29,7 @@ public class CongratulationsPanel extends Panel {
 
 	public CongratulationsPanel(String id) {
 		super(id);
-		
+
 		add(new Link<Void>("url") {
 			private static final long serialVersionUID = 1L;
 

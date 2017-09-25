@@ -30,17 +30,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAppointmentSchedulerTask extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestAppointmentSchedulerTask.class, webAppRootKey);
-	
+
 	@Autowired
 	private AppointmentLogic appointmentLogic;
-	
+
 	@Test
 	public void doIt() {
 		log.debug("- 1 MeetingReminderJob.execute");
 		log.warn("- 2 MeetingReminderJob.execute");
 		try {
 			appointmentLogic.doScheduledMeetingReminder();
-			
+
 			assertTrue(true);
 		} catch (Exception err){
 			log.error("execute",err);

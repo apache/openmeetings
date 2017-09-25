@@ -88,7 +88,6 @@
 									Set up development environment as described here: <a href="http://www.apache.org/dev/publishing-maven-artifacts.html#dev-env">Setup development environment</a><br/>
 									Don't forget to secure passwords as described here: <a href="http://maven.apache.org/guides/mini/guide-encryption.html#How_to_create_a_master_password">Password Encryption</a>
 								</li>
-								
 							</ul>
 						</li>
 					</ul>
@@ -194,11 +193,11 @@ mvn deploy -Pdeploy,rc
 					<a
 						href="http://mail-archives.apache.org/mod_mbox/openmeetings-dev/201701.mbox/%3CCAJmbs8gyvHuarzdVma%2BF6ap7RHBhhVciZp5Oi5JogQdLR6o0NA%40mail.gmail.com%3E">example Result email</a>
 					<br />
-					Votes on whether a package is ready to be released use majority approval -- i.e., at 
-					least three PMC members must vote affirmatively for release, and there must be more 
+					Votes on whether a package is ready to be released use majority approval -- i.e., at
+					least three PMC members must vote affirmatively for release, and there must be more
 					positive than negative votes. Releases may not be vetoed. Before voting +1 PMC members
-					are required to download the signed source code package, compile it as provided, and 
-					test the resulting executable on their own platform, along with also verifying that 
+					are required to download the signed source code package, compile it as provided, and
+					test the resulting executable on their own platform, along with also verifying that
 					the package meets the requirements of the ASF policy on releases.
 				</p>
 			</subsection>
@@ -261,13 +260,11 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 					</li>
 				</ul>
 				<p>NOTE: "Type of signing" can be selected as "Test" to check everything works as expected</p>
-				
 			</subsection>
-			
 			<subsection name="Step4 - Distribute and announce">
 				<p>If VOTEs positive: Upload the release </p>
 				<ul>
-					<li>Upload Artifacts with signatures created on the previous steps to 
+					<li>Upload Artifacts with signatures created on the previous steps to
 						https://dist.apache.org/repos/dist/release/openmeetings/CURRENT_VERSION
 					</li>
 					<li>Close staging repo:
@@ -297,7 +294,7 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 						Add a section to <a href="downloads.html">downloads</a> website.<br />
 						Make sure that the binary packages are linked using the mirror URL as base path (
 						<b>not</b> http://www.apache.org/dist):<br />
-						Mirror URL: 
+						Mirror URL:
 						<a href="http://www.apache.org/dyn/closer.lua/openmeetings/">http://www.apache.org/dyn/closer.lua/openmeetings/</a>
 					</li>
 					<li>

@@ -19,16 +19,16 @@
 package org.apache.openmeetings.db.dto.room;
 
 public class RoomUser {
-	
+
 	private String firstname;
 	private String lastname;
 	private String publicSID;
 	private long broadcastId;
 	private Boolean isBroadCasting;
 	private String avsettings;
-	
+
 	public RoomUser() {}
-	
+
 	public String getFirstname() {
 		return firstname;
 	}
@@ -65,5 +65,4 @@ public class RoomUser {
 	public void setBroadcastId(long broadcastId) {
 		this.broadcastId = broadcastId;
 	}
-	
 }

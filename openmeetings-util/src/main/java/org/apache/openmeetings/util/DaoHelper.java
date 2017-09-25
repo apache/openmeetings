@@ -29,11 +29,11 @@ public class DaoHelper {
 	public static String getSearchQuery(String table, String alias, String search, boolean distinct, boolean filterDeleted, boolean count, String sort, String... fields) {
 		return getSearchQuery(table, alias, null, search, distinct, filterDeleted, count, null, sort, fields);
 	}
-	
+
 	public static String getSearchQuery(String table, String alias, String join, String search, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
 		return getSearchQuery(table, alias, join, search, false, filterDeleted, count, additionalWhere, sort, fields);
 	}
-	
+
 	public static String getSearchQuery(String table, String alias, String join, String search, boolean distinct, boolean filterDeleted, boolean count, String additionalWhere, String sort, String... fields) {
 		StringBuilder sb = new StringBuilder("SELECT ");
 		if (count) {
@@ -66,13 +66,13 @@ public class DaoHelper {
 		}
 		return sb.toString();
 	}
-	
+
 	public static StringBuilder getWhereClause(String search, String alias, String... fields) {
 		StringBuilder sb = new StringBuilder();
 		getWhereClause(sb, search, alias, fields);
 		return sb;
 	}
-	
+
 	public static void getWhereClause(StringBuilder sb, String search, String alias, String... fields) {
 		if (search != null) {
 			boolean notEmpty = false;
@@ -89,7 +89,7 @@ public class DaoHelper {
 				}
 				StringBuilder placeholder = new StringBuilder();
 				placeholder.append("%").append(StringUtils.lowerCase(searchItems[i])).append("%");
-	
+
 				sb.append("(");
 				for (int j = 0; j < fields.length; ++j) {
 					if (j != 0) {

@@ -22,9 +22,9 @@ public class LibraryPresenationThumbs {
 
 	private String name = "";
 	private LibraryPresentationThumb[] thumbs = null;
-	
+
 	public LibraryPresenationThumbs() {}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -37,5 +37,4 @@ public class LibraryPresenationThumbs {
 	public void setThumbs(LibraryPresentationThumb[] thumbs) {
 		this.thumbs = thumbs;
 	}
-	
 }

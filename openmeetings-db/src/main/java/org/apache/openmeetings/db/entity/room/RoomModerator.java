@@ -50,82 +50,82 @@ import org.simpleframework.xml.Root;
 @Root(name = "room_moderator")
 public class RoomModerator implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long id;
-	
+
 	@Column(name = "roomId")
 	private Long roomId;
-	
+
 	@Column(name="is_supermoderator", nullable = false)
 	@Element(name="is_supermoderator", data = true)
 	private boolean superModerator;
-	
-	@ManyToOne(fetch = FetchType.EAGER) 
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn (name="user_id")
 	@ForeignKey(enabled = true)
 	@Element(name="user_id", data = true, required=false)
 	private User user;
-	
+
 	@Column(name = "inserted")
 	private Date inserted;
-	
+
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Column(name = "deleted", nullable = false)
 	private boolean deleted;
-	
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public boolean isSuperModerator() {
 		return superModerator;
 	}
 	public void setSuperModerator(boolean superModerator) {
 		this.superModerator = superModerator;
 	}
-	
-	
+
+
 	public User getUser() {
 		return user;
 	}
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public Date getInserted() {
 		return inserted;
 	}
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
-	
+
 	public Date getUpdated() {
 		return updated;
 	}
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-	
+
 	public boolean isDeleted() {
 		return deleted;
 	}
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-	
+
 	public Long getRoomId() {
 		return roomId;
 	}
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
-	
+
 }

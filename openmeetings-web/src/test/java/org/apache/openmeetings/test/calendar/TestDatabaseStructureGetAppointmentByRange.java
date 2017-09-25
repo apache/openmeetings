@@ -35,7 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class, webAppRootKey);
-	
+
 	@Autowired
 	private AppointmentDao appointmentDao;
 
@@ -43,7 +43,7 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 	public void test() {
 		log.debug("Test started");
 		Long userId = 1L;
-		
+
 		Calendar now = Calendar.getInstance();
 		Calendar rangeStart = Calendar.getInstance();
 		rangeStart.setTime(now.getTime());
@@ -51,7 +51,7 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		Calendar rangeEnd = Calendar.getInstance();
 		rangeEnd.add(Calendar.DATE, 1);
 		rangeEnd.setTime(now.getTime());
-		
+
 		Calendar a1End = Calendar.getInstance();
 		a1End.setTime(now.getTime());
 		a1End.add(Calendar.HOUR_OF_DAY, 1);
@@ -65,7 +65,7 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		mm1.setUser(createUserContact(userId));
 		mm1.setAppointment(a2);
 		a2.getMeetingMembers().add(mm1);
-		
+
 		Appointment a3 = getAppointment(now.getTime(), a1End.getTime());
 		a3.setTitle("AppointmentByRange_a3");
 		a3.setMeetingMembers(new ArrayList<MeetingMember>());
@@ -77,11 +77,11 @@ public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDef
 		mm3.setUser(createUserContact(userId));
 		mm3.setAppointment(a3);
 		a3.getMeetingMembers().add(mm3);
-		
+
 		a1 = appointmentDao.update(a1, userId);
 		a2 = appointmentDao.update(a2, userId);
 		a3 = appointmentDao.update(a3, userId);
-		
+
 		int a1found = 0, a2found = 0, a3found = 0;
 		for (Appointment a : appointmentDao.getInRange(userId, rangeStart.getTime(), rangeEnd.getTime())) {
 			int mmCount = a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size();

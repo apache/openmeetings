@@ -32,8 +32,8 @@
 			<subsection name="Introduction">
 				<div>
 					<p>
-						The Apache OpenMeetings HTML websites are generated from XML files. 
-						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -P allModules,unpacked -DskipTests=true]]></source> that generates the HTML files 
+						The Apache OpenMeetings HTML websites are generated from XML files.
+						You edit the XML files, run the MAVEN command <source><![CDATA[mvn install -P allModules,unpacked -DskipTests=true]]></source> that generates the HTML files
 						and then you copy generated HTML files into appropriate place and commit to Git both: XML and HTML files.
 					</p>
 					<p>
@@ -70,7 +70,7 @@ git checkout asf-site
 			</subsection>
 			<subsection name="Adding a new menu entry">
 				<div>
-					To add a new menu entry in the left side panel you need to modify the file: 
+					To add a new menu entry in the left side panel you need to modify the file:
 					<br/>
 					<tt>openmeetings-server/src/site/site.xml</tt>
 				</div>

@@ -13,15 +13,13 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Moodle Plugin</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
 		<section name="Moodle Plugin for OpenMeetings">
 			<p>
 				You can get the latest Version of the Plugin for Moodle from the
@@ -30,7 +28,6 @@
 				.
 			</p>
 		</section>
-		
 		<section name="Installation of the Moodle Plugin for Apache OpenMeetings">
 			<p>
 				You simply download the ZIP or TAR package and unzip it to Moodle's "mod" directory.<br/>
@@ -53,12 +50,10 @@
 					height="300" />
 			</a>
 		</section>
-		
 		<section name="Adding a new conference room to a Moodle course">
-			
 			<p>
 				After installation of the plugin you can go to the course pages in Moodle and turn editing on.
-				Then you choose the activity "OpenMeetings", Moodle will then show you the conference room 
+				Then you choose the activity "OpenMeetings", Moodle will then show you the conference room
 				configuration with all the options:
 			</p>
 			<a class="fancybox-buttons" href="images/moodle_add_activity_plugin.png">
@@ -66,11 +61,9 @@
 					height="360" />
 			</a>
 		</section>
-		
 		<section name="Demo video">
 			<p>The demo video of SugarCRM plugin show you the plugin in action </p>
 			<iframe width="640" height="390" src="http://www.youtube.com/embed/pPgv7zkPXAk" frameborder="0" allowfullscreen=""></iframe>
 		</section>
 	</body>
-
 </document>

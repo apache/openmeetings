@@ -33,16 +33,16 @@ public class MenuFunctionsBehavior extends Behavior {
 	private final static JavaScriptResourceReference MENU_FUNCTIONS = new JavaScriptResourceReference(MenuFunctionsBehavior.class, "menu-functions.js");
 	private final String menuContainerId;
 	private final String menuId;
-	
+
 	public MenuFunctionsBehavior(String menuContainerId, String menuId) {
 		this.menuContainerId = menuContainerId;
 		this.menuId = menuId;
 	}
-	
+
 	public String getInitScript() {
 		return String.format("initMenu('%s', '%s');", menuContainerId, menuId);
 	}
-	
+
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);

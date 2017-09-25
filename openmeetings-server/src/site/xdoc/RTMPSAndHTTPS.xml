@@ -76,7 +76,7 @@ Enter key password for <red5>
 				</li>
 				<li>Import your chosen CA's root certificate into the keystore (may
 					need to download it from their site - make sure to get the root CA and
-					not the intermediate one): 
+					not the intermediate one):
 					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore.jks -trustcacerts -file root.crt]]></source>
 					(note: you may receive a warning that the certificate already exists in the system wide keystore - import
 					anyway)
@@ -121,7 +121,7 @@ keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstorety
 				</li>
 				<li>Import your chosen CA's root certificate into the keystore (may
 					need to download it from their site - make sure to get the root CA and
-					not the intermediate one): 
+					not the intermediate one):
 					<source><![CDATA[keytool -import -alias root -keystore red5/conf/keystore.jks -trustcacerts -file root.crt]]></source>
 					(note: you may receive a warning that the certificate already exists in the system wide keystore - import
 					anyway)
@@ -143,7 +143,7 @@ keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstorety
 			<h3>Prerequisites</h3>
 			<ul>
 				<li>Create CA's root certificate: ca.crt</li>
-				<li>Create self-signed server certificate: red5.crt <tt>Common Name (CN) while creating certificate 
+				<li>Create self-signed server certificate: red5.crt <tt>Common Name (CN) while creating certificate
 					should be assign to FQDN of your site, for example - vkc.company.com</tt></li>
 				<li>Rename the existing keystore file <tt>red5/conf/keystore.jmx</tt> to <tt>red5/conf/keystore.bak</tt></li>
 				<li>Rename the existing truststore file <tt>red5/conf/truststore.jmx</tt> to <tt>red5/conf/truststore.bak</tt></li>
@@ -231,7 +231,7 @@ jmx.keystorepass=changeit
 ]]></source>
 				</li>
 				<li>Restart red5 and try to connect - your connection should now be made via RTMPS (close port 1935 to be sure)
-				</li>   
+				</li>
 			</ol>
 			<h3>Native RTMPS</h3>
 			<ol>
@@ -252,7 +252,7 @@ jmx.keystorepass=changeit
 ]]></source>
 				</li>
 				<li>Restart red5 and try to connect - your connection should now be made via RTMPS (close port 1935 to be sure)
-				</li>   
+				</li>
 			</ol>
 		</section>
 		<section name="Credits">

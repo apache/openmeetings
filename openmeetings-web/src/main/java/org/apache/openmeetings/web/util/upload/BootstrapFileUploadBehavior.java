@@ -33,11 +33,11 @@ public class BootstrapFileUploadBehavior extends Behavior {
 			= new JavaScriptResourceReference(BootstrapFileUploadBehavior.class, "fileinput.js");
 	private final static ResourceReference BOOTSTRAP_FILEINPUT_CSS_REFERENCE
 			= new CssResourceReference(BootstrapFileUploadBehavior.class, "fileinput.css");
-	public final static BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior(); 
-	
+	public final static BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior();
+
 	private BootstrapFileUploadBehavior() {
 	}
-	
+
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);

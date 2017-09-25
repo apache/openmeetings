@@ -106,7 +106,7 @@ var VideoSettings = (function() {
 			.scrollTop(Math.max(0, s.video.height / 2 - 110));
 		_updateRec();
 	}
-	
+
 	function _allowRec(allow) {
 		recAllowed = allow;
 		_updateRec();

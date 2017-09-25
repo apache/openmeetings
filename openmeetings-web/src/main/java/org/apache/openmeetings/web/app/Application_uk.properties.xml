@@ -771,7 +771,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			По умолчанию {0} использует интегрированную базу данных {1}. В 
+			По умолчанию {0} использует интегрированную базу данных {1}. В
 			продакшине Вы должны задуматься об использовании таких баз, как {2}, {3}, {4}, {5} or {6}
 		</blockquote>
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
@@ -872,7 +872,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 					информацию Вы можете посмотреть на сайте <a target="_blank"
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
 					Инструкции по установке Вы можете
-					найти здесь, однако в большинстве систем Линукс Вы можете установить его через Ваш 
+					найти здесь, однако в большинстве систем Линукс Вы можете установить его через Ваш
 					менеджер пакетов (apt-get it).
 				</li>
 				<li>Установите <strong>SWFTools</strong> на Ваш сервер, более подробную информацию
@@ -882,7 +882,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<br />
 	<b> <span style="font-size: 1.2em">Если у Вас остались
 			вопросы или Вам требуется поддержка по установке или хостингу:</span></b>
-	
+
 	<br />
 	<br />
 	<b><span style="font-size: 1.2em">Поддержка сообщества:</span></b>
@@ -957,7 +957,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

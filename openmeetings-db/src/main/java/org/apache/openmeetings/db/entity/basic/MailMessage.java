@@ -94,11 +94,11 @@ public class MailMessage implements IDataProviderEntity {
 	public MailMessage() {
 		this(null, null, null, null, null);
 	}
-	
+
 	public MailMessage(String recipients, String replyTo, String subject, String body) {
 		this(recipients, replyTo, subject, body, null);
 	}
-	
+
 	public MailMessage(String recipients, String replyTo, String subject, String body, byte[] ics) {
 		this.recipients = recipients;
 		this.replyTo = replyTo;
@@ -106,7 +106,7 @@ public class MailMessage implements IDataProviderEntity {
 		this.body = body;
 		this.ics = ics;
 	}
-	
+
 	@Override
 	public Long getId() {
 		return id;

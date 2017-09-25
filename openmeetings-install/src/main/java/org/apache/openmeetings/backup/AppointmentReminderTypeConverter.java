@@ -25,7 +25,7 @@ import org.simpleframework.xml.stream.OutputNode;
 public class AppointmentReminderTypeConverter extends OmConverter<Reminder> {
 	public AppointmentReminderTypeConverter() {
 	}
-	
+
 	@Override
 	public Reminder read(InputNode node) throws Exception {
 		return Reminder.get(getInt(node));

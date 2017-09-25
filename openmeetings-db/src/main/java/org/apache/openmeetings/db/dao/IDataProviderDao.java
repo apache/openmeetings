@@ -24,26 +24,26 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
 /**
  * General interface to perform CRUD operations on entities
- * 
+ *
  * @author solomax, swagner
- * 
+ *
  * @param <T>
  */
 public interface IDataProviderDao<T extends IDataProviderEntity> {
 
 	/**
 	 * Get an instance of an {@link T}
-	 * 
+	 *
 	 * @param id - id of instance to retrieve
 	 * @return instance with the id gived
 	 */
 	T get(Long id);
 
 	T get(long id);
-	
+
 	/**
 	 * Get a list of instances of {@link T}
-	 * 
+	 *
 	 * @param start - the start to range to retrieve
 	 * @param count - maximum instance count to retrieve
 	 * @return list of instances in the range specified
@@ -52,7 +52,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 
 	/**
 	 * Get a list of instances of {@link T}
-	 * 
+	 *
 	 * @param search - string search criteria to filter entities
 	 * @param start - the start to range to retrieve
 	 * @param count - maximum instance count to retrieve
@@ -63,14 +63,14 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 
 	/**
 	 * Count the number of instances of {@link T}
-	 * 
+	 *
 	 * @return count of instances
 	 */
 	long count();
 
 	/**
 	 * Count the number of instances of {@link T}
-	 * 
+	 *
 	 * @param search - string search criteria to filter entities
 	 * @return count of instances satisfying given search criteria
 	 */
@@ -78,7 +78,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 
 	/**
 	 * Update an instance of {@link T}
-	 * 
+	 *
 	 * @param entity - entity to be updated
 	 * @param userId - user performed update
 	 */
@@ -86,7 +86,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 
 	/**
 	 * Delete an instance of {@link T}
-	 * 
+	 *
 	 * @param entity - entity to be deleted
 	 * @param userId - user performed delete
 	 */

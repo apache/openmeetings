@@ -740,7 +740,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.presentation"><![CDATA[Public Presentation Room]]></entry>
 	<entry key="install.room.public.video.only"><![CDATA[Stanza Solo Video Pubblica]]></entry>
 	<entry key="install.room.public.video.wb"><![CDATA[Stanza Video e Lavagna Pubblica]]></entry>
-	<entry key="install.wizard.congrats.commercial"><![CDATA[Ci sono alcune aziende 
+	<entry key="install.wizard.congrats.commercial"><![CDATA[Ci sono alcune aziende
 			che offrono anche il supporto commerciale per Apache OpenMeetings:]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[Accedi all'applicazione]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Mailing list]]></entry>
@@ -811,7 +811,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[EMail Sistema]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Nominativo EMail Sistema]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Abilita TLS nell'autenticazione SMTP]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Imposta email dell'invitante 
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Imposta email dell'invitante
 					come ReplyTo negli inviti email]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Invia Email ai nuovi utenti registrati]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[I nuovi utenti devono verificre la loro Email]]></entry>
@@ -957,7 +957,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Salvato con successo]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

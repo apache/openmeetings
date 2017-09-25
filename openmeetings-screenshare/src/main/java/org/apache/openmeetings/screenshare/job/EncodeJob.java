@@ -45,7 +45,7 @@ public class EncodeJob implements Job {
 	Robot robot;
 	Rectangle screen = new Rectangle(spinnerX, spinnerY, spinnerWidth, spinnerHeight);
 	int[][] image = null;
-	
+
 	public EncodeJob() {
 		try {
 			robot = new Robot();
@@ -53,12 +53,12 @@ public class EncodeJob implements Job {
 			log.error("encode: Unexpected Error while creating robot", e);
 		}
 	}
-	
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap data = context.getJobDetail().getJobDataMap();
 		CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
-		
+
 		long start = 0;
 		if (log.isTraceEnabled()) {
 			start = System.currentTimeMillis();

@@ -37,24 +37,24 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
-	
+
 	@Test
 	public void getAppoinment() {
 		log.debug("getAppoinment enter");
 		Long userId = 1L;
-		
+
 		Calendar now = Calendar.getInstance();
 		Calendar a1End = Calendar.getInstance();
 		a1End.setTime(now.getTime());
 		a1End.add(Calendar.HOUR_OF_DAY, 1);
 		Appointment a1 = getAppointment(now.getTime(), a1End.getTime());
 		a1.setTitle("GetAppointment");
-		
+
 		a1 = appointmentDao.update(a1, userId);
-		
+
 		Appointment a = appointmentDao.get(a1.getId());
 		assertNotNull("Failed to get Appointment By id", a);
 		assertEquals("Inapropriate MeetingMembers count", 0, a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size());
 	}
-	
+
 }

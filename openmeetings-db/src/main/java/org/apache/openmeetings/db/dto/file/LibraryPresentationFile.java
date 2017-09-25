@@ -24,9 +24,9 @@ public class LibraryPresentationFile {
 	private String filename = null;
 	private String lastmod = null;
 	private Long size = null;
-	
+
 	public LibraryPresentationFile() {}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -51,5 +51,4 @@ public class LibraryPresentationFile {
 	public void setSize(Long size) {
 		this.size = size;
 	}
-	
 }

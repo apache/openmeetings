@@ -13,28 +13,24 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Drupal Plugin</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
 		<section name="Drupal Plugin for OpenMeetings">
 			<p>
-				Plugin for Drupal currently is not open source. 
-				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it. 
+				Plugin for Drupal currently is not open source.
+				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it.
 			</p>
 		</section>
-		
 		<section name="Installation of the Drupal Plugin for Apache OpenMeetings">
 			<p>
 				You simply download the ZIP or TAR package and unzip it to Drupal "mod" directory.
 				<br/>
-				For a detailed description on how to install plugins in Drupal please review their 
+				For a detailed description on how to install plugins in Drupal please review their
 				<a href="http://drupal.org/documentation/install/modules-themes" target="_blank" rel="nofollow">handbook</a>.
 				<br />
 				Then you visit the module interface of Drupal, where you will find the new module.
@@ -52,12 +48,10 @@
 					height="340" />
 			</a>
 		</section>
-		
 		<section name="Adding a new conference room to Drupal">
-			
 			<p>
-				After installation of the plugin you can go to the front page in Drupal and add a new content item 
-				"OpenMeetings Rooms" => "Add New Room". You may find following configuration values for each 
+				After installation of the plugin you can go to the front page in Drupal and add a new content item
+				"OpenMeetings Rooms" => "Add New Room". You may find following configuration values for each
 				conference room:
 			</p>
 			<a class="fancybox-buttons" href="images/drupal_room_configuration.png">
@@ -65,12 +59,10 @@
 					height="400" />
 			</a>
 		</section>
-		
 		<section name="Demo video">
 			<p>The demo video of Drupal plugin show you the plugin in action </p>
 			<iframe width="640" height="390" src="http://www.youtube.com/embed/LmMIKFCLRV4" frameborder="0" allowfullscreen=""></iframe>
 			<iframe width="640" height="390" src="http://www.youtube.com/embed/k5PF3vdVUn0" frameborder="0" allowfullscreen=""></iframe>
 		</section>
 	</body>
-
 </document>

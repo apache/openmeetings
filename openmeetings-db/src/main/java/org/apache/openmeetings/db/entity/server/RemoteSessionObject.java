@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 /**
  * This Class is marshaled as an XML-Object and stored as a String in the DB to make
  * it more easy to extend it
- * 
+ *
  * @author sebastianwagner
  *
  */
@@ -54,16 +54,15 @@ public class RemoteSessionObject {
 	private String externalUserId;
 	@Element
 	private String externalUserType;
-	
+
 	public RemoteSessionObject() {
 	}
-	
+
 	public RemoteSessionObject(String username, String firstname, String lastname,
 			String pictureUrl, String email) {
 		this(username, firstname, lastname, pictureUrl, email, "0", "");
 	}
-	
-	
+
 	/**
 	 * @param username
 	 * @param firstname
@@ -75,8 +74,8 @@ public class RemoteSessionObject {
 	 *
 	 * 06.09.2009 17:05:48
 	 * sebastianwagner
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public RemoteSessionObject(String username, String firstname,
 			String lastname, String pictureUrl, String email,
@@ -152,7 +151,7 @@ public class RemoteSessionObject {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "RemoteSessionObject [username=" + username + ", firstname=" + firstname + ", lastname=" + lastname

@@ -25,14 +25,14 @@ import java.util.LinkedList;
  *
  */
 public class PresentationObject {
-	
+
 	private FileItemDTO originalDocument;
 	private FileItemDTO pdfDocument;
 	private FileItemDTO swfDocument;
 	LinkedList<FileItemDTO> thumbs;
 
 	public PresentationObject() {}
-	
+
 	public FileItemDTO getOriginalDocument() {
 		return originalDocument;
 	}
@@ -57,7 +57,4 @@ public class PresentationObject {
 	public void setThumbs(LinkedList<FileItemDTO> thumbs) {
 		this.thumbs = thumbs;
 	}
-	
-	
-
 }

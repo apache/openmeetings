@@ -33,7 +33,7 @@
 			<p>
 				The plugin was developed for some Spanish Universities that use
 				Sakai and belongs to
-				<a rel="nofollow" target="_blank" 
+				<a rel="nofollow" target="_blank"
 					href="https://confluence.sakaiproject.org/display/SPANISH/S2G+-+Spanish+Sakai+Group">"Spanish Sakai Universities"</a>
 				group:
 			</p>
@@ -86,7 +86,7 @@
 		<section name="Source">
 			<p>
 				You can download and build the source code
-				<a rel="nofollow" target="_blank" 
+				<a rel="nofollow" target="_blank"
 					href="https://source.sakaiproject.org/contrib/samoo/adobeconnectpro-openmeetings-integration/trunk/">here</a>
 			</p>
 		</section>

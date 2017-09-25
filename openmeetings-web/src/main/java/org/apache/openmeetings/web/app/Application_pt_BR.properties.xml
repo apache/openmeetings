@@ -956,7 +956,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

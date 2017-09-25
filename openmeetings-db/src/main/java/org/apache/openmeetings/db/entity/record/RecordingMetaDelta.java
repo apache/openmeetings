@@ -31,7 +31,7 @@ import javax.persistence.Table;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
 
-@NamedQueries({ 
+@NamedQueries({
 	@NamedQuery(name = "getRecordingMetaDeltaByMetaDataId", query = "SELECT c FROM RecordingMetaDelta c WHERE c.metaDataId = :metaDataId")
 })
 @Entity
@@ -42,58 +42,58 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private Long id;
-	
+
 	@Column(name="metadata_id")
 	private Long metaDataId;
-	
+
 	@Column(name="time_stamp")
 	private Integer timeStamp;
-	
+
 	@Column(name="delta_time")
 	private Long deltaTime;
-	
+
 	@Column(name="last_time_stamp")
 	private Long lastTimeStamp;
-	
+
 	@Column(name="start_time")
 	private Date startTime;
-	
+
 	@Column(name="current_event_time")
 	private Date currentTime;
-	
+
 	@Column(name="delta_time_stamp")
 	private Long deltaTimeStamp;
-	
+
 	@Column(name="missing_time")
 	private Long missingTime;
-	
+
 	@Column(name="duration")
 	private Integer duration;
-	
+
 	@Column(name="start_time_stamp")
 	private Integer startTimeStamp;
-	
+
 	@Column(name="packet_time_stamp")
 	private Integer packetTimeStamp;
-	
+
 	@Column(name="wave_out_put_name")
 	private String waveOutPutName;
-	
+
 	@Column(name="data_length_packet")
 	private Integer dataLengthPacket;
-	
+
 	@Column(name="received_audio_data_length")
 	private Long receivedAudioDataLength;
-	
+
 	@Column(name="is_end_padding", nullable = false)
 	private boolean endPadding;
-	
+
 	@Column(name="is_start_padding", nullable = false)
 	private boolean startPadding;
-	
+
 	@Column(name="debug_status")
 	private String debugStatus;
-	
+
 	@Override
 	public Long getId() {
 		return id;
@@ -102,124 +102,124 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	public Long getMetaDataId() {
 		return metaDataId;
 	}
 	public void setMetaDataId(Long metaDataId) {
 		this.metaDataId = metaDataId;
 	}
-	
+
 	public Integer getTimeStamp() {
 		return timeStamp;
 	}
 	public void setTimeStamp(Integer timeStamp) {
 		this.timeStamp = timeStamp;
 	}
-	
+
 	public Long getDeltaTime() {
 		return deltaTime;
 	}
 	public void setDeltaTime(Long deltaTime) {
 		this.deltaTime = deltaTime;
 	}
-	
+
 	public Long getLastTimeStamp() {
 		return lastTimeStamp;
 	}
 	public void setLastTimeStamp(Long lastTimeStamp) {
 		this.lastTimeStamp = lastTimeStamp;
 	}
-	
+
 	public Long getDeltaTimeStamp() {
 		return deltaTimeStamp;
 	}
 	public void setDeltaTimeStamp(Long deltaTimeStamp) {
 		this.deltaTimeStamp = deltaTimeStamp;
 	}
-	
+
 	public Integer getPacketTimeStamp() {
 		return packetTimeStamp;
 	}
 	public void setPacketTimeStamp(Integer packetTimeStamp) {
 		this.packetTimeStamp = packetTimeStamp;
 	}
-	
+
 	public Integer getStartTimeStamp() {
 		return startTimeStamp;
 	}
 	public void setStartTimeStamp(Integer startTimeStamp) {
 		this.startTimeStamp = startTimeStamp;
 	}
-	
+
 	public Long getMissingTime() {
 		return missingTime;
 	}
 	public void setMissingTime(Long missingTime) {
 		this.missingTime = missingTime;
 	}
-	
+
 	public Integer getDuration() {
 		return duration;
 	}
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
-	
+
 	public Date getStartTime() {
 		return startTime;
 	}
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-	
+
 	public Date getCurrentTime() {
 		return currentTime;
 	}
 	public void setCurrentTime(Date currentTime) {
 		this.currentTime = currentTime;
 	}
-	
+
 	public boolean isEndPadding() {
 		return endPadding;
 	}
 	public void setEndPadding(boolean endPadding) {
 		this.endPadding = endPadding;
 	}
-	
+
 	public boolean isStartPadding() {
 		return startPadding;
 	}
 	public void setStartPadding(boolean startPadding) {
 		this.startPadding = startPadding;
 	}
-	
+
 	public String getDebugStatus() {
 		return debugStatus;
 	}
 	public void setDebugStatus(String debugStatus) {
 		this.debugStatus = debugStatus;
 	}
-	
+
 	public String getWaveOutPutName() {
 		return waveOutPutName;
 	}
 	public void setWaveOutPutName(String waveOutPutName) {
 		this.waveOutPutName = waveOutPutName;
 	}
-	
+
 	public Integer getDataLengthPacket() {
 		return dataLengthPacket;
 	}
 	public void setDataLengthPacket(Integer dataLengthPacket) {
 		this.dataLengthPacket = dataLengthPacket;
 	}
-	
+
 	public Long getReceivedAudioDataLength() {
 		return receivedAudioDataLength;
 	}
 	public void setReceivedAudioDataLength(Long receivedAudioDataLength) {
 		this.receivedAudioDataLength = receivedAudioDataLength;
 	}
-	
+
 }

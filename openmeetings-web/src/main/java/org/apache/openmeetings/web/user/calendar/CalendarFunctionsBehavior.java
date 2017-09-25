@@ -37,19 +37,19 @@ import org.apache.wicket.util.collections.MicroMap;
 public class CalendarFunctionsBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;
 	private final String markupId;
-	
+
 	public CalendarFunctionsBehavior(String markupId) {
 		this.markupId = markupId;
 	}
-	
+
 	private IModel<Map<String, Object>> newResourceModel() {
 		return Model.ofMap(new MicroMap<String, Object>("markupId", this.markupId));
 	}
-	
+
 	private ResourceReference newResourceReference() {
 		return new TextTemplateResourceReference(CalendarFunctionsBehavior.class, "calendar-functions.js", this.newResourceModel());
 	}
-	
+
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);

@@ -24,10 +24,10 @@ import org.red5.server.net.rtmp.event.VideoData;
 
 public interface IScreenEncoder {
 	void createUnalteredFrame() throws IOException;
-	
+
 	VideoData getUnalteredFrame();
 
 	VideoData encode(int[][] img) throws IOException;
-	
+
 	void reset();
 }

@@ -23,35 +23,35 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import java.io.File;
 
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 /**
- * This file is called from command line to patch the derby configuration 
+ * This file is called from command line to patch the derby configuration
  * during the automated run of Selenium
- * 
+ *
  * @author swagner
  *
  */
 public class PrepareSystemFiles {
 	private static final Logger log = Red5LoggerFactory.getLogger(PrepareSystemFiles.class, webAppRootKey);
-	
+
 	public static void main(String... args) {
 		try {
 			OmFileHelper.setOmHome(args[0]);
-			
+
 			String databaseHomeDirectory = args[1];
-			
+
 			String persistanceFileToPatch = args[2];
-			
+
 			File conf = new File(persistanceFileToPatch);
-			
+
 			if (conf.exists()) {
 				conf.delete();
 			}
-			
+
 			ConnectionPropertiesPatcher.patch(DbType.derby.name()
 					, "localhost"
 					, "1527"

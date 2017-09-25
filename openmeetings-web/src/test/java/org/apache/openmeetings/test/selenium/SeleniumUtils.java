@@ -49,7 +49,7 @@ public class SeleniumUtils {
 
 		//clear text before adding input
 		element.clear();
-		
+
 		// Would make send to check if this element is really an input text
 		element.sendKeys(inputText);
 	}
@@ -58,9 +58,9 @@ public class SeleniumUtils {
 		WebElement element = SeleniumUtils.findElement(driver, search, true, true);
 		element.click();
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param driver
 	 * @param search
 	 * @param throwException
@@ -88,7 +88,7 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param driver
 	 * @param search
 	 * @param throwException
@@ -102,17 +102,17 @@ public class SeleniumUtils {
 		for (int i = 0; i < numberOfRetries; i++) {
 			List<WebElement> elements = _findElement(driver, search);
 			if (elements != null) {
-				
+
 				if (!onlyReturnVisisbleElement) {
 					return elements.get(0);
 				}
-				
+
 				for (WebElement element : elements) {
 					if (element.isDisplayed()) {
 						return element;
 					}
 				}
-				
+
 			}
 
 			Thread.sleep(defaultSleepInterval);

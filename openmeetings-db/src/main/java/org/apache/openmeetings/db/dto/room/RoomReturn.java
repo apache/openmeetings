@@ -29,7 +29,7 @@ public class RoomReturn {
 	private RoomUser[] roomUser;
 
 	public RoomReturn() {}
-	
+
 	public Long getRoomId() {
 		return roomId;
 	}

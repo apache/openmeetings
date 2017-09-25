@@ -11,10 +11,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
+-->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Bitrix Plugin</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
@@ -22,9 +22,9 @@
 	<body>
 		<section name="OpenMeetings Plugin for Bitrix">
 			<p>
-				Plugin for Bitrix currently is not open source. 
-				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it. 
-			</p>			
+				Plugin for Bitrix currently is not open source.
+				Please contact <a href="commercial-support.html" target="_blank" rel="nofollow">Commercial Support</a> to get it.
+			</p>
 		</section>
 		<section name="Features">
 			<p>The plugin contains the following features: </p>
@@ -32,7 +32,7 @@
 				<li>Enter videoconference rooms from Bitrix (http://www.1c-bitrix.ru/): </li>
 			</ul>
 		</section>
-		<section name="Configuration">			
+		<section name="Configuration">
 			<div>
 				<b>OpenMeetings Bitrix Plugin Installation</b><br/>
 				<ol>
@@ -40,9 +40,8 @@
 					<li>Unpack it into bitrix/modules</li>
 					<li>Install via Admin</li>
 					<li>Add OPenmeetings component to any page.</li>
-				</ol>              
+				</ol>
 			</div>
 		</section>
 	</body>
-
 </document>

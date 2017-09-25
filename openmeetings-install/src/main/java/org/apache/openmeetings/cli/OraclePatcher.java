@@ -27,6 +27,6 @@ public class OraclePatcher extends ConnectionPropertiesPatcher {
 		if (db.startsWith("/")) {
 			delim = "";
 		}
-		return String.format("jdbc:oracle:thin:@%s:%s%s%s", host, port, delim, db); 
+		return String.format("jdbc:oracle:thin:@%s:%s%s%s", host, port, delim, db);
 	}
 }

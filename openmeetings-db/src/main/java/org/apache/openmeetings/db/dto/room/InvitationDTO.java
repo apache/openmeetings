@@ -50,7 +50,7 @@ public class InvitationDTO implements Serializable {
 			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		};
 	};
-	
+
 	private String email;
 	private String firstname;
 	private String lastname;
@@ -63,9 +63,9 @@ public class InvitationDTO implements Serializable {
 	private String validFrom;
 	private String validTo;
 	private long languageId;
-	
+
 	public InvitationDTO() {}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -122,7 +122,7 @@ public class InvitationDTO implements Serializable {
 	}
 	/**
 	 * Method to get valid from date-time in format YYYY-MM-dd HH:mm:ss
-	 * 
+	 *
 	 * @return date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public String getValidFrom() {
@@ -130,7 +130,7 @@ public class InvitationDTO implements Serializable {
 	}
 	/**
 	 * Method to set valid from date-time in format YYYY-MM-dd HH:mm:ss
-	 * 
+	 *
 	 * @param validFrom date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public void setValidFrom(String validFrom) {
@@ -138,7 +138,7 @@ public class InvitationDTO implements Serializable {
 	}
 	/**
 	 * Method to get valid to date-time in format YYYY-MM-dd HH:mm:ss
-	 * 
+	 *
 	 * @return date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public String getValidTo() {
@@ -146,7 +146,7 @@ public class InvitationDTO implements Serializable {
 	}
 	/**
 	 * Method to set valid to date-time in format YYYY-MM-dd HH:mm:ss
-	 * 
+	 *
 	 * @param validFrom date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public void setValidTo(String validTo) {
@@ -158,7 +158,7 @@ public class InvitationDTO implements Serializable {
 	public void setLanguageId(long languageId) {
 		this.languageId = languageId;
 	}
-	
+
 	public Invitation get(Long userId, UserDao userDao, RoomDao roomDao) {
 		Invitation i = new Invitation();
 		i.setHash(UUID.randomUUID().toString());
@@ -169,7 +169,7 @@ public class InvitationDTO implements Serializable {
 
 		i.setUsed(false);
 		i.setValid(valid);
-		
+
 		try {
 			// valid period of Invitation
 			switch (valid) {

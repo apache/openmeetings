@@ -25,9 +25,9 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 public class RoomStatus {
 	List<StreamClient> clientList;
 	BrowserStatus browserStatus;
-	
+
 	public RoomStatus() {}
-	
+
 	public List<StreamClient> getClientList() {
 		return clientList;
 	}

@@ -30,7 +30,7 @@ public class UserDashboard extends DefaultDashboard {
 	private boolean widgetRssDeleted = false;
 	private boolean widgetMyRoomsDeleted = false;
 	private boolean widgetAdminDeleted = false;
-	
+
 	public UserDashboard(String id, String title) {
 		super(id, title);
 	}
@@ -58,7 +58,7 @@ public class UserDashboard extends DefaultDashboard {
 	public void setWidgetAdminDeleted(boolean widgetAdminDeleted) {
 		this.widgetAdminDeleted = widgetAdminDeleted;
 	}
-	
+
 	@Override
 	public void deleteWidget(String widgetId) {
 		switch (widgetId) {
@@ -76,7 +76,7 @@ public class UserDashboard extends DefaultDashboard {
 		}
 		super.deleteWidget(widgetId);
 	}
-	
+
 	@Override
 	public void addWidget(Widget widget) {
 		switch (widget.getId()) {

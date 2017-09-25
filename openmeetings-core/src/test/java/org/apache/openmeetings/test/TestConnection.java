@@ -24,6 +24,6 @@ public class TestConnection {
 
 	@Test
 	public void testNoop() {
-		
+		//no-op
 	}
 }

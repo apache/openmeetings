@@ -841,11 +841,11 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step4.crypt"><![CDATA[Type de chiffrement]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Classe de chiffrement]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
-		Vous pouvez utiliser ce chiffrement par défaut qui est équivalent à la fonction MD5 de PHP ou le style de chiffrement BDS en utilisant : 
+		Vous pouvez utiliser ce chiffrement par défaut qui est équivalent à la fonction MD5 de PHP ou le style de chiffrement BDS en utilisant :
 		<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
 		Pour plus d'information ou pour écrire votre propre chiffrement voir : <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-		target="_blank">Custom Crypt Mechanism</a>. Vous pouvez éditer cette valeur plus tard MAIS les utilisateurs créés précédemment pourraient ne plus être utilisables. 
+		target="_blank">Custom Crypt Mechanism</a>. Vous pouvez éditer cette valeur plus tard MAIS les utilisateurs créés précédemment pourraient ne plus être utilisables.
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Indiquez le nom de la classe de chiffrement. NE MODIFIEZ PAS CECI SI VOUS N'ETES PAS SUR !]]></entry>
 	<entry key="install.wizard.params.step4.sip"><![CDATA[Configuration red5SIP]]></entry>
@@ -864,7 +864,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 			</h4>
 			<ul>
 				<li>Installez <strong>GhostScript</strong> sur le serveur. Vous trouverez plus d'information sur <a target="_blank"
-					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>. 
+					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>.
 					Sur la majorité des systèmes linux vous pouvez le trouver via votre gestionnaire de paquets (apt-get).
 				</li>
 			</ul>
@@ -948,7 +948,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

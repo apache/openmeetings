@@ -24,7 +24,7 @@ import org.apache.wicket.RestartResponseException;
 
 public class NotInitedPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
-	
+
 	public NotInitedPage() {
 		if (InitializationContainer.initComplete) {
 			continueToOriginalDestination();

@@ -60,7 +60,7 @@
 			canvas.testsView.testAll();
 		}
 	</method>
-	
+
 	<method name="setPassed">
 		if (running) {
 			running=false;

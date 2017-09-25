@@ -770,7 +770,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			Az {0} alapértelmezette a beépített {1} adatbázist használja. 
+			Az {0} alapértelmezette a beépített {1} adatbázist használja.
 			További lehetőségként használható a {2}, {3}, {4}, {5} or {6}
 		</blockquote>
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
@@ -841,12 +841,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step4.crypt"><![CDATA[Titkosítás típusa]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Titkosító osztály]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
-		Az alapértelmezetten beállított kódolás megfelel a 
+		Az alapértelmezetten beállított kódolás megfelel a
 		PHP-MD5 kódolónak, vagy BSD-Stílusú kódoláshoz használja a:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
 		további kódolási/titkosítási eljárásokról itt olvashat bővebben: <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Egyedi titkosítási mechanizmus </a> Ha a későbbiekben módosítja ezt a beállítást,
-		az előzőleg létrehozott adatok elérhetetlenné válnak, ami működési hibát okozhat a régebbi munkamenetek elérésében 
+		az előzőleg létrehozott adatok elérhetetlenné válnak, ami működési hibát okozhat a régebbi munkamenetek elérésében
 		(pl. jelszó, hash kezelés).
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Adja meg a titkosító osztály nevét (class). NE VÁLTOZTASSA, HA NEM BIZTOS BENNE!]]></entry>
@@ -872,7 +872,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 			</ul>
 		</li>
 	</ol>
-	
+
 	<b><span style="font-size: 1.2em">Közösségi-támogatás:</span></b>
 	<br />
 	<br />
@@ -882,10 +882,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<br />
 	<br />
 	<br />
-    <b> <span style="font-size: 1.4em">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</span></b>
+	<b> <span style="font-size: 1.4em">Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:</span></b>
 	<br />
 	<br />
-    
 	<span style="font-size: 1.3em"><a
 		href="http://openmeetings.apache.org/commercial-support.html"
 		target="_blank">http://openmeetings.apache.org/commercial-support.html</a></span>
@@ -945,7 +944,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
 	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
 	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted 
+	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
 		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
 	Regards,<br/>

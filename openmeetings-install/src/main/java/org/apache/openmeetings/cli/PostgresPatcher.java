@@ -23,6 +23,6 @@ public class PostgresPatcher extends ConnectionPropertiesPatcher {
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String port = (_port == null) ? "5432" : _port;
 		String db = (_db == null) ? "openmeetings" : _db;
-		return "jdbc:postgresql://" + host + ":" + port + "/" + db; 
+		return "jdbc:postgresql://" + host + ":" + port + "/" + db;
 	}
 }

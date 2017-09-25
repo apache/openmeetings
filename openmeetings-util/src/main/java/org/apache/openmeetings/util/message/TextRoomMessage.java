@@ -26,7 +26,7 @@ public class TextRoomMessage extends RoomMessage {
 		super(roomId, userId, type);
 		this.text = text;
 	}
-	
+
 	public String getText() {
 		return text;
 	}

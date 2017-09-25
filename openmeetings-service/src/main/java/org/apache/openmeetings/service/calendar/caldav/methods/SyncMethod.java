@@ -39,7 +39,7 @@ import org.w3c.dom.Document;
 
 /**
  * Class to work with WebDAV-Sync Method defined in RFC 6578.
- * 
+ *
  * @see SyncReportInfo for Request Report to be given as argument
  */
 public class SyncMethod extends DavMethodBase {
@@ -61,7 +61,7 @@ public class SyncMethod extends DavMethodBase {
 
 	/**
 	 * Used to add request header for Depth.
-	 * 
+	 *
 	 * @param depth
 	 *            Depth of the Request
 	 */
@@ -71,7 +71,7 @@ public class SyncMethod extends DavMethodBase {
 
 	/**
 	 * Set the Depth Header of the Sync Report.
-	 * 
+	 *
 	 * @param depth
 	 *            Depth of the Request
 	 */
@@ -103,7 +103,7 @@ public class SyncMethod extends DavMethodBase {
 
 	/**
 	 * Adapted from DavMethodBase to handle MultiStatus responses.
-	 * 
+	 *
 	 * @return MultiStatus response
 	 * @throws IOException
 	 * @throws DavException
@@ -126,7 +126,7 @@ public class SyncMethod extends DavMethodBase {
 	/**
 	 * Overridden to process the sync-token. Adapted from DavMethodBase. TODO:
 	 * Fix this override.
-	 * 
+	 *
 	 * @see DavMethodBase#processResponseBody(HttpState, HttpConnection)
 	 */
 	@Override

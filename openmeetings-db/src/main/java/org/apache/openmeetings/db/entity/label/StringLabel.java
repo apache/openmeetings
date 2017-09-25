@@ -33,12 +33,12 @@ public class StringLabel extends SimpleEntry<String, String> implements IDataPro
 	public StringLabel(StringLabel l) {
 		super(l.getKey(), l.getValue());
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return (getKey() == null ? 0 : getKey().hashCode());
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Map.Entry)) {

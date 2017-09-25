@@ -39,7 +39,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryWmlLoader {
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryWmlLoader.class, webAppRootKey);
-	
+
 	public static List<?> loadWmlFile(String fileName){
 		try {
 			String name = fileName;
@@ -48,21 +48,21 @@ public class LibraryWmlLoader {
 			}
 			File file = new File(OmFileHelper.getUploadWmlDir(), name);
 			log.debug("filepathComplete: " + file);
-			
+
 			XStream xStream = new XStream(new XppDriver());
 			xStream.setMode(XStream.NO_REFERENCES);
-			
+
 			try (InputStream is = new FileInputStream(file);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8)))
 			{
 				List<?> lMapList = (List<?>) xStream.fromXML(reader);
-				
+
 				return lMapList;
 			}
 		} catch (Exception err){
 			log.error("loadWmlFile",err);
 		}
-		
+
 		return new ArrayList<>();
 	}
 }

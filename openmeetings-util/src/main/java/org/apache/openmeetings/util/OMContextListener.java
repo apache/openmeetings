@@ -23,7 +23,7 @@ import javax.servlet.ServletContextEvent;
 import org.red5.logging.ContextLoggingListener;
 
 public class OMContextListener extends ContextLoggingListener {
-	
+
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 		super.contextDestroyed(event);

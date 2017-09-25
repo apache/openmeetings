@@ -28,7 +28,7 @@ import org.apache.wicket.model.IModel;
 
 public class RoomTypeDropDown extends DropDownChoice<Type> {
 	private static final long serialVersionUID = 1L;
-	
+
 	public RoomTypeDropDown(String id) {
 		super(id);
 		setChoices(Arrays.asList(Type.values()));
@@ -39,7 +39,7 @@ public class RoomTypeDropDown extends DropDownChoice<Type> {
 			public String getIdValue(Type rt, int index) {
 				return rt.name();
 			}
-			
+
 			@Override
 			public Object getDisplayValue(Type rt) {
 				return getString("room.type." + rt.name());

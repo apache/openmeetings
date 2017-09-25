@@ -93,7 +93,7 @@
 		<servlet-name>gateway</servlet-name>
 		<servlet-class>org.red5.server.net.servlet.AMFGatewayServlet</servlet-class>
 	</servlet>
-	
+
 	<mime-mapping>
 		<extension>inc</extension>
 		<mime-type>text/plain</mime-type>

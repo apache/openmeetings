@@ -13,17 +13,14 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Installation</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
 		<section name="OpenMeetings Installation">
-
 			<p>
 				To update from past versions or migrate see <a href="Upgrade.html">Upgrade</a>.<br/>
 				If you are looking for commercial help have a look at
@@ -36,7 +33,7 @@
 				<p>
 					<i>Note: Openmeetings requires JRE 7/8, JRE 6 is NOT compatible!</i><br />
 					<i>
-						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked 
+						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked
 						archive and type ./admin.sh or admin.bat, please see
 						<a href="CommandLineAdmin.html" target="_blank" rel="nofollow">Command Line Admin</a>
 						for more options
@@ -208,7 +205,7 @@
 				</li>
 				<li>
 					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">
-						OpenMeetings Installation tutorials by Alvaro Bustos for: Ubuntu, Debian, Mint, MacOS X, CentOS, Fedora, 
+						OpenMeetings Installation tutorials by Alvaro Bustos for: Ubuntu, Debian, Mint, MacOS X, CentOS, Fedora,
 						PCLinuxOS, openSUSE and Arch Linux.</a>
 				</li>
 				<li>
@@ -243,7 +240,7 @@
 	<param-name>configuration</param-name>
 	<param-value>DEVELOPMENT</param-value>
 </init-param>
-					]]></source> 
+					]]></source>
 					then access your OM installation
 				</li>
 				<li>If you have Problems with conversion-jobs check your openmeetings log

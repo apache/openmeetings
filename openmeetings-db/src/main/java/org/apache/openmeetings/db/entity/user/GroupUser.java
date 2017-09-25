@@ -64,24 +64,24 @@ public class GroupUser implements IDataProviderEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
 	private User user;
-	
+
 	@Column(name = "inserted")
 	private Date inserted;
-	
+
 	@Column(name = "updated")
 	private Date updated;
-	
+
 	@Column(name = "is_moderator", nullable = false)
 	@Element(data = true, required = false)
 	private boolean moderator;
-	
+
 	public GroupUser() {}
-	
+
 	public GroupUser(Group group, User u) {
 		this.group = group;
 		this.user = u;
 	}
-	
+
 	public Group getGroup() {
 		return group;
 	}

@@ -316,7 +316,7 @@ var APointer = function(wb) {
 				left: o.x - 20
 				, top: o.y - 20
 			});
-			
+
 			canvas.add(group);
 			group.uid = o.uid;
 			group.loaded = !!o.loaded;
@@ -1628,12 +1628,12 @@ var WbArea = (function() {
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId)
 			, wb = $('#wb-area').clone().attr('id', tid);
 		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
-	
+
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
 		refreshTabs();
 		_addCloseBtn(li);
-	
+
 		var wbo = Wb();
 		wbo.init(obj, tid, role);
 		wb.data(wbo);

@@ -21,7 +21,7 @@ package org.apache.openmeetings.core.data.beans.rooms;
 import org.apache.openmeetings.db.entity.room.Room;
 
 public class RoomsList {
-	
+
 	Room[] roomList = null;
 
 	public Room[] getRoomList() {
@@ -30,5 +30,4 @@ public class RoomsList {
 	public void setRoomList(Room[] roomList) {
 		this.roomList = roomList;
 	}
-
 }

@@ -29,7 +29,7 @@ public abstract class BaseScreenEncoder implements IScreenEncoder {
 		BufferedImage img = _img;
 		if (img.getWidth() != size.width || img.getHeight() != size.height) {
 			img = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
-			
+
 			Graphics2D graphics2D = img.createGraphics();
 			graphics2D.setRenderingHint(
 				RenderingHints.KEY_INTERPOLATION,
@@ -39,5 +39,4 @@ public abstract class BaseScreenEncoder implements IScreenEncoder {
 		}
 		return img;
 	}
-	
 }

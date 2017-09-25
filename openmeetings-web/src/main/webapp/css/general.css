@@ -197,11 +197,11 @@ html, body {
 .sort-icon a {
 	width: inherit;
 	height: inherit;
-}	
+}
 .start_step1, .start_step2, .start_step3, .start_step4 {
 	padding-left: 30px;
 	background-position: left top;
-	margin: 5px 0px 5px 0px; 
+	margin: 5px 0px 5px 0px;
 	background-size: contain;
 	background-repeat: no-repeat;
 	display: inline-block;
@@ -300,7 +300,7 @@ html, body {
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
 }
-.ui-progressbar div { 
+.ui-progressbar div {
 	text-align: center;
 	padding-top: 7px;
 	font-weight: bold;

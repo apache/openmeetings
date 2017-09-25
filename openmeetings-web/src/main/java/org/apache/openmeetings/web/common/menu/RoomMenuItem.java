@@ -24,12 +24,12 @@ public class RoomMenuItem extends MenuItem {
 	public RoomMenuItem(String name, String desc) {
 		super(name, desc);
 	}
-	
+
 	public RoomMenuItem(String name, String desc, String icon) {
 		super(name, desc);
 		setIcon(icon);
 	}
-	
+
 	public RoomMenuItem(String name, String desc, boolean enabled) {
 		super(name, desc);
 		setEnabled(enabled);

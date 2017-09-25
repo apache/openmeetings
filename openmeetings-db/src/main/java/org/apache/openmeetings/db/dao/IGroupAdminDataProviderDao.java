@@ -25,7 +25,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 public interface IGroupAdminDataProviderDao<T extends IDataProviderEntity> extends IDataProviderDao<T> {
 	/**
 	 * Get a list of instances of {@link T}
-	 * 
+	 *
 	 * @param search - string search criteria to filter entities
 	 * @param adminId - id of group admin user
 	 * @param start - the start to range to retrieve
@@ -37,7 +37,7 @@ public interface IGroupAdminDataProviderDao<T extends IDataProviderEntity> exten
 
 	/**
 	 * Count the number of instances of {@link T}
-	 * 
+	 *
 	 * @param search - string search criteria to filter entities
 	 * @param adminId - id of group admin user
 	 * @return count of instances satisfying given search criteria

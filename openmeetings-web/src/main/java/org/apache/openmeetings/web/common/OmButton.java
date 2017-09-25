@@ -30,13 +30,13 @@ public abstract class OmButton extends Button {
 		super(id);
 		add(new AjaxEventBehavior("click") {
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			protected void onEvent(AjaxRequestTarget target) {
 				OmButton.this.onClick(target);
 			}
 		});
 	}
-	
-	public abstract void onClick(AjaxRequestTarget target); 
+
+	public abstract void onClick(AjaxRequestTarget target);
 }
