@@ -78,7 +78,7 @@ var VideoSettings = (function() {
 		o.width = 300;
 		o.height = 200;
 		o.mode = 'settings';
-		o.rights = o.rights.join();
+		o.rights = (o.rights || []).join();
 		delete o.keycode;
 		swf = initVideo(vidScroll, 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
