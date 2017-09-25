@@ -65,7 +65,7 @@ public class WhiteboardCache {
 	}
 
 	public boolean contains(Long roomId) {
-		return cache.containsKey(roomId) ? !cache.get(roomId).getWhiteboards().isEmpty() : false;
+		return cache.containsKey(roomId);
 	}
 
 	/*
