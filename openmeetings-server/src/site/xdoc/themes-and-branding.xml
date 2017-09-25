@@ -13,20 +13,15 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Theme and color</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
 	<body>
 		<section name="Available since Apache OpenMeetings 2.0">
-			<p>
-				Themes are only available starting with Openmeetings 2.x.
-				<br />
-				There are also more general client side configuration like port
-				configuration. Those configs are stored in the public/config.xml
-			</p>
+			<p>Themes are only available starting with Openmeetings 2.x.</p>
 		</section>
 		<section name="Editing the theme">
 			<p>To modify default theme used by OM</p>

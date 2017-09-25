@@ -13,15 +13,13 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Webapp Name / Path</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
 		<section name="Customize Openmeetings logo">
 			<p>If you want to set up your logo in Openmeetings header you can do the following:</p>
 			<ol>
@@ -47,20 +45,6 @@
 					(for ex. <tt>mv /opt/red5/webapps/openmeetings /opt/red5/webapps/yourmeetings</tt>)
 				</li>
 				<li>
-					open <tt>/opt/red5/webapps/yourmeetings/public/config.xml</tt>
-					using your favorite text editor (for ex. <tt>vim /opt/red5/webapps/yourmeetings/public/config.xml</tt>)
-					<ul>
-						<li>
-							find and modify <tt>&lt;webAppRootKey&gt;openmeetings&lt;/webAppRootKey&gt;</tt>
-							to be <tt>&lt;webAppRootKey&gt;<strong>yourmeetings</strong>&lt;/webAppRootKey&gt;</tt>
-						</li>
-						<li>
-							find and modify <tt>&lt;httpRootKey&gt;/openmeetings/&lt;/httpRootKey&gt;</tt>
-							to be <tt>&lt;httpRootKey&gt;<strong>/yourmeetings/</strong>&lt;/httpRootKey&gt;</tt>
-						</li>
-					</ul>
-				</li>
-				<li>
 					open <tt>/opt/red5/webapps/root/index.html</tt>
 					using your favorite text editor (for ex. <tt>vim /opt/red5/webapps/root/index.html</tt>)
 					<ul>
@@ -73,7 +57,6 @@
 			</ol>
 			<p>That's it</p>
 		</section>
-
 		<section name="Changing hard-coded application name in string labels">
 			<p>
 				To have
@@ -128,7 +111,6 @@
 			</i>
 			</p>
 		</section>
-
 		<section name="Running multiple Openmeetings instances on the same server">
 			<p>
 				If you want to run multiple Openmeetings instances on the same server i.e. to have<br/>  
@@ -148,5 +130,4 @@
 			</ol>
 		</section>
 	</body>
-
 </document>

@@ -742,10 +742,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.video.wb"><![CDATA[Public Video And Whiteboard Room]]></entry>
 	<entry key="install.wizard.congrats.commercial"><![CDATA[Il existe des sociétés
 		qui offrent un support commercial pour Apache OpenMeetings :]]></entry>
-	<entry key="install.wizard.congrats.config"><![CDATA[modifiez la config du client]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[Entrer dans l'application]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Liste de diffusion]]></entry>
-	<entry key="install.wizard.congrats.port"><![CDATA[Si votre serveur Red5 tourne sur un port différent ou sur un domaine différent]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[La base de données a été modifiée, veuillez s'il vous plaît redémarrer l'application pour éviter des problèmes éventuels]]></entry>
 	<entry key="install.wizard.db.step.check"><![CDATA[Vérification]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>

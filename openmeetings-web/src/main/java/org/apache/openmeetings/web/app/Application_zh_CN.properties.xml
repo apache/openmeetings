@@ -741,10 +741,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.video.only"><![CDATA[Public Video Only Room]]></entry>
 	<entry key="install.room.public.video.wb"><![CDATA[Public Video And Whiteboard Room]]></entry>
 	<entry key="install.wizard.congrats.commercial"><![CDATA[有一些公司也给Apache OpenMeetings提供商业支持：]]></entry>
-	<entry key="install.wizard.congrats.config"><![CDATA[改变客户端的配置值]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[输入应用程序]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[邮件列表]]></entry>
-	<entry key="install.wizard.congrats.port"><![CDATA[如果你的Red5服务器运行在不同的端口或在不同的域]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[Database was changed, please restart application to avoid possible issues]]></entry>
 	<entry key="install.wizard.db.step.check"><![CDATA[检查]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>

@@ -213,13 +213,6 @@ jmx.keystorepass=changeit
 					UNComment <tt>Tomcat with SSL enabled</tt> section
 				</li>
 				<li>
-					Edit <tt>red5/webapps/openmeetings/public/config.xml</tt> and set
-					<br/><source><![CDATA[
-	<protocol>https</protocol>
-	<red5httpport>5443</red5httpport>
-]]></source>
-				</li>
-				<li>
 					Restart red5 and try to connect to
 					<u>https://your.server:5443</u> - you should be redirected to the OpenMeetings
 					app and all access should be via HTTPS and/or RTMPS (close port 5080 to be sure).
@@ -231,15 +224,11 @@ jmx.keystorepass=changeit
 			<ol>
 				<li>HTTPS need to be enabled otherwise tunneling will not work (it can be set up using frontend nginx/apache as well)</li>
 				<li>
-					Edit <tt>red5/webapps/openmeetings/public/config.xml</tt> and set<br/>
+					In Administration->Configuration set<br/>
 					<br/><source><![CDATA[
-	<rtmpsslport>5443</rtmpsslport>
-	<useSSL>yes</useSSL>
-	<proxyType>none</proxyType>
+					flash.secure = true
+					flash.secure.proxy = none
 ]]></source>
-				</li>
-				<li>Please NOTE <tt>rtmpsslport</tt> port set in <tt>red5/webapps/openmeetings/public/config.xml</tt> should match 
-					<tt>https</tt> port set in <tt>red5/conf/red5.properties</tt>
 				</li>
 				<li>Restart red5 and try to connect - your connection should now be made via RTMPS (close port 1935 to be sure)
 				</li>   
@@ -256,15 +245,11 @@ jmx.keystorepass=changeit
 					UNComment <tt>RTMPS</tt> section
 				</li>
 				<li>
-					Edit <tt>red5/webapps/openmeetings/public/config.xml</tt> and set<br/>
+					In Administration->Configuration set<br/>
 					<br/><source><![CDATA[
-	<rtmpsslport>8443</rtmpsslport>
-	<useSSL>yes</useSSL>
-	<proxyType>best</proxyType>
+					flash.secure = true
+					flash.secure.proxy = best
 ]]></source>
-				</li>
-				<li>Please NOTE <tt>rtmps</tt> port set in <tt>red5/conf/red5.properties</tt> should be in sync with the <tt>rtmpsslport</tt> set in 
-					<tt>red5/webapps/openmeetings/public/config.xml</tt>
 				</li>
 				<li>Restart red5 and try to connect - your connection should now be made via RTMPS (close port 1935 to be sure)
 				</li>   

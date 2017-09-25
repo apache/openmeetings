@@ -13,13 +13,12 @@
    limitations under the License.
  -->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Port settings</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
 		<section name="Default Configuration">
 			<ul>
@@ -30,19 +29,11 @@
 				are not in use by OpenMeetings by default.
 			</p>
 		</section>
-
 		<section name="Configure alternative ports">
 			<p>You need to change two files: </p>
 			<ul>
 				<li>Server-Side configuration: $RED5_HOME/conf/red5.properties, you
 					need to restart the red5-service so that changes are online.
-				</li>
-				<li>Client-Side configuration:
-					$RED5_HOME/webapps/openmeetings/public/config.xml, you need to clear your
-					browser cache after changing the file.
-				</li>
-				<li>
-					<tt>Every server side configuration has a client side representative</tt>
 				</li>
 			</ul>
 			<p></p>
@@ -51,23 +42,19 @@
 					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Config-Name </th>
 					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Default-value </th>
 					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in red5.properties </th>
-					<th style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> Name in public/config.xml </th>
 				</tr>
 				<tr>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> HTTP </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 5080 </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> http.port </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> red5httpport </td>
 				</tr>
 				<tr>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> RTMP </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> 1935 </td>
 					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmp.port </td>
-					<td style="border: 1px solid rgb(204, 204, 204); padding: 5px;"> rtmpport </td>
 				</tr>
 			</table>
 		</section>
-
 		<section name="Preventing Firewall issues">
 			<p>A common way of bypassing the firewall is to change HTTP port to 80</p>
 			<p>A short description about the connection mechanism: The
@@ -76,7 +63,6 @@
 				application will fallback to rtmpT.
 			</p>
 		</section>
-
 		<section name="OpenMeetings over SSL">
 			<p>
 				You can run OpenMeetings completely over SSL. See <a href="RTMPSAndHTTPS.html">RTMPSAndHTTPS</a>.

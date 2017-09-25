@@ -696,7 +696,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.profiles"><![CDATA[profili:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.show"><![CDATA[Visualizza report pulizia]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.streams"><![CDATA[Cartella flussi:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.temp"><![CDATA[Files temporanei:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.title"><![CDATA[Report pulizia]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.upload"><![CDATA[Cartella Upload:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Sei sicuro di voler cancellare tutti i file temporanei? Questa operazione non potrà essere annullata.]]></entry>
@@ -743,10 +742,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.video.wb"><![CDATA[Stanza Video e Lavagna Pubblica]]></entry>
 	<entry key="install.wizard.congrats.commercial"><![CDATA[Ci sono alcune aziende 
 			che offrono anche il supporto commerciale per Apache OpenMeetings:]]></entry>
-	<entry key="install.wizard.congrats.config"><![CDATA[modifica il valore di configurazione del client]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[Accedi all'applicazione]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Mailing list]]></entry>
-	<entry key="install.wizard.congrats.port"><![CDATA[Se il server Red5 viene eseguito con una porta diversa o con un dominio diverso]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[Il Database è cambiato, riavvia l'applicazione per evitare possibili problemi]]></entry>
 	<entry key="install.wizard.db.step.check"><![CDATA[Verifica]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>

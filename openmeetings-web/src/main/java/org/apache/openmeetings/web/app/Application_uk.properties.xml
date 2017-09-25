@@ -681,6 +681,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="calendar.googleKey"><![CDATA[Google Calendar API key]]></entry>
 	<entry key="calendar.url"><![CDATA[External CalDAV Calendar URL]]></entry>
 	<entry key="captcha.text"><![CDATA[Captcha text]]></entry>
+	<entry key="convert.errors.file"><![CDATA[The have been errors while processing the file]]></entry>
+	<entry key="convert.errors.file.missing"><![CDATA[File is not found]]></entry>
 	<entry key="current.password"><![CDATA[Current password]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.backup"><![CDATA[backup:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.cleanup"><![CDATA[Очистити]]></entry>
@@ -694,7 +696,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="dashboard.widget.admin.cleanup.profiles"><![CDATA[профілі:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.show"><![CDATA[Показати звіт про файли]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.streams"><![CDATA[Папка streams:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.temp"><![CDATA[Тимчасові файли:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.title"><![CDATA[Звіт про файли]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.upload"><![CDATA[Папка upload:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Ви впевнені, що хочете видалити всі тимчасові файли? Цю операцію не можна буде скасувати.]]></entry>
@@ -741,10 +742,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.video.wb"><![CDATA[Публічна кімната для відео з дошкою]]></entry>
 	<entry key="install.wizard.congrats.commercial"><![CDATA[Це компанії,
 		які так само надають комерційну підтримку Apache OpenMeetings:]]></entry>
-	<entry key="install.wizard.congrats.config"><![CDATA[змініть конфігурацію клієнта]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[Вхід в додаток]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Список розсилки]]></entry>
-	<entry key="install.wizard.congrats.port"><![CDATA[Якщо Ваш Red5-сервер запущений на іншому порту або на іншому домені]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[База даних була змінена, будь ласка, перезапустіть додаток, щоб уникнути можливих проблем]]></entry>
 	<entry key="install.wizard.db.step.check"><![CDATA[Перевірка]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>

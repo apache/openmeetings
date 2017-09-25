@@ -740,11 +740,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.presentation"><![CDATA[Public Presentation Room]]></entry>
 	<entry key="install.room.public.video.only"><![CDATA[Public Video Only Room]]></entry>
 	<entry key="install.room.public.video.wb"><![CDATA[Public Video And Whiteboard Room]]></entry>
-	<entry key="install.wizard.congrats.commercial"><![CDATA[Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:]]></entry>
-	<entry key="install.wizard.congrats.config"><![CDATA[változtassa meg a kliens szükséges konfigurációit]]></entry>
+	<entry key="install.wizard.congrats.commercial"><![CDATA[Néhány cég, akik üzleti támogatást nyújthatnak Apache OpenMeetings:]]>
+	</entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[Belépés az alkalmazásba]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[Levelező lista]]></entry>
-	<entry key="install.wizard.congrats.port"><![CDATA[Ha a Red5 szervert más porton, domainen, vagy más beállításokkal használja]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[Database was changed, please restart application to avoid possible issues]]></entry>
 	<entry key="install.wizard.db.step.check"><![CDATA[Check]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>
