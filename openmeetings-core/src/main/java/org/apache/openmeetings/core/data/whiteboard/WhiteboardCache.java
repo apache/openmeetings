@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 
@@ -36,10 +37,35 @@ public class WhiteboardCache {
 
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
 
+	private static String getDefaultName(Long langId, int num) {
+		StringBuilder sb = new StringBuilder(LabelDao.getString("615", langId));
+		if (num > 0) {
+			sb.append(" ").append(num);
+		}
+		return sb.toString();
+	}
+
+	public Whiteboard add(Long roomId, Long langId) {
+		Whiteboards wbs = get(roomId);
+		Whiteboard wb = add(wbs, langId);
+		return wb;
+	}
+
+	public Whiteboard add(Whiteboards wbs, Long langId) {
+		Whiteboard wb = new Whiteboard(getDefaultName(langId, wbs.count()));
+		long wbId = whiteboardId.getAndIncrement();
+		wbs.getWhiteboards().put(wbId, wb);
+		return wb;
+	}
+
 	public long getNewWhiteboardId(Long roomId, String name) {
 		long wbId = whiteboardId.getAndIncrement();
 		set(roomId, new Whiteboard(name), wbId);
 		return wbId;
+	}
+
+	public boolean contains(Long roomId) {
+		return cache.containsKey(roomId) ? !cache.get(roomId).getWhiteboards().isEmpty() : false;
 	}
 
 	/*

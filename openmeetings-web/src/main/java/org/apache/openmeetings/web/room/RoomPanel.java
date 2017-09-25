@@ -30,10 +30,13 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
@@ -44,6 +47,8 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.room.Whiteboard;
+import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -52,6 +57,7 @@ import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.SOAPLogin;
@@ -459,6 +465,34 @@ public class RoomPanel extends BasePanel {
 					update(c);
 				}
 			}
+			WhiteboardCache wbCache = getBean(WhiteboardCache.class);
+			if (!wbCache.contains(r.getId())) {
+				synchronized (Application.get()) { // TODO
+					if (!wbCache.contains(r.getId())) {
+						if (r.getFiles() != null && !r.getFiles().isEmpty()) {
+							TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
+							for (RoomFile rf : r.getFiles()) {
+								List<BaseFileItem> bfl = files.get(rf.getWbIdx());
+								if (bfl == null) {
+									files.put(rf.getWbIdx(), new ArrayList<>());
+									bfl = files.get(rf.getWbIdx());
+								}
+								bfl.add(rf.getFile());
+							}
+							Whiteboards wbs = wbCache.get(r.getId());
+							for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
+								Whiteboard wb = wbCache.add(wbs, getClient().getUser().getLanguageId());
+								for (BaseFileItem fi : e.getValue()) {
+									sendFileToWb(fi, wb.getWhiteBoardId(), false);
+								}
+							}
+						} else {
+							wbCache.getNewWhiteboardId(r.getId(), getString("615"));
+						}
+						log.debug("Init New Room List");
+					}
+				}
+			}
 		}
 	}
 
@@ -648,27 +682,31 @@ public class RoomPanel extends BasePanel {
 
 	public void sendFileToWb(BaseFileItem fi, boolean clean) {
 		if (activeWbId > -1 && fi.getId() != null && BaseFileItem.Type.Folder != fi.getType()) {
-			if (BaseFileItem.Type.WmlFile == fi.getType()) {
-				getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi);
-			} else {
-				String url = null;
-				PageParameters pp = new PageParameters();
-				pp.add("id", fi.getId())
-					.add("ruid", getBean(WhiteboardCache.class).get(r.getId()).getUid());
-				switch (fi.getType()) {
-					case Video:
-						pp.add("preview", true);
-						url = urlFor(new RoomResourceReference(), pp).toString();
-						break;
-					case Recording:
-						url = urlFor(new JpgRecordingResourceReference(), pp).toString();
-						break;
-					default:
-						url = urlFor(new RoomResourceReference(), pp).toString();
-						break;
-				}
-				getBean(ScopeApplicationAdapter.class).sendToWhiteboard(getClient().getUid(), activeWbId, fi, url, clean);
+			sendFileToWb(fi, activeWbId, clean);
+		}
+	}
+
+	private void sendFileToWb(BaseFileItem fi, long wbId, boolean clean) {
+		if (BaseFileItem.Type.WmlFile == fi.getType()) {
+			getBean(ConferenceLibrary.class).sendToWhiteboard(getClient().getUid(), wbId, fi);
+		} else {
+			String url = null;
+			PageParameters pp = new PageParameters();
+			pp.add("id", fi.getId())
+				.add("ruid", getBean(WhiteboardCache.class).get(r.getId()).getUid());
+			switch (fi.getType()) {
+				case Video:
+					pp.add("preview", true);
+					url = urlFor(new RoomResourceReference(), pp).toString();
+					break;
+				case Recording:
+					url = urlFor(new JpgRecordingResourceReference(), pp).toString();
+					break;
+				default:
+					url = urlFor(new RoomResourceReference(), pp).toString();
+					break;
 			}
+			getBean(ScopeApplicationAdapter.class).sendToWhiteboard(r.getId(), getClient().getUid(), wbId, fi, url, clean);
 		}
 	}
 }

@@ -37,6 +37,10 @@ public class Whiteboards {
 		this.roomId = roomId;
 	}
 
+	public int count() {
+		return whiteboards.size();
+	}
+
 	public Map<Long, Whiteboard> getWhiteboards() {
 		return whiteboards;
 	}

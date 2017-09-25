@@ -192,7 +192,7 @@ public class MainService implements IPendingServiceCallback {
 					sessionManager.update(currentClient);
 
 					scopeApplicationAdapter.sendMessageToCurrentScope("roomConnect", currentClient, false);
-
+					r.setFiles(null); //to prevent stackoverflow
 					return Arrays.<Object>asList(u, r);
 				}
 			}

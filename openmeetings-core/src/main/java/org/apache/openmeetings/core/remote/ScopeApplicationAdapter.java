@@ -1118,7 +1118,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
-			return sendToWhiteboard(client, whiteboardObjParam, whiteboardId);
+			return sendToWhiteboard(client.getRoomId(), client, whiteboardObjParam, whiteboardId);
 		} catch (Exception err) {
 			_log.error("[sendVarsByWhiteboardId]", err);
 			return -1;
@@ -1215,7 +1215,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	public void sendToWhiteboard(String uid, Long wbId, BaseFileItem fi, String url, boolean clean) {
+	public void sendToWhiteboard(Long roomId, String uid, Long wbId, BaseFileItem fi, String url, boolean clean) {
 		StreamClient client = sessionManager.get(uid);
 
 		List<?> wbObject = new ArrayList<>();
@@ -1229,7 +1229,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			case Video:
 			case Recording:
 				wbObject = getMp4WbObject(fi, url);
-				copyFileToRoom(client.getRoomId(), fi);
+				copyFileToRoom(roomId, fi);
 				break;
 			default:
 		}
@@ -1238,28 +1238,19 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			wbClear.put("id", wbId);
 			wbClear.put("param", Arrays.asList("whiteboard", new Date(), "clear", null));
 
-			whiteboardCache.get(client.getRoomId(), wbId).clear();
-			sendToScope(client.getRoomId(), "sendVarsToWhiteboardById", Arrays.asList(null, wbClear));
+			whiteboardCache.get(roomId, wbId).clear();
+			sendToScope(roomId, "sendVarsToWhiteboardById", Arrays.asList(null, wbClear));
 		}
-		sendToWhiteboard(client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
+		sendToWhiteboard(roomId, client, Arrays.asList("whiteboard", new Date(), "draw", wbObject), wbId);
 	}
 
-	private int sendToWhiteboard(StreamClient client, List<?> wbObj, Long wbId) {
+	private int sendToWhiteboard(Long roomId, StreamClient client, List<?> wbObj, Long wbId) {
 		try {
-			// Check if this User is the Mod:
-			if (client == null) {
-				return -1;
-			}
-
 			Map<Integer, Object> whiteboardObj = new HashMap<>();
 			int i = 0;
 			for (Object obj : wbObj) {
 				whiteboardObj.put(i++, obj);
 			}
-
-			Long roomId = client.getRoomId();
-
-			// log.debug("***** sendVars: " + whiteboardObj);
 
 			// Store event in list
 			String action = whiteboardObj.get(2).toString();
@@ -1294,12 +1285,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				whiteboardManager.add(roomId, whiteboardObj, wbId);
 			}
 
+			if (client == null) {
+				return -1;
+			}
+
 			Map<String, Object> sendObject = new HashMap<>();
 			sendObject.put("id", wbId);
 			sendObject.put("param", wbObj);
 
 			boolean showDrawStatus = getWhiteboardDrawStatus();
-
 			sendToScope(roomId, "sendVarsToWhiteboardById", new Object[] { showDrawStatus ? client : null, sendObject });
 		} catch (Exception err) {
 			_log.error("[sendToWhiteboard]", err);

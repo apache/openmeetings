@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.io.File;
@@ -35,8 +34,6 @@ import org.apache.commons.collections4.ComparatorUtils;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardObjectSyncManager;
 import org.apache.openmeetings.core.util.IClientUtil;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -46,7 +43,6 @@ import org.apache.openmeetings.db.dto.room.WhiteboardSyncLockObject;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -77,8 +73,6 @@ public class WhiteboardService implements IPendingServiceCallback {
 	private WhiteboardCache wbCache;
 	@Autowired
 	private SessiondataDao sessionDao;
-	@Autowired
-	private ConfigurationDao cfgDao;
 
 	public boolean getNewWhiteboardId(String name) {
 		try {
@@ -126,21 +120,6 @@ public class WhiteboardService implements IPendingServiceCallback {
 
 			log.debug("getRoomItems: " + roomId);
 			Whiteboards whiteboards = wbCache.get(roomId);
-
-			if (whiteboards.getWhiteboards().isEmpty()) {
-				Long langId = null;
-				{
-					Long userId = currentClient.getUserId();
-					if (userId != null && userId.longValue() < 0) {
-						userId = -userId;
-					}
-					User u = userDao.get(userId);
-					langId = u == null ? cfgDao.getConfValue(CONFIG_DEFAULT_LANG_KEY, Long.class, "1") : u.getLanguageId();
-				}
-				wbCache.getNewWhiteboardId(roomId, LabelDao.getString("615", langId));
-				log.debug("Init New Room List");
-				whiteboards = wbCache.get(roomId);
-			}
 			whiteboards.getWhiteboards().entrySet().stream()
 					.sorted(Map.Entry.<Long, Whiteboard>comparingByKey().reversed())
 					.forEachOrdered(x -> result.put(x.getKey(), x.getValue()));
