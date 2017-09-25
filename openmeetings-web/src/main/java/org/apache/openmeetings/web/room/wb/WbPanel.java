@@ -33,12 +33,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -58,6 +61,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
@@ -164,6 +168,31 @@ public class WbPanel extends AbstractWbPanel {
 
 	@Override
 	void internalWbLoad(StringBuilder sb) {
+		if (!WhiteboardCache.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
+			try {
+				if (WhiteboardCache.tryLock(roomId)) {
+					TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
+					for (RoomFile rf : rp.getRoom().getFiles()) {
+						List<BaseFileItem> bfl = files.get(rf.getWbIdx());
+						if (bfl == null) {
+							files.put(rf.getWbIdx(), new ArrayList<>());
+							bfl = files.get(rf.getWbIdx());
+						}
+						bfl.add(rf.getFile());
+					}
+					Whiteboards _wbs = WhiteboardCache.get(roomId);
+					for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
+						Whiteboard wb = WhiteboardCache.add(roomId, rp.getClient().getUser().getLanguageId());
+						_wbs.setActiveWb(wb.getId());
+						for (BaseFileItem fi : e.getValue()) {
+							sendFileToWb(fi, false);
+						}
+					}
+				}
+			} finally {
+				WhiteboardCache.unlock(roomId);
+			}
+		}
 		Whiteboards wbs = WhiteboardCache.get(roomId);
 		for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
 			Whiteboard wb = entry.getValue();

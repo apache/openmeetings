@@ -92,8 +92,8 @@ import org.apache.openmeetings.web.user.dashboard.RssWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.StartWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.WelcomeWidgetDescriptor;
 import org.apache.openmeetings.web.user.dashboard.admin.AdminWidgetDescriptor;
-import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
+import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.util.GroupLogoResourceReference;
 import org.apache.openmeetings.web.util.ProfileImageResourceReference;
 import org.apache.openmeetings.web.util.UserDashboardPersister;
@@ -136,6 +136,7 @@ import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Member;
 import com.hazelcast.core.MemberAttributeEvent;
@@ -363,7 +364,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public Map<Long, Whiteboards> getWhiteboards() {
+	public IMap<Long, Whiteboards> getWhiteboards() {
 		return hazelcast.getMap(WBS_KEY);
 	}
 

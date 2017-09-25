@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.data.whiteboard;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -30,6 +29,8 @@ import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.wicket.Application;
 
+import com.hazelcast.core.IMap;
+
 /**
  * Memory based cache, configured as singleton in spring configuration
  *
@@ -37,9 +38,17 @@ import org.apache.wicket.Application;
  *
  */
 public class WhiteboardCache {
-	private static Map<Long, Whiteboards> getCache() {
+	private static IMap<Long, Whiteboards> getCache() {
 		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
 		return iapp.getWhiteboards();
+	}
+
+	public static boolean tryLock(Long roomId) {
+		return getCache().tryLock(roomId);
+	}
+
+	public static void unlock(Long roomId) {
+		getCache().unlock(roomId);
 	}
 
 	private static String getDefaultName(Long langId, int num) {
@@ -48,6 +57,10 @@ public class WhiteboardCache {
 			sb.append(" ").append(num);
 		}
 		return sb.toString();
+	}
+
+	public static boolean contains(Long roomId) {
+		return getCache().containsKey(roomId);
 	}
 
 	public static Whiteboards get(Long roomId) {

@@ -37,6 +37,8 @@ import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.hazelcast.core.IMap;
+
 public interface IApplication {
 	<T> T getOmBean(Class<T> clazz);
 	<T> T _getOmBean(Class<T> clazz);
@@ -75,5 +77,5 @@ public interface IApplication {
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);
 
-	Map<Long, Whiteboards> getWhiteboards();
+	IMap<Long, Whiteboards> getWhiteboards();
 }

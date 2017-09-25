@@ -44,6 +44,11 @@
 			<artifactId>openmeetings-util</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.wicketstuff</groupId>
+			<artifactId>wicketstuff-datastore-hazelcast</artifactId>
+			<version>${wickets.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.openjpa</groupId>
 			<artifactId>openjpa</artifactId>
 			<version>${openjpa.version}</version>
