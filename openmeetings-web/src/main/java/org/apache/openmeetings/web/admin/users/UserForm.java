@@ -195,7 +195,7 @@ public class UserForm extends AdminBaseForm<User> {
 			// FIXME update feedback with the error details
 			log.error("[onSaveSubmit]: ", e);
 		}
-		setModelObject(u);
+		setModelObject(getBean(UserDao.class).get(u.getId()));
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
