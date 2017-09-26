@@ -86,6 +86,6 @@ public class RoomsPanel extends AdminBasePanel {
 		add(container.getLinks());
 		add(navigator);
 
-		add(form = new RoomForm("form", listContainer, new Room()));
+		add(form = new RoomForm("form", listContainer, null));
 	}
 }

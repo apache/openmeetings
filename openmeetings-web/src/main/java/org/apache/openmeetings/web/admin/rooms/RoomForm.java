@@ -119,7 +119,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private IModel<Long> wbIdx = Model.of(0L);
 
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
-		super(id, new CompoundPropertyModel<>(room));
+		super(id, new CompoundPropertyModel<>(room == null ? newRoom() : room));
 		this.roomList = roomList;
 		setOutputMarkupId(true);
 	}
@@ -450,7 +450,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		// TODO Auto-generated method stub
 	}
 
-	private Room newRoom() {
+	private static Room newRoom() {
 		Room r = new Room();
 		r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.MicrophoneStatus)));
 		return r;
@@ -488,7 +488,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(RoomDao.class).delete(getModelObject(), getUserId());
 		target.add(roomList);
-		setModelObject(new Room());
+		setModelObject(newRoom());
 		updateView(target);
 	}
 
