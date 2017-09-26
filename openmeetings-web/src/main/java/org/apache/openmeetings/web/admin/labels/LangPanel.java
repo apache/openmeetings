@@ -96,18 +96,13 @@ public class LangPanel extends AdminBasePanel {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					protected LabelDao getDao() {
-						return (LabelDao)super.getDao();
-					}
-
-					@Override
 					public long size() {
-						return getDao().count(language.getValue(), search);
+						return LabelDao.count(language.getValue(), search);
 					}
 
 					@Override
 					public Iterator<? extends StringLabel> iterator(long first, long count) {
-						return getDao().get(language.getValue(), search, (int)first, (int)count, getSort()).iterator();
+						return LabelDao.get(language.getValue(), search, (int)first, (int)count, getSort()).iterator();
 					}
 				}) {
 			private static final long serialVersionUID = 1L;

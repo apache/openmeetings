@@ -281,7 +281,7 @@ var Pointer = function(wb, s) {
 	};
 }
 var APointer = function(wb) {
-	var pointer = Base();
+	let pointer = Base();
 	pointer.user = '';
 	pointer.create = function(canvas, o) {
 		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
@@ -347,9 +347,12 @@ var APointer = function(wb) {
 		});
 	}
 	pointer.mouseUp = function(o) {
-		var canvas = this;
-		var ptr = canvas.getPointer(o.e);
-		var obj = {
+		let canvas = this
+			, ptr = canvas.getPointer(o.e);
+		if (pointer.user === '') {
+			pointer.user = $('.room.sidebar.left .user.list .current .name').text();
+		}
+		let obj = {
 			type: 'pointer'
 			, x: ptr.x
 			, y: ptr.y
@@ -363,7 +366,6 @@ var APointer = function(wb) {
 			canvas.selection = false;
 			canvas.on('mouse:up', pointer.mouseUp);
 		});
-		pointer.user = $('.room.sidebar.left .user.list .current .name').text();
 	}
 	pointer.deactivate = function() {
 		wb.eachCanvas(function(canvas) {

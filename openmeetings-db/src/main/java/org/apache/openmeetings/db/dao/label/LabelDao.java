@@ -217,7 +217,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		throw new RuntimeException("Should not be used");
 	}
 
-	public List<StringLabel> get(Locale l, final String search, int start, int count, final SortParam<String> sort) {
+	public static List<StringLabel> get(Locale l, final String search, int start, int count, final SortParam<String> sort) {
 		List<StringLabel> result = getLabels(l, search);
 		if (sort != null) {
 			Collections.sort(result, new LabelComparator(sort));
@@ -235,7 +235,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		throw new RuntimeException("Should not be used");
 	}
 
-	public long count(Locale l, final String search) {
+	public static long count(Locale l, final String search) {
 		return getLabels(l, search).size();
 	}
 
@@ -244,7 +244,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		throw new RuntimeException("Should not be used");
 	}
 
-	public StringLabel update(Locale l, StringLabel entity) throws Exception {
+	public static StringLabel update(Locale l, StringLabel entity) throws Exception {
 		List<StringLabel> labels = labelCache.get(l);
 		if (!labels.contains(entity)) {
 			labels.add(entity);
@@ -259,7 +259,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		throw new RuntimeException("Should not be used");
 	}
 
-	public void delete(Locale l, StringLabel entity) throws Exception {
+	public static void delete(Locale l, StringLabel entity) throws Exception {
 		List<StringLabel> labels = labelCache.get(l);
 		if (labels.contains(entity)) {
 			labels.remove(entity);
