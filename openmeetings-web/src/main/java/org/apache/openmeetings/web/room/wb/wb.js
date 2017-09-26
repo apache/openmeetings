@@ -48,6 +48,9 @@ var Player = (function() {
 				video.visible = false;
 				poster.width = _o.width;
 				poster.height = _o.height;
+				if (typeof _o.status === 'undefined') {
+					_o.status = {paused: true};
+				}
 				let playable = false;
 				let trg = new fabric.Triangle({
 					left: 2.7 * rad
