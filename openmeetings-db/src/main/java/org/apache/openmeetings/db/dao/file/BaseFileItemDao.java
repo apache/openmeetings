@@ -21,14 +21,13 @@ package org.apache.openmeetings.db.dao.file;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.db.entity.file.FileItemLog;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -36,36 +35,59 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class FileItemLogDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(FileItemLogDao.class, webAppRootKey);
+public class BaseFileItemDao {
+	private static final Logger log = Red5LoggerFactory.getLogger(BaseFileItemDao.class, webAppRootKey);
 	@PersistenceContext
-	private EntityManager em;
+	protected EntityManager em;
 
-	public long countErrors(BaseFileItem f) {
-		return em.createNamedQuery("countErrorFileLogsByFile", Long.class).setParameter("fileId", f.getId())
-				.getSingleResult();
+	public BaseFileItem get(String hash) {
+		log.debug("getByHash() started");
+		BaseFileItem f = null;
+		TypedQuery<BaseFileItem> query = em.createNamedQuery("getFileByHash", BaseFileItem.class);
+		query.setParameter("hash", hash);
+
+		try {
+			f = query.getSingleResult();
+		} catch (NoResultException ex) {
+			//no-op
+		}
+		return f;
 	}
 
-	public List<FileItemLog> get(BaseFileItem f) {
-		return em.createNamedQuery("getFileLogsByFile", FileItemLog.class).setParameter("fileId", f.getId())
-				.getResultList();
+	public BaseFileItem get(Long id) {
+		BaseFileItem f = null;
+		if (id != null && id > 0) {
+			TypedQuery<BaseFileItem> query = em.createNamedQuery("getFileById", BaseFileItem.class)
+					.setParameter("id", id);
+
+			try {
+				f = query.getSingleResult();
+			} catch (NoResultException ex) {
+			}
+		} else {
+			log.info("[get] " + "Info: No id given");
+		}
+		return f;
 	}
 
 	public void delete(BaseFileItem f) {
-		em.createNamedQuery("deleteErrorFileLogsByFile").setParameter("fileId", f.getId())
-				.executeUpdate();
+		if (f == null || f.getId() == null) {
+			return;
+		}
+		f.setDeleted(true);
+		f.setUpdated(new Date());
+
+		_update(f);
 	}
 
-	public FileItemLog add(String name, BaseFileItem f, ConverterProcessResult returnMap) {
-		log.trace("Adding log: {}, {}, {}", name, f, returnMap);
-		FileItemLog log = new FileItemLog();
-		log.setInserted(new Date());
-		log.setExitCode(returnMap.getExitCode());
-		log.setFileId(f.getId());
-		log.setMessage(returnMap.buildLogMessage());
-		log.setName(name);
-
-		em.persist(log);
-		return log;
+	public BaseFileItem _update(BaseFileItem f) {
+		if (f.getId() == null) {
+			f.setInserted(new Date());
+			em.persist(f);
+		} else {
+			f.setUpdated(new Date());
+			f = em.merge(f);
+		}
+		return f;
 	}
 }

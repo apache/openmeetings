@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicati
 import java.util.Set;
 
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -55,6 +56,10 @@ public abstract class BaseWebService {
 
 	static RoomDao getRoomDao() {
 		return getBean(RoomDao.class);
+	}
+
+	static FileItemDao getFileDao() {
+		return getBean(FileItemDao.class);
 	}
 
 	static Set<Right> getRights(Long id) {

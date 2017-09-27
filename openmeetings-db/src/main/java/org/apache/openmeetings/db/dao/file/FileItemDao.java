@@ -27,9 +27,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -48,10 +46,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class FileItemDao {
+public class FileItemDao extends BaseFileItemDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(FileItemDao.class, webAppRootKey);
-	@PersistenceContext
-	private EntityManager em;
 
 	public FileItem add(String fileName, Long parentId, Long ownerId, Long roomId, Long insertedBy,
 			Type type, String externalId, String externalType) {
@@ -147,33 +143,14 @@ public class FileItemDao {
 	}
 
 	public FileItem getByHash(String hash) {
-		log.debug("getByHash() started");
-		FileItem f = null;
-		TypedQuery<FileItem> query = em.createNamedQuery("getFileByHash", FileItem.class);
-		query.setParameter("hash", hash);
-
-		try {
-			f = query.getSingleResult();
-		} catch (NoResultException ex) {
-			//no-op
-		}
-		return f;
+		BaseFileItem bf = super.get(hash);
+		return bf instanceof FileItem ? (FileItem)bf : null;
 	}
 
+	@Override
 	public FileItem get(Long id) {
-		FileItem f = null;
-		if (id != null && id > 0) {
-			TypedQuery<FileItem> query = em.createNamedQuery("getFileById", FileItem.class)
-					.setParameter("id", id);
-
-			try {
-				f = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-		} else {
-			log.info("[get] " + "Info: No id given");
-		}
-		return f;
+		BaseFileItem bf = super.get(id);
+		return bf instanceof FileItem ? (FileItem)bf : null;
 	}
 
 	public FileItem get(String externalId, String externalType) {
@@ -201,13 +178,6 @@ public class FileItemDao {
 		return em.createNamedQuery("getAllFiles", FileItem.class).getResultList();
 	}
 
-	public void delete(FileItem f) {
-		f.setDeleted(true);
-		f.setUpdated(new Date());
-
-		update(f);
-	}
-
 	public void delete(String externalId, String externalType) {
 		log.debug("delete started");
 
@@ -230,14 +200,7 @@ public class FileItemDao {
 	}
 
 	public FileItem update(FileItem f) {
-		if (f.getId() == null) {
-			f.setInserted(new Date());
-			em.persist(f);
-		} else {
-			f.setUpdated(new Date());
-			f = em.merge(f);
-		}
-		return f;
+		return (FileItem)super._update(f);
 	}
 
 	private void updateChilds(FileItem f) {

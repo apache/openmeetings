@@ -27,13 +27,12 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -49,45 +48,21 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class RecordingDao {
+public class RecordingDao extends BaseFileItemDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingDao.class, webAppRootKey);
 
-	@PersistenceContext
-	private EntityManager em;
 	@Autowired
 	private UserDao userDao;
 
-	public Recording get(Long recordingId) {
-		try {
-			TypedQuery<Recording> query = em.createNamedQuery("getRecordingById", Recording.class);
-			query.setParameter("id", recordingId);
-
-			Recording recording = null;
-			try {
-				recording = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-			return recording;
-		} catch (Exception ex2) {
-			log.error("[get]: ", ex2);
-		}
-		return null;
+	@Override
+	public Recording get(Long id) {
+		BaseFileItem bf = super.get(id);
+		return bf instanceof Recording ? (Recording)bf : null;
 	}
 
 	public Recording getByHash(String hash) {
-		try {
-			TypedQuery<Recording> query = em.createNamedQuery("getRecordingByHash", Recording.class);
-			query.setParameter("hash", hash);
-
-			try {
-				return query.getSingleResult();
-			} catch (NoResultException ex) {
-				// noop
-			}
-		} catch (Exception ex2) {
-			log.error("[getByHash]: ", ex2);
-		}
-		return null;
+		BaseFileItem bf = super.get(hash);
+		return bf instanceof Recording ? (Recording)bf : null;
 	}
 
 	public List<Recording> getByExternalId(String externalId, String externalType) {
@@ -201,34 +176,8 @@ public class RecordingDao {
 		}
 	}
 
-	public boolean delete(Recording f) {
-		if (f == null || f.getId() == null) {
-			return false;
-		}
-		f.setDeleted(true);
-		update(f);
-		return true;
-	}
-
 	public Recording update(Recording f) {
-		try {
-			if (f.getId() == null) {
-				if (f.getInserted() == null) {
-					//required to preserve date while import
-					f.setInserted(new Date());
-				}
-				em.persist(f);
-			} else {
-				f.setUpdated(new Date());
-				if (!em.contains(f)) {
-					f = em.merge(f);
-				}
-			}
-
-		} catch (Exception ex2) {
-			log.error("[update]: ", ex2);
-		}
-		return f;
+		return (Recording)_update(f);
 	}
 
 	public void resetProcessingStatus() {
