@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -126,6 +127,26 @@ public class RoomWebService extends BaseWebService {
 		}
 	}
 
+	/*
+	 * This method is required to set additional fields on room sub-objects
+	 * for ex: RoomFile.roomId
+	 */
+	private Room updateRtoRoom(Room r, Long userId) {
+		if (r.getFiles() == null) {
+			r.setFiles(new ArrayList<>());
+		}
+		RoomDao roomDao = getRoomDao();
+		if (r.getId() == null) {
+			List<RoomFile> files = r.getFiles();
+			r.setFiles(null);
+			r = roomDao.update(r, userId);
+			r.setFiles(files);
+		}
+		for (RoomFile rf : r.getFiles()) {
+			rf.setRoomId(r.getId());
+		}
+		return roomDao.update(r, userId);
+	}
 	/**
 	 * Checks if a room with this exteralRoomId + externalRoomType does exist,
 	 * if yes it returns the room id if not, it will create the room and then
@@ -164,10 +185,10 @@ public class RoomWebService extends BaseWebService {
 					if (room == null) {
 						return null;
 					} else {
-						r = room.get();
+						r = room.get(getFileDao());
 						r.setExternalType(externalType);
 						r.setExternalId(externalId);
-						r = roomDao.update(r, userId);
+						r = updateRtoRoom(r, userId);
 						return new RoomDTO(r);
 					}
 				} else {
@@ -203,8 +224,8 @@ public class RoomWebService extends BaseWebService {
 			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				Room r = room.get();
-				r = getRoomDao().update(r, userId);
+				Room r = room.get(getFileDao());
+				r = updateRtoRoom(r, userId);;
 				return new RoomDTO(r);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26

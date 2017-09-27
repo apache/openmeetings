@@ -19,23 +19,14 @@
 package org.apache.openmeetings.test.webservice;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import javax.imageio.ImageIO;
-import javax.ws.rs.core.MediaType;
 
-import org.apache.cxf.jaxrs.ext.multipart.Attachment;
-import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.util.NonJenkinsTests;
@@ -43,13 +34,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 public class TestFileService extends AbstractWebServiceTest {
-	public final static String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
 
 	@Test
 	@Category(NonJenkinsTests.class)
 	public void addFileTest() throws IOException {
-		ServiceResult r = login();
-
 		File img = null;
 		try {
 			img = File.createTempFile("omtest", ".jpg");
@@ -59,24 +47,10 @@ public class TestFileService extends AbstractWebServiceTest {
 			Graphics g = image.getGraphics();
 			g.drawString("Hello World!!!", 10, 20);
 			ImageIO.write(image, "jpg", img);
-			try (InputStream is = new FileInputStream(img)) {
-				FileItemDTO file = new FileItemDTO();
-				file.setName("test.txt");
-				file.setHash(UUID.randomUUID().toString());
-				file.setType(BaseFileItem.Type.Presentation);
-				List<Attachment> atts = new ArrayList<>();
-				atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));
-				atts.add(new Attachment("stream", MediaType.APPLICATION_OCTET_STREAM, is));
-				FileItemDTO f1 = getClient(FILE_SERVICE_URL)
-						.path("/")
-						.query("sid", r.getMessage())
-						.type(MediaType.MULTIPART_FORM_DATA_TYPE).postCollection(atts, Attachment.class, FileItemDTO.class);
-				assertNotNull("Valid FileItem should be returned", f1);
-				assertNotNull("Valid FileItem should be returned", f1.getId());
-				assertEquals("Type should be Image", BaseFileItem.Type.Image, f1.getType());
-				assertEquals("Width should be determined", width, f1.getWidth());
-				assertEquals("Height should be Image", height, f1.getHeight());
-			}
+			CallResult<FileItemDTO> cr = createVerifiedFile(img);
+			assertEquals("Type should be Image", BaseFileItem.Type.Image, cr.getObj().getType());
+			assertEquals("Width should be determined", width, cr.getObj().getWidth());
+			assertEquals("Height should be Image", height, cr.getObj().getHeight());
 		} finally {
 			if (img != null && img.exists()) {
 				img.delete();

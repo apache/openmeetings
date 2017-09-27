@@ -61,9 +61,7 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getRecordingById", query = "SELECT f FROM Recording f WHERE f.id = :id")
-	, @NamedQuery(name = "getRecordingByHash", query = "SELECT f FROM Recording f WHERE f.hash = :hash")
-	, @NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM Recording c, User u "
+	@NamedQuery(name = "getRecordingsByExternalUser", query = "SELECT c FROM Recording c, User u "
 			+ "WHERE c.insertedBy = u.id AND u.externalId = :externalId  AND u.externalType = :externalType "
 			+ "AND c.deleted = false")
 	, @NamedQuery(name = "getRecordingsPublic", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.ownerId IS NULL "

@@ -50,7 +50,9 @@ import org.simpleframework.xml.Element;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getAllFileItemsForRoom", query = "SELECT f FROM BaseFileItem f"
+	@NamedQuery(name = "getFileById", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.id = :id")
+	, @NamedQuery(name = "getFileByHash", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.hash = :hash")
+	, @NamedQuery(name = "getAllFileItemsForRoom", query = "SELECT f FROM BaseFileItem f"
 			+ " WHERE f.deleted = false AND f.type <> :folder"
 			+ " AND (f.roomId IS NULL OR f.roomId = :roomId)"
 			+ " AND (f.groupId IS NULL OR f.groupId IN :groups)"

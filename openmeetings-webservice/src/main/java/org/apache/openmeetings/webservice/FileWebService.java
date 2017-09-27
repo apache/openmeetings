@@ -72,10 +72,6 @@ import org.slf4j.Logger;
 public class FileWebService extends BaseWebService {
 	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, webAppRootKey);
 
-	private static FileItemDao getDao() {
-		return getBean(FileItemDao.class);
-	}
-
 	/**
 	 * deletes files or folders based on it id
 	 *
@@ -92,7 +88,7 @@ public class FileWebService extends BaseWebService {
 		try {
 			Sessiondata sd = check(sid);
 
-			FileItemDao dao = getDao();
+			FileItemDao dao = getFileDao();
 			FileItem f = dao.get(id);
 			if (f == null) {
 				return new ServiceResult(-1L, "Bad id", Type.ERROR);
@@ -135,7 +131,7 @@ public class FileWebService extends BaseWebService {
 	{
 		try {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				FileItemDao dao = getDao();
+				FileItemDao dao = getFileDao();
 				FileItem f = dao.get(externalId, externalType);
 				dao.delete(f);
 				return new ServiceResult(f.getId(), "Deleted", Type.SUCCESS);
@@ -191,7 +187,7 @@ public class FileWebService extends BaseWebService {
 						throw new ServiceException(result.getLogMessage());
 					}
 				} else {
-					f = getDao().update(f);
+					f = getFileDao().update(f);
 				}
 				return new FileItemDTO(f);
 			} else {
@@ -229,7 +225,7 @@ public class FileWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
 				log.debug("roomId " + roomId);
 
-				FileItemDao dao = getDao();
+				FileItemDao dao = getFileDao();
 				FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 				// Home File List
@@ -280,7 +276,7 @@ public class FileWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
 				log.debug("getRoomByParent " + parentId);
 
-				FileItemDao dao = getDao();
+				FileItemDao dao = getFileDao();
 				List<FileItem> list = new ArrayList<>();
 				if (parentId < 0) {
 					if (parentId == -1) {
@@ -328,7 +324,7 @@ public class FileWebService extends BaseWebService {
 				// FIXME TODO: check if this user is allowed to change this file
 
 				log.debug("rename " + id);
-				FileItem f = getDao().rename(id, name);
+				FileItem f = getFileDao().rename(id, name);
 				return f == null ? null : new FileItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26
@@ -367,7 +363,7 @@ public class FileWebService extends BaseWebService {
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
 				// FIXME TODO A test is required that checks if the user is allowed to move the file
 				log.debug("move " + id);
-				FileItem f = getDao().move(id, parentId, userId, roomId);
+				FileItem f = getFileDao().move(id, parentId, userId, roomId);
 				return f == null ? null : new FileItemDTO(f);
 			} else {
 				throw new ServiceException("Insufficient permissions"); //TODO code -26

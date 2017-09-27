@@ -33,9 +33,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.openmeetings.db.dao.file.BaseFileItemDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 @XmlRootElement
@@ -62,6 +64,7 @@ public class RoomDTO implements Serializable {
 	private boolean waitForRecording;
 	private boolean audioOnly;
 	private Set<RoomElement> hiddenElements = new HashSet<>();
+	private List<RoomFileDTO> files = new ArrayList<>();
 
 	public RoomDTO() {}
 
@@ -86,9 +89,10 @@ public class RoomDTO implements Serializable {
 		waitForRecording = r.isWaitForRecording();
 		audioOnly = r.isAudioOnly();
 		hiddenElements = r.getHiddenElements();
+		files = RoomFileDTO.get(r.getFiles());
 	}
 
-	public Room get() {
+	public Room get(BaseFileItemDao fileDao) {
 		Room r = new Room();
 		r.setId(id);
 		r.setName(name);
@@ -109,6 +113,7 @@ public class RoomDTO implements Serializable {
 		r.setWaitForRecording(waitForRecording);
 		r.setAudioOnly(audioOnly);
 		r.setHiddenElements(hiddenElements);
+		r.setFiles(RoomFileDTO.get(id, files, fileDao));
 		return r;
 	}
 
@@ -272,6 +277,14 @@ public class RoomDTO implements Serializable {
 		this.closed = closed;
 	}
 
+	public List<RoomFileDTO> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<RoomFileDTO> files) {
+		this.files = files;
+	}
+
 	public static List<RoomDTO> list(List<Room> l) {
 		List<RoomDTO> rList = new ArrayList<>();
 		if (l != null) {
@@ -302,8 +315,8 @@ public class RoomDTO implements Serializable {
 		r.demo = o.optBoolean("demo", false);
 		r.closed = o.optBoolean("closed", false);
 		r.demoTime = optInt(o, "demoTime");
-		r.externalId = o.optString("externalId");
-		r.externalType = o.optString("externalType");
+		r.externalId = o.optString("externalId", null);
+		r.externalType = o.optString("externalType", null);
 		r.redirectUrl = o.optString("redirectUrl");
 		r.moderated = o.optBoolean("moderated", false);
 		r.allowUserQuestions = o.optBoolean("allowUserQuestions", false);
@@ -311,6 +324,12 @@ public class RoomDTO implements Serializable {
 		r.waitForRecording = o.optBoolean("waitForRecording", false);
 		r.audioOnly = o.optBoolean("audioOnly", false);
 		r.getHiddenElements().addAll(optEnumList(RoomElement.class, o.optJSONArray("hiddenElements")));
+		JSONArray fa = o.optJSONArray("files");
+		if (fa != null) {
+			for (int i = 0; i < fa.length(); ++i) {
+				r.getFiles().add(RoomFileDTO.get(fa.getJSONObject(i)));
+			}
+		}
 		return r;
 	}
 

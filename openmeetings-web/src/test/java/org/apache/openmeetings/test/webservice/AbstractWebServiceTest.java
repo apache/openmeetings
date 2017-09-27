@@ -25,19 +25,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.catalina.LifecycleState;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.cxf.jaxrs.client.WebClient;
+import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.test.AbstractJUnitDefaults;
 import org.apache.openmeetings.web.app.WebSession;
@@ -54,6 +63,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	public final static String BASE_SERVICES_URL = "http://localhost:8080" + CONTEXT + "/services";
 	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
 	public final static String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
+	public final static String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
 	public final static String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public final static long TIMEOUT = 5 * 60 * 1000;
 	protected WicketTester tester;
@@ -132,5 +142,45 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 				.post(new Form().param("user", dto.toString()).param("confirm", "" + false), UserDTO.class);
 		Assert.assertNotNull(user.getId());
 		u.setId(user.getId());
+	}
+
+	public CallResult<FileItemDTO> createVerifiedFile(File fsFile) throws IOException {
+		ServiceResult r = login();
+
+		FileItemDTO f1 = null;
+		try (InputStream is = new FileInputStream(fsFile)) {
+			FileItemDTO file = new FileItemDTO();
+			file.setName("test.txt");
+			file.setHash(UUID.randomUUID().toString());
+			file.setType(BaseFileItem.Type.Presentation);
+			List<Attachment> atts = new ArrayList<>();
+			atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));
+			atts.add(new Attachment("stream", MediaType.APPLICATION_OCTET_STREAM, is));
+			f1 = getClient(FILE_SERVICE_URL)
+					.path("/")
+					.query("sid", r.getMessage())
+					.type(MediaType.MULTIPART_FORM_DATA_TYPE).postCollection(atts, Attachment.class, FileItemDTO.class);
+			assertNotNull("Valid FileItem should be returned", f1);
+			assertNotNull("Valid FileItem should be returned", f1.getId());
+		}
+		return new CallResult<>(r.getMessage(), f1);
+	}
+
+	public static class CallResult<T> {
+		private final String sid;
+		private final T obj;
+
+		public CallResult(String sid, T obj) {
+			this.sid = sid;
+			this.obj = obj;
+		}
+
+		public String getSid() {
+			return sid;
+		}
+
+		public T getObj() {
+			return obj;
+		}
 	}
 }

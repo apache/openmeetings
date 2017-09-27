@@ -295,7 +295,7 @@ public class CalendarWebService extends BaseWebService {
 			//TODO check if objects passed with IDs are correct
 			if (AuthLevelUtil.hasUserLevel(u.getRights())) {
 				AppointmentDao dao = getDao();
-				Appointment a = appointment.get(userDao, dao, u);
+				Appointment a = appointment.get(userDao, getFileDao(), dao, u);
 				if (a.getRoom().getId() != null) {
 					if (a.getRoom().isAppointment()) {
 						a.getRoom().setIspublic(false);

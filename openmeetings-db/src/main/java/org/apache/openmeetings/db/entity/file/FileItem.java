@@ -29,8 +29,6 @@ import org.simpleframework.xml.Root;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getAllFiles", query = "SELECT f FROM FileItem f ORDER BY f.id")
-	, @NamedQuery(name = "getFileById", query = "SELECT f FROM FileItem f WHERE f.id = :id")
-	, @NamedQuery(name = "getFileByHash", query = "SELECT f FROM FileItem f WHERE f.hash = :hash")
 	, @NamedQuery(name = "getFilesByRoom", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.roomId = :roomId " +
 			"AND f.ownerId IS NULL AND f.parentId IS NULL ORDER BY f.type ASC, f.name ")
 	, @NamedQuery(name = "getFilesByOwner", query = "SELECT f FROM FileItem f WHERE f.deleted = false AND f.ownerId = :ownerId "

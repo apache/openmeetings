@@ -166,6 +166,7 @@
 	<bean id="conferenceLogDao" class="org.apache.openmeetings.db.dao.log.ConferenceLogDao" />
 	<bean id="emailManagement" class="org.apache.openmeetings.service.mail.EmailManager" />
 	<bean id="fileItemLogDao" class="org.apache.openmeetings.db.dao.file.FileItemLogDao" />
+	<bean id="baseFileItemDao" class="org.apache.openmeetings.db.dao.file.BaseFileItemDao" />
 	<bean id="fileItemDao" class="org.apache.openmeetings.db.dao.file.FileItemDao" />
 	<bean id="recordingDao" class="org.apache.openmeetings.db.dao.record.RecordingDao" />
 	<bean id="recordingMetaDataDao" class="org.apache.openmeetings.db.dao.record.RecordingMetaDataDao" />
