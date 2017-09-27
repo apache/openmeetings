@@ -312,8 +312,8 @@ public class RoomMenuPanel extends Panel {
 		PollDao pollDao = getBean(PollDao.class);
 		boolean pollExists = pollDao.hasPoll(r.getId());
 		User u = room.getClient().getUser();
-		boolean notExternalUser = u.getType() != User.Type.external && u.getType() != User.Type.contact;
-		exitMenuItem.setEnabled(notExternalUser);//TODO check this
+		boolean notExternalUser = u.getType() != User.Type.contact;
+		exitMenuItem.setEnabled(notExternalUser);
 		filesMenu.setEnabled(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
 		actionsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
