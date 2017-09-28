@@ -19,14 +19,13 @@
 package org.apache.openmeetings.cli;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.commons.cli.Option;
 
 public class OmOption extends Option {
 	private static final long serialVersionUID = 1L;
 	private String group = null;
-	private Map<String, Boolean> optional = null;
+	private HashMap<String, Boolean> optional = null;
 	private int order = 0;
 	private String helpPrefix = "";
 

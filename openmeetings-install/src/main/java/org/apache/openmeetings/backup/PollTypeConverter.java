@@ -33,6 +33,6 @@ public class PollTypeConverter extends OmConverter<RoomPoll.Type> {
 	@Override
 	public void write(OutputNode node, RoomPoll.Type value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getId());
+		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}
 }

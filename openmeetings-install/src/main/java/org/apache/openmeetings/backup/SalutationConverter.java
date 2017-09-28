@@ -31,6 +31,6 @@ public class SalutationConverter extends OmConverter<Salutation> {
 	@Override
 	public void write(OutputNode node, Salutation value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getId());
+		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}
 }

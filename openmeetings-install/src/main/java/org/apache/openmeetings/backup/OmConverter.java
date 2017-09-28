@@ -33,7 +33,7 @@ public abstract class OmConverter<T> implements Converter<T> {
 	static long getLong(String value, long def) {
 		long result = def;
 		try {
-			result = Long.valueOf(value).longValue();
+			result = Long.parseLong(value);
 		} catch (Exception e) {
 			//no op
 		}
@@ -47,7 +47,7 @@ public abstract class OmConverter<T> implements Converter<T> {
 	static int getInt(String value, int def) {
 		int result = def;
 		try {
-			result = Integer.valueOf(value).intValue();
+			result = Integer.parseInt(value);
 		} catch (Exception e) {
 			//no op
 		}

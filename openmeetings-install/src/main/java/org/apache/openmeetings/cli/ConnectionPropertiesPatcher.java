@@ -49,7 +49,7 @@ public abstract class ConnectionPropertiesPatcher {
 	protected ConnectionProperties props;
 
 	public static ConnectionPropertiesPatcher getPatcher(ConnectionProperties props) {
-		ConnectionPropertiesPatcher patcher = null;
+		ConnectionPropertiesPatcher patcher;
 		switch (props.getDbType()) {
 			case db2:
 				patcher = new Db2Patcher();
@@ -181,7 +181,7 @@ public abstract class ConnectionPropertiesPatcher {
 		String prop = tokens[idx].trim();
 		if (prop.startsWith(name)) {
 			//From "Username=root" getting only "root"
-			return prop.substring(prop.indexOf("=") + 1);
+			return prop.substring(prop.indexOf('=') + 1);
 		}
 		return null;
 	}

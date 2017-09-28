@@ -115,13 +115,14 @@ public abstract class BaseConverter {
 	}
 
 	protected String formatMillis(long millis) {
-		long hours = TimeUnit.MILLISECONDS.toHours(millis);
-		millis -= TimeUnit.HOURS.toMillis(hours);
-		long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-		millis -= TimeUnit.MINUTES.toMillis(minutes);
-		long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-		millis -= TimeUnit.SECONDS.toMillis(seconds);
-		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
+		long m = millis;
+		long hours = TimeUnit.MILLISECONDS.toHours(m);
+		m -= TimeUnit.HOURS.toMillis(hours);
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(m);
+		m -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = TimeUnit.MILLISECONDS.toSeconds(m);
+		m -= TimeUnit.SECONDS.toMillis(seconds);
+		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, m);
 	}
 
 	protected void updateDuration(Recording r) {
@@ -157,13 +158,11 @@ public abstract class BaseConverter {
 	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
 		//FIXME need to check this
 		if (length < 0 || position < 0) {
-			log.debug("::addSoxPad " + job + " Invalid parameters: "
-					+ " length = " + length + "; position = " + position + "; inFile = " + inFile);
+			log.debug("::addSoxPad {} Invalid parameters: length = {}; position = {}; inFile = {}", job, length, position, inFile);
 		}
-		length = length < 0 ? 0 : length;
-		position = position < 0 ? 0 : position;
-
-		String[] argv = new String[] { getPathToSoX(), inFile.getCanonicalPath(), outFile.getCanonicalPath(), "pad", "" + length, "" + position };
+		String[] argv = new String[] { getPathToSoX(), inFile.getCanonicalPath(), outFile.getCanonicalPath(), "pad"
+				, String.valueOf(length < 0 ? 0 : length)
+				, String.valueOf(position < 0 ? 0 : position) };
 
 		returnLog.add(ProcessHelper.executeScript(job, argv));
 		return argv;
@@ -394,7 +393,7 @@ public abstract class BaseConverter {
 				, "-frames:v", "1" //
 				, png.getCanonicalPath() };
 
-		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: ", f.getHash()), argv));
+		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: %s", f.getHash()), argv));
 	}
 
 	protected static Dimension getDimension(String txt) {
@@ -403,7 +402,7 @@ public abstract class BaseConverter {
 		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
 			String[] resultions = foundResolution.split("x");
-			return new Dimension(Integer.valueOf(resultions[0]).intValue(), Integer.valueOf(resultions[1]).intValue());
+			return new Dimension(Integer.parseInt(resultions[0]), Integer.parseInt(resultions[1]));
 		}
 
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play

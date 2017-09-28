@@ -34,6 +34,6 @@ public class AppointmentReminderTypeConverter extends OmConverter<Reminder> {
 	@Override
 	public void write(OutputNode node, Reminder value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getId());
+		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}
 }

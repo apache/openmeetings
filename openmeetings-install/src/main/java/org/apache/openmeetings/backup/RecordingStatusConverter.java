@@ -18,12 +18,17 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
+import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
+import org.slf4j.Logger;
 
 public class RecordingStatusConverter extends OmConverter<Recording.Status> {
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingStatusConverter.class, webAppRootKey);
 	private static final String PROCESSING = "PROCESSING";
 	public RecordingStatusConverter() {}
 
@@ -34,6 +39,7 @@ public class RecordingStatusConverter extends OmConverter<Recording.Status> {
 		try {
 			result = Recording.Status.valueOf(val);
 		} catch (Exception e) {
+			log.warn("Failed to read recording status out of {}", val);
 			result = PROCESSING.equals(val) ? Status.CONVERTING : Status.NONE;
 		}
 		return result;

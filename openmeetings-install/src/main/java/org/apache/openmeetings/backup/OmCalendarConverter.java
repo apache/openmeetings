@@ -50,6 +50,6 @@ public class OmCalendarConverter extends OmConverter<OmCalendar> {
 	@Override
 	public void write(OutputNode node, OmCalendar value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getId());
+		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}
 }

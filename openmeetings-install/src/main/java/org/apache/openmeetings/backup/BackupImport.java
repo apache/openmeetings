@@ -321,13 +321,13 @@ public class BackupImport {
 		USERS, ORGANISATIONS, CALENDARS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
 	};
 
-	private static File validate(String zipname, File intended) throws IOException {
+	private static File validate(String _ename, File intended) throws IOException {
 		final String intendedPath = intended.getCanonicalPath();
-		if (File.pathSeparatorChar != '\\' && zipname.indexOf('\\') > -1) {
-			zipname = zipname.replace('\\', '/');
-		}
+		String ename = File.pathSeparatorChar != '\\' && _ename.indexOf('\\') > -1
+				? _ename.replace('\\', '/')
+				: _ename;
 		// for each entry to be extracted
-		File fentry = new File(intended, zipname);
+		File fentry = new File(intended, ename);
 		final String canonicalPath = fentry.getCanonicalPath();
 
 		if (canonicalPath.startsWith(intendedPath)) {
@@ -404,7 +404,7 @@ public class BackupImport {
 				if (type != null) {
 					c.setType(type);
 					if (Configuration.Type.bool == type) {
-						if ("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())) {
+						if ("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())) {
 							c.setValue("true");
 						} else {
 							c.setValue("false");
@@ -424,6 +424,7 @@ public class BackupImport {
 						Class<?> clazz = Class.forName(c.getValue());
 						clazz.newInstance();
 					} catch (Exception e) {
+						log.warn("Not existing Crypt class found {}, replacing with SCryptImplementation", c.getValue());
 						c.setValue(SCryptImplementation.class.getCanonicalName());
 					}
 				}

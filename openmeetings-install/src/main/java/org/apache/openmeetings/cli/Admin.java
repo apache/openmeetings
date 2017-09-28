@@ -248,7 +248,7 @@ public class Admin {
 					if (cmdl.hasOption("default-language")) {
 						cfg.defaultLangId = cmdl.getOptionValue("default-language");
 					}
-					ConnectionProperties connectionProperties = new ConnectionProperties();
+					ConnectionProperties connectionProperties;
 					File conf = OmFileHelper.getPersistence();
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
 						String dbType = cmdl.getOptionValue("db-type", "derby");
@@ -294,7 +294,7 @@ public class Admin {
 						f = new File(file);
 					}
 					boolean includeFiles = !cmdl.hasOption("exclude-files");
-					File backup_dir = new File(OmFileHelper.getUploadBackupDir(), "" + System.currentTimeMillis());
+					File backup_dir = new File(OmFileHelper.getUploadBackupDir(), String.valueOf(System.currentTimeMillis()));
 					backup_dir.mkdirs();
 
 					BackupExport export = getApplicationContext().getBean(BackupExport.class);
