@@ -633,7 +633,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				clients.remove(c.getUid());
 				rooms.put(room.getId(), clients);
 			}
-			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c.getUid(), room.getId());
+			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c, room.getId());
 			c.setRoom(null);
 			c.clear();
 			update(c);

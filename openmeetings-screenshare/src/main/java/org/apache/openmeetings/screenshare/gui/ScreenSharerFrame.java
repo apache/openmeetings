@@ -237,7 +237,7 @@ public class ScreenSharerFrame extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				core.stopStream();
+				core.stopStream(null);
 				ScreenSharerFrame.this.setVisible(false);
 				System.exit(0);
 			}
@@ -274,7 +274,7 @@ public class ScreenSharerFrame extends JFrame {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.sharingStop();
+						core.stopSharing();
 					} else {
 						logger.warn("Sharing action is already requested");
 					}

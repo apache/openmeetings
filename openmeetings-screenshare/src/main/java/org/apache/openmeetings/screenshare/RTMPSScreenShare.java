@@ -49,7 +49,7 @@ public class RTMPSScreenShare extends RTMPSClient implements IScreenShare {
 		if (core.isAudioNotify()) {
 			AudioTone.play();
 		}
-		core.stopStream();
+		core.stopStream(null);
 	}
 
 	@Override

@@ -372,8 +372,8 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {
+		exitRoom(room.getClient());
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
-			exitRoom(room.getClient());
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");

@@ -329,16 +329,6 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		}
 	}
 
-	public void sharingStop() {
-		try {
-			schdlr.standby();
-		} catch (SchedulerException e) {
-			log.error("[schdlr.standby]", e);
-		}
-		startSharing = false;
-		captureScreenStop("stopStreaming");
-	}
-
 	public void recordingStop() {
 		startRecording = false;
 		captureScreenStop("stopRecording");
@@ -426,12 +416,10 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 					frame.setStatus("" + params.get("error"));
 				}
 			}
-		} else if ("stopStream".equals(method)) {
-			sharingStop();
 		}
 	}
 
-	public void stopStream() {
+	public void stopStream(Object obj) {
 		try {
 			log.debug("ScreenShare stopStream");
 
@@ -563,7 +551,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				Object result = returnMap.get("result");
 				if ("stopAll".equals(result)) {
 					log.trace("Stopping to stream, there is neither a Desktop Sharing nor Recording anymore");
-					stopStream();
+					stopStream(null);
 				} else if ("stopSharingOnly".equals(result)) {
 					stopSharing();
 				} else if ("stopRecordingOnly".equals(result)) {

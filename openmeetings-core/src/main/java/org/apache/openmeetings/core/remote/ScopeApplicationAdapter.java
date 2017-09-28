@@ -380,13 +380,23 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	public void roomLeaveByScope(String uid, Long roomId) {
-		StreamClient rcl = sessionManager.get(uid);
+	public void roomLeaveByScope(Client c, Long roomId) {
+		StreamClient rcl = sessionManager.get(c.getUid());
 		IScope scope = getChildScope("" + roomId);
-		_log.debug("[roomLeaveByScope] {} {} {} {}", uid, roomId, rcl, scope);
+		_log.debug("[roomLeaveByScope] {} {} {} {}", c.getUid(), roomId, rcl, scope);
 		if (rcl != null && scope != null) {
 			roomLeaveByScope(rcl, scope);
 		}
+		//Elvis has left the building
+		new MessageSender(scope, "stopStream", new Object(), this) {
+			@Override
+			public boolean filter(IConnection conn) {
+				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
+				return rcl == null
+						|| Client.Type.sharing != rcl.getType()
+						|| !c.getSid().equals(rcl.getSid());
+			}
+		}.start();
 	}
 
 	/**
