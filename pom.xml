@@ -60,7 +60,7 @@
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
 		<!--  Exclude all generated code  -->
-		<sonar.exclusions>file:**/generated-sources/**</sonar.exclusions>
+		<sonar.exclusions>file:**/generated-sources/**, file:**/fabric.js, file:**/cssemoticons.js</sonar.exclusions>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
