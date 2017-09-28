@@ -144,15 +144,15 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		u.setId(user.getId());
 	}
 
-	public CallResult<FileItemDTO> createVerifiedFile(File fsFile) throws IOException {
+	public CallResult<FileItemDTO> createVerifiedFile(File fsFile, String name, BaseFileItem.Type type) throws IOException {
 		ServiceResult r = login();
 
 		FileItemDTO f1 = null;
 		try (InputStream is = new FileInputStream(fsFile)) {
 			FileItemDTO file = new FileItemDTO();
-			file.setName("test.txt");
+			file.setName(name);
 			file.setHash(UUID.randomUUID().toString());
-			file.setType(BaseFileItem.Type.Presentation);
+			file.setType(type);
 			List<Attachment> atts = new ArrayList<>();
 			atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));
 			atts.add(new Attachment("stream", MediaType.APPLICATION_OCTET_STREAM, is));

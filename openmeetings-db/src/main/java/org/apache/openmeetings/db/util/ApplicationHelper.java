@@ -51,6 +51,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class ApplicationHelper {
 	private static final Logger log = getLogger(ApplicationHelper.class, webAppRootKey);
+	private static final Object SYNC_OBJ = new Object();
 
 	public static WicketTester getWicketTester() {
 		return getWicketTester(-1);
@@ -81,10 +82,13 @@ public class ApplicationHelper {
 	}
 
 	public static IApplication _ensureApplication() {
-		IApplication a = null;
 		if (Application.exists()) {
-			a = (IApplication)Application.get();
-		} else {
+			return (IApplication)Application.get();
+		}
+		synchronized (SYNC_OBJ) {
+			if (Application.exists()) {
+				return (IApplication)Application.get();
+			}
 			WebApplication app = (WebApplication)Application.get(wicketApplicationName);
 			LabelDao.initLanguageMap();
 			if (app == null) {
@@ -110,9 +114,8 @@ public class ApplicationHelper {
 			} else {
 				ThreadContext.setApplication(app);
 			}
-			a = (IApplication)Application.get(wicketApplicationName);
+			return (IApplication)Application.get(wicketApplicationName);
 		}
-		return a;
 	}
 
 	public static IApplication ensureApplication(Long langId) {
