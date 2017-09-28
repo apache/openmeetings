@@ -57,6 +57,10 @@
 		<src.pack.skip>false</src.pack.skip>
 		<derby.version>10.13.1.1</derby.version>
 		<license.excludedScopes>test</license.excludedScopes>
+		<!--  URL of the ASF SonarQube server  -->
+		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
+		<!--  Exclude all generated code  -->
+		<sonar.exclusions>file:**/generated-sources/**</sonar.exclusions>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
@@ -1220,6 +1224,11 @@
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.3.0.603</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
