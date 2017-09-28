@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -157,19 +156,9 @@ public class UserContactDao {
 	}
 
 	public UserContact get(Long id) {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactsById", UserContact.class);
-			query.setParameter("id", id);
-			UserContact userContacts = null;
-			try {
-				userContacts = query.getSingleResult();
-		} catch (NoResultException ex) {
-		}
-			return userContacts;
-		} catch (Exception e) {
-			log.error("[getUserContacts]",e);
-		}
-		return null;
+		List<UserContact> list = em.createNamedQuery("getUserContactsById", UserContact.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<UserContact> get() {

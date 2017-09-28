@@ -23,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -47,15 +46,9 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 
 	@Override
 	public Group get(Long id) {
-		TypedQuery<Group> query = em.createNamedQuery("getGroupById", Group.class);
-		query.setParameter("id", id);
-		Group o = null;
-		try {
-			o = query.getSingleResult();
-		} catch (NoResultException e) {
-			// o = null;
-		}
-		return o;
+		List<Group> list = em.createNamedQuery("getGroupById", Group.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public Group get(String name) {

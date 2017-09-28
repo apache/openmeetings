@@ -21,11 +21,10 @@ package org.apache.openmeetings.db.dao.file;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.red5.logging.Red5LoggerFactory;
@@ -42,32 +41,15 @@ public class BaseFileItemDao {
 
 	public BaseFileItem get(String hash) {
 		log.debug("getByHash() started");
-		BaseFileItem f = null;
-		TypedQuery<BaseFileItem> query = em.createNamedQuery("getFileByHash", BaseFileItem.class);
-		query.setParameter("hash", hash);
-
-		try {
-			f = query.getSingleResult();
-		} catch (NoResultException ex) {
-			//no-op
-		}
-		return f;
+		List<BaseFileItem> list = em.createNamedQuery("getFileByHash", BaseFileItem.class)
+				.setParameter("hash", hash).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public BaseFileItem get(Long id) {
-		BaseFileItem f = null;
-		if (id != null && id > 0) {
-			TypedQuery<BaseFileItem> query = em.createNamedQuery("getFileById", BaseFileItem.class)
-					.setParameter("id", id);
-
-			try {
-				f = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-		} else {
-			log.info("[get] " + "Info: No id given");
-		}
-		return f;
+		List<BaseFileItem> list = em.createNamedQuery("getFileById", BaseFileItem.class)
+					.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public void delete(BaseFileItem f) {

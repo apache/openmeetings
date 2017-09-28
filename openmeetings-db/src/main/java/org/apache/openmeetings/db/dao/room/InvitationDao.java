@@ -28,9 +28,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.util.CalendarHelper;
@@ -60,17 +58,9 @@ public class InvitationDao {
 	}
 
 	public Invitation get(Long invId) {
-		try {
-			TypedQuery<Invitation> query = em.createNamedQuery("getInvitationbyId", Invitation.class);
-			query.setParameter("id", invId);
-			try {
-				return query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-		} catch (Exception e) {
-			log.error("get : ", e);
-		}
-		return null;
+		List<Invitation> list = em.createNamedQuery("getInvitationbyId", Invitation.class)
+				.setParameter("id", invId).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public Invitation getByHash(String hash, boolean hidePass, boolean markUsed) {

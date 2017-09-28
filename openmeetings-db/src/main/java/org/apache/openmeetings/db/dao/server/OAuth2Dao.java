@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dao.server;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -51,13 +50,9 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 
 	@Override
 	public OAuthServer get(Long id) {
-		TypedQuery<OAuthServer> query = em.createNamedQuery("getOAuthServerById", OAuthServer.class);
-		query.setParameter("id", id);
-		OAuthServer result = null;
-		try {
-			result = query.getSingleResult();
-		} catch (NoResultException e) {}
-		return result;
+		List<OAuthServer> list = em.createNamedQuery("getOAuthServerById", OAuthServer.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	@Override

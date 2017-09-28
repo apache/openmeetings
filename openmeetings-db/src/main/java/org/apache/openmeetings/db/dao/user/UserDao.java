@@ -36,7 +36,6 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -296,16 +295,13 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				if (force) {
 					kq.getFetchPlan().addFetchGroup("backupexport");
 				}
-				try {
-					u = kq.getSingleResult();
-				} catch (NoResultException ne) {
-					//no-op
-				}
+				List<User> list = kq.getResultList();
+				u = list.size() == 1 ? list.get(0) : null;
 			} finally {
 				oem.getFetchPlan().setQueryResultCacheEnabled(qrce);
 			}
 		} else {
-			log.info("[get] " + "Info: No user id given");
+			log.info("[get]: No user id given");
 		}
 		return u;
 	}
@@ -392,18 +388,21 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return !Strings.isEmpty(login) && login.length() >= UserHelper.getMinLoginLength(cfgDao);
 	}
 
-	public User getByLogin(String login, Type type, Long domainId) {
+	private static User getSingle(List<User> list) {
 		User u = null;
-		try {
-			u = em.createNamedQuery("getUserByLogin", User.class)
-					.setParameter("login", login)
-					.setParameter("type", type)
-					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
-					.getSingleResult();
+		if (list.size() == 1) {
+			u = list.get(0);
 			u.getGroupUsers().size(); // this will initiate lazy collection
-		} catch (NoResultException ex) {
 		}
 		return u;
+	}
+
+	public User getByLogin(String login, Type type, Long domainId) {
+		return getSingle(em.createNamedQuery("getUserByLogin", User.class)
+				.setParameter("login", login)
+				.setParameter("type", type)
+				.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
+				.getResultList());
 	}
 
 	public User getByEmail(String email) {
@@ -411,33 +410,21 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getByEmail(String email, User.Type type, Long domainId) {
-		User u = null;
-		try {
-			u = em.createNamedQuery("getUserByEmail", User.class)
-					.setParameter("email", email)
-					.setParameter("type", type)
-					.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
-					.getSingleResult();
-		} catch (NoResultException ex) {
-		}
-		return u;
+		return getSingle(em.createNamedQuery("getUserByEmail", User.class)
+				.setParameter("email", email)
+				.setParameter("type", type)
+				.setParameter("domainId", domainId == null ? Long.valueOf(0) : domainId)
+				.getResultList());
 	}
 
 	public User getUserByHash(String hash) {
 		if (Strings.isEmpty(hash)) {
 			return null;
 		}
-		User us = null;
-		try {
-			us = em.createNamedQuery("getUserByHash", User.class)
+		return getSingle(em.createNamedQuery("getUserByHash", User.class)
 					.setParameter("resethash", hash)
 					.setParameter("type", User.Type.user)
-					.getSingleResult();
-		} catch (NoResultException ex) {
-		} catch (Exception e) {
-			log.error("[getUserByHash]", e);
-		}
-		return us;
+					.getResultList());
 	}
 
 	/**
@@ -534,16 +521,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return
 	 */
 	public User getByActivationHash(String hash) {
-		TypedQuery<User> query = em.createQuery("SELECT u FROM User as u WHERE u.activatehash = :activatehash"
-				+ " AND u.deleted = false", User.class);
-		query.setParameter("activatehash", hash);
-		User u = null;
-		try {
-			u = query.getSingleResult();
-		} catch (NoResultException e) {
-			// u=null}
-		}
-		return u;
+		return getSingle(em.createQuery("SELECT u FROM User as u WHERE u.activatehash = :activatehash AND u.deleted = false", User.class)
+				.setParameter("activatehash", hash).getResultList());
 	}
 
 	private <T> TypedQuery<T> getUserProfileQuery(Class<T> clazz, Long userId, String text, String offers, String search, String orderBy, boolean asc) {
@@ -592,15 +571,10 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getExternalUser(String extId, String extType) {
-		User u = null;
-		try {
-			u = em.createNamedQuery("getExternalUser", User.class)
+		return getSingle(em.createNamedQuery("getExternalUser", User.class)
 				.setParameter("externalId", extId)
 				.setParameter("externalType", extType)
-				.getSingleResult();
-		} catch (NoResultException ex) {
-		}
-		return u;
+				.getResultList());
 	}
 
 	@Override

@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -75,18 +74,11 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 
 	@Override
 	public PrivateMessageFolder get(Long id) {
-		String hql = "select c from PrivateMessageFolder c where c.id = :id ";
+		final String hql = "select c from PrivateMessageFolder c where c.id = :id ";
 
-		TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class);
-		query.setParameter("id", id);
-
-		PrivateMessageFolder folder = null;
-		try {
-			folder = query.getSingleResult();
-		} catch (NoResultException ex) {
-		}
-
-		return folder;
+		List<PrivateMessageFolder> list = em.createQuery(hql, PrivateMessageFolder.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	@Override

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -42,14 +41,9 @@ public class MeetingMemberDao {
 	private EntityManager em;
 
 	public MeetingMember get(Long meetingMemberId) {
-		MeetingMember meetingMember = null;
-		try {
-			meetingMember = em.createNamedQuery("getMeetingMemberById", MeetingMember.class)
-					.setParameter("id", meetingMemberId).getSingleResult();
-		} catch (NoResultException ex) {
-		}
-
-		return meetingMember;
+		List<MeetingMember> list = em.createNamedQuery("getMeetingMemberById", MeetingMember.class)
+				.setParameter("id", meetingMemberId).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<MeetingMember> getMeetingMembers() {

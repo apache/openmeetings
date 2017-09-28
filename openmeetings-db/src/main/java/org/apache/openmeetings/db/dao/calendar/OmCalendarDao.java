@@ -21,9 +21,7 @@ package org.apache.openmeetings.db.dao.calendar;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +47,9 @@ public class OmCalendarDao {
 	 * @return Returns the Calendar if found, else returns null
 	 */
 	public OmCalendar get(Long calId) {
-		TypedQuery<OmCalendar> query = em.createNamedQuery("getCalendarbyId", OmCalendar.class)
-				.setParameter("calId", calId);
-		OmCalendar c = null;
-		try {
-			c = query.getSingleResult();
-		} catch (NoResultException e) {
-			//no-op
-		}
-		return c;
+		List<OmCalendar> list = em.createNamedQuery("getCalendarbyId", OmCalendar.class)
+				.setParameter("calId", calId).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	/**

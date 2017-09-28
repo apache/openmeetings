@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -74,28 +73,15 @@ public class AppointmentDao {
 	 */
 	// -----------------------------------------------------------------------------------------------
 	public Appointment get(Long id) {
-		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentById", Appointment.class);
-		query.setParameter("id", id);
-
-		Appointment a = null;
-		try {
-			a = query.getSingleResult();
-		} catch (NoResultException ex) {
-			//no-op
-		}
-		return a;
+		List<Appointment> list = em.createNamedQuery("getAppointmentById", Appointment.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public Appointment getAny(Long id) {
-		TypedQuery<Appointment> query = em.createNamedQuery("getAppointmentByIdAny", Appointment.class).setParameter("id", id);
-
-		Appointment a = null;
-		try {
-			a = query.getSingleResult();
-		} catch (NoResultException ex) {
-			//no-op
-		}
-		return a;
+		List<Appointment> list = em.createNamedQuery("getAppointmentByIdAny", Appointment.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<Appointment> get() {

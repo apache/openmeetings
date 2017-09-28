@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -91,14 +90,9 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 
 	@Override
 	public PrivateMessage get(Long id) {
-		TypedQuery<PrivateMessage> query = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class);
-		query.setParameter("id", id);
-		PrivateMessage privateMessage = null;
-		try {
-			privateMessage = query.getSingleResult();
-		} catch (NoResultException ex) {
-		}
-		return privateMessage;
+		List<PrivateMessage> list = em.createNamedQuery("getPrivateMessageById", PrivateMessage.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	@Override

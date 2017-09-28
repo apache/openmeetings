@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -154,22 +153,12 @@ public class FileItemDao extends BaseFileItemDao {
 	}
 
 	public FileItem get(String externalId, String externalType) {
-		FileItem f = null;
 		log.debug("get started");
 
-		try {
-			TypedQuery<FileItem> query = em.createNamedQuery("getFileExternal", FileItem.class)
-					.setParameter("externalFileId", externalId).setParameter("externalType", externalType);
-
-			try {
-				f = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-		} catch (Exception ex2) {
-			log.error("[get]: ", ex2);
-		}
-		return f;
+		List<FileItem> list = em.createNamedQuery("getFileExternal", FileItem.class)
+				.setParameter("externalFileId", externalId).setParameter("externalType", externalType)
+				.getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<FileItem> get() {

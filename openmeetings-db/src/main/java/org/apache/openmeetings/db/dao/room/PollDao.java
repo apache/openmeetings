@@ -24,10 +24,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
@@ -85,73 +83,34 @@ public class PollDao {
 	}
 
 	public RoomPoll getByRoom(Long roomId) {
-		try {
-			log.debug(" :: getPoll :: " + roomId);
-			TypedQuery<RoomPoll> q = em.createNamedQuery("getPoll", RoomPoll.class);
-			q.setParameter("roomId", roomId);
-			return q.getSingleResult();
-		} catch (NoResultException nre) {
-			//expected
-		} catch (Exception err) {
-			log.error("[getPoll]", err);
-		}
-		return null;
+		log.debug(" :: getPoll :: {}", roomId);
+		List<RoomPoll> list = em.createNamedQuery("getPoll", RoomPoll.class)
+				.setParameter("roomId", roomId).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<RoomPoll> get() {
-		try {
-			TypedQuery<RoomPoll> q = em.createNamedQuery("getPollListBackup", RoomPoll.class);
-			return q.getResultList();
-		} catch (NoResultException nre) {
-			//expected
-		} catch (Exception err) {
-			log.error("[get]", err);
-		}
-		return null;
+		return em.createNamedQuery("getPollListBackup", RoomPoll.class).getResultList();
 	}
 
 	public List<RoomPoll> getArchived(Long roomId) {
-		try {
-			log.debug(" :: getArchived :: " + roomId);
-			TypedQuery<RoomPoll> q = em.createNamedQuery("getArchivedPollList",RoomPoll.class);
-			q.setParameter("roomId", roomId);
-			return q.getResultList();
-		} catch (NoResultException nre) {
-			//expected
-		} catch (Exception err) {
-			log.error("[getArchived]", err);
-		}
-		return null;
+		log.debug(" :: getArchived :: {}", roomId);
+		return em.createNamedQuery("getArchivedPollList",RoomPoll.class)
+				.setParameter("roomId", roomId).getResultList();
 	}
 
 	public boolean hasPoll(Long roomId) {
-		try {
-			log.debug(" :: hasPoll :: " + roomId);
-			TypedQuery<Long> q = em.createNamedQuery("hasPoll", Long.class);
-			q.setParameter("roomId", roomId);
-			q.setParameter("archived", false);
-			return q.getSingleResult() > 0;
-		} catch (NoResultException nre) {
-			//expected
-		} catch (Exception err) {
-			log.error("[hasPoll]", err);
-		}
-		return false;
+		log.debug(" :: hasPoll :: " + roomId);
+		return em.createNamedQuery("hasPoll", Long.class)
+				.setParameter("roomId", roomId)
+				.setParameter("archived", false)
+				.getSingleResult() > 0;
 	}
 
 	public boolean hasVoted(Long roomId, Long userId) {
-		try {
-			log.debug(" :: hasVoted :: " + roomId + ", " + userId);
-			TypedQuery<RoomPollAnswer> q = em.createNamedQuery("hasVoted", RoomPollAnswer.class);
-			q.setParameter("roomId", roomId);
-			q.setParameter("userId", userId);
-			q.getSingleResult();
-			return true;
-		} catch (NoResultException nre) {
-			//expected
-		} catch (Exception err) {
-			log.error("[hasVoted]", err);
-		}
-		return false;
+		return !em.createNamedQuery("hasVoted", RoomPollAnswer.class)
+				.setParameter("roomId", roomId)
+				.setParameter("userId", userId)
+				.getResultList().isEmpty();
 	}
 }

@@ -102,11 +102,10 @@ public class SessiondataDao {
 		List<Sessiondata> sessions = em.createNamedQuery("getSessionById", Sessiondata.class)
 				.setParameter("sessionId", String.format("%%%s%%", SID)).getResultList();
 
-		Sessiondata sd = null;
 		if (sessions == null || sessions.isEmpty()) {
 			return null;
 		}
-		sd = sessions.get(0);
+		Sessiondata sd = sessions.get(0);
 		if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0))) {
 			return null;
 		}
@@ -125,52 +124,6 @@ public class SessiondataDao {
 			return newInstance();
 		}
 		return update(sd);
-	}
-
-	/**
-	 * update the session of a user with a new user id this is needed to see if
-	 * the session is loggedin
-	 *
-	 * @param SID
-	 * @param userId
-	 */
-	public boolean updateUser(String SID, Long userId) {
-		try {
-			log.debug("updateUser User: " + userId + " || " + SID);
-
-			Sessiondata sd = find(SID);
-			if (sd == null) {
-				log.error("Could not find session to Update");
-				return false;
-			}
-			log.debug("Found session to update: userId: {}", userId);
-
-			sd.setUserId(userId);
-			update(sd);
-			return true;
-		} catch (Exception ex2) {
-			log.error("[updateUser]: ", ex2);
-		}
-		return false;
-	}
-
-	public boolean updateUserWithoutSession(String SID, Long userId) {
-		try {
-			log.debug("updateUser User: " + userId + " || " + SID);
-			Sessiondata sd = find(SID);
-			if (sd == null) {
-				log.error("Could not find session to Update");
-				return false;
-			}
-			log.debug("Found session to update: userId: {}", userId);
-
-			sd.setUserId(userId);
-			update(sd);
-			return true;
-		} catch (Exception ex2) {
-			log.error("[updateUser]: ", ex2);
-		}
-		return false;
 	}
 
 	/**

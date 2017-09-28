@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -46,21 +45,9 @@ public class RecordingMetaDataDao {
 	private RecordingDao recordingDao;
 
 	public RecordingMetaData get(Long id) {
-		try {
-			TypedQuery<RecordingMetaData> query = em.createNamedQuery("getMetaById", RecordingMetaData.class);
-			query.setParameter("id", id);
-
-			RecordingMetaData metaData = null;
-			try {
-				metaData = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-			return metaData;
-		} catch (Exception ex2) {
-			log.error("[get]: ", ex2);
-		}
-		return null;
+		List<RecordingMetaData> list = em.createNamedQuery("getMetaById", RecordingMetaData.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<RecordingMetaData> getByRecording(Long recordingId) {

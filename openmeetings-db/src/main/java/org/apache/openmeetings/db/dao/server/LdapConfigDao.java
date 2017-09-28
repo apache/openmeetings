@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
@@ -66,23 +65,9 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 
 	@Override
 	public LdapConfig get(Long id) {
-		try {
-
-			TypedQuery<LdapConfig> query = em.createNamedQuery("getLdapConfigById", LdapConfig.class);
-			query.setParameter("id", id);
-
-			LdapConfig ldapConfig = null;
-			try {
-				ldapConfig = query.getSingleResult();
-			} catch (NoResultException ex) {
-			}
-
-			return ldapConfig;
-
-		} catch (Exception ex2) {
-			log.error("[get]: ", ex2);
-		}
-		return null;
+		List<LdapConfig> list = em.createNamedQuery("getLdapConfigById", LdapConfig.class)
+				.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
 	}
 
 	public List<LdapConfig> getActive() {
