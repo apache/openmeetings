@@ -382,7 +382,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public void roomLeaveByScope(Client c, Long roomId) {
 		StreamClient rcl = sessionManager.get(c.getUid());
-		IScope scope = getChildScope("" + roomId);
+		IScope scope = getChildScope(String.valueOf(roomId));
 		_log.debug("[roomLeaveByScope] {} {} {} {}", c.getUid(), roomId, rcl, scope);
 		if (rcl != null && scope != null) {
 			roomLeaveByScope(rcl, scope);
@@ -677,7 +677,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendToScope(final Long roomId, String method, Object obj) {
-		new MessageSender(getChildScope("" + roomId), method, obj, this) {
+		new MessageSender(getChildScope(String.valueOf(roomId)), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
@@ -900,7 +900,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return;
 		}
 
-		recordingService.startRecording(getChildScope("" + c.getRoom().getId()), c, true);
+		recordingService.startRecording(getChildScope(String.valueOf(c.getRoom().getId())), c, true);
 	}
 
 	/**
@@ -910,7 +910,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 	public void stopInterviewRecording(org.apache.openmeetings.db.entity.basic.IClient c) {
 		_log.debug("-----------  stopInterviewRecording");
-		recordingService.stopRecording(getChildScope("" + c.getRoomId()), c);
+		recordingService.stopRecording(getChildScope(String.valueOf(c.getRoomId())), c);
 	}
 
 	public void micActivity(boolean active) {
