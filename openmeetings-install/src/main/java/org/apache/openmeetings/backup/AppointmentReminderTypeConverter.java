@@ -24,6 +24,7 @@ import org.simpleframework.xml.stream.OutputNode;
 
 public class AppointmentReminderTypeConverter extends OmConverter<Reminder> {
 	public AppointmentReminderTypeConverter() {
+		//default constructor is for export
 	}
 
 	@Override

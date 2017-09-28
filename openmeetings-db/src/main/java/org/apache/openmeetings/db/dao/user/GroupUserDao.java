@@ -51,12 +51,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public List<GroupUser> get(int start, int count) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public List<GroupUser> get(String search, int start, int count, String sort) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	public List<GroupUser> get(long groupId, String search, int start, int count, String sort) {
@@ -76,16 +76,9 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	}
 
 	public GroupUser getByGroupAndUser(Long groupId, Long userId) {
-		try {
-			List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
-					.setParameter("groupId", groupId).setParameter("userId", userId).getResultList();
-			if (list != null && !list.isEmpty()) {
-				return list.get(0);
-			}
-		} catch (Exception e) {
-			//no-op
-		}
-		return null;
+		List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
+				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList();
+		return list.isEmpty() ? null : list.get(0);
 	}
 
 	public boolean isUserInGroup(long groupId, long userId) {
@@ -95,12 +88,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public long count() {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public long count(String search) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	public long count(long groupId, String search) {
@@ -116,11 +109,11 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public GroupUser update(GroupUser entity, Long userId) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public void delete(GroupUser entity, Long userId) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 }

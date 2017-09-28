@@ -83,21 +83,21 @@ public class LdapOptions {
 		try {
 			type = AuthType.valueOf(ldap_auth_type);
 		} catch (Exception e) {
-			log.error(String.format("ConfigKey in Ldap Config contains invalid auth type : '%s' -> Defaulting to %s", ldap_auth_type, type));
+			log.error("ConfigKey in Ldap Config contains invalid auth type : '{}' -> Defaulting to {}", ldap_auth_type, type);
 		}
 
 		String ldap_prov_type = config.getProperty(CONFIGKEY_LDAP_PROV_TYPE, "");
 		try {
 			prov = Provisionning.valueOf(ldap_prov_type);
 		} catch (Exception e) {
-			log.error(String.format("ConfigKey in Ldap Config contains invalid provisionning type : '%s' -> Defaulting to %s", ldap_prov_type, prov));
+			log.error("ConfigKey in Ldap Config contains invalid provisionning type : '{}' -> Defaulting to {}", ldap_prov_type, prov);
 		}
 
 		String ldap_deref_mode = config.getProperty(CONFIGKEY_LDAP_DEREF_MODE, "");
 		try {
 			derefMode = AliasDerefMode.getDerefMode(ldap_deref_mode);
 		} catch (Exception e) {
-			log.error(String.format("ConfigKey in Ldap Config contains invalid deref mode : '%s' -> Defaulting to %s", ldap_deref_mode, derefMode));
+			log.error("ConfigKey in Ldap Config contains invalid deref mode : '{}' -> Defaulting to {}", ldap_deref_mode, derefMode);
 		}
 
 		if (AuthType.NONE == type && Provisionning.NONE == prov) {

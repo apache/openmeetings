@@ -105,6 +105,6 @@ public class TimezoneUtil {
 	public static long _getOffset(TimeZone timezone) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeZone(timezone);
-		return cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+		return (long)cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 	}
 }

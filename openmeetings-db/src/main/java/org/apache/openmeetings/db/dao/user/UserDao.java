@@ -355,13 +355,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @return
 	 */
 	public boolean checkLogin(String login, Type type, Long domainId, Long id) {
-		try {
-			User u = getByLogin(login, type, domainId);
-			return u == null || u.getId().equals(id);
-		} catch (Exception e) {
-			//exception is thrown in case of non-unique result
-			return false;
-		}
+		User u = getByLogin(login, type, domainId);
+		return u == null || u.getId().equals(id);
 	}
 
 	/**
@@ -375,13 +370,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	public boolean checkEmail(String email, Type type, Long domainId, Long id) {
 		log.debug("checkEmail: email = {}, id = {}", email, id);
-		try {
-			User u = getByEmail(email, type, domainId);
-			return u == null || u.getId().equals(id);
-		} catch (Exception e) {
-			//exception is thrown in case of non-unique result
-		}
-		return false;
+		User u = getByEmail(email, type, domainId);
+		return u == null || u.getId().equals(id);
 	}
 
 	public boolean validLogin(String login) {
@@ -493,15 +483,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public User getContact(String email, String firstName, String lastName, Long langId, String tzId, User owner) {
-		User to = null;
-		try {
-			to = em.createNamedQuery("getContactByEmailAndUser", User.class)
-					.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId()).getSingleResult();
-		} catch (Exception e) {
-			//no-op
-		}
-		if (to == null) {
-			to = new User();
+		List<User> list = em.createNamedQuery("getContactByEmailAndUser", User.class)
+				.setParameter("email", email).setParameter("type", User.Type.contact).setParameter("ownerId", owner.getId())
+				.getResultList();
+		if (list.isEmpty()) {
+			User to = new User();
 			to.setType(Type.contact);
 			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
@@ -512,8 +498,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			to.setAddress(new Address());
 			to.getAddress().setEmail(email);
 			to.setTimeZoneId(Strings.isEmpty(tzId) ? owner.getTimeZoneId() : tzId);
+			return to;
 		}
-		return to;
+		return list.get(0);
 	}
 
 	/**

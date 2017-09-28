@@ -197,22 +197,22 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public StringLabel get(long id) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public StringLabel get(Long id) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public List<StringLabel> get(int start, int count) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public List<StringLabel> get(String search, int start, int count, String order) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	public static List<StringLabel> get(Locale l, final String search, int start, int count, final SortParam<String> sort) {
@@ -225,12 +225,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public long count() {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public long count(String search) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	public static long count(Locale l, final String search) {
@@ -239,7 +239,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public StringLabel update(StringLabel entity, Long userId) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	public static StringLabel update(Locale l, StringLabel entity) throws Exception {
@@ -254,7 +254,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public void delete(StringLabel entity, Long userId) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	public static void delete(Locale l, StringLabel entity) throws Exception {

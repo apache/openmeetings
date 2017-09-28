@@ -120,16 +120,16 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 
 	@Override
 	public List<PrivateMessageFolder> get(String search, int start, int count, String order) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public long count() {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 
 	@Override
 	public long count(String search) {
-		throw new RuntimeException("Should not be used");
+		throw new UnsupportedOperationException("Should not be used");
 	}
 }

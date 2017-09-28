@@ -253,7 +253,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		log.debug("getUserRoom : " + ownerId + " || " + type);
 		Room room = null;
 		List<Room> ll = em.createNamedQuery("getRoomByOwnerAndTypeId", Room.class).setParameter("ownerId", ownerId).setParameter("type", type).getResultList();
-		if (ll.size() > 0) {
+		if (!ll.isEmpty()) {
 			room = ll.get(0);
 		}
 
@@ -286,12 +286,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 				.setParameter("externalType", externalType)
 				.setParameter("type", type)
 				.getResultList();
-		if (ll.size() > 0) {
-			return ll.get(0);
-		} else {
-			log.error("Could not find room " + externalId);
-			return null;
-		}
+		return ll.isEmpty() ? null : ll.get(0);
 	}
 
 	public List<Room> getRecent(Long userId) {

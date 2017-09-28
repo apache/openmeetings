@@ -58,9 +58,6 @@ public class RoomGroupDao {
 				.setParameter("groupId", groupId)
 				.getResultList();
 
-		if (ll.size() > 0) {
-			return ll.get(0);
-		}
-		return null;
+		return ll.isEmpty() ? null : ll.get(0);
 	}
 }

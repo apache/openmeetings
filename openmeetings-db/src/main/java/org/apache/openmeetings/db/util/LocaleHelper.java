@@ -45,10 +45,10 @@ public class LocaleHelper {
 		return new Locale.Builder().setRegion(code).build().getDisplayCountry();
 	}
 
-	public static String validateCountry(String code) {
+	public static String validateCountry(String _code) {
 		List<String> list = getCountries();
 		Set<String> countries = new HashSet<>(list);
-		code = code == null ? "" : code.toUpperCase();
+		String code = _code == null ? "" : _code.toUpperCase();
 		if (!countries.contains(code)) {
 			String newCountry = list.get(0);
 			log.warn("Invalid country found: {}, will be replaced with: {}", code, newCountry);

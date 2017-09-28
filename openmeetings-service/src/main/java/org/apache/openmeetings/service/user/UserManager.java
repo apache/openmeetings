@@ -228,7 +228,7 @@ public class UserManager implements IUserManager {
 			} else {
 				if (!checkName) {
 					return "error.login.inuse";
-				} else if (!checkEmail) {
+				} else {
 					return "error.email.inuse";
 				}
 			}
