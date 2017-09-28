@@ -97,7 +97,6 @@
 						</goals>
 						<configuration>
 							<charset>UTF-8</charset>
-							<cssSourceDir>css</cssSourceDir>
 							<cssSourceFiles>
 								<cssSourceFile>general.css</cssSourceFile>
 								<cssSourceFile>activities.css</cssSourceFile>
@@ -119,11 +118,112 @@
 						</goals>
 						<configuration>
 							<charset>UTF-8</charset>
-							<cssSourceDir>css</cssSourceDir>
 							<cssSourceFiles>
 								<cssSourceFile>general-rtl.css</cssSourceFile>
 							</cssSourceFiles>
 							<cssFinalFile>theme-rtl.css</cssFinalFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>interview-wb-js</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>wb-all.js</jsSourceFile>
+								<jsSourceFile>interview-area.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>interviewwb.js</jsFinalFile>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
+							<skipMinify>true</skipMinify>
+							<suffix></suffix>
+						</configuration>
+					</execution>
+					<execution>
+						<id>interview-wb-js-minify</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>wb-all.js</jsSourceFile>
+								<jsSourceFile>interview-area.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>interviewwb.js</jsFinalFile>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
+							<jsEngine>CLOSURE</jsEngine>
+						</configuration>
+					</execution>
+					<execution>
+						<id>wb-js</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>wb-all.js</jsSourceFile>
+								<jsSourceFile>uuid.js</jsSourceFile>
+								<jsSourceFile>player.js</jsSourceFile>
+								<jsSourceFile>tool-base.js</jsSourceFile>
+								<jsSourceFile>tool-pointer.js</jsSourceFile>
+								<jsSourceFile>tool-apointer.js</jsSourceFile>
+								<jsSourceFile>tool-shape-base.js</jsSourceFile>
+								<jsSourceFile>tool-text.js</jsSourceFile>
+								<jsSourceFile>tool-paint.js</jsSourceFile>
+								<jsSourceFile>tool-shape.js</jsSourceFile>
+								<jsSourceFile>tool-line.js</jsSourceFile>
+								<jsSourceFile>tool-uline.js</jsSourceFile>
+								<jsSourceFile>tool-rect.js</jsSourceFile>
+								<jsSourceFile>tool-ellipse.js</jsSourceFile>
+								<jsSourceFile>tool-arrow.js</jsSourceFile>
+								<jsSourceFile>tool-clipart.js</jsSourceFile>
+								<jsSourceFile>wb-board.js</jsSourceFile>
+								<jsSourceFile>wb-area.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>wb.js</jsFinalFile>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
+							<skipMinify>true</skipMinify>
+							<suffix></suffix>
+						</configuration>
+					</execution>
+					<execution>
+						<id>wb-js-minify</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>wb-all.js</jsSourceFile>
+								<jsSourceFile>uuid.js</jsSourceFile>
+								<jsSourceFile>player.js</jsSourceFile>
+								<jsSourceFile>tool-base.js</jsSourceFile>
+								<jsSourceFile>tool-pointer.js</jsSourceFile>
+								<jsSourceFile>tool-apointer.js</jsSourceFile>
+								<jsSourceFile>tool-shape-base.js</jsSourceFile>
+								<jsSourceFile>tool-text.js</jsSourceFile>
+								<jsSourceFile>tool-paint.js</jsSourceFile>
+								<jsSourceFile>tool-shape.js</jsSourceFile>
+								<jsSourceFile>tool-line.js</jsSourceFile>
+								<jsSourceFile>tool-uline.js</jsSourceFile>
+								<jsSourceFile>tool-rect.js</jsSourceFile>
+								<jsSourceFile>tool-ellipse.js</jsSourceFile>
+								<jsSourceFile>tool-arrow.js</jsSourceFile>
+								<jsSourceFile>tool-clipart.js</jsSourceFile>
+								<jsSourceFile>wb-board.js</jsSourceFile>
+								<jsSourceFile>wb-area.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>wb.js</jsFinalFile>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
+							<jsEngine>CLOSURE</jsEngine>
 						</configuration>
 					</execution>
 				</executions>

@@ -1,0 +1,58 @@
+/* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+var Shape = function(wb) {
+	let shape = ShapeBase(wb);
+	shape.obj = null;
+	shape.isDown = false;
+	shape.orig = {x: 0, y: 0};
+
+	shape.add2Canvas = function(canvas) {
+		canvas.add(shape.obj);
+	}
+	shape.mouseDown = function(o) {
+		var canvas = this;
+		shape.isDown = true;
+		var pointer = canvas.getPointer(o.e);
+		shape.orig = {x: pointer.x, y: pointer.y};
+		shape.createShape(canvas);
+		shape.add2Canvas(canvas);
+	};
+	shape.mouseMove = function(o) {
+		var canvas = this;
+		if (!shape.isDown) return;
+		var pointer = canvas.getPointer(o.e);
+		shape.updateShape(pointer);
+		canvas.renderAll();
+	};
+	shape.updateCreated = function(o) {
+		return o;
+	};
+	shape.mouseUp = function(o) {
+		var canvas = this;
+		shape.isDown = false;
+		shape.obj.setCoords();
+		shape.obj.selectable = false;
+		canvas.renderAll();
+		shape.objectCreated(shape.obj, canvas);
+	};
+	shape.internalActivate = function() {};
+	shape.activate = function() {
+		wb.eachCanvas(function(canvas) {
+			canvas.on({
+				'mouse:down': shape.mouseDown
+				, 'mouse:move': shape.mouseMove
+				, 'mouse:up': shape.mouseUp
+			});
+		});
+		shape.internalActivate();
+	};
+	shape.deactivate = function() {
+		wb.eachCanvas(function(canvas) {
+			canvas.off({
+				'mouse:down': shape.mouseDown
+				, 'mouse:move': shape.mouseMove
+				, 'mouse:up': shape.mouseUp
+			});
+		});
+	};
+	return shape;
+};
