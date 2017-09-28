@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.web.common;
 
-import java.io.Serializable;
-import java.util.function.Consumer;
-
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -28,6 +25,7 @@ import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.Model;
+import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -62,8 +60,8 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			this.dialog = dialog;
 			form.add(new EmptyPanel(DIALOG_ID));
 		}
-		this.dialog.setSubmitHandler((Consumer<AjaxRequestTarget> & Serializable)(t)->onSubmit(t));
-		this.dialog.setErrorHandler((Consumer<AjaxRequestTarget> & Serializable)(t)->onError(t));
+		this.dialog.setSubmitHandler((SerializableConsumer<AjaxRequestTarget>)(t)->onSubmit(t));
+		this.dialog.setErrorHandler((SerializableConsumer<AjaxRequestTarget>)(t)->onError(t));
 		setOutputMarkupId(true);
 	}
 
@@ -129,8 +127,8 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	public static class ConfirmableBorderDialog extends MessageFormDialog {
 		private static final long serialVersionUID = 1L;
 		private Form<?> form;
-		private Consumer<AjaxRequestTarget> submitHandler = null;
-		private Consumer<AjaxRequestTarget> errorHandler = null;
+		private SerializableConsumer<AjaxRequestTarget> submitHandler = null;
+		private SerializableConsumer<AjaxRequestTarget> errorHandler = null;
 
 		public ConfirmableBorderDialog(String id, String title, String message) {
 			this(id, title, message, null);
@@ -141,11 +139,11 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			this.form = form;
 		}
 
-		public void setSubmitHandler(Consumer<AjaxRequestTarget> submitHandler) {
+		public void setSubmitHandler(SerializableConsumer<AjaxRequestTarget> submitHandler) {
 			this.submitHandler = submitHandler;
 		}
 
-		public void setErrorHandler(Consumer<AjaxRequestTarget> errorHandler) {
+		public void setErrorHandler(SerializableConsumer<AjaxRequestTarget> errorHandler) {
 			this.errorHandler = errorHandler;
 		}
 

@@ -163,7 +163,7 @@ var Video = (function() {
 			ico.toggleClass('ui-icon-volume-off ui-icon-volume-on');
 			vol.removeClass('ui-state-error');
 			_handleMicStatus(true);
-		} else if (val == 0 && ico.hasClass('ui-icon-volume-on')) {
+		} else if (val === 0 && ico.hasClass('ui-icon-volume-on')) {
 			ico.toggleClass('ui-icon-volume-on ui-icon-volume-off');
 			vol.addClass('ui-state-error');
 			_handleMicStatus(false);
@@ -260,7 +260,7 @@ var Video = (function() {
 					e.stopImmediatePropagation();
 					return false;
 				});
-			let refresh = v.parent().find('.ui-dialog-titlebar-refresh')
+			v.parent().find('.ui-dialog-titlebar-refresh')
 				.click(function(e) {
 					e.stopImmediatePropagation();
 					_refresh();
@@ -330,7 +330,7 @@ var Video = (function() {
 			vol.hide();
 			v.parent().find('.dropdown-menu.video.volume').hide();
 		}
-		if (opts.interview && c.pod != _c.pod) {
+		if (opts.interview && c.pod !== _c.pod) {
 			c.pod = _c.pod;
 			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
 		}
@@ -385,11 +385,11 @@ var VideoManager = (function() {
 			let _id = VideoUtil.getVid(cl.uid)
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
-			if (av && v.length != 1 && !!cl.self) {
+			if (av && v.length !== 1 && !!cl.self) {
 				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
-			} else if (av && v.length == 1) {
+			} else if (av && v.length === 1) {
 				v.data().update(cl);
-			} else if (!av && v.length == 1) {
+			} else if (!av && v.length === 1) {
 				_closeV(v);
 			}
 		}
@@ -402,10 +402,10 @@ var VideoManager = (function() {
 			}
 
 		}
-		if (c.streams.length == 0) {
+		if (c.streams.length === 0) {
 			// check for non inited video window
 			let v = $('#' + VideoUtil.getVid(c.uid));
-			if (v.length == 1) {
+			if (v.length === 1) {
 				_closeV(v);
 			}
 		}
@@ -427,7 +427,7 @@ var VideoManager = (function() {
 					.show(), 10);
 			share.tooltip().off('click').click(function() {
 				var v = $('#' + VideoUtil.getVid(c.uid))
-				if (v.length != 1) {
+				if (v.length !== 1) {
 					Video().init(c, $(WBA_SEL).offset());
 				} else {
 					v.dialog('open');
@@ -439,7 +439,7 @@ var VideoManager = (function() {
 	}
 	function _close(uid, showShareBtn) {
 		var _id = VideoUtil.getVid(uid), v = $('#' + _id);
-		if (v.length == 1) {
+		if (v.length === 1) {
 			_closeV(v);
 		}
 		if (!showShareBtn && uid === share.data('uid')) {

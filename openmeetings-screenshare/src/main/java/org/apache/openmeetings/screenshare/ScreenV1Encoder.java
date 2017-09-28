@@ -140,7 +140,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 			prev = new Rectangle(0, Math.max(0, img.height - blockSize), blockSize, blockSize);
 		} else {
 			prev = new Rectangle(_prev);
-			if (Double.compare(prev.x + prev.width, img.getWidth()) == 0) {
+			if (Double.compare(0. + prev.x + prev.width, img.getWidth()) == 0) {
 				if (prev.y == 0) return new Rectangle(); //the end of the image
 				//next row
 				prev.x = 0; //reset position

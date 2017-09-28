@@ -1,8 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 function initVideo(el, id, options) {
-	var type = 'application/x-shockwave-flash';
-	var src = 'public/main.swf?cache' + new Date().getTime();
-	var o = $('<object>').attr('id', id).attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
+	let type = 'application/x-shockwave-flash'
+		, src = 'public/main.swf?cache' + new Date().getTime()
+		, o = $('<object>').attr('id', id).attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
 	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
 		.append($('<param>').attr('name', 'wmode').attr('value', options.wmode))
 		.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'))
@@ -12,7 +12,7 @@ function initVideo(el, id, options) {
 	return o;
 }
 var VideoSettings = (function() {
-	var self = {}, vs, lm, swf, s, cam, mic, res, o
+	let vs, lm, swf, s, cam, mic, res, o
 		, vidScroll, recBtn, playBtn, inited = false, recAllowed = false;
 	function _load() {
 		s = {};
@@ -121,11 +121,11 @@ var VideoSettings = (function() {
 	}
 	function _initSwf() {
 		if (!inited) {
-			var obj = swf.getDevices();
+			let obj = swf.getDevices();
 			cam.find('option[value!="-1"]').remove();
-			for (var i = 0; i < obj.cams.length; ++i) {
-				var o = $('<option></option>').attr('value', i).text(obj.cams[i]);
-				if (i == s.video.cam) {
+			for (let i = 0; i < obj.cams.length; ++i) {
+				let o = $('<option></option>').attr('value', i).text(obj.cams[i]);
+				if (i === s.video.cam) {
 					o.prop('selected', true);
 				}
 				cam.append(o);
@@ -135,9 +135,9 @@ var VideoSettings = (function() {
 				swf.camChanged(s.video.cam);
 			});
 			mic.find('option[value!="-1"]').remove();
-			for (var i = 0; i < obj.mics.length; ++i) {
-				var o = $('<option></option>').attr('value', i).text(obj.mics[i]);
-				if (i == s.video.mic) {
+			for (let i = 0; i < obj.mics.length; ++i) {
+				let o = $('<option></option>').attr('value', i).text(obj.mics[i]);
+				if (i === s.video.mic) {
 					o.prop('selected', true);
 				}
 				mic.append(o);
@@ -151,8 +151,8 @@ var VideoSettings = (function() {
 				swf.resChanged(s.video.width, s.video.height);
 			});
 			res.find('option').each(function(idx) {
-				var o = $(this).data();
-				if (o.width == s.video.width && o.height == s.video.height) {
+				let o = $(this).data();
+				if (o.width === s.video.width && o.height === s.video.height) {
 					$(this).prop('selected', true);
 					return false;
 				}

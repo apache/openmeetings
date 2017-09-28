@@ -326,7 +326,7 @@ public class RoomMenuPanel extends Panel {
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
-		pollResultMenuItem.setEnabled(pollExists || pollDao.getArchived(r.getId()).size() > 0);
+		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
 		sipDialerMenuItem.setEnabled(r.isSipEnabled() && getBean(ConfigurationDao.class).isSipEnabled());
 		//TODO sip menus
 		menuPanel.update(handler);

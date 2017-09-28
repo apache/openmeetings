@@ -106,7 +106,7 @@ public class RoomInvitationForm extends InvitationForm {
 			super.updateButtons(target);
 		} else {
 			Collection<Group> to = groups.getModelObject();
-			dialog.send.setEnabled(to.size() > 0, target);
+			dialog.send.setEnabled(!to.isEmpty(), target);
 			dialog.generate.setEnabled(false, target);
 		}
 	}
