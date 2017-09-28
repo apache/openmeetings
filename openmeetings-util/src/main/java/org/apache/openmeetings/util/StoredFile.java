@@ -18,12 +18,11 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.tika.metadata.TikaMetadataKeys.RESOURCE_NAME_KEY;
 import static org.apache.tika.mime.MediaType.application;
-import static org.apache.tika.mime.MediaType.image;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,7 +52,7 @@ public class StoredFile {
 			application("x-tika-msoffice"), application("x-tika-ooxml"), application("msword")
 			, application("vnd.wordperfect"), application("rtf")));
 
-	private static final MediaType MIME_JPG = image(EXTENSION_JPG);
+	private static final MediaType MIME_JPG = MediaType.parse(JPG_MIME_TYPE);
 	private static final Set<MediaType> PDF_TYPES = new HashSet<>(Arrays.asList(application("pdf"), application("postscript")));
 	private static final Set<MediaType> CHART_TYPES = new HashSet<>(/* TODO have to be tested and re-added Arrays.asList("xchart")*/);
 	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_JPG/* TODO have to be tested and re-added, "xchart"*/));

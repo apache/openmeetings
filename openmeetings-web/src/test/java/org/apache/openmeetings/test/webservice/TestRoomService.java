@@ -19,6 +19,7 @@
 package org.apache.openmeetings.test.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -33,8 +34,8 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.room.RoomFileDTO;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.junit.Test;
 
 public class TestRoomService extends AbstractWebServiceTest {
@@ -150,7 +151,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 	@Test
 	public void testCreateWithFiles2() throws IOException {
 		//lets create real file
-		CallResult<FileItemDTO> fileCall = createVerifiedFile(OmFileHelper.getDefaultProfilePicture());
+		CallResult<FileItemDTO> fileCall = createVerifiedFile(getDefaultProfilePicture(), "img.jpg", BaseFileItem.Type.Image);
 
 		Room.Type type = Room.Type.restricted;
 		String name = "Unit Test Ext Room4";
