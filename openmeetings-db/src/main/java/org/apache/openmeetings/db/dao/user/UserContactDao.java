@@ -125,9 +125,7 @@ public class UserContactDao {
 			query.setParameter("userId", userId);
 			query.setParameter("shareCalendar", shareCalendar);
 			List<UserContact> ll = query.getResultList();
-			if (ll.size() > 0) {
-				return ll.get(0);
-			}
+			return ll.isEmpty() ? null : ll.get(0);
 		} catch (Exception e) {
 			log.error("[getUserContactByShareCalendar]", e);
 		}

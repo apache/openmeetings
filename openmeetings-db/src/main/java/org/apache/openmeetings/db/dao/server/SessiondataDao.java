@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.dao.server;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -102,11 +103,12 @@ public class SessiondataDao {
 				.setParameter("sessionId", String.format("%%%s%%", SID)).getResultList();
 
 		Sessiondata sd = null;
-		if (sessions != null && sessions.size() > 0) {
-			sd = sessions.get(0);
-			if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0))) {
-				return null;
-			}
+		if (sessions == null || sessions.isEmpty()) {
+			return null;
+		}
+		sd = sessions.get(0);
+		if (sd == null || sd.getUserId() == null || sd.getUserId().equals(new Long(0))) {
+			return null;
 		}
 		return sd;
 	}
@@ -184,7 +186,7 @@ public class SessiondataDao {
 		} catch (Exception ex2) {
 			log.error("[getSessionToDelete]: ", ex2);
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	/**

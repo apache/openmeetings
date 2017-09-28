@@ -735,7 +735,7 @@ public class RoomPanel extends BasePanel {
 	public void requestRight(Right right, IPartialPageRequestHandler handler) {
 		RoomMessage.Type reqType = null;
 		List<Client> mods = Application.getRoomClients(r.getId(), c -> c.hasRight(Room.Right.moderator));
-		if (mods.size() == 0) {
+		if (mods.isEmpty()) {
 			if (r.isModerated()) {
 				//dialog
 				waitForModerator.open(handler);

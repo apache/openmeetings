@@ -203,7 +203,7 @@ public class Configuration implements IDataProviderEntity {
 	}
 
 	public void setValueB(boolean value) {
-		this.value = "" + value;
+		this.value = String.valueOf(value);
 	}
 
 	public String getFromVersion() {

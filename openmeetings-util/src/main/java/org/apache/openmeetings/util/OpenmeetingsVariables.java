@@ -94,7 +94,7 @@ public class OpenmeetingsVariables {
 	public static final int USER_LOGIN_MINIMUM_LENGTH = 4;
 	public static final int USER_PASSWORD_MINIMUM_LENGTH = 8;
 	public static final String DEFAULT_APP_NAME = "OpenMeetings";
-	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024; // 100MB
+	public static final long DEFAULT_MAX_UPLOAD_SIZE = 100 * 1024 * 1024L; // 100MB
 	public static final String FLASH_SECURE = "secure";
 	public static final String FLASH_NATIVE_SSL = "native";
 	public static final String FLASH_PORT = "rtmpPort";

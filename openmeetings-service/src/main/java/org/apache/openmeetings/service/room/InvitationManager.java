@@ -85,7 +85,7 @@ public class InvitationManager implements IInvitationManager {
 		User owner = a.getOwner();
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
 		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
-		AbstractSubjectEmailTemplate t = null;
+		AbstractSubjectEmailTemplate t;
 		switch (type) {
 			case Cancel:
 				t = CanceledAppointmentTemplate.get(mm.getUser(), a, tz, invitorName);
@@ -127,8 +127,7 @@ public class InvitationManager implements IInvitationManager {
 
 			// Defining Organizer
 
-			Map<String, String> organizerAttendee = handler.getAttendeeData(email, username, isOwner);
-			organizerAttendee = handler.getAttendeeData(replyToEmail, owner.getLogin(), isOwner);
+			Map<String, String> organizerAttendee = handler.getAttendeeData(replyToEmail, owner.getLogin(), isOwner);
 
 			Appointment a = i.getAppointment();
 			// Create ICal Message

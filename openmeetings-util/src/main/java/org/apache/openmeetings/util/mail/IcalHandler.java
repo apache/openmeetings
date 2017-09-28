@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -134,8 +135,8 @@ public class IcalHandler {
 		meeting.getProperties().add(Transp.OPAQUE);
 
 		// generate unique identifier (if not submitted)
-		Uid ui = null;
-		if (uid == null || uid.length() < 1) {
+		Uid ui;
+		if (Strings.isEmpty(uid)) {
 			ui = new Uid(UUID.randomUUID().toString());
 			log.debug("Generating Meeting UID : " + ui.getValue());
 		} else {
@@ -180,10 +181,9 @@ public class IcalHandler {
 	/**
 	 * Write iCal to File
 	 */
-	public void writeDataToFile(String filerPath) throws Exception {
-		if (!filerPath.endsWith(".ics")) {
-			filerPath = filerPath + ".ics";
-		}
+	public void writeDataToFile(String _filerPath) throws Exception {
+		String filerPath = _filerPath.endsWith(".ics") ? _filerPath
+				: String.format("%s.ics", _filerPath);
 
 		try (FileOutputStream fout = new FileOutputStream(filerPath)) {
 			CalendarOutputter outputter = new CalendarOutputter();

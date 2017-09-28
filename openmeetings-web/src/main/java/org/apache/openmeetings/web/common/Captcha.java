@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.common;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import java.util.Random;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
@@ -38,6 +40,7 @@ import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 
 public class Captcha extends Panel {
 	private static final long serialVersionUID = 1L;
+	private static Random rnd = new Random();
 	private String randomText;
 	private final CaptchaImageResource captchaImageResource = new CaptchaImageResource() {
 		private static final long serialVersionUID = 1L;
@@ -89,7 +92,7 @@ public class Captcha extends Panel {
 	}
 
 	private static int randomInt(int min, int max) {
-		return (int)(Math.random() * (max - min) + min);
+		return rnd.nextInt(max - min) + min;
 	}
 
 	private static String randomString(int min, int max) {

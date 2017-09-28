@@ -48,7 +48,7 @@ public class ProcessHelper {
 	}
 
 	private static String getCommand(String[] argv) {
-		StringBuffer tString = new StringBuffer();
+		StringBuilder tString = new StringBuilder();
 		for (int i = 0; i < argv.length; i++) {
 			tString.append(argv[i]).append(" ");
 		}

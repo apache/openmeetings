@@ -75,7 +75,7 @@ public class WhiteboardCache {
 		return wbs;
 	}
 
-	public static Set<Entry<Long, Whiteboard>> list(Long roomId, Long langId) {
+	public static Set<Entry<Long, Whiteboard>> list(long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
 		if (wbs.getWhiteboards().isEmpty()) {
 			Whiteboard wb = add(wbs, langId);
@@ -85,7 +85,7 @@ public class WhiteboardCache {
 		return wbs.getWhiteboards().entrySet();
 	}
 
-	public static Whiteboard add(Long roomId, Long langId) {
+	public static Whiteboard add(long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = add(wbs, langId);
 		update(wbs);
@@ -98,7 +98,7 @@ public class WhiteboardCache {
 		return wb;
 	}
 
-	public static Whiteboard clear(Long roomId, Long wbId) {
+	public static Whiteboard clear(long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = wbs.get(wbId);
 		if (wb != null) {
@@ -108,20 +108,20 @@ public class WhiteboardCache {
 		return wb;
 	}
 
-	public static Whiteboard remove(Long roomId, Long wbId) {
+	public static Whiteboard remove(long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = wbs.getWhiteboards().remove(wbId);
 		update(wbs);
 		return wb;
 	}
 
-	public static void activate(Long roomId, Long wbId) {
+	public static void activate(long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		wbs.setActiveWb(wbId);
 		update(wbs);
 	}
 
-	public static void update(Long roomId, Whiteboard wb) {
+	public static void update(long roomId, Whiteboard wb) {
 		Whiteboards wbs = get(roomId);
 		wbs.update(wb);
 		update(wbs);

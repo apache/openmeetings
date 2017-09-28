@@ -32,7 +32,7 @@ import static org.apache.wicket.validation.validator.StringValidator.minimumLeng
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -234,7 +234,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	public void updateDomain(AjaxRequestTarget target) {
 		User u = getModelObject();
-		final Map<Long, String> values = new Hashtable<>();
+		final Map<Long, String> values = new HashMap<>();
 		List<Long> ids = new ArrayList<>();
 		if (u.getType() == Type.ldap) {
 			for (LdapConfig c : getBean(LdapConfigDao.class).getActive()) {

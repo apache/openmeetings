@@ -251,7 +251,7 @@ public class AppointmentDao {
 					.setParameter("roomId", roomId)
 					.getResultList();
 
-			return list.size() > 0 ? list.get(0) : null;
+			return list.isEmpty() ? null : list.get(0);
 		} catch (Exception e) {
 			log.error("[getByRoom]", e);
 			return null;
@@ -263,7 +263,7 @@ public class AppointmentDao {
 				.setParameter("roomId", roomId)
 				.getResultList();
 
-		Appointment a = list.size() > 0 ? list.get(0) : null;
+		Appointment a = list.isEmpty() ? null : list.get(0);
 		if (a != null && !a.getRoom().isAppointment()) {
 			throw new RuntimeException("Room " + a.getRoom().getName() + " isnt part of an appointed meeting");
 		}

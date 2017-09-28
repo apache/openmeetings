@@ -39,23 +39,15 @@ public class CalendarHelper {
 	}
 
 	public static ZonedDateTime getZoneDateTime(Date d, String tzId) {
-		if (d == null) {
-			d = new Date();
-		}
-		return Instant.ofEpochMilli(d.getTime()).atZone(getZoneId(tzId));
+		long milli = (d == null ? new Date() : d).getTime();
+		return Instant.ofEpochMilli(milli).atZone(getZoneId(tzId));
 	}
 
 	public static LocalDate getDate(Date d, String tzId) {
-		if (d == null) {
-			d = new Date();
-		}
-		return getZoneDateTime(d, tzId).toLocalDate();
+		return getZoneDateTime(d == null ? new Date() : d, tzId).toLocalDate();
 	}
 
 	public static LocalDateTime getDateTime(Date d, String tzId) {
-		if (d == null) {
-			d = new Date();
-		}
-		return getZoneDateTime(d, tzId).toLocalDateTime();
+		return getZoneDateTime(d == null ? new Date() : d, tzId).toLocalDateTime();
 	}
 }

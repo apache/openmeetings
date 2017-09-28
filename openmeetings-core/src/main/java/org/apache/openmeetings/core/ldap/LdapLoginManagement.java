@@ -167,18 +167,16 @@ public class LdapLoginManagement {
 	 * Connection Data is retrieved from ConfigurationFile
 	 *
 	 */
-	public User login(String login, String passwd, Long domainId) throws OmException {
+	public User login(String _login, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");
-		if (!userDao.validLogin(login)) {
+		if (!userDao.validLogin(_login)) {
 			log.error("Invalid login provided");
 			return null;
 		}
 
 		User u = null;
 		try (LdapWorker w = new LdapWorker(domainId)) {
-			if (w.options.useLowerCase) {
-				login = login.toLowerCase();
-			}
+			String login = w.options.useLowerCase ? _login.toLowerCase() : _login;
 
 			boolean authenticated = true;
 			Dn userDn = null;

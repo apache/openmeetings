@@ -39,7 +39,7 @@ public class InstallationDocumentHandler {
 		Element root = document.addElement("install");
 		Element step = root.addElement("step");
 
-		step.addElement("stepnumber").addText("" + stepNo);
+		step.addElement("stepnumber").addText(String.valueOf(stepNo));
 		step.addElement("stepname").addText("Step " + stepNo);
 
 		try (OutputStream os = new FileOutputStream(OmFileHelper.getInstallFile())) {
@@ -55,6 +55,6 @@ public class InstallationDocumentHandler {
 
 		Node node = document.selectSingleNode("//install/step/stepnumber");
 
-		return Integer.valueOf(node.getText()).intValue();
+		return Integer.parseInt(node.getText());
 	}
 }

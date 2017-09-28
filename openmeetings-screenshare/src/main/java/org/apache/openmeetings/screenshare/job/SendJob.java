@@ -58,7 +58,7 @@ public class SendJob implements Job {
 				log.trace(String.format("send: new timestamp: %s", capture.getTimestamp()));
 			}
 		} else if (log.isTraceEnabled()) {
-			log.trace(String.format("send: nothing to send"));
+			log.trace("send: nothing to send");
 		}
 		capture.setSendFrameGuard(false);
 	}

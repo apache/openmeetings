@@ -140,7 +140,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 			prev = new Rectangle(0, Math.max(0, img.height - blockSize), blockSize, blockSize);
 		} else {
 			prev = new Rectangle(_prev);
-			if (prev.x + prev.width == img.getWidth()) {
+			if (Double.compare(prev.x + prev.width, img.getWidth()) == 0) {
 				if (prev.y == 0) return new Rectangle(); //the end of the image
 				//next row
 				prev.x = 0; //reset position
@@ -181,12 +181,12 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 	}
 
 	public int getTag(final int frame, final int codec) {
-		return ((frame & 0x0F) << 4) + ((codec & 0x0F) << 0);
+		return ((frame & 0x0F) << 4) + (codec & 0x0F);
 	}
 
 	private static void writeShort(OutputStream os, final int n) throws IOException {
 		os.write((n >> 8) & 0xFF);
-		os.write((n >> 0) & 0xFF);
+		os.write( n       & 0xFF);
 	}
 
 	public static int[][] getImage(Rectangle screen, Robot robot) {

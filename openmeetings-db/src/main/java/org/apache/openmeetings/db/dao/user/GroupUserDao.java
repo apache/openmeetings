@@ -89,8 +89,8 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	}
 
 	public boolean isUserInGroup(long groupId, long userId) {
-		return em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList().size() > 0;
+		return !em.createNamedQuery("isUserInGroup", GroupUser.class)
+				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList().isEmpty();
 	}
 
 	@Override

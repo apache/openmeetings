@@ -384,8 +384,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			return u == null || u.getId().equals(id);
 		} catch (Exception e) {
 			//exception is thrown in case of non-unique result
-			return false;
 		}
+		return false;
 	}
 
 	public boolean validLogin(String login) {
@@ -643,7 +643,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 		log.debug("login:: {} users were found", users.size());
 
-		if (users.size() == 0) {
+		if (users.isEmpty()) {
 			log.debug("No users was found: {}", userOrEmail);
 			return null;
 		}

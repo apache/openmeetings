@@ -82,7 +82,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 
 	static boolean allowOAuthLogin() {
-		return getBean(OAuth2Dao.class).getActive().size() > 0;
+		return !getBean(OAuth2Dao.class).getActive().isEmpty();
 	}
 
 	public SignInPage(PageParameters p) {
@@ -105,9 +105,7 @@ public class SignInPage extends BaseInitedPage {
 					if (authInfo == null) return;
 					log.debug("OAuthInfo=" + authInfo);
 					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
-					if (authParams != null) {
-						loginViaOAuth2(authParams, serverId);
-					}
+					loginViaOAuth2(authParams, serverId);
 				} else { // redirect to get code
 					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(),
 							null, null, getRedirectUri(server, this), null);
@@ -257,7 +255,7 @@ public class SignInPage extends BaseInitedPage {
 		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
-		JSONObject jsonResult = new JSONObject(sourceResponse.toString());
+		JSONObject jsonResult = new JSONObject(sourceResponse);
 		if (jsonResult.has("access_token")) {
 			result.accessToken = jsonResult.getString("access_token");
 		}
@@ -272,7 +270,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 		// access token must be specified
 		if (result.accessToken == null) {
-			log.error("Response doesn't contain access_token field:\n" + sourceResponse.toString());
+			log.error("Response doesn't contain access_token field:\n {}", sourceResponse);
 			return null;
 		}
 		return result;

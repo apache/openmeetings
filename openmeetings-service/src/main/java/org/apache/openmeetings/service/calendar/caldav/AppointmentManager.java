@@ -355,7 +355,7 @@ public class AppointmentManager {
 									if (o instanceof Element) {
 										Element e = (Element) o;
 										String name = DomUtil.getAttribute(e, "name", null);
-										if (name.equals("VEVENT")) {
+										if ("VEVENT".equals(name)) {
 											isVevent = true;
 										}
 									}

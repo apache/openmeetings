@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -226,7 +227,7 @@ public class iCalUtils {
 			URI uri = URI.create(organizer.getValue());
 
 			//If the value of the organizer is an email
-			if (uri.getScheme().equals("mailto")) {
+			if ("mailto".equals(uri.getScheme())) {
 				String email = uri.getSchemeSpecificPart();
 				//Contact or exist and owner
 				User org = userDao.getByEmail(email);
@@ -242,7 +243,7 @@ public class iCalUtils {
 		if (attendees != null && !attendees.isEmpty()) {
 			for (Property attendee : attendees) {
 				URI uri = URI.create(attendee.getValue());
-				if (uri.getScheme().equals("mailto")) {
+				if ("mailto".equals(uri.getScheme())) {
 					String email = uri.getSchemeSpecificPart();
 					User u = userDao.getByEmail(email);
 					if (u == null) {
@@ -307,7 +308,7 @@ public class iCalUtils {
 	 * @return {@link java.util.Date} representation of the iCalendar value.
 	 */
 	public Date parseDate(Property dt, TimeZone timeZone) {
-		if (dt == null || dt.getValue().equals("")) {
+		if (dt == null || Strings.isEmpty(dt.getValue())) {
 			return null;
 		}
 
@@ -330,13 +331,11 @@ public class iCalUtils {
 	 * @return <code>java.util.Date</code> representation of string or
 	 * <code>null</code> if the Date could not be parsed.
 	 */
-	public Date parseDate(String str, String[] patterns, TimeZone timeZone) {
-		FastDateFormat parser = null;
+	public Date parseDate(String str, String[] patterns, TimeZone _timeZone) {
+		FastDateFormat parser;
 		Locale locale = WebSession.get().getLocale();
 
-		if (str.endsWith("Z")) {
-			timeZone = TimeZone.getTimeZone("UTC");
-		}
+		TimeZone timeZone = str.endsWith("Z") ? TimeZone.getTimeZone("UTC") : _timeZone;
 
 		ParsePosition pos = new ParsePosition(0);
 		for (String pattern : patterns) {
@@ -416,7 +415,7 @@ public class iCalUtils {
 		meeting.getProperties().add(Transp.OPAQUE);
 
 		String uid = appointment.getIcalId();
-		Uid ui = null;
+		Uid ui;
 		if (uid == null || uid.length() < 1) {
 			UUID uuid = UUID.randomUUID();
 			appointment.setIcalId(uuid.toString());

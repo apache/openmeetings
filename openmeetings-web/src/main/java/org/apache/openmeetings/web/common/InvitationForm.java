@@ -139,7 +139,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	protected void updateButtons(AjaxRequestTarget target) {
 		Collection<User> to = recipients.getModelObject();
-		dialog.send.setEnabled(to.size() > 0, target);
+		dialog.send.setEnabled(!to.isEmpty(), target);
 		dialog.generate.setEnabled(to.size() == 1, target);
 	}
 

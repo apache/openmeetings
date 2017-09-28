@@ -184,7 +184,7 @@ public class MailHandler {
 		props.put("mail.smtp.timeout", smtpTimeOut);
 
 		// Check for Authentication
-		Session session = null;
+		Session session;
 		if (!Strings.isEmpty(mailAuthUser) && !Strings.isEmpty(mailAuthPass)) {
 			// use SMTP Authentication
 			props.put("mail.smtp.auth", "true");

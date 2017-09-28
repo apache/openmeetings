@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -60,8 +59,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	private RecordingDao recordingDao;
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
-	@Autowired
-	private FileItemLogDao logDao;
 
 	private String[] mergeAudioToWaves(List<File> waveFiles, File wav,
 			List<RecordingMetaData> metaDataList, ReConverterParams rcv) throws IOException {
@@ -120,12 +117,23 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			// Merge Wave to Full Length
 			File streamFolderGeneral = getStreamsHibernateDir();
 
-			File wav = new File(streamFolder, "INTERVIEW_" + r.getId() + "_FINAL_WAVE.wav");
+			File wav = new File(streamFolder, String.format("INTERVIEW_%s_FINAL_WAVE.wav", r.getId()));
 			deleteFileIfExists(wav);
 
-			if (waveFiles.size() == 1) {
+			if (waveFiles.isEmpty()) {
+				// create default Audio to merge it.
+				// strip to content length
+				File outputWav = new File(streamFolderGeneral, "one_second.wav");
+
+				// Calculate delta at beginning
+				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
+
+				String[] cmdSox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), wav.getCanonicalPath(), "pad", "0", String.valueOf(deltaPadding) };
+
+				logs.add(ProcessHelper.executeScript("generateSampleAudio", cmdSox));
+			} else if (waveFiles.size() == 1) {
 				wav = waveFiles.get(0);
-			} else if (waveFiles.size() > 0) {
+			} else {
 				String[] argv_full_sox;
 				if (reconversion) {
 					argv_full_sox = mergeAudioToWaves(waveFiles, wav, metaDataList, rcv);
@@ -134,17 +142,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 
 				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
-			} else {
-				// create default Audio to merge it.
-				// strip to content length
-				File outputWav = new File(streamFolderGeneral, "one_second.wav");
-
-				// Calculate delta at beginning
-				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
-
-				String[] cmdSox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), wav.getCanonicalPath(), "pad", "0", "" + deltaPadding };
-
-				logs.add(ProcessHelper.executeScript("generateSampleAudio", cmdSox));
 			}
 			// Default Image for empty interview video pods
 			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
@@ -183,7 +180,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 						if (diff != 0L) {
 							// stub to add
 							// ffmpeg -y -loop 1 -i /home/solomax/work/openmeetings/branches/3.0.x/dist/red5/webapps/openmeetings/streams/hibernate/default_interview_image.jpg -filter_complex '[0:0]scale=320:260' -c:v libx264 -t 00:00:29.059 -pix_fmt yuv420p out.flv
-							File podFB = new File(streamFolder, meta.getStreamName() + "_pod_" + pod + "_blank.flv");
+							File podFB = new File(streamFolder, String.format("%s_pod_%s_blank.flv", meta.getStreamName(), pod));
 							String podPB = podFB.getCanonicalPath();
 							String[] argsPodB = new String[] { getPathToFFMPEG(), "-y" //
 									, "-loop", "1", "-i", defaultInterviewImageFile.getCanonicalPath() //
@@ -258,22 +255,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			String mp4path = convertToMp4(r, args, logs);
 
-			convertToPng(r, mp4path, logs);
-
-			updateDuration(r);
-			r.setStatus(Recording.Status.PROCESSED);
-
-			logDao.delete(r);
-			for (ConverterProcessResult returnMap : logs) {
-				logDao.add("generateFFMPEG", r, returnMap);
-			}
-
-			// Delete Wave Files
-			for (File audio : waveFiles) {
-				if (audio.exists()) {
-					audio.delete();
-				}
-			}
+			postProcess(r, mp4path, logs, waveFiles);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);

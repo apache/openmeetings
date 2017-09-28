@@ -65,15 +65,13 @@ public class CalendarPatterns {
 		if (t == null) {
 			return "";
 		}
-		return "" + t.getTime();
+		return String.valueOf(t.getTime());
 	}
 
 	public static Date parseImportDate(String dateString) {
 		try {
 
-			Date resultDate = null;
-
-			resultDate = validDate(dateFormat__ddMMyyyyHHmmss, dateString);
+			Date resultDate = validDate(dateFormat__ddMMyyyyHHmmss, dateString);
 
 			if (resultDate != null) {
 				return resultDate;

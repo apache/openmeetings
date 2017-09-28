@@ -72,7 +72,7 @@ public class RemoteJob implements Job {
 		JobDataMap data = context.getJobDetail().getJobDataMap();
 		Core core = (Core)data.get(CORE_KEY);
 		try {
-			Map<String, Object> obj = null;
+			Map<String, Object> obj;
 			while ((obj = core.getRemoteEvents().poll(1, TimeUnit.MILLISECONDS)) != null) {
 				String action = String.valueOf(obj.get("action"));
 				log.trace("Action polled:: {}, count: {}", action, core.getRemoteEvents().size());

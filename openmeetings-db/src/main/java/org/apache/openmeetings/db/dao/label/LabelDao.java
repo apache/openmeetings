@@ -181,9 +181,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static List<StringLabel> getLabels(Locale l, final String search) {
 		if (!labelCache.containsKey(l)) {
 			List<StringLabel> ll = getLabels(l);
-			if (ll != null) {
-				labelCache.putIfAbsent(l, ll);
-			}
+			labelCache.putIfAbsent(l, ll);
 		}
 		List<StringLabel> result = new ArrayList<>(labelCache.containsKey(l) ? labelCache.get(l) : new ArrayList<StringLabel>());
 		if (!Strings.isEmpty(search)) {
@@ -303,7 +301,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 		@Override
 		public int compare(StringLabel o1, StringLabel o2) {
-			int val = 0;
+			int val;
 			if (KEY_ATTR.equals(sort.getProperty())) {
 				try {
 					int i1 = Integer.parseInt(o1.getKey()), i2 = Integer.parseInt(o2.getKey());

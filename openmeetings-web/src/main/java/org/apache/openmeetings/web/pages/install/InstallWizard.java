@@ -763,7 +763,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 	}
 
-	private abstract class WizardDropDown<T>  extends DropDownChoice<T> {
+	private abstract class WizardDropDown<T extends Serializable>  extends DropDownChoice<T> {
 		private static final long serialVersionUID = 1L;
 		T option;
 		IModel<Object> propModel;
@@ -797,12 +797,12 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 				@Override
 				public Object getDisplayValue(String object) {
-					return object.toString();
+					return object;
 				}
 
 				@Override
 				public String getIdValue(String object, int index) {
-					return object.toString();
+					return object;
 				}
 			});
 		}

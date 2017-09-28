@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -66,6 +67,8 @@ public abstract class BaseConverter {
 	private RecordingMetaDataDao metaDataDao;
 	@Autowired
 	private RecordingMetaDeltaDao metaDeltaDao;
+	@Autowired
+	protected FileItemLogDao logDao;
 
 	protected static class Dimension {
 		public int width = 0;
@@ -406,5 +409,24 @@ public abstract class BaseConverter {
 		}
 
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
+	}
+
+	protected void postProcess(Recording r, String mp4path, List<ConverterProcessResult> logs, List<File> waveFiles) throws IOException {
+		convertToPng(r, mp4path, logs);
+
+		updateDuration(r);
+		r.setStatus(Recording.Status.PROCESSED);
+
+		logDao.delete(r);
+		for (ConverterProcessResult returnMap : logs) {
+			logDao.add("generateFFMPEG", r, returnMap);
+		}
+
+		// Delete Wave Files
+		for (File audio : waveFiles) {
+			if (audio.exists()) {
+				audio.delete();
+			}
+		}
 	}
 }

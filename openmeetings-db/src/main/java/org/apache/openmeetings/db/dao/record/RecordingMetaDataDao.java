@@ -87,9 +87,7 @@ public class RecordingMetaDataDao {
 
 			List<RecordingMetaData> metaDatas = query.getResultList();
 
-			if (metaDatas.size() > 0) {
-				return metaDatas.get(0);
-			}
+			return metaDatas.isEmpty() ? null : metaDatas.get(0);
 		} catch (Exception ex2) {
 			log.error("[getScreenMetaDataByRecording]: ", ex2);
 		}

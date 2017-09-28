@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings.web.common;
 
+import java.io.Serializable;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public interface IUpdatable {
+public interface IUpdatable extends Serializable {
 	void update(AjaxRequestTarget target);
 }

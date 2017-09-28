@@ -121,15 +121,18 @@ public class UserManager implements IUserManager {
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
-			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation) {
+			boolean generateSipUserData, String jNameTimeZone, Boolean _sendConfirmation) {
 		try {
 			// Checks if FrontEndUsers can register
 			if (cfgDao.getBool(CONFIG_REGISTER_SOAP, false)) {
-				if (sendConfirmation == null) {
+				boolean sendConfirmation;
+				if (_sendConfirmation == null) {
 					String baseURL = cfgDao.getBaseUrl();
 					sendConfirmation = baseURL != null
 							&& !baseURL.isEmpty()
 							&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
+				} else {
+					sendConfirmation = _sendConfirmation.booleanValue();
 				}
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 

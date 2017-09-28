@@ -60,7 +60,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 
 	@Override
 	protected String getMimeType(FileItem r) {
-		String mime = null;
+		String mime;
 		switch (r.getType()) {
 			case WmlFile:
 				mime = "application/xml";

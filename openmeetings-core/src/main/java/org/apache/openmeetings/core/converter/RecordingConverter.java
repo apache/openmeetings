@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -52,8 +51,6 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 	private RecordingDao recordingDao;
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
-	@Autowired
-	private FileItemLogDao logDao;
 
 	@Override
 	public void startConversion(Long id) {
@@ -91,22 +88,22 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			// Merge Wave to Full Length
 			File wav = new File(streamFolder, screenMetaData.getStreamName() + "_FINAL_WAVE.wav");
 
-			if (waveFiles.size() == 1) {
-				wav = waveFiles.get(0);
-			} else if (waveFiles.size() > 0) {
-				String[] argv_full_sox = mergeAudioToWaves(waveFiles, wav);
-
-				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
-			} else {
+			if (waveFiles.isEmpty()) {
 				// create default Audio to merge it. strip to content length
 				String oneSecWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
 
 				// Calculate delta at beginning
 				double duration = diffSeconds(r.getRecordEnd(), r.getRecordStart());
 
-				String[] cmd = new String[] { getPathToSoX(), oneSecWav, wav.getCanonicalPath(), "pad", "0", "" + duration };
+				String[] cmd = new String[] { getPathToSoX(), oneSecWav, wav.getCanonicalPath(), "pad", "0", String.valueOf(duration) };
 
 				logs.add(ProcessHelper.executeScript("generateSampleAudio", cmd));
+			} else if (waveFiles.size() == 1) {
+				wav = waveFiles.get(0);
+			} else {
+				String[] argv_full_sox = mergeAudioToWaves(waveFiles, wav);
+
+				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
 			}
 			screenMetaData.setFullWavAudioData(wav.getName());
 			metaDataDao.update(screenMetaData);
@@ -126,8 +123,8 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			log.debug("flvWidth -1- " + flvWidth);
 			log.debug("flvHeight -1- " + flvHeight);
 
-			flvWidth = Double.valueOf((Math.floor(flvWidth / 16)) * 16).intValue();
-			flvHeight = Double.valueOf((Math.floor(flvHeight / 16)) * 16).intValue();
+			flvWidth = (int)(16. * flvWidth / 16);
+			flvHeight = (int)(16. * flvHeight / 16);
 
 			log.debug("flvWidth -2- " + flvWidth);
 			log.debug("flvHeight -2- " + flvHeight);
@@ -140,23 +137,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);
 
-			convertToPng(r, mp4path, logs);
-
-			updateDuration(r);
-			r.setStatus(Recording.Status.PROCESSED);
-
-			logDao.delete(r);
-			for (ConverterProcessResult returnMap : logs) {
-				logDao.add("generateFFMPEG", r, returnMap);
-			}
-
-			// Delete Wave Files
-			for (File audio : waveFiles) {
-				if (audio.exists()) {
-					audio.delete();
-				}
-			}
-
+			postProcess(r, mp4path, logs, waveFiles);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);

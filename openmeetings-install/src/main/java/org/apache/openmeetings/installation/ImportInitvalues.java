@@ -171,7 +171,7 @@ public class ImportInitvalues {
 						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html"
 				, "1.9.x");
 
-		addCfg(list, CONFIG_REGISTER_FRONTEND, "" + cfg.allowFrontendRegister, Configuration.Type.bool
+		addCfg(list, CONFIG_REGISTER_FRONTEND, String.valueOf(cfg.allowFrontendRegister), Configuration.Type.bool
 				, "Is user register available on login screen", "1.8.x");
 		addCfg(list, CONFIG_REGISTER_SOAP, "true", Configuration.Type.bool, "Is user register available via SOAP/REST", "3.0.x");
 		addCfg(list, CONFIG_REGISTER_OAUTH, "true", Configuration.Type.bool, "Is user register available via OAuth", "3.0.x");
@@ -180,7 +180,7 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_SMTP_SERVER, cfg.smtpServer, Configuration.Type.string, "this is the smtp server to send messages", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_PORT, "" + cfg.smtpPort, Configuration.Type.number, "this is the smtp server port normally 25", "1.9.x");
+		addCfg(list, CONFIG_SMTP_PORT, String.valueOf(cfg.smtpPort), Configuration.Type.number, "this is the smtp server port normally 25", "1.9.x");
 
 		addCfg(list, CONFIG_SMTP_SYSTEM_EMAIL, cfg.mailReferer, Configuration.Type.string, "all send e-mails by the system will have this address", "1.9.x");
 
@@ -188,7 +188,7 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_SMTP_PASS, cfg.mailAuthPass, Configuration.Type.string, "System auth email password", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_TLS, "" + cfg.mailUseTls, Configuration.Type.bool, "Enable TLS", "1.9.x");
+		addCfg(list, CONFIG_SMTP_TLS, String.valueOf(cfg.mailUseTls), Configuration.Type.bool, "Enable TLS", "1.9.x");
 
 		addCfg(list, CONFIG_SMTP_TIMEOUT_CON, "30000", Configuration.Type.number,
 				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).", "1.9.x");
@@ -201,10 +201,10 @@ public class ImportInitvalues {
 		// "1" == "EN"
 		addCfg(list, CONFIG_DEFAULT_LANG, cfg.defaultLangId, Configuration.Type.number, "Default System Language ID see languages.xml", "1.8.x");
 
-		addCfg(list, CONFIG_DOCUMENT_DPI, "" + cfg.docDpi, Configuration.Type.number,
+		addCfg(list, CONFIG_DOCUMENT_DPI, String.valueOf(cfg.docDpi), Configuration.Type.number,
 				"dpi for conversion of PDF to images (should be an integer between 50 and  600 with a default value of 150 dpi)", "2.0.x");
 
-		addCfg(list, CONFIG_DOCUMENT_QUALITY, "" + cfg.docQuality, Configuration.Type.number,
+		addCfg(list, CONFIG_DOCUMENT_QUALITY, String.valueOf(cfg.docQuality), Configuration.Type.number,
 				"compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90)", "2.0.x");
 
 		addCfg(list, CONFIG_PATH_IMAGEMAGIC, cfg.imageMagicPath, Configuration.Type.string, "Path to ImageMagick tools", "2.0.x");
@@ -219,7 +219,7 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_DASHBOARD_RSS_FEED2, cfg.urlFeed2, Configuration.Type.string, "Feed URL 2", "1.9.x");
 
-		addCfg(list, CONFIG_EMAIL_AT_REGISTER, "" + cfg.sendEmailAtRegister, Configuration.Type.bool,
+		addCfg(list, CONFIG_EMAIL_AT_REGISTER, String.valueOf(cfg.sendEmailAtRegister), Configuration.Type.bool,
 				"User get a EMail with their Account data.", "2.0.x");
 
 		addCfg(list, CONFIG_EMAIL_VERIFICATION, cfg.sendEmailWithVerficationCode, Configuration.Type.bool,
@@ -235,7 +235,7 @@ public class ImportInitvalues {
 		// SIP Integration Coniguration Values
 		// ***************************************
 
-		addCfg(list, CONFIG_SIP_ENABLED, "" + cfg.sipEnable, Configuration.Type.bool, "Enable to enable the red5SIP integration ", "1.9.x");
+		addCfg(list, CONFIG_SIP_ENABLED, String.valueOf(cfg.sipEnable), Configuration.Type.bool, "Enable to enable the red5SIP integration ", "1.9.x");
 		addCfg(list, CONFIG_SIP_ROOM_PREFIX, cfg.sipRoomPrefix, Configuration.Type.string, "Numerical prefix for OM rooms created inside the SIP", "1.9.x");
 		addCfg(list, CONFIG_SIP_EXTEN_CONTEXT, cfg.sipExtenContext, Configuration.Type.string, "Enable to enable the red5SIP integration ", "1.9.x");
 
@@ -265,16 +265,16 @@ public class ImportInitvalues {
 
 		addCfg(list, CONFIG_DASHBOARD_SHOW_RSS, "false", Configuration.Type.bool, "Show RSS widget on dashboard", "1.9.x");
 
-		addCfg(list, CONFIG_MAX_UPLOAD_SIZE, "" + DEFAULT_MAX_UPLOAD_SIZE, Configuration.Type.number,
+		addCfg(list, CONFIG_MAX_UPLOAD_SIZE, String.valueOf(DEFAULT_MAX_UPLOAD_SIZE), Configuration.Type.number,
 				"Maximum size of upload file (bytes)", "1.8.x");
 
 		addCfg(list, CONFIG_APPOINTMENT_REMINDER_MINUTES, "15", Configuration.Type.number,
 				"The number of minutes before reminder emails are send. Set to 0 to disable reminder emails", "1.9.x");
 
-		addCfg(list, CONFIG_LOGIN_MIN_LENGTH, "" + USER_LOGIN_MINIMUM_LENGTH, Configuration.Type.number,
+		addCfg(list, CONFIG_LOGIN_MIN_LENGTH, String.valueOf(USER_LOGIN_MINIMUM_LENGTH), Configuration.Type.number,
 				"Number of chars needed in a user login", "1.9.x");
 
-		addCfg(list, CONFIG_PASS_MIN_LENGTH, "" + USER_PASSWORD_MINIMUM_LENGTH, Configuration.Type.number,
+		addCfg(list, CONFIG_PASS_MIN_LENGTH, String.valueOf(USER_PASSWORD_MINIMUM_LENGTH), Configuration.Type.number,
 				"Number of chars needed in a user password", "1.9.x");
 
 		addCfg(list, CONFIG_CALENDAR_ROOM_CAPACITY, "50", Configuration.Type.number,
@@ -291,7 +291,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_DEFAULT_LDAP_ID, "0", Configuration.Type.number, "Ldap domain selected by default in the login screen", "1.9.x");
 
 		// set inviter's email address as ReplyTo in email invitations
-		addCfg(list, CONFIG_REPLY_TO_ORGANIZER, "" + cfg.replyToOrganizer, Configuration.Type.bool,
+		addCfg(list, CONFIG_REPLY_TO_ORGANIZER, String.valueOf(cfg.replyToOrganizer), Configuration.Type.bool,
 				"Set inviter's email address as ReplyTo in email invitations", "2.0.x");
 
 		addCfg(list, CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", Configuration.Type.string
@@ -317,8 +317,8 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_FLASH_ECHO_PATH, "128", Configuration.Type.number, "Specifies the echo path length (in milliseconds). A longer echo path means better echo cancellation but also introduces longer delays and requires more processing power. The default value is 128; the only other possible value is 256. To disable AEC please specify 0.", "4.0.0");
 		addCfg(list, CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, Configuration.Type.string, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options", "3.3.0");
 		addCfg(list, CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.string, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/", "3.3.0");
-		addCfg(list, CONFIG_EXT_PROCESS_TTL, "" + EXT_PROCESS_TTL, Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL), "3.3.0");
-		addCfg(list, CONFIG_MYROOMS_ENABLED, "" + true, Configuration.Type.bool, "Users are allowed to create personal rooms", "3.3.2");
+		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(EXT_PROCESS_TTL), Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL), "3.3.0");
+		addCfg(list, CONFIG_MYROOMS_ENABLED, String.valueOf(true), Configuration.Type.bool, "Users are allowed to create personal rooms", "3.3.2");
 		addCfg(list, CONFIG_REMINDER_MESSAGE, null, Configuration.Type.string, "Reminder message to notify about upcoming appointment, generated message will be used if not set", "2.0.x");
 		return list;
 	}

@@ -319,7 +319,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public boolean signIn(String login, String password, Type type, Long domainId) throws OmException {
-		User u = null;
+		User u;
 		switch (type) {
 			case ldap:
 				u = getBean(LdapLoginManagement.class).login(login, password, domainId);
