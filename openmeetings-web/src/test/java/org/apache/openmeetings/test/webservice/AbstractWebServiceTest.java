@@ -149,10 +149,10 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 
 		FileItemDTO f1 = null;
 		try (InputStream is = new FileInputStream(fsFile)) {
-			FileItemDTO file = new FileItemDTO();
-			file.setName(name);
-			file.setHash(UUID.randomUUID().toString());
-			file.setType(type);
+			FileItemDTO file = new FileItemDTO()
+					.setName(name)
+					.setHash(UUID.randomUUID().toString())
+					.setType(type);
 			List<Attachment> atts = new ArrayList<>();
 			atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));
 			atts.add(new Attachment("stream", MediaType.APPLICATION_OCTET_STREAM, is));

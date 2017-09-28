@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
@@ -75,6 +76,8 @@ public class ImageConverter extends BaseConverter {
 
 			log.debug("##### convertImage destinationFile: " + jpg);
 			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
+		} else if (!jpg.exists()){
+			copyFile(f.getFile(sf.getExt()), jpg);
 		}
 		returnMap.addItem("get JPG dimensions", initSize(f, jpg, JPG_MIME_TYPE));
 		return returnMap;
