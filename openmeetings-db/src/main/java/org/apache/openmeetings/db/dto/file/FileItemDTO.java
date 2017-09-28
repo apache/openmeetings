@@ -26,8 +26,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
+import org.apache.openmeetings.db.entity.file.FileItem;
 
 /**
  * This Object will represent a File on the File-System
@@ -101,16 +101,18 @@ public class FileItemDTO implements Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
+	public FileItemDTO setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getHash() {
 		return hash;
 	}
 
-	public void setHash(String hash) {
+	public FileItemDTO setHash(String hash) {
 		this.hash = hash;
+		return this;
 	}
 
 	public Long getParentId() {
@@ -157,24 +159,27 @@ public class FileItemDTO implements Serializable {
 		return externalId;
 	}
 
-	public void setExternalId(String externalId) {
+	public FileItemDTO setExternalId(String externalId) {
 		this.externalId = externalId;
+		return this;
 	}
 
 	public String getExternalType() {
 		return externalType;
 	}
 
-	public void setExternalType(String externalType) {
+	public FileItemDTO setExternalType(String externalType) {
 		this.externalType = externalType;
+		return this;
 	}
 
 	public Type getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public FileItemDTO setType(Type type) {
 		this.type = type;
+		return this;
 	}
 
 	public Integer getWidth() {

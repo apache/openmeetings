@@ -18,16 +18,21 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OmFileHelper.profileImagePrefix;
-import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.process.ConverterProcessResult.ZERO;
+import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -38,9 +43,15 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ConverterProcessResult;
 import org.apache.openmeetings.util.process.ConverterProcessResultList;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TIFF;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.image.ImageParser;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class ImageConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(ImageConverter.class, webAppRootKey);
@@ -57,14 +68,10 @@ public class ImageConverter extends BaseConverter {
 
 			log.debug("##### convertImage destinationFile: " + jpg);
 			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
+		} else if (!jpg.exists()){
+			copyFile(f.getFile(sf.getExt()), jpg);
 		}
-		ConverterProcessResult res = ProcessHelper.executeScript("get image dimensions :: " + f.getId()
-				, new String[] {getPathToIdentify(), "-format", "%wx%h", jpg.getCanonicalPath()});
-		returnMap.addItem("get JPG dimensions", res);
-		Dimension dim = getDimension(res.getOut());
-		f.setWidth(dim.width);
-		f.setHeight(dim.height);
-		returnMap.addItem("processThumb", generateThumb(thumbImagePrefix, jpg, 50));
+		returnMap.addItem("get JPG dimensions", initSize(f, jpg, JPG_MIME_TYPE));
 		return returnMap;
 	}
 
@@ -107,6 +114,26 @@ public class ImageConverter extends BaseConverter {
 		//scopeApplicationAdapter.updateUserSessionObject(userId, pictureuri);
 
 		return returnMap;
+	}
+
+	private static ConverterProcessResult initSize(BaseFileItem f, File img, String mime) {
+		ConverterProcessResult res = new ConverterProcessResult();
+		res.setProcess("get image dimensions :: " + f.getId());
+		final Parser parser = new ImageParser();
+		try (InputStream is = new FileInputStream(img)) {
+			Metadata metadata = new Metadata();
+			metadata.set(CONTENT_TYPE, mime);
+			parser.parse(is, new DefaultHandler(), metadata, new ParseContext());
+			f.setWidth(Integer.valueOf(metadata.get(TIFF.IMAGE_WIDTH)));
+			f.setHeight(Integer.valueOf(metadata.get(TIFF.IMAGE_LENGTH)));
+			res.setExitCode(ZERO);
+		} catch (Exception e) {
+			log.error("Error while getting dimensions", e);
+			res.setError("Error while getting dimensions");
+			res.setException(e.getMessage());
+			res.setExitCode(-1);
+		}
+		return res;
 	}
 
 	/**
