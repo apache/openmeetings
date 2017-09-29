@@ -220,10 +220,8 @@ public class LdapLoginManagement {
 				}
 					break;
 				case SIMPLEBIND:
-				{
 					userDn = new Dn(String.format(w.options.userDn, login));
 					w.conn.bind(userDn, passwd);
-				}
 					break;
 				case NONE:
 				default:
