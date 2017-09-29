@@ -31,8 +31,8 @@ import org.apache.openmeetings.util.OmException;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ServiceResult implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static ServiceResult UNKNOWN = new ServiceResult(OmException.UNKNOWN.getKey(), Type.ERROR);
-	public static ServiceResult NO_PERMISSION = new ServiceResult("error.notallowed", Type.ERROR);
+	public static final ServiceResult UNKNOWN = new ServiceResult(OmException.UNKNOWN.getKey(), Type.ERROR);
+	public static final ServiceResult NO_PERMISSION = new ServiceResult("error.notallowed", Type.ERROR);
 	private String message;
 	private String type;
 	@XmlType(namespace="org.apache.openmeetings.db.dto.basic.type")

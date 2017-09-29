@@ -19,12 +19,6 @@
 package org.apache.openmeetings.screenshare;
 
 import static java.lang.Boolean.TRUE;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerHeight;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerWidth;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerY;
 import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -38,6 +32,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
 import org.apache.openmeetings.screenshare.job.RemoteJob;
 import org.quartz.JobBuilder;
@@ -65,7 +60,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(Core.class);
-	public static float Ampl_factor = 1f;
 	final static String QUARTZ_GROUP_NAME = "ScreenShare";
 	final static String QUARTZ_REMOTE_JOB_NAME = "RemoteJob";
 	final static String QUARTZ_REMOTE_TRIGGER_NAME = "RemoteTrigger";
@@ -107,6 +101,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private SchedulerFactory schdlrFactory;
 	private Scheduler schdlr;
 	private LinkedBlockingQueue<Map<String, Object>> remoteEvents = new LinkedBlockingQueue<>();
+	private final ScreenDimensions dim;
 
 	private CaptureScreen getCapture() {
 		if (_capture == null) {
@@ -121,6 +116,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	// ------------------------------------------------------------------------
 
 	public Core(String[] args) {
+		dim = new ScreenDimensions();
 		try {
 			System.setProperty("org.terracotta.quartz.skipUpdateCheck", "true");
 			for (String arg : args) {
@@ -222,11 +218,11 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		try {
 			Point mouseP = MouseInfo.getPointerInfo().getLocation();
 
-			float scaleFactor = (1.0f * resizeX) / spinnerWidth;
+			float scaleFactor = (1.0f * dim.getResizeX()) / dim.getSpinnerWidth();
 
 			// Real size: Real mouse position = Resize : X
-			int x = (int)(Ampl_factor * (mouseP.getX() - spinnerX) * scaleFactor);
-			int y = (int)(Ampl_factor * (mouseP.getY() - spinnerY) * scaleFactor);
+			int x = (int)((mouseP.getX() - dim.getSpinnerX()) * scaleFactor);
+			int y = (int)((mouseP.getY() - dim.getSpinnerY()) * scaleFactor);
 
 			if (instance.getConnection() != null) {
 				if (Red5.getConnectionLocal() == null) {
@@ -256,8 +252,8 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			}
 			Map<String, Object> map = new HashMap<>();
 
-			int scaledWidth = (int)(Ampl_factor * resizeX);
-			int scaledHeight = (int)(Ampl_factor * resizeY);
+			int scaledWidth = dim.getResizeX();
+			int scaledHeight = dim.getResizeY();
 
 			map.put("screenWidth", scaledWidth);
 			map.put("screenHeight", scaledHeight);
@@ -327,6 +323,11 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			log.error("captureScreenStart Exception: ", err);
 			frame.setStatus("Exception: " + err);
 		}
+	}
+
+	public void sharingStop() {
+		startSharing = false;
+		captureScreenStop("stopStreaming");
 	}
 
 	public void recordingStop() {
@@ -540,7 +541,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), broadcastId);
 					instance.publish(getCapture().getStreamId(), broadcastId, "live", this);
 
-					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", spinnerWidth, spinnerHeight);
+					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", dim.getSpinnerWidth(), dim.getSpinnerHeight());
 
 					if (!getCapture().isAlive()) {
 						getCapture().setSendCursor(startSharing);
@@ -602,5 +603,9 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 
 	public LinkedBlockingQueue<Map<String, Object>> getRemoteEvents() {
 		return remoteEvents;
+	}
+
+	public ScreenDimensions getDim() {
+		return dim;
 	}
 }

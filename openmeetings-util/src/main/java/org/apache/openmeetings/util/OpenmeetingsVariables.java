@@ -105,9 +105,8 @@ public class OpenmeetingsVariables {
 	public static final String FLASH_QUALITY = "quality";
 	public static final String FLASH_ECHO_PATH = "echoPath";
 	public static final String FLASH_MIC_RATE = "micRate";
-
-	public static int DEFAULT_MINUTES_REMINDER_SEND = 15;
-	public static String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
+	public static final int DEFAULT_MINUTES_REMINDER_SEND = 15;
+	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 
 	public static String webAppRootKey = null;
 	public static String webAppRootPath = null;

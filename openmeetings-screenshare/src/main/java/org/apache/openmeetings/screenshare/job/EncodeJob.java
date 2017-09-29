@@ -18,10 +18,6 @@
  */
 package org.apache.openmeetings.screenshare.job;
 
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerHeight;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerWidth;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.AWTException;
@@ -30,6 +26,7 @@ import java.awt.Robot;
 
 import org.apache.openmeetings.screenshare.CaptureScreen;
 import org.apache.openmeetings.screenshare.ScreenV1Encoder;
+import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -42,9 +39,10 @@ import org.slf4j.Logger;
 public class EncodeJob implements Job {
 	private static final Logger log = getLogger(EncodeJob.class);
 	public static final String CAPTURE_KEY = "capture";
-	Robot robot;
-	Rectangle screen = new Rectangle(spinnerX, spinnerY, spinnerWidth, spinnerHeight);
-	int[][] image = null;
+	private Robot robot;
+	private ScreenDimensions dim;
+	private Rectangle screen = null;
+	private int[][] image = null;
 
 	public EncodeJob() {
 		try {
@@ -58,12 +56,17 @@ public class EncodeJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap data = context.getJobDetail().getJobDataMap();
 		CaptureScreen capture = (CaptureScreen)data.get(CAPTURE_KEY);
+		if (screen == null) {
+			dim = capture.getDim();
+			screen = new Rectangle(dim.getSpinnerX(), dim.getSpinnerY()
+					, dim.getSpinnerWidth(), dim.getSpinnerHeight());
+		}
 
 		long start = 0;
 		if (log.isTraceEnabled()) {
 			start = System.currentTimeMillis();
 		}
-		image = ScreenV1Encoder.getImage(screen, robot);
+		image = ScreenV1Encoder.getImage(dim, screen, robot);
 		if (log.isTraceEnabled()) {
 			log.trace(String.format("encode: Image was captured in %s ms, size %sk", System.currentTimeMillis() - start, 4 * image.length * image[0].length / 1024));
 			start = System.currentTimeMillis();

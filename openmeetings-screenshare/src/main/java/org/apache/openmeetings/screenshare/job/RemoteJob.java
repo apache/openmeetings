@@ -20,13 +20,6 @@ package org.apache.openmeetings.screenshare.job;
 
 import static java.awt.Toolkit.getDefaultToolkit;
 import static java.awt.datatransfer.DataFlavor.stringFlavor;
-import static org.apache.openmeetings.screenshare.Core.Ampl_factor;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerHeight;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerWidth;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.spinnerY;
 import static org.apache.openmeetings.screenshare.util.Util.getFloat;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -45,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.openmeetings.screenshare.Core;
+import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -57,6 +51,7 @@ public class RemoteJob implements Job {
 	private static final Logger log = getLogger(RemoteJob.class);
 	public static final String CORE_KEY = "core";
 	private Robot robot = null;
+	private ScreenDimensions dim = null;
 
 	public RemoteJob() {
 		try {
@@ -71,6 +66,9 @@ public class RemoteJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap data = context.getJobDetail().getJobDataMap();
 		Core core = (Core)data.get(CORE_KEY);
+		if (dim == null) {
+			dim = core.getDim();
+		}
 		try {
 			Map<String, Object> obj;
 			while ((obj = core.getRemoteEvents().poll(1, TimeUnit.MILLISECONDS)) != null) {
@@ -189,12 +187,12 @@ public class RemoteJob implements Job {
 		}
 	}
 
-	private static Point getCoordinates(Map<String, Object> obj) {
-		float scaleFactorX = spinnerWidth / (Ampl_factor * resizeX);
-		float scaleFactorY = spinnerHeight / (Ampl_factor * resizeY);
+	private Point getCoordinates(Map<String, Object> obj) {
+		float scaleFactorX = dim.getSpinnerWidth() / dim.getResizeX();
+		float scaleFactorY = dim.getSpinnerHeight() / dim.getResizeY();
 
-		int x = Math.round(scaleFactorX * getFloat(obj, "x") + spinnerX);
-		int y = Math.round(scaleFactorY * getFloat(obj, "y") + spinnerY);
+		int x = Math.round(scaleFactorX * getFloat(obj, "x") + dim.getSpinnerX());
+		int y = Math.round(scaleFactorY * getFloat(obj, "y") + dim.getSpinnerY());
 		return new Point(x, y);
 	}
 }

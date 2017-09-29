@@ -688,7 +688,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Set<String> clients = get().getRooms().get(roomId);
 		if (clients != null) {
 			for (String uid : clients) {
-				if (getOnlineClient(uid).getUserId().equals(userId)) {
+				Client c = getOnlineClient(uid);
+				if (c != null && c.getUserId().equals(userId)) {
 					return true;
 				}
 			}

@@ -19,8 +19,6 @@
 package org.apache.openmeetings.screenshare.gui;
 
 import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.ROUND_VALUE;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.awt.AWTException;
@@ -114,6 +112,7 @@ public class ScreenSharerFrame extends JFrame {
 	private String recordingTipLabel;
 	private String publishingTipLabel;
 	private JCheckBox audioNotify;
+	private final Core core;
 
 	private class PublishTextField extends JTextField {
 		private static final long serialVersionUID = 1L;
@@ -230,6 +229,7 @@ public class ScreenSharerFrame extends JFrame {
 	 * @throws IOException
 	 */
 	public ScreenSharerFrame(final Core core, String[] textLabels) throws AWTException {
+		this.core = core;
 		setTitle(getTextLabel(textLabels, 0)); //#id 730
 		setBackground(Color.WHITE);
 		setResizable(false);
@@ -274,7 +274,7 @@ public class ScreenSharerFrame extends JFrame {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
-						core.stopSharing();
+						core.sharingStop();
 					} else {
 						logger.warn("Sharing action is already requested");
 					}
@@ -351,8 +351,8 @@ public class ScreenSharerFrame extends JFrame {
 		panelScreen.setLayout(null);
 		panelScreen.setBackground(Color.WHITE);
 
-		int width = ScreenDimensions.width;
-		int height = ScreenDimensions.height;
+		int width = getDim().getWidth();
+		int height = getDim().getHeight();
 
 		//Sliders
 		upSlider.addListener(new ScreenYMouseListener(this));
@@ -387,7 +387,7 @@ public class ScreenSharerFrame extends JFrame {
 		vscreenWidthLabel.setBounds(250, 20, 150, 24);
 		panelScreen.add(vscreenWidthLabel);
 
-		spinnerWidth = new NumberSpinner(ScreenDimensions.spinnerWidth, 0, ScreenDimensions.widthMax, 1);
+		spinnerWidth = new NumberSpinner(getDim().getSpinnerWidth(), 0, getDim().getWidthMax(), 1);
 		spinnerWidth.setBounds(400, 20, 60, 24);
 		spinnerWidth.addChangeListener( new ChangeListener(){
 			@Override
@@ -403,7 +403,7 @@ public class ScreenSharerFrame extends JFrame {
 		labelHeight.setBounds(250, 50, 150, 24);
 		panelScreen.add(labelHeight);
 
-		spinnerHeight = new NumberSpinner(ScreenDimensions.spinnerHeight, 0, ScreenDimensions.heightMax, 1);
+		spinnerHeight = new NumberSpinner(getDim().getSpinnerHeight(), 0, getDim().getHeightMax(), 1);
 		spinnerHeight.setBounds(400, 50, 60, 24);
 		spinnerHeight.addChangeListener( new ChangeListener(){
 			@Override
@@ -419,9 +419,9 @@ public class ScreenSharerFrame extends JFrame {
 		labelX.setBounds(250, 80, 150, 24);
 		panelScreen.add(labelX);
 
-		spinnerX = new NumberSpinner(ScreenDimensions.spinnerX, 0, ScreenDimensions.widthMax, 1);
+		spinnerX = new NumberSpinner(getDim().getSpinnerX(), 0, getDim().getWidthMax(), 1);
 		spinnerX.setBounds(400, 80, 60, 24);
-		spinnerX.addChangeListener( new ChangeListener(){
+		spinnerX.addChangeListener(new ChangeListener(){
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueXSpin();
@@ -435,9 +435,9 @@ public class ScreenSharerFrame extends JFrame {
 		labelY.setBounds(250, 110, 150, 24);
 		panelScreen.add(labelY);
 
-		spinnerY = new NumberSpinner(ScreenDimensions.spinnerY, 0, ScreenDimensions.heightMax, 1);
+		spinnerY = new NumberSpinner(getDim().getSpinnerY(), 0, getDim().getHeightMax(), 1);
 		spinnerY.setBounds(400, 110, 60, 24);
-		spinnerY.addChangeListener( new ChangeListener(){
+		spinnerY.addChangeListener(new ChangeListener(){
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				calcNewValueYSpin();
@@ -461,7 +461,7 @@ public class ScreenSharerFrame extends JFrame {
 			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				ScreenDimensions.quality = ((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue();
+				getDim().setQuality(((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue());
 				calcRescaleFactors();
 			}
 		});
@@ -479,7 +479,7 @@ public class ScreenSharerFrame extends JFrame {
 			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				ScreenDimensions.FPS = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
+				getDim().setFPS(((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue());
 				calcRescaleFactors();
 			}
 		});
@@ -733,18 +733,19 @@ public class ScreenSharerFrame extends JFrame {
 	void calcNewValueXSpin() {
 		if (doUpdateBounds) {
 			int newX = spinnerX.getValue();
-			if (ScreenDimensions.spinnerWidth + newX > ScreenDimensions.widthMax) {
-				newX = ScreenDimensions.widthMax - ScreenDimensions.spinnerWidth;
+			int val = getDim().getWidthMax() - getDim().getSpinnerWidth();
+			if (newX > val) {
+				newX = val;
 				spinnerX.setValue(newX);
 				if (showWarning) {
 					setStatus(reduceWidthLabel);
 				}
 			} else {
-				ScreenDimensions.spinnerX = newX;
+				getDim().setSpinnerX(newX);
 				updateVScreenBounds();
 			}
 		} else {
-			ScreenDimensions.spinnerX = spinnerX.getValue();
+			getDim().setSpinnerX(spinnerX.getValue());
 		}
 
 		calcRescaleFactors();
@@ -753,18 +754,19 @@ public class ScreenSharerFrame extends JFrame {
 	void calcNewValueYSpin() {
 		if (doUpdateBounds) {
 			int newY = spinnerY.getValue();
-			if (ScreenDimensions.spinnerHeight + newY > ScreenDimensions.heightMax) {
-				newY = ScreenDimensions.heightMax - ScreenDimensions.spinnerHeight;
+			int val = getDim().getHeightMax() - getDim().getSpinnerHeight();
+			if (newY > val) {
+				newY = val;
 				spinnerY.setValue(newY);
 				if (showWarning) {
 					setStatus(reduceHeightLabel);
 				}
 			} else {
-				ScreenDimensions.spinnerY = newY;
+				getDim().setSpinnerY(newY);
 				updateVScreenBounds();
 			}
 		} else {
-			ScreenDimensions.spinnerY = spinnerY.getValue();
+			getDim().setSpinnerY(spinnerY.getValue());
 		}
 
 		calcRescaleFactors();
@@ -773,18 +775,19 @@ public class ScreenSharerFrame extends JFrame {
 	void calcNewValueWidthSpin() {
 		if (doUpdateBounds) {
 			int newWidth = spinnerWidth.getValue();
-			if (ScreenDimensions.spinnerX + newWidth > ScreenDimensions.widthMax) {
-				newWidth = ScreenDimensions.widthMax - ScreenDimensions.spinnerX;
+			int val = getDim().getWidthMax() - getDim().getSpinnerX();
+			if (newWidth > val) {
+				newWidth = val;
 				spinnerWidth.setValue(newWidth);
 				if (showWarning) {
 					setStatus(reduceXLabel);
 				}
 			} else {
-				ScreenDimensions.spinnerWidth = newWidth;
+				getDim().setSpinnerWidth(newWidth);
 				updateVScreenBounds();
 			}
 		} else {
-			ScreenDimensions.spinnerWidth = spinnerWidth.getValue();
+			getDim().setSpinnerWidth(spinnerWidth.getValue());
 		}
 
 		calcRescaleFactors();
@@ -793,18 +796,19 @@ public class ScreenSharerFrame extends JFrame {
 	void calcNewValueHeightSpin() {
 		if (doUpdateBounds) {
 			int newHeight = spinnerHeight.getValue();
-			if (ScreenDimensions.spinnerY + newHeight > ScreenDimensions.heightMax) {
-				newHeight = ScreenDimensions.heightMax - ScreenDimensions.spinnerY;
+			int val = getDim().getHeightMax() - getDim().getSpinnerY();
+			if (newHeight > val) {
+				newHeight = val;
 				spinnerHeight.setValue(newHeight);
 				if (showWarning) {
 					setStatus(reduceYLabel);
 				}
 			} else {
-				ScreenDimensions.spinnerHeight = newHeight;
+				getDim().setSpinnerHeight(newHeight);
 				updateVScreenBounds();
 			}
 		} else {
-			ScreenDimensions.spinnerHeight = spinnerHeight.getValue();
+			getDim().setSpinnerHeight(spinnerHeight.getValue());
 		}
 
 		calcRescaleFactors();
@@ -815,20 +819,20 @@ public class ScreenSharerFrame extends JFrame {
 	 */
 	void calcRescaleFactors() {
 		logger.trace("calcRescaleFactors -- ");
-		resizeX = spinnerWidth.getValue();
-		resizeY = spinnerHeight.getValue();
-		switch (ScreenDimensions.quality) {
+		int resizeX = spinnerWidth.getValue();
+		int resizeY = spinnerHeight.getValue();
+		switch (getDim().getQuality()) {
 			case Low:
-				resizeX = (int)(2.0 * ScreenDimensions.resizeX / 8);
-				resizeY = (int)(2.0 * ScreenDimensions.resizeY / 8);
+				resizeX = (int)(2.0 * resizeX / 8);
+				resizeY = (int)(2.0 * resizeY / 8);
 				break;
 			case Medium:
-				resizeX = (int)(4.0 * ScreenDimensions.resizeX / 8);
-				resizeY = (int)(4.0 * ScreenDimensions.resizeY / 8);
+				resizeX = (int)(4.0 * resizeX / 8);
+				resizeY = (int)(4.0 * resizeY / 8);
 				break;
 			case High:
-				resizeX = (int)(6.0 * ScreenDimensions.resizeX / 8);
-				resizeY = (int)(6.0 * ScreenDimensions.resizeY / 8);
+				resizeX = (int)(6.0 * resizeX / 8);
+				resizeY = (int)(6.0 * resizeY / 8);
 				break;
 			case VeryHigh:
 			default:
@@ -838,7 +842,9 @@ public class ScreenSharerFrame extends JFrame {
 		int dY = resizeY % ROUND_VALUE;
 		resizeX += dX == 0 ? 0 : ROUND_VALUE - dX;
 		resizeY += dY == 0 ? 0 : ROUND_VALUE - dY;
-		logger.trace("resize: X:" + resizeX + " Y: " + resizeY);
+		logger.trace("resize: X: {} Y: {}", resizeX, resizeY);
+		getDim().setResizeX(resizeX);
+		getDim().setResizeY(resizeY);
 		updateVScreenBounds();
 	}
 
@@ -848,7 +854,7 @@ public class ScreenSharerFrame extends JFrame {
 		upSlider.setBounds(x + vScreenX + (width / 2) - 8, y + vScreenY - 16, 16, 32);
 		downSlider.setBounds(x + vScreenX + (width / 2) - 8, y + vScreenY - 16 + height, 16, 32);
 
-		virtualScreen.setText(ScreenDimensions.spinnerWidth + ":" + ScreenDimensions.spinnerHeight);
+		virtualScreen.setText(String.format("%s:%s", getDim().getSpinnerWidth(), getDim().getSpinnerHeight()));
 		virtualScreen.setBounds(x + vScreenX, y + vScreenY, width, height);
 	}
 
@@ -858,13 +864,17 @@ public class ScreenSharerFrame extends JFrame {
 	 *
 	 */
 	void updateVScreenBounds() {
-		double ratio = ((double)ScreenDimensions.width) / ScreenDimensions.widthMax;
-		int newWidth = (int)(ScreenDimensions.spinnerWidth * ratio);
-		int newX = (int)(ScreenDimensions.spinnerX * ratio);
+		double ratio = ((double)getDim().getWidth()) / getDim().getWidthMax();
+		int newWidth = (int)(getDim().getSpinnerWidth() * ratio);
+		int newX = (int)(getDim().getSpinnerX() * ratio);
 
-		int newHeight = (int)(ScreenDimensions.spinnerHeight * ratio);
-		int newY = (int)(ScreenDimensions.spinnerY * ratio);
+		int newHeight = (int)(getDim().getSpinnerHeight() * ratio);
+		int newY = (int)(getDim().getSpinnerY() * ratio);
 
 		setVScreenBounds(newX, newY, newWidth, newHeight);
+	}
+
+	public ScreenDimensions getDim() {
+		return core.getDim();
 	}
 }

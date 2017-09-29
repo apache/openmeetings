@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
 public class ScreenYMouseListener extends MouseInputAdapter {
-	private ScreenSharerFrame frame;
+	private final ScreenSharerFrame frame;
 	private double y = 0;
 
 	public ScreenYMouseListener(ScreenSharerFrame frame) {
@@ -61,8 +61,8 @@ public class ScreenYMouseListener extends MouseInputAdapter {
 		double newY = e.getY();
 
 		int delta = (int) (y - newY);
-		int newYPosition = ScreenDimensions.spinnerY - delta;
-		int newHeight = ScreenDimensions.spinnerHeight + delta;
+		int newYPosition = frame.getDim().getSpinnerY() - delta;
+		int newHeight = frame.getDim().getSpinnerHeight() + delta;
 
 		if (newYPosition >= 0 && newHeight >= 0) {
 			frame.setDoUpdateBounds(false);

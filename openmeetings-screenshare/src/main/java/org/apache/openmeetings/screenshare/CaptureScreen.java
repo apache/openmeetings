@@ -19,7 +19,6 @@
 package org.apache.openmeetings.screenshare;
 
 import static org.apache.openmeetings.screenshare.Core.QUARTZ_GROUP_NAME;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.FPS;
 import static org.apache.openmeetings.screenshare.util.Util.getQurtzProps;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -29,6 +28,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.apache.openmeetings.screenshare.job.CursorJob;
 import org.apache.openmeetings.screenshare.job.EncodeJob;
 import org.apache.openmeetings.screenshare.job.SendJob;
@@ -50,7 +50,7 @@ public class CaptureScreen extends Thread {
 	private static final Logger log = getLogger(CaptureScreen.class);
 	private final static String QUARTZ_CURSOR_TRIGGER_NAME = "CursorTrigger";
 	private final static String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
-	private Core core;
+	private final Core core;
 	private int timestampDelta;
 	private volatile AtomicInteger timestamp = new AtomicInteger(0);
 	private volatile AtomicBoolean sendFrameGuard = new AtomicBoolean(false);
@@ -65,6 +65,8 @@ public class CaptureScreen extends Thread {
 	private Number streamId;
 	private boolean startPublish = false;
 	private Scheduler _scheduler;
+	private final JobDetail cursorJob;
+	private final Trigger cursorTrigger;
 
 	public CaptureScreen(Core coreScreenShare, IScreenShare client, String host, String app, int port) {
 		core = coreScreenShare;
@@ -72,6 +74,12 @@ public class CaptureScreen extends Thread {
 		this.host = host;
 		this.app = app;
 		this.port = port;
+		cursorJob = JobBuilder.newJob(CursorJob.class).withIdentity(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME).build();
+		cursorTrigger = TriggerBuilder.newTrigger()
+				.withIdentity(QUARTZ_CURSOR_TRIGGER_NAME, QUARTZ_GROUP_NAME)
+				.withSchedule(simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(5, core.getDim().getFPS())).repeatForever())
+				.build();
+		cursorJob.getJobDataMap().put(CursorJob.CAPTURE_KEY, this);
 	}
 
 	private Scheduler getScheduler() {
@@ -107,8 +115,8 @@ public class CaptureScreen extends Thread {
 				Thread.sleep(60);
 			}
 
-			timestampDelta = 1000 / FPS;
-			se = new ScreenV1Encoder(3 * FPS); //send keyframe every 3 seconds
+			timestampDelta = 1000 / core.getDim().getFPS();
+			se = new ScreenV1Encoder(core.getDim()); //send keyframe every 3 seconds
 			startTime = System.currentTimeMillis();
 
 			JobDetail encodeJob = JobBuilder.newJob(EncodeJob.class).withIdentity("EncodeJob", QUARTZ_GROUP_NAME).build();
@@ -220,12 +228,6 @@ public class CaptureScreen extends Thread {
 		try {
 			Scheduler s = getScheduler();
 			if (sendCursor) {
-				JobDetail cursorJob = JobBuilder.newJob(CursorJob.class).withIdentity(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME).build();
-				Trigger cursorTrigger = TriggerBuilder.newTrigger()
-						.withIdentity(QUARTZ_CURSOR_TRIGGER_NAME, QUARTZ_GROUP_NAME)
-						.withSchedule(simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(5, FPS)).repeatForever())
-						.build();
-				cursorJob.getJobDataMap().put(CursorJob.CAPTURE_KEY, this);
 				s.scheduleJob(cursorJob, cursorTrigger);
 			} else {
 				s.deleteJob(JobKey.jobKey(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME));
@@ -233,5 +235,9 @@ public class CaptureScreen extends Thread {
 		} catch (SchedulerException e) {
 			log.error("Unexpected Error schedule/unschedule cursor job", e);
 		}
+	}
+
+	public ScreenDimensions getDim() {
+		return core.getDim();
 	}
 }

@@ -23,36 +23,41 @@ import java.awt.Toolkit;
 
 public class ScreenDimensions {
 	public static final int ROUND_VALUE = 16;
+
+	public enum ScreenQuality {
+		VeryHigh
+		, High
+		, Medium
+		, Low
+	}
 	/**
 	 * image recalcing value's from the virtual Screen drawer
 	 */
-	public static int width = 200;
-	public static int height = 0;
+	private int width = 200;
+	private int height = 0;
 
 	/**
 	 * Values calced by the original Screen
 	 */
-
-	public static double ratio = 0;
-
-	public static int widthMax = 0;
-	public static int heightMax = 0;
+	private double ratio;
+	private final int widthMax;
+	private final int heightMax;
 
 	/**
 	 * Values set by the virtualScreen
 	 */
-	public static int spinnerWidth = 0;
-	public static int spinnerHeight = 0;
-	public static int spinnerX = 0;
-	public static int spinnerY = 0;
+	private int spinnerWidth;
+	private int spinnerHeight;
+	private int spinnerX;
+	private int spinnerY;
 
-	public static ScreenQuality quality = ScreenQuality.Medium;
-	public static int FPS = 10;
+	private ScreenQuality quality = ScreenQuality.Medium;
+	private int FPS = 10;
 
-	public static int resizeX = 640;
-	public static int resizeY = 480;
+	private int resizeX;
+	private int resizeY;
 
-	static {
+	public ScreenDimensions() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		ratio = screenSize.getHeight() / screenSize.getWidth();
 		widthMax = (int)screenSize.getWidth();
@@ -66,10 +71,83 @@ public class ScreenDimensions {
 		resizeY = 400;
 	}
 
-	public enum ScreenQuality {
-		VeryHigh
-		, High
-		, Medium
-		, Low
+	public int getResizeX() {
+		return resizeX;
+	}
+
+	public void setResizeX(int resizeX) {
+		this.resizeX = resizeX;
+	}
+
+	public int getResizeY() {
+		return resizeY;
+	}
+
+	public void setResizeY(int resizeY) {
+		this.resizeY = resizeY;
+	}
+
+	public int getSpinnerWidth() {
+		return spinnerWidth;
+	}
+
+	public void setSpinnerWidth(int spinnerWidth) {
+		this.spinnerWidth = spinnerWidth;
+	}
+
+	public int getSpinnerHeight() {
+		return spinnerHeight;
+	}
+
+	public void setSpinnerHeight(int spinnerHeight) {
+		this.spinnerHeight = spinnerHeight;
+	}
+
+	public int getSpinnerX() {
+		return spinnerX;
+	}
+
+	public void setSpinnerX(int spinnerX) {
+		this.spinnerX = spinnerX;
+	}
+
+	public int getSpinnerY() {
+		return spinnerY;
+	}
+
+	public void setSpinnerY(int spinnerY) {
+		this.spinnerY = spinnerY;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getWidthMax() {
+		return widthMax;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public int getHeightMax() {
+		return heightMax;
+	}
+
+	public ScreenQuality getQuality() {
+		return quality;
+	}
+
+	public void setQuality(ScreenQuality quality) {
+		this.quality = quality;
+	}
+
+	public int getFPS() {
+		return FPS;
+	}
+
+	public void setFPS(int fPS) {
+		FPS = fPS;
 	}
 }

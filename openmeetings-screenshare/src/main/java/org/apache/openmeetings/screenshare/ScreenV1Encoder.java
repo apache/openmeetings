@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.screenshare;
 
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeX;
-import static org.apache.openmeetings.screenshare.gui.ScreenDimensions.resizeY;
 import static org.red5.io.IoConstants.FLAG_CODEC_SCREEN;
 import static org.red5.io.IoConstants.FLAG_FRAMETYPE_INTERFRAME;
 import static org.red5.io.IoConstants.FLAG_FRAMETYPE_KEYFRAME;
@@ -33,38 +31,30 @@ import java.io.OutputStream;
 import java.util.zip.Deflater;
 
 import org.apache.mina.core.buffer.IoBuffer;
+import org.apache.openmeetings.screenshare.gui.ScreenDimensions;
 import org.red5.server.net.rtmp.event.VideoData;
 
 public class ScreenV1Encoder extends BaseScreenEncoder {
 	private int[][] last = null;
-	private static int KEY_FRAME_INDEX = 25;
 	private static int DEFAULT_BLOCK_SIZE = 32;
 	private static int DEFAULT_SCREEN_WIDTH = 1920;
 	private static int DEFAULT_SCREEN_HEIGHT = 1080;
 	private int keyFrameIndex;
 	private int frameCount = 0;
-	private int blockSize;
+	private int blockSize = DEFAULT_BLOCK_SIZE;
 	private ByteArrayOutputStream ba = new ByteArrayOutputStream(50 + 3 * DEFAULT_SCREEN_WIDTH * DEFAULT_SCREEN_HEIGHT);
 	private byte[] areaBuf = null;
 	private Deflater d = new Deflater(Deflater.DEFAULT_COMPRESSION);
 	private byte[] zipBuf = null;
 	private VideoData unalteredFrame = null;
+	private final ScreenDimensions dim;
 
-	public ScreenV1Encoder() {
-		this(KEY_FRAME_INDEX, DEFAULT_BLOCK_SIZE);
-	}
-
-	public ScreenV1Encoder(int keyFrameIndex) {
-		this(keyFrameIndex, DEFAULT_BLOCK_SIZE);
-	}
-
-	//will create square blocks
-	public ScreenV1Encoder(int keyFrameIndex, int blockSize) {
-		this.keyFrameIndex = keyFrameIndex;
+	public ScreenV1Encoder(ScreenDimensions dim) {
+		this.dim = dim;
+		this.keyFrameIndex = 3 * dim.getFPS();
 		if (blockSize < 16 || blockSize > 256 || blockSize % 16 != 0) {
 			throw new RuntimeException("Invalid block size passed: " + blockSize + " should be: 'from 16 to 256 in multiples of 16'");
 		}
-		this.blockSize = blockSize;
 
 		areaBuf = new byte[3 * blockSize * blockSize];
 		zipBuf = new byte[3 * blockSize * blockSize];
@@ -86,7 +76,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		if (unalteredFrame == null) {
 			ByteArrayOutputStream ba = new ByteArrayOutputStream(200);
 
-			Rectangle _area = new Rectangle(resizeX, resizeY);
+			Rectangle _area = new Rectangle(dim.getResizeX(), dim.getResizeY());
 			//header
 			ba.write(getTag(FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
 			writeShort(ba, _area.width + ((blockSize / 16 - 1) << 12));
@@ -189,9 +179,9 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 		os.write( n       & 0xFF);
 	}
 
-	public static int[][] getImage(Rectangle screen, Robot robot) {
-		int[][] buffer = new int[resizeX][resizeY];
-		BufferedImage image = resize(robot.createScreenCapture(screen), new Rectangle(resizeX, resizeY));
+	public static int[][] getImage(ScreenDimensions dim, Rectangle screen, Robot robot) {
+		int[][] buffer = new int[dim.getResizeX()][dim.getResizeY()];
+		BufferedImage image = resize(robot.createScreenCapture(screen), new Rectangle(dim.getResizeX(), dim.getResizeY()));
 		for (int x = 0; x < image.getWidth(); ++x) {
 			for (int y = 0; y < image.getHeight(); ++y) {
 				buffer[x][y] = image.getRGB(x, y);

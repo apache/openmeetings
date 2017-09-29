@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
 public class ScreenWidthMouseListener extends MouseInputAdapter {
-	private ScreenSharerFrame frame;
+	private final ScreenSharerFrame frame;
 	private double x = 0;
 
 	public ScreenWidthMouseListener(ScreenSharerFrame frame) {
@@ -60,10 +60,10 @@ public class ScreenWidthMouseListener extends MouseInputAdapter {
 		}
 		double newX = e.getX();
 
-		int newWidth = ScreenDimensions.spinnerWidth - (int)(x - newX);
-		int newSpinnerX = ScreenDimensions.spinnerX + newWidth;
+		int newWidth = frame.getDim().getSpinnerWidth() - (int)(x - newX);
+		int newSpinnerX = frame.getDim().getSpinnerX() + newWidth;
 
-		if (0 <= newSpinnerX && newSpinnerX <= ScreenDimensions.widthMax) {
+		if (0 <= newSpinnerX && newSpinnerX <= frame.getDim().getWidthMax()) {
 			frame.setDoUpdateBounds(false);
 			frame.setSpinnerWidth(newWidth);
 			frame.setDoUpdateBounds(true);
