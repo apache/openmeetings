@@ -188,8 +188,8 @@ public class RemoteJob implements Job {
 	}
 
 	private Point getCoordinates(Map<String, Object> obj) {
-		float scaleFactorX = dim.getSpinnerWidth() / dim.getResizeX();
-		float scaleFactorY = dim.getSpinnerHeight() / dim.getResizeY();
+		float scaleFactorX = ((float)dim.getSpinnerWidth()) / dim.getResizeX();
+		float scaleFactorY = ((float)dim.getSpinnerHeight()) / dim.getResizeY();
 
 		int x = Math.round(scaleFactorX * getFloat(obj, "x") + dim.getSpinnerX());
 		int y = Math.round(scaleFactorY * getFloat(obj, "y") + dim.getSpinnerY());

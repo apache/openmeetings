@@ -12,7 +12,7 @@ var Text = function(wb, s) {
 		var canvas = this;
 		var pointer = canvas.getPointer(o.e);
 		var ao = canvas.getActiveObject();
-		if (!!ao && ao.type == 'i-text') {
+		if (!!ao && ao.type === 'i-text') {
 			text.obj = ao;
 		} else {
 			text.obj = new fabric.IText('', {
@@ -39,7 +39,7 @@ var Text = function(wb, s) {
 			canvas.on('mouse:down', text.mouseDown);
 			canvas.selection = true;
 			canvas.forEachObject(function(o) {
-				if (o.type == 'i-text') {
+				if (o.type === 'i-text') {
 					o.selectable = true;
 				}
 			});
@@ -63,7 +63,7 @@ var Text = function(wb, s) {
 			canvas.off('mouse:down', text.mouseDown);
 			canvas.selection = false;
 			canvas.forEachObject(function(o) {
-				if (o.type == 'i-text') {
+				if (o.type === 'i-text') {
 					o.selectable = false;
 				}
 			});

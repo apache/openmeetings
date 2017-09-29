@@ -85,7 +85,7 @@ var Player = (function() {
 					, ry: 5
 				});
 				let isDone = function() {
-					return video.getElement().currentTime == video.getElement().duration;
+					return video.getElement().currentTime === video.getElement().duration;
 				};
 				let updateProgress = function() {
 					progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);

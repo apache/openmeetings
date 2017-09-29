@@ -112,7 +112,7 @@ public class ScreenSharerFrame extends JFrame {
 	private String recordingTipLabel;
 	private String publishingTipLabel;
 	private JCheckBox audioNotify;
-	private final Core core;
+	private final transient Core core;
 
 	private class PublishTextField extends JTextField {
 		private static final long serialVersionUID = 1L;

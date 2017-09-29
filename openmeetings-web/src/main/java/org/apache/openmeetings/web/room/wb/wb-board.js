@@ -99,9 +99,9 @@ var Wb = function() {
 			, scroll: false
 			, stop: function(event, ui) {
 				var pos = ui.helper.position();
-				if (pos.left == 0 || pos.left + ui.helper.width() == ui.helper.parent().width()) {
+				if (pos.left === 0 || pos.left + ui.helper.width() === ui.helper.parent().width()) {
 					ui.helper.removeClass('horisontal').addClass('vertical');
-				} else if (pos.top == 0 || pos.top + ui.helper.height() == ui.helper.parent().height()) {
+				} else if (pos.top === 0 || pos.top + ui.helper.height() === ui.helper.parent().height()) {
 					ui.helper.removeClass('vertical').addClass('horisontal');
 				}
 			}
@@ -170,17 +170,17 @@ var Wb = function() {
 						var btn = getBtn();
 						var isColor = $(this).hasClass('wb-prop-lock-color');
 						var c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
-						var enabled = $(this).button('option', 'icon') == 'ui-icon-locked';
+						var enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
 						$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
 						c.prop('disabled', !enabled);
 						btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
 					});
 				s.find('.wb-prop-color').change(function() {
 					var btn = getBtn();
-					if (btn.length == 1) {
+					if (btn.length === 1) {
 						var v = $(this).val();
 						btn.data().obj.stroke.color = v;
-						if ('paint' == mode) {
+						if ('paint' === mode) {
 							wb.eachCanvas(function(canvas) {
 								canvas.freeDrawingBrush.color = v;
 							});
@@ -189,10 +189,10 @@ var Wb = function() {
 				});
 				s.find('.wb-prop-width').change(function() {
 					var btn = getBtn();
-					if (btn.length == 1) {
+					if (btn.length === 1) {
 						var v = 1 * $(this).val();
 						btn.data().obj.stroke.width = v;
-						if ('paint' == mode) {
+						if ('paint' === mode) {
 							wb.eachCanvas(function(canvas) {
 								canvas.freeDrawingBrush.width = v;
 							});
@@ -208,10 +208,10 @@ var Wb = function() {
 				});
 				s.find('.wb-prop-opacity').change(function() {
 					var btn = getBtn();
-					if (btn.length == 1) {
+					if (btn.length === 1) {
 						var v = (1 * $(this).val()) / 100;
 						btn.data().obj.opacity = v;
-						if ('paint' == mode) {
+						if ('paint' === mode) {
 							wb.eachCanvas(function(canvas) {
 								canvas.freeDrawingBrush.opacity = v;
 							});
@@ -332,7 +332,7 @@ var Wb = function() {
 					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {});
 				}
 				_updateZoomPanel();
-				if (ccount != canvases.length) {
+				if (ccount !== canvases.length) {
 					let b = getBtn();
 					if (b.length && b.hasClass(ACTIVE)) {
 						b.data().deactivate();
@@ -382,9 +382,8 @@ var Wb = function() {
 	}
 	//events
 	function wbObjCreatedHandler(o) {
-		if (role === NONE && o.type != 'pointer') return;
+		if (role === NONE && o.type !== 'pointer') return;
 
-		var json = {};
 		switch(o.type) {
 			case 'pointer':
 				json = o;
@@ -415,7 +414,7 @@ var Wb = function() {
 	};
 	function objModifiedHandler(e) {
 		var o = e.target;
-		if (role === NONE && o.type != 'pointer') return;
+		if (role === NONE && o.type !== 'pointer') return;
 
 		o.includeDefaultValues = false;
 		var items = [];
@@ -451,7 +450,7 @@ var Wb = function() {
 	function scrollHandler(e) {
 		$(this).find('.canvas-container').each(function(idx) {
 			var h = $(this).height(), pos = $(this).position();
-			if (slide != idx && pos.top > BUMPER - h && pos.top < BUMPER) {
+			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
 				//TODO FIXME might be done without iterating
 				//console.log("Found:", idx);
 				_setSlide(idx);
@@ -465,7 +464,7 @@ var Wb = function() {
 				$(this).show();
 				a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
 			} else {
-				if (idx == slide) {
+				if (idx === slide) {
 					$(this).show();
 				} else {
 					$(this).hide();
@@ -520,7 +519,7 @@ var Wb = function() {
 		canvases.push(canvas);
 		var cc = $('#' + cid).closest('.canvas-container');
 		if (role === NONE) {
-			if (sl == slide) {
+			if (sl === slide) {
 				cc.show();
 			} else {
 				cc.hide();
@@ -545,7 +544,7 @@ var Wb = function() {
 			default:
 			{
 				var oo = z.find('.zoom').find('option[value="' + zoom.toFixed(2) + '"]');
-				if (oo.length == 1) {
+				if (oo.length === 1) {
 					oo.prop('selected', true);
 				} else {
 					z.find('.zoom').data('custom-val', zoom).find('option[value=custom]')
@@ -566,9 +565,9 @@ var Wb = function() {
 		}
 	}
 	wb.setRole = function(_role) {
-		if (role != _role) {
+		if (role !== _role) {
 			var btn = getBtn();
-			if (!!btn && btn.length == 1) {
+			if (!!btn && btn.length === 1) {
 				btn.data().deactivate();
 			}
 			a.find('.tools').remove();

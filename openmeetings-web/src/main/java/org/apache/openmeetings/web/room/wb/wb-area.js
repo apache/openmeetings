@@ -54,7 +54,7 @@ var WbArea = (function() {
 	}
 	function _activateTab(wbId) {
 		container.find('.wb-tabbar li').each(function(idx) {
-			if (wbId == 1 * $(this).data('wb-id')) {
+			if (wbId === 1 * $(this).data('wb-id')) {
 				tabs.tabs("option", "active", idx);
 				$(this)[0].scrollIntoView();
 				return false;
@@ -73,7 +73,7 @@ var WbArea = (function() {
 		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
 	}
 	function _addCloseBtn(li) {
-		if (role != PRESENTER) {
+		if (role !== PRESENTER) {
 			return;
 		}
 		li.append($('#wb-tab-close').clone().attr('id', ''));
@@ -117,7 +117,7 @@ var WbArea = (function() {
 		tabsNav.sortable(role === PRESENTER ? "enable" : "disable");
 		var prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
 		if (role === PRESENTER) {
-			if (prev.length == 0) {
+			if (prev.length === 0) {
 				var cc = tabs.find('.wb-tabbar .scroll-container')
 					, left = $('#wb-tabbar-ctrls-left').clone().attr('id', '')
 					, right = $('#wb-tabbar-ctrls-right').clone().attr('id', '');
