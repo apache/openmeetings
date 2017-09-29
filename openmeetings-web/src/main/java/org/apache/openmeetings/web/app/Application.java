@@ -212,6 +212,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 			@Override
 			public void memberAttributeChanged(MemberAttributeEvent evt) {
+				//no-op
 			}
 
 			@Override

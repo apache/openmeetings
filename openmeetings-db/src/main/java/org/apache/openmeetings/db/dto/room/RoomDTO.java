@@ -66,7 +66,9 @@ public class RoomDTO implements Serializable {
 	private Set<RoomElement> hiddenElements = new HashSet<>();
 	private List<RoomFileDTO> files = new ArrayList<>();
 
-	public RoomDTO() {}
+	public RoomDTO() {
+		//def constructor
+	}
 
 	public RoomDTO(Room r) {
 		id = r.getId();

@@ -41,14 +41,8 @@ public class FileExplorerObject implements Serializable {
 	private Long userHomeSize;
 	private Long roomHomeSize;
 
-	public FileExplorerObject() {}
-
 	public List<FileItemDTO> getUserHome() {
 		return userHome;
-	}
-
-	public void setUserHome(List<FileItemDTO> userHome) {
-		this.userHome = userHome;
 	}
 
 	public void setUser(List<FileItem> list, long size) {
@@ -58,10 +52,6 @@ public class FileExplorerObject implements Serializable {
 
 	public List<FileItemDTO> getRoomHome() {
 		return roomHome;
-	}
-
-	public void setRoomHome(List<FileItemDTO> roomHome) {
-		this.roomHome = roomHome;
 	}
 
 	public void setRoom(List<FileItem> list, long size) {

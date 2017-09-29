@@ -38,7 +38,9 @@ public class ExternalUserDTO implements Serializable {
 	private String externalId;
 	private String externalType;
 
-	public ExternalUserDTO() {}
+	public ExternalUserDTO() {
+		//def constructor
+	}
 
 	public String getLogin() {
 		return login;

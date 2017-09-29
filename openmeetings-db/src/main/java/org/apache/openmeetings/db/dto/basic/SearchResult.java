@@ -26,8 +26,6 @@ public class SearchResult<T> {
 	private Collection<T> result;
 	private String errorKey;
 
-	public SearchResult() {}
-
 	public String getObjectName() {
 		return objectName;
 	}

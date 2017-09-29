@@ -71,9 +71,6 @@ public class Sessiondata implements Serializable {
 	@Column(name = "language_id")
 	private long languageId;
 
-	public Sessiondata() {
-	}
-
 	public Long getId() {
 		return id;
 	}

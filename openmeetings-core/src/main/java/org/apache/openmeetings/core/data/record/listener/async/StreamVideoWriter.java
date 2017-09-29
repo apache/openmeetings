@@ -94,5 +94,6 @@ public class StreamVideoWriter extends BaseStreamWriter {
 
 	@Override
 	protected void internalCloseStream() {
+		//should be empty for video writer
 	}
 }

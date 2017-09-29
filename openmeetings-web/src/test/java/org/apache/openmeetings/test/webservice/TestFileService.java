@@ -19,6 +19,7 @@
 package org.apache.openmeetings.test.webservice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -27,6 +28,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.util.NonJenkinsTests;
@@ -56,5 +59,15 @@ public class TestFileService extends AbstractWebServiceTest {
 				img.delete();
 			}
 		}
+	}
+
+	@Test
+	public void testGetRoom() {
+		ServiceResult r = login();
+		FileExplorerObject fo = getClient(FILE_SERVICE_URL)
+				.path("/room/5")
+				.query("sid", r.getMessage())
+				.get(FileExplorerObject.class);
+		assertNotNull(fo);
 	}
 }

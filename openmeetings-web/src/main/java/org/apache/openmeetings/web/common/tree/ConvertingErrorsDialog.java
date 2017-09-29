@@ -101,6 +101,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+		//no-op
 	}
 
 	@Override

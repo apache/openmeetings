@@ -33,7 +33,9 @@ public class UserSearchResult {
 	private List<UserDTO> result;
 	private String errorKey;
 
-	public UserSearchResult() {}
+	public UserSearchResult() {
+		//def constructor
+	}
 
 	public UserSearchResult(SearchResult<User> copy) {
 		this.objectName = copy.getObjectName();

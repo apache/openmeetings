@@ -93,17 +93,19 @@ public class RoomGroup implements IDataProviderEntity {
 	@Element(data = true)
 	private boolean deleted;
 
+	public RoomGroup() {
+		//def constructor
+	}
+
 	public RoomGroup(Group org, Room room) {
 		this.group = org;
 		this.room = room;
 	}
 
-	public RoomGroup() {
-	}
-
 	public Group getGroup() {
 		return group;
 	}
+
 	public void setGroup(Group group) {
 		this.group = group;
 	}
@@ -111,6 +113,7 @@ public class RoomGroup implements IDataProviderEntity {
 	public Room getRoom() {
 		return room;
 	}
+
 	public void setRoom(Room room) {
 		this.room = room;
 	}
@@ -119,6 +122,7 @@ public class RoomGroup implements IDataProviderEntity {
 	public Long getId() {
 		return id;
 	}
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
@@ -127,6 +131,7 @@ public class RoomGroup implements IDataProviderEntity {
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
@@ -134,6 +139,7 @@ public class RoomGroup implements IDataProviderEntity {
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
@@ -141,8 +147,8 @@ public class RoomGroup implements IDataProviderEntity {
 	public boolean isDeleted() {
 		return deleted;
 	}
+
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
-
 }

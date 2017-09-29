@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 
 public class Version {
 	private static final Logger log = Red5LoggerFactory.getLogger(Version.class, OpenmeetingsVariables.getWebAppRootKey());
-	private static final int startedStringLength = 78;
+	private static final int TOTAL_LENGTH = 78;
 	private static String version = null;
 	private static String revision = null;
 	private static String buildDate = null;
@@ -78,12 +78,12 @@ public class Version {
 	private static void getLine(StringBuilder sb, String text, char fill) {
 		sb.append("\t#");
 		int l = text.length();
-		int headLength = (startedStringLength - l) / 2;
+		int headLength = (TOTAL_LENGTH - l) / 2;
 		for (int i = 0; i < headLength; ++i) {
 			sb.append(fill);
 		}
 		sb.append(text);
-		for (int i = 0; i < (startedStringLength - l - headLength); ++i) {
+		for (int i = 0; i < (TOTAL_LENGTH - l - headLength); ++i) {
 			sb.append(fill);
 		}
 		sb.append("#\n");

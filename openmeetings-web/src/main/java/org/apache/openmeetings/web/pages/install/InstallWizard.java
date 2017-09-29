@@ -493,7 +493,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private final class ParamsStep3 extends BaseStep {
 		private static final long serialVersionUID = 1L;
-		private static final String regex = "\\r\\n|\\r|\\n";
+		private static final String REGEX = "\\r\\n|\\r|\\n";
 		private final TextField<String> ffmpegPath;
 		private final TextField<String> imageMagicPath;
 		private final TextField<String> soxPath;
@@ -546,7 +546,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private boolean checkToolPath(TextField<String> path, String[] args) {
 			ConverterProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
 			if (!result.isOk()) {
-				path.error(result.getError().replaceAll(regex, ""));
+				path.error(result.getError().replaceAll(REGEX, ""));
 			}
 			return result.isOk();
 		}
@@ -562,12 +562,12 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				try {
 					officeManager.start();
 				} catch (OfficeException ex) {
-					err = ex.getMessage().replaceAll(regex, "");
+					err = ex.getMessage().replaceAll(REGEX, "");
 				} finally {
 					officeManager.stop();
 				}
 			} catch (Exception ex) {
-				err = ex.getMessage().replaceAll(regex, "");
+				err = ex.getMessage().replaceAll(REGEX, "");
 			}
 			if (!err.isEmpty()) {
 				officePath.error(err);

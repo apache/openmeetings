@@ -75,7 +75,9 @@ public class GroupUser implements IDataProviderEntity {
 	@Element(data = true, required = false)
 	private boolean moderator;
 
-	public GroupUser() {}
+	public GroupUser() {
+		//def constructor
+	}
 
 	public GroupUser(Group group, User u) {
 		this.group = group;

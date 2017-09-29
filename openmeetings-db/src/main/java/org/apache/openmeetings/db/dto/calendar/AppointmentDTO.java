@@ -65,7 +65,9 @@ public class AppointmentDTO implements Serializable {
 	private boolean connectedEvent;
 	private boolean reminderEmailSend;
 
-	public AppointmentDTO() {}
+	public AppointmentDTO() {
+		//def constructor
+	}
 
 	public AppointmentDTO(Appointment a) {
 		id = a.getId();

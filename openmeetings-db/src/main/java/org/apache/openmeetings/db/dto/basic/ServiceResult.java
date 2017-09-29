@@ -41,7 +41,9 @@ public class ServiceResult implements Serializable {
 		, SUCCESS
 	}
 
-	public ServiceResult() {}
+	public ServiceResult() {
+		//def constructor
+	}
 
 	public ServiceResult(String message, String type) {
 		super();

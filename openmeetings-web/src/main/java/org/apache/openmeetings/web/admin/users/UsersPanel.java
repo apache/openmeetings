@@ -53,6 +53,7 @@ public class UsersPanel extends AdminBasePanel {
 
 		@Override
 		public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+			//no-op
 		}
 	};
 	private UserForm form;

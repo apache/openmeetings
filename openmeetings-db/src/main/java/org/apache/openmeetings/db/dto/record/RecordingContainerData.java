@@ -26,17 +26,18 @@ public class RecordingContainerData implements Serializable {
 	private long userHomeSize;
 	private long publicFileSize;
 
-	public RecordingContainerData() {}
-
 	public long getUserHomeSize() {
 		return userHomeSize;
 	}
+
 	public void setUserHomeSize(long userHomeSize) {
 		this.userHomeSize = userHomeSize;
 	}
+
 	public long getPublicFileSize() {
 		return publicFileSize;
 	}
+
 	public void setPublicFileSize(long publicFileSize) {
 		this.publicFileSize = publicFileSize;
 	}

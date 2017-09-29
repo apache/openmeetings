@@ -30,8 +30,6 @@ public class RoomCountDTO {
 	private int roomCount;
 	private long maxUser;
 
-	public RoomCountDTO() {}
-
 	public Long getRoomId() {
 		return roomId;
 	}

@@ -73,8 +73,6 @@ public class StreamClient implements IClient {
 	private Long roomId;
 	private Type type = Type.video;
 
-	public StreamClient() {}
-
 	@Override
 	public Long getId() {
 		return null;
@@ -82,6 +80,7 @@ public class StreamClient implements IClient {
 
 	@Override
 	public void setId(Long id) {
+		//no-op
 	}
 
 	public String getScope() {

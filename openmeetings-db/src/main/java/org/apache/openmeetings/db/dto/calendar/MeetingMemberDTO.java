@@ -41,7 +41,9 @@ public class MeetingMemberDTO implements Serializable {
 	private Long id;
 	private UserDTO user;
 
-	public MeetingMemberDTO() {}
+	public MeetingMemberDTO() {
+		//def constructor
+	}
 
 	public MeetingMemberDTO(MeetingMember mm) {
 		this.id = mm.getId();

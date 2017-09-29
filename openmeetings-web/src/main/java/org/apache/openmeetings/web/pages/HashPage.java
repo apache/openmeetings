@@ -186,6 +186,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 
 	@Override
 	protected void onParameterArrival(IRequestParameters requestParameters, AjaxRequestTarget target) {
+		//no-op
 	}
 
 	@Override

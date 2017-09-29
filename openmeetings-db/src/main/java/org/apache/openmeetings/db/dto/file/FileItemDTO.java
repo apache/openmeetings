@@ -53,7 +53,9 @@ public class FileItemDTO implements Serializable {
 	private Integer width;
 	private Integer height;
 
-	public FileItemDTO() {}
+	public FileItemDTO() {
+		//def constructor
+	}
 
 	public FileItemDTO(FileItem f) {
 		id = f.getId();

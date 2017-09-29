@@ -37,7 +37,7 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 public class LibraryChartLoader {
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryChartLoader.class, getWebAppRootKey());
 
-	private static final String fileExt = ".xchart";
+	private static final String CHART_EXT = ".xchart";
 
 	private static LibraryChartLoader instance;
 
@@ -54,7 +54,7 @@ public class LibraryChartLoader {
 	@SuppressWarnings("rawtypes")
 	public ArrayList loadChart(File dir, String fileName) {
 		try {
-			File file = new File(dir, fileName + fileExt);
+			File file = new File(dir, fileName + CHART_EXT);
 
 			log.error("filepathComplete: " + file);
 

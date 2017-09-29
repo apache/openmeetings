@@ -205,15 +205,19 @@ public class SignInPage extends BaseInitedPage {
 		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
 			@Override
-			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+				//no-op
+			}
+
 			@Override
-			public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+			public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+				//no-op
+			}
 
 			@Override
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
 			}
-
 		}};
 		try {
 			HttpsURLConnection connection = (HttpsURLConnection)_connection;

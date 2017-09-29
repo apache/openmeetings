@@ -56,6 +56,7 @@ public class RemoteSessionObject {
 	private String externalUserType;
 
 	public RemoteSessionObject() {
+		//def constructor
 	}
 
 	public RemoteSessionObject(String username, String firstname, String lastname,

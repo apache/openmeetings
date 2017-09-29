@@ -41,7 +41,9 @@ public class RoomFileDTO implements Serializable {
 	private long fileId;
 	private long wbIdx = 0;
 
-	public RoomFileDTO() {}
+	public RoomFileDTO() {
+		//def constructor
+	}
 
 	public RoomFileDTO(RoomFile rf) {
 		id = rf.getId();

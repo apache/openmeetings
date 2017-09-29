@@ -39,7 +39,9 @@ public class RoomOptionsDTO implements Serializable {
 	private boolean allowSameURLMultipleTimes;
 	private boolean allowRecording;
 
-	public RoomOptionsDTO() {}
+	public RoomOptionsDTO() {
+		//def constructor
+	}
 
 	public Long getRoomId() {
 		return roomId;

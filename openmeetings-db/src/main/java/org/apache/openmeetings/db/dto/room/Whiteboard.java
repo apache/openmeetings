@@ -52,7 +52,9 @@ public class Whiteboard implements Serializable {
 	private int slide = 0;
 	private String name;
 
-	public Whiteboard() {}
+	public Whiteboard() {
+		//def constructor
+	}
 
 	public Whiteboard(String name) {
 		this.name = name;

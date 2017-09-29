@@ -473,7 +473,9 @@ public class MobileService {
 		private String code;
 		private String name;
 
-		public Language() {}
+		public Language() {
+			//for creating via reflection
+		}
 
 		public Language(long language_id, String code, String name) {
 			this.language_id = language_id;

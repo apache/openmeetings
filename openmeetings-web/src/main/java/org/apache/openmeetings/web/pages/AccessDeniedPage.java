@@ -60,5 +60,6 @@ public class AccessDeniedPage extends BaseInitedPage {
 
 	@Override
 	protected void onParameterArrival(IRequestParameters requestParameters, AjaxRequestTarget target) {
+		//no-op
 	}
 }

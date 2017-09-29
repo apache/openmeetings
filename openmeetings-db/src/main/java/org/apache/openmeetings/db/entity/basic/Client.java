@@ -259,6 +259,7 @@ public class Client implements IClient {
 
 	@Override
 	public void setId(Long id) {
+		//no-op
 	}
 
 	public Room getRoom() {

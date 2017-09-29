@@ -32,7 +32,9 @@ public class Whiteboards implements Serializable {
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
 	private volatile AtomicLong activeWb = new AtomicLong(0);
 
-	public Whiteboards() {}
+	public Whiteboards() {
+		//def constructor
+	}
 
 	public Whiteboards(Long roomId) {
 		this.roomId = roomId;

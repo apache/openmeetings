@@ -62,6 +62,7 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+		//no-op
 	}
 
 	@Override

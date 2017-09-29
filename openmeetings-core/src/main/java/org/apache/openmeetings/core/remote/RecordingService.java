@@ -95,6 +95,7 @@ public class RecordingService implements IPendingServiceCallback {
 
 	@Override
 	public void resultReceived(IPendingServiceCall arg0) {
+		//no-op
 	}
 
 	private static String generateFileName(Long recordingId, String streamid) {

@@ -125,6 +125,7 @@ public class PrivateMessage implements IDataProviderEntity {
 	private Long userContactId;
 
 	public PrivateMessage() {
+		//def constructor
 	}
 
 	public PrivateMessage(PrivateMessage copy) {

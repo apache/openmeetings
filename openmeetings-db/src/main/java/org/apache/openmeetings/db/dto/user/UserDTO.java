@@ -54,7 +54,9 @@ public class UserDTO implements Serializable {
 	private String externalType;
 	private Type type = Type.user;
 
-	public UserDTO() {}
+	public UserDTO() {
+		//def constructor
+	}
 
 	public UserDTO(User u) {
 		id = u.getId();

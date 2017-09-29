@@ -45,7 +45,9 @@ public class RecordingDTO implements Serializable {
 	private Integer height;
 	private Long ownerId;
 
-	public RecordingDTO() {}
+	public RecordingDTO() {
+		//def constructor
+	}
 
 	public RecordingDTO(Recording r) {
 		this.id = r.getId();

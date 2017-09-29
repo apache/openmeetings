@@ -61,7 +61,9 @@ public class RoomFile implements IDataProviderEntity {
 	@Column(name = "wb_idx", nullable = false)
 	private long wbIdx = 0;
 
-	public RoomFile() {}
+	public RoomFile() {
+		//def constructor
+	}
 
 	public RoomFile(Long roomId, BaseFileItem file, long wbIdx) {
 		this.roomId = roomId;

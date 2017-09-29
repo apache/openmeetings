@@ -78,10 +78,6 @@ public class EmailForm extends Form<MailMessage> {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onError(AjaxRequestTarget target) {
-			}
-
-			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				getBean(MailMessageDao.class).delete(getModelObject().getId(), getUserId());
 				setModelObject(new MailMessage());

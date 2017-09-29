@@ -62,10 +62,6 @@ public class ComunityUserForm extends Form<User> {
 					u.setShowContactDataToContacts(false);
 				}
 			}
-
-			@Override
-			public void detach() {
-			}
 		});
 		add(rg.add(new Radio<>("everybody", Model.of(1L)), new Radio<>("contact", Model.of(2L))
 			, new Radio<>("nobody", Model.of(3L))).setOutputMarkupId(true).setRenderBodyOnly(false)

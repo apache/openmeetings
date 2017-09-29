@@ -136,7 +136,9 @@ public class Invitation implements IDataProviderEntity {
 	@Transient
 	private boolean allowEntry = true;
 
-	public Invitation() {}
+	public Invitation() {
+		//def constructor
+	}
 
 	public Invitation(Invitation i) {
 		id = i.id;

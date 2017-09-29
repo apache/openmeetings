@@ -64,62 +64,82 @@ public class InvitationDTO implements Serializable {
 	private String validTo;
 	private long languageId;
 
-	public InvitationDTO() {}
+	public InvitationDTO() {
+		//def constructor
+	}
 
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getFirstname() {
 		return firstname;
 	}
+
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
+
 	public String getLastname() {
 		return lastname;
 	}
+
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
+
 	public String getMessage() {
 		return message;
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 	public String getSubject() {
 		return subject;
 	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
+
 	public boolean isPasswordProtected() {
 		return passwordProtected;
 	}
+
 	public void setPasswordProtected(boolean passwordProtected) {
 		this.passwordProtected = passwordProtected;
 	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public Valid getValid() {
 		return valid;
 	}
+
 	public void setValid(Valid valid) {
 		this.valid = valid;
 	}
+
 	/**
 	 * Method to get valid from date-time in format YYYY-MM-dd HH:mm:ss
 	 *
@@ -128,14 +148,17 @@ public class InvitationDTO implements Serializable {
 	public String getValidFrom() {
 		return validFrom;
 	}
+
 	/**
 	 * Method to set valid from date-time in format YYYY-MM-dd HH:mm:ss
 	 *
-	 * @param validFrom date-time in format YYYY-MM-dd HH:mm:ss
+	 * @param validFrom
+	 *            date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public void setValidFrom(String validFrom) {
 		this.validFrom = validFrom;
 	}
+
 	/**
 	 * Method to get valid to date-time in format YYYY-MM-dd HH:mm:ss
 	 *
@@ -144,17 +167,21 @@ public class InvitationDTO implements Serializable {
 	public String getValidTo() {
 		return validTo;
 	}
+
 	/**
 	 * Method to set valid to date-time in format YYYY-MM-dd HH:mm:ss
 	 *
-	 * @param validFrom date-time in format YYYY-MM-dd HH:mm:ss
+	 * @param validFrom
+	 *            date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public void setValidTo(String validTo) {
 		this.validTo = validTo;
 	}
+
 	public long getLanguageId() {
 		return languageId;
 	}
+
 	public void setLanguageId(long languageId) {
 		this.languageId = languageId;
 	}
