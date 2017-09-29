@@ -150,11 +150,9 @@ public class RoomSidebar extends Panel {
 							return;
 						}
 						if (cl.hasRight(Right.moderator) || cl.getUid().equals(_c.getUid())) {
-							{
-								// basic checks, will throw in case of missing options
-								obj.getBoolean("mute");
-								obj.put("sid", cl.getSid());
-							}
+							// basic checks, will throw in case of missing options
+							obj.getBoolean("mute");
+							obj.put("sid", cl.getSid());
 							WebSocketHelper.sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.mute, obj.toString()));
 						}
 					}

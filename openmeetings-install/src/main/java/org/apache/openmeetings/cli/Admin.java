@@ -28,6 +28,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplic
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
@@ -319,62 +320,8 @@ public class Admin {
 						System.out.println("WARNING: all intermediate files will be clean up!");
 					}
 					StringBuilder report = new StringBuilder();
-					{ //UPLOAD
-						long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
-						report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
-						//Profiles
-						WebApplicationContext ctx = getApplicationContext();
-						UserDao udao = ctx.getBean(UserDao.class);
-						CleanupEntityUnit profile = CleanupHelper.getProfileUnit(udao);
-						long restSize = sectionSize - profile.getSizeTotal();
-						report.append("\t\tprofiles: ").append(profile.getHumanTotal()).append("\n");
-						report.append("\t\t\tinvalid: ").append(profile.getHumanInvalid()).append("\n");
-						report.append("\t\t\tdeleted: ").append(profile.getHumanDeleted()).append("\n");
-						report.append("\t\t\tmissing count: ").append(profile.getMissing()).append("\n");
-						if (cleanup) {
-							profile.cleanup();
-						}
-						CleanupUnit imp = CleanupHelper.getImportUnit();
-						restSize -= imp.getSizeTotal();
-						report.append("\t\timport: ").append(OmFileHelper.getHumanSize(imp.getSizeTotal())).append("\n");
-						if (cleanup) {
-							imp.cleanup();
-						}
-						CleanupUnit back = CleanupHelper.getBackupUnit();
-						restSize -= back.getSizeTotal();
-						report.append("\t\tbackup: ").append(OmFileHelper.getHumanSize(back.getSizeTotal())).append("\n");
-						if (cleanup) {
-							back.cleanup();
-						}
-						//Files
-						FileItemDao fileDao = ctx.getBean(FileItemDao.class);
-						CleanupEntityUnit files = CleanupHelper.getFileUnit(fileDao);
-						restSize -= files.getSizeTotal();
-						report.append("\t\tfiles: ").append(files.getHumanTotal()).append("\n");
-						report.append("\t\t\tinvalid: ").append(files.getHumanInvalid()).append("\n");
-						report.append("\t\t\tdeleted: ").append(files.getHumanDeleted()).append("\n");
-						report.append("\t\t\tmissing count: ").append(files.getMissing()).append("\n");
-						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
-						if (cleanup) {
-							files.cleanup();
-						}
-					}
-					{ //STREAMS
-						RecordingDao recordDao = getApplicationContext().getBean(RecordingDao.class);
-						CleanupEntityUnit rec = CleanupHelper.getRecUnit(recordDao);
-						File hibernateDir = OmFileHelper.getStreamsHibernateDir();
-						report.append("Recordings allocates: ").append(rec.getHumanTotal()).append("\n");
-						long size = OmFileHelper.getSize(hibernateDir);
-						long restSize = rec.getSizeTotal() - size;
-						report.append("\t\tfinal: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-						report.append("\t\t\tinvalid: ").append(rec.getHumanInvalid()).append("\n");
-						report.append("\t\t\tdeleted: ").append(rec.getHumanDeleted()).append("\n");
-						report.append("\t\t\tmissing count: ").append(rec.getMissing()).append("\n");
-						report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
-						if (cleanup) {
-							rec.cleanup();
-						}
-					}
+					reportUploads(report, cleanup);
+					reportStreams(report, cleanup);
 					System.out.println(report);
 				} catch (Exception e) {
 					handleError("Files failed", e);
@@ -400,6 +347,64 @@ public class Admin {
 
 		System.out.println("... Done");
 		System.exit(0);
+	}
+
+	private void reportUploads(StringBuilder report, boolean cleanup) throws IOException {
+		long sectionSize = OmFileHelper.getSize(OmFileHelper.getUploadDir());
+		report.append("Upload totally allocates: ").append(OmFileHelper.getHumanSize(sectionSize)).append("\n");
+		//Profiles
+		WebApplicationContext ctx = getApplicationContext();
+		UserDao udao = ctx.getBean(UserDao.class);
+		CleanupEntityUnit profile = CleanupHelper.getProfileUnit(udao);
+		long restSize = sectionSize - profile.getSizeTotal();
+		report.append("\t\tprofiles: ").append(profile.getHumanTotal()).append("\n");
+		report.append("\t\t\tinvalid: ").append(profile.getHumanInvalid()).append("\n");
+		report.append("\t\t\tdeleted: ").append(profile.getHumanDeleted()).append("\n");
+		report.append("\t\t\tmissing count: ").append(profile.getMissing()).append("\n");
+		if (cleanup) {
+			profile.cleanup();
+		}
+		CleanupUnit imp = CleanupHelper.getImportUnit();
+		restSize -= imp.getSizeTotal();
+		report.append("\t\timport: ").append(OmFileHelper.getHumanSize(imp.getSizeTotal())).append("\n");
+		if (cleanup) {
+			imp.cleanup();
+		}
+		CleanupUnit back = CleanupHelper.getBackupUnit();
+		restSize -= back.getSizeTotal();
+		report.append("\t\tbackup: ").append(OmFileHelper.getHumanSize(back.getSizeTotal())).append("\n");
+		if (cleanup) {
+			back.cleanup();
+		}
+		//Files
+		FileItemDao fileDao = ctx.getBean(FileItemDao.class);
+		CleanupEntityUnit files = CleanupHelper.getFileUnit(fileDao);
+		restSize -= files.getSizeTotal();
+		report.append("\t\tfiles: ").append(files.getHumanTotal()).append("\n");
+		report.append("\t\t\tinvalid: ").append(files.getHumanInvalid()).append("\n");
+		report.append("\t\t\tdeleted: ").append(files.getHumanDeleted()).append("\n");
+		report.append("\t\t\tmissing count: ").append(files.getMissing()).append("\n");
+		report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
+		if (cleanup) {
+			files.cleanup();
+		}
+	}
+
+	private void reportStreams(StringBuilder report, boolean cleanup) throws IOException {
+		RecordingDao recordDao = getApplicationContext().getBean(RecordingDao.class);
+		CleanupEntityUnit rec = CleanupHelper.getRecUnit(recordDao);
+		File hibernateDir = OmFileHelper.getStreamsHibernateDir();
+		report.append("Recordings allocates: ").append(rec.getHumanTotal()).append("\n");
+		long size = OmFileHelper.getSize(hibernateDir);
+		long restSize = rec.getSizeTotal() - size;
+		report.append("\t\tfinal: ").append(OmFileHelper.getHumanSize(size)).append("\n");
+		report.append("\t\t\tinvalid: ").append(rec.getHumanInvalid()).append("\n");
+		report.append("\t\t\tdeleted: ").append(rec.getHumanDeleted()).append("\n");
+		report.append("\t\t\tmissing count: ").append(rec.getMissing()).append("\n");
+		report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
+		if (cleanup) {
+			rec.cleanup();
+		}
 	}
 
 	private void checkAdminDetails() throws Exception {
