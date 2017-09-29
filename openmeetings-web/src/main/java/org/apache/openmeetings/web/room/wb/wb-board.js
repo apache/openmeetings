@@ -201,7 +201,7 @@ var Wb = function() {
 				});
 				s.find('.wb-prop-fill').change(function() {
 					var btn = getBtn();
-					if (btn.length == 1) {
+					if (btn.length === 1) {
 						var v = $(this).val();
 						btn.data().obj.fill.color = v;
 					}
