@@ -52,10 +52,10 @@ public interface IApplication {
 	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
 	void invalidateClient(Long userId, String sessionId);
-	void exit(String uid);
 	void setXFrameOptions(String xFrameOptions);
 	void setContentSecurityPolicy(String contentSecurityPolicy);
 
+	void exit(IClient c);
 	IClient update(IClient c);
 
 	// web client

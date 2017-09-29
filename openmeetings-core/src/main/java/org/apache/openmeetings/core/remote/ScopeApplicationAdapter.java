@@ -380,7 +380,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	public void roomLeaveByScope(Client c, Long roomId) {
+	public void roomLeaveByScope(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
 		StreamClient rcl = sessionManager.get(c.getUid());
 		IScope scope = getChildScope(String.valueOf(roomId));
 		_log.debug("[roomLeaveByScope] {} {} {} {}", c.getUid(), roomId, rcl, scope);
@@ -434,7 +434,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			_log.debug("currentScope " + scope);
 
 			if (Client.Type.mobile == client.getType() || Client.Type.sip == client.getType()) {
-				getApp().exit(client.getUid());
+				getApp().exit(client);
 			}
 			sessionManager.remove(client.getUid());
 		} catch (Exception err) {

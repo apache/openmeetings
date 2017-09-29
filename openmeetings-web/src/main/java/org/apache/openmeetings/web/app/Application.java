@@ -395,32 +395,24 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		get().getUidBySid().put(c.getSid(), c.getUid());
 	}
 
-	public static void exitRoom(Client c) {
-		Room room = c.getRoom();
+	public static void exitRoom(IClient c) {
+		Long roomId = c.getRoomId();
 		removeUserFromRoom(c);
-		if (room != null) {
-			sendRoom(new RoomMessage(room.getId(), c.getUserId(), RoomMessage.Type.roomExit));
+		if (roomId != null) {
+			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomLeave
-					, c.getUserId(), "0", room.getId()
+					, c.getUserId(), "0", roomId
 					, c.getRemoteAddress()
-					, "" + room);
+					, String.valueOf(roomId));
 		}
 	}
 
 	@Override
-	public void exit(String uid) {
-		if (uid != null) {
-			exit(getOnlineUsers().get(uid));
-		}
-	}
-
-	private static void exit(Client c) {
+	public void exit(IClient c) {
 		if (c != null) {
-			if (c.getRoom() != null) {
-				exitRoom(c);
-			}
-			log.debug("Removing online client: {}, room: {}", c.getUid(), c.getRoom());
+			exitRoom(c);
+			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
 			get().getOnlineUsers().remove(c.getUid());
 			get().getUidBySid().remove(c.getSid());
 		}
@@ -623,22 +615,30 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return c;
 	}
 
-	public static Client removeUserFromRoom(Client c) {
-		Room room = c.getRoom();
-		log.debug("Removing online room client: {}, room: {}", c.getUid(), room);
-		if (room != null) {
+	public static IClient removeUserFromRoom(IClient _c) {
+		Long roomId = _c.getRoomId();
+		log.debug("Removing online room client: {}, room: {}", _c.getUid(), roomId);
+		if (roomId != null) {
 			Map<Long, Set<String>> rooms = get().getRooms();
-			Set<String> clients = rooms.get(room.getId());
+			Set<String> clients = rooms.get(roomId);
 			if (clients != null) {
-				clients.remove(c.getUid());
-				rooms.put(room.getId(), clients);
+				clients.remove(_c.getUid());
+				rooms.put(roomId, clients);
 			}
-			getBean(ScopeApplicationAdapter.class).roomLeaveByScope(c, room.getId());
-			c.setRoom(null);
-			c.clear();
-			update(c);
+			if (_c instanceof StreamClient) {
+				StreamClient sc = (StreamClient)_c;
+				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
+					getBean(ScopeApplicationAdapter.class).roomLeaveByScope(_c, roomId);
+				}
+			}
+			if (_c instanceof Client) {
+				Client c = (Client)_c;
+				c.setRoom(null);
+				c.clear();
+				update(c);
+			}
 		}
-		return c;
+		return _c;
 	}
 
 	@Override

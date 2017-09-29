@@ -45,6 +45,7 @@ public class StreamClient implements IClient {
 	private int userport;
 	private Date roomEnter = null;
 	private String broadcastId = null;
+	@SuppressWarnings("unused") private String broadCastID = null; //required for mobile only
 	private String login = "";
 	private Long userId = null;
 	private String firstname = "";
@@ -203,6 +204,11 @@ public class StreamClient implements IClient {
 
 	public void setBroadcastId(String broadcastId) {
 		this.broadcastId = broadcastId;
+		this.broadCastID = broadcastId;
+	}
+
+	public String getBroadCastID() {
+		return broadCastID;
 	}
 
 	@Override

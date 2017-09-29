@@ -178,7 +178,7 @@ public class MainPanel extends Panel {
 				//no chance to stop pingTimer here :(
 				if (uid != null) {
 					log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
-					Application.get().exit(uid);
+					Application.get().exit(getClient());
 					uid = null;
 				}
 			}
