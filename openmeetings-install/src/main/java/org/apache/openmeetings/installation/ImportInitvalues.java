@@ -114,7 +114,6 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,31 +163,31 @@ public class ImportInitvalues {
 	 */
 	public static List<Configuration> initialCfgs(InstallationConfig cfg) {
 		List<Configuration> list = new ArrayList<>();
-		addCfg(list, CONFIG_CRYPT, cfg.cryptClassName, Configuration.Type.string,
+		addCfg(list, CONFIG_CRYPT, cfg.getCryptClassName(), Configuration.Type.string,
 				"This Class is used for Authentification-Crypting. "
 						+ "Be carefull what you do here! If you change it while "
 						+ "running previous Pass of users will not be workign anymore! "
 						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html"
 				, "1.9.x");
 
-		addCfg(list, CONFIG_REGISTER_FRONTEND, String.valueOf(cfg.allowFrontendRegister), Configuration.Type.bool
+		addCfg(list, CONFIG_REGISTER_FRONTEND, String.valueOf(cfg.isAllowFrontendRegister()), Configuration.Type.bool
 				, "Is user register available on login screen", "1.8.x");
 		addCfg(list, CONFIG_REGISTER_SOAP, "true", Configuration.Type.bool, "Is user register available via SOAP/REST", "3.0.x");
 		addCfg(list, CONFIG_REGISTER_OAUTH, "true", Configuration.Type.bool, "Is user register available via OAuth", "3.0.x");
 		// this group_id is the Group of users who register through the frontend or SOAP
 		addCfg(list, CONFIG_DEFAULT_GROUP_ID, "1", Configuration.Type.number, "", "1.8.x");
 
-		addCfg(list, CONFIG_SMTP_SERVER, cfg.smtpServer, Configuration.Type.string, "this is the smtp server to send messages", "1.9.x");
+		addCfg(list, CONFIG_SMTP_SERVER, cfg.getSmtpServer(), Configuration.Type.string, "this is the smtp server to send messages", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_PORT, String.valueOf(cfg.smtpPort), Configuration.Type.number, "this is the smtp server port normally 25", "1.9.x");
+		addCfg(list, CONFIG_SMTP_PORT, String.valueOf(cfg.getSmtpPort()), Configuration.Type.number, "this is the smtp server port normally 25", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_SYSTEM_EMAIL, cfg.mailReferer, Configuration.Type.string, "all send e-mails by the system will have this address", "1.9.x");
+		addCfg(list, CONFIG_SMTP_SYSTEM_EMAIL, cfg.getMailReferer(), Configuration.Type.string, "all send e-mails by the system will have this address", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_USER, cfg.mailAuthName, Configuration.Type.string, "System auth email username", "1.9.x");
+		addCfg(list, CONFIG_SMTP_USER, cfg.getMailAuthName(), Configuration.Type.string, "System auth email username", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_PASS, cfg.mailAuthPass, Configuration.Type.string, "System auth email password", "1.9.x");
+		addCfg(list, CONFIG_SMTP_PASS, cfg.getMailAuthPass(), Configuration.Type.string, "System auth email password", "1.9.x");
 
-		addCfg(list, CONFIG_SMTP_TLS, String.valueOf(cfg.mailUseTls), Configuration.Type.bool, "Enable TLS", "1.9.x");
+		addCfg(list, CONFIG_SMTP_TLS, String.valueOf(cfg.isMailUseTls()), Configuration.Type.bool, "Enable TLS", "1.9.x");
 
 		addCfg(list, CONFIG_SMTP_TIMEOUT_CON, "30000", Configuration.Type.number,
 				"Socket connection timeout value in milliseconds. Default is 30 seconds (30000).", "1.9.x");
@@ -199,52 +198,52 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME, Configuration.Type.string, "Name of the Browser Title window", "3.0.x");
 
 		// "1" == "EN"
-		addCfg(list, CONFIG_DEFAULT_LANG, cfg.defaultLangId, Configuration.Type.number, "Default System Language ID see languages.xml", "1.8.x");
+		addCfg(list, CONFIG_DEFAULT_LANG, String.valueOf(cfg.getDefaultLangId()), Configuration.Type.number, "Default System Language ID see languages.xml", "1.8.x");
 
-		addCfg(list, CONFIG_DOCUMENT_DPI, String.valueOf(cfg.docDpi), Configuration.Type.number,
+		addCfg(list, CONFIG_DOCUMENT_DPI, String.valueOf(cfg.getDocDpi()), Configuration.Type.number,
 				"dpi for conversion of PDF to images (should be an integer between 50 and  600 with a default value of 150 dpi)", "2.0.x");
 
-		addCfg(list, CONFIG_DOCUMENT_QUALITY, String.valueOf(cfg.docQuality), Configuration.Type.number,
+		addCfg(list, CONFIG_DOCUMENT_QUALITY, String.valueOf(cfg.getDocQuality()), Configuration.Type.number,
 				"compression quality for conversion of PDF to images (should be an integer between 1 and 100, with a default value of 90)", "2.0.x");
 
-		addCfg(list, CONFIG_PATH_IMAGEMAGIC, cfg.imageMagicPath, Configuration.Type.string, "Path to ImageMagick tools", "2.0.x");
+		addCfg(list, CONFIG_PATH_IMAGEMAGIC, cfg.getImageMagicPath(), Configuration.Type.string, "Path to ImageMagick tools", "2.0.x");
 
-		addCfg(list, CONFIG_PATH_SOX, cfg.soxPath, Configuration.Type.string, "Path To SoX-Tools", "2.0.x");
+		addCfg(list, CONFIG_PATH_SOX, cfg.getSoxPath(), Configuration.Type.string, "Path To SoX-Tools", "2.0.x");
 
-		addCfg(list, CONFIG_PATH_FFMPEG, cfg.ffmpegPath, Configuration.Type.string, "Path To FFMPEG", "2.0.x");
-		addCfg(list, CONFIG_PATH_OFFICE, cfg.officePath, Configuration.Type.string,
+		addCfg(list, CONFIG_PATH_FFMPEG, cfg.getFfmpegPath(), Configuration.Type.string, "Path To FFMPEG", "2.0.x");
+		addCfg(list, CONFIG_PATH_OFFICE, cfg.getOfficePath(), Configuration.Type.string,
 				"The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically", "2.0.x");
 
-		addCfg(list, CONFIG_DASHBOARD_RSS_FEED1, cfg.urlFeed, Configuration.Type.string, "Feed URL 1", "1.9.x");
+		addCfg(list, CONFIG_DASHBOARD_RSS_FEED1, cfg.getUrlFeed(), Configuration.Type.string, "Feed URL 1", "1.9.x");
 
-		addCfg(list, CONFIG_DASHBOARD_RSS_FEED2, cfg.urlFeed2, Configuration.Type.string, "Feed URL 2", "1.9.x");
+		addCfg(list, CONFIG_DASHBOARD_RSS_FEED2, cfg.getUrlFeed2(), Configuration.Type.string, "Feed URL 2", "1.9.x");
 
-		addCfg(list, CONFIG_EMAIL_AT_REGISTER, String.valueOf(cfg.sendEmailAtRegister), Configuration.Type.bool,
+		addCfg(list, CONFIG_EMAIL_AT_REGISTER, String.valueOf(cfg.isSendEmailAtRegister()), Configuration.Type.bool,
 				"User get a EMail with their Account data.", "2.0.x");
 
-		addCfg(list, CONFIG_EMAIL_VERIFICATION, cfg.sendEmailWithVerficationCode, Configuration.Type.bool,
+		addCfg(list, CONFIG_EMAIL_VERIFICATION, String.valueOf(cfg.isSendEmailWithVerficationCode()), Configuration.Type.bool,
 				String.format("User must activate their account by clicking on the "
 					+ "activation-link in the registering Email "
 					+ "It makes no sense to make this(%s) 'true' while "
 					+ "%s is 'false' cause you need to send a EMail.", CONFIG_EMAIL_VERIFICATION, CONFIG_EMAIL_AT_REGISTER), "2.0.x");
 
-		addCfg(list, CONFIG_APPLICATION_BASE_URL, cfg.baseUrl, Configuration.Type.string, "Base URL your OPenmeetings installation will be accessible at.", "3.0.2");
+		addCfg(list, CONFIG_APPLICATION_BASE_URL, cfg.getBaseUrl(), Configuration.Type.string, "Base URL your OPenmeetings installation will be accessible at.", "3.0.2");
 
 		// ***************************************
 		// ***************************************
 		// SIP Integration Coniguration Values
 		// ***************************************
 
-		addCfg(list, CONFIG_SIP_ENABLED, String.valueOf(cfg.sipEnable), Configuration.Type.bool, "Enable to enable the red5SIP integration ", "1.9.x");
-		addCfg(list, CONFIG_SIP_ROOM_PREFIX, cfg.sipRoomPrefix, Configuration.Type.string, "Numerical prefix for OM rooms created inside the SIP", "1.9.x");
-		addCfg(list, CONFIG_SIP_EXTEN_CONTEXT, cfg.sipExtenContext, Configuration.Type.string, "Enable to enable the red5SIP integration ", "1.9.x");
+		addCfg(list, CONFIG_SIP_ENABLED, String.valueOf(cfg.isSipEnable()), Configuration.Type.bool, "Enable to enable the red5SIP integration ", "1.9.x");
+		addCfg(list, CONFIG_SIP_ROOM_PREFIX, cfg.getSipRoomPrefix(), Configuration.Type.string, "Numerical prefix for OM rooms created inside the SIP", "1.9.x");
+		addCfg(list, CONFIG_SIP_EXTEN_CONTEXT, cfg.getSipExtenContext(), Configuration.Type.string, "Enable to enable the red5SIP integration ", "1.9.x");
 
 		// ***************************************
 		// ***************************************
 		// Timezone settings
 		// ***************************************
 
-		addCfg(list, CONFIG_DEFAULT_TIMEZONE, cfg.ical_timeZone, Configuration.Type.string, "This is the default timezone if nothing is specified", "1.9.x");
+		addCfg(list, CONFIG_DEFAULT_TIMEZONE, cfg.getTimeZone(), Configuration.Type.string, "This is the default timezone if nothing is specified", "1.9.x");
 
 		// ***************************************
 		// ***************************************
@@ -291,7 +290,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_DEFAULT_LDAP_ID, "0", Configuration.Type.number, "Ldap domain selected by default in the login screen", "1.9.x");
 
 		// set inviter's email address as ReplyTo in email invitations
-		addCfg(list, CONFIG_REPLY_TO_ORGANIZER, String.valueOf(cfg.replyToOrganizer), Configuration.Type.bool,
+		addCfg(list, CONFIG_REPLY_TO_ORGANIZER, String.valueOf(cfg.isReplyToOrganizer()), Configuration.Type.bool,
 				"Set inviter's email address as ReplyTo in email invitations", "2.0.x");
 
 		addCfg(list, CONFIG_DEFAULT_LANDING_ZONE, "user/dashboard", Configuration.Type.string
@@ -393,7 +392,7 @@ public class ImportInitvalues {
 	public void loadInitUserAndGroup(InstallationConfig cfg) throws Exception {
 		// Add default group
 		Group org = new Group();
-		org.setName(cfg.group);
+		org.setName(cfg.getGroup());
 		org.setInsertedby(1L);
 		org.setDeleted(false);
 		org.setInserted(new Date());
@@ -403,10 +402,10 @@ public class ImportInitvalues {
 		u.setType(User.Type.user);
 		u.getRights().add(Right.Admin);
 		u.getRights().add(Right.Soap);
-		u.setLogin(cfg.username);
+		u.setLogin(cfg.getUsername());
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
-		u.getAddress().setEmail(cfg.email);
+		u.getAddress().setEmail(cfg.getEmail());
 		u.getGroupUsers().add(new GroupUser(org, u));
 
 		u = userDao.update(u, cfg.getPassword(), -1L);
@@ -500,7 +499,7 @@ public class ImportInitvalues {
 		loadInitUserAndGroup(cfg);
 		progress = 80;
 
-		loadDefaultRooms(cfg.createDefaultRooms, StringValue.valueOf(cfg.defaultLangId).toLong(1L));
+		loadDefaultRooms(cfg.isCreateDefaultRooms(), cfg.getDefaultLangId());
 		progress = 100;
 	}
 }

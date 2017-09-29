@@ -41,6 +41,7 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
+import org.apache.directory.api.util.Strings;
 import org.apache.openjpa.jdbc.conf.JDBCConfiguration;
 import org.apache.openjpa.jdbc.conf.JDBCConfigurationImpl;
 import org.apache.openjpa.jdbc.schema.SchemaTool;
@@ -65,7 +66,6 @@ import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ImportHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.mail.MailUtil;
-import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
 import org.red5.logging.Red5LoggerFactory;
@@ -109,9 +109,9 @@ public class Admin {
 		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + USER_PASSWORD_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
-		options.addOption(new OmOption("i", null, "system-email-address", true, "System e-mail address [default: " + cfg.mailReferer + "]", true));
-		options.addOption(new OmOption("i", null, "smtp-server", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpServer + "]", true));
-		options.addOption(new OmOption("i", null, "smtp-port", true, "SMTP server for outgoing e-mails [default: " + cfg.smtpPort + "]", true));
+		options.addOption(new OmOption("i", null, "system-email-address", true, String.format("System e-mail address [default: %s]", cfg.getMailReferer()), true));
+		options.addOption(new OmOption("i", null, "smtp-server", true, String.format("SMTP server for outgoing e-mails [default: %s]", cfg.getSmtpServer()), true));
+		options.addOption(new OmOption("i", null, "smtp-port", true, String.format("SMTP server for outgoing e-mails [default: %s]", cfg.getSmtpPort()), true));
 		options.addOption(new OmOption("i", null, "email-auth-user", true, "Email auth username (anonymous connection will be used if not set)", true));
 		options.addOption(new OmOption("i", null, "email-auth-pass", true, "Email auth password (anonymous connection will be used if not set)", true));
 		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]", true));
@@ -171,7 +171,7 @@ public class Admin {
 
 	private WebApplicationContext getApplicationContext() {
 		if (ctx == null) {
-			Long lngId = StringValue.valueOf(cfg.defaultLangId).toLong(1L);
+			Long lngId = (long)cfg.getDefaultLangId();
 			ctx = ApplicationHelper.getApplicationContext(lngId);
 			SchedulerFactoryBean sfb = ctx.getBean(SchedulerFactoryBean.class);
 			try {
@@ -222,31 +222,31 @@ public class Admin {
 					}
 					boolean force = cmdl.hasOption("force");
 					if (cmdl.hasOption("skip-default-rooms")) {
-						cfg.createDefaultRooms = false;
+						cfg.setCreateDefaultRooms(false);
 					}
 					if (cmdl.hasOption("disable-frontend-register")) {
-						cfg.allowFrontendRegister = false;
+						cfg.setAllowFrontendRegister(false);
 					}
 					if (cmdl.hasOption("system-email-address")) {
-						cfg.mailReferer = cmdl.getOptionValue("system-email-address");
+						cfg.setMailReferer(cmdl.getOptionValue("system-email-address"));
 					}
 					if (cmdl.hasOption("smtp-server")) {
-						cfg.smtpServer = cmdl.getOptionValue("smtp-server");
+						cfg.setSmtpServer(cmdl.getOptionValue("smtp-server"));
 					}
 					if (cmdl.hasOption("smtp-port")) {
-						cfg.smtpPort = Integer.valueOf(cmdl.getOptionValue("smtp-port"));
+						cfg.setSmtpPort(Integer.valueOf(cmdl.getOptionValue("smtp-port")));
 					}
 					if (cmdl.hasOption("email-auth-user")) {
-						cfg.mailAuthName = cmdl.getOptionValue("email-auth-user");
+						cfg.setMailAuthName(cmdl.getOptionValue("email-auth-user"));
 					}
 					if (cmdl.hasOption("email-auth-pass")) {
-						cfg.mailAuthPass = cmdl.getOptionValue("email-auth-pass");
+						cfg.setMailAuthPass(cmdl.getOptionValue("email-auth-pass"));
 					}
 					if (cmdl.hasOption("email-use-tls")) {
-						cfg.mailUseTls = true;
+						cfg.setMailUseTls(true);
 					}
 					if (cmdl.hasOption("default-language")) {
-						cfg.defaultLangId = cmdl.getOptionValue("default-language");
+						cfg.setDefaultLangId(Integer.parseInt(cmdl.getOptionValue("default-language")));
 					}
 					ConnectionProperties connectionProperties;
 					File conf = OmFileHelper.getPersistence();
@@ -403,20 +403,20 @@ public class Admin {
 	}
 
 	private void checkAdminDetails() throws Exception {
-		cfg.username = cmdl.getOptionValue("user");
-		cfg.email = cmdl.getOptionValue("email");
-		cfg.group = cmdl.getOptionValue("group");
-		if (cfg.username == null || cfg.username.length() < USER_LOGIN_MINIMUM_LENGTH) {
+		cfg.setUsername(cmdl.getOptionValue("user"));
+		cfg.setEmail(cmdl.getOptionValue("email"));
+		cfg.setGroup(cmdl.getOptionValue("group"));
+		if (cfg.getUsername() == null || cfg.getUsername().length() < USER_LOGIN_MINIMUM_LENGTH) {
 			System.out.println("User login was not provided, or too short, should be at least " + USER_LOGIN_MINIMUM_LENGTH + " character long.");
 			System.exit(1);
 		}
 
-		if (!MailUtil.isValid(cfg.email)) {
-			System.out.println("Please provide non-empty valid email: '" + cfg.email + "' is not valid.");
+		if (!MailUtil.isValid(cfg.getEmail())) {
+			System.out.println(String.format("Please provide non-empty valid email: '%s' is not valid.", cfg.getEmail()));
 			System.exit(1);
 		}
-		if (cfg.group == null || cfg.group.length() < 1) {
-			System.out.println("User group was not provided, or too short, should be at least 1 character long: " + cfg.group);
+		if (Strings.isEmpty(cfg.getGroup())) {
+			System.out.println(String.format("User group was not provided, or too short, should be at least 1 character long: %s", cfg.getGroup()));
 			System.exit(1);
 		}
 		if (cmdl.hasOption("password")) {
@@ -429,17 +429,17 @@ public class Admin {
 			passVal = new Validatable<>(cfg.getPassword());
 			passValidator.validate(passVal);
 			if (!passVal.isValid()) {
-				System.out.print("Please enter password for the user '" + cfg.username + "':");
+				System.out.print(String.format("Please enter password for the user '%s':", cfg.getUsername()));
 				cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
 			}
 		} while (!passVal.isValid());
 		Map<String, String> tzMap = ImportHelper.getAllTimeZones(TimeZone.getAvailableIDs());
-		cfg.ical_timeZone = null;
+		cfg.setTimeZone(null);
 		if (cmdl.hasOption("tz")) {
-			cfg.ical_timeZone = cmdl.getOptionValue("tz");
-			cfg.ical_timeZone = tzMap.containsKey(cfg.ical_timeZone) ? cfg.ical_timeZone : null;
+			String tz = cmdl.getOptionValue("tz");
+			cfg.setTimeZone(tzMap.containsKey(tz) ? tz : null);
 		}
-		if (cfg.ical_timeZone == null) {
+		if (cfg.getTimeZone() == null) {
 			System.out.println("Please enter timezone, Possible timezones are:");
 
 			for (Map.Entry<String,String> me : tzMap.entrySet()) {

@@ -68,11 +68,11 @@ public class TestRoomService extends AbstractWebServiceTest {
 		assertEquals("Same Room should be returned", room.getId(), room1.getId());
 	}
 
-	private CallResult<RoomDTO> createAndValidate(RoomDTO r) {
+	private static CallResult<RoomDTO> createAndValidate(RoomDTO r) {
 		return createAndValidate(null, r);
 	}
 
-	private CallResult<RoomDTO> createAndValidate(String sid, RoomDTO r) {
+	private static CallResult<RoomDTO> createAndValidate(String sid, RoomDTO r) {
 		if (sid == null) {
 			ServiceResult sr = login();
 			sid = sr.getMessage();

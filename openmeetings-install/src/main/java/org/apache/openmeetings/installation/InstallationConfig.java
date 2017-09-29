@@ -28,41 +28,41 @@ import org.apache.openmeetings.util.crypt.SCryptImplementation;
 public class InstallationConfig implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public String appName = DEFAULT_APP_NAME;
-	public String username;
+	private String appName = DEFAULT_APP_NAME;
+	private String username;
 	private String password;
-	public String email;
-	public String group;
-	public boolean allowFrontendRegister = true;
-	public boolean createDefaultRooms = true;
-	public String ical_timeZone = "Europe/Berlin";
+	private String email;
+	private String group;
+	private boolean allowFrontendRegister = true;
+	private boolean createDefaultRooms = true;
+	private String timeZone = "Europe/Berlin";
 
-	public String cryptClassName = SCryptImplementation.class.getCanonicalName();
+	private String cryptClassName = SCryptImplementation.class.getCanonicalName();
 	//email
-	public Integer smtpPort = 25;
-	public String smtpServer = "localhost";
-	public String mailAuthName = "";
-	public String mailAuthPass = "";
-	public String mailReferer = "noreply@openmeetings.apache.org";
-	public boolean mailUseTls = false;
+	private Integer smtpPort = 25;
+	private String smtpServer = "localhost";
+	private String mailAuthName = "";
+	private String mailAuthPass = "";
+	private String mailReferer = "noreply@openmeetings.apache.org";
+	private boolean mailUseTls = false;
 	//paths
-	public Integer docDpi = 150;
-	public Integer docQuality = 90;
-	public String imageMagicPath = "";
-	public String ffmpegPath = "";
-	public String soxPath = "";
-	public String officePath = "";
+	private Integer docDpi = 150;
+	private Integer docQuality = 90;
+	private String imageMagicPath = "";
+	private String ffmpegPath = "";
+	private String soxPath = "";
+	private String officePath = "";
 
-	public String defaultLangId = "1";
-	public boolean sendEmailAtRegister = false;
-	public String urlFeed = "http://mail-archives.apache.org/mod_mbox/openmeetings-user/?format=atom";
-	public String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
-	public String sendEmailWithVerficationCode = "false";
-	public boolean sipEnable = false;
-	public String sipRoomPrefix = "400";
-	public String sipExtenContext = "rooms";
-	public boolean replyToOrganizer = true;
-	public String baseUrl = DEFAULT_BASE_URL;
+	private int defaultLangId = 1;
+	private boolean sendEmailAtRegister = false;
+	private String urlFeed = "http://mail-archives.apache.org/mod_mbox/openmeetings-user/?format=atom";
+	private String urlFeed2 = "http://mail-archives.apache.org/mod_mbox/openmeetings-dev/?format=atom";
+	private boolean sendEmailWithVerficationCode = false;
+	private boolean sipEnable = false;
+	private String sipRoomPrefix = "400";
+	private String sipExtenContext = "rooms";
+	private boolean replyToOrganizer = true;
+	private String baseUrl = DEFAULT_BASE_URL;
 
 	public String getPassword() {
 		return password;
@@ -70,6 +70,246 @@ public class InstallationConfig implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	public boolean isAllowFrontendRegister() {
+		return allowFrontendRegister;
+	}
+
+	public void setAllowFrontendRegister(boolean allowFrontendRegister) {
+		this.allowFrontendRegister = allowFrontendRegister;
+	}
+
+	public boolean isCreateDefaultRooms() {
+		return createDefaultRooms;
+	}
+
+	public void setCreateDefaultRooms(boolean createDefaultRooms) {
+		this.createDefaultRooms = createDefaultRooms;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public String getCryptClassName() {
+		return cryptClassName;
+	}
+
+	public void setCryptClassName(String cryptClassName) {
+		this.cryptClassName = cryptClassName;
+	}
+
+	public Integer getSmtpPort() {
+		return smtpPort;
+	}
+
+	public void setSmtpPort(Integer smtpPort) {
+		this.smtpPort = smtpPort;
+	}
+
+	public String getSmtpServer() {
+		return smtpServer;
+	}
+
+	public void setSmtpServer(String smtpServer) {
+		this.smtpServer = smtpServer;
+	}
+
+	public String getMailAuthName() {
+		return mailAuthName;
+	}
+
+	public void setMailAuthName(String mailAuthName) {
+		this.mailAuthName = mailAuthName;
+	}
+
+	public String getMailAuthPass() {
+		return mailAuthPass;
+	}
+
+	public void setMailAuthPass(String mailAuthPass) {
+		this.mailAuthPass = mailAuthPass;
+	}
+
+	public String getMailReferer() {
+		return mailReferer;
+	}
+
+	public void setMailReferer(String mailReferer) {
+		this.mailReferer = mailReferer;
+	}
+
+	public boolean isMailUseTls() {
+		return mailUseTls;
+	}
+
+	public void setMailUseTls(boolean mailUseTls) {
+		this.mailUseTls = mailUseTls;
+	}
+
+	public Integer getDocDpi() {
+		return docDpi;
+	}
+
+	public void setDocDpi(Integer docDpi) {
+		this.docDpi = docDpi;
+	}
+
+	public Integer getDocQuality() {
+		return docQuality;
+	}
+
+	public void setDocQuality(Integer docQuality) {
+		this.docQuality = docQuality;
+	}
+
+	public String getImageMagicPath() {
+		return imageMagicPath;
+	}
+
+	public void setImageMagicPath(String imageMagicPath) {
+		this.imageMagicPath = imageMagicPath;
+	}
+
+	public String getFfmpegPath() {
+		return ffmpegPath;
+	}
+
+	public void setFfmpegPath(String ffmpegPath) {
+		this.ffmpegPath = ffmpegPath;
+	}
+
+	public String getSoxPath() {
+		return soxPath;
+	}
+
+	public void setSoxPath(String soxPath) {
+		this.soxPath = soxPath;
+	}
+
+	public String getOfficePath() {
+		return officePath;
+	}
+
+	public void setOfficePath(String officePath) {
+		this.officePath = officePath;
+	}
+
+	public int getDefaultLangId() {
+		return defaultLangId;
+	}
+
+	public void setDefaultLangId(int defaultLangId) {
+		this.defaultLangId = defaultLangId;
+	}
+
+	public boolean isSendEmailAtRegister() {
+		return sendEmailAtRegister;
+	}
+
+	public void setSendEmailAtRegister(boolean sendEmailAtRegister) {
+		this.sendEmailAtRegister = sendEmailAtRegister;
+	}
+
+	public String getUrlFeed() {
+		return urlFeed;
+	}
+
+	public void setUrlFeed(String urlFeed) {
+		this.urlFeed = urlFeed;
+	}
+
+	public String getUrlFeed2() {
+		return urlFeed2;
+	}
+
+	public void setUrlFeed2(String urlFeed2) {
+		this.urlFeed2 = urlFeed2;
+	}
+
+	public boolean isSendEmailWithVerficationCode() {
+		return sendEmailWithVerficationCode;
+	}
+
+	public void setSendEmailWithVerficationCode(boolean sendEmailWithVerficationCode) {
+		this.sendEmailWithVerficationCode = sendEmailWithVerficationCode;
+	}
+
+	public boolean isSipEnable() {
+		return sipEnable;
+	}
+
+	public void setSipEnable(boolean sipEnable) {
+		this.sipEnable = sipEnable;
+	}
+
+	public String getSipRoomPrefix() {
+		return sipRoomPrefix;
+	}
+
+	public void setSipRoomPrefix(String sipRoomPrefix) {
+		this.sipRoomPrefix = sipRoomPrefix;
+	}
+
+	public String getSipExtenContext() {
+		return sipExtenContext;
+	}
+
+	public void setSipExtenContext(String sipExtenContext) {
+		this.sipExtenContext = sipExtenContext;
+	}
+
+	public boolean isReplyToOrganizer() {
+		return replyToOrganizer;
+	}
+
+	public void setReplyToOrganizer(boolean replyToOrganizer) {
+		this.replyToOrganizer = replyToOrganizer;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	@Override
@@ -91,7 +331,7 @@ public class InstallationConfig implements Serializable {
 				+ sipEnable + ", sipRoomPrefix=" + sipRoomPrefix
 				+ ", sipExtenContext=" + sipExtenContext
 				+ ", replyToOrganizer=" + replyToOrganizer
-				+ ", ical_timeZone=" + ical_timeZone
+				+ ", timeZone=" + timeZone
 				+ "]";
 	}
 }

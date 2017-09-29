@@ -45,9 +45,9 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	protected static final String username = "admin";
 	protected static final String userpass = "12345";
-	private static final String orgname = "smoketest";
+	private static final String group = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
-	private static final String useremail = "junit@openmeetings.apache.org";
+	private static final String email = "junit@openmeetings.apache.org";
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -170,11 +170,11 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	private void makeDefaultScheme() throws Exception {
 		InstallationConfig cfg = new InstallationConfig();
-		cfg.username = username;
+		cfg.setUsername(username);
 		cfg.setPassword(userpass);
-		cfg.email = useremail;
-		cfg.group = orgname;
-		cfg.ical_timeZone = timeZone;
+		cfg.setEmail(email);
+		cfg.setGroup(group);
+		cfg.setTimeZone(timeZone);
 		importInitvalues.loadAll(cfg, false);
 	}
 

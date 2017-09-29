@@ -31,7 +31,7 @@ public abstract class BaseNotInitedPage extends BasePage {
 
 	@Override
 	protected String getApplicationName() {
-		return installCfg.appName;
+		return installCfg.getAppName();
 	}
 
 	@Override

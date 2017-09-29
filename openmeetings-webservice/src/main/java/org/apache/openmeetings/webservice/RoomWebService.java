@@ -132,7 +132,7 @@ public class RoomWebService extends BaseWebService {
 	 * This method is required to set additional fields on room sub-objects
 	 * for ex: RoomFile.roomId
 	 */
-	private Room updateRtoRoom(Room r, Long userId) {
+	private static Room updateRtoRoom(Room r, Long userId) {
 		if (r.getFiles() == null) {
 			r.setFiles(new ArrayList<>());
 		}

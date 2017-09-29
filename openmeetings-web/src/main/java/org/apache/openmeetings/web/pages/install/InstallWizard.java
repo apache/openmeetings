@@ -117,7 +117,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	//onInit, applyState
 	public InstallWizard(String id, String title) {
 		super(id, title, new CompoundPropertyModel<>(new InstallationConfig()), true);
-		setTitle(Model.of(getModelObject().appName));
+		setTitle(Model.of(getModelObject().getAppName()));
 		welcomeStep = new WelcomeStep();
 		dbStep = new DbStep();
 		paramsStep1 = new ParamsStep1();
@@ -180,7 +180,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			InstallWizard.this.setTitle(Model.of(getModelObject().appName + " - " + getString("install.wizard.install.header")));
+			InstallWizard.this.setTitle(Model.of(getModelObject().getAppName() + " - " + getString("install.wizard.install.header")));
 		}
 	}
 
@@ -395,7 +395,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().appName, getString("install.wizard.db.step.instructions.derby")
+			add(new OmLabel("note", "install.wizard.db.step.note", getModelObject().getAppName(), getString("install.wizard.db.step.instructions.derby")
 					, getString("install.wizard.db.step.instructions.mysql"), getString("install.wizard.db.step.instructions.postgresql")
 					, getString("install.wizard.db.step.instructions.db2"), getString("install.wizard.db.step.instructions.mssql")
 					, getString("install.wizard.db.step.instructions.oracle")).setEscapeModelStrings(false));
@@ -418,7 +418,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public ParamsStep1() {
 			super(dbStep);
-			add(tzDropDown = new TzDropDown("ical_timeZone"));
+			add(tzDropDown = new TzDropDown("timeZone"));
 		}
 
 		@Override
@@ -847,7 +847,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					option = op;
 				}
 				list.add(op);
-				if (option == null && me.getKey().toString().equals(InstallWizard.this.getModelObject().defaultLangId)) {
+				if (option == null && me.getKey().toString().equals(InstallWizard.this.getModelObject().getDefaultLangId())) {
 					option = op;
 				}
 			}
