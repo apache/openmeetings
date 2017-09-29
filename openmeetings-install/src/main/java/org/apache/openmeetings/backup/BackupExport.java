@@ -149,254 +149,25 @@ public class BackupExport {
 			 */
 			writeList(ser, zos, "organizations.xml", "organisations", groupDao.get(0, Integer.MAX_VALUE));
 			progressHolder.setProgress(5);
-			/*
-			 * ##################### Backup Users
-			 */
-			exportUsers(zos, userDao.getAllBackupUsers());
-			progressHolder.setProgress(10);
 
-			/*
-			 * ##################### Backup Room
-			 */
-			{
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
+			exportUsers(zos, progressHolder);
+			exportRoom(zos, progressHolder);
+			exportRoomGroup(zos, progressHolder);
+			exportRoomFile(zos, progressHolder);
+			exportCalendar(zos, progressHolder);
+			exportAppointment(zos, progressHolder);
+			exportMeetingMember(zos, progressHolder);
+			exportLdap(zos, progressHolder, ser);
+			exportOauth(zos, progressHolder, ser);
+			exportPrivateMsg(zos, progressHolder);
+			exportPrivateMsgFolder(zos, progressHolder, ser);
+			exportContacts(zos, progressHolder);
+			exportFile(zos, progressHolder);
+			exportRecording(zos, progressHolder);
+			exportPoll(zos, progressHolder);
+			exportConfig(zos, progressHolder);
+			exportChat(zos, progressHolder);
 
-				registry.bind(User.class, UserConverter.class);
-				registry.bind(Room.Type.class, RoomTypeConverter.class);
-
-				writeList(serializer, zos, "rooms.xml", "rooms", roomDao.get());
-				progressHolder.setProgress(15);
-			}
-
-			/*
-			 * ##################### Backup Room Groups
-			 */
-			{
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(Group.class, GroupConverter.class);
-				registry.bind(Room.class, RoomConverter.class);
-
-				writeList(serializer, zos, "rooms_organisation.xml", "room_organisations", roomGroupDao.get());
-				progressHolder.setProgress(17);
-			}
-
-			/*
-			 * ##################### Backup Room Files
-			 */
-			{
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(FileItem.class, BaseFileItemConverter.class);
-				registry.bind(Recording.class, BaseFileItemConverter.class);
-
-				writeList(serializer, zos, "roomFiles.xml", "RoomFiles", roomDao.getFiles());
-				progressHolder.setProgress(17);
-			}
-
-			/*
-			 * ##################### Backup Calendars
-			 */
-			{
-				List<OmCalendar> list = calendarDao.get();
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-				registry.bind(User.class, UserConverter.class);
-
-				writeList(serializer, zos, "calendars.xml", "calendars", list);
-				progressHolder.setProgress(22);
-			}
-			/*
-			 * ##################### Backup Appointments
-			 */
-			{
-				List<Appointment> list = appointmentDao.get();
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(User.class, UserConverter.class);
-				registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
-				registry.bind(Room.class, RoomConverter.class);
-				if (list != null && !list.isEmpty()) {
-					for (Appointment a : list) {
-						if (a.getStart() != null) {
-							registry.bind(a.getStart().getClass(), DateConverter.class);
-							break;
-						} else if (a.getInserted() != null) {
-							registry.bind(a.getInserted().getClass(), DateConverter.class);
-							break;
-						}
-					}
-				}
-
-				writeList(serializer, zos, "appointements.xml", "appointments", list);
-				progressHolder.setProgress(25);
-			}
-
-			/*
-			 * ##################### Backup Meeting Members
-			 */
-			{
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(User.class, UserConverter.class);
-				registry.bind(Appointment.class, AppointmentConverter.class);
-
-				writeList(serializer, zos, "meetingmembers.xml",
-						"meetingmembers", meetingMemberDao.getMeetingMembers());
-				progressHolder.setProgress(30);
-			}
-
-			/*
-			 * ##################### LDAP Configs
-			 */
-			List<LdapConfig> ldapList = ldapConfigDao.get();
-			if (!ldapList.isEmpty()) {
-				ldapList.remove(0);
-			}
-			writeList(ser, zos, "ldapconfigs.xml", "ldapconfigs", ldapList);
-			progressHolder.setProgress(35);
-
-			/*
-			 * ##################### OAuth2 servers
-			 */
-			writeList(ser, zos, "oauth2servers.xml", "oauth2servers", auth2Dao.get(0, Integer.MAX_VALUE));
-			progressHolder.setProgress(45);
-
-			/*
-			 * ##################### Private Messages
-			 */
-			{
-				List<PrivateMessage> list = privateMessageDao.get(0, Integer.MAX_VALUE);
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(User.class, UserConverter.class);
-				registry.bind(Room.class, RoomConverter.class);
-				if (list != null && !list.isEmpty()) {
-					registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-				}
-
-				writeList(serializer, zos, "privateMessages.xml",
-						"privatemessages", list);
-				progressHolder.setProgress(50);
-			}
-
-			/*
-			 * ##################### Private Message Folders
-			 */
-			writeList(ser, zos, "privateMessageFolder.xml",
-					"privatemessagefolders", privateMessageFolderDao.get(0, Integer.MAX_VALUE));
-			progressHolder.setProgress(55);
-
-			/*
-			 * ##################### User Contacts
-			 */
-			{
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(User.class, UserConverter.class);
-
-				writeList(serializer, zos, "userContacts.xml", "usercontacts", userContactDao.get());
-				progressHolder.setProgress(60);
-			}
-
-			/*
-			 * ##################### File-Explorer
-			 */
-			{
-				List<FileItem> list = fileItemDao.get();
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				if (list != null && !list.isEmpty()) {
-					registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-				}
-
-				writeList(serializer, zos, "fileExplorerItems.xml", "fileExplorerItems", list);
-				progressHolder.setProgress(65);
-			}
-
-			/*
-			 * ##################### Recordings
-			 */
-			{
-				List<Recording> list = recordingDao.get();
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				if (list != null && !list.isEmpty()) {
-					registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-				}
-
-				writeList(serializer, zos, "flvRecordings.xml", "flvrecordings", list);
-				progressHolder.setProgress(70);
-			}
-
-			/*
-			 * ##################### Polls
-			 */
-			{
-				List<RoomPoll> list = pollManager.get();
-				Registry registry = new Registry();
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				registry.bind(User.class, UserConverter.class);
-				registry.bind(Room.class, RoomConverter.class);
-				registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
-				if (list != null && !list.isEmpty()) {
-					registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
-				}
-
-				writeList(serializer, zos, "roompolls.xml", "roompolls", list);
-				progressHolder.setProgress(75);
-			}
-
-			/*
-			 * ##################### Config
-			 */
-			{
-				List<Configuration> list = configurationDao.get(0, Integer.MAX_VALUE);
-				Serializer serializer = getConfigSerializer(list);
-
-				writeList(serializer, zos, "configs.xml", "configs", list);
-				progressHolder.setProgress(80);
-			}
-
-			/*
-			 * ##################### Chat
-			 */
-			{
-				List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
-				Registry registry = new Registry();
-				registry.bind(User.class, UserConverter.class);
-				registry.bind(Room.class, RoomConverter.class);
-				Strategy strategy = new RegistryStrategy(registry);
-				Serializer serializer = new Persister(strategy);
-
-				if (list != null && !list.isEmpty()) {
-					registry.bind(list.get(0).getSent().getClass(), DateConverter.class);
-				}
-
-				writeList(serializer, zos, "chat_messages.xml", "chat_messages", list);
-				progressHolder.setProgress(85);
-			}
 			if (includeFiles) {
 				//##################### Backup Room Files
 				for (File file : OmFileHelper.getUploadDir().listFiles()) {
@@ -417,6 +188,276 @@ public class BackupExport {
 		}
 		progressHolder.setProgress(100);
 		log.debug("---Done");
+	}
+
+	/*
+	 * ##################### Backup Users
+	 */
+	private void exportUsers(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer ser = new Persister(strategy);
+
+		registry.bind(Group.class, GroupConverter.class);
+		registry.bind(Salutation.class, SalutationConverter.class);
+		List<User> list = userDao.getAllBackupUsers();
+		if (list != null && !list.isEmpty()) {
+			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
+			registry.bind(dateClass, DateConverter.class);
+		}
+
+		writeList(ser, zos, "users.xml", "users", list);
+		progressHolder.setProgress(10);
+	}
+
+	/*
+	 * ##################### Backup Room
+	 */
+	private void exportRoom(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, UserConverter.class);
+		registry.bind(Room.Type.class, RoomTypeConverter.class);
+
+		writeList(serializer, zos, "rooms.xml", "rooms", roomDao.get());
+		progressHolder.setProgress(15);
+	}
+
+	/*
+	 * ##################### Backup Room Groups
+	 */
+	private void exportRoomGroup(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(Group.class, GroupConverter.class);
+		registry.bind(Room.class, RoomConverter.class);
+
+		writeList(serializer, zos, "rooms_organisation.xml", "room_organisations", roomGroupDao.get());
+		progressHolder.setProgress(17);
+	}
+
+	/*
+	 * ##################### Backup Room Files
+	 */
+	private void exportRoomFile(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(FileItem.class, BaseFileItemConverter.class);
+		registry.bind(Recording.class, BaseFileItemConverter.class);
+
+		writeList(serializer, zos, "roomFiles.xml", "RoomFiles", roomDao.getFiles());
+		progressHolder.setProgress(17);
+	}
+
+	/*
+	 * ##################### Backup Calendars
+	 */
+	private void exportCalendar(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<OmCalendar> list = calendarDao.get();
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+		registry.bind(User.class, UserConverter.class);
+
+		writeList(serializer, zos, "calendars.xml", "calendars", list);
+		progressHolder.setProgress(22);
+	}
+
+	/*
+	 * ##################### Backup Appointments
+	 */
+	private void exportAppointment(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<Appointment> list = appointmentDao.get();
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, UserConverter.class);
+		registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
+		registry.bind(Room.class, RoomConverter.class);
+		if (list != null && !list.isEmpty()) {
+			for (Appointment a : list) {
+				if (a.getStart() != null) {
+					registry.bind(a.getStart().getClass(), DateConverter.class);
+					break;
+				} else if (a.getInserted() != null) {
+					registry.bind(a.getInserted().getClass(), DateConverter.class);
+					break;
+				}
+			}
+		}
+
+		writeList(serializer, zos, "appointements.xml", "appointments", list);
+		progressHolder.setProgress(25);
+	}
+
+	/*
+	 * ##################### Backup Meeting Members
+	 */
+	private void exportMeetingMember(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, UserConverter.class);
+		registry.bind(Appointment.class, AppointmentConverter.class);
+
+		writeList(serializer, zos, "meetingmembers.xml",
+				"meetingmembers", meetingMemberDao.getMeetingMembers());
+		progressHolder.setProgress(30);
+	}
+
+	/*
+	 * ##################### LDAP Configs
+	 */
+	private void exportLdap(ZipOutputStream zos, ProgressHolder progressHolder, Serializer ser) throws Exception {
+		List<LdapConfig> ldapList = ldapConfigDao.get();
+		if (!ldapList.isEmpty()) {
+			ldapList.remove(0);
+		}
+		writeList(ser, zos, "ldapconfigs.xml", "ldapconfigs", ldapList);
+		progressHolder.setProgress(35);
+	}
+
+	/*
+	 * ##################### OAuth2 servers
+	 */
+	private void exportOauth(ZipOutputStream zos, ProgressHolder progressHolder, Serializer ser) throws Exception {
+		writeList(ser, zos, "oauth2servers.xml", "oauth2servers", auth2Dao.get(0, Integer.MAX_VALUE));
+		progressHolder.setProgress(45);
+	}
+
+	/*
+	 * ##################### Private Messages
+	 */
+	private void exportPrivateMsg(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<PrivateMessage> list = privateMessageDao.get(0, Integer.MAX_VALUE);
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, UserConverter.class);
+		registry.bind(Room.class, RoomConverter.class);
+		if (list != null && !list.isEmpty()) {
+			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
+		}
+
+		writeList(serializer, zos, "privateMessages.xml",
+				"privatemessages", list);
+		progressHolder.setProgress(50);
+	}
+
+	/*
+	 * ##################### Private Message Folders
+	 */
+	private void exportPrivateMsgFolder(ZipOutputStream zos, ProgressHolder progressHolder, Serializer ser) throws Exception {
+		writeList(ser, zos, "privateMessageFolder.xml",
+				"privatemessagefolders", privateMessageFolderDao.get(0, Integer.MAX_VALUE));
+		progressHolder.setProgress(55);
+	}
+
+	/*
+	 * ##################### User Contacts
+	 */
+	private void exportContacts(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, UserConverter.class);
+
+		writeList(serializer, zos, "userContacts.xml", "usercontacts", userContactDao.get());
+		progressHolder.setProgress(60);
+	}
+
+	/*
+	 * ##################### File-Explorer
+	 */
+	private void exportFile(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<FileItem> list = fileItemDao.get();
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		if (list != null && !list.isEmpty()) {
+			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
+		}
+
+		writeList(serializer, zos, "fileExplorerItems.xml", "fileExplorerItems", list);
+		progressHolder.setProgress(65);
+	}
+
+	/*
+	 * ##################### Recordings
+	 */
+	private void exportRecording(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<Recording> list = recordingDao.get();
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		if (list != null && !list.isEmpty()) {
+			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
+		}
+
+		writeList(serializer, zos, "flvRecordings.xml", "flvrecordings", list);
+		progressHolder.setProgress(70);
+	}
+
+	/*
+	 * ##################### Polls
+	 */
+	private void exportPoll(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<RoomPoll> list = pollManager.get();
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, UserConverter.class);
+		registry.bind(Room.class, RoomConverter.class);
+		registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
+		if (list != null && !list.isEmpty()) {
+			registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
+		}
+
+		writeList(serializer, zos, "roompolls.xml", "roompolls", list);
+		progressHolder.setProgress(75);
+	}
+
+	/*
+	 * ##################### Config
+	 */
+	private void exportConfig(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<Configuration> list = configurationDao.get(0, Integer.MAX_VALUE);
+		Serializer serializer = getConfigSerializer(list);
+
+		writeList(serializer, zos, "configs.xml", "configs", list);
+		progressHolder.setProgress(80);
+	}
+
+	/*
+	 * ##################### Chat
+	 */
+	private void exportChat(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		List<ChatMessage> list = chatDao.get(0, Integer.MAX_VALUE);
+		Registry registry = new Registry();
+		registry.bind(User.class, UserConverter.class);
+		registry.bind(Room.class, RoomConverter.class);
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		if (list != null && !list.isEmpty()) {
+			registry.bind(list.get(0).getSent().getClass(), DateConverter.class);
+		}
+
+		writeList(serializer, zos, "chat_messages.xml", "chat_messages", list);
+		progressHolder.setProgress(85);
 	}
 
 	private static Serializer getConfigSerializer(List<Configuration> list) throws Exception {
@@ -462,21 +503,6 @@ public class BackupExport {
 			}
 		}
 		root.commit();
-	}
-
-	public void exportUsers(ZipOutputStream zos, List<User> list) throws Exception {
-		Registry registry = new Registry();
-		Strategy strategy = new RegistryStrategy(registry);
-		Serializer ser = new Persister(strategy);
-
-		registry.bind(Group.class, GroupConverter.class);
-		registry.bind(Salutation.class, SalutationConverter.class);
-		if (list != null && !list.isEmpty()) {
-			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
-			registry.bind(dateClass, DateConverter.class);
-		}
-
-		writeList(ser, zos, "users.xml", "users", list);
 	}
 
 	private void writeZipDir(String prefix, URI base, File dir, ZipOutputStream zos) throws IOException {

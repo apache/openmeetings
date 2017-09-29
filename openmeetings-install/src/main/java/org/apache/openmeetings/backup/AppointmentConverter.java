@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.OmConverter.getLong;
+
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -25,7 +27,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class AppointmentConverter extends OmConverter<Appointment> {
+public class AppointmentConverter implements OmConverter<Appointment> {
 	private AppointmentDao appointmentDao;
 	private Map<Long, Long> idMap;
 

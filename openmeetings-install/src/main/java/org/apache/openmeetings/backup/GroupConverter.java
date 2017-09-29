@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.OmConverter.getLong;
+
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -25,7 +27,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class GroupConverter extends OmConverter<Group> {
+public class GroupConverter implements OmConverter<Group> {
 	private GroupDao groupDao;
 	private Map<Long, Long> idMap;
 

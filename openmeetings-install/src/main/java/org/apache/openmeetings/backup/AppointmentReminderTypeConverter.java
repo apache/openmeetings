@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.OmConverter.getInt;
+
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class AppointmentReminderTypeConverter extends OmConverter<Reminder> {
+public class AppointmentReminderTypeConverter implements OmConverter<Reminder> {
 	public AppointmentReminderTypeConverter() {
 		//default constructor is for export
 	}

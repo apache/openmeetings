@@ -129,7 +129,7 @@ public class ProfileForm extends Form<User> {
 			try {
 				Thread.sleep(6 + (long)(10 * Math.random() * 1000));
 			} catch (InterruptedException e) {
-				log.error("Unexpected exception while sleeting", e);
+				log.error("Unexpected exception while sleeping", e);
 			}
 		}
 		super.onValidate();

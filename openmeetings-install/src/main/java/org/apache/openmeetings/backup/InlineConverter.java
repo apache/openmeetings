@@ -20,7 +20,7 @@ package org.apache.openmeetings.backup;
 
 import org.simpleframework.xml.stream.InputNode;
 
-public abstract class InlineConverter<T> extends OmConverter<T> {
+public abstract class InlineConverter<T> implements OmConverter<T> {
 
 	String getNextValue(InputNode parent, String name) throws Exception {
 		InputNode node = parent.getNext(name);

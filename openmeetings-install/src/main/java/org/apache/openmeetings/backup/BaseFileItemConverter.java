@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.OmConverter.getLong;
+
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -26,7 +28,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class BaseFileItemConverter extends OmConverter<BaseFileItem> {
+public class BaseFileItemConverter implements OmConverter<BaseFileItem> {
 	private FileItemDao fileDao;
 	private Map<Long, Long> idMap;
 

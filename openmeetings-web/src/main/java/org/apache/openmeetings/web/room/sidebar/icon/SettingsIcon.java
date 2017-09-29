@@ -40,6 +40,6 @@ public class SettingsIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("VideoSettings.open();");
+		return "VideoSettings.open();";
 	}
 }

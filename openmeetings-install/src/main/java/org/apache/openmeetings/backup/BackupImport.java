@@ -377,503 +377,25 @@ public class BackupImport {
 		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 
 		File f = unzip(is);
-
-		/*
-		 * ##################### Import Configs
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Long.class, LongTransform.class);
-			registry.bind(Date.class, DateConverter.class);
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-
-			List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
-			for (Configuration c : list) {
-				if (c.getKey() == null || c.isDeleted()) {
-					continue;
-				}
-				String newKey = outdatedConfigKeys.get(c.getKey());
-				if (newKey != null) {
-					c.setKey(newKey);
-				}
-				Configuration.Type type = configTypes.get(c.getKey());
-				if (type != null) {
-					c.setType(type);
-					if (Configuration.Type.bool == type) {
-						if ("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())) {
-							c.setValue("true");
-						} else {
-							c.setValue("false");
-						}
-					}
-				}
-				Configuration cfg = cfgDao.forceGet(c.getKey());
-				if (cfg != null && !cfg.isDeleted()) {
-					log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getValue(), c.getValue());
-				}
-				c.setId(cfg == null ? null : cfg.getId());
-				if (c.getUser() != null && c.getUser().getId() == null) {
-					c.setUser(null);
-				}
-				if (CONFIG_CRYPT.equals(c.getKey())) {
-					try {
-						Class<?> clazz = Class.forName(c.getValue());
-						clazz.newInstance();
-					} catch (Exception e) {
-						log.warn("Not existing Crypt class found {}, replacing with SCryptImplementation", c.getValue());
-						c.setValue(SCryptImplementation.class.getCanonicalName());
-					}
-				}
-				cfgDao.update(c, null);
-			}
-		}
-
-		log.info("Configs import complete, starting group import");
-		/*
-		 * ##################### Import Groups
-		 */
+		importConfigs(f);
 		Serializer simpleSerializer = new Persister();
-		{
-			List<Group> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Group.class);
-			for (Group o : list) {
-				Long oldId = o.getId();
-				o.setId(null);
-				o = groupDao.update(o, null);
-				groupMap.put(oldId, o.getId());
-			}
-		}
-
-		log.info("Groups import complete, starting LDAP config import");
-		/*
-		 * ##################### Import LDAP Configs
-		 */
-		Long defaultLdapId = cfgDao.getLong(CONFIG_DEFAULT_LDAP_ID, null);
-		{
-			List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
-			for (LdapConfig c : list) {
-				if (!"local DB [internal]".equals(c.getName())) {
-					c.setId(null);
-					c = ldapConfigDao.update(c, null);
-					if (defaultLdapId == null) {
-						defaultLdapId = c.getId();
-					}
-				}
-			}
-		}
-
-		log.info("Ldap config import complete, starting OAuth2 server import");
-		/*
-		 * ##################### OAuth2 servers
-		 */
-		{
-			List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
-			for (OAuthServer s : list) {
-				s.setId(null);
-				auth2Dao.update(s, null);
-			}
-		}
-
-		log.info("OAuth2 servers import complete, starting user import");
-		/*
-		 * ##################### Import Users
-		 */
-		{
-			String jNameTimeZone = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
-			List<User> list = readUserList(f, "users.xml", "users");
-			int minLoginLength = getMinLoginLength(cfgDao);
-			for (User u : list) {
-				if (u.getLogin() == null) {
-					continue;
-				}
-				if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
-					u.setLogin(UUID.randomUUID().toString());
-				}
-
-				String tz = u.getTimeZoneId();
-				if (tz == null) {
-					u.setTimeZoneId(jNameTimeZone);
-					u.setForceTimeZoneCheck(true);
-				} else {
-					u.setForceTimeZoneCheck(false);
-				}
-
-				Long userId = u.getId();
-				u.setId(null);
-				if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
-					u.getSipUser().setId(0);
-				}
-				if (LDAP_EXT_TYPE.equals(u.getExternalType()) && User.Type.external != u.getType()) {
-					log.warn("Found LDAP user in 'old' format, external_type == 'LDAP':: " + u);
-					u.setType(User.Type.ldap);
-					u.setExternalType(null);
-					if (u.getDomainId() == null) {
-						u.setDomainId(defaultLdapId); //domainId was not supported in old versions of OM
-					}
-				}
-				if (!Strings.isEmpty(u.getExternalType())) {
-					u.setType(User.Type.external);
-				}
-				if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
-					u.setActivatehash(null);
-				}
-				userDao.update(u, Long.valueOf(-1));
-				userMap.put(userId, u.getId());
-			}
-		}
-
-		log.info("Users import complete, starting room import");
-		/*
-		 * ##################### Import Rooms
-		 */
-		{
-			List<Room> list = readRoomList(f, "rooms.xml", "rooms");
-			for (Room r : list) {
-				Long roomId = r.getId();
-
-				// We need to reset ids as openJPA reject to store them otherwise
-				r.setId(null);
-				if (r.getModerators() != null) {
-					for (Iterator<RoomModerator> i = r.getModerators().iterator(); i.hasNext();) {
-						RoomModerator rm = i.next();
-						if (rm.getUser().getId() == null) {
-							i.remove();
-						}
-					}
-				}
-				r = roomDao.update(r, null);
-				roomMap.put(roomId, r.getId());
-			}
-		}
-
-		log.info("Room import complete, starting room groups import");
-		/*
-		 * ##################### Import Room Groups
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-
-			registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-
-			List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
-			for (RoomGroup ro : list) {
-				if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getGroup() != null && ro.getGroup().getId() != null) {
-					// We need to reset this as openJPA reject to store them otherwise
-					ro.setId(null);
-					roomGroupDao.update(ro, null);
-				}
-			}
-		}
-
-		log.info("Room groups import complete, starting chat messages import");
-		/*
-		 * ##################### Import Chat messages
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-			registry.bind(Date.class, DateConverter.class);
-
-			List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
-			for (ChatMessage m : list) {
-				m.setId(null);
-				if (m.getFromUser() == null || m.getFromUser().getId() == null) {
-					continue;
-				}
-				chatDao.update(m);
-			}
-		}
-		log.info("Chat messages import complete, starting calendar import");
-		/*
-		 * ##################### Import Calendars
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-			//registry.bind(OmCalendar.SyncType.class, OmCalendarSyncTypeConverter.class);
-			List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, true);
-			for (OmCalendar c : list) {
-				Long id = c.getId();
-				c.setId(null);
-				c = calendarDao.update(c);
-				calendarMap.put(id, c.getId());
-			}
-		}
-
-		log.info("Calendar import complete, starting appointement import");
-		/*
-		 * ##################### Import Appointements
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-			registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
-			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-			registry.bind(Date.class, DateConverter.class);
-			registry.bind(OmCalendar.class, new OmCalendarConverter(calendarDao, calendarMap));
-
-			List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
-			for (Appointment a : list) {
-				Long appId = a.getId();
-
-				// We need to reset this as openJPA reject to store them otherwise
-				a.setId(null);
-				if (a.getOwner() != null && a.getOwner().getId() == null) {
-					a.setOwner(null);
-				}
-				if (a.getRoom() == null || a.getRoom().getId() == null) {
-					log.warn("Appointment without room was found, skipping: {}", a);
-					continue;
-				}
-				if (a.getStart() == null || a.getEnd() == null) {
-					log.warn("Appointment without start/end time was found, skipping: {}", a);
-					continue;
-				}
-				a = appointmentDao.update(a, null, false);
-				appointmentMap.put(appId, a.getId());
-			}
-		}
-
-		log.info("Appointement import complete, starting meeting members import");
-		/*
-		 * ##################### Import MeetingMembers
-		 *
-		 * Reminder Invitations will be NOT send!
-		 */
-		{
-			List<MeetingMember> list = readMeetingMemberList(f, "meetingmembers.xml", "meetingmembers");
-			for (MeetingMember ma : list) {
-				ma.setId(null);
-				meetingMemberDao.update(ma);
-			}
-		}
-
-		log.info("Meeting members import complete, starting recordings server import");
-		/*
-		 * ##################### Import Recordings
-		 */
-		{
-			List<Recording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
-			for (Recording r : list) {
-				Long recId = r.getId();
-				r.setId(null);
-				if (r.getRoomId() != null) {
-					r.setRoomId(roomMap.get(r.getRoomId()));
-				}
-				if (r.getOwnerId() != null) {
-					r.setOwnerId(userMap.get(r.getOwnerId()));
-				}
-				if (r.getMetaData() != null) {
-					for (RecordingMetaData meta : r.getMetaData()) {
-						meta.setId(null);
-						meta.setRecording(r);
-					}
-				}
-				if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(recordingFileName)) {
-					String name = getFileName(r.getHash());
-					r.setHash(UUID.randomUUID().toString());
-					fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_PNG));
-					fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
-				}
-				if (Strings.isEmpty(r.getHash())) {
-					r.setHash(UUID.randomUUID().toString());
-				}
-				r = recordingDao.update(r);
-				fileItemMap.put(recId, r.getId());
-			}
-		}
-
-		log.info("Recording import complete, starting private message folder import");
-		/*
-		 * ##################### Import Private Message Folders
-		 */
-		{
-			List<PrivateMessageFolder> list = readList(simpleSerializer, f, "privateMessageFolder.xml"
-				, "privatemessagefolders", PrivateMessageFolder.class, true);
-			for (PrivateMessageFolder p : list) {
-				Long folderId = p.getId();
-				PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
-				if (storedFolder == null) {
-					p.setId(null);
-					Long newFolderId = privateMessageFolderDao.addPrivateMessageFolderObj(p);
-					messageFolderMap.put(folderId, newFolderId);
-				}
-			}
-		}
-
-		log.info("Private message folder import complete, starting user contacts import");
-		/*
-		 * ##################### Import User Contacts
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-
-			List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
-			for (UserContact uc : list) {
-				Long ucId = uc.getId();
-				UserContact storedUC = userContactDao.get(ucId);
-
-				if (storedUC == null && uc.getContact() != null && uc.getContact().getId() != null) {
-					uc.setId(null);
-					if (uc.getOwner() != null && uc.getOwner().getId() == null) {
-						uc.setOwner(null);
-					}
-					uc = userContactDao.update(uc);
-					userContactMap.put(ucId, uc.getId());
-				}
-			}
-		}
-
-		log.info("Usercontact import complete, starting private messages item import");
-		/*
-		 * ##################### Import Private Messages
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-			registry.bind(Date.class, DateConverter.class);
-
-			List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
-			boolean oldBackup = true;
-			for (PrivateMessage p : list) {
-				if (p.getFolderId() == null || p.getFolderId().longValue() < 0) {
-					oldBackup = false;
-					break;
-				}
-			}
-			for (PrivateMessage p : list) {
-				p.setId(null);
-				p.setFolderId(getNewId(p.getFolderId(), Maps.MESSAGEFOLDERS));
-				p.setUserContactId(getNewId(p.getUserContactId(), Maps.USERCONTACTS));
-				if (p.getRoom() != null && p.getRoom().getId() == null) {
-					p.setRoom(null);
-				}
-				if (p.getTo() != null && p.getTo().getId() == null) {
-					p.setTo(null);
-				}
-				if (p.getFrom() != null && p.getFrom().getId() == null) {
-					p.setFrom(null);
-				}
-				if (p.getOwner() != null && p.getOwner().getId() == null) {
-					p.setOwner(null);
-				}
-				if (oldBackup && p.getOwner() != null && p.getOwner().getId() != null
-						&& p.getFrom() != null && p.getFrom().getId() != null
-						&& p.getOwner().getId() == p.getFrom().getId())
-				{
-					p.setFolderId(SENT_FOLDER_ID);
-				}
-				privateMessageDao.update(p, null);
-			}
-		}
-
-		log.info("Private message import complete, starting file explorer item import");
-		/*
-		 * ##################### Import File-Explorer Items
-		 */
-		{
-			List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
-			for (FileItem file : list) {
-				Long fId = file.getId();
-				// We need to reset this as openJPA reject to store them otherwise
-				file.setId(null);
-				Long roomId = file.getRoomId();
-				file.setRoomId(roomMap.containsKey(roomId) ? roomMap.get(roomId) : null);
-				if (file.getOwnerId() != null) {
-					file.setOwnerId(userMap.get(file.getOwnerId()));
-				}
-				if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
-					file.setParentId(null);
-				}
-				if (Strings.isEmpty(file.getHash())) {
-					file.setHash(UUID.randomUUID().toString());
-				}
-				file = fileItemDao.update(file);
-				fileItemMap.put(fId, file.getId());
-			}
-		}
-
-		log.info("File explorer item import complete, starting room poll import");
-		/*
-		 * ##################### Import Room Polls
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
-			Serializer serializer = new Persister(strategy, matcher);
-
-			matcher.bind(Integer.class, IntegerTransform.class);
-			registry.bind(User.class, new UserConverter(userDao, userMap));
-			registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
-			registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
-			registry.bind(Date.class, DateConverter.class);
-
-			List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
-			for (RoomPoll rp : list) {
-				rp.setId(null);
-				if (rp.getRoom() == null || rp.getRoom().getId() == null) {
-					//room was deleted
-					continue;
-				}
-				if (rp.getCreator() == null || rp.getCreator().getId() == null) {
-					rp.setCreator(null);
-				}
-				for (RoomPollAnswer rpa : rp.getAnswers()) {
-					if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
-						rpa.setVotedUser(null);
-					}
-				}
-				pollDao.update(rp);
-			}
-		}
-
-		log.info("Poll import complete, starting room files import");
-		/*
-		 * ##################### Import Room Files
-		 */
-		{
-			Registry registry = new Registry();
-			Strategy strategy = new RegistryStrategy(registry);
-			Serializer serializer = new Persister(strategy);
-
-			registry.bind(BaseFileItem.class, new BaseFileItemConverter(fileItemDao, fileItemMap));
-
-			List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class, true);
-			for (RoomFile rf : list) {
-				Room r = roomDao.get(roomMap.get(rf.getRoomId()));
-				if (r.getFiles() == null) {
-					r.setFiles(new ArrayList<>());
-				}
-				rf.setId(null);
-				rf.setRoomId(r.getId());
-				r.getFiles().add(rf);
-				roomDao.update(r, null);
-			}
-		}
+		importGroups(f, simpleSerializer);
+		Long defaultLdapId = importLdap(f, simpleSerializer);
+		importOauth(f, simpleSerializer);
+		importUsers(f, defaultLdapId);
+		importRooms(f);
+		importRoomGroups(f);
+		importChat(f);
+		importCalendars(f);
+		importAppointments(f);
+		importMeetingMembers(f);
+		importRecordings(f);
+		importPrivateMsgFolders(f, simpleSerializer);
+		importContacts(f);
+		importPrivateMsgs(f);
+		importFiles(f);
+		importPolls(f);
+		importRoomFiles(f);
 
 		log.info("Room files import complete, starting copy of files and folders");
 		/*
@@ -884,6 +406,504 @@ public class BackupImport {
 		log.info("File explorer item import complete, clearing temp files");
 
 		FileUtils.deleteDirectory(f);
+	}
+
+	/*
+	 * ##################### Import Configs
+	 */
+	private void importConfigs(File f) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+		Serializer serializer = new Persister(strategy, matcher);
+
+		matcher.bind(Long.class, LongTransform.class);
+		registry.bind(Date.class, DateConverter.class);
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+
+		List<Configuration> list = readList(serializer, f, "configs.xml", "configs", Configuration.class, true);
+		for (Configuration c : list) {
+			if (c.getKey() == null || c.isDeleted()) {
+				continue;
+			}
+			String newKey = outdatedConfigKeys.get(c.getKey());
+			if (newKey != null) {
+				c.setKey(newKey);
+			}
+			Configuration.Type type = configTypes.get(c.getKey());
+			if (type != null) {
+				c.setType(type);
+				if (Configuration.Type.bool == type) {
+					if ("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())) {
+						c.setValue("true");
+					} else {
+						c.setValue("false");
+					}
+				}
+			}
+			Configuration cfg = cfgDao.forceGet(c.getKey());
+			if (cfg != null && !cfg.isDeleted()) {
+				log.warn("Non deleted configuration with same key is found! old value: {}, new value: {}", cfg.getValue(), c.getValue());
+			}
+			c.setId(cfg == null ? null : cfg.getId());
+			if (c.getUser() != null && c.getUser().getId() == null) {
+				c.setUser(null);
+			}
+			if (CONFIG_CRYPT.equals(c.getKey())) {
+				try {
+					Class<?> clazz = Class.forName(c.getValue());
+					clazz.newInstance();
+				} catch (Exception e) {
+					log.warn("Not existing Crypt class found {}, replacing with SCryptImplementation", c.getValue());
+					c.setValue(SCryptImplementation.class.getCanonicalName());
+				}
+			}
+			cfgDao.update(c, null);
+		}
+	}
+
+	/*
+	 * ##################### Import Groups
+	 */
+	private void importGroups(File f, Serializer simpleSerializer) throws Exception {
+		log.info("Configs import complete, starting group import");
+		List<Group> list = readList(simpleSerializer, f, "organizations.xml", "organisations", Group.class);
+		for (Group o : list) {
+			Long oldId = o.getId();
+			o.setId(null);
+			o = groupDao.update(o, null);
+			groupMap.put(oldId, o.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import LDAP Configs
+	 */
+	private Long importLdap(File f, Serializer simpleSerializer) throws Exception {
+		log.info("Groups import complete, starting LDAP config import");
+		Long defaultLdapId = cfgDao.getLong(CONFIG_DEFAULT_LDAP_ID, null);
+		List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class, true);
+		for (LdapConfig c : list) {
+			if (!"local DB [internal]".equals(c.getName())) {
+				c.setId(null);
+				c = ldapConfigDao.update(c, null);
+				if (defaultLdapId == null) {
+					defaultLdapId = c.getId();
+				}
+			}
+		}
+		return defaultLdapId;
+	}
+
+	/*
+	 * ##################### OAuth2 servers
+	 */
+	private void importOauth(File f, Serializer simpleSerializer) throws Exception {
+		log.info("Ldap config import complete, starting OAuth2 server import");
+		List<OAuthServer> list = readList(simpleSerializer, f, "oauth2servers.xml", "oauth2servers", OAuthServer.class, true);
+		for (OAuthServer s : list) {
+			s.setId(null);
+			auth2Dao.update(s, null);
+		}
+	}
+
+	/*
+	 * ##################### Import Users
+	 */
+	private void importUsers(File f, Long defaultLdapId) throws Exception {
+		log.info("OAuth2 servers import complete, starting user import");
+		String jNameTimeZone = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
+		List<User> list = readUserList(f, "users.xml", "users");
+		int minLoginLength = getMinLoginLength(cfgDao);
+		for (User u : list) {
+			if (u.getLogin() == null) {
+				continue;
+			}
+			if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
+				u.setLogin(UUID.randomUUID().toString());
+			}
+
+			String tz = u.getTimeZoneId();
+			if (tz == null) {
+				u.setTimeZoneId(jNameTimeZone);
+				u.setForceTimeZoneCheck(true);
+			} else {
+				u.setForceTimeZoneCheck(false);
+			}
+
+			Long userId = u.getId();
+			u.setId(null);
+			if (u.getSipUser() != null && u.getSipUser().getId() != 0) {
+				u.getSipUser().setId(0);
+			}
+			if (LDAP_EXT_TYPE.equals(u.getExternalType()) && User.Type.external != u.getType()) {
+				log.warn("Found LDAP user in 'old' format, external_type == 'LDAP':: " + u);
+				u.setType(User.Type.ldap);
+				u.setExternalType(null);
+				if (u.getDomainId() == null) {
+					u.setDomainId(defaultLdapId); //domainId was not supported in old versions of OM
+				}
+			}
+			if (!Strings.isEmpty(u.getExternalType())) {
+				u.setType(User.Type.external);
+			}
+			if (AuthLevelUtil.hasLoginLevel(u.getRights()) && !Strings.isEmpty(u.getActivatehash())) {
+				u.setActivatehash(null);
+			}
+			userDao.update(u, Long.valueOf(-1));
+			userMap.put(userId, u.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import Rooms
+	 */
+	private void importRooms(File f) throws Exception {
+		log.info("Users import complete, starting room import");
+		List<Room> list = readRoomList(f, "rooms.xml", "rooms");
+		for (Room r : list) {
+			Long roomId = r.getId();
+
+			// We need to reset ids as openJPA reject to store them otherwise
+			r.setId(null);
+			if (r.getModerators() != null) {
+				for (Iterator<RoomModerator> i = r.getModerators().iterator(); i.hasNext();) {
+					RoomModerator rm = i.next();
+					if (rm.getUser().getId() == null) {
+						i.remove();
+					}
+				}
+			}
+			r = roomDao.update(r, null);
+			roomMap.put(roomId, r.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import Room Groups
+	 */
+	private void importRoomGroups(File f) throws Exception {
+		log.info("Room import complete, starting room groups import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(Group.class, new GroupConverter(groupDao, groupMap));
+		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
+
+		List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
+		for (RoomGroup ro : list) {
+			if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getGroup() != null && ro.getGroup().getId() != null) {
+				// We need to reset this as openJPA reject to store them otherwise
+				ro.setId(null);
+				roomGroupDao.update(ro, null);
+			}
+		}
+	}
+
+	/*
+	 * ##################### Import Chat messages
+	 */
+	private void importChat(File f) throws Exception {
+		log.info("Room groups import complete, starting chat messages import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
+		registry.bind(Date.class, DateConverter.class);
+
+		List<ChatMessage> list = readList(serializer, f, "chat_messages.xml", "chat_messages", ChatMessage.class, true);
+		for (ChatMessage m : list) {
+			m.setId(null);
+			if (m.getFromUser() == null || m.getFromUser().getId() == null) {
+				continue;
+			}
+			chatDao.update(m);
+		}
+	}
+
+	/*
+	 * ##################### Import Calendars
+	 */
+	private void importCalendars(File f) throws Exception {
+		log.info("Chat messages import complete, starting calendar import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+		//registry.bind(OmCalendar.SyncType.class, OmCalendarSyncTypeConverter.class);
+		List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, true);
+		for (OmCalendar c : list) {
+			Long id = c.getId();
+			c.setId(null);
+			c = calendarDao.update(c);
+			calendarMap.put(id, c.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import Appointements
+	 */
+	private void importAppointments(File f) throws Exception {
+		log.info("Calendar import complete, starting appointement import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+		registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
+		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
+		registry.bind(Date.class, DateConverter.class);
+		registry.bind(OmCalendar.class, new OmCalendarConverter(calendarDao, calendarMap));
+
+		List<Appointment> list = readList(serializer, f, "appointements.xml", "appointments", Appointment.class);
+		for (Appointment a : list) {
+			Long appId = a.getId();
+
+			// We need to reset this as openJPA reject to store them otherwise
+			a.setId(null);
+			if (a.getOwner() != null && a.getOwner().getId() == null) {
+				a.setOwner(null);
+			}
+			if (a.getRoom() == null || a.getRoom().getId() == null) {
+				log.warn("Appointment without room was found, skipping: {}", a);
+				continue;
+			}
+			if (a.getStart() == null || a.getEnd() == null) {
+				log.warn("Appointment without start/end time was found, skipping: {}", a);
+				continue;
+			}
+			a = appointmentDao.update(a, null, false);
+			appointmentMap.put(appId, a.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import MeetingMembers
+	 *
+	 * Reminder Invitations will be NOT send!
+	 */
+	private void importMeetingMembers(File f) throws Exception {
+		log.info("Appointement import complete, starting meeting members import");
+		List<MeetingMember> list = readMeetingMemberList(f, "meetingmembers.xml", "meetingmembers");
+		for (MeetingMember ma : list) {
+			ma.setId(null);
+			meetingMemberDao.update(ma);
+		}
+	}
+
+	/*
+	 * ##################### Import Recordings
+	 */
+	private void importRecordings(File f) throws Exception {
+		log.info("Meeting members import complete, starting recordings server import");
+		List<Recording> list = readRecordingList(f, "flvRecordings.xml", "flvrecordings");
+		for (Recording r : list) {
+			Long recId = r.getId();
+			r.setId(null);
+			if (r.getRoomId() != null) {
+				r.setRoomId(roomMap.get(r.getRoomId()));
+			}
+			if (r.getOwnerId() != null) {
+				r.setOwnerId(userMap.get(r.getOwnerId()));
+			}
+			if (r.getMetaData() != null) {
+				for (RecordingMetaData meta : r.getMetaData()) {
+					meta.setId(null);
+					meta.setRecording(r);
+				}
+			}
+			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(recordingFileName)) {
+				String name = getFileName(r.getHash());
+				r.setHash(UUID.randomUUID().toString());
+				fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_PNG));
+				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
+			}
+			if (Strings.isEmpty(r.getHash())) {
+				r.setHash(UUID.randomUUID().toString());
+			}
+			r = recordingDao.update(r);
+			fileItemMap.put(recId, r.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import Private Message Folders
+	 */
+	private void importPrivateMsgFolders(File f, Serializer simpleSerializer) throws Exception {
+		log.info("Recording import complete, starting private message folder import");
+		List<PrivateMessageFolder> list = readList(simpleSerializer, f, "privateMessageFolder.xml"
+			, "privatemessagefolders", PrivateMessageFolder.class, true);
+		for (PrivateMessageFolder p : list) {
+			Long folderId = p.getId();
+			PrivateMessageFolder storedFolder = privateMessageFolderDao.get(folderId);
+			if (storedFolder == null) {
+				p.setId(null);
+				Long newFolderId = privateMessageFolderDao.addPrivateMessageFolderObj(p);
+				messageFolderMap.put(folderId, newFolderId);
+			}
+		}
+	}
+
+	/*
+	 * ##################### Import User Contacts
+	 */
+	private void importContacts(File f) throws Exception {
+		log.info("Private message folder import complete, starting user contacts import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+
+		List<UserContact> list = readList(serializer, f, "userContacts.xml", "usercontacts", UserContact.class, true);
+		for (UserContact uc : list) {
+			Long ucId = uc.getId();
+			UserContact storedUC = userContactDao.get(ucId);
+
+			if (storedUC == null && uc.getContact() != null && uc.getContact().getId() != null) {
+				uc.setId(null);
+				if (uc.getOwner() != null && uc.getOwner().getId() == null) {
+					uc.setOwner(null);
+				}
+				uc = userContactDao.update(uc);
+				userContactMap.put(ucId, uc.getId());
+			}
+		}
+	}
+
+	/*
+	 * ##################### Import Private Messages
+	 */
+	private void importPrivateMsgs(File f) throws Exception {
+		log.info("Usercontact import complete, starting private messages item import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
+		registry.bind(Date.class, DateConverter.class);
+
+		List<PrivateMessage> list = readList(serializer, f, "privateMessages.xml", "privatemessages", PrivateMessage.class, true);
+		boolean oldBackup = true;
+		for (PrivateMessage p : list) {
+			if (p.getFolderId() == null || p.getFolderId().longValue() < 0) {
+				oldBackup = false;
+				break;
+			}
+		}
+		for (PrivateMessage p : list) {
+			p.setId(null);
+			p.setFolderId(getNewId(p.getFolderId(), Maps.MESSAGEFOLDERS));
+			p.setUserContactId(getNewId(p.getUserContactId(), Maps.USERCONTACTS));
+			if (p.getRoom() != null && p.getRoom().getId() == null) {
+				p.setRoom(null);
+			}
+			if (p.getTo() != null && p.getTo().getId() == null) {
+				p.setTo(null);
+			}
+			if (p.getFrom() != null && p.getFrom().getId() == null) {
+				p.setFrom(null);
+			}
+			if (p.getOwner() != null && p.getOwner().getId() == null) {
+				p.setOwner(null);
+			}
+			if (oldBackup && p.getOwner() != null && p.getOwner().getId() != null
+					&& p.getFrom() != null && p.getFrom().getId() != null
+					&& p.getOwner().getId() == p.getFrom().getId())
+			{
+				p.setFolderId(SENT_FOLDER_ID);
+			}
+			privateMessageDao.update(p, null);
+		}
+	}
+
+	/*
+	 * ##################### Import File-Explorer Items
+	 */
+	private void importFiles(File f) throws Exception {
+		log.info("Private message import complete, starting file explorer item import");
+		List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
+		for (FileItem file : list) {
+			Long fId = file.getId();
+			// We need to reset this as openJPA reject to store them otherwise
+			file.setId(null);
+			Long roomId = file.getRoomId();
+			file.setRoomId(roomMap.containsKey(roomId) ? roomMap.get(roomId) : null);
+			if (file.getOwnerId() != null) {
+				file.setOwnerId(userMap.get(file.getOwnerId()));
+			}
+			if (file.getParentId() != null && file.getParentId().longValue() <= 0L) {
+				file.setParentId(null);
+			}
+			if (Strings.isEmpty(file.getHash())) {
+				file.setHash(UUID.randomUUID().toString());
+			}
+			file = fileItemDao.update(file);
+			fileItemMap.put(fId, file.getId());
+		}
+	}
+
+	/*
+	 * ##################### Import Room Polls
+	 */
+	private void importPolls(File f) throws Exception {
+		log.info("File explorer item import complete, starting room poll import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+		Serializer serializer = new Persister(strategy, matcher);
+
+		matcher.bind(Integer.class, IntegerTransform.class);
+		registry.bind(User.class, new UserConverter(userDao, userMap));
+		registry.bind(Room.class, new RoomConverter(roomDao, roomMap));
+		registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
+		registry.bind(Date.class, DateConverter.class);
+
+		List<RoomPoll> list = readList(serializer, f, "roompolls.xml", "roompolls", RoomPoll.class, true);
+		for (RoomPoll rp : list) {
+			rp.setId(null);
+			if (rp.getRoom() == null || rp.getRoom().getId() == null) {
+				//room was deleted
+				continue;
+			}
+			if (rp.getCreator() == null || rp.getCreator().getId() == null) {
+				rp.setCreator(null);
+			}
+			for (RoomPollAnswer rpa : rp.getAnswers()) {
+				if (rpa.getVotedUser() == null || rpa.getVotedUser().getId() == null) {
+					rpa.setVotedUser(null);
+				}
+			}
+			pollDao.update(rp);
+		}
+	}
+
+	/*
+	 * ##################### Import Room Files
+	 */
+	private void importRoomFiles(File f) throws Exception {
+		log.info("Poll import complete, starting room files import");
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+
+		registry.bind(BaseFileItem.class, new BaseFileItemConverter(fileItemDao, fileItemMap));
+
+		List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class, true);
+		for (RoomFile rf : list) {
+			Room r = roomDao.get(roomMap.get(rf.getRoomId()));
+			if (r.getFiles() == null) {
+				r.setFiles(new ArrayList<>());
+			}
+			rf.setId(null);
+			rf.setRoomId(r.getId());
+			r.getFiles().add(rf);
+			roomDao.update(r, null);
+		}
 	}
 
 	private static <T> List<T> readList(Serializer ser, File baseDir, String fileName, String listNodeName, Class<T> clazz) throws Exception {

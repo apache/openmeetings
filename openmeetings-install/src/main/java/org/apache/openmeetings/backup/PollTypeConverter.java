@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.OmConverter.getLong;
+
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class PollTypeConverter extends OmConverter<RoomPoll.Type> {
+public class PollTypeConverter implements OmConverter<RoomPoll.Type> {
 	public PollTypeConverter() {}
 
 	@Override

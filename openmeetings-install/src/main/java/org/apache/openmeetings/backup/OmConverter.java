@@ -21,7 +21,7 @@ package org.apache.openmeetings.backup;
 import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 
-public abstract class OmConverter<T> implements Converter<T> {
+public interface OmConverter<T> extends Converter<T> {
 	static long getLong(InputNode node) throws Exception {
 		return getLong(node.getValue());
 	}

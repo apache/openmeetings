@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.backup;
 
+import static org.apache.openmeetings.backup.OmConverter.getLong;
+
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -25,7 +27,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class RoomConverter extends OmConverter<Room> {
+public class RoomConverter implements OmConverter<Room> {
 	private RoomDao roomDao;
 	private Map<Long, Long> idMap;
 
