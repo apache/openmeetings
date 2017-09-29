@@ -465,7 +465,7 @@ public class ScreenSharerFrame extends JFrame {
 				calcRescaleFactors();
 			}
 		});
-		comboQuality.setSelectedIndex(core.defaultQuality);
+		comboQuality.setSelectedIndex(core.getDefaultQuality());
 		panelScreen.add(comboQuality);
 		comboFPS = new JComboBox<>();
 		comboFPS.addItem(new KeyValue<>("2 FPS", 2));
@@ -486,18 +486,18 @@ public class ScreenSharerFrame extends JFrame {
 		boolean fpsSelected = false;
 		for (int i = 0; i < comboFPS.getItemCount(); ++i) {
 			KeyValue<Integer> v = comboFPS.getItemAt(i);
-			if (core.defaultFPS == v.value) {
+			if (core.getDefaultFps() == v.value) {
 				comboFPS.setSelectedIndex(i);
 				fpsSelected = true;
 				break;
 			}
 		}
 		if (!fpsSelected) {
-			comboFPS.addItem(new KeyValue<>(core.defaultFPS + " FPS", core.defaultFPS));
+			comboFPS.addItem(new KeyValue<>(core.getDefaultFps() + " FPS", core.getDefaultFps()));
 			comboFPS.setSelectedIndex(comboFPS.getItemCount() - 1);
 		}
 		comboFPS.setBounds(390, 170, 70, 24);
-		comboFPS.setVisible(core.showFPS);
+		comboFPS.setVisible(core.isShowFps());
 		panelScreen.add(comboFPS);
 
 		panelRecording.setBackground(Color.WHITE);

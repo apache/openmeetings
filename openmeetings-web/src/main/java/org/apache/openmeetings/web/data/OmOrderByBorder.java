@@ -27,19 +27,19 @@ public class OmOrderByBorder<T extends IDataProviderEntity> extends AjaxFallback
 	private DataViewContainer<T> container;
 
 	public OmOrderByBorder(final String id, final String property, DataViewContainer<T> container) {
-		super(id, property, container.view.getDataProvider());
+		super(id, property, container.getView().getDataProvider());
 		this.container = container;
 		setOutputMarkupId(true);
 	}
 
 	@Override
 	protected void onSortChanged() {
-		container.view.setCurrentPage(0);
+		container.getView().setCurrentPage(0);
 	}
 
 	@Override
 	protected void onAjaxClick(AjaxRequestTarget target) {
-		target.add(container.container, container.navigator);
+		target.add(container.getContainer(), container.getNavigator());
 		target.add(container.getLinks());
 	}
 }

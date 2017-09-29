@@ -29,9 +29,9 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 
 public class DataViewContainer<T extends IDataProviderEntity> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public WebMarkupContainer container;
-	public SearchableDataView<T> view;
-	public PagedEntityListPanel navigator;
+	private final WebMarkupContainer container;
+	private final SearchableDataView<T> view;
+	private final PagedEntityListPanel navigator;
 	private List<OmOrderByBorder<T>> orderLinks = new ArrayList<>();
 
 	public DataViewContainer(WebMarkupContainer container, SearchableDataView<T> view, PagedEntityListPanel navigator) {
@@ -50,5 +50,17 @@ public class DataViewContainer<T extends IDataProviderEntity> implements Seriali
 		@SuppressWarnings("unchecked")
 		OmOrderByBorder<T>[] a = new OmOrderByBorder[0];
 		return orderLinks.toArray(a);
+	}
+
+	public WebMarkupContainer getContainer() {
+		return container;
+	}
+
+	public SearchableDataView<T> getView() {
+		return view;
+	}
+
+	public PagedEntityListPanel getNavigator() {
+		return navigator;
 	}
 }

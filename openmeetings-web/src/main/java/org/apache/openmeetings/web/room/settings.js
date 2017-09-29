@@ -116,7 +116,6 @@ var VideoSettings = (function() {
 		playBtn.prop('disabled', false).button('refresh');
 	}
 	function _micActivity(level) {
-		console.log("activity: ", level)
 		lm.progressbar("value", Math.max(0, level));
 	}
 	function _initSwf() {

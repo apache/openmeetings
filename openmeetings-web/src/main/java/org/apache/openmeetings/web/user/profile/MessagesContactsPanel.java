@@ -222,7 +222,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		if (target != null) {
 			updateTable(target);
 			target.add(folders, unread, selectDropDown, moveDropDown);
-			target.add(dataContainer.container, dataContainer.navigator);
+			target.add(dataContainer.getContainer(), dataContainer.getNavigator());
 			target.add(dataContainer.getLinks());
 		}
 	}

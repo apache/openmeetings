@@ -77,15 +77,15 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private String app;
 	private int port;
 
-	public String sid;
+	private String sid;
 	private CaptureScreen _capture = null;
 	private RTMPClientPublish publishClient = null;
 
 	private ScreenSharerFrame frame;
 
-	public int defaultQuality = 1;
-	public int defaultFPS = 10;
-	public boolean showFPS = true;
+	private int defaultQuality = 1;
+	private int defaultFps = 10;
+	private boolean showFps = true;
 
 	private boolean allowRecording = true;
 	private boolean allowPublishing = true;
@@ -93,7 +93,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private boolean startSharing = false;
 	private boolean startRecording = false;
 	private boolean startPublishing = false;
-	public boolean isConnected = false;
+	private boolean connected = false;
 	private boolean readyToRecord = false;
 	private boolean audioNotify = false;
 	private boolean remoteEnabled = true;
@@ -129,8 +129,8 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				sid = args[2];
 				String labelTexts = args[3];
 				defaultQuality = Integer.parseInt(args[4]);
-				defaultFPS = Integer.parseInt(args[5]);
-				showFPS = bool(args[6]);
+				defaultFps = Integer.parseInt(args[5]);
+				showFps = bool(args[6]);
 				remoteEnabled = bool(args[7]);
 				allowRecording = bool(args[8]);
 				allowPublishing = bool(args[9]);
@@ -314,7 +314,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		try {
 			log.debug("captureScreenStart");
 
-			if (!isConnected) {
+			if (!connected) {
 				connect(sid);
 			} else {
 				setConnectionAsSharingClient();
@@ -432,7 +432,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 			stopSharing();
 			stopRecording();
 			stopPublishing();
-			isConnected = false;
+			connected = false;
 
 			if (instance != null) {
 				instance.disconnect();
@@ -507,7 +507,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 					frame.setStatus(String.format("Error: %s %s", code, returnMap.get("description")));
 					return;
 				}
-				isConnected = true;
+				connected = true;
 				setConnectionAsSharingClient();
 			} else if ("setConnectionAsSharingClient".equals(method)) {
 				if (!bool(returnMap.get("alreadyPublished"))) {
@@ -612,5 +612,17 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 
 	public ScreenDimensions getDim() {
 		return dim;
+	}
+
+	public int getDefaultQuality() {
+		return defaultQuality;
+	}
+
+	public int getDefaultFps() {
+		return defaultFps;
+	}
+
+	public boolean isShowFps() {
+		return showFps;
 	}
 }

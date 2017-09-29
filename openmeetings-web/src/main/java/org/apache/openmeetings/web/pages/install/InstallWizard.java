@@ -753,9 +753,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 	private static class SelectOption implements Serializable {
 		private static final long serialVersionUID = 1L;
-		public String key;
+		private final String key;
 		@SuppressWarnings("unused")
-		public String value;
+		private final String value;
 
 		SelectOption(String key, String value) {
 			this.key = key;
