@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.junit.Test;
 
 public class TestGroupService extends AbstractWebServiceTest {
-	public final static String GROUP_SERVICE_URL = BASE_SERVICES_URL + "/group";
+	public static final String GROUP_SERVICE_URL = BASE_SERVICES_URL + "/group";
 
 	@Test
 	public void putTest() {

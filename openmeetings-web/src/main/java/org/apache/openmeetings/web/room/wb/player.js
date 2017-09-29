@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Player = (function() {
-	let player = {}, mainColor = '#ff6600', rad = 20;
+	const player = {}, mainColor = '#ff6600', rad = 20;
 	function _filter(_o, props) {
 		return props.reduce((result, key) => { result[key] = _o[key]; return result; }, {});
 	}
@@ -18,7 +18,7 @@ var Player = (function() {
 	}
 
 	player.create = function(canvas, _o, _role) {
-		let vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
+		const vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
 			.attr("width", _o.width).attr("height", _o.height)
 			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src));
 		$('#wb-tab-' + canvas.wbId).append(vid);
@@ -31,7 +31,7 @@ var Player = (function() {
 					_o.status = {paused: true};
 				}
 				let playable = false;
-				let trg = new fabric.Triangle({
+				const trg = new fabric.Triangle({
 					left: 2.7 * rad
 					, top: _o.height - 2.5 * rad
 					, visible: _o.status.paused
@@ -41,7 +41,7 @@ var Player = (function() {
 					, stroke: mainColor
 					, fill: mainColor
 				});
-				let rectPause1 = new fabric.Rect({
+				const rectPause1 = new fabric.Rect({
 					left: 1.6 * rad
 					, top: _o.height - 2.5 * rad
 					, visible: !_o.status.paused
@@ -50,7 +50,7 @@ var Player = (function() {
 					, stroke: mainColor
 					, fill: mainColor
 				});
-				let rectPause2 = new fabric.Rect({
+				const rectPause2 = new fabric.Rect({
 					left: 2.1 * rad
 					, top: _o.height - 2.5 * rad
 					, visible: !_o.status.paused
@@ -59,7 +59,7 @@ var Player = (function() {
 					, stroke: mainColor
 					, fill: mainColor
 				});
-				let play = new fabric.Group([
+				const play = new fabric.Group([
 						new fabric.Circle({
 							left: rad
 							, top: _o.height - 3 * rad
@@ -73,7 +73,7 @@ var Player = (function() {
 						objectCaching: false
 						, visible: false
 					});
-				let cProgress = new fabric.Rect({
+				const cProgress = new fabric.Rect({
 					left: 3.5 * rad
 					, top: _o.height - 1.5 * rad
 					, visible: false
@@ -84,14 +84,14 @@ var Player = (function() {
 					, rx: 5
 					, ry: 5
 				});
-				let isDone = function() {
+				const isDone = function() {
 					return video.getElement().currentTime === video.getElement().duration;
 				};
-				let updateProgress = function() {
+				const updateProgress = function() {
 					progress.set('width', (video.getElement().currentTime * cProgress.width) / video.getElement().duration);
 					canvas.renderAll();
 				};
-				let progress = new fabric.Rect({
+				const progress = new fabric.Rect({
 					left: 3.5 * rad
 					, top: _o.height - 1.5 * rad
 					, visible: false
@@ -104,15 +104,15 @@ var Player = (function() {
 				});
 				let request;
 
-				let opts = $.extend({
+				const opts = $.extend({
 					subTargetCheck: true
 					, objectCaching: false
 					, omType: 'Video'
 					, selectable: canvas.selection
 				}, _filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height', 'status']));
-				let group = new fabric.Group([video, poster, play, progress, cProgress], opts);
+				const group = new fabric.Group([video, poster, play, progress, cProgress], opts);
 
-				let updateControls = function() {
+				const updateControls = function() {
 					video.visible = true;
 					poster.visible = false;
 
@@ -121,7 +121,7 @@ var Player = (function() {
 					rectPause2.visible = !group.status.paused;
 					canvas.renderAll();
 				};
-				let render = function () {
+				const render = function () {
 					if (isDone()) {
 						_sendStatus(group, true, video.getElement().duration);
 						updateControls();
@@ -136,7 +136,7 @@ var Player = (function() {
 				};
 				cProgress.on({
 					'mousedown': function (evt) {
-						let _ptr = canvas.getPointer(evt.e)
+						const _ptr = canvas.getPointer(evt.e)
 							, ptr = canvas._normalizePointer(group, _ptr)
 							, l = (group.width / 2 + ptr.x) * canvas.getZoom() - cProgress.aCoords.bl.x;
 						_sendStatus(group, group.status.paused, l * video.getElement().duration / cProgress.width)
@@ -211,12 +211,12 @@ var Player = (function() {
 				canvas.renderAll();
 				player.modify(group, _o);
 
-				let pos = {left: play.left, top: play.top};
+				const pos = {left: play.left, top: play.top};
 			});
 		});
 	};
 	player.modify = function(g, _o) {
-		let opts = $.extend({
+		const opts = $.extend({
 			angle: 0
 			, left: 10
 			, scaleX: 1

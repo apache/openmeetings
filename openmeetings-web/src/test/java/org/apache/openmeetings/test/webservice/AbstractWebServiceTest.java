@@ -59,13 +59,13 @@ import org.junit.BeforeClass;
 
 public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	private static Tomcat tomcat;
-	public final static String CONTEXT = "/openmeetings";
-	public final static String BASE_SERVICES_URL = "http://localhost:8080" + CONTEXT + "/services";
-	public final static String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
-	public final static String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
-	public final static String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
-	public final static String UNIT_TEST_EXT_TYPE = "om_unit_tests";
-	public final static long TIMEOUT = 5 * 60 * 1000;
+	public static final String CONTEXT = "/openmeetings";
+	public static final String BASE_SERVICES_URL = "http://localhost:8080" + CONTEXT + "/services";
+	public static final String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
+	public static final String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
+	public static final String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
+	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
+	public static final long TIMEOUT = 5 * 60 * 1000;
 	protected WicketTester tester;
 
 	public static WebClient getClient(String url) {

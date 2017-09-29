@@ -1,15 +1,16 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Wb = function() {
-	const ACTIVE = 'active';
-	const BUMPER = 100;
-	let wb = {id: -1, name: ''}, a, t, z, s, canvases = [], mode, slide = 0, width = 0, height = 0
-			, zoom = 1., zoomMode = 'fullFit', role = null, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
+	const ACTIVE = 'active', BUMPER = 100
+		, wb = {id: -1, name: ''}, canvases = []
+		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
+	let a, t, z, s, mode, slide = 0, width = 0, height = 0
+			, zoom = 1., zoomMode = 'fullFit', role = null;
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
 	}
 	function initToolBtn(m, def, obj) {
-		var btn = getBtn(m);
+		let btn = getBtn(m);
 		btn.data({
 			obj: obj
 			, activate: function() {
@@ -38,7 +39,7 @@ var Wb = function() {
 		var c = $('#wb-area-cliparts').clone().attr('id', '');
 		getBtn('arrow').after(c);
 		c.find('a').prepend(c.find('div.om-icon.big:first'));
-		c.find('.om-icon.clipart').each(function(idx) {
+		c.find('.om-icon.clipart').each(function() {
 			var cur = $(this);
 			cur.css('background-image', 'url(' + cur.data('image') + ')')
 				.click(function() {
@@ -224,12 +225,12 @@ var Wb = function() {
 				s.draggable({
 					scroll: false
 					, containment: "body"
-					, start: function(event, ui) {
+					, start: function() {
 						if (!!s.css("bottom")) {
 							s.css("bottom", "").css("right", "");
 						}
 					}
-					, drag: function(event, ui) {
+					, drag: function() {
 						if (s.position().x + s.width() >= s.parent().width()) {
 							return false;
 						}
@@ -322,18 +323,18 @@ var Wb = function() {
 				break;
 			case 'Presentation':
 			{
-				let ccount = canvases.length;
-				let count = _o.deleted ? 1 : _o.count;
+				const ccount = canvases.length
+					, count = _o.deleted ? 1 : _o.count;
 				for (let i = 0; i < count; ++i) {
 					if (canvases.length < i + 1) {
 						addCanvas();
 					}
-					let canvas = canvases[i];
+					const canvas = canvases[i];
 					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {});
 				}
 				_updateZoomPanel();
 				if (ccount !== canvases.length) {
-					let b = getBtn();
+					const b = getBtn();
 					if (b.length && b.hasClass(ACTIVE)) {
 						b.data().deactivate();
 						b.data().activate();
@@ -343,7 +344,7 @@ var Wb = function() {
 				break;
 			default:
 			{
-				let canvas = canvases[_o.slide];
+				const canvas = canvases[_o.slide];
 				if (!!canvas) {
 					_o.selectable = canvas.selection;
 					canvas.add(_o);
@@ -358,8 +359,8 @@ var Wb = function() {
 				canvas.renderOnAddRemove = false;
 			});
 
-			for (var i = 0; i < objects.length; ++i) {
-				var _o = objects[i];
+			for (let i = 0; i < objects.length; ++i) {
+				let _o = objects[i];
 				_o.loaded = true;
 				handler(_o);
 			}
@@ -422,8 +423,8 @@ var Wb = function() {
 			o.clone(function(_o) {
 				// ungrouping
 				_o.includeDefaultValues = false;
-				var _items = _o.destroy().getObjects();
-				for (var i = 0; i < _items.length; ++i) {
+				let _items = _o.destroy().getObjects();
+				for (let i = 0; i < _items.length; ++i) {
 					items.push(toOmJson(_items[i]));
 				}
 			}, extraProps);
@@ -449,7 +450,7 @@ var Wb = function() {
 	};
 	function scrollHandler(e) {
 		$(this).find('.canvas-container').each(function(idx) {
-			var h = $(this).height(), pos = $(this).position();
+			let h = $(this).height(), pos = $(this).position();
 			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
 				//TODO FIXME might be done without iterating
 				//console.log("Found:", idx);
@@ -507,17 +508,17 @@ var Wb = function() {
 		}
 	}
 	function addCanvas() {
-		var sl = canvases.length;
-		var cid = 'can-' + a.attr('id') + '-slide-' + sl;
-		var c = $('<canvas></canvas>').attr('id', cid);
+		let sl = canvases.length;
+		let cid = 'can-' + a.attr('id') + '-slide-' + sl;
+		let c = $('<canvas></canvas>').attr('id', cid);
 		a.find('.canvases').append(c);
-		var canvas = new fabric.Canvas(c.attr('id'), {
+		let canvas = new fabric.Canvas(c.attr('id'), {
 			preserveObjectStacking: true
 		});
 		canvas.wbId = wb.id;
 		canvas.slide = sl;
 		canvases.push(canvas);
-		var cc = $('#' + cid).closest('.canvas-container');
+		let cc = $('#' + cid).closest('.canvas-container');
 		if (role === NONE) {
 			if (sl === slide) {
 				cc.show();

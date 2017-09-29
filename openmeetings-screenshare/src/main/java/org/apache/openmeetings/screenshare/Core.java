@@ -60,9 +60,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private static final Logger log = getLogger(Core.class);
-	final static String QUARTZ_GROUP_NAME = "ScreenShare";
-	final static String QUARTZ_REMOTE_JOB_NAME = "RemoteJob";
-	final static String QUARTZ_REMOTE_TRIGGER_NAME = "RemoteTrigger";
+	static final String QUARTZ_GROUP_NAME = "ScreenShare";
+	static final String QUARTZ_REMOTE_JOB_NAME = "RemoteJob";
+	static final String QUARTZ_REMOTE_TRIGGER_NAME = "RemoteTrigger";
 	private static final String CONNECT_REJECTED = "NetConnection.Connect.Rejected";
 	private static final String CONNECT_FAILED = "NetConnection.Connect.Failed";
 

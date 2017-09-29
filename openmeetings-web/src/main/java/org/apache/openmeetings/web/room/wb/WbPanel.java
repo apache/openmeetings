@@ -99,8 +99,8 @@ public class WbPanel extends AbstractWbPanel {
 	private static final int DEFAULT_WIDTH = 640;
 	private static final int DEFAULT_HEIGHT = 480;
 	private static final int UNDO_SIZE = 20;
-	public final static ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
-	private final static ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
+	public static final ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
+	private static final ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
 	private long wb2save = -1;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();

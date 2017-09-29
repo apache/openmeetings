@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var APointer = function(wb) {
-	let pointer = Base();
+	const pointer = Base();
 	pointer.user = '';
 	pointer.create = function(canvas, o) {
 		fabric.Image.fromURL('./css/images/pointer.png', function(img) {
@@ -9,7 +9,7 @@ var APointer = function(wb) {
 				, originX: 'right'
 				, originY: 'top'
 			});
-			let circle1 = new fabric.Circle({
+			const circle1 = new fabric.Circle({
 				radius: 20
 				, stroke: '#ff6600'
 				, strokeWidth: 2
@@ -17,7 +17,7 @@ var APointer = function(wb) {
 				, originX: 'center'
 				, originY: 'center'
 			});
-			let circle2 = new fabric.Circle({
+			const circle2 = new fabric.Circle({
 				radius: 6
 				, stroke: '#ff6600'
 				, strokeWidth: 2
@@ -25,13 +25,13 @@ var APointer = function(wb) {
 				, originX: 'center'
 				, originY: 'center'
 			});
-			let text = new fabric.Text(o.user, {
+			const text = new fabric.Text(o.user, {
 				fontSize: 12
 				, left: 10
 				, originX: 'left'
 				, originY: 'bottom'
 			});
-			let group = new fabric.Group([circle1, circle2, img, text], {
+			const group = new fabric.Group([circle1, circle2, img, text], {
 				left: o.x - 20
 				, top: o.y - 20
 			});
@@ -40,7 +40,7 @@ var APointer = function(wb) {
 			group.uid = o.uid;
 			group.loaded = !!o.loaded;
 
-			let count = 3;
+			const count = 3;
 			function go(_cnt) {
 				if (_cnt < 0) {
 					canvas.remove(group);
@@ -66,18 +66,18 @@ var APointer = function(wb) {
 		});
 	}
 	pointer.mouseUp = function(o) {
-		let canvas = this
+		const canvas = this
 			, ptr = canvas.getPointer(o.e);
 		if (pointer.user === '') {
 			pointer.user = $('.room.sidebar.left .user.list .current .name').text();
 		}
-		let obj = {
+		const obj = {
 			type: 'pointer'
 			, x: ptr.x
 			, y: ptr.y
 			, user: pointer.user
 		};
-		obj.uid = uid = pointer.objectCreated(obj, canvas);
+		obj.uid = pointer.objectCreated(obj, canvas);
 		pointer.create(canvas, obj);
 	}
 	pointer.activate = function() {

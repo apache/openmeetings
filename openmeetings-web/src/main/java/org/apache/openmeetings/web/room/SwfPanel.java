@@ -51,7 +51,7 @@ import com.github.openjson.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private final static Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, getWebAppRootKey());
+	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, getWebAppRootKey());
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";

@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Clipart = function(wb, btn) {
-	let art = Shape(wb);
+	const art = Shape(wb);
 	art.add2Canvas = function(canvas) {}
 	art.createShape = function(canvas) {
 		fabric.Image.fromURL(btn.data('image'), function(img) {

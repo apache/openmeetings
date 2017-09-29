@@ -31,7 +31,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.wicket.util.string.Strings;
 
 public class DateParamConverter implements ParamConverter<Date> {
-	private final static FastDateFormat[] formats = new FastDateFormat[] { ISO8601_FULL_FORMAT, ISO8601_DATETIME_FORMAT, ISO8601_DATE_FORMAT };
+	private static final FastDateFormat[] formats = new FastDateFormat[] { ISO8601_FULL_FORMAT, ISO8601_DATETIME_FORMAT, ISO8601_DATE_FORMAT };
 
 	public static Date get(String val) {
 		if (Strings.isEmpty(val)) {

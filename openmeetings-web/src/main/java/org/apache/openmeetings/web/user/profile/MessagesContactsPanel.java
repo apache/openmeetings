@@ -84,12 +84,12 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
-	private final static Long MOVE_CHOOSE = Long.valueOf(-1);
-	private final static String SELECT_CHOOSE = "1252";
-	private final static String SELECT_ALL = "1239";
-	private final static String SELECT_NONE = "1240";
-	private final static String SELECT_UNREAD = "1241";
-	private final static String SELECT_READ = "1242";
+	private static final Long MOVE_CHOOSE = Long.valueOf(-1);
+	private static final String SELECT_CHOOSE = "1252";
+	private static final String SELECT_ALL = "1239";
+	private static final String SELECT_NONE = "1240";
+	private static final String SELECT_UNREAD = "1241";
+	private static final String SELECT_READ = "1242";
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final WebMarkupContainer folders = new WebMarkupContainer("folders");
 	private final Label unread = new Label("unread", Model.of(0L));

@@ -59,7 +59,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, getWebAppRootKey());
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
-	public final static String EXEC_EXT = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") < 0 ? "" : ".exe";
+	public static final String EXEC_EXT = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") < 0 ? "" : ".exe";
 
 	@Autowired
 	protected ConfigurationDao cfgDao;

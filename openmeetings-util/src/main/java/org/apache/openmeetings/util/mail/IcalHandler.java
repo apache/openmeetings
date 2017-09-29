@@ -69,9 +69,9 @@ public class IcalHandler {
 	private final Calendar icsCalendar;
 
 	/** Creation of a new Event */
-	public final static Method ICAL_METHOD_REQUEST = Method.REQUEST;
-	public final static Method ICAL_METHOD_CANCEL = Method.CANCEL;
-	public final static Method ICAL_METHOD_REFRESH = Method.REFRESH;
+	public static final Method ICAL_METHOD_REQUEST = Method.REQUEST;
+	public static final Method ICAL_METHOD_CANCEL = Method.CANCEL;
+	public static final Method ICAL_METHOD_REFRESH = Method.REFRESH;
 
 	/**
 	 * Constructor

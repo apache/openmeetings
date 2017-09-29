@@ -30,7 +30,7 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 public class MenuFunctionsBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;
-	private final static JavaScriptResourceReference MENU_FUNCTIONS = new JavaScriptResourceReference(MenuFunctionsBehavior.class, "menu-functions.js");
+	private static final JavaScriptResourceReference MENU_FUNCTIONS = new JavaScriptResourceReference(MenuFunctionsBehavior.class, "menu-functions.js");
 	private final String menuContainerId;
 	private final String menuId;
 

@@ -20,8 +20,8 @@ package org.apache.openmeetings.util;
 
 public class OmException extends Exception {
 	private static final long serialVersionUID = 1L;
-	public final static OmException UNKNOWN = new OmException("error.unknown");
-	public final static OmException BAD_CREDENTIALS = new OmException("error.bad.credentials");
+	public static final OmException UNKNOWN = new OmException("error.unknown");
+	public static final OmException BAD_CREDENTIALS = new OmException("error.bad.credentials");
 	private final String key;
 
 	public OmException(String key) {

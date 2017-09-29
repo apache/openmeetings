@@ -31,8 +31,8 @@ public abstract class AdminBasePanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final JavaScriptResourceReference ADMIN_SCRIPT = new JavaScriptResourceReference(AdminBasePanel.class, "admin.js");
 
-	protected final static String BASE_ROW_CLASS = "ui-widget-content";
-	protected final static String ROW_CLASS = BASE_ROW_CLASS + " clickable";
+	protected static final String BASE_ROW_CLASS = "ui-widget-content";
+	protected static final String ROW_CLASS = BASE_ROW_CLASS + " clickable";
 
 	public AdminBasePanel(String id) {
 		super(id);

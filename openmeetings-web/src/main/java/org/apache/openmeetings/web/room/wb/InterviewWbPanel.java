@@ -37,7 +37,7 @@ import com.github.openjson.JSONObject;
 
 public class InterviewWbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
-	public final static ResourceReference INTERVIEWWB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "interviewwb.js");
+	public static final ResourceReference INTERVIEWWB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "interviewwb.js");
 
 	public InterviewWbPanel(String id, RoomPanel rp) {
 		super(id, rp);

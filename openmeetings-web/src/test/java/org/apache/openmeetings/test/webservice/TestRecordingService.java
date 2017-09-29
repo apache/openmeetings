@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestRecordingService extends AbstractWebServiceTest {
-	public final static String RECORD_SERVICE_URL = BASE_SERVICES_URL + "/record";
+	public static final String RECORD_SERVICE_URL = BASE_SERVICES_URL + "/record";
 	@Autowired
 	private RecordingDao recordingDao;
 

@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
-	private final static String[] searchFields = {"name"};
+	private static final String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
 

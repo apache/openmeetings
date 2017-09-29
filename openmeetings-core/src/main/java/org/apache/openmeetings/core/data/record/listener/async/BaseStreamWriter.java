@@ -44,8 +44,8 @@ import org.slf4j.Logger;
 
 public abstract class BaseStreamWriter implements Runnable {
 	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, getWebAppRootKey());
-	private final static int MINUTE_MULTIPLIER = 60 * 1000;
-	public final static int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
+	private static final int MINUTE_MULTIPLIER = 60 * 1000;
+	public static final int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
 	protected int startTimeStamp = -1;
 	protected long initialDelta = 0;
 

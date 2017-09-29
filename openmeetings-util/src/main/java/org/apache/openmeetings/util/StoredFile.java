@@ -43,11 +43,11 @@ import org.slf4j.Logger;
 
 public class StoredFile {
 	private static final Logger log = Red5LoggerFactory.getLogger(StoredFile.class, getWebAppRootKey());
-	private final static String MIME_AUDIO = "audio";
-	private final static String MIME_VIDEO = "video";
-	private final static String MIME_IMAGE = "image";
-	private final static String MIME_TEXT = "text";
-	private final static String MIME_APP = "application";
+	private static final String MIME_AUDIO = "audio";
+	private static final String MIME_VIDEO = "video";
+	private static final String MIME_IMAGE = "image";
+	private static final String MIME_TEXT = "text";
+	private static final String MIME_APP = "application";
 	private static final Set<MediaType> CONVERT_TYPES = new HashSet<>(Arrays.asList(
 			application("x-tika-msoffice"), application("x-tika-ooxml"), application("msword")
 			, application("vnd.wordperfect"), application("rtf")));

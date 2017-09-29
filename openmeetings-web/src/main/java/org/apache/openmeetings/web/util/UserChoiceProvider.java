@@ -38,7 +38,7 @@ import com.github.openjson.JSONStringer;
 
 public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
-	private final static int PAGE_SIZE = 10;
+	private static final int PAGE_SIZE = 10;
 	private final Map<String, User> newContacts = new HashMap<>();
 
 	public static User getUser(String value) {

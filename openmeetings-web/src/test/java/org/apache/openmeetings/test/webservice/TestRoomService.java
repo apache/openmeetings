@@ -39,8 +39,8 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.Test;
 
 public class TestRoomService extends AbstractWebServiceTest {
-	public final static String ROOM_SERVICE_URL = BASE_SERVICES_URL + "/room";
-	private final static long CAPACITY = 666L;
+	public static final String ROOM_SERVICE_URL = BASE_SERVICES_URL + "/room";
+	private static final long CAPACITY = 666L;
 
 	@Test
 	public void testExternal() {

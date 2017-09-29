@@ -2,15 +2,16 @@
 var PRESENTER = 'presenter';
 var WHITEBOARD = 'whiteBoard';
 var WbArea = (function() {
-	let container, area, tabs, scroll, role = NONE, self = {}, _inited = false;
+	const self = {};
+	let container, area, tabs, scroll, role = NONE, _inited = false;
 
 	function refreshTabs() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
 	}
 	function getActive() {
-		var idx = tabs.tabs("option", 'active');
+		let idx = tabs.tabs("option", 'active');
 		if (idx > -1) {
-			var href = tabs.find('a')[idx];
+			let href = tabs.find('a')[idx];
 			if (!!href) {
 				return $($(href).attr('href'));
 			}
@@ -22,10 +23,10 @@ var WbArea = (function() {
 			case 8:  // backspace
 			case 46: // delete
 				{
-					var wb = getActive().data();
-					var canvas = wb.getCanvas();
+					let wb = getActive().data();
+					let canvas = wb.getCanvas();
 					if (!!canvas) {
-						var arr = [];
+						let arr = [];
 						if (!!canvas.getActiveGroup()) {
 							canvas.getActiveGroup().forEachObject(function(o) {
 								arr.push({
@@ -34,7 +35,7 @@ var WbArea = (function() {
 								});
 							});
 						} else {
-							var o = canvas.getActiveObject();
+							let o = canvas.getActiveObject();
 							if (!!o) {
 								arr.push({
 									uid: o.uid
@@ -62,12 +63,12 @@ var WbArea = (function() {
 		});
 	}
 	function _resizeWbs() {
-		var w = area.width(), hh = area.height();
-		var wbTabs = area.find(".tabs.ui-tabs");
-		var tabPanels = wbTabs.find(".ui-tabs-panel");
-		var wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
+		let w = area.width(), hh = area.height();
+		let wbTabs = area.find(".tabs.ui-tabs");
+		let tabPanels = wbTabs.find(".ui-tabs-panel");
+		let wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
 		tabPanels.height(wbah);
-		tabPanels.each(function(idx) {
+		tabPanels.each(function() {
 			$(this).data().resize(w - 25, wbah - 20);
 		});
 		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
@@ -82,7 +83,6 @@ var WbArea = (function() {
 		});
 	}
 	function _getImage(cnv, fmt) {
-		//TODO zoom ???
 		return cnv.toDataURL({
 			format: fmt
 			, width: cnv.width
@@ -131,7 +131,7 @@ var WbArea = (function() {
 				tabs.find('.next.om-icon').click(function() {
 					scroll.scrollLeft(scroll.scrollLeft() + 30);
 				});
-				tabsNav.find('li').each(function(idx) {
+				tabsNav.find('li').each(function() {
 					var li = $(this);
 					_addCloseBtn(li);
 				});
@@ -145,14 +145,14 @@ var WbArea = (function() {
 			}
 			$(window).off('keyup', deleteHandler);
 		}
-		tabs.find(".ui-tabs-panel").each(function(idx) {
+		tabs.find(".ui-tabs-panel").each(function() {
 			$(this).data().setRole(role);
 		});
 	}
 	self.init = function() {
 		container = $(".room.wb.area");
 		tabs = container.find('.tabs').tabs({
-			beforeActivate: function(e, ui) {
+			beforeActivate: function(e) {
 				var res = true;
 				if (e.originalEvent && e.originalEvent.type === 'click') {
 					res = role === PRESENTER;
@@ -285,14 +285,8 @@ $(function() {
 				return; //ping
 			}
 			var m = jQuery.parseJSON(msg);
-			if (m) {
-				switch(m.type) {
-					case "wb":
-						if (typeof WbArea !== 'undefined') {
-							eval(m.func);
-						}
-						break;
-				}
+			if (m && 'wb' === m.type && typeof WbArea !== 'undefined') {
+				eval(m.func);
 			}
 		} catch (err) {
 			console.log(err);

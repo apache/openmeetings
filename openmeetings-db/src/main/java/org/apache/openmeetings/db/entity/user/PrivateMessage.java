@@ -53,9 +53,9 @@ import org.simpleframework.xml.Root;
 @Root(name = "privatemessage")
 public class PrivateMessage implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
-	public final static Long INBOX_FOLDER_ID = Long.valueOf(0);
-	public final static Long SENT_FOLDER_ID = Long.valueOf(-1);
-	public final static Long TRASH_FOLDER_ID = Long.valueOf(-2);
+	public static final Long INBOX_FOLDER_ID = Long.valueOf(0);
+	public static final Long SENT_FOLDER_ID = Long.valueOf(-1);
+	public static final Long TRASH_FOLDER_ID = Long.valueOf(-2);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

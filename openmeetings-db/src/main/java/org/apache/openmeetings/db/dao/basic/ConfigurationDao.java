@@ -110,7 +110,7 @@ import com.github.openjson.JSONObject;
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, getWebAppRootKey());
-	private final static String[] searchFields = {"key", "value"};
+	private static final String[] searchFields = {"key", "value"};
 
 	@PersistenceContext
 	private EntityManager em;

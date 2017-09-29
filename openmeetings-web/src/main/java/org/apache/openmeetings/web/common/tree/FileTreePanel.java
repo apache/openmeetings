@@ -37,9 +37,9 @@ import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
@@ -74,13 +74,13 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 public abstract class FileTreePanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final static String ALIGN_LEFT_CLASS = " align-left";
-	private final static String ALIGN_RIGHT_CLASS = " align-right";
-	private final static String BASE_CLASS = " om-icon big clickable";
-	private final static String UPLOAD_CLASS = "add" + BASE_CLASS + ALIGN_LEFT_CLASS;
-	private final static String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + ALIGN_LEFT_CLASS;
-	private final static String TRASH_CLASS = "trash" + BASE_CLASS + ALIGN_RIGHT_CLASS;
-	private final static String DISABLED_CLASS = " disabled";
+	private static final String ALIGN_LEFT_CLASS = " align-left";
+	private static final String ALIGN_RIGHT_CLASS = " align-right";
+	private static final String BASE_CLASS = " om-icon big clickable";
+	private static final String UPLOAD_CLASS = "add" + BASE_CLASS + ALIGN_LEFT_CLASS;
+	private static final String CREATE_DIR_CLASS = "folder-create" + BASE_CLASS + ALIGN_LEFT_CLASS;
+	private static final String TRASH_CLASS = "trash" + BASE_CLASS + ALIGN_RIGHT_CLASS;
+	private static final String DISABLED_CLASS = " disabled";
 	final WebMarkupContainer trees = new WebMarkupContainer("tree-container");
 	private final WebMarkupContainer sizes = new WebMarkupContainer("sizes");
 	private BaseFileItem lastSelected = null;
@@ -267,9 +267,9 @@ public abstract class FileTreePanel extends Panel {
 		Long id = f.getId();
 		if (id != null) {
 			if (f instanceof Recording) {
-				getBean(RecordingDao.class).delete((Recording)f);
+				getBean(RecordingDao.class).delete(f);
 			} else {
-				getBean(FileItemDao.class).delete((FileItem)f);
+				getBean(FileItemDao.class).delete(f);
 			}
 		}
 		update(handler);

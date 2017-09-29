@@ -50,11 +50,11 @@ import com.github.openjson.JSONObject;
 import com.hazelcast.core.Member;
 
 public class VideoSettings extends Panel {
-	private final static long serialVersionUID = 1L;
-	private final static Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, getWebAppRootKey());
-	private final static ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
-	public final static String URL = "url";
-	public final static String FALLBACK = "fallback";
+	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, getWebAppRootKey());
+	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
+	public static final String URL = "url";
+	public static final String FALLBACK = "fallback";
 
 	public VideoSettings(String id) {
 		super(id);

@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class GroupUserDao implements IDataProviderDao<GroupUser> {
-	private final static String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
+	private static final String[] searchFields = {"user.lastname", "user.firstname", "user.login", "user.address.email"};
 	@PersistenceContext
 	private EntityManager em;
 

@@ -29,11 +29,11 @@ import org.apache.wicket.request.resource.ResourceReference;
 
 public class BootstrapFileUploadBehavior extends Behavior {
 	private static final long serialVersionUID = 1L;
-	private final static ResourceReference BOOTSTRAP_FILEINPUT_JS_REFERENCE
+	private static final ResourceReference BOOTSTRAP_FILEINPUT_JS_REFERENCE
 			= new JavaScriptResourceReference(BootstrapFileUploadBehavior.class, "fileinput.js");
-	private final static ResourceReference BOOTSTRAP_FILEINPUT_CSS_REFERENCE
+	private static final ResourceReference BOOTSTRAP_FILEINPUT_CSS_REFERENCE
 			= new CssResourceReference(BootstrapFileUploadBehavior.class, "fileinput.css");
-	public final static BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior();
+	public static final BootstrapFileUploadBehavior INSTANCE = new BootstrapFileUploadBehavior();
 
 	private BootstrapFileUploadBehavior() {
 	}

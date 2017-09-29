@@ -149,13 +149,13 @@ import com.hazelcast.core.MessageListener;
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, getWebAppRootKey());
 	private static boolean isInstalled;
-	private final static String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
-	private final static String UID_BY_SID_KEY = "UID_BY_SID_KEY";
-	private final static String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
-	private final static String ROOMS_KEY = "ROOMS_KEY";
-	private final static String WBS_KEY = "WBS_KEY";
-	private final static String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
-	public final static String NAME_ATTR_KEY = "name";
+	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
+	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
+	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
+	private static final String ROOMS_KEY = "ROOMS_KEY";
+	private static final String WBS_KEY = "WBS_KEY";
+	private static final String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
+	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
 	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed

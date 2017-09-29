@@ -53,7 +53,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class TestCalendarService extends AbstractWebServiceTest {
-	public final static String CALENDAR_SERVICE_URL = BASE_SERVICES_URL + "/calendar";
+	public static final String CALENDAR_SERVICE_URL = BASE_SERVICES_URL + "/calendar";
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired

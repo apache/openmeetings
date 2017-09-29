@@ -31,8 +31,6 @@ import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
-import static org.apache.openmeetings.web.user.chat.EmotionsResources.EMOTIONS_CSS_REFERENCE;
-import static org.apache.openmeetings.web.user.chat.EmotionsResources.EMOTIONS_JS_REFERENCE;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -67,7 +65,9 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -78,6 +78,8 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 public class Chat extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(Chat.class, getWebAppRootKey());
+	public static final ResourceReference EMOTIONS_JS_REFERENCE = new JavaScriptResourceReference(Chat.class, "cssemoticons.js");
+	public static final ResourceReference EMOTIONS_CSS_REFERENCE = new CssResourceReference(Chat.class, "cssemoticons.css");
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private static final String PARAM_TYPE = "type";

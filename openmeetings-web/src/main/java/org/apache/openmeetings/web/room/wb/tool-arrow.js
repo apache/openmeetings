@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Arrow = function(wb, s) {
-	let arrow = Line(wb, s);
+	const arrow = Line(wb, s);
 	arrow.createShape = function(canvas) {
 		arrow.obj = new fabric.Polygon([
 			{x: 0, y: 0},

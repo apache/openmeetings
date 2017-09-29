@@ -847,7 +847,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					option = op;
 				}
 				list.add(op);
-				if (option == null && me.getKey().toString().equals(InstallWizard.this.getModelObject().getDefaultLangId())) {
+				if (option == null && me.getKey().intValue() == InstallWizard.this.getModelObject().getDefaultLangId()) {
 					option = op;
 				}
 			}

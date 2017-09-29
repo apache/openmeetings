@@ -41,10 +41,10 @@ import com.github.openjson.JSONObject;
 
 public class FileItemTree extends DefaultNestedTree<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
-	private final static String CSS_CLASS_FILE = "file ";
-	private final static String PARAM_MOD = "mod";
-	private final static String PARAM_SHIFT = "s";
-	private final static String PARAM_CTRL = "c";
+	private static final String CSS_CLASS_FILE = "file ";
+	private static final String PARAM_MOD = "mod";
+	private static final String PARAM_SHIFT = "s";
+	private static final String PARAM_CTRL = "c";
 	final FileTreePanel treePanel;
 
 	public FileItemTree(String id, FileTreePanel treePanel, ITreeProvider<BaseFileItem> tp) {

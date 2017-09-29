@@ -53,7 +53,7 @@ import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTable
 
 public class UserSearchPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
-	private final static List<Integer> itemsPerPage = Arrays.asList(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
+	private static final List<Integer> itemsPerPage = Arrays.asList(10, 25, 50, 75, 100, 200, 500, 1000, 2500, 5000);
 	private String text;
 	private String search;
 	private String offer;

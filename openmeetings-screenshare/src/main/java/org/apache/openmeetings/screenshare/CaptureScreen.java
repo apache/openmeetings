@@ -48,8 +48,8 @@ import org.slf4j.Logger;
 
 public class CaptureScreen extends Thread {
 	private static final Logger log = getLogger(CaptureScreen.class);
-	private final static String QUARTZ_CURSOR_TRIGGER_NAME = "CursorTrigger";
-	private final static String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
+	private static final String QUARTZ_CURSOR_TRIGGER_NAME = "CursorTrigger";
+	private static final String QUARTZ_CURSOR_JOB_NAME = "CursorJob";
 	private final Core core;
 	private int timestampDelta;
 	private volatile AtomicInteger timestamp = new AtomicInteger(0);

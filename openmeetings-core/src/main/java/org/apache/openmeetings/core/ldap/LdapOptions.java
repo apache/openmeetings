@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 
 public class LdapOptions {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapOptions.class, getWebAppRootKey());
-	private final static String EMPTY_FORMAT = "%s";
+	private static final String EMPTY_FORMAT = "%s";
 	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
 	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";
 	private static final String CONFIGKEY_LDAP_SECURE = "ldap_conn_secure";
