@@ -76,8 +76,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, getWebAppRootKey());
-
-	public final static String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
+	private final static String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
 
 	@PersistenceContext
 	private EntityManager em;

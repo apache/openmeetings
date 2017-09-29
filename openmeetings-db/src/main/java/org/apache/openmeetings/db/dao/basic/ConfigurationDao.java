@@ -53,12 +53,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_COD
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setConfigKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -110,7 +110,7 @@ import com.github.openjson.JSONObject;
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, getWebAppRootKey());
-	public final static String[] searchFields = {"key", "value"};
+	private final static String[] searchFields = {"key", "value"};
 
 	@PersistenceContext
 	private EntityManager em;

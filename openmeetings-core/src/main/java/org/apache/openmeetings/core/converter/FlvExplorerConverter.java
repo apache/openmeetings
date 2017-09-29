@@ -72,8 +72,8 @@ public class FlvExplorerConverter extends BaseConverter {
 			}
 			//Parse the width height from the FFMPEG output
 			Dimension dim = getDimension(res.getError());
-			f.setWidth(dim.width);
-			f.setHeight(dim.height);
+			f.setWidth(dim.getWidth());
+			f.setHeight(dim.getHeight());
 			convertToPng(f, mp4.getCanonicalPath(), logs);
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);

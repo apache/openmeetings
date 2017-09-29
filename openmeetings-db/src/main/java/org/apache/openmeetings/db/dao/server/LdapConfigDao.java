@@ -50,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	private static final Logger log = Red5LoggerFactory.getLogger(LdapConfigDao.class, getWebAppRootKey());
-	public final static String[] searchFields = {"name", "configFileName", "domain", "comment"};
+	private final static String[] searchFields = {"name", "configFileName", "domain", "comment"};
 
 	@PersistenceContext
 	private EntityManager em;

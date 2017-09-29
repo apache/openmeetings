@@ -57,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomDao.class, getWebAppRootKey());
-	public final static String[] searchFields = {"name"};
+	private final static String[] searchFields = {"name"};
 
 	@PersistenceContext
 	private EntityManager em;

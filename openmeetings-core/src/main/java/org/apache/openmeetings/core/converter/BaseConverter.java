@@ -71,12 +71,20 @@ public abstract class BaseConverter {
 	protected FileItemLogDao logDao;
 
 	protected static class Dimension {
-		public int width = 0;
-		public int height = 0;
+		private final int width;
+		private final int height;
 
 		public Dimension(int width, int height) {
 			this.width = width;
 			this.height = height;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public int getHeight() {
+			return height;
 		}
 	}
 

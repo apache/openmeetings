@@ -469,9 +469,9 @@ public class MobileService {
 
 	public static class Language implements Serializable {
 		private static final long serialVersionUID = 1L;
-		public long language_id;
-		public String code;
-		public String name;
+		private long language_id;
+		private String code;
+		private String name;
 
 		public Language() {}
 
@@ -479,6 +479,18 @@ public class MobileService {
 			this.language_id = language_id;
 			this.code = code;
 			this.name = name;
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public long getLanguage_id() {
+			return language_id;
+		}
+
+		public String getName() {
+			return name;
 		}
 	}
 }

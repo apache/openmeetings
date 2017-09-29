@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class GroupDao implements IGroupAdminDataProviderDao<Group> {
-	public final static String[] searchFields = {"name"};
+	private final static String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
 
