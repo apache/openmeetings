@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
@@ -54,6 +53,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
 
@@ -211,10 +212,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public String getAppName() {
-		if (APPLICATION_NAME == null) {
-			APPLICATION_NAME = getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME);
+		if (getApplicationName() == null) {
+			setApplicationName(getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME));;
 		}
-		return APPLICATION_NAME;
+		return getApplicationName();
 	}
 
 	public String getBaseUrl() {
@@ -304,7 +305,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				CryptProvider.reset();
 				break;
 			case CONFIG_APPLICATION_NAME:
-				APPLICATION_NAME = value;
+				setApplicationName(value);
 				break;
 			case CONFIG_HEADER_XFRAME:
 			{

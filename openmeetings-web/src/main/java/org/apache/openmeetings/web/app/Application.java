@@ -71,7 +71,6 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
@@ -742,7 +741,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
 		if (!isInstalled) {
-			if (InitializationContainer.initComplete) {
+			if (OpenmeetingsVariables.initComplete) {
 				//TODO can also check crypt class here
 				isInstalled = result = get()._getBean(UserDao.class).count() > 0;
 			}
@@ -751,7 +750,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static <T> T getBean(Class<T> clazz) {
-		if (InitializationContainer.initComplete) {
+		if (OpenmeetingsVariables.initComplete) {
 			if (!isInstalled()) {
 				throw new RestartResponseException(InstallWizardPage.class);
 			}

@@ -31,7 +31,7 @@ import org.wicketstuff.select2.Response;
 
 public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
-	public static int PAGE_SIZE = 20;
+	public static final int PAGE_SIZE = 20;
 
 	@Override
 	public String getIdValue(User choice) {

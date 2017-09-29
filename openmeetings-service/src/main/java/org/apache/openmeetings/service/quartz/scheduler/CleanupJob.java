@@ -37,7 +37,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanTestSetup() {
 		log.debug("CleanupJob.cleanTestSetup");
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		try {
@@ -107,7 +107,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanRoomFiles() {
 		log.debug("CleanupJob.cleanRoomFiles");
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		try {
@@ -148,7 +148,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanSessions() {
 		log.trace("CleanupJob.cleanSessions");
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		try {
@@ -175,7 +175,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanExpiredResetHash() {
 		log.debug("CleanupJob.cleanExpiredResetHash");
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		List<User> users = userDao.getByExpiredHash(resetHashTtl);

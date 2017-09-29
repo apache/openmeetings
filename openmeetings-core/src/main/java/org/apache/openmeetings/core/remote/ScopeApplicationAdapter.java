@@ -50,9 +50,9 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
@@ -130,7 +130,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				_log.debug("scopeName :: " + scopeName);
 			}
 
-			InitializationContainer.initComplete = true;
+			OpenmeetingsVariables.initComplete = true;
 			// Init properties
 			IApplication iapp = getApp();
 			iapp.setXFrameOptions(cfgDao.getString(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN));

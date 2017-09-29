@@ -30,8 +30,8 @@ import javax.servlet.ServletContextEvent;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.util.InitializationContainer;
 import org.apache.openmeetings.util.OMContextListener;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.Application;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ThreadContext;
@@ -61,7 +61,7 @@ public class ApplicationHelper {
 		WebApplication app = (WebApplication)ensureApplication(langId);
 
 		WicketTester tester = new WicketTester(app, app.getServletContext());
-		InitializationContainer.initComplete = true;
+		OpenmeetingsVariables.initComplete = true;
 		return tester;
 	}
 

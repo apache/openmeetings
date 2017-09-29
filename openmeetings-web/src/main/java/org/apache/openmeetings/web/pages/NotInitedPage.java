@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.RestartResponseException;
 
@@ -26,7 +26,7 @@ public class NotInitedPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
 
 	public NotInitedPage() {
-		if (InitializationContainer.initComplete) {
+		if (OpenmeetingsVariables.initComplete) {
 			continueToOriginalDestination();
 			// Ups, no original destination. Go to the home page
 			throw new RestartResponseException(Application.get().getHomePage());

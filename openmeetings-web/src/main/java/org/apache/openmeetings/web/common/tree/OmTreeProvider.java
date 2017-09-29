@@ -45,12 +45,12 @@ import org.apache.wicket.model.Model;
 public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
 	private static final List<Type> VIDEO_TYPES = Arrays.asList(Type.Folder, Type.Video);
-	public static String RECORDINGS_MY = "recordings-my";
-	public static String RECORDINGS_PUBLIC = "recordings-public";
-	public static String RECORDINGS_GROUP = "recordings-group-%s";
-	public static String FILES_MY = "files-my";
-	public static String FILES_ROOM = "files-room";
-	public static String FILES_GROUP = "files-group-%s";
+	public static final String RECORDINGS_MY = "recordings-my";
+	public static final String RECORDINGS_PUBLIC = "recordings-public";
+	public static final String RECORDINGS_GROUP = "recordings-group-%s";
+	public static final String FILES_MY = "files-my";
+	public static final String FILES_ROOM = "files-room";
+	public static final String FILES_GROUP = "files-group-%s";
 	private final Long roomId;
 	private final List<BaseFileItem> roots = new ArrayList<>();
 	private final String PUBLIC, GROUP_FILE, GROUP_REC;

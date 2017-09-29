@@ -118,10 +118,6 @@
 				<tt>http://yourcorp.com:5080/openmeetings2</tt><br/> etc.<br/> you need to do the following:
 			</p>
 			<ol>
-				<li>edit <tt>webapps/openmeetings1/WEB-INF/red5-web.properties</tt> for <strong>every</strong> Openmeetings
-				instance and add the following line <tt>webapp.contextPath=/openmeetings1</tt>  to it (context of
-				<strong>every</strong> instance <strong>should</strong> match the folder name in webapps dir)
-				</li>
 				<li>in case of java memory problems modify <tt>red5.sh</tt> add following line:<br/>
 					<source>export JAVA_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+CMSPermGenSweepingEnabled -XX:MaxPermSize=128M"</source>
 					or <tt>red5.bat</tt>:<br/>

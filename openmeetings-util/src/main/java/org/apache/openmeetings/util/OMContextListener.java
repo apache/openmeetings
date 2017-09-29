@@ -32,9 +32,8 @@ public class OMContextListener extends ContextLoggingListener {
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		OpenmeetingsVariables.webAppRootKey = pathToName(event);
-		OpenmeetingsVariables.webAppRootPath = "/" + OpenmeetingsVariables.webAppRootKey;
 		System.setProperty("current_openmeetings_context_name", OpenmeetingsVariables.webAppRootKey);
-		System.setProperty("webapp.contextPath", OpenmeetingsVariables.webAppRootPath);
+		System.setProperty("webapp.contextPath", String.format("/%s", OpenmeetingsVariables.webAppRootKey));
 		System.setProperty("logback.configurationFile", "logback-config.xml");
 		super.contextInitialized(event);
 	}

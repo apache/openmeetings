@@ -26,7 +26,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
 import org.apache.openmeetings.service.mail.template.subject.RecordingExpiringTemplate;
-import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class ReminderJob extends AbstractJob {
 
 	public void remindMeetings() {
 		log.debug("ReminderJob.remindMeetings");
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		try {

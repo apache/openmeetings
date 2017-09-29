@@ -58,7 +58,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
-import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -270,7 +270,7 @@ public class MailHandler {
 
 	public void resetSendingStatus() {
 		log.debug("resetSendingStatus enter ...");
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		Calendar c = Calendar.getInstance();

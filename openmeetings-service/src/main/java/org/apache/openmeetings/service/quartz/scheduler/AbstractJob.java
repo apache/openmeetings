@@ -28,7 +28,7 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.util.InitializationContainer;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public abstract class AbstractJob {
 	RecordingDao recordingDao;
 
 	void processExpiringRecordings(boolean notified, BiConsumer<Recording, Long> consumer) {
-		if (!InitializationContainer.initComplete) {
+		if (!OpenmeetingsVariables.initComplete) {
 			return;
 		}
 		for (Group g : groupDao.getLimited()) {
