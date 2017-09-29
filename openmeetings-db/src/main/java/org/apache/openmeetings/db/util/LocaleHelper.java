@@ -59,7 +59,7 @@ public class LocaleHelper {
 
 	public static Locale getLocale(User u) {
 		Long langId = u.getLanguageId();
-		Locale locale = langId == 3 ? Locale.GERMANY : LabelDao.languages.get(langId);
+		Locale locale = langId == 3 ? Locale.GERMANY : LabelDao.getLocale(langId);
 		try {
 			Locale.Builder builder = new Locale.Builder().setLanguage(locale.getLanguage());
 			if (u.getAddress() != null && u.getAddress().getCountry() != null) {

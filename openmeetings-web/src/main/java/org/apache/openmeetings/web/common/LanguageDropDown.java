@@ -43,7 +43,7 @@ public class LanguageDropDown extends DropDownChoice<Long> {
 	}
 
 	private void internalInit() {
-		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+		for (Map.Entry<Long, Locale> e : LabelDao.getLanguages()) {
 			languages.add(e.getKey());
 		}
 		setChoices(languages);
@@ -52,7 +52,7 @@ public class LanguageDropDown extends DropDownChoice<Long> {
 
 			@Override
 			public Object getDisplayValue(Long object) {
-				return LabelDao.languages.get(object).getDisplayName();
+				return LabelDao.getLocale(object).getDisplayName();
 			}
 
 			@Override

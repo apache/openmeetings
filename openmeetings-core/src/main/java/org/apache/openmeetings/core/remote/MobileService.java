@@ -104,7 +104,7 @@ public class MobileService {
 	 */
 	public List<Language> getLanguages() {
 		List<Language> result = new ArrayList<>();
-		for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+		for (Map.Entry<Long, Locale> e : LabelDao.getLanguages()) {
 			result.add(new Language(e.getKey(), e.getValue().toLanguageTag(), e.getValue().getDisplayName(Locale.ENGLISH)));
 		}
 		return result;

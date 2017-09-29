@@ -23,10 +23,10 @@ import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
@@ -709,7 +709,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Locale getLocale(final long languageId) {
-		Locale loc = LabelDao.languages.get(languageId);
+		Locale loc = LabelDao.getLocale(languageId);
 		if (loc == null) {
 			loc = Session.exists() ? WebSession.get().getLocale() : Locale.ENGLISH;
 		}

@@ -298,14 +298,7 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public Long getLanguage(Locale loc) {
-		if (loc != null) {
-			for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
-				if (loc.equals(e.getValue())) {
-					return e.getKey();
-				}
-			}
-		}
-		return cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L);
+		return LabelDao.getLanguage(loc, cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
 	}
 
 	@Override

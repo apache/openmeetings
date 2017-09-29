@@ -40,7 +40,7 @@ public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTest
 		setOmHome();
 		System.setProperty(Constants.SKIP_JARS_PROPERTY, "*");
 		LabelDao.initLanguageMap();
-		if (LabelDao.languages.isEmpty()) {
+		if (LabelDao.getLanguages().isEmpty()) {
 			fail("Failed to set languages");
 		}
 	}

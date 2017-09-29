@@ -64,7 +64,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 					return;
 				}
 				Locale l = Locale.forLanguageTag(s.getValue());
-				for (Map.Entry<Long, Locale> e : LabelDao.languages.entrySet()) {
+				for (Map.Entry<Long, Locale> e : LabelDao.getLanguages()) {
 					if (e.getValue().equals(l)) {
 						s.error(new ValidationError("This code already added")); //FIXME TODO add proper key
 						break;

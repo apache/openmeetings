@@ -67,9 +67,9 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final String KEY_ATTR = "key";
 	public static final String APP_RESOURCES_EN = "Application.properties.xml";
 	public static final String APP_RESOURCES = "Application_%s.properties.xml";
-	public static final LinkedHashMap<Long, Locale> languages = new LinkedHashMap<>(); //TODO hide it and return unmodifiable map
-	public static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
-	public static final Set<String> keys = new HashSet<>();
+	private static final LinkedHashMap<Long, Locale> languages = new LinkedHashMap<>();
+	private static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
+	private static final Set<String> keys = new HashSet<>();
 	private static Class<?> APP = null;
 
 	private static void storeLanguages() throws Exception {
@@ -213,6 +213,25 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	@Override
 	public List<StringLabel> get(String search, int start, int count, String order) {
 		throw new UnsupportedOperationException("Should not be used");
+	}
+
+	public static Locale getLocale(Long id) {
+		return languages.get(id);
+	}
+
+	public static Long getLanguage(Locale loc, Long def) {
+		if (loc != null) {
+			for (Map.Entry<Long, Locale> e : languages.entrySet()) {
+				if (loc.equals(e.getValue())) {
+					return e.getKey();
+				}
+			}
+		}
+		return def;
+	}
+
+	public static Set<Map.Entry<Long, Locale>> getLanguages() {
+		return languages.entrySet();
 	}
 
 	public static List<StringLabel> get(Locale l, final String search, int start, int count, final SortParam<String> sort) {

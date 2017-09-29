@@ -492,7 +492,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
-			to.setLanguageId(null == langId || null == LabelDao.languages.get(langId) ? owner.getLanguageId() : langId.longValue());
+			to.setLanguageId(null == langId || null == LabelDao.getLocale(langId) ? owner.getLanguageId() : langId.longValue());
 			to.setOwnerId(owner.getId());
 			to.setAddress(new Address());
 			to.getAddress().setEmail(email);

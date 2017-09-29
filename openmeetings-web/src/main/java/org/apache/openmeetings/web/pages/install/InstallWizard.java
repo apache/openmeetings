@@ -838,7 +838,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super(id);
 
 			List<SelectOption> list = new ArrayList<>();
-			for (Map.Entry<Long, Locale> me : LabelDao.languages.entrySet()) {
+			for (Map.Entry<Long, Locale> me : LabelDao.getLanguages()) {
 				SelectOption op = new SelectOption(me.getKey().toString(), me.getValue().getDisplayName());
 				if (getSession().getLocale().equals(me.getValue())) {
 					option = op;
