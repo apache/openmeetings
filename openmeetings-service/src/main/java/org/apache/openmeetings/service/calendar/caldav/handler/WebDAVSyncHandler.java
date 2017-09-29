@@ -43,7 +43,7 @@ import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
 import static org.apache.jackrabbit.webdav.DavServletResponse.SC_FORBIDDEN;
 import static org.apache.jackrabbit.webdav.DavServletResponse.SC_PRECONDITION_FAILED;
 import static org.apache.jackrabbit.webdav.DavServletResponse.SC_NOT_FOUND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 /**
  * Class used to sync events using WebDAV-Sync defined in RFC 6578.
@@ -52,7 +52,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
  * modified or deleted.
  */
 public class WebDAVSyncHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(WebDAVSyncHandler.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WebDAVSyncHandler.class, getWebAppRootKey());
 
 	public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
 			SyncReportInfo.NAMESPACE);

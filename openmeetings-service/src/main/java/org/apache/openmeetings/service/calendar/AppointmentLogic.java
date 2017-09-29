@@ -22,7 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,7 +51,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AppointmentLogic {
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentLogic.class, getWebAppRootKey());
 
 	@Autowired
 	private AppointmentDao appointmentDao;

@@ -18,24 +18,25 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class CryptProvider {
-	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, getWebAppRootKey());
 	private static volatile ICrypt crypt;
 
 	public static ICrypt get() {
 		if (crypt == null) {
 			synchronized (CryptProvider.class) {
 				if (crypt == null) {
+					String clazz = getConfigKeyCryptClassName();
 					try {
-						log.debug("getInstanceOfCrypt:: configKeyCryptClassName: " + configKeyCryptClassName);
+						log.debug("getInstanceOfCrypt:: configKeyCryptClassName: {}", clazz);
 
-						crypt = configKeyCryptClassName == null ? null : (ICrypt) Class.forName(configKeyCryptClassName).newInstance();
+						crypt = clazz == null ? null : (ICrypt) Class.forName(clazz).newInstance();
 					} catch (Exception err) {
 						log.error("[getInstanceOfCrypt]", err);
 					}

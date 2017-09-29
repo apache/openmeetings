@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -101,7 +101,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, getWebAppRootKey());
 
 	private AppointmentForm form;
 	private DialogButton save = new DialogButton("save", Application.getString("144"));

@@ -22,7 +22,7 @@ import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ import net.fortuna.ical4j.model.Component;
  * <li>Deletion of events which are not in the response.</li>
  */
 public class EtagsHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(EtagsHandler.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(EtagsHandler.class, getWebAppRootKey());
 
 	public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, iCalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);

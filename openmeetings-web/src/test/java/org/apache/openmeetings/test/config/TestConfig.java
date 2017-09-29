@@ -19,7 +19,7 @@
 package org.apache.openmeetings.test.config;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestConfig extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestConfig.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestConfig.class, getWebAppRootKey());
 
 	@Autowired
 	private ConfigurationDao configurationDao;

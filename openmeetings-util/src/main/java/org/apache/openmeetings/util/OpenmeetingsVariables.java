@@ -108,19 +108,67 @@ public class OpenmeetingsVariables {
 	public static final int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 
-	public static String webAppRootKey = null;
-	public static String configKeyCryptClassName = null;
-	public static String wicketApplicationName = null;
+	private static String webAppRootKey = null;
+	private static String configKeyCryptClassName = null;
+	private static String wicketApplicationName = null;
 	private static String applicationName = null;
-	public static int EXT_PROCESS_TTL = 20;
-	public static JSONObject ROOM_SETTINGS = new JSONObject();
-	public static boolean initComplete = false;
+	private static int extProcessTtl = 20;
+	private static JSONObject roomSettings = new JSONObject();
+	private static boolean initComplete = false;
 
 	public static String getApplicationName() {
 		return applicationName;
 	}
 
-	public static void setApplicationName(String applicationName) {
-		OpenmeetingsVariables.applicationName = applicationName;
+	public static void setApplicationName(String name) {
+		applicationName = name;
+	}
+
+	public static JSONObject getRoomSettings() {
+		return new JSONObject(roomSettings.toString());
+	}
+
+	public static void setRoomSettings(JSONObject s) {
+		roomSettings = s;
+	}
+
+	public static String getConfigKeyCryptClassName() {
+		return configKeyCryptClassName;
+	}
+
+	public static void setConfigKeyCryptClassName(String name) {
+		configKeyCryptClassName = name;
+	}
+
+	public static int getExtProcessTtl() {
+		return extProcessTtl;
+	}
+
+	public static void setExtProcessTtl(int ttl) {
+		extProcessTtl = ttl;
+	}
+
+	public static boolean isInitComplete() {
+		return initComplete;
+	}
+
+	public static void setInitComplete(boolean complete) {
+		initComplete = complete;
+	}
+
+	public static String getWicketApplicationName() {
+		return wicketApplicationName;
+	}
+
+	public static void setWicketApplicationName(String name) {
+		wicketApplicationName = name;
+	}
+
+	public static String getWebAppRootKey() {
+		return webAppRootKey;
+	}
+
+	public static void setWebAppRootKey(String key) {
+		webAppRootKey = key;
 	}
 }

@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.test.rtmp;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class SimulateLoad extends Thread {
-	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoad.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoad.class, getWebAppRootKey());
 
 	private LoadTestRtmpClient loadTestRtmpClient;
 	private boolean testRunning = true;

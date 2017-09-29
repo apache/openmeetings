@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TimezoneUtil {
-	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, getWebAppRootKey());
 
 	@Autowired
 	private ConfigurationDao cfgDao;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -30,7 +30,7 @@ import org.slf4j.Logger;
  * passwords created using OM earlier than 3.1.0
  */
 class MD5Implementation {
-	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, getWebAppRootKey());
 
 	private static String hash(String str) {
 		String passPhrase = null;

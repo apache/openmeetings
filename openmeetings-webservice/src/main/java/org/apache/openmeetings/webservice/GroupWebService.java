@@ -20,7 +20,7 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/group")
 public class GroupWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(GroupWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(GroupWebService.class, getWebAppRootKey());
 
 	private static GroupDao getDao() {
 		return getBean(GroupDao.class);

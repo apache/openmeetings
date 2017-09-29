@@ -23,6 +23,7 @@ import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplicati
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -63,7 +64,6 @@ import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ImportHelper;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.validation.IValidator;
@@ -185,7 +185,7 @@ public class Admin {
 
 	private void process(String[] args) {
 		String ctxName = System.getProperty("context", "openmeetings");
-		OpenmeetingsVariables.wicketApplicationName = ctxName;
+		setWicketApplicationName(ctxName);
 		File home = new File(System.getenv("RED5_HOME"));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 

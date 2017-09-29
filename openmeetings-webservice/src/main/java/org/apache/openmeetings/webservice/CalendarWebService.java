@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
@@ -68,7 +68,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/calendar")
 public class CalendarWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarWebService.class, getWebAppRootKey());
 
 	private static AppointmentDao getDao() {
 		return getBean(AppointmentDao.class);

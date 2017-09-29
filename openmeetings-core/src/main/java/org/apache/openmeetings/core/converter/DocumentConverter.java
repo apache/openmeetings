@@ -21,7 +21,7 @@ package org.apache.openmeetings.core.converter;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 
@@ -42,7 +42,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DocumentConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(DocumentConverter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(DocumentConverter.class, getWebAppRootKey());
 
 	@Autowired
 	protected ConfigurationDao cfgDao;

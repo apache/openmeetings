@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.util.mail;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -60,7 +60,7 @@ import net.fortuna.ical4j.model.property.Version;
  *
  */
 public class IcalHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(IcalHandler.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(IcalHandler.class, getWebAppRootKey());
 	static {
 		System.setProperty("net.fortuna.ical4j.timezone.update.enabled", "false");
 	}

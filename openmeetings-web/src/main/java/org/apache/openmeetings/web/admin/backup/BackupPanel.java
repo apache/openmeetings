@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.backup;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -65,7 +65,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  *
  */
 public class BackupPanel extends AdminBasePanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, getWebAppRootKey());
 	private static final long serialVersionUID = 1L;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));

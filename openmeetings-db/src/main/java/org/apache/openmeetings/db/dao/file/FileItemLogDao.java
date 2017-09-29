@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class FileItemLogDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(FileItemLogDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileItemLogDao.class, getWebAppRootKey());
 	@PersistenceContext
 	private EntityManager em;
 

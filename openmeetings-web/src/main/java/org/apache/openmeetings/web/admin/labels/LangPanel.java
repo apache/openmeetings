@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +71,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  */
 public class LangPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, getWebAppRootKey());
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final LangForm langForm;
 	private FileUploadField fileUploadField;

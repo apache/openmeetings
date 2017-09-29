@@ -21,7 +21,8 @@ package org.apache.openmeetings.service.quartz.scheduler;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -37,13 +38,12 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CleanupJob extends AbstractJob {
-	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, webAppRootKey);
+	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, getWebAppRootKey());
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
 	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour
@@ -74,7 +74,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanTestSetup() {
 		log.debug("CleanupJob.cleanTestSetup");
-		if (!OpenmeetingsVariables.initComplete) {
+		if (!isInitComplete()) {
 			return;
 		}
 		try {
@@ -107,7 +107,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanRoomFiles() {
 		log.debug("CleanupJob.cleanRoomFiles");
-		if (!OpenmeetingsVariables.initComplete) {
+		if (!isInitComplete()) {
 			return;
 		}
 		try {
@@ -148,7 +148,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanSessions() {
 		log.trace("CleanupJob.cleanSessions");
-		if (!OpenmeetingsVariables.initComplete) {
+		if (!isInitComplete()) {
 			return;
 		}
 		try {
@@ -175,7 +175,7 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanExpiredResetHash() {
 		log.debug("CleanupJob.cleanExpiredResetHash");
-		if (!OpenmeetingsVariables.initComplete) {
+		if (!isInitComplete()) {
 			return;
 		}
 		List<User> users = userDao.getByExpiredHash(resetHashTtl);

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +33,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class AuthLevelUtil {
-	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelUtil.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelUtil.class, getWebAppRootKey());
 
 	private static boolean check(Set<User.Right> rights, User.Right level) {
 		boolean result = rights.contains(level);

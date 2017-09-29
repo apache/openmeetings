@@ -23,7 +23,7 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -85,7 +85,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
  */
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(UserForm.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserForm.class, getWebAppRootKey());
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;

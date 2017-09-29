@@ -19,7 +19,7 @@
 package org.apache.openmeetings.service.room;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +63,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InvitationManager implements IInvitationManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, getWebAppRootKey());
 
 	@Autowired
 	private InvitationDao invitationDao;

@@ -22,7 +22,7 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
@@ -66,7 +66,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class RegisterDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, getWebAppRootKey());
 	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString("lbl.cancel"));
 	private DialogButton registerBtn = new DialogButton("register", Application.getString("121")) {
 		private static final long serialVersionUID = 1L;

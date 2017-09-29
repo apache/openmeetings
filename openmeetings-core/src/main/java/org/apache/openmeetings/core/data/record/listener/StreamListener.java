@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.listener;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
 
@@ -37,7 +37,7 @@ import org.red5.server.net.rtmp.event.VideoData;
 import org.slf4j.Logger;
 
 public class StreamListener implements IStreamListener {
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamListener.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamListener.class, getWebAppRootKey());
 
 	private final BaseStreamWriter streamWriter;
 

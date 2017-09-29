@@ -23,7 +23,7 @@ package org.apache.openmeetings.test;
  * Intern, SETLabs, Infosys Technologies Ltd. May 2004 - Jul 2004
  * Ecole des Mines de Nantes, France
  */
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -57,7 +57,7 @@ import org.slf4j.Logger;
  */
 public class EditorPaneLinkDetector extends JEditorPane {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(EditorPaneLinkDetector.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(EditorPaneLinkDetector.class, getWebAppRootKey());
 
 	/**
 	 * Creates a <code>EditorPaneLinkDetector</code>.

@@ -22,7 +22,7 @@ import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
@@ -45,7 +45,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
@@ -64,9 +63,7 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.util.OmException;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.webservice.error.ServiceException;
-import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.IValidator;
@@ -90,7 +87,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
 public class UserWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, getWebAppRootKey());
 
 	/**
 	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
@@ -417,8 +414,7 @@ public class UserWebService extends BaseWebService {
 	@Path("/count/{roomid}")
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
-			IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
-			return new ServiceResult("" + app.getOmRoomClients(roomId).size(), Type.SUCCESS);
+			return new ServiceResult(String.valueOf(getApp().getOmRoomClients(roomId).size()), Type.SUCCESS);
 		}
 		return NO_PERMISSION;
 	}

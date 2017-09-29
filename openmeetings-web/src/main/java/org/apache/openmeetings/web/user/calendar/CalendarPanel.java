@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
@@ -70,7 +70,7 @@ import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class CalendarPanel extends UserBasePanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, getWebAppRootKey());
 	private static final long serialVersionUID = 1L;
 	private static final String javaScriptMarkup = "setCalendarHeight();";
 	private final String javaScriptAddDatepicker;

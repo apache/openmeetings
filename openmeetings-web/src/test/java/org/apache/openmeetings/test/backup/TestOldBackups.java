@@ -19,7 +19,7 @@
 package org.apache.openmeetings.test.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestOldBackups extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, getWebAppRootKey());
 
 	@Autowired
 	private BackupImport backupController;

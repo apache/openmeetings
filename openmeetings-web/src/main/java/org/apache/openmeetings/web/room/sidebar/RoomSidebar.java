@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -74,7 +74,7 @@ import com.googlecode.wicket.kendo.ui.widget.tabs.TabListModel;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, getWebAppRootKey());
 	public static final String FUNC_TOGGLE_RIGHT = "toggleRight";
 	public static final String FUNC_TOGGLE_ACTIVITY = "toggleActivity";
 	public static final String FUNC_ACTION = "roomAction";

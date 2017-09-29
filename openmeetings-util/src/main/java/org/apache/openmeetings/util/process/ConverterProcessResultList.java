@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.util.process;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.LinkedHashMap;
@@ -35,7 +35,7 @@ import org.slf4j.Logger;
  *
  */
 public class ConverterProcessResultList {
-	private static final Logger log = getLogger(ConverterProcessResultList.class, webAppRootKey);
+	private static final Logger log = getLogger(ConverterProcessResultList.class, getWebAppRootKey());
 
 	private Map<String, ConverterProcessResult> jobs = new LinkedHashMap<>();
 

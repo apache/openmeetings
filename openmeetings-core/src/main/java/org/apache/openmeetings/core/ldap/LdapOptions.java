@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.ldap;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Properties;
 
@@ -31,7 +31,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class LdapOptions {
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapOptions.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapOptions.class, getWebAppRootKey());
 	private final static String EMPTY_FORMAT = "%s";
 	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
 	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";

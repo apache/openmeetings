@@ -21,8 +21,8 @@ package org.apache.openmeetings.service.mail;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
@@ -42,15 +42,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EmailManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(EmailManager.class, getWebAppRootKey());
 
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private MailHandler mailHandler;
 
+	private static IApplication getApp() {
+		return ((IApplication)Application.get(getWicketApplicationName()));
+	}
+
 	public static String getString(String key) {
-		return ((IApplication)Application.get(wicketApplicationName)).getOmString(key);
+		return getApp().getOmString(key);
 	}
 
 	/**
@@ -68,7 +72,7 @@ public class EmailManager {
 		boolean sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 
 		ensureApplication(langId != null ? langId : cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
-		String link = ((IApplication)Application.get(wicketApplicationName)).urlForActivatePage(new PageParameters().add("u",  hash));
+		String link = getApp().urlForActivatePage(new PageParameters().add("u",  hash));
 
 		if (sendEmailAtRegister) {
 			mailHandler.send(email, getString("512")

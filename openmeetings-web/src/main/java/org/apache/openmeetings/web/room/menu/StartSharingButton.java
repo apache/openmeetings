@@ -24,7 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
@@ -56,7 +56,7 @@ import com.github.openjson.JSONObject;
 
 public class StartSharingButton extends OmButton {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingButton.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingButton.class, getWebAppRootKey());
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownloadBehavior download;

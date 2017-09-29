@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.pages.auth;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.DataOutputStream;
@@ -73,7 +73,7 @@ import com.github.openjson.JSONObject;
 
 public class SignInPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(SignInPage.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SignInPage.class, getWebAppRootKey());
 	private SignInDialog d;
 	private KickMessageDialog m;
 

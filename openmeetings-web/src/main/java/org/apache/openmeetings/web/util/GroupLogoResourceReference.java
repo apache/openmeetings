@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.util;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 
 public class GroupLogoResourceReference extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = getLogger(GroupLogoResourceReference.class, webAppRootKey);
+	private static final Logger log = getLogger(GroupLogoResourceReference.class, getWebAppRootKey());
 
 	public GroupLogoResourceReference() {
 		super(GroupLogoResourceReference.class, "grouplogo");

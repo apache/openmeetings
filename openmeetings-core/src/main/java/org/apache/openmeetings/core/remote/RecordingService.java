@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
 import java.util.Map;
@@ -66,7 +66,7 @@ import com.github.openjson.JSONObject;
 
 @Service
 public class RecordingService implements IPendingServiceCallback {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingService.class, getWebAppRootKey());
 
 	/**
 	 * Stores a reference to all available listeners we need that reference, as the internal references stored with the

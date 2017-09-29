@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Map;
 
@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 
 public class StrongPasswordValidator implements IValidator<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(StrongPasswordValidator.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StrongPasswordValidator.class, getWebAppRootKey());
 	private final int minLength;
 	private final boolean web;
 	private User u;

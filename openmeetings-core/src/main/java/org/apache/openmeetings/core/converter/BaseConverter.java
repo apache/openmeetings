@@ -26,7 +26,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +57,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, getWebAppRootKey());
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 	public final static String EXEC_EXT = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") < 0 ? "" : ".exe";
 

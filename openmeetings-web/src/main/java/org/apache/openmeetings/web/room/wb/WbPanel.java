@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.room.wb;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
@@ -93,7 +93,7 @@ import com.github.openjson.JSONTokener;
 
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(WbPanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WbPanel.class, getWebAppRootKey());
 	private static final int UPLOAD_WB_LEFT = 0;
 	private static final int UPLOAD_WB_TOP = 0;
 	private static final int DEFAULT_WIDTH = 640;

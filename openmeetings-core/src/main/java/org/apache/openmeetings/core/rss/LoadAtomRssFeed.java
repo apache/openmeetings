@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.rss;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -28,7 +28,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class LoadAtomRssFeed {
-	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, getWebAppRootKey());
 
 	public static HttpURLConnection getFeedConnection(String _url) throws IOException {
 		log.debug("getFeedConnection:: " + _url);

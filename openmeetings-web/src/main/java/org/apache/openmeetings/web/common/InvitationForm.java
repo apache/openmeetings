@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.CalendarHelper.getDate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
@@ -68,7 +68,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public abstract class InvitationForm extends Form<Invitation> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationForm.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationForm.class, getWebAppRootKey());
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final PasswordTextField passwd;
 	private final DropDownChoice<String> timeZoneId = new DropDownChoice<>("timeZoneId", Model.of((String)null), AVAILABLE_TIMEZONES);

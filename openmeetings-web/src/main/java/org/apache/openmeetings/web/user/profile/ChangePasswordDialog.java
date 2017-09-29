@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -45,7 +45,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ChangePasswordDialog.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ChangePasswordDialog.class, getWebAppRootKey());
 	private final DialogButton update = new DialogButton("update", Model.of(Application.getString("327"))) {
 		private static final long serialVersionUID = 1L;
 

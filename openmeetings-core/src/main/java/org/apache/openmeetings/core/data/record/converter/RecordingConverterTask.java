@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.converter;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.red5.logging.Red5LoggerFactory;
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RecordingConverterTask {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingConverterTask.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingConverterTask.class, getWebAppRootKey());
 
 	@Autowired
 	private TaskExecutor taskExecutor;

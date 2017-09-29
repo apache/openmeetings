@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.rtmp;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class SimulateLoadTest {
-	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoadTest.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SimulateLoadTest.class, getWebAppRootKey());
 	private int numberOfClients = 25;
 	private List<SimulateLoad> simulateLoadList = new ArrayList<>();
 

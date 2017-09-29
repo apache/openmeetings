@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
@@ -40,7 +40,7 @@ import org.slf4j.Logger;
 
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(UploadableImagePanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UploadableImagePanel.class, getWebAppRootKey());
 	private final FileUploadField fileUploadField = new FileUploadField("image", new IModel<List<FileUpload>>() {
 		private static final long serialVersionUID = 1L;
 

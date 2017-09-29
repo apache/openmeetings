@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWebAppRootKey;
+
 import javax.servlet.ServletContextEvent;
 
 import org.red5.logging.ContextLoggingListener;
@@ -31,9 +34,9 @@ public class OMContextListener extends ContextLoggingListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		OpenmeetingsVariables.webAppRootKey = pathToName(event);
-		System.setProperty("current_openmeetings_context_name", OpenmeetingsVariables.webAppRootKey);
-		System.setProperty("webapp.contextPath", String.format("/%s", OpenmeetingsVariables.webAppRootKey));
+		setWebAppRootKey(pathToName(event));
+		System.setProperty("current_openmeetings_context_name", getWebAppRootKey());
+		System.setProperty("webapp.contextPath", String.format("/%s", getWebAppRootKey()));
 		System.setProperty("logback.configurationFile", "logback-config.xml");
 		super.contextInitialized(event);
 	}

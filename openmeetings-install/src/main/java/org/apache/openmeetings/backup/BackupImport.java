@@ -95,7 +95,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -193,7 +193,7 @@ import org.xml.sax.InputSource;
 
 @Component
 public class BackupImport {
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, getWebAppRootKey());
 	private static final String LDAP_EXT_TYPE = "LDAP";
 	private static final Properties countries = new Properties();
 	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();

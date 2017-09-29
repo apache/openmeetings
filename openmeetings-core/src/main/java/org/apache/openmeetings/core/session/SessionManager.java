@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.session;
 
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Collection;
 import java.util.Date;
@@ -49,7 +49,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SessionManager implements ISessionManager {
-	protected static final Logger log = Red5LoggerFactory.getLogger(SessionManager.class, webAppRootKey);
+	protected static final Logger log = Red5LoggerFactory.getLogger(SessionManager.class, getWebAppRootKey());
 
 	private static Map<String, StreamClient> getClients() {
 		return getApp().getStreamClients();

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
 
 import java.util.Date;
@@ -33,7 +33,7 @@ import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 
 public class StreamVideoWriter extends BaseStreamWriter {
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamVideoWriter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamVideoWriter.class, getWebAppRootKey());
 	private Date startedSessionScreenTimeDate = null;
 
 	public StreamVideoWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,

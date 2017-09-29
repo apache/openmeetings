@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.derby;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 
@@ -36,7 +36,7 @@ import org.slf4j.Logger;
  *
  */
 public class PrepareSystemFiles {
-	private static final Logger log = Red5LoggerFactory.getLogger(PrepareSystemFiles.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(PrepareSystemFiles.class, getWebAppRootKey());
 
 	public static void main(String... args) {
 		try {

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.documents;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +35,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryChartLoader {
-	private static final Logger log = Red5LoggerFactory.getLogger(LibraryChartLoader.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LibraryChartLoader.class, getWebAppRootKey());
 
 	private static final String fileExt = ".xchart";
 

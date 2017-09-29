@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
@@ -80,7 +80,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class SignInDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(SignInDialog.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SignInDialog.class, getWebAppRootKey());
 	private Form<String> form;
 	private DialogButton loginBtn = new DialogButton("login", Application.getString("112")) {
 		private static final long serialVersionUID = 1L;

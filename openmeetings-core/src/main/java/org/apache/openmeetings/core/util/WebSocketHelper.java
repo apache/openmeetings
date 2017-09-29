@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 
 import java.io.IOException;
@@ -41,7 +41,6 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
@@ -58,7 +57,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class WebSocketHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(WebSocketHelper.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(WebSocketHelper.class, getWebAppRootKey());
 	public static final String ID_TAB_PREFIX = "chatTab-";
 	public static final String ID_ALL = ID_TAB_PREFIX + "all";
 	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
@@ -197,7 +196,7 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageAll(m));
 		}
-		Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
+		Application app = (Application)getApp();
 		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 		Executor executor = settings.getWebSocketPushMessageExecutor();
@@ -213,8 +212,7 @@ public class WebSocketHelper {
 	}
 
 	protected static void publish(IClusterWsMessage m) {
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		iapp.publishWsTopic(m);
+		getApp().publishWsTopic(m);
 	}
 
 	protected static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
@@ -237,7 +235,7 @@ public class WebSocketHelper {
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
-		Application app = Application.get(OpenmeetingsVariables.wicketApplicationName);
+		Application app = (Application)getApp();
 		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 		Executor executor = settings.getWebSocketPushMessageExecutor();

@@ -25,7 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -72,7 +72,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserManager implements IUserManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, getWebAppRootKey());
 
 	@Autowired
 	private SessiondataDao sessionDao;

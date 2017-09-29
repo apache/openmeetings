@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.room.activities;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -61,7 +61,7 @@ import org.slf4j.Logger;
 
 public class ActivitiesPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ActivitiesPanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ActivitiesPanel.class, getWebAppRootKey());
 	private static final String PARAM_ID = "id";
 	private static final String ACTION = "action";
 	private static final String PARAM_ROOM_ID = "roomid";

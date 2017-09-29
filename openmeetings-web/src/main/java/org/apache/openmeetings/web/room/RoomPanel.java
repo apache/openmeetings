@@ -19,7 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -109,7 +109,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, getWebAppRootKey());
 	private static final String ACCESS_DENIED_ID = "access-denied";
 	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {

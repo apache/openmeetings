@@ -19,7 +19,7 @@
 package org.apache.openmeetings.util.process;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ProcessHelper {
-	public static final Logger log = Red5LoggerFactory.getLogger(ProcessHelper.class, OpenmeetingsVariables.webAppRootKey);
+	public static final Logger log = Red5LoggerFactory.getLogger(ProcessHelper.class, OpenmeetingsVariables.getWebAppRootKey());
 
 	public static ConverterProcessResult executeScriptWindows(String process, String[] argv) {
 		try {
@@ -94,7 +94,7 @@ public class ProcessHelper {
 			// 20-minute timeout for command execution
 			// FFMPEG conversion of Recordings may take a real long time until
 			// its finished
-			proc.waitFor(EXT_PROCESS_TTL, TimeUnit.MINUTES);
+			proc.waitFor(getExtProcessTtl(), TimeUnit.MINUTES);
 
 			res.setExitCode(proc.exitValue());
 			res.setOut(IOUtils.toString(proc.getInputStream(), UTF_8));

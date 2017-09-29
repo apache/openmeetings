@@ -21,13 +21,13 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
 
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
@@ -51,7 +51,7 @@ import com.github.openjson.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private final static Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, webAppRootKey);
+	private final static Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, getWebAppRootKey());
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
@@ -123,7 +123,7 @@ public class SwfPanel extends BasePanel {
 				URL url = new URL(cp.getCodebase());
 				String path = url.getPath();
 				path = path.substring(1, path.indexOf('/', 2) + 1);
-				JSONObject gs = ROOM_SETTINGS;
+				JSONObject gs = OpenmeetingsVariables.getRoomSettings();
 				s.put("flashProtocol", gs.getBoolean(FLASH_SECURE) ? "rtmps" : "rtmp")
 						.put("flashPort", gs.getBoolean(FLASH_SECURE) ? gs.getString(FLASH_SSL_PORT) : gs.getString(FLASH_PORT))
 						.put("proxy", gs.getBoolean(FLASH_NATIVE_SSL) ? "best" : "none")

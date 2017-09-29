@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.List;
@@ -58,7 +58,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/record")
 public class RecordingWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingWebService.class, getWebAppRootKey());
 
 	private static RecordingDao getDao() {
 		return getBean(RecordingDao.class);

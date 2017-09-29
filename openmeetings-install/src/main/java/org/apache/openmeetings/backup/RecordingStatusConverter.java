@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
@@ -28,7 +28,7 @@ import org.simpleframework.xml.stream.OutputNode;
 import org.slf4j.Logger;
 
 public class RecordingStatusConverter extends OmConverter<Recording.Status> {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingStatusConverter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingStatusConverter.class, getWebAppRootKey());
 	private static final String PROCESSING = "PROCESSING";
 	public RecordingStatusConverter() {}
 

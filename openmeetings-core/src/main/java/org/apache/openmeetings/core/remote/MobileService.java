@@ -25,7 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
 import java.io.Serializable;
@@ -72,7 +72,7 @@ import org.springframework.stereotype.Service;
 
 @Service("mobile.service")
 public class MobileService {
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, getWebAppRootKey());
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired

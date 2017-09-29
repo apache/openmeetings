@@ -23,8 +23,10 @@ import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
@@ -145,7 +147,7 @@ import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 
 public class Application extends AuthenticatedWebApplication implements IApplication {
-	private static final Logger log = getLogger(Application.class, webAppRootKey);
+	private static final Logger log = getLogger(Application.class, getWebAppRootKey());
 	private static boolean isInstalled;
 	private final static String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
 	private final static String UID_BY_SID_KEY = "UID_BY_SID_KEY";
@@ -172,7 +174,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	@Override
 	protected void init() {
-		wicketApplicationName = super.getName();
+		setWicketApplicationName(super.getName());
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
@@ -339,7 +341,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static Application get() {
-		return (Application)org.apache.wicket.Application.get(wicketApplicationName);
+		return (Application)org.apache.wicket.Application.get(getWicketApplicationName());
 	}
 
 	public static DashboardContext getDashboardContext() {
@@ -741,7 +743,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
 		if (!isInstalled) {
-			if (OpenmeetingsVariables.initComplete) {
+			if (isInitComplete()) {
 				//TODO can also check crypt class here
 				isInstalled = result = get()._getBean(UserDao.class).count() > 0;
 			}
@@ -750,7 +752,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public static <T> T getBean(Class<T> clazz) {
-		if (OpenmeetingsVariables.initComplete) {
+		if (isInitComplete()) {
 			if (!isInstalled()) {
 				throw new RestartResponseException(InstallWizardPage.class);
 			}

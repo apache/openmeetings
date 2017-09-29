@@ -19,7 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.io.InputStream;
@@ -72,7 +72,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/file")
 public class FileWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileWebService.class, getWebAppRootKey());
 
 	/**
 	 * deletes files or folders based on it id

@@ -19,7 +19,7 @@
 package org.apache.openmeetings.test.asf;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -34,7 +34,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class AsfCopyRightReplace {
-	private static final Logger log = Red5LoggerFactory.getLogger(AsfCopyRightReplace.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AsfCopyRightReplace.class, getWebAppRootKey());
 
 	private static String asf_copyright = "/*\n"
 			+ " * Licensed to the Apache Software Foundation (ASF) under one\n"

@@ -21,7 +21,7 @@ package org.apache.openmeetings.core.converter;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InterviewConverter extends BaseConverter implements IRecordingConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(InterviewConverter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InterviewConverter.class, getWebAppRootKey());
 	private static class ReConverterParams {
 		private int leftSideLoud = 1;
 		private int rightSideLoud = 1;

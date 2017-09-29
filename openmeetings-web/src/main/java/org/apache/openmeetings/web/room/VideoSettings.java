@@ -21,8 +21,7 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
@@ -35,6 +34,7 @@ import java.util.Set;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -51,7 +51,7 @@ import com.hazelcast.core.Member;
 
 public class VideoSettings extends Panel {
 	private final static long serialVersionUID = 1L;
-	private final static Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, webAppRootKey);
+	private final static Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, getWebAppRootKey());
 	private final static ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
 	public final static String URL = "url";
 	public final static String FALLBACK = "fallback";
@@ -72,8 +72,8 @@ public class VideoSettings extends Panel {
 
 	public static JSONObject getInitJson(ExtendedClientProperties cp, Long roomId, String sid) {
 		String scope = roomId == null ? OmFileHelper.HIBERNATE : "" + roomId;
-		JSONObject gs = ROOM_SETTINGS;
-		JSONObject s = new JSONObject(ROOM_SETTINGS.toString())
+		JSONObject gs = OpenmeetingsVariables.getRoomSettings();
+		JSONObject s = new JSONObject(gs.toString())
 				.put("sid", sid)
 				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
 		try {

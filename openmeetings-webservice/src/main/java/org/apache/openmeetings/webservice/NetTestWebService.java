@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,7 +43,7 @@ import org.springframework.stereotype.Service;
 @Service("netTestWebService")
 @Path("/networktest")
 public class NetTestWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, getWebAppRootKey());
 	enum TestType {
 		UNKNOWN,
 		PING,

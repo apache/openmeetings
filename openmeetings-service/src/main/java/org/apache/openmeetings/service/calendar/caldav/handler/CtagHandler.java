@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 
 import java.io.IOException;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
 
 /**
@@ -48,7 +48,7 @@ import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
  * @see CalendarHandler
  */
 public class CtagHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(CtagHandler.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(CtagHandler.class, getWebAppRootKey());
 
 	public static final Namespace NAMESPACE_CALSERVER = Namespace.getNamespace("cs", "http://calendarserver.org/ns/");
 	public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag", NAMESPACE_CALSERVER);

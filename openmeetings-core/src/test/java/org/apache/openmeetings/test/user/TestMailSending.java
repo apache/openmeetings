@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.user;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertTrue;
 
 import javax.mail.Message;
@@ -37,7 +37,7 @@ import org.slf4j.Logger;
  *
  */
 public class TestMailSending {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestMailSending.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestMailSending.class, getWebAppRootKey());
 
 	//Example GMail email server data
 	private String smtpServer = "smtp.gmail.com";

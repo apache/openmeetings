@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.dao.room;
 
 import static org.apache.openmeetings.util.CalendarHelper.getZoneId;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class InvitationDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDao.class, getWebAppRootKey());
 
 	@PersistenceContext
 	private EntityManager em;

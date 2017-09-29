@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.PrintWriter;
 
@@ -29,7 +29,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class ErrorMessagePanel extends Panel {
-	private static final Logger log = Red5LoggerFactory.getLogger(ErrorMessagePanel.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ErrorMessagePanel.class, getWebAppRootKey());
 	private static final long serialVersionUID = 1L;
 
 	public ErrorMessagePanel(String id, String msg, Throwable err) {

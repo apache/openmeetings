@@ -40,7 +40,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENAB
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_ECHO_PATH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_FPS;
@@ -51,12 +50,15 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ROOM_SETTINGS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,7 +109,7 @@ import com.github.openjson.JSONObject;
 @Repository
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
-	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, getWebAppRootKey());
 	public final static String[] searchFields = {"key", "value"};
 
 	@PersistenceContext
@@ -301,7 +303,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				reloadRoomSettings();
 				break;
 			case CONFIG_CRYPT:
-				configKeyCryptClassName = value;
+				setConfigKeyCryptClassName(value);
 				CryptProvider.reset();
 				break;
 			case CONFIG_APPLICATION_NAME:
@@ -309,7 +311,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				break;
 			case CONFIG_HEADER_XFRAME:
 			{
-				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+				IApplication iapp = (IApplication)Application.get(getWicketApplicationName());
 				if (iapp != null) {
 					iapp.setXFrameOptions(value);
 				}
@@ -317,14 +319,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				break;
 			case CONFIG_HEADER_CSP:
 			{
-				IApplication iapp = (IApplication)Application.get(wicketApplicationName);
+				IApplication iapp = (IApplication)Application.get(getWicketApplicationName());
 				if (iapp != null) {
 					iapp.setContentSecurityPolicy(value);
 				}
 			}
 				break;
 			case CONFIG_EXT_PROCESS_TTL:
-				EXT_PROCESS_TTL = Integer.parseInt(value);
+				setExtProcessTtl(Integer.parseInt(value));
 				break;
 		}
 		return entity;
@@ -352,13 +354,13 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	public String getCryptKey() {
-		if (configKeyCryptClassName == null) {
+		if (getConfigKeyCryptClassName() == null) {
 			String cryptClass = getString(CONFIG_CRYPT, null);
 			if (cryptClass != null) {
-				configKeyCryptClassName = cryptClass;
+				setConfigKeyCryptClassName(cryptClass);
 			}
 		}
-		return configKeyCryptClassName;
+		return getConfigKeyCryptClassName();
 	}
 
 	public JSONObject reloadRoomSettings() {
@@ -367,7 +369,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			try (InputStream is = new FileInputStream(new File(new File(OmFileHelper.getRootDir(), "conf"), "red5.properties"))) {
 				props.load(is);
 			}
-			ROOM_SETTINGS = new JSONObject()
+			setRoomSettings(new JSONObject()
 				.put(FLASH_SECURE, getBool(CONFIG_FLASH_SECURE, false))
 				.put(FLASH_NATIVE_SSL, "best".equals(getString(CONFIG_FLASH_SECURE_PROXY, "none")))
 				.put(FLASH_PORT, props.getProperty("rtmp.port"))
@@ -383,10 +385,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 						.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
 						.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
 						)
-				;
+				);
 		} catch (Exception e) {
 			log.error("Unexpected exception while reloading room settings: ", e);
 		}
-		return ROOM_SETTINGS;
+		return getRoomSettings();
 	}
 }

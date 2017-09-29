@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -47,7 +47,7 @@ import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
 
 public class ProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ProfileForm.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ProfileForm.class, getWebAppRootKey());
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import javax.jws.WebMethod;
@@ -54,7 +54,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/error")
 public class ErrorWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(ErrorWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ErrorWebService.class, getWebAppRootKey());
 
 	/**
 	 * loads an Error-Object. If a Method returns a negative Result, its an

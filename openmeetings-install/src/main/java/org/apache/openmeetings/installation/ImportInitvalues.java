@@ -85,12 +85,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -122,7 +122,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ImportInitvalues {
-	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, getWebAppRootKey());
 
 	@Autowired
 	private ConfigurationDao cfgDao;
@@ -317,7 +317,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_FLASH_ECHO_PATH, "128", Configuration.Type.number, "Specifies the echo path length (in milliseconds). A longer echo path means better echo cancellation but also introduces longer delays and requires more processing power. The default value is 128; the only other possible value is 256. To disable AEC please specify 0.", "4.0.0");
 		addCfg(list, CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN, Configuration.Type.string, "Value for 'X-Frame-Options' header (default: DENY), more info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options", "3.3.0");
 		addCfg(list, CONFIG_HEADER_CSP, HEADER_CSP_SELF, Configuration.Type.string, "Value for 'Content-Security-Policy' header (default: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval';), have to be modified to enable Google analytics site: https://content-security-policy.com/", "3.3.0");
-		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(EXT_PROCESS_TTL), Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", EXT_PROCESS_TTL), "3.3.0");
+		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(getExtProcessTtl()), Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", getExtProcessTtl()), "3.3.0");
 		addCfg(list, CONFIG_MYROOMS_ENABLED, String.valueOf(true), Configuration.Type.bool, "Users are allowed to create personal rooms", "3.3.2");
 		addCfg(list, CONFIG_REMINDER_MESSAGE, null, Configuration.Type.string, "Reminder message to notify about upcoming appointment, generated message will be used if not set", "2.0.x");
 		return list;

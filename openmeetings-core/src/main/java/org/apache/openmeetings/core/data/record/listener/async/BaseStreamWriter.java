@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.data.record.listener.async;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +43,7 @@ import org.red5.server.util.ScopeUtils;
 import org.slf4j.Logger;
 
 public abstract class BaseStreamWriter implements Runnable {
-	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, getWebAppRootKey());
 	private final static int MINUTE_MULTIPLIER = 60 * 1000;
 	public final static int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
 	protected int startTimeStamp = -1;

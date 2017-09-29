@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.update;
 
@@ -31,7 +31,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class RoomBroadcaster {
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, getWebAppRootKey());
 
 	public static StreamClient getClient(String publicSid) {
 		return getBean(ISessionManager.class).get(publicSid);

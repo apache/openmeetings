@@ -18,8 +18,9 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
@@ -31,7 +32,6 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.OMContextListener;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.Application;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ThreadContext;
@@ -50,7 +50,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class ApplicationHelper {
-	private static final Logger log = getLogger(ApplicationHelper.class, webAppRootKey);
+	private static final Logger log = getLogger(ApplicationHelper.class, getWebAppRootKey());
 	private static final Object SYNC_OBJ = new Object();
 
 	public static WicketTester getWicketTester() {
@@ -61,7 +61,7 @@ public class ApplicationHelper {
 		WebApplication app = (WebApplication)ensureApplication(langId);
 
 		WicketTester tester = new WicketTester(app, app.getServletContext());
-		OpenmeetingsVariables.initComplete = true;
+		setInitComplete(true);
 		return tester;
 	}
 
@@ -89,7 +89,7 @@ public class ApplicationHelper {
 			if (Application.exists()) {
 				return (IApplication)Application.get();
 			}
-			WebApplication app = (WebApplication)Application.get(wicketApplicationName);
+			WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
 			LabelDao.initLanguageMap();
 			if (app == null) {
 				try {
@@ -99,7 +99,7 @@ public class ApplicationHelper {
 					return null;
 				}
 				app.setServletContext(new MockServletContext(app, null));
-				app.setName(wicketApplicationName);
+				app.setName(getWicketApplicationName());
 				ServletContext sc = app.getServletContext();
 				OMContextListener omcl = new OMContextListener();
 				omcl.contextInitialized(new ServletContextEvent(sc));
@@ -114,7 +114,7 @@ public class ApplicationHelper {
 			} else {
 				ThreadContext.setApplication(app);
 			}
-			return (IApplication)Application.get(wicketApplicationName);
+			return (IApplication)Application.get(getWicketApplicationName());
 		}
 	}
 
@@ -135,7 +135,7 @@ public class ApplicationHelper {
 	}
 
 	public static void destroyApplication() {
-		WebApplication app = (WebApplication)Application.get(wicketApplicationName);
+		WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
 		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
 		app.internalDestroy(); //need to be called to
 		if (ctx != null) {

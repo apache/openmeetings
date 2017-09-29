@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.red5.io.IoConstants.TYPE_AUDIO;
 import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
 
@@ -36,7 +36,7 @@ import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 
 public class StreamAudioWriter extends BaseStreamWriter {
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioWriter.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioWriter.class, getWebAppRootKey());
 
 	private int duration = 0;
 

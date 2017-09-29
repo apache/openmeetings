@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.test;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.configKeyCryptClassName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
@@ -60,7 +60,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	@Before
 	public void setUp() throws Exception {
-		wicketApplicationName = "openmeetings";
+		setWicketApplicationName("openmeetings");
 		cfgDao.getCryptKey();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
@@ -68,7 +68,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		} else {
 			log.info("Default scheme already created");
 		}
-		if (configKeyCryptClassName == null) {
+		if (getConfigKeyCryptClassName() == null) {
 			assertNotNull("Crypt class name should not be null", cfgDao.getCryptKey());
 		}
 	}

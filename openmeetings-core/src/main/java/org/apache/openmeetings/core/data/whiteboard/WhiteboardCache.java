@@ -18,16 +18,14 @@
  */
 package org.apache.openmeetings.core.data.whiteboard;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
-import org.apache.wicket.Application;
 
 import com.hazelcast.core.IMap;
 
@@ -39,8 +37,7 @@ import com.hazelcast.core.IMap;
  */
 public class WhiteboardCache {
 	private static IMap<Long, Whiteboards> getCache() {
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		return iapp.getWhiteboards();
+		return getApp().getWhiteboards();
 	}
 
 	public static boolean tryLock(Long roomId) {

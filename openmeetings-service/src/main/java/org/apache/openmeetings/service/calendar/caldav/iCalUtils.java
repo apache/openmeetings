@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.service.calendar.caldav;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.net.URI;
 import java.text.ParsePosition;
@@ -75,7 +75,7 @@ import net.fortuna.ical4j.model.property.Version;
  */
 @org.springframework.stereotype.Component
 public class iCalUtils {
-	private static final Logger log = Red5LoggerFactory.getLogger(iCalUtils.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(iCalUtils.class, getWebAppRootKey());
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
 	@Autowired

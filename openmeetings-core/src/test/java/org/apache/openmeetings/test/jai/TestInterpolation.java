@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.test.jai;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class TestInterpolation {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestInterpolation.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestInterpolation.class, getWebAppRootKey());
 
 	@Test
 	public void testInterpolate() {

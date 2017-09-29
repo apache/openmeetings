@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class RecordingMetaDeltaDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingMetaDeltaDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RecordingMetaDeltaDao.class, getWebAppRootKey());
 	@PersistenceContext
 	private EntityManager em;
 

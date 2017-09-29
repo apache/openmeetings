@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MainService implements IPendingServiceCallback {
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.getWebAppRootKey());
 
 	@Autowired
 	private AppointmentDao appointmentDao;

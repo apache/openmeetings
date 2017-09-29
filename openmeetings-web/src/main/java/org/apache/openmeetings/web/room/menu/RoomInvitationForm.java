@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 
@@ -54,7 +54,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class RoomInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomInvitationForm.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomInvitationForm.class, getWebAppRootKey());
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Long roomId;
 	private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");

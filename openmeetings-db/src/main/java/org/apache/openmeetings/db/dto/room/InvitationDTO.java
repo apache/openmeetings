@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvitationDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDTO.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDTO.class, getWebAppRootKey());
 	private static ThreadLocal<SimpleDateFormat> SDF = new ThreadLocal<SimpleDateFormat>() {
 		@Override
 		protected SimpleDateFormat initialValue() {

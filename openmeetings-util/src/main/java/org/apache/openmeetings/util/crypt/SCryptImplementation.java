@@ -19,7 +19,7 @@
 package org.apache.openmeetings.util.crypt;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -30,7 +30,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class SCryptImplementation implements ICrypt {
-	private static final Logger log = Red5LoggerFactory.getLogger(SCryptImplementation.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SCryptImplementation.class, getWebAppRootKey());
 	private static final String SECURE_RND_ALG = "SHA1PRNG";
 	private static final int COST = 1024 * 16;
 	private static final int KEY_LENGTH = 512;

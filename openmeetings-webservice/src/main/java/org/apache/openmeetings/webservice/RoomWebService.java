@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
@@ -58,10 +58,8 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
-import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -78,7 +76,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/room")
 public class RoomWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, getWebAppRootKey());
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -439,7 +437,7 @@ public class RoomWebService extends BaseWebService {
 		List<RoomCountDTO> roomBeans = new ArrayList<>();
 		try {
 			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				IApplication app = (IApplication)Application.get(OpenmeetingsVariables.wicketApplicationName);
+				IApplication app = getApp();
 				List<Room> rooms = getRoomDao().get(ids);
 
 				for (Room room : rooms) {

@@ -20,7 +20,7 @@ package org.apache.openmeetings.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.tika.metadata.TikaMetadataKeys.RESOURCE_NAME_KEY;
 import static org.apache.tika.mime.MediaType.application;
 
@@ -42,7 +42,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class StoredFile {
-	private static final Logger log = Red5LoggerFactory.getLogger(StoredFile.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(StoredFile.class, getWebAppRootKey());
 	private final static String MIME_AUDIO = "audio";
 	private final static String MIME_VIDEO = "video";
 	private final static String MIME_IMAGE = "image";

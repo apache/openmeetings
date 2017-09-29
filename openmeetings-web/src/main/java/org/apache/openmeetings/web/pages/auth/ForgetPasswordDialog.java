@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
@@ -62,7 +62,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
-	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, getWebAppRootKey());
 	private static final long serialVersionUID = 1L;
 	private final DialogButton send = new DialogButton("send", Application.getString("317"));
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));

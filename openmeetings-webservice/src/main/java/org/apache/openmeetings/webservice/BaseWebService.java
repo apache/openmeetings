@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
 import java.util.Set;
 
@@ -32,9 +32,12 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.wicket.Application;
 
 public abstract class BaseWebService {
+	static IApplication getApp() {
+		return (IApplication)Application.get(getWicketApplicationName());
+	}
+
 	static <T> T getBean(Class<T> clazz) {
-		IApplication iapp = (IApplication)Application.get(wicketApplicationName);
-		return iapp._getOmBean(clazz);
+		return getApp()._getOmBean(clazz);
 	}
 
 	static SessiondataDao getSessionDao() {

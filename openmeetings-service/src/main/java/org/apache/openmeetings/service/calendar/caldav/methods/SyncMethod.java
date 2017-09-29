@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.methods;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 
@@ -43,7 +43,7 @@ import org.w3c.dom.Document;
  * @see SyncReportInfo for Request Report to be given as argument
  */
 public class SyncMethod extends DavMethodBase {
-	private static final Logger log = Red5LoggerFactory.getLogger(ReportMethod.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(ReportMethod.class, getWebAppRootKey());
 
 	private MultiStatus multiStatus = null;
 	private String synctoken = null;

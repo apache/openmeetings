@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureUsersSearch extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureUsersSearch.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureUsersSearch.class, getWebAppRootKey());
 
 	@Autowired
 	private UserDao userDao;

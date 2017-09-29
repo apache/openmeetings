@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class UserDao implements IGroupAdminDataProviderDao<User> {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, getWebAppRootKey());
 
 	public final static String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
 

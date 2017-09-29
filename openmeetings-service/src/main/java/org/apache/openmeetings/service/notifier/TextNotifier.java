@@ -19,7 +19,7 @@
 package org.apache.openmeetings.service.notifier;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import javax.annotation.PostConstruct;
 
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TextNotifier implements INotifier {
-	private static final Logger log = Red5LoggerFactory.getLogger(TextNotifier.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(TextNotifier.class, getWebAppRootKey());
 	@Autowired
 	private NotifierService notifier;
 	@Autowired

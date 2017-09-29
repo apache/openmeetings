@@ -21,7 +21,7 @@ package org.apache.openmeetings.web.pages.install;
 import static org.apache.openmeetings.core.converter.BaseConverter.EXEC_EXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONE_SET;
 import static org.apache.wicket.validation.validator.RangeValidator.range;
@@ -98,7 +98,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, getWebAppRootKey());
 	private final IDynamicWizardStep welcomeStep;
 	private final IDynamicWizardStep dbStep;
 	private final ParamsStep1 paramsStep1;

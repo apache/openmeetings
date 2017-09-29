@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.dao.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class AppointmentDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDao.class, getWebAppRootKey());
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

@@ -21,7 +21,7 @@ package org.apache.openmeetings.core.data.file;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FileProcessor {
-	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, getWebAppRootKey());
 
 	//Spring loaded Beans
 	@Autowired

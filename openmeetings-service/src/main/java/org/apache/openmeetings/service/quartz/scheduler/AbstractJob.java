@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -28,20 +29,19 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJob {
-	private static Logger log = Red5LoggerFactory.getLogger(AbstractJob.class, webAppRootKey);
+	private static Logger log = Red5LoggerFactory.getLogger(AbstractJob.class, getWebAppRootKey());
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired
 	RecordingDao recordingDao;
 
 	void processExpiringRecordings(boolean notified, BiConsumer<Recording, Long> consumer) {
-		if (!OpenmeetingsVariables.initComplete) {
+		if (!isInitComplete()) {
 			return;
 		}
 		for (Group g : groupDao.getLimited()) {

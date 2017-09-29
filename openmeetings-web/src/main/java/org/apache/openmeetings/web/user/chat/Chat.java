@@ -23,7 +23,7 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
@@ -77,7 +77,7 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 public class Chat extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(Chat.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(Chat.class, getWebAppRootKey());
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private static final String PARAM_TYPE = "type";

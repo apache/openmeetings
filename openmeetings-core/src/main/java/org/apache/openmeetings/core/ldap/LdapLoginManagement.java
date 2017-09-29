@@ -23,7 +23,7 @@ import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
 import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.Closeable;
 import java.io.File;
@@ -80,7 +80,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LdapLoginManagement {
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, getWebAppRootKey());
 	// LDAP custom attribute mapping keys
 	private static final String CONFIGKEY_LDAP_KEY_LOGIN = "ldap_user_attr_login";
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";

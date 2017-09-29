@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.test.selenium;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -36,7 +36,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class SeleniumUtils {
-	private static final Logger log = Red5LoggerFactory.getLogger(SeleniumUtils.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(SeleniumUtils.class, getWebAppRootKey());
 	// we need to retry some actions because our web site is dynamic
 	static int numberOfRetries = 10;
 

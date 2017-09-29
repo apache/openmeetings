@@ -22,11 +22,13 @@ import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.wicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +54,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
@@ -76,7 +77,7 @@ import com.github.openjson.JSONObject;
 
 @Service("web.handler")
 public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter implements IPendingServiceCallback {
-	private static final Logger _log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, webAppRootKey);
+	private static final Logger _log = Red5LoggerFactory.getLogger(ScopeApplicationAdapter.class, getWebAppRootKey());
 	private static final String SID_PARAM = "sid";
 	private static final String PARENT_SID_PARAM = "parentSid"; //mobile
 	private static final String MOBILE_PARAM = "mobileClient";
@@ -102,7 +103,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	private RecordingDao recordingDao;
 
 	public static IApplication getApp() {
-		return (IApplication)Application.get(wicketApplicationName);
+		return (IApplication)Application.get(getWicketApplicationName());
 	}
 
 	@Override
@@ -130,13 +131,13 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				_log.debug("scopeName :: " + scopeName);
 			}
 
-			OpenmeetingsVariables.initComplete = true;
+			setInitComplete(true);
 			// Init properties
 			IApplication iapp = getApp();
 			iapp.setXFrameOptions(cfgDao.getString(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN));
 			iapp.setContentSecurityPolicy(cfgDao.getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
 			iapp.updateJpaAddresses(cfgDao);
-			EXT_PROCESS_TTL = cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, EXT_PROCESS_TTL);
+			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
 		} catch (Exception err) {

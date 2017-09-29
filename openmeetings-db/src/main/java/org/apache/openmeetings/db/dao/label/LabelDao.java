@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.dao.label;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper._ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +62,7 @@ import org.slf4j.Logger;
  *
  */
 public class LabelDao implements IDataProviderDao<StringLabel>{
-	private static final Logger log = Red5LoggerFactory.getLogger(LabelDao.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(LabelDao.class, getWebAppRootKey());
 	private static final String ENTRY_ELEMENT = "entry";
 	private static final String KEY_ATTR = "key";
 	public static final String APP_RESOURCES_EN = "Application.properties.xml";

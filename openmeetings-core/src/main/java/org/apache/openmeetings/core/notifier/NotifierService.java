@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.notifier;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class NotifierService {
-	private static final Logger log = Red5LoggerFactory.getLogger(NotifierService.class, webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(NotifierService.class, getWebAppRootKey());
 
 	private List<INotifier> notifiers = new ArrayList<>();
 

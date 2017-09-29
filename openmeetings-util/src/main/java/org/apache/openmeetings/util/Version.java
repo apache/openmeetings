@@ -26,7 +26,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 public class Version {
-	private static final Logger log = Red5LoggerFactory.getLogger(Version.class, OpenmeetingsVariables.webAppRootKey);
+	private static final Logger log = Red5LoggerFactory.getLogger(Version.class, OpenmeetingsVariables.getWebAppRootKey());
 	private static final int startedStringLength = 78;
 	private static String version = null;
 	private static String revision = null;

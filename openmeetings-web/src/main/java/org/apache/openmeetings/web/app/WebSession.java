@@ -24,7 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.webAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
@@ -91,7 +91,7 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = getLogger(WebSession.class, webAppRootKey);
+	private static final Logger log = getLogger(WebSession.class, getWebAppRootKey());
 	public static final int MILLIS_IN_MINUTE = 60000;
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<>(AVAILABLE_TIMEZONES);
