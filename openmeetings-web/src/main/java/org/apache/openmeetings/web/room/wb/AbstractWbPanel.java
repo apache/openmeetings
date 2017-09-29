@@ -73,9 +73,6 @@ public abstract class AbstractWbPanel extends Panel {
 			if (!inited) {
 				return;
 			}
-			if (!inited) {
-				return;
-			}
 			try {
 				WbAction a = WbAction.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				StringValue sv = getRequest().getRequestParameters().getParameterValue(PARAM_OBJ);
