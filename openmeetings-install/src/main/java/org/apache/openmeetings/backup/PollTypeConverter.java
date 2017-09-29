@@ -25,8 +25,6 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class PollTypeConverter implements OmConverter<RoomPoll.Type> {
-	public PollTypeConverter() {}
-
 	@Override
 	public RoomPoll.Type read(InputNode node) throws Exception {
 		return RoomPoll.Type.get(getLong(node));

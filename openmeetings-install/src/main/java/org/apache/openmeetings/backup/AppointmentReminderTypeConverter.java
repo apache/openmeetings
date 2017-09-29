@@ -25,10 +25,6 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class AppointmentReminderTypeConverter implements OmConverter<Reminder> {
-	public AppointmentReminderTypeConverter() {
-		//default constructor is for export
-	}
-
 	@Override
 	public Reminder read(InputNode node) throws Exception {
 		return Reminder.get(getInt(node));

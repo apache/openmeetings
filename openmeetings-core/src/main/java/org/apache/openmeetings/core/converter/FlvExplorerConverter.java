@@ -40,7 +40,7 @@ import org.springframework.stereotype.Component;
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, getWebAppRootKey());
 
-	public List<ConverterProcessResult> convertToMP4(FileItem f, String ext) {
+	public List<ConverterProcessResult> convertVideo(FileItem f, String ext) {
 		List<ConverterProcessResult> logs = new ArrayList<>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);

@@ -122,7 +122,7 @@ public class FileProcessor {
 				result = imageConverter.convertImage(f, sf);
 			} else if (isVideo) {
 				copyFile(temp, file);
-				List<ConverterProcessResult> returnList = flvExplorerConverter.convertToMP4(f, ext);
+				List<ConverterProcessResult> returnList = flvExplorerConverter.convertVideo(f, ext);
 
 				int i = 0;
 				for (ConverterProcessResult returnMap : returnList) {

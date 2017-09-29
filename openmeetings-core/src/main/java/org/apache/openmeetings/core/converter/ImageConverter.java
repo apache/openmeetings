@@ -33,7 +33,6 @@ import static org.apache.openmeetings.util.process.ConverterProcessResult.ZERO;
 import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,12 +86,7 @@ public class ImageConverter extends BaseConverter {
 		ConverterProcessResultList returnMap = new ConverterProcessResultList();
 
 		// User Profile Update
-		File[] files = getUploadProfilesUserDir(userId).listFiles(new FileFilter() {
-			@Override
-			public boolean accept(File pathname) {
-				return pathname.getName().endsWith(EXTENSION_JPG);
-			}
-		});
+		File[] files = getUploadProfilesUserDir(userId).listFiles(fi -> fi.getName().endsWith(EXTENSION_JPG));
 		if (files != null) {
 			for (File f : files) {
 				FileUtils.deleteQuietly(f);
@@ -118,8 +112,6 @@ public class ImageConverter extends BaseConverter {
 		userDao.update(us, userId);
 
 		//FIXME: After uploading a new picture all other clients should refresh
-		//scopeApplicationAdapter.updateUserSessionObject(userId, pictureuri);
-
 		return returnMap;
 	}
 
@@ -191,12 +183,7 @@ public class ImageConverter extends BaseConverter {
 		ConverterProcessResult res = ProcessHelper.executeScript("convertDocument", argv);
 		list.addItem("convert PDF to images", res);
 		if (res.isOk()) {
-			File[] pages = pdf.getParentFile().listFiles(new FileFilter() {
-				@Override
-				public boolean accept(File f) {
-					return f.isFile() && f.getName().startsWith(DOC_PAGE_PREFIX) && f.getName().endsWith(EXTENSION_PNG);
-				}
-			});
+			File[] pages = pdf.getParentFile().listFiles(fi -> fi.isFile() && fi.getName().startsWith(DOC_PAGE_PREFIX) && fi.getName().endsWith(EXTENSION_PNG));
 			if (pages == null || pages.length == 0) {
 				f.setCount(0);
 			} else {

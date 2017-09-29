@@ -317,10 +317,6 @@ public class BackupImport {
 	private final Map<Long, Long> userContactMap = new HashMap<>();
 	private final Map<String, String> fileMap = new HashMap<>();
 
-	private enum Maps {
-		USERS, ORGANISATIONS, CALENDARS, APPOINTMENTS, ROOMS, MESSAGEFOLDERS, USERCONTACTS
-	};
-
 	private static File validate(String _ename, File intended) throws IOException {
 		final String intendedPath = intended.getCanonicalPath();
 		String ename = File.pathSeparatorChar != '\\' && _ename.indexOf('\\') > -1
@@ -347,10 +343,8 @@ public class BackupImport {
 				// for each entry to be extracted
 				File fentry = validate(zipentry.getName(), f);
 				File dir = zipentry.isDirectory() ? fentry : fentry.getParentFile();
-				if (!dir.exists()) {
-					if (!dir.mkdirs()) {
-						log.warn("Failed to create folders: " + dir);
-					}
+				if (!dir.exists() && !dir.mkdirs()) {
+					log.warn("Failed to create folders: {}", dir);
 				}
 				if (!fentry.isDirectory()) {
 					try (FileOutputStream fos = FileUtils.openOutputStream(fentry)) {
@@ -434,11 +428,7 @@ public class BackupImport {
 			if (type != null) {
 				c.setType(type);
 				if (Configuration.Type.bool == type) {
-					if ("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())) {
-						c.setValue("true");
-					} else {
-						c.setValue("false");
-					}
+					c.setValue(String.valueOf("1".equals(c.getValue()) || "yes".equals(c.getValue()) || "true".equals(c.getValue())));
 				}
 			}
 			Configuration cfg = cfgDao.forceGet(c.getKey());
@@ -633,7 +623,6 @@ public class BackupImport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 		registry.bind(User.class, new UserConverter(userDao, userMap));
-		//registry.bind(OmCalendar.SyncType.class, OmCalendarSyncTypeConverter.class);
 		List<OmCalendar> list = readList(serializer, f, "calendars.xml", "calendars", OmCalendar.class, true);
 		for (OmCalendar c : list) {
 			Long id = c.getId();
@@ -797,8 +786,8 @@ public class BackupImport {
 		}
 		for (PrivateMessage p : list) {
 			p.setId(null);
-			p.setFolderId(getNewId(p.getFolderId(), Maps.MESSAGEFOLDERS));
-			p.setUserContactId(getNewId(p.getUserContactId(), Maps.USERCONTACTS));
+			p.setFolderId(messageFolderMap.get(p.getFolderId()));
+			p.setUserContactId(userContactMap.get(p.getUserContactId()));
 			if (p.getRoom() != null && p.getRoom().getId() == null) {
 				p.setRoom(null);
 			}
@@ -917,20 +906,20 @@ public class BackupImport {
 			final String msg = fileName + " missing";
 			if (notThow) {
 				log.debug(msg);
+				return list;
 			} else {
 				throw new Exception(msg);
 			}
-		} else {
-			try (InputStream rootIs = new FileInputStream(xml)) {
-				InputNode root = NodeBuilder.read(rootIs);
-				InputNode listNode = root.getNext();
-				if (listNodeName.equals(listNode.getName())) {
-					InputNode item = listNode.getNext();
-					while (item != null) {
-						T o = ser.read(clazz, item, false);
-						list.add(o);
-						item = listNode.getNext();
-					}
+		}
+		try (InputStream rootIs = new FileInputStream(xml)) {
+			InputNode root = NodeBuilder.read(rootIs);
+			InputNode listNode = root.getNext();
+			if (listNodeName.equals(listNode.getName())) {
+				InputNode item = listNode.getNext();
+				while (item != null) {
+					T o = ser.read(clazz, item, false);
+					list.add(o);
+					item = listNode.getNext();
 				}
 			}
 		}
@@ -1404,7 +1393,7 @@ public class BackupImport {
 						// profile should correspond to the new user id
 						for (File profile : file.listFiles()) {
 							Long oldId = getProfileId(profile);
-							Long id = oldId != null ? getNewId(oldId, Maps.USERS) : null;
+							Long id = oldId != null ? userMap.get(oldId) : null;
 							if (id != null) {
 								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
 							}
@@ -1422,7 +1411,7 @@ public class BackupImport {
 					} else {
 						// check if folder is room folder, store it under new id if necessary
 						Long oldId = importLongType(fName);
-						Long id = oldId != null ? getNewId(oldId, Maps.ROOMS) : null;
+						Long id = oldId != null ? roomMap.get(oldId) : null;
 						if (id != null) {
 							FileUtils.copyDirectory(file, getUploadRoomDir(id.toString()));
 						} else {
@@ -1462,50 +1451,6 @@ public class BackupImport {
 			// no-op
 		}
 		return val;
-	}
-
-	private Long getNewId(Long oldId, Maps map) {
-		Long newId = null;
-		switch (map) {
-			case USERS:
-				if (userMap.containsKey(oldId)) {
-					newId = userMap.get(oldId);
-				}
-				break;
-			case ORGANISATIONS:
-				if (groupMap.containsKey(oldId)) {
-					newId = groupMap.get(oldId);
-				}
-				break;
-			case CALENDARS:
-				if (calendarMap.containsKey(oldId)) {
-					newId = calendarMap.get(oldId);
-				}
-				break;
-			case APPOINTMENTS:
-				if (appointmentMap.containsKey(oldId)) {
-					newId = appointmentMap.get(oldId);
-				}
-				break;
-			case ROOMS:
-				if (roomMap.containsKey(oldId)) {
-					newId = roomMap.get(oldId);
-				}
-				break;
-			case MESSAGEFOLDERS:
-				if (messageFolderMap.containsKey(oldId)) {
-					newId = messageFolderMap.get(oldId);
-				}
-				break;
-			case USERCONTACTS:
-				if (userContactMap.containsKey(oldId)) {
-					newId = userContactMap.get(oldId);
-				}
-				break;
-			default:
-				break;
-		}
-		return newId;
 	}
 
 	private static String getCountry(String countryId) {

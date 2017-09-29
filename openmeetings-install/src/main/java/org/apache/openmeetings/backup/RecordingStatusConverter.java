@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 public class RecordingStatusConverter implements OmConverter<Recording.Status> {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingStatusConverter.class, getWebAppRootKey());
 	private static final String PROCESSING = "PROCESSING";
-	public RecordingStatusConverter() {}
 
 	@Override
 	public Recording.Status read(InputNode node) throws Exception {

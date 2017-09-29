@@ -25,8 +25,6 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
 public class RoomTypeConverter implements OmConverter<Type> {
-	public RoomTypeConverter() {}
-
 	@Override
 	public Type read(InputNode node) throws Exception {
 		return Type.get(getInt(node));

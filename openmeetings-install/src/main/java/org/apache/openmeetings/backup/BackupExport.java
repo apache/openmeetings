@@ -35,6 +35,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -171,12 +172,10 @@ public class BackupExport {
 			if (includeFiles) {
 				//##################### Backup Room Files
 				for (File file : OmFileHelper.getUploadDir().listFiles()) {
-					if (file.isDirectory()) {
-						String fName = file.getName();
-						if (!IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
-							log.debug("### " + file.getName());
-							writeZipDir(BCKP_ROOM_FILES, file.getParentFile().toURI(), file, zos);
-						}
+					String fName = file.getName();
+					if (file.isDirectory() && !IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
+						log.debug("### " + file.getName());
+						writeZipDir(BCKP_ROOM_FILES, file.getParentFile().toURI(), file, zos);
 					}
 				}
 
@@ -281,13 +280,16 @@ public class BackupExport {
 		registry.bind(User.class, UserConverter.class);
 		registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 		registry.bind(Room.class, RoomConverter.class);
-		if (list != null && !list.isEmpty()) {
+		if (list != null) {
 			for (Appointment a : list) {
+				Class<? extends Date> clazz = null;
 				if (a.getStart() != null) {
-					registry.bind(a.getStart().getClass(), DateConverter.class);
-					break;
+					clazz = a.getStart().getClass();
 				} else if (a.getInserted() != null) {
-					registry.bind(a.getInserted().getClass(), DateConverter.class);
+					clazz = a.getInserted().getClass();
+				}
+				if (clazz != null) {
+					registry.bind(clazz, DateConverter.class);
 					break;
 				}
 			}

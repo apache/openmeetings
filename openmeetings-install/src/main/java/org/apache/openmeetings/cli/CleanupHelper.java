@@ -98,12 +98,7 @@ public class CleanupHelper {
 		List<File> invalid = new ArrayList<>();
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
-		for (File f : list(hibernateDir, new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.endsWith(EXTENSION_MP4);
-			}
-		})) {
+		for (File f : list(hibernateDir, (dir, name) -> name.endsWith(EXTENSION_MP4))) {
 			if (!f.isFile()) {
 				log.warn("Recording found is not a file: " + f);
 				continue;
@@ -143,12 +138,7 @@ public class CleanupHelper {
 	}
 
 	private static File[] list(final String hash) {
-		return list(hibernateDir, new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.startsWith(hash);
-			}
-		});
+		return list(hibernateDir, (dir, name) -> name.startsWith(hash));
 	}
 
 	private static void add(List<File> list, final String hash) {

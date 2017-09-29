@@ -21,11 +21,10 @@ package org.apache.openmeetings.service.quartz.scheduler;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.List;
 import java.util.Map;
 
@@ -83,12 +82,7 @@ public class CleanupJob extends AbstractJob {
 			if (folders != null) {
 				for (File folder : folders) {
 					if (folder.isDirectory()) {
-						File[] files = folder.listFiles(new FileFilter() {
-							@Override
-							public boolean accept(File file) {
-								return file.getName().startsWith(TEST_SETUP_PREFIX);
-							}
-						});
+						File[] files = folder.listFiles(fi -> fi.getName().startsWith(TEST_SETUP_PREFIX));
 						if (files != null) {
 							for (File file : files) {
 								if (file.isFile() && file.lastModified() + testSetupTimeout < System.currentTimeMillis()) {
