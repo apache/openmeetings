@@ -479,7 +479,7 @@ public class ScreenSharerFrame extends JFrame {
 			@Override
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				getDim().setFPS(((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue());
+				getDim().setFps(((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue());
 				calcRescaleFactors();
 			}
 		});

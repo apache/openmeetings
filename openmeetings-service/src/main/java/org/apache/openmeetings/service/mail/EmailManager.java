@@ -21,8 +21,8 @@ package org.apache.openmeetings.service.mail;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
@@ -50,7 +50,7 @@ public class EmailManager {
 	private MailHandler mailHandler;
 
 	private static IApplication getApp() {
-		return ((IApplication)Application.get(getWicketApplicationName()));
+		return (IApplication)Application.get(getWicketApplicationName());
 	}
 
 	public static String getString(String key) {

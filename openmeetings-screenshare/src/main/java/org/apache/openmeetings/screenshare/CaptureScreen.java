@@ -77,7 +77,7 @@ public class CaptureScreen extends Thread {
 		cursorJob = JobBuilder.newJob(CursorJob.class).withIdentity(QUARTZ_CURSOR_JOB_NAME, QUARTZ_GROUP_NAME).build();
 		cursorTrigger = TriggerBuilder.newTrigger()
 				.withIdentity(QUARTZ_CURSOR_TRIGGER_NAME, QUARTZ_GROUP_NAME)
-				.withSchedule(simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(5, core.getDim().getFPS())).repeatForever())
+				.withSchedule(simpleSchedule().withIntervalInMilliseconds(1000 / Math.min(5, core.getDim().getFps())).repeatForever())
 				.build();
 		cursorJob.getJobDataMap().put(CursorJob.CAPTURE_KEY, this);
 	}
@@ -115,7 +115,7 @@ public class CaptureScreen extends Thread {
 				Thread.sleep(60);
 			}
 
-			timestampDelta = 1000 / core.getDim().getFPS();
+			timestampDelta = 1000 / core.getDim().getFps();
 			se = new ScreenV1Encoder(core.getDim()); //send keyframe every 3 seconds
 			startTime = System.currentTimeMillis();
 

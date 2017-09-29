@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 function initVideo(el, id, options) {
-	let type = 'application/x-shockwave-flash'
+	const type = 'application/x-shockwave-flash'
 		, src = 'public/main.swf?cache' + new Date().getTime()
 		, o = $('<object>').attr('id', id).attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
 	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
@@ -13,7 +13,7 @@ function initVideo(el, id, options) {
 }
 var VideoSettings = (function() {
 	let vs, lm, swf, s, cam, mic, res, o
-		, vidScroll, recBtn, playBtn, inited = false, recAllowed = false;
+		, vidScroll, recBtn, playBtn, recAllowed = false;
 	function _load() {
 		s = {};
 		try {
@@ -120,44 +120,42 @@ var VideoSettings = (function() {
 		lm.progressbar("value", Math.max(0, level));
 	}
 	function _initSwf() {
-		if (!inited) {
-			let obj = swf.getDevices();
-			cam.find('option[value!="-1"]').remove();
-			for (let i = 0; i < obj.cams.length; ++i) {
-				let o = $('<option></option>').attr('value', i).text(obj.cams[i]);
-				if (i === s.video.cam) {
-					o.prop('selected', true);
-				}
-				cam.append(o);
+		const obj = swf.getDevices();
+		cam.find('option[value!="-1"]').remove();
+		for (let i = 0; i < obj.cams.length; ++i) {
+			const o = $('<option></option>').attr('value', i).text(obj.cams[i]);
+			if (i === s.video.cam) {
+				o.prop('selected', true);
 			}
-			cam.prop('disabled', false).change(function() {
-				_readValues();
-				swf.camChanged(s.video.cam);
-			});
-			mic.find('option[value!="-1"]').remove();
-			for (let i = 0; i < obj.mics.length; ++i) {
-				let o = $('<option></option>').attr('value', i).text(obj.mics[i]);
-				if (i === s.video.mic) {
-					o.prop('selected', true);
-				}
-				mic.append(o);
-			}
-			mic.prop('disabled', false).change(function() {
-				_readValues();
-				swf.micChanged(s.video.mic);
-			});
-			res.change(function() {
-				_readValues();
-				swf.resChanged(s.video.width, s.video.height);
-			});
-			res.find('option').each(function(idx) {
-				let o = $(this).data();
-				if (o.width === s.video.width && o.height === s.video.height) {
-					$(this).prop('selected', true);
-					return false;
-				}
-			});
+			cam.append(o);
 		}
+		cam.prop('disabled', false).change(function() {
+			_readValues();
+			swf.camChanged(s.video.cam);
+		});
+		mic.find('option[value!="-1"]').remove();
+		for (let i = 0; i < obj.mics.length; ++i) {
+			const o = $('<option></option>').attr('value', i).text(obj.mics[i]);
+			if (i === s.video.mic) {
+				o.prop('selected', true);
+			}
+			mic.append(o);
+		}
+		mic.prop('disabled', false).change(function() {
+			_readValues();
+			swf.micChanged(s.video.mic);
+		});
+		res.change(function() {
+			_readValues();
+			swf.resChanged(s.video.width, s.video.height);
+		});
+		res.find('option').each(function(idx) {
+			const o = $(this).data();
+			if (o.width === s.video.width && o.height === s.video.height) {
+				$(this).prop('selected', true);
+				return false;
+			}
+		});
 		_readValues();
 		swf.init(s.video.cam, s.video.mic, s.video.width, s.video.height);
 	}

@@ -51,7 +51,7 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 
 	public ScreenV1Encoder(ScreenDimensions dim) {
 		this.dim = dim;
-		this.keyFrameIndex = 3 * dim.getFPS();
+		this.keyFrameIndex = 3 * dim.getFps();
 		if (blockSize < 16 || blockSize > 256 || blockSize % 16 != 0) {
 			throw new RuntimeException("Invalid block size passed: " + blockSize + " should be: 'from 16 to 256 in multiples of 16'");
 		}

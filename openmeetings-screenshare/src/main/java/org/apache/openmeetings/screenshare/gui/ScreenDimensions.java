@@ -52,7 +52,7 @@ public class ScreenDimensions {
 	private int spinnerY;
 
 	private ScreenQuality quality = ScreenQuality.Medium;
-	private int FPS = 10;
+	private int fps = 10;
 
 	private int resizeX;
 	private int resizeY;
@@ -143,11 +143,11 @@ public class ScreenDimensions {
 		this.quality = quality;
 	}
 
-	public int getFPS() {
-		return FPS;
+	public int getFps() {
+		return fps;
 	}
 
-	public void setFPS(int fPS) {
-		FPS = fPS;
+	public void setFps(int fps) {
+		this.fps = fps;
 	}
 }

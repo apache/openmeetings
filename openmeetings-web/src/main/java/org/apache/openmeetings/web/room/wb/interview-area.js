@@ -10,10 +10,10 @@ var WbArea = (function() {
 		btns.button()
 			.click(function() {
 				choose.dialog('open');
-				let sel = choose.find('.users').html('');
-				let users = $('.user.list .user.entry');
+				const sel = choose.find('.users').html('')
+					, users = $('.user.list .user.entry');
 				for (let i = 0; i < users.length; ++i) {
-					let u = $(users[i]);
+					const u = $(users[i]);
 					sel.append($('<option></option>').text(u.attr('title')).val(u.attr('id').substr(4)));
 				}
 				choose.find('.pod-name').val($(this).data('pod'));

@@ -420,6 +420,11 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		}
 	}
 
+	/**
+	 * Will stop any activity and disconnect
+	 *
+	 * @param obj - dummy unused param to perform the call
+	 */
 	public void stopStream(Object obj) {
 		try {
 			log.debug("ScreenShare stopStream");
