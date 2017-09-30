@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.PrivateMessageFolder;
@@ -96,20 +95,6 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 			folder = em.merge(folder);
 		}
 		return folder;
-	}
-
-	public List<PrivateMessageFolder> getPrivateMessageFolderByUserId(Long userId) {
-		try {
-			String hql = "select c from PrivateMessageFolder c where c.userId = :userId ";
-
-			TypedQuery<PrivateMessageFolder> query = em.createQuery(hql, PrivateMessageFolder.class);
-			query.setParameter("userId", userId);
-
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getPrivateMessageFolderByUserId]",e);
-		}
-		return null;
 	}
 
 	@Override

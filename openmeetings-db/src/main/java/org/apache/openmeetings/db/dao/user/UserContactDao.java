@@ -104,55 +104,17 @@ public class UserContactDao {
 	}
 
 	public List<UserContact> getContactsByUserAndStatus(Long ownerId, boolean pending) {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByUserAndStatus", UserContact.class);
-			query.setParameter("ownerId", ownerId);
-			query.setParameter("pending", pending);
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getContactsByUserAndStatus]",e);
-		}
-		return null;
-	}
-
-	public UserContact getUserContactByShareCalendar(Long contactId,
-			Boolean shareCalendar, Long userId) {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getUserContactByShareCalendar",
-					UserContact.class);
-			query.setParameter("contactId", contactId);
-			query.setParameter("userId", userId);
-			query.setParameter("shareCalendar", shareCalendar);
-			List<UserContact> ll = query.getResultList();
-			return ll.isEmpty() ? null : ll.get(0);
-		} catch (Exception e) {
-			log.error("[getUserContactByShareCalendar]", e);
-		}
-		return null;
-	}
-
-	public List<UserContact> getContactsByShareCalendar(Long contactId, Boolean shareCalendar) {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getContactsByShareCalendar", UserContact.class);
-			query.setParameter("contactId", contactId);
-			query.setParameter("shareCalendar", shareCalendar);
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getContactsByShareCalendar]",e);
-		}
-		return null;
+		return em.createNamedQuery("getContactsByUserAndStatus", UserContact.class)
+				.setParameter("ownerId", ownerId)
+				.setParameter("pending", pending)
+				.getResultList();
 	}
 
 	public List<UserContact> getContactRequestsByUserAndStatus(Long userId, boolean pending) {
-		try {
-			TypedQuery<UserContact> query = em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class);
-			query.setParameter("userId", userId);
-			query.setParameter("pending", pending);
-			return query.getResultList();
-		} catch (Exception e) {
-			log.error("[getContactRequestsByUserAndStatus]",e);
-		}
-		return null;
+		return em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class)
+				.setParameter("userId", userId)
+				.setParameter("pending", pending)
+				.getResultList();
 	}
 
 	public UserContact get(Long id) {

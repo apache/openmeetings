@@ -46,15 +46,6 @@ import org.simpleframework.xml.Root;
 			"where c.owner.id = :ownerId " +
 			"AND c.pending = :pending " +
 			"AND c.contact.deleted = false"),
-	@NamedQuery(name = "getUserContactByShareCalendar", query = "select c from UserContact c "
-			+ "where c.contact.id = :userId "
-			+ "AND c.owner.id = :contactId "
-			+ "AND c.shareCalendar = :shareCalendar "
-			+ "AND c.contact.deleted = false"),
-	@NamedQuery(name = "getContactsByShareCalendar", query = "select c from UserContact c " +
-			"where c.contact.id = :contactId " +
-			"AND c.shareCalendar = :shareCalendar " +
-			"AND c.contact.deleted = false"),
 	@NamedQuery(name = "getContactRequestsByUserAndStatus", query = "select c from UserContact c " +
 			"where c.contact.id = :userId " +
 			"AND c.pending = :pending " +

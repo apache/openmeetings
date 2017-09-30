@@ -62,7 +62,6 @@ public class RTMPTSScreenShare extends RTMPTSClient implements IScreenShare {
 	public void handleException(Throwable throwable) {
 		Throwable cause = throwable.getCause();
 		log.error("{}", new Object[] { cause });
-		System.out.println(cause);
 		core.handleException(cause);
 	}
 }

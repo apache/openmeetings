@@ -36,23 +36,12 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class LibraryChartLoader {
 	private static final Logger log = Red5LoggerFactory.getLogger(LibraryChartLoader.class, getWebAppRootKey());
-
 	private static final String CHART_EXT = ".xchart";
 
-	private static LibraryChartLoader instance;
-
-	private LibraryChartLoader() {
-	}
-
-	public static synchronized LibraryChartLoader getInstance() {
-		if (instance == null) {
-			instance = new LibraryChartLoader();
-		}
-		return instance;
-	}
+	private LibraryChartLoader() {}
 
 	@SuppressWarnings("rawtypes")
-	public ArrayList loadChart(File dir, String fileName) {
+	public static ArrayList loadChart(File dir, String fileName) {
 		try {
 			File file = new File(dir, fileName + CHART_EXT);
 
@@ -70,8 +59,6 @@ public class LibraryChartLoader {
 		} catch (Exception err) {
 			log.error("Unexpected error while loading chart", err);
 		}
-
-		return null;
+		return new ArrayList<>();
 	}
-
 }

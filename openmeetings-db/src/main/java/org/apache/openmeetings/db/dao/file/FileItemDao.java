@@ -76,22 +76,6 @@ public class FileItemDao extends BaseFileItemDao {
 		return null;
 	}
 
-	public List<FileItem> getByRoomAndOwner(Long roomId, Long ownerId) {
-		log.debug(".getByRoomAndOwner() started");
-		try {
-			TypedQuery<FileItem> query = em.createNamedQuery("getFilesByRoomAndOwner", FileItem.class);
-			query.setParameter("roomId", roomId);
-			query.setParameter("ownerId", ownerId);
-
-			List<FileItem> fileExplorerList = query.getResultList();
-
-			return fileExplorerList;
-		} catch (Exception ex2) {
-			log.error("[getByRoomAndOwner]: ", ex2);
-		}
-		return null;
-	}
-
 	public List<FileItem> getByRoom(Long roomId) {
 		log.debug("getByRoom roomId :: " + roomId);
 		return em.createNamedQuery("getFilesByRoom", FileItem.class).setParameter("roomId", roomId).getResultList();

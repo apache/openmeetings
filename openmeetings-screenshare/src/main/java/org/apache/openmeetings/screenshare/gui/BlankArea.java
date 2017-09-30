@@ -26,7 +26,7 @@ import javax.swing.SwingConstants;
 
 public class BlankArea extends MouseListenerable {
 	private static final long serialVersionUID = 1L;
-	private Dimension minSize = new Dimension(100, 50);
+	private static final Dimension MIN_SIZE = new Dimension(100, 50);
 
 	public BlankArea(Color color) {
 		setBackground(color);
@@ -36,7 +36,7 @@ public class BlankArea extends MouseListenerable {
 		setHorizontalTextPosition(0);
 		setVerticalTextPosition(0);
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		setMinimumSize(minSize);
-		setPreferredSize(minSize);
+		setMinimumSize(MIN_SIZE);
+		setPreferredSize(MIN_SIZE);
 	}
 }

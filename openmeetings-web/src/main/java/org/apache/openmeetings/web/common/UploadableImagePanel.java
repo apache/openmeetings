@@ -22,6 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -46,7 +47,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 
 		@Override
 		public List<FileUpload> getObject() {
-			return null;
+			return new ArrayList<>();
 		}
 	});
 

@@ -55,16 +55,10 @@ public class RecordingMetaDataDao {
 	}
 
 	public List<RecordingMetaData> getAudioMetaDataByRecording(Long recordingId) {
-		try {
-			TypedQuery<RecordingMetaData> query = em.createNamedQuery("getAudioMetaByRecording", RecordingMetaData.class);
-			query.setParameter("recordingId", recordingId);
-			query.setParameter("none", Status.NONE);
-
-			return query.getResultList();
-		} catch (Exception ex2) {
-			log.error("[getAudioMetaDataByRecording]: ", ex2);
-		}
-		return null;
+		return em.createNamedQuery("getAudioMetaByRecording", RecordingMetaData.class)
+				.setParameter("recordingId", recordingId)
+				.setParameter("none", Status.NONE)
+				.getResultList();
 	}
 
 	public RecordingMetaData getScreenMetaDataByRecording(Long recordingId) {

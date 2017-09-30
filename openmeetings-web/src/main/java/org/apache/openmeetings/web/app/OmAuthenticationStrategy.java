@@ -57,7 +57,7 @@ public class OmAuthenticationStrategy extends DefaultAuthenticationStrategy {
 
 			return new String[] { username, password, type, domainId };
 		}
-		return null;
+		return new String[] {};
 	}
 
 	public void save(final String username, final String password, final Type type, final Long domainId) {

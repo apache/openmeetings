@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -81,38 +82,10 @@ public class RecordingDao extends BaseFileItemDao {
 		} catch (Exception ex2) {
 			log.error("[getByExternalId]: ", ex2);
 		}
-		return null;
+		return new ArrayList<>();
 	}
-
-	public List<Recording> getByExternalTypeAndCreator(String externalType, Long insertedBy) {
-		try {
-
-			log.debug("getByExternalType :externalType: " + externalType);
-
-			TypedQuery<Recording> query = em.createNamedQuery("getRecordingsByExternalTypeAndOwner", Recording.class);
-			query.setParameter("externalType", externalType);
-			query.setParameter("insertedBy", insertedBy);
-
-			List<Recording> recordingList = query.getResultList();
-
-			log.debug("getByExternalType :: " + recordingList.size());
-
-			return recordingList;
-		} catch (Exception ex2) {
-			log.error("[getByExternalType]: ", ex2);
-		}
-		return null;
-	}
-
 	public List<Recording> get() {
-		try {
-			TypedQuery<Recording> query = em.createNamedQuery("getRecordingsAll", Recording.class);
-
-			return query.getResultList();
-		} catch (Exception ex2) {
-			log.error("[get]: ", ex2);
-		}
-		return null;
+		return em.createNamedQuery("getRecordingsAll", Recording.class).getResultList();
 	}
 
 	public List<Recording> getByExternalType(String externalType) {
@@ -137,17 +110,8 @@ public class RecordingDao extends BaseFileItemDao {
 	}
 
 	public List<Recording> getByRoomId(Long roomId) {
-		try {
-			TypedQuery<Recording> query = em.createNamedQuery("getRecordingsByRoom", Recording.class);
-			query.setParameter("roomId", roomId);
-
-			List<Recording> recordingList = query.getResultList();
-
-			return recordingList;
-		} catch (Exception ex2) {
-			log.error("[getByRoomId]: ", ex2);
-		}
-		return null;
+		return em.createNamedQuery("getRecordingsByRoom", Recording.class)
+				.setParameter("roomId", roomId).getResultList();
 	}
 
 	public List<Recording> getExpiring(Long groupId, int reminderDays, boolean notified) {

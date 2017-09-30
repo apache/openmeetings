@@ -120,7 +120,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 			@Override
 			public List<FileUpload> getObject() {
-				return null;
+				return new ArrayList<>();
 			}
 		}));
 		uploadField.add(AttributeModifier.append("accept", StoredFile.getAcceptAttr()));
