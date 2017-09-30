@@ -61,6 +61,9 @@
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
 		<!--  Exclude all generated code  -->
 		<sonar.exclusions>file:**/generated-sources/**, file:**/fabric.js, file:**/cssemoticons.js, file:**/uuid.js, file:**/fileinput*.js</sonar.exclusions>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
@@ -837,6 +840,10 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<destFile>${sonar.jacoco.reportPath}</destFile>
+					<append>true</append>
+				</configuration>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
