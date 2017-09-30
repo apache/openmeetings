@@ -36,7 +36,7 @@ public class StringLabel extends SimpleEntry<String, String> implements IDataPro
 
 	@Override
 	public int hashCode() {
-		return (getKey() == null ? 0 : getKey().hashCode());
+		return getKey() == null ? 0 : getKey().hashCode();
 	}
 
 	@Override

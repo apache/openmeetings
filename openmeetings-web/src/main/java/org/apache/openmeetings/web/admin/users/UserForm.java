@@ -181,7 +181,7 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		User u = getModelObject();
 		try {
-			boolean isNew = (u.getId() == null);
+			boolean isNew = u.getId() == null;
 			boolean sendEmailAtRegister = getBean(ConfigurationDao.class).getBool(CONFIG_EMAIL_AT_REGISTER, false);
 			if (isNew && sendEmailAtRegister) {
 				u.setActivatehash(UUID.randomUUID().toString());

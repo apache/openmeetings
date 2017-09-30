@@ -47,7 +47,7 @@ function addCalButton(rtl, id) {
 		onChangeMonthYear: function(year, month, inst) {
 			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
 		},
-		onSelect: function(dateText, inst) {
+		onSelect: function(dateText) {
 			var date = new Date(dateText);
 			$('#${markupId}').fullCalendar('gotoDate', date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getDate());
 		}

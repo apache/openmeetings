@@ -164,7 +164,7 @@ var Chat = function() {
 						if (playPromise !== undefined) {
 							playPromise.then(function() {
 								// Automatic playback started!
-							}).catch(function(error) {
+							}).catch(function() {
 								// Automatic playback failed.
 							});
 						}
@@ -212,7 +212,7 @@ var Chat = function() {
 				$('#chatPopup .control.block').removeClass('ui-state-highlight');
 				$('#chatPanel, #chatPopup').animate({height: openedHeight}, 1000);
 				$('#chatPanel').resizable("option", "disabled", false);
-				$('#chat .messageArea').each(function(idx) {
+				$('#chat .messageArea').each(function() {
 					$(this).scrollTop($(this)[0].scrollHeight);
 				});
 			}

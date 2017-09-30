@@ -448,7 +448,7 @@ var Wb = function() {
 		o.path.slide = this.slide;
 		wbObjCreatedHandler(o.path);
 	};
-	function scrollHandler(e) {
+	function scrollHandler() {
 		$(this).find('.canvas-container').each(function(idx) {
 			let h = $(this).height(), pos = $(this).position();
 			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
@@ -618,7 +618,7 @@ var Wb = function() {
 		zoomMode = wbo.zoomMode;
 		_setSize();
 	}
-	wb.resize = function(w, h) {
+	wb.resize = function() {
 		if (t.position().left + t.width() > a.width()) {
 			t.position({
 				my: "right"

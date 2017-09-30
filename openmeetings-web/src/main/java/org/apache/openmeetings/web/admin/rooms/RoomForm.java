@@ -420,7 +420,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	}
 
 	void updateClients(AjaxRequestTarget target) {
-		long roomId = (getModelObject().getId() != null ? getModelObject().getId() : 0);
+		long roomId = getModelObject().getId() != null ? getModelObject().getId() : 0;
 		final List<StreamClient> clientsInRoom = getBean(ISessionManager.class).listByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);

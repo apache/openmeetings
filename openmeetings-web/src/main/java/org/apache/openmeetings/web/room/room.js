@@ -222,7 +222,7 @@ var Video = (function() {
 				_resize(w, h);
 				swf[0].vidResize(w, h);
 			}
-			, close: function(event, ui) {
+			, close: function() {
 				VideoManager.close(c.uid, true);
 			}
 		}).dialogExtend({
@@ -588,14 +588,14 @@ var Room = (function() {
 			WbArea.resize(sb.width() + 5, w, h);
 		}
 	}
-	function _reload(event, ui) {
+	function _reload() {
 		if (!!options.reloadUrl) {
 			window.location.href = options.reloadUrl;
 		} else {
 			window.location.reload();
 		}
 	}
-	function _close(jqEvent, msg) {
+	function _close() {
 		_unload();
 		$(".room.holder").remove();
 		$("#chatPanel").remove();
@@ -623,7 +623,7 @@ var Room = (function() {
 		});
 		$(".room.sidebar.left").resizable({
 			handles: "e"
-			, stop: function(event, ui) {
+			, stop: function() {
 				_setSize();
 			}
 		});

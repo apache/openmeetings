@@ -148,7 +148,7 @@ var VideoSettings = (function() {
 			_readValues();
 			swf.resChanged(s.video.width, s.video.height);
 		});
-		res.find('option').each(function(idx) {
+		res.find('option').each(function() {
 			const o = $(this).data();
 			if (o.width === s.video.width && o.height === s.video.height) {
 				$(this).prop('selected', true);

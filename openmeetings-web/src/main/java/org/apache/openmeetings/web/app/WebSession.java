@@ -518,13 +518,13 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					if (!showMyRoomConfValue) {
 						iter.remove();
 					}
-				} else if ((w.getClass().equals(RssWidget.class))) {
+				} else if (w.getClass().equals(RssWidget.class)) {
 					// RssWidget is stored in the profile of user. Now, Show_RSS_Key is disable.
 					existRssWidget = true;
 					if (!showRssConfValue) {
 						iter.remove();
 					}
-				} else if ((w.getClass().equals(AdminWidget.class))) {
+				} else if (w.getClass().equals(AdminWidget.class)) {
 					// AdminWidget is stored in the profile of user. check if user is admin.
 					existAdminWidget = true;
 					if (!showAdminWidget) {

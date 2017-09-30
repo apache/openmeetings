@@ -159,7 +159,7 @@ public class ScreenSharerFrame extends JFrame {
 			if (obj instanceof KeyValue) {
 				@SuppressWarnings("unchecked")
 				KeyValue<T> kv = (KeyValue<T>) obj;
-				return (kv.value.equals(this.value));
+				return kv.value.equals(this.value);
 			}
 			return false;
 		}

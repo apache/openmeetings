@@ -25,7 +25,7 @@ function getRssItems(url, next) {
 		, crossDomain: true
 		, dataType: 'xml'
 		, cache: false
-		, success: function(data, status, xhr) {
+		, success: function(data) {
 			var $xml = $(data);
 			var counter = MAX_ITEM_COUNT;
 			$xml.find("item").each(function() {

@@ -48,8 +48,8 @@ public class SearchableGroupAdminDataProvider<T extends IDataProviderEntity> ext
 
 	@Override
 	public long size() {
-		return (hasGroupAdminLevel(getRights())
+		return hasGroupAdminLevel(getRights())
 				? getDao().count(search, getUserId())
-				: getDao().count(search));
+				: getDao().count(search);
 	}
 }
