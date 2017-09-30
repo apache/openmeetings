@@ -122,8 +122,4 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 		super.toJson(choice, stringer);
 		stringer.key("contact").value(choice.getType() == Type.contact);
 	}
-
-	@Override
-	public void detach() {
-	}
 }

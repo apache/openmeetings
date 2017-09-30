@@ -41,6 +41,8 @@ public class CleanupHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(CleanupHelper.class);
 	private static File hibernateDir = OmFileHelper.getStreamsHibernateDir();
 
+	private CleanupHelper() {}
+
 	public static CleanupEntityUnit getProfileUnit(final UserDao udao) {
 		File parent = OmFileHelper.getUploadProfilesDir();
 		List<File> invalid = new ArrayList<>();

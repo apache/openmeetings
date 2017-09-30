@@ -109,6 +109,7 @@ public class RoomListPanel extends Panel {
 	 * @param r
 	 */
 	public void onContainerClick(AjaxRequestTarget target, Room r) {
+		//no-op
 	}
 
 	/**
@@ -117,6 +118,7 @@ public class RoomListPanel extends Panel {
 	 * @param r
 	 */
 	public void onRefreshClick(AjaxRequestTarget target, Room r) {
+		//no-op
 	}
 
 	/**

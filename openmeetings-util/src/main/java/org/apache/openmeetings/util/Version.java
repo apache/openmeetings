@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.util;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -31,47 +30,31 @@ public class Version {
 	private static String version = null;
 	private static String revision = null;
 	private static String buildDate = null;
-
-	private static void init() throws IOException {
-		Properties props = new Properties();
-		try (InputStream is = Version.class.getResourceAsStream("version.properties")) {
-			props.load(is);
+	static {
+		try {
+			Properties props = new Properties();
+			try (InputStream is = Version.class.getResourceAsStream("version.properties")) {
+				props.load(is);
+			}
+			version = props.getProperty("version");
+			revision = props.getProperty("revision");
+			buildDate = props.getProperty("date");
+		} catch (Exception e) {
+			log.error("Error", e);
 		}
-		version = props.getProperty("version");
-		revision = props.getProperty("revision");
-		buildDate = props.getProperty("date");
 	}
 
+	private Version() {}
+
 	public static String getVersion() {
-		if (version == null) {
-			try {
-				init();
-			} catch (Exception e) {
-				log.error("Error", e);
-			}
-		}
 		return version;
 	}
 
 	public static String getRevision() {
-		if (revision == null) {
-			try {
-				init();
-			} catch (Exception e) {
-				log.error("Error", e);
-			}
-		}
 		return revision;
 	}
 
 	public static String getBuildDate() {
-		if (buildDate == null) {
-			try {
-				init();
-			} catch (Exception e) {
-				log.error("Error", e);
-			}
-		}
 		return buildDate;
 	}
 

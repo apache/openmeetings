@@ -22,7 +22,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,12 +44,7 @@ public class OmHelpFormatter extends HelpFormatter {
 		for (Option o : g.getOptions()) {
 			result.add((OmOption)o);
 		}
-		Collections.sort(result, new Comparator<OmOption>() {
-			@Override
-			public int compare(OmOption o1, OmOption o2) {
-				return o1.getOrder() - o2.getOrder();
-			}
-		});
+		Collections.sort(result, (o1, o2) -> o1.getOrder() - o2.getOrder());
 		return result;
 	}
 
@@ -118,15 +112,11 @@ public class OmHelpFormatter extends HelpFormatter {
 		for (Map.Entry<String, List<OmOption>> me : map.entrySet()) {
 			final String key = me.getKey();
 			List<OmOption> options = me.getValue();
-			Collections.sort(options, new Comparator<OmOption>(){
-				@Override
-				public int compare(OmOption o1, OmOption o2) {
+			Collections.sort(options, (o1, o2) -> {
 					boolean o1opt = !o1.isOptional(key);
 					boolean o2opt = !o2.isOptional(key);
 					return (o1opt && o2opt || !o1opt && !o2opt) ? (o1.getOpt() == null ? 1 : -1) : (o1opt ? -1 : 1);
-				}
-
-			});
+				});
 			if (opts.hasOption(key)) {
 				options.add(0, (OmOption)opts.getOption(key));
 			}

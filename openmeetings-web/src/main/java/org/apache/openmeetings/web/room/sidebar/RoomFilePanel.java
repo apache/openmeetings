@@ -26,8 +26,8 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
+import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
@@ -59,6 +59,7 @@ public class RoomFilePanel extends FileTreePanel {
 
 	@Override
 	protected void update(AjaxRequestTarget target, BaseFileItem f) {
+		//no-op
 	}
 
 	@Override

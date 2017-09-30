@@ -315,13 +315,13 @@ public class MainPanel extends Panel {
 	}
 
 	private List<IMenuItem> getMainMenu() {
-		List<IMenuItem> menu = new ArrayList<>();
+		List<IMenuItem> mmenu = new ArrayList<>();
 		{
 			// Dashboard Menu Points
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("290", "1450", MenuActions.dashboardModuleStartScreen, null));
 			l.add(getSubItem("291", "1451", MenuActions.dashboardModuleCalendar, null));
-			menu.add(new MenuItem(Application.getString("124"), l));
+			mmenu.add(new MenuItem(Application.getString("124"), l));
 		}
 		{
 			// Conference Menu Points
@@ -346,13 +346,13 @@ public class MainPanel extends Panel {
 					}
 				});
 			}
-			menu.add(new MenuItem(Application.getString("792"), l));
+			mmenu.add(new MenuItem(Application.getString("792"), l));
 		}
 		{
 			// Recording Menu Points
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("395", "1452", MenuActions.recordModule, null));
-			menu.add(new MenuItem(Application.getString("395"), l));
+			mmenu.add(new MenuItem(Application.getString("395"), l));
 		}
 		Set<Right> r = WebSession.getRights();
 		boolean isAdmin = hasAdminLevel(r);
@@ -373,9 +373,9 @@ public class MainPanel extends Panel {
 				l.add(getSubItem("367", "1461", MenuActions.adminModuleBackup, null));
 				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.adminModuleEmail, null));
 			}
-			menu.add(new MenuItem(Application.getString("6"), l));
+			mmenu.add(new MenuItem(Application.getString("6"), l));
 		}
-		return menu;
+		return mmenu;
 	}
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler) {
@@ -391,12 +391,12 @@ public class MainPanel extends Panel {
 	}
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
-		BasePanel panel = getPanel(f.getArea(), f.getType());
-		if (panel != null) {
+		BasePanel npanel = getPanel(f.getArea(), f.getType());
+		if (npanel != null) {
 			if (getClient() != null) {
-				updateContents(panel, handler);
+				updateContents(npanel, handler);
 			} else {
-				this.panel = panel;
+				this.panel = npanel;
 			}
 			if (updateFragment) {
 				UrlFragment uf = new UrlFragment(handler);

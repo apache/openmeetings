@@ -90,9 +90,9 @@ public class StreamClient implements IClient {
 	public void setScope(String scope) {
 		this.scope = scope;
 		StringValue scn = StringValue.valueOf(scope);
-		long roomId = scn.toLong(Long.MIN_VALUE);
-		if (roomId > 0) {
-			this.roomId = roomId;
+		long rId = scn.toLong(Long.MIN_VALUE);
+		if (rId > 0) {
+			this.roomId = rId;
 		}
 	}
 

@@ -31,6 +31,8 @@ import org.apache.openmeetings.service.mail.template.RequestContactTemplate;
 import org.apache.openmeetings.web.app.Application;
 
 public class ContactsHelper {
+	private ContactsHelper() {}
+
 	public static Object addUserToContactList(long userIdToAdd) {
 		boolean isContact = getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
 

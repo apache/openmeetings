@@ -109,13 +109,9 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		form.add(uploadField = new FileUploadField("file", new IModel<List<FileUpload>>() {
 			private static final long serialVersionUID = 1L;
 
-			//FIXME this need to be eliminated
-			@Override
-			public void detach() {
-			}
-
 			@Override
 			public void setObject(List<FileUpload> object) {
+				//no-op
 			}
 
 			@Override

@@ -345,14 +345,14 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			createRoomBlock.setEnabled(createRoom);
 			groom.setEnabled(!createRoom);
 			if (a.getId() == null) {
-				java.util.Calendar start = WebSession.getCalendar();
-				start.setTime(a.getStart());
-				java.util.Calendar end = WebSession.getCalendar();
-				end.setTime(a.getEnd());
+				java.util.Calendar from = WebSession.getCalendar();
+				from.setTime(a.getStart());
+				java.util.Calendar to = WebSession.getCalendar();
+				to.setTime(a.getEnd());
 
-				if (start.equals(end)) {
-					end.add(java.util.Calendar.HOUR_OF_DAY, 1);
-					a.setEnd(end.getTime());
+				if (from.equals(to)) {
+					to.add(java.util.Calendar.HOUR_OF_DAY, 1);
+					a.setEnd(to.getTime());
 				}
 				cals.setEnabled(true);
 			} else {

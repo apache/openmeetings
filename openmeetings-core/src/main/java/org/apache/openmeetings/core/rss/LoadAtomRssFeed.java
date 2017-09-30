@@ -30,6 +30,8 @@ import org.slf4j.Logger;
 public class LoadAtomRssFeed {
 	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, getWebAppRootKey());
 
+	private LoadAtomRssFeed() {}
+
 	public static HttpURLConnection getFeedConnection(String _url) throws IOException {
 		log.debug("getFeedConnection:: " + _url);
 

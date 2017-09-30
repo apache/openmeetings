@@ -32,6 +32,8 @@ import org.bouncycastle.crypto.params.KeyParameter;
 class SHA256Implementation {
 	private static final int KEY_LENGTH = 128 * 8;
 
+	private SHA256Implementation() {}
+
 	private static String hash(String str, byte[] salt, int iter) {
 		PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
 		gen.init(str.getBytes(StandardCharsets.UTF_8), salt, iter);

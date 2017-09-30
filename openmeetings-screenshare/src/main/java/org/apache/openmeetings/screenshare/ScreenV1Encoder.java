@@ -74,19 +74,19 @@ public class ScreenV1Encoder extends BaseScreenEncoder {
 			return;
 		}
 		if (unalteredFrame == null) {
-			ByteArrayOutputStream ba = new ByteArrayOutputStream(200);
+			ByteArrayOutputStream arr = new ByteArrayOutputStream(200);
 
 			Rectangle _area = new Rectangle(dim.getResizeX(), dim.getResizeY());
 			//header
-			ba.write(getTag(FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
-			writeShort(ba, _area.width + ((blockSize / 16 - 1) << 12));
-			writeShort(ba, _area.height + ((blockSize / 16 - 1) << 12));
+			arr.write(getTag(FLAG_FRAMETYPE_INTERFRAME, FLAG_CODEC_SCREEN));
+			writeShort(arr, _area.width + ((blockSize / 16 - 1) << 12));
+			writeShort(arr, _area.height + ((blockSize / 16 - 1) << 12));
 			Rectangle area = getNextBlock(_area, null);
 			while (area.width > 0 && area.height > 0) {
-				writeShort(ba, 0);
+				writeShort(arr, 0);
 				area = getNextBlock(_area, area);
 			}
-			unalteredFrame = getData(ba.toByteArray());
+			unalteredFrame = getData(arr.toByteArray());
 		}
 	}
 

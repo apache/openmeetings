@@ -104,6 +104,7 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+		//no-op
 	}
 
 	private void update(AjaxRequestTarget target) {

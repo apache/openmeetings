@@ -26,6 +26,8 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class RoomHelper {
+	private RoomHelper() {}
+
 	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, String uid) {
 		StreamClient sc = mgr.get(uid);
 		JSONObject o = c.toJson(self)

@@ -34,6 +34,8 @@ public class FormatHelper {
 	private static final Pattern RtlLocalesRe = Pattern.compile("^(ar|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Arab|Hebr|Thaa|Nkoo|Tfng))"
 					+ "(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)");
 
+	private FormatHelper() {}
+
 	/**
 	 * Check if a BCP 47 / III language code indicates an RTL language, i.e.
 	 * either: - a language code explicitly specifying one of the right-to-left

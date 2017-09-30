@@ -91,10 +91,6 @@ public class UserSearchPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void detach() {
-			}
-
-			@Override
 			public Iterator<? extends User> iterator(long first, long count) {
 				return searched ? getBean(UserDao.class).searchUserProfile(getUserId(), text, offer, search, orderBy, (int)first, (int)count, asc).iterator()
 						: new ArrayList<User>().iterator();

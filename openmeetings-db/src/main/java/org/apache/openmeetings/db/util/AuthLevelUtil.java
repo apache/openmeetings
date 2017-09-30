@@ -35,6 +35,8 @@ import org.slf4j.Logger;
 public class AuthLevelUtil {
 	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelUtil.class, getWebAppRootKey());
 
+	private AuthLevelUtil() {}
+
 	private static boolean check(Set<User.Right> rights, User.Right level) {
 		boolean result = rights.contains(level);
 		log.debug(String.format("Level %s :: %s", level, result ? "[GRANTED]" : "[DENIED]"));
@@ -53,11 +55,9 @@ public class AuthLevelUtil {
 		if (hasAdminLevel(u.getRights())) {
 			//admin user get superModerator level, no-one can kick him/her
 			result.add(Room.Right.superModerator);
-		} else if (r.isAppointment() && a != null) {
+		} else if (r.isAppointment() && a != null && u.getId().equals(a.getOwner().getId())) {
 			// appointment owner is super moderator
-			if (u.getId().equals(a.getOwner().getId())) {
-				result.add(Room.Right.superModerator);
-			}
+			result.add(Room.Right.superModerator);
 		}
 		if (result.isEmpty()) {
 			if (!r.isModerated() && 1 == userCount) {

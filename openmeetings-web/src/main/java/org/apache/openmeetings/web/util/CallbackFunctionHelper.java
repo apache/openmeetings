@@ -25,6 +25,8 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.util.string.StringValue;
 
 public class CallbackFunctionHelper {
+	private CallbackFunctionHelper() {}
+
 	private static StringBuilder getNamedFunctionStr(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("function ").append(name).append("(");

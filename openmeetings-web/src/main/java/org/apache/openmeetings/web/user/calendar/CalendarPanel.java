@@ -322,13 +322,13 @@ public class CalendarPanel extends UserBasePanel {
 			@Override
 			protected void populateItem(final ListItem<OmCalendar> item) {
 				item.setOutputMarkupId(true);
-				final OmCalendar calendar = item.getModelObject();
-				item.add(new Button("item", new PropertyModel<String>(calendar, "title")).add(new AjaxEventBehavior("click") {
+				final OmCalendar cal = item.getModelObject();
+				item.add(new Button("item", new PropertyModel<String>(cal, "title")).add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, calendar);
+						calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, cal);
 						target.add(calendarDialog);
 					}
 				}));

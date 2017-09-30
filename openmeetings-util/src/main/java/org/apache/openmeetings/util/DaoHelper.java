@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.util.string.Strings;
 
 public class DaoHelper {
+	private DaoHelper() {}
 
 	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String sort, String... fields) {
 		return getSearchQuery(table, alias, search, false, filterDeleted, count, sort, fields);

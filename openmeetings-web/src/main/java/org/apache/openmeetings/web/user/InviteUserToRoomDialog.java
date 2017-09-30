@@ -99,5 +99,6 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+		//no-op
 	}
 }

@@ -525,10 +525,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void detach() {
-			}
-
-			@Override
 			public Iterator<? extends UserContact> iterator(long first, long count) {
 				return getBean(UserContactDao.class).get(getUserId(), (int)first, (int)count).iterator();
 			}

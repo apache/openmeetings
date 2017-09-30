@@ -53,5 +53,6 @@ public class AboutDialog extends AbstractDialog<String> {
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton arg1) {
+		//no-op
 	}
 }

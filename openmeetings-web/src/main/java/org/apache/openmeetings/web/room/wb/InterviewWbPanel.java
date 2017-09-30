@@ -49,7 +49,9 @@ public class InterviewWbPanel extends AbstractWbPanel {
 	}
 
 	@Override
-	public void sendFileToWb(final BaseFileItem fi, boolean clean) {}
+	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
+		//no-op
+	}
 
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {

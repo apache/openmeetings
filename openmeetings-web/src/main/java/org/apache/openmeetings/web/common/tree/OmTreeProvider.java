@@ -65,12 +65,10 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 
 	public void refreshRoots(boolean all) {
 		List<BaseFileItem> fRoot = new ArrayList<>(), rRoot = new ArrayList<>();
-		if (all) {
-			if (roomId != null) {
-				BaseFileItem r = createRoot(Application.getString("706"), FILES_MY, false);
-				r.setOwnerId(getUserId());
-				fRoot.add(r);
-			}
+		if (all && roomId != null) {
+			BaseFileItem r = createRoot(Application.getString("706"), FILES_MY, false);
+			r.setOwnerId(getUserId());
+			fRoot.add(r);
 		}
 		if (roomId != null) {
 			BaseFileItem r = createRoot(Application.getString("707"), FILES_ROOM, false);

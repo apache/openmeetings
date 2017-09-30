@@ -25,6 +25,8 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class DtoHelper {
+	private DtoHelper() {}
+
 	public static Integer optInt(JSONObject o, String key) {
 		return o.has(key) && !o.isNull(key) ? o.getInt(key) : null;
 	}

@@ -64,6 +64,8 @@ public class XmlExport {
 			+ "see http://openmeetings.apache.org/LanguageEditor.html for Details\n"
 			+ "###############################################\n";
 
+	private XmlExport() {}
+
 	public static Document createDocument() {
 		Document document = DocumentHelper.createDocument();
 		document.setXMLEncoding(UTF_8.name());

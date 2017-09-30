@@ -23,6 +23,8 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
 
 public class MailUtil {
+	private MailUtil() {}
+
 	public static boolean isValid(String email) {
 		if (Strings.isEmpty(email)) {
 			return false;

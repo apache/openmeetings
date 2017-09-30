@@ -26,6 +26,8 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
 public class MD5 {
+	private MD5() {}
+
 	public static String checksum(String data) throws NoSuchAlgorithmException {
 		MessageDigest md5 = MessageDigest.getInstance("MD5");
 		byte[] b = data == null ? new byte[0] : data.getBytes(UTF_8);

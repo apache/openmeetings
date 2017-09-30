@@ -33,6 +33,9 @@ import org.slf4j.Logger;
 
 public class LocaleHelper {
 	private static final Logger log = Red5LoggerFactory.getLogger(LocaleHelper.class, getWebAppRootKey());
+
+	private LocaleHelper() {}
+
 	public static List<String> getCountries() {
 		return Arrays.asList(Locale.getISOCountries());
 	}

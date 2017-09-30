@@ -591,10 +591,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		@Override
 		public IDynamicWizardStep next() {
-			if (!isAllChecked) {
-				if (!checkAllPath()) {
-					return this;
-				}
+			if (!isAllChecked && !checkAllPath()) {
+				return this;
 			}
 			return paramsStep4;
 		}

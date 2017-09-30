@@ -36,6 +36,8 @@ import com.hazelcast.core.IMap;
  *
  */
 public class WhiteboardCache {
+	private WhiteboardCache() {}
+
 	private static IMap<Long, Whiteboards> getCache() {
 		return getApp().getWhiteboards();
 	}

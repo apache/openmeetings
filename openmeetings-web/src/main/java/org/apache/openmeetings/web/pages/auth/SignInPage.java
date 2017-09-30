@@ -39,10 +39,8 @@ import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -225,13 +223,7 @@ public class SignInPage extends BaseInitedPage {
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 			connection.setSSLSocketFactory(sslSocketFactory);
-			connection.setHostnameVerifier(new HostnameVerifier() {
-
-				@Override
-				public boolean verify(String arg0, SSLSession arg1) {
-					return true;
-				}
-			});
+			connection.setHostnameVerifier((arg0, arg1) -> true);
 		} catch (Exception e) {
 			log.error("[prepareConnection]", e);
 		}

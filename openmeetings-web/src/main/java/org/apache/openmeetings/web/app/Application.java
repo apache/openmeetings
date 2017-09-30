@@ -143,8 +143,6 @@ import com.hazelcast.core.Member;
 import com.hazelcast.core.MemberAttributeEvent;
 import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
-import com.hazelcast.core.Message;
-import com.hazelcast.core.MessageListener;
 
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, getWebAppRootKey());
@@ -180,16 +178,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelWsTopic = hazelcast.getTopic("default");
-		hazelWsTopic.addMessageListener(new MessageListener<IClusterWsMessage>() {
-			@Override
-			public void onMessage(Message<IClusterWsMessage> msg) {
+		hazelWsTopic.addMessageListener(msg -> {
 				String serverId = msg.getPublishingMember().getStringAttribute(NAME_ATTR_KEY);
 				if (serverId.equals(hazelcast.getName())) {
 					return;
 				}
 				WbWebSocketHelper.send(msg.getMessageObject());
-			}
-		});
+			});
 		hazelcast.getCluster().addMembershipListener(new MembershipListener() {
 			@Override
 			public void memberRemoved(MembershipEvent evt) {
@@ -743,11 +738,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
-		if (!isInstalled) {
-			if (isInitComplete()) {
-				//TODO can also check crypt class here
-				isInstalled = result = get()._getBean(UserDao.class).count() > 0;
-			}
+		if (!isInstalled && isInitComplete()) {
+			//TODO can also check crypt class here
+			isInstalled = result = get()._getBean(UserDao.class).count() > 0;
 		}
 		return result;
 	}

@@ -180,35 +180,31 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public void checkHashes(StringValue secure, StringValue invitation) {
 		try {
-			if (!secure.isEmpty()) {
-				if (!isSignedIn() || soap == null || !soap.getHash().equals(secure.toString())) {
-					// otherwise already logged-in with the same hash
-					if (isSignedIn()) {
-						invalidateNow();
-					}
-					signIn(secure.toString(), true);
+			if (!secure.isEmpty() && (soap == null || !soap.getHash().equals(secure.toString()))) {
+				// otherwise already logged-in with the same hash
+				if (isSignedIn()) {
+					invalidateNow();
 				}
+				signIn(secure.toString(), true);
 			}
-			if (!invitation.isEmpty()) {
-				if (!isSignedIn() || i == null || !i.getHash().equals(invitation.toString())) {
-					// otherwise already logged-in with the same hash
-					if (isSignedIn()) {
-						invalidateNow();
+			if (!invitation.isEmpty() && (i == null || !i.getHash().equals(invitation.toString()))) {
+				// otherwise already logged-in with the same hash
+				if (isSignedIn()) {
+					invalidateNow();
+				}
+				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
+				if (i != null && i.isAllowEntry()) {
+					Set<Right> hrights = new HashSet<>();
+					if (i.getRoom() != null) {
+						hrights.add(Right.Room);
+						roomId = i.getRoom().getId();
+					} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
+						hrights.add(Right.Room);
+						roomId = i.getAppointment().getRoom().getId();
+					} else if (i.getRecording() != null) {
+						recordingId = i.getRecording().getId();
 					}
-					i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
-					if (i != null && i.isAllowEntry()) {
-						Set<Right> rights = new HashSet<>();
-						if (i.getRoom() != null) {
-							rights.add(Right.Room);
-							roomId = i.getRoom().getId();
-						} else if (i.getAppointment() != null && i.getAppointment().getRoom() != null) {
-							rights.add(Right.Room);
-							roomId = i.getAppointment().getRoom().getId();
-						} else if (i.getRecording() != null) {
-							recordingId = i.getRecording().getId();
-						}
-						setUser(i.getInvitee(), rights);
-					}
+					setUser(i.getInvitee(), hrights);
 				}
 			}
 		} catch (Exception e) {

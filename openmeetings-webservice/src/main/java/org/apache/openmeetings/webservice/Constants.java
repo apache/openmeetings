@@ -22,4 +22,6 @@ public class Constants {
 	public static final String TNS = "http://webservice.openmeetings.apache.org/";
 	public static final String USER_SERVICE_NAME = "org.apache.openmeetings.webservice.UserWebService";
 	public static final String USER_SERVICE_PORT_NAME = "UserService";
+
+	private Constants() {}
 }

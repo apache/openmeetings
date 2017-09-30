@@ -29,6 +29,8 @@ import java.util.Map;
  *
  */
 public class ImportHelper {
+	private ImportHelper() {}
+
 	/**
 	 * returns a list of all timezones as a {@link Map}
 	 *

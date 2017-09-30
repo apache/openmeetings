@@ -26,6 +26,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 
 public class UserHelper {
+	private UserHelper() {}
+
 	public static int getMinLoginLength(ConfigurationDao cfgDao) {
 		return cfgDao.getInt(CONFIG_LOGIN_MIN_LENGTH, USER_LOGIN_MINIMUM_LENGTH);
 	}

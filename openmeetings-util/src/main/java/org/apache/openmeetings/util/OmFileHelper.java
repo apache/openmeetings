@@ -78,6 +78,8 @@ public class OmFileHelper {
 	public static final Long SIP_USER_ID = -1L;
 	public static final String SIP_PICTURE_URI = "phone.png";
 
+	private OmFileHelper() {}
+
 	public static void setOmHome(File omHome) {
 		OmFileHelper.OM_HOME = omHome;
 	}

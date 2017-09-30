@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 public class RoomBroadcaster {
 	private static final Logger log = Red5LoggerFactory.getLogger(RoomBroadcaster.class, getWebAppRootKey());
 
+	private RoomBroadcaster() {}
+
 	public static StreamClient getClient(String publicSid) {
 		return getBean(ISessionManager.class).get(publicSid);
 	}

@@ -246,10 +246,6 @@ public class Chat extends Panel {
 				private static final long serialVersionUID = 1L;
 
 				@Override
-				protected void onError(AjaxRequestTarget target) {
-				}
-
-				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					ChatDao dao = getBean(ChatDao.class);
 					String scope = activeTab.getModelObject();

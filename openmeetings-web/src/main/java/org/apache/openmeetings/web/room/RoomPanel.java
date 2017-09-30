@@ -190,6 +190,7 @@ public class RoomPanel extends BasePanel {
 
 				@Override
 				public void close() throws IOException {
+					//no-op
 				}
 			};
 		}
@@ -369,6 +370,7 @@ public class RoomPanel extends BasePanel {
 
 				@Override
 				public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+					//no-op
 				}
 			});
 		} else {
@@ -824,7 +826,6 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public boolean screenShareAllowed() {
-		Room r = getRoom();
 		return !isInterview && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
 				&& sharingUser == null;

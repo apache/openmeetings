@@ -138,9 +138,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 	}
 
 	protected void updateButtons(AjaxRequestTarget target) {
-		Collection<User> to = recipients.getModelObject();
-		dialog.send.setEnabled(!to.isEmpty(), target);
-		dialog.generate.setEnabled(to.size() == 1, target);
+		Collection<User> recpnts = recipients.getModelObject();
+		dialog.send.setEnabled(!recpnts.isEmpty(), target);
+		dialog.generate.setEnabled(recpnts.size() == 1, target);
 	}
 
 	@Override

@@ -33,6 +33,8 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 public class InstallationDocumentHandler {
+	private InstallationDocumentHandler() {}
+
 	public static void createDocument(int stepNo) throws Exception {
 		Document document = DocumentHelper.createDocument();
 

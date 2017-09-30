@@ -154,10 +154,8 @@ public class RecordingService implements IPendingServiceCallback {
 
 			// get all stream and start recording them
 			for (IConnection conn : scope.getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						startStreamRecord(conn, recordingId, isInterview);
-					}
+				if (conn != null && conn instanceof IServiceCapableConnection) {
+					startStreamRecord(conn, recordingId, isInterview);
 				}
 			}
 			// Send every user a notification that the recording did start
@@ -188,11 +186,9 @@ public class RecordingService implements IPendingServiceCallback {
 
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
-				if (conn != null) {
-					if (conn instanceof IServiceCapableConnection) {
-						StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
-						stopStreamRecord(scope, rcl);
-					}
+				if (conn != null && conn instanceof IServiceCapableConnection) {
+					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
+					stopStreamRecord(scope, rcl);
 				}
 			}
 			// Store to database
@@ -264,12 +260,10 @@ public class RecordingService implements IPendingServiceCallback {
 
 			// the stream can be null if the user just closes the browser
 			// without canceling the recording before leaving
-			if (stream != null) {
-				// Iterate through all stream listeners and stop the appropriate
-				if (stream.getStreamListeners() != null) {
-					for (IStreamListener iStreamListener : stream.getStreamListeners()) {
-						stream.removeStreamListener(iStreamListener);
-					}
+			// Iterate through all stream listeners and stop the appropriate
+			if (stream != null && stream.getStreamListeners() != null) {
+				for (IStreamListener iStreamListener : stream.getStreamListeners()) {
+					stream.removeStreamListener(iStreamListener);
 				}
 			}
 

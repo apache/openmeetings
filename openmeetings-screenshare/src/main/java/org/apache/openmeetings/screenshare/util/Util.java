@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Util {
+	private Util() {}
+
 	public static Properties getQurtzProps(String name) {
 		final Properties p = new Properties();
 		p.put(PROP_SCHED_INSTANCE_NAME, name);
@@ -46,5 +48,4 @@ public class Util {
 	public static float getFloat(Map<String, Object> map, String key) {
 		return getDouble(map, key).floatValue();
 	}
-
 }

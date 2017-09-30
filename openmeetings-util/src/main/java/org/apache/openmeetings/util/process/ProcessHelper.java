@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 public class ProcessHelper {
 	public static final Logger log = Red5LoggerFactory.getLogger(ProcessHelper.class, OpenmeetingsVariables.getWebAppRootKey());
 
+	private ProcessHelper() {}
+
 	public static ConverterProcessResult executeScriptWindows(String process, String[] argv) {
 		try {
 			String[] cmd = new String[argv.length + 2];

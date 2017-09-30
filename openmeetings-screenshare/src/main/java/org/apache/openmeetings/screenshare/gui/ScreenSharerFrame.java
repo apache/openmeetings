@@ -29,8 +29,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -268,9 +266,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopSharing.setToolTipText(startSharingLabel);
 		btnStartStopSharing.setIcon(startIcon);
 		btnStartStopSharing.setSize(200, 32);
-		btnStartStopSharing.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+		btnStartStopSharing.addActionListener(evt -> {
 				if (sharingStarted) {
 					if (!sharingActionRequested) {
 						sharingActionRequested = true;
@@ -286,20 +282,14 @@ public class ScreenSharerFrame extends JFrame {
 						logger.warn("Sharing action is already requested");
 					}
 				}
-			}
-		});
+			});
 
 		JLabel lblSelectArea = new JLabel(getTextLabel(textLabels, 4)); //#id 734
 		JPanel panelStatus = new JPanel();
 		audioNotify = new JCheckBox(getTextLabel(textLabels, 36)); //#id 1589
 		audioNotify.setBackground(Color.WHITE);
 		audioNotify.setSelected(core.isAudioNotify());
-		audioNotify.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				core.setAudioNotify(audioNotify.isSelected());
-			}
-		});
+		audioNotify.addActionListener(e -> core.setAudioNotify(audioNotify.isSelected()));
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -405,12 +395,7 @@ public class ScreenSharerFrame extends JFrame {
 
 		spinnerHeight = new NumberSpinner(getDim().getSpinnerHeight(), 0, getDim().getHeightMax(), 1);
 		spinnerHeight.setBounds(400, 50, 60, 24);
-		spinnerHeight.addChangeListener( new ChangeListener(){
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				calcNewValueHeightSpin();
-			}
-		});
+		spinnerHeight.addChangeListener(e -> calcNewValueHeightSpin());
 		panelScreen.add(spinnerHeight);
 
 		//Spinner X
@@ -421,12 +406,7 @@ public class ScreenSharerFrame extends JFrame {
 
 		spinnerX = new NumberSpinner(getDim().getSpinnerX(), 0, getDim().getWidthMax(), 1);
 		spinnerX.setBounds(400, 80, 60, 24);
-		spinnerX.addChangeListener(new ChangeListener(){
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				calcNewValueXSpin();
-			}
-		});
+		spinnerX.addChangeListener(e -> calcNewValueXSpin());
 		panelScreen.add(spinnerX);
 
 		//Spinner Y
@@ -437,12 +417,7 @@ public class ScreenSharerFrame extends JFrame {
 
 		spinnerY = new NumberSpinner(getDim().getSpinnerY(), 0, getDim().getHeightMax(), 1);
 		spinnerY.setBounds(400, 110, 60, 24);
-		spinnerY.addChangeListener(new ChangeListener(){
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				calcNewValueYSpin();
-			}
-		});
+		spinnerY.addChangeListener(e -> calcNewValueYSpin());
 		panelScreen.add(spinnerY);
 
 		//Quality
@@ -457,14 +432,12 @@ public class ScreenSharerFrame extends JFrame {
 		comboQuality.addItem(new KeyValue<>(getTextLabel(textLabels, 21), ScreenQuality.Medium)); //#id 1092
 		comboQuality.addItem(new KeyValue<>(getTextLabel(textLabels, 22), ScreenQuality.Low)); //#id 1093
 		comboQuality.setBounds(250, 170, 130, 24);
-		comboQuality.addActionListener(new ActionListener() {
-			@Override
-			@SuppressWarnings("unchecked")
-			public void actionPerformed(ActionEvent e) {
-				getDim().setQuality(((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue());
+		comboQuality.addActionListener(e -> {
+				@SuppressWarnings("unchecked")
+				ScreenQuality q = ((KeyValue<ScreenQuality>)comboQuality.getSelectedItem()).getValue();
+				getDim().setQuality(q);
 				calcRescaleFactors();
-			}
-		});
+			});
 		comboQuality.setSelectedIndex(core.getDefaultQuality());
 		panelScreen.add(comboQuality);
 		comboFPS = new JComboBox<>();
@@ -475,14 +448,12 @@ public class ScreenSharerFrame extends JFrame {
 		comboFPS.addItem(new KeyValue<>("20 FPS", 20));
 		comboFPS.addItem(new KeyValue<>("25 FPS", 25));
 		comboFPS.addItem(new KeyValue<>("30 FPS", 30));
-		comboFPS.addActionListener(new ActionListener() {
-			@Override
-			@SuppressWarnings("unchecked")
-			public void actionPerformed(ActionEvent e) {
-				getDim().setFps(((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue());
+		comboFPS.addActionListener(e -> {
+				@SuppressWarnings("unchecked")
+				Integer v = ((KeyValue<Integer>)comboFPS.getSelectedItem()).getValue();
+				getDim().setFps(v);
 				calcRescaleFactors();
-			}
-		});
+			});
 		boolean fpsSelected = false;
 		for (int i = 0; i < comboFPS.getItemCount(); ++i) {
 			KeyValue<Integer> v = comboFPS.getItemAt(i);
@@ -515,9 +486,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopRecording.setToolTipText(getTextLabel(textLabels, 15)); //#id 871
 		btnStartStopRecording.setIcon(startIcon);
 		btnStartStopRecording.setBounds(10, 82, 200, 32);
-		btnStartStopRecording.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+		btnStartStopRecording.addActionListener(e -> {
 				if (recordingStarted) {
 					if (!recordingActionRequested) {
 						recordingActionRequested = true;
@@ -533,8 +502,7 @@ public class ScreenSharerFrame extends JFrame {
 						logger.warn("Recording action is already requested");
 					}
 				}
-			}
-		});
+			});
 		panelRecording.add(btnStartStopRecording);
 
 		panelPublish.setBackground(Color.WHITE);
@@ -583,9 +551,7 @@ public class ScreenSharerFrame extends JFrame {
 		btnStartStopPublish.setToolTipText(getTextLabel(textLabels, 24)); //#id 1466
 		btnStartStopPublish.setIcon(startIcon);
 		btnStartStopPublish.setBounds(10, 86, 200, 32);
-		btnStartStopPublish.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+		btnStartStopPublish.addActionListener(e -> {
 				if (publishStarted) {
 					if (!publishingActionRequested) {
 						publishingActionRequested = true;
@@ -601,8 +567,7 @@ public class ScreenSharerFrame extends JFrame {
 						logger.warn("Publishing action is already requested");
 					}
 				}
-			}
-		});
+			});
 		panelPublish.add(btnStartStopPublish);
 
 		JPanel panelSecurity = new JPanel();
@@ -615,12 +580,7 @@ public class ScreenSharerFrame extends JFrame {
 		remoteEnabled.setSelected(core.isRemoteEnabled());
 		remoteEnabled.setBounds(10, 10, 450, 24);
 		remoteEnabled.setEnabled(core.isRemoteEnabled());
-		remoteEnabled.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				core.setRemoteEnabled(remoteEnabled.isSelected());
-			}
-		});
+		remoteEnabled.addActionListener(e -> core.setRemoteEnabled(remoteEnabled.isSelected()));
 		panelSecurity.add(remoteEnabled);
 
 		panelStatus.setBackground(SystemColor.control);

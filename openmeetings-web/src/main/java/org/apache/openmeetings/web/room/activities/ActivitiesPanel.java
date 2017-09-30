@@ -80,13 +80,13 @@ public class ActivitiesPanel extends Panel {
 			try {
 				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString();
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
-				Action action = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
+				Action act = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
 				Activity a = activities.get(id);
 				if (a == null || !room.getRoom().getId().equals(roomId)) {
 					log.error("It seems like we are being hacked!!!!");
 					return;
 				}
-				switch (action) {
+				switch (act) {
 					case close:
 						remove(id, target);
 						break;

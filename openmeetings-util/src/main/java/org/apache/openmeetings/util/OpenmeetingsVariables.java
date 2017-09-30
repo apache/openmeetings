@@ -116,6 +116,8 @@ public class OpenmeetingsVariables {
 	private static JSONObject roomSettings = new JSONObject();
 	private static boolean initComplete = false;
 
+	private OpenmeetingsVariables() {}
+
 	public static String getApplicationName() {
 		return applicationName;
 	}

@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 class MD5Implementation {
 	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, getWebAppRootKey());
 
+	private MD5Implementation() {}
+
 	private static String hash(String str) {
 		String passPhrase = null;
 		try {

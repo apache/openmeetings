@@ -81,7 +81,7 @@ public class Admin {
 	private InstallationConfig cfg = null;
 	private Options opts = null;
 	private CommandLine cmdl = null;
-	private WebApplicationContext ctx = null;
+	private WebApplicationContext context = null;
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -171,17 +171,17 @@ public class Admin {
 	}
 
 	private WebApplicationContext getApplicationContext() {
-		if (ctx == null) {
+		if (context == null) {
 			Long lngId = (long)cfg.getDefaultLangId();
-			ctx = ApplicationHelper.getApplicationContext(lngId);
-			SchedulerFactoryBean sfb = ctx.getBean(SchedulerFactoryBean.class);
+			context = ApplicationHelper.getApplicationContext(lngId);
+			SchedulerFactoryBean sfb = context.getBean(SchedulerFactoryBean.class);
 			try {
 				sfb.getScheduler().shutdown(false);
 			} catch (Exception e) {
 				handleError("Unable to shutdown schedulers", e);
 			}
 		}
-		return ctx;
+		return context;
 	}
 
 	private void process(String[] args) {
@@ -483,9 +483,9 @@ public class Admin {
 	}
 
 	private void immediateDropDB(ConnectionProperties props) throws Exception {
-		if (ctx != null) {
+		if (context != null) {
 			destroyApplication();
-			ctx = null;
+			context = null;
 		}
 		JDBCConfigurationImpl conf = new JDBCConfigurationImpl();
 		try {

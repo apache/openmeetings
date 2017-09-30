@@ -28,6 +28,8 @@ public class CryptProvider {
 	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, getWebAppRootKey());
 	private static volatile ICrypt crypt;
 
+	private CryptProvider() {}
+
 	public static ICrypt get() {
 		if (crypt == null) {
 			synchronized (CryptProvider.class) {

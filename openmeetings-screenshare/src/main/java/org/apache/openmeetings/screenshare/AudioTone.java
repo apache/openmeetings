@@ -26,6 +26,8 @@ import javax.sound.sampled.SourceDataLine;
 public class AudioTone {
 	public static final float SAMPLE_RATE = 44100F;
 
+	private AudioTone() {}
+
 	public static void play() {
 		byte[] buf = new byte[1];
 
