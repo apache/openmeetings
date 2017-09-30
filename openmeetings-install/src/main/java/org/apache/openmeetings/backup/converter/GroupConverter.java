@@ -16,41 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.OmConverter.getLong;
+import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
 
 import java.util.Map;
 
-import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.entity.user.Group;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class AppointmentConverter implements OmConverter<Appointment> {
-	private AppointmentDao appointmentDao;
+public class GroupConverter implements OmConverter<Group> {
+	private GroupDao groupDao;
 	private Map<Long, Long> idMap;
 
-	public AppointmentConverter() {
+	public GroupConverter() {
 		//default constructor is for export
 	}
 
-	public AppointmentConverter(AppointmentDao appointmentDao, Map<Long, Long> idMap) {
-		this.appointmentDao = appointmentDao;
+	public GroupConverter(GroupDao groupDao, Map<Long, Long> idMap) {
+		this.groupDao = groupDao;
 		this.idMap = idMap;
 	}
 
 	@Override
-	public Appointment read(InputNode node) throws Exception {
+	public Group read(InputNode node) throws Exception {
 		long oldId = getLong(node);
-		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
+		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 
-		Appointment a = appointmentDao.getAny(newId);
-		return a == null ? new Appointment() : a;
+		Group o = groupDao.get(newId);
+		return o == null ? new Group() : o;
 	}
 
 	@Override
-	public void write(OutputNode node, Appointment value) throws Exception {
+	public void write(OutputNode node, Group value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : "" + value.getId());
 	}

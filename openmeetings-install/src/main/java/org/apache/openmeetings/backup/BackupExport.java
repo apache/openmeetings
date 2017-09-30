@@ -41,6 +41,16 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.openmeetings.backup.converter.AppointmentConverter;
+import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
+import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
+import org.apache.openmeetings.backup.converter.DateConverter;
+import org.apache.openmeetings.backup.converter.GroupConverter;
+import org.apache.openmeetings.backup.converter.PollTypeConverter;
+import org.apache.openmeetings.backup.converter.RoomConverter;
+import org.apache.openmeetings.backup.converter.RoomTypeConverter;
+import org.apache.openmeetings.backup.converter.SalutationConverter;
+import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;

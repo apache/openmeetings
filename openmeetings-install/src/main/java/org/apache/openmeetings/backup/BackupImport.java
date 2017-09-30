@@ -124,6 +124,18 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.openmeetings.backup.converter.AppointmentConverter;
+import org.apache.openmeetings.backup.converter.AppointmentReminderTypeConverter;
+import org.apache.openmeetings.backup.converter.BaseFileItemConverter;
+import org.apache.openmeetings.backup.converter.DateConverter;
+import org.apache.openmeetings.backup.converter.GroupConverter;
+import org.apache.openmeetings.backup.converter.OmCalendarConverter;
+import org.apache.openmeetings.backup.converter.PollTypeConverter;
+import org.apache.openmeetings.backup.converter.RecordingStatusConverter;
+import org.apache.openmeetings.backup.converter.RoomConverter;
+import org.apache.openmeetings.backup.converter.RoomTypeConverter;
+import org.apache.openmeetings.backup.converter.SalutationConverter;
+import org.apache.openmeetings.backup.converter.UserConverter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -908,7 +920,7 @@ public class BackupImport {
 				log.debug(msg);
 				return list;
 			} else {
-				throw new Exception(msg);
+				throw new BackupException(msg);
 			}
 		}
 		try (InputStream rootIs = new FileInputStream(xml)) {
@@ -1074,7 +1086,7 @@ public class BackupImport {
 	public List<User> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
 		File xml = new File(baseDir, fileName);
 		if (!xml.exists()) {
-			throw new Exception(fileName + " missing");
+			throw new BackupException(fileName + " missing");
 		}
 
 		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
@@ -1091,7 +1103,7 @@ public class BackupImport {
 
 		File xml = new File(baseDir, filename);
 		if (!xml.exists()) {
-			throw new Exception(filename + " missing");
+			throw new BackupException(filename + " missing");
 		}
 
 		DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

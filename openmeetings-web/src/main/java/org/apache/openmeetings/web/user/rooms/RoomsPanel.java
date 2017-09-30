@@ -118,8 +118,7 @@ public class RoomsPanel extends UserPanel {
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {
-		final List<Client> clientsInRoom = Application.getRoomClients(roomId);
-		clients.setDefaultModelObject(clientsInRoom);
+		clients.setDefaultModelObject(Application.getRoomClients(roomId));
 		Room room = getBean(RoomDao.class).get(roomId);
 		roomID.setObject(room.getId());
 		roomName.setObject(room.getName());

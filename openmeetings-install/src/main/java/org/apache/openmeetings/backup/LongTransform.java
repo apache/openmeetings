@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import org.apache.openmeetings.backup.converter.OmConverter;
 import org.simpleframework.xml.transform.Transform;
 
 public class LongTransform implements Transform<Long> {
@@ -28,6 +29,6 @@ public class LongTransform implements Transform<Long> {
 
 	@Override
 	public String write(Long value) throws Exception {
-		return "" + value;
+		return String.valueOf(value);
 	}
 }

@@ -66,9 +66,8 @@ public class SOAPLoginDao {
 			if (soapLoginId != null) {
 				return soapLogin.getHash();
 			} else {
-				throw new Exception("Could not store SOAPLogin");
+				log.error("[addSOAPLogin]: Could not store SOAPLogin");
 			}
-
 		} catch (Exception ex2) {
 			log.error("[addSOAPLogin]: ", ex2);
 		}
@@ -82,14 +81,13 @@ public class SOAPLoginDao {
 					.setParameter("hash", String.format("%%%s%%", hash))
 					.getResultList();
 
-			if (sList.size() > 1) {
-				throw new Exception("there are more then one SOAPLogin with identical hash! " + hash);
-			}
-
 			if (sList.size() == 1) {
 				return sList.get(0);
 			}
 
+			if (sList.size() > 1) {
+				log.error("[get]: there are more then one SOAPLogin with identical hash! {}", hash);
+			}
 		} catch (Exception ex2) {
 			log.error("[get]: ", ex2);
 		}

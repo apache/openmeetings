@@ -16,26 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import java.util.Date;
-
-import org.apache.openmeetings.util.CalendarPatterns;
 import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
-import org.simpleframework.xml.stream.OutputNode;
 
-public class DateConverter implements Converter<Date> {
-	@Override
-	public Date read(InputNode node) throws Exception {
-		String val = node.getValue();
-		return val == null || "null".equals(val) ? new Date() : CalendarPatterns.parseImportDate(val);
+public interface OmConverter<T> extends Converter<T> {
+	static long getLong(InputNode node) throws Exception {
+		return getLong(node.getValue());
 	}
 
-	@Override
-	public void write(OutputNode node, Date value) throws Exception {
-		node.setAttribute("class", "java.util.Date");
-		node.setData(true);
-		node.setValue(value == null ? "0" : CalendarPatterns.getExportDate(value));
+	static long getLong(String value) {
+		return getLong(value, 0);
+	}
+
+	static long getLong(String value, long def) {
+		long result = def;
+		try {
+			result = Long.parseLong(value);
+		} catch (Exception e) {
+			//no op
+		}
+		return result;
+	}
+
+	static int getInt(InputNode node) throws Exception {
+		return getInt(node.getValue(), 0);
+	}
+
+	static int getInt(String value, int def) {
+		int result = def;
+		try {
+			result = Integer.parseInt(value);
+		} catch (Exception e) {
+			//no op
+		}
+		return result;
 	}
 }

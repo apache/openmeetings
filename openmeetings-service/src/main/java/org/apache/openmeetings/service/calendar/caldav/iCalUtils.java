@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -379,7 +380,7 @@ public class iCalUtils {
 
 		net.fortuna.ical4j.model.TimeZone timeZone = registry.getTimeZone(tzid);
 		if (timeZone == null) {
-			throw new Exception("Unable to get time zone by id provided: " + tzid);
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
 		}
 
 		Calendar icsCalendar = new Calendar();
@@ -480,7 +481,7 @@ public class iCalUtils {
 
 		net.fortuna.ical4j.model.TimeZone timeZone = registry.getTimeZone(tzid);
 		if (timeZone == null) {
-			throw new Exception("Unable to get time zone by id provided: " + tzid);
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + tzid);
 		}
 
 		Calendar icsCalendar = new Calendar();

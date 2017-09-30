@@ -16,22 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.OmConverter.getLong;
+import static org.apache.openmeetings.backup.converter.OmConverter.getInt;
 
-import org.apache.openmeetings.db.entity.room.RoomPoll;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class PollTypeConverter implements OmConverter<RoomPoll.Type> {
+public class SalutationConverter implements OmConverter<Salutation> {
 	@Override
-	public RoomPoll.Type read(InputNode node) throws Exception {
-		return RoomPoll.Type.get(getLong(node));
+	public Salutation read(InputNode node) throws Exception {
+		return Salutation.get(getInt(node));
 	}
 
 	@Override
-	public void write(OutputNode node, RoomPoll.Type value) throws Exception {
+	public void write(OutputNode node, Salutation value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}

@@ -16,42 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.OmConverter.getLong;
+import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
 
 import java.util.Map;
 
-import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.entity.user.Group;
+import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
+import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class GroupConverter implements OmConverter<Group> {
-	private GroupDao groupDao;
+public class OmCalendarConverter implements OmConverter<OmCalendar> {
+	private OmCalendarDao calendarDao;
 	private Map<Long, Long> idMap;
 
-	public GroupConverter() {
+	public OmCalendarConverter() {
 		//default constructor is for export
 	}
 
-	public GroupConverter(GroupDao groupDao, Map<Long, Long> idMap) {
-		this.groupDao = groupDao;
+	public OmCalendarConverter(OmCalendarDao calendarDao, Map<Long, Long> idMap) {
+		this.calendarDao = calendarDao;
 		this.idMap = idMap;
 	}
 
 	@Override
-	public Group read(InputNode node) throws Exception {
+	public OmCalendar read(InputNode node) throws Exception {
 		long oldId = getLong(node);
-		long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
+		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 
-		Group o = groupDao.get(newId);
-		return o == null ? new Group() : o;
+		OmCalendar c = calendarDao.get(newId);
+		return c == null ? new OmCalendar() : c;
 	}
 
 	@Override
-	public void write(OutputNode node, Group value) throws Exception {
+	public void write(OutputNode node, OmCalendar value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : "" + value.getId());
+		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}
 }

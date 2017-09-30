@@ -413,7 +413,7 @@ public class ImportInitvalues {
 		log.debug("Installation - User Added user-Id " + u.getId());
 
 		if (u.getId() == null) {
-			throw new Exception("Unable to add user");
+			throw new InstallException("Unable to add user");
 		}
 	}
 

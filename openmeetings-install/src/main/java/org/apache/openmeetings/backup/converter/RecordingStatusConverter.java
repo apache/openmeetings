@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 

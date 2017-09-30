@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.backup;
 
+import org.apache.openmeetings.backup.converter.OmConverter;
 import org.simpleframework.xml.transform.Transform;
 
 public class IntegerTransform implements Transform<Integer> {
@@ -28,6 +29,6 @@ public class IntegerTransform implements Transform<Integer> {
 
 	@Override
 	public String write(Integer value) throws Exception {
-		return "" + value;
+		return String.valueOf(value);
 	}
 }

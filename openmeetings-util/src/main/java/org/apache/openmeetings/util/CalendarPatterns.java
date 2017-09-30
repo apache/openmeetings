@@ -89,7 +89,7 @@ public class CalendarPatterns {
 				return resultDate;
 			}
 
-			throw new Exception("Could not parse date string " + dateString);
+			log.error("parseDate:: Could not parse date string {}", dateString);
 		} catch (Exception e) {
 			log.error("parseDate", e);
 		}

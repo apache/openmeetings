@@ -16,23 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.OmConverter.getInt;
+import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
 
-import org.apache.openmeetings.db.entity.user.User.Salutation;
+import java.util.Map;
+
+import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class SalutationConverter implements OmConverter<Salutation> {
-	@Override
-	public Salutation read(InputNode node) throws Exception {
-		return Salutation.get(getInt(node));
+public class UserConverter implements OmConverter<User> {
+	private UserDao userDao;
+	private Map<Long, Long> idMap;
+
+	public UserConverter() {
+		//default constructor is for export
+	}
+
+	public UserConverter(UserDao userDao, Map<Long, Long> idMap) {
+		this.userDao = userDao;
+		this.idMap = idMap;
 	}
 
 	@Override
-	public void write(OutputNode node, Salutation value) throws Exception {
+	public User read(InputNode node) throws Exception {
+		long oldId = getLong(node);
+		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
+
+		User u = userDao.get(newId);
+		return u == null ? new User() : u;
+	}
+
+	@Override
+	public void write(OutputNode node, User value) throws Exception {
 		node.setData(true);
-		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
+		node.setValue(value == null ? "0" : "" + value.getId());
 	}
 }

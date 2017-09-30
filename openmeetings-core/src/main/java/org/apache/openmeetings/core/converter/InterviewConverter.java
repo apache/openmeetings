@@ -147,7 +147,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
 
 			if (!defaultInterviewImageFile.exists()) {
-				throw new Exception("defaultInterviewImageFile does not exist!");
+				throw new ConversionException("defaultInterviewImageFile does not exist!");
 			}
 
 			final int flvWidth = 320;

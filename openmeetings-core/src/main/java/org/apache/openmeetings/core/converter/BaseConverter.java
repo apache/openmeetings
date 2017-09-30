@@ -344,7 +344,7 @@ public abstract class BaseConverter {
 					log.debug("Trim Audio to Full Length -- Start");
 
 					if (!outputFullWav.exists()) {
-						throw new Exception("Audio File does not exist , could not extract the Audio correctly");
+						throw new ConversionException("Audio File does not exist , could not extract the Audio correctly");
 					}
 					metaData.setFullWavAudioData(hashFileFullName);
 

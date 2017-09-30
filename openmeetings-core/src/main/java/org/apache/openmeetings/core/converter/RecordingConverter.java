@@ -69,11 +69,11 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			RecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(r.getId());
 
 			if (screenMetaData == null) {
-				throw new Exception("screenMetaData is Null recordingId " + r.getId());
+				throw new ConversionException("screenMetaData is Null recordingId " + r.getId());
 			}
 
 			if (screenMetaData.getStreamStatus() == Status.NONE) {
-				throw new Exception("Stream has not been started, error in recording");
+				throw new ConversionException("Stream has not been started, error in recording");
 			}
 			if (Strings.isEmpty(r.getHash())) {
 				r.setHash(UUID.randomUUID().toString());

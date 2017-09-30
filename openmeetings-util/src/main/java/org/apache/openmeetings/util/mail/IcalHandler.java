@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import org.apache.wicket.util.string.Strings;
@@ -119,7 +120,7 @@ public class IcalHandler {
 
 		TimeZone timeZone = registry.getTimeZone(javaTzId);
 		if (timeZone == null) {
-			throw new RuntimeException("Unable to get time zone by id provided: " + javaTzId);
+			throw new NoSuchElementException("Unable to get time zone by id provided: " + javaTzId);
 		}
 
 		DateTime start = new DateTime(startDate);

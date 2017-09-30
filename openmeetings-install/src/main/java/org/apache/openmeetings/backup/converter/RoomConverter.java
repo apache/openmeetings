@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.OmConverter.getLong;
+import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
 
 import java.util.Map;
 

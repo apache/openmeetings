@@ -16,22 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.backup;
+package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.OmConverter.getInt;
+import static org.apache.openmeetings.backup.converter.OmConverter.getInt;
 
-import org.apache.openmeetings.db.entity.room.Room.Type;
+import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class RoomTypeConverter implements OmConverter<Type> {
+public class AppointmentReminderTypeConverter implements OmConverter<Reminder> {
 	@Override
-	public Type read(InputNode node) throws Exception {
-		return Type.get(getInt(node));
+	public Reminder read(InputNode node) throws Exception {
+		return Reminder.get(getInt(node));
 	}
 
 	@Override
-	public void write(OutputNode node, Type value) throws Exception {
+	public void write(OutputNode node, Reminder value) throws Exception {
 		node.setData(true);
 		node.setValue(value == null ? "0" : String.valueOf(value.getId()));
 	}
