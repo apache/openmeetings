@@ -50,7 +50,7 @@ public class AppointmentMessageBodyReader implements MessageBodyReader<Appointme
 			throws IOException, WebApplicationException
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(entityStream, UTF_8));
-		String line = null;
+		String line;
 		StringBuilder sb = new StringBuilder();
 		while ((line = br.readLine()) != null) {
 			sb.append(line).append(System.lineSeparator());

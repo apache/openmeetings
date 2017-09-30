@@ -108,7 +108,7 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 
 	@Override
 	public User fromId(String id) {
-		User u = null;
+		User u;
 		if (newContacts.containsKey(id)) {
 			u = newContacts.get(id);
 		} else {

@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -279,7 +278,7 @@ public class FileWebService extends BaseWebService {
 				log.debug("getRoomByParent " + parentId);
 
 				FileItemDao dao = getFileDao();
-				List<FileItem> list = new ArrayList<>();
+				List<FileItem> list;
 				if (parentId < 0) {
 					if (parentId == -1) {
 						list = dao.getByOwner(userId);

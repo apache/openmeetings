@@ -173,11 +173,11 @@ public class CalendarPanel extends UserBasePanel {
 		days.put(0, Application.getString("466"));
 		shortDays.put(0, Application.getString("459"));
 		for (int i = 0; i < 12; i++) {
-			monthes.put(i, Application.getString("" + (469 + i)));
-			shortMonthes.put(i, Application.getString("" + (1556 + i)));
+			monthes.put(i, Application.getString(String.valueOf(469 + i)));
+			shortMonthes.put(i, Application.getString(String.valueOf(1556 + i)));
 			if (i + 1 < 7) {
-				days.put(i + 1, Application.getString("" + (460 + i)));
-				shortDays.put(i + 1, Application.getString("" + (453 + i)));
+				days.put(i + 1, Application.getString(String.valueOf(460 + i)));
+				shortDays.put(i + 1, Application.getString(String.valueOf(453 + i)));
 			}
 		}
 		options.set("monthNames", monthes.toString());

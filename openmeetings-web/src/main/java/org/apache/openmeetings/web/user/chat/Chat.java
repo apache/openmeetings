@@ -147,7 +147,7 @@ public class Chat extends Panel {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), Application.getString("406")));
 		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
-		if (list.size() > 0) {
+		if (!list.isEmpty()) {
 			sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
 		}
 		return sb;
@@ -171,7 +171,7 @@ public class Chat extends Panel {
 			}
 			list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
 			StringBuilder sb = new StringBuilder(getReinit());
-			if (list.size() > 0) {
+			if (!list.isEmpty()) {
 				sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
 			}
 			response.render(OnDomReadyHeaderItem.forScript(sb.toString()));

@@ -289,7 +289,6 @@ $(function() {
 				eval(m.func);
 			}
 		} catch (err) {
-			console.log(err);
 			//no-op
 		}
 	});

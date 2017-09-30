@@ -74,7 +74,7 @@ public class RoomsPanel extends UserPanel {
 		});
 
 		// Users in this Room
-		add(details.setOutputMarkupId(true).setVisible(rooms.size() > 0));
+		add(details.setOutputMarkupId(true).setVisible(!rooms.isEmpty()));
 		details.add(new Label("roomId", roomID));
 		details.add(new Label("roomName", roomName));
 		details.add(new Label("roomComment", roomComment));

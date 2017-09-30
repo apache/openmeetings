@@ -80,67 +80,66 @@ public class ActivitiesPanel extends Panel {
 			try {
 				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString();
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
-				assert(room.getRoom().getId().equals(roomId));
 				Action action = Action.valueOf(getRequest().getRequestParameters().getParameterValue(ACTION).toString());
 				Activity a = activities.get(id);
-				if (a != null) {
-					switch (action) {
-						case close:
-							remove(id, target);
-							break;
-						case decline:
-							if (room.getClient().hasRight(Right.moderator)) {
-								sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-							}
-							break;
-						case accept:
-							Client client = getOnlineClient(a.getUid());
-							if (room.getClient().hasRight(Right.moderator) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
-								switch (a.getType()) {
-									case reqRightModerator:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.moderator);
-										break;
-									case reqRightAv:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.audio, Right.video);
-										break;
-									case reqRightPresenter:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.presenter);
-										break;
-									case reqRightWb:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.whiteBoard);
-										break;
-									case reqRightShare:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.share);
-										break;
-									case reqRightRemote:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.remoteControl);
-										break;
-									case reqRightA:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.audio);
-										break;
-									case reqRightMute:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.mute);
-										break;
-									case reqRightExclusive:
-										sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
-										room.allowRight(client, Right.exclusive);
-										break;
-									default:
-										break;
-								}
-							}
-							break;
-					}
-				} else {
+				if (a == null || !room.getRoom().getId().equals(roomId)) {
 					log.error("It seems like we are being hacked!!!!");
+					return;
+				}
+				switch (action) {
+					case close:
+						remove(id, target);
+						break;
+					case decline:
+						if (room.getClient().hasRight(Right.moderator)) {
+							sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+						}
+						break;
+					case accept:
+						Client client = getOnlineClient(a.getUid());
+						if (room.getClient().hasRight(Right.moderator) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
+							switch (a.getType()) {
+								case reqRightModerator:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.moderator);
+									break;
+								case reqRightAv:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.audio, Right.video);
+									break;
+								case reqRightPresenter:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.presenter);
+									break;
+								case reqRightWb:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.whiteBoard);
+									break;
+								case reqRightShare:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.share);
+									break;
+								case reqRightRemote:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.remoteControl);
+									break;
+								case reqRightA:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.audio);
+									break;
+								case reqRightMute:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.mute);
+									break;
+								case reqRightExclusive:
+									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									room.allowRight(client, Right.exclusive);
+									break;
+								default:
+									break;
+							}
+						}
+						break;
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while processing activity action", e);

@@ -54,7 +54,7 @@ public class ExtendedClientProperties extends ClientProperties {
 
 	public JSONObject getSettings() {
 		try {
-			return Strings.isEmpty(settings) ? new JSONObject() : new JSONObject(settings.toString());
+			return Strings.isEmpty(settings) ? new JSONObject() : new JSONObject(settings);
 		} catch (Exception e) {
 			//can throw, no op
 		}
@@ -63,17 +63,18 @@ public class ExtendedClientProperties extends ClientProperties {
 
 	private static StringBuilder cleanUrl(String _url) {
 		StringBuilder sb = new StringBuilder();
-		int semi = _url.indexOf(';');
+		String url = _url;
+		int semi = url.indexOf(';');
 		if (semi > -1) {
-			_url = _url.substring(0, semi);
+			url = url.substring(0, semi);
 		}
 		for (String tail : new String[]{HASH_MAPPING, SIGNIN_MAPPING, NOTINIT_MAPPING}) {
-			if (_url.endsWith(tail)) {
-				_url = _url.substring(0, _url.length() - tail.length());
+			if (url.endsWith(tail)) {
+				url = url.substring(0, url.length() - tail.length());
 				break;
 			}
 		}
-		return sb.append(_url);
+		return sb.append(url);
 	}
 
 	@Override

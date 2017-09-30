@@ -89,7 +89,7 @@ public class RoomClientPanel extends Panel {
 	protected void onInitialize() {
 		super.onInitialize();
 		Client c = (Client)getDefaultModelObject();
-		String status = null, statusTitle = null;
+		String status, statusTitle;
 		if (c.hasRight(Right.moderator)) {
 			status = "status-mod";
 			statusTitle = "679";

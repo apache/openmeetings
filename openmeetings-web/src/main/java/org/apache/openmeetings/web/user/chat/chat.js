@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	var chatTabs
+	let chatTabs
 		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 		, msgTemplate = "<div class='clear' id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
 		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
@@ -36,11 +36,11 @@ var Chat = function() {
 		}
 	}
 	function _save() {
-		var _s = JSON.stringify(s);
+		let _s = JSON.stringify(s);
 		localStorage.setItem('openmeetings', _s);
 	}
 	function _updateBtn(a) {
-		var muted = s.chat.muted === true;
+		let muted = s.chat.muted === true;
 		a.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
 				.attr('title', a.data(muted ? 'sound-enabled' : 'sound-muted'));
 	}
@@ -49,27 +49,27 @@ var Chat = function() {
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
 	function initToolbar() {
-		var emtBtn = $('#emoticons');
+		let emtBtn = $('#emoticons');
 		emtBtn.html('');
 		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
-		var emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
-		for (var ei in emoticon.specialEmoticons) {
+		let emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
+		for (let ei in emoticon.specialEmoticons) {
 			emots.push(ei);
 		}
-		var emotMenuList = $('#emotMenuList');
+		let emotMenuList = $('#emotMenuList');
 		emotMenuList.html('');
-		var rowSize = 20;
-		var row = $('<tr></tr>');
-		for (var i = 0; i < emots.length; ++i) {
+		let rowSize = 20;
+		let row = $('<tr></tr>');
+		for (let i = 0; i < emots.length; ++i) {
 			row.append('<td><div class="emt" onclick="Chat.emtClick(\'' + emots[i] + '\');">'
 				+ emoticon.emoticonize(emots[i]) + '</div></td>');
-			if (i != 0 && i % rowSize == 0) {
+			if (i !== 0 && i % rowSize === 0) {
 				emotMenuList.append(row);
 				row = $('<tr></tr>');
 			}
 		}
 		_load();
-		var a = $('#chat .audio');
+		let a = $('#chat .audio');
 		_updateBtn(a);
 		$('#chat .chat-btn').hover(function(){ $(this).addClass('ui-state-hover') }, function(){ $(this).removeClass('ui-state-hover') });
 		a.click(function() {
@@ -99,7 +99,7 @@ var Chat = function() {
 			});
 			// close icon: removing the tab on click
 			chatTabs.delegate("span.ui-icon-close", "click", function() {
-				var panelId = $(this).closest("li").remove().attr("aria-controls");
+				let panelId = $(this).closest("li").remove().attr("aria-controls");
 				$("#" + panelId).remove();
 				chatTabs.tabs("refresh");
 			});
@@ -115,7 +115,7 @@ var Chat = function() {
 				}
 			});
 			$('#chatMessage').off().on('input propertychange paste', function () {
-				var room = $('.room.box');
+				let room = $('.room.box');
 				if (room.length) {
 					if (!!typingTimer) {
 						clearTimeout(typingTimer);
@@ -141,10 +141,10 @@ var Chat = function() {
 				return;
 			}
 			if (!label) {
-				label = id == "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
+				label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
 			}
-			var li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
-			if (id.indexOf("chatTab-r") != 0) {
+			let li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+			if (id.indexOf("chatTab-r") !== 0) {
 				li.append(closeBlock);
 			}
 			chatTabs.find(".ui-tabs-nav").append(li);
@@ -153,11 +153,11 @@ var Chat = function() {
 			activateTab(id);
 		}
 		, addMessage: function(m) {
-			if ($('#chat').length > 0 && m && m.type == "chat") {
+			if ($('#chat').length > 0 && m && m.type === "chat") {
 				if (isClosed()) {
 					$('#chatPopup .control.block').addClass('ui-state-highlight');
 					if ($('#chatPanel').is(':visible') && s.chat.muted !== true) {
-						var playPromise = audio.play();
+						let playPromise = audio.play();
 
 						// In browsers that don’t yet support this functionality,
 						// playPromise won’t be defined.
@@ -170,18 +170,18 @@ var Chat = function() {
 						}
 					}
 				}
-				var msg, cm;
+				let msg, cm;
 				while (!!(cm = m.msg.pop())) {
-					var area = $('#' + cm.scope);
+					let area = $('#' + cm.scope);
 					msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
 							.replace(/#\{userId\}/g, cm.from.id)
 							.replace(/#\{imgSrc\}/g, !!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())
 							.replace(/#\{from\}/g, cm.from.name)
 							.replace(/#\{sent\}/g, cm.sent)
 							.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
-					var date = msg.children('.date');
+					let date = msg.children('.date');
 					date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
-					if ("full" == cm.actions) {
+					if ("full" === cm.actions) {
 						date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
 						date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
 						date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
@@ -193,10 +193,10 @@ var Chat = function() {
 						this.addTab(cm.scope, cm.scopeName);
 						area = $('#' + cm.scope);
 					}
-					if (m.mode == "accept") {
+					if (m.mode === "accept") {
 						$('#chat-msg-id-' + cm.id).remove();
 					}
-					var btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+					let btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
 					area.append(msg);
 					if (btm) {
 						area.animate({
@@ -232,7 +232,7 @@ var Chat = function() {
 			}
 		}
 		, emtClick: function(emoticon) {
-			var editor = $('#chatMessage .wysiwyg-editor');
+			let editor = $('#chatMessage .wysiwyg-editor');
 			editor.html(editor.html() + ' ' + emoticon + ' ');
 		}
 	};
@@ -244,14 +244,14 @@ $(function() {
 			if (msg instanceof Blob) {
 				return; //ping
 			}
-			var m = jQuery.parseJSON(msg);
+			let m = jQuery.parseJSON(msg);
 			if (m) {
 				switch(m.type) {
 					case "chat":
 						Chat.addMessage(m);
 						break;
 					case "typing":
-						if (typeof typingActivity == "function") {
+						if (typeof typingActivity === "function") {
 							typingActivity(m.uid, m.active);
 						}
 						break;
