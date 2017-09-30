@@ -61,6 +61,7 @@ public class SyncReportInfo implements XmlSerializable {
 	private int limit = Integer.MIN_VALUE;
 
 	public SyncReportInfo() {
+		//default constructor
 	}
 
 	public SyncReportInfo(String syncToken, DavPropertyNameSet properties, int syncLevel) {

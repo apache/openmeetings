@@ -29,8 +29,6 @@ import org.quartz.JobExecutionException;
 public class CursorJob implements Job {
 	public static final String CAPTURE_KEY = "capture";
 
-	public CursorJob() {}
-
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap data = context.getJobDetail().getJobDataMap();

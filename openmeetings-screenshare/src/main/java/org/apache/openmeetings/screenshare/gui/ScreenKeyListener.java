@@ -39,5 +39,6 @@ public class ScreenKeyListener implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		//no-op
 	}
 }

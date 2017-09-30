@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 public class SendJob implements Job {
 	private static final Logger log = getLogger(SendJob.class);
 	public static final String CAPTURE_KEY = "capture";
-	public SendJob() {}
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {

@@ -55,5 +55,6 @@ public class StringLabel extends SimpleEntry<String, String> implements IDataPro
 
 	@Override
 	public void setId(Long id) {
+		//no-op
 	}
 }

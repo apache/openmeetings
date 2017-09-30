@@ -100,6 +100,7 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 
 	@Override
 	public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+		//no-op
 	}
 
 	@Override

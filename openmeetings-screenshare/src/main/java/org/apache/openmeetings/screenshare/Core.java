@@ -242,6 +242,7 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	 * @param id The streamid sent by server
 	 */
 	public void setId(String id) {
+		//no-op
 	}
 
 	public void setConnectionAsSharingClient() {
