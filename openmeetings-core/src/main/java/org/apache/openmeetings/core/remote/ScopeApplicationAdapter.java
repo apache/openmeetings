@@ -25,10 +25,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_X
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +65,7 @@ import org.red5.server.api.IClient;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.Red5;
 import org.red5.server.api.scope.IScope;
+import org.red5.server.api.scope.ScopeType;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
@@ -152,6 +153,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return (Map<String, Object>)params[0];
 		}
 		return new HashMap<>();
+	}
+
+	@Override
+	public boolean appConnect(IConnection conn, Object[] params) {
+		if (conn != null && conn.getScope() != null && conn.getScope().getType() == ScopeType.APPLICATION) {
+			return false;
+		}
+		return super.appConnect(conn, params);
 	}
 
 	@Override
