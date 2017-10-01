@@ -272,7 +272,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<excludedGroups>org.apache.openmeetings.util.NonJenkinsTests</excludedGroups>
+							<excludedGroups>org.apache.openmeetings.test.NonJenkinsTests</excludedGroups>
 						</configuration>
 					</plugin>
 				</plugins>
