@@ -43,7 +43,7 @@ public class TestInvitation extends AbstractWicketTester {
 
 	@Test
 	public void testSendInvitationLink() throws Exception {
-		User us = userDao.getByLogin(username, User.Type.user, null);
+		User us = userDao.getByLogin(adminUsername, User.Type.user, null);
 
 		LocalDateTime from = LocalDateTime.now().plusDays(1).withHour(12).withMinute(0).withSecond(0);
 		User invitee = userDao.getContact("sebawagner@apache.org", "Testname", "Testlastname", us.getId());

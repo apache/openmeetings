@@ -41,6 +41,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter.MessageSender;
+import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;

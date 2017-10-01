@@ -34,7 +34,7 @@ public class TestLogin extends AbstractJUnitDefaults {
 
 	@Test
 	public void testTestLogin() throws OmException {
-		User us = userDao.login(username, userpass);
+		User us = userDao.login(adminUsername, userpass);
 
 		assertNotNull("User is unable to login", us);
 

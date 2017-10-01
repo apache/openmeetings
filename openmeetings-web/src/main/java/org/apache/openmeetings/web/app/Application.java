@@ -49,9 +49,9 @@ import java.util.function.Predicate;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.core.remote.MainService;
 import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
+import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;

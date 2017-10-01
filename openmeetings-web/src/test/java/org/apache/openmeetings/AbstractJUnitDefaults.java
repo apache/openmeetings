@@ -43,7 +43,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
 	public static final int ONE_HOUR = 60 * 60 * 1000;
 
-	protected static final String username = "admin";
+	protected static final String adminUsername = "admin";
+	protected static final String regularUsername = "user";
 	protected static final String userpass = "12345";
 	private static final String group = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
@@ -64,6 +65,10 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		cfgDao.getCryptKey();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
+			User regular = getUser();
+			regular.setLogin(regularUsername);
+			regular.updatePassword(cfgDao, userpass);
+			createUser(regular);
 			log.info("Default scheme created successfully");
 		} else {
 			log.info("Default scheme already created");
@@ -170,7 +175,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	private void makeDefaultScheme() throws Exception {
 		InstallationConfig cfg = new InstallationConfig();
-		cfg.setUsername(username);
+		cfg.setUsername(adminUsername);
 		cfg.setPassword(userpass);
 		cfg.setEmail(email);
 		cfg.setGroup(group);

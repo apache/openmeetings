@@ -51,12 +51,12 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 			if (login != null && password != null) {
 				s.signIn(login, password, Type.user, null);
 			} else {
-				s.signIn(username, userpass, Type.user, null);
+				s.signIn(adminUsername, userpass, Type.user, null);
 			}
 		} catch (OmException e) {
 			fail(e.getMessage());
 		}
-		assertTrue("Web session is not signed in for user: " + (login != null ? login : username), s.isSignedIn());
+		assertTrue("Web session is not signed in for user: " + (login != null ? login : adminUsername), s.isSignedIn());
 	}
 
 	public <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(String path, String name) {

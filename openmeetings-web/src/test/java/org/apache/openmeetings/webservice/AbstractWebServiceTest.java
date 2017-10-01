@@ -78,7 +78,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	}
 
 	public static ServiceResult login() {
-		return login(username, userpass);
+		return login(adminUsername, userpass);
 	}
 
 	public static ServiceResult loginNoCheck(String user, String pass) {

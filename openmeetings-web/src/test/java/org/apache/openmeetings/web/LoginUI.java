@@ -39,7 +39,7 @@ public class LoginUI extends AbstractWicketTester {
 		tester.assertRenderedPage(SignInPage.class);
 
 		FormTester formTester = tester.newFormTester("signin:signin");
-		formTester.setValue("login", username);
+		formTester.setValue("login", adminUsername);
 		formTester.setValue("pass", userpass);
 		formTester.submit("submit");
 

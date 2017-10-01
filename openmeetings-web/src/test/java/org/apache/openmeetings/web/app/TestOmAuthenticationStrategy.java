@@ -44,6 +44,7 @@ public class TestOmAuthenticationStrategy extends AbstractWicketTester {
 		assertEquals(4, s.decode("1-sep-2").length);
 		assertEquals(4, s.decode("1-sep-2-sep-user").length);
 		assertEquals(4, s.decode("1-sep-2-sep-user-sep-3").length);
+		assertEquals(4, s.decode("-sep--sep--sep-").length);
 	}
 
 	private void copyCookies() {

@@ -213,7 +213,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public boolean signIn(String secureHash, boolean markUsed) {
-		//FIXME code is duplicated from MainService, need to be unified
 		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
 		SOAPLogin soapLogin = soapDao.get(secureHash);
 		if (soapLogin == null) {

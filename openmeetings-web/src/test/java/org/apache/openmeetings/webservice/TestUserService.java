@@ -91,7 +91,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertEquals("OM Call should be successful", Type.SUCCESS.name(), r1.getType());
 
 		WebSession ws = WebSession.get();
-		assertTrue(ws.signIn(username, userpass, User.Type.user, null));
+		assertTrue(ws.signIn(adminUsername, userpass, User.Type.user, null));
 		Long userId0 = WebSession.getUserId();
 		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
 		assertTrue("Login via secure hash should be successful", ws.isSignedIn());

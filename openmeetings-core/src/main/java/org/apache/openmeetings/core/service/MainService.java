@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.remote;
+package org.apache.openmeetings.core.service;
 
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -27,8 +27,6 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.service.IPendingServiceCall;
-import org.red5.server.api.service.IPendingServiceCallback;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +37,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class MainService implements IPendingServiceCallback {
+public class MainService {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.getWebAppRootKey());
 
 	@Autowired
@@ -94,10 +92,5 @@ public class MainService implements IPendingServiceCallback {
 			}
 		}
 		return allowed;
-	}
-
-	@Override
-	public void resultReceived(IPendingServiceCall arg0) {
-		log.debug("[resultReceived]" + arg0);
 	}
 }
