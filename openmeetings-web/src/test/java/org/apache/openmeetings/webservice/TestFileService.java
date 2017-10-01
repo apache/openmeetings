@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.util.NonJenkinsTests;
+import org.apache.openmeetings.test.NonJenkinsTests;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 

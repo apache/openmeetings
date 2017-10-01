@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util;
+package org.apache.openmeetings.test;
 
 public @interface NonJenkinsTests {
 

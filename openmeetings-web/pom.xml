@@ -76,7 +76,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<inherited>true</inherited>
 						<configuration>
-							<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests,org.apache.openmeetings.test.selenium.HeavyTests,org.apache.openmeetings.util.NonJenkinsTests</excludedGroups>
+							<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests,org.apache.openmeetings.test.HeavyTests,org.apache.openmeetings.test.NonJenkinsTests</excludedGroups>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -418,7 +418,7 @@
 				<inherited>true</inherited>
 				<configuration>
 					<workingDirectory>${project.build.directory}</workingDirectory>
-					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests,org.apache.openmeetings.test.selenium.HeavyTests</excludedGroups>
+					<excludedGroups>org.apache.openmeetings.test.selenium.SeleniumTests,org.apache.openmeetings.test.HeavyTests</excludedGroups>
 					<systemPropertyVariables>
 						<om.home>${project.build.directory}/test-root</om.home>
 						<languages.home>${project.build.directory}/test-root/languages</languages.home>

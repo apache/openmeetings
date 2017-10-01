@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.selenium;
+package org.apache.openmeetings.test.selenium;
 
 import java.util.Date;
 

@@ -32,7 +32,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.selenium.HeavyTests;
+import org.apache.openmeetings.test.HeavyTests;
 import org.apache.openmeetings.util.OmException;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;

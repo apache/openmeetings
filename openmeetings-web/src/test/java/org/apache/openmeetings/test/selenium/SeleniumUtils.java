@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.selenium;
+package org.apache.openmeetings.test.selenium;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
