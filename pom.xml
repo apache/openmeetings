@@ -840,10 +840,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<configuration>
-					<destFile>${sonar.jacoco.reportPath}</destFile>
-					<append>true</append>
-				</configuration>
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -1042,6 +1038,10 @@
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>
 					<version>0.7.9</version>
+					<configuration>
+						<destFile>${sonar.jacoco.reportPath}</destFile>
+						<append>true</append>
+					</configuration>
 				</plugin>
 
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->

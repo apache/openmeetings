@@ -19,6 +19,7 @@
 package org.apache.openmeetings.util.crypt;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -39,6 +40,12 @@ public abstract class AbstractCryptTest {
 		assertEquals("Hash for null should be null", null, hash);
 
 		assertTrue("Hash for null should be null", crypt.verify(null, null));
+		assertFalse("Hash for null should be null", crypt.verify(null, "abc"));
+		assertFalse("Hash for null should NOT be null", crypt.verify("abc", null));
+
+		assertTrue("Hash for null should be null", crypt.fallback(null, null));
+		assertFalse("Hash for null should be null", crypt.fallback(null, "abc"));
+		assertFalse("Hash for null should NOT be null", crypt.fallback("abc", null));
 	}
 
 	private static List<String> get(int count) {
