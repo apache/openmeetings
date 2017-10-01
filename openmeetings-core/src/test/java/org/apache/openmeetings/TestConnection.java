@@ -16,35 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.rdc;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
-import java.awt.event.KeyEvent;
+package org.apache.openmeetings;
 
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
 
-public class TestKeyCodesNumber {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestKeyCodesNumber.class, getWebAppRootKey());
+public class TestConnection {
 
 	@Test
-	public void testKeyCodes() {
-		try {
-
-			for (int i = 1; i < 600; i++) {
-
-				String charText = KeyEvent.getKeyText(i);
-
-				log.debug("ERROR " + i + " " + charText);
-
-			}
-
-		} catch (Exception err) {
-			log.error("[testKeyCodes]", err);
-		}
-
+	public void testNoop() {
+		//no-op
 	}
-
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.rtmp;
+package org.apache.openmeetings.rtmp;
 
 import java.util.Date;
 import java.util.HashMap;

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.rdc;
+package org.apache.openmeetings.rdc;
 
 import java.awt.Color;
 import java.awt.Frame;

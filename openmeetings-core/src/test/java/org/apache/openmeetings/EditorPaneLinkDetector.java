@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test;
+package org.apache.openmeetings;
 
 /**
  * David Bismut, david.bismut@gmail.com

@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.test.userdata;
+package org.apache.openmeetings.gui;
 
 import org.junit.Test;
 
-public class TestMD5 {
+
+public class TestGui {
 
 	@Test
-	public void testTestMD5() {
+	public void testNoop() {
 		// no-op
 	}
-
 }
