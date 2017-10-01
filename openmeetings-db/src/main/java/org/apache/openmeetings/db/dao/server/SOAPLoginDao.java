@@ -75,6 +75,9 @@ public class SOAPLoginDao {
 	}
 
 	public SOAPLogin get(String hash) {
+		if (hash == null) {
+			return null;
+		}
 		try {
 			//MSSql find nothing in case SID is passed as-is without wildcarting '%hash%'
 			List<SOAPLogin> sList = em.createNamedQuery("getSoapLoginByHash", SOAPLogin.class)
@@ -82,9 +85,13 @@ public class SOAPLoginDao {
 					.getResultList();
 
 			if (sList.size() == 1) {
-				return sList.get(0);
+				SOAPLogin sl = sList.get(0);
+				if (hash.equals(sl.getHash())) {
+					return sl;
+				} else {
+					log.error("[get]: Wrong SOAPLogin was found by hash! {}", hash);
+				}
 			}
-
 			if (sList.size() > 1) {
 				log.error("[get]: there are more then one SOAPLogin with identical hash! {}", hash);
 			}

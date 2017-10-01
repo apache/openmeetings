@@ -81,14 +81,14 @@ public class TestUserService extends AbstractWebServiceTest {
 	@Test
 	public void hashTestNoAuth() {
 		ServiceResult r = getHash("aa");
-		assertEquals("OM Call should NOT be successful", r.getType(), Type.ERROR.name());
+		assertEquals("OM Call should NOT be successful", Type.ERROR.name(), r.getType());
 	}
 
 	@Test
 	public void hashTest() throws OmException {
 		ServiceResult r = login();
 		ServiceResult r1 = getHash(r.getMessage());
-		assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
+		assertEquals("OM Call should be successful", Type.SUCCESS.name(), r1.getType());
 
 		WebSession ws = WebSession.get();
 		assertTrue(ws.signIn(username, userpass, User.Type.user, null));
