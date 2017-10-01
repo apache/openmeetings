@@ -46,24 +46,27 @@ public class ExternalUserDTO implements Serializable {
 		return login;
 	}
 
-	public void setLogin(String login) {
+	public ExternalUserDTO setLogin(String login) {
 		this.login = login;
+		return this;
 	}
 
 	public String getFirstname() {
 		return firstname;
 	}
 
-	public void setFirstname(String firstname) {
+	public ExternalUserDTO setFirstname(String firstname) {
 		this.firstname = firstname;
+		return this;
 	}
 
 	public String getLastname() {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public ExternalUserDTO setLastname(String lastname) {
 		this.lastname = lastname;
+		return this;
 	}
 
 	public String getProfilePictureUrl() {
@@ -78,24 +81,27 @@ public class ExternalUserDTO implements Serializable {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public ExternalUserDTO setEmail(String email) {
 		this.email = email;
+		return this;
 	}
 
 	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExternalId(String externalId) {
+	public ExternalUserDTO setExternalId(String externalId) {
 		this.externalId = externalId;
+		return this;
 	}
 
 	public String getExternalType() {
 		return externalType;
 	}
 
-	public void setExternalType(String externalType) {
+	public ExternalUserDTO setExternalType(String externalType) {
 		this.externalType = externalType;
+		return this;
 	}
 
 	public static ExternalUserDTO fromString(String s) {

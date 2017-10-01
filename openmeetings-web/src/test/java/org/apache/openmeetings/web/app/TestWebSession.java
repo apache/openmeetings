@@ -18,37 +18,34 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import javax.servlet.http.Cookie;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OmException;
 import org.junit.Test;
 
-public class TestOmAuthenticationStrategy extends AbstractWicketTester {
+public class TestWebSession extends AbstractWicketTester {
 	@Test
-	public void test() {
-		OmAuthenticationStrategy s = new OmAuthenticationStrategy();
-		s.save(null, null, User.Type.oauth, null);
-		assertNull("Wasn't saved, should not be loaded", s.load());
+	public void testLogin() throws OmException {
+		WebSession ws = WebSession.get();
+		assertFalse("Should not be signed in", ws.isSignedIn());
 
-		s.save("aa", "bb", User.Type.contact, null);
-		copyCookies();
-		assertNotNull("Should be loaded", s.load());
-
-		assertEquals(0, s.decode(null).length);
-		assertEquals(4, s.decode("1").length);
-		assertEquals(4, s.decode("1-sep-2").length);
-		assertEquals(4, s.decode("1-sep-2-sep-user").length);
-		assertEquals(4, s.decode("1-sep-2-sep-user-sep-3").length);
-	}
-
-	private void copyCookies() {
-		for (Cookie c : tester.getResponse().getCookies()) {
-			tester.getRequest().addCookie(c);
+		try {
+			ws.signIn(username, "", User.Type.contact, null);
+			fail("Exception should be thrown");
+		} catch(OmException exc) {
+			assertTrue("Expected exception", true);
+		}
+		assertFalse(ws.signIn(username, "", User.Type.user, null));
+		assertTrue(ws.signIn(username, userpass, User.Type.user, null));
+		try {
+			ws.signIn(username, userpass, User.Type.ldap, null);
+			fail("Exception should be thrown");
+		} catch(OmException exc) {
+			assertTrue("Expected exception", true);
 		}
 	}
 }

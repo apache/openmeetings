@@ -47,8 +47,9 @@ public class RoomOptionsDTO implements Serializable {
 		return roomId;
 	}
 
-	public void setRoomId(Long roomId) {
+	public RoomOptionsDTO setRoomId(Long roomId) {
 		this.roomId = roomId;
+		return this;
 	}
 
 	public Long getRecordingId() {
@@ -63,8 +64,9 @@ public class RoomOptionsDTO implements Serializable {
 		return moderator;
 	}
 
-	public void setModerator(boolean moderator) {
+	public RoomOptionsDTO setModerator(boolean moderator) {
 		this.moderator = moderator;
+		return this;
 	}
 
 	public boolean isShowAudioVideoTest() {

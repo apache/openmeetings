@@ -37,8 +37,11 @@ import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
 import org.apache.openmeetings.db.dto.user.ExternalUserDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestUserService extends AbstractWebServiceTest {
@@ -55,31 +58,45 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotNull("Valid ServiceResult should be returned", r);
 	}
 
-	@Test
-	public void hashTest() {
-		ServiceResult r = login();
-		ExternalUserDTO user = new ExternalUserDTO();
-		user.setExternalId("1");
-		user.setExternalType("OmJunitTests");
-		user.setEmail("user1@junit.openmeetings.apache.org");
-		user.setFirstname("First Name 1");
-		user.setLastname("Last Name 1");
-		user.setLogin("login1");
-		RoomOptionsDTO options = new RoomOptionsDTO();
-		options.setRoomId(5L);
-		options.setModerator(true);
+	private static ServiceResult getHash(String sid) {
+		ExternalUserDTO user = new ExternalUserDTO()
+				.setExternalId("1")
+				.setExternalType(UNIT_TEST_EXT_TYPE)
+				.setEmail("user1@junit.openmeetings.apache.org")
+				.setFirstname("First Name 1")
+				.setLastname("Last Name 1")
+				.setLogin("login1");
+		RoomOptionsDTO options = new RoomOptionsDTO()
+				.setRoomId(5L)
+				.setModerator(true);
 		Response resp = getClient(USER_SERVICE_URL)
 				.path("/hash")
-				.query("sid", r.getMessage())
+				.query("sid", sid)
 				.form(new Form().param("user", user.toString()).param("options", options.toString()));
 		assertNotNull("Valid ServiceResult should be returned", resp);
 		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
-		ServiceResult r1 = resp.readEntity(ServiceResult.class);
+		return resp.readEntity(ServiceResult.class);
+	}
+
+	@Test
+	public void hashTestNoAuth() {
+		ServiceResult r = getHash("aa");
+		assertEquals("OM Call should NOT be successful", r.getType(), Type.ERROR.name());
+	}
+
+	@Test
+	public void hashTest() throws OmException {
+		ServiceResult r = login();
+		ServiceResult r1 = getHash(r.getMessage());
 		assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
 
 		WebSession ws = WebSession.get();
+		assertTrue(ws.signIn(username, userpass, User.Type.user, null));
+		Long userId0 = WebSession.getUserId();
 		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
 		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
+		Long userId1 = WebSession.getUserId();
+		Assert.assertNotEquals(userId0, userId1);
 	}
 
 	@Test
@@ -99,7 +116,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		u.getAddress().setCountry(Locale.getDefault().getCountry());
 		u.setTimeZoneId(tz);
 		u.setExternalId(uuid);
-		u.setExternalType("OmJunitTests");
+		u.setExternalType(UNIT_TEST_EXT_TYPE);
 		UserDTO user = getClient(USER_SERVICE_URL)
 				.path("/")
 				.query("sid", r.getMessage())
