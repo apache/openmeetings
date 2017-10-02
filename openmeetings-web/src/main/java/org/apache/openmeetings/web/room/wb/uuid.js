@@ -8,8 +8,8 @@ var UUID = (function() {
 	}
 	self.generate = function() {
 		const d0 = Math.random() * 0xffffffff | 0
-			, d1 = Math.random() * 0xffffffff | 0;
-			, d2 = Math.random() * 0xffffffff | 0;
+			, d1 = Math.random() * 0xffffffff | 0
+			, d2 = Math.random() * 0xffffffff | 0
 			, d3 = Math.random() * 0xffffffff | 0;
 		return lut[d0 & 0xff] + lut[d0 >> 8 & 0xff] + lut[d0 >> 16 & 0xff] + lut[d0 >> 24 & 0xff] + '-' +
 			lut[d1 & 0xff] + lut[d1 >> 8 & 0xff] + '-' + lut[d1 >> 16 & 0x0f | 0x40] + lut[d1 >> 24 & 0xff] + '-' +
