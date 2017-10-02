@@ -169,8 +169,8 @@ var Wb = function() {
 					.button({icon: 'ui-icon-locked', showLabel: false})
 					.click(function() {
 						const btn = getBtn()
-							, isColor = $(this).hasClass('wb-prop-lock-color');
-							, c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
+							, isColor = $(this).hasClass('wb-prop-lock-color')
+							, c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill')
 							, enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
 						$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
 						c.prop('disabled', !enabled);

@@ -65,7 +65,7 @@ var WbArea = (function() {
 	function _resizeWbs() {
 		const w = area.width(), hh = area.height()
 			, wbTabs = area.find(".tabs.ui-tabs")
-			, tabPanels = wbTabs.find(".ui-tabs-panel");
+			, tabPanels = wbTabs.find(".ui-tabs-panel")
 			, wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
 		tabPanels.height(wbah);
 		tabPanels.each(function() {
