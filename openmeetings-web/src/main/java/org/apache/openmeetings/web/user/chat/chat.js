@@ -1,7 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	const chatTabs
-		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
+	const tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 		, msgTemplate = "<div class='clear' id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
 		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='const e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
 		, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
@@ -13,7 +12,9 @@ var Chat = function() {
 		, emoticon = new CSSEmoticon()
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
 		;
-	let openedHeight = "345px", allPrefix = "All", roomPrefix = "Room ", typingTimer, audio, s
+	let chatTabs, openedHeight = "345px", allPrefix = "All"
+		, roomPrefix = "Room ", typingTimer, audio, s;
+
 	try {
 		audio = new Audio('./public/chat_message.mp3');
 	} catch (e) {
