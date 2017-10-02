@@ -25,7 +25,7 @@ var VideoSettings = (function() {
 		return s;
 	}
 	function _save(refr) {
-		var _s = JSON.stringify(s);
+		const _s = JSON.stringify(s);
 		localStorage.setItem('openmeetings', _s);
 		if (typeof avSettings === 'function') {
 			avSettings(_s);
@@ -83,7 +83,7 @@ var VideoSettings = (function() {
 		swf = initVideo(vidScroll, 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
-		var rr = vs.find('.cam-resolution').parent('.sett-row');
+		const rr = vs.find('.cam-resolution').parent('.sett-row');
 		if (!!o.interview) {
 			rr.show();
 		} else {
@@ -98,7 +98,7 @@ var VideoSettings = (function() {
 	function _readValues() {
 		s.video.cam = 1 * cam.val();
 		s.video.mic = 1 * mic.val();
-		var o = res.find('option:selected').data();
+		const o = res.find('option:selected').data();
 		s.video.width = o.width;
 		s.video.height = o.height;
 		$(swf).attr('width', Math.max(300, s.video.width)).attr('height', Math.max(200, s.video.height));

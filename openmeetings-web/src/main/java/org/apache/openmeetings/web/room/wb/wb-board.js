@@ -10,7 +10,7 @@ var Wb = function() {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
 	}
 	function initToolBtn(m, def, obj) {
-		let btn = getBtn(m);
+		const btn = getBtn(m);
 		btn.data({
 			obj: obj
 			, activate: function() {
@@ -25,7 +25,7 @@ var Wb = function() {
 				obj.deactivate();
 			}
 		}).click(function() {
-			var b = getBtn();
+			const b = getBtn();
 			if (b.length && b.hasClass(ACTIVE)) {
 				b.data().deactivate();
 			}
@@ -36,14 +36,14 @@ var Wb = function() {
 		}
 	}
 	function initCliparts() {
-		var c = $('#wb-area-cliparts').clone().attr('id', '');
+		const c = $('#wb-area-cliparts').clone().attr('id', '');
 		getBtn('arrow').after(c);
 		c.find('a').prepend(c.find('div.om-icon.big:first'));
 		c.find('.om-icon.clipart').each(function() {
-			var cur = $(this);
+			const cur = $(this);
 			cur.css('background-image', 'url(' + cur.data('image') + ')')
 				.click(function() {
-					var old = c.find('a .om-icon.clipart');
+					const old = c.find('a .om-icon.clipart');
 					c.find('ul li').prepend(old);
 					c.find('a').prepend(cur);
 				});
@@ -51,7 +51,7 @@ var Wb = function() {
 		});
 	}
 	function confirmDlg(_id, okHandler) {
-		var confirm = $('#' + _id);
+		const confirm = $('#' + _id);
 		confirm.dialog({
 			modal: true
 			, buttons: [
@@ -73,10 +73,10 @@ var Wb = function() {
 		return confirm;
 	}
 	function _updateZoomPanel() {
-		var ccount = canvases.length;
+		const ccount = canvases.length;
 		if (ccount > 1 && role === PRESENTER) {
 			z.find('.doc-group').show();
-			var ns = 1 * slide;
+			const ns = 1 * slide;
 			z.find('.doc-group .curr-slide').val(ns + 1).attr('max', ccount);
 			z.find('.doc-group .up').prop('disabled', ns < 1);
 			z.find('.doc-group .down').prop('disabled', ns > ccount - 2);
@@ -99,7 +99,7 @@ var Wb = function() {
 			, containment: "parent"
 			, scroll: false
 			, stop: function(event, ui) {
-				var pos = ui.helper.position();
+				const pos = ui.helper.position();
 				if (pos.left === 0 || pos.left + ui.helper.width() === ui.helper.parent().width()) {
 					ui.helper.removeClass('horisontal').addClass('vertical');
 				} else if (pos.top === 0 || pos.top + ui.helper.height() === ui.helper.parent().height()) {
@@ -112,8 +112,8 @@ var Wb = function() {
 			, containment: "parent"
 			, scroll: false
 		});
-		var _firstToolItem = true;
-		var clearAll = t.find('.om-icon.clear-all');
+		const clearAll = t.find('.om-icon.clear-all');
+		let _firstToolItem = true;
 		switch (role) {
 			case PRESENTER:
 				clearAll.click(function() {
@@ -161,25 +161,25 @@ var Wb = function() {
 					.button()
 					.click(function() {
 						$(this).toggleClass('ui-state-active selected');
-						var btn = getBtn();
-						var isB = $(this).hasClass('wb-prop-b');
+						const btn = getBtn()
+							, isB = $(this).hasClass('wb-prop-b');
 						btn.data().obj.style[isB ? 'bold' : 'italic'] = $(this).hasClass('selected');
 					});
 				s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
 					.button({icon: 'ui-icon-locked', showLabel: false})
 					.click(function() {
-						var btn = getBtn();
-						var isColor = $(this).hasClass('wb-prop-lock-color');
-						var c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
-						var enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
+						const btn = getBtn()
+							, isColor = $(this).hasClass('wb-prop-lock-color');
+							, c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill');
+							, enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
 						$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
 						c.prop('disabled', !enabled);
 						btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
 					});
 				s.find('.wb-prop-color').change(function() {
-					var btn = getBtn();
+					const btn = getBtn();
 					if (btn.length === 1) {
-						var v = $(this).val();
+						const v = $(this).val();
 						btn.data().obj.stroke.color = v;
 						if ('paint' === mode) {
 							wb.eachCanvas(function(canvas) {
@@ -189,9 +189,9 @@ var Wb = function() {
 					}
 				});
 				s.find('.wb-prop-width').change(function() {
-					var btn = getBtn();
+					const btn = getBtn();
 					if (btn.length === 1) {
-						var v = 1 * $(this).val();
+						const v = 1 * $(this).val();
 						btn.data().obj.stroke.width = v;
 						if ('paint' === mode) {
 							wb.eachCanvas(function(canvas) {
@@ -201,16 +201,16 @@ var Wb = function() {
 					}
 				});
 				s.find('.wb-prop-fill').change(function() {
-					var btn = getBtn();
+					const btn = getBtn();
 					if (btn.length === 1) {
-						var v = $(this).val();
+						const v = $(this).val();
 						btn.data().obj.fill.color = v;
 					}
 				});
 				s.find('.wb-prop-opacity').change(function() {
-					var btn = getBtn();
+					const btn = getBtn();
 					if (btn.length === 1) {
-						var v = (1 * $(this).val()) / 100;
+						const v = (1 * $(this).val()) / 100;
 						btn.data().obj.opacity = v;
 						if ('paint' === mode) {
 							wb.eachCanvas(function(canvas) {
@@ -262,7 +262,7 @@ var Wb = function() {
 					}));
 				});
 				z.find('.zoom').change(function() {
-					var zzz = $(this).val();
+					const zzz = $(this).val();
 					zoomMode = 'zoom';
 					if (isNaN(zzz)) {
 						switch (zzz) {
@@ -289,7 +289,7 @@ var Wb = function() {
 		}
 	}
 	function _findObject(o) {
-		var _o = null;
+		let _o = null;
 		canvases[o.slide].forEachObject(function(__o) {
 			if (!!__o && o.uid === __o.uid) {
 				_o = __o;
@@ -299,9 +299,9 @@ var Wb = function() {
 		return _o;
 	}
 	function _removeHandler(o) {
-		var __o = _findObject(o);
+		const __o = _findObject(o);
 		if (!!__o) {
-			var cnvs = canvases[o.slide];
+			const cnvs = canvases[o.slide];
 			if (!!cnvs) {
 				cnvs.discardActiveGroup();
 				if ('Video' === __o.omType) {
@@ -360,7 +360,7 @@ var Wb = function() {
 			});
 
 			for (let i = 0; i < objects.length; ++i) {
-				let _o = objects[i];
+				const _o = objects[i];
 				_o.loaded = true;
 				handler(_o);
 			}
@@ -373,7 +373,7 @@ var Wb = function() {
 	};
 
 	function toOmJson(o) {
-		let r = o.toJSON(extraProps);
+		const r = o.toJSON(extraProps);
 		if (o.omType === 'Video') {
 			r.type = 'video';
 			delete r.objects;
@@ -400,7 +400,7 @@ var Wb = function() {
 		}));
 	};
 	function objAddedHandler(e) {
-		var o = e.target;
+		const o = e.target;
 		if (!!o.loaded) return;
 		switch(o.type) {
 			case 'i-text':
@@ -414,16 +414,15 @@ var Wb = function() {
 		}
 	};
 	function objModifiedHandler(e) {
-		var o = e.target;
+		const o = e.target, items = [];
 		if (role === NONE && o.type !== 'pointer') return;
 
 		o.includeDefaultValues = false;
-		var items = [];
 		if ("group" === o.type && o.omType !== 'Video') {
 			o.clone(function(_o) {
 				// ungrouping
 				_o.includeDefaultValues = false;
-				let _items = _o.destroy().getObjects();
+				const _items = _o.destroy().getObjects();
 				for (let i = 0; i < _items.length; ++i) {
 					items.push(toOmJson(_items[i]));
 				}
@@ -437,7 +436,7 @@ var Wb = function() {
 		}));
 	};
 	function objSelectedHandler(e) {
-		var o = e.target;
+		const o = e.target;
 		s.find('.wb-dim-x').val(o.left);
 		s.find('.wb-dim-y').val(o.top);
 		s.find('.wb-dim-w').val(o.width);
@@ -450,7 +449,7 @@ var Wb = function() {
 	};
 	function scrollHandler() {
 		$(this).find('.canvas-container').each(function(idx) {
-			let h = $(this).height(), pos = $(this).position();
+			const h = $(this).height(), pos = $(this).position();
 			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
 				//TODO FIXME might be done without iterating
 				//console.log("Found:", idx);
@@ -508,17 +507,17 @@ var Wb = function() {
 		}
 	}
 	function addCanvas() {
-		let sl = canvases.length;
-		let cid = 'can-' + a.attr('id') + '-slide-' + sl;
-		let c = $('<canvas></canvas>').attr('id', cid);
+		const sl = canvases.length
+			, cid = 'can-' + a.attr('id') + '-slide-' + sl
+			, c = $('<canvas></canvas>').attr('id', cid);
 		a.find('.canvases').append(c);
-		let canvas = new fabric.Canvas(c.attr('id'), {
+		const canvas = new fabric.Canvas(c.attr('id'), {
 			preserveObjectStacking: true
 		});
 		canvas.wbId = wb.id;
 		canvas.slide = sl;
 		canvases.push(canvas);
-		let cc = $('#' + cid).closest('.canvas-container');
+		const cc = $('#' + cid).closest('.canvas-container');
 		if (role === NONE) {
 			if (sl === slide) {
 				cc.show();
@@ -544,7 +543,7 @@ var Wb = function() {
 				break;
 			default:
 			{
-				var oo = z.find('.zoom').find('option[value="' + zoom.toFixed(2) + '"]');
+				const oo = z.find('.zoom').find('option[value="' + zoom.toFixed(2) + '"]');
 				if (oo.length === 1) {
 					oo.prop('selected', true);
 				} else {
@@ -560,14 +559,14 @@ var Wb = function() {
 		});
 	}
 	function _videoStatus(json) {
-		let g = _findObject(json);
+		const g = _findObject(json);
 		if (!!g) {
 			g.videoStatus(json.status);
 		}
 	}
 	wb.setRole = function(_role) {
 		if (role !== _role) {
-			var btn = getBtn();
+			const btn = getBtn();
 			if (!!btn && btn.length === 1) {
 				btn.data().deactivate();
 			}
@@ -575,7 +574,7 @@ var Wb = function() {
 			a.find('.wb-settings').remove();
 			a.find('.wb-zoom').remove();
 			role = _role;
-			var sc = a.find('.scroll-container');
+			const sc = a.find('.scroll-container');
 			z = $('#wb-zoom').clone().attr('id', '');
 			if (role === NONE) {
 				t = $('#wb-tools-readonly').clone().attr('id', '');
@@ -644,9 +643,9 @@ var Wb = function() {
 		showCurrentSlide();
 	};
 	wb.createObj = function(obj) {
-		let arr = [], _arr = Array.isArray(obj) ? obj : [obj];
+		const arr = [], _arr = Array.isArray(obj) ? obj : [obj];
 		for (let i = 0; i < _arr.length; ++i) {
-			let o = _arr[i];
+			const o = _arr[i];
 			switch(o.type) {
 				case 'pointer':
 					APointer().create(canvases[o.slide], o);
@@ -655,10 +654,12 @@ var Wb = function() {
 					Player.create(canvases[o.slide], o, role);
 					break;
 				default:
-					var __o = _findObject(o);
+				{
+					const __o = _findObject(o);
 					if (!__o) {
 						arr.push(o);
 					}
+				}
 					break;
 			}
 		}
@@ -668,16 +669,16 @@ var Wb = function() {
 	};
 	wb.load = wb.createObj;
 	wb.modifyObj = function(obj) { //TODO need to be unified
-		let arr = [], _arr = Array.isArray(obj) ? obj : [obj];
+		const arr = [], _arr = Array.isArray(obj) ? obj : [obj];
 		for (let i = 0; i < _arr.length; ++i) {
-			let o = _arr[i];
+			const o = _arr[i];
 			switch(o.type) {
 				case 'pointer':
 					_modifyHandler(APointer().create(canvases[o.slide], o))
 					break;
 				case 'video':
 				{
-					let g = _findObject(o);
+					const g = _findObject(o);
 					if (!!g) {
 						Player.modify(g, o);
 					}
@@ -693,13 +694,13 @@ var Wb = function() {
 		}
 	};
 	wb.removeObj = function(arr) {
-		for (var i = 0; i < arr.length; ++i) {
+		for (let i = 0; i < arr.length; ++i) {
 			_removeHandler(arr[i]);
 		}
 	};
 	wb.clearAll = function() {
-		for (var i = 1; i < canvases.length; ++i) {
-			let cc = $('#can-wb-tab-0-slide-' + i).closest('.canvas-container');
+		for (let i = 1; i < canvases.length; ++i) {
+			const cc = $('#can-wb-tab-0-slide-' + i).closest('.canvas-container');
 			cc.remove();
 			canvases[i].dispose();
 		}
@@ -710,7 +711,7 @@ var Wb = function() {
 	};
 	wb.clearSlide = function(_sl) {
 		if (canvases.length > _sl) {
-			let canvas = canvases[_sl];
+			const canvas = canvases[_sl];
 			canvas.renderOnAddRemove = false;
 			let arr = canvas.getObjects();
 			while (arr.length > 0) {
@@ -726,7 +727,7 @@ var Wb = function() {
 		return canvases[slide];
 	};
 	wb.eachCanvas = function(func) {
-		for (var i = 0; i < canvases.length; ++i) {
+		for (let i = 0; i < canvases.length; ++i) {
 			func(canvases[i]);
 		}
 	}

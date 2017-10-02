@@ -23,10 +23,10 @@ var WbArea = (function() {
 			case 8:  // backspace
 			case 46: // delete
 				{
-					let wb = getActive().data();
-					let canvas = wb.getCanvas();
+					const wb = getActive().data()
+						, canvas = wb.getCanvas();
 					if (!!canvas) {
-						let arr = [];
+						const arr = [];
 						if (!!canvas.getActiveGroup()) {
 							canvas.getActiveGroup().forEachObject(function(o) {
 								arr.push({
@@ -35,7 +35,7 @@ var WbArea = (function() {
 								});
 							});
 						} else {
-							let o = canvas.getActiveObject();
+							const o = canvas.getActiveObject();
 							if (!!o) {
 								arr.push({
 									uid: o.uid
@@ -63,10 +63,10 @@ var WbArea = (function() {
 		});
 	}
 	function _resizeWbs() {
-		let w = area.width(), hh = area.height();
-		let wbTabs = area.find(".tabs.ui-tabs");
-		let tabPanels = wbTabs.find(".ui-tabs-panel");
-		let wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
+		const w = area.width(), hh = area.height()
+			, wbTabs = area.find(".tabs.ui-tabs")
+			, tabPanels = wbTabs.find(".ui-tabs-panel");
+			, wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
 		tabPanels.height(wbah);
 		tabPanels.each(function() {
 			$(this).data().resize(w - 25, wbah - 20);
@@ -113,12 +113,12 @@ var WbArea = (function() {
 	self.setRole = function(_role) {
 		if (!_inited) return;
 		role = _role;
-		var tabsNav = tabs.find(".ui-tabs-nav");
+		const tabsNav = tabs.find(".ui-tabs-nav");
 		tabsNav.sortable(role === PRESENTER ? "enable" : "disable");
-		var prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
+		const prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
 		if (role === PRESENTER) {
 			if (prev.length === 0) {
-				var cc = tabs.find('.wb-tabbar .scroll-container')
+				const cc = tabs.find('.wb-tabbar .scroll-container')
 					, left = $('#wb-tabbar-ctrls-left').clone().attr('id', '')
 					, right = $('#wb-tabbar-ctrls-right').clone().attr('id', '');
 				cc.before(left).after(right);
@@ -132,7 +132,7 @@ var WbArea = (function() {
 					scroll.scrollLeft(scroll.scrollLeft() + 30);
 				});
 				tabsNav.find('li').each(function() {
-					var li = $(this);
+					const li = $(this);
 					_addCloseBtn(li);
 				});
 				$(window).keyup(deleteHandler);
@@ -153,7 +153,7 @@ var WbArea = (function() {
 		container = $(".room.wb.area");
 		tabs = container.find('.tabs').tabs({
 			beforeActivate: function(e) {
-				var res = true;
+				let res = true;
 				if (e.originalEvent && e.originalEvent.type === 'click') {
 					res = role === PRESENTER;
 				}
@@ -179,7 +179,7 @@ var WbArea = (function() {
 	};
 	self.create = function(obj) {
 		if (!_inited) return;
-		var tid = self.getWbTabId(obj.wbId)
+		const tid = self.getWbTabId(obj.wbId)
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId)
 			, wb = $('#wb-area').clone().attr('id', tid);
 		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
@@ -189,7 +189,7 @@ var WbArea = (function() {
 		refreshTabs();
 		_addCloseBtn(li);
 
-		var wbo = Wb();
+		const wbo = Wb();
 		wbo.init(obj, tid, role);
 		wb.data(wbo);
 		_resizeWbs();
@@ -235,18 +235,18 @@ var WbArea = (function() {
 	};
 	self.removeWb = function(obj) {
 		if (!_inited) return;
-		var tabId = self.getWbTabId(obj.wbId);
+		const tabId = self.getWbTabId(obj.wbId);
 		tabs.find('li[aria-controls="' + tabId + '"]').remove();
 		$("#" + tabId).remove();
 		refreshTabs();
 	};
 	self.resize = function(posX, w, h) {
 		if (!container || !_inited) return;
-		var hh = h - 5;
+		const hh = h - 5;
 		container.width(w).height(h).css('left', posX + "px");
 		area.width(w).height(hh);
 
-		var wbTabs = area.find(".tabs.ui-tabs");
+		const wbTabs = area.find(".tabs.ui-tabs");
 		wbTabs.height(hh);
 		_resizeWbs();
 	}
@@ -255,9 +255,9 @@ var WbArea = (function() {
 		self.getWb(json.wbId).setSize(json);
 	}
 	self.download = function(fmt) {
-		var wb = getActive().data();
+		const wb = getActive().data();
 		if ('pdf' === fmt) {
-			var arr = [];
+			const arr = [];
 			wb.eachCanvas(function(cnv) {
 				arr.push(_getImage(cnv, 'image/png'));
 			});
@@ -265,7 +265,7 @@ var WbArea = (function() {
 				slides: arr
 			}));
 		} else {
-			var cnv = wb.getCanvas()
+			const cnv = wb.getCanvas()
 				, a = document.createElement('a');
 			a.setAttribute('target', '_blank')
 			a.setAttribute('download', wb.name + '.' + fmt);
@@ -284,7 +284,7 @@ $(function() {
 			if (msg instanceof Blob) {
 				return; //ping
 			}
-			var m = jQuery.parseJSON(msg);
+			const m = jQuery.parseJSON(msg);
 			if (m && 'wb' === m.type && typeof WbArea !== 'undefined') {
 				eval(m.func);
 			}

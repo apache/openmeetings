@@ -2,7 +2,7 @@
 const WBA_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
 const VID_SEL = '.video.user-video';
 var VideoUtil = (function() {
-	var self = {};
+	const self = {};
 	function _getVid(uid) {
 		return "video" + uid;
 	}
@@ -21,8 +21,7 @@ var VideoUtil = (function() {
 		return c.activities.indexOf('broadcastV') > -1;
 	}
 	function _getRects(sel, excl) {
-		var list = [];
-		var elems = $(sel);
+		const list = [], elems = $(sel);
 		for (let i = 0; i < elems.length; ++i) {
 			if (excl !== $(elems[i]).attr('aria-describedby')) {
 				list.push(_getRect(elems[i]));
@@ -31,7 +30,7 @@ var VideoUtil = (function() {
 		return list;
 	}
 	function _getRect(e) {
-		let win = $(e), winoff = win.offset();
+		const win = $(e), winoff = win.offset();
 		return {left: winoff.left
 			, top: winoff.top
 			, right: winoff.left + win.width()
@@ -41,11 +40,10 @@ var VideoUtil = (function() {
 		if (Room.getOptions().interview) {
 			return {left: 0, top: 0};
 		}
-		var wba = $(WBA_SEL);
-		var woffset = wba.offset();
-		const offsetX = 20, offsetY = 10
+		const wba = $(WBA_SEL), woffset = wba.offset()
+			, offsetX = 20, offsetY = 10
 			, area = {left: woffset.left, top: woffset.top, right: woffset.left + wba.width(), bottom: woffset.top + wba.height()};
-		var rectNew = {
+		const rectNew = {
 				_left: area.left
 				, _top: area.top
 				, right: area.left + w
@@ -67,11 +65,10 @@ var VideoUtil = (function() {
 			};
 		//console.log("Area " + JSON.stringify(area));
 		do {
-			let minY = area.bottom;
-			var posFound = true;
+			let minY = area.bottom, posFound = true;
 			//console.log("Checking RECT " + JSON.stringify(rectNew));
 			for (let i = 0; i < list.length; ++i) {
-				let rect = list[i];
+				const rect = list[i];
 				minY = Math.min(minY, rect.bottom);
 
 				if (rectNew.left < rect.right && rectNew.right > rect.left && rectNew.top < rect.bottom && rectNew.bottom > rect.top) {
@@ -96,9 +93,9 @@ var VideoUtil = (function() {
 		return {left: rectNew.left, top: rectNew.top};
 	}
 	function _arrange() {
-		let list = [], elems = $(VID_SEL);
+		const list = [], elems = $(VID_SEL);
 		for (let i = 0; i < elems.length; ++i) {
-			let v = $(elems[i]);
+			const v = $(elems[i]);
 			v.css(_getPos(list, v.width(), v.height()));
 			list.push(_getRect(v));
 		}
@@ -115,14 +112,15 @@ var VideoUtil = (function() {
 	return self;
 })();
 var Video = (function() {
-	var self = {}, c, v, vc, t, f, swf, size, vol, slider, handle
+	const self = {};
+	let c, v, vc, t, f, swf, size, vol, slider, handle
 		, lastVolume = 50;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
 	}
 	function _resizeDlg(_w, _h) {
-		let h = _h + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
+		const h = _h + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
 		v.dialog("option", "width", _w).dialog("option", "height", h);
 		_resize(_w, _h);
 		return h;
@@ -132,7 +130,7 @@ var Video = (function() {
 			//TODO buttons
 			v.dialog("option", "position", {my: "center", at: "center", of: WBA_SEL});
 		} else {
-			let h = _resizeDlg(size.width, size.height);
+			const h = _resizeDlg(size.width, size.height);
 			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
 		}
 	}
@@ -158,7 +156,7 @@ var Video = (function() {
 	}
 	function _handleVolume(val) {
 		handle.text(val);
-		var ico = vol.find('.ui-icon');
+		const ico = vol.find('.ui-icon');
 		if (val > 0 && ico.hasClass('ui-icon-volume-off')) {
 			ico.toggleClass('ui-icon-volume-off ui-icon-volume-on');
 			vol.removeClass('ui-state-error');
@@ -177,7 +175,7 @@ var Video = (function() {
 			return;
 		}
 		if (mute) {
-			let val = slider.slider("option", "value");
+			const val = slider.slider("option", "value");
 			if (val > 0) {
 				lastVolume = val;
 			}
@@ -192,13 +190,13 @@ var Video = (function() {
 		c = _c;
 		pos = _pos;
 		size = {width: c.width, height: c.height};
-		var _id = VideoUtil.getVid(c.uid)
+		const _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
 			, _w = c.self ? Math.max(300, c.width) : c.width
 			, _h = c.self ? Math.max(200, c.height) : c.height
 			, opts = Room.getOptions();
 		{ //scope
-			let cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
+			const cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
 			cont.append($('#user-video').clone().attr('id', _id).attr('title', name)
 					.attr('data-client-uid', c.type + c.cuid).data(self));
 		}
@@ -217,7 +215,7 @@ var Video = (function() {
 			, resizable: !opts.interview
 			, modal: false
 			, resizeStop: function(event, ui) {
-				var w = ui.size.width - 2
+				const w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(":visible") ? f.height() : 0);
 				_resize(w, h);
 				swf[0].vidResize(w, h);
@@ -239,7 +237,7 @@ var Video = (function() {
 			v.parent().find('.ui-dialog-titlebar-buttonpane')
 				.append($('#video-volume-btn').children().clone())
 				.append($('#video-refresh-btn').children().clone());
-			var volume = v.parent().find('.dropdown-menu.video.volume');
+			const volume = v.parent().find('.dropdown-menu.video.volume');
 			slider = v.parent().find('.slider');
 			if (opts.interview) {
 				v.parent().find('.ui-dialog-titlebar-collapse').hide();
@@ -251,7 +249,7 @@ var Video = (function() {
 				})
 				.click(function(e) {
 					e.stopImmediatePropagation();
-					let muted = $(this).find('.ui-icon').hasClass('ui-icon-volume-off');
+					const muted = $(this).find('.ui-icon').hasClass('ui-icon-volume-off');
 					roomAction('mute', JSON.stringify({uid: c.cuid, mute: !muted}));
 					_mute(!muted);
 					volume.hide();
@@ -286,7 +284,7 @@ var Video = (function() {
 					_handleVolume(ui.value);
 				}
 			});
-			let hasAudio = VideoUtil.hasAudio(c);
+			const hasAudio = VideoUtil.hasAudio(c);
 			_handleMicStatus(hasAudio);
 			if (!hasAudio) {
 				vol.hide();
@@ -295,7 +293,7 @@ var Video = (function() {
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 		//broadcast
-		var o = Room.getOptions();
+		const o = Room.getOptions();
 		if (c.self) {
 			o.cam = c.cam;
 			o.mic = c.mic;
@@ -319,10 +317,10 @@ var Video = (function() {
 		v.dialog("widget").css(_pos);
 	}
 	function _update(_c) {
-		var opts = Room.getOptions();
+		const opts = Room.getOptions();
 		c.screenActivities = _c.screenActivities;
 		c.activities = _c.activities;
-		let hasAudio = VideoUtil.hasAudio(c);
+		const hasAudio = VideoUtil.hasAudio(c);
 		_handleMicStatus(hasAudio);
 		if (hasAudio) {
 			vol.show();
@@ -340,7 +338,7 @@ var Video = (function() {
 	}
 	function _refresh(_opts) {
 		if (swf[0].refresh !== undefined) {
-			let opts = _opts || {};
+			const opts = _opts || {};
 			if (!isNaN(opts.width)) {
 				_resizeDlg(opts.width, opts.height);
 			}
@@ -364,7 +362,8 @@ var Video = (function() {
 	return self;
 });
 var VideoManager = (function() {
-	var self = {}, share, inited = false;
+	const self = {};
+	let share, inited = false;
 
 	function _init() {
 		VideoSettings.init(Room.getOptions());
@@ -376,13 +375,13 @@ var VideoManager = (function() {
 			return;
 		}
 		for (let i = 0; i < c.streams.length; ++i) {
-			let cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
+			const cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
 			delete cl.streams;
 			$.extend(cl, s);
 			if (cl.self && VideoUtil.isSharing(cl) || VideoUtil.isRecording(cl)) {
 				continue;
 			}
-			let _id = VideoUtil.getVid(cl.uid)
+			const _id = VideoUtil.getVid(cl.uid)
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
 			if (av && v.length !== 1 && !!cl.self) {
@@ -395,16 +394,16 @@ var VideoManager = (function() {
 		}
 		if (c.uid === Room.getOptions().uid) {
 			Room.setRights(c.rights);
-			var windows = $(VID_SEL + ' .ui-dialog-content');
-			for (var i = 0; i < windows.length; ++i) {
-				let w = $(windows[i]);
+			const windows = $(VID_SEL + ' .ui-dialog-content');
+			for (let i = 0; i < windows.length; ++i) {
+				const w = $(windows[i]);
 				w.data().setRights(c.rights);
 			}
 
 		}
 		if (c.streams.length === 0) {
 			// check for non inited video window
-			let v = $('#' + VideoUtil.getVid(c.uid));
+			const v = $('#' + VideoUtil.getVid(c.uid));
 			if (v.length === 1) {
 				_closeV(v);
 			}
@@ -426,7 +425,7 @@ var VideoManager = (function() {
 					.data('uid', c.uid)
 					.show(), 10);
 			share.tooltip().off('click').click(function() {
-				var v = $('#' + VideoUtil.getVid(c.uid))
+				const v = $('#' + VideoUtil.getVid(c.uid))
 				if (v.length !== 1) {
 					Video().init(c, $(WBA_SEL).offset());
 				} else {
@@ -438,7 +437,7 @@ var VideoManager = (function() {
 		}
 	}
 	function _close(uid, showShareBtn) {
-		var _id = VideoUtil.getVid(uid), v = $('#' + _id);
+		const _id = VideoUtil.getVid(uid), v = $('#' + _id);
 		if (v.length === 1) {
 			_closeV(v);
 		}
@@ -460,8 +459,8 @@ var VideoManager = (function() {
 		return $(VID_SEL + ' div[data-client-uid="room' + uid + '"]');
 	}
 	function _micActivity(uid, active) {
-		var u = $('#user' + uid + ' .audio-activity.ui-icon');
-		var v = _find(uid).parent();
+		const u = $('#user' + uid + ' .audio-activity.ui-icon')
+			, v = _find(uid).parent();
 		if (active) {
 			u.addClass("speaking");
 			v.addClass('user-speaks')
@@ -471,21 +470,21 @@ var VideoManager = (function() {
 		}
 	}
 	function _refresh(uid, opts) {
-		var v = _find(uid);
+		const v = _find(uid);
 		if (v.length > 0) {
 			v.data().refresh(opts);
 		}
 	}
 	function _mute(uid, mute) {
-		var v = _find(uid);
+		const v = _find(uid);
 		if (v.length > 0) {
 			v.data().mute(mute);
 		}
 	}
 	function _clickExclusive(uid) {
-		let s = VideoSettings.load();
+		const s = VideoSettings.load();
 		if (false !== s.video.confirmExclusive) {
-			let dlg = $('#exclusive-confirm');
+			const dlg = $('#exclusive-confirm');
 			dlg.dialog({
 				buttons: [
 					{
@@ -508,9 +507,9 @@ var VideoManager = (function() {
 		}
 	}
 	function _exclusive(uid) {
-		var windows = $(VID_SEL + ' .ui-dialog-content');
-		for (var i = 0; i < windows.length; ++i) {
-			let w = $(windows[i]);
+		const windows = $(VID_SEL + ' .ui-dialog-content');
+		for (let i = 0; i < windows.length; ++i) {
+			const w = $(windows[i]);
 			w.data().mute('room' + uid !== w.data('client-uid'));
 		}
 	}
@@ -528,16 +527,17 @@ var VideoManager = (function() {
 	return self;
 })();
 var Room = (function() {
-	var self = {}, options;
+	const self = {};
+	let options;
 
 	function _init(_options) {
 		options = _options;
 		VideoManager.init();
 	}
 	function _getSelfAudioClient() {
-		let vw = $('#video' + Room.getOptions().uid);
+		const vw = $('#video' + Room.getOptions().uid);
 		if (vw.length > 0) {
-			let v = vw.data();
+			const v = vw.data();
 			if (VideoUtil.hasAudio(v.client())) {
 				return v;
 			}
@@ -552,7 +552,7 @@ var Room = (function() {
 					break;
 				case options.keycode.exclusive: // Shift+F12 by default
 				{
-					let v = _getSelfAudioClient();
+					const v = _getSelfAudioClient();
 					if (v !== null) {
 						VideoManager.clickExclusive(Room.getOptions().uid);
 					}
@@ -560,7 +560,7 @@ var Room = (function() {
 					break;
 				case options.keycode.mute: // Shift+F7 by default
 				{
-					let v = _getSelfAudioClient();
+					const v = _getSelfAudioClient();
 					if (v !== null) {
 						v.mute(!v.isMuted());
 					}
@@ -570,15 +570,15 @@ var Room = (function() {
 		}
 	}
 	function _setSize() {
-		var sb = $(".room.sidebar.left")
+		const sb = $(".room.sidebar.left")
 			, w = $(window).width() - sb.width() - 8
 			, h = $(window).height() - $('#menu').height() - 3
-			, p = sb.find('.tabs');
+			, p = sb.find('.tabs')
+			, holder = $('.room.holder');
 		sb.height(h);
-		var hh = h - 5;
+		const hh = h - 5;
 		p.height(hh);
 		$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
-		var holder = $('.room.holder');
 		if (sb.width() > 230) {
 			holder.addClass('big').removeClass('small');
 		} else {
@@ -599,7 +599,7 @@ var Room = (function() {
 		_unload();
 		$(".room.holder").remove();
 		$("#chatPanel").remove();
-		var dlg = $('#disconnected-dlg');
+		const dlg = $('#disconnected-dlg');
 		dlg.dialog({
 			modal: true
 			, close: _reload
@@ -645,7 +645,7 @@ var Room = (function() {
 		$(window).off('keyup', _keyHandler);
 	}
 	function _showClipboard(txt) {
-		let dlg = $('#clipboard-dialog');
+		const dlg = $('#clipboard-dialog');
 		dlg.find('p .text').text(txt);
 		dlg.dialog({
 			resizable: false
@@ -680,18 +680,18 @@ function startPrivateChat(el) {
 }
 /***** functions required by SIP   ******/
 function sipBtnClick() {
-	var txt = $('.sip-number');
+	const txt = $('.sip-number');
 	txt.val(txt.val() + $(this).data('value'));
 }
 function sipBtnEraseClick() {
-	var txt = $('.sip-number');
-	var t = txt.val();
+	const txt = $('.sip-number')
+		, t = txt.val();
 	if (!!t) {
 		txt.val(t.substring(0, t.length -1));
 	}
 }
 function sipGetKey(evt) {
-	var k = -1;
+	let k = -1;
 	if (evt.keyCode > 47 && evt.keyCode < 58) {
 		k = evt.keyCode - 48;
 	}
@@ -701,13 +701,13 @@ function sipGetKey(evt) {
 	return k;
 }
 function sipKeyDown(evt) {
-	var k = sipGetKey(evt);
+	const k = sipGetKey(evt);
 	if (k > 0) {
 		$('#sip-dialer-btn-' + k).addClass('ui-state-active');
 	}
 }
 function sipKeyUp(evt) {
-	var k = sipGetKey(evt);
+	const k = sipGetKey(evt);
 	if (k > 0) {
 		$('#sip-dialer-btn-' + k).removeClass('ui-state-active');
 	}
@@ -715,7 +715,7 @@ function sipKeyUp(evt) {
 
 /***** functions required by SWF   ******/
 function typingActivity(uid, active) {
-	var u = $('#user' + uid + ' .typing-activity.ui-icon');
+	const u = $('#user' + uid + ' .typing-activity.ui-icon');
 	if (active) {
 		u.addClass("typing");
 	} else {

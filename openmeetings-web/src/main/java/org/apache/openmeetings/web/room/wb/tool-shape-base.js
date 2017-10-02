@@ -1,11 +1,11 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var ShapeBase = function() {
-	let base = Base();
+	const base = Base();
 	base.fill = {enabled: true, color: '#FFFF33'};
 	base.stroke = {enabled: true, color: '#FF6600', width: 5};
 	base.opacity = 1;
 	base.enableLineProps = function(s) {
-		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = s.find('.wb-prop-opacity');
+		const c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width'), o = s.find('.wb-prop-opacity');
 		s.find('.wb-prop-fill').prop('disabled', true);
 		s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
 		c.val(base.stroke.color).prop('disabled', false);
@@ -14,7 +14,7 @@ var ShapeBase = function() {
 		return {c: c, w: w, o: o};
 	};
 	base.enableAllProps = function(s) {
-		var c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width')
+		const c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width')
 			, o = s.find('.wb-prop-opacity'), f = s.find('.wb-prop-fill')
 			, lc = s.find('.wb-prop-lock-color'), lf = s.find('.wb-prop-lock-fill');
 		s.find('.wb-prop-b, .wb-prop-i').button("disable");

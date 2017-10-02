@@ -3,7 +3,7 @@ function adminPanelInit() {
 	if (typeof extAdminPanelInit === 'function') {
 		extAdminPanelInit();
 	}
-	let f = $('#adminForm'), t = $('#adminTable')
+	const f = $('#adminForm'), t = $('#adminTable')
 		, h = $(window).height() - 5;
 	f.height(h - f.position().top);
 	t.height(h - t.position().top);

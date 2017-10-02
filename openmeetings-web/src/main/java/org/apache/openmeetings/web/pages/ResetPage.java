@@ -26,7 +26,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ResetPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
-	private final String RESET_PARAM = "hash";
+	private static final String RESET_PARAM = "hash";
 
 	public ResetPage(PageParameters pp) {
 		String resetHash = pp.get(RESET_PARAM).toString();

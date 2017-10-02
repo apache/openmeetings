@@ -6,7 +6,7 @@ function getCalendarHeight() {
 	return $(window).height() - $('#${markupId}').position().top - 20;
 }
 function setCalendarHeight() {
-	var cal = $('#${markupId}');
+	const cal = $('#${markupId}');
 	if (cal.length) {
 		cal.fullCalendar('option', 'height', getCalendarHeight());
 	}
@@ -15,12 +15,12 @@ $(function() {
 	$(window).on("load", function() { setCalendarHeight(); } );
 });
 function toggleDatePicker(id) {
-	var dp = $("#" + id);
+	const dp = $("#" + id);
 	dp.datepicker(dp.datepicker("widget").is(":visible") ? "hide" : "show");
 	return false;
 }
 function addCalButton(rtl, id) {
-	var my_button =
+	const my_button =
 		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left" onclick="return toggleDatePicker(\'' + id + '\');">' +
 		'<input type="text" id="' + id + '" /></button>';
 
@@ -30,7 +30,7 @@ function addCalButton(rtl, id) {
 		$(".fc .fc-toolbar .fc-left").append(my_button);
 	}
 
-	var dp = $("#" + id);
+	const dp = $("#" + id);
 	dp.datepicker({
 		showOn: "button",
 		buttonImage: "images/calendar.gif",

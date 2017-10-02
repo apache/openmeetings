@@ -110,9 +110,7 @@ public class SignInPage extends BaseInitedPage {
 					log.debug("redirectUrl=" + redirectUrl);
 					throw new RedirectToUrlException(redirectUrl);
 				}
-			} catch (IOException e) {
-				log.error("OAuth2 login error", e);
-			} catch (NoSuchAlgorithmException e) {
+			} catch (IOException|NoSuchAlgorithmException e) {
 				log.error("OAuth2 login error", e);
 			}
 		}

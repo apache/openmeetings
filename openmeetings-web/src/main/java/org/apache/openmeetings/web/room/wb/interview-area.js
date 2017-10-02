@@ -1,6 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var WbArea = (function() {
-	var container, area, role = NONE, self = {}, choose, btns
+	const self = {};
+	let container, area, role = NONE, choose, btns
 		, _inited = false, recStart, recStop;
 
 	function _init() {
@@ -66,7 +67,7 @@ var WbArea = (function() {
 	}
 	function _resize(posX, w, h) {
 		if (!container || !_inited) return;
-		var hh = h - 5;
+		const hh = h - 5;
 		container.width(w).height(h).css('left', posX + "px");
 		area.width(w).height(hh);
 	}

@@ -19,8 +19,8 @@ var Clipart = function(wb, btn) {
 		if (!art.obj) {
 			return; // not ready
 		}
-		var dx = pointer.x - art.orig.x, dy = pointer.y - art.orig.y;
-		var d = Math.sqrt(dx * dx + dy * dy);
+		const dx = pointer.x - art.orig.x, dy = pointer.y - art.orig.y
+			, d = Math.sqrt(dx * dx + dy * dy);
 		art.obj.set({
 			width: d
 			, height: art.orig.height * d / art.orig.width

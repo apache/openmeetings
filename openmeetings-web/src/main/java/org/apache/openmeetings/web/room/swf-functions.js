@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var labels, config;
 function initSwf(_options) {
-	var options = $.extend({
+	const options = $.extend({
 		allowfullscreen : 'true',
 		bgcolor : '#ffffff',
 		width : '100%',
@@ -10,7 +10,7 @@ function initSwf(_options) {
 		__lzminimumversion : 8
 	}, _options);
 	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
-	var embed = $('<embed>')
+	const embed = $('<embed>')
 		.attr('quality', 'high')
 		.attr('bgcolor', options.bgcolor)
 		.attr('src', "public/" + options.src)
@@ -29,7 +29,7 @@ function initSwf(_options) {
 }
 function loadingComplete() {
 	document.getElementById("swfloading").style.display = 'none';
-	var lzApp = document.getElementById("lzappContainer");
+	const lzApp = document.getElementById("lzappContainer");
 	lzApp.style.width = '100%';
 	lzApp.style.height = '100%';
 }

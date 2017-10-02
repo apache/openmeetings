@@ -9,17 +9,17 @@ var Shape = function(wb) {
 		canvas.add(shape.obj);
 	}
 	shape.mouseDown = function(o) {
-		var canvas = this;
+		const canvas = this
+			, pointer = canvas.getPointer(o.e);
 		shape.isDown = true;
-		var pointer = canvas.getPointer(o.e);
 		shape.orig = {x: pointer.x, y: pointer.y};
 		shape.createShape(canvas);
 		shape.add2Canvas(canvas);
 	};
 	shape.mouseMove = function(o) {
-		var canvas = this;
+		const canvas = this;
 		if (!shape.isDown) return;
-		var pointer = canvas.getPointer(o.e);
+		const pointer = canvas.getPointer(o.e);
 		shape.updateShape(pointer);
 		canvas.renderAll();
 	};
@@ -27,7 +27,7 @@ var Shape = function(wb) {
 		return o;
 	};
 	shape.mouseUp = function(o) {
-		var canvas = this;
+		const canvas = this;
 		shape.isDown = false;
 		shape.obj.setCoords();
 		shape.obj.selectable = false;

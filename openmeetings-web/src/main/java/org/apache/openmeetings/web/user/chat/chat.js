@@ -1,23 +1,19 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	let chatTabs
+	const chatTabs
 		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 		, msgTemplate = "<div class='clear' id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
-		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='var e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
-		, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
-		, addTemplate = "<div class='add om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);addContact(e.data(\"userId\"));'></div>"
-		, messageTemplate = "<div class='new-email om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);privateMessage(e.data(\"userId\"));'></div>"
-		, inviteTemplate = "<div class='invite om-icon align-right clickable' data-user-id='#{userId}' onclick='var e=$(this);inviteUser(e.data(\"userId\"));'></div>"
+		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='const e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
+		, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
+		, addTemplate = "<div class='add om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);addContact(e.data(\"userId\"));'></div>"
+		, messageTemplate = "<div class='new-email om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);privateMessage(e.data(\"userId\"));'></div>"
+		, inviteTemplate = "<div class='invite om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);inviteUser(e.data(\"userId\"));'></div>"
 		, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 		, closedHeight = "20px"
-		, openedHeight = "345px"
-		, allPrefix = "All"
-		, roomPrefix = "Room "
 		, emoticon = new CSSEmoticon()
-		, typingTimer
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
-		, audio, s
 		;
+	let openedHeight = "345px", allPrefix = "All", roomPrefix = "Room ", typingTimer, audio, s
 	try {
 		audio = new Audio('./public/chat_message.mp3');
 	} catch (e) {
@@ -36,11 +32,11 @@ var Chat = function() {
 		}
 	}
 	function _save() {
-		let _s = JSON.stringify(s);
+		const _s = JSON.stringify(s);
 		localStorage.setItem('openmeetings', _s);
 	}
 	function _updateBtn(a) {
-		let muted = s.chat.muted === true;
+		const muted = s.chat.muted === true;
 		a.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
 				.attr('title', a.data(muted ? 'sound-enabled' : 'sound-muted'));
 	}
@@ -49,16 +45,15 @@ var Chat = function() {
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
 	function initToolbar() {
-		let emtBtn = $('#emoticons');
+		const emtBtn = $('#emoticons');
 		emtBtn.html('');
 		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
-		let emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
+		const emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
 		for (let ei in emoticon.specialEmoticons) {
 			emots.push(ei);
 		}
-		let emotMenuList = $('#emotMenuList');
+		const rowSize = 20, emotMenuList = $('#emotMenuList');
 		emotMenuList.html('');
-		let rowSize = 20;
 		let row = $('<tr></tr>');
 		for (let i = 0; i < emots.length; ++i) {
 			row.append('<td><div class="emt" onclick="Chat.emtClick(\'' + emots[i] + '\');">'
@@ -69,7 +64,7 @@ var Chat = function() {
 			}
 		}
 		_load();
-		let a = $('#chat .audio');
+		const a = $('#chat .audio');
 		_updateBtn(a);
 		$('#chat .chat-btn').hover(function(){ $(this).addClass('ui-state-hover') }, function(){ $(this).removeClass('ui-state-hover') });
 		a.click(function() {
@@ -99,7 +94,7 @@ var Chat = function() {
 			});
 			// close icon: removing the tab on click
 			chatTabs.delegate("span.ui-icon-close", "click", function() {
-				let panelId = $(this).closest("li").remove().attr("aria-controls");
+				const panelId = $(this).closest("li").remove().attr("aria-controls");
 				$("#" + panelId).remove();
 				chatTabs.tabs("refresh");
 			});
@@ -115,7 +110,7 @@ var Chat = function() {
 				}
 			});
 			$('#chatMessage').off().on('input propertychange paste', function () {
-				let room = $('.room.box');
+				const room = $('.room.box');
 				if (room.length) {
 					if (!!typingTimer) {
 						clearTimeout(typingTimer);
@@ -143,7 +138,7 @@ var Chat = function() {
 			if (!label) {
 				label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
 			}
-			let li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+			const li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
 			if (id.indexOf("chatTab-r") !== 0) {
 				li.append(closeBlock);
 			}
@@ -157,7 +152,7 @@ var Chat = function() {
 				if (isClosed()) {
 					$('#chatPopup .control.block').addClass('ui-state-highlight');
 					if ($('#chatPanel').is(':visible') && s.chat.muted !== true) {
-						let playPromise = audio.play();
+						const playPromise = audio.play();
 
 						// In browsers that don’t yet support this functionality,
 						// playPromise won’t be defined.
@@ -179,7 +174,7 @@ var Chat = function() {
 							.replace(/#\{from\}/g, cm.from.name)
 							.replace(/#\{sent\}/g, cm.sent)
 							.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
-					let date = msg.children('.date');
+					const date = msg.children('.date');
 					date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
 					if ("full" === cm.actions) {
 						date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
@@ -196,7 +191,7 @@ var Chat = function() {
 					if (m.mode === "accept") {
 						$('#chat-msg-id-' + cm.id).remove();
 					}
-					let btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+					const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
 					area.append(msg);
 					if (btm) {
 						area.animate({
@@ -232,7 +227,7 @@ var Chat = function() {
 			}
 		}
 		, emtClick: function(emoticon) {
-			let editor = $('#chatMessage .wysiwyg-editor');
+			const editor = $('#chatMessage .wysiwyg-editor');
 			editor.html(editor.html() + ' ' + emoticon + ' ');
 		}
 	};
@@ -244,7 +239,7 @@ $(function() {
 			if (msg instanceof Blob) {
 				return; //ping
 			}
-			let m = jQuery.parseJSON(msg);
+			const m = jQuery.parseJSON(msg);
 			if (m) {
 				switch(m.type) {
 					case "chat":

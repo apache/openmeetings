@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Ellipse = function(wb, s) {
-	let ellipse = Rect(wb, s);
+	const ellipse = Rect(wb, s);
 	ellipse.createShape = function() {
 		ellipse.obj = new fabric.Ellipse({
 			strokeWidth: ellipse.stroke.width
