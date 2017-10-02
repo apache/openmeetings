@@ -19,7 +19,7 @@ var Activities = function() {
 		if (!isInited()) {
 			activities.resizable({
 				handles: "n, e"
-				, disabled: isClosed(activities)
+				, disabled: isClosed()
 				, alsoResize: "#activities .area"
 				, minHeight: 195
 				, minWidth: 260

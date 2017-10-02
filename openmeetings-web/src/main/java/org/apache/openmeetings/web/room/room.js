@@ -64,8 +64,9 @@ var VideoUtil = (function() {
 				}
 			};
 		//console.log("Area " + JSON.stringify(area));
+		let minY = area.bottom, posFound;
 		do {
-			let minY = area.bottom, posFound = true;
+			posFound = true
 			//console.log("Checking RECT " + JSON.stringify(rectNew));
 			for (let i = 0; i < list.length; ++i) {
 				const rect = list[i];
