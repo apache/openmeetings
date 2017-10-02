@@ -19,7 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
+import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

@@ -18,25 +18,59 @@
  */
 package org.apache.openmeetings;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.getWicketTester;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.red5.logging.Red5LoggerFactory.getLogger;
+import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 
 import java.io.Serializable;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
+import org.slf4j.Logger;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
+	private static final Logger log = getLogger(AbstractWicketTester.class, getWebAppRootKey());
 	protected WicketTester tester;
+
+	public static WicketTester getWicketTester() {
+		return getWicketTester(-1);
+	}
+
+	public static WicketTester getWicketTester(long langId) {
+		WebApplication app = (WebApplication)ensureApplication(langId);
+
+		WicketTester tester = new WicketTester(app, app.getServletContext());
+		setInitComplete(true);
+		return tester;
+	}
+
+	public static void destroy(WicketTester tester) {
+		if (tester != null) {
+			ServletContext sc = tester.getServletContext();
+			try {
+				((XmlWebApplicationContext)sc.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).close();
+			} catch (Exception e) {
+				log.error("Unexpected error while destroying XmlWebApplicationContext", e);
+			}
+			tester.destroy();
+		}
+	}
 
 	@Override
 	public void setUp() throws Exception {

@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
@@ -44,7 +43,6 @@ import org.apache.wicket.protocol.http.mock.MockServletContext;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
-import org.apache.wicket.util.tester.WicketTester;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
@@ -54,30 +52,6 @@ public class ApplicationHelper {
 	private static final Object SYNC_OBJ = new Object();
 
 	private ApplicationHelper() {}
-
-	public static WicketTester getWicketTester() {
-		return getWicketTester(-1);
-	}
-
-	public static WicketTester getWicketTester(long langId) {
-		WebApplication app = (WebApplication)ensureApplication(langId);
-
-		WicketTester tester = new WicketTester(app, app.getServletContext());
-		setInitComplete(true);
-		return tester;
-	}
-
-	public static void destroy(WicketTester tester) {
-		if (tester != null) {
-			ServletContext sc = tester.getServletContext();
-			try {
-				((XmlWebApplicationContext)sc.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).close();
-			} catch (Exception e) {
-				log.error("Unexpected error while destroying XmlWebApplicationContext", e);
-			}
-			tester.destroy();
-		}
-	}
 
 	public static IApplication ensureApplication() {
 		return ensureApplication(-1L);

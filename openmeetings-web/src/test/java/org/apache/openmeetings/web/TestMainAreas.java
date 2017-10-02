@@ -23,7 +23,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
@@ -31,12 +30,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestMainAreas extends AbstractWicketTester {
-	@Test
-	public void testSigninIsDisplayed() {
-		tester.startPage(MainPage.class);
-		tester.assertRenderedPage(SignInPage.class);
-	}
-
 	@Test
 	public void testDashboard() throws OmException {
 		Assert.assertTrue(((WebSession)tester.getSession()).signIn(adminUsername, userpass, User.Type.user, null));;
@@ -47,8 +40,6 @@ public class TestMainAreas extends AbstractWicketTester {
 		WebSocketTester webSocketTester = new WebSocketTester(tester, page);
 		webSocketTester.sendMessage("socketConnected");
 
-		//tester.assertComponentOnAjaxResponse("main-container:main:contents:child")
 		tester.assertComponent("main-container:main:contents:child", OmDashboardPanel.class); //main-container:main:contents:child:dashboard
-		//tester.getLastRenderedPage(). visitChildren(OmDashboardPanel.class, visitor) find(OmDashboardPanel.class)
 	}
 }
