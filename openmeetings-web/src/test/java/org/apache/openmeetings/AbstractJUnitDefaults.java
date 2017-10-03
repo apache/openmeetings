@@ -27,10 +27,12 @@ import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
@@ -45,6 +47,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	protected static final String adminUsername = "admin";
 	protected static final String regularUsername = "user";
+	protected static final String groupAdminUsername = "groupAdmin";
 	protected static final String userpass = "12345";
 	private static final String group = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
@@ -54,6 +57,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private GroupDao groupDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
@@ -65,10 +70,11 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		cfgDao.getCryptKey();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
-			User regular = getUser();
-			regular.setLogin(regularUsername);
-			regular.updatePassword(cfgDao, userpass);
-			createUser(regular);
+			// regular user
+			createSystemUser(regularUsername, false);
+
+			// group admin
+			createSystemUser(groupAdminUsername, true);
 			log.info("Default scheme created successfully");
 		} else {
 			log.info("Default scheme already created");
@@ -157,6 +163,16 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.updatePassword(cfgDao, createPass());
 		u.setLanguageId(1L);
 		return u;
+	}
+
+	public User createSystemUser(String login, boolean groupAdmin) throws Exception {
+		User u = getUser();
+		GroupUser gu = new GroupUser(groupDao.get(group), u);
+		gu.setModerator(groupAdmin);
+		u.getGroupUsers().add(gu);
+		u.setLogin(login);
+		u.updatePassword(cfgDao, userpass);
+		return createUser(u);
 	}
 
 	public User createUser() throws Exception {
