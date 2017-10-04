@@ -57,6 +57,8 @@ import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.openmeetings.web.pages.NotInitedPage;
+import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
@@ -271,5 +273,17 @@ public class TestMainAreas extends AbstractWicketTester {
 	public void testRoom1() throws OmException {
 		//public interview room
 		checkArea(AreaKeys.room, String.valueOf(1), RoomPanel.class, regularUsername);
+	}
+
+	@Test
+	public void testInstallNotAccessible() {
+		tester.startPage(InstallWizardPage.class);
+		tester.assertRenderedPage(MainPage.class);
+	}
+
+	@Test
+	public void testUnavailNotAccessible() {
+		tester.startPage(NotInitedPage.class);
+		tester.assertRenderedPage(MainPage.class);
 	}
 }
