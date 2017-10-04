@@ -82,7 +82,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	public String getEscapedString(String lbl) {
-		return escapeMarkup(getString(lbl), false, false).toString();
+		return escapeMarkup(getString(lbl)).toString();
 	}
 
 	@Override

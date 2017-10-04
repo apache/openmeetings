@@ -105,4 +105,8 @@ public class DaoHelper {
 			}
 		}
 	}
+
+	public static String getStringParam(String param) {
+		return param == null ? "%" : "%" + StringUtils.lowerCase(param) + "%";
+	}
 }

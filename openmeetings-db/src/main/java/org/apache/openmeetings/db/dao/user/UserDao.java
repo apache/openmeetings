@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
+import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -542,10 +543,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		TypedQuery<T> query = em.createQuery(sb.toString(), clazz);
 		setAdditionalParams(query, params);
 		return query;
-	}
-
-	private static String getStringParam(String param) {
-		return param == null ? "%" : "%" + StringUtils.lowerCase(param) + "%";
 	}
 
 	public List<User> searchUserProfile(Long userId, String text, String offers, String search, String orderBy, int start, int max, boolean asc) {

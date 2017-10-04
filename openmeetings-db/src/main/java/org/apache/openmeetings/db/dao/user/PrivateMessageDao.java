@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
+import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Collection;
@@ -30,11 +31,11 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -112,7 +113,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 			.append(" FROM PrivateMessage m WHERE m.owner.id = :ownerId ")
 			.append(" AND m.folderId = :folderId ");
 
-		if (!StringUtils.isEmpty(search)) {
+		if (!Strings.isEmpty(search)) {
 			hql.append(" AND ( ")
 				.append("lower(m.subject) LIKE :search ")
 				.append("OR lower(m.message) LIKE :search ")
@@ -123,18 +124,22 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 				.append(" ) ");
 		}
 
-		if (!isCount && !StringUtils.isEmpty(orderBy)) {
+		if (!isCount && !Strings.isEmpty(orderBy)) {
 			hql.append(" ORDER BY ").append(orderBy).append(asc ? " ASC" : " DESC");
 		}
 		return hql.toString();
 	}
 
+	private <T> void setSearch(TypedQuery<T> query, String search) {
+		if (!Strings.isEmpty(search)) {
+			query.setParameter("search", getStringParam(search));
+		}
+	}
+
 	public Long count(Long ownerId, Long folderId, String search) {
 		TypedQuery<Long> query = em.createQuery(getQuery(true, search, null, true), Long.class);
 		query.setParameter("ownerId", ownerId);
-		if (!StringUtils.isEmpty(search)) {
-			query.setParameter("search", StringUtils.lowerCase("%" + search + "%"));
-		}
+		setSearch(query, search);
 		query.setParameter("folderId", folderId);
 		return query.getSingleResult();
 	}
@@ -143,9 +148,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		TypedQuery<PrivateMessage> query = em.createQuery(getQuery(false, search, orderBy, asc), PrivateMessage.class);
 		query.setParameter("ownerId", ownerId);
 		query.setParameter("folderId", folderId);
-		if (!StringUtils.isEmpty(search)) {
-			query.setParameter("search", StringUtils.lowerCase("%" + search + "%"));
-		}
+		setSearch(query, search);
 		query.setFirstResult(start);
 		query.setMaxResults(max);
 		return query.getResultList();
