@@ -63,10 +63,6 @@ public class UserSearchPanel extends UserBasePanel {
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
 
-	private void refresh(IPartialPageRequestHandler handler) {
-		handler.add(container.add(fixedHeader));
-	}
-
 	public UserSearchPanel(String id) {
 		super(id);
 
@@ -137,6 +133,10 @@ public class UserSearchPanel extends UserBasePanel {
 				refresh(target);
 			}
 		}).setOutputMarkupId(true));
+	}
+
+	private void refresh(IPartialPageRequestHandler handler) {
+		handler.add(container.add(fixedHeader));
 	}
 
 	private static String getName(User u) {

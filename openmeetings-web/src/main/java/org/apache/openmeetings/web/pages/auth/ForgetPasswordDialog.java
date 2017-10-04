@@ -70,11 +70,65 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
 	private final RadioGroup<Type> rg = new RadioGroup<>("type", Model.of(Type.email));
-	private final Label label = new Label("label", Model.of(Application.getString("315")));
+	private final Label label = new Label("label", Model.of(""));
 	private final Captcha captcha = new Captcha("captcha");
-	private Form<String> form;
+	private Form<String> form = new Form<String>("form") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
+			add(feedback.setOutputMarkupId(true));
+			add(label.setDefaultModelObject(getString("315")).setOutputMarkupId(true));
+			add(name.setOutputMarkupId(true));
+			add(captcha);
+			add(rg.add(new Radio<>("email", Model.of(Type.email)))
+					.add(new Radio<>("login", Model.of(Type.login)))
+					.setOutputMarkupId(true));
+			rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onUpdate(AjaxRequestTarget target) {
+					updateLabel(target);
+				}
+			});
+			add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					ForgetPasswordDialog.this.onSubmit(target);
+				}
+
+				@Override
+				protected void onError(AjaxRequestTarget target) {
+					ForgetPasswordDialog.this.onError(target);
+				}
+			});
+			updateLabel(null);
+		}
+
+		@Override
+		protected void onValidate() {
+			String n = name.getConvertedInput();
+			if (n != null) {
+				IValidatable<String> val = new Validatable<>(n);
+				Type type = rg.getConvertedInput();
+				if (type == Type.email) {
+					emailValidator.validate(val);
+					if (!val.isValid()) {
+						error(getString("234"));
+					}
+				}
+				if (type == Type.login && n.length() < UserHelper.getMinLoginLength(getBean(ConfigurationDao.class))) {
+					error(getString("104"));
+				}
+			}
+		}
+	};
 	private SignInDialog s;
-	final MessageDialog confirmDialog;
+	MessageDialog confirmDialog;
 
 	enum Type {
 		email
@@ -82,61 +136,15 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	public ForgetPasswordDialog(String id) {
-		super(id, Application.getString("312"));
-		add(form = new Form<String>("form") {
-			private static final long serialVersionUID = 1L;
+		super(id, "");
+	}
 
-			{
-				add(feedback.setOutputMarkupId(true));
-				add(label.setOutputMarkupId(true));
-				add(name.setOutputMarkupId(true));
-				add(captcha);
-				add(rg.add(new Radio<>("email", Model.of(Type.email)))
-						.add(new Radio<>("login", Model.of(Type.login)))
-						.setOutputMarkupId(true));
-				rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onUpdate(AjaxRequestTarget target) {
-						updateLabel(target);
-					}
-				});
-				add(new AjaxButton("submit") { //FAKE button so "submit-on-enter" works as expected
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					protected void onSubmit(AjaxRequestTarget target) {
-						ForgetPasswordDialog.this.onSubmit(target);
-					}
-
-					@Override
-					protected void onError(AjaxRequestTarget target) {
-						ForgetPasswordDialog.this.onError(target);
-					}
-				});
-				updateLabel(null);
-			}
-
-			@Override
-			protected void onValidate() {
-				String n = name.getConvertedInput();
-				if (n != null) {
-					IValidatable<String> val = new Validatable<>(n);
-					Type type = rg.getConvertedInput();
-					if (type == Type.email) {
-						emailValidator.validate(val);
-						if (!val.isValid()) {
-							error(getString("234"));
-						}
-					}
-					if (type == Type.login && n.length() < UserHelper.getMinLoginLength(getBean(ConfigurationDao.class))) {
-						error(getString("104"));
-					}
-				}
-			}
-		});
-		confirmDialog = new NonClosableMessageDialog("confirmDialog", Application.getString("312"), Application.getString("321")){
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		setTitle(Model.of(getString("312")));
+		add(form);
+		confirmDialog = new NonClosableMessageDialog("confirmDialog", getString("312"), getString("321")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -148,7 +156,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	private void updateLabel(IPartialPageRequestHandler handler) {
-		String lbl = Application.getString(rg.getModelObject() == Type.email ? "315" : "316");
+		String lbl = getString(rg.getModelObject() == Type.email ? "315" : "316");
 		name.setLabel(Model.of(lbl));
 		label.setDefaultModelObject(lbl);
 		if (handler != null) {
@@ -221,7 +229,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 * @param appLink
 	 * @return <code>true</code> in case reset was successful, <code>false</code> otherwise
 	 */
-	private static boolean resetUser(String email, String username, String appLink) {
+	private boolean resetUser(String email, String username, String appLink) {
 		try {
 			UserDao userDao = getBean(UserDao.class);
 			log.debug("resetUser " + email);
@@ -246,7 +254,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return false;
 	}
 
-	private static void sendHashByUser(User us, String appLink, UserDao userDao) {
+	private void sendHashByUser(User us, String appLink, UserDao userDao) {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(UUID.randomUUID().toString());
 		us.setResetDate(new Date());
@@ -257,7 +265,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 		String template = ResetPasswordTemplate.getEmail(reset_link);
 
-		getBean(MailHandler.class).send(email, Application.getString("517"), template);
+		getBean(MailHandler.class).send(email, getString("517"), template);
 	}
 
 }

@@ -64,11 +64,6 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	private final TextField<Long> valueN;
 	private final CheckBox valueB;
 
-	private void refresh(AjaxRequestTarget target) {
-		target.add(this);
-		target.appendJavaScript("adminPanelInit();");
-	}
-
 	public ConfigForm(String id, WebMarkupContainer listContainer, Configuration configuration) {
 		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
@@ -132,6 +127,11 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	private void refresh(AjaxRequestTarget target) {
+		target.add(this);
+		target.appendJavaScript("adminPanelInit();");
 	}
 
 	private void update(AjaxRequestTarget target) {

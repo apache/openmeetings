@@ -144,7 +144,9 @@ public class iCalUtils {
 	 * @return Updated Appointment.
 	 */
 	public Appointment parseCalendartoAppointment(Appointment a, Calendar calendar, String etag) {
-		if (calendar == null) return a;
+		if (calendar == null) {
+			return a;
+		}
 		CalendarComponent event = calendar.getComponent(Component.VEVENT);
 		if (event != null) {
 			TimeZone tz = parseTimeZone(calendar, a.getOwner());

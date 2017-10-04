@@ -36,14 +36,14 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	private String id;
 	private Core core;
 
-	public void setCore(Core core) {
-		this.core = core;
-	}
-
 	RTMPClientPublish(Core core, String host, String app, String id) {
 		this.id = id;
 		this.core = core;
 		publishScreen = new CaptureScreen(core, this, host, app, 1935);
+	}
+
+	public void setCore(Core core) {
+		this.core = core;
 	}
 
 	public void connect() {

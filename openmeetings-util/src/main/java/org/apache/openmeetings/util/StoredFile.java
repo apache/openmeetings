@@ -26,7 +26,6 @@ import static org.apache.tika.mime.MediaType.application;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -85,11 +84,11 @@ public class StoredFile {
 		init(name, ext, is);
 	}
 
-	public StoredFile(String fullname, File f) throws FileNotFoundException, IOException {
+	public StoredFile(String fullname, File f) throws IOException {
 		this(fullname, null, f);
 	}
 
-	public StoredFile(String name, String ext, File f) throws FileNotFoundException, IOException {
+	public StoredFile(String name, String ext, File f) throws IOException {
 		try (InputStream fis = new FileInputStream(f)) {
 			init(name, ext, fis);
 		}

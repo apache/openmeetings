@@ -148,116 +148,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 		});
 	private WebMarkupContainer selectedFolder;
 
-	private void setDefaultFolderClass() {
-		inbox.add(AttributeModifier.replace("class", "email inbox clickable"));
-		sent.add(AttributeModifier.replace("class", "email sent clickable"));
-		trash.add(AttributeModifier.replace("class", "email trash clickable"));
-	}
-
-	private static void selectFolder(WebMarkupContainer folder) {
-		folder.add(AttributeModifier.append("class", "ui-widget-header ui-corner-all"));
-	}
-
-	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
-		folder.add(AttributeModifier.replace("class", "email folder clickable"));
-		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
-			selectFolder(folder);
-		}
-	}
-
-	private void updateControls(AjaxRequestTarget target) {
-		deleteBtn.setEnabled(!selectedMessages.isEmpty());
-		Long selFldr = selectedFolderModel.getObject();
-		readBtn.setEnabled(!TRASH_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
-		unreadBtn.setEnabled(!TRASH_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
-		toInboxBtn.setVisible(!INBOX_FOLDER_ID.equals(selFldr) && !SENT_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
-		target.add(buttons);
-	}
-
-	private static String getEmail(User u) {
-		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
-	}
-
-	private void selectMessage(long id, AjaxRequestTarget target) {
-		PrivateMessage msg = getBean(PrivateMessageDao.class).get(id);
-		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
-		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
-		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
-		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()).setEscapeModelStrings(false));
-		if (msg != null) {
-			Room r = msg.getRoom();
-			if (r != null) {
-				//TODO add time check
-				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
-				roomContainer.addOrReplace(new Label("start", a == null ? "" : getDateFormat().format(a.getStart())));
-				roomContainer.addOrReplace(new Label("end", a == null ? "" : getDateFormat().format(a.getEnd())));
-				roomContainer.addOrReplace(new Button("enter").add(new RoomEnterBehavior(r.getId())));
-			}
-			roomContainer.setVisible(r != null);
-		}
-		if (target != null) {
-			target.add(selectedMessage);
-			updateControls(target);
-		}
-	}
-
-	void updateTable(AjaxRequestTarget target) {
-		container.add(fixedTable);
-		if (target != null) {
-			target.add(container);
-		}
-	}
-
-	private void selectFolder(WebMarkupContainer folder, Long id, AjaxRequestTarget target) {
-		selectedFolder = folder;
-		selectedFolderModel.setObject(id);
-		setDefaultFolderClass();
-		selectFolder(folder);
-		emptySelection(target);
-		selectDropDown.setModelObject(SELECT_CHOOSE);
-		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
-		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "80")));
-		readBtn.setEnabled(false);
-		unreadBtn.setEnabled(false);
-		if (target != null) {
-			updateTable(target);
-			target.add(folders, unread, selectDropDown, moveDropDown);
-			target.add(dataContainer.getContainer(), dataContainer.getNavigator());
-			target.add(dataContainer.getLinks());
-		}
-	}
-
-	private void emptySelection(AjaxRequestTarget target) {
-		selectedMessages.clear();
-		selectMessage(-1, target);
-		unread.setDefaultModelObject(getBean(PrivateMessageDao.class).count(getUserId(), selectedFolderModel.getObject(), null));
-		if (target != null) {
-			target.add(unread);
-		}
-	}
-
-	private static String getDisplayName(User u) {
-		return new StringBuilder().append(u.getFirstname()).append(" ")
-				.append(u.getLastname()).append(" ")
-				.append("<").append(getEmail(u)).append(">")
-				.toString();
-	}
-
-	private void updateMoveModel() {
-		List<PrivateMessageFolder> list = new ArrayList<>();
-		list.add(NOT_MOVE_FOLDER);
-		list.addAll(foldersModel.getObject());
-		moveDropDown.setChoices(list);
-	}
-
-	private void updateContacts(AjaxRequestTarget target) {
-		pendingContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
-		allContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactsByUserAndStatus(getUserId(), false).size());
-		if (target != null) {
-			target.add(contacts);
-		}
-	}
-
 	public MessagesContactsPanel(String id) {
 		super(id);
 		NOT_MOVE_FOLDER.setId(MOVE_CHOOSE);
@@ -610,6 +500,116 @@ public class MessagesContactsPanel extends UserBasePanel {
 				response.render(OnDomReadyHeaderItem.forScript(getCallbackScript()));
 			}
 		});
+	}
+
+	private void setDefaultFolderClass() {
+		inbox.add(AttributeModifier.replace("class", "email inbox clickable"));
+		sent.add(AttributeModifier.replace("class", "email sent clickable"));
+		trash.add(AttributeModifier.replace("class", "email trash clickable"));
+	}
+
+	private static void selectFolder(WebMarkupContainer folder) {
+		folder.add(AttributeModifier.append("class", "ui-widget-header ui-corner-all"));
+	}
+
+	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
+		folder.add(AttributeModifier.replace("class", "email folder clickable"));
+		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
+			selectFolder(folder);
+		}
+	}
+
+	private void updateControls(AjaxRequestTarget target) {
+		deleteBtn.setEnabled(!selectedMessages.isEmpty());
+		Long selFldr = selectedFolderModel.getObject();
+		readBtn.setEnabled(!TRASH_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
+		unreadBtn.setEnabled(!TRASH_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
+		toInboxBtn.setVisible(!INBOX_FOLDER_ID.equals(selFldr) && !SENT_FOLDER_ID.equals(selFldr) && !selectedMessages.isEmpty());
+		target.add(buttons);
+	}
+
+	private static String getEmail(User u) {
+		return u == null || u.getAddress() == null ? "" : u.getAddress().getEmail();
+	}
+
+	private void selectMessage(long id, AjaxRequestTarget target) {
+		PrivateMessage msg = getBean(PrivateMessageDao.class).get(id);
+		selectedMessage.addOrReplace(new Label("from", msg == null ? "" : getEmail(msg.getFrom())));
+		selectedMessage.addOrReplace(new Label("to", msg == null ? "" : getEmail(msg.getTo())));
+		selectedMessage.addOrReplace(new Label("subj", msg == null ? "" : msg.getSubject()));
+		selectedMessage.addOrReplace(new Label("body", msg == null ? "" : msg.getMessage()).setEscapeModelStrings(false));
+		if (msg != null) {
+			Room r = msg.getRoom();
+			if (r != null) {
+				//TODO add time check
+				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
+				roomContainer.addOrReplace(new Label("start", a == null ? "" : getDateFormat().format(a.getStart())));
+				roomContainer.addOrReplace(new Label("end", a == null ? "" : getDateFormat().format(a.getEnd())));
+				roomContainer.addOrReplace(new Button("enter").add(new RoomEnterBehavior(r.getId())));
+			}
+			roomContainer.setVisible(r != null);
+		}
+		if (target != null) {
+			target.add(selectedMessage);
+			updateControls(target);
+		}
+	}
+
+	void updateTable(AjaxRequestTarget target) {
+		container.add(fixedTable);
+		if (target != null) {
+			target.add(container);
+		}
+	}
+
+	private void selectFolder(WebMarkupContainer folder, Long id, AjaxRequestTarget target) {
+		selectedFolder = folder;
+		selectedFolderModel.setObject(id);
+		setDefaultFolderClass();
+		selectFolder(folder);
+		emptySelection(target);
+		selectDropDown.setModelObject(SELECT_CHOOSE);
+		moveDropDown.setModelObject(NOT_MOVE_FOLDER);
+		deleteBtn.add(AttributeModifier.replace("value", Application.getString(TRASH_FOLDER_ID.equals(id) ? "1256" : "80")));
+		readBtn.setEnabled(false);
+		unreadBtn.setEnabled(false);
+		if (target != null) {
+			updateTable(target);
+			target.add(folders, unread, selectDropDown, moveDropDown);
+			target.add(dataContainer.getContainer(), dataContainer.getNavigator());
+			target.add(dataContainer.getLinks());
+		}
+	}
+
+	private void emptySelection(AjaxRequestTarget target) {
+		selectedMessages.clear();
+		selectMessage(-1, target);
+		unread.setDefaultModelObject(getBean(PrivateMessageDao.class).count(getUserId(), selectedFolderModel.getObject(), null));
+		if (target != null) {
+			target.add(unread);
+		}
+	}
+
+	private static String getDisplayName(User u) {
+		return new StringBuilder().append(u.getFirstname()).append(" ")
+				.append(u.getLastname()).append(" ")
+				.append("<").append(getEmail(u)).append(">")
+				.toString();
+	}
+
+	private void updateMoveModel() {
+		List<PrivateMessageFolder> list = new ArrayList<>();
+		list.add(NOT_MOVE_FOLDER);
+		list.addAll(foldersModel.getObject());
+		moveDropDown.setChoices(list);
+	}
+
+	private void updateContacts(AjaxRequestTarget target) {
+		pendingContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactRequestsByUserAndStatus(getUserId(), true).size());
+		allContacts.setDefaultModelObject(getBean(UserContactDao.class).getContactsByUserAndStatus(getUserId(), false).size());
+		if (target != null) {
+			target.add(contacts);
+		}
 	}
 
 	@Override

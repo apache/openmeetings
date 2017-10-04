@@ -103,18 +103,6 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	private LinkedBlockingQueue<Map<String, Object>> remoteEvents = new LinkedBlockingQueue<>();
 	private final ScreenDimensions dim;
 
-	private CaptureScreen getCapture() {
-		if (_capture == null) {
-			_capture = new CaptureScreen(this, instance, host, app, port);
-		}
-		return _capture;
-	}
-	// ------------------------------------------------------------------------
-	//
-	// Main
-	//
-	// ------------------------------------------------------------------------
-
 	public Core(String[] args) {
 		dim = new ScreenDimensions();
 		try {
@@ -164,6 +152,13 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		}
 	}
 
+	private CaptureScreen getCapture() {
+		if (_capture == null) {
+			_capture = new CaptureScreen(this, instance, host, app, port);
+		}
+		return _capture;
+	}
+
 	private void setInstance(URI uri) {
 		Protocol protocol = Protocol.valueOf(uri.getScheme());
 		host = uri.getHost();
@@ -193,6 +188,11 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		log.debug(String.format("host: %s, port: %s, app: %s, publish: %s", host, port, app, sid));
 	}
 
+	// ------------------------------------------------------------------------
+	//
+	// Main
+	//
+	// ------------------------------------------------------------------------
 	public static void main(String[] args) {
 		new Core(args);
 	}

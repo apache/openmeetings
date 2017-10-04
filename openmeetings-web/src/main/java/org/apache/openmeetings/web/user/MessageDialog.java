@@ -91,16 +91,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private boolean isPrivate = false;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<User>());
 
-	@Override
-	public int getWidth() {
-		return 650;
-	}
-
-	public void open(IPartialPageRequestHandler handler, Long userId) {
-		getModelObject().setTo(getBean(UserDao.class).get(userId));
-		open(handler);
-	}
-
 	public MessageDialog reset(boolean isPrivate) {
 		//TODO should be 'in sync' with appointment
 		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
@@ -121,6 +111,16 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		form.setModelObject(p);
 		this.isPrivate = isPrivate;
 		return this;
+	}
+
+	@Override
+	public int getWidth() {
+		return 650;
+	}
+
+	public void open(IPartialPageRequestHandler handler, Long userId) {
+		getModelObject().setTo(getBean(UserDao.class).get(userId));
+		open(handler);
 	}
 
 	@Override

@@ -33,7 +33,6 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
 import org.wicketstuff.select2.Response;
 
-import com.github.openjson.JSONException;
 import com.github.openjson.JSONStringer;
 
 public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
@@ -118,7 +117,7 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	}
 
 	@Override
-	public void toJson(User choice, JSONStringer stringer) throws JSONException {
+	public void toJson(User choice, JSONStringer stringer) {
 		super.toJson(choice, stringer);
 		stringer.key("contact").value(choice.getType() == Type.contact);
 	}

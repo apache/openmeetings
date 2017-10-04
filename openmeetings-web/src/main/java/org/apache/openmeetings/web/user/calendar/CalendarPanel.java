@@ -98,46 +98,6 @@ public class CalendarPanel extends UserBasePanel {
 	private final WebMarkupContainer calendarListContainer;
 	private transient HttpClient client = null; // Non-Serializable HttpClient.
 
-	@Override
-	public void cleanup(IPartialPageRequestHandler handler) {
-		refreshTimer.stop(handler);
-		syncTimer.stop(handler);
-		if (client != null) {
-			getAppointmentManager().cleanupIdleConnections();
-			client.getState().clear();
-		}
-	}
-
-	private static AppointmentDao getDao() {
-		return getBean(AppointmentDao.class);
-	}
-
-	public void refresh(IPartialPageRequestHandler handler) {
-		calendar.refresh(handler);
-	}
-
-	//Reloads the Calendar List on Appointment Dialog and the list of Calendars
-	public void refreshCalendars(IPartialPageRequestHandler handler) {
-		handler.add(dialog, calendarListContainer);
-	}
-
-	Calendar getCalendar() {
-		return calendar;
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-
-		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
-		if (target.isPresent()) {
-			target.get().appendJavaScript(javaScriptMarkup);
-			target.get().appendJavaScript(javaScriptAddDatepicker);
-		} else {
-			response.render(JavaScriptHeaderItem.forScript(javaScriptMarkup, this.getId()));
-		}
-	}
-
 	public CalendarPanel(String id) {
 		super(id);
 
@@ -355,6 +315,46 @@ public class CalendarPanel extends UserBasePanel {
 		}));
 
 		add(calendarListContainer);
+	}
+
+	@Override
+	public void cleanup(IPartialPageRequestHandler handler) {
+		refreshTimer.stop(handler);
+		syncTimer.stop(handler);
+		if (client != null) {
+			getAppointmentManager().cleanupIdleConnections();
+			client.getState().clear();
+		}
+	}
+
+	private static AppointmentDao getDao() {
+		return getBean(AppointmentDao.class);
+	}
+
+	public void refresh(IPartialPageRequestHandler handler) {
+		calendar.refresh(handler);
+	}
+
+	//Reloads the Calendar List on Appointment Dialog and the list of Calendars
+	public void refreshCalendars(IPartialPageRequestHandler handler) {
+		handler.add(dialog, calendarListContainer);
+	}
+
+	Calendar getCalendar() {
+		return calendar;
+	}
+
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+
+		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
+		if (target.isPresent()) {
+			target.get().appendJavaScript(javaScriptMarkup);
+			target.get().appendJavaScript(javaScriptAddDatepicker);
+		} else {
+			response.render(JavaScriptHeaderItem.forScript(javaScriptMarkup, this.getId()));
+		}
 	}
 
 	// Client creation here, because the client is not created until necessary

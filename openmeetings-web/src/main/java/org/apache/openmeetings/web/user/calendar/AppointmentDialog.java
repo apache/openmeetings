@@ -123,6 +123,26 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		, group
 	}
 
+	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
+		super(id, title, model, true);
+		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
+		this.calendarPanel = calendarPanel;
+		setOutputMarkupId(true);
+		form = new AppointmentForm("appForm", model);
+		add(form);
+		confirmDelete = new MessageDialog("confirmDelete", Application.getString("80"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				if (button != null && button.match(AbstractDialog.OK)){
+					deleteAppointment(handler);
+				}
+			}
+		};
+		add(confirmDelete);
+	}
+
 	@Override
 	public int getWidth() {
 		return 650;
@@ -152,26 +172,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 		save.setVisible(isOwner(a), target);
 		super.setModelObject(a);
-	}
-
-	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
-		super(id, title, model, true);
-		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
-		this.calendarPanel = calendarPanel;
-		setOutputMarkupId(true);
-		form = new AppointmentForm("appForm", model);
-		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", Application.getString("80"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				if (button != null && button.match(AbstractDialog.OK)){
-					deleteAppointment(handler);
-				}
-			}
-		};
-		add(confirmDelete);
 	}
 
 	protected void deleteAppointment(IPartialPageRequestHandler handler) {
@@ -314,63 +314,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		);
 		private final WebMarkupContainer groupContainer = new WebMarkupContainer("groupContainer");
 
-		private Room createAppRoom() {
-			Room r = new Room();
-			r.setAppointment(true);
-			if (r.getType() == null) {
-				r.setType(Room.Type.conference);
-			}
-			return r;
-		}
-
-		@Override
-		protected void onModelChanged() {
-			super.onModelChanged();
-
-			Appointment a = getModelObject();
-			if (a.getReminder() == null) {
-				a.setReminder(Reminder.none);
-			}
-			if (a.getRoom() == null) {
-				a.setRoom(createAppRoom());
-			}
-			createRoom = myRoomsAllowed && a.getRoom().isAppointment();
-			if (createRoom) {
-				appRoom = a.getRoom();
-			} else {
-				groom.setModelObject(a.getRoom());
-				appRoom = createAppRoom();
-			}
-			createRoomBlock.setDefaultModelObject(appRoom);
-			createRoomBlock.setEnabled(createRoom);
-			groom.setEnabled(!createRoom);
-			if (a.getId() == null) {
-				java.util.Calendar from = WebSession.getCalendar();
-				from.setTime(a.getStart());
-				java.util.Calendar to = WebSession.getCalendar();
-				to.setTime(a.getEnd());
-
-				if (from.equals(to)) {
-					to.add(java.util.Calendar.HOUR_OF_DAY, 1);
-					a.setEnd(to.getTime());
-				}
-				cals.setEnabled(true);
-			} else {
-				cals.setEnabled(false);
-			}
-
-			rdi.setModelObject(InviteeType.user);
-			attendees.setModelObject(new ArrayList<>());
-			if (a.getMeetingMembers() != null) {
-				for (MeetingMember mm : a.getMeetingMembers()) {
-					attendees.getModelObject().add(mm.getUser());
-				}
-			}
-			pwd.setEnabled(a.isPasswordProtected());
-			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
-			ownerPanel.setVisible(!isOwner(a));
-		}
-
 		public AppointmentForm(String id, CompoundPropertyModel<Appointment> model) {
 			super(id, model);
 			setOutputMarkupId(true);
@@ -478,6 +421,63 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			pwd.setOutputMarkupId(true);
 			add(pwd);
 			add(cals.setNullValid(true).setLabel(Model.of("calendar")).setOutputMarkupId(true));
+		}
+
+		private Room createAppRoom() {
+			Room r = new Room();
+			r.setAppointment(true);
+			if (r.getType() == null) {
+				r.setType(Room.Type.conference);
+			}
+			return r;
+		}
+
+		@Override
+		protected void onModelChanged() {
+			super.onModelChanged();
+
+			Appointment a = getModelObject();
+			if (a.getReminder() == null) {
+				a.setReminder(Reminder.none);
+			}
+			if (a.getRoom() == null) {
+				a.setRoom(createAppRoom());
+			}
+			createRoom = myRoomsAllowed && a.getRoom().isAppointment();
+			if (createRoom) {
+				appRoom = a.getRoom();
+			} else {
+				groom.setModelObject(a.getRoom());
+				appRoom = createAppRoom();
+			}
+			createRoomBlock.setDefaultModelObject(appRoom);
+			createRoomBlock.setEnabled(createRoom);
+			groom.setEnabled(!createRoom);
+			if (a.getId() == null) {
+				java.util.Calendar from = WebSession.getCalendar();
+				from.setTime(a.getStart());
+				java.util.Calendar to = WebSession.getCalendar();
+				to.setTime(a.getEnd());
+
+				if (from.equals(to)) {
+					to.add(java.util.Calendar.HOUR_OF_DAY, 1);
+					a.setEnd(to.getTime());
+				}
+				cals.setEnabled(true);
+			} else {
+				cals.setEnabled(false);
+			}
+
+			rdi.setModelObject(InviteeType.user);
+			attendees.setModelObject(new ArrayList<>());
+			if (a.getMeetingMembers() != null) {
+				for (MeetingMember mm : a.getMeetingMembers()) {
+					attendees.getModelObject().add(mm.getUser());
+				}
+			}
+			pwd.setEnabled(a.isPasswordProtected());
+			owner.setDefaultModel(Model.of(FormatHelper.formatUser(a.getOwner())));
+			ownerPanel.setVisible(!isOwner(a));
 		}
 
 		@Override

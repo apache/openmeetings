@@ -30,26 +30,26 @@ public class OmOption extends Option {
 	private String helpPrefix = "";
 
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
-			String description, boolean optional) throws IllegalArgumentException {
+			String description, boolean optional) {
 		this(group, 0, opt, longOpt, hasArg, description);
 		setOptional(optional);
 	}
 
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
-			String description, String optional) throws IllegalArgumentException {
+			String description, String optional) {
 		this(group, 0, opt, longOpt, hasArg, description);
 		setOptional(optional, true);
 	}
 
 	public OmOption(String group, int order, String opt, String longOpt, boolean hasArg,
-			String description) throws IllegalArgumentException {
+			String description) {
 		super(opt, longOpt, hasArg, description);
 		this.group = group;
 		this.setOrder(order);
 	}
 
 	public OmOption(String group, String opt, String longOpt, boolean hasArg,
-			String description) throws IllegalArgumentException {
+			String description) {
 		this(group, 0, opt, longOpt, hasArg, description);
 	}
 

@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -169,7 +168,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return labels;
 	}
 
-	private static List<StringLabel> getLabels(InputStream is) throws InvalidPropertiesFormatException, IOException {
+	private static List<StringLabel> getLabels(InputStream is) throws IOException {
 		final List<StringLabel> labels = new ArrayList<>();
 		Properties props = new Properties();
 		props.loadFromXML(is);

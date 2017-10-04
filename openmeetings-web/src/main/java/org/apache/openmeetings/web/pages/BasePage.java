@@ -51,10 +51,6 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private final HeaderPanel header;
 	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader");
 
-	protected abstract boolean isRtl();
-	protected abstract String getLanguageCode();
-	protected abstract String getApplicationName();
-
 	public BasePage() {
 		options = new HashMap<>();
 		options.put("fragmentIdentifierSuffix", "");
@@ -70,6 +66,10 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(header = new HeaderPanel("header", appName));
 		add(loader.setVisible(isMainPage()).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 	}
+
+	protected abstract boolean isRtl();
+	protected abstract String getLanguageCode();
+	protected abstract String getApplicationName();
 
 	protected OmUrlFragment getUrlFragment(IRequestParameters params) {
 		for (AreaKeys key : AreaKeys.values()) {

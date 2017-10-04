@@ -215,13 +215,6 @@ public class RoomMenuPanel extends Panel {
 		}
 	};
 
-	private Group getGroup() {
-		Room r = room.getRoom();
-		return r.getGroups() == null || r.getGroups().isEmpty()
-				? new Group()
-				: r.getGroups().get(0).getGroup();
-	}
-
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
@@ -241,6 +234,13 @@ public class RoomMenuPanel extends Panel {
 		add(vote = new VoteDialog("vote"));
 		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
 		add(sipDialer = new SipDialerDialog("sipDialer", room));
+	}
+
+	private Group getGroup() {
+		Room r = room.getRoom();
+		return r.getGroups() == null || r.getGroups().isEmpty()
+				? new Group()
+				: r.getGroups().get(0).getGroup();
 	}
 
 	@Override

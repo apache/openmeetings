@@ -37,6 +37,12 @@ public abstract class AbstractTemplatePanel extends Panel {
 	public static final String COMP_ID = "template";
 	protected final Locale locale;
 
+	public AbstractTemplatePanel(Locale locale) {
+		super(COMP_ID);
+		this.locale = locale == null ? getDefault() : locale;
+		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
+	}
+
 	public static <T> T getBean(Class<T> clazz) {
 		return ensureApplication().getOmBean(clazz);
 	}
@@ -48,12 +54,6 @@ public abstract class AbstractTemplatePanel extends Panel {
 	private static Locale getDefault() {
 		Long langId = getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_LANG, 1L);
 		return LabelDao.getLocale(langId);
-	}
-
-	public AbstractTemplatePanel(Locale locale) {
-		super(COMP_ID);
-		this.locale = locale == null ? getDefault() : locale;
-		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
 	}
 
 	public static String getString(String id, Locale locale, String... params) {

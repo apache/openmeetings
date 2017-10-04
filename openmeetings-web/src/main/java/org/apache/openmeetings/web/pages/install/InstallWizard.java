@@ -110,10 +110,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private DbType initDbType = null;
 	private DbType dbType = null;
 
-	public void initTzDropDown() {
-		paramsStep1.tzDropDown.setOption();
-	}
-
 	//onInit, applyState
 	public InstallWizard(String id, String title) {
 		super(id, title, new CompoundPropertyModel<>(new InstallationConfig()), true);
@@ -130,6 +126,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		wmodel.setCancelVisible(false);
 		wmodel.setLastVisible(true);
 		init(wmodel);
+	}
+
+	public void initTzDropDown() {
+		paramsStep1.tzDropDown.setOption();
 	}
 
 	@Override
@@ -321,6 +321,13 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			}
 		};
 
+		public DbStep() {
+			super(welcomeStep);
+			add(form.setOutputMarkupId(true));
+			initDbType = form.getModelObject().getDbType();
+			initForm(false, null);
+		}
+
 		private ConnectionProperties getProps(DbType type) {
 			ConnectionProperties props = new ConnectionProperties();
 			try {
@@ -383,13 +390,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			if (target != null) {
 				target.add(form);
 			}
-		}
-
-		public DbStep() {
-			super(welcomeStep);
-			add(form.setOutputMarkupId(true));
-			initDbType = form.getModelObject().getDbType();
-			initForm(false, null);
 		}
 
 		@Override
@@ -654,16 +654,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final Label desc = new Label("desc", "");
 		private boolean started = false;
 
-		public void startInstallation(AjaxRequestTarget target) {
-			started = true;
-			timer.restart(target);
-			new Thread(new InstallProcess(Application.get()._getBean(ImportInitvalues.class))
-				, "Openmeetings - Installation").start();
-			//progressBar.setVisible(true);
-			desc.setDefaultModelObject(getString("install.wizard.install.started"));
-			target.add(desc, container);
-		}
-
 		public InstallStep() {
 			super(paramsStep4);
 
@@ -711,6 +701,16 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			congrat.setVisible(false);
 
 			add(container.setOutputMarkupId(true));
+		}
+
+		public void startInstallation(AjaxRequestTarget target) {
+			started = true;
+			timer.restart(target);
+			new Thread(new InstallProcess(Application.get()._getBean(ImportInitvalues.class))
+				, "Openmeetings - Installation").start();
+			//progressBar.setVisible(true);
+			desc.setDefaultModelObject(getString("install.wizard.install.started"));
+			target.add(desc, container);
 		}
 
 		@Override
@@ -782,11 +782,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private final class TzDropDown extends WizardDropDown<String> {
 		private static final long serialVersionUID = 1L;
 
-		public void setOption() {
-			String tzId = WebSession.get().getClientTZCode();
-			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : AVAILABLE_TIMEZONES.get(0);
-		}
-
 		public TzDropDown(String id) {
 			super(id);
 			setChoices(AVAILABLE_TIMEZONES);
@@ -803,6 +798,11 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					return object;
 				}
 			});
+		}
+
+		public void setOption() {
+			String tzId = WebSession.get().getClientTZCode();
+			option = AVAILABLE_TIMEZONE_SET.contains(tzId) ? tzId : AVAILABLE_TIMEZONES.get(0);
 		}
 
 		@Override

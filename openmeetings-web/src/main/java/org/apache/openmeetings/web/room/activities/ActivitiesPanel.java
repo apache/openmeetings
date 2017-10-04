@@ -258,6 +258,16 @@ public class ActivitiesPanel extends Panel {
 		}
 	};
 
+	public ActivitiesPanel(String id, RoomPanel room) {
+		super(id);
+		this.room = room;
+		setVisible(!room.getRoom().isHidden(RoomElement.Activities));
+		setOutputMarkupPlaceholderTag(true);
+		setMarkupId(id);
+		add(container.add(lv).setOutputMarkupPlaceholderTag(true));
+		add(action);
+	}
+
 	public void add(Activity a, IPartialPageRequestHandler handler) {
 		activities.put(a.getId(), a);
 		update(handler);
@@ -276,16 +286,6 @@ public class ActivitiesPanel extends Panel {
 			lv.setList(new ArrayList<>(activities.values()));
 			handler.add(container);
 		}
-	}
-
-	public ActivitiesPanel(String id, RoomPanel room) {
-		super(id);
-		this.room = room;
-		setVisible(!room.getRoom().isHidden(RoomElement.Activities));
-		setOutputMarkupPlaceholderTag(true);
-		setMarkupId(id);
-		add(container.add(lv).setOutputMarkupPlaceholderTag(true));
-		add(action);
 	}
 
 	@Override

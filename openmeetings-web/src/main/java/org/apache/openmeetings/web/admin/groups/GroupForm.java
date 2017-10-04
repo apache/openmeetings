@@ -81,10 +81,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 		}
 	};
 
-	static String formatUser(User choice) {
-		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
-	}
-
 	public GroupForm(String id, WebMarkupContainer groupList, Group group) {
 		super(id, new CompoundPropertyModel<>(group));
 		this.groupList = groupList;
@@ -132,6 +128,10 @@ public class GroupForm extends AdminBaseForm<Group> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	static String formatUser(User choice) {
+		return String.format("%s [%s %s]", choice.getLogin(), choice.getFirstname(), choice.getLastname());
 	}
 
 	@Override

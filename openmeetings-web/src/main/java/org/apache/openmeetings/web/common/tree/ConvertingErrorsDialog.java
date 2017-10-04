@@ -57,6 +57,11 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 		}
 	};
 
+	public ConvertingErrorsDialog(String id, IModel<BaseFileItem> model) {
+		super(id, Application.getString("887"), model);
+		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
+	}
+
 	@Override
 	public int getWidth() {
 		return 600;
@@ -70,11 +75,6 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 	@Override
 	public boolean isModal() {
 		return true;
-	}
-
-	public ConvertingErrorsDialog(String id, IModel<BaseFileItem> model) {
-		super(id, Application.getString("887"), model);
-		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
 	}
 
 	@Override

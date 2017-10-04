@@ -217,10 +217,6 @@ public class ScreenSharerFrame extends JFrame {
 		}
 	}
 
-	private static String getTextLabel(String[] textLabels, int idx) {
-		return textLabels != null && idx < textLabels.length ? textLabels[idx] : "#STAB#";
-	}
-
 	/**
 	 * Create the frame.
 	 * @throws AWTException
@@ -596,6 +592,10 @@ public class ScreenSharerFrame extends JFrame {
 
 		// Background Image
 		//We have no logo, that is why we need no background, sebawagner 29.04.2012
+	}
+
+	private static String getTextLabel(String[] textLabels, int idx) {
+		return textLabels != null && idx < textLabels.length ? textLabels[idx] : "#STAB#";
 	}
 
 	public void setSharingStatus(boolean status, boolean unlockScreen) {

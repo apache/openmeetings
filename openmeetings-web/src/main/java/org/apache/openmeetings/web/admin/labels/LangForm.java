@@ -45,19 +45,6 @@ public class LangForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
 	private DropDownChoice<Map.Entry<Long, Locale>> languages;
 
-	static List<Map.Entry<Long, Locale>> getLanguages() {
-		List<Map.Entry<Long, Locale>> list = new ArrayList<>();
-		for (Map.Entry<Long, Locale> e : LabelDao.getLanguages()) {
-			list.add(new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue()));
-		}
-		return list;
-	}
-
-	public void updateLanguages(AjaxRequestTarget target) {
-		languages.setChoices(getLanguages());
-		target.add(languages);
-	}
-
 	/**
 	 * Render Main
 	 *
@@ -99,5 +86,18 @@ public class LangForm extends Form<Void> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	static List<Map.Entry<Long, Locale>> getLanguages() {
+		List<Map.Entry<Long, Locale>> list = new ArrayList<>();
+		for (Map.Entry<Long, Locale> e : LabelDao.getLanguages()) {
+			list.add(new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue()));
+		}
+		return list;
+	}
+
+	public void updateLanguages(AjaxRequestTarget target) {
+		languages.setChoices(getLanguages());
+		target.add(languages);
 	}
 }

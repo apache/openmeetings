@@ -159,6 +159,26 @@ public class RoomPanel extends BasePanel {
 			}
 			wb.update(target);
 		}
+
+		private void initVideos(AjaxRequestTarget target) {
+			StringBuilder sb = new StringBuilder();
+			boolean hasStreams = false;
+			Client _c = getClient();
+			for (Client c: getRoomClients(getRoom().getId()) ) {
+				boolean self = _c.getUid().equals(c.getUid());
+				for (String uid : c.getStreams()) {
+					JSONObject jo = videoJson(c, self, c.getSid(), getBean(ISessionManager.class), uid);
+					sb.append(String.format("VideoManager.play(%s);", jo));
+					hasStreams = true;
+				}
+			}
+			if (isInterview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+				sb.append("WbArea.setRecStartEnabled(true);");
+			}
+			if (!Strings.isEmpty(sb)) {
+				target.appendJavaScript(sb);
+			}
+		}
 	};
 	private RedirectMessageDialog roomClosed;
 	private MessageDialog clientKicked, waitForModerator, waitApplyModeration;
@@ -204,11 +224,6 @@ public class RoomPanel extends BasePanel {
 		}
 	};
 
-	public void startDownload(AjaxRequestTarget target, byte[] bb) {
-		pdfWb = bb;
-		download.initiate(target);
-	}
-
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
@@ -216,24 +231,9 @@ public class RoomPanel extends BasePanel {
 		this.wb = isInterview ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
 	}
 
-	private void initVideos(AjaxRequestTarget target) {
-		StringBuilder sb = new StringBuilder();
-		boolean hasStreams = false;
-		Client _c = getClient();
-		for (Client c: getRoomClients(getRoom().getId()) ) {
-			boolean self = _c.getUid().equals(c.getUid());
-			for (String uid : c.getStreams()) {
-				JSONObject jo = videoJson(c, self, c.getSid(), getBean(ISessionManager.class), uid);
-				sb.append(String.format("VideoManager.play(%s);", jo));
-				hasStreams = true;
-			}
-		}
-		if (isInterview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
-			sb.append("WbArea.setRecStartEnabled(true);");
-		}
-		if (!Strings.isEmpty(sb)) {
-			target.appendJavaScript(sb);
-		}
+	public void startDownload(AjaxRequestTarget target, byte[] bb) {
+		pdfWb = bb;
+		download.initiate(target);
 	}
 
 	@Override

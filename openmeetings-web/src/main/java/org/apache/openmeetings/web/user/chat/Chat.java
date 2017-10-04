@@ -115,6 +115,15 @@ public class Chat extends Panel {
 		}
 	};
 
+	public Chat(String id) {
+		super(id);
+		setOutputMarkupPlaceholderTag(true);
+		setMarkupId(id);
+
+		add(chatActivity);
+		add(new ChatForm("sendForm"));
+	}
+
 	private String getUid() {
 		return findParent(MainPanel.class).getClient().getUid(); //TODO HACK
 	}
@@ -125,15 +134,6 @@ public class Chat extends Panel {
 
 	public JSONObject getMessage(Long userId, List<ChatMessage> list) {
 		return WebSocketHelper.getMessage(userId, list, getDateFormat(), (o, u) -> o.put("img", getUrl(getRequestCycle(), u)));
-	}
-
-	public Chat(String id) {
-		super(id);
-		setOutputMarkupPlaceholderTag(true);
-		setMarkupId(id);
-
-		add(chatActivity);
-		add(new ChatForm("sendForm"));
 	}
 
 	public static CharSequence getReinit() {

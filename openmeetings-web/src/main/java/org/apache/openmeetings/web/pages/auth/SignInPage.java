@@ -74,14 +74,6 @@ public class SignInPage extends BaseInitedPage {
 	private SignInDialog d;
 	private KickMessageDialog m;
 
-	static boolean allowRegister() {
-		return getBean(ConfigurationDao.class).getBool(CONFIG_REGISTER_FRONTEND, false);
-	}
-
-	static boolean allowOAuthLogin() {
-		return !getBean(OAuth2Dao.class).getActive().isEmpty();
-	}
-
 	public SignInPage() {
 		this(new PageParameters());
 	}
@@ -103,7 +95,9 @@ public class SignInPage extends BaseInitedPage {
 					String code = p.get("code").toString();
 					log.debug("OAuth response code=" + code);
 					AuthInfo authInfo = getToken(code, server);
-					if (authInfo == null) return;
+					if (authInfo == null) {
+						return;
+					}
 					log.debug("OAuthInfo=" + authInfo);
 					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
 					loginViaOAuth2(authParams, serverId);
@@ -142,6 +136,14 @@ public class SignInPage extends BaseInitedPage {
 		m = new KickMessageDialog("kick");
 		add(d.setVisible(!WebSession.get().isKickedByAdmin()),
 				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
+	}
+
+	static boolean allowRegister() {
+		return getBean(ConfigurationDao.class).getBool(CONFIG_REGISTER_FRONTEND, false);
+	}
+
+	static boolean allowOAuthLogin() {
+		return !getBean(OAuth2Dao.class).getActive().isEmpty();
 	}
 
 	@Override

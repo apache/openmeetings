@@ -109,18 +109,6 @@ public class OmUrlFragment implements Serializable {
 		, myTabButton
 	}
 
-	public static OmUrlFragment get() {
-		String[] arr = getBean(ConfigurationDao.class).getString(CONFIG_DEFAULT_LANDING_ZONE, "").split("/");
-		if (arr != null && arr.length == 2) {
-			try {
-				return new OmUrlFragment(AreaKeys.valueOf(arr[0]), arr[1]);
-			} catch (Exception e) {
-				// no-op
-			}
-		}
-		return DASHBOARD;
-	}
-
 	public OmUrlFragment(AreaKeys area, String type) {
 		this.setArea(area);
 		this.setType(type);
@@ -205,6 +193,18 @@ public class OmUrlFragment implements Serializable {
 				setType(TYPE_EMAIL);
 				break;
 		}
+	}
+
+	public static OmUrlFragment get() {
+		String[] arr = getBean(ConfigurationDao.class).getString(CONFIG_DEFAULT_LANDING_ZONE, "").split("/");
+		if (arr != null && arr.length == 2) {
+			try {
+				return new OmUrlFragment(AreaKeys.valueOf(arr[0]), arr[1]);
+			} catch (Exception e) {
+				// no-op
+			}
+		}
+		return DASHBOARD;
 	}
 
 	public AreaKeys getArea() {

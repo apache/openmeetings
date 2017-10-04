@@ -49,14 +49,6 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 public class WidgetsPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 
-	private static Widget isDisplayed(WidgetDescriptor wd) {
-		for (Widget w : getDashboard().getWidgets()) {
-			if (w.getClass().getName().equals(wd.getWidgetClassName())) {
-				return w;
-			}
-		}
-		return null;
-	}
 	public WidgetsPanel(String id) {
 		super(id);
 
@@ -108,5 +100,13 @@ public class WidgetsPanel extends Panel {
 			}
 		});
 	}
-}
 
+	private static Widget isDisplayed(WidgetDescriptor wd) {
+		for (Widget w : getDashboard().getWidgets()) {
+			if (w.getClass().getName().equals(wd.getWidgetClassName())) {
+				return w;
+			}
+		}
+		return null;
+	}
+}

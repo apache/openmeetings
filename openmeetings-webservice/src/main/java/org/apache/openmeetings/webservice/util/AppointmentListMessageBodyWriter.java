@@ -31,7 +31,6 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
@@ -65,7 +64,7 @@ public class AppointmentListMessageBodyWriter implements MessageBodyWriter<List<
 	@Override
 	public void writeTo(List<AppointmentDTO> t, Class<?> type, Type genericType, Annotation[] annotations,
 			MediaType mediaType, MultivaluedMap<String, Object> httpHeaders, OutputStream out)
-			throws IOException, WebApplicationException
+			throws IOException
 	{
 		Writer writer = new OutputStreamWriter(out, UTF_8);
 		JSONArray rr = new JSONArray();
