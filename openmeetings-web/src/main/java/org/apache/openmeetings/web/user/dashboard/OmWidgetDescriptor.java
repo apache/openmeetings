@@ -18,10 +18,43 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-public class MyRoomsWidgetDescriptor extends OmWidgetDescriptor {
-	private static final long serialVersionUID = 1L;
+import org.apache.openmeetings.web.app.Application;
+import org.wicketstuff.dashboard.WidgetDescriptor;
 
-	public MyRoomsWidgetDescriptor() {
-		super("781", "782", "om.widget.myrooms");
+public class OmWidgetDescriptor implements WidgetDescriptor {
+	private static final long serialVersionUID = 1L;
+	private final String name;
+	private final String desc;
+	private final String type;
+
+	public OmWidgetDescriptor(String name, String desc, String type) {
+		this.name = name;
+		this.desc = desc;
+		this.type = type;
+	}
+
+	@Override
+	public String getName() {
+		return Application.getString(name);
+	}
+
+	@Override
+	public String getProvider() {
+		return "Apache Openmeetings";
+	}
+
+	@Override
+	public String getDescription() {
+		return Application.getString(desc);
+	}
+
+	@Override
+	public String getWidgetClassName() {
+		return getClass().getName();
+	}
+
+	@Override
+	public String getTypeName() {
+		return type;
 	}
 }

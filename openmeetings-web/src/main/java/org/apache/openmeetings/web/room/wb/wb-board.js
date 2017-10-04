@@ -385,6 +385,7 @@ var Wb = function() {
 	function wbObjCreatedHandler(o) {
 		if (role === NONE && o.type !== 'pointer') return;
 
+		let json;
 		switch(o.type) {
 			case 'pointer':
 				json = o;
@@ -452,7 +453,6 @@ var Wb = function() {
 			const h = $(this).height(), pos = $(this).position();
 			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
 				//TODO FIXME might be done without iterating
-				//console.log("Found:", idx);
 				_setSlide(idx);
 				return false;
 			}

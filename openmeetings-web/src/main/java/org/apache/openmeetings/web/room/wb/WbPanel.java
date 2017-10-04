@@ -565,12 +565,10 @@ public class WbPanel extends AbstractWbPanel {
 					if (f.exists() && f.isFile()) {
 						try (BufferedReader br = Files.newBufferedReader(f.toPath())) {
 							final boolean[] updated = {false};
-							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), (o) -> {
+							JSONArray arr = getArray(new JSONObject(new JSONTokener(br)), o -> {
 									wb.put(o.getString("uid"), o);
 									updated[0] = true;
-									return addFileUrl(wbs.getUid(), o, _f -> {
-										updateWbSize(wb, _f);
-									});
+									return addFileUrl(wbs.getUid(), o, _f -> updateWbSize(wb, _f));
 								});
 							if (updated[0]) {
 								WhiteboardCache.update(roomId, wb);

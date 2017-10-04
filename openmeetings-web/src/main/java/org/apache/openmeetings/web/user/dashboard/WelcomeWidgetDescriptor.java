@@ -18,34 +18,10 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import org.apache.openmeetings.web.app.Application;
-import org.wicketstuff.dashboard.WidgetDescriptor;
-
-public class WelcomeWidgetDescriptor implements WidgetDescriptor {
+public class WelcomeWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
-	@Override
-	public String getName() {
-		return Application.getString("1546");
-	}
-
-	@Override
-	public String getProvider() {
-		return "Apache Openmeetings";
-	}
-
-	@Override
-	public String getDescription() {
-		return Application.getString("1547");
-	}
-
-	@Override
-	public String getWidgetClassName() {
-		return WelcomeWidget.class.getName();
-	}
-
-	@Override
-	public String getTypeName() {
-		return "om.widget.welcome";
+	public WelcomeWidgetDescriptor() {
+		super("1546", "1547", "om.widget.welcome");
 	}
 }
