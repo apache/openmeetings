@@ -136,6 +136,11 @@ public class ScreenSharerFrame extends JFrame {
 
 			setColumns(10);
 		}
+
+		private void updatePublishURL() {
+			lblPublishURL.setText("rtmp://" + textPublishHost.getText() + ":1935/"
+					+ textPublishApp.getText() + "/" + textPublishId.getText());
+		}
 	}
 
 	private static class KeyValue<T> {
@@ -655,11 +660,6 @@ public class ScreenSharerFrame extends JFrame {
 
 	public String getPublishId() {
 		return textPublishId.getText();
-	}
-
-	private void updatePublishURL() {
-		lblPublishURL.setText("rtmp://" + textPublishHost.getText() + ":1935/"
-				+ textPublishApp.getText() + "/" + textPublishId.getText());
 	}
 
 	public void setShowWarning(boolean showWarning) {

@@ -157,18 +157,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		return false;
 	}
 
-	private static String getPath(String _path, String app) {
-		StringBuilder path = new StringBuilder();
-		if (!Strings.isEmpty(_path)) {
-			path.append(_path);
-			if (!_path.endsWith(File.separator)) {
-				path.append(File.separator);
-			}
-		}
-		path.append(app);
-		return path.toString();
-	}
-
 	private abstract class BaseStep extends DynamicWizardStep {
 		private static final long serialVersionUID = 1L;
 
@@ -230,7 +218,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					return object.name();
 				}
 			});
-			{
+
+			@Override
+			protected void onInitialize() {
+				super.onInitialize();
 				add(db.add(new OnChangeAjaxBehavior() {
 					private static final long serialVersionUID = 1L;
 
@@ -499,39 +490,44 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private final TextField<String> soxPath;
 		private final TextField<String> officePath;
 		private boolean isAllChecked = false;
+
 		public ParamsStep3() {
 			super(paramsStep2);
+			add(imageMagicPath = new TextField<>("imageMagicPath"));
+			add(ffmpegPath = new TextField<>("ffmpegPath"));
+			add(soxPath = new TextField<>("soxPath"));
+			add(officePath = new TextField<>("officePath"));
+		}
 
+		@Override
+		protected void onInitialize() {
+			super.onInitialize();
 			add(new TextField<Integer>("docDpi").setRequired(true).add(range(50, 600)));
 			add(new TextField<Integer>("docQuality").setRequired(true).add(range(1, 100)));
-			add(imageMagicPath = new TextField<>("imageMagicPath"));
 			add(new AjaxButton("validateImageMagic") {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
+					checkToolPath(imageMagicPath, new String[] {getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(ffmpegPath = new TextField<>("ffmpegPath"));
 			add(new AjaxButton("validateFfmpeg") {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"});
+					checkToolPath(ffmpegPath, new String[] {getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"});
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(soxPath = new TextField<>("soxPath"));
 			add(new AjaxButton("validateSox") {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
+					checkToolPath(soxPath, new String[] {getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
 					target.add(getFeedbackPanel());
 				}
 			});
-			add(officePath = new TextField<>("officePath"));
 			add(new AjaxButton("validateOffice") {
 				private static final long serialVersionUID = 1L;
 				@Override
@@ -576,9 +572,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		private boolean checkAllPath() {
-			boolean result = checkToolPath(imageMagicPath, new String[] {InstallWizard.getPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
-			result = checkToolPath(ffmpegPath, new String[] {InstallWizard.getPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"}) && result;
-			result = checkToolPath(soxPath, new String[] {InstallWizard.getPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"}) && result;
+			boolean result = checkToolPath(imageMagicPath, new String[] {getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
+			result = checkToolPath(ffmpegPath, new String[] {getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"}) && result;
+			result = checkToolPath(soxPath, new String[] {getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"}) && result;
 			result = checkOfficePath() && result;
 			isAllChecked = true;
 			return result;
@@ -605,6 +601,18 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		@Override
 		public IDynamicWizardStep last() {
 			return installStep;
+		}
+
+		private String getToolPath(String _path, String app) {
+			StringBuilder path = new StringBuilder();
+			if (!Strings.isEmpty(_path)) {
+				path.append(_path);
+				if (!_path.endsWith(File.separator)) {
+					path.append(File.separator);
+				}
+			}
+			path.append(app);
+			return path.toString();
 		}
 	}
 

@@ -27,8 +27,8 @@ import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.room.RoomPreviewResourceReference;
 import org.apache.openmeetings.web.room.RoomResourceReference;
-import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.openmeetings.web.user.record.Mp4RecordingResourceReference;
+import org.apache.openmeetings.web.user.record.PngRecordingResourceReference;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -131,13 +131,10 @@ public class WbWebSocketHelper extends WebSocketHelper {
 				roomId
 				, new JSONObject().put("type", "wb")
 				, null
-				, (o, c) -> {
-						return o.put("func", String.format("WbArea.%s(%s);"
+				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);"
 								, WbAction.createObj.name()
 								, getObjWbJson(wbId, addFileUrl(ruid, file, fi, c)).toString())
-							).toString();
-					}
-				);
+							).toString());
 	}
 
 	private static void sendWb(Long roomId, WbAction meth, JSONObject obj, Predicate<Client> check) {

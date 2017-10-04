@@ -40,16 +40,29 @@ import com.googlecode.wicket.jquery.ui.markup.html.link.AjaxLink;
 
 public class Captcha extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static Random rnd = new Random();
 	private String randomText;
 	private final CaptchaImageResource captchaImageResource = new CaptchaImageResource() {
 		private static final long serialVersionUID = 1L;
+		private Random rnd = new Random();
 
 		@Override
 		protected byte[] render() {
 			randomText = randomString(6, 8);
 			getChallengeIdModel().setObject(randomText);
 			return super.render();
+		}
+
+		private int randomInt(int min, int max) {
+			return rnd.nextInt(max - min) + min;
+		}
+
+		private String randomString(int min, int max) {
+			int num = randomInt(min, max);
+			byte b[] = new byte[num];
+			for (int i = 0; i < num; ++i) {
+				b[i] = (byte)randomInt('a', 'z');
+			}
+			return new String(b, UTF_8);
 		}
 	};
 	private final Image captcha = new Image("captcha", captchaImageResource);
@@ -89,19 +102,6 @@ public class Captcha extends Panel {
 				behavior.setOption("showLabel", false);
 			}
 		});
-	}
-
-	private static int randomInt(int min, int max) {
-		return rnd.nextInt(max - min) + min;
-	}
-
-	private static String randomString(int min, int max) {
-		int num = randomInt(min, max);
-		byte b[] = new byte[num];
-		for (int i = 0; i < num; ++i) {
-			b[i] = (byte)randomInt('a', 'z');
-		}
-		return new String(b, UTF_8);
 	}
 
 	public Image refresh(IPartialPageRequestHandler handler) {

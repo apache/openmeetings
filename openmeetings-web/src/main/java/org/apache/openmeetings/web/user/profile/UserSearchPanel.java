@@ -68,7 +68,10 @@ public class UserSearchPanel extends UserBasePanel {
 
 		add(new Form<Void>("form") {
 			private static final long serialVersionUID = 1L;
-			{
+
+			@Override
+			protected void onInitialize() {
+				super.onInitialize();
 				add(new TextField<>("text", new PropertyModel<String>(UserSearchPanel.this, "text")));
 				add(new TextField<>("offer", new PropertyModel<String>(UserSearchPanel.this, "offer")));
 				add(new TextField<>("search", new PropertyModel<String>(UserSearchPanel.this, "search")));

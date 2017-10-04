@@ -38,7 +38,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.util.io.IOUtils;
@@ -48,9 +47,9 @@ public class RoomsPanel extends UserPanel {
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
 	private final WebMarkupContainer details = new WebMarkupContainer("details");
 	private final ListView<Client> clients;
-	private IModel<Long> roomID = Model.of((Long)null);
-	private IModel<String> roomName = Model.of((String)null);
-	private IModel<String> roomComment = Model.of((String)null);
+	private final Label roomIdLbl = new Label("roomId", Model.of((Long)null));
+	private final Label roomNameLbl = new Label("roomName", Model.of((String)null));
+	private final Label roomCommentLbl = new Label("roomComment", Model.of((String)null));
 	private List<Client> clientsInRoom = null;
 	private Long roomId = 0L;
 
@@ -75,9 +74,7 @@ public class RoomsPanel extends UserPanel {
 
 		// Users in this Room
 		add(details.setOutputMarkupId(true).setVisible(!rooms.isEmpty()));
-		details.add(new Label("roomId", roomID));
-		details.add(new Label("roomName", roomName));
-		details.add(new Label("roomComment", roomComment));
+		details.add(roomIdLbl, roomNameLbl, roomCommentLbl);
 		clients = new ListView<Client>("clients", clientsInRoom){
 			private static final long serialVersionUID = 1L;
 
@@ -120,17 +117,9 @@ public class RoomsPanel extends UserPanel {
 	void updateRoomDetails(AjaxRequestTarget target) {
 		clients.setDefaultModelObject(Application.getRoomClients(roomId));
 		Room room = getBean(RoomDao.class).get(roomId);
-		roomID.setObject(room.getId());
-		roomName.setObject(room.getName());
-		roomComment.setObject(room.getComment());
+		roomIdLbl.setDefaultModelObject(room.getId());
+		roomNameLbl.setDefaultModelObject(room.getName());
+		roomCommentLbl.setDefaultModelObject(room.getComment());
 		target.add(clientsContainer, details);
-	}
-
-	@Override
-	protected void onDetach() {
-		roomID.detach();
-		roomName.detach();
-		roomComment.detach();
-		super.onDetach();
 	}
 }

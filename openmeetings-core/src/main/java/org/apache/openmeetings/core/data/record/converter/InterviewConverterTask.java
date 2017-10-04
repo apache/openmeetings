@@ -40,9 +40,7 @@ public class InterviewConverterTask {
 		try {
 			log.debug("[-1-]" + taskExecutor);
 
-			taskExecutor.execute(() -> {
-				interviewConverter.startConversion(recordingId);
-			});
+			taskExecutor.execute(() -> interviewConverter.startConversion(recordingId));
 		} catch (Exception err) {
 			log.error("[startConversionThread]", err);
 		}

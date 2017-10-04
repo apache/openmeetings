@@ -237,28 +237,6 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		return values;
 	}
 
-	private static PieChart<Integer> pieChart(RoomPoll p) {
-		PieChart<Integer> pieChart = new PieChart<>(null);
-		String[] ticks = getTicks(p);
-		Integer[] values = getValues(p);
-		for (int i = 0; i < values.length; ++i) {
-			pieChart.addValue(ticks[i], values[i]);
-		}
-
-		pieChart.getSeriesDefaults().setRendererOptions(new RendererOptions().setHighlightMouseDown(true)
-				.setShowDataLabels(true).setFill(false).setSliceMargin(4).setLineWidth(5));
-
-		Highlighter h = new Highlighter();
-		h.setShow(true);
-		h.setFormatString("%s, %P");
-		h.setTooltipLocation(Location.ne);
-		h.setShowTooltip(true);
-		h.setUseAxesFormatters(false);
-
-		pieChart.getChartConfiguration().setLegend(null).setHighlighter(h);
-		return pieChart;
-	}
-
 	private static BarChart<Integer> barChart(RoomPoll p) {
 		String[] ticks = getTicks(p);
 		BarChart<Integer> barChart = new BarChart<>(null);
@@ -376,6 +354,28 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			name.detach();
 			count.detach();
 			super.onDetach();
+		}
+
+		private PieChart<Integer> pieChart(RoomPoll p) {
+			PieChart<Integer> pieChart = new PieChart<>(null);
+			String[] ticks = getTicks(p);
+			Integer[] values = getValues(p);
+			for (int i = 0; i < values.length; ++i) {
+				pieChart.addValue(ticks[i], values[i]);
+			}
+
+			pieChart.getSeriesDefaults().setRendererOptions(new RendererOptions().setHighlightMouseDown(true)
+					.setShowDataLabels(true).setFill(false).setSliceMargin(4).setLineWidth(5));
+
+			Highlighter h = new Highlighter();
+			h.setShow(true);
+			h.setFormatString("%s, %P");
+			h.setTooltipLocation(Location.ne);
+			h.setShowTooltip(true);
+			h.setUseAxesFormatters(false);
+
+			pieChart.getChartConfiguration().setLegend(null).setHighlighter(h);
+			return pieChart;
 		}
 	}
 }

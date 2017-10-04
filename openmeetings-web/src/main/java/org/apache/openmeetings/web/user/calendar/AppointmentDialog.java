@@ -309,6 +309,10 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					protected List<? extends OmCalendar> load() {
 						return getCalendarList();
 					}
+
+					private List<OmCalendar> getCalendarList(){
+						return getBean(AppointmentManager.class).getCalendars(getUserId());
+					}
 				},
 				new ChoiceRenderer<OmCalendar>("title", "id")
 		);
@@ -499,10 +503,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				result.add(getModelObject().getRoom());
 			}
 			return result;
-		}
-
-		private List<OmCalendar> getCalendarList(){
-			return getBean(AppointmentManager.class).getCalendars(getUserId());
 		}
 
 		@Override
