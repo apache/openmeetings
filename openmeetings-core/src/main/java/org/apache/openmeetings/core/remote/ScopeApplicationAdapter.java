@@ -391,7 +391,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void dropSharing(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
-		IScope scope = getChildScope(String.valueOf(roomId));
+		IScope scope = null;
+		try {
+			scope = getChildScope(String.valueOf(roomId));
+		} catch (Exception e) {
+			//no-op, scope doesn't exist while testing
+		}
 		//Elvis has left the building
 		new MessageSender(scope, "stopStream", new Object(), this) {
 			@Override

@@ -168,8 +168,12 @@ public class RecordingService implements IPendingServiceCallback {
 
 	public void stopRecording(IScope scope, IClient client) {
 		try {
-			//FIXME TODO The client who started the recording might already left the room !!!!
-			log.debug("stopRecordAndSave {}, {}", client.getLogin(), client.getRemoteAddress());
+			Long recordingId = IClientUtil.getRecordingId(scope);
+			log.debug("stopRecordAndSave {}, {}, ID: {}", client.getLogin(), client.getRemoteAddress(), recordingId);
+			if (recordingId == null) {
+				log.error("Unable to find recordingId on recording stop");
+				return;
+			}
 			IApplication iapp = getApp();
 			Client recClient = null;
 			for (Client c : iapp.getOmRoomClients(client.getRoomId())) {
@@ -179,11 +183,14 @@ public class RecordingService implements IPendingServiceCallback {
 				}
 			}
 			if (recClient == null) {
-				log.error("Unable to find recordingId on recording stop");
-				return;
+				log.warn("Unable to find Recording client");
+			} else {
+				WebSocketHelper.sendRoom(new TextRoomMessage(recClient.getRoomId(), recClient.getUserId(), RoomMessage.Type.recordingStoped, recClient.getSid()));
+				// Store to database
+				recClient.setRecordingId(null);
+				recClient.setRecordingStarted(false);
+				sessionManager.update(recClient);
 			}
-			WebSocketHelper.sendRoom(new TextRoomMessage(recClient.getRoomId(), recClient.getUserId(), RoomMessage.Type.recordingStoped, recClient.getSid()));
-
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null && conn instanceof IServiceCapableConnection) {
@@ -191,15 +198,9 @@ public class RecordingService implements IPendingServiceCallback {
 					stopStreamRecord(scope, rcl);
 				}
 			}
-			// Store to database
-			Long recordingId = recClient.getRecordingId();
-
 			recordingDao.updateEndTime(recordingId, new Date());
 
 			// Reset values
-			recClient.setRecordingId(null);
-			recClient.setRecordingStarted(false);
-			sessionManager.update(recClient);
 			log.debug("recordingConverterTask {}", recordingConverter);
 
 			Recording recording = recordingDao.get(recordingId);
