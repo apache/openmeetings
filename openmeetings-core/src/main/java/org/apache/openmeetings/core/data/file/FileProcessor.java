@@ -113,7 +113,7 @@ public class FileProcessor {
 				// convert to pdf, thumbs, swf and xml-description
 				result = generatePDF.convertPDF(f, sf);
 			} else if (isChart) {
-				//TODO should be implemented copyFile(temp, file);
+				//TODO should be implemented
 				log.debug("uploaded chart file");
 			} else if (isImage) {
 				// convert it to JPG

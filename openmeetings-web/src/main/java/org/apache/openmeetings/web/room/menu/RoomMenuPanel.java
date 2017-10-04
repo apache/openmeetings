@@ -284,18 +284,18 @@ public class RoomMenuPanel extends Panel {
 
 		actionsMenu.setTop(true);
 		actionsMenu.getItems().add(inviteMenuItem);
-		actionsMenu.getItems().add(shareMenuItem); //FIXME enable/disable
-		actionsMenu.getItems().add(applyModerMenuItem); //FIXME enable/disable
-		actionsMenu.getItems().add(applyWbMenuItem); //FIXME enable/disable
-		actionsMenu.getItems().add(applyAvMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(shareMenuItem);
+		actionsMenu.getItems().add(applyModerMenuItem);
+		actionsMenu.getItems().add(applyWbMenuItem);
+		actionsMenu.getItems().add(applyAvMenuItem);
 		actionsMenu.getItems().add(pollCreateMenuItem);
-		actionsMenu.getItems().add(pollResultMenuItem); //FIXME enable/disable
-		actionsMenu.getItems().add(pollVoteMenuItem); //FIXME enable/disable
+		actionsMenu.getItems().add(pollResultMenuItem);
+		actionsMenu.getItems().add(pollVoteMenuItem);
 		actionsMenu.getItems().add(sipDialerMenuItem);
 		actionsMenu.getItems().add(downloadPngMenuItem);
 		actionsMenu.getItems().add(downloadJpgMenuItem);
 		actionsMenu.getItems().add(downloadPdfMenuItem);
-		//TODO seems need to be removed actionsMenu.getItems().add(new RoomMenuItem(Application.getString(1126), Application.getString(1490)));
+		//TODO add local cache editor
 		menu.add(actionsMenu);
 		return menu;
 	}

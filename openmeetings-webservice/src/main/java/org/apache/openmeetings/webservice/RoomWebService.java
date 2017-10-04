@@ -239,42 +239,6 @@ public class RoomWebService extends BaseWebService {
 		}
 	}
 
-	/**//*
-	 * Adds a new Room like through the Frontend
-	 *
-	 * @param sid
-	 *            The SID from getSession
-	 * @param room
-	 *            room object
-	 *
-	 * @return - id of the user added or error code
-	 * @throws ServiceException
-	 *//*
-	@WebMethod
-	@PUT
-	@Path("/{id}")
-	public RoomDTO update(@WebParam(name="sid") @QueryParam("sid") String sid, @PathParam("id") @WebParam(name="id") Long id, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
-		try {
-			Long userId = sessionDao.checkSession(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(userDao.getRights(userId))) {
-				if (roomDao.get(id) == null) {
-					throw new ServiceException("Room not found");
-				}
-				Room r = room.get(roomTypeDao);
-				r.setId(id);
-				r = roomDao.update(r, userId);
-				return new RoomDTO(r);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("update", err);
-			throw new ServiceException(err.getMessage());
-		}
-	}*/
-
 	/**
 	 * Delete a room by its room id
 	 *

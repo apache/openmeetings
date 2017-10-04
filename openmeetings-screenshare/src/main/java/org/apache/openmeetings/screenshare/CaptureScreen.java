@@ -141,23 +141,6 @@ public class CaptureScreen extends Thread {
 		}
 	}
 
-	/*
-	private void pushAudio(byte[] audio, long ts) {
-		if (startPublish) {
-			buffer.put((byte) 6);
-			buffer.put(audio);
-			buffer.flip();
-
-			// I can stream audio
-			//packets successfully using linear PCM at 11025Hz. For those packets I
-			//push one byte (0x06) which specifies the format of audio data in a
-			//ByteBuffer, and then real audio data:
-			RTMPMessage rtmpMsg = RTMPMessage.build(new AudioData(buffer), (int) ts);
-			client.publishStreamData(streamId, rtmpMsg);
-		}
-	}
-	*/
-
 	public void pushVideo(VideoData data, int ts) {
 		if (startPublish) {
 			if (Red5.getConnectionLocal() == null) {

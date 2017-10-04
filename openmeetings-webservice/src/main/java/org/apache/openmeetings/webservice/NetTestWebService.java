@@ -96,7 +96,6 @@ public class NetTestWebService {
 		}
 
 		ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new ByteArrayInputStream(data));
-		//response.header("Content-Disposition", "attachment; filename=test.png");
 		response.header("Cache-Control", "no-cache");
 		response.header("Content-Length", String.valueOf(data.length));
 		return response.build();

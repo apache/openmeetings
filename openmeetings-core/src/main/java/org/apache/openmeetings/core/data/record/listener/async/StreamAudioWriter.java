@@ -174,13 +174,11 @@ public class StreamAudioWriter extends BaseStreamWriter {
 				ITag tag = new Tag();
 				tag.setDataType(streampacket.getDataType());
 
-				// log.debug("data.limit() :: "+data.limit());
 				tag.setBodySize(data.limit());
 				tag.setTimestamp(timeStamp);
 				tag.setBody(data);
 
 				writer.writeTag(tag);
-
 			}
 		} catch (Exception e) {
 			log.error("##REC:: [packetReceived]", e);

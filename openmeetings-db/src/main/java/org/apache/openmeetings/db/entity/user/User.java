@@ -134,7 +134,6 @@ public class User implements IDataProviderEntity {
 		, prof(SALUTATION_PROF_ID);
 		private int id;
 
-		Salutation() {} //default;
 		Salutation(int id) {
 			this.id = id;
 		}

@@ -125,7 +125,6 @@ public class Room implements IDataProviderEntity {
 		//, custom(5)
 		private int id;
 
-		Type() {} //default;
 		Type(int id) {
 			this.id = id;
 		}

@@ -93,7 +93,6 @@ public class AppointmentLogic {
 	 */
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() {
-		// log.debug("doScheduledMeetingReminder");
 		String baseUrl = cfgDao.getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
 		if (baseUrl == null || baseUrl.length() < 1) {
 			log.error("Error retrieving baseUrl for application");

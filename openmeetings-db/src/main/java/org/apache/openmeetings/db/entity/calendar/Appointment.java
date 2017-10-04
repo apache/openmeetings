@@ -129,8 +129,6 @@ public class Appointment implements IDataProviderEntity {
 
 		private int id;
 
-		Reminder() {} // default;
-
 		Reminder(int id) {
 			this.id = id;
 		}

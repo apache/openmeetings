@@ -408,7 +408,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 
 		selectMessage(-1, null);
 		add(container.add(dv).setOutputMarkupId(true));
-		//TODO add valid autoupdate add(new AjaxSelfUpdatingTimerBehavior(seconds(15)));
 		add(selectedMessage.add(roomContainer.setVisible(false)).setOutputMarkupId(true));
 
 		IDataProvider<UserContact> dp = new IDataProvider<UserContact>() {

@@ -429,22 +429,6 @@ public class iCalUtils {
 
 		meeting.getProperties().add(ui);
 
-		/* RRule rRule = null;
-		if (appointment.getIsDaily() != null) {
-			rRule = new RRule("FREQ=DAILY");
-		} else if (appointment.getIsWeekly() != null) {
-			rRule = new RRule("FREQ=WEEKLY");
-		} else if (appointment.getIsMonthly() != null) {
-			rRule = new RRule("FREQ=MONTHLY");
-		} else if (appointment.getIsYearly() != null) {
-			rRule = new RRule("FREQ=YEARLY");
-		}
-
-		if (rRule != null) {
-			meeting.getProperties().add(rRule);
-		}
-		*/
-
 		if (appointment.getMeetingMembers() != null) {
 			for (MeetingMember meetingMember : appointment.getMeetingMembers()) {
 				Attendee attendee = new Attendee(URI.create("mailto:" +

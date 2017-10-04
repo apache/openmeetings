@@ -669,7 +669,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					}
 					if (th != null) {
 						timer.stop(target);
-						//TODO change text, localize
 						progressBar.setVisible(false);
 						target.add(container.replace(new ErrorMessagePanel("status", getString("install.wizard.install.failed"), th))
 							, desc.setVisible(false)
@@ -677,7 +676,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					} else {
 						progressBar.setModelObject(Application.get()._getBean(ImportInitvalues.class).getProgress());
 						progressBar.refresh(target);
-						//TODO uncomment later target.add(value);
 						//TODO add current step result as info
 					}
 				}
@@ -693,9 +691,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					target.add(container, desc.setVisible(false));
 				}
 			});
-			//TODO uncomment later progressBar.add(value = new Label("value", progressBar.getModel()));
-			//TODO uncomment later value.setOutputMarkupId(true);
-			//progressBar.setVisible(false);
 
 			container.add(congrat = new CongratulationsPanel("status"));
 			congrat.setVisible(false);
@@ -708,7 +703,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			timer.restart(target);
 			new Thread(new InstallProcess(Application.get()._getBean(ImportInitvalues.class))
 				, "Openmeetings - Installation").start();
-			//progressBar.setVisible(true);
 			desc.setDefaultModelObject(getString("install.wizard.install.started"));
 			target.add(desc, container);
 		}

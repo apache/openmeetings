@@ -62,16 +62,7 @@ public class MainService {
 							}
 						}
 					}
-					/*
-					TODO need to be reviewed
-					Calendar c = WebSession.getCalendar();
-					if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
-						allowed = true;
-					} else {
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm"); //FIXME format
-						deniedMessage = Application.getString("error.hash.period") + String.format(" %s - %s", sdf.format(a.getStart()), sdf.format(a.getEnd()));
-					}
-					*/
+					// TODO restrict by time???
 				}
 			} else {
 				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()));

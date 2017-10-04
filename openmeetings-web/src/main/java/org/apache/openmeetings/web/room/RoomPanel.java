@@ -527,11 +527,8 @@ public class RoomPanel extends BasePanel {
 					case roomEnter:
 						sidebar.update(handler);
 						menu.update(handler);
-						// TODO should this be fixed?
-						//activities.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
 						break;
 					case roomExit:
-						//TODO check user/remove tab
 						sidebar.update(handler);
 						activities.add(new Activity(m, Activity.Type.roomExit), handler);
 						break;
@@ -576,8 +573,6 @@ public class RoomPanel extends BasePanel {
 						break;
 					case kick:
 						{
-							//FIXME TODO add line to activities about user kick
-							//activities.add(new Activity(m, Activity.Type.roomExit), handler);
 							String uid = ((TextRoomMessage)m).getText();
 							if (getClient().getUid().equals(uid)) {
 								handler.add(room.setVisible(false));

@@ -226,7 +226,6 @@ public class RecordingService implements IPendingServiceCallback {
 	private void addListener(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenSharing, boolean isInterview) {
 		log.debug("Recording show for: {}", conn.getScope().getContextPath());
 		log.debug("Name of CLient and Stream to be recorded: {}", broadcastid);
-		// log.debug("Application.getInstance()"+Application.getInstance());
 		log.debug("Scope " + conn);
 		log.debug("Scope " + conn.getScope());
 		// Get a reference to the current broadcast stream.

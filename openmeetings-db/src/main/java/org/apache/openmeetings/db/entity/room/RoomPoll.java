@@ -68,11 +68,10 @@ public class RoomPoll implements IDataProviderEntity {
 
 	@XmlType(namespace="org.apache.openmeetings.room.poll.type")
 	public enum Type {
-		yesNo
-		, numeric;
+		yesNo(YES_NO_TYPE_ID)
+		, numeric(NUMERIC_TYPE_ID);
 		private int id;
 
-		Type() {} //default;
 		Type(int id) {
 			this.id = id;
 		}

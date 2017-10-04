@@ -87,7 +87,6 @@ public abstract class ConnectionPropertiesPatcher {
 
 	private static Document getDocument(File xml) throws Exception {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		//dbFactory.setNamespaceAware(true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		return dBuilder.parse(xml);
 	}

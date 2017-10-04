@@ -174,9 +174,6 @@ public class FileWebService extends BaseWebService {
 				throw new ServiceException("Bad id");//TODO err code -1 ????
 			}
 			Set<Right> rights = getRights(userId);
-			/* FIXME TODO permissions
-			if (AuthLevelUtil.hasWebServiceLevel(rights)
-					|| (AuthLevelUtil.hasUserLevel(rights) && userId.equals(f.getOwnerId())))*/
 			if (AuthLevelUtil.hasUserLevel(rights))
 			{
 				f.setInsertedBy(userId);

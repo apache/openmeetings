@@ -60,7 +60,7 @@ public class StoredFile {
 		Set<MediaType> types = new LinkedHashSet<>();
 		types.addAll(CONVERT_TYPES);
 		types.addAll(PDF_TYPES);
-		//TODO have to be tested and re-added ext.addAll(chartExtensions);
+		//TODO Charts need to added
 		StringBuilder sb = new StringBuilder("audio/*,video/*,image/*,text/*");
 		sb.append(",application/vnd.oasis.opendocument.*");
 		sb.append(",application/vnd.sun.xml.*");
