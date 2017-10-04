@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import org.apache.openmeetings.web.app.Application;
+import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetDescriptor;
 
 public class OmWidgetDescriptor implements WidgetDescriptor {
@@ -26,11 +27,13 @@ public class OmWidgetDescriptor implements WidgetDescriptor {
 	private final String name;
 	private final String desc;
 	private final String type;
+	private final Class<? extends Widget> clazz;
 
-	public OmWidgetDescriptor(String name, String desc, String type) {
+	public OmWidgetDescriptor(String name, String desc, String type, Class<? extends Widget> clazz) {
 		this.name = name;
 		this.desc = desc;
 		this.type = type;
+		this.clazz = clazz;
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class OmWidgetDescriptor implements WidgetDescriptor {
 
 	@Override
 	public String getWidgetClassName() {
-		return getClass().getName();
+		return clazz.getName();
 	}
 
 	@Override

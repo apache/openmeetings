@@ -22,6 +22,6 @@ public class MyRoomsWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public MyRoomsWidgetDescriptor() {
-		super("781", "782", "om.widget.myrooms");
+		super("781", "782", "om.widget.myrooms", MyRoomsWidget.class);
 	}
 }

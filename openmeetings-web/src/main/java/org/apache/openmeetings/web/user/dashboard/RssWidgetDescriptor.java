@@ -22,6 +22,6 @@ public class RssWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public RssWidgetDescriptor() {
-		super("277", "277", "om.widget.rss");
+		super("277", "277", "om.widget.rss", RssWidget.class);
 	}
 }

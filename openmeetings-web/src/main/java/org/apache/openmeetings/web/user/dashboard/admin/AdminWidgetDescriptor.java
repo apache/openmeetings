@@ -24,6 +24,6 @@ public class AdminWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public AdminWidgetDescriptor() {
-		super("dashboard.widget.admin.title", "dashboard.widget.admin.desc", "om.widget.admin");
+		super("dashboard.widget.admin.title", "dashboard.widget.admin.desc", "om.widget.admin", AdminWidget.class);
 	}
 }

@@ -22,6 +22,6 @@ public class WelcomeWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public WelcomeWidgetDescriptor() {
-		super("1546", "1547", "om.widget.welcome");
+		super("1546", "1547", "om.widget.welcome", WelcomeWidget.class);
 	}
 }

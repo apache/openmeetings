@@ -22,6 +22,6 @@ public class RecentRoomsWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public RecentRoomsWidgetDescriptor() {
-		super("widget.recent.title", "widget.recent.desc", "om.widget.recentrooms");
+		super("widget.recent.title", "widget.recent.desc", "om.widget.recentrooms", RecentRoomsWidget.class);
 	}
 }

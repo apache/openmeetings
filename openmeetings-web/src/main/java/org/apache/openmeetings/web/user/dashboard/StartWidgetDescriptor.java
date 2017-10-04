@@ -22,6 +22,6 @@ public class StartWidgetDescriptor extends OmWidgetDescriptor {
 	private static final long serialVersionUID = 1L;
 
 	public StartWidgetDescriptor() {
-		super("widget.start.title", "widget.start.desc", "om.widget.start");
+		super("widget.start.title", "widget.start.desc", "om.widget.start", StartWidget.class);
 	}
 }
