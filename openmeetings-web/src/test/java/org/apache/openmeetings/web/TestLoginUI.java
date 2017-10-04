@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
-public class LoginUI extends AbstractWicketTester {
+public class TestLoginUI extends AbstractWicketTester {
 	@Test
 	public void testValidLogin() {
 		tester.startPage(MainPage.class);
