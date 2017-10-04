@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.pages.auth;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -176,7 +175,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		formTester.setValue("captcha:captchaText", getCaptcha("register:form:captcha:captcha"));
 		formTester.submit("submit");
 		checkErrors(0);
-		tester.assertLabel("register:confirmRegistration:container:message", escapeMarkup(getString(lbl), false, false).toString());
+		tester.assertLabel("register:confirmRegistration:container:message", getEscapedString(lbl));
 		ButtonAjaxBehavior b2 = getButtonBehavior("register:confirmRegistration", "OK");
 		tester.executeBehavior(b2);
 	}
@@ -189,7 +188,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		forgetTester.setValue("captcha:captchaText", getCaptcha("forget:form:captcha:captcha"));
 		forgetTester.submit("submit");
 		checkErrors(0);
-		tester.assertLabel("forget:confirmDialog:container:message", getString("321"));
+		tester.assertLabel("forget:confirmDialog:container:message", getEscapedString("321"));
 	}
 
 	// complex test
@@ -244,7 +243,7 @@ public class TestLoginUI extends AbstractWicketTester {
 			resetTester.setValue("confirmPassword", passwd);
 			resetTester.submit("submit");
 			checkErrors(0);
-			tester.assertLabel("resetPassword:confirmReset:container:message", getString("332"));
+			tester.assertLabel("resetPassword:confirmReset:container:message", getEscapedString("332"));
 		} finally {
 			for (Configuration c : cfgs) {
 				c.setValueB(false);

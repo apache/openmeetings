@@ -21,6 +21,7 @@ package org.apache.openmeetings;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
+import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -78,6 +79,10 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 
 	public String getString(String lbl) {
 		return Application.getString(lbl, tester.getSession().getLocale());
+	}
+
+	public String getEscapedString(String lbl) {
+		return escapeMarkup(getString(lbl), false, false).toString();
 	}
 
 	@Override
