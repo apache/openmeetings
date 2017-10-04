@@ -40,7 +40,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -105,7 +104,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private FastDateFormat ISO8601FORMAT = null;
 	private FastDateFormat  sdf = null;
 	private UserDashboard dashboard;
-	private Locale browserLocale = null;
 	private Invitation i = null;
 	private SOAPLogin soap = null;
 	private Long roomId = null;
@@ -116,7 +114,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public WebSession(Request request) {
 		super(request);
-		browserLocale = getLocale();
 	}
 
 	@Override
@@ -135,7 +132,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		externalType = null;
 		tz = null;
 		browserTz = null;
-		browserLocale = null;
 		extProps = new ExtendedClientProperties();
 	}
 
@@ -443,12 +439,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		return d;
 	}
 
-	public Locale getBrowserLocale(){
-		return browserLocale;
-	}
-
-	public Long getLanguageByBrowserLocale() {
-		return getBean(IUserManager.class).getLanguage(getBrowserLocale());
+	public Long getLanguageByLocale() {
+		return getBean(IUserManager.class).getLanguage(getLocale());
 	}
 
 	public String getClientTZCode() {
@@ -470,7 +462,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				//no-op
 			}
 			if (browserTz == null) {
-				_zone = Calendar.getInstance(getBrowserLocale()).getTimeZone();
+				_zone = Calendar.getInstance(getLocale()).getTimeZone();
 			}
 		}
 		return _zone == null ? null : _zone.getID();

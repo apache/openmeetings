@@ -91,8 +91,8 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				add(label.setOutputMarkupId(true));
 				add(name.setOutputMarkupId(true));
 				add(captcha);
-				add(rg.add(new Radio<>("email", Model.of(Type.email)).setOutputMarkupId(true))
-						.add(new Radio<>("login", Model.of(Type.login)).setOutputMarkupId(true))
+				add(rg.add(new Radio<>("email", Model.of(Type.email)))
+						.add(new Radio<>("login", Model.of(Type.login)))
 						.setOutputMarkupId(true));
 				rg.add(new AjaxFormChoiceComponentUpdatingBehavior() {
 					private static final long serialVersionUID = 1L;
@@ -123,7 +123,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 				String n = name.getConvertedInput();
 				if (n != null) {
 					IValidatable<String> val = new Validatable<>(n);
-					Type type = rg.getModelObject();
+					Type type = rg.getConvertedInput();
 					if (type == Type.email) {
 						emailValidator.validate(val);
 						if (!val.isValid()) {

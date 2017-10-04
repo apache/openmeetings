@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -37,7 +38,6 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.Captcha;
@@ -135,8 +135,8 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		password = null;
 		form.confirmPassword.setModelObject(null);
 		email = null;
-		lang = WebSession.get().getLanguageByBrowserLocale();
-		country = WebSession.get().getBrowserLocale().getCountry();
+		lang = WebSession.get().getLanguageByLocale();
+		country = WebSession.get().getLocale().getCountry();
 		captcha.refresh(handler);
 	}
 
@@ -145,8 +145,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		String baseURL = cfgDao.getBaseUrl();
 		sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
-		sendConfirmation = !Strings.isEmpty(baseURL)
-				&& cfgDao.getBool(OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION, false);
+		sendConfirmation = !Strings.isEmpty(baseURL) && cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 		String messageCode = "account.created";
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";

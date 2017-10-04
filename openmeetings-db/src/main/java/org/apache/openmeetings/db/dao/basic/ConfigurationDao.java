@@ -129,14 +129,18 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	/**
 	 * Retrieves Configuration regardless of its deleted status
 	 *
-	 * @param confKey
-	 * @return
+	 * @param key
+	 * @return correspondent {@link Configuration} or null
 	 */
-	public Configuration forceGet(String confKey) {
+	public Configuration forceGet(String key) {
 		try {
 			List<Configuration> list = em.createNamedQuery("forceGetConfigurationByKey", Configuration.class)
-					.setParameter("key", confKey).getResultList();
-			return list.isEmpty() ? null : list.get(0);
+					.setParameter("key", key).getResultList();
+			if (list.isEmpty()) {
+				return null;
+			}
+			Configuration c = list.get(0);
+			return c.getKey().equals(key) ? c : null;
 		} catch (Exception e) {
 			log.error("[forceGet]: ", e);
 		}
@@ -284,9 +288,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity.setDeleted(deleted);
 			em.persist(entity);
 		} else {
-			if (userId != null) {
-				entity.setUser(userDao.get(userId));
-			}
+			entity.setUser(userDao.get(userId));
 			entity.setDeleted(deleted);
 			entity.setUpdated(new Date());
 			entity = em.merge(entity);

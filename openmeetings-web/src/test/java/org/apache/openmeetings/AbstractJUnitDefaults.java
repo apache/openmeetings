@@ -48,7 +48,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	protected static final String adminUsername = "admin";
 	protected static final String regularUsername = "user";
 	protected static final String groupAdminUsername = "groupAdmin";
-	protected static final String userpass = "12345";
+	protected static final String userpass = "Q!w2e3r4t5";
 	private static final String group = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
 	private static final String email = "junit@openmeetings.apache.org";
@@ -56,7 +56,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private UserDao userDao;
+	protected UserDao userDao;
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired
@@ -146,6 +146,14 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return getUser(UUID.randomUUID().toString());
 	}
 
+	protected static String getLogin(String uid) {
+		return String.format("login%s", uid);
+	}
+
+	protected static String getEmail(String uid) {
+		return String.format("email%s@local", uid);
+	}
+
 	protected String createPass() {
 		return "pass1_!@#$%_A";
 	}
@@ -155,9 +163,9 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		// add user
 		u.setFirstname("firstname" + uuid);
 		u.setLastname("lastname" + uuid);
-		u.setLogin("login" + uuid);
+		u.setLogin(getLogin(uuid));
 		u.setAddress(new Address());
-		u.getAddress().setEmail(String.format("email%s@local", uuid));
+		u.getAddress().setEmail(getEmail(uuid));
 		u.setRights(UserDao.getDefaultRights());
 		u.setTimeZoneId("Asia/Bangkok");
 		u.updatePassword(cfgDao, createPass());

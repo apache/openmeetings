@@ -58,7 +58,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -81,6 +80,10 @@ public class SignInPage extends BaseInitedPage {
 
 	static boolean allowOAuthLogin() {
 		return !getBean(OAuth2Dao.class).getActive().isEmpty();
+	}
+
+	public SignInPage() {
+		this(new PageParameters());
 	}
 
 	public SignInPage(PageParameters p) {
@@ -139,15 +142,6 @@ public class SignInPage extends BaseInitedPage {
 		m = new KickMessageDialog("kick");
 		add(d.setVisible(!WebSession.get().isKickedByAdmin()),
 				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
-	}
-
-	public SignInPage() {
-		this(new PageParameters());
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
 	}
 
 	@Override
