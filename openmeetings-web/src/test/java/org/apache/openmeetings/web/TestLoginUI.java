@@ -61,7 +61,6 @@ public class TestLoginUI extends AbstractWicketTester {
 				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
 	}
 
-
 	@Test
 	public void testEmptyRegister() {
 		tester.startPage(SignInPage.class);
@@ -71,7 +70,18 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.executeBehavior(b);
 		FormTester formTester = tester.newFormTester("register:form");
 		formTester.submit("submit");
-		assertEquals("There should be exactly 7 errors", 7,
+		assertEquals("There should be exactly 8 errors", 8,
+				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
+	}
+
+	@Test
+	public void testEmptyForget() {
+		tester.startPage(SignInPage.class);
+		tester.assertRenderedPage(SignInPage.class);
+		tester.clickLink("signin:signin:forget");
+		FormTester formTester = tester.newFormTester("forget:form");
+		formTester.submit("submit");
+		assertEquals("There should be exactly 2 errors", 2,
 				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
 	}
 }
