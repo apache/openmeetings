@@ -20,22 +20,23 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
@@ -48,10 +49,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.Test;
+import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class TestLoginUI extends AbstractWicketTester {
+	private static final Logger log = getLogger(TestLoginUI.class, getWebAppRootKey());
 	private final static String PATH_REGISTER = "register:form";
 
 	private void checkLogin(String login, String pass) {
@@ -74,6 +77,16 @@ public class TestLoginUI extends AbstractWicketTester {
 		checkLogin(adminUsername, userpass);
 	}
 
+	private void checkErrors(int count) {
+		List<FeedbackMessage> errors = tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
+		if (count != errors.size()) {
+			for (FeedbackMessage fm : errors) {
+				log.debug("Error {}", fm);
+			}
+		}
+		assertEquals(String.format("There should be exactly %s errors", count), count, errors.size());
+	}
+
 	@Test
 	public void testEmptyLogin() {
 		tester.startPage(SignInPage.class);
@@ -82,8 +95,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		FormTester formTester = tester.newFormTester("signin:signin");
 		formTester.submit("submit");
 
-		assertEquals("There should be exactly 2 errors", 2,
-				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
+		checkErrors(2);
 	}
 
 	private FormTester showRegister() {
@@ -99,8 +111,16 @@ public class TestLoginUI extends AbstractWicketTester {
 	public void testEmptyRegister() {
 		FormTester formTester = showRegister();
 		formTester.submit("submit");
-		assertEquals("There should be exactly 8 errors", 8,
-				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
+		checkErrors(8);
+	}
+
+	@Test
+	public void testRegister() throws ReflectiveOperationException, SecurityException {
+		tester.startPage(SignInPage.class);
+		tester.assertRenderedPage(SignInPage.class);
+
+		String uid = UUID.randomUUID().toString();
+		performRegister(uid, "account.created");
 	}
 
 	private FormTester showForget() {
@@ -114,8 +134,21 @@ public class TestLoginUI extends AbstractWicketTester {
 	public void testEmptyForget() {
 		FormTester formTester = showForget();
 		formTester.submit("submit");
-		assertEquals("There should be exactly 2 errors", 2,
-				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
+		checkErrors(2);
+	}
+
+	@Test
+	public void testForget() throws SecurityException, ReflectiveOperationException {
+		tester.startPage(SignInPage.class);
+		tester.assertRenderedPage(SignInPage.class);
+
+		performForget(UUID.randomUUID().toString());
+	}
+
+	@Test
+	public void testReset() {
+		tester.startPage(ResetPage.class, new PageParameters().add(ResetPage.RESET_PARAM, UUID.randomUUID().toString()));
+		tester.assertRenderedPage(SignInPage.class);
 	}
 
 	private String getCaptcha(String path) throws ReflectiveOperationException, SecurityException {
@@ -130,7 +163,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		return captcha.getChallengeId();
 	}
 
-	private void testRegister(String uid) throws ReflectiveOperationException, SecurityException {
+	private void performRegister(String uid, String lbl) throws ReflectiveOperationException, SecurityException {
 		ButtonAjaxBehavior b1 = getButtonBehavior("signin", "register");
 		tester.executeBehavior(b1);
 		FormTester formTester = tester.newFormTester(PATH_REGISTER);
@@ -142,11 +175,21 @@ public class TestLoginUI extends AbstractWicketTester {
 		formTester.setValue("confirmPassword", userpass);
 		formTester.setValue("captcha:captchaText", getCaptcha("register:form:captcha:captcha"));
 		formTester.submit("submit");
-		assertEquals("There should be exactly 0 errors", 0,
-				tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
-		tester.assertLabel("register:confirmRegistration:container:message", Application.getString("warn.notverified"));
+		checkErrors(0);
+		tester.assertLabel("register:confirmRegistration:container:message", escapeMarkup(getString(lbl), false, false).toString());
 		ButtonAjaxBehavior b2 = getButtonBehavior("register:confirmRegistration", "OK");
 		tester.executeBehavior(b2);
+	}
+
+	private void performForget(String uid) throws ReflectiveOperationException, SecurityException {
+		int type = rnd.nextInt(2);
+		FormTester forgetTester = showForget();
+		forgetTester.select("type", type);
+		forgetTester.setValue("name", type == 0 ? getEmail(uid) : getLogin(uid));
+		forgetTester.setValue("captcha:captchaText", getCaptcha("forget:form:captcha:captcha"));
+		forgetTester.submit("submit");
+		checkErrors(0);
+		tester.assertLabel("forget:confirmDialog:container:message", getString("321"));
 	}
 
 	// complex test
@@ -163,7 +206,7 @@ public class TestLoginUI extends AbstractWicketTester {
 			tester.assertRenderedPage(SignInPage.class);
 
 			String uid = UUID.randomUUID().toString();
-			testRegister(uid);
+			performRegister(uid, "warn.notverified");
 
 			// activate
 			User u = userDao.getByLogin(getLogin(uid), User.Type.user, null);
@@ -178,20 +221,14 @@ public class TestLoginUI extends AbstractWicketTester {
 			assertNull(u.getActivatehash());
 			assertTrue(u.getRights().contains(User.Right.Login));
 			checkLogin(getEmail(uid), userpass);
+
+			// logout
+			Locale loc = tester.getSession().getLocale();
 			tester.getSession().invalidateNow();
+			tester.getSession().setLocale(loc);
 
 			// forget by 'random'
-			tester.getSession().setLocale(Locale.GERMAN);
-			Random rnd = new Random();
-			int type = rnd.nextInt(2);
-			FormTester forgetTester = showForget();
-			forgetTester.select("type", type);
-			forgetTester.setValue("name", type == 0 ? getEmail(uid) : getLogin(uid));
-			forgetTester.setValue("captcha:captchaText", getCaptcha("forget:form:captcha:captcha"));
-			forgetTester.submit("submit");
-			assertEquals("There should be exactly 0 errors", 0,
-					tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR)).size());
-			tester.assertLabel("forget:confirmDialog:container:message", Application.getString("321"));
+			performForget(uid);
 
 			// reset password
 			u = userDao.getByEmail(getEmail(uid));
@@ -201,6 +238,13 @@ public class TestLoginUI extends AbstractWicketTester {
 			tester.assertRenderedPage(ResetPage.class);
 
 			// check reset
+			String passwd = "q1W@e3r4t5";
+			FormTester resetTester = tester.newFormTester("resetPassword:form");
+			resetTester.setValue("password", passwd);
+			resetTester.setValue("confirmPassword", passwd);
+			resetTester.submit("submit");
+			checkErrors(0);
+			tester.assertLabel("resetPassword:confirmReset:container:message", getString("332"));
 		} finally {
 			for (Configuration c : cfgs) {
 				c.setValueB(false);

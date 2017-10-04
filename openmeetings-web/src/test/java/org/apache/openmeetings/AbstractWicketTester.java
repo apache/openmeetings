@@ -29,11 +29,14 @@ import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APP
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 import javax.servlet.ServletContext;
 
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.lang.Args;
@@ -47,6 +50,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	private static final Logger log = getLogger(AbstractWicketTester.class, getWebAppRootKey());
 	protected WicketTester tester;
+	protected Random rnd = new Random();
 
 	public static WicketTester getWicketTester() {
 		return getWicketTester(-1);
@@ -72,11 +76,17 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		}
 	}
 
+	public String getString(String lbl) {
+		return Application.getString(lbl, tester.getSession().getLocale());
+	}
+
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 		tester = getWicketTester();
 		assertNotNull("Web session should not be null", WebSession.get());
+		Locale[] locales = Locale.getAvailableLocales();
+		tester.getSession().setLocale(locales[rnd.nextInt(locales.length)]);
 	}
 
 	public void login(String login, String password) {
