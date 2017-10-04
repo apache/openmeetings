@@ -629,6 +629,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 			if (_c instanceof Client) {
+				getBean(ScopeApplicationAdapter.class).dropSharing(_c, roomId);
 				Client c = (Client)_c;
 				c.setRoom(null);
 				c.clear();

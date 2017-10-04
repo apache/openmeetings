@@ -390,13 +390,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}
 	}
 
-	public void roomLeaveByScope(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
-		StreamClient rcl = sessionManager.get(c.getUid());
+	public void dropSharing(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
 		IScope scope = getChildScope(String.valueOf(roomId));
-		_log.debug("[roomLeaveByScope] {} {} {} {}", c.getUid(), roomId, rcl, scope);
-		if (rcl != null && scope != null) {
-			roomLeaveByScope(rcl, scope);
-		}
 		//Elvis has left the building
 		new MessageSender(scope, "stopStream", new Object(), this) {
 			@Override
@@ -407,6 +402,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 						|| !c.getSid().equals(rcl.getSid());
 			}
 		}.start();
+	}
+
+	public void roomLeaveByScope(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
+		StreamClient rcl = sessionManager.get(c.getUid());
+		IScope scope = getChildScope(String.valueOf(roomId));
+		_log.debug("[roomLeaveByScope] {} {} {} {}", c.getUid(), roomId, rcl, scope);
+		if (rcl != null && scope != null) {
+			roomLeaveByScope(rcl, scope);
+		}
+		dropSharing(c, roomId);
 	}
 
 	/**
