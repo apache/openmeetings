@@ -28,7 +28,7 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItemLog;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -56,7 +56,7 @@ public class FileItemLogDao {
 				.executeUpdate();
 	}
 
-	public FileItemLog add(String name, BaseFileItem f, ConverterProcessResult returnMap) {
+	public FileItemLog add(String name, BaseFileItem f, ProcessResult returnMap) {
 		log.trace("Adding log: {}, {}, {}", name, f, returnMap);
 		FileItemLog l = new FileItemLog();
 		l.setInserted(new Date());

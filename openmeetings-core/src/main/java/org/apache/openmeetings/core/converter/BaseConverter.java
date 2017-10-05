@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.io.flv.impl.FLVWriter;
 import org.red5.logging.Red5LoggerFactory;
@@ -159,14 +159,14 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 
-	protected void stripAudioFirstPass(Recording recording, List<ConverterProcessResult> returnLog,
+	protected void stripAudioFirstPass(Recording recording, List<ProcessResult> returnLog,
 			List<File> waveFiles, File streamFolder)
 	{
 		stripAudioFirstPass(recording, returnLog, waveFiles, streamFolder
 				, metaDataDao.getAudioMetaDataByRecording(recording.getId()));
 	}
 
-	private String[] addSoxPad(List<ConverterProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
+	private String[] addSoxPad(List<ProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
 		//FIXME need to check this
 		if (length < 0 || position < 0) {
 			log.debug("::addSoxPad {} Invalid parameters: length = {}; position = {}; inFile = {}", job, length, position, inFile);
@@ -250,7 +250,7 @@ public abstract class BaseConverter {
 	}
 
 	protected void stripAudioFirstPass(Recording recording,
-			List<ConverterProcessResult> returnLog,
+			List<ProcessResult> returnLog,
 			List<File> waveFiles, File streamFolder,
 			List<RecordingMetaData> metaDataList) {
 		try {
@@ -384,7 +384,7 @@ public abstract class BaseConverter {
 		return argv;
 	}
 
-	protected String convertToMp4(Recording r, List<String> _argv, List<ConverterProcessResult> returnLog) throws IOException {
+	protected String convertToMp4(Recording r, List<String> _argv, List<ProcessResult> returnLog) throws IOException {
 		//TODO add faststart, move filepaths to helpers
 		String mp4path = r.getFile().getCanonicalPath();
 		List<String> argv = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
@@ -393,7 +393,7 @@ public abstract class BaseConverter {
 		return mp4path;
 	}
 
-	protected void convertToPng(BaseFileItem f, String mp4path, List<ConverterProcessResult> logs) throws IOException {
+	protected void convertToPng(BaseFileItem f, String mp4path, List<ProcessResult> logs) throws IOException {
 		// Extract first Image for preview purpose
 		// ffmpeg -i movie.mp4 -vf  "thumbnail,scale=640:-1" -frames:v 1 movie.png
 		File png = f.getFile(EXTENSION_PNG);
@@ -419,14 +419,14 @@ public abstract class BaseConverter {
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 
-	protected void postProcess(Recording r, String mp4path, List<ConverterProcessResult> logs, List<File> waveFiles) throws IOException {
+	protected void postProcess(Recording r, String mp4path, List<ProcessResult> logs, List<File> waveFiles) throws IOException {
 		convertToPng(r, mp4path, logs);
 
 		updateDuration(r);
 		r.setStatus(Recording.Status.PROCESSED);
 
 		logDao.delete(r);
-		for (ConverterProcessResult returnMap : logs) {
+		for (ProcessResult returnMap : logs) {
 			logDao.add("generateFFMPEG", r, returnMap);
 		}
 

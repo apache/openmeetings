@@ -35,8 +35,8 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +57,8 @@ public class FileProcessor {
 	private DocumentConverter generatePDF;
 
 	//FIXME TODO this method need to be refactored to throw exceptions
-	public ConverterProcessResultList processFile(FileItem f, InputStream is) throws Exception {
-		ConverterProcessResultList result = new ConverterProcessResultList();
+	public ProcessResultList processFile(FileItem f, InputStream is) throws Exception {
+		ProcessResultList result = new ProcessResultList();
 		// Generate a random string to prevent any problems with
 		// foreign characters and duplicates
 		String hash = UUID.randomUUID().toString();
@@ -86,7 +86,7 @@ public class FileProcessor {
 			// add outputfolders for profiles
 			// if it is a presenation it will be copied to another place
 			if (!(isOffice || isPdf || isImage || isVideo || isAsIs)) {
-				result.addItem("wrongType", new ConverterProcessResult("The file type cannot be converted"));
+				result.addItem("wrongType", new ProcessResult("The file type cannot be converted"));
 				return result;
 			}
 			if (isImage) {
@@ -103,7 +103,7 @@ public class FileProcessor {
 			File file = f.getFile(ext);
 			log.debug("writing file to: " + file);
 			if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
-				result.addItem("No parent", new ConverterProcessResult("Unable to create parent for file: " + file.getCanonicalPath()));
+				result.addItem("No parent", new ProcessResult("Unable to create parent for file: " + file.getCanonicalPath()));
 				return result;
 			}
 
@@ -122,23 +122,18 @@ public class FileProcessor {
 				result = imageConverter.convertImage(f, sf);
 			} else if (isVideo) {
 				copyFile(temp, file);
-				List<ConverterProcessResult> returnList = flvExplorerConverter.convertVideo(f, ext);
+				List<ProcessResult> returnList = flvExplorerConverter.convertVideo(f, ext);
 
 				int i = 0;
-				for (ConverterProcessResult returnMap : returnList) {
+				for (ProcessResult returnMap : returnList) {
 					result.addItem("processVideo " + i++, returnMap);
 				}
 			}
 			f = fileDao.update(f);
 			log.debug("fileId: " + f.getId());
-
-			// has to happen at the end, otherwise it will be overwritten
-			//cause the variable is new initialized
-			result.setCompleteName(file.getName());
-			result.setFileItemId(f.getId());
 		} catch (Exception e) {
 			log.debug("Error while processing the file", e);
-			result.addItem("exception", new ConverterProcessResult("Unexpected exception: " + e.getMessage()));
+			result.addItem("exception", new ProcessResult("Unexpected exception: " + e.getMessage()));
 			throw e;
 		} finally {
 			if (temp != null && temp.exists() && temp.isFile()) {

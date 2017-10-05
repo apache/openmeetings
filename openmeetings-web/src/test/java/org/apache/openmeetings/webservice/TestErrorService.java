@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Locale;
 
+import javax.ws.rs.core.Response;
+
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.junit.Test;
@@ -38,6 +40,51 @@ public class TestErrorService extends AbstractWebServiceTest {
 				.path(String.format("/%s/%s", "error.unknown", LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
 				.get(ServiceResult.class);
 		assertNotNull("Valid Result should be returned", sr);
-		assertEquals("SUCCESS result should be returned", ServiceResult.Type.SUCCESS, sr.getType());
+		assertEquals("SUCCESS result should be returned", ServiceResult.Type.SUCCESS.name(), sr.getType());
+	}
+
+	@Test
+	public void reportTest() {
+		// null report
+		Response resp = getClient(ERROR_SERVICE_URL)
+				.path("/report")
+				.post("");
+		assertNotNull("Not null Response should be returned", resp);
+		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+
+		// report with message
+		resp = getClient(ERROR_SERVICE_URL)
+				.path("/report")
+				.query("message", "Dummy test")
+				.post("");
+		assertNotNull("Not null Response should be returned", resp);
+		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+
+		// report with invalid sid and message
+		resp = getClient(ERROR_SERVICE_URL)
+				.path("/report")
+				.query("message", "Dummy test")
+				.query("sid", "n/a")
+				.post("");
+		assertNotNull("Not null Response should be returned", resp);
+		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+
+		// report with valid sid and no message
+		ServiceResult r = login();
+		resp = getClient(ERROR_SERVICE_URL)
+				.path("/report")
+				.query("sid", r.getMessage())
+				.post("");
+		assertNotNull("Not null Response should be returned", resp);
+		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
+
+		// report with valid sid and message
+		resp = getClient(ERROR_SERVICE_URL)
+				.path("/report")
+				.query("sid", r.getMessage())
+				.query("message", "Dummy test")
+				.post("");
+		assertNotNull("Not null Response should be returned", resp);
+		assertEquals("SUCCESS result should be returned", Response.Status.NO_CONTENT.getStatusCode(), resp.getStatus());
 	}
 }

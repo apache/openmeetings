@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.entity.file;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.apache.openmeetings.util.process.ConverterProcessResult.ZERO;
+import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
 
 import java.util.Arrays;
 import java.util.Date;

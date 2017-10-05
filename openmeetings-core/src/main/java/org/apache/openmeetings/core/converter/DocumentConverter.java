@@ -28,8 +28,8 @@ import java.io.File;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResult;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
@@ -49,8 +49,8 @@ public class DocumentConverter {
 	@Autowired
 	private ImageConverter imageConverter;
 
-	public ConverterProcessResultList convertPDF(FileItem f, StoredFile sf) throws Exception {
-		ConverterProcessResultList result = new ConverterProcessResultList();
+	public ProcessResultList convertPDF(FileItem f, StoredFile sf) throws Exception {
+		ProcessResultList result = new ProcessResultList();
 
 		boolean fullProcessing = !sf.isPdf();
 		File original = f.getFile(sf.getExt());
@@ -70,7 +70,7 @@ public class DocumentConverter {
 	/**
 	 * Generates PDF using JOD Library (external library)
 	 */
-	public ConverterProcessResult doJodConvert(File in, File out) {
+	public ProcessResult doJodConvert(File in, File out) {
 		try {
 			String officePath = cfgDao.getString(CONFIG_PATH_OFFICE, null);
 			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
@@ -84,15 +84,15 @@ public class DocumentConverter {
 				converter.convert(in, out);
 			} catch (OfficeException ex) {
 				log.error("doJodConvert", ex);
-				return new ConverterProcessResult("doJodConvert", ex.getMessage(), ex);
+				return new ProcessResult("doJodConvert", ex.getMessage(), ex);
 			} finally {
 				officeManager.stop();
 			}
 		} catch (Exception ex) {
 			log.error("doJodConvert", ex);
-			return new ConverterProcessResult("doJodConvert", ex.getMessage(), ex);
+			return new ProcessResult("doJodConvert", ex.getMessage(), ex);
 		}
-		ConverterProcessResult result = new ConverterProcessResult("doJodConvert", "Document converted successfully", null);
+		ProcessResult result = new ProcessResult("doJodConvert", "Document converted successfully", null);
 		result.setExitCode(0);
 		return result;
 	}

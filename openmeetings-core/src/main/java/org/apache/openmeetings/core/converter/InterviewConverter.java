@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -107,7 +107,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			r.setStatus(Recording.Status.CONVERTING);
 			r = recordingDao.update(r);
 
-			List<ConverterProcessResult> logs = new ArrayList<>();
+			List<ProcessResult> logs = new ArrayList<>();
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());
@@ -172,7 +172,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							, "-v", "error"
 							, "-f", "null"
 							, "file.null"};
-					ConverterProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
+					ProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
 					logs.add(res);
 					if (res.isOk()) {
 						//TODO need to remove smallest gap
@@ -211,7 +211,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 			}
 			if (!found) {
-				ConverterProcessResult res = new ConverterProcessResult();
+				ProcessResult res = new ProcessResult();
 				res.setProcess("CheckFlvFilesExists");
 				res.setError("No valid pods found");
 				res.setExitCode(-1);

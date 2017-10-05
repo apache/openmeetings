@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -40,8 +40,8 @@ import org.springframework.stereotype.Component;
 public class FlvExplorerConverter extends BaseConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(FlvExplorerConverter.class, getWebAppRootKey());
 
-	public List<ConverterProcessResult> convertVideo(FileItem f, String ext) {
-		List<ConverterProcessResult> logs = new ArrayList<>();
+	public List<ProcessResult> convertVideo(FileItem f, String ext) {
+		List<ProcessResult> logs = new ArrayList<>();
 		try {
 			File mp4 = f.getFile(EXTENSION_MP4);
 			f.setType(Type.Video);
@@ -60,7 +60,7 @@ public class FlvExplorerConverter extends BaseConverter {
 					, "-c:a", "libfdk_aac" //
 					, "-pix_fmt", "yuv420p" //
 					, mp4.getCanonicalPath() };
-			ConverterProcessResult res = ProcessHelper.executeScript("uploadVideo ID :: " + f.getHash(), args);
+			ProcessResult res = ProcessHelper.executeScript("uploadVideo ID :: " + f.getHash(), args);
 			logs.add(res);
 			if (sameExt && tmp != null) {
 				if (res.isOk()) {
@@ -77,7 +77,7 @@ public class FlvExplorerConverter extends BaseConverter {
 			convertToPng(f, mp4.getCanonicalPath(), logs);
 		} catch (Exception err) {
 			log.error("[convertToFLV]", err);
-			logs.add(new ConverterProcessResult("convertToMP4", err.getMessage(), err));
+			logs.add(new ProcessResult("convertToMP4", err.getMessage(), err));
 		}
 
 		return logs;

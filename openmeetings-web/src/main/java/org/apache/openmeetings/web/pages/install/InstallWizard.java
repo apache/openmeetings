@@ -49,7 +49,7 @@ import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
@@ -543,7 +543,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		private boolean checkToolPath(TextField<String> path, String[] args) {
-			ConverterProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
+			ProcessResult result = ProcessHelper.executeScript(path.getInputName() + " path:: '" + path.getValue() + "'", args);
 			if (!result.isOk()) {
 				path.error(result.getError().replaceAll(REGEX, ""));
 			}

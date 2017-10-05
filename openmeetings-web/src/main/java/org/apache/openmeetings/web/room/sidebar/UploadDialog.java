@@ -32,8 +32,8 @@ import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResult;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
@@ -196,8 +196,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				f.setInsertedBy(getUserId());
 
 				try {
-					ConverterProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream());
-					for (Entry<String, ConverterProcessResult> entry : logs.getJobs().entrySet()) {
+					ProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream());
+					for (Entry<String, ProcessResult> entry : logs.getJobs().entrySet()) {
 						getBean(FileItemLogDao.class).add(entry.getValue().getProcess(), f, entry.getValue());
 					}
 					room.getSidebar().updateFiles(target);

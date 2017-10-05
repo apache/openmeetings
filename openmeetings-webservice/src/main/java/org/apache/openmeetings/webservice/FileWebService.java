@@ -51,7 +51,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -180,7 +180,7 @@ public class FileWebService extends BaseWebService {
 				//TODO permissions
 				if (stream != null) {
 					//TODO attachment
-					ConverterProcessResultList result = getBean(FileProcessor.class).processFile(f, stream);
+					ProcessResultList result = getBean(FileProcessor.class).processFile(f, stream);
 					if (result.hasError()) {
 						throw new ServiceException(result.getLogMessage());
 					}

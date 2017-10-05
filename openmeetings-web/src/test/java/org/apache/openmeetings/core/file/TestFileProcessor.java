@@ -31,7 +31,7 @@ import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,7 +49,7 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 					.setHash(UUID.randomUUID().toString())
 					.setType(BaseFileItem.Type.Recording).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {
-				ConverterProcessResultList result = processor.processFile(f, is);
+				ProcessResultList result = processor.processFile(f, is);
 				assertFalse("Conversion should be successful", result.hasError());
 				assertEquals("Type should be image", BaseFileItem.Type.Image, f.getType());
 			}

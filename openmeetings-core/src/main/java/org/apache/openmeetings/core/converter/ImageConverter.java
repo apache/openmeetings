@@ -29,7 +29,7 @@ import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.util.process.ConverterProcessResult.ZERO;
+import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
 import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
 import java.io.File;
@@ -44,8 +44,8 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.process.ConverterProcessResult;
-import org.apache.openmeetings.util.process.ConverterProcessResultList;
+import org.apache.openmeetings.util.process.ProcessResult;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TIFF;
@@ -66,8 +66,8 @@ public class ImageConverter extends BaseConverter {
 	@Autowired
 	private UserDao userDao;
 
-	public ConverterProcessResultList convertImage(BaseFileItem f, StoredFile sf) throws IOException {
-		ConverterProcessResultList returnMap = new ConverterProcessResultList();
+	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf) throws IOException {
+		ProcessResultList returnMap = new ProcessResultList();
 
 		File jpg = f.getFile(EXTENSION_JPG);
 		if (!sf.isJpg()) {
@@ -82,8 +82,8 @@ public class ImageConverter extends BaseConverter {
 		return returnMap;
 	}
 
-	public ConverterProcessResultList convertImageUserProfile(File file, Long userId, boolean skipConvertion) throws Exception {
-		ConverterProcessResultList returnMap = new ConverterProcessResultList();
+	public ProcessResultList convertImageUserProfile(File file, Long userId, boolean skipConvertion) throws Exception {
+		ProcessResultList returnMap = new ProcessResultList();
 
 		// User Profile Update
 		File[] files = getUploadProfilesUserDir(userId).listFiles(fi -> fi.getName().endsWith(EXTENSION_JPG));
@@ -123,8 +123,8 @@ public class ImageConverter extends BaseConverter {
 		return cfgDao.getString(CONFIG_DOCUMENT_QUALITY, "90");
 	}
 
-	private static ConverterProcessResult initSize(BaseFileItem f, File img, String mime) {
-		ConverterProcessResult res = new ConverterProcessResult();
+	private static ProcessResult initSize(BaseFileItem f, File img, String mime) {
+		ProcessResult res = new ProcessResult();
 		res.setProcess("get image dimensions :: " + f.getId());
 		final Parser parser = new ImageParser();
 		try (InputStream is = new FileInputStream(img)) {
@@ -150,13 +150,13 @@ public class ImageConverter extends BaseConverter {
 	 * @throws IOException
 	 *
 	 */
-	private ConverterProcessResult convertSingleJpg(File in, File out) throws IOException {
+	private ProcessResult convertSingleJpg(File in, File out) throws IOException {
 		String[] argv = new String[] { getPathToConvert(), in.getCanonicalPath(), out.getCanonicalPath() };
 
 		return ProcessHelper.executeScript("convertSingleJpg", argv);
 	}
 
-	public ConverterProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {
+	public ProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {
 		String[] argv = new String[] { getPathToConvert()
 				, "-resize", (width == null ? "" : width) + (height == null ? "" : "x" + height)
 				, in.getCanonicalPath(), out.getCanonicalPath()
@@ -171,7 +171,7 @@ public class ImageConverter extends BaseConverter {
 	 * @return - result of conversion
 	 * @throws IOException in case IO exception occurred
 	 */
-	public ConverterProcessResultList convertDocument(ConverterProcessResultList list, FileItem f, File pdf) throws IOException {
+	public ProcessResultList convertDocument(ProcessResultList list, FileItem f, File pdf) throws IOException {
 		log.debug("convertDocument");
 		String[] argv = new String[] {
 			getPathToConvert()
@@ -180,7 +180,7 @@ public class ImageConverter extends BaseConverter {
 			, "-quality", getQuality()
 			, new File(pdf.getParentFile(), PAGE_TMPLT).getCanonicalPath()
 			};
-		ConverterProcessResult res = ProcessHelper.executeScript("convertDocument", argv);
+		ProcessResult res = ProcessHelper.executeScript("convertDocument", argv);
 		list.addItem("convert PDF to images", res);
 		if (res.isOk()) {
 			File[] pages = pdf.getParentFile().listFiles(fi -> fi.isFile() && fi.getName().startsWith(DOC_PAGE_PREFIX) && fi.getName().endsWith(EXTENSION_PNG));

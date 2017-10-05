@@ -27,7 +27,7 @@ package org.apache.openmeetings.util.process;
  * @author sebawagner
  *
  */
-public class ConverterProcessResult {
+public class ProcessResult {
 	public static final Integer ZERO = new Integer(0);
 
 	private String process;
@@ -37,15 +37,15 @@ public class ConverterProcessResult {
 	private Integer exitCode;
 	private String out;
 
-	public ConverterProcessResult() {
+	public ProcessResult() {
 		this(null, null, null);
 	}
 
-	public ConverterProcessResult(String error) {
+	public ProcessResult(String error) {
 		this(null, error, null);
 	}
 
-	public ConverterProcessResult(String process, String error, Exception ex) {
+	public ProcessResult(String process, String error, Exception ex) {
 		setProcess(process);
 		setException(ex == null ? null : ex.toString());
 		setError(error);

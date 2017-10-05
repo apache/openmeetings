@@ -35,7 +35,7 @@ public class ProcessHelper {
 
 	private ProcessHelper() {}
 
-	public static ConverterProcessResult executeScriptWindows(String process, String[] argv) {
+	public static ProcessResult executeScriptWindows(String process, String[] argv) {
 		try {
 			String[] cmd = new String[argv.length + 2];
 			cmd[0] = "cmd.exe";
@@ -45,7 +45,7 @@ public class ProcessHelper {
 			return executeScript(process, cmd, env);
 		} catch (Exception t) {
 			log.error("executeScriptWindows", t);
-			return new ConverterProcessResult(process, t.getMessage(), t);
+			return new ProcessResult(process, t.getMessage(), t);
 		}
 	}
 
@@ -70,13 +70,13 @@ public class ProcessHelper {
 		}
 	}
 
-	public static ConverterProcessResult executeScript(String process, String[] argv) {
+	public static ProcessResult executeScript(String process, String[] argv) {
 		Map<String, String> env = new HashMap<>();
 		return executeScript(process, argv, env);
 	}
 
-	public static ConverterProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env) {
-		ConverterProcessResult res = new ConverterProcessResult();
+	public static ProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env) {
+		ProcessResult res = new ProcessResult();
 		res.setProcess(process);
 		debugCommandStart(process, argv);
 
