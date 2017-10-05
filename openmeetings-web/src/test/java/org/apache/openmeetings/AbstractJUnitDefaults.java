@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.Assert.assertNotNull;
@@ -43,15 +44,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
-	public static final int ONE_HOUR = 60 * 60 * 1000;
-
-	protected static final String adminUsername = "admin";
-	protected static final String regularUsername = "user";
-	protected static final String groupAdminUsername = "groupAdmin";
-	protected static final String userpass = "Q!w2e3r4t5";
-	private static final String group = "smoketest";
 	private static final String timeZone = "Europe/Berlin";
-	private static final String email = "junit@openmeetings.apache.org";
+	public static final int ONE_HOUR = 60 * 60 * 1000;
+	public static final String adminUsername = "admin";
+	public static final String regularUsername = "user";
+	protected static final String groupAdminUsername = "groupAdmin";
+	public static final String userpass = "Q!w2e3r4t5";
+	public static final String group = "smoketest";
+	public static final String email = "junit@openmeetings.apache.org";
 
 	@Autowired
 	private AppointmentDao appointmentDao;
@@ -66,7 +66,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 
 	@Before
 	public void setUp() throws Exception {
-		setWicketApplicationName("openmeetings");
+		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
 		cfgDao.getCryptKey();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();

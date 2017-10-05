@@ -21,8 +21,9 @@ package org.apache.openmeetings.cli;
 public class DerbyPatcher extends ConnectionPropertiesPatcher {
 	@Override
 	protected String getUrl(String _url, String host, String _port, String _db) {
-		String db = (_db == null) ? "openmeetings" : _db;
-		String suffix = _url.substring(_url.indexOf(';'));
-		return "jdbc:derby" + ":" + db + suffix;
+		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
+		int idx = _url.indexOf(';');
+		String suffix = idx > -1 ? _url.substring(idx) : "";
+		return String.format("jdbc:derby:%s%s", db, suffix);
 	}
 }

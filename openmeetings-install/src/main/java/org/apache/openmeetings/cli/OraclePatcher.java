@@ -22,7 +22,7 @@ public class OraclePatcher extends ConnectionPropertiesPatcher {
 	@Override
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String port = (_port == null) ? "1521" : _port;
-		String db = (_db == null) ? "openmeetings" : _db;
+		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
 		String delim = ":";
 		if (db.startsWith("/")) {
 			delim = "";

@@ -22,8 +22,8 @@ public class MysqlPatcher extends ConnectionPropertiesPatcher {
 	@Override
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String port = (_port == null) ? "3306" : _port;
-		String db = (_db == null) ? "openmeetings" : _db;
+		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
 		String suffix = _url.substring(_url.indexOf('?'));
-		return "jdbc:mysql://" + host + ":" + port + "/" + db + suffix;
+		return String.format("jdbc:mysql://%s:%s/%s%s", host, port, db, suffix);
 	}
 }

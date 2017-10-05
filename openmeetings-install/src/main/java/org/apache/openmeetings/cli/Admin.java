@@ -21,6 +21,7 @@ package org.apache.openmeetings.cli;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
@@ -185,7 +186,7 @@ public class Admin {
 	}
 
 	private void process(String[] args) {
-		String ctxName = System.getProperty("context", "openmeetings");
+		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(ctxName);
 		File home = new File(System.getenv("RED5_HOME"));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));

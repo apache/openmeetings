@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplicatio
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -39,6 +40,8 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.feedback.ExactLevelFeedbackMessageFilter;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
@@ -109,6 +112,10 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	public <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(String path, String name) {
+		return getButtonBehavior(tester, path, name);
+	}
+
+	public static <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(WicketTester tester, String path, String name) {
 		Args.notNull(path, "path");
 		Args.notNull(name, "name");
 		@SuppressWarnings("unchecked")
@@ -119,6 +126,21 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 				return bb;
 			}
 		}
+		fail(String.format("Button '%s' not found for dialog '%s'", name, path));
 		return null;
+	}
+
+	public void checkErrors(int count) {
+		checkErrors(tester, count);
+	}
+
+	public static void checkErrors(WicketTester tester, int count) {
+		List<FeedbackMessage> errors = tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
+		if (count != errors.size()) {
+			for (FeedbackMessage fm : errors) {
+				log.debug("Error {}", fm);
+			}
+		}
+		assertEquals(String.format("There should be exactly %s errors", count), count, errors.size());
 	}
 }

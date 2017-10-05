@@ -42,6 +42,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public abstract class ConnectionPropertiesPatcher {
+	public static final String DEFAULT_DB_NAME = "openmeetings";
 	protected static final String URL_PREFIX = "Url";
 	protected static final String DRIVER_PREFIX = "DriverClassName";
 	protected static final String USER_PREFIX = "Username";

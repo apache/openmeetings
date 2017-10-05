@@ -20,13 +20,10 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -41,19 +38,15 @@ import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.wicket.extensions.markup.html.captcha.CaptchaImageResource;
-import org.apache.wicket.feedback.ExactLevelFeedbackMessageFilter;
-import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.Test;
-import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class TestLoginUI extends AbstractWicketTester {
-	private static final Logger log = getLogger(TestLoginUI.class, getWebAppRootKey());
 	private final static String PATH_REGISTER = "register:form";
 
 	private void checkLogin(String login, String pass) {
@@ -74,16 +67,6 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.assertRenderedPage(SignInPage.class);
 
 		checkLogin(adminUsername, userpass);
-	}
-
-	private void checkErrors(int count) {
-		List<FeedbackMessage> errors = tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
-		if (count != errors.size()) {
-			for (FeedbackMessage fm : errors) {
-				log.debug("Error {}", fm);
-			}
-		}
-		assertEquals(String.format("There should be exactly %s errors", count), count, errors.size());
 	}
 
 	@Test

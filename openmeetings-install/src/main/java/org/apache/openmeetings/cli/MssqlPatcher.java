@@ -22,7 +22,7 @@ public class MssqlPatcher extends ConnectionPropertiesPatcher {
 	@Override
 	protected String getUrl(String _url, String host, String _port, String _db) {
 		String port = (_port == null) ? "1433" : _port;
-		String db = (_db == null) ? "openmeetings" : _db;
-		return "jdbc:sqlserver://" + host + ":" + port + ";databaseName=" + db;
+		String db = (_db == null) ? DEFAULT_DB_NAME : _db;
+		return String.format("jdbc:sqlserver://%s:%s;databaseName=%s", host, port, db);
 	}
 }
