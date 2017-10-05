@@ -40,7 +40,6 @@ public class OmFileHelper {
 	private static final String CONF_DIR = "conf";
 	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
-	private static final String INSTALL_FILE = "install.xml";
 
 	public static final String BACKUP_DIR = "backup";
 	public static final String IMPORT_DIR = "import";
@@ -236,10 +235,6 @@ public class OmFileHelper {
 
 	public static File getConfDir() {
 		return new File(OmFileHelper.OM_HOME, CONF_DIR);
-	}
-
-	public static File getInstallFile() {
-		return new File(getConfDir(), INSTALL_FILE);
 	}
 
 	public static File getScreenSharingDir() {

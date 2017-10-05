@@ -62,7 +62,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ApplicationHelper;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.installation.InstallationDocumentHandler;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ImportHelper;
@@ -279,8 +278,6 @@ public class Admin {
 						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
 						importInit.loadAll(cfg, force);
 					}
-
-					InstallationDocumentHandler.createDocument(3);
 				} catch(Exception e) {
 					handleError("Install failed", e);
 				}
