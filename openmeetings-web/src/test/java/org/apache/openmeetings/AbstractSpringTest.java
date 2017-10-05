@@ -45,7 +45,7 @@ public abstract class AbstractSpringTest extends AbstractJUnit4SpringContextTest
 		}
 	}
 
-	protected static void setOmHome() {
+	public static void setOmHome() {
 		String webappsDir = System.getProperty("om.home", ".");
 		OmFileHelper.setOmHome(webappsDir);
 		if (!OmFileHelper.getOmHome().exists() || !OmFileHelper.getOmHome().isDirectory()) {

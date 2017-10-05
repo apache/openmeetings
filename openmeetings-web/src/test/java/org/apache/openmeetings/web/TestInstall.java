@@ -18,6 +18,47 @@
  */
 package org.apache.openmeetings.web;
 
-public class TestInstall {
+import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
+import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
+import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
+import java.util.Locale;
+import java.util.Random;
+
+import org.apache.openmeetings.AbstractSpringTest;
+import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.pages.install.InstallWizardPage;
+import org.apache.wicket.util.tester.WicketTester;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestInstall {
+	private static final String DERBY_HOME = "derby.system.home";
+	protected WicketTester tester;
+	protected Random rnd = new Random();
+
+	@Before
+	public void setUp() throws IOException {
+		AbstractSpringTest.setOmHome();
+		setWicketApplicationName("openmeetings");
+		System.setProperty(DERBY_HOME, getOmHome().getCanonicalPath());
+		tester = getWicketTester();
+		assertNotNull("Web session should not be null", WebSession.get());
+		Locale[] locales = Locale.getAvailableLocales();
+		tester.getSession().setLocale(locales[rnd.nextInt(locales.length)]);
+	}
+
+	@After
+	public void tearDown() {
+		System.getProperties().remove(DERBY_HOME);
+	}
+
+	@Test
+	public void testInstall() {
+		tester.startPage(InstallWizardPage.class);
+		tester.assertRenderedPage(InstallWizardPage.class);
+	}
 }

@@ -323,6 +323,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			ConnectionProperties props = new ConnectionProperties();
 			try {
 				File conf = OmFileHelper.getPersistence(type);
+				if (!conf.exists() && type == null) {
+					return props; // initial select
+				}
 				props = ConnectionPropertiesPatcher.getConnectionProperties(conf);
 				if (DbType.derby != props.getDbType()) {
 					// resetting default login/password
