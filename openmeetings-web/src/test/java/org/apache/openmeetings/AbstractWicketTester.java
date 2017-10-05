@@ -32,7 +32,6 @@ import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APP
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import javax.servlet.ServletContext;
 
@@ -54,7 +53,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	private static final Logger log = getLogger(AbstractWicketTester.class, getWebAppRootKey());
 	protected WicketTester tester;
-	protected Random rnd = new Random();
 
 	public static WicketTester getWicketTester() {
 		return getWicketTester(-1);

@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplic
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -52,6 +53,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public static final String userpass = "Q!w2e3r4t5";
 	public static final String group = "smoketest";
 	public static final String email = "junit@openmeetings.apache.org";
+	public static final Random rnd = new Random();
 
 	@Autowired
 	private AppointmentDao appointmentDao;

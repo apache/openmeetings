@@ -24,7 +24,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Locale;
-import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -101,7 +100,6 @@ public class TestUserService extends AbstractWebServiceTest {
 
 	@Test
 	public void addUserTest() {
-		Random rnd = new Random();
 		String[] tzList = TimeZone.getAvailableIDs();
 		String tz = TimeZone.getTimeZone(tzList[rnd.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();

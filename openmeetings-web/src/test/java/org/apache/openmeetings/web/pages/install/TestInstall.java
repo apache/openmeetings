@@ -91,6 +91,7 @@ public class TestInstall {
 		InstallWizard wiz = (InstallWizard)page.get(WIZARD_PATH);
 		assertNull("Model should be null", wiz.getWizardModel().getActiveStep());
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0)); //welcome step
+		assertNotNull("Model should NOT be null", wiz.getWizardModel().getActiveStep());
 
 		ButtonAjaxBehavior prev = getButtonBehavior(tester, WIZARD_PATH, "PREV"); //check enabled
 		log.debug("Prev button enabled ? {}", prev.getButton().isEnabled());
@@ -119,8 +120,8 @@ public class TestInstall {
 		tester.executeBehavior(next); //crypt step
 		// not checking errors
 		if (countErrors(tester) > 0) {
-			tester.cleanupFeedbackMessages();
 			tester.executeBehavior(next); //skip errors
+			tester.cleanupFeedbackMessages();
 		}
 		wizardTester.setValue("view:cryptClassName", SCryptImplementation.class.getName());
 		tester.executeBehavior(next); //install step
