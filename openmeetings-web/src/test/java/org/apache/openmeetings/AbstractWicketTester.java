@@ -134,8 +134,16 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		checkErrors(tester, count);
 	}
 
+	public static List<FeedbackMessage> getErrors(WicketTester tester) {
+		return tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
+	}
+
+	public static int countErrors(WicketTester tester) {
+		return getErrors(tester).size();
+	}
+
 	public static void checkErrors(WicketTester tester, int count) {
-		List<FeedbackMessage> errors = tester.getFeedbackMessages(new ExactLevelFeedbackMessageFilter(FeedbackMessage.ERROR));
+		List<FeedbackMessage> errors = getErrors(tester);
 		if (count != errors.size()) {
 			for (FeedbackMessage fm : errors) {
 				log.debug("Error {}", fm);

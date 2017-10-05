@@ -25,12 +25,14 @@ import static org.apache.openmeetings.AbstractJUnitDefaults.email;
 import static org.apache.openmeetings.AbstractJUnitDefaults.group;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.apache.openmeetings.AbstractWicketTester.checkErrors;
+import static org.apache.openmeetings.AbstractWicketTester.countErrors;
 import static org.apache.openmeetings.AbstractWicketTester.getButtonBehavior;
 import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.io.File;
@@ -86,6 +88,8 @@ public class TestInstall {
 	public void testInstall() {
 		InstallWizardPage page = tester.startPage(InstallWizardPage.class);
 		tester.assertRenderedPage(InstallWizardPage.class);
+		InstallWizard wiz = (InstallWizard)page.get(WIZARD_PATH);
+		assertNull("Model should be null", wiz.getWizardModel().getActiveStep());
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0)); //welcome step
 
 		ButtonAjaxBehavior prev = getButtonBehavior(tester, WIZARD_PATH, "PREV"); //check enabled
@@ -114,7 +118,10 @@ public class TestInstall {
 		wizardTester.setValue("view:docQuality", "90");
 		tester.executeBehavior(next); //crypt step
 		// not checking errors
-		tester.cleanupFeedbackMessages();
+		if (countErrors(tester) > 0) {
+			tester.cleanupFeedbackMessages();
+			tester.executeBehavior(next); //skip errors
+		}
 		wizardTester.setValue("view:cryptClassName", SCryptImplementation.class.getName());
 		tester.executeBehavior(next); //install step
 		checkErrors(tester, 0);
