@@ -87,24 +87,24 @@ public class SignInPage extends BaseInitedPage {
 				OAuthServer server = getBean(OAuth2Dao.class).get(serverId);
 				log.debug("OAuthServer=" + server);
 				if (server == null) {
-					log.warn("OAuth server id=" + serverId + " not found");
+					log.warn("OAuth server id={} not found", serverId);
 					return;
 				}
 
-				if (p.get("code").toString() != null) { // got code
+				if (!p.get("code").isNull()) { // got code
 					String code = p.get("code").toString();
-					log.debug("OAuth response code=" + code);
+					log.debug("OAuth response code={}", code);
 					AuthInfo authInfo = getToken(code, server);
 					if (authInfo == null) {
 						return;
 					}
-					log.debug("OAuthInfo=" + authInfo);
+					log.debug("OAuthInfo={}", authInfo);
 					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
 					loginViaOAuth2(authParams, serverId);
 				} else { // redirect to get code
 					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(),
 							null, null, getRedirectUri(server, this), null);
-					log.debug("redirectUrl=" + redirectUrl);
+					log.debug("redirectUrl={}", redirectUrl);
 					throw new RedirectToUrlException(redirectUrl);
 				}
 			} catch (IOException|NoSuchAlgorithmException e) {
@@ -153,8 +153,8 @@ public class SignInPage extends BaseInitedPage {
 
 	// ============= OAuth2 methods =============
 
-	public String prepareUrlParams(String urlTemplate, String clientId, String clientSecret,
-			String clientToken, String redirectUri, String code) throws UnsupportedEncodingException {
+	public static String prepareUrlParams(String urlTemplate, String clientId, String clientSecret,
+			String clientToken, String redirectUri, String code) {
 		String result = urlTemplate;
 		if (clientId != null) {
 			result = result.replace("{$client_id}", clientId);
@@ -166,7 +166,11 @@ public class SignInPage extends BaseInitedPage {
 			result = result.replace("{$access_token}", clientToken);
 		}
 		if (redirectUri != null) {
-			result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, UTF_8.name()));
+			try {
+				result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, UTF_8.name()));
+			} catch (UnsupportedEncodingException e) {
+				log.error("Unexpected exception while encoding URI", e);
+			}
 		}
 		if (code != null) {
 			result = result.replace("{$code}", code);

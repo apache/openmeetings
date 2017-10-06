@@ -24,6 +24,8 @@ import static org.apache.openmeetings.web.app.Application.getAuthenticationStrat
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.getRedirectUri;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.prepareUrlParams;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
@@ -63,9 +65,9 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -274,27 +276,21 @@ public class SignInDialog extends NonClosableDialog<String> {
 					@Override
 					protected void populateItem(final ListItem<OAuthServer> item) {
 						Button btn = new Button("oauthBtn");
-						Image icon = new Image("icon", new Model<String>());
-						icon.setVisible(!Strings.isEmpty(item.getModelObject().getIconUrl()));
-						icon.add(new AttributeModifier("src", new IModel<String>() {
-							private static final long serialVersionUID = 1L;
-
-							@Override
-							public String getObject() {
-								return item.getModelObject().getIconUrl();
-							}
-
-						}));
+						final OAuthServer s = item.getModelObject();
+						Image icon = new Image("icon", Model.of(""));
+						icon.setVisible(!Strings.isEmpty(s.getIconUrl()));
+						icon.add(AttributeModifier.replace("src", s.getIconUrl()));
 						btn.add(icon);
-						btn.add(new Label("label", item.getModelObject().getName()))
+						btn.add(new Label("label", s.getName()))
 							.add(new AjaxEventBehavior("click") {
 								private static final long serialVersionUID = 1L;
 
 								@Override
 								protected void onEvent(AjaxRequestTarget target) {
-									PageParameters parameters = new PageParameters();
-									parameters.add("oauthid", item.getModelObject().getId());
-									setResponsePage(SignInPage.class, parameters);
+									String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId(),
+											null, null, getRedirectUri(s, SignInDialog.this), null);
+									log.debug("redirectUrl={}", authUrl);
+									throw new RedirectToUrlException(authUrl);
 								}
 							});
 						item.add(btn);
