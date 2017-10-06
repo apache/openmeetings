@@ -82,6 +82,7 @@ public class Admin {
 	private Options opts = null;
 	private CommandLine cmdl = null;
 	private WebApplicationContext context = null;
+	private String step;
 
 	private Admin() {
 		cfg = new InstallationConfig();
@@ -116,7 +117,7 @@ public class Admin {
 		options.addOption(new OmOption("i", null, "email-auth-user", true, "Email auth username (anonymous connection will be used if not set)", true));
 		options.addOption(new OmOption("i", null, "email-auth-pass", true, "Email auth password (anonymous connection will be used if not set)", true));
 		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]", true));
-		options.addOption(new OmOption("i", null, "skip-default-rooms", false, "Do not create default rooms [created by default]", true));
+		options.addOption(new OmOption("i", null, "skip-default-objects", false, "Do not create default rooms and OAuth servers [created by default]", true));
 		options.addOption(new OmOption("i", null, "disable-frontend-register", false, "Do not allow front end register [allowed by default]", true));
 		options.addOption(new OmOption("i", null, "default-language", true, "Default system language as int [1 by default]", true));
 
@@ -154,37 +155,41 @@ public class Admin {
 				"\t./admin.sh -i -v -user admin -email someemail@gmail.com -tz \"Asia/Tehran\" -group \"yourgroup\" --db-type mysql --db-host localhost");
 	}
 
-	private void handleError(String msg, Exception e) {
-		handleError(msg, e, false);
+	private void handleError(Exception e) {
+		handleError(e, false);
 	}
 
-	private void handleError(String msg, Exception e, boolean printUsage) {
+	private void handleError(Exception e, boolean printUsage) {
 		if (printUsage) {
 			usage();
 		}
 		if (verbose) {
+			String msg = String.format("%s failed", step);
 			log.error(msg, e);
 		} else {
-			log.error(msg + " " + e.getMessage());
+			log.error("{} failed: {}", step, e.getMessage());
 		}
-		System.exit(1);
+		throw new ExitException();
 	}
 
 	private WebApplicationContext getApplicationContext() {
 		if (context == null) {
+			String _step = step; //preserve step
+			step = "Shutdown schedulers";
 			Long lngId = (long)cfg.getDefaultLangId();
 			context = ApplicationHelper.getApplicationContext(lngId);
 			SchedulerFactoryBean sfb = context.getBean(SchedulerFactoryBean.class);
 			try {
 				sfb.getScheduler().shutdown(false);
+				step = _step; //restore
 			} catch (Exception e) {
-				handleError("Unable to shutdown schedulers", e);
+				handleError(e);
 			}
 		}
 		return context;
 	}
 
-	private void process(String[] args) {
+	private void process(String... args) throws Exception {
 		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(ctxName);
 		File home = new File(System.getenv("RED5_HOME"));
@@ -196,7 +201,7 @@ public class Admin {
 		} catch (ParseException e) {
 			System.out.println(e.getMessage());
 			usage();
-			System.exit(1);
+			throw new ExitException();
 		}
 		verbose = cmdl.hasOption('v');
 
@@ -216,14 +221,15 @@ public class Admin {
 		String file = cmdl.getOptionValue("file", "");
 		switch(cmd) {
 			case install:
-				try {
+				{
+					step = "Install";
 					if (cmdl.hasOption("file") && (cmdl.hasOption("user") || cmdl.hasOption("email") || cmdl.hasOption("group"))) {
 						System.out.println("Please specify even 'file' option or 'admin user'.");
-						System.exit(1);
+						throw new ExitException();
 					}
 					boolean force = cmdl.hasOption("force");
-					if (cmdl.hasOption("skip-default-rooms")) {
-						cfg.setCreateDefaultRooms(false);
+					if (cmdl.hasOption("skip-default-objects")) {
+						cfg.setCreateDefaultObjects(false);
 					}
 					if (cmdl.hasOption("disable-frontend-register")) {
 						cfg.setAllowFrontendRegister(false);
@@ -278,12 +284,11 @@ public class Admin {
 						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
 						importInit.loadAll(cfg, force);
 					}
-				} catch(Exception e) {
-					handleError("Install failed", e);
 				}
 				break;
 			case backup:
-				try {
+				{
+					step = "Backup";
 					File f;
 					if (!cmdl.hasOption("file")) {
 						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
@@ -300,19 +305,15 @@ public class Admin {
 					export.performExport(f, includeFiles, new ProgressHolder());
 					FileUtils.deleteDirectory(backup_dir);
 					backup_dir.delete();
-				} catch (Exception e) {
-					handleError("Backup failed", e);
 				}
 				break;
 			case restore:
-				try {
-					restoreOm(checkRestoreFile(file));
-				} catch (Exception e) {
-					handleError("Restore failed", e);
-				}
+				step = "Restore";
+				restoreOm(checkRestoreFile(file));
 				break;
 			case files:
-				try {
+				{
+					step = "Files";
 					boolean cleanup = cmdl.hasOption("cleanup");
 					if (cleanup) {
 						System.out.println("WARNING: all intermediate files will be clean up!");
@@ -321,20 +322,17 @@ public class Admin {
 					reportUploads(report, cleanup);
 					reportStreams(report, cleanup);
 					System.out.println(report);
-				} catch (Exception e) {
-					handleError("Files failed", e);
 				}
 				break;
 			case ldap:
-				if (!cmdl.hasOption("d")) {
-					System.out.println("Please specify LDAP domain Id.");
-					System.exit(1);
-				}
-				Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
-				try {
+				{
+					step = "LDAP import";
+					if (!cmdl.hasOption("d")) {
+						System.out.println("Please specify LDAP domain Id.");
+						throw new ExitException();
+					}
+					Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
 					getApplicationContext().getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
-				} catch (Exception e) {
-					handleError("LDAP import failed", e);
 				}
 				break;
 			case usage:
@@ -342,9 +340,6 @@ public class Admin {
 				usage();
 				break;
 		}
-
-		System.out.println("... Done");
-		System.exit(0);
 	}
 
 	private void reportUploads(StringBuilder report, boolean cleanup) throws IOException {
@@ -411,16 +406,16 @@ public class Admin {
 		cfg.setGroup(cmdl.getOptionValue("group"));
 		if (cfg.getUsername() == null || cfg.getUsername().length() < USER_LOGIN_MINIMUM_LENGTH) {
 			System.out.println("User login was not provided, or too short, should be at least " + USER_LOGIN_MINIMUM_LENGTH + " character long.");
-			System.exit(1);
+			throw new ExitException();
 		}
 
 		if (!MailUtil.isValid(cfg.getEmail())) {
 			System.out.println(String.format("Please provide non-empty valid email: '%s' is not valid.", cfg.getEmail()));
-			System.exit(1);
+			throw new ExitException();
 		}
 		if (Strings.isEmpty(cfg.getGroup())) {
 			System.out.println(String.format("User group was not provided, or too short, should be at least 1 character long: %s", cfg.getGroup()));
-			System.exit(1);
+			throw new ExitException();
 		}
 		if (cmdl.hasOption("password")) {
 			cfg.setPassword(cmdl.getOptionValue("password"));
@@ -448,7 +443,7 @@ public class Admin {
 			for (Map.Entry<String,String> me : tzMap.entrySet()) {
 				System.out.println(String.format("%1$-25s%2$s", "\"" + me.getKey() + "\"", me.getValue()));
 			}
-			System.exit(1);
+			throw new ExitException();
 		}
 	}
 
@@ -506,22 +501,38 @@ public class Admin {
 		if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
 			System.out.println("File should be specified, and point the existent zip file");
 			usage();
-			System.exit(1);
+			throw new ExitException();
 		}
-
 		return backup;
 	}
 
-	private void restoreOm(File backup) {
+	private void restoreOm(File backup) throws Exception {
 		try (InputStream is = new FileInputStream(backup)) {
 			BackupImport importCtrl = getApplicationContext().getBean(BackupImport.class);
 			importCtrl.performImport(is);
+		}
+	}
+
+	//package private wrapper for testing
+	static void handle(String... args) {
+		Admin a = new Admin();
+		try {
+			a.process(args);
+		} catch (ExitException ee) {
+			throw ee;
 		} catch (Exception e) {
-			handleError("Restore failed", e);
+			a.handleError(e);
 		}
 	}
 
 	public static void main(String[] args) {
-		new Admin().process(args);
+		try {
+			handle(args);
+
+			System.out.println("... Done");
+			System.exit(0);
+		} catch (ExitException e) {
+			System.exit(e.getCode());
+		}
 	}
 }

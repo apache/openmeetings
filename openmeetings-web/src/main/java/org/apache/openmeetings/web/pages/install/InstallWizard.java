@@ -49,8 +49,8 @@ import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ErrorMessagePanel;
@@ -457,7 +457,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new CheckBox("allowFrontendRegister"));
 			add(new CheckBox("sendEmailAtRegister"));
 			add(new CheckBox("sendEmailWithVerficationCode"));
-			add(new CheckBox("createDefaultRooms"));
+			add(new CheckBox("createDefaultObjects"));
 			add(new TextField<String>("mailReferer"));
 			add(new TextField<String>("smtpServer"));
 			add(new TextField<Integer>("smtpPort").setRequired(true));

@@ -32,7 +32,6 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -43,7 +42,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.UrlTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.UrlValidator;
@@ -533,22 +531,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 
 			//Add new AttributeModifier to change the type of URLTextField, to text for
 			//Google Calendar and to URL for a normal CalDAV calendar
-			url.add(new AttributeModifier("type", new IModel<String>() {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public String getObject() {
-					return gcal.getModelObject() ? "text" : "url";
-				}
-			}) {
-				private static final long serialVersionUID = 1L;
-
-				@Override
-				public boolean isTemporary(Component component) {
-					//This is a temporary model.
-					return true;
-				}
-			});
+			url.add(AttributeModifier.replace("type", gcal.getModelObject() ? "text" : "url"));
 		}
 
 

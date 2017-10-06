@@ -802,7 +802,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[Enter a username]]></entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Allow self-registering]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Configuration]]></entry>
-	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Default Rooms of all types will be created]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Default DB objects of all types will be created (including Rooms, OAuth2 servers etc.)]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Default Language]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Username]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Enter the mail-username]]></entry>

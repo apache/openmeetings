@@ -799,7 +799,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[输入用户名]]></entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[允许自我注册]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[配置]]></entry>
-	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[创建所有类型的默认房间]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Default DB objects of all types will be created (including Rooms, OAuth2 servers etc.)]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[默认语言]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-用户名]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[输入邮件用户名]]></entry>

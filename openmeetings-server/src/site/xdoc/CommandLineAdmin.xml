@@ -78,7 +78,8 @@
       --email-auth-pass <arg>        (optional) Email auth password (anonymous connection will be
                                      used if not set)
       --email-use-tls                (optional) Is secure e-mail connection [default: no]
-      --skip-default-rooms           (optional) Do not create default rooms [created by default]
+      --skip-default-objects         (optional) Do not create default rooms and OAuth servers
+                                     [created by default]
       --disable-frontend-register    (optional) Do not allow front end register [allowed by default]
       --db-type <arg>                (optional) The type of the DB to be used
       --db-host <arg>                (optional) DNS name or IP address of database

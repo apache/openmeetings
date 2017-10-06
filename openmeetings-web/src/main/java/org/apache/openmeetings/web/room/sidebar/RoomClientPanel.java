@@ -50,7 +50,7 @@ public class RoomClientPanel extends Panel {
 		final String name = getName(c);
 		add(new Label("name", name));
 		add(new UserSpeaksIcon("user-speaks", uid, room));
-		item.add(new AttributeModifier("title", name));
+		item.add(AttributeModifier.replace("title", name));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new KickIcon("kick", uid, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));

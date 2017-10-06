@@ -802,7 +802,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[Введіть логін користувача]]></entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Дозволити самореєстрацію]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Налаштування]]></entry>
-	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[За замовчуванням створити кімнати всіх типів]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Default DB objects of all types will be created (including Rooms, OAuth2 servers etc.)]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Мову за замовчуванням]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Користувач]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Введіть логін для електронної пошти]]></entry>

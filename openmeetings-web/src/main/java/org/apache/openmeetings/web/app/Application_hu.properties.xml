@@ -801,7 +801,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step1.username.title"><![CDATA[Adja meg a felhasználói nevét]]></entry>
 	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Előregisztráció engedélyezése (megjelenik a belépő panelen)]]></entry>
 	<entry key="install.wizard.params.step2.configuration"><![CDATA[Beállítások]]></entry>
-	<entry key="install.wizard.params.step2.createDefaultRooms"><![CDATA[Alapértelmezett típusú konferencia szobák létrehozása]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Default DB objects of all types will be created (including Rooms, OAuth2 servers etc.)]]></entry>
 	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Alapértelmezett nyelv]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Felhasználó név]]></entry>
 	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Adja meg a felhasználó nevet]]></entry>

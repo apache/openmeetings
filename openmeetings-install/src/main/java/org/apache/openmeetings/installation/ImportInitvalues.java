@@ -485,7 +485,9 @@ public class ImportInitvalues {
 		progress = 20;
 		loadConfiguration(cfg);
 		progress = 40;
-		loadInitialOAuthServers();
+		if (cfg.isCreateDefaultObjects()) {
+			loadInitialOAuthServers();
+		}
 		progress = 60;
 	}
 
@@ -499,7 +501,7 @@ public class ImportInitvalues {
 		loadInitUserAndGroup(cfg);
 		progress = 80;
 
-		loadDefaultRooms(cfg.isCreateDefaultRooms(), cfg.getDefaultLangId());
+		loadDefaultRooms(cfg.isCreateDefaultObjects(), cfg.getDefaultLangId());
 		progress = 100;
 	}
 }

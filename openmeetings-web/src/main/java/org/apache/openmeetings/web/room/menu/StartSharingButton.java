@@ -43,8 +43,8 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.room.VideoSettings;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -68,7 +68,7 @@ public class StartSharingButton extends OmButton {
 		this.uid = uid;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
-		add(new AttributeAppender("title", Application.getString("1480")));
+		add(AttributeModifier.replace("title", Application.getString("1480")));
 		add(download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 

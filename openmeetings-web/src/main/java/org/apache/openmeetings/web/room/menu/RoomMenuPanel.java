@@ -59,7 +59,6 @@ import org.apache.openmeetings.web.room.poll.PollResultsDialog;
 import org.apache.openmeetings.web.room.poll.VoteDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -250,7 +249,7 @@ public class RoomMenuPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(askBtn.add(new AttributeAppender("title", getString("84"))));
+		add(askBtn.add(AttributeModifier.replace("title", getString("84"))));
 		Label demo = new Label("demo", Model.of(""));
 		Room r = room.getRoom();
 		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));

@@ -51,7 +51,7 @@ public class RoomsTabbedPanel extends UserPanel {
 				Group org = item.getModelObject().getGroup();
 				item.add(new WebMarkupContainer("link")
 					.add(new Label("name", Model.of(org.getName())))
-					.add(new AttributeModifier("href", "#org" + org.getId())));
+					.add(AttributeModifier.replace("href", "#org" + org.getId())));
 			}
 		});
 		add(new ListView<GroupUser>("orgRooms", u.getGroupUsers()) {

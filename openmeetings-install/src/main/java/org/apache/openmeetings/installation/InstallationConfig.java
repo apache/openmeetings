@@ -34,7 +34,7 @@ public class InstallationConfig implements Serializable {
 	private String email;
 	private String group;
 	private boolean allowFrontendRegister = true;
-	private boolean createDefaultRooms = true;
+	private boolean createDefaultObjects = true;
 	private String timeZone = "Europe/Berlin";
 
 	private String cryptClassName = SCryptImplementation.class.getCanonicalName();
@@ -112,12 +112,12 @@ public class InstallationConfig implements Serializable {
 		this.allowFrontendRegister = allowFrontendRegister;
 	}
 
-	public boolean isCreateDefaultRooms() {
-		return createDefaultRooms;
+	public boolean isCreateDefaultObjects() {
+		return createDefaultObjects;
 	}
 
-	public void setCreateDefaultRooms(boolean createDefaultRooms) {
-		this.createDefaultRooms = createDefaultRooms;
+	public void setCreateDefaultObjects(boolean createDefaultObjects) {
+		this.createDefaultObjects = createDefaultObjects;
 	}
 
 	public String getTimeZone() {
@@ -315,8 +315,8 @@ public class InstallationConfig implements Serializable {
 	@Override
 	public String toString() {
 		return "InstallationConfig [allowFrontendRegister="
-				+ allowFrontendRegister + ", createDefaultRooms="
-				+ createDefaultRooms + ", cryptClassName=" + cryptClassName
+				+ allowFrontendRegister + ", createDefaultObjects="
+				+ createDefaultObjects + ", cryptClassName=" + cryptClassName
 				+ ", smtpPort=" + smtpPort + ", smtpServer=" + smtpServer
 				+ ", mailAuthName=" + mailAuthName + ", mailAuthPass="
 				+ mailAuthPass + ", mailReferer=" + mailReferer

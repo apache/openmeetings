@@ -45,7 +45,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -160,9 +159,9 @@ public class ActivitiesPanel extends Panel {
 			Activity a = item.getModelObject();
 			String text = "";
 			Long roomId = room.getRoom().getId();
-			Component accept = new WebMarkupContainer("accept").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getId())));
-			Component decline = new WebMarkupContainer("decline").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getId())));
-			Component find = new WebMarkupContainer("find").add(new AttributeAppender("onclick", String.format("Activities.findUser('%s');", a.getUid()))).setVisible(false);
+			Component accept = new WebMarkupContainer("accept").add(AttributeModifier.append("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getId())));
+			Component decline = new WebMarkupContainer("decline").add(AttributeModifier.append("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getId())));
+			Component find = new WebMarkupContainer("find").add(AttributeModifier.append("onclick", String.format("Activities.findUser('%s');", a.getUid()))).setVisible(false);
 			boolean self = getUserId().equals(a.getSender());
 			switch (a.getType()) {
 				case reqRightModerator:
@@ -231,7 +230,7 @@ public class ActivitiesPanel extends Panel {
 					text = String.format("%s %s [%s]", name, getString("693"), df.format(a.getCreated()));
 					break;
 			}
-			item.add(new WebMarkupContainer("close").add(new AttributeAppender("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
+			item.add(new WebMarkupContainer("close").add(AttributeModifier.replace("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
 			item.add(accept, decline, find, new Label("text", text));
 			item.add(AttributeModifier.append("class", getClass(a)));
 		}
