@@ -36,6 +36,7 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
+		<jdk.version>1.8</jdk.version>
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
@@ -129,7 +130,7 @@
 								<configuration>
 									<rules>
 										<requireJavaVersion>
-											<version>[1.8.0,)</version>
+											<version>[${jdk.version}.0,)</version>
 										</requireJavaVersion>
 									</rules>
 									<failFast>true</failFast>
@@ -879,6 +880,8 @@
 					<version>${maven-javadoc-plugin.version}</version>
 					<configuration>
 						<additionalparam>-Xdoclint:none</additionalparam>
+						<source>${jdk.version}</source>
+						<javadocVersion>${jdk.version}</javadocVersion>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -887,8 +890,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
 						<optimize>true</optimize>
 						<debug>true</debug>
 						<encoding>UTF-8</encoding>
