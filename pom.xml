@@ -36,10 +36,26 @@
 		<wicket.mode>DEPLOYMENT</wicket.mode>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
+		<!-- plugin versions -->
+		<maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
+		<maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+		<maven-site-plugin.version>3.3</maven-site-plugin.version>
+		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
+		<maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
+		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+		<checksum-maven-plugin.version>1.6</checksum-maven-plugin.version>
+		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+		<license-maven-plugin.version>1.14</license-maven-plugin.version>
+		<reflow-velocity-tools.version>1.1.1</reflow-velocity-tools.version>
+		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+		<maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
+		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
+		<maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
+		<maven-bundle-plugin.version>3.3.0</maven-bundle-plugin.version>
+		<!-- dependency versions -->
 		<junit.version>4.12</junit.version>
-		<maven.javadoc.version>2.10.3</maven.javadoc.version>
-		<maven.surefire.version>2.20</maven.surefire.version>
-		<maven-site.version>3.3</maven-site.version>
 		<wicket.version>8.0.0-SNAPSHOT</wicket.version>
 		<wicketju.version>8.0.0-SNAPSHOT</wicketju.version>
 		<wickets.version>8.0.0-M7</wickets.version>
@@ -103,7 +119,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-enforcer-plugin</artifactId>
-						<version>1.4.1</version>
+						<version>${maven-enforcer-plugin.version}</version>
 						<executions>
 							<execution>
 								<id>enforce-versions</id>
@@ -124,7 +140,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>${maven-source-plugin.version}</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -149,7 +165,7 @@
 					<plugin>
 						<groupId>net.nicoulaj.maven.plugins</groupId>
 						<artifactId>checksum-maven-plugin</artifactId>
-						<version>1.5</version>
+						<version>${checksum-maven-plugin.version}</version>
 						<executions>
 							<execution>
 								<goals>
@@ -166,7 +182,7 @@
 					</plugin>
 					<plugin>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
+						<version>${maven-gpg-plugin.version}</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -200,7 +216,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>license-maven-plugin</artifactId>
-						<version>1.14</version>
+						<version>${license-maven-plugin.version}</version>
 						<executions>
 							<execution>
 								<id>download-licenses</id>
@@ -800,7 +816,7 @@
 					<dependency>
 						<groupId>lt.velykis.maven.skins</groupId>
 						<artifactId>reflow-velocity-tools</artifactId>
-						<version>1.1.1</version>
+						<version>${reflow-velocity-tools.version}</version>
 					</dependency>
 					<!-- Reflow skin requires Velocity >= 1.7 -->
 					<dependency>
@@ -860,7 +876,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${maven.javadoc.version}</version>
+					<version>${maven-javadoc-plugin.version}</version>
 					<configuration>
 						<additionalparam>-Xdoclint:none</additionalparam>
 					</configuration>
@@ -869,7 +885,7 @@
 					<inherited>true</inherited>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.6.1</version>
+					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
 						<source>1.8</source>
 						<target>1.8</target>
@@ -881,7 +897,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
-					<version>3.0.2</version>
+					<version>${maven-jar-plugin.version}</version>
 					<configuration>
 						<archive>
 							<manifest>
@@ -900,22 +916,22 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>${maven-assembly-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.10</version>
+					<version>${maven-dependency-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>${maven-site.version}</version>
+					<version>${maven-site-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>${maven.surefire.version}</version>
+					<version>${maven-surefire-plugin.version}</version>
 					<configuration>
 						<forkCount>1</forkCount>
 						<reuseForks>false</reuseForks>
@@ -927,19 +943,19 @@
 						<dependency>
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-junit47</artifactId>
-							<version>${maven.surefire.version}</version>
+							<version>${maven-surefire-plugin.version}</version>
 						</dependency>
 					</dependencies>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-report-plugin</artifactId>
-					<version>${maven.surefire.version}</version>
+					<version>${maven-surefire-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>${maven-bundle-plugin.version}</version>
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
@@ -955,7 +971,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.1.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -1267,7 +1283,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.9</version>
+				<version>${maven-project-info-reports-plugin.version}</version>
 				<configuration>
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 					<showAvatarImages>true</showAvatarImages>
