@@ -55,6 +55,7 @@
 		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
 		<maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>3.3.0</maven-bundle-plugin.version>
+		<maven-war-plugin.version>3.0.0</maven-war-plugin.version> <!-- 3.1.0 is broken https://issues.apache.org/jira/browse/MWAR-407 -->
 		<!-- dependency versions -->
 		<junit.version>4.12</junit.version>
 		<wicket.version>8.0.0-SNAPSHOT</wicket.version>
@@ -974,7 +975,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>${maven-war-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
