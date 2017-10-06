@@ -120,8 +120,10 @@ public class TestInstall {
 		tester.executeBehavior(next); //crypt step
 		// not checking errors
 		if (countErrors(tester) > 0) {
-			tester.executeBehavior(next); //skip errors
 			tester.cleanupFeedbackMessages();
+			wizardTester.setValue("view:docDpi", "150");
+			wizardTester.setValue("view:docQuality", "90");
+			tester.executeBehavior(next); //skip errors
 		}
 		wizardTester.setValue("view:cryptClassName", SCryptImplementation.class.getName());
 		tester.executeBehavior(next); //install step
