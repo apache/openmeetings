@@ -102,10 +102,7 @@ public class SignInPage extends BaseInitedPage {
 					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
 					loginViaOAuth2(authParams, serverId);
 				} else { // redirect to get code
-					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(),
-							null, null, getRedirectUri(server, this), null);
-					log.debug("redirectUrl={}", redirectUrl);
-					throw new RedirectToUrlException(redirectUrl);
+					showAuth(server, this);
 				}
 			} catch (IOException|NoSuchAlgorithmException e) {
 				log.error("OAuth2 login error", e);
@@ -152,6 +149,12 @@ public class SignInPage extends BaseInitedPage {
 	}
 
 	// ============= OAuth2 methods =============
+	public static void showAuth(final OAuthServer s, Component c) {
+		String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId()
+				, null, null, getRedirectUri(s, c), null);
+		log.debug("redirectUrl={}", authUrl);
+		throw new RedirectToUrlException(authUrl);
+	}
 
 	public static String prepareUrlParams(String urlTemplate, String clientId, String clientSecret,
 			String clientToken, String redirectUri, String code) {

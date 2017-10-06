@@ -24,8 +24,6 @@ import static org.apache.openmeetings.web.app.Application.getAuthenticationStrat
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
-import static org.apache.openmeetings.web.pages.auth.SignInPage.getRedirectUri;
-import static org.apache.openmeetings.web.pages.auth.SignInPage.prepareUrlParams;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
@@ -67,7 +65,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -287,10 +284,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 								@Override
 								protected void onEvent(AjaxRequestTarget target) {
-									String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId(),
-											null, null, getRedirectUri(s, SignInDialog.this), null);
-									log.debug("redirectUrl={}", authUrl);
-									throw new RedirectToUrlException(authUrl);
+									SignInPage.showAuth(s, SignInDialog.this);
 								}
 							});
 						item.add(btn);
