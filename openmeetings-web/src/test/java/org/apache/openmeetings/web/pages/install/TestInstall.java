@@ -31,6 +31,7 @@ import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
@@ -93,8 +94,9 @@ public class TestInstall {
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0)); //welcome step
 		assertNotNull("Model should NOT be null", wiz.getWizardModel().getActiveStep());
 
-		ButtonAjaxBehavior prev = getButtonBehavior(tester, WIZARD_PATH, "PREV"); //check enabled
-		log.debug("Prev button enabled ? {}", prev.getButton().isEnabled());
+		ButtonAjaxBehavior prev = getButtonBehavior(tester, WIZARD_PATH, "PREV");
+		 //check enabled, add check for other buttons on other steps
+		assertFalse("Prev button should be disabled", prev.getButton().isEnabled());
 		ButtonAjaxBehavior next = getButtonBehavior(tester, WIZARD_PATH, "NEXT");
 		ButtonAjaxBehavior finish = getButtonBehavior(tester, WIZARD_PATH, SUBMIT);
 		tester.executeBehavior(next); //DB step
