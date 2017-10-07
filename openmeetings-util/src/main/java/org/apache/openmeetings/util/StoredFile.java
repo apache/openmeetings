@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.util;
 
+import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -105,7 +106,7 @@ public class StoredFile {
 		}
 		Tika tika = new Tika();
 		Metadata md = new Metadata();
-		md.add(RESOURCE_NAME_KEY, String.format("%s.%s", name, ext));
+		md.add(RESOURCE_NAME_KEY, String.format(FILE_NAME_FMT, name, ext));
 		try {
 			mime = MediaType.parse(tika.detect(is, md));
 		} catch (Exception e) {

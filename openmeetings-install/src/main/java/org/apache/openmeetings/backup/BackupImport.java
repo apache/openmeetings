@@ -29,6 +29,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.FILES_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
@@ -719,8 +720,8 @@ public class BackupImport {
 			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(recordingFileName)) {
 				String name = getFileName(r.getHash());
 				r.setHash(UUID.randomUUID().toString());
-				fileMap.put(String.format("%s.%s", name, EXTENSION_JPG), String.format("%s.%s", r.getHash(), EXTENSION_PNG));
-				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format("%s.%s", r.getHash(), EXTENSION_MP4));
+				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
+				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
 			}
 			if (Strings.isEmpty(r.getHash())) {
 				r.setHash(UUID.randomUUID().toString());

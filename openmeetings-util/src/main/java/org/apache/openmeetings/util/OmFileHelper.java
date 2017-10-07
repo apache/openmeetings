@@ -41,6 +41,7 @@ public class OmFileHelper {
 	private static final String IMAGES_DIR = "images";
 	private static final String WML_DIR = "stored";
 
+	public static final String FILE_NAME_FMT = "%s.%s";
 	public static final String BACKUP_DIR = "backup";
 	public static final String IMPORT_DIR = "import";
 	public static final String PROFILES_DIR = "profiles";
@@ -194,7 +195,7 @@ public class OmFileHelper {
 	}
 
 	public static String getName(String name, String ext) {
-		return String.format("%s.%s", name, ext);
+		return String.format(FILE_NAME_FMT, name, ext);
 	}
 
 	public static File getRecordingMetaData(Long roomId, String name) {

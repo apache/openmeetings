@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
+import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
@@ -261,7 +262,7 @@ public abstract class BaseFileItem implements IDataProviderEntity {
 	}
 
 	public String getFileName(String ext) {
-		return ext == null ? name : String.format("%s.%s", name, ext);
+		return ext == null ? name : String.format(FILE_NAME_FMT, name, ext);
 	}
 
 	public File getFile() {
@@ -298,16 +299,16 @@ public abstract class BaseFileItem implements IDataProviderEntity {
 			File d = new File(getUploadFilesDir(), getHash());
 			switch (getType()) {
 				case WmlFile:
-					f = new File(getUploadWmlDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_WML : ext));
+					f = new File(getUploadWmlDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_WML : ext));
 					break;
 				case Image:
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_JPG : ext));
+					f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_JPG : ext));
 					break;
 				case Recording:
-					f = new File(getStreamsHibernateDir(), String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
+					f = new File(getStreamsHibernateDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
 				case Video:
-					f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_MP4 : ext));
+					f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
 					break;
 				case Presentation:
 					int slide;
@@ -324,7 +325,7 @@ public abstract class BaseFileItem implements IDataProviderEntity {
 					if (slide > -1) {
 						f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));
 					} else {
-						f = new File(d, String.format("%s.%s", getHash(), ext == null ? EXTENSION_PDF : ext));
+						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_PDF : ext));
 					}
 					break;
 				case PollChart:

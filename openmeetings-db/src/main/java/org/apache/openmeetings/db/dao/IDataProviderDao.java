@@ -30,6 +30,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
  * @param <T>
  */
 public interface IDataProviderDao<T extends IDataProviderEntity> {
+	static final UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException("Should not be used");
 
 	/**
 	 * Get an instance of an {@link T}

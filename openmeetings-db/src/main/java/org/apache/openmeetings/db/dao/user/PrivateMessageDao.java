@@ -181,21 +181,21 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 
 	@Override
 	public List<PrivateMessage> get(String search, int start, int count, String order) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public long count() {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public long count(String search) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void delete(PrivateMessage entity, Long userId) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 }

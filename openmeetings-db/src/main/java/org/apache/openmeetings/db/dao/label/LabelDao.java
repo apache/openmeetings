@@ -190,22 +190,22 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public StringLabel get(long id) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public StringLabel get(Long id) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public List<StringLabel> get(int start, int count) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public List<StringLabel> get(String search, int start, int count, String order) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	public static Locale getLocale(Long id) {
@@ -237,12 +237,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public long count() {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public long count(String search) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	public static long count(Locale l, final String search) {
@@ -251,7 +251,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public StringLabel update(StringLabel entity, Long userId) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	public static StringLabel update(Locale l, StringLabel entity) throws Exception {
@@ -266,7 +266,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	@Override
 	public void delete(StringLabel entity, Long userId) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	public static void delete(Locale l, StringLabel entity) throws Exception {

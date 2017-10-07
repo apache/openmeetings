@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.file;
 
+import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -45,7 +46,7 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 	public void testProcessJpeg() throws Exception {
 		for (String ext : new String[] {null, "txt", "png"}) {
 			FileItem f = new FileItemDTO()
-					.setName(String.format("%s.%s", FILE_NAME, ext))
+					.setName(String.format(FILE_NAME_FMT, FILE_NAME, ext))
 					.setHash(UUID.randomUUID().toString())
 					.setType(BaseFileItem.Type.Recording).get();
 			try (InputStream is = new FileInputStream(getDefaultProfilePicture())) {

@@ -51,12 +51,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public List<GroupUser> get(int start, int count) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public List<GroupUser> get(String search, int start, int count, String sort) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	public List<GroupUser> get(long groupId, String search, int start, int count, String sort) {
@@ -88,12 +88,12 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public long count() {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public long count(String search) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	public long count(long groupId, String search) {
@@ -109,11 +109,11 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public GroupUser update(GroupUser entity, Long userId) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 
 	@Override
 	public void delete(GroupUser entity, Long userId) {
-		throw new UnsupportedOperationException("Should not be used");
+		throw UNSUPPORTED;
 	}
 }

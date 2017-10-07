@@ -5,7 +5,7 @@ function dragHelper() {
 		s = $('.ui-state-active .ui-draggable.ui-draggable-handle');
 	}
 	const c = $('<div/>').attr('id', 'draggingContainer').width(80).height(36)
-		h = $('<div class="ui-corner-all ui-widget-header"/>').append(s.clone()).width(s.width());
+		, h = $('<div class="ui-corner-all ui-widget-header"/>').append(s.clone()).width(s.width());
 	return c.append(h);
 }
 function treeRevert(dropped) {
