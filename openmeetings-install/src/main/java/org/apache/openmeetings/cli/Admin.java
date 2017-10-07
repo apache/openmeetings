@@ -76,6 +76,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 public class Admin {
 	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
+	public static final String RED5_HOME = "red5_home";
 
 	private boolean verbose = false;
 	private InstallationConfig cfg = null;
@@ -190,9 +191,13 @@ public class Admin {
 	}
 
 	private void process(String... args) throws Exception {
+		step = "Initialization";
+		if (!System.getProperties().containsKey("context")) {
+			System.out.println(String.format("System.property 'context' is not set, defaulting to %s", DEFAULT_CONTEXT_NAME));
+		}
 		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(ctxName);
-		File home = new File(System.getenv("RED5_HOME"));
+		File home = new File(System.getProperty(RED5_HOME));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 
 		CommandLineParser parser = new DefaultParser();

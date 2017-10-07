@@ -150,23 +150,21 @@ public class SignInPage extends BaseInitedPage {
 
 	// ============= OAuth2 methods =============
 	public static void showAuth(final OAuthServer s, Component c) {
-		String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId()
-				, null, null, getRedirectUri(s, c), null);
+		String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId(), getRedirectUri(s, c), null, null, null);
 		log.debug("redirectUrl={}", authUrl);
 		throw new RedirectToUrlException(authUrl);
 	}
 
-	public static String prepareUrlParams(String urlTemplate, String clientId, String clientSecret,
-			String clientToken, String redirectUri, String code) {
+	public static String prepareUrlParams(String urlTemplate, String clientId, String redirectUri, String secret, String token, String code) {
 		String result = urlTemplate;
 		if (clientId != null) {
 			result = result.replace("{$client_id}", clientId);
 		}
-		if (clientSecret != null) {
-			result = result.replace("{$client_secret}", clientSecret);
+		if (secret != null) {
+			result = result.replace("{$client_secret}", secret);
 		}
-		if (clientToken != null) {
-			result = result.replace("{$access_token}", clientToken);
+		if (token != null) {
+			result = result.replace("{$access_token}", token);
 		}
 		if (redirectUri != null) {
 			try {
@@ -234,8 +232,8 @@ public class SignInPage extends BaseInitedPage {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
 		String requestTokenParams = server.getRequestTokenAttributes();
-		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), server.getClientSecret(),
-				null, getRedirectUri(server, this), code);
+		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), getRedirectUri(server, this)
+				, server.getClientSecret(), null, code);
 		// request auth token
 		HttpURLConnection urlConnection = (HttpURLConnection) new URL(requestTokenBaseUrl).openConnection();
 		prepareConnection(urlConnection);
@@ -281,8 +279,8 @@ public class SignInPage extends BaseInitedPage {
 		String lastname = server.getLastnameParamName();
 		// prepare url
 		String requestInfoUrl = server.getRequestInfoUrl();
-		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), server.getClientSecret(),
-				token, getRedirectUri(server, this), code);
+		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server, this)
+				, server.getClientSecret(), token, code);
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
 		prepareConnection(connection);

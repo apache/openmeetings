@@ -65,12 +65,20 @@ public class TestInstall {
 	protected WicketTester tester;
 	protected Random rnd = new Random();
 
+	public static void setDerbyHome(File f) throws IOException {
+		System.setProperty(DERBY_HOME, f.getCanonicalPath());
+	}
+
+	public static void resetDerbyHome() {
+		System.getProperties().remove(DERBY_HOME);
+	}
+
 	@Before
 	public void setUp() throws IOException {
 		AbstractSpringTest.setOmHome();
 		setWicketApplicationName(DEFAULT_APP_NAME);
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
-		System.setProperty(DERBY_HOME, tempFolder.getCanonicalPath());
+		setDerbyHome(tempFolder);
 		tester = getWicketTester();
 		assertNotNull("Web session should not be null", WebSession.get());
 		Locale[] locales = Locale.getAvailableLocales();
@@ -81,7 +89,7 @@ public class TestInstall {
 	@After
 	public void tearDown() throws IOException {
 		AbstractWicketTester.destroy(tester);
-		System.getProperties().remove(DERBY_HOME);
+		resetDerbyHome();
 		deleteDirectory(tempFolder);
 	}
 
