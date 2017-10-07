@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -73,9 +74,9 @@ public abstract class ClientIcon extends WebMarkupContainer {
 		if (isClickable()) {
 			//request/remove
 			cls.append(CLS_CLICKABLE);
-			add(AttributeModifier.replace("onclick", getScript()));
+			add(addOnClick(getScript()));
 		} else {
-			add(AttributeModifier.replace("onclick", ""));
+			add(addOnClick(""));
 		}
 		internalUpdate();
 		add(AttributeModifier.replace("title", getTitle()));

@@ -24,6 +24,7 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -462,8 +463,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("onclick", String.format("showUserInfo(%s);", userId))));
-				item.add(new WebMarkupContainer("message").add(AttributeModifier.append("onclick", String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
+				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("message").add(addOnClick(String.format("privateMessage(%s);", userId))).setVisible(!uc.isPending()));
 				item.add(new ConfirmableAjaxBorder("delete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
 

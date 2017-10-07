@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.isUserOnline;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,11 +120,11 @@ public class UserSearchPanel extends UserBasePanel {
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
-				item.add(new WebMarkupContainer("view").add(AttributeModifier.append("onclick", String.format("showUserInfo(%s);", userId))));
+				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
 				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId()))
-						.add(AttributeModifier.append("onclick", String.format("addContact(%s);", userId))));
-				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(AttributeModifier.append("onclick", String.format("privateMessage(%s);", userId))));
-				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(AttributeModifier.append("onclick", String.format("inviteUser(%s);", userId))));
+						.add(addOnClick(String.format("addContact(%s);", userId))));
+				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(addOnClick(String.format("privateMessage(%s);", userId))));
+				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(addOnClick(String.format("inviteUser(%s);", userId))));
 				//item.add(new TooltipBehavior(new Options("content", "TODO:: Picture will be displayed"))); //FIXME
 			}
 		};

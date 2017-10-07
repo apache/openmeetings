@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
@@ -64,6 +65,8 @@ public class ActivitiesPanel extends Panel {
 	private static final String PARAM_ID = "id";
 	private static final String ACTION = "action";
 	private static final String PARAM_ROOM_ID = "roomid";
+	private static final String ACTIVITY_FMT = "%s %s [%s]";
+	private static final String ACTIVITY_FUNC_FMT = "activityAction(%s, '%s', '%s');";
 	private enum Action {
 		accept, decline, close
 	};
@@ -159,9 +162,9 @@ public class ActivitiesPanel extends Panel {
 			Activity a = item.getModelObject();
 			String text = "";
 			Long roomId = room.getRoom().getId();
-			Component accept = new WebMarkupContainer("accept").add(AttributeModifier.append("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.accept.name(), a.getId())));
-			Component decline = new WebMarkupContainer("decline").add(AttributeModifier.append("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.decline.name(), a.getId())));
-			Component find = new WebMarkupContainer("find").add(AttributeModifier.append("onclick", String.format("Activities.findUser('%s');", a.getUid()))).setVisible(false);
+			Component accept = new WebMarkupContainer("accept").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.accept.name(), a.getId())));
+			Component decline = new WebMarkupContainer("decline").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.decline.name(), a.getId())));
+			Component find = new WebMarkupContainer("find").add(addOnClick(String.format("Activities.findUser('%s');", a.getUid()))).setVisible(false);
 			boolean self = getUserId().equals(a.getSender());
 			switch (a.getType()) {
 				case reqRightModerator:
@@ -197,40 +200,40 @@ public class ActivitiesPanel extends Panel {
 					item.setVisible(false);
 					break;
 				case roomExit:
-					text = String.format("%s %s [%s]", name, getString("1367"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("1367"), df.format(a.getCreated()));
 					break;
 				case reqRightModerator:
-					text = String.format("%s %s [%s]", name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
 					break;
 				case reqRightPresenter:
-					text = String.format("%s %s [%s]", name, getString("right.presenter.request"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("right.presenter.request"), df.format(a.getCreated()));
 					break;
 				case reqRightWb:
-					text = String.format("%s %s [%s]", name, getString("694"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("694"), df.format(a.getCreated()));
 					break;
 				case reqRightShare:
-					text = String.format("%s %s [%s]", name, getString("1070"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("1070"), df.format(a.getCreated()));
 					break;
 				case reqRightRemote:
-					text = String.format("%s %s [%s]", name, getString("1082"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("1082"), df.format(a.getCreated()));
 					break;
 				case reqRightA:
-					text = String.format("%s %s [%s]", name, getString("1603"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("1603"), df.format(a.getCreated()));
 					break;
 				case reqRightAv:
-					text = String.format("%s %s [%s]", name, getString("695"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("695"), df.format(a.getCreated()));
 					break;
 				case reqRightMute:
-					text = String.format("%s %s [%s]", name, getString("1399"), df.format(a.getCreated()));//TODO un-mute 1398
+					text = String.format(ACTIVITY_FMT, name, getString("1399"), df.format(a.getCreated()));//TODO un-mute 1398
 					break;
 				case reqRightExclusive:
-					text = String.format("%s %s [%s]", name, getString("1427"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("1427"), df.format(a.getCreated()));
 					break;
 				case haveQuestion:
-					text = String.format("%s %s [%s]", name, getString("693"), df.format(a.getCreated()));
+					text = String.format(ACTIVITY_FMT, name, getString("693"), df.format(a.getCreated()));
 					break;
 			}
-			item.add(new WebMarkupContainer("close").add(AttributeModifier.replace("onclick", String.format("activityAction(%s, '%s', '%s');", roomId, Action.close.name(), a.getId()))));
+			item.add(new WebMarkupContainer("close").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.close.name(), a.getId()))));
 			item.add(accept, decline, find, new Label("text", text));
 			item.add(AttributeModifier.append("class", getClass(a)));
 		}

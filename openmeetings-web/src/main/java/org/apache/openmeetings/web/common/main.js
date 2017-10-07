@@ -5,14 +5,14 @@ Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	info.settings = JSON.stringify(getSettings());
 };
 function getSettings() {
-	const s = localStorage.getItem("openmeetings");
+	let s = localStorage.getItem("openmeetings");
 	if (!!s) {
 		s = JSON.parse(s);
 	}
 	return s || {};
 }
 function saveSetting(name, val) {
-	let s = getSettings();
+	const s = getSettings();
 	s[name] = val;
 	localStorage.setItem("openmeetings", JSON.stringify(s));
 }
