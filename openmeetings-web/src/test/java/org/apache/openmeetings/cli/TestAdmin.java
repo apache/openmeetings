@@ -19,8 +19,12 @@
 package org.apache.openmeetings.cli;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
+import static org.apache.openmeetings.AbstractJUnitDefaults.email;
+import static org.apache.openmeetings.AbstractJUnitDefaults.group;
+import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
+import static org.apache.openmeetings.AbstractSpringTest.setOmHome;
 import static org.apache.openmeetings.cli.Admin.RED5_HOME;
-import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.apache.openmeetings.web.pages.install.TestInstall.resetDerbyHome;
 import static org.apache.openmeetings.web.pages.install.TestInstall.setDerbyHome;
 import static org.junit.Assert.fail;
@@ -28,8 +32,9 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.openmeetings.AbstractSpringTest;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,10 +45,10 @@ public class TestAdmin {
 
 	@Before
 	public void setUp() throws IOException {
-		AbstractSpringTest.setOmHome();
+		setOmHome();
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
 		System.setProperty("user.dir", tempFolder.getCanonicalPath());
-		System.setProperty(RED5_HOME, getOmHome().getCanonicalPath());
+		System.setProperty(RED5_HOME, tempFolder.getCanonicalPath());
 		setDerbyHome(tempFolder);
 	}
 
@@ -54,10 +59,9 @@ public class TestAdmin {
 		deleteDirectory(tempFolder);
 	}
 
-	@Test
-	public void testNoArgs() {
+	private static void checkError(String... args) throws Exception {
 		try {
-			Admin.handle();
+			new Admin().process(args);
 			fail();
 		} catch (ExitException ee) {
 			Assert.assertTrue(true);
@@ -65,18 +69,58 @@ public class TestAdmin {
 	}
 
 	@Test
-	public void testBadArgs() {
-		try {
-			Admin.handle("aaaa");
-			fail();
-		} catch (ExitException ee) {
-			Assert.assertTrue(true);
-		}
+	public void testNoArgs() throws Exception {
+		checkError();
 	}
 
 	@Test
-	public void testUsage() {
-		Admin.handle("-h");
+	public void testBadArgs() throws Exception {
+		checkError("aaaa");
+	}
+
+	@Test
+	public void testUsage() throws Exception {
+		new Admin().process("-h");
 		Assert.assertTrue(true);
+	}
+
+	@Test
+	public void testInstallParamConflict() throws Exception {
+		checkError("-i", "-file", "aaa", "-user", "bbb");
+		checkError("-i", "-file", "aaa", "-email", "bbb");
+		checkError("-i", "-file", "aaa", "-group", "bbb");
+	}
+
+	private static Admin getAdmin(Admin _a) {
+		if (_a == null) {
+			Admin a = new Admin();
+			setOmHome();
+			return a;
+		}
+		return _a;
+	}
+
+	private static void performInstall(Admin _a, String... args) throws Exception {
+		List<String> params = Arrays.asList("-i"
+				, "-tz", "Europe/Berlin"
+				, "-email", email
+				, "-group", group
+				, "-user", adminUsername
+				, "--password", userpass);
+		for (String a : args) {
+			params.add(a);
+		}
+		Admin a = getAdmin(_a);
+		a.process(params.toArray(new String[] {}));
+	}
+
+	@Test
+	public void testInstallBackup() throws Exception {
+		Admin a = getAdmin(null);
+		performInstall(a);
+		//backup
+		a.process("-b");
+		//backup to file
+		a.process("-b", Files.createTempFile("omtempbackup", null).toFile().getCanonicalPath());
 	}
 }

@@ -64,6 +64,7 @@ import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.ConnectionProperties;
+import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.ImportHelper;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.mail.MailUtil;
@@ -83,11 +84,20 @@ public class Admin {
 	private Options opts = null;
 	private CommandLine cmdl = null;
 	private WebApplicationContext context = null;
+	private File home;
 	private String step;
 
-	private Admin() {
+	Admin() {
 		cfg = new InstallationConfig();
 		opts = buildOptions();
+		step = "Initialization";
+		if (!System.getProperties().containsKey("context")) {
+			System.out.println(String.format("System.property 'context' is not set, defaulting to %s", DEFAULT_CONTEXT_NAME));
+		}
+		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
+		setWicketApplicationName(ctxName);
+		home = new File(System.getProperty(RED5_HOME));
+		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
 	}
 
 	private Options buildOptions() {
@@ -157,10 +167,10 @@ public class Admin {
 	}
 
 	private void handleError(Exception e) {
-		handleError(e, false);
+		handleError(e, false, true);
 	}
 
-	private void handleError(Exception e, boolean printUsage) {
+	private void handleError(Exception e, boolean printUsage, boolean _throw) {
 		if (printUsage) {
 			usage();
 		}
@@ -170,7 +180,9 @@ public class Admin {
 		} else {
 			log.error("{} failed: {}", step, e.getMessage());
 		}
-		throw new ExitException();
+		if (_throw) {
+			throw new ExitException();
+		}
 	}
 
 	private WebApplicationContext getApplicationContext() {
@@ -190,16 +202,8 @@ public class Admin {
 		return context;
 	}
 
-	private void process(String... args) throws Exception {
-		step = "Initialization";
-		if (!System.getProperties().containsKey("context")) {
-			System.out.println(String.format("System.property 'context' is not set, defaulting to %s", DEFAULT_CONTEXT_NAME));
-		}
-		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
-		setWicketApplicationName(ctxName);
-		File home = new File(System.getProperty(RED5_HOME));
-		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
-
+	//package private wrapper for testing
+	void process(String... args) throws Exception {
 		CommandLineParser parser = new DefaultParser();
 		try {
 			cmdl = parser.parse(opts, args);
@@ -263,7 +267,7 @@ public class Admin {
 					ConnectionProperties connectionProperties;
 					File conf = OmFileHelper.getPersistence();
 					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
-						String dbType = cmdl.getOptionValue("db-type", "derby");
+						String dbType = cmdl.getOptionValue("db-type", DbType.derby.name());
 						connectionProperties = ConnectionPropertiesPatcher.patch(dbType
 								, cmdl.getOptionValue("db-host", "localhost")
 								, cmdl.getOptionValue("db-port", null)
@@ -518,26 +522,17 @@ public class Admin {
 		}
 	}
 
-	//package private wrapper for testing
-	static void handle(String... args) {
+	public static void main(String[] args) {
 		Admin a = new Admin();
 		try {
 			a.process(args);
-		} catch (ExitException ee) {
-			throw ee;
-		} catch (Exception e) {
-			a.handleError(e);
-		}
-	}
-
-	public static void main(String[] args) {
-		try {
-			handle(args);
 
 			System.out.println("... Done");
-			System.exit(0);
 		} catch (ExitException e) {
-			System.exit(e.getCode());
+			a.handleError(e, false, false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 }
