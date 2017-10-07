@@ -5,7 +5,7 @@ Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	info.settings = JSON.stringify(getSettings());
 };
 function getSettings() {
-	let s = localStorage.getItem("openmeetings");
+	const s = localStorage.getItem("openmeetings");
 	if (!!s) {
 		s = JSON.parse(s);
 	}

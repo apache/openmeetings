@@ -76,7 +76,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
 
 public class Admin {
-	private static final Logger log = Red5LoggerFactory.getLogger(Admin.class);
+	private static final Logger _log = Red5LoggerFactory.getLogger(Admin.class);
 	public static final String RED5_HOME = "red5_home";
 
 	private boolean verbose = false;
@@ -92,12 +92,17 @@ public class Admin {
 		opts = buildOptions();
 		step = "Initialization";
 		if (!System.getProperties().containsKey("context")) {
-			System.out.println(String.format("System.property 'context' is not set, defaulting to %s", DEFAULT_CONTEXT_NAME));
+			log(String.format("System.property 'context' is not set, defaulting to %s", DEFAULT_CONTEXT_NAME));
 		}
 		String ctxName = System.getProperty("context", DEFAULT_CONTEXT_NAME);
 		setWicketApplicationName(ctxName);
 		home = new File(System.getProperty(RED5_HOME));
 		OmFileHelper.setOmHome(new File(new File(home, "webapps"), ctxName));
+	}
+
+	private static void log(CharSequence msg) {
+		_log.info(msg.toString());
+		System.out.println(msg);
 	}
 
 	private Options buildOptions() {
@@ -176,9 +181,9 @@ public class Admin {
 		}
 		if (verbose) {
 			String msg = String.format("%s failed", step);
-			log.error(msg, e);
+			_log.error(msg, e);
 		} else {
-			log.error("{} failed: {}", step, e.getMessage());
+			_log.error("{} failed: {}", step, e.getMessage());
 		}
 		if (_throw) {
 			throw new ExitException();
@@ -208,7 +213,7 @@ public class Admin {
 		try {
 			cmdl = parser.parse(opts, args);
 		} catch (ParseException e) {
-			System.out.println(e.getMessage());
+			log(e.getMessage());
 			usage();
 			throw new ExitException();
 		}
@@ -233,7 +238,7 @@ public class Admin {
 				{
 					step = "Install";
 					if (cmdl.hasOption("file") && (cmdl.hasOption("user") || cmdl.hasOption("email") || cmdl.hasOption("group"))) {
-						System.out.println("Please specify even 'file' option or 'admin user'.");
+						log("Please specify even 'file' option or 'admin user'.");
 						throw new ExitException();
 					}
 					boolean force = cmdl.hasOption("force");
@@ -302,7 +307,7 @@ public class Admin {
 					if (!cmdl.hasOption("file")) {
 						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
 						f = new File(home, file);
-						System.out.println("File name was not specified, '" + file + "' will be used");
+						log("File name was not specified, '" + file + "' will be used");
 					} else {
 						f = new File(file);
 					}
@@ -325,19 +330,19 @@ public class Admin {
 					step = "Files";
 					boolean cleanup = cmdl.hasOption("cleanup");
 					if (cleanup) {
-						System.out.println("WARNING: all intermediate files will be clean up!");
+						log("WARNING: all intermediate files will be clean up!");
 					}
 					StringBuilder report = new StringBuilder();
 					reportUploads(report, cleanup);
 					reportStreams(report, cleanup);
-					System.out.println(report);
+					log(report);
 				}
 				break;
 			case ldap:
 				{
 					step = "LDAP import";
 					if (!cmdl.hasOption("d")) {
-						System.out.println("Please specify LDAP domain Id.");
+						log("Please specify LDAP domain Id.");
 						throw new ExitException();
 					}
 					Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
@@ -414,16 +419,16 @@ public class Admin {
 		cfg.setEmail(cmdl.getOptionValue("email"));
 		cfg.setGroup(cmdl.getOptionValue("group"));
 		if (cfg.getUsername() == null || cfg.getUsername().length() < USER_LOGIN_MINIMUM_LENGTH) {
-			System.out.println("User login was not provided, or too short, should be at least " + USER_LOGIN_MINIMUM_LENGTH + " character long.");
+			log("User login was not provided, or too short, should be at least " + USER_LOGIN_MINIMUM_LENGTH + " character long.");
 			throw new ExitException();
 		}
 
 		if (!MailUtil.isValid(cfg.getEmail())) {
-			System.out.println(String.format("Please provide non-empty valid email: '%s' is not valid.", cfg.getEmail()));
+			log(String.format("Please provide non-empty valid email: '%s' is not valid.", cfg.getEmail()));
 			throw new ExitException();
 		}
 		if (Strings.isEmpty(cfg.getGroup())) {
-			System.out.println(String.format("User group was not provided, or too short, should be at least 1 character long: %s", cfg.getGroup()));
+			log(String.format("User group was not provided, or too short, should be at least 1 character long: %s", cfg.getGroup()));
 			throw new ExitException();
 		}
 		if (cmdl.hasOption("password")) {
@@ -436,7 +441,7 @@ public class Admin {
 			passVal = new Validatable<>(cfg.getPassword());
 			passValidator.validate(passVal);
 			if (!passVal.isValid()) {
-				System.out.print(String.format("Please enter password for the user '%s':", cfg.getUsername()));
+				log(String.format("Please enter password for the user '%s':", cfg.getUsername()));
 				cfg.setPassword(new BufferedReader(new InputStreamReader(System.in, UTF_8)).readLine());
 			}
 		} while (!passVal.isValid());
@@ -447,10 +452,10 @@ public class Admin {
 			cfg.setTimeZone(tzMap.containsKey(tz) ? tz : null);
 		}
 		if (cfg.getTimeZone() == null) {
-			System.out.println("Please enter timezone, Possible timezones are:");
+			log("Please enter timezone, Possible timezones are:");
 
 			for (Map.Entry<String,String> me : tzMap.entrySet()) {
-				System.out.println(String.format("%1$-25s%2$s", "\"" + me.getKey() + "\"", me.getValue()));
+				log(String.format("%1$-25s%2$s", "\"" + me.getKey() + "\"", me.getValue()));
 			}
 			throw new ExitException();
 		}
@@ -508,7 +513,7 @@ public class Admin {
 	private File checkRestoreFile(String file) {
 		File backup = new File(file);
 		if (!cmdl.hasOption("file") || !backup.exists() || !backup.isFile()) {
-			System.out.println("File should be specified, and point the existent zip file");
+			log("File should be specified, and point the existent zip file");
 			usage();
 			throw new ExitException();
 		}
@@ -527,10 +532,11 @@ public class Admin {
 		try {
 			a.process(args);
 
-			System.out.println("... Done");
+			log("... Done");
 		} catch (ExitException e) {
 			a.handleError(e, false, false);
 		} catch (Exception e) {
+			_log.error("Unexpected error", e);
 			e.printStackTrace();
 			System.exit(1);
 		}

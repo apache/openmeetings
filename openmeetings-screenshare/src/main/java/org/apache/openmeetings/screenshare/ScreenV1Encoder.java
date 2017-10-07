@@ -36,9 +36,9 @@ import org.red5.server.net.rtmp.event.VideoData;
 
 public class ScreenV1Encoder extends BaseScreenEncoder {
 	private int[][] last = null;
-	private static int DEFAULT_BLOCK_SIZE = 32;
-	private static int DEFAULT_SCREEN_WIDTH = 1920;
-	private static int DEFAULT_SCREEN_HEIGHT = 1080;
+	private static final int DEFAULT_BLOCK_SIZE = 32;
+	private static final int DEFAULT_SCREEN_WIDTH = 1920;
+	private static final int DEFAULT_SCREEN_HEIGHT = 1080;
 	private int keyFrameIndex;
 	private int frameCount = 0;
 	private int blockSize = DEFAULT_BLOCK_SIZE;

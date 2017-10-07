@@ -68,7 +68,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	private static final LinkedHashMap<Long, Locale> languages = new LinkedHashMap<>();
 	private static final ConcurrentHashMap<Locale, List<StringLabel>> labelCache = new ConcurrentHashMap<>();
 	private static final Set<String> keys = new HashSet<>();
-	private static Class<?> APP = null;
+	private static Class<?> appClass = null;
 
 	private static void storeLanguages() throws Exception {
 		Document d = XmlExport.createDocument();
@@ -98,11 +98,11 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
-		if (APP == null) {
+		if (appClass == null) {
 			//FIXME HACK to resolve package dependencies
-			APP = Class.forName("org.apache.openmeetings.web.app.Application");
+			appClass = Class.forName("org.apache.openmeetings.web.app.Application");
 		}
-		return APP;
+		return appClass;
 	}
 
 	public static void initLanguageMap() {
@@ -142,13 +142,13 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		for (StringLabel sl : labels) {
 			r.addElement(ENTRY_ELEMENT).addAttribute(KEY_ATTR, sl.getKey()).addCDATA(sl.getValue());
 		}
-		URL u = APP.getResource(getLabelFileName(l));
+		URL u = appClass.getResource(getLabelFileName(l));
 		XmlExport.toXml(new File(u.toURI()), d);
 	}
 
 	public static void upload(Locale l, InputStream is) throws Exception {
 		List<StringLabel> labels = getLabels(is);
-		URL u = APP.getResource(getLabelFileName(Locale.ENGLISH)); //get the URL of existing resource
+		URL u = appClass.getResource(getLabelFileName(Locale.ENGLISH)); //get the URL of existing resource
 		File el = new File(u.toURI());
 		File f = new File(el.getParentFile(), getLabelFileName(l));
 		if (!f.exists()) {
@@ -160,7 +160,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	private static List<StringLabel> getLabels(Locale l) {
 		List<StringLabel> labels = new ArrayList<>();
-		try (InputStream is = APP.getResourceAsStream(getLabelFileName(l))) {
+		try (InputStream is = appClass.getResourceAsStream(getLabelFileName(l))) {
 			labels = getLabels(is);
 		} catch (Exception e) {
 			log.error("Error reading resources document", e);
@@ -287,7 +287,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		}
 		labelCache.remove(l);
 		try {
-			URL u = APP.getResource(getLabelFileName(l));
+			URL u = appClass.getResource(getLabelFileName(l));
 			if (u != null) {
 				File f = new File(u.toURI());
 				if (f.exists()) {

@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Shape = function(wb) {
-	let shape = ShapeBase(wb);
+	const shape = ShapeBase(wb);
 	shape.obj = null;
 	shape.isDown = false;
 	shape.orig = {x: 0, y: 0};

@@ -28,7 +28,7 @@ public class OmFileHelper {
 	/**
 	 * This variable needs to point to the openmeetings webapp directory
 	 */
-	private static File OM_HOME = null;
+	private static File omHome = null;
 	private static final String UPLOAD_DIR = "upload";
 	private static final String PUBLIC_DIR = "public";
 	private static final String CLIPARTS_DIR = "cliparts";
@@ -80,11 +80,11 @@ public class OmFileHelper {
 	private OmFileHelper() {}
 
 	public static void setOmHome(File omHome) {
-		OmFileHelper.OM_HOME = omHome;
+		OmFileHelper.omHome = omHome;
 	}
 
 	public static void setOmHome(String omHome) {
-		OmFileHelper.OM_HOME = new File(omHome);
+		OmFileHelper.omHome = new File(omHome);
 	}
 
 	public static File getRootDir() {
@@ -93,7 +93,7 @@ public class OmFileHelper {
 	}
 
 	public static File getOmHome() {
-		return OmFileHelper.OM_HOME;
+		return OmFileHelper.omHome;
 	}
 
 	private static File getDir(File parent, String name) {
@@ -105,7 +105,7 @@ public class OmFileHelper {
 	}
 
 	public static File getUploadDir() {
-		return new File(OmFileHelper.OM_HOME, UPLOAD_DIR);
+		return new File(OmFileHelper.omHome, UPLOAD_DIR);
 	}
 
 	public static File getUploadFilesDir() {
@@ -174,7 +174,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsDir() {
-		return getDir(OmFileHelper.OM_HOME, STREAMS_DIR);
+		return getDir(OmFileHelper.omHome, STREAMS_DIR);
 	}
 
 	public static File getStreamsHibernateDir() {
@@ -202,11 +202,11 @@ public class OmFileHelper {
 	}
 
 	public static File getLanguagesDir() {
-		return new File(OmFileHelper.OM_HOME, LANGUAGES_DIR);
+		return new File(OmFileHelper.omHome, LANGUAGES_DIR);
 	}
 
 	public static File getPublicDir() {
-		return new File(OmFileHelper.OM_HOME, PUBLIC_DIR);
+		return new File(OmFileHelper.omHome, PUBLIC_DIR);
 	}
 
 	public static File getPublicClipartsDir() {
@@ -218,7 +218,7 @@ public class OmFileHelper {
 	}
 
 	public static File getWebinfDir() {
-		return new File(OmFileHelper.OM_HOME, WEB_INF_DIR);
+		return new File(OmFileHelper.omHome, WEB_INF_DIR);
 	}
 
 	public static File getPersistence() {
@@ -234,15 +234,15 @@ public class OmFileHelper {
 	}
 
 	public static File getConfDir() {
-		return new File(OmFileHelper.OM_HOME, CONF_DIR);
+		return new File(OmFileHelper.omHome, CONF_DIR);
 	}
 
 	public static File getScreenSharingDir() {
-		return new File(OmFileHelper.OM_HOME, SCREENSHARING_DIR);
+		return new File(OmFileHelper.omHome, SCREENSHARING_DIR);
 	}
 
 	public static File getImagesDir() {
-		return new File(OmFileHelper.OM_HOME, IMAGES_DIR);
+		return new File(OmFileHelper.omHome, IMAGES_DIR);
 	}
 
 	public static File appendSuffix(File original, String suffix) {

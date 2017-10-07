@@ -33,7 +33,7 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 
 public class OmHelpFormatter extends HelpFormatter {
-	private static String GENERAL_OPTION_GROUP = "";
+	private static final String GENERAL_OPTION_GROUP = "";
 	private int maxPrefixLength = 0;
 
 	@SuppressWarnings("unchecked")

@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,6 +29,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
@@ -44,12 +44,7 @@ import org.slf4j.Logger;
 public class InvitationDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDTO.class, getWebAppRootKey());
-	private static ThreadLocal<SimpleDateFormat> SDF = new ThreadLocal<SimpleDateFormat>() {
-		@Override
-		protected SimpleDateFormat initialValue() {
-			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		};
-	};
+	private static final FastDateFormat SDF = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
 	private String email;
 	private String firstname;
@@ -201,8 +196,8 @@ public class InvitationDTO implements Serializable {
 			// valid period of Invitation
 			switch (valid) {
 				case Period:
-					i.setValidFrom(new Date(SDF.get().parse(validFrom).getTime() - (5 * 60 * 1000)));
-					i.setValidTo(SDF.get().parse(validTo));
+					i.setValidFrom(new Date(SDF.parse(validFrom).getTime() - (5 * 60 * 1000)));
+					i.setValidTo(SDF.parse(validTo));
 					break;
 				case Endless:
 				case OneTime:

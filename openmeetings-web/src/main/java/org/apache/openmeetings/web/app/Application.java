@@ -156,7 +156,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
-	private static Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
+	private static final Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
 	private static String appName;
 	static {
 		STRINGS_WITH_APP.addAll(Arrays.asList("499", "500", "506", "511", "512", "513", "517", "532", "622", "widget.start.desc"

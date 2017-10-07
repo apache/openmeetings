@@ -32,7 +32,7 @@ import org.apache.wicket.resource.loader.IStringResourceLoader;
  *
  */
 public class LabelResourceLoader implements IStringResourceLoader {
-	private static Map<String, String> STRING_LABEL_MAPPING = new HashMap<>();
+	private static final Map<String, String> STRING_LABEL_MAPPING = new HashMap<>();
 
 	static {
 		STRING_LABEL_MAPPING.put("PagingNavigator.first", "goto.first");

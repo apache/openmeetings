@@ -9,7 +9,7 @@ var Text = function(wb, s) {
 	//TODO font size, background color
 
 	text.mouseDown = function(o) {
-		let canvas = this
+		const canvas = this
 			, pointer = canvas.getPointer(o.e)
 			, ao = canvas.getActiveObject();
 		if (!!ao && ao.type === 'i-text') {
@@ -45,13 +45,13 @@ var Text = function(wb, s) {
 			});
 		});
 		text.enableAllProps(s);
-		let b = s.find('.wb-prop-b').button("enable");
+		const b = s.find('.wb-prop-b').button("enable");
 		if (text.style.bold) {
 			b.addClass('ui-state-active selected');
 		} else {
 			b.removeClass('ui-state-active selected');
 		}
-		let i = s.find('.wb-prop-i').button("enable");
+		const i = s.find('.wb-prop-i').button("enable");
 		if (text.style.italic) {
 			i.addClass('ui-state-active selected');
 		} else {

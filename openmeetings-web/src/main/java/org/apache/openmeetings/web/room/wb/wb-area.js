@@ -9,9 +9,9 @@ var WbArea = (function() {
 		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
 	}
 	function getActive() {
-		let idx = tabs.tabs("option", 'active');
+		const idx = tabs.tabs("option", 'active');
 		if (idx > -1) {
-			let href = tabs.find('a')[idx];
+			const href = tabs.find('a')[idx];
 			if (!!href) {
 				return $($(href).attr('href'));
 			}
