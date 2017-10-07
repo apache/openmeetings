@@ -93,10 +93,6 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	@Override
 	public long count(String search) {
-		throw UNSUPPORTED;
-	}
-
-	public long count(long groupId, String search) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", search, false, true, null, searchFields), Long.class);
 		return q.getSingleResult();
 	}

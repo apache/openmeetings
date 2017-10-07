@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.entity.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
+import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
 
 import java.util.Date;
 import java.util.List;
@@ -228,6 +228,6 @@ public class Recording extends BaseFileItem {
 
 	@Override
 	public String getFileName(String ext) {
-		return String.format("%s%s.%s", recordingFileName, getId(), ext == null ? EXTENSION_MP4 : ext);
+		return String.format("%s%s.%s", RECORDING_FILE_NAME, getId(), ext == null ? EXTENSION_MP4 : ext);
 	}
 }

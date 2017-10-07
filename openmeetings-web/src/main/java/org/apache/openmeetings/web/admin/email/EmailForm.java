@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.admin.email;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
 import java.util.Date;
@@ -79,7 +78,7 @@ public class EmailForm extends Form<MailMessage> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				getBean(MailMessageDao.class).delete(getModelObject().getId(), getUserId());
+				getBean(MailMessageDao.class).delete(getModelObject().getId());
 				setModelObject(new MailMessage());
 				target.add(list, EmailForm.this);
 			}

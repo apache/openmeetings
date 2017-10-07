@@ -151,9 +151,9 @@ public class CleanupHelper {
 
 	private static long getUserIdByProfile(String name) {
 		long result = -1;
-		if (name.startsWith(OmFileHelper.profilesPrefix)) {
+		if (name.startsWith(OmFileHelper.PROFILES_PREFIX)) {
 			try {
-				result = Long.parseLong(name.substring(OmFileHelper.profilesPrefix.length()));
+				result = Long.parseLong(name.substring(OmFileHelper.PROFILES_PREFIX.length()));
 			} catch (Exception e) {
 				//noop
 			}

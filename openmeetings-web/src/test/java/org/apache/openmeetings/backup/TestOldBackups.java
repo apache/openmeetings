@@ -29,13 +29,11 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.After;
 import org.junit.Test;
@@ -45,13 +43,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestOldBackups extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, getWebAppRootKey());
+	private String cryptClass = null;
 
 	@Autowired
 	private BackupImport backupController;
 	@Autowired
 	private GroupDao groupDao;
-	@Autowired
-	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired
@@ -60,7 +57,6 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private RoomGroupDao roomGroupDao;
-	private String cryptClass = null;
 
 	@Override
 	public void setUp() throws Exception {

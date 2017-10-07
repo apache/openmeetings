@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -36,8 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestInvitation extends AbstractWicketTester {
 	@Autowired
 	private InvitationManager invitationManager;
-	@Autowired
-	private UserDao userDao;
 	@Autowired
 	private RoomDao roomDao;
 

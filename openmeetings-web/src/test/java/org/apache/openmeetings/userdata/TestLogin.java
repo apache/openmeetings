@@ -21,16 +21,11 @@ package org.apache.openmeetings.userdata;
 import static org.junit.Assert.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestLogin extends AbstractJUnitDefaults {
-	@Autowired
-	private UserDao userDao;
-
 	@Test
 	public void testTestLogin() throws OmException {
 		User us = userDao.login(adminUsername, userpass);

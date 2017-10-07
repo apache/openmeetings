@@ -28,7 +28,6 @@ import java.util.UUID;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -39,13 +38,11 @@ import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserGroup extends AbstractJUnitDefaults {
+	public static final String GROUP_NAME = "Test Group";
 	@Autowired
 	private GroupUserDao groupUserDao;
 	@Autowired
 	private GroupDao groupDao;
-	@Autowired
-	private UserDao userDao;
-	public static final String GROUP_NAME = "Test Group";
 
 	private User getValidUser() {
 		for (User u : userDao.getAllBackupUsers()) {

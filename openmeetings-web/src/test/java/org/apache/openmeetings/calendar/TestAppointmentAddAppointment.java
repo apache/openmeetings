@@ -32,7 +32,6 @@ import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -53,8 +52,6 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	private AppointmentLogic appointmentLogic;
 	@Autowired
 	private AppointmentDao appointmentDao;
-	@Autowired
-	private UserDao userDao;
 
 	private static void setTime(Appointment a) {
 		a.setStart(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));

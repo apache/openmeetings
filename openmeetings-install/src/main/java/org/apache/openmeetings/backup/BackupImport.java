@@ -37,9 +37,9 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
-import static org.apache.openmeetings.util.OmFileHelper.profilesPrefix;
-import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
-import static org.apache.openmeetings.util.OmFileHelper.thumbImagePrefix;
+import static org.apache.openmeetings.util.OmFileHelper.PROFILES_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.THUMB_IMG_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
@@ -599,7 +599,7 @@ public class BackupImport {
 			if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getGroup() != null && ro.getGroup().getId() != null) {
 				// We need to reset this as openJPA reject to store them otherwise
 				ro.setId(null);
-				roomGroupDao.update(ro, null);
+				roomGroupDao.update(ro);
 			}
 		}
 	}
@@ -717,7 +717,7 @@ public class BackupImport {
 					meta.setRecording(r);
 				}
 			}
-			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(recordingFileName)) {
+			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {
 				String name = getFileName(r.getHash());
 				r.setHash(UUID.randomUUID().toString());
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
@@ -1384,8 +1384,8 @@ public class BackupImport {
 
 	private static Long getProfileId(File f) {
 		String n = f.getName();
-		if (n.indexOf(profilesPrefix) > -1) {
-			return importLongType(n.substring(profilesPrefix.length()));
+		if (n.indexOf(PROFILES_PREFIX) > -1) {
+			return importLongType(n.substring(PROFILES_PREFIX.length()));
 		}
 		return null;
 	}
@@ -1451,7 +1451,7 @@ public class BackupImport {
 	}
 
 	private static File getImgDir(String name) {
-		int start = name.startsWith(thumbImagePrefix) ? thumbImagePrefix.length() : 0;
+		int start = name.startsWith(THUMB_IMG_PREFIX) ? THUMB_IMG_PREFIX.length() : 0;
 		String hash = name.substring(start, name.length() - EXTENSION_JPG.length() - 1);
 		return new File(getUploadFilesDir(), hash);
 	}

@@ -130,7 +130,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return hql.toString();
 	}
 
-	private <T> void setSearch(TypedQuery<T> query, String search) {
+	private static <T> void setSearch(TypedQuery<T> query, String search) {
 		if (!Strings.isEmpty(search)) {
 			query.setParameter("search", getStringParam(search));
 		}

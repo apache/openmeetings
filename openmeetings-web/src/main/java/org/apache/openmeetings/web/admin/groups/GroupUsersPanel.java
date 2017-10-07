@@ -142,7 +142,7 @@ public class GroupUsersPanel extends Panel {
 
 		@Override
 		public long size() {
-			return users2add.size() + (search == null ? getDao().count(groupId) : getDao().count(groupId, search));
+			return users2add.size() + (search == null ? getDao().count(groupId) : getDao().count(search));
 		}
 
 		@Override

@@ -50,17 +50,16 @@ public class OmFileHelper {
 	public static final String HIBERNATE = "hibernate";
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
 	public static final String DB_PERSISTENCE_NAME = "classes/META-INF/%s_persistence.xml";
-	public static final String profilesPrefix = "profile_";
-	public static final String nameOfLanguageFile = "languages.xml";
-	public static final String libraryFileName = "library.xml";
-	public static final String defaultProfileImageName = "profile.jpg";
-	public static final String profileFileName = "profile";
-	public static final String recordingFileName = "flvRecording_";
-	public static final String profileImagePrefix = "_profile_";
-	public static final String thumbImagePrefix = "_thumb_";
+	public static final String PROFILES_PREFIX = "profile_";
+	public static final String LANG_FILE_NAME = "languages.xml";
+	public static final String LIBRARY_FILE_NAME = "library.xml";
+	public static final String PROFILE_IMG_NAME = "profile.jpg";
+	public static final String PROFILE_FILE_NAME = "profile";
+	public static final String RECORDING_FILE_NAME = "flvRecording_";
+	public static final String THUMB_IMG_PREFIX = "_thumb_";
 	public static final String DOC_PAGE_PREFIX = "page";
 	public static final String TEST_SETUP_PREFIX = "TEST_SETUP_";
-	public static final String dashboardFile = "dashboard.xml";
+	public static final String DASHBOARD_FILE = "dashboard.xml";
 	public static final String EXTENSION_WML = "wml";
 	public static final String EXTENSION_FLV = "flv";
 	public static final String EXTENSION_MP4 = "mp4";
@@ -118,11 +117,11 @@ public class OmFileHelper {
 	}
 
 	public static File getUploadProfilesUserDir(Long userId) {
-		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
+		return getDir(getUploadProfilesDir(), PROFILES_PREFIX + userId);
 	}
 
 	public static File getUploadProfilesUserDir(String userId) {
-		return getDir(getUploadProfilesDir(), profilesPrefix + userId);
+		return getDir(getUploadProfilesDir(), PROFILES_PREFIX + userId);
 	}
 
 	public static File getGroupLogoDir() {
@@ -138,7 +137,7 @@ public class OmFileHelper {
 	}
 
 	public static File getDefaultProfilePicture() {
-		return new File(getImagesDir(), defaultProfileImageName);
+		return new File(getImagesDir(), PROFILE_IMG_NAME);
 	}
 
 	public static File getUserProfilePicture(Long userId, String uri) {
@@ -155,7 +154,7 @@ public class OmFileHelper {
 	}
 
 	public static File getUserDashboard(Long userId) {
-		return new File(getUploadProfilesUserDir(userId), dashboardFile);
+		return new File(getUploadProfilesUserDir(userId), DASHBOARD_FILE);
 	}
 
 	public static File getUploadImportDir() {

@@ -36,7 +36,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 
 public class RedirectMessageDialog extends NonClosableMessageDialog {
 	private static final long serialVersionUID = 1L;
-	private static final int delay = 5;
+	private static final int DELAY = 5;
 	private final String labelId;
 	private final String url;
 	private final boolean autoOpen;
@@ -58,7 +58,7 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	}
 
 	private void startTimer(IPartialPageRequestHandler handler) {
-		label.add(new OmRedirectTimerBehavior(delay, labelId) {
+		label.add(new OmRedirectTimerBehavior(DELAY, labelId) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -53,9 +53,9 @@ public class RoomModeratorDao {
 	}
 
 	/**
-	 * @param userId unused
+	 * @param rm moderator to be updated
 	 */
-	public RoomModerator update(RoomModerator rm, Long userId) {
+	public RoomModerator update(RoomModerator rm) {
 		if (rm.getId() == null) {
 			rm.setInserted(new Date());
 			em.persist(rm);

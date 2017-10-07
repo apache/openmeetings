@@ -50,10 +50,8 @@ import org.red5.server.api.event.IEvent;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.net.ICommand;
-import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.event.Notify;
-import org.red5.server.net.rtmp.message.Header;
 import org.red5.server.net.rtmp.status.StatusCodes;
 import org.slf4j.Logger;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -391,12 +389,9 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 	}
 
 	/**
-	 * @param conn - unused
-	 * @param channel - unused
-	 * @param source - unused
 	 * @param command - command to be processed
 	 */
-	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
+	protected void onCommand(ICommand command) {
 		if (!(command instanceof Notify)) {
 			return;
 		}

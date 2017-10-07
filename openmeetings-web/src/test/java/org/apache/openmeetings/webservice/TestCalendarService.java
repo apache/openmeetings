@@ -36,7 +36,6 @@ import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
@@ -62,8 +61,6 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	private MeetingMemberDao mmDao;
 	@Autowired
 	private InvitationDao invitationDao;
-	@Autowired
-	private UserDao userDao;
 
 	private void actualTest(Room r) throws Exception {
 		String uuid = UUID.randomUUID().toString();

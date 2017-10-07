@@ -24,8 +24,6 @@ import org.apache.openmeetings.db.dto.basic.Info;
 import org.junit.Test;
 
 public class TestInfoService extends AbstractWebServiceTest {
-	public static final String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
-
 	@Test
 	public void infoTest() {
 		Info info = getClient(INFO_SERVICE_URL).path("/version").get(Info.class);

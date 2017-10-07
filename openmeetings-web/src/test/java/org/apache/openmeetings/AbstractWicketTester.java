@@ -109,7 +109,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		assertTrue("Web session is not signed in for user: " + (login != null ? login : adminUsername), s.isSignedIn());
 	}
 
-	public <T extends Serializable> ButtonAjaxBehavior getButtonBehavior(String path, String name) {
+	public ButtonAjaxBehavior getButtonBehavior(String path, String name) {
 		return getButtonBehavior(tester, path, name);
 	}
 

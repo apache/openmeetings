@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.recordingFileName;
+import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
 
 import java.io.File;
 
@@ -41,7 +41,7 @@ public class PngRecordingResourceReference extends RecordingResourceReference {
 
 	@Override
 	protected String getFileName(Recording r) {
-		return String.format("%s%s.%s", recordingFileName, r.getId(), EXTENSION_PNG);
+		return String.format("%s%s.%s", RECORDING_FILE_NAME, r.getId(), EXTENSION_PNG);
 	}
 
 	@Override

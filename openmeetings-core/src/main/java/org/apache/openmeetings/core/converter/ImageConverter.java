@@ -25,7 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
-import static org.apache.openmeetings.util.OmFileHelper.profileFileName;
+import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -93,7 +93,7 @@ public class ImageConverter extends BaseConverter {
 			}
 		}
 
-		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), profileFileName, EXTENSION_JPG);
+		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), PROFILE_FILE_NAME, EXTENSION_JPG);
 		if (!skipConvertion) {
 			returnMap.addItem("processJPG", convertSingleJpg(file, destinationFile));
 		} else {

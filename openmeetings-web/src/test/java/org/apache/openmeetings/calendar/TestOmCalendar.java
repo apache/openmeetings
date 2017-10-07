@@ -23,7 +23,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
@@ -32,8 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TestOmCalendar extends AbstractJUnitDefaults {
 	@Autowired
 	private OmCalendarDao calendarDao;
-	@Autowired
-	private UserDao userDao;
 
 	@Test
 	public void saveCalendar() {

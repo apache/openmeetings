@@ -55,7 +55,7 @@ public class RTMPScreenShare extends RTMPClient implements IScreenShare {
 	@Override
 	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
 		super.onCommand(conn, channel, source, command);
-		core.onCommand(conn, channel, source, command);
+		core.onCommand(command);
 	}
 
 	@Override

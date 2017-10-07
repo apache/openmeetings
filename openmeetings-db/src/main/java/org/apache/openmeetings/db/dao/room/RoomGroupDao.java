@@ -39,9 +39,9 @@ public class RoomGroupDao {
 	}
 
 	/**
-	 * @param userId unused
+	 * @param entity to be updated
 	 */
-	public RoomGroup update(RoomGroup entity, Long userId) {
+	public RoomGroup update(RoomGroup entity) {
 		if (entity.getId() == null) {
 			entity.setInserted(new Date());
 			em.persist(entity);

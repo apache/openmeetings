@@ -72,7 +72,7 @@ import com.googlecode.wicket.jquery.ui.form.button.Button;
 public class CalendarPanel extends UserBasePanel {
 	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, getWebAppRootKey());
 	private static final long serialVersionUID = 1L;
-	private static final String javaScriptMarkup = "setCalendarHeight();";
+	private static final String JS_MARKUP = "setCalendarHeight();";
 	private final String javaScriptAddDatepicker;
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {
 		private static final long serialVersionUID = 1L;
@@ -350,10 +350,10 @@ public class CalendarPanel extends UserBasePanel {
 
 		Optional<AjaxRequestTarget> target = getRequestCycle().find(AjaxRequestTarget.class);
 		if (target.isPresent()) {
-			target.get().appendJavaScript(javaScriptMarkup);
+			target.get().appendJavaScript(JS_MARKUP);
 			target.get().appendJavaScript(javaScriptAddDatepicker);
 		} else {
-			response.render(JavaScriptHeaderItem.forScript(javaScriptMarkup, this.getId()));
+			response.render(JavaScriptHeaderItem.forScript(JS_MARKUP, this.getId()));
 		}
 	}
 

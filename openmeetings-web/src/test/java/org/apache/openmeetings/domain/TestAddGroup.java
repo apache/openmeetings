@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.user.GroupDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -37,8 +36,6 @@ public class TestAddGroup extends AbstractJUnitDefaults {
 
 	@Autowired
 	private GroupDao groupDao;
-	@Autowired
-	private UserDao userDao;
 
 	@Test
 	public void testAddingGroup() {

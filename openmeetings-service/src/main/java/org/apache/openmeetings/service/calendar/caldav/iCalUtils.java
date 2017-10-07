@@ -119,7 +119,6 @@ public class iCalUtils {
 		List<Appointment> appointments = new ArrayList<>();
 		ComponentList<CalendarComponent> events = calendar.getComponents(Component.VEVENT);
 		User owner = userDao.get(ownerId);
-		TimeZone tz = parseTimeZone(calendar, owner);
 
 		for (CalendarComponent event : events) {
 			Appointment a = new Appointment();
@@ -127,7 +126,7 @@ public class iCalUtils {
 			a.setDeleted(false);
 			a.setRoom(createDefaultRoom());
 			a.setReminder(Appointment.Reminder.none);
-			a = addVEventPropertiestoAppointment(a, event, tz);
+			a = addVEventPropertiestoAppointment(a, event);
 			appointments.add(a);
 		}
 		return appointments;
@@ -149,10 +148,8 @@ public class iCalUtils {
 		}
 		CalendarComponent event = calendar.getComponent(Component.VEVENT);
 		if (event != null) {
-			TimeZone tz = parseTimeZone(calendar, a.getOwner());
-
 			a.setEtag(etag);
-			a = addVEventPropertiestoAppointment(a, event, tz);
+			a = addVEventPropertiestoAppointment(a, event);
 		}
 		return a;
 	}
@@ -162,10 +159,9 @@ public class iCalUtils {
 	 *
 	 * @param a     Appointment to which the properties are to be added
 	 * @param event VEvent to parse properties from.
-	 * @param tz    Timezone of the Event
 	 * @return Updated Appointment
 	 */
-	private Appointment addVEventPropertiestoAppointment(Appointment a, CalendarComponent event, TimeZone tz) {
+	private Appointment addVEventPropertiestoAppointment(Appointment a, CalendarComponent event) {
 		DateProperty dtstart = (DateProperty)event.getProperty(Property.DTSTART)
 				, dtend = (DateProperty)event.getProperty(Property.DTEND)
 				, dtstamp = (DateProperty)event.getProperty(Property.DTSTAMP)

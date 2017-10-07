@@ -22,15 +22,10 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.AbstractWicketTester;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserCount extends AbstractWicketTester {
-	@Autowired
-	private UserDao userDao;
-
 	@Test
 	public void testCountSearchUsers() throws Exception {
 		User u = createUser();

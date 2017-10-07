@@ -34,7 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class MailMessageDao  implements IDataProviderDao<MailMessage> {
+public class MailMessageDao implements IDataProviderDao<MailMessage> {
 	@PersistenceContext
 	private EntityManager em;
 
@@ -121,15 +121,14 @@ public class MailMessageDao  implements IDataProviderDao<MailMessage> {
 	@Override
 	public void delete(MailMessage m, Long userId) {
 		if (m != null) {
-			delete(m.getId(), userId);
+			delete(m.getId());
 		}
 	}
 
 	/**
 	 * @param id - entity id
-	 * @param userId - unused
 	 */
-	public void delete(Long id, Long userId) {
+	public void delete(Long id) {
 		if (id != null) {
 			em.remove(get(id));
 		}

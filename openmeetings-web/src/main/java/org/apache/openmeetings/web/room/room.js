@@ -63,29 +63,24 @@ var VideoUtil = (function() {
 					this.bottom = t + h;
 				}
 			};
-		//console.log("Area " + JSON.stringify(area));
 		let minY = area.bottom, posFound;
 		do {
 			posFound = true
-			//console.log("Checking RECT " + JSON.stringify(rectNew));
 			for (let i = 0; i < list.length; ++i) {
 				const rect = list[i];
 				minY = Math.min(minY, rect.bottom);
 
 				if (rectNew.left < rect.right && rectNew.right > rect.left && rectNew.top < rect.bottom && rectNew.bottom > rect.top) {
 					rectNew.left = rect.right + offsetX;
-					//console.log("Intersecting with " + JSON.stringify(rect) + ", new RECT " + JSON.stringify(rectNew));
 					posFound = false;
 				}
 				if (rectNew.right >= area.right) {
 					rectNew.left = area.left;
 					rectNew.top = minY + offsetY;
-					//console.log("End of the row, new RECT " + JSON.stringify(rectNew));
 					posFound = false;
 				}
 				if (rectNew.bottom >= area.bottom) {
 					rectNew.top = area.top;
-					//console.log("Bottom of the area, new RECT " + JSON.stringify(rectNew));
 					posFound = true;
 					break;
 				}

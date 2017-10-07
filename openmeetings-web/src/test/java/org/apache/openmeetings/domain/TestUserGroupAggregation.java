@@ -23,19 +23,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserGroupAggregation extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestUserGroupAggregation.class, getWebAppRootKey());
-
-	@Autowired
-	private UserDao userDao;
 
 	@Test
 	public void testitNow() {

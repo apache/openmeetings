@@ -94,7 +94,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	private static File getLangFile() {
-		return new File(OmFileHelper.getLanguagesDir(), OmFileHelper.nameOfLanguageFile);
+		return new File(OmFileHelper.getLanguagesDir(), OmFileHelper.LANG_FILE_NAME);
 	}
 
 	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
