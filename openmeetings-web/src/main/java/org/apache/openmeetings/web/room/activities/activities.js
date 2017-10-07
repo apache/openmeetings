@@ -3,32 +3,10 @@ var Activities = function() {
 	const closedHeight = "20px";
 	let activities, openedHeight = "345px", inited = false;
 
-	function isInited() {
-		if (!inited) {
-			activities = $('#activities');
-			if (!!activities.resizable("instance")) {
-				inited = true;
-			}
-		}
-		return inited;
-	}
 	function isClosed() {
-		return activities.height() < 24;
+		return inited && activities.height() < 24;
 	}
 	function open() {
-		if (!isInited()) {
-			activities.resizable({
-				handles: "n, e"
-				, disabled: isClosed()
-				, alsoResize: "#activities .area"
-				, minHeight: 195
-				, minWidth: 260
-				, stop: function(event, ui) {
-					activities.css({'top': '', 'right': ''});
-					openedHeight = ui.size.height + "px";
-				}
-			});
-		}
 		if (isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 			$('.control.block', activities).removeClass('ui-state-highlight');
@@ -45,12 +23,30 @@ var Activities = function() {
 	}
 
 	return {
-		hightlight: function() {
+		init: function() {
+			if (inited) return;
+			activities = $('#activities');
+			activities.resizable({
+				handles: "n, e"
+				, disabled: isClosed()
+				, alsoResize: "#activities .area"
+				, minHeight: 195
+				, minWidth: 260
+				, stop: function(event, ui) {
+					activities.css({'top': '', 'right': ''});
+					openedHeight = ui.size.height + "px";
+				}
+			});
+			inited = true;
+		}
+		, hightlight: function() {
+			if (!inited) return;
 			if (isClosed()) {
 				$('.control.block', activities).addClass('ui-state-highlight');
 			}
 		}
 		, toggle: function() {
+			if (!inited) return;
 			if (isClosed()) {
 				open();
 			} else {

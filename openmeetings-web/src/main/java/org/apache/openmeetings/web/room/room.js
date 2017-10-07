@@ -534,6 +534,7 @@ var Room = (function() {
 	function _init(_options) {
 		options = _options;
 		VideoManager.init();
+		Activities.init();
 	}
 	function _getSelfAudioClient() {
 		const vw = $('#video' + Room.getOptions().uid);
