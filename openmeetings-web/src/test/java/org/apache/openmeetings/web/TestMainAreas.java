@@ -61,6 +61,7 @@ import org.apache.openmeetings.web.pages.NotInitedPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.room.RoomPanel;
+import org.apache.openmeetings.web.room.wb.AbstractWbPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
 import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.profile.SettingsPanel;
@@ -281,16 +282,25 @@ public class TestMainAreas extends AbstractWicketTester {
 		checkUnauthArea(AreaKeys.admin, TYPE_EMAIL, groupAdminUsername, regularUsername);
 	}
 
+	private void testRoom(Long id) throws OmException {
+		checkArea(AreaKeys.room, String.valueOf(id), RoomPanel.class, p -> {
+			RoomPanel rp = (RoomPanel)p.get("main-container:main:contents:child");
+			tester.executeBehavior((AbstractAjaxBehavior)rp.getBehaviorById(0)); //room enter
+			AbstractWbPanel wb = (AbstractWbPanel)rp.get("roomContainer:wb-area:whiteboard");
+			tester.executeBehavior((AbstractAjaxBehavior)wb.getBehaviorById(0)); //wb load
+		}, regularUsername);
+	}
+
 	@Test
 	public void testRoom5() throws OmException {
 		// public presentation room
-		checkArea(AreaKeys.room, String.valueOf(5), RoomPanel.class, regularUsername);
+		testRoom(5L);
 	}
 
 	@Test
 	public void testRoom1() throws OmException {
 		//public interview room
-		checkArea(AreaKeys.room, String.valueOf(1), RoomPanel.class, regularUsername);
+		testRoom(1L);
 	}
 
 	@Test
