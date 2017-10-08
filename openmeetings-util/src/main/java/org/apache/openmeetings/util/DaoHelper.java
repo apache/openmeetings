@@ -22,6 +22,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.util.string.Strings;
 
 public class DaoHelper {
+	public static final UnsupportedOperationException UNSUPPORTED = new UnsupportedOperationException("Should not be used");
+
 	private DaoHelper() {}
 
 	public static String getSearchQuery(String table, String alias, String search, boolean filterDeleted, boolean count, String sort, String... fields) {

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
+import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 

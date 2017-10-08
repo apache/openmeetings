@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
+
 import java.util.List;
 
 import javax.persistence.EntityManager;

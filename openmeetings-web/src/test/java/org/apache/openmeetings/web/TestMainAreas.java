@@ -74,6 +74,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 
+import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
+
 public class TestMainAreas extends AbstractWicketTester {
 	private static final Logger log = getLogger(TestMainAreas.class, getWebAppRootKey());
 
@@ -99,12 +101,19 @@ public class TestMainAreas extends AbstractWicketTester {
 	}
 
 	private void checkArea(AreaKeys area, String type, Class<? extends BasePanel> clazz, String... users) throws OmException {
+		checkArea(area, type, clazz, null, users);
+	}
+
+	private void checkArea(AreaKeys area, String type, Class<? extends BasePanel> clazz, Consumer<MainPage> consumer, String... users) throws OmException {
 		for (String user : users) {
 			log.debug("Positive test:: area: {}, type: {} for user: {}", area, type, user);
 			testArea(user, p -> {
 				tester.getRequest().setParameter(area.name(), type);
 				tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(1));
 				tester.assertComponent("main-container:main:contents:child", clazz);
+				if (consumer != null) {
+					consumer.accept(p);
+				}
 			});
 		}
 	}
@@ -151,7 +160,15 @@ public class TestMainAreas extends AbstractWicketTester {
 
 	@Test
 	public void testRoomsProfileMessages() throws OmException {
-		checkArea(AreaKeys.profile, TYPE_MESSAGES, SettingsPanel.class, regularUsername);
+		checkArea(AreaKeys.profile, TYPE_MESSAGES, SettingsPanel.class, p -> {
+			TabbedPanel tp = (TabbedPanel)p.get("main-container:main:contents:child:tabs");
+			tester.executeBehavior((AbstractAjaxBehavior)tp.getBehaviorById(0)); //create behavior
+			for (int i = 0; i <= tp.getLastTabIndex(); ++i) {
+				tester.getRequest().setParameter("index", String.valueOf(i));
+				tester.executeBehavior((AbstractAjaxBehavior)tp.getBehaviorById(1)); // activate
+				//add visibility check
+			}
+		}, regularUsername);
 	}
 
 	@Test

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.label;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper._ensureApplication;
+import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
