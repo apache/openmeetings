@@ -187,7 +187,7 @@ public class TestLoginUI extends AbstractWicketTester {
 			tester.startPage(SignInPage.class);
 			tester.assertRenderedPage(SignInPage.class);
 
-			String uid = UUID.randomUUID().toString();
+			String uid = String.valueOf(Math.abs(rnd.nextLong())); // number uid is used to prevent password validation errors
 			performRegister(uid, "warn.notverified");
 
 			// activate
