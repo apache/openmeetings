@@ -74,7 +74,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
@@ -154,7 +153,7 @@ public class WbPanel extends AbstractWbPanel {
 				protected void populateItem(ListItem<String> item) {
 					String cls = String.format("clipart-%s", item.getIndex());
 					item.add(append("class", cls), append("data-mode", cls)
-							, AttributeModifier.replace("data-image", item.getModelObject()));
+							, append("data-image", item.getModelObject()).setSeparator(""));
 				}
 			}, fileName);
 		}
