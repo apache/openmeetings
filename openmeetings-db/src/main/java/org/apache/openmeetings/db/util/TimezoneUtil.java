@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.util;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
-import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -100,11 +99,5 @@ public class TimezoneUtil {
 		}
 		// if user has not time zone get one from the server configuration
 		return getDefaultTimeZone();
-	}
-
-	public static long _getOffset(TimeZone timezone) {
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(timezone);
-		return (long)cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
 	}
 }

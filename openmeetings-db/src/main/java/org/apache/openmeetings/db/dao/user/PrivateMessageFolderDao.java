@@ -49,9 +49,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 			privateMessageFolder.setInserted(new Date());
 
 			privateMessageFolder = em.merge(privateMessageFolder);
-			Long privateMessageFolderId = privateMessageFolder.getId();
-
-			return privateMessageFolderId;
+			return privateMessageFolder.getId();
 		} catch (Exception e) {
 			log.error("[addPrivateMessageFolder]",e);
 		}
@@ -62,9 +60,7 @@ public class PrivateMessageFolderDao implements IDataProviderDao<PrivateMessageF
 		folder.setInserted(new Date());
 
 		folder = em.merge(folder);
-		Long privateMessageFolderId = folder.getId();
-
-		return privateMessageFolderId;
+		return folder.getId();
 	}
 
 	@Override

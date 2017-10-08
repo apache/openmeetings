@@ -224,8 +224,7 @@ public class AppointmentDao {
 		query.setParameter("start", startCal.getTime());
 		query.setParameter("end", endCal.getTime());
 
-		List<Appointment> listAppoints = query.getResultList();
-		return listAppoints;
+		return query.getResultList();
 	}
 
 	// ---------------------------------------------------------------------------------------------

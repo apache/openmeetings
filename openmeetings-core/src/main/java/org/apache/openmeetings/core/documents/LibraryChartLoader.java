@@ -53,8 +53,7 @@ public class LibraryChartLoader {
 			try (InputStream is = new FileInputStream(file);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8)))
 			{
-				ArrayList lMapList = (ArrayList) xStream.fromXML(reader);
-				return lMapList;
+				return (ArrayList) xStream.fromXML(reader);
 			}
 		} catch (Exception err) {
 			log.error("Unexpected error while loading chart", err);

@@ -75,13 +75,11 @@ public class XmlExport {
 
 	public static Element createRoot(Document document) {
 		document.addDocType("properties", null, "http://java.sun.com/dtd/properties.dtd");
-		Element root = document.addElement("properties");
-		return root;
+		return document.addElement("properties");
 	}
 
-	public static Element createRoot(Document document, String _root) {
-		Element root = document.addElement(_root);
-		return root;
+	public static Element createRoot(Document document, String root) {
+		return document.addElement(root);
 	}
 
 	public static void toXml(Writer out, Document doc) throws Exception {

@@ -69,9 +69,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 			privateMessage.setUserContactId(userContactId);
 
 			privateMessage = em.merge(privateMessage);
-			Long privateMessageId = privateMessage.getFolderId();
-
-			return privateMessageId;
+			return privateMessage.getFolderId();
 		} catch (Exception e) {
 			log.error("[addPrivateMessage]",e);
 		}
