@@ -345,10 +345,10 @@ public class MobileService {
 	/**
 	 * designed to do nothing remain for compatibility
 	 *
-	 * @param SID - sid
+	 * @param sid - sid
 	 * @param userId - redundant userId
 	 */
-	public Map<String, Object> roomConnect(String SID, Long userId) {
+	public Map<String, Object> roomConnect(String sid, Long userId) {
 		// publicSid is changed on mobile room connect
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
@@ -478,8 +478,8 @@ public class MobileService {
 			//for creating via reflection
 		}
 
-		public Language(long language_id, String code, String name) {
-			this.language_id = language_id;
+		public Language(long langId, String code, String name) {
+			this.language_id = langId;
 			this.code = code;
 			this.name = name;
 		}

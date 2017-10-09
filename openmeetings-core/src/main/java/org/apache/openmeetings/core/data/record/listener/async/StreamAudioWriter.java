@@ -153,8 +153,8 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					metaDelta.setStartTime(startedSessionTimeDate);
 					metaDelta.setPacketTimeStamp(streampacket.getTimestamp());
 
-					Date current_date = new Date();
-					Long deltaTimeStamp = current_date.getTime() - startedSessionTimeDate.getTime();
+					Date curDate = new Date();
+					Long deltaTimeStamp = curDate.getTime() - startedSessionTimeDate.getTime();
 
 					duration = Math.max(duration, timeStamp + writer.getOffset());
 					metaDelta.setDuration(duration);
@@ -163,7 +163,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 					metaDelta.setMissingTime(missingTime);
 
-					metaDelta.setCurrentTime(current_date);
+					metaDelta.setCurrentTime(curDate);
 					metaDelta.setDeltaTimeStamp(deltaTimeStamp);
 					metaDelta.setStartTimeStamp(startTimeStamp);
 

@@ -305,18 +305,18 @@ public abstract class BaseConverter {
 
 						metaDelta.setWaveOutPutName(hashFileGapsFullName);
 
-						String[] argv_sox = null;
+						String[] soxArgs = null;
 
 						if (metaDelta.getDeltaTime() != null) {
 							double gapSeconds = diffSeconds(metaDelta.getDeltaTime());
 							if (metaDelta.isStartPadding()) {
-								argv_sox = addSoxPad(returnLog, "fillGap", gapSeconds, 0, inputFile, outputGapFullWav);
+								soxArgs = addSoxPad(returnLog, "fillGap", gapSeconds, 0, inputFile, outputGapFullWav);
 							} else if (metaDelta.isEndPadding()) {
-								argv_sox = addSoxPad(returnLog, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
+								soxArgs = addSoxPad(returnLog, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
 							}
 						}
 
-						if (argv_sox != null) {
+						if (soxArgs != null) {
 							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getId());
 
 							metaDeltaDao.update(metaDelta);

@@ -117,11 +117,11 @@ public class SessiondataDao {
 
 	/**
 	 *
-	 * @param SID
+	 * @param sid
 	 * @return
 	 */
-	public Sessiondata check(String SID) {
-		Sessiondata sd = find(SID);
+	public Sessiondata check(String sid) {
+		Sessiondata sd = find(sid);
 		// Checks if wether the Session or the User Object of that Session is set yet
 		if (sd == null) {
 			return newInstance();
@@ -172,14 +172,14 @@ public class SessiondataDao {
 				String aux = rcl.getSwfurl();
 
 				//FIXME TODO this need to be refactored !
-				int init_pos = aux.indexOf("sid=") + 4;
-				int end_pos = init_pos + 32;
-				if (end_pos > aux.length()) {
-					end_pos = aux.length();
+				int start = aux.indexOf("sid=") + 4;
+				int end = start + 32;
+				if (end > aux.length()) {
+					end = aux.length();
 				}
-				String SID = aux.substring(init_pos, end_pos);
+				String sid = aux.substring(start, end);
 
-				Sessiondata sData = check(SID);
+				Sessiondata sData = check(sid);
 				if (sData != null) {
 					em.remove(sData);
 				}

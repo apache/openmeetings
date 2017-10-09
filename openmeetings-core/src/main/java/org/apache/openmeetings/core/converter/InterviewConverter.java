@@ -134,14 +134,14 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			} else if (waveFiles.size() == 1) {
 				wav = waveFiles.get(0);
 			} else {
-				String[] argv_full_sox;
+				String[] soxArgs;
 				if (reconversion) {
-					argv_full_sox = mergeAudioToWaves(waveFiles, wav, metaDataList, rcv);
+					soxArgs = mergeAudioToWaves(waveFiles, wav, metaDataList, rcv);
 				} else {
-					argv_full_sox = mergeAudioToWaves(waveFiles, wav);
+					soxArgs = mergeAudioToWaves(waveFiles, wav);
 				}
 
-				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
+				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", soxArgs));
 			}
 			// Default Image for empty interview video pods
 			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");

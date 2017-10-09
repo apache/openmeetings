@@ -101,9 +101,9 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			} else if (waveFiles.size() == 1) {
 				wav = waveFiles.get(0);
 			} else {
-				String[] argv_full_sox = mergeAudioToWaves(waveFiles, wav);
+				String[] soxArgs = mergeAudioToWaves(waveFiles, wav);
 
-				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", argv_full_sox));
+				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", soxArgs));
 			}
 			screenMetaData.setFullWavAudioData(wav.getName());
 			metaDataDao.update(screenMetaData);

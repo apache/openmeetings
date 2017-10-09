@@ -463,7 +463,7 @@ public class RoomSidebar extends Panel {
 		tabs.reload(handler);
 	}
 
-	private static abstract class OmTab implements ITab {
+	private abstract static class OmTab implements ITab {
 		private static final long serialVersionUID = 1L;
 
 		public abstract String getCssClass();

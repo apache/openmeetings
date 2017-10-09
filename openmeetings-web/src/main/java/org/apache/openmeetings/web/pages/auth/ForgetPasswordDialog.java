@@ -259,11 +259,11 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		us.setResethash(UUID.randomUUID().toString());
 		us.setResetDate(new Date());
 		userDao.update(us, null);
-		String reset_link = appLink + "?hash=" + us.getResethash();
+		String resetLink = appLink + "?hash=" + us.getResethash();
 
 		String email = us.getAddress().getEmail();
 
-		String template = ResetPasswordTemplate.getEmail(reset_link);
+		String template = ResetPasswordTemplate.getEmail(resetLink);
 
 		getBean(MailHandler.class).send(email, getString("517"), template);
 	}

@@ -76,28 +76,28 @@ public class LdapOptions {
 	String importQuery = null;
 
 	public LdapOptions(Properties config) {
-		String ldap_use_lower_case = config.getProperty(CONFIGKEY_LDAP_USE_LOWER_CASE, "false");
-		useLowerCase = "true".equals(ldap_use_lower_case);
+		String useLowerCaseProp = config.getProperty(CONFIGKEY_LDAP_USE_LOWER_CASE, "false");
+		useLowerCase = "true".equals(useLowerCaseProp);
 
-		String ldap_auth_type = config.getProperty(CONFIGKEY_LDAP_AUTH_TYPE, "");
+		String authType = config.getProperty(CONFIGKEY_LDAP_AUTH_TYPE, "");
 		try {
-			type = AuthType.valueOf(ldap_auth_type);
+			type = AuthType.valueOf(authType);
 		} catch (Exception e) {
-			log.error("ConfigKey in Ldap Config contains invalid auth type : '{}' -> Defaulting to {}", ldap_auth_type, type);
+			log.error("ConfigKey in Ldap Config contains invalid auth type : '{}' -> Defaulting to {}", authType, type);
 		}
 
-		String ldap_prov_type = config.getProperty(CONFIGKEY_LDAP_PROV_TYPE, "");
+		String provType = config.getProperty(CONFIGKEY_LDAP_PROV_TYPE, "");
 		try {
-			prov = Provisionning.valueOf(ldap_prov_type);
+			prov = Provisionning.valueOf(provType);
 		} catch (Exception e) {
-			log.error("ConfigKey in Ldap Config contains invalid provisionning type : '{}' -> Defaulting to {}", ldap_prov_type, prov);
+			log.error("ConfigKey in Ldap Config contains invalid provisionning type : '{}' -> Defaulting to {}", provType, prov);
 		}
 
-		String ldap_deref_mode = config.getProperty(CONFIGKEY_LDAP_DEREF_MODE, "");
+		String derefModeProp = config.getProperty(CONFIGKEY_LDAP_DEREF_MODE, "");
 		try {
-			derefMode = AliasDerefMode.getDerefMode(ldap_deref_mode);
+			derefMode = AliasDerefMode.getDerefMode(derefModeProp);
 		} catch (Exception e) {
-			log.error("ConfigKey in Ldap Config contains invalid deref mode : '{}' -> Defaulting to {}", ldap_deref_mode, derefMode);
+			log.error("ConfigKey in Ldap Config contains invalid deref mode : '{}' -> Defaulting to {}", derefModeProp, derefMode);
 		}
 
 		if (AuthType.NONE == type && Provisionning.NONE == prov) {

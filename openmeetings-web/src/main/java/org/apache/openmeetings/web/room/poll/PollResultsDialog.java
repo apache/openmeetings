@@ -170,8 +170,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 		}
 	}
 
-	private static String removeMinified(String name_) {
-		String name = name_;
+	private static String removeMinified(String _name) {
+		String name = _name;
 		int idxOfExtension = name.lastIndexOf('.');
 		if (idxOfExtension > -1) {
 			String extension = name.substring(idxOfExtension);

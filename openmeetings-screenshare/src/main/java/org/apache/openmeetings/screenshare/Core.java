@@ -380,11 +380,11 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 		}
 	}
 
-	synchronized public boolean isReadyToRecord() {
+	public synchronized boolean isReadyToRecord() {
 		return readyToRecord;
 	}
 
-	synchronized private void setReadyToRecord(boolean readyToRecord) {
+	private synchronized void setReadyToRecord(boolean readyToRecord) {
 		this.readyToRecord = readyToRecord;
 	}
 

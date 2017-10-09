@@ -34,7 +34,7 @@ import org.apache.openmeetings.util.OmException;
 //FIXME HACK to bypass cross project compilation
 public interface IUserManager {
 
-	Object registerUser(String login, String Userpass, String lastname,
+	Object registerUser(String login, String userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
@@ -53,5 +53,5 @@ public interface IUserManager {
 	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
 
 	boolean kickById(String uid);
-	boolean kickUsersByRoomId(Long room_id);
+	boolean kickUsersByRoomId(Long roomId);
 }

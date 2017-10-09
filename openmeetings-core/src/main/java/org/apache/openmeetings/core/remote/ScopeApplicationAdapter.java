@@ -742,7 +742,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		}.start();
 	}
 
-	public static abstract class MessageSender extends Thread {
+	public abstract static class MessageSender extends Thread {
 		final IScope scope;
 		final IConnection current;
 		final String method;

@@ -238,21 +238,21 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			if (to.getAddress() != null) {
 				String aLinkHTML = 	(isPrivate && to.getType() == Type.user) ? "<br/><br/>" + "<a href='" + getContactsLink() + "'>"
 							+ Application.getString("1302", to.getLanguageId()) + "</a><br/>" : "";
-				String invitation_link = "";
+				String invitationLink = "";
 				if (p.isBookedRoom()) {
 					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
 							false, null, Valid.Period, owner, to.getLanguageId()
 							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
 
-					invitation_link = getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl());
+					invitationLink = getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl());
 
-					if (invitation_link == null) {
-						invitation_link = "";
+					if (invitationLink == null) {
+						invitationLink = "";
 					} else {
-						invitation_link = "<br/>" //
+						invitationLink = "<br/>" //
 								+ Application.getString("503", to.getLanguageId())
-								+ "<br/><a href='" + invitation_link
+								+ "<br/><a href='" + invitationLink
 								+ "'>"
 								+ Application.getString("504", to.getLanguageId()) + "</a><br/>";
 					}
@@ -261,7 +261,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				String subj = p.getSubject() == null ? "" : p.getSubject();
 				getBean(MailHandler.class).send(to.getAddress().getEmail(),
 						Application.getString("1301", to.getLanguageId()) + subj,
-						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitation_link);
+						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitationLink);
 			}
 		}
 	}

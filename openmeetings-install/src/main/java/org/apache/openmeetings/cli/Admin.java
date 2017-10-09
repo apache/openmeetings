@@ -312,13 +312,13 @@ public class Admin {
 						f = new File(file);
 					}
 					boolean includeFiles = !cmdl.hasOption("exclude-files");
-					File backup_dir = new File(OmFileHelper.getUploadBackupDir(), String.valueOf(System.currentTimeMillis()));
-					backup_dir.mkdirs();
+					File backupDir = new File(OmFileHelper.getUploadBackupDir(), String.valueOf(System.currentTimeMillis()));
+					backupDir.mkdirs();
 
 					BackupExport export = getApplicationContext().getBean(BackupExport.class);
 					export.performExport(f, includeFiles, new ProgressHolder());
-					FileUtils.deleteDirectory(backup_dir);
-					backup_dir.delete();
+					FileUtils.deleteDirectory(backupDir);
+					backupDir.delete();
 				}
 				break;
 			case restore:
