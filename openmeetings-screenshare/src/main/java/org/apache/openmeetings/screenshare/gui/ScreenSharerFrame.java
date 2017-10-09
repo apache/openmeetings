@@ -292,41 +292,41 @@ public class ScreenSharerFrame extends JFrame {
 		audioNotify.setSelected(core.isAudioNotify());
 		audioNotify.addActionListener(e -> core.setAudioNotify(audioNotify.isSelected()));
 
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
+		GroupLayout glContentPane = new GroupLayout(contentPane);
+		glContentPane.setHorizontalGroup(
+			glContentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(glContentPane.createSequentialGroup()
+					.addGroup(glContentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(glContentPane.createSequentialGroup()
 							.addGap(7)
 							.addComponent(lblStartSharing)
 							.addGap(15)
 							.addComponent(audioNotify))
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(glContentPane.createSequentialGroup()
 							.addGap(21)
 							.addComponent(btnStartStopSharing, 200, 200, 200)
 							.addGap(52)
 							)
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(glContentPane.createSequentialGroup()
 							.addGap(7)
 							.addComponent(lblSelectArea, GroupLayout.PREFERRED_SIZE, 470, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(glContentPane.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(panelScreen, GroupLayout.PREFERRED_SIZE, 472, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(glContentPane.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(tabbedPane, GroupLayout.PREFERRED_SIZE, 472, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
+						.addGroup(glContentPane.createSequentialGroup()
 							.addComponent(panelStatus, 494, 494, 494)))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
+		glContentPane.setVerticalGroup(
+			glContentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(glContentPane.createSequentialGroup()
 					.addGap(7)
 					.addComponent(lblStartSharing)
 					.addGap(4)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(glContentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnStartStopSharing, 32, 32, 32).addComponent(audioNotify, 32, 32, 32)
 						)
 					.addGap(4)
@@ -593,7 +593,7 @@ public class ScreenSharerFrame extends JFrame {
 				BorderFactory.createEmptyBorder(0, 5, 0, 0)));
 		panelStatus.add(lblStatus);
 
-		contentPane.setLayout(gl_contentPane);
+		contentPane.setLayout(glContentPane);
 
 		// Background Image
 		//We have no logo, that is why we need no background, sebawagner 29.04.2012

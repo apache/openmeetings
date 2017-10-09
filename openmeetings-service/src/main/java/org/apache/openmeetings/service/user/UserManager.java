@@ -97,7 +97,7 @@ public class UserManager implements IUserManager {
 	 * Group with the id specified in the configuration value default.group.id
 	 *
 	 * @param login
-	 * @param Userpass
+	 * @param userpass
 	 * @param lastname
 	 * @param firstname
 	 * @param email
@@ -117,7 +117,7 @@ public class UserManager implements IUserManager {
 	 * @return
 	 */
 	@Override
-	public Object registerUser(String login, String Userpass, String lastname,
+	public Object registerUser(String login, String userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
@@ -137,7 +137,7 @@ public class UserManager implements IUserManager {
 				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
 
 				Object user = registerUserInit(UserDao.getDefaultRights(), login,
-						Userpass, lastname, firstname, email, age, street,
+						userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, country, town, languageId,
 						true, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), phone,
 						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);

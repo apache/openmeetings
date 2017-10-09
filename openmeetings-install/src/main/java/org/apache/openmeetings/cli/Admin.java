@@ -73,7 +73,6 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.BeansException;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -330,9 +329,9 @@ public class Admin {
 	private void processBackup(String file) throws Exception {
 		File f;
 		if (!cmdl.hasOption("file")) {
-			file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
-			f = new File(home, file);
-			log("File name was not specified, '" + file + "' will be used");
+			String fn = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
+			f = new File(home, fn);
+			log("File name was not specified, '" + fn + "' will be used");
 		} else {
 			f = new File(file);
 		}
@@ -357,7 +356,7 @@ public class Admin {
 		log(report);
 	}
 
-	private void processLdap() throws BeansException, OmException {
+	private void processLdap() throws OmException {
 		if (!cmdl.hasOption("d")) {
 			log("Please specify LDAP domain Id.");
 			throw new ExitException();

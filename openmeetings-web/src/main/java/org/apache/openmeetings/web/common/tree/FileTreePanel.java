@@ -221,11 +221,6 @@ public abstract class FileTreePanel extends Panel {
 			}
 
 			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				super.onEvent(target);
-			}
-
-			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				deleteAll(target);
 			}

@@ -264,8 +264,8 @@ public class StreamClient implements IClient {
 		return picture_uri;
 	}
 
-	public void setPicture_uri(String picture_uri) {
-		this.picture_uri = picture_uri;
+	public void setPicture_uri(String pictureUri) {
+		this.picture_uri = pictureUri;
 	}
 
 	public String getLanguage() {

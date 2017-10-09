@@ -26,19 +26,19 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class RegisterUserTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RegisterUserTemplate(String username, String email, String verification_url) {
+	public RegisterUserTemplate(String username, String email, String verificationUrl) {
 		super(getOmSession().getLocale());
 		add(new Label("registrationLbl", getString("506", locale)));
 		add(new Label("username", username));
 		add(new Label("email", email));
 		WebMarkupContainer verification = new WebMarkupContainer("verification");
-		add(verification.add(new Label("verification_url2", verification_url))
-			.add(new ExternalLink("verification_url1", verification_url))
-			.setVisible(verification_url != null));
+		add(verification.add(new Label("verification_url2", verificationUrl))
+			.add(new ExternalLink("verification_url1", verificationUrl))
+			.setVisible(verificationUrl != null));
 		add(new Label("groupLbl", getString("511", locale)));
 	}
 
-	public static String getEmail(String username, String email, String verification_url) {
-		return ComponentRenderer.renderComponent(new RegisterUserTemplate(username, email, verification_url)).toString();
+	public static String getEmail(String username, String email, String verificationUrl) {
+		return ComponentRenderer.renderComponent(new RegisterUserTemplate(username, email, verificationUrl)).toString();
 	}
 }

@@ -28,11 +28,6 @@ import org.red5.logging.ContextLoggingListener;
 public class OMContextListener extends ContextLoggingListener {
 
 	@Override
-	public void contextDestroyed(ServletContextEvent event) {
-		super.contextDestroyed(event);
-	}
-
-	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		setWebAppRootKey(pathToName(event));
 		System.setProperty("current_openmeetings_context_name", getWebAppRootKey());

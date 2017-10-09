@@ -103,15 +103,15 @@ public class InvitationManager implements IInvitationManager {
 
 	@Override
 	public void sendInvitationLink(Invitation i, MessageType type, String subject, String message, boolean ical) throws Exception {
-		String invitation_link = null;
+		String invitationLink = null;
 		if (type != MessageType.Cancel) {
 			IApplication app = ensureApplication(1L);
-			invitation_link = app.getOmInvitationLink(i);
+			invitationLink = app.getOmInvitationLink(i);
 		}
 		User owner = i.getInvitedBy();
 
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		String template = InvitationTemplate.getEmail(i.getInvitee(), invitorName, message, invitation_link);
+		String template = InvitationTemplate.getEmail(i.getInvitee(), invitorName, message, invitationLink);
 		String email = i.getInvitee().getAddress().getEmail();
 		String replyToEmail = owner.getAddress().getEmail();
 
@@ -131,7 +131,7 @@ public class InvitationManager implements IInvitationManager {
 
 			Appointment a = i.getAppointment();
 			// Create ICal Message
-			String meetingId = handler.addNewMeeting(a.getStart(), a.getEnd(), a.getTitle(), atts, invitation_link,
+			String meetingId = handler.addNewMeeting(a.getStart(), a.getEnd(), a.getTitle(), atts, invitationLink,
 					organizerAttendee, a.getIcalId(), timezoneUtil.getTimeZone(owner).getID());
 
 			// Writing back meetingUid

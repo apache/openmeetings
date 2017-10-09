@@ -22,11 +22,8 @@ import org.red5.client.net.rtmp.INetStreamEventHandler;
 import org.red5.client.net.rtmp.RTMPClient;
 import org.red5.server.api.service.IPendingServiceCall;
 import org.red5.server.api.service.IPendingServiceCallback;
-import org.red5.server.net.ICommand;
-import org.red5.server.net.rtmp.Channel;
 import org.red5.server.net.rtmp.RTMPConnection;
 import org.red5.server.net.rtmp.event.Notify;
-import org.red5.server.net.rtmp.message.Header;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,11 +68,6 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 		publishScreen.setStartPublish(false);
 		publishScreen.release();
 		core.publishingStop();
-	}
-
-	@Override
-	protected void onCommand(RTMPConnection conn, Channel channel, Header source, ICommand command) {
-		super.onCommand(conn, channel, source, command);
 	}
 
 	@Override

@@ -24,7 +24,6 @@ import java.time.LocalTime;
 import java.util.Locale;
 
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -52,11 +51,5 @@ public class OmDateTimePicker extends DateTimePicker {
 		tp.setLabel(getLabel());
 		return tp;
 	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		//TODO this is remain here until localized AM/PM will be correctly handled
-		//response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
-	}
+	//TODO render KendoCultureHeaderItem as soon as localized AM/PM will be correctly handled
 }
