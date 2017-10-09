@@ -44,6 +44,7 @@ public class ByteArrayDataSource implements DataSource {
 			}
 			data = os.toByteArray();
 		} catch (IOException ioex) {
+			//no-op
 		}
 	}
 

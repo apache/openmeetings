@@ -106,7 +106,9 @@ public class NetTestWebService {
 	@Path("/")
 	public void upload(@Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM) InputStream stream) throws IOException {
 		byte[] b = new byte[1024];
-		while (stream.read(b) >= 0 ) {};
+		while (stream.read(b) >= 0 ) {
+			//no-op
+		};
 	}
 
 	private static TestType getTypeByString(String typeString) {

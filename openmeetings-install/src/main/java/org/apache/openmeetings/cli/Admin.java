@@ -66,12 +66,14 @@ import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.ConnectionProperties;
 import org.apache.openmeetings.util.ConnectionProperties.DbType;
 import org.apache.openmeetings.util.ImportHelper;
+import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -235,125 +237,133 @@ public class Admin {
 		String file = cmdl.getOptionValue("file", "");
 		switch(cmd) {
 			case install:
-				{
-					step = "Install";
-					if (cmdl.hasOption("file") && (cmdl.hasOption("user") || cmdl.hasOption("email") || cmdl.hasOption("group"))) {
-						log("Please specify even 'file' option or 'admin user'.");
-						throw new ExitException();
-					}
-					boolean force = cmdl.hasOption("force");
-					if (cmdl.hasOption("skip-default-objects")) {
-						cfg.setCreateDefaultObjects(false);
-					}
-					if (cmdl.hasOption("disable-frontend-register")) {
-						cfg.setAllowFrontendRegister(false);
-					}
-					if (cmdl.hasOption("system-email-address")) {
-						cfg.setMailReferer(cmdl.getOptionValue("system-email-address"));
-					}
-					if (cmdl.hasOption("smtp-server")) {
-						cfg.setSmtpServer(cmdl.getOptionValue("smtp-server"));
-					}
-					if (cmdl.hasOption("smtp-port")) {
-						cfg.setSmtpPort(Integer.valueOf(cmdl.getOptionValue("smtp-port")));
-					}
-					if (cmdl.hasOption("email-auth-user")) {
-						cfg.setMailAuthName(cmdl.getOptionValue("email-auth-user"));
-					}
-					if (cmdl.hasOption("email-auth-pass")) {
-						cfg.setMailAuthPass(cmdl.getOptionValue("email-auth-pass"));
-					}
-					if (cmdl.hasOption("email-use-tls")) {
-						cfg.setMailUseTls(true);
-					}
-					if (cmdl.hasOption("default-language")) {
-						cfg.setDefaultLangId(Integer.parseInt(cmdl.getOptionValue("default-language")));
-					}
-					ConnectionProperties connectionProperties;
-					File conf = OmFileHelper.getPersistence();
-					if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
-						String dbType = cmdl.getOptionValue("db-type", DbType.derby.name());
-						connectionProperties = ConnectionPropertiesPatcher.patch(dbType
-								, cmdl.getOptionValue("db-host", "localhost")
-								, cmdl.getOptionValue("db-port", null)
-								, cmdl.getOptionValue("db-name", null)
-								, cmdl.getOptionValue("db-user", null)
-								, cmdl.getOptionValue("db-pass", null)
-								);
-					} else {
-						//get properties from existent persistence.xml
-						connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
-					}
-					if (cmdl.hasOption("file")) {
-						File backup = checkRestoreFile(file);
-						dropDB(connectionProperties);
-
-						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
-						importInit.loadSystem(cfg, force);
-						restoreOm(backup);
-					} else {
-						checkAdminDetails();
-						dropDB(connectionProperties);
-
-						ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
-						importInit.loadAll(cfg, force);
-					}
-				}
+				step = "Install";
+				processInstall(file);
 				break;
 			case backup:
-				{
-					step = "Backup";
-					File f;
-					if (!cmdl.hasOption("file")) {
-						file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
-						f = new File(home, file);
-						log("File name was not specified, '" + file + "' will be used");
-					} else {
-						f = new File(file);
-					}
-					boolean includeFiles = !cmdl.hasOption("exclude-files");
-					File backupDir = new File(OmFileHelper.getUploadBackupDir(), String.valueOf(System.currentTimeMillis()));
-					backupDir.mkdirs();
-
-					BackupExport export = getApplicationContext().getBean(BackupExport.class);
-					export.performExport(f, includeFiles, new ProgressHolder());
-					FileUtils.deleteDirectory(backupDir);
-					backupDir.delete();
-				}
+				step = "Backup";
+				processBackup(file);
 				break;
 			case restore:
 				step = "Restore";
-				restoreOm(checkRestoreFile(file));
+				processRestore(checkRestoreFile(file));
 				break;
 			case files:
-				{
-					step = "Files";
-					boolean cleanup = cmdl.hasOption("cleanup");
-					if (cleanup) {
-						log("WARNING: all intermediate files will be clean up!");
-					}
-					StringBuilder report = new StringBuilder();
-					reportUploads(report, cleanup);
-					reportStreams(report, cleanup);
-					log(report);
-				}
+				step = "Files";
+				processFiles();
 				break;
 			case ldap:
-				{
-					step = "LDAP import";
-					if (!cmdl.hasOption("d")) {
-						log("Please specify LDAP domain Id.");
-						throw new ExitException();
-					}
-					Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
-					getApplicationContext().getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
-				}
+				step = "LDAP import";
+				processLdap();
 				break;
 			case usage:
 			default:
 				usage();
 				break;
 		}
+	}
+
+	private void processInstall(String file) throws Exception {
+		if (cmdl.hasOption("file") && (cmdl.hasOption("user") || cmdl.hasOption("email") || cmdl.hasOption("group"))) {
+			log("Please specify even 'file' option or 'admin user'.");
+			throw new ExitException();
+		}
+		boolean force = cmdl.hasOption("force");
+		if (cmdl.hasOption("skip-default-objects")) {
+			cfg.setCreateDefaultObjects(false);
+		}
+		if (cmdl.hasOption("disable-frontend-register")) {
+			cfg.setAllowFrontendRegister(false);
+		}
+		if (cmdl.hasOption("system-email-address")) {
+			cfg.setMailReferer(cmdl.getOptionValue("system-email-address"));
+		}
+		if (cmdl.hasOption("smtp-server")) {
+			cfg.setSmtpServer(cmdl.getOptionValue("smtp-server"));
+		}
+		if (cmdl.hasOption("smtp-port")) {
+			cfg.setSmtpPort(Integer.valueOf(cmdl.getOptionValue("smtp-port")));
+		}
+		if (cmdl.hasOption("email-auth-user")) {
+			cfg.setMailAuthName(cmdl.getOptionValue("email-auth-user"));
+		}
+		if (cmdl.hasOption("email-auth-pass")) {
+			cfg.setMailAuthPass(cmdl.getOptionValue("email-auth-pass"));
+		}
+		if (cmdl.hasOption("email-use-tls")) {
+			cfg.setMailUseTls(true);
+		}
+		if (cmdl.hasOption("default-language")) {
+			cfg.setDefaultLangId(Integer.parseInt(cmdl.getOptionValue("default-language")));
+		}
+		ConnectionProperties connectionProperties;
+		File conf = OmFileHelper.getPersistence();
+		if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
+			String dbType = cmdl.getOptionValue("db-type", DbType.derby.name());
+			connectionProperties = ConnectionPropertiesPatcher.patch(dbType
+					, cmdl.getOptionValue("db-host", "localhost")
+					, cmdl.getOptionValue("db-port", null)
+					, cmdl.getOptionValue("db-name", null)
+					, cmdl.getOptionValue("db-user", null)
+					, cmdl.getOptionValue("db-pass", null)
+					);
+		} else {
+			//get properties from existent persistence.xml
+			connectionProperties = ConnectionPropertiesPatcher.getConnectionProperties(conf);
+		}
+		if (cmdl.hasOption("file")) {
+			File backup = checkRestoreFile(file);
+			dropDB(connectionProperties);
+
+			ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
+			importInit.loadSystem(cfg, force);
+			processRestore(backup);
+		} else {
+			checkAdminDetails();
+			dropDB(connectionProperties);
+
+			ImportInitvalues importInit = getApplicationContext().getBean(ImportInitvalues.class);
+			importInit.loadAll(cfg, force);
+		}
+	}
+
+	private void processBackup(String file) throws Exception {
+		File f;
+		if (!cmdl.hasOption("file")) {
+			file = "backup_" + CalendarPatterns.getTimeForStreamId(new Date()) + ".zip";
+			f = new File(home, file);
+			log("File name was not specified, '" + file + "' will be used");
+		} else {
+			f = new File(file);
+		}
+		boolean includeFiles = !cmdl.hasOption("exclude-files");
+		File backupDir = new File(OmFileHelper.getUploadBackupDir(), String.valueOf(System.currentTimeMillis()));
+		backupDir.mkdirs();
+
+		BackupExport export = getApplicationContext().getBean(BackupExport.class);
+		export.performExport(f, includeFiles, new ProgressHolder());
+		FileUtils.deleteDirectory(backupDir);
+		backupDir.delete();
+	}
+
+	private void processFiles() throws IOException {
+		boolean cleanup = cmdl.hasOption("cleanup");
+		if (cleanup) {
+			log("WARNING: all intermediate files will be clean up!");
+		}
+		StringBuilder report = new StringBuilder();
+		reportUploads(report, cleanup);
+		reportStreams(report, cleanup);
+		log(report);
+	}
+
+	private void processLdap() throws BeansException, OmException {
+		if (!cmdl.hasOption("d")) {
+			log("Please specify LDAP domain Id.");
+			throw new ExitException();
+		}
+		Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
+		getApplicationContext().getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
 	}
 
 	private void reportUploads(StringBuilder report, boolean cleanup) throws IOException {
@@ -520,7 +530,7 @@ public class Admin {
 		return backup;
 	}
 
-	private void restoreOm(File backup) throws Exception {
+	private void processRestore(File backup) throws Exception {
 		try (InputStream is = new FileInputStream(backup)) {
 			BackupImport importCtrl = getApplicationContext().getBean(BackupImport.class);
 			importCtrl.performImport(is);
