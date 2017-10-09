@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.getAuthenticationStrat
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.showAuth;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
@@ -45,8 +46,8 @@ import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -64,7 +65,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -274,31 +274,20 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 					@Override
 					protected void populateItem(final ListItem<OAuthServer> item) {
-						Button btn = new Button("oauthBtn");
-						Image icon = new Image("icon", new Model<String>());
-						icon.setVisible(!Strings.isEmpty(item.getModelObject().getIconUrl()));
-						icon.add(new AttributeModifier("src", new IModel<String>() {
+						final OAuthServer s = item.getModelObject();
+						Button btn = new Button("oauthBtn") {
 							private static final long serialVersionUID = 1L;
 
 							@Override
-							public String getObject() {
-								return item.getModelObject().getIconUrl();
+							public void onSubmit() {
+								showAuth(s, SignInDialog.this);
 							}
-
-						}));
-						btn.add(icon);
-						btn.add(new Label("label", item.getModelObject().getName()))
-							.add(new AjaxEventBehavior("click") {
-								private static final long serialVersionUID = 1L;
-
-								@Override
-								protected void onEvent(AjaxRequestTarget target) {
-									PageParameters parameters = new PageParameters();
-									parameters.add("oauthid", item.getModelObject().getId());
-									setResponsePage(SignInPage.class, parameters);
-								}
-							});
-						item.add(btn);
+						};
+						Component icon = new Image("icon", Model.of(""))
+								.setVisible(!Strings.isEmpty(s.getIconUrl()))
+								.add(AttributeModifier.replace("src", s.getIconUrl()));
+						btn.add(icon, new Label("label", s.getName()));
+						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
 					}
 				}).setVisible(allowOAuthLogin()));
 		}

@@ -39,10 +39,8 @@ import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -60,7 +58,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
@@ -77,12 +74,8 @@ public class SignInPage extends BaseInitedPage {
 	private SignInDialog d;
 	private KickMessageDialog m;
 
-	static boolean allowRegister() {
-		return "1".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"));
-	}
-
-	static boolean allowOAuthLogin() {
-		return getBean(OAuth2Dao.class).getActive().size() > 0;
+	public SignInPage() {
+		this(new PageParameters());
 	}
 
 	public SignInPage(PageParameters p) {
@@ -94,29 +87,24 @@ public class SignInPage extends BaseInitedPage {
 				OAuthServer server = getBean(OAuth2Dao.class).get(serverId);
 				log.debug("OAuthServer=" + server);
 				if (server == null) {
-					log.warn("OAuth server id=" + serverId + " not found");
+					log.warn("OAuth server id={} not found", serverId);
 					return;
 				}
 
-				if (p.get("code").toString() != null) { // got code
+				if (!p.get("code").isNull()) { // got code
 					String code = p.get("code").toString();
-					log.debug("OAuth response code=" + code);
+					log.debug("OAuth response code={}", code);
 					AuthInfo authInfo = getToken(code, server);
-					if (authInfo == null) return;
-					log.debug("OAuthInfo=" + authInfo);
-					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
-					if (authParams != null) {
-						loginViaOAuth2(authParams, serverId);
+					if (authInfo == null) {
+						return;
 					}
+					log.debug("OAuthInfo={}", authInfo);
+					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
+					loginViaOAuth2(authParams, serverId);
 				} else { // redirect to get code
-					String redirectUrl = prepareUrlParams(server.getRequestKeyUrl(), server.getClientId(),
-							null, null, getRedirectUri(server, this), null);
-					log.debug("redirectUrl=" + redirectUrl);
-					throw new RedirectToUrlException(redirectUrl);
+					showAuth(server, this);
 				}
-			} catch (IOException e) {
-				log.error("OAuth2 login error", e);
-			} catch (NoSuchAlgorithmException e) {
+			} catch (IOException|NoSuchAlgorithmException e) {
 				log.error("OAuth2 login error", e);
 			}
 		}
@@ -147,13 +135,12 @@ public class SignInPage extends BaseInitedPage {
 				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
 	}
 
-	public SignInPage() {
-		this(new PageParameters());
+	static boolean allowRegister() {
+		return "1".equals(getBean(ConfigurationDao.class).getConfValue(CONFIG_FRONTEND_REGISTER_KEY, String.class, "0"));
 	}
 
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
+	static boolean allowOAuthLogin() {
+		return getBean(OAuth2Dao.class).getActive().size() > 0;
 	}
 
 	@Override
@@ -162,21 +149,29 @@ public class SignInPage extends BaseInitedPage {
 	}
 
 	// ============= OAuth2 methods =============
+	public static void showAuth(final OAuthServer s, Component c) {
+		String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId(), getRedirectUri(s, c), null, null, null);
+		log.debug("redirectUrl={}", authUrl);
+		throw new RedirectToUrlException(authUrl);
+	}
 
-	public String prepareUrlParams(String urlTemplate, String clientId, String clientSecret,
-			String clientToken, String redirectUri, String code) throws UnsupportedEncodingException {
+	public static String prepareUrlParams(String urlTemplate, String clientId, String redirectUri, String secret, String token, String code) {
 		String result = urlTemplate;
 		if (clientId != null) {
 			result = result.replace("{$client_id}", clientId);
 		}
-		if (clientSecret != null) {
-			result = result.replace("{$client_secret}", clientSecret);
+		if (secret != null) {
+			result = result.replace("{$client_secret}", secret);
 		}
-		if (clientToken != null) {
-			result = result.replace("{$access_token}", clientToken);
+		if (token != null) {
+			result = result.replace("{$access_token}", token);
 		}
 		if (redirectUri != null) {
-			result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, UTF_8.name()));
+			try {
+				result = result.replace("{$redirect_uri}", URLEncoder.encode(redirectUri, UTF_8.name()));
+			} catch (UnsupportedEncodingException e) {
+				log.error("Unexpected exception while encoding URI", e);
+			}
 		}
 		if (code != null) {
 			result = result.replace("{$code}", code);
@@ -207,15 +202,19 @@ public class SignInPage extends BaseInitedPage {
 		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
 			@Override
-			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+			public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+				//no-op
+			}
+
 			@Override
-			public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+			public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+				//no-op
+			}
 
 			@Override
 			public X509Certificate[] getAcceptedIssuers() {
-				return null;
+				return new X509Certificate[] {};
 			}
-
 		}};
 		try {
 			HttpsURLConnection connection = (HttpsURLConnection)_connection;
@@ -223,13 +222,7 @@ public class SignInPage extends BaseInitedPage {
 			sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 			SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 			connection.setSSLSocketFactory(sslSocketFactory);
-			connection.setHostnameVerifier(new HostnameVerifier() {
-
-				@Override
-				public boolean verify(String arg0, SSLSession arg1) {
-					return true;
-				}
-			});
+			connection.setHostnameVerifier((arg0, arg1) -> true);
 		} catch (Exception e) {
 			log.error("[prepareConnection]", e);
 		}
@@ -239,8 +232,8 @@ public class SignInPage extends BaseInitedPage {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
 		String requestTokenParams = server.getRequestTokenAttributes();
-		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), server.getClientSecret(),
-				null, getRedirectUri(server, this), code);
+		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), getRedirectUri(server, this)
+				, server.getClientSecret(), null, code);
 		// request auth token
 		HttpURLConnection urlConnection = (HttpURLConnection) new URL(requestTokenBaseUrl).openConnection();
 		prepareConnection(urlConnection);
@@ -257,7 +250,7 @@ public class SignInPage extends BaseInitedPage {
 		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
-		JSONObject jsonResult = new JSONObject(sourceResponse.toString());
+		JSONObject jsonResult = new JSONObject(sourceResponse);
 		if (jsonResult.has("access_token")) {
 			result.accessToken = jsonResult.getString("access_token");
 		}
@@ -272,7 +265,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 		// access token must be specified
 		if (result.accessToken == null) {
-			log.error("Response doesn't contain access_token field:\n" + sourceResponse.toString());
+			log.error("Response doesn't contain access_token field:\n {}", sourceResponse);
 			return null;
 		}
 		return result;
@@ -286,8 +279,8 @@ public class SignInPage extends BaseInitedPage {
 		String lastname = server.getLastnameParamName();
 		// prepare url
 		String requestInfoUrl = server.getRequestInfoUrl();
-		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), server.getClientSecret(),
-				token, getRedirectUri(server, this), code);
+		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server, this)
+				, server.getClientSecret(), token, code);
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
 		prepareConnection(connection);
