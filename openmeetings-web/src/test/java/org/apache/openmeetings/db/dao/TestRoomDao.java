@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -27,11 +28,14 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
+import org.junit.Assert;
 import org.junit.Test;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 public class TestRoomDao extends AbstractJUnitDefaults {
+	private static final Logger log = Red5LoggerFactory.getLogger(TestRoomDao.class, getWebAppRootKey());
 	@Autowired
 	protected RoomDao roomDao;
 
@@ -47,6 +51,11 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 		User u = userDao.getByLogin(adminUsername, User.Type.user, null);
 		assertNotNull("Admin user should exist", u);
 		r = roomDao.getUserRoom(u.getId(), Room.Type.presentation, "bla");
-		assertTrue("User presentation room should have mic status hidden", r.isHidden(RoomElement.MicrophoneStatus));
+		boolean hidden = r.isHidden(RoomElement.MicrophoneStatus);
+		if (!hidden && log.isDebugEnabled()) {
+			log.debug("Invalid personal room found -> User: {}, Room: {} ... deleted ? {}", u, r, r.isDeleted());
+		}
+		Assert.assertEquals("User presentation room should be created", Room.Type.presentation, r.getType());
+		assertTrue("User presentation room should have mic status hidden", hidden);
 	}
 }
