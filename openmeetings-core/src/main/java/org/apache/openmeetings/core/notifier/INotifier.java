@@ -22,6 +22,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User;
 
+@FunctionalInterface
 public interface INotifier {
 	void notify(User u, Appointment a, Invitation inv) throws Exception;
 }

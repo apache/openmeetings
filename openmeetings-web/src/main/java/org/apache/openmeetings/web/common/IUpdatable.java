@@ -22,6 +22,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
+@FunctionalInterface
 public interface IUpdatable extends Serializable {
 	void update(AjaxRequestTarget target);
 }

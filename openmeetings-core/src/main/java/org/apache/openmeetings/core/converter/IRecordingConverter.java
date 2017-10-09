@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+@FunctionalInterface
 public interface IRecordingConverter {
 	void startConversion(Long recordingId);
 }
