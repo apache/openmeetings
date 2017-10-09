@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.dao;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
@@ -40,7 +39,7 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 	protected RoomDao roomDao;
 
 	@Test
-	public void testMicStatusHidden() {
+	public void testMicStatusHidden() throws Exception {
 		Room r = roomDao.get(1);
 		assertTrue("Default interview room should have mic status hidden", r.isHidden(RoomElement.MicrophoneStatus));
 		r = roomDao.get(5);
@@ -48,8 +47,7 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 		r = roomDao.get(6);
 		assertFalse("Default Mic room should have mic status visible", r.isHidden(RoomElement.MicrophoneStatus));
 
-		User u = userDao.getByLogin(adminUsername, User.Type.user, null);
-		assertNotNull("Admin user should exist", u);
+		User u = createUser(); //creating new User here
 		r = roomDao.getUserRoom(u.getId(), Room.Type.presentation, "bla");
 		boolean hidden = r.isHidden(RoomElement.MicrophoneStatus);
 		if (!hidden && log.isDebugEnabled()) {
