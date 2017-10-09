@@ -44,6 +44,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -317,6 +318,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private Room createAppRoom() {
 			Room r = new Room();
 			r.setAppointment(true);
+			r.hide(RoomElement.MicrophoneStatus);
 			if (r.getType() == null) {
 				r.setType(Room.Type.conference);
 			}

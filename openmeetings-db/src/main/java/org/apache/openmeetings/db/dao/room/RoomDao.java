@@ -42,6 +42,7 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.util.TimezoneUtil;
@@ -265,6 +266,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 			room.setAllowUserQuestions(true);
 			room.setOwnerId(ownerId);
 			room.setAllowRecording(true);
+			room.hide(RoomElement.MicrophoneStatus);
 
 			room = update(room, ownerId);
 			if (room.getId() != null) {
