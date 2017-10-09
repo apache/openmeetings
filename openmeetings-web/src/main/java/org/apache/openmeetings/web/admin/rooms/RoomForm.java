@@ -27,7 +27,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -452,7 +451,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	private static Room newRoom() {
 		Room r = new Room();
-		r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.MicrophoneStatus)));
+		r.hide(RoomElement.MicrophoneStatus);
 		return r;
 	}
 
