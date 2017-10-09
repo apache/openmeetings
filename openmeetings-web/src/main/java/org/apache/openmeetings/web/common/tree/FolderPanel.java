@@ -24,9 +24,9 @@ import java.util.Map.Entry;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -130,7 +130,7 @@ public class FolderPanel extends Panel {
 
 	private static void move(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
 		Long pid = p.getId();
-		//FIXME parent should not be moved to child !!!!!!!
+		//TODO parent should not be moved to child !!!!!!!
 		if (pid != null && pid.equals(f.getId())) {
 			return;
 		}

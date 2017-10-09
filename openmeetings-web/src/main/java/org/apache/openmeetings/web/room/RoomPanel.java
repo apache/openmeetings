@@ -655,7 +655,7 @@ public class RoomPanel extends BasePanel {
 				c.allow(Right.superModerator);
 				update(c);
 			} else {
-				//FIXME TODO !!! c.getUser != getUserId
+				//TODO !!! c.getUser != getUserId
 				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, getRoomClients(r.getId()).size());
 				if (!rr.isEmpty()) {
 					c.allow(rr);

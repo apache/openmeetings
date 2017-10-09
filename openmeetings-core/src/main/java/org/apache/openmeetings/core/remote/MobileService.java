@@ -166,7 +166,7 @@ public class MobileService {
 				String country = umap.get("stateId");
 				Long langId = Long.valueOf(umap.get("langId"));
 
-				//FIXME TODO unify with Register dialog
+				//TODO unify with Register dialog
 				String hash = UUID.randomUUID().toString();
 
 				String baseURL = cfgDao.getBaseUrl();
@@ -310,7 +310,6 @@ public class MobileService {
 
 	public List<Map<String, Object>> getRooms() {
 		List<Map<String, Object>> result = new ArrayList<>();
-		// FIXME duplicated code
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
 		User u = userDao.get(c.getUserId());

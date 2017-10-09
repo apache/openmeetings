@@ -315,12 +315,12 @@ public class UserManager implements IUserManager {
 		}
 		if (!userDao.validLogin(login)) {
 			log.error("Invalid login, please check parameters");
-			return null; //TODO FIXME need to be checked
+			return null;
 		}
 		User u = userDao.getByLogin(login, Type.oauth, serverId);
 		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getId())) {
 			log.error("Another user with the same email exists");
-			return null; //TODO FIXME need to be checked
+			return null;
 		}
 		// generate random password
 		SecureRandom rnd = new SecureRandom();
@@ -352,7 +352,6 @@ public class UserManager implements IUserManager {
 				}
 			}
 		}
-		//TODO FIXME should we update fields on login ????
 		u.setLastlogin(new Date());
 		u = userDao.update(u, pass, Long.valueOf(-1));
 

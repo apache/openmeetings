@@ -287,7 +287,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 			boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
 			try {
-				oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
+				oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
 				TypedQuery<User> q = oem.createNamedQuery("getUserById", User.class).setParameter("id", id);
 				@SuppressWarnings("unchecked")
 				OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);
@@ -334,7 +334,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		OpenJPAEntityManager oem = OpenJPAPersistence.cast(em);
 		boolean qrce = oem.getFetchPlan().getQueryResultCacheEnabled();
 		try {
-			oem.getFetchPlan().setQueryResultCacheEnabled(false); //FIXME update in cache during update
+			oem.getFetchPlan().setQueryResultCacheEnabled(false); //update in cache during update
 			TypedQuery<User> q = oem.createNamedQuery("getAllUsers", User.class);
 			@SuppressWarnings("unchecked")
 			OpenJPAQuery<User> kq = OpenJPAPersistence.cast(q);

@@ -171,7 +171,7 @@ public class SessiondataDao {
 			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
 				String aux = rcl.getSwfurl();
 
-				//FIXME TODO this need to be refactored !
+				//TODO this need to be refactored !
 				int start = aux.indexOf("sid=") + 4;
 				int end = start + 32;
 				if (end > aux.length()) {

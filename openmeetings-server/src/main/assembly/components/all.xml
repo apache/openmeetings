@@ -93,14 +93,14 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/public</directory><!-- FIXME should be implemented differently -->
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/public</directory>
 			<outputDirectory>${root.webapp}</outputDirectory>
 			<includes>
 				<include>favicon.ico</include>
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory><!-- FIXME should be implemented differently -->
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory>
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>META-INF/**</exclude>
@@ -122,7 +122,7 @@
 			</excludes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory><!-- FIXME should be implemented differently -->
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory>
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<filtered>true</filtered>
 			<includes>
@@ -130,7 +130,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory><!-- FIXME should be implemented differently -->
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
 			<outputDirectory>lib</outputDirectory>
 			<includes>
 				<include>spring-*</include>
@@ -140,7 +140,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory><!-- FIXME should be implemented differently -->
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
 			<outputDirectory>plugins</outputDirectory>
 			<includes>
 				<include>tomcat-*</include>

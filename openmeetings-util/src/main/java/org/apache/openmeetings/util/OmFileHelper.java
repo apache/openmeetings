@@ -88,7 +88,7 @@ public class OmFileHelper {
 	}
 
 	public static File getRootDir() {
-		// FIXME hack !!!!
+		// hack !!!!
 		return getOmHome().getParentFile().getParentFile();
 	}
 
@@ -257,7 +257,7 @@ public class OmFileHelper {
 		return new File(parent, name + suffix + ext);
 	}
 
-	// FIXME need to be generalized
+	// TODO need to be generalized
 	public static File getNewFile(File dir, String name, String ext) throws IOException {
 		File f = new File(dir, getName(name, ext));
 		int recursiveNumber = 0;

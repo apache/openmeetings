@@ -100,7 +100,7 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 
 	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
 		if (appClass == null) {
-			//FIXME HACK to resolve package dependencies
+			//HACK to resolve package dependencies
 			appClass = Class.forName("org.apache.openmeetings.web.app.Application");
 		}
 		return appClass;

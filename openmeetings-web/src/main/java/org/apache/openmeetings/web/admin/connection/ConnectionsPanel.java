@@ -56,8 +56,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 		SearchableDataProvider<IClient> sdp = new SearchableDataProvider<IClient>(null) {
 			private static final long serialVersionUID = 1L;
 
-			//FIXME add search
-
+			//TODO add search
 			private List<IClient> list() {
 				List<IClient> l = new ArrayList<>();
 				l.addAll(getBean(ISessionManager.class).list());
@@ -67,7 +66,6 @@ public class ConnectionsPanel extends AdminBasePanel {
 
 			@Override
 			public Iterator<? extends IClient> iterator(long first, long count) {
-				//FIXME add grouping by public SID
 				List<IClient> l = list();
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}

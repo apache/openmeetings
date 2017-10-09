@@ -156,7 +156,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
-	private static final Set<String> STRINGS_WITH_APP = new HashSet<>(); //FIXME need to be removed
+	private static final Set<String> STRINGS_WITH_APP = new HashSet<>();
 	private static String appName;
 	static {
 		STRINGS_WITH_APP.addAll(Arrays.asList("499", "500", "506", "511", "512", "513", "517", "532", "622", "widget.start.desc"
@@ -443,10 +443,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					client.setMic(0);
 					client.setRoom(getBean(RoomDao.class).get(rcl.getRoomId()));
 					addUserToRoom(client);
-					//FIXME TODO unify this
+					//TODO unify this
 					WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				}
-				//FIXME TODO rights
+				//TODO rights
 			} else if (client == null && Client.Type.sip == rcl.getType()) {
 				rcl.setLogin(SIP_USER_NAME);
 				rcl.setUserId(SIP_USER_ID);
@@ -462,7 +462,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				client.allow(Room.Right.audio, Room.Right.video);
 				client.set(Activity.broadcastA);
 				addUserToRoom(client);
-				//FIXME TODO unify this
+				//TODO unify this
 				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
 			} else {
 				return null;
@@ -695,7 +695,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return false;
 	}
 
-	//TODO need more safe way FIXME
+	//TODO need more safe way
 	public <T> T _getBean(Class<T> clazz) {
 		WebApplicationContext wac = getWebApplicationContext(getServletContext());
 		return wac == null ? null : wac.getBean(clazz);
@@ -757,13 +757,14 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
+	//BEGIN hack for email templates support (should be in separate module for now
 	@Override
-	public <T> T getOmBean(Class<T> clazz) { //FIXME hack for email templates support (should be in separate module for now
+	public <T> T getOmBean(Class<T> clazz) {
 		return Application.getBean(clazz);
 	}
 
 	@Override
-	public <T> T _getOmBean(Class<T> clazz) { //FIXME hack for web services support (should be in separate module for now
+	public <T> T _getOmBean(Class<T> clazz) {
 		return Application.get()._getBean(clazz);
 	}
 
@@ -772,9 +773,20 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public String getOmContactsLink() { //FIXME hack for email templates support (should be in separate module for now
+	public String getOmContactsLink() {
 		return getContactsLink();
 	}
+
+	@Override
+	public String getOmInvitationLink(Invitation i) {
+		return getInvitationLink(i, null);
+	}
+
+	@Override
+	public String urlForActivatePage(PageParameters pp) {
+		return urlForPage(ActivatePage.class, pp, null);
+	}
+	//END hack for email templates support (should be in separate module for now
 
 	public static String getInvitationLink(Invitation i, String baseUrl) {
 		String link = "";
@@ -807,11 +819,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return link;
 	}
 
-	@Override
-	public String getOmInvitationLink(Invitation i) { //FIXME hack for email templates support (should be in separate module for now
-		return getInvitationLink(i, null);
-	}
-
 	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String _baseUrl) {
 		RequestCycle rc = RequestCycle.get();
 		String baseUrl = getBean(ConfigurationDao.class).getBaseUrl();
@@ -819,11 +826,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			baseUrl = _baseUrl;
 		}
 		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.urlFor(clazz, pp)));
-	}
-
-	@Override
-	public String urlForActivatePage(PageParameters pp) { //FIXME hack for email templates support (should be in separate module for now
-		return urlForPage(ActivatePage.class, pp, null);
 	}
 
 	@Override

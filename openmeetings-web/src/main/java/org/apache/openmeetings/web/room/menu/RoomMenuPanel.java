@@ -340,7 +340,7 @@ public class RoomMenuPanel extends Panel {
 			if (recClient != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
 						, recClient.getUser().getLogin(), recClient.getUser().getFirstname(), recClient.getUser().getLastname(), df.format(recClient.getConnectedSince())));
-				//FIXME TODO get ConnectedSince of StreamClient
+				//TODO get ConnectedSince of StreamClient
 				roomClass.append(" screen");
 			}
 			Client pubClient = getClientBySid(room.getPublishingUser());

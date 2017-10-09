@@ -84,7 +84,7 @@ form .input {
 	float: left !important;
 }
 
-/**** FIXME need to be moved to wicket-jquery-ui **************/
+/**** TODO need to be moved to wicket-jquery-ui **************/
 span.css-emoticon {
 	transform: rotate(-90deg) !important;
 }

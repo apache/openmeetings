@@ -475,12 +475,15 @@ public class ImportInitvalues {
 	}
 
 	// ------------------------------------------------------------------------------
-
-	public void loadSystem(InstallationConfig cfg, boolean force) {
-		// FIXME dummy check if installation was performed before
+	private void checkInstalled(boolean force) {
+		// dummy check if installation was performed before
 		if (!force && userDao.count() > 0) {
 			log.debug("System contains users, no need to install data one more time.");
 		}
+	}
+
+	public void loadSystem(InstallationConfig cfg, boolean force) {
+		checkInstalled(force);
 		sipDao.delete();
 		progress = 20;
 		loadConfiguration(cfg);
@@ -492,11 +495,7 @@ public class ImportInitvalues {
 	}
 
 	public void loadAll(InstallationConfig cfg, boolean force) throws Exception {
-		// FIXME dummy check if installation was performed before
-		if (!force && userDao.count() > 0) {
-			log.debug("System contains users, no need to install data one more time.");
-			return;
-		}
+		checkInstalled(force);
 		loadSystem(cfg, force);
 		loadInitUserAndGroup(cfg);
 		progress = 80;

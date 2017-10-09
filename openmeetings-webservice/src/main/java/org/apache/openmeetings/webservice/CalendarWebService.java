@@ -277,7 +277,7 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@WebMethod
 	@POST
-	@Path("/") //TODO FIXME update is also here for now
+	@Path("/")
 	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment) throws ServiceException {
 		//Seems to be create
 		log.debug("save SID:" + sid);

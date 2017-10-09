@@ -49,8 +49,8 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.openmeetings.util.process.ProcessResult;
 import org.red5.io.flv.impl.FLVWriter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -167,7 +167,6 @@ public abstract class BaseConverter {
 	}
 
 	private String[] addSoxPad(List<ProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
-		//FIXME need to check this
 		if (length < 0 || position < 0) {
 			log.debug("::addSoxPad {} Invalid parameters: length = {}; position = {}; inFile = {}", job, length, position, inFile);
 		}
@@ -377,7 +376,7 @@ public abstract class BaseConverter {
 				"-c:a", "libfaac",
 				"-c:a", "libfdk_aac",
 				"-ar", "22050",
-				"-b:a", "32k", //FIXME add quality constants
+				"-b:a", "32k", //TODO add quality constants
 				"-s", getDimensions(r), //
 				mp4path
 				));

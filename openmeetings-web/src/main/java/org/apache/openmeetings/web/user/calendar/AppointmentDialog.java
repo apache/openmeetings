@@ -113,7 +113,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	final MessageDialog confirmDelete;
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
-	//FIXME TODO need to be unified with RoomInvitationForm
+	//TODO need to be unified with RoomInvitationForm
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
 			, new CollectionModel<Group>(new ArrayList<>())
@@ -494,14 +494,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		}
 
 		private List<Room> getRoomList() {
-			//FIXME need to be reviewed
 			List<Room> result = new ArrayList<>();
 			RoomDao dao = getBean(RoomDao.class);
 			result.addAll(dao.getPublicRooms());
 			for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
 				result.addAll(dao.getGroupRooms(ou.getGroup().getId()));
 			}
-			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) { //FIXME review
+			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) {
 				result.add(getModelObject().getRoom());
 			}
 			return result;

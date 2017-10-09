@@ -452,7 +452,7 @@ var Wb = function() {
 		$(this).find('.canvas-container').each(function(idx) {
 			const h = $(this).height(), pos = $(this).position();
 			if (slide !== idx && pos.top > BUMPER - h && pos.top < BUMPER) {
-				//TODO FIXME might be done without iterating
+				//TODO might be done without iterating
 				_setSlide(idx);
 				return false;
 			}

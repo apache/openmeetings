@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
+import static org.apache.commons.lang3.time.FastDateFormat.MEDIUM;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -30,10 +30,11 @@ import org.apache.wicket.markup.html.basic.Label;
 
 public class DateLabel extends Label {
 	private static final long serialVersionUID = 1L;
-	private static final FastDateFormat fmt = FastDateFormat.getInstance(WEB_DATE_PATTERN);
+	private final FastDateFormat fmt;
 
 	public DateLabel(String id) {
 		super(id);
+		fmt = FastDateFormat.getDateTimeInstance(MEDIUM, MEDIUM, getLocale());
 	}
 
 	@Override

@@ -60,13 +60,13 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 				try {
 					new Locale.Builder().setLanguageTag(s.getValue());
 				} catch (IllformedLocaleException e) {
-					s.error(new ValidationError("Invalid code, please use ")); //FIXME TODO add proper key
+					s.error(new ValidationError("Invalid code, please use "));
 					return;
 				}
 				Locale l = Locale.forLanguageTag(s.getValue());
 				for (Map.Entry<Long, Locale> e : LabelDao.getLanguages()) {
 					if (e.getValue().equals(l)) {
-						s.error(new ValidationError("This code already added")); //FIXME TODO add proper key
+						s.error(new ValidationError("This code already added"));
 						break;
 					}
 				}
@@ -108,7 +108,7 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 			langPanel.getLangForm().updateLanguages(target);
 			target.appendJavaScript("$('#addLanguage').dialog('close');");
 		} catch (Exception e) {
-			error("Failed to add, " + e.getMessage()); //FIXME TODO add proper key
+			error("Failed to add, " + e.getMessage());
 			target.add(feedback);
 		}
 	}

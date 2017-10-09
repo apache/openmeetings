@@ -163,7 +163,7 @@ public class Chat extends Panel {
 
 		if (showDashboardChat) {
 			ChatDao dao = getBean(ChatDao.class);
-			//FIXME limited count should be loaded with "earlier" link
+			//TODO limited count should be loaded with "earlier" link
 			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
 			for(Long roomId : getUserRooms(getUserId())) {
 				Room r = getBean(RoomDao.class).get(roomId);

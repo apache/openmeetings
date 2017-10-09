@@ -215,11 +215,11 @@ public class CalendarPanel extends UserBasePanel {
 				}
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getStart());
-				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
+				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
 				a.setStart(cal.getTime());
 
 				cal.setTime(a.getEnd());
-				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
+				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
 				a.setEnd(cal.getTime());
 
 				dao.update(a, getUserId());
@@ -227,7 +227,7 @@ public class CalendarPanel extends UserBasePanel {
 				if (a.getCalendar() != null) {
 					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 				}
-				//FIXME add feedback info
+				//TODO add feedback info
 			}
 
 			@Override
@@ -239,7 +239,7 @@ public class CalendarPanel extends UserBasePanel {
 				}
 				java.util.Calendar cal = WebSession.getCalendar();
 				cal.setTime(a.getEnd());
-				cal.add(java.util.Calendar.MILLISECOND, (int)delta); //FIXME?
+				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
 				a.setEnd(cal.getTime());
 
 				dao.update(a, getUserId());
@@ -247,7 +247,7 @@ public class CalendarPanel extends UserBasePanel {
 				if (a.getCalendar() != null) {
 					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 				}
-				//FIXME add feedback info
+				//TODO add feedback info
 			}
 		};
 

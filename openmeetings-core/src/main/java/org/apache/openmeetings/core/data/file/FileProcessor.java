@@ -35,8 +35,8 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
-import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.util.process.ProcessResult;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class FileProcessor {
 	@Autowired
 	private DocumentConverter generatePDF;
 
-	//FIXME TODO this method need to be refactored to throw exceptions
+	//TODO this method need to be refactored to throw exceptions
 	public ProcessResultList processFile(FileItem f, InputStream is) throws Exception {
 		ProcessResultList result = new ProcessResultList();
 		// Generate a random string to prevent any problems with

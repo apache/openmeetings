@@ -31,7 +31,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmException;
 
-//FIXME HACK to bypass cross project compilation
+//HACK to bypass cross project compilation
 public interface IUserManager {
 
 	Object registerUser(String login, String userpass, String lastname,

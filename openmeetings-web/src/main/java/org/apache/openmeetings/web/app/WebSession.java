@@ -226,7 +226,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						user = userDao.getNewUserInstance(null);
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
-						user.setLogin(remoteUser.getUsername()); //FIXME check if login UNIQUE
+						user.setLogin(remoteUser.getUsername());
 						user.setType(Type.external);
 						user.setExternalId(remoteUser.getExternalUserId());
 						user.setExternalType(remoteUser.getExternalUserType());
@@ -243,7 +243,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					if (markUsed) {
 						soapLogin.setUsed(true);
 						soapLogin.setUseDate(new Date());
-						//soapLogin.setClientURL(clientURL); //FIXME
+						//soapLogin.setClientURL(clientURL); //TODO
 						soapDao.update(soapLogin);
 					}
 					roomId = soapLogin.getRoomId();

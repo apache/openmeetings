@@ -236,8 +236,6 @@ public class UserWebService extends BaseWebService {
 		}
 	}
 
-	//FIXME no update
-
 	/**
 	 *
 	 * Delete a certain user by its id

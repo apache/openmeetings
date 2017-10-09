@@ -43,7 +43,7 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	public static User getUser(String value) {
 		User u = null;
 		if (!Strings.isEmpty(value)) {
-			//FIXME refactor this
+			//TODO refactor this
 			String email = null;
 			String fName = null;
 			String lName = null;

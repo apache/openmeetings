@@ -205,7 +205,6 @@ public class InvitationDTO implements Serializable {
 					break;
 			}
 		} catch (ParseException e) {
-			//FIXME TODO need to throw other exception
 			log.error("Unexpected error while creating invitation", e);
 			throw new RuntimeException(e);
 		}

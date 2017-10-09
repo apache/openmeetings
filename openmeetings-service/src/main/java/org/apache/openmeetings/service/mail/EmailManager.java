@@ -27,7 +27,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplic
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.service.mail.template.FeedbackTemplate;
 import org.apache.openmeetings.service.mail.template.RegisterUserTemplate;
 import org.apache.wicket.Application;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -78,10 +77,5 @@ public class EmailManager {
 			mailHandler.send(email, getString("512")
 				, RegisterUserTemplate.getEmail(username, email, sendEmailWithVerficationCode ? link : null));
 		}
-	}
-
-	//FIXME, seems to be not used
-	public void sendFeedback(String username, String email, String message) {
-		mailHandler.send("user@openmeetings.apache.org", getString("499"), FeedbackTemplate.getEmail(username, email, message));
 	}
 }

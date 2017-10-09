@@ -100,8 +100,7 @@ public class RoomClientPanel extends Panel {
 			status = "status-user";
 			statusTitle = "677";
 		}
-		//FIXME TODO add 'typingActivity'
-		//FIXME TODO add ability to change 'first/last name'
+		//TODO add ability to change 'first/last name'
 		add(new WebMarkupContainer("status").add(AttributeModifier.append("class", status), AttributeModifier.replace("title", getString(statusTitle))));
 	}
 }

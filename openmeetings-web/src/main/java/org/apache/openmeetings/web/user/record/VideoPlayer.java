@@ -33,7 +33,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class VideoPlayer extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final WebMarkupContainer wait = new WebMarkupContainer("wait"); //FIXME not used
+	private final WebMarkupContainer wait = new WebMarkupContainer("wait"); //TODO not used
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Mp4RecordingResourceReference mp4RecRes = new Mp4RecordingResourceReference();
 	private final PngRecordingResourceReference posterRecRes = new PngRecordingResourceReference();

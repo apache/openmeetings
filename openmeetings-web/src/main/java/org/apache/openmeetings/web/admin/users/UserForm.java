@@ -191,7 +191,7 @@ public class UserForm extends AdminBaseForm<User> {
 				getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
 			}
 		} catch (Exception e) {
-			// FIXME update feedback with the error details
+			// TODO update feedback with the error details
 			log.error("[onSaveSubmit]: ", e);
 		}
 		setModelObject(getBean(UserDao.class).get(u.getId()));

@@ -89,7 +89,7 @@ public class ProfileForm extends Form<User> {
 
 			@Override
 			protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-				// FIXME update feedback with the error details
+				// TODO update feedback with the error details
 			}
 
 			@Override
@@ -100,7 +100,7 @@ public class ProfileForm extends Form<User> {
 
 			@Override
 			protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-				// FIXME update feedback with the error details
+				// TODO update feedback with the error details
 			}
 		});
 		add(new WebMarkupContainer("changePwd").add(new ButtonBehavior("#changePwd"), new AjaxEventBehavior("click") {

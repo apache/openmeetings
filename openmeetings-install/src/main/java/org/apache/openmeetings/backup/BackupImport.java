@@ -952,7 +952,7 @@ public class BackupImport {
 		return null;
 	}
 
-	//FIXME (need to be removed in later versions) HACK to fix old properties
+	//TODO (need to be removed in later versions) HACK to fix old properties
 	public List<FileItem> readFileItemList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<FileItem> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
@@ -1031,7 +1031,7 @@ public class BackupImport {
 		return list;
 	}
 
-	//FIXME (need to be removed in later versions) HACK to fix old properties
+	//TODO (need to be removed in later versions) HACK to fix old properties
 	public List<Recording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<Recording> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
@@ -1093,7 +1093,7 @@ public class BackupImport {
 		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
 	}
 
-	//FIXME (need to be removed in later versions) HACK to add external attendees previously stored in MeetingMember structure
+	//TODO (need to be removed in later versions) HACK to add external attendees previously stored in MeetingMember structure
 	private List<MeetingMember> readMeetingMemberList(File baseDir, String filename, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -1169,7 +1169,7 @@ public class BackupImport {
 		return list;
 	}
 
-	//FIXME (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Address and sipData
+	//TODO (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Address and sipData
 	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -1312,7 +1312,7 @@ public class BackupImport {
 		return list;
 	}
 
-	//FIXME (need to be removed in later versions) HACK to fix old properties
+	//TODO (need to be removed in later versions) HACK to fix old properties
 	private List<Room> readRoomList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<Room> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);

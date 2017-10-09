@@ -437,7 +437,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 			for (RoomFile rf : r.getFiles()) {
 				rf.setRoomId(r.getId());
 			}
-			// FIXME double update
 			getBean(RoomDao.class).update(getModelObject(), getUserId());
 		}
 		hideNewRecord();

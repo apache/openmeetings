@@ -433,7 +433,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			private String getName(UserContact uc) {
-				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname(); //FIXME salutation
+				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname(); //TODO salutation, UNIFY
 			}
 
 			@Override

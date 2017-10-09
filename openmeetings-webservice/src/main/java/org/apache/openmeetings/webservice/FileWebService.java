@@ -319,7 +319,7 @@ public class FileWebService extends BaseWebService {
 	{
 		try {
 			if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
-				// FIXME TODO: check if this user is allowed to change this file
+				// TODO: check if this user is allowed to change this file
 
 				log.debug("rename " + id);
 				FileItem f = getFileDao().rename(id, name);
@@ -359,7 +359,7 @@ public class FileWebService extends BaseWebService {
 			Sessiondata sd = check(sid);
 			Long userId = sd.getUserId();
 			if (AuthLevelUtil.hasUserLevel(getRights(userId))) {
-				// FIXME TODO A test is required that checks if the user is allowed to move the file
+				// TODO A test is required that checks if the user is allowed to move the file
 				log.debug("move " + id);
 				FileItem f = getFileDao().move(id, parentId, userId, roomId);
 				return f == null ? null : new FileItemDTO(f);

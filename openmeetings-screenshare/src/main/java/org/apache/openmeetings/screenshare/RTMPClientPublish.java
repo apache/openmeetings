@@ -82,9 +82,7 @@ class RTMPClientPublish extends RTMPClient implements IPendingServiceCallback, I
 	public void resultReceived(IPendingServiceCall call) {
 		String method = call == null ? null : call.getServiceMethodName();
 		logger.trace("call ### get Method Name " + method);
-		if ("connect".equals(method)) {
-			//setConnectionAsSharingClient(); //FIXME
-		} else if ("createStream".equals(method)) {
+		if ("createStream".equals(method)) {
 			if (call.getResult() != null) {
 				publishScreen.setStreamId((Integer)call.getResult());
 				publish(publishScreen.getStreamId(), id, "live", this);

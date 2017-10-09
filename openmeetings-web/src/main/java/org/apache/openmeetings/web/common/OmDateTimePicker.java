@@ -56,7 +56,7 @@ public class OmDateTimePicker extends DateTimePicker {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		//FIXME TODO this is remain here until localized AM/PM will be correctly handled
+		//TODO this is remain here until localized AM/PM will be correctly handled
 		//response.render(KendoCultureHeaderItem.of(WebSession.get().getLocale()));
 	}
 }

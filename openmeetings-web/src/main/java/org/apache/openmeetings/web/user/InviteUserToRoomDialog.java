@@ -54,7 +54,7 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 
 		@Override
 		public void onRoomEnter(AjaxRequestTarget target, Long roomId) {
-			//FIXME TODO only show message if other user is online
+			//TODO only show message if other user is online
 			inviteMsg.open(target, roomId, userId);
 		}
 	}
