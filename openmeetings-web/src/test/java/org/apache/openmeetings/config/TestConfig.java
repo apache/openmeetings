@@ -26,24 +26,19 @@ import static org.junit.Assert.assertNull;
 import java.util.List;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestConfig extends AbstractJUnitDefaults {
 	private static final Logger log = Red5LoggerFactory.getLogger(TestConfig.class, getWebAppRootKey());
-
-	@Autowired
-	private ConfigurationDao configurationDao;
 
 	@Test
 	public void getConfigKey() {
 		System.err.println("THIS");
 
-		Configuration smtp_server = configurationDao.get(CONFIG_SMTP_SERVER);
+		Configuration smtp_server = cfgDao.get(CONFIG_SMTP_SERVER);
 
 		System.err.println("smtp_server " + smtp_server.getUser());
 
@@ -54,7 +49,7 @@ public class TestConfig extends AbstractJUnitDefaults {
 	public void getConfigs() {
 
 		try {
-			List<Configuration> list = configurationDao.get(4, 6);
+			List<Configuration> list = cfgDao.get(4, 6);
 
 			for (Configuration conf : list) {
 				log.error("conf.getKey() " + conf.getKey());
