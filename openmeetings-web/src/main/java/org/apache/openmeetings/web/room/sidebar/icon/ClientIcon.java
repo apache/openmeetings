@@ -19,9 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -30,8 +33,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 public abstract class ClientIcon extends WebMarkupContainer {
 	private static final long serialVersionUID = 1L;
 	protected static final String ICON_CLASS = "ui-icon ";
-	protected static final String ALIGN_LEFT = "align-left ";
-	protected static final String ALIGN_RIGHT = "align-right ";
 	protected static final String CLS_CLICKABLE = "clickable ";
 	protected final RoomPanel room;
 	protected final boolean self;
@@ -57,7 +58,7 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	protected abstract String getTitle();
 
 	protected String getAlign() {
-		return ALIGN_LEFT;
+		return ((BasePage)getPage()).isRtl() ? ALIGN_RIGHT : ALIGN_LEFT;
 	}
 
 	protected abstract boolean isClickable();

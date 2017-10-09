@@ -38,7 +38,7 @@ public abstract class BaseInitedPage extends BasePage {
 	}
 
 	@Override
-	protected boolean isRtl() {
+	public boolean isRtl() {
 		return FormatHelper.isRtlLanguage(getLanguageCode());
 	}
 }

@@ -1,4 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+var isRtl = "rtl" === $('html').attr('dir');
+
 Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	const l = window.location;
 	info.codebase = l.origin + l.pathname;

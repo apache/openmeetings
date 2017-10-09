@@ -83,6 +83,21 @@ form .input {
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
 	float: left !important;
 }
+.room.menu.right {
+	right:initial !important;
+	left:0;
+}
+.room.menu.right .icon, .room.menu.right .room.name {
+	float:left !important;
+}
+#activities {
+	right: 10px !important;
+	left: initial !important;
+}
+#activities .control.block .label, #chatPopup .control.block .label {
+	padding-left: initial !important;
+	padding-right: 20px !important;
+}
 
 /**** TODO need to be moved to wicket-jquery-ui **************/
 span.css-emoticon {

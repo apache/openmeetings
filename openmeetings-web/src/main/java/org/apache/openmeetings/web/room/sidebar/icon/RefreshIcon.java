@@ -18,8 +18,12 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
+
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
+import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 
 public class RefreshIcon extends ClientIcon {
@@ -37,7 +41,7 @@ public class RefreshIcon extends ClientIcon {
 
 	@Override
 	protected String getAlign() {
-		return ALIGN_RIGHT;
+		return ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT;
 	}
 
 	@Override

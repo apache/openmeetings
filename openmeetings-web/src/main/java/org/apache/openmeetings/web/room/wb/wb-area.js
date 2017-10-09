@@ -243,7 +243,7 @@ var WbArea = (function() {
 	self.resize = function(posX, w, h) {
 		if (!container || !_inited) return;
 		const hh = h - 5;
-		container.width(w).height(h).css('left', posX + "px");
+		container.width(w).height(h).css('left', (isRtl ? 0 : posX) + "px");
 		area.width(w).height(hh);
 
 		const wbTabs = area.find(".tabs.ui-tabs");

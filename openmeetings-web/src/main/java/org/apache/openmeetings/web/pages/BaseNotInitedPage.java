@@ -40,7 +40,7 @@ public abstract class BaseNotInitedPage extends BasePage {
 	}
 
 	@Override
-	protected boolean isRtl() {
+	public boolean isRtl() {
 		boolean rtl = false;
 		if (Application.isInstalled()) {
 			rtl = FormatHelper.isRtlLanguage(WebSession.get().getLocale().toString());

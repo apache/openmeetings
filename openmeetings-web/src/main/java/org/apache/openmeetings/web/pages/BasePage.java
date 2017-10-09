@@ -47,6 +47,8 @@ import org.wicketstuff.urlfragment.AsyncUrlFragmentAwarePage;
 
 public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private static final long serialVersionUID = 1L;
+	public static final String ALIGN_LEFT = "align-left ";
+	public static final String ALIGN_RIGHT = "align-right ";
 	private final Map<String, String> options;
 	private final HeaderPanel header;
 	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader");
@@ -67,7 +69,7 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 		add(loader.setVisible(isMainPage()).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 	}
 
-	protected abstract boolean isRtl();
+	public abstract boolean isRtl();
 	protected abstract String getLanguageCode();
 	protected abstract String getApplicationName();
 
