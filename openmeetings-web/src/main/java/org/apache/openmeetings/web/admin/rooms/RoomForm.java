@@ -28,6 +28,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -120,7 +121,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private IModel<Long> wbIdx = Model.of(0L);
 
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
-		super(id, new CompoundPropertyModel<>(room));
+		super(id, new CompoundPropertyModel<>(room == null ? newRoom() : room));
 		this.roomList = roomList;
 		setOutputMarkupId(true);
 	}
@@ -451,9 +452,15 @@ public class RoomForm extends AdminBaseForm<Room> {
 		// TODO Auto-generated method stub
 	}
 
+	private static Room newRoom() {
+		Room r = new Room();
+		r.setHiddenElements(new HashSet<>(Arrays.asList(RoomElement.MicrophoneStatus)));
+		return r;
+	}
+
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		setModelObject(new Room());
+		setModelObject(newRoom());
 		updateView(target);
 	}
 
@@ -468,7 +475,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		if (r.getId() != null) {
 			r = getBean(RoomDao.class).get(r.getId());
 		} else {
-			r = new Room();
+			r = newRoom();
 		}
 		setModelObject(r);
 		updateView(target);
@@ -483,7 +490,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(RoomDao.class).delete(getModelObject(), getUserId());
 		target.add(roomList);
-		setModelObject(new Room());
+		setModelObject(newRoom());
 		updateView(target);
 	}
 
