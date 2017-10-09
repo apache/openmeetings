@@ -18,9 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +29,7 @@ import org.apache.openmeetings.db.entity.basic.Configuration.Type;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -119,7 +118,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 			}
 		};
 		valueB = new CheckBox("valueB");
-		add(forDatePattern("updated", WEB_DATE_PATTERN));
+		add(new DateLabel("updated"));
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
 		update(null);

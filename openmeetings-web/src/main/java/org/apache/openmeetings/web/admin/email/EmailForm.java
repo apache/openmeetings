@@ -18,17 +18,13 @@
  */
 package org.apache.openmeetings.web.admin.email;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
-
-import java.util.Date;
 
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
+import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.datetime.markup.html.basic.DateLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -39,8 +35,6 @@ import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
 public class EmailForm extends Form<MailMessage> {
 	private static final long serialVersionUID = 1L;
-	private final DateLabel inserted;
-	private final DateLabel updated;
 	private final Label status;
 	private final AjaxButton reset;
 	private ConfirmableAjaxBorder delBtn;
@@ -53,8 +47,8 @@ public class EmailForm extends Form<MailMessage> {
 		add(new Label("subject"));
 		add(new Label("recipients"));
 		add(new Label("body").setEscapeModelStrings(false));
-		add(inserted = forDatePattern("inserted", Model.of((Date)null), WEB_DATE_PATTERN));
-		add(updated = forDatePattern("updated", Model.of((Date)null), WEB_DATE_PATTERN));
+		add(new DateLabel("inserted"));
+		add(new DateLabel("updated"));
 		add(new Label("errorCount"));
 		add(new Label("lastError"));
 		add(reset = new AjaxButton("reset") {
@@ -92,8 +86,6 @@ public class EmailForm extends Form<MailMessage> {
 		MailMessage m = getModelObject();
 		delBtn.setEnabled(m.getId() != null);
 		status.setDefaultModelObject(getString("admin.email.status." + m.getStatus().name()));
-		inserted.setModelObject(m.getInserted() == null ? null : m.getInserted().getTime());
-		updated.setModelObject(m.getUpdated() == null ? null : m.getUpdated().getTime());
 		reset.setEnabled(m.getId() != null && MailMessage.Status.ERROR == m.getStatus());
 	}
 }

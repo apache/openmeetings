@@ -22,12 +22,10 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.WEB_DATE_PATTERN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.wicket.datetime.markup.html.basic.DateLabel.forDatePattern;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.ArrayList;
@@ -52,6 +50,7 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
+import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
@@ -123,8 +122,8 @@ public class UserForm extends AdminBaseForm<User> {
 		update(null);
 		add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(new Label("ownerId"));
-		add(forDatePattern("inserted", WEB_DATE_PATTERN));
-		add(forDatePattern("updated", WEB_DATE_PATTERN));
+		add(new DateLabel("inserted"));
+		add(new DateLabel("updated"));
 
 		add(new CheckBox("forceTimeZoneCheck"));
 
