@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.getAuthenticationStrat
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
+import static org.apache.openmeetings.web.pages.auth.SignInPage.showAuth;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
@@ -44,8 +45,8 @@ import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -272,22 +273,20 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 					@Override
 					protected void populateItem(final ListItem<OAuthServer> item) {
-						Button btn = new Button("oauthBtn");
 						final OAuthServer s = item.getModelObject();
-						Image icon = new Image("icon", Model.of(""));
-						icon.setVisible(!Strings.isEmpty(s.getIconUrl()));
-						icon.add(AttributeModifier.replace("src", s.getIconUrl()));
-						btn.add(icon);
-						btn.add(new Label("label", s.getName()))
-							.add(new AjaxEventBehavior("click") {
-								private static final long serialVersionUID = 1L;
+						Button btn = new Button("oauthBtn") {
+							private static final long serialVersionUID = 1L;
 
-								@Override
-								protected void onEvent(AjaxRequestTarget target) {
-									SignInPage.showAuth(s, SignInDialog.this);
-								}
-							});
-						item.add(btn);
+							@Override
+							public void onSubmit() {
+								showAuth(s, SignInDialog.this);
+							}
+						};
+						Component icon = new Image("icon", Model.of(""))
+								.setVisible(!Strings.isEmpty(s.getIconUrl()))
+								.add(AttributeModifier.replace("src", s.getIconUrl()));
+						btn.add(icon, new Label("label", s.getName()));
+						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
 					}
 				}).setVisible(allowOAuthLogin()));
 		}
