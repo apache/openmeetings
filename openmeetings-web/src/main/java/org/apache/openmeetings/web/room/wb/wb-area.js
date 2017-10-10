@@ -285,8 +285,8 @@ $(function() {
 				return; //ping
 			}
 			const m = jQuery.parseJSON(msg);
-			if (m && 'wb' === m.type && typeof WbArea !== 'undefined') {
-				eval(m.func);
+			if (m && 'wb' === m.type && typeof WbArea !== 'undefined' && !!m.func) {
+				WbArea[m.func](m.param);
 			}
 		} catch (err) {
 			//no-op

@@ -131,10 +131,8 @@ public class WbWebSocketHelper extends WebSocketHelper {
 				roomId
 				, new JSONObject().put("type", "wb")
 				, null
-				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);"
-								, WbAction.createObj.name()
-								, getObjWbJson(wbId, addFileUrl(ruid, file, fi, c)).toString())
-							).toString());
+				, (o, c) -> o.put("func", WbAction.createObj.name())
+							.put("param", getObjWbJson(wbId, addFileUrl(ruid, file, fi, c)).toString()).toString());
 	}
 
 	private static void sendWb(Long roomId, WbAction meth, JSONObject obj, Predicate<Client> check) {
@@ -142,7 +140,8 @@ public class WbWebSocketHelper extends WebSocketHelper {
 				roomId
 				, new JSONObject().put("type", "wb")
 				, check
-				, (o, c) -> o.put("func", String.format("WbArea.%s(%s);", meth.name(), obj.toString(new NullStringer()))).toString()
+				, (o, c) -> o.put("func", meth.name())
+							.put("param", obj.toString(new NullStringer())).toString()
 			);
 	}
 }
