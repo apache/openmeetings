@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 			item.add(new Label("exitCode", l.getExitCode()));
 			item.add(new Label("message", l.getMessage()));
 			if (!l.isOk()) {
-				item.add(AttributeModifier.replace("class", "alert"));
+				item.add(AttributeModifier.replace(ATTR_CLASS, "alert"));
 			}
 		}
 	};

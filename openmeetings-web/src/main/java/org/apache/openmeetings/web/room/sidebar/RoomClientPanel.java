@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
@@ -53,14 +55,14 @@ public class RoomClientPanel extends Panel {
 		final String name = getName(c);
 		add(new Label("name", name));
 		add(new UserSpeaksIcon("user-speaks", uid, room));
-		item.add(AttributeModifier.replace("title", name));
+		item.add(AttributeModifier.replace(ATTR_TITLE, name));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
 		actions.add(new KickIcon("kick", uid, room));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
 		actions.setVisible(room.getClient().hasRight(Right.moderator));
 		if (c.getUid().equals(room.getClient().getUid())) {
 			actions.add(new SelfIconsPanel("icons", uid, room, false));
-			item.add(AttributeModifier.append("class", "current"));
+			item.add(AttributeModifier.append(ATTR_CLASS, "current"));
 		} else {
 			actions.add(new ClientIconsPanel("icons", uid, room));
 		}
@@ -105,6 +107,6 @@ public class RoomClientPanel extends Panel {
 		}
 		status = String.format("%s %s", status, ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT);
 		//TODO add ability to change 'first/last name'
-		add(new WebMarkupContainer("status").add(AttributeModifier.append("class", status), AttributeModifier.replace("title", getString(statusTitle))));
+		add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, status), AttributeModifier.replace(ATTR_TITLE, getString(statusTitle))));
 	}
 }

@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common.tree;
 import static org.apache.commons.text.StringEscapeUtils.escapeEcmaScript;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.util.time.Duration.NONE;
@@ -275,10 +276,10 @@ public abstract class FileTreePanel extends Panel {
 			this.readOnly = readOnly;
 			tree.refreshRoots(!readOnly);
 			createDir.setEnabled(!readOnly);
-			createDir.add(AttributeModifier.replace("class", new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			createDir.add(AttributeModifier.replace(ATTR_CLASS, new StringBuilder(CREATE_DIR_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			upload.setEnabled(!readOnly);
-			upload.add(AttributeModifier.replace("class", new StringBuilder(UPLOAD_CLASS).append(readOnly ? DISABLED_CLASS : "")));
-			trashBorder.add(AttributeModifier.replace("class", new StringBuilder(TRASH_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			upload.add(AttributeModifier.replace(ATTR_CLASS, new StringBuilder(UPLOAD_CLASS).append(readOnly ? DISABLED_CLASS : "")));
+			trashBorder.add(AttributeModifier.replace(ATTR_CLASS, new StringBuilder(TRASH_CLASS).append(readOnly ? DISABLED_CLASS : "")));
 			if (handler != null) {
 				handler.add(createDir, upload, trashBorder);
 				update(handler);

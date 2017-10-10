@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.rooms;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -66,7 +67,7 @@ public class RoomsPanel extends AdminBasePanel {
 						target.appendJavaScript("adminPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", getRowClass(room.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(room.getId(), form.getModelObject().getId())));
 			}
 		};
 

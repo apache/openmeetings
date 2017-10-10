@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.profile;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -301,7 +302,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					}
 					cssClass.append("ui-state-active");
 				}
-				item.add(AttributeModifier.replace("class", cssClass.toString()));
+				item.add(AttributeModifier.replace(ATTR_CLASS, cssClass.toString()));
 			}
 		};
 		PagedEntityListPanel navigator = new PagedEntityListPanel("navigator", dv) {
@@ -442,7 +443,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				final Long contactId = uc.getId();
 				final Long userId = uc.getOwner().getId();
 				if (uc.isPending()) {
-					item.add(AttributeModifier.append("class", "unread"));
+					item.add(AttributeModifier.append(ATTR_CLASS, "unread"));
 				}
 				item.add(new Label("name", getName(uc)));
 				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("click") {
@@ -503,17 +504,17 @@ public class MessagesContactsPanel extends UserBasePanel {
 	}
 
 	private void setDefaultFolderClass() {
-		inbox.add(AttributeModifier.replace("class", "email inbox clickable"));
-		sent.add(AttributeModifier.replace("class", "email sent clickable"));
-		trash.add(AttributeModifier.replace("class", "email trash clickable"));
+		inbox.add(AttributeModifier.replace(ATTR_CLASS, "email inbox clickable"));
+		sent.add(AttributeModifier.replace(ATTR_CLASS, "email sent clickable"));
+		trash.add(AttributeModifier.replace(ATTR_CLASS, "email trash clickable"));
 	}
 
 	private static void selectFolder(WebMarkupContainer folder) {
-		folder.add(AttributeModifier.append("class", "ui-widget-header ui-corner-all"));
+		folder.add(AttributeModifier.append(ATTR_CLASS, "ui-widget-header ui-corner-all"));
 	}
 
 	private void setFolderClass(ListItem<PrivateMessageFolder> folder) {
-		folder.add(AttributeModifier.replace("class", "email folder clickable"));
+		folder.add(AttributeModifier.replace(ATTR_CLASS, "email folder clickable"));
 		if (folder.getModelObject().getId().equals(selectedFolderModel.getObject())) {
 			selectFolder(folder);
 		}

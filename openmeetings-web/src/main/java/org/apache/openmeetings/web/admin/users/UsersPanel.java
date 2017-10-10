@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.Application;
@@ -82,7 +84,7 @@ public class UsersPanel extends AdminBasePanel {
 						form.update(target);
 					}
 				});
-				item.add(AttributeModifier.append("class", getRowClass(u.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(u.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

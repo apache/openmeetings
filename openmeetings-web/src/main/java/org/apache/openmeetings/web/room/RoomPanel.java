@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addUserToRoom;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
@@ -244,7 +245,7 @@ public class RoomPanel extends BasePanel {
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
-		room.add(AttributeModifier.append("class", r.getType().name()));
+		room.add(AttributeModifier.append(ATTR_CLASS, r.getType().name()));
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
 		if (isInterview) {

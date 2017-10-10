@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Map.Entry;
@@ -95,7 +97,7 @@ public class FolderPanel extends Panel {
 				}
 			}.setContainment(treePanel.getContainment());
 			String cls = r instanceof Recording ? "recorditem" : "fileitem";
-			drag.add(AttributeModifier.append("class", r.isReadOnly() ? "readonlyitem" : cls));
+			drag.add(AttributeModifier.append(ATTR_CLASS, r.isReadOnly() ? "readonlyitem" : cls));
 		}
 		Component name = r.getId() == null || !editable ? new Label("name", r.getName()) : new AjaxEditableLabel<String>("name", Model.of(model.getObject().getName())) {
 			private static final long serialVersionUID = 1L;
@@ -119,7 +121,7 @@ public class FolderPanel extends Panel {
 		};
 		drag.add(name);
 		add(drop.add(drag).setOutputMarkupId(true));
-		add(AttributeModifier.append("title", r.getName()));
+		add(AttributeModifier.append(ATTR_TITLE, r.getName()));
 	}
 
 	private static void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p) {

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.configurations;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
@@ -68,7 +70,7 @@ public class ConfigsPanel extends AdminBasePanel {
 						target.appendJavaScript("adminPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", getRowClass(c.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(c.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

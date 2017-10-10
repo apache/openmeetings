@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.isUserOnline;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -115,7 +116,7 @@ public class UserSearchPanel extends UserBasePanel {
 				final UserContactDao contactsDao = getBean(UserContactDao.class);
 				User u = item.getModelObject();
 				final long userId = u.getId();
-				item.add(new WebMarkupContainer("status").add(AttributeModifier.append("class", isUserOnline(userId) ? "online" : "offline")));
+				item.add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, isUserOnline(userId) ? "online" : "offline")));
 				item.add(new Label("name", getName(u)));
 				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));

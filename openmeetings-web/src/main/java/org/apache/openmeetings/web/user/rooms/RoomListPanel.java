@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Room;
@@ -66,7 +68,7 @@ public class RoomListPanel extends Panel {
 				roomContainer.add(new Label("roomName", r.getName()));
 				final WebMarkupContainer info = new WebMarkupContainer("info");
 				roomContainer.add(info.setOutputMarkupId(true)
-						.add(AttributeModifier.append("title", getString(String.format("room.type.%s.desc", r.getType().name())))));
+						.add(AttributeModifier.append(ATTR_TITLE, getString(String.format("room.type.%s.desc", r.getType().name())))));
 				final Label curUsers = new Label("curUsers", new Model<>(Application.getRoomClients(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getCapacity()));

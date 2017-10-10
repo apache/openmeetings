@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.backup.converter;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+
 import java.util.Date;
 
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -34,7 +36,7 @@ public class DateConverter implements Converter<Date> {
 
 	@Override
 	public void write(OutputNode node, Date value) throws Exception {
-		node.setAttribute("class", "java.util.Date");
+		node.setAttribute(ATTR_CLASS, "java.util.Date");
 		node.setData(true);
 		node.setValue(value == null ? "0" : CalendarPatterns.getExportDate(value));
 	}

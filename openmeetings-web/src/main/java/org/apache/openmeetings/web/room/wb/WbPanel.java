@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.wb;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
@@ -152,7 +153,7 @@ public class WbPanel extends AbstractWbPanel {
 				@Override
 				protected void populateItem(ListItem<String> item) {
 					String cls = String.format("clipart-%s", item.getIndex());
-					item.add(append("class", cls), append("data-mode", cls)
+					item.add(append(ATTR_CLASS, cls), append("data-mode", cls)
 							, append("data-image", item.getModelObject()).setSeparator(""));
 				}
 			}, fileName);

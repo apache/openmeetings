@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.admin.rooms;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZE;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
@@ -295,7 +296,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				RoomModerator moderator = item.getModelObject();
 				Label name = new Label("uName", moderator.getUser().getFirstname() + " " + moderator.getUser().getLastname());
 				if (moderator.getId() == null) {
-					name.add(AttributeModifier.append("class", "newItem"));
+					name.add(AttributeModifier.append(ATTR_CLASS, "newItem"));
 				}
 				item.add(new CheckBox("superModerator", new PropertyModel<Boolean>(moderator, "superModerator")))
 					.add(new Label("userId", "" + moderator.getUser().getId()))

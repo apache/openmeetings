@@ -21,6 +21,8 @@ package org.apache.openmeetings.web.room.menu;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
@@ -249,7 +251,7 @@ public class RoomMenuPanel extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(askBtn.add(AttributeModifier.replace("title", getString("84"))));
+		add(askBtn.add(AttributeModifier.replace(ATTR_TITLE, getString("84"))));
 		Label demo = new Label("demo", Model.of(""));
 		Room r = room.getRoom();
 		add(demo.setVisible(r.isDemoRoom() && r.getDemoTime() != null && room.getRoom().getDemoTime().intValue() > 0));
@@ -259,7 +261,7 @@ public class RoomMenuPanel extends Panel {
 
 				@Override
 				protected void onTimer(int remain) {
-					getComponent().add(AttributeModifier.replace("title", getText("639", remain)));
+					getComponent().add(AttributeModifier.replace(ATTR_TITLE, getText("639", remain)));
 				}
 
 				@Override
@@ -353,7 +355,7 @@ public class RoomMenuPanel extends Panel {
 				roomClass.append(" screen");
 			}
 		}
-		handler.add(roomName.add(AttributeModifier.replace("class", roomClass), AttributeModifier.replace("title", roomTitle)));
+		handler.add(roomName.add(AttributeModifier.replace(ATTR_CLASS, roomClass), AttributeModifier.replace(ATTR_TITLE, roomTitle)));
 		handler.add(askBtn.setVisible(!moder && r.isAllowUserQuestions()));
 		handler.add(shareBtn.setVisible(shareVisible));
 	}

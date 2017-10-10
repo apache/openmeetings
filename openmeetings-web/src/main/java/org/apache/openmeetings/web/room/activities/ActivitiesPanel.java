@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.activities;
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
@@ -240,12 +241,12 @@ public class ActivitiesPanel extends Panel {
 			}
 			final String align = ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT;
 			item.add(new WebMarkupContainer("close").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.close.name(), a.getId())))
-					.add(AttributeModifier.append("class", align)));
-			item.add(accept.add(AttributeModifier.append("class", align))
-					, decline.add(AttributeModifier.append("class", align))
-					, find.add(AttributeModifier.append("class", align))
+					.add(AttributeModifier.append(ATTR_CLASS, align)));
+			item.add(accept.add(AttributeModifier.append(ATTR_CLASS, align))
+					, decline.add(AttributeModifier.append(ATTR_CLASS, align))
+					, find.add(AttributeModifier.append(ATTR_CLASS, align))
 					, new Label("text", text));
-			item.add(AttributeModifier.append("class", getClass(a)));
+			item.add(AttributeModifier.append(ATTR_CLASS, getClass(a)));
 		}
 
 		private String getClass(Activity a) {

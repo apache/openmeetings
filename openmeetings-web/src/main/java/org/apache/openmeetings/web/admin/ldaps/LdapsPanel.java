@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.ldaps;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
@@ -67,7 +69,7 @@ public class LdapsPanel extends AdminBasePanel {
 						target.appendJavaScript("adminPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", getRowClass(lc.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(lc.getId(), form.getModelObject().getId())));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

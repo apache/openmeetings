@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,7 +49,7 @@ public abstract class ImagePanel extends Panel {
 	public void update() {
 		profile.addOrReplace(new WebMarkupContainer("img").add(
 				AttributeModifier.append("alt", getTitle())
-				, AttributeModifier.append("title", getTitle())
+				, AttributeModifier.append(ATTR_TITLE, getTitle())
 				, AttributeModifier.append("src", getImageUrl())));
 	}
 }

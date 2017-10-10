@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -52,12 +55,12 @@ public class MenuPanel extends Panel {
 			protected void addMenuItem(ListItem<IMenuItem> item, IMenuItem menuItem) {
 				super.addMenuItem(item, menuItem);
 				MenuItem m = (MenuItem)menuItem;
-				item.add(AttributeModifier.append("class", m.isTop() ? "top" : "sub"));
+				item.add(AttributeModifier.append(ATTR_CLASS, m.isTop() ? "top" : "sub"));
 				if (!Strings.isEmpty(m.getDesc())) {
-					item.add(AttributeModifier.append("title", m.getDesc()));
+					item.add(AttributeModifier.append(ATTR_TITLE, m.getDesc()));
 				}
 				if (!Strings.isEmpty(m.getIcon())) {
-					item.add(AttributeModifier.append("class", m.getIcon()));
+					item.add(AttributeModifier.append(ATTR_CLASS, m.getIcon()));
 				}
 			}
 		});

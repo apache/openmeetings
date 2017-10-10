@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
@@ -80,8 +82,8 @@ public abstract class ClientIcon extends WebMarkupContainer {
 			add(addOnClick(""));
 		}
 		internalUpdate();
-		add(AttributeModifier.replace("title", getTitle()));
-		add(AttributeModifier.replace("class", cls.append(cssClass)));
+		add(AttributeModifier.replace(ATTR_TITLE, getTitle()));
+		add(AttributeModifier.replace(ATTR_CLASS, cls.append(cssClass)));
 		if (handler != null) {
 			handler.add(this);
 		}

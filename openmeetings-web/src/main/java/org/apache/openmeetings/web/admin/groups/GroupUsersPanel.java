@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
@@ -69,7 +70,7 @@ public class GroupUsersPanel extends Panel {
 				User u = grpUser.getUser();
 				Label label = new Label("label", u == null ? "" : GroupForm.formatUser(u));
 				if (grpUser.getId() == null) {
-					label.add(AttributeModifier.append("class", "newItem"));
+					label.add(AttributeModifier.append(ATTR_CLASS, "newItem"));
 				}
 				item.add(label);
 				item.add(new ConfirmableAjaxBorder("deleteUserBtn", getString("80"), getString("833")) {

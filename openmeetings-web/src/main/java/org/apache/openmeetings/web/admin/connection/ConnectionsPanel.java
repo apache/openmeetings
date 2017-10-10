@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.connection;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.lang.reflect.Field;
@@ -144,7 +145,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 						target.add(details.setVisible(true));
 					}
 				});
-				item.add(AttributeModifier.append("class", ROW_CLASS));
+				item.add(AttributeModifier.append(ATTR_CLASS, ROW_CLASS));
 			}
 		};
 		add(container.add(dataView).setOutputMarkupId(true), details.setVisible(false).setOutputMarkupPlaceholderTag(true));

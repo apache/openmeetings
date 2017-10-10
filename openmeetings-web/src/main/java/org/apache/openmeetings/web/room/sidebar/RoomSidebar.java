@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
@@ -316,8 +318,8 @@ public class RoomSidebar extends Panel {
 				WebMarkupContainer t = super.newTabContainer(id, tabId, tab, index);
 				Component link = newTitleLabel("link", tab.getTitle());
 				link.add(AttributeModifier.replace("href", "#" + tabId));
-				link.add(AttributeModifier.append("class", ((OmTab)tab).getCssClass()));
-				link.add(AttributeModifier.append("title", tab.getTitle()));
+				link.add(AttributeModifier.append(ATTR_CLASS, ((OmTab)tab).getCssClass()));
+				link.add(AttributeModifier.append(ATTR_TITLE, tab.getTitle()));
 				t.replace(link);
 				return t;
 			}

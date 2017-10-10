@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.menu;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -68,7 +69,7 @@ public class StartSharingButton extends OmButton {
 		this.uid = uid;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
-		add(AttributeModifier.replace("title", Application.getString("1480")));
+		add(AttributeModifier.replace(ATTR_TITLE, Application.getString("1480")));
 		add(download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 

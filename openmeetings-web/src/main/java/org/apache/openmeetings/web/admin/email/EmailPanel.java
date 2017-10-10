@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.email;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
@@ -61,7 +63,7 @@ public class EmailPanel extends AdminBasePanel {
 						target.add(form, list);
 					}
 				});
-				item.add(AttributeModifier.replace("class", getRowClass(m)));
+				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(m)));
 			}
 		};
 		add(list.add(dataView).setOutputMarkupId(true));

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.groups;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -76,7 +78,7 @@ public class GroupsPanel extends AdminBasePanel {
 						target.appendJavaScript("adminPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", getRowClass(g.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(g.getId(), form.getModelObject().getId())));
 			}
 		};
 

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.oauth;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
@@ -61,7 +63,7 @@ public class OAuthPanel extends AdminBasePanel {
 						target.appendJavaScript("adminPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.replace("class", getRowClass(server.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(server.getId(), form.getModelObject().getId())));
 			}
 
 		};

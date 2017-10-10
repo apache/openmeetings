@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.labels;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
@@ -123,7 +124,7 @@ public class LangPanel extends AdminBasePanel {
 						target.appendJavaScript("adminPanelInit();");
 					}
 				});
-				item.add(AttributeModifier.append("class", getRowClass(fv.getId(), form.getModelObject().getId())));
+				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(fv.getId(), form.getModelObject().getId())));
 			}
 		};
 
