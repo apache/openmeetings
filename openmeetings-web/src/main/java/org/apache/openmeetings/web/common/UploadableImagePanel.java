@@ -22,8 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.StoredFile;
@@ -34,7 +32,7 @@ import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressB
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -42,14 +40,7 @@ import org.slf4j.Logger;
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(UploadableImagePanel.class, getWebAppRootKey());
-	private final FileUploadField fileUploadField = new FileUploadField("image", new IModel<List<FileUpload>>() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public List<FileUpload> getObject() {
-			return new ArrayList<>();
-		}
-	});
+	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<FileUpload>());
 
 	public UploadableImagePanel(String id) {
 		super(id);
