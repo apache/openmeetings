@@ -30,7 +30,9 @@ var Chat = function() {
 		s = {};
 		try {
 			s = JSON.parse(localStorage.getItem('openmeetings')) || s;
-		} catch (e) {}
+		} catch (e) {
+			//no-op
+		}
 		if (!s.chat) {
 			s.chat = {};
 		}

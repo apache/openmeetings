@@ -18,7 +18,9 @@ var VideoSettings = (function() {
 		s = {};
 		try {
 			s = JSON.parse(localStorage.getItem('openmeetings')) || s;
-		} catch (e) {}
+		} catch (e) {
+			//no-op
+		}
 		if (!s.video) {
 			s.video = {};
 		}

@@ -184,7 +184,6 @@ var Video = (function() {
 	}
 	function _init(_c, _pos) {
 		c = _c;
-		pos = _pos;
 		size = {width: c.width, height: c.height};
 		const _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
