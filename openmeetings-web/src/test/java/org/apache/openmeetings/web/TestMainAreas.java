@@ -42,7 +42,6 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import java.util.function.Consumer;
 
 import org.apache.openmeetings.AbstractWicketTester;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.admin.backup.BackupPanel;
 import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
@@ -54,7 +53,6 @@ import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.admin.oauth.OAuthPanel;
 import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
@@ -70,8 +68,6 @@ import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
-import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
-import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -79,20 +75,6 @@ import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 
 public class TestMainAreas extends AbstractWicketTester {
 	private static final Logger log = getLogger(TestMainAreas.class, getWebAppRootKey());
-
-	private void testArea(String user, Consumer<MainPage> consumer) throws OmException {
-		Assert.assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));;
-		MainPage page = tester.startPage(MainPage.class);
-		tester.assertRenderedPage(MainPage.class);
-		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));
-		tester.executeBehavior((AbstractAjaxBehavior)page.get("main-container").getBehaviorById(0));
-		WebSocketTester webSocketTester = new WebSocketTester(tester, page);
-		webSocketTester.sendMessage("socketConnected");
-
-		consumer.accept(page);
-		tester.getSession().invalidateNow();
-		webSocketTester.destroy();
-	}
 
 	@Test
 	public void testDashboard() throws OmException {

@@ -32,18 +32,24 @@ import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APP
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import javax.servlet.ServletContext;
 
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.feedback.ExactLevelFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Assert;
 import org.slf4j.Logger;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -126,6 +132,20 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		}
 		fail(String.format("Button '%s' not found for dialog '%s'", name, path));
 		return null;
+	}
+
+	protected void testArea(String user, Consumer<MainPage> consumer) throws OmException {
+		Assert.assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));;
+		MainPage page = tester.startPage(MainPage.class);
+		tester.assertRenderedPage(MainPage.class);
+		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));
+		tester.executeBehavior((AbstractAjaxBehavior)page.get("main-container").getBehaviorById(0));
+		WebSocketTester webSocketTester = new WebSocketTester(tester, page);
+		webSocketTester.sendMessage("socketConnected");
+
+		consumer.accept(page);
+		tester.getSession().invalidateNow();
+		webSocketTester.destroy();
 	}
 
 	public void checkErrors(int count) {
