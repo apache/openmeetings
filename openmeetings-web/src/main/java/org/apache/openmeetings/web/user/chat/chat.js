@@ -1,12 +1,15 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	const tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
-		, msgTemplate = "<div class='clear' id='chat-msg-id-#{id}'><img class='profile' src='#{imgSrc}'/><span class='from' data-user-id='#{userId}'>#{from}</span><span class='date align-right'>#{sent}</span>#{msg}</div>"
-		, acceptTemplate = "<div class='tick om-icon align-right clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='const e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
-		, infoTemplate = "<div class='user om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
-		, addTemplate = "<div class='add om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);addContact(e.data(\"userId\"));'></div>"
-		, messageTemplate = "<div class='new-email om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);privateMessage(e.data(\"userId\"));'></div>"
-		, inviteTemplate = "<div class='invite om-icon align-right clickable' data-user-id='#{userId}' onclick='const e=$(this);inviteUser(e.data(\"userId\"));'></div>"
+	const isRtl = "rtl" === $('html').attr('dir')
+		, align = isRtl ? 'align-right' : 'align-left'
+		, alignIco = isRtl ? 'align-left' : 'align-right'
+		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
+		, msgTemplate = "<div class='clear msg-row' id='chat-msg-id-#{id}'><img class='profile " + align + "' src='#{imgSrc}'/><span class='from " + align + "' data-user-id='#{userId}'>#{from}</span><span class='" + align + "'>#{msg}</span><span class='date " + alignIco + "'>#{sent}</span></div>"
+		, acceptTemplate = "<div class='tick om-icon " + alignIco + " clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='const e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
+		, infoTemplate = "<div class='user om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
+		, addTemplate = "<div class='add om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);addContact(e.data(\"userId\"));'></div>"
+		, messageTemplate = "<div class='new-email om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);privateMessage(e.data(\"userId\"));'></div>"
+		, inviteTemplate = "<div class='invite om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);inviteUser(e.data(\"userId\"));'></div>"
 		, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
 		, closedHeight = "20px"
 		, emoticon = new CSSEmoticon()

@@ -88,37 +88,37 @@
 .room.menu.right .icon .profile img {
 	width: 28px;
 }
-.room.sidebar.left {
+.room.sidebar {
 	min-width: 150px;
 	width: 315px;
 	position: absolute;
 }
-.room.sidebar.left .ui-resizable-handle {
+.room.sidebar .ui-resizable-handle {
 	width: 4px;
 	background-color: #f3f3f4;
 	border: 1px solid #dedee0;
 }
-.room.sidebar.left .ui-resizable-handle:hover {
+.room.sidebar .ui-resizable-handle:hover {
 	background-color: #b6bdca;
 	border-color: #bebec3;
 }
-.room.sidebar.left .ui-tabs .ui-tabs-panel {
+.room.sidebar .ui-tabs .ui-tabs-panel {
 	padding: 0;
 }
-.room.sidebar.left .user.header {
+.room.sidebar .user.header {
 	height: 45px;
 	padding-left: 5px;
 }
-.room.sidebar.left .user.header .ui-icon {
+.room.sidebar .user.header .ui-icon {
 	margin-top: 5px;
 	margin-left: 5px;
 	width: 32px;
 	height: 32px;
 }
-.room.sidebar.left .user.list {
+.room.sidebar .user.list {
 	overflow-y: auto;
 }
-.room.sidebar.left .user.list .user {
+.room.sidebar .user.list .user {
 	min-height: 40px;
 	padding-left: 5px;
 	padding-top: 5px;
@@ -127,7 +127,7 @@
 	background-position: 2px 2px;
 	position: relative;
 }
-.room.sidebar.left .user.list .user.name {
+.room.sidebar .user.list .user.name {
 	line-height: 18px;
 	height: 18px;
 	padding: 0;
@@ -135,10 +135,10 @@
 	margin-right: 20px;
 	overflow: hidden;
 }
-.room.holder.small .room.sidebar.left .user.list .user.name {
+.room.holder.small .room.sidebar .user.list .user.name {
 	display: none;
 }
-.room.sidebar.left .user.list .user .user.actions {
+.room.sidebar .user.list .user .user.actions {
 	position: relative;
 	min-height: 18px;
 	padding: 0;
@@ -146,22 +146,22 @@
 	visibility: hidden;
 	margin-right: 35px;
 }
-.room.sidebar.left .user.list .user:hover .user.actions {
+.room.sidebar .user.list .user:hover .user.actions {
 	visibility: visible;
 }
-.room.sidebar.left .user.list .user .user.actions .ui-icon {
+.room.sidebar .user.list .user .user.actions .ui-icon {
 	margin-right: 2px;
 	margin-top: 0;
 }
-.room.sidebar.left .user.list .user .ui-icon {
+.room.sidebar .user.list .user .ui-icon {
 	background-size: 16px;
 }
-.room.sidebar.left .user.list .user .ui-icon.audio-activity {
+.room.sidebar .user.list .user .ui-icon.audio-activity {
 	position: absolute;
 	bottom: 0px;
 	right: 3px;
 }
-.room.sidebar.left .user.list .user .ui-icon.big {
+.room.sidebar .user.list .user .ui-icon.big {
 	background-size: 32px;
 }
 .audio-activity.ui-icon {
@@ -257,14 +257,14 @@
 .activity.mic.enabled.ui-icon {
 	background-image: url(images/microphone_disable.png);
 }
-.room.sidebar.left .user.list .user .user.actions .ui-icon.bumper
-	, .room.sidebar.left .user.header .ui-icon.bumper {
+.room.sidebar .user.list .user .user.actions .ui-icon.bumper
+	, .room.sidebar .user.header .ui-icon.bumper {
 	padding-right: 5px;
 }
-.room.sidebar.left .tabs, .room.sidebar.left .tabs #utab, .room.sidebar.left .tabs #ftab {
+.room.sidebar .tabs, .room.sidebar .tabs #utab, .room.sidebar .tabs #ftab {
 	padding: 0;
 }
-.room.sidebar.left .user.list .user.current {
+.room.sidebar .user.list .user.current {
 	font-weight: bold;
 	background-color: #00FF00;
 }
@@ -365,7 +365,7 @@
 	padding: .1em .7em;
 	font-weight: bolder;
 }
-.room.sidebar.left .tab.om-icon.big {
+.room.sidebar .tab.om-icon.big {
 	padding: 0em 1em 0 2.5em;
 	line-height: 30px;
 	width: auto;
@@ -374,19 +374,19 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
-.room.holder.small .room.sidebar.left .tab.om-icon.big {
+.room.holder.small .room.sidebar .tab.om-icon.big {
 	max-width: 0px;
 	padding-right: 0;
 }
-.room.holder.small .room.sidebar.left .file.tree .file.item .name
-	, .room.holder.small .room.sidebar.left .file.tree .file.item .name span
+.room.holder.small .room.sidebar .file.tree .file.item .name
+	, .room.holder.small .room.sidebar .file.tree .file.item .name span
 {
 	width: 40px;
 }
-.room.sidebar.left .tab.om-icon.big.user {
+.room.sidebar .tab.om-icon.big.user {
 	background-image: url(images/group.png);
 }
-.room.sidebar.left .tab.om-icon.big.file {
+.room.sidebar .tab.om-icon.big.file {
 	background-image: url(images/folder_explore.png);
 }
 /************ VIDEO **************/
@@ -432,40 +432,40 @@
 	max-width: 250px;
 }
 @media screen and (max-width: 1280px) {
-	.room.sidebar.left {
+	.room.sidebar {
 		width: 150px;
 	}
-	.room.holder .room.sidebar.left .tab.om-icon.big {
+	.room.holder .room.sidebar .tab.om-icon.big {
 		max-width: 0px;
 		padding-right: 0;
 	}
-	.room.holder.big .room.sidebar.left .tab.om-icon.big {
+	.room.holder.big .room.sidebar .tab.om-icon.big {
 		max-width: 80px;
 		padding: 0em 1em 0 2.5em;
 	}
-	.room.holder .room.sidebar.left .user.list .user.name {
+	.room.holder .room.sidebar .user.list .user.name {
 		display: none;
 	}
-	.room.holder.big .room.sidebar.left .user.list .user.name {
+	.room.holder.big .room.sidebar .user.list .user.name {
 		display: block;
 	}
-	.room.holder .room.sidebar.left .file.tree .file.item .name
-		, .room.holder .room.sidebar.left .file.tree .file.item .name span
+	.room.holder .room.sidebar .file.tree .file.item .name
+		, .room.holder .room.sidebar .file.tree .file.item .name span
 	{
 		width: 40px;
 	}
-	.room.holder.big .room.sidebar.left .file.tree .file.item .name
-		, .room.holder.big .room.sidebar.left .file.tree .file.item .name span
+	.room.holder.big .room.sidebar .file.tree .file.item .name
+		, .room.holder.big .room.sidebar .file.tree .file.item .name span
 	{
 		width: 230px;
 	}
-	.room.sidebar.left .file.tree .file.item .name span {
+	.room.sidebar .file.tree .file.item .name span {
 		padding: 0;
 	}
-	.room.holder .room.sidebar.left .file.tree .file.item {
+	.room.holder .room.sidebar .file.tree .file.item {
 		width: 80px;
 	}
-	.room.holder.big .room.sidebar.left .file.tree .file.item {
+	.room.holder.big .room.sidebar .file.tree .file.item {
 		width: auto;
 	}
 }

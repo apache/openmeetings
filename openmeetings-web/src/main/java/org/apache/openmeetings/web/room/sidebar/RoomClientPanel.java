@@ -19,11 +19,14 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.KickIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.RefreshIcon;
@@ -100,6 +103,7 @@ public class RoomClientPanel extends Panel {
 			status = "status-user";
 			statusTitle = "677";
 		}
+		status = String.format("%s %s", status, ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT);
 		//TODO add ability to change 'first/last name'
 		add(new WebMarkupContainer("status").add(AttributeModifier.append("class", status), AttributeModifier.replace("title", getString(statusTitle))));
 	}

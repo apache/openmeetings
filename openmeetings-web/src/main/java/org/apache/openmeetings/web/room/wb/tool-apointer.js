@@ -69,7 +69,7 @@ var APointer = function(wb) {
 		const canvas = this
 			, ptr = canvas.getPointer(o.e);
 		if (pointer.user === '') {
-			pointer.user = $('.room.sidebar.left .user.list .current .name').text();
+			pointer.user = $('.room.sidebar .user.list .current .name').text();
 		}
 		const obj = {
 			type: 'pointer'

@@ -534,7 +534,7 @@ form .input {
 .no-close .ui-dialog-titlebar-close {
 	display: none;
 }
-.table {
+.table, .msg-row {
 	position: relative;
 }
 .table .column {

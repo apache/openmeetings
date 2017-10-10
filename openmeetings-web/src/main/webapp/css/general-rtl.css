@@ -98,8 +98,41 @@ form .input {
 	padding-left: initial !important;
 	padding-right: 20px !important;
 }
+.btn-toolbar .btn, .btn-toolbar .btn-group, .btn-toolbar .input-group {
+	float: right !important;
+}
+#chat .chat-btn {
+	float: left !important;
+	margin-right: initial !important;
+	margin-left: 10px !important;
+}
+.room.sidebar .tab.om-icon.big {
+	padding: 0em 2.5em 0 1em !important;
+}
+@media screen and (max-width: 1280px) {
+	.room.holder .room.sidebar .tab.om-icon.big {
+		padding-left: 0 !important;
+	}
+}
+.om-icon.big {
+	background-position: right 1px top 1px !important;
+}
+.room.sidebar .user.list .user {
+	background-position: right 2px top 2px !important;
+}
+.room.sidebar .user.list .user.name {
+	margin-left: 0px 0px 0px 20px !important;
+	padding: 0px 44px 0px 0px !important;
+}
+.room.sidebar .user.list .user .ui-icon.audio-activity {
+	right: initial !important;
+	left: 3px !important;
+}
 
 /**** TODO need to be moved to wicket-jquery-ui **************/
+span.css-emoticon.un-transformed-emoticon, span.css-emoticon.animated-emoticon:hover {
+	transform: rotate(0deg) !important;
+}
 span.css-emoticon {
 	transform: rotate(-90deg) !important;
 }

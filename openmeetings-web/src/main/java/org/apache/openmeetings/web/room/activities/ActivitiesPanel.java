@@ -25,6 +25,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
+import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -41,6 +43,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.TextRoomMessage;
+import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -66,6 +69,7 @@ public class ActivitiesPanel extends Panel {
 	private static final String ACTION = "action";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private static final String ACTIVITY_FMT = "%s %s [%s]";
+	private static final String ACTIVITY_FMT_RTL = "%3$s %2$s [%1$s]";
 	private static final String ACTIVITY_FUNC_FMT = "activityAction(%s, '%s', '%s');";
 	private enum Action {
 		accept, decline, close
@@ -194,47 +198,53 @@ public class ActivitiesPanel extends Panel {
 				User u = getBean(UserDao.class).get(a.getSender());
 				name = self ? getString("1362") : String.format("%s %s", u.getFirstname(), u.getLastname());
 			}
+			final String fmt = ((BasePage)getPage()).isRtl() ? ACTIVITY_FMT_RTL : ACTIVITY_FMT;
 			switch (a.getType()) {
 				case roomEnter:
 					text = ""; // TODO should this be fixed?
 					item.setVisible(false);
 					break;
 				case roomExit:
-					text = String.format(ACTIVITY_FMT, name, getString("1367"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("1367"), df.format(a.getCreated()));
 					break;
 				case reqRightModerator:
-					text = String.format(ACTIVITY_FMT, name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
 					break;
 				case reqRightPresenter:
-					text = String.format(ACTIVITY_FMT, name, getString("right.presenter.request"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("right.presenter.request"), df.format(a.getCreated()));
 					break;
 				case reqRightWb:
-					text = String.format(ACTIVITY_FMT, name, getString("694"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("694"), df.format(a.getCreated()));
 					break;
 				case reqRightShare:
-					text = String.format(ACTIVITY_FMT, name, getString("1070"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("1070"), df.format(a.getCreated()));
 					break;
 				case reqRightRemote:
-					text = String.format(ACTIVITY_FMT, name, getString("1082"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("1082"), df.format(a.getCreated()));
 					break;
 				case reqRightA:
-					text = String.format(ACTIVITY_FMT, name, getString("1603"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("1603"), df.format(a.getCreated()));
 					break;
 				case reqRightAv:
-					text = String.format(ACTIVITY_FMT, name, getString("695"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("695"), df.format(a.getCreated()));
 					break;
 				case reqRightMute:
-					text = String.format(ACTIVITY_FMT, name, getString("1399"), df.format(a.getCreated()));//TODO un-mute 1398
+					text = String.format(fmt, name, getString("1399"), df.format(a.getCreated()));//TODO un-mute 1398
 					break;
 				case reqRightExclusive:
-					text = String.format(ACTIVITY_FMT, name, getString("1427"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("1427"), df.format(a.getCreated()));
 					break;
 				case haveQuestion:
-					text = String.format(ACTIVITY_FMT, name, getString("693"), df.format(a.getCreated()));
+					text = String.format(fmt, name, getString("693"), df.format(a.getCreated()));
 					break;
 			}
-			item.add(new WebMarkupContainer("close").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.close.name(), a.getId()))));
-			item.add(accept, decline, find, new Label("text", text));
+			final String align = ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT;
+			item.add(new WebMarkupContainer("close").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.close.name(), a.getId())))
+					.add(AttributeModifier.append("class", align)));
+			item.add(accept.add(AttributeModifier.append("class", align))
+					, decline.add(AttributeModifier.append("class", align))
+					, find.add(AttributeModifier.append("class", align))
+					, new Label("text", text));
 			item.add(AttributeModifier.append("class", getClass(a)));
 		}
 

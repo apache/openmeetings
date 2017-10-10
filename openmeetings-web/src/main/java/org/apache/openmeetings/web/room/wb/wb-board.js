@@ -224,10 +224,10 @@ var Wb = function() {
 				});
 				s.draggable({
 					scroll: false
-					, containment: "body"
+					, containment: 'body'
 					, start: function() {
-						if (!!s.css("bottom")) {
-							s.css("bottom", "").css("right", "");
+						if (!!s.css('bottom')) {
+							s.css('bottom', '').css(isRtl ? 'left' : 'right', '');
 						}
 					}
 					, drag: function() {
@@ -575,16 +575,19 @@ var Wb = function() {
 			a.find('.wb-zoom').remove();
 			role = _role;
 			const sc = a.find('.scroll-container');
-			z = $('#wb-zoom').clone().attr('id', '');
+			z = $('#wb-zoom').clone().attr('id', '')
+				.attr('style', 'position: absolute; top: 0px; ' + (isRtl ? 'right' : 'left') + ': 80px;');
 			if (role === NONE) {
 				t = $('#wb-tools-readonly').clone().attr('id', '');
 				sc.off('scroll', scrollHandler);
 			} else {
 				t = $('#wb-tools').clone().attr('id', '');
-				s = $("#wb-settings").clone().attr('id', '');
+				s = $("#wb-settings").clone().attr('id', '')
+					.attr('style', 'display: none; bottom: 100px; ' + (isRtl ? 'left' : 'right') + ': 100px;');
 				a.append(s);
 				sc.on('scroll', scrollHandler);
 			}
+			t.attr('style', 'position: absolute; top: 20px; ' + (isRtl ? 'left' : 'right') + ': 20px;');
 			a.append(t).append(z);
 			showCurrentSlide();
 			t = a.find('.tools'), s = a.find(".wb-settings");
@@ -620,15 +623,15 @@ var Wb = function() {
 	wb.resize = function() {
 		if (t.position().left + t.width() > a.width()) {
 			t.position({
-				my: "right"
-				, at: "right-20"
+				my: (isRtl ? 'left' : 'right')
+				, at: (isRtl ? 'left' : 'right') + '-20'
 				, of: '#' + a[0].id
 				, collision: "fit"
 			});
 		}
 		if (z.position().left + z.width() > a.width()) {
 			z.position({
-				my: "left top"
+				my: (isRtl ? 'right' : 'left') + ' top'
 				, at: "center top"
 				, of: '#' + a[0].id
 				, collision: "fit"

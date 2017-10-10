@@ -567,7 +567,7 @@ var Room = (function() {
 		}
 	}
 	function _setSize() {
-		const sb = $(".room.sidebar.left")
+		const sb = $(".room.sidebar")
 			, w = $(window).width() - sb.width() - 8
 			, h = $(window).height() - $('#menu').height() - 3
 			, p = sb.find('.tabs')
@@ -612,13 +612,13 @@ var Room = (function() {
 		});
 	}
 	function _load() {
-		$(".room.sidebar.left").ready(function() {
+		$(".room.sidebar").ready(function() {
 			_setSize();
 		});
 		$(window).on('resize.openmeetings', function() {
 			_setSize();
 		});
-		$(".room.sidebar.left").resizable({
+		$(".room.sidebar").resizable({
 			handles: "e"
 			, stop: function() {
 				_setSize();
