@@ -279,7 +279,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 							@Override
 							public void onSubmit() {
-								showAuth(s, SignInDialog.this);
+								showAuth(s);
 							}
 						};
 						Component icon = new Image("icon", Model.of(""))

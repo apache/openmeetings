@@ -825,7 +825,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (!new UrlValidator(new String[] {"http", "https"}).isValid(baseUrl) && !Strings.isEmpty(_baseUrl)) {
 			baseUrl = _baseUrl;
 		}
-		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.urlFor(clazz, pp)));
+		return rc.getUrlRenderer().renderFullUrl(Url.parse(baseUrl + rc.mapUrlFor(clazz, pp)));
 	}
 
 	@Override

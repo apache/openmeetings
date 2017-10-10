@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -216,8 +217,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		String nm = name.getModelObject();
 		Type type = rg.getModelObject();
-		resetUser(type == Type.email ? nm : "", type == Type.login ? nm : ""
-			, getBean(ConfigurationDao.class).getBaseUrl() + getRequestCycle().urlFor(ResetPage.class, new PageParameters()).toString().substring(2));
+		resetUser(type == Type.email ? nm : "", type == Type.login ? nm : "");
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 * @param appLink
 	 * @return <code>true</code> in case reset was successful, <code>false</code> otherwise
 	 */
-	private boolean resetUser(String email, String username, String appLink) {
+	private boolean resetUser(String email, String username) {
 		try {
 			UserDao userDao = getBean(UserDao.class);
 			log.debug("resetUser " + email);
@@ -238,13 +238,13 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			if (!Strings.isEmpty(email)) {
 				User us = userDao.getByEmail(email);
 				if (us != null) {
-					sendHashByUser(us, appLink, userDao);
+					sendHashByUser(us, userDao);
 					return true;
 				}
 			} else if (!Strings.isEmpty(username)) {
 				User us = userDao.getByLogin(username, User.Type.user, null);
 				if (us != null) {
-					sendHashByUser(us, appLink, userDao);
+					sendHashByUser(us, userDao);
 					return true;
 				}
 			}
@@ -254,12 +254,14 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return false;
 	}
 
-	private void sendHashByUser(User us, String appLink, UserDao userDao) {
+	private void sendHashByUser(User us, UserDao userDao) {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(UUID.randomUUID().toString());
 		us.setResetDate(new Date());
 		userDao.update(us, null);
-		String resetLink = appLink + "?hash=" + us.getResethash();
+		String resetLink = urlForPage(ResetPage.class
+				, new PageParameters().add("hash", us.getResethash())
+				, getBean(ConfigurationDao.class).getBaseUrl());
 
 		String email = us.getAddress().getEmail();
 

@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.admin.oauth;
 
+import static org.apache.openmeetings.web.pages.auth.SignInPage.getRedirectUri;
+
 import java.util.Arrays;
 
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
@@ -26,7 +28,6 @@ import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
-import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -74,7 +75,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
-		redirectUriText.setModelObject(SignInPage.getRedirectUri(getModelObject(), this));
+		redirectUriText.setModelObject(getRedirectUri(getModelObject()));
 	}
 
 	@Override

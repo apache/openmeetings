@@ -23,13 +23,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_B
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -56,7 +55,6 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.BaseInitedPage;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -102,7 +100,7 @@ public class SignInPage extends BaseInitedPage {
 					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
 					loginViaOAuth2(authParams, serverId);
 				} else { // redirect to get code
-					showAuth(server, this);
+					showAuth(server);
 				}
 			} catch (IOException|NoSuchAlgorithmException e) {
 				log.error("OAuth2 login error", e);
@@ -149,8 +147,8 @@ public class SignInPage extends BaseInitedPage {
 	}
 
 	// ============= OAuth2 methods =============
-	public static void showAuth(final OAuthServer s, Component c) {
-		String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId(), getRedirectUri(s, c), null, null, null);
+	public static void showAuth(final OAuthServer s) {
+		String authUrl = prepareUrlParams(s.getRequestKeyUrl(), s.getClientId(), getRedirectUri(s), null, null, null);
 		log.debug("redirectUrl={}", authUrl);
 		throw new RedirectToUrlException(authUrl);
 	}
@@ -179,16 +177,11 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	public static String getRedirectUri(OAuthServer server, Component component) {
+	public static String getRedirectUri(OAuthServer server) {
 		String result = "";
 		if (server.getId() != null) {
-			try {
-				String base = getBean(ConfigurationDao.class).getBaseUrl();
-				URI uri = new URI(base + component.urlFor(SignInPage.class, new PageParameters().add("oauthid", server.getId())));
-				result = uri.normalize().toString();
-			} catch (URISyntaxException e) {
-				log.error("Unexpected error while getting redirect URL", e);
-			}
+			String base = getBean(ConfigurationDao.class).getBaseUrl();
+			result = urlForPage(SignInPage.class, new PageParameters().add("oauthid", server.getId()), base);
 		}
 		return result;
 	}
@@ -232,7 +225,7 @@ public class SignInPage extends BaseInitedPage {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
 		String requestTokenParams = server.getRequestTokenAttributes();
-		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), getRedirectUri(server, this)
+		requestTokenParams = prepareUrlParams(requestTokenParams, server.getClientId(), getRedirectUri(server)
 				, server.getClientSecret(), null, code);
 		// request auth token
 		HttpURLConnection urlConnection = (HttpURLConnection) new URL(requestTokenBaseUrl).openConnection();
@@ -279,7 +272,7 @@ public class SignInPage extends BaseInitedPage {
 		String lastname = server.getLastnameParamName();
 		// prepare url
 		String requestInfoUrl = server.getRequestInfoUrl();
-		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server, this)
+		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server)
 				, server.getClientSecret(), token, code);
 		// send request
 		URLConnection connection = new URL(requestInfoUrl).openConnection();
