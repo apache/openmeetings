@@ -300,10 +300,11 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case removeWb:
 				{
-					long _id = obj.optLong("wbId", -1);
-					Long id = _id < 0 ? null : _id;
-					WhiteboardCache.remove(roomId, id);
-					sendWbAll(WbAction.removeWb, obj);
+					long id = obj.optLong("wbId", -1);
+					if (id > -1) {
+						WhiteboardCache.remove(roomId, id);
+						sendWbAll(WbAction.removeWb, obj);
+					}
 				}
 					break;
 				case activateWb:
