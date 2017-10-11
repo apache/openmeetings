@@ -39,7 +39,7 @@ public abstract class AppointmentTemplate extends SubjectEmailTemplate {
 	protected Appointment a;
 	protected TimeZone tz;
 
-	public AppointmentTemplate(Locale locale, Appointment a, TimeZone tz) {
+	AppointmentTemplate(Locale locale, Appointment a, TimeZone tz) {
 		super(locale);
 		this.a = a;
 		this.tz = tz;

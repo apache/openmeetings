@@ -37,7 +37,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	public static final String COMP_ID = "template";
 	protected final Locale locale;
 
-	public AbstractTemplatePanel(Locale locale) {
+	protected AbstractTemplatePanel(Locale locale) {
 		super(COMP_ID);
 		this.locale = locale == null ? getDefault() : locale;
 		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));

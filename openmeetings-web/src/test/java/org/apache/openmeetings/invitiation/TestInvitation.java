@@ -61,7 +61,7 @@ public class TestInvitation extends AbstractWicketTester {
 		invitationManager.sendInvitationLink(i, MessageType.Create, "subject", "message", false);
 	}
 
-	private void checkTemplate(SubjectEmailTemplate t) {
+	private static void checkTemplate(SubjectEmailTemplate t) {
 		Assert.assertNotNull("Template should be created", t);
 		Assert.assertFalse("Subject should be not empty", Strings.isEmpty(t.getSubject()));
 		Assert.assertFalse("Boby should be not empty", Strings.isEmpty(t.getEmail()));

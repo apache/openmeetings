@@ -30,7 +30,7 @@ public abstract class SubjectEmailTemplate extends AbstractTemplatePanel {
 	private String subject = null;
 	private boolean created = false;
 
-	public SubjectEmailTemplate(Locale locale) {
+	SubjectEmailTemplate(Locale locale) {
 		super(locale);
 	}
 

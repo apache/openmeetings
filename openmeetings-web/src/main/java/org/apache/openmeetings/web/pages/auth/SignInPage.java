@@ -221,7 +221,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 	}
 
-	private AuthInfo getToken(String code, OAuthServer server) throws IOException {
+	private static AuthInfo getToken(String code, OAuthServer server) throws IOException {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
 		String requestTokenParams = server.getRequestTokenAttributes();
@@ -264,7 +264,7 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	private Map<String, String> getAuthParams(String token, String code, OAuthServer server) throws IOException {
+	private static Map<String, String> getAuthParams(String token, String code, OAuthServer server) throws IOException {
 		// get attributes names
 		String loginAttributeName = server.getLoginParamName();
 		String emailAttributeName = server.getEmailParamName();
