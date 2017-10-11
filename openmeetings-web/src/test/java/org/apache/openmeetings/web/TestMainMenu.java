@@ -26,6 +26,7 @@ import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
+import org.apache.openmeetings.web.user.dashboard.OmDashboardPanel;
 import org.apache.openmeetings.web.user.record.RecordingsPanel;
 import org.apache.openmeetings.web.user.rooms.RoomsSelectorPanel;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
@@ -36,7 +37,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
 
 public class TestMainMenu extends AbstractWicketTester {
 	private void checkMenuItem(int idx1, int idx2, Class<? extends BasePanel> clazz) throws OmException {
-		testArea(regularUsername, p -> {
+		testArea(adminUsername, p -> {
 			Menu menu = (Menu)p.get("main-container:main:topControls:menu:menu");
 			Assert.assertNotNull(menu);
 			tester.getRequest().setParameter("hash", menu.getItemList().get(idx1).getItems().get(idx2).getId());
@@ -48,7 +49,7 @@ public class TestMainMenu extends AbstractWicketTester {
 
 	@Test
 	public void testDahboard() throws OmException {
-		checkMenuItem(0, 0, CalendarPanel.class);
+		checkMenuItem(0, 0, OmDashboardPanel.class);
 	}
 
 	@Test
