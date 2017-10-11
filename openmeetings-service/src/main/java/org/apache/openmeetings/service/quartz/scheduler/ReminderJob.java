@@ -25,7 +25,7 @@ import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
-import org.apache.openmeetings.service.mail.template.subject.AbstractSubjectEmailTemplate;
+import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
 import org.apache.openmeetings.service.mail.template.subject.RecordingExpiringTemplate;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class ReminderJob extends AbstractJob {
 				if (u == null) {
 					log.debug("Unable to send expiration email due to recording owner is NULL, {}", rec);
 				} else {
-					AbstractSubjectEmailTemplate templ = RecordingExpiringTemplate.get(u, rec, days);
+					SubjectEmailTemplate templ = RecordingExpiringTemplate.get(u, rec, days);
 					mailHandler.send(u.getAddress().getEmail(), templ.getSubject(), templ.getEmail());
 				}
 			} else {

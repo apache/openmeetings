@@ -18,9 +18,15 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
+import static javax.servlet.http.HttpServletResponse.SC_OK;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+
+import java.io.IOException;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
+import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
@@ -34,11 +40,6 @@ import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.PropFindMethod;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-
-import java.io.IOException;
-
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.jackrabbit.webdav.DavServletResponse.SC_OK;
 
 /**
  * Class for Syncing through the help of Ctags.
@@ -58,45 +59,30 @@ public class CtagHandler extends AbstractCalendarHandler {
 	}
 
 	@Override
-	public OmCalendar syncItems() {
+	DavMethodBase internalSyncItems() throws IOException, DavException {
 		//Calendar already inited.
 
-		PropFindMethod propFindMethod = null;
+		DavPropertyNameSet properties = new DavPropertyNameSet();
+		properties.add(DNAME_GETCTAG);
 
-		try {
-			DavPropertyNameSet properties = new DavPropertyNameSet();
-			properties.add(DNAME_GETCTAG);
+		PropFindMethod method = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
+		client.executeMethod(method);
 
-			propFindMethod = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
-			client.executeMethod(propFindMethod);
+		if (method.succeeded()) {
+			for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus().getResponses()) {
+				DavPropertySet set = response.getProperties(SC_OK);
+				String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
 
-			if (propFindMethod.succeeded()) {
-				for (MultiStatusResponse response : propFindMethod.getResponseBodyAsMultiStatus().getResponses()) {
-					DavPropertySet set = response.getProperties(SC_OK);
-					String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
-
-					if (ctag != null && !ctag.equals(calendar.getToken())) {
-						EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
-						etagsHandler.syncItems();
-						calendar.setToken(ctag);
-					}
+				if (ctag != null && !ctag.equals(calendar.getToken())) {
+					EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+					etagsHandler.syncItems();
+					calendar.setToken(ctag);
 				}
-			} else {
-				log.error("Error executing PROPFIND Method, with status Code: "
-						+ propFindMethod.getStatusCode());
 			}
-
-		} catch (IOException | DavException e) {
-			log.error("Error during the execution of calendar-multiget Report.", e);
-		} catch (Exception e) {
-			log.error("Severe Error during the execution of calendar-multiget Report.", e);
-		} finally {
-			if (propFindMethod != null) {
-				propFindMethod.releaseConnection();
-			}
+		} else {
+			log.error("Error executing PROPFIND Method, with status Code: {}", method.getStatusCode());
 		}
-
-		return calendar;
+		return method;
 	}
 
 	@Override

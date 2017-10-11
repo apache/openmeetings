@@ -29,8 +29,6 @@ import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
-import org.red5.io.ITag;
-import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -170,15 +168,8 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					metaDeltaDao.add(metaDelta);
 				}
 
-				log.trace("##REC:: timeStamp :: " + timeStamp);
-				ITag tag = new Tag();
-				tag.setDataType(streampacket.getDataType());
-
-				tag.setBodySize(data.limit());
-				tag.setTimestamp(timeStamp);
-				tag.setBody(data);
-
-				writer.writeTag(tag);
+				log.trace("##REC:: timeStamp :: {}", timeStamp);
+				write(timeStamp, streampacket.getDataType(), data);
 			}
 		} catch (Exception e) {
 			log.error("##REC:: [packetReceived]", e);
@@ -192,18 +183,18 @@ public class StreamAudioWriter extends BaseStreamWriter {
 			// Screen Data, cause there is no!
 
 			Date virtualTime = lastcurrentTime;
-			log.debug("##REC:: virtualTime: " + virtualTime);
-			log.debug("##REC:: startedSessionTimeDate: " + startedSessionTimeDate);
+			log.debug("##REC:: virtualTime: {}", virtualTime);
+			log.debug("##REC:: startedSessionTimeDate: {}", startedSessionTimeDate);
 
 			long deltaRecordingTime = virtualTime == null ? 0 : virtualTime.getTime() - startedSessionTimeDate.getTime();
 
-			log.debug("##REC:: lastTimeStamp :closeStream: " + lastTimeStamp);
-			log.debug("##REC:: lastStreamPacketTimeStamp :closeStream: " + lastStreamPacketTimeStamp);
-			log.debug("##REC:: deltaRecordingTime :closeStream: " + deltaRecordingTime);
+			log.debug("##REC:: lastTimeStamp :closeStream: {}", lastTimeStamp);
+			log.debug("##REC:: lastStreamPacketTimeStamp :closeStream: {}", lastStreamPacketTimeStamp);
+			log.debug("##REC:: deltaRecordingTime :closeStream: {}", deltaRecordingTime);
 
 			long deltaTimePaddingEnd = deltaRecordingTime - lastTimeStamp - initialDelta;
 
-			log.debug("##REC:: deltaTimePaddingEnd :: " + deltaTimePaddingEnd);
+			log.debug("##REC:: deltaTimePaddingEnd :: {}", deltaTimePaddingEnd);
 
 			RecordingMetaDelta metaDelta = new RecordingMetaDelta();
 

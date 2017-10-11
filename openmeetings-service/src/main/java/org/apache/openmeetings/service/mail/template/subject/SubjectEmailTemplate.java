@@ -18,36 +18,42 @@
  */
 package org.apache.openmeetings.service.mail.template.subject;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-
 import java.util.Locale;
-import java.util.TimeZone;
 
-import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.LocaleHelper;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.openmeetings.service.mail.template.AbstractTemplatePanel;
+import org.apache.wicket.core.util.string.ComponentRenderer;
+import org.apache.wicket.markup.html.panel.Fragment;
 
-public class AppointmentReminderTemplate extends AppointmentTemplate {
+public abstract class SubjectEmailTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
+	private String email = null;
+	private String subject = null;
+	private boolean created = false;
 
-	private AppointmentReminderTemplate(Locale locale, Appointment a, TimeZone tz) {
-		super(locale, a, tz);
+	public SubjectEmailTemplate(Locale locale) {
+		super(locale);
 	}
 
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
-		add(new Label("titleLbl", getString("1158", locale)));
+	SubjectEmailTemplate create() {
+		email = ComponentRenderer.renderComponent(this).toString();
+		subject = ComponentRenderer.renderComponent(getSubjectFragment()).toString();
+		created = true;
+		return this;
 	}
 
-	public static SubjectEmailTemplate get(User u, Appointment a, TimeZone tz) {
-		ensureApplication(u.getLanguageId());
-		return new AppointmentReminderTemplate(LocaleHelper.getLocale(u), a, tz).create();
+	abstract Fragment getSubjectFragment();
+
+	public final String getEmail() {
+		if (!created) {
+			throw new RuntimeException("Not created!!");
+		}
+		return email;
 	}
 
-	@Override
-	String getPrefix() {
-		return ensureApplication().getOmString("1158", locale);
+	public final String getSubject() {
+		if (!created) {
+			throw new RuntimeException("Not created!!");
+		}
+		return subject;
 	}
 }

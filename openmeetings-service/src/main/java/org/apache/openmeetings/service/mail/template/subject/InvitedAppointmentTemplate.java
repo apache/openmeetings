@@ -19,41 +19,24 @@
 package org.apache.openmeetings.service.mail.template.subject;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
-import org.apache.openmeetings.service.mail.template.AbstractTemplatePanel;
-import org.apache.wicket.core.util.string.ComponentRenderer;
-import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.wicket.markup.html.basic.Label;
 
-public abstract class AbstractSubjectEmailTemplate extends AbstractTemplatePanel {
+public abstract class InvitedAppointmentTemplate extends AppointmentTemplate {
 	private static final long serialVersionUID = 1L;
-	private String email = null;
-	private String subject = null;
-	private boolean created = false;
+	protected final String invitorName;
 
-	public AbstractSubjectEmailTemplate(Locale locale) {
-		super(locale);
+	protected InvitedAppointmentTemplate(Locale locale, Appointment a, TimeZone tz, String invitorName) {
+		super(locale, a, tz);
+		this.invitorName = invitorName;
 	}
 
-	AbstractSubjectEmailTemplate create() {
-		email = ComponentRenderer.renderComponent(this).toString();
-		subject = ComponentRenderer.renderComponent(getSubjectFragment()).toString();
-		created = true;
-		return this;
-	}
-
-	abstract Fragment getSubjectFragment();
-
-	public final String getEmail() {
-		if (!created) {
-			throw new RuntimeException("Not created!!");
-		}
-		return email;
-	}
-
-	public final String getSubject() {
-		if (!created) {
-			throw new RuntimeException("Not created!!");
-		}
-		return subject;
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new Label("invitorLbl", getString("1156", locale)));
+		add(new Label("invitor", invitorName));
 	}
 }

@@ -53,6 +53,11 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.openmeetings.screenshare.Core;
 import org.apache.openmeetings.screenshare.gui.ScreenDimensions.ScreenQuality;
+import org.apache.openmeetings.screenshare.gui.listener.ScreenHeightMouseListener;
+import org.apache.openmeetings.screenshare.gui.listener.ScreenMouseListener;
+import org.apache.openmeetings.screenshare.gui.listener.ScreenWidthMouseListener;
+import org.apache.openmeetings.screenshare.gui.listener.ScreenXMouseListener;
+import org.apache.openmeetings.screenshare.gui.listener.ScreenYMouseListener;
 import org.slf4j.Logger;
 
 public class ScreenSharerFrame extends JFrame {
@@ -770,7 +775,7 @@ public class ScreenSharerFrame extends JFrame {
 	/**
 	 * Needs to be always invoked after every re-scaling
 	 */
-	void calcRescaleFactors() {
+	public void calcRescaleFactors() {
 		logger.trace("calcRescaleFactors -- ");
 		int resizeX = spinnerWidth.getValue();
 		int resizeY = spinnerHeight.getValue();
@@ -816,7 +821,7 @@ public class ScreenSharerFrame extends JFrame {
 	 * by using the vars from the Spinners
 	 *
 	 */
-	void updateVScreenBounds() {
+	public void updateVScreenBounds() {
 		double ratio = ((double)getDim().getWidth()) / getDim().getWidthMax();
 		int newWidth = (int)(getDim().getSpinnerWidth() * ratio);
 		int newX = (int)(getDim().getSpinnerX() * ratio);

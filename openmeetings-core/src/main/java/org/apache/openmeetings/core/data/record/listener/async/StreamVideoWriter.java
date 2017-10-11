@@ -26,8 +26,6 @@ import java.util.Date;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.red5.io.ITag;
-import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
@@ -49,7 +47,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 			log.trace("incoming timeStamp :: " + timeStamp);
 			if (startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
 				//skip until keyframe
-				log.trace("no KEYFRAME, skipping ::" + streampacket.getFrameType());
+				log.trace("no KEYFRAME, skipping :: {}", streampacket.getFrameType());
 				return;
 			}
 			if (timeStamp <= 0) {
@@ -75,18 +73,9 @@ public class StreamVideoWriter extends BaseStreamWriter {
 				// That will be not bigger then long value
 				startTimeStamp = timeStamp;
 			}
-
 			timeStamp -= startTimeStamp;
 
-			log.trace("timeStamp :: " + timeStamp);
-			ITag tag = new Tag();
-			tag.setDataType(streampacket.getDataType());
-
-			tag.setBodySize(data.limit());
-			tag.setTimestamp(timeStamp);
-			tag.setBody(data);
-
-			writer.writeTag(tag);
+			write(timeStamp, streampacket.getDataType(), data);
 		} catch (Exception e) {
 			log.error("[packetReceived]", e);
 		}

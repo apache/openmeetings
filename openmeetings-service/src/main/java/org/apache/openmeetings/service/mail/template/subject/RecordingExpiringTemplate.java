@@ -30,7 +30,7 @@ import org.apache.openmeetings.service.mail.template.OmTextLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
 
-public class RecordingExpiringTemplate extends AbstractSubjectEmailTemplate {
+public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
 	private final Recording rec;
 	private long remainingDays;
@@ -43,7 +43,7 @@ public class RecordingExpiringTemplate extends AbstractSubjectEmailTemplate {
 		this.remainingDays = remainingDays;
 	}
 
-	public static AbstractSubjectEmailTemplate get(User u, Recording rec, long remainingDays) {
+	public static SubjectEmailTemplate get(User u, Recording rec, long remainingDays) {
 		ensureApplication(u.getLanguageId());
 		return new RecordingExpiringTemplate(u, rec, remainingDays).create();
 	}

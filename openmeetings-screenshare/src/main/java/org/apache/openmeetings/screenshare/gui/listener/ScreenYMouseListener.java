@@ -16,41 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screenshare.gui;
+package org.apache.openmeetings.screenshare.gui.listener;
 
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
-import javax.swing.event.MouseInputAdapter;
+import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
 
-public class ScreenXMouseListener extends MouseInputAdapter {
-	private final ScreenSharerFrame frame;
-	private double x = 0;
+public class ScreenYMouseListener extends OmMouseInputAdapter {
+	private double y = 0;
 
-	public ScreenXMouseListener(ScreenSharerFrame frame) {
-		this.frame = frame;
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		frame.setShowWarning(false);
-		this.x = e.getX();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		frame.setShowWarning(true);
+	public ScreenYMouseListener(ScreenSharerFrame frame) {
+		super(frame, Cursor.N_RESIZE_CURSOR);
+		cons = e -> {this.y = e.getY();};
 	}
 
 	@Override
@@ -58,15 +37,16 @@ public class ScreenXMouseListener extends MouseInputAdapter {
 		if (!((Component)e.getSource()).isEnabled()) {
 			return;
 		}
-		double newX = e.getX();
-		int delta = (int) (x - newX);
-		int newXPosition = frame.getDim().getSpinnerX() - delta;
-		int newWidth = frame.getDim().getSpinnerWidth() + delta;
+		double newY = e.getY();
 
-		if (newXPosition >= 0 && newWidth >= 0) {
+		int delta = (int) (y - newY);
+		int newYPosition = frame.getDim().getSpinnerY() - delta;
+		int newHeight = frame.getDim().getSpinnerHeight() + delta;
+
+		if (newYPosition >= 0 && newHeight >= 0) {
 			frame.setDoUpdateBounds(false);
-			frame.setSpinnerX(newXPosition);
-			frame.setSpinnerWidth(newWidth);
+			frame.setSpinnerY(newYPosition);
+			frame.setSpinnerHeight(newHeight);
 			frame.setDoUpdateBounds(true);
 			frame.updateVScreenBounds();
 			frame.calcRescaleFactors();

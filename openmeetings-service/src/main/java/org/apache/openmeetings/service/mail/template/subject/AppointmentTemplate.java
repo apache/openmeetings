@@ -29,17 +29,34 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.service.mail.template.DashOmTextLabel;
 import org.apache.openmeetings.service.mail.template.OmTextLabel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.util.string.Strings;
 
-public abstract class AbstractAppointmentTemplate extends AbstractSubjectEmailTemplate {
+public abstract class AppointmentTemplate extends SubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
 	protected Appointment a;
 	protected TimeZone tz;
 
-	public AbstractAppointmentTemplate(Locale locale, Appointment a, TimeZone tz) {
+	public AppointmentTemplate(Locale locale, Appointment a, TimeZone tz) {
 		super(locale);
 		this.a = a;
 		this.tz = tz;
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
+		add(new Label("title", a.getTitle()));
+		add(new WebMarkupContainer("descContainer")
+				.add(new Label("descLbl", getString("1152", locale)))
+				.add(new Label("desc", a.getDescription()).setEscapeModelStrings(false))
+				.setVisible(!Strings.isEmpty(a.getDescription())));
+		add(new Label("startLbl", getString("1153", locale)));
+		add(new Label("start", format(a.getStart())));
+		add(new Label("endLbl", getString("1154", locale)));
+		add(new Label("end", format(a.getEnd())));
 	}
 
 	abstract String getPrefix();

@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
+import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -89,68 +90,54 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	}
 
 	@Override
-	public OmCalendar syncItems() {
+	DavMethodBase internalSyncItems() throws IOException, DavException {
 		Long ownerId = this.calendar.getOwner().getId();
 		if (!isMultigetDisabled) {
+			CalDAVReportMethod method = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
 
-			CalDAVReportMethod reportMethod = null;
+			client.executeMethod(method);
+			if (method.succeeded()) {
+				//Map for each Href as key and Appointment as Value.
+				Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
+						appointmentDao.getbyCalendar(calendar.getId()));
 
-			try {
-				reportMethod = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
+				for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus().getResponses()) {
+					if (response.getStatus()[0].getStatusCode() == SC_OK) {
+						Appointment a = map.get(response.getHref());
 
-				client.executeMethod(reportMethod);
+						//Check if it's an updated Appointment
+						if (a != null) {
+							String origetag = a.getEtag(),
+									currentetag = CalendarDataProperty.getEtagfromResponse(response);
 
-				if (reportMethod.succeeded()) {
-					//Map for each Href as key and Appointment as Value.
-					Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
-							appointmentDao.getbyCalendar(calendar.getId()));
-
-					for (MultiStatusResponse response : reportMethod.getResponseBodyAsMultiStatus().getResponses()) {
-						if (response.getStatus()[0].getStatusCode() == SC_OK) {
-							Appointment a = map.get(response.getHref());
-
-							//Check if it's an updated Appointment
-							if (a != null) {
-								String origetag = a.getEtag(),
-										currentetag = CalendarDataProperty.getEtagfromResponse(response);
-
-								//If etag is modified
-								if (!currentetag.equals(origetag)) {
-									if (onlyEtag) {
-										a.setEtag(currentetag);
-									} else {
-										Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
-										a = utils.parseCalendartoAppointment(a, calendar, currentetag);
-									}
-									appointmentDao.update(a, ownerId);
+							//If etag is modified
+							if (!currentetag.equals(origetag)) {
+								if (onlyEtag) {
+									a.setEtag(currentetag);
+								} else {
+									Calendar calendar = CalendarDataProperty.getCalendarfromResponse(response);
+									a = utils.parseCalendartoAppointment(a, calendar, currentetag);
 								}
-							} else if (!onlyEtag) {
-								//Else it's a new Appointment
-								// i.e. parse into a new Appointment
-								// Only applicable when we get calendar data along with etag.
-								String etag = CalendarDataProperty.getEtagfromResponse(response);
-								Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
-								Appointment appointments = utils.parseCalendartoAppointment(
-										ical, response.getHref(), etag, calendar);
-								appointmentDao.update(appointments, ownerId);
+								appointmentDao.update(a, ownerId);
 							}
+						} else if (!onlyEtag) {
+							//Else it's a new Appointment
+							// i.e. parse into a new Appointment
+							// Only applicable when we get calendar data along with etag.
+							String etag = CalendarDataProperty.getEtagfromResponse(response);
+							Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
+							Appointment appointments = utils.parseCalendartoAppointment(
+									ical, response.getHref(), etag, calendar);
+							appointmentDao.update(appointments, ownerId);
 						}
 					}
-				} else {
-					log.error("Report Method return Status: {} for calId {}", reportMethod.getStatusCode(), calendar.getId());
 				}
-			} catch (IOException | DavException e) {
-				log.error("Error during the execution of calendar-multiget Report.", e);
-			} catch (Exception e) {
-				log.error("Severe Error during the execution of calendar-multiget Report.", e);
-			} finally {
-				if (reportMethod != null) {
-					reportMethod.releaseConnection();
-				}
+			} else {
+				log.error("Report Method return Status: {} for calId {}", method.getStatusCode(), calendar.getId());
 			}
+			return method;
 		}
-
-		return calendar;
+		return null;
 	}
 
 	// Doesn't handle Creation, Updation and Deletion of events.

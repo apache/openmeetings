@@ -28,12 +28,15 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.io.IStreamableFile;
+import org.red5.io.ITag;
 import org.red5.io.ITagWriter;
+import org.red5.io.flv.impl.Tag;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.red5.server.api.service.IStreamableFileService;
@@ -142,12 +145,12 @@ public abstract class BaseStreamWriter implements Runnable {
 
 					packetReceived(item);
 				} else if (dostopping || lastPackedRecieved + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
-					log.debug(String.format("##REC:: none packets received for: %s minutes, exiting", (System.currentTimeMillis() - lastPackedRecieved) / MINUTE_MULTIPLIER));
+					log.debug("##REC:: none packets received for: {} minutes, exiting", (System.currentTimeMillis() - lastPackedRecieved) / MINUTE_MULTIPLIER);
 					stopping = true;
 					closeStream();
 				}
 				if (++counter % 5000 == 0) {
-					log.debug("##REC:: Stream writer is still listening:: " + file.getName());
+					log.debug("##REC:: Stream writer is still listening:: {}", file.getName());
 				}
 			} catch (InterruptedException e) {
 				log.error("##REC:: [run]", e);
@@ -191,10 +194,21 @@ public abstract class BaseStreamWriter implements Runnable {
 		}
 		try {
 			queue.put(streampacket);
-			log.trace("##REC:: Q put, successful: " + queue.size());
+			log.trace("##REC:: Q put, successful: {}", queue.size());
 		} catch (InterruptedException ignored) {
 			log.error("##REC:: [append]", ignored);
 		}
 	}
 
+	protected void write(int timeStamp, byte type, IoBuffer data) throws IOException {
+		log.trace("timeStamp :: {}", timeStamp);
+		ITag tag = new Tag();
+		tag.setDataType(type);
+
+		tag.setBodySize(data.limit());
+		tag.setTimestamp(timeStamp);
+		tag.setBody(data);
+
+		writer.writeTag(tag);
+	}
 }

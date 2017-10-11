@@ -16,41 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screenshare.gui;
+package org.apache.openmeetings.screenshare.gui.listener;
 
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
-import javax.swing.event.MouseInputAdapter;
+import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
 
-public class ScreenWidthMouseListener extends MouseInputAdapter {
-	private final ScreenSharerFrame frame;
+public class ScreenWidthMouseListener extends OmMouseInputAdapter {
 	private double x = 0;
 
 	public ScreenWidthMouseListener(ScreenSharerFrame frame) {
-		this.frame = frame;
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR));
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		frame.setShowWarning(false);
-		this.x = e.getX();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		frame.setShowWarning(true);
+		super(frame, Cursor.W_RESIZE_CURSOR);
+		cons = e -> {this.x = e.getX();};
 	}
 
 	@Override

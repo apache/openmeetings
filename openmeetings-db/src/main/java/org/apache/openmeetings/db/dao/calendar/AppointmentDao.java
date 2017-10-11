@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,13 +35,11 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.IInvitationManager;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +55,9 @@ public class AppointmentDao {
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
 	@Autowired
-	private UserDao userDao;
-	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private IInvitationManager invitationManager;
 
@@ -197,38 +190,7 @@ public class AppointmentDao {
 				.setParameter("title", title).setParameter("userId", userId).getResultList();
 	}
 
-	/**
-	 * @author becherer
-	 * @param userId
-	 * @return
-	 */
-	public List<Appointment> getForToday(Long userId) {
-		log.debug("getAppoitmentbyRangeAndMember : UserID - " + userId);
-
-		TimeZone timeZone = timezoneUtil.getTimeZone(userDao.get(userId));
-
-		Calendar startCal = Calendar.getInstance(timeZone);
-		startCal.set(Calendar.MINUTE, 0);
-		startCal.set(Calendar.HOUR, 0);
-		startCal.set(Calendar.SECOND, 1);
-
-		Calendar endCal = Calendar.getInstance(timeZone);
-		endCal.set(Calendar.MINUTE, 23);
-		endCal.set(Calendar.HOUR, 59);
-		endCal.set(Calendar.SECOND, 59);
-
-		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRangeByUser", Appointment.class);
-
-		query.setParameter("userId", userId);
-
-		query.setParameter("start", startCal.getTime());
-		query.setParameter("end", endCal.getTime());
-
-		return query.getResultList();
-	}
-
 	// ---------------------------------------------------------------------------------------------
-
 	public Appointment getByRoom(Long userId, Long roomId) {
 		try {
 			List<Appointment> list = em.createNamedQuery("getAppointmentByOwnerRoomId", Appointment.class)

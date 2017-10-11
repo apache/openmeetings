@@ -34,6 +34,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
+import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -76,7 +77,7 @@ public class EtagsHandler extends AbstractCalendarHandler {
 	}
 
 	@Override
-	public OmCalendar syncItems() {
+	DavMethodBase internalSyncItems() throws IOException, DavException {
 		Long ownerId = this.calendar.getOwner().getId();
 		Map<String, Appointment> map = listToMap(appointmentDao.getHrefsbyCalendar(calendar.getId()),
 				appointmentDao.getbyCalendar(calendar.getId()));
@@ -87,76 +88,65 @@ public class EtagsHandler extends AbstractCalendarHandler {
 		CompFilter vcalendar = new CompFilter(Calendar.VCALENDAR);
 		vcalendar.addCompFilter(new CompFilter(Component.VEVENT));
 
-		CalDAVReportMethod reportMethod = null;
-		try {
-			CalendarQuery query = new CalendarQuery(properties, vcalendar, map.isEmpty() ? new CalendarData() : null, false, false);
-			reportMethod = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
-			client.executeMethod(reportMethod);
-			if (reportMethod.succeeded()) {
-				MultiStatusResponse[] multiStatusResponses = reportMethod.getResponseBodyAsMultiStatus().getResponses();
-				if (map.isEmpty()) {
-					//Initializing the Calendar for the first time.
+		CalendarQuery query = new CalendarQuery(properties, vcalendar, map.isEmpty() ? new CalendarData() : null, false, false);
+		CalDAVReportMethod method = new CalDAVReportMethod(path, query, CalDAVConstants.DEPTH_1);
+		client.executeMethod(method);
+		if (method.succeeded()) {
+			MultiStatusResponse[] multiStatusResponses = method.getResponseBodyAsMultiStatus().getResponses();
+			if (map.isEmpty()) {
+				//Initializing the Calendar for the first time.
 
-					//Parse the responses into Appointments
-					for (MultiStatusResponse response : multiStatusResponses) {
-						if (response.getStatus()[0].getStatusCode() == SC_OK) {
-							String etag = CalendarDataProperty.getEtagfromResponse(response);
-							Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
-							Appointment appointments = utils.parseCalendartoAppointment(
-									ical, response.getHref(), etag, calendar);
+				//Parse the responses into Appointments
+				for (MultiStatusResponse response : multiStatusResponses) {
+					if (response.getStatus()[0].getStatusCode() == SC_OK) {
+						String etag = CalendarDataProperty.getEtagfromResponse(response);
+						Calendar ical = CalendarDataProperty.getCalendarfromResponse(response);
+						Appointment appointments = utils.parseCalendartoAppointment(
+								ical, response.getHref(), etag, calendar);
 
-							appointmentDao.update(appointments, ownerId);
-						}
+						appointmentDao.update(appointments, ownerId);
 					}
-				} else {
-					//Calendar has been inited before
-					List<String> currenthrefs = new ArrayList<>();
-
-					for (MultiStatusResponse response : multiStatusResponses) {
-						if (response.getStatus()[0].getStatusCode() == SC_OK) {
-							Appointment appointment = map.get(response.getHref());
-
-							//Event updated
-							if (appointment != null) {
-								String origetag = appointment.getEtag(),
-										currentetag = CalendarDataProperty.getEtagfromResponse(response);
-
-								//If etag is modified
-								if (!currentetag.equals(origetag)) {
-									currenthrefs.add(appointment.getHref());
-								}
-								map.remove(response.getHref());
-							} else {
-								// The orig list of events doesn't contain this event.
-								currenthrefs.add(response.getHref());
-							}
-						}
-					}
-
-					//Remaining Events have been deleted on the server, thus delete them
-					for (Map.Entry<String, Appointment> entry : map.entrySet()) {
-						appointmentDao.delete(entry.getValue(), ownerId);
-					}
-
-					//Get the rest of the events through a Multiget Handler.
-					MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
-							calendar, client, appointmentDao, utils);
-					return multigetHandler.syncItems();
 				}
 			} else {
-				log.error("Report Method return Status: {} for calId {} ", reportMethod.getStatusCode(), calendar.getId());
-			}
-		} catch (IOException | DavException e) {
-			log.error("Error during the execution of calendar-multiget Report.", e);
-		} catch (Exception e) {
-			log.error("Severe Error during the execution of calendar-multiget Report.", e);
-		} finally {
-			if (reportMethod != null) {
-				reportMethod.releaseConnection();
-			}
-		}
+				//Calendar has been inited before
+				List<String> currenthrefs = new ArrayList<>();
 
-		return calendar;
+				for (MultiStatusResponse response : multiStatusResponses) {
+					if (response.getStatus()[0].getStatusCode() == SC_OK) {
+						Appointment appointment = map.get(response.getHref());
+
+						//Event updated
+						if (appointment != null) {
+							String origetag = appointment.getEtag(),
+									currentetag = CalendarDataProperty.getEtagfromResponse(response);
+
+							//If etag is modified
+							if (!currentetag.equals(origetag)) {
+								currenthrefs.add(appointment.getHref());
+							}
+							map.remove(response.getHref());
+						} else {
+							// The orig list of events doesn't contain this event.
+							currenthrefs.add(response.getHref());
+						}
+					}
+				}
+
+				//Remaining Events have been deleted on the server, thus delete them
+				for (Map.Entry<String, Appointment> entry : map.entrySet()) {
+					appointmentDao.delete(entry.getValue(), ownerId);
+				}
+
+				//Get the rest of the events through a Multiget Handler.
+				MultigetHandler multigetHandler = new MultigetHandler(currenthrefs, path,
+						calendar, client, appointmentDao, utils);
+				releaseConnection(method);
+				return multigetHandler.internalSyncItems();
+			}
+		} else {
+			log.error("Report Method return Status: {} for calId {} ", method.getStatusCode(), calendar.getId());
+		}
+		return method;
 	}
 
 	@Override

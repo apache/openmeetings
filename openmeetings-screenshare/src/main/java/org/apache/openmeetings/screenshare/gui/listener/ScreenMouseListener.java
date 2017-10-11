@@ -16,43 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.screenshare.gui;
+package org.apache.openmeetings.screenshare.gui.listener;
 
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
-import javax.swing.event.MouseInputAdapter;
+import org.apache.openmeetings.screenshare.gui.ScreenSharerFrame;
 
-public class ScreenMouseListener extends MouseInputAdapter {
-	private final ScreenSharerFrame frame;
+public class ScreenMouseListener extends OmMouseInputAdapter {
 	private int x = 0;
 	private int y = 0;
 
 	public ScreenMouseListener(ScreenSharerFrame frame) {
-		this.frame = frame;
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		frame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		frame.setShowWarning(false);
-		this.x = e.getX();
-		this.y = e.getY();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		frame.setShowWarning(true);
+		super(frame, Cursor.HAND_CURSOR);
+		cons = e -> {
+			this.x = e.getX();
+			this.y = e.getY();
+		};
 	}
 
 	@Override
@@ -71,8 +52,6 @@ public class ScreenMouseListener extends MouseInputAdapter {
 		if (newYPosition >= 0) {
 			frame.setSpinnerY(newYPosition);
 		}
-
 		frame.calcRescaleFactors();
 	}
-
 }
