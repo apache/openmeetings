@@ -264,6 +264,13 @@ public class TestMainAreas extends AbstractWicketTester {
 		checkUnauthArea(AreaKeys.admin, TYPE_EMAIL, groupAdminUsername, regularUsername);
 	}
 
+	@Test
+	public void testAdminBad() throws OmException {
+		checkArea(AreaKeys.admin, TYPE_EMAIL, EmailPanel.class, adminUsername);
+		//Panel will be the same
+		checkArea(AreaKeys.admin, "BAD", EmailPanel.class, adminUsername);
+	}
+
 	private void testRoom(Long id) throws OmException {
 		checkArea(AreaKeys.room, String.valueOf(id), RoomPanel.class, p -> {
 			RoomPanel rp = (RoomPanel)p.get("main-container:main:contents:child");
@@ -283,6 +290,11 @@ public class TestMainAreas extends AbstractWicketTester {
 	public void testRoom1() throws OmException {
 		//public interview room
 		testRoom(1L);
+	}
+
+	@Test
+	public void testRoomBad() throws OmException {
+		checkArea(AreaKeys.room, "BAD", OmDashboardPanel.class, adminUsername);
 	}
 
 	@Test

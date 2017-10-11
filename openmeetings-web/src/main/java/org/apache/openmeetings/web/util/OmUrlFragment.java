@@ -88,9 +88,6 @@ public class OmUrlFragment implements Serializable {
 		, dashboardModuleCalendar
 		, recordModule
 		, conferenceModuleRoomList
-		, eventModuleRoomList
-		, moderatorModuleUser
-		, moderatorModuleRoom
 		, adminModuleUser
 		, adminModuleConnections
 		, adminModuleOrg
@@ -145,12 +142,6 @@ public class OmUrlFragment implements Serializable {
 						setType(TYPE_PUBLIC);
 						break;
 				}
-				break;
-			case eventModuleRoomList:
-				break;
-			case moderatorModuleUser:
-				break;
-			case moderatorModuleRoom:
 				break;
 			case adminModuleUser:
 				setArea(AreaKeys.admin);

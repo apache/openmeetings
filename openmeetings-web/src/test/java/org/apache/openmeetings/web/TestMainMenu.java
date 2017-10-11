@@ -20,8 +20,14 @@ package org.apache.openmeetings.web;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.web.admin.backup.BackupPanel;
+import org.apache.openmeetings.web.admin.configurations.ConfigsPanel;
 import org.apache.openmeetings.web.admin.connection.ConnectionsPanel;
+import org.apache.openmeetings.web.admin.email.EmailPanel;
 import org.apache.openmeetings.web.admin.groups.GroupsPanel;
+import org.apache.openmeetings.web.admin.labels.LangPanel;
+import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
+import org.apache.openmeetings.web.admin.oauth.OAuthPanel;
 import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
 import org.apache.openmeetings.web.common.BasePanel;
@@ -95,5 +101,35 @@ public class TestMainMenu extends AbstractWicketTester {
 	@Test
 	public void testAdminRooms() throws OmException {
 		checkMenuItem(3, 3, RoomsPanel.class);
+	}
+
+	@Test
+	public void testAdminConfigs() throws OmException {
+		checkMenuItem(3, 4, ConfigsPanel.class);
+	}
+
+	@Test
+	public void testAdminLabels() throws OmException {
+		checkMenuItem(3, 5, LangPanel.class);
+	}
+
+	@Test
+	public void testAdminLaps() throws OmException {
+		checkMenuItem(3, 6, LdapsPanel.class);
+	}
+
+	@Test
+	public void testAdminOauth() throws OmException {
+		checkMenuItem(3, 7, OAuthPanel.class);
+	}
+
+	@Test
+	public void testAdminBackup() throws OmException {
+		checkMenuItem(3, 8, BackupPanel.class);
+	}
+
+	@Test
+	public void testAdminEmail() throws OmException {
+		checkMenuItem(3, 9, EmailPanel.class);
 	}
 }
