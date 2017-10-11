@@ -402,7 +402,12 @@ public class User implements IDataProviderEntity {
 		return password;
 	}
 
-	@Deprecated //should not be used directly (for bean usage only)
+	/**
+	 * @deprecated should not be used directly (for bean usage only)
+	 *
+	 * @param password - password to set
+	 */
+	@Deprecated
 	public void setPassword(String password) {
 		this.password = password;
 	}

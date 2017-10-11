@@ -155,15 +155,12 @@ public class VideoInfo extends Panel {
 
 			if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
 				List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
-				reconvLabel:
-				if (!metas.isEmpty()) {
-					for (RecordingMetaData meta : metas) {
-						if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
-							break reconvLabel;
-						}
+				for (RecordingMetaData meta : metas) {
+					if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
+						break;
 					}
-					reConvEnabled = true;
 				}
+				reConvEnabled = !metas.isEmpty();
 			}
 		}
 		reConvert.setEnabled(reConvEnabled);

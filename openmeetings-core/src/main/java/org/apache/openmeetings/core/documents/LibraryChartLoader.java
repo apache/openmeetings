@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class LibraryChartLoader {
 	private LibraryChartLoader() {}
 
 	@SuppressWarnings("rawtypes")
-	public static ArrayList loadChart(File dir, String fileName) {
+	public static List loadChart(File dir, String fileName) {
 		try {
 			File file = new File(dir, fileName + CHART_EXT);
 
@@ -53,7 +54,7 @@ public class LibraryChartLoader {
 			try (InputStream is = new FileInputStream(file);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8)))
 			{
-				return (ArrayList) xStream.fromXML(reader);
+				return (List) xStream.fromXML(reader);
 			}
 		} catch (Exception err) {
 			log.error("Unexpected error while loading chart", err);
