@@ -73,25 +73,26 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanTestSetup() {
 		log.debug("CleanupJob.cleanTestSetup");
+		final long now = System.currentTimeMillis();
 		if (!isInitComplete()) {
 			return;
 		}
 		try {
 			//TODO need to move all these staff to helper
-			File[] folders = getStreamsDir().listFiles();
-			if (folders != null) {
-				for (File folder : folders) {
-					if (folder.isDirectory()) {
-						File[] files = folder.listFiles(fi -> fi.getName().startsWith(TEST_SETUP_PREFIX));
-						if (files != null) {
-							for (File file : files) {
-								if (file.isFile() && file.lastModified() + testSetupTimeout < System.currentTimeMillis()) {
-									log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
-									file.delete();
-								}
-							}
-						}
-					}
+			File[] folders = getStreamsDir().listFiles(fi -> fi.isDirectory());
+			if (folders == null) {
+				return;
+			}
+			for (File folder : folders) {
+				File[] files = folder.listFiles(
+						fi -> fi.getName().startsWith(TEST_SETUP_PREFIX) && fi.isFile() && fi.lastModified() + testSetupTimeout < now
+					);
+				if (files == null) {
+					continue;
+				}
+				for (File file : files) {
+					log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
+					file.delete();
 				}
 			}
 		} catch (Exception e) {
@@ -101,37 +102,37 @@ public class CleanupJob extends AbstractJob {
 
 	public void cleanRoomFiles() {
 		log.debug("CleanupJob.cleanRoomFiles");
+		final long now = System.currentTimeMillis();
 		if (!isInitComplete()) {
 			return;
 		}
 		try {
 			//TODO need to move all these staff to helper
-			File[] folders = getStreamsDir().listFiles();
-			if (folders != null) {
-				for (File folder : folders) {
-					Long roomId = null;
-					if (NumberUtils.isCreatable(folder.getName())) {
-						roomId = Long.valueOf(folder.getName());
-						Whiteboards wbList = WhiteboardCache.get(roomId);
-						for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
-							if (!e.getValue().isEmpty()) {
-								roomId = null;
-								break;
-							}
+			File[] folders = getStreamsDir().listFiles(fi -> fi.isDirectory());
+			if (folders == null) {
+				return;
+			}
+			for (File folder : folders) {
+				Long roomId = null;
+				if (NumberUtils.isCreatable(folder.getName())) {
+					roomId = Long.valueOf(folder.getName());
+					Whiteboards wbList = WhiteboardCache.get(roomId);
+					for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
+						if (!e.getValue().isEmpty()) {
+							roomId = null;
+							break;
 						}
 					}
-					if (folder.isDirectory() && roomId != null && sessionManager.listByRoom(roomId).isEmpty()) {
-						File[] files = folder.listFiles();
-						//TODO need to rework this and remove hardcodings
-						if (files != null) {
-							for (File file : files) {
-								if (file.isFile() && file.lastModified() + roomFilesTtl < System.currentTimeMillis()) {
-									log.debug("Room files are too old and no users in the room: " + roomId);
-									FileUtils.deleteDirectory(folder);
-									break;
-								}
-							}
-						}
+				}
+				if (roomId != null && sessionManager.listByRoom(roomId).isEmpty()) {
+					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
+					//TODO need to rework this and remove hardcodings
+					if (files == null || files.length == 0) {
+						continue;
+					} else {
+						log.debug("Room files are too old and no users in the room: " + roomId);
+						FileUtils.deleteDirectory(folder);
+						break;
 					}
 				}
 			}
