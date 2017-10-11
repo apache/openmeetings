@@ -266,9 +266,7 @@ public class TestMainAreas extends AbstractWicketTester {
 
 	@Test
 	public void testAdminBad() throws OmException {
-		checkArea(AreaKeys.admin, TYPE_EMAIL, EmailPanel.class, adminUsername);
-		//Panel will be the same
-		checkArea(AreaKeys.admin, "BAD", EmailPanel.class, adminUsername);
+		checkArea(AreaKeys.admin, "BAD", OmDashboardPanel.class, adminUsername);
 	}
 
 	private void testRoom(Long id) throws OmException {
