@@ -78,7 +78,6 @@ public class CleanupJob extends AbstractJob {
 			return;
 		}
 		try {
-			//TODO need to move all these staff to helper
 			File[] folders = getStreamsDir().listFiles(fi -> fi.isDirectory());
 			if (folders == null) {
 				return;
@@ -107,7 +106,6 @@ public class CleanupJob extends AbstractJob {
 			return;
 		}
 		try {
-			//TODO need to move all these staff to helper
 			File[] folders = getStreamsDir().listFiles(fi -> fi.isDirectory());
 			if (folders == null) {
 				return;
