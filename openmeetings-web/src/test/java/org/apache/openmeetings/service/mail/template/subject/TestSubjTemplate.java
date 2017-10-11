@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.service.mail.template.subject;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -30,14 +32,13 @@ import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
-import org.junit.Assert;
 import org.junit.Test;
 
-public class TestEmailTemplate extends AbstractWicketTester {
+public class TestSubjTemplate extends AbstractWicketTester {
 	private static void checkTemplate(SubjectEmailTemplate t) {
-		Assert.assertNotNull("Template should be created", t);
-		Assert.assertFalse("Subject should be not empty", Strings.isEmpty(t.getSubject()));
-		Assert.assertFalse("Boby should be not empty", Strings.isEmpty(t.getEmail()));
+		assertNotNull("Template should be created", t);
+		assertFalse("Subject should be not empty", Strings.isEmpty(t.getSubject()));
+		assertFalse("Body should be not empty", Strings.isEmpty(t.getEmail()));
 	}
 
 	@Test

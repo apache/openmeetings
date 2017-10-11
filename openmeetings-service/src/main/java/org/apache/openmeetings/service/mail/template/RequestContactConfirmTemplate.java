@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.basic.Label;
 public class RequestContactConfirmTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactConfirmTemplate(UserContact contact) {
+	private RequestContactConfirmTemplate(UserContact contact) {
 		super(LocaleHelper.getLocale(contact.getOwner()));
 		add(new Label("hi", getString("1192", locale)));
 		add(new Label("firstName", contact.getOwner().getFirstname()));

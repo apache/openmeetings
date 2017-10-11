@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class RegisterUserTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RegisterUserTemplate(String username, String email, String verificationUrl) {
+	private RegisterUserTemplate(String username, String email, String verificationUrl) {
 		super(getOmSession().getLocale());
 		add(new Label("registrationLbl", getString("506", locale)));
 		add(new Label("username", username));

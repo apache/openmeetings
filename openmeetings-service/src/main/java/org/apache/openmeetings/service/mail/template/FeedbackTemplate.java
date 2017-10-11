@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class FeedbackTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public FeedbackTemplate(String username, String email, String message) {
+	private FeedbackTemplate(String username, String email, String message) {
 		super(getOmSession().getLocale());
 		add(new Label("appname", getBean(ConfigurationDao.class).getAppName()));
 		add(new Label("username", username));

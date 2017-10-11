@@ -29,7 +29,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class RequestContactTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public RequestContactTemplate(User userToAdd, User user) {
+	private RequestContactTemplate(User userToAdd, User user) {
 		super(LocaleHelper.getLocale(userToAdd));
 		add(new Label("hi", getString("1192", locale)));
 		add(new Label("addedFirstName", userToAdd.getFirstname()));

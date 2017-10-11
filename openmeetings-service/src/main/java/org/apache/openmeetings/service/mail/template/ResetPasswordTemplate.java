@@ -25,7 +25,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 public class ResetPasswordTemplate extends AbstractTemplatePanel {
 	private static final long serialVersionUID = 1L;
 
-	public ResetPasswordTemplate(String link) {
+	private ResetPasswordTemplate(String link) {
 		super(getOmSession().getLocale());
 		add(new Label("reset-header", getString("513", locale)));
 		add(new ExternalLink("reset_link1", link));
