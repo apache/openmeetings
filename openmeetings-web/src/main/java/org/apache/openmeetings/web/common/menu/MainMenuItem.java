@@ -25,7 +25,7 @@ import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-public class MainMenuItem extends MenuItem {
+public class MainMenuItem extends OmMenuItem {
 	private static final long serialVersionUID = 1L;
 	private MenuActions action;
 	private MenuParams params;

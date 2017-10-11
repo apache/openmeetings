@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.common.menu;
 
-public class RoomMenuItem extends MenuItem {
+public class RoomMenuItem extends OmMenuItem {
 	private static final long serialVersionUID = 1L;
 
 	public RoomMenuItem(String name, String desc) {

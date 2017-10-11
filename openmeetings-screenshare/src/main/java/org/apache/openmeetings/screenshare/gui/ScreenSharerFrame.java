@@ -48,8 +48,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -380,12 +378,7 @@ public class ScreenSharerFrame extends JFrame {
 
 		spinnerWidth = new NumberSpinner(getDim().getSpinnerWidth(), 0, getDim().getWidthMax(), 1);
 		spinnerWidth.setBounds(400, 20, 60, 24);
-		spinnerWidth.addChangeListener( new ChangeListener(){
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				calcNewValueWidthSpin();
-			}
-		});
+		spinnerWidth.addChangeListener(e -> calcNewValueWidthSpin());
 		panelScreen.add(spinnerWidth);
 
 		//Spinner Height

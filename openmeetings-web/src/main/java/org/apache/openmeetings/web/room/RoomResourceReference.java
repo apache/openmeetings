@@ -126,13 +126,8 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 
 	@Override
 	protected File getFile(FileItem f, Attributes attr) {
-		String ext = null;
-		switch (f.getType()) {
-			case Presentation:
-				ext = attr.getParameters().get("slide").toString();
-				break;
-			default:
-		}
+		String ext = f.getType() == FileItem.Type.Presentation
+				? attr.getParameters().get("slide").toString() : null;
 		return getFile(f, ext);
 	}
 

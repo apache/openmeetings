@@ -82,7 +82,7 @@ public class AppointmentManager {
 	@Autowired
 	private AppointmentDao appointmentDao;
 	@Autowired
-	private iCalUtils utils;
+	private IcalUtils utils;
 
 	/**
 	 * Returns a new HttpClient with the inbuilt connection manager in this.

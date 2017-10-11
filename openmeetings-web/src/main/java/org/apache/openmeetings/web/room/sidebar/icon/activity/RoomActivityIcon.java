@@ -32,7 +32,6 @@ public abstract class RoomActivityIcon extends ClientIcon {
 	private static final String CLS_ENABLED = "enabled ";
 	private static final String CLS_DISABLED = "disabled";
 	protected final Activity activity;
-	protected final Pod pod = Pod.none;
 
 	public RoomActivityIcon(String id, String uid, Activity activity, RoomPanel room) {
 		super(id, uid, room);
@@ -41,7 +40,7 @@ public abstract class RoomActivityIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid, pod.name());
+		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid, Pod.none.name());
 	}
 
 	protected boolean visible() {

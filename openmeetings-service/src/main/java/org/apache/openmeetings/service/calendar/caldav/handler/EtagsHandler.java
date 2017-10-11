@@ -40,7 +40,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar.SyncType;
-import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
+import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.apache.wicket.util.string.Strings;
 import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.CalDAVReportMethod;
@@ -71,7 +71,7 @@ import net.fortuna.ical4j.model.Component;
 public class EtagsHandler extends AbstractCalendarHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(EtagsHandler.class, getWebAppRootKey());
 
-	public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, iCalUtils utils) {
+	public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);
 	}
 

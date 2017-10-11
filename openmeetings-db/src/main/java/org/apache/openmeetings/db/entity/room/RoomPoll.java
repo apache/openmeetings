@@ -89,15 +89,7 @@ public class RoomPoll implements IDataProviderEntity {
 		}
 
 		public static Type get(int type) {
-			Type rt = Type.yesNo;
-			switch (type) {
-				case NUMERIC_TYPE_ID:
-					rt = Type.numeric;
-					break;
-				default:
-					//no-op
-			}
-			return rt;
+			return type == NUMERIC_TYPE_ID ? Type.numeric : Type.yesNo;
 		}
 	}
 

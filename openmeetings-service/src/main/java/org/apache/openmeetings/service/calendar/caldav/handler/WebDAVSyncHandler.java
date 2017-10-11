@@ -26,7 +26,7 @@ import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
-import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
+import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncMethod;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncReportInfo;
 import org.osaf.caldav4j.model.response.CalendarDataProperty;
@@ -57,7 +57,7 @@ public class WebDAVSyncHandler extends AbstractCalendarHandler {
 	public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
 			SyncReportInfo.NAMESPACE);
 
-	public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, iCalUtils utils) {
+	public WebDAVSyncHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);
 	}
 

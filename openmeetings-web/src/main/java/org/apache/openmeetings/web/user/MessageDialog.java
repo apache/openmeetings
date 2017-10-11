@@ -91,6 +91,37 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private boolean isPrivate = false;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<User>());
 
+	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
+		super(id, Application.getString("1209"), model);
+		form = new Form<>("form", getModel());
+
+		form.add(feedback.setOutputMarkupId(true));
+		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
+		form.add(new TextField<String>("subject"));
+		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
+		form.add(toolbar);
+		form.add(new WysiwygEditor("message", toolbar));
+		form.add(roomParamsBlock.setOutputMarkupId(true));
+		final CheckBox bookedRoom = new CheckBox("bookedRoom");
+		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior("click") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onEvent(AjaxRequestTarget target) {
+				PrivateMessage p = MessageDialog.this.getModelObject();
+				p.setBookedRoom(!p.isBookedRoom());
+				roomParams.setVisible(p.isBookedRoom());
+				target.add(bookedRoom, roomParamsBlock);
+			}
+		}));
+		bookedRoom.setVisible(getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true));
+		roomParamsBlock.add(roomParams);
+		roomParams.add(new RoomTypeDropDown("room.type"));
+		roomParams.add(start);
+		roomParams.add(end);
+		add(form.setOutputMarkupId(true));
+	}
+
 	public MessageDialog reset(boolean isPrivate) {
 		//TODO should be 'in sync' with appointment
 		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
@@ -130,37 +161,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		}
 		handler.add(form);
 		super.onOpen(handler);
-	}
-
-	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
-		super(id, Application.getString("1209"), model);
-		form = new Form<>("form", getModel());
-
-		form.add(feedback.setOutputMarkupId(true));
-		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
-		form.add(new TextField<String>("subject"));
-		DefaultWysiwygToolbar toolbar = new DefaultWysiwygToolbar("toolbarContainer");
-		form.add(toolbar);
-		form.add(new WysiwygEditor("message", toolbar));
-		form.add(roomParamsBlock.setOutputMarkupId(true));
-		final CheckBox bookedRoom = new CheckBox("bookedRoom");
-		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior("click") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				PrivateMessage p = MessageDialog.this.getModelObject();
-				p.setBookedRoom(!p.isBookedRoom());
-				roomParams.setVisible(p.isBookedRoom());
-				target.add(bookedRoom, roomParamsBlock);
-			}
-		}));
-		bookedRoom.setVisible(getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true));
-		roomParamsBlock.add(roomParams);
-		roomParams.add(new RoomTypeDropDown("room.type"));
-		roomParams.add(start);
-		roomParams.add(end);
-		add(form.setOutputMarkupId(true));
 	}
 
 	@Override

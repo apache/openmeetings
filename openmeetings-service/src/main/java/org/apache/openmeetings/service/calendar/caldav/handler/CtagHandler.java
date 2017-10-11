@@ -29,7 +29,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
-import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
+import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.PropFindMethod;
 import org.red5.logging.Red5LoggerFactory;
@@ -53,7 +53,7 @@ public class CtagHandler extends AbstractCalendarHandler {
 	public static final Namespace NAMESPACE_CALSERVER = Namespace.getNamespace("cs", "http://calendarserver.org/ns/");
 	public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag", NAMESPACE_CALSERVER);
 
-	public CtagHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, iCalUtils utils) {
+	public CtagHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);
 	}
 

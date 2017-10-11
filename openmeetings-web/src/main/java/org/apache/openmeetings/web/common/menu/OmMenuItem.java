@@ -22,17 +22,17 @@ import java.util.List;
 
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
-public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuItem {
+public class OmMenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuItem {
 	private static final long serialVersionUID = 1L;
 	private String desc;
 	private boolean top;
 
-	public MenuItem(String title, List<IMenuItem> items) {
+	public OmMenuItem(String title, List<IMenuItem> items) {
 		super(title, items);
 		setTop(true);
 	}
 
-	public MenuItem(String title, String desc) {
+	public OmMenuItem(String title, String desc) {
 		super(title);
 		this.desc = desc;
 	}
@@ -49,7 +49,7 @@ public class MenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuIt
 		return top;
 	}
 
-	public MenuItem setTop(boolean top) {
+	public OmMenuItem setTop(boolean top) {
 		this.top = top;
 		return this;
 	}

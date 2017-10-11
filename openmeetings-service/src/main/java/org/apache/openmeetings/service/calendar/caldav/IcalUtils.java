@@ -75,8 +75,8 @@ import net.fortuna.ical4j.model.property.Version;
  * This class's functions could be made static, as they are not instantiated anyway.
  */
 @org.springframework.stereotype.Component
-public class iCalUtils {
-	private static final Logger log = Red5LoggerFactory.getLogger(iCalUtils.class, getWebAppRootKey());
+public class IcalUtils {
+	private static final Logger log = Red5LoggerFactory.getLogger(IcalUtils.class, getWebAppRootKey());
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
 	@Autowired

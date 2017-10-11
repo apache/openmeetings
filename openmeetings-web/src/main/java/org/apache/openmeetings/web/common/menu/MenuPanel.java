@@ -54,7 +54,7 @@ public class MenuPanel extends Panel {
 			@Override
 			protected void addMenuItem(ListItem<IMenuItem> item, IMenuItem menuItem) {
 				super.addMenuItem(item, menuItem);
-				MenuItem m = (MenuItem)menuItem;
+				OmMenuItem m = (OmMenuItem)menuItem;
 				item.add(AttributeModifier.append(ATTR_CLASS, m.isTop() ? "top" : "sub"));
 				if (!Strings.isEmpty(m.getDesc())) {
 					item.add(AttributeModifier.append(ATTR_TITLE, m.getDesc()));

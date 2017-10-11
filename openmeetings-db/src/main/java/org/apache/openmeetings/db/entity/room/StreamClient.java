@@ -52,7 +52,6 @@ public class StreamClient implements IClient {
 	private String lastname = "";
 	private String email;
 	private String lastLogin;
-	private String picture_uri;
 	private String language = "";
 	private String avsettings = "";
 	private String swfurl;
@@ -258,14 +257,6 @@ public class StreamClient implements IClient {
 
 	public void setLastLogin(String lastLogin) {
 		this.lastLogin = lastLogin;
-	}
-
-	public String getPicture_uri() {
-		return picture_uri;
-	}
-
-	public void setPicture_uri(String pictureUri) {
-		this.picture_uri = pictureUri;
 	}
 
 	public String getLanguage() {

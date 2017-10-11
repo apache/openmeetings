@@ -58,7 +58,7 @@ public class Captcha extends Panel {
 
 		private String randomString(int min, int max) {
 			int num = randomInt(min, max);
-			byte b[] = new byte[num];
+			byte[] b = new byte[num];
 			for (int i = 0; i < num; ++i) {
 				b[i] = (byte)randomInt('a', 'z');
 			}

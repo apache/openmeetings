@@ -34,7 +34,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar.SyncType;
-import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
+import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.CalDAVReportMethod;
 import org.osaf.caldav4j.model.request.CalendarData;
@@ -61,7 +61,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	private boolean isMultigetDisabled = false, onlyEtag = false;
 
 	public MultigetHandler(List<String> hrefs, boolean onlyEtag, String path, OmCalendar calendar, HttpClient client,
-			AppointmentDao appointmentDao, iCalUtils utils) {
+			AppointmentDao appointmentDao, IcalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);
 		this.onlyEtag = onlyEtag;
 
@@ -83,7 +83,7 @@ public class MultigetHandler extends AbstractCalendarHandler {
 	}
 
 	public MultigetHandler(List<String> hrefs, String path, OmCalendar calendar, HttpClient client,
-			AppointmentDao appointmentDao, iCalUtils utils)
+			AppointmentDao appointmentDao, IcalUtils utils)
 	{
 		this(hrefs, false, path, calendar, client, appointmentDao, utils);
 	}

@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
-import org.apache.openmeetings.web.common.menu.MenuItem;
+import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.AboutDialog;
@@ -321,7 +321,7 @@ public class MainPanel extends Panel {
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("290", "1450", MenuActions.dashboardModuleStartScreen, null));
 			l.add(getSubItem("291", "1451", MenuActions.dashboardModuleCalendar, null));
-			mmenu.add(new MenuItem(Application.getString("124"), l));
+			mmenu.add(new OmMenuItem(Application.getString("124"), l));
 		}
 		{
 			// Conference Menu Points
@@ -333,11 +333,11 @@ public class MainPanel extends Panel {
 			}
 			List<Room> recent = getBean(RoomDao.class).getRecent(getUserId());
 			if (!recent.isEmpty()) {
-				l.add(new MenuItem(DELIMITER, (String)null));
+				l.add(new OmMenuItem(DELIMITER, (String)null));
 			}
 			for (Room r : recent) {
 				final Long roomId = r.getId();
-				l.add(new MenuItem(r.getName(), r.getName()) {
+				l.add(new OmMenuItem(r.getName(), r.getName()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -346,13 +346,13 @@ public class MainPanel extends Panel {
 					}
 				});
 			}
-			mmenu.add(new MenuItem(Application.getString("792"), l));
+			mmenu.add(new OmMenuItem(Application.getString("792"), l));
 		}
 		{
 			// Recording Menu Points
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("395", "1452", MenuActions.recordModule, null));
-			mmenu.add(new MenuItem(Application.getString("395"), l));
+			mmenu.add(new OmMenuItem(Application.getString("395"), l));
 		}
 		Set<Right> r = WebSession.getRights();
 		boolean isAdmin = hasAdminLevel(r);
@@ -373,7 +373,7 @@ public class MainPanel extends Panel {
 				l.add(getSubItem("367", "1461", MenuActions.adminModuleBackup, null));
 				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.adminModuleEmail, null));
 			}
-			mmenu.add(new MenuItem(Application.getString("6"), l));
+			mmenu.add(new OmMenuItem(Application.getString("6"), l));
 		}
 		return mmenu;
 	}

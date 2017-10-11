@@ -22,7 +22,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
-import org.apache.openmeetings.service.calendar.caldav.iCalUtils;
+import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +37,12 @@ public abstract class AbstractCalendarHandler implements CalendarHandler {
 	protected HttpClient client;
 	protected OmCalendar calendar;
 	protected String path;
-	protected iCalUtils utils;
+	protected IcalUtils utils;
 
 	protected AppointmentDao appointmentDao;
 
 	public AbstractCalendarHandler(String path, OmCalendar calendar, HttpClient client,
-			AppointmentDao appointmentDao, iCalUtils utils)
+			AppointmentDao appointmentDao, IcalUtils utils)
 	{
 		this.path = path;
 		this.calendar = calendar;
