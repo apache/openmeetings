@@ -29,7 +29,7 @@ public class ScreenHeightMouseListener extends OmMouseInputAdapter {
 
 	public ScreenHeightMouseListener(ScreenSharerFrame frame) {
 		super(frame, Cursor.N_RESIZE_CURSOR);
-		cons = e -> {this.y = e.getY();};
+		cons = e -> y = e.getY();
 	}
 
 	@Override

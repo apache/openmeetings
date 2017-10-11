@@ -29,7 +29,7 @@ public class ScreenWidthMouseListener extends OmMouseInputAdapter {
 
 	public ScreenWidthMouseListener(ScreenSharerFrame frame) {
 		super(frame, Cursor.W_RESIZE_CURSOR);
-		cons = e -> {this.x = e.getX();};
+		cons = e -> x = e.getX();
 	}
 
 	@Override

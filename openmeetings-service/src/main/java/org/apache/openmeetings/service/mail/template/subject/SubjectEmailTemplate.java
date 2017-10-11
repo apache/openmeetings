@@ -45,14 +45,14 @@ public abstract class SubjectEmailTemplate extends AbstractTemplatePanel {
 
 	public final String getEmail() {
 		if (!created) {
-			throw new RuntimeException("Not created!!");
+			throw new IllegalStateException("Not created!!");
 		}
 		return email;
 	}
 
 	public final String getSubject() {
 		if (!created) {
-			throw new RuntimeException("Not created!!");
+			throw new IllegalStateException("Not created!!");
 		}
 		return subject;
 	}

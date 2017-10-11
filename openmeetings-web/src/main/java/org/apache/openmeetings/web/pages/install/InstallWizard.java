@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.cli.ConnectionPropertiesPatcher;
+import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -78,9 +79,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
-import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
-import org.artofsolving.jodconverter.office.OfficeException;
-import org.artofsolving.jodconverter.office.OfficeManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
@@ -553,23 +551,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		private boolean checkOfficePath() {
 			String err  = "";
 			try {
-				DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
-				if (!Strings.isEmpty(officePath.getValue())) {
-					configuration.setOfficeHome(officePath.getValue());
-				}
-				OfficeManager officeManager = configuration.buildOfficeManager();
-				try {
-					officeManager.start();
-				} catch (OfficeException ex) {
-					err = ex.getMessage().replaceAll(REGEX, "");
-				} finally {
-					officeManager.stop();
-				}
+				DocumentConverter.createOfficeManager(officePath.getValue(), null);
 			} catch (Exception ex) {
-				err = ex.getMessage().replaceAll(REGEX, "");
-			}
-			if (!err.isEmpty()) {
-				officePath.error(err);
+				officePath.error(err = ex.getMessage().replaceAll(REGEX, ""));
 			}
 			return err.isEmpty();
 		}

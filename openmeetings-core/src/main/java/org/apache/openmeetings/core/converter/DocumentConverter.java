@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFF
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -33,7 +34,6 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.artofsolving.jodconverter.OfficeDocumentConverter;
 import org.artofsolving.jodconverter.office.DefaultOfficeManagerConfiguration;
-import org.artofsolving.jodconverter.office.OfficeException;
 import org.artofsolving.jodconverter.office.OfficeManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -67,27 +67,35 @@ public class DocumentConverter {
 		return imageConverter.convertDocument(result, f, pdf);
 	}
 
+	public static void createOfficeManager(String officePath, Consumer<OfficeManager> consumer) {
+		OfficeManager manager = null;
+		try {
+			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
+			if (!Strings.isEmpty(officePath)) {
+				configuration.setOfficeHome(officePath);
+			}
+			manager = configuration.buildOfficeManager();
+			manager.start();
+			if (consumer != null) {
+				consumer.accept(manager);
+			}
+		} finally {
+			if (manager != null) {
+				manager.stop();
+			}
+		}
+	}
+
 	/**
 	 * Generates PDF using JOD Library (external library)
 	 */
 	public ProcessResult doJodConvert(File in, File out) {
 		try {
-			String officePath = cfgDao.getString(CONFIG_PATH_OFFICE, null);
-			DefaultOfficeManagerConfiguration configuration = new DefaultOfficeManagerConfiguration();
-			if (!Strings.isEmpty(officePath)) {
-				configuration.setOfficeHome(officePath);
-			}
-			OfficeManager officeManager = configuration.buildOfficeManager();
-			officeManager.start();
-			OfficeDocumentConverter converter = new OfficeDocumentConverter(officeManager);
-			try {
-				converter.convert(in, out);
-			} catch (OfficeException ex) {
-				log.error("doJodConvert", ex);
-				return new ProcessResult("doJodConvert", ex.getMessage(), ex);
-			} finally {
-				officeManager.stop();
-			}
+			createOfficeManager(cfgDao.getString(CONFIG_PATH_OFFICE, null)
+					, man -> {
+						OfficeDocumentConverter converter = new OfficeDocumentConverter(man);
+						converter.convert(in, out);
+					});
 		} catch (Exception ex) {
 			log.error("doJodConvert", ex);
 			return new ProcessResult("doJodConvert", ex.getMessage(), ex);
