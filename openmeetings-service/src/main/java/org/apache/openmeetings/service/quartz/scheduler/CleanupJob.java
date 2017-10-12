@@ -78,7 +78,7 @@ public class CleanupJob extends AbstractJob {
 			return;
 		}
 		try {
-			File[] folders = getStreamsDir().listFiles(fi -> fi.isDirectory());
+			File[] folders = getStreamsDir().listFiles(File::isDirectory);
 			if (folders == null) {
 				return;
 			}
@@ -106,7 +106,7 @@ public class CleanupJob extends AbstractJob {
 			return;
 		}
 		try {
-			File[] folders = getStreamsDir().listFiles(fi -> fi.isDirectory());
+			File[] folders = getStreamsDir().listFiles(File::isDirectory);
 			if (folders == null) {
 				return;
 			}
@@ -125,12 +125,9 @@ public class CleanupJob extends AbstractJob {
 				if (roomId != null && sessionManager.listByRoom(roomId).isEmpty()) {
 					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
 					//TODO need to rework this and remove hardcodings
-					if (files == null || files.length == 0) {
-						continue;
-					} else {
+					if (files != null && files.length > 0) {
 						log.debug("Room files are too old and no users in the room: " + roomId);
 						FileUtils.deleteDirectory(folder);
-						break;
 					}
 				}
 			}
