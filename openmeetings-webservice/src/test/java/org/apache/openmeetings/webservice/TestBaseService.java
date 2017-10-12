@@ -31,6 +31,8 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.junit.Test;
 
+import com.sun.star.uno.RuntimeException;
+
 public class TestBaseService {
 	private void checkException(Runnable r) {
 		try {
@@ -71,6 +73,6 @@ public class TestBaseService {
 	@Test
 	public void testPerformCall() {
 		checkException(() -> BaseWebService.performCall("", sd -> true
-				, sd -> BaseWebService.getBean(UserDao.class).get(sd.getUserId())));
+				, sd -> { throw new RuntimeException("test"); }));
 	}
 }
