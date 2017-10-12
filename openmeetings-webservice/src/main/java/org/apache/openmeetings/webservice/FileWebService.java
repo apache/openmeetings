@@ -262,8 +262,7 @@ public class FileWebService extends BaseWebService {
 			, @WebParam(name="name") @PathParam("name") String name)
 	{
 		log.debug("rename {}", id);
-		return performCall(sid, User.Right.Room, sd -> {
-			// TODO: check if this user is allowed to change this file
+		return performCall(sid, User.Right.Soap, sd -> {
 			FileItem f = getFileDao().rename(id, name);
 			return f == null ? null : new FileItemDTO(f);
 		});
@@ -289,8 +288,7 @@ public class FileWebService extends BaseWebService {
 			, @WebParam(name="parentid") @PathParam("parentid") long parentId)
 	{
 		log.debug("move {}", id);
-		return performCall(sid, User.Right.Room, sd -> {
-			// TODO A test is required that checks if the user is allowed to move the file
+		return performCall(sid, User.Right.Soap, sd -> {
 			FileItem f = getFileDao().move(id, parentId, sd.getUserId(), roomId);
 			return f == null ? null : new FileItemDTO(f);
 		});
