@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.ws.rs.core.Response;
 
@@ -32,6 +33,16 @@ import org.junit.Test;
 
 public class TestErrorService extends AbstractWebServiceTest {
 	public static final String ERROR_SERVICE_URL = BASE_SERVICES_URL + "/error";
+
+	@Test
+	public void getTestBadKey() {
+		Locale[] locales = Locale.getAvailableLocales();
+		ServiceResult sr = getClient(ERROR_SERVICE_URL)
+				.path(String.format("/%s/%s", UUID.randomUUID().toString(), LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
+				.get(ServiceResult.class);
+		assertNotNull("Valid Result should be returned", sr);
+		assertEquals("SUCCESS result should be returned", ServiceResult.Type.SUCCESS.name(), sr.getType());
+	}
 
 	@Test
 	public void getTest() {

@@ -102,11 +102,11 @@ public abstract class BaseWebService {
 		return new HashSet<>();
 	}
 
-	public static <T> T performCall(String sid, User.Right level, Function<Sessiondata, T> action) {
+	static <T> T performCall(String sid, User.Right level, Function<Sessiondata, T> action) {
 		return performCall(sid, sd -> AuthLevelUtil.check(getRights(sd.getUserId()), level), action);
 	}
 
-	public static <T> T performCall(String sid, Predicate<Sessiondata> allowed, Function<Sessiondata, T> action) {
+	static <T> T performCall(String sid, Predicate<Sessiondata> allowed, Function<Sessiondata, T> action) {
 		try {
 			Sessiondata sd = check(sid);
 			if (allowed.test(sd)) {
