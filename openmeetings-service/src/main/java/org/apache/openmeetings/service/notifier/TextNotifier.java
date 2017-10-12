@@ -64,8 +64,6 @@ public class TextNotifier implements INotifier {
 			msg = String.format("%s %s", LabelDao.getString("1158", u.getLanguageId()), a.getTitle());
 		}
 		final String reminderMsg = msg;
-		taskExecutor.execute(() -> {
-			log.debug("Sending Text to: {}, msg is: {}", phone, reminderMsg);
-		});
+		taskExecutor.execute(() -> log.debug("Sending Text to: {}, msg is: {}", phone, reminderMsg));
 	}
 }

@@ -511,28 +511,18 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 				public boolean filter(IConnection conn) {
 					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
 
-					if (rcl == null) {
-						_log.debug("RCL IS NULL newStream SEND");
+					if (rcl == null || Strings.isEmpty(rcl.getUid())) {
+						_log.debug("Invalid client");
 						return true;
 					}
 
 					_log.debug("check send to {}", rcl);
-
-					if (Strings.isEmpty(rcl.getUid())) {
-						_log.debug("publicSID IS NULL newStream SEND");
-						return true;
-					}
 					if (rcl.isRecordingStarted()) {
 						_log.debug("RCL getIsRecording newStream SEND");
 						recordingService.startStreamRecord(current);
 					}
-					if (Client.Type.sharing == rcl.getType()) {
-						_log.debug("RCL getisSharing newStream SEND");
-						return true;
-					}
-
-					if (rcl.getUid().equals(c.getUid())) {
-						_log.debug("RCL publicSID is equal newStream SEND");
+					if (Client.Type.sharing == rcl.getType() || rcl.getUid().equals(c.getUid())) {
+						_log.debug("Going to skip this client");
 						return true;
 					}
 					_log.debug("RCL SEND is equal newStream SEND {} || {}", rcl.getUid(), rcl.getUserport());
