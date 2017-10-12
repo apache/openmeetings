@@ -75,7 +75,7 @@ public class OmCalendar implements IDataProviderEntity {
 	@Element(name = "token", data = true, required = false)
 	private String token;
 
-	@Column(name = "deleted")
+	@Column(name = "deleted", nullable = false)
 	@Element(name = "deleted", data = true)
 	private boolean deleted;
 

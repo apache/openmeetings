@@ -127,9 +127,7 @@ public class UserWebService extends BaseWebService {
 	@GET
 	@Path("/")
 	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			return UserDTO.list(getUserDao().getAllUsers());
-		});
+		return performCall(sid, User.Right.Soap, sd -> UserDTO.list(getUserDao().getAllUsers()));
 	}
 
 	/**
@@ -358,8 +356,6 @@ public class UserWebService extends BaseWebService {
 	@GET
 	@Path("/count/{roomid}")
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			return new ServiceResult(String.valueOf(getApp().getOmRoomClients(roomId).size()), Type.SUCCESS);
-		});
+		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(getApp().getOmRoomClients(roomId).size()), Type.SUCCESS));
 	}
 }

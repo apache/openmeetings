@@ -90,9 +90,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) {
-		return performCall(sid, User.Right.Room, sd -> {
-			return RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type)));
-		});
+		return performCall(sid, User.Right.Room, sd -> RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type))));
 	}
 
 	/**
@@ -106,9 +104,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			return new RoomDTO(getRoomDao().get(id));
-		});
+		return performCall(sid, User.Right.Soap, sd -> new RoomDTO(getRoomDao().get(id)));
 	}
 
 	/*

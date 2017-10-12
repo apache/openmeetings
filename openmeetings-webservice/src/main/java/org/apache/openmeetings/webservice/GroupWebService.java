@@ -106,9 +106,7 @@ public class GroupWebService extends BaseWebService {
 	@GET
 	@Path("/")
 	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			return getDao().get(0, Integer.MAX_VALUE);
-		});
+		return performCall(sid, User.Right.Soap, sd -> getDao().get(0, Integer.MAX_VALUE));
 	}
 
 	/**

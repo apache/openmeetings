@@ -98,9 +98,7 @@ public class RecordingWebService extends BaseWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId) {
 		log.debug("getExternal:: type {}, id {}", externalType, externalId);
-		return performCall(sid, User.Right.Soap, sd -> {
-			return RecordingDTO.list(getDao().getByExternalId(externalId, externalType));
-		});
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(getDao().getByExternalId(externalId, externalType)));
 	}
 
 	/**
@@ -117,9 +115,7 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/{externaltype}")
 	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			return RecordingDTO.list(getDao().getByExternalType(externalType));
-		});
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(getDao().getByExternalType(externalType)));
 	}
 
 	/**
@@ -136,8 +132,6 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/room/{roomid}")
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			return RecordingDTO.list(getDao().getByRoomId(roomId));
-		});
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(getDao().getByRoomId(roomId)));
 	}
 }

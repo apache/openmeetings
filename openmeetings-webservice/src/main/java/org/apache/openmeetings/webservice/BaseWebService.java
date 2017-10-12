@@ -103,7 +103,7 @@ public abstract class BaseWebService {
 	}
 
 	public static <T> T performCall(String sid, User.Right level, Function<Sessiondata, T> action) {
-		return performCall(sid, (sd) -> AuthLevelUtil.check(getRights(sd.getUserId()), level), action);
+		return performCall(sid, sd -> AuthLevelUtil.check(getRights(sd.getUserId()), level), action);
 	}
 
 	public static <T> T performCall(String sid, Predicate<Sessiondata> allowed, Function<Sessiondata, T> action) {

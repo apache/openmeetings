@@ -156,16 +156,14 @@ public class FileWebService extends BaseWebService {
 				throw new ServiceException("Bad id");
 			}
 			f.setInsertedBy(sd.getUserId());
-			//TODO permissions
-			if (stream != null) {
-				ProcessResultList result;
+			if (stream != null) { //TODO permissions
 				try {
-					result = getBean(FileProcessor.class).processFile(f, stream);
+					ProcessResultList result = getBean(FileProcessor.class).processFile(f, stream);
+					if (result.hasError()) {
+						throw new ServiceException(result.getLogMessage());
+					}
 				} catch (Exception e) {
 					throw new ServiceException(e.getMessage());
-				}
-				if (result.hasError()) {
-					throw new ServiceException(result.getLogMessage());
 				}
 			} else {
 				f = getFileDao().update(f);
