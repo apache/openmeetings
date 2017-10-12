@@ -23,9 +23,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
@@ -37,6 +39,8 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private RoomDao roomDao;
 
 	@Test
 	public void getAppoinment() {
@@ -55,5 +59,14 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 		Appointment a = appointmentDao.get(a1.getId());
 		assertNotNull("Failed to get Appointment By id", a);
 		assertEquals("Inapropriate MeetingMembers count", 0, a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size());
+	}
+
+	@Test
+	public void testGetByRoom() {
+		Date start = new Date();
+		Appointment a = createAppointment(getAppointment(userDao.get(1L), roomDao.get(5L), start, new Date(start.getTime() + ONE_HOUR)));
+		Appointment a1 = appointmentDao.getByRoom(1L, 5L);
+		assertNotNull("Created appointment should be found", a1);
+		assertEquals(a.getId(), a1.getId());
 	}
 }

@@ -91,7 +91,7 @@ public class AppointmentDao {
 			r.setName(a.getTitle());
 			r.setCapacity(cfgDao.getLong(CONFIG_CALENDAR_ROOM_CAPACITY, 50L));
 		}
-		roomDao.update(r, userId);
+		a.setRoom(roomDao.update(r, userId));
 		if (sendmails) {
 			Set<Long> mmIds = a.getId() == null ? new HashSet<>()
 					: meetingMemberDao.getMeetingMemberIdsByAppointment(a.getId());

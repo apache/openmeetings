@@ -68,6 +68,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		webCreateUser(u);
 		ServiceResult sr = login(u.getLogin(), createPass());
+		u = userDao.get(u.getId());
 
 		Date start = new Date();
 		Appointment a = createAppointment(getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
