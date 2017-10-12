@@ -94,7 +94,7 @@ public class ChatDao {
 	 * @param userId - unused
 	 */
 	public void delete(ChatMessage entity, long userId) {
-		// TODO Auto-generated method stub
+		// no-op
 	}
 
 	public void deleteGlobal() {

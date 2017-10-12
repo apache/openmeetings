@@ -38,7 +38,7 @@ import org.apache.wicket.model.Model;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
-public class InviteUserMessageDialog extends AbstractFormDialog<String>  {
+public class InviteUserMessageDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private final DialogButton send = new DialogButton("send", Application.getString("213"));
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
@@ -77,13 +77,11 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String>  {
 
 	@Override
 	protected void onError(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-
+		// no-op
 	}
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		// TODO Auto-generated method stub
-
+		// no-op
 	}
 }

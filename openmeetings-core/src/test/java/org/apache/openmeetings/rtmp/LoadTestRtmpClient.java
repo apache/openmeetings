@@ -63,7 +63,6 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 	}
 
 	public boolean performCall() {
-
 		// System.err.println("performCall " + isConnected);
 
 		if (!isConnected) {
@@ -90,9 +89,6 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 		} else {
 			System.err.println("Call running " + counterCalls);
 		}
-
-
-
 		return false;
 	}
 
@@ -154,18 +150,14 @@ public class LoadTestRtmpClient extends RTMPClient implements IPendingServiceCal
 
 			counterCalls++;
 		}
-
 	}
-
 
 	@Override
 	public void onStreamEvent(Notify notify) {
-		// TODO Auto-generated method stub
-
+		// no-op
 	}
 
 	public int getNumberOfCalls() {
 		return calls.size();
 	}
-
 }
