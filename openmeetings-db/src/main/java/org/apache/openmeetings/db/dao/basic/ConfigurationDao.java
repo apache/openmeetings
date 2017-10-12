@@ -219,7 +219,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	public String getAppName() {
 		if (getApplicationName() == null) {
-			setApplicationName(getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME));;
+			setApplicationName(getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME));
 		}
 		return getApplicationName();
 	}

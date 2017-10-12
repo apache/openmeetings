@@ -18,9 +18,14 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -28,24 +33,46 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.Application;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 public abstract class BaseWebService {
+	private static final Logger log = Red5LoggerFactory.getLogger(BaseWebService.class, getWebAppRootKey());
+
 	static IApplication getApp() {
 		return (IApplication)Application.get(getWicketApplicationName());
 	}
 
 	static <T> T getBean(Class<T> clazz) {
-		return getApp()._getOmBean(clazz);
+		T b = null;
+		try {
+			b = getApp()._getOmBean(clazz);
+		} catch (Exception e) {
+			throw new ServiceException(e.getMessage());
+		}
+		if (b == null) {
+			throw new ServiceException("");
+		}
+		return b;
 	}
 
 	static SessiondataDao getSessionDao() {
 		return getBean(SessiondataDao.class);
 	}
 
+	// this one is fail safe
 	static Sessiondata check(String sid) {
-		return getSessionDao().check(sid);
+		try {
+			return getSessionDao().check(sid);
+		} catch (ServiceException e) {
+			log.debug("Exception while checking sid", e);
+		}
+		return new Sessiondata();
 	}
 
 	static Set<Right> getRights(String sid) {
@@ -65,7 +92,33 @@ public abstract class BaseWebService {
 		return getBean(FileItemDao.class);
 	}
 
+	// this one is fail safe
 	static Set<Right> getRights(Long id) {
-		return getUserDao().getRights(id);
+		try {
+			return getUserDao().getRights(id);
+		} catch (ServiceException e) {
+			log.debug("Exception while getting rights", e);
+		}
+		return new HashSet<>();
+	}
+
+	public static <T> T performCall(String sid, User.Right level, Function<Sessiondata, T> action) {
+		return performCall(sid, (sd) -> AuthLevelUtil.check(getRights(sd.getUserId()), level), action);
+	}
+
+	public static <T> T performCall(String sid, Predicate<Sessiondata> allowed, Function<Sessiondata, T> action) {
+		try {
+			Sessiondata sd = check(sid);
+			if (allowed.test(sd)) {
+				return action.apply(sd);
+			} else {
+				throw NO_PERMISSION;
+			}
+		} catch (ServiceException err) {
+			throw err;
+		} catch (Exception err) {
+			log.error("[performCall]", err);
+			throw new ServiceException(err.getMessage());
+		}
 	}
 }

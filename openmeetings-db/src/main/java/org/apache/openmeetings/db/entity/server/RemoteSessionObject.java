@@ -136,10 +136,14 @@ public class RemoteSessionObject {
 		this.externalUserType = externalUserType;
 	}
 
-	public String toXml() throws Exception {
+	public String toXml() {
 		StringWriter sw = new StringWriter();
-		Serializer serializer = new Persister();
-		serializer.write(this, sw);
+		try {
+			Serializer serializer = new Persister();
+			serializer.write(this, sw);
+		} catch (Exception e) {
+			log.error("Unexpected error while storing object to XML: " + this, e);
+		}
 		return sw.toString();
 	}
 

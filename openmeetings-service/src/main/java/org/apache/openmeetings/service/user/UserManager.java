@@ -331,7 +331,7 @@ public class UserManager implements IUserManager {
 		if (u == null) {
 			u = userDao.getNewUserInstance(null);
 			u.setType(Type.oauth);
-			u.getRights().remove(Right.Login);;
+			u.getRights().remove(Right.Login);
 			u.setDomainId(serverId);
 			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), u));
 			u.setLogin(login);

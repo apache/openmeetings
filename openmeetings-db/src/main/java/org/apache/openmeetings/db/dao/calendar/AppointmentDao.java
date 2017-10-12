@@ -140,6 +140,9 @@ public class AppointmentDao {
 	// ----------------------------------------------------------------------------------------------------------
 
 	public void delete(Appointment a, Long userId) {
+		if (a == null || a.getId() == null) {
+			return;
+		}
 		a.setUpdated(new Date());
 		a.setDeleted(true);
 		a.setMeetingMembers(null);

@@ -20,11 +20,9 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
-import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -54,9 +52,7 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -89,24 +85,14 @@ public class RoomWebService extends BaseWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param type
 	 * @return - list of public rooms
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/public/{type}")
-	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
-				return RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type)));
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getPublic] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) {
+		return performCall(sid, User.Right.Room, sd -> {
+			return RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type)));
+		});
 	}
 
 	/**
@@ -119,13 +105,10 @@ public class RoomWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/{id}")
-	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
-		Set<User.Right> rights = getRights(sid);
-		if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasUserLevel(rights)) {
+	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
+		return performCall(sid, User.Right.Soap, sd -> {
 			return new RoomDTO(getRoomDao().get(id));
-		} else {
-			throw NO_PERMISSION;
-		}
+		});
 	}
 
 	/*
@@ -166,7 +149,6 @@ public class RoomWebService extends BaseWebService {
 	 *            details of the room to be created if not found
 	 *
 	 * @return - id of the room or error code
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
@@ -175,35 +157,24 @@ public class RoomWebService extends BaseWebService {
 			, @PathParam("type") @WebParam(name="type") String type
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId
-			, @WebParam(name="room") @QueryParam("room") RoomDTO room) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				RoomDao roomDao = getRoomDao();
-				Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
-				if (r == null) {
-					if (room == null) {
-						return null;
-					} else {
-						r = room.get(getFileDao());
-						r.setExternalType(externalType);
-						r.setExternalId(externalId);
-						r = updateRtoRoom(r, userId);
-						return new RoomDTO(r);
-					}
+			, @WebParam(name="room") @QueryParam("room") RoomDTO room) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			RoomDao roomDao = getRoomDao();
+			Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
+			if (r == null) {
+				if (room == null) {
+					return null;
 				} else {
+					r = room.get(getFileDao());
+					r.setExternalType(externalType);
+					r.setExternalId(externalId);
+					r = updateRtoRoom(r, sd.getUserId());
 					return new RoomDTO(r);
 				}
 			} else {
-				throw NO_PERMISSION;
+				return new RoomDTO(r);
 			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getExternal] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+		});
 	}
 
 	/**
@@ -215,28 +186,16 @@ public class RoomWebService extends BaseWebService {
 	 *            room object
 	 *
 	 * @return - id of the user added or error code
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@POST
 	@Path("/")
-	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				Room r = room.get(getFileDao());
-				r = updateRtoRoom(r, userId);;
-				return new RoomDTO(r);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException e) {
-			throw e;
-		} catch (Exception e) {
-			log.error("add", e);
-			throw new ServiceException(e.getMessage());
-		}
+	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			Room r = room.get(getFileDao());
+			r = updateRtoRoom(r, sd.getUserId());
+			return new RoomDTO(r);
+		});
 	}
 
 	/**
@@ -250,21 +209,17 @@ public class RoomWebService extends BaseWebService {
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		Sessiondata sd = check(sid);
-		Long userId = sd.getUserId();
-		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+		return performCall(sid, User.Right.Soap, sd -> {
 			RoomDao roomDao = getRoomDao();
 			Room r = roomDao.get(id);
-			if (r != null) {
-				roomDao.delete(r, userId);
-				return new ServiceResult("Deleted", Type.SUCCESS);
-			} else {
+			if (r == null) {
 				return new ServiceResult("Not found", Type.SUCCESS);
+			} else {
+				roomDao.delete(r, sd.getUserId());
+				return new ServiceResult("Deleted", Type.SUCCESS);
 			}
-		} else {
-			throw NO_PERMISSION;
-		}
+		});
 	}
 
 	/**
@@ -280,37 +235,23 @@ public class RoomWebService extends BaseWebService {
 	 *            the room id
 	 *
 	 * @return - 1 in case of success, -2 otherwise
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/close/{id}")
-	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
+	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+		return performCall(sid, User.Right.Soap, sd -> {
 			Long userId = sd.getUserId();
-			log.debug("close " + id);
+			RoomDao roomDao = getRoomDao();
+			Room room = roomDao.get(id);
+			room.setClosed(true);
 
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				RoomDao roomDao = getRoomDao();
-				Room room = roomDao.get(id);
-				room.setClosed(true);
+			roomDao.update(room, userId);
 
-				roomDao.update(room, userId);
+			WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
 
-				WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
-
-				return new ServiceResult("Closed", Type.SUCCESS);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[close] ", err);
-			throw new ServiceException(err.getMessage());
-		}
-
+			return new ServiceResult("Closed", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -326,34 +267,19 @@ public class RoomWebService extends BaseWebService {
 	 *            the room id
 	 *
 	 * @return - 1 in case of success, -2 otherwise
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/open/{id}")
-	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			Long userId = sd.getUserId();
-			log.debug("open " + id);
+	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			RoomDao roomDao = getRoomDao();
+			Room room = roomDao.get(id);
+			room.setClosed(false);
+			roomDao.update(room, sd.getUserId());
 
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				RoomDao roomDao = getRoomDao();
-				Room room = roomDao.get(id);
-				room.setClosed(false);
-				roomDao.update(room, userId);
-
-				return new ServiceResult("Opened", Type.SUCCESS);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[open] ", err);
-			throw new ServiceException(err.getMessage());
-		}
-
+			return new ServiceResult("Opened", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -370,20 +296,11 @@ public class RoomWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/kick/{id}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				boolean result = getBean(IUserManager.class).kickUsersByRoomId(id);
-				return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[kick]", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			boolean result = getBean(IUserManager.class).kickUsersByRoomId(id);
+			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -392,37 +309,27 @@ public class RoomWebService extends BaseWebService {
 	 * @param sid - The SID of the User. This SID must be marked as Loggedin
 	 * @param ids - id of the room you need counters for
 	 * @return - current users for rooms ids
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/counters")
-	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) throws ServiceException {
-		List<RoomCountDTO> roomBeans = new ArrayList<>();
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				IApplication app = getApp();
-				List<Room> rooms = getRoomDao().get(ids);
+	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			List<RoomCountDTO> roomBeans = new ArrayList<>();
+			IApplication app = getApp();
+			List<Room> rooms = getRoomDao().get(ids);
 
-				for (Room room : rooms) {
-					RoomCountDTO rCountBean = new RoomCountDTO();
-					rCountBean.setRoomId(room.getId());
-					rCountBean.setRoomName(room.getName());
-					rCountBean.setMaxUser(room.getCapacity());
-					rCountBean.setRoomCount(app.getOmRoomClients(room.getId()).size());
+			for (Room room : rooms) {
+				RoomCountDTO rCountBean = new RoomCountDTO();
+				rCountBean.setRoomId(room.getId());
+				rCountBean.setRoomName(room.getName());
+				rCountBean.setMaxUser(room.getCapacity());
+				rCountBean.setRoomCount(app.getOmRoomClients(room.getId()).size());
 
-					roomBeans.add(rCountBean);
-				}
-			} else {
-				throw NO_PERMISSION;
+				roomBeans.add(rCountBean);
 			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[counters]", err);
-			throw new ServiceException(err.getMessage());
-		}
-		return roomBeans;
+			return roomBeans;
+		});
 	}
 
 	/**
@@ -432,7 +339,6 @@ public class RoomWebService extends BaseWebService {
 	 * @param invite - parameters of the invitation
 	 * @param sendmail - flag to determine if email should be sent or not
 	 * @return - serviceResult object with the result
-	 * @throws ServiceException - in case of any exception
 	 */
 	@WebMethod
 	@POST
@@ -440,31 +346,25 @@ public class RoomWebService extends BaseWebService {
 	public ServiceResult hash(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="invite") @QueryParam("invite") InvitationDTO invite
 			, @WebParam(name="sendmail") @QueryParam("sendmail") boolean sendmail
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				Invitation i = invite.get(userId, getUserDao(), getRoomDao());
-				i = getBean(InvitationDao.class).update(i);
+		log.debug("[hash] invite {}", invite);
+		return performCall(sid, User.Right.Soap, sd -> {
+			Invitation i = invite.get(sd.getUserId(), getUserDao(), getRoomDao());
+			i = getBean(InvitationDao.class).update(i);
 
-				if (i != null) {
-					if (sendmail) {
+			if (i != null) {
+				if (sendmail) {
+					try {
 						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
+					} catch (Exception e) {
+						throw new ServiceException(e.getMessage());
 					}
-					return new ServiceResult(i.getHash(), Type.SUCCESS);
-				} else {
-					return new ServiceResult("error.unknown", Type.ERROR);
 				}
+				return new ServiceResult(i.getHash(), Type.SUCCESS);
 			} else {
-				throw NO_PERMISSION;
+				return new ServiceResult("error.unknown", Type.ERROR);
 			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[hash] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+		});
 	}
 }

@@ -20,7 +20,6 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
-import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -47,7 +46,6 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
@@ -91,22 +89,13 @@ public class CalendarWebService extends BaseWebService {
 	public List<AppointmentDTO> range(@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("start") @WebParam(name="start") Calendar start
 			, @PathParam("end") @WebParam(name="end") Calendar end
-			) throws ServiceException
+			)
 	{
-		log.debug("range : startdate - " + start.getTime() + ", enddate - " + end.getTime());
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasUserLevel(getRights(sd.getUserId()))) {
-				return AppointmentDTO.list(getDao().getInRange(sd.getUserId(), start.getTime(), end.getTime()));
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[range]", err);
-			throw new ServiceException(err.getMessage());
-		}
+		log.debug("range : startdate - {} , enddate - {}"
+				, start == null ? "" : start.getTime()
+				, end == null ? "" : end.getTime());
+		return performCall(sid, User.Right.Room
+				, sd -> AppointmentDTO.list(getDao().getInRange(sd.getUserId(), start.getTime(), end.getTime())));
 	}
 
 	/**
@@ -131,21 +120,13 @@ public class CalendarWebService extends BaseWebService {
 			, @PathParam("userid") @WebParam(name="userid") long userid
 			, @PathParam("start") @WebParam(name="start") Calendar start
 			, @PathParam("end") @WebParam(name="end") Calendar end
-			) throws ServiceException
+			)
 	{
-		log.debug("rangeForUser : startdate - " + start.getTime() + ", enddate - " + end.getTime());
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				return AppointmentDTO.list(getDao().getInRange(userid, start.getTime(), end.getTime()));
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[rangeForUser]", err);
-			throw new ServiceException(err.getMessage());
-		}
+		log.debug("rangeForUser : startdate - {} , enddate - {}"
+				, start == null ? "" : start.getTime()
+				, end == null ? "" : end.getTime());
+		return performCall(sid, User.Right.Soap
+				, sd -> AppointmentDTO.list(getDao().getInRange(userid, start.getTime(), end.getTime())));
 	}
 
 	/**
@@ -158,21 +139,11 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/next")
-	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasUserLevel(getRights(sd.getUserId()))) {
-				Appointment a = getDao().getNext(sd.getUserId(), new Date());
-				return a == null ? null : new AppointmentDTO(a);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[next]", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) {
+		return performCall(sid, User.Right.Room, sd -> {
+			Appointment a = getDao().getNext(sd.getUserId(), new Date());
+			return a == null ? null : new AppointmentDTO(a);
+		});
 	}
 
 	/**
@@ -188,20 +159,11 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/next/{userid}")
-	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				Appointment a = getDao().getNext(userid, new Date());
-				return a == null ? null : new AppointmentDTO(a);
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[nextForUser]", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			Appointment a = getDao().getNext(userid, new Date());
+			return a == null ? null : new AppointmentDTO(a);
+		});
 	}
 
 	/**
@@ -215,24 +177,11 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/room/{roomid}")
-	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasUserLevel(getRights(sd.getUserId()))) {
-				Appointment app = getDao().getByRoom(sd.getUserId(), roomid);
-				if (app != null) {
-					return new AppointmentDTO(app);
-				}
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getByRoom]", err);
-			throw new ServiceException(err.getMessage());
-		}
-		return null;
+	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) {
+		return performCall(sid, User.Right.Room, sd -> {
+			Appointment a = getDao().getByRoom(sd.getUserId(), roomid);
+			return a == null ? null : new AppointmentDTO(a);
+		});
 	}
 
 	/**
@@ -248,20 +197,8 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/title/{title}")
-	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasUserLevel(getRights(sd.getUserId()))) {
-				return AppointmentDTO.list(getDao().searchAppointmentsByTitle(sd.getUserId(), title));
-			} else {
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getByTitle]", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) {
+		return performCall(sid, User.Right.Room, sd -> AppointmentDTO.list(getDao().searchAppointmentsByTitle(sd.getUserId(), title)));
 	}
 
 	/**
@@ -278,25 +215,22 @@ public class CalendarWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/")
-	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment) throws ServiceException {
+	public AppointmentDTO save(@QueryParam("sid") @WebParam(name="sid") String sid, @FormParam("appointment") @WebParam(name="appointment") AppointmentDTO appointment) {
 		//Seems to be create
-		log.debug("save SID:" + sid);
+		log.debug("save SID: {}", sid);
 
-		try {
-			UserDao userDao = getUserDao();
-			Sessiondata sd = check(sid);
-			log.debug("save userId:" + sd);
-			User u = userDao.get(sd.getUserId());
-			if (!AuthLevelUtil.hasWebServiceLevel(u.getRights())
-					&& appointment.getOwner() != null
-					&& !appointment.getOwner().getId().equals(u.getId()))
-			{
-				//TODO maybe additional checks are required
-				log.error("USER/Room modification as SOAP");
-				throw NO_PERMISSION;
-			}
-			//TODO check if objects passed with IDs are correct
-			if (AuthLevelUtil.hasUserLevel(u.getRights())) {
+		UserDao userDao = getUserDao();
+		return performCall(sid, sd -> {
+				User u = userDao.get(sd.getUserId());
+				if (!AuthLevelUtil.hasUserLevel(u.getRights())) {
+					log.error("save: not authorized");
+					return false;
+				}
+				return AuthLevelUtil.hasWebServiceLevel(u.getRights())
+						|| appointment.getOwner() == null
+						|| appointment.getOwner().getId().equals(u.getId());
+			}, sd -> {
+				User u = userDao.get(sd.getUserId());
 				AppointmentDao dao = getDao();
 				Appointment a = appointment.get(userDao, getFileDao(), dao, u);
 				if (a.getRoom().getId() != null) {
@@ -307,25 +241,16 @@ public class CalendarWebService extends BaseWebService {
 					}
 				}
 				return new AppointmentDTO(dao.update(a, u.getId()));
-			} else {
-				log.error("save : wrong user level");
-				throw NO_PERMISSION;
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[save]", err);
-			throw new ServiceException(err.getMessage());
-		}
+			});
 	}
 
 	/**
 	 *
 	 * delete a calendar event
 	 *
-	 * If the given SID is from an Administrator or Web-Service user, the user
+	 * If the given sid is from an Administrator or Web-Service user, the user
 	 * can delete any appointment.<br/>
-	 * If the SID is assigned to a simple user, he can only delete appointments
+	 * If the sid is assigned to a regular user, he can only delete appointments
 	 * where he is also the owner/creator of the appointment
 	 *
 	 * @param sid
@@ -338,31 +263,25 @@ public class CalendarWebService extends BaseWebService {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			Set<Right> rights = getRights(sd.getUserId());
-
-			AppointmentDao dao = getDao();
-			Appointment a = dao.get(id);
-			if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasAdminLevel(rights)) {
-				// fine
-			} else if (AuthLevelUtil.hasUserLevel(rights)) {
-				// check if the appointment belongs to the current user
-				if (!a.getOwner().getId().equals(sd.getUserId())) {
-					throw new ServiceException("The Appointment cannot be updated by the given user");
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
+		AppointmentDao dao = getDao();
+		Appointment a = dao.get(id);
+		return performCall(sid, sd -> {
+				Set<Right> rights = getRights(sd.getUserId());
+				if (AuthLevelUtil.hasWebServiceLevel(rights) || AuthLevelUtil.hasAdminLevel(rights)) {
+					return true;
+					// fine
 				}
-			} else {
-				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
-			}
-			dao.delete(a, sd.getUserId());
-
-			return new ServiceResult("Deleted", Type.SUCCESS);
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[delete]", err);
-			throw new ServiceException(err.getMessage());
-		}
+				if (AuthLevelUtil.hasUserLevel(rights) && a.getOwner().getId().equals(sd.getUserId())) {
+					return true;
+				}
+				return false;
+			}, sd -> {
+				if (a == null) {
+					throw new ServiceException("Bad id");
+				}
+				dao.delete(a, sd.getUserId());
+				return new ServiceResult("Deleted", Type.SUCCESS);
+			});
 	}
 }

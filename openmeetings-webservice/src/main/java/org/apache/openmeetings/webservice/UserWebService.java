@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
@@ -60,7 +59,6 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -124,22 +122,14 @@ public class UserWebService extends BaseWebService {
 	 *            The SID from getSession
 	 *
 	 * @return - list of users
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/")
-	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				return UserDTO.list(getUserDao().getAllUsers());
-			} else {
-				throw ServiceException.NO_PERMISSION;
-			}
-		} catch (Exception err) {
-			log.error("addNewUser", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			return UserDTO.list(getUserDao().getAllUsers());
+		});
 	}
 
 	/**
@@ -154,7 +144,6 @@ public class UserWebService extends BaseWebService {
 	 *            whatever or not to send email, leave empty for auto-send
 	 *
 	 * @return - id of the user added or error code
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@POST
@@ -163,77 +152,69 @@ public class UserWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="user") @FormParam("user") UserDTO user
 			, @WebParam(name="confirm") @FormParam("confirm") Boolean confirm
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sd.getUserId()))) {
-				UserDao userDao = getUserDao();
-				User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
+		return performCall(sid, User.Right.Soap, sd -> {
+			UserDao userDao = getUserDao();
+			User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
-				if (testUser != null) {
-					throw new ServiceException("User does already exist!");
-				}
-
-				ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-				String tz = user.getTimeZoneId();
-				if (Strings.isEmpty(tz)) {
-					tz = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "");
-				}
-				if (user.getAddress() == null) {
-					user.setAddress(new Address());
-					user.getAddress().setCountry(Locale.getDefault().getCountry());
-				}
-				if (user.getLanguageId() == null) {
-					user.setLanguageId(1L);
-				}
-				IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), user.get(userDao));
-				Validatable<String> passVal = new Validatable<>(user.getPassword());
-				passValidator.validate(passVal);
-				if (!passVal.isValid()) {
-					StringBuilder sb = new StringBuilder();
-					for (IValidationError err : passVal.getErrors()) {
-						sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
-					}
-					log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
-					throw new ServiceException(sb.toString());
-				}
-				Object _user = getBean(UserManager.class).registerUser(user.getLogin(), user.getPassword(),
-						user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
-						user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
-						, user.getAddress().getTown(), user.getLanguageId(),
-						"", false, true, // generate SIP Data if the config is enabled
-						tz, confirm);
-
-				if (_user == null) {
-					throw new ServiceException(UNKNOWN.getMessage());
-				} else if (_user instanceof String) {
-					throw new ServiceException((String)_user);
-				}
-
-				User u = (User)_user;
-
-				u.getRights().add(Right.Room);
-				if (Strings.isEmpty(user.getExternalId()) && Strings.isEmpty(user.getExternalType())) {
-					// activate the User
-					u.getRights().add(Right.Login);
-					u.getRights().add(Right.Dashboard);
-				} else {
-					u.setType(User.Type.external);
-					u.setExternalId(user.getExternalId());
-					u.setExternalType(user.getExternalType());
-				}
-
-				u = userDao.update(u, sd.getUserId());
-
-				return new UserDTO(u);
-			} else {
-				throw ServiceException.NO_PERMISSION;
+			if (testUser != null) {
+				throw new ServiceException("User does already exist!");
 			}
-		} catch (Exception err) {
-			log.error("addNewUser", err);
-			throw new ServiceException(err.getMessage());
-		}
+
+			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
+			String tz = user.getTimeZoneId();
+			if (Strings.isEmpty(tz)) {
+				tz = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "");
+			}
+			if (user.getAddress() == null) {
+				user.setAddress(new Address());
+				user.getAddress().setCountry(Locale.getDefault().getCountry());
+			}
+			if (user.getLanguageId() == null) {
+				user.setLanguageId(1L);
+			}
+			IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), user.get(userDao));
+			Validatable<String> passVal = new Validatable<>(user.getPassword());
+			passValidator.validate(passVal);
+			if (!passVal.isValid()) {
+				StringBuilder sb = new StringBuilder();
+				for (IValidationError err : passVal.getErrors()) {
+					sb.append(((ValidationError)err).getMessage()).append(System.lineSeparator());
+				}
+				log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
+				throw new ServiceException(sb.toString());
+			}
+			Object _user = getBean(UserManager.class).registerUser(user.getLogin(), user.getPassword(),
+					user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
+					user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
+					, user.getAddress().getTown(), user.getLanguageId(),
+					"", false, true, // generate SIP Data if the config is enabled
+					tz, confirm);
+
+			if (_user == null) {
+				throw new ServiceException(UNKNOWN.getMessage());
+			} else if (_user instanceof String) {
+				throw new ServiceException((String)_user);
+			}
+
+			User u = (User)_user;
+
+			u.getRights().add(Right.Room);
+			if (Strings.isEmpty(user.getExternalId()) && Strings.isEmpty(user.getExternalType())) {
+				// activate the User
+				u.getRights().add(Right.Login);
+				u.getRights().add(Right.Dashboard);
+			} else {
+				u.setType(User.Type.external);
+				u.setExternalId(user.getExternalId());
+				u.setExternalType(user.getExternalType());
+			}
+
+			u = userDao.update(u, sd.getUserId());
+
+			return new UserDTO(u);
+		});
 	}
 
 	/**
@@ -246,26 +227,17 @@ public class UserWebService extends BaseWebService {
 	 *            the openmeetings user id
 	 *
 	 * @return - id of the user deleted, error code otherwise
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasAdminLevel(getRights(sd.getUserId()))) {
-				UserDao userDao = getUserDao();
-				userDao.delete(userDao.get(id), sd.getUserId());
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+		return performCall(sid, User.Right.Admin, sd -> {
+			UserDao userDao = getUserDao();
+			userDao.delete(userDao.get(id), sd.getUserId());
 
-				return new ServiceResult("Deleted", Type.SUCCESS);
-			} else {
-				return NO_PERMISSION;
-			}
-		} catch (Exception err) {
-			log.error("deleteUserById", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult("Deleted", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -280,7 +252,6 @@ public class UserWebService extends BaseWebService {
 	 *            externalUserId
 	 *
 	 * @return - id of user deleted, or error code
-	 * @throws ServiceException
 	 */
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
@@ -288,25 +259,17 @@ public class UserWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="externaltype") @PathParam("externaltype") String externalType
 			, @WebParam(name="externalid") @PathParam("externalid") String externalId
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasAdminLevel(getRights(sd.getUserId()))) {
-				UserDao userDao = getUserDao();
-				User user = userDao.getExternalUser(externalId, externalType);
+		return performCall(sid, User.Right.Admin, sd -> {
+			UserDao userDao = getUserDao();
+			User user = userDao.getExternalUser(externalId, externalType);
 
-				// Setting user deleted
-				userDao.delete(user, sd.getUserId());
+			// Setting user deleted
+			userDao.delete(user, sd.getUserId());
 
-				return new ServiceResult("Deleted", Type.SUCCESS);
-			} else {
-				return NO_PERMISSION;
-			}
-		} catch (Exception err) {
-			log.error("deleteUserByExternalUserIdAndType", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult("Deleted", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -322,7 +285,6 @@ public class UserWebService extends BaseWebService {
 	 *            room options to set
 	 *
 	 * @return - secure hash or error code
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@POST
@@ -331,46 +293,38 @@ public class UserWebService extends BaseWebService {
 			@WebParam(name="sid") @QueryParam("sid") String sid
 			, @WebParam(name="user") @FormParam("user") ExternalUserDTO user
 			, @WebParam(name="options") @FormParam("options") RoomOptionsDTO options
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sd.getUserId()))) {
-				RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
-						user.getLogin(), user.getFirstname(), user.getLastname()
-						, user.getProfilePictureUrl(), user.getEmail()
-						, user.getExternalId(), user.getExternalType());
+		return performCall(sid, User.Right.Soap, sd -> {
+			RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
+					user.getLogin(), user.getFirstname(), user.getLastname()
+					, user.getProfilePictureUrl(), user.getEmail()
+					, user.getExternalId(), user.getExternalType());
 
-				log.debug(remoteSessionObject.toString());
+			log.debug(remoteSessionObject.toString());
 
-				String xmlString = remoteSessionObject.toXml();
+			String xmlString = remoteSessionObject.toXml();
 
-				log.debug("xmlString " + xmlString);
+			log.debug("xmlString " + xmlString);
 
-				//TODO LandingZone are not configurable for now
-				String hash = getBean(SOAPLoginDao.class).addSOAPLogin(sid, options.getRoomId(),
-						options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
-						options.getRecordingId(),
-						"room", // LandingZone,
-						options.isAllowRecording()
-						);
+			//TODO LandingZone are not configurable for now
+			String hash = getBean(SOAPLoginDao.class).addSOAPLogin(sid, options.getRoomId(),
+					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
+					options.getRecordingId(),
+					"room", // LandingZone,
+					options.isAllowRecording()
+					);
 
-				if (hash != null) {
-					if (options.isAllowSameURLMultipleTimes()) {
-						sd.setPermanent(true);
-					}
-					sd.setXml(xmlString);
-					getSessionDao().update(sd);
-					return new ServiceResult(hash, Type.SUCCESS);
+			if (hash != null) {
+				if (options.isAllowSameURLMultipleTimes()) {
+					sd.setPermanent(true);
 				}
-			} else {
-				return NO_PERMISSION;
+				sd.setXml(xmlString);
+				getSessionDao().update(sd);
+				return new ServiceResult(hash, Type.SUCCESS);
 			}
-		} catch (Exception err) {
-			log.error("getRoomHash", err);
-			throw new ServiceException(err.getMessage());
-		}
-		return UNKNOWN;
+			return UNKNOWN;
+		});
 	}
 
 	/**
@@ -384,19 +338,12 @@ public class UserWebService extends BaseWebService {
 	@WebMethod
 	@POST
 	@Path("/kick/{uid}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				boolean success = getBean(IUserManager.class).kickById(uid);
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			boolean success = getBean(IUserManager.class).kickById(uid);
 
-				return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
-			} else {
-				return NO_PERMISSION;
-			}
-		} catch (Exception err) {
-			log.error("[kick]", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -411,9 +358,8 @@ public class UserWebService extends BaseWebService {
 	@GET
 	@Path("/count/{roomid}")
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		if (AuthLevelUtil.hasUserLevel(getRights(sid))) {
+		return performCall(sid, User.Right.Soap, sd -> {
 			return new ServiceResult(String.valueOf(getApp().getOmRoomClients(roomId).size()), Type.SUCCESS);
-		}
-		return NO_PERMISSION;
+		});
 	}
 }

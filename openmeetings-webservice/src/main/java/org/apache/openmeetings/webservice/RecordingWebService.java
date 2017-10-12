@@ -39,8 +39,7 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.record.RecordingDTO;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.openmeetings.db.entity.user.User;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -75,21 +74,12 @@ public class RecordingWebService extends BaseWebService {
 	 */
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				RecordingDao dao = getDao();
-				dao.delete(dao.get(id));
-				return new ServiceResult("Deleted", Type.SUCCESS);
-			} else {
-				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[delete] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			RecordingDao dao = getDao();
+			dao.delete(dao.get(id));
+			return new ServiceResult("Deleted", Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -100,26 +90,17 @@ public class RecordingWebService extends BaseWebService {
 	 * @param externalType the externalUserType
 	 *
 	 * @return - list of flv recordings
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/{externaltype}/{externalid}")
 	public List<RecordingDTO> getExternal(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
-			, @PathParam("externalid") @WebParam(name="externalid") String externalId) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				return RecordingDTO.list(getDao().getByExternalId(externalId, externalType));
-			} else {
-				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getExternal] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+			, @PathParam("externalid") @WebParam(name="externalid") String externalId) {
+		log.debug("getExternal:: type {}, id {}", externalType, externalId);
+		return performCall(sid, User.Right.Soap, sd -> {
+			return RecordingDTO.list(getDao().getByExternalId(externalId, externalType));
+		});
 	}
 
 	/**
@@ -130,25 +111,15 @@ public class RecordingWebService extends BaseWebService {
 	 * @param externalType
 	 *            externalRoomType specified when creating the room
 	 * @return - list of flv recordings
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/{externaltype}")
 	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				return RecordingDTO.list(getDao().getByExternalType(externalType));
-			} else {
-				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getByExternalTypeByList] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			return RecordingDTO.list(getDao().getByExternalType(externalType));
+		});
 	}
 
 	/**
@@ -159,24 +130,14 @@ public class RecordingWebService extends BaseWebService {
 	 * @param roomId
 	 *            the room id
 	 * @return - list of recordings
-	 * @throws ServiceException
 	 */
 	@WebMethod
 	@GET
 	@Path("/room/{roomid}")
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
-			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) throws ServiceException {
-		try {
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				return RecordingDTO.list(getDao().getByRoomId(roomId));
-			} else {
-				throw new ServiceException("Not allowed to preform that action, Authenticate the SID first");
-			}
-		} catch (ServiceException err) {
-			throw err;
-		} catch (Exception err) {
-			log.error("[getByRoomId] ", err);
-			throw new ServiceException(err.getMessage());
-		}
+			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) {
+		return performCall(sid, User.Right.Soap, sd -> {
+			return RecordingDTO.list(getDao().getByRoomId(roomId));
+		});
 	}
 }

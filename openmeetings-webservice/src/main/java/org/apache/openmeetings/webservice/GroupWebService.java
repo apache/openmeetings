@@ -19,7 +19,6 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.commons.lang3.StringUtils.isAlphanumeric;
-import static org.apache.openmeetings.db.dto.basic.ServiceResult.NO_PERMISSION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
@@ -50,12 +49,9 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -88,21 +84,16 @@ public class GroupWebService extends BaseWebService {
 	 * @param name
 	 *            the name of the group
 	 * @return the new id of the group or -1 in case an error happened
-	 * @throws ServiceException
 	 */
 	@POST
 	@Path("/")
-	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) throws ServiceException {
-		Sessiondata sd = check(sid);
-		Long userId = sd.getUserId();
-		if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
+	public ServiceResult add(@QueryParam("sid") @WebParam(name="sid") String sid, @QueryParam("name") @WebParam(name="name") String name) {
+		log.debug("add:: name {}", name);
+		return performCall(sid, User.Right.Soap, sd -> {
 			Group o = new Group();
 			o.setName(name);
-			return new ServiceResult("" + getDao().update(o, userId).getId(), Type.SUCCESS);
-		} else {
-			log.error("Could not create group");
-			return NO_PERMISSION;
-		}
+			return new ServiceResult(String.valueOf(getDao().update(o, sd.getUserId()).getId()), Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -111,17 +102,13 @@ public class GroupWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID from getSession
 	 * @return list of all groups
-	 * @throws ServiceException
 	 */
 	@GET
 	@Path("/")
-	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) throws ServiceException {
-		if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
+	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
+		return performCall(sid, User.Right.Soap, sd -> {
 			return getDao().get(0, Integer.MAX_VALUE);
-		} else {
-			log.error("Insufficient permissions");
-			throw ServiceException.NO_PERMISSION;
-		}
+		});
 	}
 
 	/**
@@ -142,26 +129,17 @@ public class GroupWebService extends BaseWebService {
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
 			, @PathParam("userid") @WebParam(name="userid") Long userid
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			Long authUserId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(authUserId))) {
-				if (!getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
-					UserDao userDao = getUserDao();
-					User u = userDao.get(userid);
-					u.getGroupUsers().add(new GroupUser(getDao().get(id), u));
-					userDao.update(u, authUserId);
-				}
-				return new ServiceResult("" + userid, Type.SUCCESS);
-			} else {
-				return NO_PERMISSION;
+		return performCall(sid, User.Right.Soap, sd -> {
+			if (!getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
+				UserDao userDao = getUserDao();
+				User u = userDao.get(userid);
+				u.getGroupUsers().add(new GroupUser(getDao().get(id), u));
+				userDao.update(u, sd.getUserId());
 			}
-		} catch (Exception err) {
-			log.error("addUser", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult(String.valueOf(userid), Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -182,31 +160,22 @@ public class GroupWebService extends BaseWebService {
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
 			, @PathParam("userid") @WebParam(name="userid") Long userid
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			Long authUserId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(authUserId))) {
-				if (getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
-					UserDao userDao = getUserDao();
-					User u = userDao.get(userid);
-					for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext(); ) {
-						GroupUser gu = iter.next();
-						if (id.equals(gu.getGroup().getId())) {
-							iter.remove();
-						}
+		return performCall(sid, User.Right.Soap, sd -> {
+			if (getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
+				UserDao userDao = getUserDao();
+				User u = userDao.get(userid);
+				for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext(); ) {
+					GroupUser gu = iter.next();
+					if (id.equals(gu.getGroup().getId())) {
+						iter.remove();
 					}
-					userDao.update(u, authUserId);
 				}
-				return new ServiceResult("" + userid, Type.SUCCESS);
-			} else {
-				return NO_PERMISSION;
+				userDao.update(u, sd.getUserId());
 			}
-		} catch (Exception err) {
-			log.error("addUser", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult(String.valueOf(userid), Type.SUCCESS);
+		});
 	}
 
 	/**
@@ -224,38 +193,29 @@ public class GroupWebService extends BaseWebService {
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomid
-			) throws ServiceException
+			)
 	{
-		try {
-			Sessiondata sd = check(sid);
-			Long userId = sd.getUserId();
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(userId))) {
-				RoomDao roomDao = getRoomDao();
-				Room r = roomDao.get(roomid);
-				if (r != null) {
-					if (r.getGroups() == null) {
-						r.setGroups(new ArrayList<RoomGroup>());
-					}
-					boolean found = false;
-					for (RoomGroup ro : r.getGroups()) {
-						if (ro.getGroup().getId().equals(id)) {
-							found = true;
-						}
-					}
-					if (!found) {
-						r.getGroups().add(new RoomGroup(getDao().get(id), r));
-						roomDao.update(r, userId);
-						return new ServiceResult("Success", Type.SUCCESS);
+		return performCall(sid, User.Right.Soap, sd -> {
+			RoomDao roomDao = getRoomDao();
+			Room r = roomDao.get(roomid);
+			if (r != null) {
+				if (r.getGroups() == null) {
+					r.setGroups(new ArrayList<RoomGroup>());
+				}
+				boolean found = false;
+				for (RoomGroup ro : r.getGroups()) {
+					if (ro.getGroup().getId().equals(id)) {
+						found = true;
 					}
 				}
-				return new ServiceResult("Not added", Type.ERROR);
-			} else {
-				return NO_PERMISSION;
+				if (!found) {
+					r.getGroups().add(new RoomGroup(getDao().get(id), r));
+					roomDao.update(r, sd.getUserId());
+					return new ServiceResult("Success", Type.SUCCESS);
+				}
 			}
-		} catch (Exception err) {
-			log.error("[addRoom]", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult("Not added", Type.ERROR);
+		});
 	}
 
 	/**
@@ -284,28 +244,20 @@ public class GroupWebService extends BaseWebService {
 			, @QueryParam("max") @WebParam(name="max") int max
 			, @QueryParam("orderby") @WebParam(name="orderby") String orderby
 			, @QueryParam("asc") @WebParam(name="asc") boolean asc
-			) throws ServiceException
+			)
 	{
-		try {
+		return performCall(sid, User.Right.Soap, sd -> {
 			SearchResult<User> result = new SearchResult<>();
 			result.setObjectName(User.class.getName());
-			if (AuthLevelUtil.hasWebServiceLevel(getRights(sid))) {
-				GroupUserDao dao = getBean(GroupUserDao.class);
-				result.setRecords(dao.count(id));
-				result.setResult(new ArrayList<User>());
-				String order = isAlphanumeric(orderby) ? orderby : "id";
-				for (GroupUser ou : dao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
-					result.getResult().add(ou.getUser());
-				}
-			} else {
-				log.error("Need Administration Account");
-				result.setErrorKey(NO_PERMISSION.getMessage());
+			GroupUserDao dao = getBean(GroupUserDao.class);
+			result.setRecords(dao.count(id));
+			result.setResult(new ArrayList<User>());
+			String order = isAlphanumeric(orderby) ? orderby : "id";
+			for (GroupUser ou : dao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
+				result.getResult().add(ou.getUser());
 			}
 			return new UserSearchResult(result);
-		} catch (Exception err) {
-			log.error("getUsers", err);
-			throw new ServiceException(err.getMessage());
-		}
+		});
 	}
 
 	/**
@@ -321,22 +273,12 @@ public class GroupWebService extends BaseWebService {
 	@WebMethod
 	@DELETE
 	@Path("/{id}")
-	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) throws ServiceException {
-		try {
-			Sessiondata sd = check(sid);
-			Long authUserId = sd.getUserId();
+	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+		return performCall(sid, User.Right.Admin, sd -> {
+			GroupDao dao = getDao();
+			dao.delete(dao.get(id), sd.getUserId());
 
-			if (AuthLevelUtil.hasAdminLevel(getRights(authUserId))) {
-				GroupDao dao = getDao();
-				dao.delete(dao.get(id), authUserId);
-
-				return new ServiceResult("Deleted", Type.SUCCESS);
-			} else {
-				return NO_PERMISSION;
-			}
-		} catch (Exception err) {
-			log.error("deleteUserById", err);
-			throw new ServiceException(err.getMessage());
-		}
+			return new ServiceResult("Deleted", Type.SUCCESS);
+		});
 	}
 }

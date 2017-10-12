@@ -57,7 +57,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotNull("Valid ServiceResult should be returned", r);
 	}
 
-	private static ServiceResult getHash(String sid) {
+	private static ServiceResult getHash(String sid, boolean expectError) {
 		ExternalUserDTO user = new ExternalUserDTO()
 				.setExternalId("1")
 				.setExternalType(UNIT_TEST_EXT_TYPE)
@@ -73,20 +73,24 @@ public class TestUserService extends AbstractWebServiceTest {
 				.query("sid", sid)
 				.form(new Form().param("user", user.toString()).param("options", options.toString()));
 		assertNotNull("Valid ServiceResult should be returned", resp);
-		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
-		return resp.readEntity(ServiceResult.class);
+		if (expectError) {
+			assertEquals("Call should NOT be successful", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp.getStatus());
+			return null;
+		} else {
+			assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+			return resp.readEntity(ServiceResult.class);
+		}
 	}
 
 	@Test
 	public void hashTestNoAuth() {
-		ServiceResult r = getHash("aa");
-		assertEquals("OM Call should NOT be successful", Type.ERROR.name(), r.getType());
+		getHash("aa", true);
 	}
 
 	@Test
 	public void hashTest() throws OmException {
 		ServiceResult r = login();
-		ServiceResult r1 = getHash(r.getMessage());
+		ServiceResult r1 = getHash(r.getMessage(), false);
 		assertEquals("OM Call should be successful", Type.SUCCESS.name(), r1.getType());
 
 		WebSession ws = WebSession.get();
