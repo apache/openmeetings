@@ -285,28 +285,6 @@ public class UserForm extends AdminBaseForm<User> {
 	}
 
 	@Override
-	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
-		//ignore validation errors
-		onNewSubmit(target, form);
-	}
-
-	@Override
-	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
-		//ignore validation errors
-		onDeleteSubmit(target, form);
-	}
-
-	@Override
 	protected IMarkupSourcingStrategy newMarkupSourcingStrategy() {
 		return new PanelMarkupSourcingStrategy(false);
 	}

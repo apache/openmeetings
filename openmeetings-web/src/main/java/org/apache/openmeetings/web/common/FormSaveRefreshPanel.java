@@ -86,8 +86,12 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 	}
 
 	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
-	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
+	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
 
 	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
-	protected abstract void onRefreshError(AjaxRequestTarget target, Form<?> form);
+	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
 }

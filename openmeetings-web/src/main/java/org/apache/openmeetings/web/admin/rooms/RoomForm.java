@@ -444,11 +444,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 		updateView(target);
 	}
 
-	@Override
-	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
-	}
-
 	private static Room newRoom() {
 		Room r = new Room();
 		r.hide(RoomElement.MicrophoneStatus);
@@ -459,11 +454,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
 		setModelObject(newRoom());
 		updateView(target);
-	}
-
-	@Override
-	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -479,21 +469,11 @@ public class RoomForm extends AdminBaseForm<Room> {
 	}
 
 	@Override
-	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
 		getBean(RoomDao.class).delete(getModelObject(), getUserId());
 		target.add(roomList);
 		setModelObject(newRoom());
 		updateView(target);
-	}
-
-	@Override
-	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
-		// TODO Auto-generated method stub
 	}
 
 	public void updateView(AjaxRequestTarget target) {

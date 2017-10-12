@@ -128,7 +128,9 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected abstract void onSaveError(AjaxRequestTarget target, Form<?> form);
+	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
 
 	/**
 	 * invoked when new button is pressed
@@ -144,7 +146,9 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
+	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
 
 	/**
 	 * invoked when refresh button is pressed
@@ -160,7 +164,9 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected abstract void onRefreshError(AjaxRequestTarget target, Form<?> form);
+	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
 
 	/**
 	 * invoked when delete button is pressed
@@ -176,6 +182,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	 * @param target
 	 * @param form
 	 */
-	protected abstract void onDeleteError(AjaxRequestTarget target, Form<?> form);
-
+	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
 }

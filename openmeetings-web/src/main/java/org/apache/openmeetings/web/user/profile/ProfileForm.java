@@ -88,19 +88,9 @@ public class ProfileForm extends Form<User> {
 			}
 
 			@Override
-			protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-				// TODO update feedback with the error details
-			}
-
-			@Override
 			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 				refreshUser();
 				target.add(ProfileForm.this);
-			}
-
-			@Override
-			protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-				// TODO update feedback with the error details
 			}
 		});
 		add(new WebMarkupContainer("changePwd").add(new ButtonBehavior("#changePwd"), new AjaxEventBehavior("click") {
