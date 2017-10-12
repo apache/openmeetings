@@ -75,12 +75,10 @@ public class RoomModerator implements Serializable {
 	@Column(name = "updated")
 	private Date updated;
 
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
-
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -88,14 +86,15 @@ public class RoomModerator implements Serializable {
 	public boolean isSuperModerator() {
 		return superModerator;
 	}
+
 	public void setSuperModerator(boolean superModerator) {
 		this.superModerator = superModerator;
 	}
 
-
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
@@ -103,6 +102,7 @@ public class RoomModerator implements Serializable {
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
@@ -110,22 +110,16 @@ public class RoomModerator implements Serializable {
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
-
 }
