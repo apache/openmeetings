@@ -53,20 +53,20 @@ public class RoomModerator implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
 
 	@Column(name = "roomId")
 	private Long roomId;
 
-	@Column(name="is_supermoderator", nullable = false)
-	@Element(name="is_supermoderator", data = true)
+	@Column(name = "is_supermoderator", nullable = false)
+	@Element(name = "is_supermoderator", data = true)
 	private boolean superModerator;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn (name="user_id")
+	@JoinColumn(name = "user_id")
 	@ForeignKey(enabled = true)
-	@Element(name="user_id", data = true, required=false)
+	@Element(name = "user_id", data = true, required = false)
 	private User user;
 
 	@Column(name = "inserted")
