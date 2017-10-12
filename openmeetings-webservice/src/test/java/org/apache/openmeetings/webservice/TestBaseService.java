@@ -34,7 +34,7 @@ import org.junit.Test;
 import com.sun.star.uno.RuntimeException;
 
 public class TestBaseService {
-	private void checkException(Runnable r) {
+	private static void checkException(Runnable r) {
 		try {
 			r.run();
 			fail("ServiceException expected");
@@ -55,7 +55,7 @@ public class TestBaseService {
 		assertNull("UserId should be null", sd.getUserId());
 	}
 
-	private void checkRights(Set<Right> rights) {
+	private static void checkRights(Set<Right> rights) {
 		assertNotNull("NOT null Rights should be returned", rights);
 		assertTrue("Rights should be empty", rights.isEmpty());
 	}

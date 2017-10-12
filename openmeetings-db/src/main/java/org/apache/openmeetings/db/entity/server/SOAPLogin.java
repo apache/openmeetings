@@ -35,56 +35,53 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "getSoapLoginByHash", query = "SELECT s FROM SOAPLogin s WHERE s.hash LIKE :hash")
 })
-
 public class SOAPLogin implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
 
-	@Column(name="hash")
+	@Column(name = "hash")
 	private String hash;
 
-	@Column(name="room_id")
+	@Column(name = "room_id")
 	private Long roomId;
 
-	@Column(name="session_hash")
+	@Column(name = "session_hash")
 	private String sessionHash;
 
-	@Column(name="created")
+	@Column(name = "created")
 	private Date created;
 
-	@Column(name="used", nullable = false)
+	@Column(name = "used", nullable = false)
 	private boolean used;
 
-	@Column(name="use_date")
+	@Column(name = "use_date")
 	private Date useDate;
 
-	@Column(name="moderator", nullable = false)
+	@Column(name = "moderator", nullable = false)
 	private boolean moderator;
 
-	@Column(name="showaudiovideotest", nullable = false)
+	@Column(name = "showaudiovideotest", nullable = false)
 	private boolean showAudioVideoTest;
 
-	@Column(name="allow_same_url_multiple_times", nullable = false)
+	@Column(name = "allow_same_url_multiple_times", nullable = false)
 	private boolean allowSameURLMultipleTimes;
 
-	@Column(name="client_url")
+	@Column(name = "client_url")
 	private String clientURL;
 
-	@Column(name="recording_id")
+	@Column(name = "recording_id")
 	private Long recordingId;
 
-	@Column(name="landing_zone")
-	private String landingZone;
-
-	@Column(name="allow_recording", nullable = false)
+	@Column(name = "allow_recording", nullable = false)
 	private boolean allowRecording;
 
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -92,6 +89,7 @@ public class SOAPLogin implements Serializable {
 	public String getHash() {
 		return hash;
 	}
+
 	public void setHash(String hash) {
 		this.hash = hash;
 	}
@@ -99,6 +97,7 @@ public class SOAPLogin implements Serializable {
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
@@ -106,6 +105,7 @@ public class SOAPLogin implements Serializable {
 	public String getSessionHash() {
 		return sessionHash;
 	}
+
 	public void setSessionHash(String sessionHash) {
 		this.sessionHash = sessionHash;
 	}
@@ -113,6 +113,7 @@ public class SOAPLogin implements Serializable {
 	public Date getCreated() {
 		return created;
 	}
+
 	public void setCreated(Date created) {
 		this.created = created;
 	}
@@ -120,6 +121,7 @@ public class SOAPLogin implements Serializable {
 	public boolean isUsed() {
 		return used;
 	}
+
 	public void setUsed(boolean used) {
 		this.used = used;
 	}
@@ -127,6 +129,7 @@ public class SOAPLogin implements Serializable {
 	public Date getUseDate() {
 		return useDate;
 	}
+
 	public void setUseDate(Date useDate) {
 		this.useDate = useDate;
 	}
@@ -134,6 +137,7 @@ public class SOAPLogin implements Serializable {
 	public boolean isModerator() {
 		return moderator;
 	}
+
 	public void setModerator(boolean moderator) {
 		this.moderator = moderator;
 	}
@@ -141,6 +145,7 @@ public class SOAPLogin implements Serializable {
 	public boolean getShowAudioVideoTest() {
 		return showAudioVideoTest;
 	}
+
 	public void setShowAudioVideoTest(boolean showAudioVideoTest) {
 		this.showAudioVideoTest = showAudioVideoTest;
 	}
@@ -148,6 +153,7 @@ public class SOAPLogin implements Serializable {
 	public boolean getAllowSameURLMultipleTimes() {
 		return allowSameURLMultipleTimes;
 	}
+
 	public void setAllowSameURLMultipleTimes(boolean allowSameURLMultipleTimes) {
 		this.allowSameURLMultipleTimes = allowSameURLMultipleTimes;
 	}
@@ -155,6 +161,7 @@ public class SOAPLogin implements Serializable {
 	public String getClientURL() {
 		return clientURL;
 	}
+
 	public void setClientURL(String clientURL) {
 		this.clientURL = clientURL;
 	}
@@ -162,22 +169,16 @@ public class SOAPLogin implements Serializable {
 	public Long getRecordingId() {
 		return recordingId;
 	}
+
 	public void setRecordingId(Long recordingId) {
 		this.recordingId = recordingId;
-	}
-
-	public String getLandingZone() {
-		return landingZone;
-	}
-	public void setLandingZone(String landingZone) {
-		this.landingZone = landingZone;
 	}
 
 	public boolean isAllowRecording() {
 		return allowRecording;
 	}
+
 	public void setAllowRecording(boolean allowRecording) {
 		this.allowRecording = allowRecording;
 	}
-
 }

@@ -68,17 +68,19 @@ public class TestUserService extends AbstractWebServiceTest {
 		RoomOptionsDTO options = new RoomOptionsDTO()
 				.setRoomId(5L)
 				.setModerator(true);
-		Response resp = getClient(USER_SERVICE_URL)
+		try (Response resp = getClient(USER_SERVICE_URL)
 				.path("/hash")
 				.query("sid", sid)
-				.form(new Form().param("user", user.toString()).param("options", options.toString()));
-		assertNotNull("Valid ServiceResult should be returned", resp);
-		if (expectError) {
-			assertEquals("Call should NOT be successful", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp.getStatus());
-			return null;
-		} else {
-			assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
-			return resp.readEntity(ServiceResult.class);
+				.form(new Form().param("user", user.toString()).param("options", options.toString())))
+		{
+			assertNotNull("Valid ServiceResult should be returned", resp);
+			if (expectError) {
+				assertEquals("Call should NOT be successful", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), resp.getStatus());
+				return null;
+			} else {
+				assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+				return resp.readEntity(ServiceResult.class);
+			}
 		}
 	}
 

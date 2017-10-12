@@ -305,11 +305,9 @@ public class UserWebService extends BaseWebService {
 
 			log.debug("xmlString " + xmlString);
 
-			//TODO LandingZone are not configurable for now
 			String hash = getBean(SOAPLoginDao.class).addSOAPLogin(sid, options.getRoomId(),
 					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
 					options.getRecordingId(),
-					"room", // LandingZone,
 					options.isAllowRecording()
 					);
 
