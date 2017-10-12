@@ -24,6 +24,7 @@
 		version="2.0">
 	<persistence-unit name="openmeetings" transaction-type="RESOURCE_LOCAL">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+		<class>org.apache.openmeetings.db.entity.HistoricalEntity</class>
 		<class>org.apache.openmeetings.db.entity.basic.ChatMessage</class>
 		<class>org.apache.openmeetings.db.entity.basic.Configuration</class>
 		<class>org.apache.openmeetings.db.entity.basic.MailMessage</class>

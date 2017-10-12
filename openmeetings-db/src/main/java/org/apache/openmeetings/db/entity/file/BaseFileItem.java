@@ -30,7 +30,6 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -48,7 +47,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 
 @Entity
@@ -67,7 +66,7 @@ import org.simpleframework.xml.Element;
 })
 @Table(name = "file")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class BaseFileItem implements IDataProviderEntity {
+public abstract class BaseFileItem extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	@XmlType(namespace = "org.apache.openmeetings.file")
@@ -106,18 +105,6 @@ public abstract class BaseFileItem implements IDataProviderEntity {
 	@Column(name = "inserted_by")
 	@Element(data = true, required = false)
 	private Long insertedBy;
-
-	@Column(name = "inserted")
-	@Element(data = true, required = false)
-	private Date inserted;
-
-	@Column(name = "updated")
-	@Element(data = true, required = false)
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
 
 	@Column(name = "width")
 	@Element(data = true, required = false)
@@ -203,30 +190,6 @@ public abstract class BaseFileItem implements IDataProviderEntity {
 
 	public void setInsertedBy(Long insertedBy) {
 		this.insertedBy = insertedBy;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public Integer getWidth() {

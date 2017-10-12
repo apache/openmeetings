@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.server;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +32,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -48,7 +46,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "ldapconfig")
 @Root(name="ldapconfig")
-public class LdapConfig implements IDataProviderEntity {
+public class LdapConfig extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,12 +73,6 @@ public class LdapConfig implements IDataProviderEntity {
 	@Element(data = true, name = "isActive")
 	private boolean active;
 
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "insertedby_id", updatable = true, insertable = true)
 	@ForeignKey(enabled = true)
@@ -90,9 +82,6 @@ public class LdapConfig implements IDataProviderEntity {
 	@JoinColumn(name = "updatedby_id", updatable = true, insertable = true)
 	@ForeignKey(enabled = true)
 	private User updatedby;
-
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
 
 	@Lob
 	@Column(name = "comment", length = 2048)
@@ -149,22 +138,6 @@ public class LdapConfig implements IDataProviderEntity {
 		this.active = active;
 	}
 
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
 	public User getInsertedby() {
 		return insertedby;
 	}
@@ -179,14 +152,6 @@ public class LdapConfig implements IDataProviderEntity {
 
 	public void setUpdatedby(User updatedby) {
 		this.updatedby = updatedby;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public String getComment() {

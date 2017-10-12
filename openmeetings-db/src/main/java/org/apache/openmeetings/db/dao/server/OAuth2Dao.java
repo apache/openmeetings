@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -85,8 +86,10 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	@Override
 	public OAuthServer update(OAuthServer server, Long userId) {
 		if (server.getId() == null) {
+			server.setInserted(new Date());
 			em.persist(server);
 		} else {
+			server.setUpdated(new Date());
 			server = em.merge(server);
 		}
 		return server;

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.db.entity.room;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -52,7 +51,7 @@ import org.apache.openjpa.persistence.FetchAttribute;
 import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -79,15 +78,15 @@ import org.simpleframework.xml.Root;
 	@NamedQuery(name = "countRooms", query = "SELECT COUNT(r) FROM Room r WHERE r.deleted = false"),
 	@NamedQuery(name = "getBackupRooms", query = "SELECT r FROM Room r ORDER BY r.id"),
 	@NamedQuery(name = "getRoomsCapacityByIds", query = "SELECT SUM(r.capacity) FROM Room r WHERE r.deleted = false AND r.id IN :ids")
-	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT r.room FROM RoomGroup r LEFT JOIN FETCH r.room "
-			+ "WHERE r.group.id = :groupId AND r.deleted = false AND r.room.deleted = false AND r.room.appointment = false "
-			+ "AND r.group.deleted = false ORDER BY r.room.name ASC")
+	, @NamedQuery(name = "getGroupRooms", query = "SELECT DISTINCT rg.room FROM RoomGroup rg LEFT JOIN FETCH rg.room "
+			+ "WHERE rg.group.id = :groupId AND rg.room.deleted = false AND rg.room.appointment = false "
+			+ "ORDER BY rg.room.name ASC")
 })
 @Table(name = "room")
 @Root(name = "room")
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Room implements IDataProviderEntity {
+public class Room extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int CONFERENCE_TYPE_ID = 1;
 	public static final int PRESENTATION_TYPE_ID = 3;
@@ -176,16 +175,6 @@ public class Room implements IDataProviderEntity {
 	@Enumerated(EnumType.STRING)
 	@Element(name = "roomtypeId", data = true, required = false)
 	private Type type = Type.conference;
-
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
 
 	@Column(name = "ispublic", nullable = false)
 	@Element(name = "ispublic", data = true, required = false)
@@ -342,30 +331,6 @@ public class Room implements IDataProviderEntity {
 
 	public void setType(Type type) {
 		this.type = type;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public boolean getIspublic() {

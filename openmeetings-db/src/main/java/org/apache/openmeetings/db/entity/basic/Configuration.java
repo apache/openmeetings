@@ -20,8 +20,6 @@ package org.apache.openmeetings.db.entity.basic;
 
 import static java.lang.Boolean.TRUE;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +34,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -54,7 +52,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "configuration")
 @Root(name = "config")
-public class Configuration implements IDataProviderEntity {
+public class Configuration extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Type {
@@ -80,22 +78,11 @@ public class Configuration implements IDataProviderEntity {
 	@Element(name = "value", data = true, required = false)
 	private String value;
 
-	@Column(name = "inserted")
-	@Element(name = "created", data = true, required = false)
-	private Date inserted;
-
-	@Column(name = "updated")
-	@Element(name = "updated", data = true, required = false)
-	private Date updated;
 
 	@Lob
 	@Column(name = "comment", length = 2048)
 	@Element(data = true, required = false)
 	private String comment;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
 
 	@Column(name = "fromVersion")
 	@Element(data = true, required = false)
@@ -147,30 +134,6 @@ public class Configuration implements IDataProviderEntity {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public User getUser() {

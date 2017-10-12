@@ -22,65 +22,38 @@
 		xsi:noNamespaceSchemaLocation="errorvalues.xsd">
 	<row>
 		<field name="starttime">2007-12-06 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.unknown</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime">2017-05-18 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.bad.credentials</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime">2007-12-06 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.short.login</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime">2007-12-06 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.reg.disabled</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime">2007-12-06 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.login.inuse</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime">2007-12-06 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.email.inuse</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime">2007-12-06 19:01:07</field>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.notallowed</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime"/>
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.nogroup</field>
-		<field name="type">error</field>
 	</row>
 	<row>
 		<field name="starttime" />
-		<field name="updatetime" />
-		<field name="deleted">false</field>
 		<field name="labelKey">error.notactivated</field>
-		<field name="type">error</field>
 	</row>
 </ROOT>

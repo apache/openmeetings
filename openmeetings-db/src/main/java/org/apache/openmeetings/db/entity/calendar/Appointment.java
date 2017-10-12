@@ -41,7 +41,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
@@ -118,7 +118,7 @@ import org.simpleframework.xml.Root;
 		query = "UPDATE Appointment a SET a.deleted = true WHERE a.calendar.id = :calId")
 })
 @Root(name = "appointment")
-public class Appointment implements IDataProviderEntity {
+public class Appointment extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int REMINDER_NONE_ID = 1;
 	public static final int REMINDER_EMAIL_ID = 2;
@@ -193,18 +193,6 @@ public class Appointment implements IDataProviderEntity {
 	@ForeignKey(enabled = true)
 	@Element(name = "users_id", data = true, required = false)
 	private User owner;
-
-	@Column(name = "inserted")
-	@Element(name = "inserted", data = true, required = false)
-	private Date inserted;
-
-	@Column(name = "updated")
-	@Element(name = "updated", data = true, required = false)
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
 
 	@Column(name = "reminder")
 	@Enumerated(EnumType.STRING)
@@ -353,30 +341,6 @@ public class Appointment implements IDataProviderEntity {
 		this.reminder = reminder;
 	}
 
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	public Boolean getIsWeekly() {
 		return isWeekly;
 	}
@@ -500,6 +464,6 @@ public class Appointment implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Appointment [id=" + id + ", title=" + title + ", start=" + start + ", end=" + end + ", owner=" + owner
-				+ ", deleted=" + deleted + ", icalId=" + icalId + ", calendar=" + calendar + ", href=" + href + ", etag=" + etag + "]";
+				+ ", deleted=" + isDeleted() + ", icalId=" + icalId + ", calendar=" + calendar + ", href=" + href + ", etag=" + etag + "]";
 	}
 }

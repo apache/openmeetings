@@ -146,7 +146,6 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -317,8 +316,6 @@ public class BackupImport {
 	private OAuth2Dao auth2Dao;
 	@Autowired
 	private GroupDao groupDao;
-	@Autowired
-	private RoomGroupDao roomGroupDao;
 
 	private final Map<Long, Long> userMap = new HashMap<>();
 	private final Map<Long, Long> groupMap = new HashMap<>();
@@ -596,11 +593,17 @@ public class BackupImport {
 
 		List<RoomGroup> list = readList(serializer, f, "rooms_organisation.xml", "room_organisations", RoomGroup.class);
 		for (RoomGroup ro : list) {
-			if (!ro.isDeleted() && ro.getRoom() != null && ro.getRoom().getId() != null && ro.getGroup() != null && ro.getGroup().getId() != null) {
-				// We need to reset this as openJPA reject to store them otherwise
-				ro.setId(null);
-				roomGroupDao.update(ro);
+			Room r = roomDao.get(ro.getRoom().getId());
+			if (r == null || ro.getGroup() == null || ro.getGroup().getId() == null) {
+				continue;
 			}
+			if (r.getGroups() == null) {
+				r.setGroups(new ArrayList<>());
+			}
+			ro.setId(null);
+			ro.setRoom(r);
+			r.getGroups().add(ro);
+			roomDao.update(r, null);
 		}
 	}
 
@@ -898,6 +901,9 @@ public class BackupImport {
 		List<RoomFile> list = readList(serializer, f, "roomFiles.xml", "RoomFiles", RoomFile.class, true);
 		for (RoomFile rf : list) {
 			Room r = roomDao.get(roomMap.get(rf.getRoomId()));
+			if (r == null || rf.getFile() == null || rf.getFile().getId() == null) {
+				continue;
+			}
 			if (r.getFiles() == null) {
 				r.setFiles(new ArrayList<>());
 			}

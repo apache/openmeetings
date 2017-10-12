@@ -11,7 +11,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
+-->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:param name="languagesDir"/>
 	<xsl:output method="xml"/>
@@ -39,8 +39,7 @@
 		<section name="Openmeetings Errors table">
 		<table>
 			<tr>
-				<th>Code</th>
-				<th>Type</th>
+				<th>Error Code</th>
 				<th>Description</th>
 			</tr>
 			<xsl:apply-templates/>
@@ -54,11 +53,7 @@
 		<xsl:variable name="englishPath"><xsl:value-of select="concat($languagesDir, '/Application.properties.xml')"/></xsl:variable>
 		<xsl:variable name="descId" select="field[@name='labelKey']"/>
 			<tr>
-				<td>-<xsl:value-of select="$descId"/></td>
-				<td>
-					<xsl:variable name="type" select="concat('error.type.', field[@name='type'])"/>
-					<xsl:value-of select="document($englishPath)/properties/entry[@key=$type]/text()" />
-				</td>
+				<td><xsl:value-of select="$descId"/></td>
 				<td>
 					<xsl:value-of select="document($englishPath)/properties/entry[@key=$descId]/text()" />
 				</td>

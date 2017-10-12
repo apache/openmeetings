@@ -60,7 +60,6 @@ import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -144,8 +143,6 @@ public class BackupExport {
 	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
-	@Autowired
-	private RoomGroupDao roomGroupDao;
 
 	public void performExport(File zip, boolean includeFiles, ProgressHolder progressHolder) throws Exception {
 		if (zip.getParentFile() != null && !zip.getParentFile().exists()) {
@@ -245,7 +242,7 @@ public class BackupExport {
 		registry.bind(Group.class, GroupConverter.class);
 		registry.bind(Room.class, RoomConverter.class);
 
-		writeList(serializer, zos, "rooms_organisation.xml", "room_organisations", roomGroupDao.get());
+		writeList(serializer, zos, "rooms_organisation.xml", "room_organisations", roomDao.getGroups());
 		progressHolder.setProgress(17);
 	}
 

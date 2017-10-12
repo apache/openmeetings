@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.room;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -83,16 +81,6 @@ public class RoomGroup implements IDataProviderEntity {
 	@Element(name = "organisation_id", data = true, required = false)
 	private Group group;
 
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
-
 	public RoomGroup() {
 		//def constructor
 	}
@@ -126,29 +114,5 @@ public class RoomGroup implements IDataProviderEntity {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 }

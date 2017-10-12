@@ -32,7 +32,6 @@ import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.room.RoomGroupDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.After;
@@ -55,8 +54,6 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private MeetingMemberDao meetingMemberDao;
-	@Autowired
-	private RoomGroupDao roomGroupDao;
 
 	@Override
 	public void setUp() throws Exception {
@@ -95,7 +92,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 				long newGroupCount = groupDao.count();
 				long newUserCount = userDao.count();
 				long newRoomCount = roomDao.count();
-				long newRoomGroupCount = roomGroupDao.get().size();
+				long newRoomGroupCount = roomDao.getGroups().size();
 				long newApptCount = appointmentDao.get().size();
 				long newMeetingMembersCount = meetingMemberDao.getMeetingMembers().size();
 				assertTrue("Zero groups were imported from " + name, newGroupCount > groupCount);

@@ -37,7 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.user.User;
 	@NamedQuery(name = "getInvitationByAppointment", query = "SELECT i FROM Invitation i WHERE i.appointment.id = :appointmentId  ")
 })
 @Table(name = "invitation")
-public class Invitation implements IDataProviderEntity {
+public class Invitation extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum MessageType {
@@ -77,15 +77,6 @@ public class Invitation implements IDataProviderEntity {
 	@JoinColumn(name = "invited_by", nullable = true)
 	@ForeignKey(enabled = true)
 	private User invitedBy;
-
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "room_id", nullable = true)
@@ -143,9 +134,9 @@ public class Invitation implements IDataProviderEntity {
 	public Invitation(Invitation i) {
 		id = i.id;
 		invitedBy = i.invitedBy;
-		inserted = i.inserted;
-		updated = i.updated;
-		deleted = i.deleted;
+		setInserted(i.getInserted());
+		setUpdated(i.getUpdated());
+		setDeleted(i.isDeleted());
 		room = i.room;
 		recording = i.recording;
 		hash = i.hash;
@@ -191,30 +182,6 @@ public class Invitation implements IDataProviderEntity {
 
 	public void setInvitedBy(User invitedBy) {
 		this.invitedBy = invitedBy;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public String getHash() {

@@ -56,5 +56,4 @@ public class TestGetAppointment extends AbstractJUnitDefaults {
 		assertNotNull("Failed to get Appointment By id", a);
 		assertEquals("Inapropriate MeetingMembers count", 0, a.getMeetingMembers() == null ? 0 : a.getMeetingMembers().size());
 	}
-
 }

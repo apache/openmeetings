@@ -46,6 +46,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomFile;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
@@ -314,8 +315,14 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		return result;
 	}
 
+	// Methods for backup export
 	public List<RoomFile> getFiles() {
 		return em.createQuery("SELECT rf FROM RoomFile rf", RoomFile.class)
+				.getResultList();
+	}
+
+	public List<RoomGroup> getGroups() {
+		return em.createQuery("SELECT rg FROM RoomGroup rg", RoomGroup.class)
 				.getResultList();
 	}
 }

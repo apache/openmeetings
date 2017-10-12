@@ -36,7 +36,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -60,7 +60,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "recording_metadata")
 @Root(name = "flvrecordingmetadata")
-public class RecordingMetaData implements IDataProviderEntity {
+public class RecordingMetaData extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@XmlType(namespace="org.apache.openmeetings.record.meta")
 	public enum Status {
@@ -112,17 +112,6 @@ public class RecordingMetaData implements IDataProviderEntity {
 	@Column(name = "inserted_by")
 	@Element(data = true, required = false)
 	private Long insertedBy;
-
-	@Column(name = "inserted")
-	@Element(data = true)
-	private Date inserted;
-
-	@Column(name = "updated")
-	@Element(data = true, required = false)
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
 
 	@Column(name = "wav_audio_data")
 	@Element(data = true, required = false)
@@ -212,30 +201,6 @@ public class RecordingMetaData implements IDataProviderEntity {
 
 	public void setInsertedBy(Long insertedBy) {
 		this.insertedBy = insertedBy;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
 	}
 
 	public boolean isScreenData() {

@@ -542,8 +542,10 @@ public class Admin {
 			a.process(args);
 
 			log("... Done");
+			System.exit(0);
 		} catch (ExitException e) {
 			a.handleError(e, false, false);
+			System.exit(1);
 		} catch (Exception e) {
 			_log.error("Unexpected error", e);
 			e.printStackTrace();

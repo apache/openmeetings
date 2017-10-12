@@ -29,7 +29,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -41,7 +41,7 @@ import org.simpleframework.xml.Root;
 		@NamedQuery(name = "getAllOAuthServers", query = "SELECT s FROM OAuthServer s WHERE s.deleted = false ORDER BY s.id"),
 		@NamedQuery(name = "countOAuthServers", query = "select count(s) from OAuthServer s WHERE s.deleted = false") })
 @Root
-public class OAuthServer implements IDataProviderEntity {
+public class OAuthServer extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -106,10 +106,6 @@ public class OAuthServer implements IDataProviderEntity {
 	@Column(name = "lastname_param_name")
 	@Element(data = true, required = false)
 	private String lastnameParamName;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true)
-	private boolean deleted;
 
 	@Override
 	public Long getId() {
@@ -233,14 +229,6 @@ public class OAuthServer implements IDataProviderEntity {
 		this.lastnameParamName = lastnameParamName;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	@Override
 	public String toString() {
 		return "OAuthServer [id=" + id + ", name=" + name + ", iconUrl=" + iconUrl + ", enabled=" + enabled
@@ -248,7 +236,7 @@ public class OAuthServer implements IDataProviderEntity {
 				+ ", requestTokenUrl=" + requestTokenUrl + ", requestTokenAttributes=" + requestTokenAttributes
 				+ ", requestTokenMethod=" + requestTokenMethod + ", requestInfoUrl=" + requestInfoUrl
 				+ ", loginParamName=" + loginParamName + ", emailParamName=" + emailParamName + ", firstnameParamName="
-				+ firstnameParamName + ", lastnameParamName=" + lastnameParamName + ", deleted=" + deleted + "]";
+				+ firstnameParamName + ", lastnameParamName=" + lastnameParamName + ", deleted=" + isDeleted() + "]";
 	}
 
 	public enum RequestMethod {

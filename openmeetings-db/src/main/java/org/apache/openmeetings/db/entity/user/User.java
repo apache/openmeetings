@@ -56,7 +56,7 @@ import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.MD5;
@@ -100,7 +100,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "om_user")
 @Root(name = "user")
-public class User implements IDataProviderEntity {
+public class User extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	public static final int SALUTATION_MR_ID = 1;
 	public static final int SALUTATION_MS_ID = 2;
@@ -212,19 +212,9 @@ public class User implements IDataProviderEntity {
 	@Element(name = "title_id", data = true, required = false)
 	private Salutation salutation;
 
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
 	@Column(name = "pictureuri")
 	@Element(data = true, required = false)
 	private String pictureuri;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true, required = false)
-	private boolean deleted;
 
 	@Column(name = "language_id")
 	@Element(name = "language_id", data = true, required = false)
@@ -428,30 +418,6 @@ public class User implements IDataProviderEntity {
 		this.salutation = salutation;
 	}
 
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	public String getPictureuri() {
 		return pictureuri;
 	}
@@ -629,7 +595,7 @@ public class User implements IDataProviderEntity {
 	public String toString() {
 		return "User [id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
-				+ ", pictureuri=" + pictureuri + ", deleted=" + deleted
+				+ ", pictureuri=" + pictureuri + ", deleted=" + isDeleted()
 				+ ", languageId=" + languageId + ", address=" + address
 				+ ", externalId=" + externalId + ", externalType=" + externalType
 				+ ", type=" + type + "]";

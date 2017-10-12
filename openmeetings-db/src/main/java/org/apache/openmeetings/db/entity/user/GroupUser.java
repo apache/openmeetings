@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +31,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -47,7 +45,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "group_user")
 @Root(name="user_organisation")
-public class GroupUser implements IDataProviderEntity {
+public class GroupUser extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,12 +62,6 @@ public class GroupUser implements IDataProviderEntity {
 	@JoinColumn(name = "user_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
 	private User user;
-
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
 
 	@Column(name = "is_moderator", nullable = false)
 	@Element(data = true, required = false)
@@ -100,22 +92,6 @@ public class GroupUser implements IDataProviderEntity {
 	@Override
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
 	}
 
 	public boolean isModerator() {

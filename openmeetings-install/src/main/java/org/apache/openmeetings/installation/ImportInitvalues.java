@@ -371,7 +371,6 @@ public class ImportInitvalues {
 			RoomGroup ro = new RoomGroup();
 			ro.setRoom(r);
 			ro.setGroup(groupDao.get(groupId));
-			ro.setInserted(new Date());
 			r.getGroups().add(ro);
 		}
 		r = roomDao.update(r, null);

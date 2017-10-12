@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -109,10 +110,10 @@ public class MailMessageDao implements IDataProviderDao<MailMessage> {
 	@Override
 	public MailMessage update(MailMessage m, Long userId) {
 		if (m.getId() == null) {
-			m.setInserted(Calendar.getInstance());
+			m.setInserted(new Date());
 			em.persist(m);
 		} else {
-			m.setUpdated(Calendar.getInstance());
+			m.setUpdated(new Date());
 			m = em.merge(m);
 		}
 		return m;

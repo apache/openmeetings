@@ -18,13 +18,25 @@
  */
 package org.apache.openmeetings.db.entity.calendar;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.user.User;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
-
-import javax.persistence.*;
 
 @Entity
 @Table(name = "om_calendar")
@@ -48,7 +60,7 @@ import javax.persistence.*;
 				+ "	AND a.owner.id = :userId AND a.calendar.id = :calId  "),
 		@NamedQuery(name = "getCalendarbyId", query = "SELECT c FROM OmCalendar c WHERE c.deleted = false AND c.id = :calId") })
 @Root(name = "calendar")
-public class OmCalendar implements IDataProviderEntity {
+public class OmCalendar extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum SyncType {
@@ -74,10 +86,6 @@ public class OmCalendar implements IDataProviderEntity {
 	@Column(name = "sync_token")
 	@Element(name = "token", data = true, required = false)
 	private String token;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(name = "deleted", data = true)
-	private boolean deleted;
 
 	@Column(name = "sync_type")
 	@Enumerated(EnumType.STRING)
@@ -125,14 +133,6 @@ public class OmCalendar implements IDataProviderEntity {
 		this.token = token;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
 	public SyncType getSyncType() {
 		return syncType;
 	}
@@ -152,6 +152,6 @@ public class OmCalendar implements IDataProviderEntity {
 	@Override
 	public String toString() {
 		return "Calendar [ id=" + id + ", title=" + title + ", token=" + token + ", href=" + href + ", SyncType="
-				+ syncType + ", deleted=" + deleted + ", owner=" + owner + " ]";
+				+ syncType + ", deleted=" + isDeleted() + ", owner=" + owner + " ]";
 	}
 }

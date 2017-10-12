@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +27,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -45,7 +43,7 @@ import org.simpleframework.xml.Root;
 })
 @Table(name = "om_group")
 @Root(name = "organisation")
-public class Group implements IDataProviderEntity {
+public class Group extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -63,16 +61,6 @@ public class Group implements IDataProviderEntity {
 
 	@Column(name = "updatedby")
 	private Long updatedby;
-
-	@Column(name = "inserted")
-	private Date inserted;
-
-	@Column(name = "updated")
-	private Date updated;
-
-	@Column(name = "deleted", nullable = false)
-	@Element(data = true, required = false)
-	private boolean deleted;
 
 	@Column(name = "tag")
 	@Element(data = true, required = false)
@@ -138,30 +126,6 @@ public class Group implements IDataProviderEntity {
 
 	public void setUpdatedby(Long updatedby) {
 		this.updatedby = updatedby;
-	}
-
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public String getTag() {
@@ -230,6 +194,6 @@ public class Group implements IDataProviderEntity {
 
 	@Override
 	public String toString() {
-		return "Group [id=" + id + ", name=" + name + ", deleted=" + deleted + "]";
+		return "Group [id=" + id + ", name=" + name + ", deleted=" + isDeleted() + "]";
 	}
 }

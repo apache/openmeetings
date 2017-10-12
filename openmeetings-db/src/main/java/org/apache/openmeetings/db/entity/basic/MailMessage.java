@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.util.Calendar;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,7 +30,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 
 @Entity
 @NamedQueries({
@@ -44,7 +42,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 	, @NamedQuery(name = "resetMailStatusById", query = "UPDATE MailMessage m SET m.errorCount = 0, m.status = :noneStatus WHERE m.id = :id")
 })
 @Table(name = "email_queue")
-public class MailMessage implements IDataProviderEntity {
+public class MailMessage extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 
 	public enum Status {
@@ -77,12 +75,6 @@ public class MailMessage implements IDataProviderEntity {
 	@Column(name = "status", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Status status = Status.NONE;
-
-	@Column(name = "inserted")
-	private Calendar inserted;
-
-	@Column(name = "updated")
-	private Calendar updated;
 
 	@Column(name = "error_count", nullable = false)
 	private int errorCount = 0;
@@ -155,22 +147,6 @@ public class MailMessage implements IDataProviderEntity {
 
 	public void setStatus(Status status) {
 		this.status = status;
-	}
-
-	public Calendar getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Calendar inserted) {
-		this.inserted = inserted;
-	}
-
-	public Calendar getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Calendar updated) {
-		this.updated = updated;
 	}
 
 	public byte[] getIcs() {
