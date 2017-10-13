@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,14 +26,14 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
-import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Entity
 @Table(name = "address")
 @Root(name="address")
-public class Address implements IDataProviderEntity {
+public class Address extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,10 +53,6 @@ public class Address implements IDataProviderEntity {
 	@Element(data=true, required=false)
 	private String fax;
 
-	@Column(name = "inserted")
-	@Element(name = "starttime",data=true, required=false)
-	private Date inserted;
-
 	@Column(name = "country")
 	@Element(name="country", data=true, required=false)
 	private String country;
@@ -71,15 +65,9 @@ public class Address implements IDataProviderEntity {
 	@Element(data=true, required=false)
 	private String town;
 
-	@Column(name = "updated")
-	private Date updated;
-
 	@Column(name = "zip")
 	@Element(data=true, required=false)
 	private String zip;
-
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
 
 	@Column(name = "email")
 	@Element(name="mail", data=true, required=false)
@@ -123,14 +111,6 @@ public class Address implements IDataProviderEntity {
 		this.fax = fax;
 	}
 
-	public Date getInserted() {
-		return inserted;
-	}
-
-	public void setInserted(Date inserted) {
-		this.inserted = inserted;
-	}
-
 	public String getCountry() {
 		return country;
 	}
@@ -155,28 +135,12 @@ public class Address implements IDataProviderEntity {
 		this.town = town;
 	}
 
-	public Date getUpdated() {
-		return updated;
-	}
-
-	public void setUpdated(Date updated) {
-		this.updated = updated;
-	}
-
 	public String getZip() {
 		return zip;
 	}
 
 	public void setZip(String zip) {
 		this.zip = zip;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public String getEmail() {
@@ -199,7 +163,7 @@ public class Address implements IDataProviderEntity {
 	public String toString() {
 		return "Address [id=" + id + ", country=" + country
 				+ ", street=" + street + ", town=" + town + ", zip=" + zip
-				+ ", deleted=" + deleted + ", email=" + email + ", phone="
+				+ ", deleted=" + isDeleted() + ", email=" + email + ", phone="
 				+ phone + "]";
 	}
 }

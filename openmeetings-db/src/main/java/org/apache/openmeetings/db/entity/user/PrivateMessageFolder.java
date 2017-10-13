@@ -42,24 +42,25 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 	@Element(data = true, name = "privateMessageFolderId")
 	private Long id;
 
-	@Column(name="folder_name")
-	@Element(data=true)
+	@Column(name = "folder_name")
+	@Element(data = true)
 	private String folderName;
 
-	@Column(name="user_id")
-	@Element(data=true)
+	@Column(name = "user_id")
+	@Element(data = true)
 	private Long userId;
 
-	@Column(name="inserted")
+	@Column(name = "inserted")
 	private Date inserted;
 
-	@Column(name="updated")
+	@Column(name = "updated")
 	private Date updated;
 
 	@Override
 	public Long getId() {
 		return id;
 	}
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
@@ -68,6 +69,7 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 	public String getFolderName() {
 		return folderName;
 	}
+
 	public void setFolderName(String folderName) {
 		this.folderName = folderName;
 	}
@@ -75,6 +77,7 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 	public Long getUserId() {
 		return userId;
 	}
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
@@ -82,6 +85,7 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
@@ -89,8 +93,8 @@ public class PrivateMessageFolder implements IDataProviderEntity {
 	public Date getUpdated() {
 		return updated;
 	}
+
 	public void setUpdated(Date updated) {
 		this.updated = updated;
 	}
-
 }

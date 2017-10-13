@@ -40,64 +40,65 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
 
-	@Column(name="metadata_id")
+	@Column(name = "metadata_id")
 	private Long metaDataId;
 
-	@Column(name="time_stamp")
+	@Column(name = "time_stamp")
 	private Integer timeStamp;
 
-	@Column(name="delta_time")
+	@Column(name = "delta_time")
 	private Long deltaTime;
 
-	@Column(name="last_time_stamp")
+	@Column(name = "last_time_stamp")
 	private Long lastTimeStamp;
 
-	@Column(name="start_time")
+	@Column(name = "start_time")
 	private Date startTime;
 
-	@Column(name="current_event_time")
+	@Column(name = "current_event_time")
 	private Date currentTime;
 
-	@Column(name="delta_time_stamp")
+	@Column(name = "delta_time_stamp")
 	private Long deltaTimeStamp;
 
-	@Column(name="missing_time")
+	@Column(name = "missing_time")
 	private Long missingTime;
 
-	@Column(name="duration")
+	@Column(name = "duration")
 	private Integer duration;
 
-	@Column(name="start_time_stamp")
+	@Column(name = "start_time_stamp")
 	private Integer startTimeStamp;
 
-	@Column(name="packet_time_stamp")
+	@Column(name = "packet_time_stamp")
 	private Integer packetTimeStamp;
 
-	@Column(name="wave_out_put_name")
+	@Column(name = "wave_out_put_name")
 	private String waveOutPutName;
 
-	@Column(name="data_length_packet")
+	@Column(name = "data_length_packet")
 	private Integer dataLengthPacket;
 
-	@Column(name="received_audio_data_length")
+	@Column(name = "received_audio_data_length")
 	private Long receivedAudioDataLength;
 
-	@Column(name="is_end_padding", nullable = false)
+	@Column(name = "is_end_padding", nullable = false)
 	private boolean endPadding;
 
-	@Column(name="is_start_padding", nullable = false)
+	@Column(name = "is_start_padding", nullable = false)
 	private boolean startPadding;
 
-	@Column(name="debug_status")
+	@Column(name = "debug_status")
 	private String debugStatus;
 
 	@Override
 	public Long getId() {
 		return id;
 	}
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
@@ -106,6 +107,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Long getMetaDataId() {
 		return metaDataId;
 	}
+
 	public void setMetaDataId(Long metaDataId) {
 		this.metaDataId = metaDataId;
 	}
@@ -113,6 +115,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Integer getTimeStamp() {
 		return timeStamp;
 	}
+
 	public void setTimeStamp(Integer timeStamp) {
 		this.timeStamp = timeStamp;
 	}
@@ -120,6 +123,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Long getDeltaTime() {
 		return deltaTime;
 	}
+
 	public void setDeltaTime(Long deltaTime) {
 		this.deltaTime = deltaTime;
 	}
@@ -127,6 +131,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Long getLastTimeStamp() {
 		return lastTimeStamp;
 	}
+
 	public void setLastTimeStamp(Long lastTimeStamp) {
 		this.lastTimeStamp = lastTimeStamp;
 	}
@@ -134,6 +139,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Long getDeltaTimeStamp() {
 		return deltaTimeStamp;
 	}
+
 	public void setDeltaTimeStamp(Long deltaTimeStamp) {
 		this.deltaTimeStamp = deltaTimeStamp;
 	}
@@ -141,6 +147,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Integer getPacketTimeStamp() {
 		return packetTimeStamp;
 	}
+
 	public void setPacketTimeStamp(Integer packetTimeStamp) {
 		this.packetTimeStamp = packetTimeStamp;
 	}
@@ -148,6 +155,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Integer getStartTimeStamp() {
 		return startTimeStamp;
 	}
+
 	public void setStartTimeStamp(Integer startTimeStamp) {
 		this.startTimeStamp = startTimeStamp;
 	}
@@ -155,6 +163,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Long getMissingTime() {
 		return missingTime;
 	}
+
 	public void setMissingTime(Long missingTime) {
 		this.missingTime = missingTime;
 	}
@@ -162,6 +171,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Integer getDuration() {
 		return duration;
 	}
+
 	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
@@ -169,6 +179,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Date getStartTime() {
 		return startTime;
 	}
+
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
@@ -176,6 +187,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Date getCurrentTime() {
 		return currentTime;
 	}
+
 	public void setCurrentTime(Date currentTime) {
 		this.currentTime = currentTime;
 	}
@@ -183,6 +195,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public boolean isEndPadding() {
 		return endPadding;
 	}
+
 	public void setEndPadding(boolean endPadding) {
 		this.endPadding = endPadding;
 	}
@@ -190,6 +203,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public boolean isStartPadding() {
 		return startPadding;
 	}
+
 	public void setStartPadding(boolean startPadding) {
 		this.startPadding = startPadding;
 	}
@@ -197,6 +211,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public String getDebugStatus() {
 		return debugStatus;
 	}
+
 	public void setDebugStatus(String debugStatus) {
 		this.debugStatus = debugStatus;
 	}
@@ -204,6 +219,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public String getWaveOutPutName() {
 		return waveOutPutName;
 	}
+
 	public void setWaveOutPutName(String waveOutPutName) {
 		this.waveOutPutName = waveOutPutName;
 	}
@@ -211,6 +227,7 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Integer getDataLengthPacket() {
 		return dataLengthPacket;
 	}
+
 	public void setDataLengthPacket(Integer dataLengthPacket) {
 		this.dataLengthPacket = dataLengthPacket;
 	}
@@ -218,8 +235,8 @@ public class RecordingMetaDelta implements IDataProviderEntity {
 	public Long getReceivedAudioDataLength() {
 		return receivedAudioDataLength;
 	}
+
 	public void setReceivedAudioDataLength(Long receivedAudioDataLength) {
 		this.receivedAudioDataLength = receivedAudioDataLength;
 	}
-
 }
