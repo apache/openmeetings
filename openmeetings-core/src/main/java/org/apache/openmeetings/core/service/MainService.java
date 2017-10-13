@@ -46,42 +46,50 @@ public class MainService {
 	// External User Types
 	public static final String EXTERNAL_USER_TYPE_LDAP = "LDAP";
 
-	public boolean isRoomAllowedToUser(Room r, User u) {
-		boolean allowed = false;
-		if (r != null) {
-			if (r.isAppointment()) {
-				Appointment a = appointmentDao.getByRoom(r.getId());
-				if (a != null && !a.isDeleted()) {
-					allowed = a.getOwner().getId().equals(u.getId());
-					log.debug("[loginWicket] appointed room, isOwner ? " + allowed);
-					if (!allowed) {
-						for (MeetingMember mm : a.getMeetingMembers()) {
-							if (mm.getUser().getId().equals(u.getId())) {
-								allowed = true;
-								break;
-							}
-						}
-					}
-					// TODO restrict by time???
-				}
-			} else {
-				allowed = r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()));
-				log.debug("[loginWicket] public ? " + r.getIspublic() + ", ownedId ? " + r.getOwnerId() + " " + allowed);
-				if (!allowed && null != r.getGroups()) {
-					for (RoomGroup ro : r.getGroups()) {
-						for (GroupUser ou : u.getGroupUsers()) {
-							if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
-								allowed = true;
-								break;
-							}
-						}
-						if (allowed) {
-							break;
-						}
-					}
+	private static boolean checkAppointment(Appointment a, User u) {
+		if (a == null || a.isDeleted()) {
+			return false;
+		}
+		if (a.getOwner().getId().equals(u.getId())) {
+			log.debug("[isRoomAllowedToUser] appointed room, Owner entered");
+			return true;
+		}
+		for (MeetingMember mm : a.getMeetingMembers()) {
+			if (mm.getUser().getId().equals(u.getId())) {
+				return true;
+			}
+		}
+		// TODO restrict by time???
+		return false;
+	}
+
+	private static boolean checkGroups(Room r, User u) {
+		if (null == r.getGroups()) { //u.getGroupUsers() can't be null due to user was able to login
+			return false;
+		}
+		for (RoomGroup ro : r.getGroups()) {
+			for (GroupUser ou : u.getGroupUsers()) {
+				if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
+					return true;
 				}
 			}
 		}
-		return allowed;
+		return false;
+	}
+
+	public boolean isRoomAllowedToUser(Room r, User u) {
+		if (r == null) {
+			return false;
+		}
+		if (r.isAppointment()) {
+			Appointment a = appointmentDao.getByRoom(r.getId());
+			return checkAppointment(a, u);
+		} else {
+			if (r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()))) {
+				log.debug("[isRoomAllowedToUser] public ? {} , ownedId ? {} ALLOWED", r.getIspublic(), r.getOwnerId());
+				return true;
+			}
+			return checkGroups(r, u);
+		}
 	}
 }
