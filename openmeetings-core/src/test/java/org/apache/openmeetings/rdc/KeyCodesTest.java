@@ -40,10 +40,6 @@ public class KeyCodesTest extends Frame implements KeyListener {
 	String msg1 = "";
 	String msg2 = "";
 
-	public static void main(String[] args) {
-		new KeyCodesTest();
-	}
-
 	public KeyCodesTest() {
 		super("TestKeyCodes");
 		addKeyListener(this);

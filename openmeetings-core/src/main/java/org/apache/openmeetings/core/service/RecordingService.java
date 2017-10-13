@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.remote;
+package org.apache.openmeetings.core.service;
 
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -31,6 +31,7 @@ import org.apache.openmeetings.core.converter.BaseConverter;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
+import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -51,8 +52,6 @@ import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.scope.IScope;
-import org.red5.server.api.service.IPendingServiceCall;
-import org.red5.server.api.service.IPendingServiceCallback;
 import org.red5.server.api.service.IServiceCapableConnection;
 import org.red5.server.api.stream.IBroadcastStream;
 import org.red5.server.api.stream.IStreamListener;
@@ -64,7 +63,7 @@ import org.springframework.stereotype.Service;
 import com.github.openjson.JSONObject;
 
 @Service
-public class RecordingService implements IPendingServiceCallback {
+public class RecordingService {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingService.class, getWebAppRootKey());
 
 	/**
@@ -89,11 +88,6 @@ public class RecordingService implements IPendingServiceCallback {
 	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
-
-	@Override
-	public void resultReceived(IPendingServiceCall arg0) {
-		//no-op
-	}
 
 	private static String generateFileName(Long recordingId, String streamid) {
 		String dateString = CalendarPatterns.getTimeForStreamId(new Date());
@@ -248,7 +242,7 @@ public class RecordingService implements IPendingServiceCallback {
 	 * @param broadcastId
 	 * @param metaId
 	 */
-	public void removeListener(IScope scope, String broadcastId, Long metaId) {
+	private void removeListener(IScope scope, String broadcastId, Long metaId) {
 		try {
 			log.debug("** removeListener: scope: {}, broadcastId: {} || {}", scope, broadcastId, scope.getContextPath());
 
@@ -325,7 +319,7 @@ public class RecordingService implements IPendingServiceCallback {
 		startStreamRecord(conn, recordingId, rec.isInterview());
 	}
 
-	public void startStreamRecord(IConnection conn, Long recordingId, boolean isInterview) {
+	private void startStreamRecord(IConnection conn, Long recordingId, boolean isInterview) {
 		Date now = new Date();
 
 		StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));

@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.service.RecordingService;
 import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
