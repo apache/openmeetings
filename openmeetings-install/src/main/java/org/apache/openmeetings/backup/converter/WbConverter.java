@@ -88,7 +88,7 @@ public class WbConverter {
 		if (props.size() < 12) {
 			return;
 		}
-		String color = getColor((int)props.get(2));
+		String color = getColor((Integer)props.get(2));
 		String style = (String)props.get(4);
 		JSONObject o = setColor(init(wb, props), color, color)
 				.put("type", "i-text")
@@ -107,7 +107,7 @@ public class WbConverter {
 		if (props.size() < 13) {
 			return;
 		}
-		String color = getColor((int)props.get(4));
+		String color = getColor((Integer)props.get(4));
 		JSONObject o = setColor(init(wb, props), color, null)
 				.put("type", "path")
 				.put("strokeWidth", props.get(3));
@@ -116,13 +116,13 @@ public class WbConverter {
 		JSONArray path = new JSONArray();
 		for (List<?> point : points) {
 			if (path.length() == 0) {
-				path.put(new JSONArray(Arrays.asList("M", (int)point.get(1), (int)point.get(2))));
+				path.put(new JSONArray(Arrays.asList("M", (Integer)point.get(1), (Integer)point.get(2))));
 			} else if (path.length() == points.size() - 1) {
-				path.put(new JSONArray(Arrays.asList("L", (int)point.get(3), (int)point.get(4))));
+				path.put(new JSONArray(Arrays.asList("L", (Integer)point.get(3), (Integer)point.get(4))));
 			} else {
 				path.put(new JSONArray(Arrays.asList("Q"
-						, (int)point.get(1), (int)point.get(2)
-						, (int)point.get(3), (int)point.get(4))));
+						, (Integer)point.get(1), (Integer)point.get(2)
+						, (Integer)point.get(3), (Integer)point.get(4))));
 			}
 		}
 		add(wb, o.put("path", path).put("opacity", props.get(5)));
@@ -132,7 +132,7 @@ public class WbConverter {
 		if (props.size() < 16) {
 			return;
 		}
-		String color = getColor((int)props.get(1));
+		String color = getColor((Integer)props.get(1));
 		add(wb, setColor(init(wb, props), color, color)
 				.put("type", "line")
 				.put("strokeWidth", props.get(2))
@@ -148,8 +148,8 @@ public class WbConverter {
 			return null;
 		}
 		return setColor(init(wb, props)
-					, 1 == (int)props.get(4) ? getColor((int)props.get(1)) : null
-					, 1 == (int)props.get(5) ? getColor((int)props.get(3)) : null)
+					, 1 == (Integer)props.get(4) ? getColor((Integer)props.get(1)) : null
+					, 1 == (Integer)props.get(5) ? getColor((Integer)props.get(3)) : null)
 				.put("type", "rect")
 				.put("strokeWidth", props.get(2))
 				.put("opacity", props.get(6));

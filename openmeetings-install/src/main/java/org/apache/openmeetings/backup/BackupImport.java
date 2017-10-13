@@ -857,7 +857,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import File-Explorer Items
 	 */
-	private List<FileItem> importFiles(File f, boolean old) throws Exception {
+	private List<FileItem> importFiles(File f) throws Exception {
 		log.info("Private message import complete, starting file explorer item import");
 		List<FileItem> result = new ArrayList<>();
 		List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
