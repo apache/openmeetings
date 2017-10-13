@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
@@ -104,7 +105,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 			if (!Strings.isEmpty(wuid) && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
 					JSONObject file = e.getValue().get(wuid);
-					if (file != null && f.getId().equals(file.optLong("fileId"))) {
+					if (file != null && f.getId().equals(file.optLong(ATTR_FILE_ID))) {
 						return f; // item IS on WB
 					}
 				}

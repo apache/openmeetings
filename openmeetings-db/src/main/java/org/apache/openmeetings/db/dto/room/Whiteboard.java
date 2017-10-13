@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.NullStringer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -43,6 +44,9 @@ import com.github.openjson.JSONObject;
 public class Whiteboard implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(Whiteboard.class, getWebAppRootKey());
+	public static final String ATTR_TYPE = "type";
+	public static final String ATTR_FILE_ID = "fileId";
+	public static final String ATTR_FILE_TYPE = "fileType";
 	public enum ZoomMode {
 		fullFit
 		, pageWidth
@@ -125,7 +129,7 @@ public class Whiteboard implements Serializable {
 		JSONArray arr = new JSONArray();
 		roomItems.entrySet().removeIf(e -> {
 				JSONObject o = new JSONObject(e.getValue());
-				boolean match = !"Presentation".equals(o.optString("fileType")) && o.optInt("slide", -1) == slide;
+				boolean match = !FileItem.Type.Presentation.name().equals(o.optString(ATTR_FILE_TYPE)) && o.optInt("slide", -1) == slide;
 				if (match) {
 					arr.put(e);
 				}

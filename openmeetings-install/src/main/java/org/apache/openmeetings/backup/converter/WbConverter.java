@@ -20,6 +20,9 @@ package org.apache.openmeetings.backup.converter;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -49,9 +52,16 @@ import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class WbConverter {
 	private static final Logger log = Red5LoggerFactory.getLogger(WbConverter.class, getWebAppRootKey());
+	private static final String ATTR_STROKE = "strokeWidth";
+	private static final String ATTR_OPACITY = "opacity";
+	private static final String TYPE_IMAGE = "image";
+
+	private WbConverter() {
+		//should not be used
+	}
 
 	private static String getColor(int val) {
-		return String.format("#%06X", (0xFFFFFF & val));
+		return String.format("#%06X", 0xFFFFFF & val);
 	}
 
 	private static void add(Whiteboard wb, JSONObject o) {
@@ -91,7 +101,7 @@ public class WbConverter {
 		String color = getColor((Integer)props.get(2));
 		String style = (String)props.get(4);
 		JSONObject o = setColor(init(wb, props), color, color)
-				.put("type", "i-text")
+				.put(ATTR_TYPE, "i-text")
 				.put("text", props.get(1))
 				.put("fontSize", props.get(3));
 		if (style.indexOf("bold") > -1) {
@@ -109,8 +119,8 @@ public class WbConverter {
 		}
 		String color = getColor((Integer)props.get(4));
 		JSONObject o = setColor(init(wb, props), color, null)
-				.put("type", "path")
-				.put("strokeWidth", props.get(3));
+				.put(ATTR_TYPE, "path")
+				.put(ATTR_STROKE, props.get(3));
 		@SuppressWarnings("unchecked")
 		List<List<?>> points = (List<List<?>>)props.get(1);
 		JSONArray path = new JSONArray();
@@ -125,7 +135,7 @@ public class WbConverter {
 						, (Integer)point.get(3), (Integer)point.get(4))));
 			}
 		}
-		add(wb, o.put("path", path).put("opacity", props.get(5)));
+		add(wb, o.put("path", path).put(ATTR_OPACITY, props.get(5)));
 	}
 
 	private static void processLine(Whiteboard wb, List<?> props) {
@@ -134,9 +144,9 @@ public class WbConverter {
 		}
 		String color = getColor((Integer)props.get(1));
 		add(wb, setColor(init(wb, props), color, color)
-				.put("type", "line")
-				.put("strokeWidth", props.get(2))
-				.put("opacity", props.get(3))
+				.put(ATTR_TYPE, "line")
+				.put(ATTR_STROKE, props.get(2))
+				.put(ATTR_OPACITY, props.get(3))
 				.put("x1", props.get(4))
 				.put("y1", props.get(5))
 				.put("x2", props.get(6))
@@ -150,15 +160,15 @@ public class WbConverter {
 		return setColor(init(wb, props)
 					, 1 == (Integer)props.get(4) ? getColor((Integer)props.get(1)) : null
 					, 1 == (Integer)props.get(5) ? getColor((Integer)props.get(3)) : null)
-				.put("type", "rect")
-				.put("strokeWidth", props.get(2))
-				.put("opacity", props.get(6));
+				.put(ATTR_TYPE, "rect")
+				.put(ATTR_STROKE, props.get(2))
+				.put(ATTR_OPACITY, props.get(6));
 	}
 
 	private static void processEllipse(Whiteboard wb, List<?> props) {
 		JSONObject o = processRect(wb, props);
 		if (o != null) {
-			o.put("type", "ellipse")
+			o.put(ATTR_TYPE, "ellipse")
 				.put("rx", o.getDouble("width") / 2)
 				.put("ry", o.getDouble("height") / 2);
 			add(wb, o);
@@ -175,7 +185,7 @@ public class WbConverter {
 			src = String.format("./public/%s", src.substring(idx));
 		}
 		add(wb, init(wb, props)
-			.put("type", "image")
+			.put(ATTR_TYPE, TYPE_IMAGE)
 			.put("omType", "Clipart")
 			.put("_src", src)
 			.put("angle", props.get(3)));
@@ -199,9 +209,9 @@ public class WbConverter {
 			return;
 		}
 		add(wb, init(wb, props)
-			.put("type", "image")
-			.put("fileType", BaseFileItem.Type.Image.name())
-			.put("fileId", fileId));
+			.put(ATTR_TYPE, TYPE_IMAGE)
+			.put(ATTR_FILE_TYPE, BaseFileItem.Type.Image.name())
+			.put(ATTR_FILE_ID, fileId));
 	}
 
 	private static void processDoc(Whiteboard wb, List<?> props) {
@@ -213,9 +223,9 @@ public class WbConverter {
 			return;
 		}
 		add(wb, init(wb, props, false)
-			.put("type", "image")
-			.put("fileType", BaseFileItem.Type.Presentation.name())
-			.put("fileId", fileId));
+			.put(ATTR_TYPE, TYPE_IMAGE)
+			.put(ATTR_FILE_TYPE, BaseFileItem.Type.Presentation.name())
+			.put(ATTR_FILE_ID, fileId));
 	}
 
 	private static void processVid(Whiteboard wb, List<?> props) {
@@ -223,9 +233,9 @@ public class WbConverter {
 			return;
 		}
 		add(wb, init(wb, props)
-			.put("type", "image")
-			.put("fileType", BaseFileItem.Type.Video.name())
-			.put("fileId", props.get(1)));
+			.put(ATTR_TYPE, TYPE_IMAGE)
+			.put(ATTR_FILE_TYPE, BaseFileItem.Type.Video.name())
+			.put(ATTR_FILE_ID, props.get(1)));
 	}
 
 	public static Whiteboard convert(FileItem fi) {
@@ -236,7 +246,7 @@ public class WbConverter {
 		List<?> wml = loadWmlFile(fi.getHash());
 		for (Object wo : wml) {
 			List<?> props = (List<?>)wo;
-			if (props.size() > 0) {
+			if (!props.isEmpty()) {
 				String uid = (String)props.get(props.size() - 1);
 				if (uids.contains(uid)) {
 					continue;
@@ -263,7 +273,7 @@ public class WbConverter {
 					case "clipart":
 						processClipart(wb, props);
 						break;
-					case "image":
+					case TYPE_IMAGE:
 						processImage(wb, props);
 						break;
 					case "swf":

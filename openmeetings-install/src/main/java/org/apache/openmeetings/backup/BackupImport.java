@@ -435,7 +435,7 @@ public class BackupImport {
 		FileUtils.deleteDirectory(f);
 	}
 
-	private BackupVersion getVersion(Serializer ser, File f) throws Exception {
+	private static BackupVersion getVersion(Serializer ser, File f) throws Exception {
 		List<BackupVersion> list = readList(ser, f, "version.xml", "version", BackupVersion.class, true);
 		return list.isEmpty() ? new BackupVersion() : list.get(0);
 	}
@@ -446,7 +446,7 @@ public class BackupImport {
 	private void importConfigs(File f) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
-		RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+		RegistryMatcher matcher = new RegistryMatcher();
 		Serializer serializer = new Persister(strategy, matcher);
 
 		matcher.bind(Long.class, LongTransform.class);
@@ -890,7 +890,7 @@ public class BackupImport {
 		log.info("File explorer item import complete, starting room poll import");
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
-		RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+		RegistryMatcher matcher = new RegistryMatcher();
 		Serializer serializer = new Persister(strategy, matcher);
 
 		matcher.bind(Integer.class, IntegerTransform.class);
@@ -989,6 +989,126 @@ public class BackupImport {
 		return null;
 	}
 
+	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
+		return readUserList(new InputSource(xml), listNodeName);
+	}
+
+	public List<User> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
+		File xml = new File(baseDir, fileName);
+		if (!xml.exists()) {
+			throw new BackupException(fileName + " missing");
+		}
+
+		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
+	}
+
+	private static Long getProfileId(File f) {
+		String n = f.getName();
+		if (n.indexOf(PROFILES_PREFIX) > -1) {
+			return importLongType(n.substring(PROFILES_PREFIX.length()));
+		}
+		return null;
+	}
+
+	private void importFolders(File importBaseDir) throws IOException {
+		// Now check the room files and import them
+		File roomFilesFolder = new File(importBaseDir, BCKP_ROOM_FILES);
+
+		File uploadDir = getUploadDir();
+
+		log.debug("roomFilesFolder PATH " + roomFilesFolder.getCanonicalPath());
+
+		if (roomFilesFolder.exists()) {
+			for (File file : roomFilesFolder.listFiles()) {
+				if (file.isDirectory()) {
+					String fName = file.getName();
+					if (PROFILES_DIR.equals(fName)) {
+						// profile should correspond to the new user id
+						for (File profile : file.listFiles()) {
+							Long oldId = getProfileId(profile);
+							Long id = oldId != null ? userMap.get(oldId) : null;
+							if (id != null) {
+								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
+							}
+						}
+					} else if (FILES_DIR.equals(fName)) {
+						log.debug("Entered FILES folder ");
+						for (File rf : file.listFiles()) {
+							// going to fix images
+							if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
+								FileUtils.copyFileToDirectory(rf, getImgDir(rf.getName()));
+							} else {
+								FileUtils.copyDirectory(rf, new File(getUploadFilesDir(), rf.getName()));
+							}
+						}
+					} else {
+						// check if folder is room folder, store it under new id if necessary
+						Long oldId = importLongType(fName);
+						Long id = oldId != null ? roomMap.get(oldId) : null;
+						if (id != null) {
+							FileUtils.copyDirectory(file, getUploadRoomDir(id.toString()));
+						} else {
+							FileUtils.copyDirectory(file, new File(uploadDir, fName));
+						}
+					}
+				}
+			}
+		}
+
+		// Now check the recordings and import them
+		File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
+		log.debug("sourceDirRec PATH " + recDir.getCanonicalPath());
+		if (recDir.exists()) {
+			for (File r : recDir.listFiles()) {
+				String n = fileMap.get(r.getName());
+				if (n != null) {
+					FileUtils.copyFile(r, new File(getStreamsHibernateDir(), n));
+				} else {
+					FileUtils.copyFileToDirectory(r, getStreamsHibernateDir());
+				}
+			}
+		}
+	}
+
+	private static File getImgDir(String name) {
+		int start = name.startsWith(THUMB_IMG_PREFIX) ? THUMB_IMG_PREFIX.length() : 0;
+		String hash = name.substring(start, name.length() - EXTENSION_JPG.length() - 1);
+		return new File(getUploadFilesDir(), hash);
+	}
+
+	private static Long importLongType(String value) {
+		Long val = null;
+		try {
+			val = Long.valueOf(value);
+		} catch (Exception e) {
+			// no-op
+		}
+		return val;
+	}
+
+	private static String getCountry(String countryId) {
+		if (countries.isEmpty()) {
+			try (InputStream is = BackupImport.class.getResourceAsStream("countries.properties")) {
+				countries.load(is);
+			} catch (IOException e) {
+				log.error("Unexpected exception during countries import", e);
+			}
+		}
+		return countries.getProperty(String.format("country.%s", countryId));
+	}
+
+	private void convertOldPresentation(FileItem fi) {
+		File f = fi.getOriginal();
+		if (f != null && f.exists()) {
+			try {
+				StoredFile sf = new StoredFile(fi.getHash(), getFileExt(f.getName()), f);
+				docConverter.convertPDF(fi, sf);
+			} catch (Exception e) {
+				log.error("Unexpected exception while converting OLD format presentations", e);
+			}
+		}
+	}
+
 	//TODO (need to be removed in later versions) HACK to fix old properties
 	public List<FileItem> readFileItemList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<FileItem> list = new ArrayList<>();
@@ -996,7 +1116,7 @@ public class BackupImport {
 		if (xml.exists()) {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			RegistryMatcher matcher = new RegistryMatcher();
 			Serializer ser = new Persister(strategy, matcher);
 
 			matcher.bind(Long.class, LongTransform.class);
@@ -1068,14 +1188,13 @@ public class BackupImport {
 		return list;
 	}
 
-	//TODO (need to be removed in later versions) HACK to fix old properties
 	public List<Recording> readRecordingList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<Recording> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			RegistryMatcher matcher = new RegistryMatcher();
 			Serializer ser = new Persister(strategy, matcher);
 
 			matcher.bind(Long.class, LongTransform.class);
@@ -1117,20 +1236,6 @@ public class BackupImport {
 		return list;
 	}
 
-	public List<User> readUserList(InputStream xml, String listNodeName) throws Exception {
-		return readUserList(new InputSource(xml), listNodeName);
-	}
-
-	public List<User> readUserList(File baseDir, String fileName, String listNodeName) throws Exception {
-		File xml = new File(baseDir, fileName);
-		if (!xml.exists()) {
-			throw new BackupException(fileName + " missing");
-		}
-
-		return readUserList(new InputSource(xml.toURI().toASCIIString()), listNodeName);
-	}
-
-	//TODO (need to be removed in later versions) HACK to add external attendees previously stored in MeetingMember structure
 	private List<MeetingMember> readMeetingMemberList(File baseDir, String filename, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -1206,7 +1311,6 @@ public class BackupImport {
 		return list;
 	}
 
-	//TODO (need to be removed in later versions) HACK to fix 2 deleted nodes in users.xml and inline Address and sipData
 	private List<User> readUserList(InputSource xml, String listNodeName) throws Exception {
 		Registry registry = new Registry();
 		Strategy strategy = new RegistryStrategy(registry);
@@ -1349,14 +1453,13 @@ public class BackupImport {
 		return list;
 	}
 
-	//TODO (need to be removed in later versions) HACK to fix old properties
 	private List<Room> readRoomList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<Room> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
 		if (xml.exists()) {
 			Registry registry = new Registry();
 			Strategy strategy = new RegistryStrategy(registry);
-			RegistryMatcher matcher = new RegistryMatcher(); //TODO need to be removed in the later versions
+			RegistryMatcher matcher = new RegistryMatcher();
 			Serializer ser = new Persister(strategy, matcher);
 
 			matcher.bind(Long.class, LongTransform.class);
@@ -1417,112 +1520,5 @@ public class BackupImport {
 			}
 		}
 		return list;
-	}
-
-	private static Long getProfileId(File f) {
-		String n = f.getName();
-		if (n.indexOf(PROFILES_PREFIX) > -1) {
-			return importLongType(n.substring(PROFILES_PREFIX.length()));
-		}
-		return null;
-	}
-
-	private void importFolders(File importBaseDir) throws IOException {
-		// Now check the room files and import them
-		File roomFilesFolder = new File(importBaseDir, BCKP_ROOM_FILES);
-
-		File uploadDir = getUploadDir();
-
-		log.debug("roomFilesFolder PATH " + roomFilesFolder.getCanonicalPath());
-
-		if (roomFilesFolder.exists()) {
-			for (File file : roomFilesFolder.listFiles()) {
-				if (file.isDirectory()) {
-					String fName = file.getName();
-					if (PROFILES_DIR.equals(fName)) {
-						// profile should correspond to the new user id
-						for (File profile : file.listFiles()) {
-							Long oldId = getProfileId(profile);
-							Long id = oldId != null ? userMap.get(oldId) : null;
-							if (id != null) {
-								FileUtils.copyDirectory(profile, getUploadProfilesUserDir(id));
-							}
-						}
-					} else if (FILES_DIR.equals(fName)) {
-						log.debug("Entered FILES folder ");
-						for (File rf : file.listFiles()) {
-							// going to fix images
-							if (rf.isFile() && rf.getName().endsWith(EXTENSION_JPG)) {
-								FileUtils.copyFileToDirectory(rf, getImgDir(rf.getName()));
-							} else {
-								FileUtils.copyDirectory(rf, new File(getUploadFilesDir(), rf.getName()));
-							}
-						}
-					} else {
-						// check if folder is room folder, store it under new id if necessary
-						Long oldId = importLongType(fName);
-						Long id = oldId != null ? roomMap.get(oldId) : null;
-						if (id != null) {
-							FileUtils.copyDirectory(file, getUploadRoomDir(id.toString()));
-						} else {
-							FileUtils.copyDirectory(file, new File(uploadDir, fName));
-						}
-					}
-				}
-			}
-		}
-
-		// Now check the recordings and import them
-		File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
-		log.debug("sourceDirRec PATH " + recDir.getCanonicalPath());
-		if (recDir.exists()) {
-			for (File r : recDir.listFiles()) {
-				String n = fileMap.get(r.getName());
-				if (n != null) {
-					FileUtils.copyFile(r, new File(getStreamsHibernateDir(), n));
-				} else {
-					FileUtils.copyFileToDirectory(r, getStreamsHibernateDir());
-				}
-			}
-		}
-	}
-
-	private static File getImgDir(String name) {
-		int start = name.startsWith(THUMB_IMG_PREFIX) ? THUMB_IMG_PREFIX.length() : 0;
-		String hash = name.substring(start, name.length() - EXTENSION_JPG.length() - 1);
-		return new File(getUploadFilesDir(), hash);
-	}
-
-	private static Long importLongType(String value) {
-		Long val = null;
-		try {
-			val = Long.valueOf(value);
-		} catch (Exception e) {
-			// no-op
-		}
-		return val;
-	}
-
-	private static String getCountry(String countryId) {
-		if (countries.isEmpty()) {
-			try (InputStream is = BackupImport.class.getResourceAsStream("countries.properties")) {
-				countries.load(is);
-			} catch (IOException e) {
-				log.error("Unexpected exception during countries import", e);
-			}
-		}
-		return countries.getProperty(String.format("country.%s", countryId));
-	}
-
-	private void convertOldPresentation(FileItem fi) {
-		File f = fi.getOriginal();
-		if (f != null && f.exists()) {
-			try {
-				StoredFile sf = new StoredFile(fi.getHash(), getFileExt(f.getName()), f);
-				docConverter.convertPDF(fi, sf);
-			} catch (Exception e) {
-				log.error("Unexpected exception while converting OLD format presentations", e);
-			}
-		}
 	}
 }

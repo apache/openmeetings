@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -223,7 +226,7 @@ public class WbPanel extends AbstractWbPanel {
 			case modifyObj:
 			{
 				JSONObject o = obj.optJSONObject("obj");
-				if (o != null && "pointer".equals(o.getString("type"))) {
+				if (o != null && "pointer".equals(o.getString(ATTR_TYPE))) {
 					sendWbOthers(a, obj);
 					return;
 				}
@@ -263,7 +266,7 @@ public class WbPanel extends AbstractWbPanel {
 				for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
 					Whiteboard wb = entry.getValue();
 					for (JSONObject o : wb.list()) {
-						String ft = o.optString("fileType");
+						String ft = o.optString(ATTR_FILE_TYPE);
 						if (BaseFileItem.Type.Recording.name().equals(ft) || BaseFileItem.Type.Video.name().equals(ft)) {
 							JSONObject _sts = o.optJSONObject("status");
 							if (_sts == null) {
@@ -455,7 +458,7 @@ public class WbPanel extends AbstractWbPanel {
 					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
 					String uid = obj.getString("uid");
 					JSONObject po = wb.get(uid);
-					if (po != null && "video".equals(po.getString("type"))) {
+					if (po != null && "video".equals(po.getString(ATTR_TYPE))) {
 						JSONObject ns = obj.getJSONObject("status");
 						po.put("status", ns.put("updated", System.currentTimeMillis()));
 						WhiteboardCache.update(roomId, wb.put(uid, po));
@@ -496,9 +499,9 @@ public class WbPanel extends AbstractWbPanel {
 
 	private JSONObject addFileUrl(String ruid, JSONObject _file, Consumer<BaseFileItem> consumer) {
 		try {
-			final long fid = _file.optLong("fileId", -1);
+			final long fid = _file.optLong(ATTR_FILE_ID, -1);
 			if (fid > 0) {
-				BaseFileItem fi = FileItem.Type.Recording.name().equals(_file.optString("fileType"))
+				BaseFileItem fi = FileItem.Type.Recording.name().equals(_file.optString(ATTR_FILE_TYPE))
 						? getBean(RecordingDao.class).get(fid)
 						: getBean(FileItemDao.class).get(fid);
 				if (fi != null) {
@@ -585,10 +588,10 @@ public class WbPanel extends AbstractWbPanel {
 				default:
 				{
 					JSONObject file = new JSONObject()
-							.put("fileId", fi.getId())
-							.put("fileType", fi.getType().name())
+							.put(ATTR_FILE_ID, fi.getId())
+							.put(ATTR_FILE_TYPE, fi.getType().name())
 							.put("count", fi.getCount())
-							.put("type", "image")
+							.put(ATTR_TYPE, "image")
 							.put("left", UPLOAD_WB_LEFT)
 							.put("top", UPLOAD_WB_TOP)
 							.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
@@ -597,7 +600,7 @@ public class WbPanel extends AbstractWbPanel {
 							.put("slide", wb.getSlide())
 							;
 					if (FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType()) {
-						file.put("type", "video");
+						file.put(ATTR_TYPE, "video");
 						file.put("status", new JSONObject()
 								.put("paused", true)
 								.put("pos", 0.0)

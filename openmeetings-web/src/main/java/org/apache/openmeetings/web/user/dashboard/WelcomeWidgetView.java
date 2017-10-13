@@ -49,7 +49,6 @@ public class WelcomeWidgetView extends WidgetView {
 
 		User u = getBean(UserDao.class).get(getUserId());
 		add(new UploadableProfileImagePanel("img", getUserId()));
-		//TODO this need to be aligned according to Locale
 		add(new Label("firstname", Model.of(u.getFirstname())));
 		add(new Label("lastname", Model.of(u.getLastname())));
 		add(new Label("tz", Model.of(u.getTimeZoneId())));

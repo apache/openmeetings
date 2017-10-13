@@ -6,7 +6,6 @@ var Text = function(wb, s) {
 	text.stroke.width = 12; //fontSize
 	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
-	//TODO font size, background color
 
 	text.mouseDown = function(o) {
 		const canvas = this

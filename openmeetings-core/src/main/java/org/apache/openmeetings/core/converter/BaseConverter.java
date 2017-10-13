@@ -377,7 +377,7 @@ public abstract class BaseConverter {
 				"-c:a", "libfaac",
 				"-c:a", "libfdk_aac",
 				"-ar", "22050",
-				"-b:a", "32k", //TODO add quality constants
+				"-b:a", "32k",
 				"-s", getDimensions(r), //
 				mp4path
 				));
@@ -385,7 +385,6 @@ public abstract class BaseConverter {
 	}
 
 	protected String convertToMp4(Recording r, List<String> _argv, List<ProcessResult> returnLog) throws IOException {
-		//TODO add faststart, move filepaths to helpers
 		String mp4path = r.getFile().getCanonicalPath();
 		List<String> argv = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
 		argv.addAll(_argv);
