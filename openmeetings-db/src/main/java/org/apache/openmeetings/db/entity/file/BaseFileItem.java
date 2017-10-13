@@ -31,7 +31,10 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadWmlDir;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,6 +52,7 @@ import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.openmeetings.db.entity.HistoricalEntity;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.simpleframework.xml.Element;
 
 @Entity
@@ -295,6 +299,20 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		return f;
 	}
 
+	public final File getOriginal() {
+		File f = getFile(null);
+		if (f != null) {
+			File p = f.getParentFile();
+			if (p != null && p.exists()) {
+				File[] ff = p.listFiles(new OriginalFilter());
+				if (ff != null && ff.length > 0) {
+					f = ff[0];
+				}
+			}
+		}
+		return f;
+	}
+
 	public final boolean exists() {
 		return exists(null);
 	}
@@ -312,50 +330,51 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((ownerId == null) ? 0 : ownerId.hashCode());
-		result = prime * result + ((parentId == null) ? 0 : parentId.hashCode());
-		result = prime * result + ((roomId == null) ? 0 : roomId.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		BaseFileItem other = (BaseFileItem) obj;
 		if (hash == null) {
-			if (other.hash != null)
+			if (other.hash != null) {
 				return false;
-		} else if (!hash.equals(other.hash))
+			}
+		} else if (!hash.equals(other.hash)) {
 			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
+		}
+		if (type != other.type) {
 			return false;
-		if (ownerId == null) {
-			if (other.ownerId != null)
-				return false;
-		} else if (!ownerId.equals(other.ownerId))
-			return false;
-		if (parentId == null) {
-			if (other.parentId != null)
-				return false;
-		} else if (!parentId.equals(other.parentId))
-			return false;
-		if (roomId == null) {
-			if (other.roomId != null)
-				return false;
-		} else if (!roomId.equals(other.roomId))
-			return false;
-		if (type != other.type)
-			return false;
+		}
 		return true;
+	}
+
+	private class OriginalFilter implements FileFilter {
+		Set<String> exclusions = new HashSet<>();
+
+		OriginalFilter() {
+			exclusions.add(EXTENSION_JPG);
+			exclusions.add("swf");
+			if (Type.Presentation == getType()) {
+				exclusions.add(EXTENSION_PDF);
+			}
+		}
+
+		@Override
+		public boolean accept(File f) {
+			String n = f.getName();
+			String ext = OmFileHelper.getFileExt(n);
+			return n.startsWith(getHash()) && !exclusions.contains(ext);
+		}
 	}
 }

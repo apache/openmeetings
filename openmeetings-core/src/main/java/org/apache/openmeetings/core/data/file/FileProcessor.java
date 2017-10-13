@@ -54,7 +54,7 @@ public class FileProcessor {
 	@Autowired
 	private ImageConverter imageConverter;
 	@Autowired
-	private DocumentConverter generatePDF;
+	private DocumentConverter docConverter;
 
 	//TODO this method need to be refactored to throw exceptions
 	public ProcessResultList processFile(FileItem f, InputStream is) throws Exception {
@@ -111,7 +111,7 @@ public class FileProcessor {
 			if (isOffice || isPdf) {
 				copyFile(temp, file);
 				// convert to pdf, thumbs, swf and xml-description
-				result = generatePDF.convertPDF(f, sf);
+				result = docConverter.convertPDF(f, sf);
 			} else if (isChart) {
 				//TODO should be implemented
 				log.debug("uploaded chart file");

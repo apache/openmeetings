@@ -18,17 +18,10 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
-
 import java.io.File;
-import java.io.FileFilter;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import com.googlecode.wicket.jquery.ui.JQueryIcon;
@@ -57,36 +50,11 @@ public class DownloadMenuItem extends MenuItem {
 	@Override
 	public void onClick(AjaxRequestTarget target) {
 		BaseFileItem fi = tree.getLastSelected();
-		File f = fi.getFile(ext);
+		File f = ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())
+				? fi.getOriginal() : fi.getFile(ext);
 		if (f != null && f.exists()) {
-			if (ext == null && (Type.Image == fi.getType() || Type.Presentation == fi.getType())) {
-				File[] ff = f.getParentFile().listFiles(new OriginalFilter(fi));
-				if (ff != null && ff.length > 0) {
-					f = ff[0];
-				}
-			}
 			tree.dwnldFile = f;
 			tree.downloader.initiate(target);
-		}
-	}
-
-	private static class OriginalFilter implements FileFilter {
-		final BaseFileItem fi;
-		Set<String> exclusions = new HashSet<>();
-
-		OriginalFilter(BaseFileItem fi) {
-			this.fi = fi;
-			exclusions.add(EXTENSION_JPG);
-			if (Type.Presentation == fi.getType()) {
-				exclusions.add(EXTENSION_PDF);
-			}
-		}
-
-		@Override
-		public boolean accept(File f) {
-			String n = f.getName();
-			String ext = OmFileHelper.getFileExt(n);
-			return n.startsWith(fi.getHash()) && !exclusions.contains(ext);
 		}
 	}
 }

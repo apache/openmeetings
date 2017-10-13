@@ -140,4 +140,9 @@ public class BackupVersion implements Serializable, Comparable<BackupVersion> {
 		}
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s.%s.%s", major, minor, micro);
+	}
 }

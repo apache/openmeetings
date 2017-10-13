@@ -34,6 +34,7 @@ import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.THUMB_IMG_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
@@ -137,6 +138,7 @@ import org.apache.openmeetings.backup.converter.RoomConverter;
 import org.apache.openmeetings.backup.converter.RoomTypeConverter;
 import org.apache.openmeetings.backup.converter.SalutationConverter;
 import org.apache.openmeetings.backup.converter.UserConverter;
+import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -184,6 +186,7 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -316,6 +319,8 @@ public class BackupImport {
 	private OAuth2Dao auth2Dao;
 	@Autowired
 	private GroupDao groupDao;
+	@Autowired
+	private DocumentConverter docConverter;
 
 	private final Map<Long, Long> userMap = new HashMap<>();
 	private final Map<Long, Long> groupMap = new HashMap<>();
@@ -398,7 +403,7 @@ public class BackupImport {
 		importPrivateMsgFolders(f, simpleSerializer);
 		importContacts(f);
 		importPrivateMsgs(f);
-		importFiles(f);
+		importFiles(f, ver.compareTo(BackupVersion.get("4.0.0")) < 0);
 		importPolls(f);
 		importRoomFiles(f);
 
@@ -408,6 +413,13 @@ public class BackupImport {
 		 */
 		importFolders(f);
 
+		if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
+			for (BaseFileItem bfi : fileItemDao.get()) {
+				if (BaseFileItem.Type.Presentation == bfi.getType()) {
+					convertOldPresentation(bfi);
+				}
+			}
+		}
 		log.info("File explorer item import complete, clearing temp files");
 
 		FileUtils.deleteDirectory(f);
@@ -835,7 +847,7 @@ public class BackupImport {
 	/*
 	 * ##################### Import File-Explorer Items
 	 */
-	private void importFiles(File f) throws Exception {
+	private void importFiles(File f, boolean old) throws Exception {
 		log.info("Private message import complete, starting file explorer item import");
 		List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
 		for (FileItem file : list) {
@@ -1487,5 +1499,17 @@ public class BackupImport {
 			}
 		}
 		return countries.getProperty(String.format("country.%s", countryId));
+	}
+
+	private void convertOldPresentation(BaseFileItem bfi) {
+		File f = bfi.getOriginal();
+		if (f != null && f.exists()) {
+			try {
+				StoredFile sf = new StoredFile(bfi.getHash(), getFileExt(f.getName()), f);
+				docConverter.convertPDF((FileItem)bfi, sf);
+			} catch (Exception e) {
+				log.error("Unexpected exception while converting OLD format presentations", e);
+			}
+		}
 	}
 }
