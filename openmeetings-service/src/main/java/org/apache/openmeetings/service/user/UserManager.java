@@ -54,6 +54,7 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
+import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
@@ -208,7 +209,16 @@ public class UserManager implements IUserManager {
 				if (sendWelcomeMessage && email.length() != 0) {
 					emailManagement.sendMail(login, email, hash, sendConfirmation, languageId);
 				}
-				Address adr =  userDao.getAddress(street, zip, town, country, additionalname, fax, phone, email);
+				Address a =  new Address();
+				a.setStreet(street);
+				a.setZip(zip);
+				a.setTown(town);
+				a.setCountry(country);
+				a.setAdditionalname(additionalname);
+				a.setComment("");
+				a.setFax(fax);
+				a.setPhone(phone);
+				a.setEmail(email);
 
 				// If this user needs first to click his E-Mail verification
 				// code then set the status to 0
@@ -216,13 +226,42 @@ public class UserManager implements IUserManager {
 					rights.remove(Right.Login);
 				}
 
-				User u = userDao.addUser(rights, firstname, login, lastname, languageId,
-						password, adr, sendSMS, age, hash, timezone,
-						forceTimeZoneCheck, userOffers, userSearchs, showContactData,
-						showContactDataToContacts, null, null, groups, null);
+				User u = new User();
+				u.setFirstname(firstname);
+				u.setLogin(login);
+				u.setLastname(lastname);
+				u.setAge(age);
+				u.setAddress(a);
+				u.setSendSMS(sendSMS);
+				u.setRights(rights);
+				u.setLastlogin(new Date());
+				u.setSalutation(Salutation.mr);
+				u.setActivatehash(hash);
+				u.setTimeZoneId(timezone.getID());
+				u.setForceTimeZoneCheck(forceTimeZoneCheck);
+				if (!Strings.isEmpty(u.getExternalType())) {
+					u.setType(Type.external);
+				}
+
+				u.setUserOffers(userOffers);
+				u.setUserSearchs(userSearchs);
+				u.setShowContactData(showContactData);
+				u.setShowContactDataToContacts(showContactDataToContacts);
+
+				// this is needed cause the language is not a needed data at registering
+				u.setLanguageId(languageId != 0 ? languageId : 1);
+				if (!Strings.isEmpty(password)) {
+					u.updatePassword(cfgDao, password);
+				}
+				if (groups != null) {
+					for (Long grpId : groups) {
+						u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
+					}
+				}
+				u = userDao.update(u, null);
 				log.debug("Added user-Id " + u.getId());
 
-				if (adr.getId() != null && u.getId() != null) {
+				if (a.getId() != null && u.getId() != null) {
 					return u;
 				}
 			} else {

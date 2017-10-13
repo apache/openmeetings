@@ -108,10 +108,6 @@ public class PrivateMessage implements IDataProviderEntity {
 	@Element(data = true)
 	private boolean isRead;
 
-	@Column(name = "parent_message_id")
-	@Element(data = true, required = false)
-	private Long parentMessage;
-
 	@Column(name = "private_message_folder_id")
 	@Element(data = true, name = "privateMessageFolderId", required = false)
 	private Long folderId;
@@ -137,7 +133,6 @@ public class PrivateMessage implements IDataProviderEntity {
 		bookedRoom = copy.bookedRoom;
 		room = copy.room;
 		isRead = copy.isRead;
-		parentMessage = copy.parentMessage;
 		folderId = copy.folderId;
 		isContactRequest = copy.isContactRequest;
 		userContactId = copy.userContactId;
@@ -215,14 +210,6 @@ public class PrivateMessage implements IDataProviderEntity {
 
 	public void setRoom(Room room) {
 		this.room = room;
-	}
-
-	public Long getParentMessage() {
-		return parentMessage;
-	}
-
-	public void setParentMessage(Long parentMessage) {
-		this.parentMessage = parentMessage;
 	}
 
 	public Long getFolderId() {

@@ -38,8 +38,6 @@ public class StreamClient implements IClient {
 	private String sid = null;
 	private boolean mod = false;
 	private boolean superMod = false;
-	private boolean canGiveAudio = false;
-	private boolean canVideo = false;
 	private Date connectedSince;
 	private String remoteAddress;
 	private int userport;
@@ -145,22 +143,6 @@ public class StreamClient implements IClient {
 
 	public void setSuperMod(boolean superMod) {
 		this.superMod = superMod;
-	}
-
-	public boolean isCanGiveAudio() {
-		return canGiveAudio;
-	}
-
-	public void setCanGiveAudio(boolean canGiveAudio) {
-		this.canGiveAudio = canGiveAudio;
-	}
-
-	public boolean isCanVideo() {
-		return canVideo;
-	}
-
-	public void setCanVideo(boolean canVideo) {
-		this.canVideo = canVideo;
 	}
 
 	public Date getConnectedSince() {

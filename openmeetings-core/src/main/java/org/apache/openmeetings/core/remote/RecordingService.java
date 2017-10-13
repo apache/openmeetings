@@ -35,7 +35,6 @@ import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -89,8 +88,6 @@ public class RecordingService implements IPendingServiceCallback {
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
-	private RecordingMetaDeltaDao metaDeltaDao;
-	@Autowired
 	private RecordingMetaDataDao metaDataDao;
 
 	@Override
@@ -142,7 +139,6 @@ public class RecordingService implements IPendingServiceCallback {
 
 			// Update Client and set Flag
 			client.setRecordingStarted(true);
-			client.setRecordingId(recordingId);
 			if (!(client instanceof Client)) {
 				IApplication iapp = getApp();
 				Client c = iapp.getOmClientBySid(client.getSid());
@@ -239,7 +235,7 @@ public class RecordingService implements IPendingServiceCallback {
 		// Save the stream to disk.
 		log.debug("### stream: [{}, name: {}, scope: {}, metaId: {}, sharing ? {}, interview ? {}]"
 				, stream, streamName, conn.getScope(), metaId, isScreenSharing, isInterview);
-		StreamListener streamListener = new StreamListener(!isScreenSharing, streamName, conn.getScope(), metaId, isScreenSharing, isInterview, metaDataDao, metaDeltaDao);
+		StreamListener streamListener = new StreamListener(!isScreenSharing, streamName, conn.getScope(), metaId, isScreenSharing, isInterview);
 
 		streamListeners.put(metaId, streamListener);
 		stream.addStreamListener(streamListener);
@@ -340,16 +336,14 @@ public class RecordingService implements IPendingServiceCallback {
 		}
 
 		// If its the recording client we need another type of Meta Data
-		boolean audioOnly = "a".equals(rcl.getAvsettings());
-		boolean videoOnly = "v".equals(rcl.getAvsettings());
 		if (broadcastId != null) {
+			boolean audioOnly = "a".equals(rcl.getAvsettings());
+			boolean videoOnly = "v".equals(rcl.getAvsettings());
 			if (Client.Type.sharing == rcl.getType()) {
-				if (rcl.getRecordingId() != null && (rcl.isSharingStarted() || rcl.isRecordingStarted())) {
+				if (rcl.isSharingStarted() || rcl.isRecordingStarted()) {
 					String streamName = generateFileName(recordingId, broadcastId);
 
-					Long metaId = metaDataDao.add(
-							recordingId, rcl.getFirstname() + " " + rcl.getLastname(), now, false,
-							false, true, streamName, null);
+					Long metaId = metaDataDao.add(recordingId, now, false, false, true, streamName, null);
 
 					// Start FLV Recording
 					addListener(conn, rcl.getBroadcastId(), streamName, metaId, true, isInterview);
@@ -363,8 +357,7 @@ public class RecordingService implements IPendingServiceCallback {
 				// But we only record av or a, video only is not interesting
 				String streamName = generateFileName(recordingId, broadcastId);
 
-				Long metaId = metaDataDao.add(recordingId,
-						rcl.getFirstname() + " " + rcl.getLastname(), now, audioOnly, videoOnly, false, streamName,
+				Long metaId = metaDataDao.add(recordingId, now, audioOnly, videoOnly, false, streamName,
 						rcl.getInterviewPodId());
 
 				// Start FLV recording

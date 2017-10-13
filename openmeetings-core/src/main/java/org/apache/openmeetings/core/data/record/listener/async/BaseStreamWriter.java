@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -75,12 +76,12 @@ public abstract class BaseStreamWriter implements Runnable {
 	protected final RecordingMetaDataDao metaDataDao;
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<>();
 
-	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData, RecordingMetaDataDao metaDataDao) {
+	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData) {
 		startedSessionTimeDate = new Date();
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
 		this.metaDataId = metaDataId;
-		this.metaDataDao = metaDataDao;
+		this.metaDataDao = getApp().getOmBean(RecordingMetaDataDao.class);
 		this.scope = scope;
 		try {
 			init();

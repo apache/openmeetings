@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
+import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.red5.io.IoConstants.TYPE_AUDIO;
 import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
@@ -25,7 +26,6 @@ import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
@@ -50,11 +50,10 @@ public class StreamAudioWriter extends BaseStreamWriter {
 
 	private boolean isInterview = false;
 
-	public StreamAudioWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,
-			boolean isInterview, RecordingMetaDataDao metaDataDao, RecordingMetaDeltaDao metaDeltaDao) {
-		super(streamName, scope, metaDataId, isScreenData, metaDataDao);
+	public StreamAudioWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData, boolean isInterview) {
+		super(streamName, scope, metaDataId, isScreenData);
 
-		this.metaDeltaDao = metaDeltaDao;
+		this.metaDeltaDao = getApp().getOmBean(RecordingMetaDeltaDao.class);
 		this.isInterview = isInterview;
 	}
 

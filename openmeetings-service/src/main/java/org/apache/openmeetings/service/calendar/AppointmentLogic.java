@@ -24,7 +24,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -32,18 +31,12 @@ import java.util.TimeZone;
 import org.apache.openmeetings.core.notifier.NotifierService;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
-import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,15 +51,9 @@ public class AppointmentLogic {
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
-	private RoomDao roomDao;
-	@Autowired
 	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private InvitationDao invitationDao;
-	@Autowired
-	private UserDao userDao;
-	@Autowired
-	private MeetingMemberDao meetingMemberDao;
 	@Autowired
 	private NotifierService notifierService;
 
@@ -151,68 +138,5 @@ public class AppointmentLogic {
 				sendReminder(mm.getUser(), a, inv);
 			}
 		}
-	}
-
-	public Appointment getAppointment(String appointmentName,
-			String appointmentLocation, String appointmentDescription,
-			Calendar appointmentstart, Calendar appointmentend,
-			Boolean isDaily, Boolean isWeekly, Boolean isMonthly,
-			Boolean isYearly, String remind, String[] mmClient,
-			Long roomType, Long languageId,
-			boolean isPasswordProtected, String password, long roomId, Long userId) {
-		Appointment a = new Appointment();
-		a.setTitle(appointmentName);
-		a.setLocation(appointmentLocation);
-		a.setDescription(appointmentDescription);
-		a.setStart(appointmentstart.getTime());
-		a.setEnd(appointmentend.getTime());
-		a.setIsDaily(isDaily);
-		a.setIsWeekly(isWeekly);
-		a.setIsMonthly(isMonthly);
-		a.setIsYearly(isYearly);
-		a.setReminder(Reminder.valueOf(remind));
-		if (roomId > 0) {
-			a.setRoom(roomDao.get(roomId));
-		} else {
-			a.setRoom(new Room());
-			a.getRoom().setComment(appointmentDescription);
-			a.getRoom().setName(appointmentName);
-			a.getRoom().setType(Room.Type.get(roomType));
-			a.getRoom().setAppointment(true);
-		}
-		a.setOwner(userDao.get(userId));
-		a.setPasswordProtected(isPasswordProtected);
-		a.setPassword(password);
-		a.setMeetingMembers(new ArrayList<MeetingMember>());
-		for (String singleClient : mmClient) {
-			if (Strings.isEmpty(singleClient)) {
-				continue;
-			}
-			MeetingMember mm = getMeetingMember(userId, languageId, singleClient);
-			mm.setAppointment(a);
-			a.getMeetingMembers().add(mm);
-		}
-		return a;
-	}
-
-	public MeetingMember getMeetingMember(Long userId, Long langId, String str) {
-		String[] params = str.split(",");
-
-		try {
-			return meetingMemberDao.get(Long.valueOf(params[0]));
-		} catch (Exception e) {
-			//no-op
-		}
-		MeetingMember mm = new MeetingMember();
-		try {
-			mm.setUser(userDao.get(Long.valueOf(params[4])));
-		} catch (Exception e) {
-			//no-op
-		}
-		if (mm.getUser() == null) {
-			mm.setUser(userDao.getContact(params[3], params[1], params[2], langId, params[5], userId));
-		}
-
-		return mm;
 	}
 }

@@ -24,7 +24,6 @@ import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -34,10 +33,8 @@ public class StreamVideoWriter extends BaseStreamWriter {
 	private static final Logger log = Red5LoggerFactory.getLogger(StreamVideoWriter.class, getWebAppRootKey());
 	private Date startedSessionScreenTimeDate = null;
 
-	public StreamVideoWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData,
-			RecordingMetaDataDao metaDataDao) {
-
-		super(streamName, scope, metaDataId, isScreenData, metaDataDao);
+	public StreamVideoWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData) {
+		super(streamName, scope, metaDataId, isScreenData);
 	}
 
 	@Override

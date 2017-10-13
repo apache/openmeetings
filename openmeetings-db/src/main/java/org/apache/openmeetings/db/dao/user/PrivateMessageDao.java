@@ -33,7 +33,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
@@ -49,8 +48,8 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	@PersistenceContext
 	private EntityManager em;
 
-	public Long addPrivateMessage(String subject, String message, Long parentMessageId,
-			User from, User to, User owner, Boolean bookedRoom, Room room,
+	public Long addPrivateMessage(String subject, String message,
+			User from, User to, User owner,
 			boolean isContactRequest, Long userContactId) {
 		try {
 			PrivateMessage privateMessage = new PrivateMessage();
@@ -60,9 +59,6 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 			privateMessage.setFrom(from);
 			privateMessage.setTo(to);
 			privateMessage.setOwner(owner);
-			privateMessage.setBookedRoom(Boolean.TRUE.equals(bookedRoom));
-			privateMessage.setRoom(room);
-			privateMessage.setParentMessage(parentMessageId);
 			privateMessage.setFolderId(INBOX_FOLDER_ID);
 			privateMessage.setIsRead(false);
 			privateMessage.setIsContactRequest(isContactRequest);

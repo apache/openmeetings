@@ -272,8 +272,6 @@ public abstract class BaseConverter {
 
 				File outputWav = new File(streamFolder, metaData.getStreamName() + "_WAVE.wav");
 
-				metaData.setWavAudioData(outputWav.getName());
-
 				log.debug("FLV File Name: {} Length: {} ", inputFlvFile.getName(), inputFlvFile.length());
 
 				if (inputFlvFile.exists()) {

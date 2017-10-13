@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.persistence.EntityManager;
@@ -48,7 +47,6 @@ import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -84,8 +82,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private GroupDao groupDao;
 	@Autowired
 	private TimezoneUtil timezoneUtil;
 
@@ -623,65 +619,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 		u.setLastlogin(new Date());
 		return update(u, u.getId());
-	}
-
-	public Address getAddress(String street, String zip, String town, String country, String additionalname, String fax, String phone, String email) {
-		Address a =  new Address();
-		a.setStreet(street);
-		a.setZip(zip);
-		a.setTown(town);
-		a.setCountry(country);
-		a.setAdditionalname(additionalname);
-		a.setComment("");
-		a.setFax(fax);
-		a.setPhone(phone);
-		a.setEmail(email);
-		return a;
-	}
-
-	public User addUser(Set<Right> rights, String firstname, String login, String lastname, long languageId,
-			String userpass, Address adress, boolean sendSMS, Date age, String hash, TimeZone timezone,
-			boolean forceTimeZoneCheck, String userOffers, String userSearchs, boolean showContactData,
-			boolean showContactDataToContacts, String externalId, String externalType, List<Long> groupIds, String pictureuri) throws NoSuchAlgorithmException {
-
-		User u = new User();
-		u.setFirstname(firstname);
-		u.setLogin(login);
-		u.setLastname(lastname);
-		u.setAge(age);
-		u.setAddress(adress);
-		u.setSendSMS(sendSMS);
-		u.setRights(rights);
-		u.setLastlogin(new Date());
-		u.setSalutation(Salutation.mr);
-		u.setActivatehash(hash);
-		u.setTimeZoneId(timezone.getID());
-		u.setForceTimeZoneCheck(forceTimeZoneCheck);
-		u.setExternalId(externalId);
-		u.setExternalType(externalType);
-		if (!Strings.isEmpty(u.getExternalType())) {
-			u.setType(Type.external);
-		}
-
-		u.setUserOffers(userOffers);
-		u.setUserSearchs(userSearchs);
-		u.setShowContactData(showContactData);
-		u.setShowContactDataToContacts(showContactDataToContacts);
-
-		// this is needed cause the language is not a needed data at registering
-		u.setLanguageId(languageId != 0 ? languageId : 1);
-		if (!Strings.isEmpty(userpass)) {
-			u.updatePassword(cfgDao, userpass);
-		}
-		u.setDeleted(false);
-		u.setPictureuri(pictureuri);
-		if (groupIds != null) {
-			for (Long grpId : groupIds) {
-				u.getGroupUsers().add(new GroupUser(groupDao.get(grpId), u));
-			}
-		}
-
-		return update(u, null);
 	}
 
 	public List<User> getByExpiredHash(long ttl) {

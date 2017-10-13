@@ -22,9 +22,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 
 import java.io.File;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
@@ -47,34 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class FileItemDao extends BaseFileItemDao {
 	private static final Logger log = Red5LoggerFactory.getLogger(FileItemDao.class, getWebAppRootKey());
-
-	public FileItem add(String fileName, Long parentId, Long ownerId, Long roomId, Long insertedBy,
-			Type type, String externalId, String externalType) {
-		log.debug(".add(): adding file " + fileName + " roomID: " + roomId);
-		try {
-			FileItem fileItem = new FileItem();
-			fileItem.setName(fileName);
-			fileItem.setHash(UUID.randomUUID().toString());
-			fileItem.setDeleted(false);
-			fileItem.setParentId(parentId);
-			fileItem.setOwnerId(ownerId);
-			fileItem.setRoomId(roomId);
-			fileItem.setInserted(new Date());
-			fileItem.setInsertedBy(insertedBy);
-			fileItem.setType(type);
-			fileItem.setUpdated(new Date());
-			fileItem.setExternalId(externalId);
-			fileItem.setExternalType(externalType);
-
-			fileItem = em.merge(fileItem);
-
-			log.debug(".add(): file " + fileName + " added as " + fileItem.getId());
-			return fileItem;
-		} catch (Exception ex2) {
-			log.error(".add(): ", ex2);
-		}
-		return null;
-	}
 
 	public List<FileItem> getByRoom(Long roomId) {
 		log.debug("getByRoom roomId :: " + roomId);

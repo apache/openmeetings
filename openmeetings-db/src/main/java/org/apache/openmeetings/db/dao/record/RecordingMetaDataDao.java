@@ -75,28 +75,18 @@ public class RecordingMetaDataDao {
 		return null;
 	}
 
-	public Long add(Long recordingId, String freeTextUserName, Date recordStart, boolean isAudioOnly,
+	public Long add(Long recordingId, Date recordStart, boolean isAudioOnly,
 			boolean isVideoOnly, boolean isScreenData, String streamName, Integer interiewPodId) {
 		try {
 
 			RecordingMetaData metaData = new RecordingMetaData();
-
-			metaData.setDeleted(false);
-
 			metaData.setRecording(recordingDao.get(recordingId));
-			metaData.setFreeTextUserName(freeTextUserName);
-			metaData.setInserted(new Date());
-
 			metaData.setRecordStart(recordStart);
-
 			metaData.setAudioOnly(isAudioOnly);
 			metaData.setVideoOnly(isVideoOnly);
 			metaData.setScreenData(isScreenData);
-
 			metaData.setStreamName(streamName);
-
 			metaData.setInteriewPodId(interiewPodId);
-
 			metaData = update(metaData);
 			return metaData.getId();
 		} catch (Exception ex2) {
@@ -125,8 +115,10 @@ public class RecordingMetaDataDao {
 	public RecordingMetaData update(RecordingMetaData metaData) {
 		log.debug("[update]: ");
 		if (metaData.getId() == null) {
+			metaData.setInserted(new Date());
 			em.persist(metaData);
 		} else {
+			metaData.setUpdated(new Date());
 			metaData = em.merge(metaData);
 		}
 		return metaData;

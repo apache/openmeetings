@@ -32,6 +32,7 @@ import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
+import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
@@ -40,6 +41,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.calendar.AppointmentLogic;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 import org.junit.Test;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -52,10 +54,33 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 	private AppointmentLogic appointmentLogic;
 	@Autowired
 	private AppointmentDao appointmentDao;
+	@Autowired
+	private MeetingMemberDao meetingMemberDao;
 
 	private static void setTime(Appointment a) {
 		a.setStart(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
 		a.setEnd(Date.from(LocalDateTime.now().plusHours(1).atZone(ZoneId.systemDefault()).toInstant()));
+	}
+
+	public MeetingMember getMeetingMember(Long userId, Long langId, String str) {
+		String[] params = str.split(",");
+
+		try {
+			return meetingMemberDao.get(Long.valueOf(params[0]));
+		} catch (Exception e) {
+			//no-op
+		}
+		MeetingMember mm = new MeetingMember();
+		try {
+			mm.setUser(userDao.get(Long.valueOf(params[4])));
+		} catch (Exception e) {
+			//no-op
+		}
+		if (mm.getUser() == null) {
+			mm.setUser(userDao.getContact(params[3], params[1], params[2], langId, params[5], userId));
+		}
+
+		return mm;
 	}
 
 	@Test
@@ -85,11 +110,34 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		Long languageId = 1L;
 		Long roomType = 1L;
 
-		Appointment a = appointmentLogic.getAppointment(appointmentName,
-				appointmentLocation, appointmentDescription,
-				start, end, isDaily, isWeekly,
-				isMonthly, isYearly, remind, mmClient,
-				roomType, languageId, false, "", -1, userId);
+		Appointment a = new Appointment();
+		a.setTitle(appointmentName);
+		a.setLocation(appointmentLocation);
+		a.setDescription(appointmentDescription);
+		a.setStart(start.getTime());
+		a.setEnd(end.getTime());
+		a.setIsDaily(isDaily);
+		a.setIsWeekly(isWeekly);
+		a.setIsMonthly(isMonthly);
+		a.setIsYearly(isYearly);
+		a.setReminder(Reminder.valueOf(remind));
+		a.setRoom(new Room());
+		a.getRoom().setComment(appointmentDescription);
+		a.getRoom().setName(appointmentName);
+		a.getRoom().setType(Room.Type.get(roomType));
+		a.getRoom().setAppointment(true);
+		a.setOwner(userDao.get(userId));
+		a.setPasswordProtected(false);
+		a.setPassword("");
+		a.setMeetingMembers(new ArrayList<MeetingMember>());
+		for (String singleClient : mmClient) {
+			if (Strings.isEmpty(singleClient)) {
+				continue;
+			}
+			MeetingMember mm = getMeetingMember(userId, languageId, singleClient);
+			mm.setAppointment(a);
+			a.getMeetingMembers().add(mm);
+		}
 		a = appointmentDao.update(a, userId);
 
 		Thread.sleep(3000);

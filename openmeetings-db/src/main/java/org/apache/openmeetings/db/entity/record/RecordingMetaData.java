@@ -93,10 +93,6 @@ public class RecordingMetaData extends HistoricalEntity {
 	@Element(data = true)
 	private String streamName;
 
-	@Column(name = "free_text_user_name")
-	@Element(data = true)
-	private String freeTextUserName;
-
 	@Column(name = "is_audio_only", nullable = false)
 	@Element(name = "isAudioOnly", data = true)
 	private boolean audioOnly;
@@ -108,14 +104,6 @@ public class RecordingMetaData extends HistoricalEntity {
 	@Column(name = "is_screen_data", nullable = false)
 	@Element(name = "isScreenData", data = true)
 	private boolean screenData;
-
-	@Column(name = "inserted_by")
-	@Element(data = true, required = false)
-	private Long insertedBy;
-
-	@Column(name = "wav_audio_data")
-	@Element(data = true, required = false)
-	private String wavAudioData;
 
 	@Column(name = "full_wav_audio_data")
 	@Element(data = true, required = false)
@@ -171,14 +159,6 @@ public class RecordingMetaData extends HistoricalEntity {
 		this.recordEnd = recordEnd;
 	}
 
-	public String getFreeTextUserName() {
-		return freeTextUserName;
-	}
-
-	public void setFreeTextUserName(String freeTextUserName) {
-		this.freeTextUserName = freeTextUserName;
-	}
-
 	public boolean isAudioOnly() {
 		return audioOnly;
 	}
@@ -195,14 +175,6 @@ public class RecordingMetaData extends HistoricalEntity {
 		this.videoOnly = videoOnly;
 	}
 
-	public Long getInsertedBy() {
-		return insertedBy;
-	}
-
-	public void setInsertedBy(Long insertedBy) {
-		this.insertedBy = insertedBy;
-	}
-
 	public boolean isScreenData() {
 		return screenData;
 	}
@@ -217,14 +189,6 @@ public class RecordingMetaData extends HistoricalEntity {
 
 	public void setStreamName(String streamName) {
 		this.streamName = streamName;
-	}
-
-	public String getWavAudioData() {
-		return wavAudioData;
-	}
-
-	public void setWavAudioData(String wavAudioData) {
-		this.wavAudioData = wavAudioData;
 	}
 
 	public String getFullWavAudioData() {

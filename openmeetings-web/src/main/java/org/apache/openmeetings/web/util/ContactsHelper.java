@@ -48,7 +48,7 @@ public class ContactsHelper {
 		String message = RequestContactTemplate.getEmail(userToAdd, user);
 
 		getBean(PrivateMessageDao.class).addPrivateMessage(
-			subj, message, 0L, user, userToAdd, userToAdd, false, null, true, contact.getId());
+			subj, message, user, userToAdd, userToAdd, true, contact.getId());
 
 		if (userToAdd.getAddress() != null) {
 			getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
@@ -82,8 +82,7 @@ public class ContactsHelper {
 			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + Application.getString("1198");
 
 			getBean(PrivateMessageDao.class).addPrivateMessage(
-					subj, message,
-					0L, contact.getContact(), user, user, false, null, false, 0L);
+					subj, message, contact.getContact(), user, user, false, 0L);
 
 			getBean(MailHandler.class).send(user.getAddress().getEmail(), subj, message);
 		}

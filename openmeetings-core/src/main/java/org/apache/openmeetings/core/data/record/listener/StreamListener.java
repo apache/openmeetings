@@ -26,8 +26,6 @@ import org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter;
 import org.apache.openmeetings.core.data.record.listener.async.CachedEvent;
 import org.apache.openmeetings.core.data.record.listener.async.StreamAudioWriter;
 import org.apache.openmeetings.core.data.record.listener.async.StreamVideoWriter;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
 import org.red5.server.api.stream.IBroadcastStream;
@@ -42,11 +40,10 @@ public class StreamListener implements IStreamListener {
 	private final BaseStreamWriter streamWriter;
 
 	public StreamListener(boolean isAudio, String streamName, IScope scope, Long metaDataId,
-			boolean isScreenData, boolean isInterview, RecordingMetaDataDao metaDataDao
-			, RecordingMetaDeltaDao metaDeltaDao) {
+			boolean isScreenData, boolean isInterview) {
 		streamWriter = isAudio
-			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview, metaDataDao, metaDeltaDao)
-			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData, metaDataDao);
+			? new StreamAudioWriter(streamName, scope, metaDataId, isScreenData, isInterview)
+			: new StreamVideoWriter(streamName, scope, metaDataId, isScreenData);
 	}
 
 	@Override

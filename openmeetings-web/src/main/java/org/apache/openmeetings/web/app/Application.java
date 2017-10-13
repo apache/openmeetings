@@ -480,7 +480,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		rcl.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 		rcl.setSuperMod(client.hasRight(Right.superModerator));
 		rcl.setMod(client.hasRight(Right.moderator));
-		rcl.setCanVideo(client.hasRight(Right.video) && client.isCamEnabled() && client.hasActivity(Activity.broadcastV));
 		if (client.hasActivity(Activity.broadcastA) && client.getMic() < 0) {
 			client.remove(Activity.broadcastA);
 		}
