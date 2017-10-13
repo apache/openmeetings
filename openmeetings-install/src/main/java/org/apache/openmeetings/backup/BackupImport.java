@@ -405,7 +405,7 @@ public class BackupImport {
 		importPrivateMsgFolders(f, simpleSerializer);
 		importContacts(f);
 		importPrivateMsgs(f);
-		List<FileItem> files = importFiles(f, ver.compareTo(BackupVersion.get("4.0.0")) < 0);
+		List<FileItem> files = importFiles(f);
 		importPolls(f);
 		importRoomFiles(f);
 
