@@ -2,7 +2,7 @@
 var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100
 		, wb = {id: -1, name: ''}, canvases = []
-		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide'];
+		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src'];
 	let a, t, z, s, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'fullFit', role = null;
 

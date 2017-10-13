@@ -3,7 +3,8 @@ var Clipart = function(wb, btn) {
 	const art = Shape(wb);
 	art.add2Canvas = function(canvas) {}
 	art.createShape = function(canvas) {
-		fabric.Image.fromURL(btn.data('image'), function(img) {
+		const imgSrc = btn.data('image');
+		fabric.Image.fromURL(imgSrc, function(img) {
 			art.orig.width = img.width;
 			art.orig.height = img.height;
 			art.obj = img.set({
@@ -11,6 +12,8 @@ var Clipart = function(wb, btn) {
 				, top: art.orig.y
 				, width: 0
 				, height: 0
+				, omType: 'Clipart'
+				, _src: imgSrc
 			});
 			canvas.add(art.obj);
 		});

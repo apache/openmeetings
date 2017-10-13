@@ -138,6 +138,7 @@ import org.apache.openmeetings.backup.converter.RoomConverter;
 import org.apache.openmeetings.backup.converter.RoomTypeConverter;
 import org.apache.openmeetings.backup.converter.SalutationConverter;
 import org.apache.openmeetings.backup.converter.UserConverter;
+import org.apache.openmeetings.backup.converter.WbConverter;
 import org.apache.openmeetings.core.converter.DocumentConverter;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -155,6 +156,7 @@ import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -403,7 +405,7 @@ public class BackupImport {
 		importPrivateMsgFolders(f, simpleSerializer);
 		importContacts(f);
 		importPrivateMsgs(f);
-		importFiles(f, ver.compareTo(BackupVersion.get("4.0.0")) < 0);
+		List<FileItem> files = importFiles(f, ver.compareTo(BackupVersion.get("4.0.0")) < 0);
 		importPolls(f);
 		importRoomFiles(f);
 
@@ -414,9 +416,17 @@ public class BackupImport {
 		importFolders(f);
 
 		if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
-			for (BaseFileItem bfi : fileItemDao.get()) {
+			for (BaseFileItem bfi : files) {
 				if (BaseFileItem.Type.Presentation == bfi.getType()) {
-					convertOldPresentation(bfi);
+					convertOldPresentation((FileItem)bfi);
+				}
+				if (BaseFileItem.Type.WmlFile == bfi.getType()) {
+					try {
+						Whiteboard wb = WbConverter.convert((FileItem)bfi);
+						wb.save(bfi.getFile().toPath());
+					} catch (Exception e) {
+						log.error("Unexpected error while converting WB", e);
+					}
 				}
 			}
 		}
@@ -847,8 +857,9 @@ public class BackupImport {
 	/*
 	 * ##################### Import File-Explorer Items
 	 */
-	private void importFiles(File f, boolean old) throws Exception {
+	private List<FileItem> importFiles(File f, boolean old) throws Exception {
 		log.info("Private message import complete, starting file explorer item import");
+		List<FileItem> result = new ArrayList<>();
 		List<FileItem> list = readFileItemList(f, "fileExplorerItems.xml", "fileExplorerItems");
 		for (FileItem file : list) {
 			Long fId = file.getId();
@@ -866,8 +877,10 @@ public class BackupImport {
 				file.setHash(UUID.randomUUID().toString());
 			}
 			file = fileItemDao.update(file);
+			result.add(file);
 			fileItemMap.put(fId, file.getId());
 		}
+		return result;
 	}
 
 	/*
@@ -1012,7 +1025,7 @@ public class BackupImport {
 								f.setType(BaseFileItem.Type.WmlFile);
 								f.setHash(val);
 							}
-							if ("isChart".equals(name) && "true".equals(val)) {
+							if (f.getType() == null && "isChart".equals(name) && "true".equals(val)) {
 								f.setType(BaseFileItem.Type.PollChart);
 							}
 							if ("isImage".equals(name) && "true".equals(val)) {
@@ -1501,12 +1514,12 @@ public class BackupImport {
 		return countries.getProperty(String.format("country.%s", countryId));
 	}
 
-	private void convertOldPresentation(BaseFileItem bfi) {
-		File f = bfi.getOriginal();
+	private void convertOldPresentation(FileItem fi) {
+		File f = fi.getOriginal();
 		if (f != null && f.exists()) {
 			try {
-				StoredFile sf = new StoredFile(bfi.getHash(), getFileExt(f.getName()), f);
-				docConverter.convertPDF((FileItem)bfi, sf);
+				StoredFile sf = new StoredFile(fi.getHash(), getFileExt(f.getName()), f);
+				docConverter.convertPDF(fi, sf);
 			} catch (Exception e) {
 				log.error("Unexpected exception while converting OLD format presentations", e);
 			}

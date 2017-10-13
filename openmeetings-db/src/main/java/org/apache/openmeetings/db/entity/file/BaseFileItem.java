@@ -377,4 +377,10 @@ public abstract class BaseFileItem extends HistoricalEntity {
 			return n.startsWith(getHash()) && !exclusions.contains(ext);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "FileItem [id=" + id + ", name=" + name + ", room=" + roomId + ", type=" + type.name() + "]";
+	}
+
 }

@@ -18,7 +18,13 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -28,12 +34,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.openmeetings.util.NullStringer;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class Whiteboard implements Serializable {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(Whiteboard.class, getWebAppRootKey());
 	public enum ZoomMode {
 		fullFit
 		, pageWidth
@@ -177,15 +186,29 @@ public class Whiteboard implements Serializable {
 		//deep-copy
 		JSONObject json = new JSONObject(new JSONObject(this).toString(new NullStringer()));
 		json.remove("id"); //filtering
-		if (!json.has(ITEMS_KEY)) {
-			json.put(ITEMS_KEY, new JSONObject());
-		}
-		JSONObject items = json.getJSONObject(ITEMS_KEY);
-		for (String uid : items.keySet()) {
-			JSONObject o = items.getJSONObject(uid);
+		json.remove("empty"); //filtering
+		JSONObject items = new JSONObject();
+		for (Entry<String, String> e : roomItems.entrySet()) {
+			JSONObject o = new JSONObject(e.getValue());
+			//filtering
+			o.remove("src");
+			if ("Clipart".equals(o.opt("omType"))) {
+				o.put("src", o.get("_src"));
+			}
 			o.remove("_src");
-			o.remove("src"); //filtering
+			items.put(e.getKey(), o);
 		}
+		json.put(ITEMS_KEY, items);
 		return json;
+	}
+
+	public String save(Path path) {
+		try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+			writer.write(toJson().toString(new NullStringer(2)));
+		} catch (IOException e) {
+			log.error("Unexpected error while saving WB", e);
+			return e.getMessage();
+		}
+		return null;
 	}
 }

@@ -3,7 +3,7 @@ var Text = function(wb, s) {
 	const text = ShapeBase();
 	text.obj = null;
 	text.fill.color = '#000000';
-	text.stroke.width = 1;
+	text.stroke.width = 12; //fontSize
 	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
 	//TODO font size, background color
@@ -21,7 +21,8 @@ var Text = function(wb, s) {
 				, padding: 7
 				, fill: text.fill.enabled ? text.fill.color : 'rgba(0,0,0,0)'
 				, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
-				, strokeWidth: text.stroke.width
+				//, strokeWidth: text.stroke.width
+				, fontSize: text.stroke.width
 				, opacity: text.opacity
 			});
 			if (text.style.bold) {

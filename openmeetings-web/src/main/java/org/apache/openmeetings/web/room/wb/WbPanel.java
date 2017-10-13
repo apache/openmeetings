@@ -28,7 +28,6 @@ import static org.apache.wicket.AttributeModifier.append;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -50,6 +49,7 @@ import java.util.function.Function;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -116,12 +116,10 @@ public class WbPanel extends AbstractWbPanel {
 			f.setHash(UUID.randomUUID().toString());
 			f.setName(getModelObject());
 			f = getBean(FileItemDao.class).update(f);
-			try (BufferedWriter writer = Files.newBufferedWriter(f.getFile().toPath())) {
-				writer.write(wb.toJson().toString(new NullStringer(2)));
-			} catch (IOException e) {
-				error("Unexpected error while saving WB: " + e.getMessage());
+			String res = wb.save(f.getFile().toPath());
+			if (!Strings.isEmpty(res)) {
+				error("Unexpected error while saving WB: " + res);
 				target.add(feedback);
-				log.error("Unexpected error while saving WB", e);
 			}
 		}
 
