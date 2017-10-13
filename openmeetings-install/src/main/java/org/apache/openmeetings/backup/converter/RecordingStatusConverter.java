@@ -23,11 +23,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.red5.logging.Red5LoggerFactory;
+import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 import org.slf4j.Logger;
 
-public class RecordingStatusConverter implements OmConverter<Recording.Status> {
+public class RecordingStatusConverter implements Converter<Recording.Status> {
 	private static final Logger log = Red5LoggerFactory.getLogger(RecordingStatusConverter.class, getWebAppRootKey());
 	private static final String PROCESSING = "PROCESSING";
 

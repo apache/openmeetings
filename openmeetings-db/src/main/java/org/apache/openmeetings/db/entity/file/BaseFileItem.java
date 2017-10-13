@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.file;
 
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
@@ -278,12 +279,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 					if (ext == null) {
 						slide = 0;
 					} else {
-						try {
-							//ext is used for slide here
-							slide = Integer.parseInt(ext);
-						} catch (Exception e) {
-							slide = -1;
-						}
+						slide = toInt(ext, -1);
 					}
 					if (slide > -1) {
 						f = new File(d, String.format("%1$s-%2$04d.%3$s", DOC_PAGE_PREFIX, slide, EXTENSION_PNG));

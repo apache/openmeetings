@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class UserConverter implements OmConverter<User> {
+public class UserConverter implements Converter<User> {
 	private UserDao userDao;
 	private Map<Long, Long> idMap;
 
@@ -42,7 +43,7 @@ public class UserConverter implements OmConverter<User> {
 
 	@Override
 	public User read(InputNode node) throws Exception {
-		long oldId = getLong(node);
+		long oldId = toLong(node.getValue());
 		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 
 		User u = userDao.get(newId);

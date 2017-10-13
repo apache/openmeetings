@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.calendar.OmCalendarDao;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
+import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class OmCalendarConverter implements OmConverter<OmCalendar> {
+public class OmCalendarConverter implements Converter<OmCalendar> {
 	private OmCalendarDao calendarDao;
 	private Map<Long, Long> idMap;
 
@@ -42,7 +43,7 @@ public class OmCalendarConverter implements OmConverter<OmCalendar> {
 
 	@Override
 	public OmCalendar read(InputNode node) throws Exception {
-		long oldId = getLong(node);
+		long oldId = toLong(node.getValue());
 		Long newId = idMap.containsKey(oldId) ? idMap.get(oldId) : oldId;
 
 		OmCalendar c = calendarDao.get(newId);

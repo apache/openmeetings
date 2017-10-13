@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.converter.OmConverter.getInt;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 
 import org.apache.openmeetings.db.entity.room.Room.Type;
+import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class RoomTypeConverter implements OmConverter<Type> {
+public class RoomTypeConverter implements Converter<Type> {
 	@Override
 	public Type read(InputNode node) throws Exception {
-		return Type.get(getInt(node));
+		return Type.get(toInt(node.getValue()));
 	}
 
 	@Override

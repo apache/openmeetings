@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.ldap;
 
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Properties;
@@ -119,7 +120,7 @@ public class LdapOptions {
 
 		// Connection URL
 		host = config.getProperty(CONFIGKEY_LDAP_HOST);
-		port = Integer.parseInt(config.getProperty(CONFIGKEY_LDAP_PORT, "389"));
+		port = toInt(config.getProperty(CONFIGKEY_LDAP_PORT), 389);
 		secure = "true".equals(config.getProperty(CONFIGKEY_LDAP_SECURE, "false"));
 
 		// Username for LDAP SERVER himself

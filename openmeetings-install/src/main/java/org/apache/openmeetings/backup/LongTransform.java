@@ -18,13 +18,14 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.backup.converter.OmConverter;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
+
 import org.simpleframework.xml.transform.Transform;
 
 public class LongTransform implements Transform<Long> {
 	@Override
 	public Long read(String value) throws Exception {
-		return OmConverter.getLong(value);
+		return toLong(value);
 	}
 
 	@Override

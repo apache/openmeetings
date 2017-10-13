@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
@@ -412,7 +413,7 @@ public abstract class BaseConverter {
 		while (matcher.find()) {
 			String foundResolution = txt.substring(matcher.start(), matcher.end());
 			String[] resultions = foundResolution.split("x");
-			return new Dimension(Integer.parseInt(resultions[0]), Integer.parseInt(resultions[1]));
+			return new Dimension(toInt(resultions[0]), toInt(resultions[1]));
 		}
 
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play

@@ -381,8 +381,9 @@ public class BackupImport {
 		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 
 		File f = unzip(is);
-		importConfigs(f);
 		Serializer simpleSerializer = new Persister();
+		BackupVersion ver = getVersion(simpleSerializer, f);
+		importConfigs(f);
 		importGroups(f, simpleSerializer);
 		Long defaultLdapId = importLdap(f, simpleSerializer);
 		importOauth(f, simpleSerializer);
@@ -410,6 +411,11 @@ public class BackupImport {
 		log.info("File explorer item import complete, clearing temp files");
 
 		FileUtils.deleteDirectory(f);
+	}
+
+	private BackupVersion getVersion(Serializer ser, File f) throws Exception {
+		List<BackupVersion> list = readList(ser, f, "version.xml", "version", BackupVersion.class, true);
+		return list.isEmpty() ? new BackupVersion() : list.get(0);
 	}
 
 	/*

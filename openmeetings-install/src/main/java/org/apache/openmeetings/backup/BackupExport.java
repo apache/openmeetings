@@ -35,8 +35,9 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -67,6 +68,7 @@ import org.apache.openmeetings.db.dao.user.PrivateMessageDao;
 import org.apache.openmeetings.db.dao.user.PrivateMessageFolderDao;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
@@ -76,6 +78,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
+import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
@@ -155,9 +158,9 @@ public class BackupExport {
 			/*
 			 * ##################### Backup Groups
 			 */
-			writeList(ser, zos, "organizations.xml", "organisations", groupDao.get(0, Integer.MAX_VALUE));
-			progressHolder.setProgress(5);
-
+			writeList(ser, zos, "version.xml", "version", Arrays.asList(BackupVersion.get()));
+			progressHolder.setProgress(2);
+			exportGroups(zos, progressHolder);
 			exportUsers(zos, progressHolder);
 			exportRoom(zos, progressHolder);
 			exportRoomGroup(zos, progressHolder);
@@ -166,7 +169,7 @@ public class BackupExport {
 			exportAppointment(zos, progressHolder);
 			exportMeetingMember(zos, progressHolder);
 			exportLdap(zos, progressHolder, ser);
-			exportOauth(zos, progressHolder, ser);
+			exportOauth(zos, progressHolder);
 			exportPrivateMsg(zos, progressHolder);
 			exportPrivateMsgFolder(zos, progressHolder, ser);
 			exportContacts(zos, progressHolder);
@@ -196,6 +199,35 @@ public class BackupExport {
 		log.debug("---Done");
 	}
 
+	private static <T extends HistoricalEntity> void bindDate(Registry registry, List<T> list) throws Exception {
+		bindDate(registry, list, HistoricalEntity::getInserted);
+	}
+
+	private static <T> void bindDate(Registry registry, List<T> list, Function<T, ?> func) throws Exception {
+		if (list != null) {
+			for (T e : list) {
+				Object d = func.apply(e);
+				if (d != null) {
+					Class<?> dateClass = d.getClass();
+					registry.bind(dateClass, DateConverter.class);
+					break;
+				}
+			}
+		}
+	}
+	/*
+	 * ##################### Backup  Groups
+	 */
+	private void exportGroups(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer ser = new Persister(strategy);
+		List<Group> list = groupDao.get(0, Integer.MAX_VALUE);
+		bindDate(registry, list);
+		writeList(ser, zos, "organizations.xml", "organisations", list);
+		progressHolder.setProgress(5);
+	}
+
 	/*
 	 * ##################### Backup Users
 	 */
@@ -207,10 +239,7 @@ public class BackupExport {
 		registry.bind(Group.class, GroupConverter.class);
 		registry.bind(Salutation.class, SalutationConverter.class);
 		List<User> list = userDao.getAllBackupUsers();
-		if (list != null && !list.isEmpty()) {
-			Class<?> dateClass = list.get(0).getRegdate() != null ? list.get(0).getRegdate().getClass() : list.get(0).getInserted().getClass();
-			registry.bind(dateClass, DateConverter.class);
-		}
+		bindDate(registry, list);
 
 		writeList(ser, zos, "users.xml", "users", list);
 		progressHolder.setProgress(10);
@@ -226,8 +255,9 @@ public class BackupExport {
 
 		registry.bind(User.class, UserConverter.class);
 		registry.bind(Room.Type.class, RoomTypeConverter.class);
-
-		writeList(serializer, zos, "rooms.xml", "rooms", roomDao.get());
+		List<Room> list = roomDao.get();
+		bindDate(registry, list);
+		writeList(serializer, zos, "rooms.xml", "rooms", list);
 		progressHolder.setProgress(15);
 	}
 
@@ -287,20 +317,7 @@ public class BackupExport {
 		registry.bind(User.class, UserConverter.class);
 		registry.bind(Appointment.Reminder.class, AppointmentReminderTypeConverter.class);
 		registry.bind(Room.class, RoomConverter.class);
-		if (list != null) {
-			for (Appointment a : list) {
-				Class<? extends Date> clazz = null;
-				if (a.getStart() != null) {
-					clazz = a.getStart().getClass();
-				} else if (a.getInserted() != null) {
-					clazz = a.getInserted().getClass();
-				}
-				if (clazz != null) {
-					registry.bind(clazz, DateConverter.class);
-					break;
-				}
-			}
-		}
+		bindDate(registry, list);
 
 		writeList(serializer, zos, "appointements.xml", "appointments", list);
 		progressHolder.setProgress(25);
@@ -337,8 +354,13 @@ public class BackupExport {
 	/*
 	 * ##################### OAuth2 servers
 	 */
-	private void exportOauth(ZipOutputStream zos, ProgressHolder progressHolder, Serializer ser) throws Exception {
-		writeList(ser, zos, "oauth2servers.xml", "oauth2servers", auth2Dao.get(0, Integer.MAX_VALUE));
+	private void exportOauth(ZipOutputStream zos, ProgressHolder progressHolder) throws Exception {
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		Serializer serializer = new Persister(strategy);
+		List<OAuthServer> list = auth2Dao.get(0, Integer.MAX_VALUE);
+		bindDate(registry, list);
+		writeList(serializer, zos, "oauth2servers.xml", "oauth2servers", list);
 		progressHolder.setProgress(45);
 	}
 
@@ -353,12 +375,8 @@ public class BackupExport {
 
 		registry.bind(User.class, UserConverter.class);
 		registry.bind(Room.class, RoomConverter.class);
-		if (list != null && !list.isEmpty()) {
-			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-		}
-
-		writeList(serializer, zos, "privateMessages.xml",
-				"privatemessages", list);
+		bindDate(registry, list, PrivateMessage::getInserted);
+		writeList(serializer, zos, "privateMessages.xml", "privatemessages", list);
 		progressHolder.setProgress(50);
 	}
 
@@ -394,10 +412,7 @@ public class BackupExport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 
-		if (list != null && !list.isEmpty()) {
-			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-		}
-
+		bindDate(registry, list);
 		writeList(serializer, zos, "fileExplorerItems.xml", "fileExplorerItems", list);
 		progressHolder.setProgress(65);
 	}
@@ -411,10 +426,7 @@ public class BackupExport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 
-		if (list != null && !list.isEmpty()) {
-			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-		}
-
+		bindDate(registry, list);
 		writeList(serializer, zos, "flvRecordings.xml", "flvrecordings", list);
 		progressHolder.setProgress(70);
 	}
@@ -431,10 +443,7 @@ public class BackupExport {
 		registry.bind(User.class, UserConverter.class);
 		registry.bind(Room.class, RoomConverter.class);
 		registry.bind(RoomPoll.Type.class, PollTypeConverter.class);
-		if (list != null && !list.isEmpty()) {
-			registry.bind(list.get(0).getCreated().getClass(), DateConverter.class);
-		}
-
+		bindDate(registry, list, RoomPoll::getCreated);
 		writeList(serializer, zos, "roompolls.xml", "roompolls", list);
 		progressHolder.setProgress(75);
 	}
@@ -461,10 +470,7 @@ public class BackupExport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 
-		if (list != null && !list.isEmpty()) {
-			registry.bind(list.get(0).getSent().getClass(), DateConverter.class);
-		}
-
+		bindDate(registry, list, ChatMessage::getSent);
 		writeList(serializer, zos, "chat_messages.xml", "chat_messages", list);
 		progressHolder.setProgress(85);
 	}
@@ -475,9 +481,7 @@ public class BackupExport {
 		Strategy strategy = new RegistryStrategy(registry);
 		Serializer serializer = new Persister(strategy);
 
-		if (list != null && !list.isEmpty() && list.get(0).getInserted() != null) {
-			registry.bind(list.get(0).getInserted().getClass(), DateConverter.class);
-		}
+		bindDate(registry, list);
 		return serializer;
 	}
 

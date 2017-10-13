@@ -18,13 +18,14 @@
  */
 package org.apache.openmeetings.backup;
 
-import org.apache.openmeetings.backup.converter.OmConverter;
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
+
 import org.simpleframework.xml.transform.Transform;
 
 public class IntegerTransform implements Transform<Integer> {
 	@Override
 	public Integer read(String value) throws Exception {
-		return OmConverter.getInt(value, 0);
+		return toInt(value, 0);
 	}
 
 	@Override

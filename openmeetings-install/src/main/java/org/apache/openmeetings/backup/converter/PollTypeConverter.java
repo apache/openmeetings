@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.backup.converter;
 
-import static org.apache.openmeetings.backup.converter.OmConverter.getLong;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 import org.apache.openmeetings.db.entity.room.RoomPoll;
+import org.simpleframework.xml.convert.Converter;
 import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.OutputNode;
 
-public class PollTypeConverter implements OmConverter<RoomPoll.Type> {
+public class PollTypeConverter implements Converter<RoomPoll.Type> {
 	@Override
 	public RoomPoll.Type read(InputNode node) throws Exception {
-		return RoomPoll.Type.get(getLong(node));
+		return RoomPoll.Type.get(toLong(node.getValue()));
 	}
 
 	@Override

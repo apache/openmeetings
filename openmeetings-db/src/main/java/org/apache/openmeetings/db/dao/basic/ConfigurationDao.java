@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
@@ -328,7 +329,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			}
 				break;
 			case CONFIG_EXT_PROCESS_TTL:
-				setExtProcessTtl(Integer.parseInt(value));
+				setExtProcessTtl(toInt(value));
 				break;
 		}
 		return entity;
