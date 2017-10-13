@@ -170,8 +170,8 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	void internalWbLoad(StringBuilder sb) {
 		if (!WhiteboardCache.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
-			try {
-				if (WhiteboardCache.tryLock(roomId)) {
+			if (WhiteboardCache.tryLock(roomId)) {
+				try {
 					TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
 					for (RoomFile rf : rp.getRoom().getFiles()) {
 						List<BaseFileItem> bfl = files.get(rf.getWbIdx());
@@ -189,9 +189,9 @@ public class WbPanel extends AbstractWbPanel {
 							sendFileToWb(fi, false);
 						}
 					}
+				} finally {
+					WhiteboardCache.unlock(roomId);
 				}
-			} finally {
-				WhiteboardCache.unlock(roomId);
 			}
 		}
 		Whiteboards wbs = WhiteboardCache.get(roomId);
