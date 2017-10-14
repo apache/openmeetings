@@ -188,7 +188,7 @@ public class AppointmentDao {
 		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
-	public List<Appointment> searchAppointmentsByTitle(Long userId, String title) {
+	public List<Appointment> searchByTitle(Long userId, String title) {
 		return em.createNamedQuery("getAppointmentsByTitle", Appointment.class)
 				.setParameter("title", title).setParameter("userId", userId).getResultList();
 	}

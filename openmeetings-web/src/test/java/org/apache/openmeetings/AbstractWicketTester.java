@@ -58,6 +58,8 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
 	private static final Logger log = getLogger(AbstractWicketTester.class, getWebAppRootKey());
+	public static final String PATH_CHILD = "main-container:main:contents:child";
+	public static final String PATH_MENU = "main-container:main:topControls:menu:menu";
 	protected WicketTester tester;
 
 	public static WicketTester getWicketTester() {

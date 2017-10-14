@@ -227,7 +227,6 @@ public class CalendarPanel extends UserBasePanel {
 				if (a.getCalendar() != null) {
 					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 				}
-				//TODO add feedback info
 			}
 
 			@Override
@@ -247,7 +246,6 @@ public class CalendarPanel extends UserBasePanel {
 				if (a.getCalendar() != null) {
 					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 				}
-				//TODO add feedback info
 			}
 		};
 
@@ -270,7 +268,6 @@ public class CalendarPanel extends UserBasePanel {
 
 			@Override
 			protected List<OmCalendar> load() {
-				// TODO: better way to do this?
 				AppointmentManager manager = getAppointmentManager();
 				List<OmCalendar> cals = new ArrayList<>(manager.getCalendars(getUserId()));
 				cals.addAll(manager.getGoogleCalendars(getUserId()));
@@ -368,7 +365,6 @@ public class CalendarPanel extends UserBasePanel {
 	}
 
 	//Adds a new Event Source to the Calendar
-	//TODO: The Ajax Refresh does not work.
 	public void populateGoogleCalendar(OmCalendar gcal, IPartialPageRequestHandler target) {
 		calendar.addSource(new GoogleCalendar(gcal.getHref(), gcal.getToken()));
 		refresh(target);
@@ -405,7 +401,7 @@ public class CalendarPanel extends UserBasePanel {
 
 	private static Appointment getDefault() {
 		Appointment a = new Appointment();
-		a.setReminder(Reminder.ical); //TODO: Make configurable
+		a.setReminder(Reminder.ical);
 		a.setOwner(getBean(UserDao.class).get(getUserId()));
 		a.setTitle(Application.getString("1444"));
 		log.debug(" -- getDefault -- Current model " + a);

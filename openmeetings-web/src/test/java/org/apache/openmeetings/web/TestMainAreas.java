@@ -79,7 +79,7 @@ public class TestMainAreas extends AbstractWicketTester {
 	@Test
 	public void testDashboard() throws OmException {
 		testArea(regularUsername, p -> {
-			tester.assertComponent("main-container:main:contents:child", OmDashboardPanel.class);
+			tester.assertComponent(PATH_CHILD, OmDashboardPanel.class);
 		});
 	}
 
@@ -93,7 +93,7 @@ public class TestMainAreas extends AbstractWicketTester {
 			testArea(user, p -> {
 				tester.getRequest().setParameter(area.name(), type);
 				tester.executeBehavior((AbstractAjaxBehavior)p.getBehaviorById(1));
-				tester.assertComponent("main-container:main:contents:child", clazz);
+				tester.assertComponent(PATH_CHILD, clazz);
 				if (consumer != null) {
 					consumer.accept(p);
 				}
@@ -271,7 +271,7 @@ public class TestMainAreas extends AbstractWicketTester {
 
 	private void testRoom(Long id) throws OmException {
 		checkArea(AreaKeys.room, String.valueOf(id), RoomPanel.class, p -> {
-			RoomPanel rp = (RoomPanel)p.get("main-container:main:contents:child");
+			RoomPanel rp = (RoomPanel)p.get(PATH_CHILD);
 			tester.executeBehavior((AbstractAjaxBehavior)rp.getBehaviorById(0)); //room enter
 			AbstractWbPanel wb = (AbstractWbPanel)rp.get("roomContainer:wb-area:whiteboard");
 			tester.executeBehavior((AbstractAjaxBehavior)wb.getBehaviorById(0)); //wb load

@@ -198,7 +198,7 @@ public class CalendarWebService extends BaseWebService {
 	@GET
 	@Path("/title/{title}")
 	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) {
-		return performCall(sid, User.Right.Room, sd -> AppointmentDTO.list(getDao().searchAppointmentsByTitle(sd.getUserId(), title)));
+		return performCall(sid, User.Right.Room, sd -> AppointmentDTO.list(getDao().searchByTitle(sd.getUserId(), title)));
 	}
 
 	/**

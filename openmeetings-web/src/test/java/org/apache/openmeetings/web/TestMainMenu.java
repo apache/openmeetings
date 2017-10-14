@@ -44,12 +44,12 @@ import com.googlecode.wicket.jquery.ui.widget.menu.Menu;
 public class TestMainMenu extends AbstractWicketTester {
 	private void checkMenuItem(int idx1, int idx2, Class<? extends BasePanel> clazz) throws OmException {
 		testArea(adminUsername, p -> {
-			Menu menu = (Menu)p.get("main-container:main:topControls:menu:menu");
+			Menu menu = (Menu)p.get(PATH_MENU);
 			Assert.assertNotNull(menu);
 			tester.getRequest().setParameter("hash", menu.getItemList().get(idx1).getItems().get(idx2).getId());
 			tester.executeBehavior((AbstractAjaxBehavior)menu.getBehaviorById(0));
 
-			tester.assertComponent("main-container:main:contents:child", clazz);
+			tester.assertComponent(PATH_CHILD, clazz);
 		});
 	}
 
