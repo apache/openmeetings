@@ -19,18 +19,13 @@
 		<title>Manual Testing</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
-
 		<section name="Introduction">
-
 			<p>
 				Below is a test plan for the OpenMeetings 2.1 pre-release testing.
 			</p>
 		</section>
-
 		<section name="Details">
-
 			<ol>
 				<li>
 					<b>User GUI tests</b>
@@ -43,16 +38,16 @@
 								<li>"Visit Apache OpenMeetings" link </li>
 								<li>Enter wrong login/password </li>
 								<li>Enter correct login/password </li>
-								<li>Exit the system by click the Exit button </li>
+								<li>Logout the system by click the Logout link </li>
 							</ol>
 						</li>
 						<li>
 							Dashboard
 							<ol>
-								<li>Correct user info in the upper left corner </li>
+								<li>Correct user info in 'Welcome' widget (upper left)</li>
 								<li>Links in the "Help and support" section </li>
 								<li>It should be possible to enter user’s room from the dashboard </li>
-								<li>Room details should be shown correctly in the "Rooms in this section…" part of the screen </li>
+								<li>Room details should be shown correctly in the "Room details section…" part of the screen </li>
 							</ol>
 						</li>
 						<li>
@@ -68,7 +63,6 @@
 								<li>Changing font style in the massage </li>
 								<li>Adding emotions to the message </li>
 							</ol>
-							Attention! Correct RTL support does not work in the current implementation
 						</li>
 						<li>
 							Calendar view
