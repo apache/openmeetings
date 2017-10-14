@@ -322,7 +322,6 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	public List<RoomGroup> getGroups() {
-		return em.createQuery("SELECT rg FROM RoomGroup rg", RoomGroup.class)
-				.getResultList();
+		return em.createNamedQuery("getAllRoomGroups", RoomGroup.class).getResultList();
 	}
 }

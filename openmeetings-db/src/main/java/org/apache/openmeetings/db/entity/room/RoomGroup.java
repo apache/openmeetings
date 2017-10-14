@@ -38,26 +38,7 @@ import org.simpleframework.xml.Root;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getAllRoomGroups", query = "select ro from RoomGroup ro ORDER BY ro.id"),
-	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomType", query = "select c from RoomGroup as c "
-			+ "where c.room.type = :type AND c.group.id = :groupId "
-			+ "AND c.deleted = false"),
-	@NamedQuery(name = "getRoomGroupByGroupId", query = "SELECT c FROM RoomGroup c "
-			+ "LEFT JOIN FETCH c.room "
-			+ "WHERE c.group.id = :groupId "
-			+ "AND c.deleted = false AND c.room.deleted = false AND c.room.appointment = false "
-			+ "AND c.group.deleted = false "
-			+ "ORDER BY c.room.name ASC"),
-	@NamedQuery(name = "selectMaxFromRoomsByGroup", query = "select c from RoomGroup as c "
-			+ "where c.group.id = :groupId "
-			+ "AND c.deleted = false"),
-	@NamedQuery(name = "getRoomGroupByGroupIdAndRoomId", query = "select c from RoomGroup as c "
-			+ "where c.room.id = :roomId "
-			+ "AND c.group.id = :groupId "
-			+ "AND c.deleted = false"),
-	@NamedQuery(name = "getRoomGroupByRoomsId", query = "select c from RoomGroup as c "
-			+ "where c.room.id = :roomId "
-			+ "AND c.deleted = false")
+	@NamedQuery(name = "getAllRoomGroups", query = "SELECT rg FROM RoomGroup rg ORDER BY rg.id")
 })
 @Table(name = "room_group")
 @Root(name="room_organisation")
