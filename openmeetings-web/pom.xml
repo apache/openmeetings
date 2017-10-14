@@ -34,7 +34,7 @@
 		<mssql.version>6.2.1.jre8</mssql.version>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<pdfbox.version>2.0.6</pdfbox.version>
+		<pdfbox.version>2.0.7</pdfbox.version>
 	</properties>
 	<profiles>
 		<profile>
@@ -539,12 +539,12 @@
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-websocket</artifactId>
 			<version>${tomcat.version}</version>
-			<exclusions>
+			<!--exclusions> commented for Red5 lib substitution
 				<exclusion>
 					<groupId>org.apache.tomcat.embed</groupId>
 					<artifactId>tomcat-embed-core</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions-->
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
@@ -624,6 +624,22 @@
 					<artifactId>pdfbox-tools</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		 <!-- added for Red5 lib substitution -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-core</artifactId>
+			<version>${tomcat.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<version>${tomcat.version}</version>
 		</dependency>
 	</dependencies>
 </project>
