@@ -65,12 +65,9 @@ public class FileProcessor {
 
 		File temp = null;
 		try {
-			temp = File.createTempFile(String.format("upload_%s", hash), ".tmp");
-			copyInputStreamToFile(is, temp);
-
 			String ext = getFileExt(f.getName());
-			log.debug("file extension: " + ext);
-			StoredFile sf = new StoredFile(hash, ext, temp);
+			log.debug("file extension: {}", ext);
+			StoredFile sf = new StoredFile(hash, ext, is);
 			// Check variable to see if this file is a presentation
 			// check if this is a a file that can be converted by
 			// openoffice-service
@@ -101,13 +98,15 @@ public class FileProcessor {
 			f.setHash(hash);
 
 			File file = f.getFile(ext);
-			log.debug("writing file to: " + file);
+			log.debug("writing file to: {}", file);
 			if (!file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
 				result.addItem("No parent", new ProcessResult("Unable to create parent for file: " + file.getCanonicalPath()));
 				return result;
 			}
 
-			log.debug("canBeConverted: " + isOffice);
+			temp = File.createTempFile(String.format("upload_%s", hash), ".tmp");
+			copyInputStreamToFile(is, temp);
+			log.debug("canBeConverted: {}", isOffice);
 			if (isOffice || isPdf) {
 				copyFile(temp, file);
 				// convert to pdf, thumbs, swf and xml-description
@@ -130,7 +129,7 @@ public class FileProcessor {
 				}
 			}
 			f = fileDao.update(f);
-			log.debug("fileId: " + f.getId());
+			log.debug("fileId: {}", f.getId());
 		} catch (Exception e) {
 			log.debug("Error while processing the file", e);
 			result.addItem("exception", new ProcessResult("Unexpected exception: " + e.getMessage()));
