@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class VideoSettings extends Panel {
 		JSONObject gs = OpenmeetingsVariables.getRoomSettings();
 		JSONObject s = new JSONObject(gs.toString())
 				.put("sid", sid)
+				.put("debug", DEVELOPMENT == Application.get().getConfigurationType())
 				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
 		try {
 			URL url = new URL(cp.getCodebase());

@@ -75,7 +75,9 @@
 		private var exclusiveTitle:String;
 
 		private function debug(...rest):void {
-			ExternalInterface.call("console.log", rest);
+			if ('true' === params.debug) {
+				ExternalInterface.call("console.log", rest);
+			}
 		}
 
 		private function camAvail():Boolean {

@@ -19,6 +19,7 @@
 package org.apache.openmeetings {
 import flash.events.AsyncErrorEvent;
 import flash.events.NetStatusEvent;
+import flash.events.IOErrorEvent;
 import flash.external.ExternalInterface;
 import flash.media.Camera;
 import flash.media.H264Level;
@@ -149,7 +150,9 @@ public class OmVideo {
 	}
 
 	private function debug(... rest):void {
-		ExternalInterface.call("console.log", rest);
+		if ('true' === params.debug) {
+			ExternalInterface.call("console.log", rest);
+		}
 	}
 
 	private function createStream():void {
@@ -165,22 +168,22 @@ public class OmVideo {
 			, onCuePoint: function(metadata:Object):void {
 				debug("onCuePoint: ", metadata);
 			}
-			, ioError: function(error:Object):void {
-				debug("ioError: ", error);
+			, ioError: function(e:IOErrorEvent):void {
+				debug("ioError: ", e);
 			}
-			, netStatus: function(status:Object):void {
-				debug("netStatus: ", status);
+			, netStatus: function(e:NetStatusEvent):void {
+				debug("netStatus: ", e);
 			}
-			, asyncError: function(error:Object):void {
-				debug("asyncError: ", error);
+			, asyncError: function(e:AsyncErrorEvent):void {
+				debug("asyncError: ", e);
 			}
 		};
 		//this is a workaround, attaching the event to the client object does not work
 		ns.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus2);
 	}
 
-	private function onNetStatus2(evt:Object):void {
-		debug("netStream_onNetStatus: ", evt.info.code, evt.target);
+	private function onNetStatus2(e:NetStatusEvent):void {
+		debug("netStream_onNetStatus: ", e.info.code);
 	}
 
 	private function _publish(mode:String, name:String, cam:Camera, mic:Microphone, f:Function):void {
@@ -191,6 +194,7 @@ public class OmVideo {
 		this.mic = mic;
 		createStream();
 
+		ns.publish(name, (mode == BROADCAST) ? LIVE : mode);
 		ns.attachCamera(cam);
 		attachCamera(cam);
 		if (cam != null) {
@@ -212,7 +216,6 @@ public class OmVideo {
 		ns.attachAudio(mic);
 		_setVolume(volume);
 
-		ns.publish(name, (mode == BROADCAST) ? LIVE : mode);
 		if (f != null) {
 			f.call();
 		}
