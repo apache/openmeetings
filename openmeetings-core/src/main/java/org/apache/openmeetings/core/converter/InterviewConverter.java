@@ -34,8 +34,9 @@ import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.openmeetings.util.process.ProcessResult;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -107,7 +108,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			r.setStatus(Recording.Status.CONVERTING);
 			r = recordingDao.update(r);
 
-			List<ProcessResult> logs = new ArrayList<>();
+			ProcessResultList logs = new ProcessResultList();
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());

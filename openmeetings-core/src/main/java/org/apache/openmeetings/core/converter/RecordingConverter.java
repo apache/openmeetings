@@ -34,8 +34,8 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessHelper;
+import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 		try {
 			log.debug("recording " + r.getId());
 
-			List<ProcessResult> logs = new ArrayList<>();
+			ProcessResultList logs = new ProcessResultList();
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 

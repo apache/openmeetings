@@ -96,8 +96,9 @@ public class ProcessResult {
 		return exitCode;
 	}
 
-	public void setExitCode(Integer exitCode) {
+	public ProcessResult setExitCode(Integer exitCode) {
 		this.exitCode = exitCode;
+		return this;
 	}
 
 	public boolean isOk() {

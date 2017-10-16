@@ -18,14 +18,8 @@
  */
 package org.apache.openmeetings.util.process;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.slf4j.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,16 +29,10 @@ import org.slf4j.Logger;
  *
  */
 public class ProcessResultList {
-	private static final Logger log = getLogger(ProcessResultList.class, getWebAppRootKey());
+	private List<ProcessResult> jobs = new ArrayList<>();
 
-	private Map<String, ProcessResult> jobs = new LinkedHashMap<>();
-
-	public ProcessResult addItem(String name, ProcessResult processResult) {
-		if (jobs.containsKey(name)) {
-			log.error("Duplicate key in jobslist:: " + name);
-			return null;
-		}
-		return jobs.put(name, processResult);
+	public void add(ProcessResult res) {
+		jobs.add(res);
 	}
 
 	/**
@@ -53,8 +41,8 @@ public class ProcessResultList {
 	 * @return
 	 */
 	public boolean hasError() {
-		for (Entry<String, ProcessResult> entry : jobs.entrySet()) {
-			if (!entry.getValue().isOk()) {
+		for (ProcessResult res : jobs) {
+			if (!res.isOk()) {
 				return true;
 			}
 		}
@@ -68,11 +56,11 @@ public class ProcessResultList {
 	 */
 	public String getLogMessage() {
 		StringBuilder logMessage = new StringBuilder();
-		for (Entry<String, ProcessResult> entry : jobs.entrySet()) {
+		for (ProcessResult res : jobs) {
 			logMessage.append("key: ");
-			logMessage.append(entry.getKey());
+			logMessage.append(res.getProcess());
 			logMessage.append("\r\n");
-			logMessage.append(entry.getValue().buildLogMessage());
+			logMessage.append(res.buildLogMessage());
 		}
 		return logMessage.toString();
 	}
@@ -81,7 +69,7 @@ public class ProcessResultList {
 		return jobs.size();
 	}
 
-	public Map<String, ProcessResult> getJobs() {
+	public List<ProcessResult> getJobs() {
 		return jobs;
 	}
 }

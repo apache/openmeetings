@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -197,8 +196,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 
 				try {
 					ProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream());
-					for (Entry<String, ProcessResult> entry : logs.getJobs().entrySet()) {
-						getBean(FileItemLogDao.class).add(entry.getValue().getProcess(), f, entry.getValue());
+					for (ProcessResult res : logs.getJobs()) {
+						getBean(FileItemLogDao.class).add(res.getProcess(), f, res);
 					}
 					room.getSidebar().updateFiles(target);
 					if (logs.hasError()) {

@@ -39,7 +39,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
@@ -52,6 +51,8 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
+import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.wicket.util.string.Strings;
 import org.red5.io.flv.impl.FLVWriter;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -90,12 +91,13 @@ public abstract class BaseConverter {
 	}
 
 	private String getPath(String key, String app) {
-		String path = cfgDao.getString(key, "");
-		if (!Strings.isEmpty(path) && !path.endsWith(File.separator)) {
-			path += File.separator;
+		final String cfg = cfgDao.getString(key, "");
+		StringBuilder path = new StringBuilder(cfg);
+		if (!Strings.isEmpty(path) && !cfg.endsWith(File.separator)) {
+			path.append(File.separator);
 		}
-		path += app;
-		return path;
+		path.append(app).append(EXEC_EXT);
+		return path.toString();
 	}
 
 	public String getPathToFFMPEG() {
@@ -107,7 +109,7 @@ public abstract class BaseConverter {
 	}
 
 	protected String getPathToConvert() {
-		return getPath(CONFIG_PATH_IMAGEMAGIC, "convert") + EXEC_EXT;
+		return getPath(CONFIG_PATH_IMAGEMAGIC, "convert");
 	}
 
 	protected File getStreamFolder(Recording recording) {
@@ -160,14 +162,14 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 
-	protected void stripAudioFirstPass(Recording recording, List<ProcessResult> returnLog,
+	protected void stripAudioFirstPass(Recording recording, ProcessResultList logs,
 			List<File> waveFiles, File streamFolder)
 	{
-		stripAudioFirstPass(recording, returnLog, waveFiles, streamFolder
+		stripAudioFirstPass(recording, logs, waveFiles, streamFolder
 				, metaDataDao.getAudioMetaDataByRecording(recording.getId()));
 	}
 
-	private String[] addSoxPad(List<ProcessResult> returnLog, String job, double length, double position, File inFile, File outFile) throws IOException {
+	private String[] addSoxPad(ProcessResultList logs, String job, double length, double position, File inFile, File outFile) throws IOException {
 		if (length < 0 || position < 0) {
 			log.debug("::addSoxPad {} Invalid parameters: length = {}; position = {}; inFile = {}", job, length, position, inFile);
 		}
@@ -175,7 +177,7 @@ public abstract class BaseConverter {
 				, String.valueOf(length < 0 ? 0 : length)
 				, String.valueOf(position < 0 ? 0 : position) };
 
-		returnLog.add(ProcessHelper.executeScript(job, argv));
+		logs.add(ProcessHelper.executeScript(job, argv));
 		return argv;
 	}
 
@@ -250,7 +252,7 @@ public abstract class BaseConverter {
 	}
 
 	protected void stripAudioFirstPass(Recording recording,
-			List<ProcessResult> returnLog,
+			ProcessResultList logs,
 			List<File> waveFiles, File streamFolder,
 			List<RecordingMetaData> metaDataList) {
 		try {
@@ -281,7 +283,7 @@ public abstract class BaseConverter {
 							, "-af", "aresample=32k:min_comp=0.001:min_hard_comp=0.100000"
 							, outputWav.getCanonicalPath()};
 
-					returnLog.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
+					logs.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
 				}
 
 				if (outputWav.exists() && outputWav.length() != 0) {
@@ -308,9 +310,9 @@ public abstract class BaseConverter {
 						if (metaDelta.getDeltaTime() != null) {
 							double gapSeconds = diffSeconds(metaDelta.getDeltaTime());
 							if (metaDelta.isStartPadding()) {
-								soxArgs = addSoxPad(returnLog, "fillGap", gapSeconds, 0, inputFile, outputGapFullWav);
+								soxArgs = addSoxPad(logs, "fillGap", gapSeconds, 0, inputFile, outputGapFullWav);
 							} else if (metaDelta.isEndPadding()) {
-								soxArgs = addSoxPad(returnLog, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
+								soxArgs = addSoxPad(logs, "fillGap", 0, gapSeconds, inputFile, outputGapFullWav);
 							}
 						}
 
@@ -334,7 +336,7 @@ public abstract class BaseConverter {
 					// Calculate delta at ending
 					double endPad = diffSeconds(recording.getRecordEnd(), metaData.getRecordEnd());
 
-					addSoxPad(returnLog, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
+					addSoxPad(logs, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
 
 					// Fix for Audio Length - Invalid Audio Length in Recorded Files
 					// Audio must match 100% the Video
@@ -382,15 +384,15 @@ public abstract class BaseConverter {
 		return argv;
 	}
 
-	protected String convertToMp4(Recording r, List<String> _argv, List<ProcessResult> returnLog) throws IOException {
+	protected String convertToMp4(Recording r, List<String> _argv, ProcessResultList logs) throws IOException {
 		String mp4path = r.getFile().getCanonicalPath();
 		List<String> argv = new ArrayList<>(Arrays.asList(getPathToFFMPEG(), "-y"));
 		argv.addAll(_argv);
-		returnLog.add(ProcessHelper.executeScript("generate MP4", addMp4OutParams(r, argv, mp4path).toArray(new String[]{})));
+		logs.add(ProcessHelper.executeScript("generate MP4", addMp4OutParams(r, argv, mp4path).toArray(new String[]{})));
 		return mp4path;
 	}
 
-	protected void convertToPng(BaseFileItem f, String mp4path, List<ProcessResult> logs) throws IOException {
+	protected void convertToPng(BaseFileItem f, String mp4path, ProcessResultList logs) throws IOException {
 		// Extract first Image for preview purpose
 		// ffmpeg -i movie.mp4 -vf  "thumbnail,scale=640:-1" -frames:v 1 movie.png
 		File png = f.getFile(EXTENSION_PNG);
@@ -400,7 +402,6 @@ public abstract class BaseConverter {
 				, "-vf", "thumbnail,scale=640:-1" //
 				, "-frames:v", "1" //
 				, png.getCanonicalPath() };
-
 		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: %s", f.getHash()), argv));
 	}
 
@@ -416,15 +417,15 @@ public abstract class BaseConverter {
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 
-	protected void postProcess(Recording r, String mp4path, List<ProcessResult> logs, List<File> waveFiles) throws IOException {
+	protected void postProcess(Recording r, String mp4path, ProcessResultList logs, List<File> waveFiles) throws IOException {
 		convertToPng(r, mp4path, logs);
 
 		updateDuration(r);
 		r.setStatus(Recording.Status.PROCESSED);
 
 		logDao.delete(r);
-		for (ProcessResult returnMap : logs) {
-			logDao.add("generateFFMPEG", r, returnMap);
+		for (ProcessResult res : logs.getJobs()) {
+			logDao.add("generateFFMPEG", r, res);
 		}
 
 		// Delete Wave Files

@@ -67,19 +67,21 @@ public class ImageConverter extends BaseConverter {
 	private UserDao userDao;
 
 	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf) throws IOException {
-		ProcessResultList returnMap = new ProcessResultList();
+		return convertImage(f, sf, new ProcessResultList());
+	}
 
+	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf, ProcessResultList logs) throws IOException {
 		File jpg = f.getFile(EXTENSION_JPG);
 		if (!sf.isJpg()) {
 			File img = f.getFile(sf.getExt());
 
 			log.debug("##### convertImage destinationFile: " + jpg);
-			returnMap.addItem("processJPG", convertSingleJpg(img, jpg));
+			logs.add(convertSingleJpg(img, jpg));
 		} else if (!jpg.exists()){
 			copyFile(f.getFile(sf.getExt()), jpg);
 		}
-		returnMap.addItem("get JPG dimensions", initSize(f, jpg, JPG_MIME_TYPE));
-		return returnMap;
+		logs.add(initSize(f, jpg, JPG_MIME_TYPE));
+		return logs;
 	}
 
 	public ProcessResultList convertImageUserProfile(File file, Long userId, boolean skipConvertion) throws Exception {
@@ -95,7 +97,7 @@ public class ImageConverter extends BaseConverter {
 
 		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), PROFILE_FILE_NAME, EXTENSION_JPG);
 		if (!skipConvertion) {
-			returnMap.addItem("processJPG", convertSingleJpg(file, destinationFile));
+			returnMap.add(convertSingleJpg(file, destinationFile));
 		} else {
 			FileUtils.copyFile(file, destinationFile);
 		}
@@ -123,7 +125,7 @@ public class ImageConverter extends BaseConverter {
 		return cfgDao.getString(CONFIG_DOCUMENT_QUALITY, "90");
 	}
 
-	private static ProcessResult initSize(BaseFileItem f, File img, String mime) {
+	private ProcessResult initSize(BaseFileItem f, File img, String mime) {
 		ProcessResult res = new ProcessResult();
 		res.setProcess("get image dimensions :: " + f.getId());
 		final Parser parser = new ImageParser();
@@ -171,7 +173,7 @@ public class ImageConverter extends BaseConverter {
 	 * @return - result of conversion
 	 * @throws IOException in case IO exception occurred
 	 */
-	public ProcessResultList convertDocument(ProcessResultList list, FileItem f, File pdf) throws IOException {
+	public ProcessResultList convertDocument(FileItem f, File pdf, ProcessResultList logs) throws IOException {
 		log.debug("convertDocument");
 		String[] argv = new String[] {
 			getPathToConvert()
@@ -180,17 +182,17 @@ public class ImageConverter extends BaseConverter {
 			, "-quality", getQuality()
 			, new File(pdf.getParentFile(), PAGE_TMPLT).getCanonicalPath()
 			};
-		ProcessResult res = ProcessHelper.executeScript("convertDocument", argv);
-		list.addItem("convert PDF to images", res);
+		ProcessResult res = ProcessHelper.executeScript("convert PDF to images", argv);
+		logs.add(res);
 		if (res.isOk()) {
 			File[] pages = pdf.getParentFile().listFiles(fi -> fi.isFile() && fi.getName().startsWith(DOC_PAGE_PREFIX) && fi.getName().endsWith(EXTENSION_PNG));
 			if (pages == null || pages.length == 0) {
 				f.setCount(0);
 			} else {
 				f.setCount(pages.length);
-				list.addItem("get PNG page dimensions", initSize(f, pages[0], PNG_MIME_TYPE));
+				logs.add(initSize(f, pages[0], PNG_MIME_TYPE));
 			}
 		}
-		return list;
+		return logs;
 	}
 }

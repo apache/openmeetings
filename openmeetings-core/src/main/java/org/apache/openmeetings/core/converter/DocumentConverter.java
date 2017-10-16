@@ -50,21 +50,23 @@ public class DocumentConverter {
 	private ImageConverter imageConverter;
 
 	public ProcessResultList convertPDF(FileItem f, StoredFile sf) throws Exception {
-		ProcessResultList result = new ProcessResultList();
+		return convertPDF(f, sf, new ProcessResultList());
+	}
 
+	public ProcessResultList convertPDF(FileItem f, StoredFile sf, ProcessResultList logs) throws Exception {
 		boolean fullProcessing = !sf.isPdf();
 		File original = f.getFile(sf.getExt());
 		File pdf = f.getFile(EXTENSION_PDF);
 		log.debug("fullProcessing: " + fullProcessing);
 		if (fullProcessing) {
 			log.debug("-- running JOD --");
-			result.addItem("processOpenOffice", doJodConvert(original, pdf));
+			logs.add(doJodConvert(original, pdf));
 		} else if (!EXTENSION_PDF.equals(sf.getExt())) {
 			copyFile(original, pdf);
 		}
 
 		log.debug("-- generate page images --");
-		return imageConverter.convertDocument(result, f, pdf);
+		return imageConverter.convertDocument(f, pdf, logs);
 	}
 
 	public static void createOfficeManager(String officePath, Consumer<OfficeManager> consumer) {
@@ -100,8 +102,7 @@ public class DocumentConverter {
 			log.error("doJodConvert", ex);
 			return new ProcessResult("doJodConvert", ex.getMessage(), ex);
 		}
-		ProcessResult result = new ProcessResult("doJodConvert", "Document converted successfully", null);
-		result.setExitCode(0);
-		return result;
+		return new ProcessResult("doJodConvert", "Document converted successfully", null)
+				.setExitCode(0);
 	}
 }
