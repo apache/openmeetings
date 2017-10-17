@@ -69,7 +69,7 @@ import org.simpleframework.xml.Element;
 	, @NamedQuery(name = "getFileItemsByIds", query = "SELECT f FROM BaseFileItem f"
 			+ " WHERE f.deleted = false AND f.id IN :ids")
 })
-@Table(name = "file")
+@Table(name = "om_file")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class BaseFileItem extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
