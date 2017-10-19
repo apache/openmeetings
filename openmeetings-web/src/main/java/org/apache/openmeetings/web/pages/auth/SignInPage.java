@@ -64,6 +64,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.github.openjson.JSONException;
 import com.github.openjson.JSONObject;
 
 public class SignInPage extends BaseInitedPage {
@@ -102,7 +103,7 @@ public class SignInPage extends BaseInitedPage {
 				} else { // redirect to get code
 					showAuth(server);
 				}
-			} catch (IOException|NoSuchAlgorithmException e) {
+			} catch (IOException|NoSuchAlgorithmException|JSONException e) {
 				log.error("OAuth2 login error", e);
 			}
 		}
@@ -243,18 +244,18 @@ public class SignInPage extends BaseInitedPage {
 		String sourceResponse = IOUtils.toString(urlConnection.getInputStream(), UTF_8);
 		// parse json result
 		AuthInfo result = new AuthInfo();
-		JSONObject jsonResult = new JSONObject(sourceResponse);
-		if (jsonResult.has("access_token")) {
-			result.accessToken = jsonResult.getString("access_token");
+		JSONObject json = new JSONObject(sourceResponse);
+		if (json.has("access_token")) {
+			result.accessToken = json.getString("access_token");
 		}
-		if (jsonResult.has("refresh_token")) {
-			result.refreshToken = jsonResult.getString("refresh_token");
+		if (json.has("refresh_token")) {
+			result.refreshToken = json.getString("refresh_token");
 		}
-		if (jsonResult.has("token_type")) {
-			result.tokenType = jsonResult.getString("token_type");
+		if (json.has("token_type")) {
+			result.tokenType = json.getString("token_type");
 		}
-		if (jsonResult.has("expires_in")) {
-			result.expiresIn = jsonResult.getLong("expires_in");
+		if (json.has("expires_in")) {
+			result.expiresIn = json.getLong("expires_in");
 		}
 		// access token must be specified
 		if (result.accessToken == null) {
@@ -266,8 +267,8 @@ public class SignInPage extends BaseInitedPage {
 
 	private static Map<String, String> getAuthParams(String token, String code, OAuthServer server) throws IOException {
 		// get attributes names
-		String loginAttributeName = server.getLoginParamName();
-		String emailAttributeName = server.getEmailParamName();
+		String login = server.getLoginParamName();
+		String email = server.getEmailParamName();
 		String firstname = server.getFirstnameParamName();
 		String lastname = server.getLastnameParamName();
 		// prepare url
@@ -280,14 +281,14 @@ public class SignInPage extends BaseInitedPage {
 		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
 		// parse json result
 		Map<String, String> result = new HashMap<>();
-		JSONObject parsedJson = new JSONObject(sourceResponse);
-		result.put("login", parsedJson.getString(loginAttributeName));
-		result.put("email", parsedJson.getString(emailAttributeName));
-		if (parsedJson.has(firstname)) {
-			result.put("firstname", parsedJson.getString(firstname));
+		JSONObject json = new JSONObject(sourceResponse);
+		result.put("login", json.getString(login));
+		result.put("email", json.getString(email));
+		if (json.has(firstname)) {
+			result.put("firstname", json.getString(firstname));
 		}
-		if (parsedJson.has(lastname)) {
-			result.put("lastname", parsedJson.getString(lastname));
+		if (json.has(lastname)) {
+			result.put("lastname", json.getString(lastname));
 		}
 		return result;
 	}
