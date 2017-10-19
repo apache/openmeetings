@@ -447,8 +447,8 @@ public class ImportInitvalues {
 		facebookServer.setEnabled(false);
 		facebookServer.setClientId("<put your client_id>");
 		facebookServer.setClientSecret("<put your client_secret>");
-		facebookServer.setRequestKeyUrl("https://www.facebook.com/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
-		facebookServer.setRequestTokenUrl("https://graph.facebook.com/v2.3/oauth/access_token");
+		facebookServer.setRequestKeyUrl("https://www.facebook.com/v2.10/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
+		facebookServer.setRequestTokenUrl("https://graph.facebook.com/v2.10/oauth/access_token");
 		facebookServer.setRequestTokenMethod(RequestMethod.POST);
 		facebookServer.setRequestTokenAttributes("client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}");
 		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=id,first_name,last_name,email");

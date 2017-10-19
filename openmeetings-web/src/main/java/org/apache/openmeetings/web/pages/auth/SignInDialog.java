@@ -61,7 +61,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -283,10 +282,11 @@ public class SignInDialog extends NonClosableDialog<String> {
 								showAuth(s, SignInDialog.this);
 							}
 						};
-						Component icon = new Image("icon", Model.of(""))
-								.setVisible(!Strings.isEmpty(s.getIconUrl()))
-								.add(AttributeModifier.replace("src", s.getIconUrl()));
-						btn.add(icon, new Label("label", s.getName()));
+						Component lbl = new Label("label", s.getName());
+						if (!Strings.isEmpty(s.getIconUrl())) {
+							lbl.add(AttributeModifier.replace("style", String.format("background-image: url(%s)", s.getIconUrl())));
+						}
+						btn.add(lbl);
 						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
 					}
 				}).setVisible(allowOAuthLogin()));
