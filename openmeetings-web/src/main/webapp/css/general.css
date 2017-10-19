@@ -24,6 +24,16 @@ html, body {
 * {
 	box-sizing: initial; /*reset bootstrap box sizing*/
 }
+.signin .oauth-section {
+	border-left: 2px dotted;
+	padding-left: 5px;
+}
+.signin .oauth-section .provider {
+	background-position: 0 0;
+	background-size: 16px;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
 #header {
 	font-size: 28px;
 	line-height: 40px;
