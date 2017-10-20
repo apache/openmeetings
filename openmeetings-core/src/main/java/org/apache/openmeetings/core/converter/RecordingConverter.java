@@ -66,7 +66,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 
-			RecordingMetaData screenMetaData = metaDataDao.getScreenMetaDataByRecording(r.getId());
+			RecordingMetaData screenMetaData = metaDataDao.getScreenByRecording(r.getId());
 
 			if (screenMetaData == null) {
 				throw new ConversionException("screenMetaData is Null recordingId " + r.getId());

@@ -25,7 +25,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
@@ -61,18 +60,11 @@ public class RecordingMetaDataDao {
 				.getResultList();
 	}
 
-	public RecordingMetaData getScreenMetaDataByRecording(Long recordingId) {
-		try {
-			TypedQuery<RecordingMetaData> query = em.createNamedQuery("getScreenMetaByRecording", RecordingMetaData.class);
-			query.setParameter("recordingId", recordingId);
-
-			List<RecordingMetaData> metaDatas = query.getResultList();
-
-			return metaDatas.isEmpty() ? null : metaDatas.get(0);
-		} catch (Exception ex2) {
-			log.error("[getScreenMetaDataByRecording]: ", ex2);
-		}
-		return null;
+	public RecordingMetaData getScreenByRecording(Long recordingId) {
+		List<RecordingMetaData> list = em.createNamedQuery("getScreenMetaByRecording", RecordingMetaData.class)
+				.setParameter("recordingId", recordingId)
+				.getResultList();
+		return list.isEmpty() ? null : list.get(0);
 	}
 
 	public Long add(Long recordingId, Date recordStart, boolean isAudioOnly,
@@ -101,8 +93,8 @@ public class RecordingMetaDataDao {
 
 			if (meta != null) {
 				meta.setRecordEnd(recordEnd);
-				log.debug("updateEndDate :: Start Date :" + meta.getRecordStart());
-				log.debug("updateEndDate :: End Date :" + meta.getRecordEnd());
+				log.debug("updateEndDate :: Start Date : {}", meta.getRecordStart());
+				log.debug("updateEndDate :: End Date : {}", meta.getRecordEnd());
 				update(meta);
 			}
 			return metaId;
