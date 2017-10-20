@@ -69,7 +69,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Before
 	public void setUp() throws Exception {
 		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
-		getCryptClassName();
+		cfgDao.reinit();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
 			// regular user

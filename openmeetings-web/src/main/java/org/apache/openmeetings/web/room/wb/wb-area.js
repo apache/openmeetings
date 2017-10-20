@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var PRESENTER = 'presenter';
 var WHITEBOARD = 'whiteBoard';
-var WbArea = (function() {
+var DrawWbArea = function() {
 	const self = {};
 	let container, area, tabs, scroll, role = NONE, _inited = false;
 
@@ -277,7 +277,7 @@ var WbArea = (function() {
 	self.loadVideos = function() { wbAction('loadVideos'); };
 	self.initVideos = _initVideos;
 	return self;
-})();
+};
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		try {

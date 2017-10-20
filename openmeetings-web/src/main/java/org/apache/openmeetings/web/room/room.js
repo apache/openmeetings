@@ -527,6 +527,7 @@ var Room = (function() {
 
 	function _init(_options) {
 		options = _options;
+		window.WbArea = options.interview ? InterviewWbArea() : DrawWbArea();
 		VideoManager.init();
 		Activities.init();
 	}
@@ -631,8 +632,9 @@ var Room = (function() {
 		$(window).off('resize.openmeetings');
 		Wicket.Event.unsubscribe("/websocket/closed", _close);
 		Wicket.Event.unsubscribe("/websocket/error", _close);
-		if (!!WbArea) {
+		if (typeof WbArea !== 'undefined') {
 			WbArea.destroy();
+			WbArea = undefined;
 		}
 		if (typeof VideoSettings !== 'undefined') {
 			VideoSettings.close();

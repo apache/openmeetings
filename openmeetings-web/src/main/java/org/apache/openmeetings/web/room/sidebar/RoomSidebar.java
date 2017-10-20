@@ -232,7 +232,7 @@ public class RoomSidebar extends Panel {
 			if (!s.isEmpty()) {
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				Client c = room.getClient();
-				cp.setSettings(new JSONObject(s.toString())).update(c, Room.Type.interview == room.getRoom().getType());
+				cp.setSettings(new JSONObject(s.toString())).update(c, room.isInterview());
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
@@ -377,7 +377,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
-		if (Room.Type.interview == room.getRoom().getType()) {
+		if (room.isInterview()) {
 			return;
 		}
 		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.presenter);

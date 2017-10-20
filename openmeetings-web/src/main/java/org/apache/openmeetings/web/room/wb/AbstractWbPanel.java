@@ -32,7 +32,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.string.StringValue;
@@ -49,17 +48,6 @@ public abstract class AbstractWbPanel extends Panel {
 	protected static final String ROLE_NONE = "none";
 	protected final RoomPanel rp;
 	protected boolean inited = false;
-	private final AbstractDefaultAjaxBehavior wbLoad = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			StringBuilder sb = new StringBuilder("WbArea.init();");
-			internalWbLoad(sb);
-			target.appendJavaScript(sb);
-			inited = true;
-		}
-	};
 	private final AbstractDefaultAjaxBehavior wbAction = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -88,11 +76,18 @@ public abstract class AbstractWbPanel extends Panel {
 		super(id);
 		this.rp = rp;
 		setOutputMarkupId(true);
-		add(wbLoad, wbAction);
+		add(wbAction);
+	}
+
+	public CharSequence getInitScript() {
+		StringBuilder sb = new StringBuilder("WbArea.init();");
+		internalWbLoad(sb);
+		inited = true;
+		return sb;
 	}
 
 	public AbstractWbPanel update(IPartialPageRequestHandler handler) {
-		if (handler != null) {
+		if (inited && handler != null) {
 			handler.appendJavaScript(String.format("Room.setSize();WbArea.setRole('%s');", getRole()));
 		}
 		return this;
@@ -127,7 +122,6 @@ public abstract class AbstractWbPanel extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(OnDomReadyHeaderItem.forScript(wbLoad.getCallbackScript()));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, wbAction, explicit(PARAM_ACTION), explicit(PARAM_OBJ))));
 	}
 }
