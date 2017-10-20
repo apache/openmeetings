@@ -73,6 +73,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			}
 
 			if (screenMetaData.getStreamStatus() == Status.NONE) {
+				printMetaInfo(screenMetaData, "StartConversion");
 				throw new ConversionException("Stream has not been started, error in recording");
 			}
 			if (Strings.isEmpty(r.getHash())) {
@@ -120,14 +121,14 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			int flvWidth = r.getWidth();
 			int flvHeight = r.getHeight();
 
-			log.debug("flvWidth -1- " + flvWidth);
-			log.debug("flvHeight -1- " + flvHeight);
+			log.debug("flvWidth -1- {}", flvWidth);
+			log.debug("flvHeight -1- {}", flvHeight);
 
 			flvWidth = (int)(16. * flvWidth / 16);
 			flvHeight = (int)(16. * flvHeight / 16);
 
-			log.debug("flvWidth -2- " + flvWidth);
-			log.debug("flvHeight -2- " + flvHeight);
+			log.debug("flvWidth -2- {}", flvWidth);
+			log.debug("flvHeight -2- {}", flvHeight);
 
 			r.setWidth(flvWidth);
 			r.setHeight(flvHeight);

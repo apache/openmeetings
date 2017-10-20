@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.service;
 
+import static org.apache.openmeetings.core.converter.BaseConverter.printMetaInfo;
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -27,7 +28,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.core.converter.BaseConverter;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
@@ -271,20 +271,25 @@ public class RecordingService {
 			log.debug("Stream Closing :: " + metaId);
 
 			RecordingMetaData metaData = metaDataDao.get(metaId);
-			BaseConverter.printMetaInfo(metaData, "Stopping the stream");
+			printMetaInfo(metaData, "Stopping the stream");
 			// Manually call finish on the stream so that there is no endless loop waiting in the RecordingConverter waiting for the stream to finish
 			// this would normally happen in the Listener
 			Status s = metaData.getStreamStatus();
-			if (Status.NONE == s) {
-				log.debug("Stream was not started, no need to stop :: stream with id {}", metaId);
-			} else {
-				metaData.setStreamStatus(listenerAdapter == null && s == Status.STARTED ? Status.STOPPED : Status.STOPPING);
-				log.debug("Stopping the stream :: New status == {}", metaData.getStreamStatus());
+			switch (s) {
+				case NONE:
+					log.debug("Stream was not started, no need to stop :: stream with id {}", metaId);
+					break;
+				case STARTED:
+					metaData.setStreamStatus(listenerAdapter == null ? Status.STOPPED : Status.STOPPING);
+					metaDataDao.update(metaData);
+					break;
+				default:
+					//no-op
+					break;
 			}
-			metaDataDao.update(metaData);
 			if (listenerAdapter == null) {
-				log.debug("Stream Not Found :: " + metaId);
-				log.debug("Available Streams :: " + streamListeners.size());
+				log.debug("Stream Not Found :: {}", metaId);
+				log.debug("Available Streams :: {}", streamListeners.size());
 
 				for (Long entryKey : streamListeners.keySet()) {
 					log.debug("Stored recordingMetaDataId in Map: {}", entryKey);
