@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dao.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.RECENT_ROOMS_COUNT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -215,7 +216,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	private String getSipNumber(long roomId) {
-		if (cfgDao.isSipEnabled()) {
+		if (isSipEnabled()) {
 			return cfgDao.getString(CONFIG_SIP_ROOM_PREFIX, "400") + roomId;
 		}
 		return null;
@@ -229,7 +230,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		} else {
 			entity.setUpdated(new Date());
 		}
-		if (entity.isSipEnabled() && cfgDao.isSipEnabled()) {
+		if (entity.isSipEnabled() && isSipEnabled()) {
 			String sipNumber = getSipNumber(entity.getId());
 			if (sipNumber != null && !sipNumber.equals(entity.getConfno())) {
 				entity.setConfno(sipNumber);

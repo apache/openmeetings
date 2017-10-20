@@ -18,15 +18,14 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getGaCode;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.HeaderPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
@@ -71,7 +70,6 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 
 	public abstract boolean isRtl();
 	protected abstract String getLanguageCode();
-	protected abstract String getApplicationName();
 
 	protected OmUrlFragment getUrlFragment(IRequestParameters params) {
 		for (AreaKeys key : AreaKeys.values()) {
@@ -90,10 +88,6 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	@Override
 	protected Map<String, String> getOptions() {
 		return options;
-	}
-
-	protected String getGaCode() {
-		return getBean(ConfigurationDao.class).getString(CONFIG_GOOGLE_ANALYTICS_CODE, null);
 	}
 
 	protected boolean isMainPage() {

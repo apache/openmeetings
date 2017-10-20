@@ -18,12 +18,11 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -53,7 +52,7 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		super.onInitialize();
 		final Form<Void> form = new Form<>("form");
 		form.setMultiPart(true);
-		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
+		form.setMaxSize(Bytes.bytes(getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
 		form.add(fileUploadField);
 		form.add(new UploadProgressBar("progress", form, fileUploadField));

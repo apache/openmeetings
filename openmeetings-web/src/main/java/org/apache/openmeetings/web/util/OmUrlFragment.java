@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
@@ -286,6 +287,6 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	public String getLink() {
-		return getBean(ConfigurationDao.class).getBaseUrl() + "#" + getArea().name() + "/" + getType();
+		return getBaseUrl() + "#" + getArea().name() + "/" + getType();
 	}
 }

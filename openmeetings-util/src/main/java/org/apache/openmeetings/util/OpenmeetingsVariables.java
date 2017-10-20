@@ -111,12 +111,16 @@ public class OpenmeetingsVariables {
 	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 
 	private static String webAppRootKey = null;
-	private static String configKeyCryptClassName = null;
+	private static String cryptClassName = null;
 	private static String wicketApplicationName = null;
 	private static String applicationName = null;
 	private static int extProcessTtl = 20;
 	private static JSONObject roomSettings = new JSONObject();
 	private static boolean initComplete = false;
+	private static long maxUploadSize = DEFAULT_MAX_UPLOAD_SIZE;
+	private static String baseUrl = DEFAULT_BASE_URL;
+	private static boolean sipEnabled = false;
+	private static String gaCode = null;
 
 	private OpenmeetingsVariables() {}
 
@@ -136,12 +140,12 @@ public class OpenmeetingsVariables {
 		roomSettings = s;
 	}
 
-	public static String getConfigKeyCryptClassName() {
-		return configKeyCryptClassName;
+	public static String getCryptClassName() {
+		return cryptClassName;
 	}
 
-	public static void setConfigKeyCryptClassName(String name) {
-		configKeyCryptClassName = name;
+	public static void setCryptClassName(String name) {
+		cryptClassName = name;
 	}
 
 	public static int getExtProcessTtl() {
@@ -174,5 +178,41 @@ public class OpenmeetingsVariables {
 
 	public static void setWebAppRootKey(String key) {
 		webAppRootKey = key;
+	}
+
+	/**
+	 *
+	 * @return returns the max upload size configured by max_upload_size config key
+	 */
+	public static long getMaxUploadSize() {
+		return maxUploadSize;
+	}
+
+	public static void setMaxUploadSize(long size) {
+		maxUploadSize = size;
+	}
+
+	public static String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public static void setBaseUrl(String url) {
+		baseUrl = url;
+	}
+
+	public static boolean isSipEnabled() {
+		return sipEnabled;
+	}
+
+	public static void setSipEnabled(boolean enabled) {
+		sipEnabled = enabled;
+	}
+
+	public static String getGaCode() {
+		return gaCode;
+	}
+
+	public static void setGaCode(String code) {
+		gaCode = code;
 	}
 }

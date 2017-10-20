@@ -19,8 +19,8 @@
 package org.apache.openmeetings.service.mail.template.subject;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -51,7 +51,7 @@ public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final String app = getBean(ConfigurationDao.class).getAppName();
+		final String app = getApplicationName();
 		add(new Label("greetings", getString("template.recording.expiring.greetings", locale, u.getFirstname())));
 		add(new Label("body", getString("template.recording.expiring.body", locale, app, String.valueOf(remainingDays))));
 		add(new Label("footer", getString("template.recording.expiring.footer", locale, app)).setEscapeModelStrings(false));

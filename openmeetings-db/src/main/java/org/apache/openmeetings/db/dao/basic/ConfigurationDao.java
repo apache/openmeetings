@@ -31,6 +31,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
@@ -51,15 +52,17 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setMaxUploadSize;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -218,25 +221,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		return def;
 	}
 
-	public String getAppName() {
-		if (getApplicationName() == null) {
-			setApplicationName(getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME));
-		}
-		return getApplicationName();
-	}
-
-	public String getBaseUrl() {
-		String val = getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
-		if (val != null && !val.endsWith("/")) {
-			val += "/";
-		}
-		return val;
-	}
-
-	public boolean isSipEnabled() {
-		return getBool(CONFIG_SIP_ENABLED, false);
-	}
-
 	@Override
 	public Configuration get(long id) {
 		return get(Long.valueOf(id));
@@ -305,12 +289,23 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_FLASH_MIC_RATE:
 				reloadRoomSettings();
 				break;
+			case CONFIG_MAX_UPLOAD_SIZE:
+				reloadMaxUpload();
+				break;
 			case CONFIG_CRYPT:
-				setConfigKeyCryptClassName(value);
-				CryptProvider.reset();
+				reloadCrypt();
 				break;
 			case CONFIG_APPLICATION_NAME:
 				setApplicationName(value);
+				break;
+			case CONFIG_APPLICATION_BASE_URL:
+				reloadBaseUrl();
+				break;
+			case CONFIG_SIP_ENABLED:
+				reloadSipEnabled();
+				break;
+			case CONFIG_GOOGLE_ANALYTICS_CODE:
+				reloadGaCode();
 				break;
 			case CONFIG_HEADER_XFRAME:
 			{
@@ -341,32 +336,49 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		this.update(entity, userId, true);
 	}
 
-	/**
-	 * returns the max upload size configured by max_upload_size config key
-	 *
-	 * @param configurationDao
-	 * @return
-	 */
-	public long getMaxUploadSize() {
+	private void reloadMaxUpload() {
 		try {
-			return getLong(CONFIG_MAX_UPLOAD_SIZE, DEFAULT_MAX_UPLOAD_SIZE);
+			setMaxUploadSize(getLong(CONFIG_MAX_UPLOAD_SIZE, DEFAULT_MAX_UPLOAD_SIZE));
 		} catch (Exception e) {
 			log.error("Invalid value saved for max_upload_size conf key: ", e);
 		}
-		return DEFAULT_MAX_UPLOAD_SIZE;
 	}
 
-	public String getCryptKey() {
-		if (getConfigKeyCryptClassName() == null) {
-			String cryptClass = getString(CONFIG_CRYPT, null);
-			if (cryptClass != null) {
-				setConfigKeyCryptClassName(cryptClass);
-			}
+	private void reloadCrypt() {
+		String cryptClass = getString(CONFIG_CRYPT, null);
+		if (cryptClass != null) {
+			setCryptClassName(cryptClass);
+			CryptProvider.reset();
 		}
-		return getConfigKeyCryptClassName();
 	}
 
-	public JSONObject reloadRoomSettings() {
+	private void reloadBaseUrl() {
+		String val = getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
+		if (val != null && !val.endsWith("/")) {
+			val += "/";
+		}
+		setBaseUrl(val);
+	}
+
+	private void reloadSipEnabled() {
+		setSipEnabled(getBool(CONFIG_SIP_ENABLED, false));
+	}
+
+	private void reloadGaCode() {
+		setGaCode(getString(CONFIG_GOOGLE_ANALYTICS_CODE, null));
+	}
+
+	public void reinit() {
+		reloadMaxUpload();
+		reloadCrypt();
+		setApplicationName(getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME));
+		reloadBaseUrl();
+		reloadSipEnabled();
+		reloadGaCode();
+		reloadRoomSettings();
+	}
+
+	private JSONObject reloadRoomSettings() {
 		try {
 			Properties props = new Properties();
 			try (InputStream is = new FileInputStream(new File(new File(OmFileHelper.getRootDir(), "conf"), "red5.properties"))) {

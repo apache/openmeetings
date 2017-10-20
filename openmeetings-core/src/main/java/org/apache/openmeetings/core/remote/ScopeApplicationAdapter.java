@@ -123,11 +123,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 			_log.debug("webAppPath : " + OmFileHelper.getOmHome());
 
-			// Only load this Class one time Initially this value might by empty, because the DB is empty yet
-			cfgDao.getCryptKey();
-
-			// init your handler here
-			cfgDao.reloadRoomSettings();
+			// Init all global config properties
+			cfgDao.reinit();
 
 			for (String scopeName : scope.getScopeNames()) {
 				_log.debug("scopeName :: " + scopeName);

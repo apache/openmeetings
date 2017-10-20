@@ -23,6 +23,8 @@ import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
@@ -722,7 +724,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 		String[] params = _params;
 		if ((params == null || params.length == 0) && STRINGS_WITH_APP.contains(key)) {
-			params = new String[]{getBean(ConfigurationDao.class).getAppName()};
+			params = new String[]{getApplicationName()};
 		}
 		Localizer l = get().getResourceSettings().getLocalizer();
 		String value = l.getStringIgnoreSettings(key, null, null, loc, null, "[Missing]");
@@ -820,7 +822,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String _baseUrl) {
 		RequestCycle rc = RequestCycle.get();
-		String baseUrl = getBean(ConfigurationDao.class).getBaseUrl();
+		String baseUrl = getBaseUrl();
 		if (!new UrlValidator(new String[] {"http", "https"}).isValid(baseUrl) && !Strings.isEmpty(_baseUrl)) {
 			baseUrl = _baseUrl;
 		}

@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
@@ -128,7 +129,7 @@ public class UserManager implements IUserManager {
 			if (cfgDao.getBool(CONFIG_REGISTER_SOAP, false)) {
 				boolean sendConfirmation;
 				if (_sendConfirmation == null) {
-					String baseURL = cfgDao.getBaseUrl();
+					String baseURL = getBaseUrl();
 					sendConfirmation = baseURL != null
 							&& !baseURL.isEmpty()
 							&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);

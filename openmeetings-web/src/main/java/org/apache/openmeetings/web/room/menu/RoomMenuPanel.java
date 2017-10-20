@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getClientBySid;
@@ -332,7 +333,7 @@ public class RoomMenuPanel extends Panel {
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
-		sipDialerMenuItem.setEnabled(r.isSipEnabled() && getBean(ConfigurationDao.class).isSipEnabled());
+		sipDialerMenuItem.setEnabled(r.isSipEnabled() && isSipEnabled());
 		//TODO sip menus
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");

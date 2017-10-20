@@ -18,19 +18,11 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 
 public abstract class BaseInitedPage extends BasePage {
 	private static final long serialVersionUID = 1L;
-
-	@Override
-	protected String getApplicationName() {
-		return getBean(ConfigurationDao.class).getAppName();
-	}
 
 	@Override
 	protected String getLanguageCode() {

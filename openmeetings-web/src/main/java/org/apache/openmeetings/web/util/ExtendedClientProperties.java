@@ -80,7 +80,7 @@ public class ExtendedClientProperties extends ClientProperties {
 	@Override
 	public void read(IRequestParameters parameters) {
 		super.read(parameters);
-		String _url = parameters.getParameterValue("codebase").toString("N/A");
+		String _url = parameters.getParameterValue("codebase").toString(getBaseUrl());
 		StringBuilder sb = cleanUrl(_url);
 		if (sb.charAt(sb.length() - 1) != '/') {
 			sb.append('/');

@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
 
@@ -169,7 +170,7 @@ public class MobileService {
 				//TODO unify with Register dialog
 				String hash = UUID.randomUUID().toString();
 
-				String baseURL = cfgDao.getBaseUrl();
+				String baseURL = getBaseUrl();
 				boolean sendConfirmation = !Strings.isEmpty(baseURL)
 						&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 				Object user = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname

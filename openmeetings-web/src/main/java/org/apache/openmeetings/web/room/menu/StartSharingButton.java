@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
@@ -102,7 +103,7 @@ public class StartSharingButton extends OmButton {
 			ISessionManager sessionManager = getBean(ISessionManager.class);
 			app = app.replace("$native", String.valueOf(s.getBoolean(FLASH_NATIVE_SSL)))
 					.replace("$codebase", WebSession.get().getExtendedProperties().getCodebase())
-					.replace("$applicationName", cfgDao.getAppName())
+					.replace("$applicationName", getApplicationName())
 					.replace("$url", _url)
 					.replace("$fallback", s.getString(VideoSettings.FALLBACK))
 					.replace("$sid", sid)

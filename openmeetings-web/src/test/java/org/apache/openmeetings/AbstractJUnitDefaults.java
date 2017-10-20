@@ -19,7 +19,7 @@
 package org.apache.openmeetings;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.Assert.assertNotNull;
 
@@ -69,7 +69,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Before
 	public void setUp() throws Exception {
 		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
-		cfgDao.getCryptKey();
+		getCryptClassName();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
 			// regular user
@@ -81,8 +81,8 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		} else {
 			log.info("Default scheme already created");
 		}
-		if (getConfigKeyCryptClassName() == null) {
-			assertNotNull("Crypt class name should not be null", cfgDao.getCryptKey());
+		if (getCryptClassName() == null) {
+			assertNotNull("Crypt class name should not be null", getCryptClassName());
 		}
 	}
 
