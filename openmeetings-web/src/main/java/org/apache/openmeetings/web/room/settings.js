@@ -85,8 +85,8 @@ var VideoSettings = (function() {
 		swf = initVideo(vidScroll, 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
-		const rr = vs.find('.cam-resolution').parent('.sett-row');
-		if (!!o.interview) {
+		const rr = vs.find('.cam-resolution').parents('.sett-row');
+		if (!o.interview) {
 			rr.show();
 		} else {
 			rr.hide();

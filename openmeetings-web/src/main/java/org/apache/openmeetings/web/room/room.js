@@ -122,6 +122,9 @@ var Video = (function() {
 		return h;
 	}
 	function _securityMode(on) {
+		if (Room.getOptions().interview) {
+			return;
+		}
 		if (on) {
 			//TODO buttons
 			v.dialog("option", "position", {my: "center", at: "center", of: WBA_SEL});
