@@ -115,7 +115,9 @@ var Video = (function() {
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
 	}
-	function _resizeDlg(_w, _h) {
+	function _resizeDlg(_ww, _hh) {
+		const interview = Room.getOptions().interview;
+		const _w = interview ? 320 : _ww, _h = interview ? 260 : _hh;
 		const h = _h + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
 		v.dialog("option", "width", _w).dialog("option", "height", h);
 		_resize(_w, _h);
@@ -337,7 +339,7 @@ var Video = (function() {
 	function _refresh(_opts) {
 		if (swf[0].refresh !== undefined) {
 			const opts = _opts || {};
-			if (!isNaN(opts.width)) {
+			if (!Room.getOptions().interview && !isNaN(opts.width)) {
 				_resizeDlg(opts.width, opts.height);
 			}
 			swf[0].refresh(opts);
