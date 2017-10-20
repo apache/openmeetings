@@ -23,6 +23,7 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -143,7 +144,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		String baseURL = cfgDao.getBaseUrl();
+		String baseURL = getBaseUrl();
 		sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 		sendConfirmation = !Strings.isEmpty(baseURL) && cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 		String messageCode = "account.created";

@@ -18,15 +18,14 @@
  */
 package org.apache.openmeetings.web.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.Version.getBuildDate;
 import static org.apache.openmeetings.util.Version.getRevision;
 import static org.apache.openmeetings.util.Version.getVersion;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,7 +39,7 @@ public class AboutDialog extends AbstractDialog<String> {
 	public AboutDialog(String id) {
 		super(id, Application.getString("1549"));
 
-		add(new Label("name", getBean(ConfigurationDao.class).getAppName()));
+		add(new Label("name", getApplicationName()));
 		add(new Label("version", getVersion()));
 		add(new Label("revision", getRevision()));
 		add(new Label("buildDate", getBuildDate()));

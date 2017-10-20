@@ -33,9 +33,4 @@ public class NotInitedPage extends BaseNotInitedPage {
 			throw new RestartResponseException(Application.get().getHomePage());
 		}
 	}
-
-	@Override
-	protected String getGaCode() {
-		return null;
-	}
 }

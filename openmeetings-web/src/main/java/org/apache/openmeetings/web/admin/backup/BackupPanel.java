@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.backup;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.util.time.Duration.NONE;
@@ -30,7 +31,6 @@ import java.util.Date;
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.backup.ProgressHolder;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
@@ -94,7 +94,7 @@ public class BackupPanel extends AdminBasePanel {
 			setMultiPart(true);
 
 			// set max upload size in form as info text
-			Long maxBytes = getBean(ConfigurationDao.class).getMaxUploadSize();
+			Long maxBytes = getMaxUploadSize();
 			double megaBytes = maxBytes.doubleValue() / 1024 / 1024;
 			DecimalFormat formatter = new DecimalFormat("#,###.00");
 			add(new Label("MaxUploadSize", formatter.format(megaBytes)));

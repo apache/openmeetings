@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getConfigKeyCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import org.red5.logging.Red5LoggerFactory;
@@ -34,7 +34,7 @@ public class CryptProvider {
 		if (crypt == null) {
 			synchronized (CryptProvider.class) {
 				if (crypt == null) {
-					String clazz = getConfigKeyCryptClassName();
+					String clazz = getCryptClassName();
 					try {
 						log.debug("getInstanceOfCrypt:: configKeyCryptClassName: {}", clazz);
 

@@ -19,6 +19,7 @@
 package org.apache.openmeetings.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -59,7 +60,7 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 	public void setUp() throws Exception {
 		super.setUp();
 		// Crypt class need to be preserved here to avoid overriding by backup import
-		cryptClass = cfgDao.getCryptKey();
+		cryptClass = getCryptClassName();
 	}
 
 	@After

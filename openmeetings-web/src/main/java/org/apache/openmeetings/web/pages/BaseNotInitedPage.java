@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.pages;
 
 import org.apache.openmeetings.db.util.FormatHelper;
-import org.apache.openmeetings.installation.InstallationConfig;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,12 +26,6 @@ import org.apache.wicket.request.IRequestParameters;
 
 public abstract class BaseNotInitedPage extends BasePage {
 	private static final long serialVersionUID = 1L;
-	private static final InstallationConfig installCfg = new InstallationConfig();
-
-	@Override
-	protected String getApplicationName() {
-		return installCfg.getAppName();
-	}
 
 	@Override
 	protected String getLanguageCode() {

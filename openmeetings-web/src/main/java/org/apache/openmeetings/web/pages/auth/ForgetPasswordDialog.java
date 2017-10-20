@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
@@ -261,7 +262,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		userDao.update(us, null);
 		String resetLink = urlForPage(ResetPage.class
 				, new PageParameters().add("hash", us.getResethash())
-				, getBean(ConfigurationDao.class).getBaseUrl());
+				, getBaseUrl());
 
 		String email = us.getAddress().getEmail();
 

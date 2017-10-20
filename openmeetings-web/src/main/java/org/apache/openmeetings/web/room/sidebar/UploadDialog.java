@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -26,7 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.core.data.file.FileProcessor;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -103,7 +103,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 			.setOutputMarkupId(true);
 
 		form.setMultiPart(true);
-		form.setMaxSize(Bytes.bytes(getBean(ConfigurationDao.class).getMaxUploadSize()));
+		form.setMaxSize(Bytes.bytes(getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
 		form.add(uploadField = new FileUploadField("file", new IModel<List<FileUpload>>() {
 			private static final long serialVersionUID = 1L;

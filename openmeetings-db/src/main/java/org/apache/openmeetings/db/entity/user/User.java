@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.user;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -371,7 +372,7 @@ public class User extends HistoricalEntity {
 	}
 
 	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
-		if (configDao.isSipEnabled()) {
+		if (isSipEnabled()) {
 			AsteriskSipUser u = getSipUser();
 			if (u == null) {
 				setSipUser(u = new AsteriskSipUser());

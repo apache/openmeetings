@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.pages.auth;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
@@ -181,7 +182,7 @@ public class SignInPage extends BaseInitedPage {
 	public static String getRedirectUri(OAuthServer server) {
 		String result = "";
 		if (server.getId() != null) {
-			String base = getBean(ConfigurationDao.class).getBaseUrl();
+			String base = getBaseUrl();
 			result = urlForPage(SignInPage.class, new PageParameters().add("oauthid", server.getId()), base);
 		}
 		return result;
