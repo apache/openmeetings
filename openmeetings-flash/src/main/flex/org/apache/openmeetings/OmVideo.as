@@ -76,11 +76,13 @@ public class OmVideo {
 	}
 
 	public function resize(width:int, height:int):void {
+		debug("resize:: " + width + "x" + height);
 		this.width = ui.width = width;
 		this.height = ui.height = height;
 	}
 
 	public function vidResize(width:int, height:int):void {
+		debug("vidResize:: " + width + "x" + height);
 		vid.width = width;
 		vid.height = height;
 	}

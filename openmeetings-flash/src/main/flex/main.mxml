@@ -41,6 +41,8 @@
 
 		import org.apache.openmeetings.OmVideo;
 
+		private static const INTERVIEW_WIDTH:int = 320;
+		private static const INTERVIEW_HEIGHT:int = 260;
 		private var audioOnly:Boolean = false;
 		private var FPS:int;
 		private var bandwidth:int = 0;
@@ -395,10 +397,13 @@
 		}
 
 		private function refreshBroadcast(opts:Object):void {
+			debug("refreshBroadcast", opts);
 			if (opts && !isNaN(opts.width)) {
 				selectedCam = opts.cam;
 				selectedMic = opts.mic;
-				vidResize(opts.width, opts.height);
+				var width:int = interview ? INTERVIEW_WIDTH : opts.width
+					, height:int = interview ? INTERVIEW_HEIGHT : opts.height;
+				vidResize(width, height);
 			}
 			video.reset();
 			activityTimer.stop();
@@ -480,7 +485,7 @@
 					//FIXME need to be unified
 					if (interview) {
 						//we need a fixed frame rate for the videos to merge them later on
-						_camera.setMode(video.width, video.height, 24);
+						_camera.setMode(INTERVIEW_WIDTH, INTERVIEW_HEIGHT, 24);
 						debug("IS INTERVIEW ");
 						_camera.setQuality(0, 98);
 					} else {
@@ -570,15 +575,13 @@
 			_attachCamera(getCam());
 		}
 
-		private function setResolution(width:int, height:int, attach:Boolean):void {
-			if (!interview) {
-				debug("onselect WxH :: " + width + "x" + height);
-
-				video.resize(width, height);
-
-				if (attach) {
-					checkAvPermissions(settingsCameraCallback);
-				}
+		private function setResolution(w:int, h:int, attach:Boolean):void {
+			var width:int = interview ? INTERVIEW_WIDTH : w
+				, height:int = interview ? INTERVIEW_HEIGHT : h;
+			debug("onselect WxH :: " + width + "x" + height);
+			video.resize(width, height);
+			if (attach) {
+				checkAvPermissions(settingsCameraCallback);
 			}
 		}
 
