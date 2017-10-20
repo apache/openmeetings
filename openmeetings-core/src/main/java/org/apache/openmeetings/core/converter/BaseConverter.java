@@ -188,12 +188,12 @@ public abstract class BaseConverter {
 
 	public static void printMetaInfo(RecordingMetaData metaData, String prefix) {
 		if (log.isDebugEnabled()) {
-			log.debug(String.format("### %s:: recording id %s; stream with id %s; current status: %s ", prefix, metaData.getRecording().getId()
-					, metaData.getId(), metaData.getStreamStatus()));
+			log.debug("### {}:: recording id {}; stream with id {}; current status: {} ", prefix, metaData.getRecording().getId()
+					, metaData.getId(), metaData.getStreamStatus());
 			File metaFlv = getRecordingMetaData(metaData.getRecording().getRoomId(), metaData.getStreamName());
 			File metaSer = getMetaFlvSer(metaData);
-			log.debug(String.format("### %s:: Flv file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified()));
-			log.debug(String.format("### %s:: Ser file [%s] exists ? %s; size: %s, lastModified: %s ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified()));
+			log.debug("### {}:: Flv file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified());
+			log.debug("### {}:: Ser file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified());
 		}
 	}
 
