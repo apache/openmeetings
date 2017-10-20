@@ -426,7 +426,6 @@ public class RoomPanel extends BasePanel {
 					case recordingStarted:
 						{
 							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-							String uid = obj.getString("uid");
 							String sid = obj.getString("sid");
 							Client c = getClientBySid(sid);
 							if (c == null) {
@@ -434,7 +433,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							recordingUser = sid;
-							update(c.addStream(uid).set(Client.Activity.record));
+							update(c.set(Client.Activity.record));
 							menu.update(handler);
 							updateInterviewRecordingButtons(handler);
 						}

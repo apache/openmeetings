@@ -148,7 +148,7 @@ public class RecordingService {
 					startStreamRecord(conn, recordingId, isInterview);
 				}
 			}
-			// Send every user a notification that the recording did start
+			// Send notification to all users that the recording has been started
 			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted
 					, new JSONObject().put("uid", client.getUid()).put("sid", client.getSid()).toString()));
 		} catch (Exception err) {
@@ -172,15 +172,18 @@ public class RecordingService {
 					break;
 				}
 			}
+			IClient stopClient;
 			if (recClient == null) {
 				log.warn("Unable to find Recording client");
+				stopClient = client;
 			} else {
-				WebSocketHelper.sendRoom(new TextRoomMessage(recClient.getRoomId(), recClient.getUserId(), RoomMessage.Type.recordingStoped, recClient.getSid()));
+				stopClient = recClient;
 				// Store to database
 				recClient.setRecordingId(null);
 				recClient.setRecordingStarted(false);
 				sessionManager.update(recClient);
 			}
+			WebSocketHelper.sendRoom(new TextRoomMessage(stopClient.getRoomId(), stopClient.getUserId(), RoomMessage.Type.recordingStoped, stopClient.getSid()));
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null && conn instanceof IServiceCapableConnection) {
