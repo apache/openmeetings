@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var WbArea = (function() {
+var InterviewWbArea = function() {
 	const self = {};
 	let container, area, role = NONE, choose, btns
 		, _inited = false, recStart, recStop;
@@ -85,4 +85,4 @@ var WbArea = (function() {
 	self.setRecStartEnabled = _setRecStartEnabled;
 	self.setRecStopEnabled = _setRecStopEnabled;
 	return self;
-})();
+};

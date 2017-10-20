@@ -60,7 +60,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			return;
 		}
 		try {
-			log.debug("recording " + r.getId());
+			log.debug("recording {}", r.getId());
 
 			ProcessResultList logs = new ProcessResultList();
 			List<File> waveFiles = new ArrayList<>();

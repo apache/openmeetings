@@ -119,14 +119,13 @@ public class RoomPanel extends BasePanel {
 		, mute
 	}
 	private final Room r;
-	private final boolean isInterview;
+	private final boolean interview;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
 	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
-			target.appendJavaScript("Room.setSize();");
 			WebSession ws = WebSession.get();
 			ExtendedClientProperties cp = ws.getExtendedProperties();
 			getBean(ConferenceLogDao.class).add(
@@ -138,13 +137,16 @@ public class RoomPanel extends BasePanel {
 			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
 					.put("uid", _c.getUid())
 					.put("rights", _c.toJson(true).getJSONArray("rights"))
-					.put("interview", isInterview)
+					.put("interview", interview)
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
 					.put("exclusiveTitle", getString("1386"));
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
-			target.appendJavaScript(String.format("Room.init(%s);", options));
+			StringBuilder sb = new StringBuilder("Room.init(").append(options).append(");")
+					.append(wb.getInitScript())
+					.append("Room.setSize();");
+			target.appendJavaScript(sb);
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
 			// play video from other participants
 			initVideos(target);
@@ -173,7 +175,7 @@ public class RoomPanel extends BasePanel {
 					hasStreams = true;
 				}
 			}
-			if (isInterview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+			if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
 				sb.append("WbArea.setRecStartEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -228,8 +230,8 @@ public class RoomPanel extends BasePanel {
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
-		this.isInterview = Room.Type.interview == r.getType();
-		this.wb = isInterview ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
+		this.interview = Room.Type.interview == r.getType();
+		this.wb = interview ? new InterviewWbPanel("whiteboard", this) : new WbPanel("whiteboard", this);
 	}
 
 	public void startDownload(AjaxRequestTarget target, byte[] bb) {
@@ -248,7 +250,7 @@ public class RoomPanel extends BasePanel {
 		room.add(AttributeModifier.append(ATTR_CLASS, r.getType().name()));
 		room.add(menu = new RoomMenuPanel("menu", this));
 		room.add(AttributeModifier.append("data-room-id", r.getId()));
-		if (isInterview) {
+		if (interview) {
 			room.add(new WebMarkupContainer("wb-area").add(wb));
 		} else {
 			Droppable<BaseFileItem> wbArea = new Droppable<BaseFileItem>("wb-area") {
@@ -628,7 +630,7 @@ public class RoomPanel extends BasePanel {
 
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
 		Client _c = getClient();
-		if (isInterview && _c.hasRight(Right.moderator)) {
+		if (interview && _c.hasRight(Right.moderator)) {
 			if (recordingUser == null) {
 				boolean hasStreams = false;
 				for (Client cl : getRoomClients(r.getId())) {
@@ -720,7 +722,7 @@ public class RoomPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "jquery.dialogextend.js"))));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
-		if (isInterview) {
+		if (interview) {
 			response.render(JavaScriptHeaderItem.forReference(INTERVIEWWB_JS_REFERENCE));
 		} else {
 			response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
@@ -822,7 +824,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public boolean screenShareAllowed() {
-		return !isInterview && !r.isHidden(RoomElement.ScreenSharing)
+		return !interview && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
 				&& sharingUser == null;
 	}
@@ -849,5 +851,9 @@ public class RoomPanel extends BasePanel {
 
 	public String getPublishingUser() {
 		return null;
+	}
+
+	public boolean isInterview() {
+		return interview;
 	}
 }
