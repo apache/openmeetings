@@ -125,7 +125,7 @@ public class ImageConverter extends BaseConverter {
 		return cfgDao.getString(CONFIG_DOCUMENT_QUALITY, "90");
 	}
 
-	private ProcessResult initSize(BaseFileItem f, File img, String mime) {
+	private static ProcessResult initSize(BaseFileItem f, File img, String mime) {
 		ProcessResult res = new ProcessResult();
 		res.setProcess("get image dimensions :: " + f.getId());
 		final Parser parser = new ImageParser();
