@@ -35,5 +35,6 @@ public interface IScreenShare extends ClientExceptionHandler {
 	void disconnect();
 	void createStream(IPendingServiceCallback callback);
 	void publish(Number streamId, String name, String mode, INetStreamEventHandler handler);
+	void unpublish(Number streamId);
 	void publishStreamData(Number streamId, IMessage message);
 }
