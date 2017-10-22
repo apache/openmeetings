@@ -535,18 +535,22 @@ public class Core implements IPendingServiceCallback, INetStreamEventHandler {
 				}
 			} else if ("createStream".equals(method)) {
 				if (startRecording || startSharing) {
+					CaptureScreen capture = getCapture();
 					if (o != null && o instanceof Number) {
-						getCapture().setStreamId((Number)o);
+						if (capture.getStreamId() != null) {
+							instance.unpublish(capture.getStreamId());
+						}
+						capture.setStreamId((Number)o);
 					}
 					final String broadcastId = UUID.randomUUID().toString();
-					log.debug("createPublishStream result stream id: {}; name: {}", getCapture().getStreamId(), broadcastId);
-					instance.publish(getCapture().getStreamId(), broadcastId, "live", this);
+					log.debug("createPublishStream result stream id: {}; name: {}", capture.getStreamId(), broadcastId);
+					instance.publish(capture.getStreamId(), broadcastId, "live", this);
 
 					log.debug("setup capture thread spinnerWidth = {}; spinnerHeight = {};", dim.getSpinnerWidth(), dim.getSpinnerHeight());
 
-					if (!getCapture().isAlive()) {
-						getCapture().setSendCursor(startSharing);
-						getCapture().start();
+					if (!capture.isStarted()) {
+						capture.setSendCursor(startSharing);
+						capture.start();
 					}
 				}
 			} else if ("screenSharerAction".equals(method)) {

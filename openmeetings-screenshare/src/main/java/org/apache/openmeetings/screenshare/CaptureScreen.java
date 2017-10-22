@@ -207,6 +207,10 @@ public class CaptureScreen extends Thread {
 		core.sendCursorStatus();
 	}
 
+	public boolean isStarted() throws SchedulerException {
+		return active && _scheduler != null && _scheduler.isStarted() && !_scheduler.isShutdown();
+	}
+
 	public void setSendCursor(boolean sendCursor) {
 		try {
 			Scheduler s = getScheduler();
