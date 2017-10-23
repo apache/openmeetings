@@ -284,6 +284,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(NOTINIT_MAPPING, NotInitedPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(HASH_MAPPING, HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(SIGNIN_MAPPING, getSignInPageClass()));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("oauth/${oauthid}", getSignInPageClass()));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);
