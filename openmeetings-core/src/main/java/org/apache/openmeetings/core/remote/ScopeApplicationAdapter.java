@@ -257,6 +257,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					sendMessageToCurrentScope("stopScreenSharingMessage", client, false);
 
 					returnMap.put("result", "stopSharingOnly");
+					sendStreamClosed(client);
 				}
 				if (Boolean.parseBoolean("" + map.get("stopRecording")) && client.isRecordingStarted()) {
 					changed = true;
