@@ -268,7 +268,6 @@ public class SignInPage extends BaseInitedPage {
 
 	private static Map<String, String> getAuthParams(String token, String code, OAuthServer server) throws IOException {
 		// get attributes names
-		String login = server.getLoginParamName();
 		String email = server.getEmailParamName();
 		String firstname = server.getFirstnameParamName();
 		String lastname = server.getLastnameParamName();
@@ -283,8 +282,11 @@ public class SignInPage extends BaseInitedPage {
 		// parse json result
 		Map<String, String> result = new HashMap<>();
 		JSONObject json = new JSONObject(sourceResponse);
-		result.put("login", json.getString(login));
-		result.put("email", json.getString(email));
+		String login = json.getString(server.getLoginParamName());
+		result.put("login", login);
+		result.put("email", json.has(email)
+				? json.getString(email)
+				: String.format("%s@%s", login, new URL(server.getIconUrl()).getHost()));
 		if (json.has(firstname)) {
 			result.put("firstname", json.getString(firstname));
 		}

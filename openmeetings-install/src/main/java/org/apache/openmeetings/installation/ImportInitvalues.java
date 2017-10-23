@@ -428,27 +428,27 @@ public class ImportInitvalues {
 
 	public void loadInitialOAuthServers() {
 		// Yandex
-		OAuthServer yandexServer = new OAuthServer();
-		yandexServer.setName("Yandex");
-		yandexServer.setIconUrl("http://yandex.st/morda-logo/i/favicon.ico");
-		yandexServer.setClientId(CLIENT_PLACEHOLDER);
-		yandexServer.setClientSecret(SECRET_PLACEHOLDER);
-		yandexServer.setEnabled(false);
-		yandexServer.setRequestInfoUrl("https://login.yandex.ru/info?format=json&oauth_token={$access_token}");
-		yandexServer.setRequestTokenUrl("https://oauth.yandex.ru/token");
-		yandexServer.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}");
-		yandexServer.setRequestTokenAttributes("grant_type=authorization_code&code={$code}&client_id={$client_id}&client_secret={$client_secret}");
-		yandexServer.setRequestTokenMethod(RequestMethod.POST);
-		yandexServer.setLoginParamName("login");
-		yandexServer.setEmailParamName("default_email");
-		yandexServer.setFirstnameParamName("first_name");
-		yandexServer.setLastnameParamName("last_name");
-		oauthDao.update(yandexServer, null);
+		OAuthServer yaServer = new OAuthServer();
+		yaServer.setName("Yandex");
+		yaServer.setIconUrl("http://yandex.st/morda-logo/i/favicon.ico");
+		yaServer.setClientId(CLIENT_PLACEHOLDER);
+		yaServer.setClientSecret(SECRET_PLACEHOLDER);
+		yaServer.setEnabled(false);
+		yaServer.setRequestInfoUrl("https://login.yandex.ru/info?format=json&oauth_token={$access_token}");
+		yaServer.setRequestTokenUrl("https://oauth.yandex.ru/token");
+		yaServer.setRequestKeyUrl("https://oauth.yandex.ru/authorize?response_type=code&client_id={$client_id}");
+		yaServer.setRequestTokenAttributes("grant_type=authorization_code&code={$code}&client_id={$client_id}&client_secret={$client_secret}");
+		yaServer.setRequestTokenMethod(RequestMethod.POST);
+		yaServer.setLoginParamName("login");
+		yaServer.setEmailParamName("default_email");
+		yaServer.setFirstnameParamName("first_name");
+		yaServer.setLastnameParamName("last_name");
+		oauthDao.update(yaServer, null);
 
 		// Google
 		OAuthServer googleServer = new OAuthServer();
 		googleServer.setName("Google");
-		googleServer.setIconUrl("https://www.google.ru/images/google_favicon_128.png");
+		googleServer.setIconUrl("https://www.google.com/images/google_favicon_128.png");
 		googleServer.setEnabled(false);
 		googleServer.setClientId(CLIENT_PLACEHOLDER);
 		googleServer.setClientSecret(SECRET_PLACEHOLDER);
@@ -465,22 +465,40 @@ public class ImportInitvalues {
 		oauthDao.update(googleServer, null);
 
 		// Facebook
-		OAuthServer facebookServer = new OAuthServer();
-		facebookServer.setName("Facebook");
-		facebookServer.setIconUrl("https://www.facebook.com/images/fb_icon_325x325.png");
-		facebookServer.setEnabled(false);
-		facebookServer.setClientId(CLIENT_PLACEHOLDER);
-		facebookServer.setClientSecret(SECRET_PLACEHOLDER);
-		facebookServer.setRequestKeyUrl("https://www.facebook.com/v2.10/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
-		facebookServer.setRequestTokenUrl("https://graph.facebook.com/v2.10/oauth/access_token");
-		facebookServer.setRequestTokenMethod(RequestMethod.POST);
-		facebookServer.setRequestTokenAttributes("client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}");
-		facebookServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=id,first_name,last_name,email");
-		facebookServer.setLoginParamName("id");
-		facebookServer.setEmailParamName(EMAIL_PARAM);
-		facebookServer.setFirstnameParamName("first_name");
-		facebookServer.setLastnameParamName("last_name");
-		oauthDao.update(facebookServer, null);
+		OAuthServer fbServer = new OAuthServer();
+		fbServer.setName("Facebook");
+		fbServer.setIconUrl("https://www.facebook.com/images/fb_icon_325x325.png");
+		fbServer.setEnabled(false);
+		fbServer.setClientId(CLIENT_PLACEHOLDER);
+		fbServer.setClientSecret(SECRET_PLACEHOLDER);
+		fbServer.setRequestKeyUrl("https://www.facebook.com/v2.10/dialog/oauth?client_id={$client_id}&redirect_uri={$redirect_uri}&scope=email");
+		fbServer.setRequestTokenUrl("https://graph.facebook.com/v2.10/oauth/access_token");
+		fbServer.setRequestTokenMethod(RequestMethod.POST);
+		fbServer.setRequestTokenAttributes("client_id={$client_id}&redirect_uri={$redirect_uri}&client_secret={$client_secret}&code={$code}");
+		fbServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=id,first_name,last_name,email");
+		fbServer.setLoginParamName("id");
+		fbServer.setEmailParamName(EMAIL_PARAM);
+		fbServer.setFirstnameParamName("first_name");
+		fbServer.setLastnameParamName("last_name");
+		oauthDao.update(fbServer, null);
+
+		// VK
+		OAuthServer vkServer = new OAuthServer();
+		vkServer.setName("VK");
+		vkServer.setIconUrl("https://vk.com/images/svg_icons/ic_head_logo.svg");
+		vkServer.setEnabled(false);
+		vkServer.setClientId(CLIENT_PLACEHOLDER);
+		vkServer.setClientSecret(SECRET_PLACEHOLDER);
+		vkServer.setRequestKeyUrl("https://oauth.vk.com/authorize?client_id={$client_id}&scope=email&redirect_uri={$redirect_uri}&response_type=code&v=5.68");
+		vkServer.setRequestTokenUrl("https://oauth.vk.com/access_token");
+		vkServer.setRequestTokenMethod(RequestMethod.POST);
+		vkServer.setRequestTokenAttributes("client_id={$client_id}&client_secret={$client_secret}&code={$code}&redirect_uri={$redirect_uri}");
+		vkServer.setRequestInfoUrl("https://api.vk.com/method/users.get?user_ids=&access_token={$access_token}&fields=id,first_name,last_name,email&name_case=nom");
+		vkServer.setLoginParamName("id");
+		vkServer.setEmailParamName(EMAIL_PARAM);
+		vkServer.setFirstnameParamName("first_name");
+		vkServer.setLastnameParamName("last_name");
+		oauthDao.update(vkServer, null);
 	}
 
 	// ------------------------------------------------------------------------------
