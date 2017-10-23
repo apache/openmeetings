@@ -36,8 +36,6 @@ import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -49,6 +47,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
+import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
@@ -99,8 +98,8 @@ public class SignInPage extends BaseInitedPage {
 						return;
 					}
 					log.debug("OAuthInfo={}", authInfo);
-					Map<String, String> authParams = getAuthParams(authInfo.accessToken, code, server);
-					loginViaOAuth2(authParams, serverId);
+					OAuthUser user = getAuthParams(authInfo.accessToken, code, server);
+					loginViaOAuth2(user, serverId);
 				} else { // redirect to get code
 					showAuth(server);
 				}
@@ -266,11 +265,7 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	private static Map<String, String> getAuthParams(String token, String code, OAuthServer server) throws IOException {
-		// get attributes names
-		String email = server.getEmailParamName();
-		String firstname = server.getFirstnameParamName();
-		String lastname = server.getLastnameParamName();
+	private static OAuthUser getAuthParams(String token, String code, OAuthServer server) throws IOException {
 		// prepare url
 		String requestInfoUrl = server.getRequestInfoUrl();
 		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server)
@@ -280,24 +275,11 @@ public class SignInPage extends BaseInitedPage {
 		prepareConnection(connection);
 		String sourceResponse = IOUtils.toString(connection.getInputStream(), UTF_8);
 		// parse json result
-		Map<String, String> result = new HashMap<>();
-		JSONObject json = new JSONObject(sourceResponse);
-		String login = json.getString(server.getLoginParamName());
-		result.put("login", login);
-		result.put("email", json.has(email)
-				? json.getString(email)
-				: String.format("%s@%s", login, new URL(server.getIconUrl()).getHost()));
-		if (json.has(firstname)) {
-			result.put("firstname", json.getString(firstname));
-		}
-		if (json.has(lastname)) {
-			result.put("lastname", json.getString(lastname));
-		}
-		return result;
+		return new OAuthUser(sourceResponse, server);
 	}
 
-	private void loginViaOAuth2(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
-		User u = getBean(IUserManager.class).loginOAuth(params, serverId);
+	private void loginViaOAuth2(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException {
+		User u = getBean(IUserManager.class).loginOAuth(user, serverId);
 
 		if (u != null && WebSession.get().signIn(u)) {
 			setResponsePage(Application.get().getHomePage());

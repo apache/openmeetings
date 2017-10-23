@@ -50,6 +50,7 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -342,23 +343,13 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException {
-		String login = params.get("login");
-		String email = params.get("email");
-		String lastname = params.get("lastname");
-		String firstname = params.get("firstname");
-		if (firstname == null) {
-			firstname = "";
-		}
-		if (lastname == null) {
-			lastname = "";
-		}
-		if (!userDao.validLogin(login)) {
+	public User loginOAuth(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException {
+		if (!userDao.validLogin(user.getUid())) {
 			log.error("Invalid login, please check parameters");
 			return null;
 		}
-		User u = userDao.getByLogin(login, Type.oauth, serverId);
-		if (!userDao.checkEmail(email, Type.oauth, serverId, u == null ? null : u.getId())) {
+		User u = userDao.getByLogin(user.getUid(), Type.oauth, serverId);
+		if (!userDao.checkEmail(user.getEmail(), Type.oauth, serverId, u == null ? null : u.getId())) {
 			log.error("Another user with the same email exists");
 			return null;
 		}
@@ -374,16 +365,16 @@ public class UserManager implements IUserManager {
 			u.getRights().remove(Right.Login);
 			u.setDomainId(serverId);
 			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), u));
-			u.setLogin(login);
+			u.setLogin(user.getUid());
 			u.setShowContactDataToContacts(true);
-			u.setLastname(lastname);
-			u.setFirstname(firstname);
-			u.getAddress().setEmail(email);
-			String picture = params.get("picture");
+			u.setLastname(user.getLastName());
+			u.setFirstname(user.getFirstName());
+			u.getAddress().setEmail(user.getEmail());
+			String picture = user.getPicture();
 			if (picture != null) {
 				u.setPictureuri(picture);
 			}
-			String locale = params.get("locale");
+			String locale = user.getLocale();
 			if (locale != null) {
 				Locale loc = Locale.forLanguageTag(locale);
 				if (loc != null) {

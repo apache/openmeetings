@@ -53,6 +53,7 @@ import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -139,7 +140,7 @@ public class MobileService {
 		Map<String, Object> result = getResult();
 		try {
 			if (cfgDao.getBool(CONFIG_REGISTER_OAUTH, false)) {
-				User u = userManager.loginOAuth(umap, 2); //TODO hardcoded
+				User u = userManager.loginOAuth(new OAuthUser(umap), 2); //TODO hardcoded
 				result = login(u, result);
 			}
 		} catch (Exception e) {
