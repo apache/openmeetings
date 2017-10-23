@@ -494,7 +494,7 @@ public class ImportInitvalues {
 		vkServer.setRequestTokenMethod(RequestMethod.POST);
 		vkServer.setRequestTokenAttributes("client_id={$client_id}&client_secret={$client_secret}&code={$code}&redirect_uri={$redirect_uri}");
 		vkServer.setRequestInfoUrl("https://api.vk.com/method/users.get?user_ids=&access_token={$access_token}&fields=id,first_name,last_name,email&name_case=nom");
-		vkServer.setLoginParamName("id");
+		vkServer.setLoginParamName("uid");
 		vkServer.setEmailParamName(EMAIL_PARAM);
 		vkServer.setFirstnameParamName("first_name");
 		vkServer.setLastnameParamName("last_name");

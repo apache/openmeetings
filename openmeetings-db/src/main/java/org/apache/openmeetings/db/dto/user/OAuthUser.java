@@ -51,27 +51,28 @@ public class OAuthUser implements Serializable {
 	 */
 	public OAuthUser(String jsonStr, OAuthServer server) {
 		// get attributes names
-		String email = server.getEmailParamName();
-		String firstname = server.getFirstnameParamName();
-		String lastname = server.getLastnameParamName();
-		JSONObject json = getJSON(jsonStr, server.getLoginParamName());
-		String login = json.getString(server.getLoginParamName());
+		String pEmail = server.getEmailParamName();
+		String pFirstname = server.getFirstnameParamName();
+		String pLastname = server.getLastnameParamName();
+		String pLogin = server.getLoginParamName();
+		JSONObject json = getJSON(jsonStr, pLogin);
+		String login = json.getString(pLogin);
 
 		this.uid = login;
 		try {
-			this.email = json.has(email)
-					? json.getString(email)
+			this.email = json.has(pEmail)
+					? json.getString(pEmail)
 					: String.format("%s@%s", login, new URL(server.getIconUrl()).getHost());
 		} catch (JSONException | MalformedURLException e) {
 			this.email = null;
 			// no-op, bad user
 			log.error("Failed to get user from JSON: {}", json);
 		}
-		if (json.has(firstname)) {
-			this.firstName = json.getString(firstname);
+		if (json.has(pFirstname)) {
+			this.firstName = json.getString(pFirstname);
 		}
-		if (json.has(lastname)) {
-			this.lastName = json.getString(lastname);
+		if (json.has(pLastname)) {
+			this.lastName = json.getString(pLastname);
 		}
 	}
 
@@ -119,12 +120,7 @@ public class OAuthUser implements Serializable {
 		// will only check 1 additional level
 		for (String key : json.keySet()) {
 			Object o = json.get(key);
-			if (o instanceof JSONObject) {
-				JSONObject jo = (JSONObject)o;
-				if (jo.has(prop)) {
-					return jo;
-				}
-			} else if (o instanceof JSONArray) {
+			if (o instanceof JSONArray) {
 				JSONArray ja = (JSONArray)o;
 				//Assuming here array consist of objects
 				for (int i = 0; i < ja.length(); ++i) {

@@ -21,6 +21,9 @@ package org.apache.openmeetings.db.dto.user;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.junit.Test;
 
@@ -65,10 +68,16 @@ public class TestOAuthUser {
 				);
 		assertEquals("Email should be constructed", "4uidhere4@goo.gl", user.getEmail());
 	}
-	/*
-{'id': '11klahjsfwehf5', 'email': 'alsfkvslvmclqwkdsm@gmail.com', 'verified_email': true, 'name': 'John Doe', 'given_name': 'John', 'family_name': 'Doe', 'link': 'https://plus.google.com/+JohnDoe', 'picture': 'https://lh3.googleusercontent.com/somehash/photo.jpg', 'gender': 'male', 'locale': 'en'}
-*/
-/*
-{'response':[{'uid':4uidhere4,'first_name':'John','last_name':'Doe'}]}
-*/
+
+	@Test
+	public void map() {
+		Map<String, String> umap = new HashMap<>();
+		umap.put("login", "abc");
+		umap.put("email", "abc@local");
+		OAuthUser user = new OAuthUser(umap);
+		assertEquals("UID should be correct", "abc", user.getUid());
+		assertEquals("Email should be correct", "abc@local", user.getEmail());
+		assertNull("First should be empty", user.getFirstName());
+		assertNull("Lastname should be empty", user.getLastName());
+	}
 }
