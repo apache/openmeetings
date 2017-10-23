@@ -23,17 +23,16 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmException;
 
 //HACK to bypass cross project compilation
 public interface IUserManager {
-
 	Object registerUser(String login, String userpass, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
@@ -50,7 +49,7 @@ public interface IUserManager {
 			Boolean showContactDataToContacts, String activatedHash) throws OmException, NoSuchAlgorithmException;
 
 	Long getLanguage(Locale loc);
-	User loginOAuth(Map<String, String> params, long serverId) throws IOException, NoSuchAlgorithmException;
+	User loginOAuth(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException;
 
 	boolean kickById(String uid);
 	boolean kickUsersByRoomId(Long roomId);
