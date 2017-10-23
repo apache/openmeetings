@@ -132,6 +132,8 @@ public class ImportInitvalues {
 	private static final String CLIENT_PLACEHOLDER = "<put your client_id>";
 	private static final String SECRET_PLACEHOLDER = "<put your client_secret>";
 	private static final String EMAIL_PARAM = "email";
+	private static final String FNAME_PARAM = "first_name";
+	private static final String LNAME_PARAM = "last_name";
 
 	@Autowired
 	private ConfigurationDao cfgDao;
@@ -441,8 +443,8 @@ public class ImportInitvalues {
 		yaServer.setRequestTokenMethod(RequestMethod.POST);
 		yaServer.setLoginParamName("login");
 		yaServer.setEmailParamName("default_email");
-		yaServer.setFirstnameParamName("first_name");
-		yaServer.setLastnameParamName("last_name");
+		yaServer.setFirstnameParamName(FNAME_PARAM);
+		yaServer.setLastnameParamName(LNAME_PARAM);
 		oauthDao.update(yaServer, null);
 
 		// Google
@@ -478,14 +480,14 @@ public class ImportInitvalues {
 		fbServer.setRequestInfoUrl("https://graph.facebook.com/me?access_token={$access_token}&fields=id,first_name,last_name,email");
 		fbServer.setLoginParamName("id");
 		fbServer.setEmailParamName(EMAIL_PARAM);
-		fbServer.setFirstnameParamName("first_name");
-		fbServer.setLastnameParamName("last_name");
+		fbServer.setFirstnameParamName(FNAME_PARAM);
+		fbServer.setLastnameParamName(LNAME_PARAM);
 		oauthDao.update(fbServer, null);
 
 		// VK
 		OAuthServer vkServer = new OAuthServer();
 		vkServer.setName("VK");
-		vkServer.setIconUrl("https://vk.com/images/svg_icons/ic_head_logo.svg");
+		vkServer.setIconUrl("https://vk.com/images/safari_152.png");
 		vkServer.setEnabled(false);
 		vkServer.setClientId(CLIENT_PLACEHOLDER);
 		vkServer.setClientSecret(SECRET_PLACEHOLDER);
@@ -496,8 +498,8 @@ public class ImportInitvalues {
 		vkServer.setRequestInfoUrl("https://api.vk.com/method/users.get?user_ids=&access_token={$access_token}&fields=id,first_name,last_name,email&name_case=nom");
 		vkServer.setLoginParamName("uid");
 		vkServer.setEmailParamName(EMAIL_PARAM);
-		vkServer.setFirstnameParamName("first_name");
-		vkServer.setLastnameParamName("last_name");
+		vkServer.setFirstnameParamName(FNAME_PARAM);
+		vkServer.setLastnameParamName(LNAME_PARAM);
 		oauthDao.update(vkServer, null);
 	}
 
