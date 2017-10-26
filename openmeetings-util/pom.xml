@@ -31,8 +31,8 @@
 	<description>Module for utility classes being used by all OpenMeetings modules</description>
 	<properties>
 		<dom4j.version>2.1.0</dom4j.version>
-		<commons-codec.version>1.10</commons-codec.version>
-		<commons-io.version>2.5</commons-io.version>
+		<commons-codec.version>1.11</commons-codec.version>
+		<commons-io.version>2.6</commons-io.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<build>

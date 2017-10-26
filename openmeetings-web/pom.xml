@@ -602,12 +602,12 @@
 			<version>${cxf.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!--dependency> commented for Red5 lib substitution
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-core</artifactId>
 			<version>${tomcat.version}</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbynet</artifactId>
