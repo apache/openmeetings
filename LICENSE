@@ -216,15 +216,8 @@ webapps/openmeetings/conf/om_ldap.cfg
 webapps/openmeetings/css/*.css
 
 webapps/openmeetings/docs/*
-webapps/openmeetings/js/openmeetings_functions.js
 webapps/openmeetings/languages/*
-webapps/openmeetings/public/config.*
-webapps/openmeetings/public/favicon.ico
-webapps/openmeetings/public/maindebug.swf11.swf
-webapps/openmeetings/public/main.swf11.swf
-webapps/openmeetings/public/networktestingdebug.swf10.swf
-webapps/openmeetings/public/networktesting.swf10.swf
-webapps/openmeetings/public/theme.*
+webapps/openmeetings/public/**
 webapps/openmeetings/streams/*
 webapps/openmeetings/upload/*
 
@@ -268,36 +261,34 @@ webapps/root/WEB-INF/web.xml
 webapps/openmeetings/WEB-INF/lib/animal-sniffer-annotations-1.14.jar
 webapps/openmeetings/WEB-INF/lib/api-all-*.jar
 webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0-final.jar
+webapps/openmeetings/WEB-INF/lib/cache-api-1.0.0.jar
 webapps/openmeetings/WEB-INF/lib/caldav4j-*.jar
 webapps/openmeetings/WEB-INF/lib/commons-*.jar
 webapps/openmeetings/WEB-INF/lib/cxf-*.jar
 webapps/openmeetings/WEB-INF/lib/derby*.jar
-webapps/openmeetings/WEB-INF/lib/dom4j-2.0.1.jar
-webapps/openmeetings/WEB-INF/lib/error_prone_annotations-2.0.18.jar
+webapps/openmeetings/WEB-INF/lib/dom4j-2.1.0.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
-webapps/openmeetings/WEB-INF/lib/gson-2.8.1.jar
-webapps/openmeetings/WEB-INF/lib/guava-23.0.jar
-webapps/openmeetings/WEB-INF/lib/hazelcast-3.8.3.jar
+webapps/openmeetings/WEB-INF/lib/gson-2.8.2.jar
+webapps/openmeetings/WEB-INF/lib/hazelcast-*.jar
 webapps/openmeetings/WEB-INF/lib/httpcore-*.jar
-webapps/openmeetings/WEB-INF/lib/j2objc-annotations-1.1.jar
 webapps/openmeetings/WEB-INF/lib/jackrabbit-webdav-2.12.1.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
-webapps/openmeetings/WEB-INF/lib/joda-time-2.9.9.jar
 webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
 webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.3.jar
-webapps/openmeetings/WEB-INF/lib/jqplot-8.0.0-M7.jar
+webapps/openmeetings/WEB-INF/lib/jqplot-*.jar
 webapps/openmeetings/WEB-INF/lib/json-1.3.jar
 webapps/openmeetings/WEB-INF/lib/jsr305-1.3.9.jar
 webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
-webapps/openmeetings/WEB-INF/lib/neethi-3.0.3.jar
+webapps/openmeetings/WEB-INF/lib/neethi-3.1.0.jar
 webapps/openmeetings/WEB-INF/lib/openjpa-2.4.2.jar
 webapps/openmeetings/WEB-INF/lib/openjson-1.0.8.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
+webapps/openmeetings/WEB-INF/lib/pdfbox-*.jar
 webapps/openmeetings/WEB-INF/lib/ridl-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
 webapps/openmeetings/WEB-INF/lib/smslib-3.5.4.jar
@@ -305,10 +296,10 @@ webapps/openmeetings/WEB-INF/lib/stax-1.2.0.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-3.1.4.jar
 webapps/openmeetings/WEB-INF/lib/unoil-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/wicket*.jar
-webapps/openmeetings/WEB-INF/lib/woodstox-core-asl-4.4.1.jar
+webapps/openmeetings/WEB-INF/lib/woodstox-core-*.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
 webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-3.17.jar
-webapps/openmeetings/WEB-INF/lib/xml-apis-1.4.01.jar
+webapps/openmeetings/WEB-INF/lib/xml-apis-*.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
 webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.2.jar
 
@@ -2597,7 +2588,7 @@ THE SOFTWARE.
 
  =======================================================================================
 
-webapps/openmeetings/WEB-INF/lib/threetenbp-1.3.3.jar
+webapps/openmeetings/WEB-INF/lib/threetenbp-1.3.6.jar
 
 BSD 3-clause
 

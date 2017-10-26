@@ -69,27 +69,39 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 3.3.2 released!</b>
-				<div>Release 3.3.2, provides following improvements:<br/>
+				<b>Version 4.0.0 released!</b>
+				<div>Release 4.0.0, provides following improvements:<br/>
 					<ul>
-						<li>Audio/Video in conference room is fixed</li>
-						<li>Strong password is enforced during self registration</li>
-						<li>'dashboard.show.chat' should work as expected</li>
-						<li>New Setting is added 'user can create rooms'</li>
+						<li>Room White board is rewritten to use HTML5 instead of Flash</li>
+						<li>All Audio/Video components were rewritten using Apache Flex</li>
+						<li>Bunch of automatic tests were written, code was cleaned-up and simplified</li>
+						<li>outdated SMSlib was removed from the dependencies</li>
+						<li>RTL in room is improved</li>
+						<li>swftool 3rd party tool is not required any more</li>
+						<li>OAuth authorization is fixed additional VK provider is added</li>
+						<li>language resources are minimized</li>
+						<li>performance is improved</li>
 					</ul>
 					<br/>
+					Admin->Config<br/>
+					<br/>
+					<ul>
+						<li>config keys are generalized</li>
+						<li>config types are introduced</li>
+					</ul>
 					Other fixes and improvements
 					<br/>
 					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
 				</div>
 				<br/>
+
 				<span>
-					8 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/3.3.2/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12341445">Detailed list</a>
+					513 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.0/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12324572">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-09-18)</span>
+				<span class="date">(2017-11-01)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
