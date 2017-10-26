@@ -3,6 +3,537 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 4.0.0
+================================================================================================================
+
+** Sub-task
+    * [OPENMEETINGS-370] - Please make the ability to change slides/pages of an uploaded document only available to Moderators, and not to participants who have “Draw on the Whiteboard” rights
+    * [OPENMEETINGS-371] - Please make the ability to create new Whiteboards or change the Whiteboard only available to Moderators, and not to participants who have “Draw on the Whiteboard” rights
+    * [OPENMEETINGS-374] - Only Moderators should have the ability to upload, add, delete, or load files and folders
+    * [OPENMEETINGS-731] - Drawing area of the Wicket based Whiteboard should be limited
+    * [OPENMEETINGS-732] - Wicket based Whiteboard should provide save content feature
+    * [OPENMEETINGS-733] - Wicket based Whiteboard should provide Undo feature
+    * [OPENMEETINGS-734] - Wicket based Whiteboard should provide Draw Arrow, Draw Pointer and Draw Underline features
+    * [OPENMEETINGS-735] - Wicket based Whiteboard should provide Insert Clipart, Picture, DOC, PDF features
+    * [OPENMEETINGS-753] - Fix Login, Sign up and user profile settings to reflect the new timezone handling
+    * [OPENMEETINGS-896] - Basic room layout should be created
+    * [OPENMEETINGS-897] - Room menu should be added
+    * [OPENMEETINGS-937] - Screen sharing application should create recordings with size multiple by 16
+    * [OPENMEETINGS-1030] - Add Files section
+    * [OPENMEETINGS-1045] - Screen-sharing button/action should be added
+    * [OPENMEETINGS-1081] - Polls should be added to the room
+    * [OPENMEETINGS-1085] - Room Rights should be implemented
+    * [OPENMEETINGS-1097] - Room Chat should be added
+    * [OPENMEETINGS-1118] - SOAP/REST methods need to be implemented using CXF
+    * [OPENMEETINGS-1120] - Activities section should be added
+    * [OPENMEETINGS-1285] - Number of servlets need to be reduced
+    * [OPENMEETINGS-1376] - User list should be fully implemented
+    * [OPENMEETINGS-1386] - CalDAV client prerequisites
+    * [OPENMEETINGS-1391] - Fix CalDAV4j issues
+    * [OPENMEETINGS-1392] - Implement OM CalDAV client
+    * [OPENMEETINGS-1455] - invitationHash/securityHash should work
+    * [OPENMEETINGS-1458] - Show nickname dialog should be added
+    * [OPENMEETINGS-1459] - External users need to be redirected on connection error
+    * [OPENMEETINGS-1469] - Download functionality is missing in file tree
+
+** Bug
+    * [OPENMEETINGS-19] - pdf, doc etc does not resize
+    * [OPENMEETINGS-84] - Issue with Whiteboard Scaling and Scrolling
+    * [OPENMEETINGS-189] - Invitation
+    * [OPENMEETINGS-270] - MemoryLeak / Dead-Lock in FlvRecorderConverter
+    * [OPENMEETINGS-318] - Video stays under presentation.
+    * [OPENMEETINGS-409] - Interview Room (2)
+    * [OPENMEETINGS-452] - LDAP issue. Cannot relogin with user that already was logined before and then logged out
+    * [OPENMEETINGS-475] - Full screen entry via F11 in Chrome does not work
+    * [OPENMEETINGS-508] - Network testing page is not localized
+    * [OPENMEETINGS-532] - Generated hash issue
+    * [OPENMEETINGS-533] - Missing Saving whiteboard to image
+    * [OPENMEETINGS-641] - Unexpected result is shown on the Admin->Connection tab.
+    * [OPENMEETINGS-680] - The "," symbol is used for the multiple e-mail instead of standard ";" symbol
+    * [OPENMEETINGS-686] - Recording faild when pause is used
+    * [OPENMEETINGS-697] - Authentification Ldap
+    * [OPENMEETINGS-793] - Possibility of Code Injection Vulnerability found.
+    * [OPENMEETINGS-801] - Zoom Out functionality of new Whiteboard is broken due to error in original Closure Whiteboard
+    * [OPENMEETINGS-809] - Global chat issues in rooms
+    * [OPENMEETINGS-825] - xss in poll results and calendar
+    * [OPENMEETINGS-839] - user can  switch himself between boards in moderated room
+    * [OPENMEETINGS-840] - Strange uploaded video behaviour 
+    * [OPENMEETINGS-859] - Audio and Video in recordings is no more in sync
+    * [OPENMEETINGS-878] - Sign Web-Start application with trusted root cert
+    * [OPENMEETINGS-887] - Global chat is not implemented completly for OM 3.0
+    * [OPENMEETINGS-889] - "Upload new image" button should have the same style with other buttons
+    * [OPENMEETINGS-892] - "Add user" button is disabled when add new group
+    * [OPENMEETINGS-893] - Removed user is not added to usergroup again
+    * [OPENMEETINGS-898] - Time zone is not defined correctly on sign in page
+    * [OPENMEETINGS-899] - Calendar event start and end time are not displayed correctly
+    * [OPENMEETINGS-900] - Deleted contact is selected when user invite external guest to calendar invitation
+    * [OPENMEETINGS-902] - Records are not created correctly
+    * [OPENMEETINGS-904] - Default landing zone
+    * [OPENMEETINGS-906] - Cannot create new group with users
+    * [OPENMEETINGS-907] - "password is required" message is displayed when "Password protected" checkbox is not  checked
+    * [OPENMEETINGS-908] - Calendar event start and end date are not displayed correctly in the month vew
+    * [OPENMEETINGS-909] - Event owners is not receive email notification
+    * [OPENMEETINGS-910] - Contacts are availble to search on the Search user page
+    * [OPENMEETINGS-912] - Email disappears when move emial to the new folder
+    * [OPENMEETINGS-913] - Booking is not working via private message
+    * [OPENMEETINGS-914] - "Mark unread" action does not work on Contacts and message page
+    * [OPENMEETINGS-915] - Regression in 3.0: Incorrect moderator list update in the room screen.
+    * [OPENMEETINGS-916] - Selected recording is not highlighted and should not be moved to other folder
+    * [OPENMEETINGS-917] - Contacts should not be added as default moderator
+    * [OPENMEETINGS-918] - Contacts should not be added to usergroup
+    * [OPENMEETINGS-920] - where are the controls to playback a recorded video?
+    * [OPENMEETINGS-922] - Add folder button does not add a folder.
+    * [OPENMEETINGS-923] - Drag and drop of files in the recordings section does not work
+    * [OPENMEETINGS-924] - deleting recordings?
+    * [OPENMEETINGS-925] - Recording details previously showed the room name not the id
+    * [OPENMEETINGS-927] - Memory leak in OM wicket application
+    * [OPENMEETINGS-930] - getInvitationHash method allow creation of invalid users (login too small)
+    * [OPENMEETINGS-931] - AD LDAP Authentication on empty install organization choice after first logon: empty list
+    * [OPENMEETINGS-932] - SIP dialer menu item is not availble in the OM 3.x
+    * [OPENMEETINGS-934] - screenrecording without sound
+    * [OPENMEETINGS-935] - Names are mixed in contact request email
+    * [OPENMEETINGS-936] - First frame of the recording has size differs from all other frames
+    * [OPENMEETINGS-943] - OM3.0: login with LDAP user not working
+    * [OPENMEETINGS-950] - Update red5 version to latest (requires Git checkout and Maven sub-build)
+    * [OPENMEETINGS-951] - Command line installer fails if path contains spaces
+    * [OPENMEETINGS-952] - Build should be compatible with latest ant
+    * [OPENMEETINGS-956] - Recording frame is not scrolled
+    * [OPENMEETINGS-957] - Screensharing is broken
+    * [OPENMEETINGS-958] - Calendar event start and end date are not displayed correctly in the month vew for IST time zone
+    * [OPENMEETINGS-959] - "Choose Device" Dialog doesn't show (all) devices from flash-settings
+    * [OPENMEETINGS-961] - Calendar event can be canceled by guest
+    * [OPENMEETINGS-965] - Dashboard is malfunctioning when the user language is set to french
+    * [OPENMEETINGS-966] - Invitation links are not working
+    * [OPENMEETINGS-967] - dashboard.show.myrooms and dashboard.show.rssfeed options are not working
+    * [OPENMEETINGS-972] - Default user database
+    * [OPENMEETINGS-975] - Reminder is not sent for calendar event
+    * [OPENMEETINGS-976] - Cannot restore an erased key in administration\configuration\key
+    * [OPENMEETINGS-977] - Import of Appointments and UserContacts was broken
+    * [OPENMEETINGS-978] - It is impossible to start OM in offline mode
+    * [OPENMEETINGS-983] - Verification URL is not generated correctly for self register users
+    * [OPENMEETINGS-986] - Oauth2.0 Logon Not Working
+    * [OPENMEETINGS-990] - error while playing recording
+    * [OPENMEETINGS-993] - Deleted rooms are now excluded from backup
+    * [OPENMEETINGS-997] - error installing with mssql 
+    * [OPENMEETINGS-998] - Audio and Video of recordings are not in sync after a few minutes
+    * [OPENMEETINGS-1002] - OM theming should be consistent
+    * [OPENMEETINGS-1004] - Internal error is thrown when you search a user on the Search Users Tab
+    * [OPENMEETINGS-1007] - Users with externalUserId and externaluserType <> null can't login
+    * [OPENMEETINGS-1018] - No error if send invitation with empty email.
+    * [OPENMEETINGS-1019] - RemoteControl: problem with sql
+    * [OPENMEETINGS-1020] - create new user after adding user does not add to DB
+    * [OPENMEETINGS-1022] - cliAdmin is broken (NPE + exclude-files)
+    * [OPENMEETINGS-1023] - ChatMessages are not imported
+    * [OPENMEETINGS-1024] - Add user admin dropdown is broken when postgres is used
+    * [OPENMEETINGS-1029] - modifyRoomParameter SOAP/REST method is broken
+    * [OPENMEETINGS-1032] - search variable in Language Editor produce java.lang.StackOverflowError
+    * [OPENMEETINGS-1034] - openmeetings start always fails with postgresql db on debian
+    * [OPENMEETINGS-1037] - LDAP passwords are being printed to the log
+    * [OPENMEETINGS-1038] - PrivateRoom Widget is displayed when dashboard.show.myrooms key is disabled
+    * [OPENMEETINGS-1039] - Interview recording is broken if stop-on-close
+    * [OPENMEETINGS-1044] - Flash components is not compiled under OS Windows
+    * [OPENMEETINGS-1048] - Appointement owner has no moderation rights
+    * [OPENMEETINGS-1052] - Room list not displayed after room exit
+    * [OPENMEETINGS-1055] - Error is thrown and connection is closed when external user try to generate URL and send email invitation
+    * [OPENMEETINGS-1056] - "Remove moderator role fom this user" icon is not availble for moderator in the conference 
+    * [OPENMEETINGS-1059] - Language not loaded from user profile.
+    * [OPENMEETINGS-1060] - Strange view of warnings at User editing screen.
+    * [OPENMEETINGS-1061] - Font size list is not visible and availble in the global chat
+    * [OPENMEETINGS-1062] - Contact data of other users are shown not all.
+    * [OPENMEETINGS-1063] - When "Show contact data to contacts only" was selected, contact data are not showing for users from contacts.
+    * [OPENMEETINGS-1079] - Synchronous backup does not work through the web interface with a large volume of data
+    * [OPENMEETINGS-1083] - Impossible to add user to group, moderator to room
+    * [OPENMEETINGS-1084] - cannot remove auto created user by invite for conference room 
+    * [OPENMEETINGS-1087] - X-UA-Compatible should be set as first META tag
+    * [OPENMEETINGS-1088] - error installing with mssql
+    * [OPENMEETINGS-1089] - Spanish installation screens contains bad UTF-8 chars
+    * [OPENMEETINGS-1091] - the attendees can chaange the start and end dates of calendar appointment rooms !!!
+    * [OPENMEETINGS-1092] - users can use the calendar room to make conference after the end-date of the conference room!!!
+    * [OPENMEETINGS-1094] - Ldap authorisation is not working correctly if var ldap_search_scope=SUBTREE
+    * [OPENMEETINGS-1098] - Login via OAuth2 is broken due to redirectUri is wrong
+    * [OPENMEETINGS-1109] - Appointment with existing room is displayed as appointment with 'appointment special room'
+    * [OPENMEETINGS-1113] - Chat during conference
+    * [OPENMEETINGS-1114] - LDAP config is not Unicode aware
+    * [OPENMEETINGS-1117] - RTL is not fully supported by OM
+    * [OPENMEETINGS-1123] - RedirectLoop while trying to install
+    * [OPENMEETINGS-1124] - Calendar interface bug
+    * [OPENMEETINGS-1127] - Unexpected behaivor when user enter to the room if room type is udefined
+    * [OPENMEETINGS-1134] - Removed folder shows in the "Move to folder..." dropdown box
+    * [OPENMEETINGS-1143] - Recordings list order
+    * [OPENMEETINGS-1146] - RTMPS uses rtmpport
+    * [OPENMEETINGS-1151] - Recording Java Application is blocked by Security Settings
+    * [OPENMEETINGS-1154] - Too big waiting time after pressing the "Stop recording" button
+    * [OPENMEETINGS-1156] - The "Allow recording" flag is not checked when screen sharing is started
+    * [OPENMEETINGS-1157] - Calendar web service is broken
+    * [OPENMEETINGS-1159] - Chat is not correctly aligned then language is RTL
+    * [OPENMEETINGS-1160] - Edit user settings is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1161] - Dashboard start widget is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1162] - Admin->users is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1163] - Admin->OAuth is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1164] - Admin->Servers is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1165] - Admin->Configurations is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1166] - Admin->Groups is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1167] - Admin->Labels is not correctly aligned when language is RTL
+    * [OPENMEETINGS-1168] - Request for contact multi-language + RTL issues
+    * [OPENMEETINGS-1169] - Send Message dialog is not properly aligned when RTL language is selected
+    * [OPENMEETINGS-1170] - Profile page is not updated when user changes settings
+    * [OPENMEETINGS-1173] - The "Internal error" is thrown when uncheck the "Create/Modify appointment special room" flag
+    * [OPENMEETINGS-1177] - Calendar is not properly aligned when RTL language is selected
+    * [OPENMEETINGS-1181] - Date pickers are not localized
+    * [OPENMEETINGS-1183] - It is impossible to change 'chatOpened' room parameter using modifyRoomParameter SOAP call
+    * [OPENMEETINGS-1185] - Appointments returned by SOAP service get wrong start/end time
+    * [OPENMEETINGS-1187] - Send One-Time Invitation does not work if we Generate URL first.
+    * [OPENMEETINGS-1188] - less data for getRoomById
+    * [OPENMEETINGS-1191] - GSOC: WebRTC support for OM (WebM file reading/writing)
+    * [OPENMEETINGS-1193] - RTL - REVERSING SENTENCES
+    * [OPENMEETINGS-1196] - Meaningless internal error in case OAuth email is in use
+    * [OPENMEETINGS-1199] - Cluster status is missed on admin->connection page
+    * [OPENMEETINGS-1200] - Main menu items shows incorrectly
+    * [OPENMEETINGS-1201] - Header of moderators list box shows incorrectly
+    * [OPENMEETINGS-1203] - Screen sharing is not started when external guest try to start sharing
+    * [OPENMEETINGS-1205] - Invitation is not sent from the toom
+    * [OPENMEETINGS-1208] - default_group_id ...?
+    * [OPENMEETINGS-1218] - Wrong birthday date is displayed on the User datails at Administration->Users page
+    * [OPENMEETINGS-1247] - DOAP needs to provide asfext:pmc entry
+    * [OPENMEETINGS-1249] - Guest can't enter to the room when room is booked via private message
+    * [OPENMEETINGS-1253] - Crash when searching at language editor.
+    * [OPENMEETINGS-1254] - Crash when adding OAuth2 config
+    * [OPENMEETINGS-1255] - Incorrect work of "Show contact data to contacts only"
+    * [OPENMEETINGS-1258] - The latest chat messeages are not shown in the global chat
+    * [OPENMEETINGS-1260] - Period invitation created from room is shifted one month
+    * [OPENMEETINGS-1263] - component.getString() should not be called from constructor
+    * [OPENMEETINGS-1264] - "Old style" confirm dialogs should be replaced with jquery-ui confirmations
+    * [OPENMEETINGS-1265] - Internal error  Return to home page 
+    * [OPENMEETINGS-1266] - Width/height parameters are missing in RecordingDTO
+    * [OPENMEETINGS-1269] - 'Internal Error' Message on Deleting / Selecting a User in Admin/User Panel
+    * [OPENMEETINGS-1272] - Exception and Internal Errror When "To complete your registration please click on the following link"
+    * [OPENMEETINGS-1274] - After registration I don't see confirmation
+    * [OPENMEETINGS-1281] - Bad URL to download language files to translate in OpenMeetings website
+    * [OPENMEETINGS-1287] - Mail templates are excluded from the build artefact
+    * [OPENMEETINGS-1288] - Search User page is broken
+    * [OPENMEETINGS-1292] - OM 3.1 When clic on Upload file picture button profile, nothings happens
+    * [OPENMEETINGS-1295] - OM 3.0.7 - No upload image for widget user 
+    * [OPENMEETINGS-1296] - Unable to upload image to profile
+    * [OPENMEETINGS-1297] - svn tree need to be restructured
+    * [OPENMEETINGS-1299] - In Application_zh_CN.properties file, from entry 1465 to entry 1600, we should have Chinese entries, but there are still English entries.
+    * [OPENMEETINGS-1303] - Report a bug URL
+    * [OPENMEETINGS-1308] - "File tree" is broken in room after installation
+    * [OPENMEETINGS-1309] -  Issue with playing the recordings in OM 3.1.0
+    * [OPENMEETINGS-1314] - A no user receive an invitation  and he tries to send an invitation 
+    * [OPENMEETINGS-1316] - Older timezone's in OM
+    * [OPENMEETINGS-1323] - Error is thrown to the log file during conversion recording
+    * [OPENMEETINGS-1327] - Messages are being displayed in the folder right after creation
+    * [OPENMEETINGS-1328] - ConfirmAjaxCallListener should be changed on standard wicket dialog in the MessagesContactsPanel
+    * [OPENMEETINGS-1329] - "null" adds to the Subject when user send private masage to contact
+    * [OPENMEETINGS-1330] - Contact being deleted from contact list without confirmation dialog
+    * [OPENMEETINGS-1333] - Recording and sharing is not started when contact try to start recording or sharing 
+    * [OPENMEETINGS-1334] - It's impossible to invite om user to the my rooms
+    * [OPENMEETINGS-1335] - Screen sharing icons and favicon need to be updated
+    * [OPENMEETINGS-1336] - User can not enter to group room
+    * [OPENMEETINGS-1338] - Screen sharing application failed to connect to the server
+    * [OPENMEETINGS-1339] - Poll results shows uncorrectly
+    * [OPENMEETINGS-1341] - White page is shown when user try to reset password
+    * [OPENMEETINGS-1342] - Incorrect user type set when user enter to the OpenMeeitings via plugins
+    * [OPENMEETINGS-1344] - MD5 should not be used for password encryption
+    * [OPENMEETINGS-1346] - Error while import a backup from OM version 3.0.2
+    * [OPENMEETINGS-1347] - missing sort functionality in administration view
+    * [OPENMEETINGS-1348] - Backup import with LDAP users from 2.1.0 fails
+    * [OPENMEETINGS-1349] - Custom address states sets to NULL while restoring from backup
+    * [OPENMEETINGS-1350] - rtmpT connection problem
+    * [OPENMEETINGS-1351] - Call for Logo page does not say where to send contributions
+    * [OPENMEETINGS-1354] - Backup zip is being extracted without necessary checks
+    * [OPENMEETINGS-1355] - random UUID should be user to generate password reset hash
+    * [OPENMEETINGS-1358] - RTMPS SSHHandshakeFailed error  in 3.0.7 and working fine with 3.0.4
+    * [OPENMEETINGS-1359] - Links to apache-extras.org should be removed from the site
+    * [OPENMEETINGS-1377] - Backup fails when appointment has deleted room
+    * [OPENMEETINGS-1379] - XSS in Chat window leading to DOS
+    * [OPENMEETINGS-1380] - Chat messages are not being imported
+    * [OPENMEETINGS-1384] - SIP dial to room need to be fixed
+    * [OPENMEETINGS-1396] - Swf selection should be improved
+    * [OPENMEETINGS-1399] - OpenMeetings is vulnerable to session fixation
+    * [OPENMEETINGS-1400] - Admin>Conference Rooms>Appointment Room Checkbox
+    * [OPENMEETINGS-1401] - Email Reminders for Calendared Events Not Issued
+    * [OPENMEETINGS-1402] - Screen Sharing issue with Greek language
+    * [OPENMEETINGS-1406] - View profile form is broken
+    * [OPENMEETINGS-1410] - Om failed to install using Oracle
+    * [OPENMEETINGS-1411] - allowSameURLMultipleTimes parameter for secure hash is broken
+    * [OPENMEETINGS-1414] - spring-mvc and batik need to be removed
+    * [OPENMEETINGS-1416] - Users with moderator's flag in usergroup do not become moderators in rooms.
+    * [OPENMEETINGS-1417] - Check/uncheck of moderator flag in usergroups doesn't work.
+    * [OPENMEETINGS-1432] - Recording download from Moodle is broken
+    * [OPENMEETINGS-1434] - Only the first group is added in ATTRIBUTE mode
+    * [OPENMEETINGS-1437] - behavior os share audio and share audio/video button ist different
+    * [OPENMEETINGS-1438] - Recordings permission check is broken
+    * [OPENMEETINGS-1442] - Remote keyboard is not working in screen-sharing app
+    * [OPENMEETINGS-1443] - Invitations are broken
+    * [OPENMEETINGS-1444] - Language editor is broken
+    * [OPENMEETINGS-1448] - Recordings backup fails "Enum missing"
+    * [OPENMEETINGS-1449] - Check box "Do not ask again" in "Choose device" dialog doesn't work
+    * [OPENMEETINGS-1451] - SOAP/REST API documentation need to be improved
+    * [OPENMEETINGS-1457] - flvRecordings and fileExplorerItem::Video file name depends on id
+    * [OPENMEETINGS-1460] - Application.ONLINE_USERS does not reflect changes to Client instances
+    * [OPENMEETINGS-1461] - We need to switch to java8
+    * [OPENMEETINGS-1465] - Password field is enabled when Password protected is not checked
+    * [OPENMEETINGS-1466] - REST/SOAP methods are incomplete
+    * [OPENMEETINGS-1468] - problems with keyborad usage while screensharing with remote desktop 
+    * [OPENMEETINGS-1470] - WB video is not displayed
+    * [OPENMEETINGS-1472] - User cannot be deleted
+    * [OPENMEETINGS-1476] - Deleted records are shown under trash
+    * [OPENMEETINGS-1478] - Admin->Connections displays outdated connections
+    * [OPENMEETINGS-1479] - Dashboard Chat not disabled when dashboard.show.chat value is 0
+    * [OPENMEETINGS-1482] - Om performance issues
+    * [OPENMEETINGS-1483] - Error while installing OM on MSSQL
+    * [OPENMEETINGS-1486] - Registration dialog is broken
+    * [OPENMEETINGS-1487] - Clear text passwords shouldn't be sent via email
+    * [OPENMEETINGS-1489] - Calendar in broken in French
+    * [OPENMEETINGS-1492] - OM 3.1.3 duplication records in database
+    * [OPENMEETINGS-1494] - Calendar & Events
+    * [OPENMEETINGS-1495] - Labels in admin forms are overlapping with inputs
+    * [OPENMEETINGS-1496] - Dates from backup files are being parsed with errors
+    * [OPENMEETINGS-1498] - Exception is thown when user exit from the room
+    * [OPENMEETINGS-1499] - Backup import is crached under OS Windows
+    * [OPENMEETINGS-1502] - NullPointerException while checking existing LDAP user
+    * [OPENMEETINGS-1504] - User with no password is being created in Web installer
+    * [OPENMEETINGS-1505] - Password is not checked when owner invite guest to the room with password protected invitation
+    * [OPENMEETINGS-1508] - Italian translation
+    * [OPENMEETINGS-1509] - Count of users in the room on the rooms page is not updated when any user exit from room
+    * [OPENMEETINGS-1511] - LDAP user profile picture
+    * [OPENMEETINGS-1513] - The Installer Converters page should be improved
+    * [OPENMEETINGS-1518] - Recorgings should not be converted to ogg/avi format
+    * [OPENMEETINGS-1521] - 'null' is shown instead of usergroup when user update and save User details
+    * [OPENMEETINGS-1524] - Poll description is missed in the Poll results
+    * [OPENMEETINGS-1525] - Openmeetings 3.1.3 - Problem with script red5-highperf.sh 
+    * [OPENMEETINGS-1532] - Recording folders not always imported as expected
+    * [OPENMEETINGS-1533] - Impossible to create Appointment using calendar WebService
+    * [OPENMEETINGS-1534] - Video upload to room is broken
+    * [OPENMEETINGS-1535] - Calendar web service range method is broken
+    * [OPENMEETINGS-1537] - external soap users unable to login to the conference room created
+    * [OPENMEETINGS-1539] - Calendar web service: delete method returns nothing on success
+    * [OPENMEETINGS-1540] - Placeholder in reset template email is not being replaced
+    * [OPENMEETINGS-1541] - Appointment invitations are not always accessible
+    * [OPENMEETINGS-1542] - Ajax busy status is not displayed in the room
+    * [OPENMEETINGS-1543] - Webservice Calendar/range
+    * [OPENMEETINGS-1546] - Secure hash is not working every other time
+    * [OPENMEETINGS-1547] - 'You have to wait until a moderator enters the room' dialog need to be added to the room
+    * [OPENMEETINGS-1548] - EmoticonsBehavior should be removed to speed up OM in FF
+    * [OPENMEETINGS-1549] - Command line admin fails to install
+    * [OPENMEETINGS-1553] - Chat messages in mobile client are broken
+    * [OPENMEETINGS-1555] - Text does not fit room tabs
+    * [OPENMEETINGS-1556] - When entered the room sometimes is not the right size whiteboard
+    * [OPENMEETINGS-1560] - Error when a user is removed from the group in the tab group management
+    * [OPENMEETINGS-1561] - It does not work the new user registration by using verification code via email
+    * [OPENMEETINGS-1563] - It does not work download PowerPoint presentations
+    * [OPENMEETINGS-1564] - Do not fit the text in the notification window
+    * [OPENMEETINGS-1569] - .../streams/hibernate folder is not cleaned
+    * [OPENMEETINGS-1572] - Chat should be made resizable
+    * [OPENMEETINGS-1577] - Rooms  does not work when using French Language
+    * [OPENMEETINGS-1578] - Invitation URL is incorerct
+    * [OPENMEETINGS-1579] - Room polls are not work as expected
+    * [OPENMEETINGS-1581] - Permission on video & audio on public rooms
+    * [OPENMEETINGS-1586] - Administrator no access to the room 
+    * [OPENMEETINGS-1590] - Video frame of mobile user are resized when mobile user switch off video
+    * [OPENMEETINGS-1591] - Chat messages are not sorted correctly when user send message in the room
+    * [OPENMEETINGS-1592] - Avatar is not shown when mobile client sends chat message in the room
+    * [OPENMEETINGS-1594] - Screen-sharing base URL is broken
+    * [OPENMEETINGS-1595] - Video is not displayed when user try allow to share your video again
+    * [OPENMEETINGS-1597] - Message are not shown properly in the activities and actions window for user without moderator rights
+    * [OPENMEETINGS-1598] - The "Disabled" select item does not work properly on the  "Choose device" dialog
+    * [OPENMEETINGS-1599] - Connection panel is not scrolled
+    * [OPENMEETINGS-1600] - The "Clear whiteboard" flag does not work when user upload file directly to whiteboard
+    * [OPENMEETINGS-1601] - Drop recording to WB doesn't work as expected
+    * [OPENMEETINGS-1603] - The "Internal error" is thrown when user select custom folder in the room
+    * [OPENMEETINGS-1610] - "'timepicker' is not a valid LocalTime 
+    * [OPENMEETINGS-1611] - JS errors in OM Admin
+    * [OPENMEETINGS-1616] - New chat messages should be added to the bottom
+    * [OPENMEETINGS-1619] - User details panel is cut off when admin click on add new user button
+    * [OPENMEETINGS-1620] - 'Unenroll user' is not fully working
+    * [OPENMEETINGS-1630] - It is impossible to get room count using REST
+    * [OPENMEETINGS-1631] - User can vote multiple times
+    * [OPENMEETINGS-1638] - Interview room need to be added
+    * [OPENMEETINGS-1639] - Load/Undo on WB should be implemented
+    * [OPENMEETINGS-1640] - Styles need to be added to WB text
+    * [OPENMEETINGS-1641] - Video on WB need to be implemented
+    * [OPENMEETINGS-1642] - Page controls and Zoom need to be added to WB
+    * [OPENMEETINGS-1643] - Flex AV settings need to be moved to config DB table
+    * [OPENMEETINGS-1644] - Missing Video options
+    * [OPENMEETINGS-1646] - All users video frames are closed when any user with enabled video exit from the room
+    * [OPENMEETINGS-1647] - Camera streams are not being recorded
+    * [OPENMEETINGS-1648] - External process time-to-live should be configurable
+    * [OPENMEETINGS-1654] - No nickname dialog, wrong name on video window
+    * [OPENMEETINGS-1657] - Issues with WB drawing
+    * [OPENMEETINGS-1660] - UserWebService.add method is broken
+    * [OPENMEETINGS-1664] - SIP integration is broken
+    * [OPENMEETINGS-1665] - Multiple issues were reported against web services
+    * [OPENMEETINGS-1666] - About RoomWebService getExternal Method Error.SQL bug
+    * [OPENMEETINGS-1668] - About RoomWebService getExternal Method The parameter types of bugs
+    * [OPENMEETINGS-1670] - Recordings is not works properly
+    * [OPENMEETINGS-1672] - Backup using command line admin fails if file name was specified
+    * [OPENMEETINGS-1673] - Recording test is broken
+    * [OPENMEETINGS-1675] - When using the Apache Derby database on Windows the install of OM 3.3.0 can't continue past "user" and "Password" entries if you don't enter a value.  As these values don't appear in the persistence.xml file it causes an Error and OM isn't installed.
+    * [OPENMEETINGS-1677] - Clustering seems to be broken
+    * [OPENMEETINGS-1679] - User session being dropped if RTPMT is being used
+    * [OPENMEETINGS-1682] - Restricted room should be renamed to Presentation
+    * [OPENMEETINGS-1686] - Error message is not displayed completely when user change password
+    * [OPENMEETINGS-1690] - Password is required message is displayed when admin try to update any user settings
+    * [OPENMEETINGS-1693] - UserWebService.add method parameters are badly annotated
+    * [OPENMEETINGS-1697] - Strong password is not enforced during self registration
+    * [OPENMEETINGS-1698] - dashboard.show.chat option is not fully works
+    * [OPENMEETINGS-1699] - Audio/video is not available for the user with no camera installed
+    * [OPENMEETINGS-1700] - Internal error during simultaneous room enter
+    * [OPENMEETINGS-1701] - WhiteBoard foolfit controls work incorrectly in some cases
+    * [OPENMEETINGS-1703] - OM Loooong load
+    * [OPENMEETINGS-1705] - Error on Rest api /openmeetings/services//calendar/title/{title}
+    * [OPENMEETINGS-1706] - Remote control is not implemented
+    * [OPENMEETINGS-1710] - Recording is loaded on the whiteboard for too long time 
+    * [OPENMEETINGS-1711] - Internal Error is shown when click on " Contacts and messages" link
+    * [OPENMEETINGS-1712] - There is no logout or exit option if come in to room directly by API call
+    * [OPENMEETINGS-1713] - References to outdated config.xml should be removed
+    * [OPENMEETINGS-1715] - Screen-sharing and recording should be stopped in case user exit the room.
+    * [OPENMEETINGS-1717] - OAuth2 login works weird in FF
+    * [OPENMEETINGS-1719] - Multiple issues in Language editor
+    * [OPENMEETINGS-1720] - Import of office documents and saved Whiteboards is broken
+    * [OPENMEETINGS-1724] - Stop recording button is not work in the interview room
+    * [OPENMEETINGS-1725] - Camera and mic settings dialog is not work properly in the interview room
+    * [OPENMEETINGS-1726] - Video is not started in the rectricted room
+    * [OPENMEETINGS-1727] - More OAuth providers should be added
+
+** Improvement
+    * [OPENMEETINGS-16] - Missing functionality in SOAP/REST API
+    * [OPENMEETINGS-67] - Show Recordings in the File-Section and make them available to be able to show them in the whiteboard
+    * [OPENMEETINGS-95] - docs folder, generated by build, should be removed from SVN, artifact for the docs should be added
+    * [OPENMEETINGS-96] - Possibility to deny remote control for all when sharing screen
+    * [OPENMEETINGS-108] - A OpenMeetings header page logo ?; Change icons in somes pages?;  Add to title VMWare - Iso Live DVD; Every three weeks to post a reminder that there is a live iso dvd.
+    * [OPENMEETINGS-359] - Conference room menu option "Send invitation" to allow selection from Openmeetings users from a user group
+    * [OPENMEETINGS-360] - Email invited meeting participants to display name not email address
+    * [OPENMEETINGS-369] - Please make the "Clear Whiteboard" tool only accessible to Moderators and not to participants who have “Draw on the Whiteboard” rights
+    * [OPENMEETINGS-372] - Please make the ability to “clear the Chat window” only available to Moderators, and not to participants who have “Draw on the Whiteboard” rights
+    * [OPENMEETINGS-373] - By default all users should be able to scroll their Whiteboard, and doing so should not affect any other participants Whiteboard.
+    * [OPENMEETINGS-401] - Add pause and seek capability to streaming video
+    * [OPENMEETINGS-406] - Module for creating document thumbnail on the whiteboard, without using OpenOffice.org, as mandatory dependency
+    * [OPENMEETINGS-413] - A good idea could be to add default parameter like default country, default language, default domain, etc
+    * [OPENMEETINGS-427] - ExportPDF
+    * [OPENMEETINGS-547] - Deferred recordings converting possibility.
+    * [OPENMEETINGS-551] - GSOC: Need to implement HTML5 whiteboard.
+    * [OPENMEETINGS-553] - GSOC: Need to have possibility to import/export or sync events from OpenMeetings calendar using ical or caldav protocol.
+    * [OPENMEETINGS-623] - OpenMeetings怎么修改发送邮件的格式
+    * [OPENMEETINGS-649] -  Add email management functions to Om Admin
+    * [OPENMEETINGS-662] - Code contribution - mathematical whiteboard
+    * [OPENMEETINGS-690] - possibility for user to signal a question 
+    * [OPENMEETINGS-794] - Add a possibility to enter brief name for users with same invitation url (grouped mail)
+    * [OPENMEETINGS-800] - New Whiteboard should provide user rights controlling 
+    * [OPENMEETINGS-846] - Invitation of a complete usergroup as a one-click operation
+    * [OPENMEETINGS-894] - Red5 should be updated to the latest stable version
+    * [OPENMEETINGS-938] - Recording length field should be filled by converters
+    * [OPENMEETINGS-939] - Not ready recordings should have special icon
+    * [OPENMEETINGS-942] - Searching for contacts
+    * [OPENMEETINGS-979] - Axis2 should be removed from stack
+    * [OPENMEETINGS-980] - Library versions should be updated
+    * [OPENMEETINGS-982] - ApplicationContext recreation should be avoided
+    * [OPENMEETINGS-984] - Recording auto-repairing should be added
+    * [OPENMEETINGS-1017] - ACLs should be added to the User
+    * [OPENMEETINGS-1033] - Improve ldap auth type adding SearchScope variable in config file
+    * [OPENMEETINGS-1036] - Improve User Form for include LDAP domain
+    * [OPENMEETINGS-1040] - Select2 should be used to display/set user groups
+    * [OPENMEETINGS-1049] - no default value for the "Quality of the screen sharing"/default FPS
+    * [OPENMEETINGS-1086] - apache-rat and apache-whisker plugins should be added to the build
+    * [OPENMEETINGS-1130] - Emails should be created using templates, not string concatenation
+    * [OPENMEETINGS-1133] - Direct sign-in from another site
+    * [OPENMEETINGS-1135] - logback config should be updated to use log rotation and keep old logs
+    * [OPENMEETINGS-1136] - Improving portuguese-brazil installation translation
+    * [OPENMEETINGS-1138] - In the general interface, provide a way to access links to recordings, which can be shared with others (both registered users and external people).
+    * [OPENMEETINGS-1198] - Simplify Database Install
+    * [OPENMEETINGS-1206] - Room service should be updated to be able to generate invitation hash with first and last name
+    * [OPENMEETINGS-1209] - typing indicator
+    * [OPENMEETINGS-1210] - chat jumps down, if it was scrolled up before
+    * [OPENMEETINGS-1245] - Offer drop-down list for inviting users when in conference room
+    * [OPENMEETINGS-1256] - Fetch users from AD into contacts
+    * [OPENMEETINGS-1262] - Install wizard need to be updated to use wicket-jquery-ui
+    * [OPENMEETINGS-1270] - Outdated documentation
+    * [OPENMEETINGS-1290] - Room SIP# should be displayed as a hint
+    * [OPENMEETINGS-1294] - OM 3.1.0 spanish translation attached
+    * [OPENMEETINGS-1301] - No Accessability for Conference Room
+    * [OPENMEETINGS-1313] - Support for Google Analytics scripts should be added
+    * [OPENMEETINGS-1356] - Build should be speed up by reducing forking
+    * [OPENMEETINGS-1357] - maven-dependency-plugin should be used to download/unpack OpenLaszlo
+    * [OPENMEETINGS-1382] - Update default avatar of user 
+    * [OPENMEETINGS-1383] - Updated French translation for OpenMeetings 3.1.1/3.1.1+
+    * [OPENMEETINGS-1403] - External cameras should be supported
+    * [OPENMEETINGS-1405] - Appointment dialog should be simplified
+    * [OPENMEETINGS-1419] - Connect to Oracle DB with Service Name through Web Installer
+    * [OPENMEETINGS-1420] - Select a whole group of users as attendees in event
+    * [OPENMEETINGS-1424] - Add a "recent rooms" functionality
+    * [OPENMEETINGS-1445] - 3.1.2 Build Compilation Warnings
+    * [OPENMEETINGS-1462] - Implementation for a delete button for the chat content on the principal chat window 
+    * [OPENMEETINGS-1480] - Ukrainian translation need to be improved
+    * [OPENMEETINGS-1488] - Additional functionality for groups
+    * [OPENMEETINGS-1490] - Jodconverter should be added to openmeetings project
+    * [OPENMEETINGS-1507] - Remove "application.base.url" configuration key
+    * [OPENMEETINGS-1512] - Wrong LDAP value can cause error on My Profile Page
+    * [OPENMEETINGS-1527] - Multiselect using Shift/Ctrl need to be added to file tree
+    * [OPENMEETINGS-1551] - Add prohibition of  time format  сombination as 15:00 PM when creating event 
+    * [OPENMEETINGS-1554] - Please add the feature to upload your video files to the server, in the recording section
+    * [OPENMEETINGS-1558] - Room public drive should be accessible to all users in read-only mode
+    * [OPENMEETINGS-1580] - Enable multiple uploads  at once to file tree and whiteboard.
+    * [OPENMEETINGS-1607] - "Raise your hand" notification should also be added in user-list
+    * [OPENMEETINGS-1613] - User and teacher user profiles
+    * [OPENMEETINGS-1617] - BackupExport should write directly to zip file
+    * [OPENMEETINGS-1623] - Full-Fit for Recordings Video Player
+    * [OPENMEETINGS-1632] - Wicket internal AjaxDownload should be used
+    * [OPENMEETINGS-1634] - File tree drag to trash, need to be enhanced
+    * [OPENMEETINGS-1650] - Make Audio Alerts Configurable
+    * [OPENMEETINGS-1662] - UI is bad..
+    * [OPENMEETINGS-1667] - JS/CSS optimization should be added
+    * [OPENMEETINGS-1674] - 3rd party dependencies need to eliminated
+    * [OPENMEETINGS-1676] - Room left panel should be iconized for smaller devices
+    * [OPENMEETINGS-1685] - Unused and duplicated string labels need to be removed
+    * [OPENMEETINGS-1691] - config keys/values need to be unified
+    * [OPENMEETINGS-1709] - GeneralConfiguration.xml should be generated
+    * [OPENMEETINGS-1722] - Config values should be better cached
+
+** New Feature
+    * [OPENMEETINGS-132] - Video window resizing
+    * [OPENMEETINGS-290] - Switching the type of converter
+    * [OPENMEETINGS-293] - Doc to html converter with Apache POI
+    * [OPENMEETINGS-330] - save the changes at whiteboard to a doc/pdf or etc
+    * [OPENMEETINGS-335] - Docx to html converter with docx4j
+    * [OPENMEETINGS-442] - om LDAP users controlled with a group
+    * [OPENMEETINGS-485] - Scrolling pdf files could be much handier
+    * [OPENMEETINGS-573] - Audio notification for new chat message
+    * [OPENMEETINGS-812] - Refactor Project to Multi-Project layout Maven style
+    * [OPENMEETINGS-828] - Video player in share add PAUSE function
+    * [OPENMEETINGS-895] - HTML5 room should be implemented
+    * [OPENMEETINGS-1008] - New Setting: Can user create rooms
+    * [OPENMEETINGS-1104] - Enable change first day in the Calendar
+    * [OPENMEETINGS-1453] - Provision for getting OpenMeetings version from SOAP/REST api
+    * [OPENMEETINGS-1501] - Openmeetings - deleting emails
+
+** Task
+    * [OPENMEETINGS-90] - Default Country
+    * [OPENMEETINGS-745] - Refactoring of timezone behaviour in OpenMeetings
+    * [OPENMEETINGS-940] - Build system should be changed to use Maven
+    * [OPENMEETINGS-964] - LDAP login should be refactored
+    * [OPENMEETINGS-1302] - Current maven build doesn't create source artifact
+    * [OPENMEETINGS-1305] - REST/SOAP should be tested
+    * [OPENMEETINGS-1311] - Outdated jquery.ui.menubar should be replaced with jqueryui menu component
+    * [OPENMEETINGS-1515] - Fluido skin for the site should be replaced with reflow
+    * [OPENMEETINGS-1704] - Defects reported by coverity scan need to be eliminated
+    * [OPENMEETINGS-1707] - SMSlib should be removed from dependencies
+    * [OPENMEETINGS-1714] - Issues reported by Sonar should be fixed (4.0.0)
+
+** Test
+    * [OPENMEETINGS-1025] - Problem with convert recording by ffmpeg
+
+** Wish
+    * [OPENMEETINGS-217] - Chat module place..
+    * [OPENMEETINGS-853] - temporary uploaded files
+    * [OPENMEETINGS-861] - SOAP user for creating & using om rooms via moodle can log into GUI of OM
+    * [OPENMEETINGS-905] - Clickable mainItem in the menu
+    * [OPENMEETINGS-1064] - chat should be topmost during a screen sharing session
+    * [OPENMEETINGS-1065] - add ability to minimize screen-sharing video
+    * [OPENMEETINGS-1066] - re-order fields on screen-sharing applet
+    * [OPENMEETINGS-1214] - LDAP import AD groups
+
+
 Release Notes - Openmeetings - Version 3.3.2
 ================================================================================================================
 ** Bug
