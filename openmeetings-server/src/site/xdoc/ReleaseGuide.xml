@@ -116,10 +116,10 @@
 						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=4.0.0</source>
 					</li>
 					<li>Update final SCM URL located at <tt>pom.xml</tt> and <tt>openmeetings-server/pom.xml</tt>
-						<source>
+						<source><![CDATA[
 <scm>
     <url>https://git-wip-us.apache.org/repos/asf?p=openmeetings.git</url>
-						</source>
+						]]></source>
 					</li>
 					<li>
 						Create a TAG and commit it to the Git<br/>
