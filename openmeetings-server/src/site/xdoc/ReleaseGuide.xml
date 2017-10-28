@@ -95,11 +95,6 @@
 			</subsection>
 			<subsection name="Step1 - Prepare files">
 				<ul>
-					<li>Switch to the necessary branch:
-						<source>
-git checkout BRANCH
-						</source>
-					</li>
 					<li>
 						Check that all files:<br />
 						LICENSE, NOTICE, DISCLAIMER, CHANGELOG, README<br />
@@ -111,23 +106,28 @@ git checkout BRANCH
 						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
 						<tt>openmeetings-server/src/site/xdoc/downloads.xml</tt><br/>
 					</li>
-					<li>
-						Create a TAG of the Git tree that you would like to release<br/>
-						Example:
-
+					<li>Switch to the necessary branch:
+						<source>git checkout 4.0.x</source>
+					</li>
+					<li>Create temporary local branch
+						<source>git checkout -b release-4.0.0-RC1</source>
+					</li>
+					<li>Update versions of all modules
+						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=4.0.0</source>
+					</li>
+					<li>Update final SCM URL located at <tt>pom.xml</tt> and <tt>openmeetings-server/pom.xml</tt>
 						<source>
-git tag 4.0.0RC1
-git push origin 4.0.0RC1
+<scm>
+    <url>https://git-wip-us.apache.org/repos/asf?p=openmeetings.git</url>
 						</source>
 					</li>
 					<li>
-						<p>Get the source from your TAG: </p>
-						<source>git checkout $BRANCHORTAG</source>
-						<p>$BRANCHORTAG should be replaced with your new TAG</p>
-					</li>
-					<li>
-						<p>Update versions of all modules</p>
-						<source>mvn versions:set -DgenerateBackupPoms=false -DnewVersion=3.1.0</source>
+						Create a TAG and commit it to the Git<br/>
+						<source>
+git commit -a -m "4.0.0 Release Candidate 1"
+git tag -s 4.0.0RC1 -m "4.0.0 Release Candidate 1 tag"
+git push origin 4.0.0RC1
+						</source>
 					</li>
 					<li>Deploy release artifacts to Maven
 						<ul>
@@ -151,27 +151,27 @@ mvn deploy -Pdeploy,rc
 						<p>
 							Commit artifacts you have created with KEYS file to the
 							<tt>https://dist.apache.org/repos/dist/dev/openmeetings/</tt>
-							Proposed file structure for "Release Candidate 1" of 3.1.0 will be:
+							Proposed file structure for "Release Candidate 1" of 4.0.0 will be:
 						</p>
 						<source>
-3.1.0
-3.1.0/rc1
-3.1.0/rc1/src
-3.1.0/rc1/src/apache-openmeetings-3.1.0-src.zip
-3.1.0/rc1/src/apache-openmeetings-3.1.0-src.tar.gz
-3.1.0/rc1/src/apache-openmeetings-3.1.0-src.zip.sha
-3.1.0/rc1/src/apache-openmeetings-3.1.0-src.zip.asc
-3.1.0/rc1/src/apache-openmeetings-3.1.0-src.tar.gz.sha
-3.1.0/rc1/src/apache-openmeetings-3.1.0-src.tar.gz.asc
-3.1.0/rc1/bin
-3.1.0/rc1/bin/apache-openmeetings-3.1.0.zip
-3.1.0/rc1/bin/apache-openmeetings-3.1.0.tar.gz
-3.1.0/rc1/bin/apache-openmeetings-3.1.0.zip.sha
-3.1.0/rc1/bin/apache-openmeetings-3.1.0.zip.asc
-3.1.0/rc1/bin/apache-openmeetings-3.1.0.tar.gz.sha
-3.1.0/rc1/bin/apache-openmeetings-3.1.0.tar.gz.asc
-3.1.0/rc1/CHANGELOG
-3.1.0/rc1/KEYS
+4.0.0
+4.0.0/rc1
+4.0.0/rc1/src
+4.0.0/rc1/src/apache-openmeetings-4.0.0-src.zip
+4.0.0/rc1/src/apache-openmeetings-4.0.0-src.tar.gz
+4.0.0/rc1/src/apache-openmeetings-4.0.0-src.zip.sha
+4.0.0/rc1/src/apache-openmeetings-4.0.0-src.zip.asc
+4.0.0/rc1/src/apache-openmeetings-4.0.0-src.tar.gz.sha
+4.0.0/rc1/src/apache-openmeetings-4.0.0-src.tar.gz.asc
+4.0.0/rc1/bin
+4.0.0/rc1/bin/apache-openmeetings-4.0.0.zip
+4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz
+4.0.0/rc1/bin/apache-openmeetings-4.0.0.zip.sha
+4.0.0/rc1/bin/apache-openmeetings-4.0.0.zip.asc
+4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz.sha
+4.0.0/rc1/bin/apache-openmeetings-4.0.0.tar.gz.asc
+4.0.0/rc1/CHANGELOG
+4.0.0/rc1/KEYS
 						</source>
 					</li>
 				</ul>
@@ -216,8 +216,8 @@ mvn clean install -Prc,release
 					<li>Go to <a href="https://securesigning.websecurity.symantec.com/csportal/">https://securesigning.websecurity.symantec.com/csportal/</a></li>
 					<li>Select "Signing Sets"</li>
 					<li>Select "Add signing set"</li>
-					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 3.1.0-RELEASE"</li>
-					<li>Enter "Version" for ex. "3.1.0-RELEASE"</li>
+					<li>Enter "Signing set name" (must include "Apache OpenMeetings" and version) for ex. "Apache OpenMeetings 4.0.0-RELEASE"</li>
+					<li>Enter "Version" for ex. "4.0.0-RELEASE"</li>
 					<li>Select "Java Signing Sha256" as "Signing service"</li>
 					<li>Select "Upload files" and add all <b>jar</b> files from <tt>target/jnlp</tt></li>
 					<li>Select "Sign now"</li>

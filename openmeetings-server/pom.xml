@@ -45,7 +45,7 @@
 	<scm>
 		<connection>scm:git:http://git-wip-us.apache.org/repos/asf/openmeetings.git</connection>
 		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/openmeetings.git</developerConnection>
-		<url>http://git-wip-us.apache.org/repos/asf/wicket/repo?p=openmeetings.git</url>
+		<url>https://git-wip-us.apache.org/repos/asf?p=openmeetings.git</url>
 		<tag>HEAD</tag>
 	</scm>
 	<profiles>
