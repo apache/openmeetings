@@ -204,6 +204,7 @@
 .wb-tabbar {
 	padding-left: 70px !important;
 	padding-right: 35px !important;
+	min-height: 40px;
 }
 .wb-tabbar .scroll-container {
 	overflow: hidden;

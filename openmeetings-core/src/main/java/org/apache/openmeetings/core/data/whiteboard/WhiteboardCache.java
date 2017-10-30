@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.data.whiteboard;
 
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
 import java.util.Map.Entry;
 import java.util.Set;
@@ -63,12 +64,18 @@ public class WhiteboardCache {
 	}
 
 	public static Whiteboards get(Long roomId) {
+		return get(roomId, null);
+	}
+
+	public static Whiteboards get(Long roomId, Long langId) {
 		if (roomId == null) {
 			return null;
 		}
 		Whiteboards wbs = getCache().get(roomId);
 		if (wbs == null) {
 			wbs = new Whiteboards(roomId);
+			Whiteboard wb = add(wbs, langId);
+			wbs.setActiveWb(wb.getId());
 			update(wbs);
 		}
 		return wbs;
@@ -76,11 +83,6 @@ public class WhiteboardCache {
 
 	public static Set<Entry<Long, Whiteboard>> list(long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
-		if (wbs.getWhiteboards().isEmpty()) {
-			Whiteboard wb = add(wbs, langId);
-			wbs.setActiveWb(wb.getId());
-			update(wbs);
-		}
 		return wbs.getWhiteboards().entrySet();
 	}
 
@@ -92,7 +94,7 @@ public class WhiteboardCache {
 	}
 
 	private static Whiteboard add(Whiteboards wbs, Long langId) {
-		Whiteboard wb = new Whiteboard(getDefaultName(langId, wbs.count()));
+		Whiteboard wb = new Whiteboard(getDefaultName(langId == null ? getDefaultLang() : langId, wbs.count()));
 		wbs.add(wb);
 		return wb;
 	}

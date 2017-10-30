@@ -19,12 +19,11 @@
 package org.apache.openmeetings.service.mail.template;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
 import java.util.Locale;
 
 import org.apache.openmeetings.IWebSession;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.wicket.AttributeModifier;
@@ -52,8 +51,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	}
 
 	private static Locale getDefault() {
-		Long langId = getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_LANG, 1L);
-		return LabelDao.getLocale(langId);
+		return LabelDao.getLocale(getDefaultLang());
 	}
 
 	public static String getString(String id, Locale locale, String... params) {

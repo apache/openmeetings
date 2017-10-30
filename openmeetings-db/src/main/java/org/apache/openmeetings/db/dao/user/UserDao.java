@@ -20,7 +20,7 @@ package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
@@ -103,7 +103,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		User user = new User();
 		user.setSalutation(Salutation.mr); // TODO: Fix default selection to be configurable
 		user.setRights(getDefaultRights());
-		user.setLanguageId(cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
+		user.setLanguageId(getDefaultLang());
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);

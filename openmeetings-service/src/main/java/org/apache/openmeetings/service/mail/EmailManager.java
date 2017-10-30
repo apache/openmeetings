@@ -19,8 +19,8 @@
 package org.apache.openmeetings.service.mail;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
@@ -70,7 +70,7 @@ public class EmailManager {
 		log.debug("sendMail:: username = {}, email = {}", username, email);
 		boolean sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 
-		ensureApplication(langId != null ? langId : cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
+		ensureApplication(langId != null ? langId : getDefaultLang());
 		String link = getApp().urlForActivatePage(new PageParameters().add("u",  hash));
 
 		if (sendEmailAtRegister) {
