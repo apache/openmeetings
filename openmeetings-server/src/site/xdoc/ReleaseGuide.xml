@@ -119,6 +119,8 @@
 						<source><![CDATA[
 <scm>
     <url>https://git-wip-us.apache.org/repos/asf?p=openmeetings.git</url>
+
+    SET https://github.com/apache/openmeetings/tree/4.0.0RC1
 						]]></source>
 					</li>
 					<li>
