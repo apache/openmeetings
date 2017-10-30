@@ -22,10 +22,10 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
@@ -339,7 +339,7 @@ public class UserManager implements IUserManager {
 
 	@Override
 	public Long getLanguage(Locale loc) {
-		return LabelDao.getLanguage(loc, cfgDao.getLong(CONFIG_DEFAULT_LANG, 1L));
+		return LabelDao.getLanguage(loc, getDefaultLang());
 	}
 
 	@Override

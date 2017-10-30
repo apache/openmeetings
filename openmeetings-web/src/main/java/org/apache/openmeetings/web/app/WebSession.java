@@ -22,8 +22,8 @@ import static java.text.DateFormat.SHORT;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -357,7 +357,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 			if (session.isSignedIn()) {
 				session.languageId = getBean(UserDao.class).get(session.userId).getLanguageId();
 			} else {
-				session.languageId = getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_LANG, 1L);
+				session.languageId = getDefaultLang();
 			}
 		}
 		return session.languageId;

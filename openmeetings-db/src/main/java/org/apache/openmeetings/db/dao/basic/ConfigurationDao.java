@@ -22,6 +22,7 @@ import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
@@ -58,6 +59,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplic
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMaxUploadSize;
@@ -326,6 +328,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_EXT_PROCESS_TTL:
 				setExtProcessTtl(toInt(value));
 				break;
+			case CONFIG_DEFAULT_LANG:
+				reloadDefaultLang();
+				break;
 		}
 		return entity;
 	}
@@ -368,10 +373,15 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setGaCode(getString(CONFIG_GOOGLE_ANALYTICS_CODE, null));
 	}
 
+	private void reloadDefaultLang() {
+		setDefaultLang(getLong(CONFIG_DEFAULT_LANG, 1L));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
 		setApplicationName(getString(CONFIG_APPLICATION_NAME, DEFAULT_APP_NAME));
+		reloadDefaultLang();
 		reloadBaseUrl();
 		reloadSipEnabled();
 		reloadGaCode();

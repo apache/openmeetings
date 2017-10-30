@@ -169,6 +169,7 @@ public class WbPanel extends AbstractWbPanel {
 
 	@Override
 	void internalWbLoad(StringBuilder sb) {
+		Long langId = rp.getClient().getUser().getLanguageId();
 		if (!WhiteboardCache.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
 			if (WhiteboardCache.tryLock(roomId)) {
 				try {
@@ -181,9 +182,9 @@ public class WbPanel extends AbstractWbPanel {
 						}
 						bfl.add(rf.getFile());
 					}
-					Whiteboards _wbs = WhiteboardCache.get(roomId);
+					Whiteboards _wbs = WhiteboardCache.get(roomId, langId);
 					for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
-						Whiteboard wb = WhiteboardCache.add(roomId, rp.getClient().getUser().getLanguageId());
+						Whiteboard wb = WhiteboardCache.add(roomId, langId);
 						_wbs.setActiveWb(wb.getId());
 						for (BaseFileItem fi : e.getValue()) {
 							sendFileToWb(fi, false);
@@ -194,8 +195,8 @@ public class WbPanel extends AbstractWbPanel {
 				}
 			}
 		}
-		Whiteboards wbs = WhiteboardCache.get(roomId);
-		for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
+		Whiteboards wbs = WhiteboardCache.get(roomId, langId);
+		for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, langId)) {
 			Whiteboard wb = entry.getValue();
 			sb.append(new StringBuilder("WbArea.create(").append(getAddWbJson(wb)).append(");"));
 			JSONArray arr = new JSONArray();

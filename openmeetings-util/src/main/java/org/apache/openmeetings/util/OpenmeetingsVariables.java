@@ -121,6 +121,7 @@ public class OpenmeetingsVariables {
 	private static String baseUrl = DEFAULT_BASE_URL;
 	private static boolean sipEnabled = false;
 	private static String gaCode = null;
+	private static Long defaultLang = 1L;
 
 	private OpenmeetingsVariables() {}
 
@@ -214,5 +215,13 @@ public class OpenmeetingsVariables {
 
 	public static void setGaCode(String code) {
 		gaCode = code;
+	}
+
+	public static Long getDefaultLang() {
+		return defaultLang;
+	}
+
+	public static void setDefaultLang(Long lang) {
+		defaultLang = lang;
 	}
 }
