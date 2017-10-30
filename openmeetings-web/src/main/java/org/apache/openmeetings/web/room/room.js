@@ -1,5 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-const WBA_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
+const WB_AREA_SEL = '.room.wb.area';
+const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
+var WBA_SEL = WB_AREA_SEL;
 const VID_SEL = '.video.user-video';
 var VideoUtil = (function() {
 	const self = {};
@@ -366,6 +368,9 @@ var VideoManager = (function() {
 	let share, inited = false;
 
 	function _init() {
+		if ($(WB_AREA_SEL + ' .wb-area .tabs').length > 0) {
+			WBA_SEL = WBA_WB_SEL;
+		}
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 		inited = true;

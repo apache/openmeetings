@@ -151,7 +151,9 @@ var DrawWbArea = function() {
 	}
 	self.init = function() {
 		container = $(".room.wb.area");
-		tabs = container.find('.tabs').tabs({
+		tabs = container.find('.tabs');
+		if (tabs.length === 0) return;
+		tabs.tabs({
 			beforeActivate: function(e) {
 				let res = true;
 				if (e.originalEvent && e.originalEvent.type === 'click') {
@@ -241,9 +243,9 @@ var DrawWbArea = function() {
 		refreshTabs();
 	};
 	self.resize = function(posX, w, h) {
-		if (!container || !_inited) return;
 		const hh = h - 5;
 		container.width(w).height(h).css('left', (isRtl ? 0 : posX) + "px");
+		if (!container || !_inited) return;
 		area.width(w).height(hh);
 
 		const wbTabs = area.find(".tabs.ui-tabs");
@@ -255,6 +257,7 @@ var DrawWbArea = function() {
 		self.getWb(json.wbId).setSize(json);
 	}
 	self.download = function(fmt) {
+		if (!_inited) return;
 		const wb = getActive().data();
 		if ('pdf' === fmt) {
 			const arr = [];
@@ -274,7 +277,10 @@ var DrawWbArea = function() {
 		}
 	}
 	self.videoStatus = _videoStatus;
-	self.loadVideos = function() { wbAction('loadVideos'); };
+	self.loadVideos = function() {
+		if (!_inited) return;
+		wbAction('loadVideos');
+	};
 	self.initVideos = _initVideos;
 	return self;
 };
