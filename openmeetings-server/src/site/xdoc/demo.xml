@@ -11,16 +11,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
+-->
 <document xmlns="http://maven.apache.org/XDOC/2.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
 		<title>Demo servers</title>
 		<author email="dev@openmeetings.apache.org">Apache OpenMeetings Team</author>
 	</properties>
-
 	<body>
 		<section name="Apache OpenMeetings Demo Servers">
 			<p>
@@ -29,16 +27,24 @@
 			<p>
 				This is a list of servers that you can use for testing OpenMeetings.
 			</p>
-			<p>
-				<a href="https://om.alteametasoft.com/openmeetings" target="_blank" rel="nofollow">https://om.alteametasoft.com/openmeetings</a> Latest release version of OpenMeetings
-			</p>
-			<p>
-				<a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">https://demo-openmeetings.apache.org/openmeetings</a> Next major version of OpenMeetings
-			</p>
-			<p>
-				<a href="https://om.alteametasoft.com:8443/next" target="_blank" rel="nofollow">https://om.alteametasoft.com:8443/next</a> Next major version of OpenMeetings
-			</p>
+			<table>
+				<tr>
+					<th>Address</th>
+					<th>Description</th>
+				</tr>
+				<tr>
+					<td><a href="https://om.alteametasoft.com/openmeetings" target="_blank" rel="nofollow">https://om.alteametasoft.com/openmeetings</a></td>
+					<td>Latest release version of OpenMeetings</td>
+				</tr>
+				<tr>
+					<td><a href="https://demo-openmeetings.apache.org/openmeetings" target="_blank" rel="nofollow">https://demo-openmeetings.apache.org/openmeetings</a></td>
+					<td>Next major version of OpenMeetings</td>
+				</tr>
+				<tr>
+					<td><a href="https://om.alteametasoft.com:8443/next" target="_blank" rel="nofollow">https://om.alteametasoft.com:8443/next</a></td>
+					<td>Next version of OpenMeetings</td>
+				</tr>
+			</table>
 		</section>
 	</body>
 </document>
-

@@ -31,7 +31,7 @@
 					<img src="images/installation_instructions.png" alt="Installation in 3 simple steps" />
 				</a>
 				<p>
-					<i>Note: Openmeetings requires JRE 7/8, JRE 6 is NOT compatible!</i><br />
+					<i>Note: Openmeetings requires JRE 8, JRE 6/7 is NOT compatible!</i><br />
 					<i>
 						Since Version 2.0 you can also install OpenMeetings from command line. Just cd to the unpacked
 						archive and type ./admin.sh or admin.bat, please see
@@ -146,35 +146,25 @@
 					</div>
 				</li>
 			</ol>
-
 		</section>
-
 		<section name="Ports, NAT Settings, Customize">
-
 			<p>
 				See
 				<a href="PortSettings.html">PortSettings</a>
 			</p>
 		</section>
-
 		<section name="Hardware Requirements">
 			<ul>
 				<li>
 					Minimalistic requirement (without Document Converters, Recorder and
-					Upload feature) 1GHz CPU 1 GB RAM (
-					<i>server-side</i>
-					)
+					Upload feature) 2GHz CPU 4 GB RAM (<i>server-side</i>)
 				</li>
 				<li>
-					Recommended requirement 2x/4x 2GHz ++ CPU (32 or 64Bit) 4GB RAM. If
+					Recommended requirement 2x/4x 2GHz ++ CPU (32 or 64Bit) 8GB RAM. If
 					you have a 64Bit Operating System check if there is a OpenOffice
 					64Bit Version
-					<a href="http://download.openoffice.org/other.html#de" rel="nofollow">available
-						for your OS
-					</a>
-					(
-					<i>server-side</i>
-					)
+					<a href="http://download.openoffice.org/other.html#de" rel="nofollow">available for your OS</a>
+					(<i>server-side</i>)
 				</li>
 				<li>
 					Headset/Microphone recommendation: Logitech ClearChat PC Wireless,
@@ -186,16 +176,13 @@
 					<a
 						href="http://shop.ebay.com/i.html?_nkw=Logitech+ClearChat.+Wireless&amp;_sacat=0&amp;_trksid=p3286.m270.l1313&amp;LH_BIN=1&amp;LH_IncludeSIF=1&amp;_odkw=Logitech+ClearChat+PC&amp;_osacat=0"
 						rel="nofollow">EBay Auctions</a>
-					(
-					<i>cient-side</i>
-					).
+					(<i>cient-side</i>).
 					<a href="RecommendedHardwareList.html">See all recommendations</a>
 					for cameras, headsets and speakerphones.
 				</li>
 			</ul>
 
 		</section>
-
 		<section name="Debian, Links, Changelog, VoIP">
 			<ul>
 				<li>for VoIP and SIP Integration see also <a href="voip-sip-integration.html">VoIPAndSIP</a></li>
@@ -224,7 +211,6 @@
 				</li>
 			</ul>
 		</section>
-
 		<section name="Tips and Tricks">
 			<ul>
 				<li>
@@ -255,8 +241,5 @@
 				</li>
 			</ul>
 		</section>
-
 	</body>
-
 </document>
-
