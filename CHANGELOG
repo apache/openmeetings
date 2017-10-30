@@ -396,6 +396,8 @@ Release Notes - Openmeetings - Version 4.0.0
     * [OPENMEETINGS-1725] - Camera and mic settings dialog is not work properly in the interview room
     * [OPENMEETINGS-1726] - Video is not started in the rectricted room
     * [OPENMEETINGS-1727] - More OAuth providers should be added
+    * [OPENMEETINGS-1731] - Multiple JS errors in room without WB
+    * [OPENMEETINGS-1732] - Whiteboard is displayed after deletion
 
 ** Improvement
     * [OPENMEETINGS-16] - Missing functionality in SOAP/REST API
