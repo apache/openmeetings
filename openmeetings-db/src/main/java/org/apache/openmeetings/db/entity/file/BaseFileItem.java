@@ -382,5 +382,4 @@ public abstract class BaseFileItem extends HistoricalEntity {
 	public String toString() {
 		return "FileItem [id=" + id + ", name=" + name + ", room=" + roomId + ", type=" + type.name() + "]";
 	}
-
 }

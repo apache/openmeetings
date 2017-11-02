@@ -113,5 +113,4 @@ public class SOAPLoginDao {
 			log.error("[update]: ", ex2);
 		}
 	}
-
 }

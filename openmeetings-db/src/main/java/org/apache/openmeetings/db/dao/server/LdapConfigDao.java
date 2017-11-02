@@ -162,5 +162,4 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 			em.merge(entity);
 		}
 	}
-
 }

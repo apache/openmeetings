@@ -46,8 +46,6 @@ public class RecordingMetaDeltaDao {
 		return em.createNamedQuery("getRecordingMetaDeltaByMetaDataId", RecordingMetaDelta.class).setParameter("metaDataId", metaDataId).getResultList();
 	}
 
-
-
 	public Long add(RecordingMetaDelta metaDelta) {
 		try {
 
@@ -73,5 +71,4 @@ public class RecordingMetaDeltaDao {
 
 		return metaDelta;
 	}
-
 }

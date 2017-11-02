@@ -142,5 +142,4 @@ public class UserContact implements Serializable {
 	public void setShareCalendar(boolean shareCalendar) {
 		this.shareCalendar = shareCalendar;
 	}
-
 }

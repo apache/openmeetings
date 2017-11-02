@@ -100,5 +100,4 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 		server.setDeleted(true);
 		update(server, userId);
 	}
-
 }

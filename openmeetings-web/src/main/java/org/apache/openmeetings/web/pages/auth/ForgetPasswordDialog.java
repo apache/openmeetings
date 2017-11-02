@@ -270,5 +270,4 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 		getBean(MailHandler.class).send(email, getString("517"), template);
 	}
-
 }
