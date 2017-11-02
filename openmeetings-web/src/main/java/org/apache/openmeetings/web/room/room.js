@@ -723,7 +723,6 @@ function sipKeyUp(evt) {
 		$('#sip-dialer-btn-' + k).removeClass('ui-state-active');
 	}
 }
-
 /***** functions required by SWF   ******/
 function typingActivity(uid, active) {
 	const u = $('#user' + uid + ' .typing-activity.ui-icon');
