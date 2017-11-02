@@ -20,21 +20,32 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div id="busy-indicator"></div>
-	<div class="tabs" wicket:id="tabs"></div>
-
-	<wicket:fragment wicket:id="user-panel">
-		<div wicket:id="icons" class="user header"></div>
-		<div class="user list clear">
-			<div wicket:id="user" class="user entry ui-corner-all ui-widget-content">
-				<div wicket:id="user"></div>
+	<div class="tabs" id="room-sidebar-tabs">
+		<ul>
+			<li>
+				<a href="#room-sidebar-tab-users" class="om-icon big tab user" wicket:message="title:398">
+					<wicket:message key="398"/>
+				</a>
+			</li>
+			<li wicket:enclosure="file-tab">
+				<a href="#room-sidebar-tab-files" class="om-icon big tab file" wicket:message="title:245" wicket:id="file-tab">
+					<wicket:message key="245"/>
+				</a>
+			</li>
+		</ul>
+		<div id="room-sidebar-tab-users">
+			<div wicket:id="icons" class="user header"></div>
+			<div class="user list clear" wicket:id="user-list">
+				<div wicket:id="user" class="user entry ui-corner-all ui-widget-content">
+					<div wicket:id="user"></div>
+				</div>
 			</div>
+			<script>Room.setSize();</script>
 		</div>
-		<script>Room.setSize();</script>
-	</wicket:fragment>
-
-	<wicket:fragment wicket:id="file-panel">
-		<div class="file list" wicket:id="tree"></div>
-	</wicket:fragment>
+		<div id="room-sidebar-tab-files" wicket:enclosure="tree">
+			<div class="file list" wicket:id="tree"></div>
+		</div>
+	</div>
 	<div wicket:id="addFolder"></div>
 	<form wicket:id="form"><div wicket:id="confirm-trash"></div></form>
 	<div wicket:id="upload"></div>

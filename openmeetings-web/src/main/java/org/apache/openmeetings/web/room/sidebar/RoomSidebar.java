@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
@@ -29,7 +27,6 @@ import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFu
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -49,30 +46,23 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
-import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.github.openjson.JSONObject;
-import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
-import com.googlecode.wicket.kendo.ui.widget.tabs.TabListModel;
+import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -88,15 +78,14 @@ public class RoomSidebar extends Panel {
 	public static final String PARAM_POD = "pod";
 	public static final String PARAM_SETTINGS = "s";
 	private final RoomPanel room;
-	private final TabbedPanel tabs;
-	private final ITab userTab, fileTab;
 	private UploadDialog upload;
 	private RoomFilePanel roomFiles;
+	private final WebMarkupContainer userList = new WebMarkupContainer("user-list");
+	private final WebMarkupContainer fileTab = new WebMarkupContainer("file-tab");
 	private final SelfIconsPanel selfRights;
 	private ConfirmableAjaxBorder confirmKick;
 	private boolean showFiles;
 	private boolean avInited = false;
-	private int selectedIdx = 0;
 	private Client kickedClient;
 	private VideoSettings settings = new VideoSettings("settings");
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
@@ -248,88 +237,18 @@ public class RoomSidebar extends Panel {
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
 		this.room = room;
-
-		userTab = new OmTab() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isVisible() {
-				return true;
-			}
-
-			@Override
-			public String getCssClass() {
-				return "om-icon big tab user";
-			}
-
-			@Override
-			public IModel<String> getTitle() {
-				return Model.of(getString("398"));
-			}
-
-			@Override
-			public WebMarkupContainer getPanel(String containerId) {
-				WebMarkupContainer p = new Fragment(containerId, "user-panel", RoomSidebar.this);
-				p.add(selfRights, updateUsers());
-				return p;
-			}
-		};
-		fileTab = new OmTab() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isVisible() {
-				return Room.Type.interview != room.getRoom().getType();
-			}
-
-			@Override
-			public String getCssClass() {
-				return "om-icon big tab file";
-			}
-
-			@Override
-			public IModel<String> getTitle() {
-				return Model.of(getString("245"));
-			}
-
-			@Override
-			public WebMarkupContainer getPanel(String containerId) {
-				WebMarkupContainer p = new Fragment(containerId, "file-panel", RoomSidebar.this);
-				p.add(roomFiles);
-				return p;
-			}
-		};
-		add((tabs = new TabbedPanel("tabs", newTabModel()) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onConfigure() {
-				super.onConfigure();
-				setActiveTab(selectedIdx);
-			}
-
-			@Override
-			public void onActivate(AjaxRequestTarget target, int index, ITab tab) {
-				selectedIdx = index;
-			}
-
-			@Override
-			protected WebMarkupContainer newTabContainer(String id, String tabId, ITab tab, int index) {
-				WebMarkupContainer t = super.newTabContainer(id, tabId, tab, index);
-				Component link = newTitleLabel("link", tab.getTitle());
-				link.add(AttributeModifier.replace("href", "#" + tabId));
-				link.add(AttributeModifier.append(ATTR_CLASS, ((OmTab)tab).getCssClass()));
-				link.add(AttributeModifier.append(ATTR_TITLE, tab.getTitle()));
-				t.replace(link);
-				return t;
-			}
-		}).setOutputMarkupId(true));
 		selfRights = new SelfIconsPanel("icons", room.getUid(), room, true);
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		final Form<?> form = new Form<>("form");
+		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
+		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);
+		add(selfRights, userList.add(updateUsers()).setOutputMarkupId(true)
+				, fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
+
 		add(addFolder, settings);
 		add(toggleRight, toggleActivity, roomAction, avSettings);
 		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
@@ -340,25 +259,9 @@ public class RoomSidebar extends Panel {
 				room.kickUser(kickedClient);
 			}
 		});
-		final Form<?> form = new Form<>("form");
-		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
-		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
-	}
-
-	private TabListModel newTabModel() {
-		return new TabListModel() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<ITab> load() {
-				List<ITab> l = new ArrayList<>();
-				l.add(userTab);
-				l.add(fileTab);
-				return l;
-			}
-		};
+		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
 	}
 
 	@Override
@@ -387,9 +290,12 @@ public class RoomSidebar extends Panel {
 	public void update(IPartialPageRequestHandler handler) {
 		updateShowFiles(handler);
 		updateUsers();
-		selfRights.setVisible(room.getRoom().isAllowUserQuestions() || room.getClient().hasRight(Right.moderator));
-		selfRights.update(handler);
-		tabs.reload(handler);
+		final boolean rightsVisible = room.getRoom().isAllowUserQuestions() || room.getClient().hasRight(Right.moderator);
+		selfRights.setVisible(rightsVisible);
+		if (rightsVisible) {
+			selfRights.update(handler);
+		}
+		handler.add(selfRights, userList);
 	}
 
 	public void updateFiles(IPartialPageRequestHandler handler) {
@@ -461,14 +367,6 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void setFilesActive(IPartialPageRequestHandler handler) {
-		selectedIdx = 1;
-		tabs.reload(handler);
-	}
-
-	private abstract static class OmTab implements ITab {
-		private static final long serialVersionUID = 1L;
-
-		public abstract String getCssClass();
+		handler.appendJavaScript("$('#room-sidebar-tabs').tabs('option', 'active', 1);");
 	}
 }
-
