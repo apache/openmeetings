@@ -261,9 +261,6 @@
 	, .room.sidebar .user.header .ui-icon.bumper {
 	padding-right: 5px;
 }
-.room.sidebar .tabs, .room.sidebar .tabs #utab, .room.sidebar .tabs #ftab {
-	padding: 0;
-}
 .room.sidebar .user.list .user.current {
 	font-weight: bold;
 	background-color: #00FF00;
