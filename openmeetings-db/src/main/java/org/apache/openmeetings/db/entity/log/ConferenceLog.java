@@ -37,52 +37,51 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Table(name = "conference_log")
 @NamedQueries({
 	@NamedQuery(name = "getLogRecentRooms", query = "SELECT c FROM ConferenceLog c "
-			+ "WHERE c.roomId IS NOT NULL AND c.type = :roomEnter and c.userId = :userId ORDER BY c.inserted DESC")
+		+ "WHERE c.roomId IS NOT NULL AND c.type = :roomEnter and c.userId = :userId ORDER BY c.inserted DESC")
 })
 public class ConferenceLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
+
 	public enum Type {
-		clientConnect
-		, roomEnter
-		, roomLeave
-		, nicknameEnter
+		clientConnect, roomEnter, roomLeave, nicknameEnter
 	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private Long id;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type")
 	private Type type;
 
-	@Column(name="inserted")
+	@Column(name = "inserted")
 	private Date inserted;
 
-	@Column(name="insertedby")
+	@Column(name = "insertedby")
 	private long insertedby;
 
-	//NULL means its a Guest/Invited User
-	@Column(name="user_id")
+	// NULL means its a Guest/Invited User
+	@Column(name = "user_id")
 	private Long userId;
 
-	@Column(name="streamid")
+	@Column(name = "streamid")
 	private String streamid;
 
-	@Column(name="room_id")
+	@Column(name = "room_id")
 	private Long roomId;
 
-	@Column(name="userip")
+	@Column(name = "userip")
 	private String userip;
 
-	@Column(name="scopename")
+	@Column(name = "scopename")
 	private String scopeName;
 
 	@Override
 	public Long getId() {
 		return id;
 	}
+
 	@Override
 	public void setId(Long id) {
 		this.id = id;
@@ -91,6 +90,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public Type getType() {
 		return type;
 	}
+
 	public void setType(Type type) {
 		this.type = type;
 	}
@@ -98,6 +98,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public Date getInserted() {
 		return inserted;
 	}
+
 	public void setInserted(Date inserted) {
 		this.inserted = inserted;
 	}
@@ -105,6 +106,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public long getInsertedby() {
 		return insertedby;
 	}
+
 	public void setInsertedby(long insertedby) {
 		this.insertedby = insertedby;
 	}
@@ -112,6 +114,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public Long getUserId() {
 		return userId;
 	}
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
@@ -119,6 +122,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public String getStreamId() {
 		return streamid;
 	}
+
 	public void setStreamid(String streamid) {
 		this.streamid = streamid;
 	}
@@ -126,6 +130,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public Long getRoomId() {
 		return roomId;
 	}
+
 	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
@@ -133,6 +138,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public String getUserip() {
 		return userip;
 	}
+
 	public void setUserip(String userip) {
 		this.userip = userip;
 	}
@@ -140,6 +146,7 @@ public class ConferenceLog implements IDataProviderEntity {
 	public String getScopeName() {
 		return scopeName;
 	}
+
 	public void setScopeName(String scopeName) {
 		this.scopeName = scopeName;
 	}

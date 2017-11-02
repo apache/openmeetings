@@ -45,5 +45,4 @@ public class InterviewConverterTask {
 			log.error("[startConversionThread]", err);
 		}
 	}
-
 }

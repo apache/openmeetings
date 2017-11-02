@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

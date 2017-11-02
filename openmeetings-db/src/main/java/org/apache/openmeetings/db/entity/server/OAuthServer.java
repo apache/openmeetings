@@ -253,5 +253,4 @@ public class OAuthServer extends HistoricalEntity {
 			return name;
 		}
 	}
-
 }

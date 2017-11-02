@@ -152,5 +152,4 @@ public class RoomPollAnswer implements IDataProviderEntity {
 	public void setRoomPoll(RoomPoll roomPoll) {
 		this.roomPoll = roomPoll;
 	}
-
 }

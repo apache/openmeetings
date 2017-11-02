@@ -78,7 +78,6 @@ public class Configuration extends HistoricalEntity {
 	@Element(name = "value", data = true, required = false)
 	private String value;
 
-
 	@Lob
 	@Column(name = "comment", length = 2048)
 	@Element(data = true, required = false)
