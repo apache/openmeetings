@@ -533,11 +533,13 @@ var VideoManager = (function() {
 })();
 var Room = (function() {
 	const self = {};
-	let options;
+	let options, menuHeight;
 
 	function _init(_options) {
 		options = _options;
 		window.WbArea = options.interview ? InterviewWbArea() : DrawWbArea();
+		const menu = $('.room.box .room.menu');
+		menuHeight = menu.length === 0 ? 0 : menu.height();
 		VideoManager.init();
 		Activities.init();
 	}
@@ -579,7 +581,7 @@ var Room = (function() {
 	function _setSize() {
 		const sb = $(".room.sidebar")
 			, w = $(window).width() - sb.width() - 8
-			, h = $(window).height() - $('#menu').height() - 3
+			, h = $(window).height() - menuHeight - 3
 			, p = sb.find('.tabs')
 			, holder = $('.room.holder');
 		sb.height(h);
@@ -672,6 +674,7 @@ var Room = (function() {
 	}
 
 	self.init = _init;
+	self.getMenuHeight = function() { return menuHeight; };
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.setRights = function(_r) { return options.rights = _r; };
 	self.setSize = _setSize;
