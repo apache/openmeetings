@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[点此查看简介以及全部的消息]]></entry>
 	<entry key="1308"><![CDATA[成员号]]></entry>
 	<entry key="1312"><![CDATA[直接载入到白板]]></entry>
+	<entry key="1313">您是否真的想删除白板？此动作不可逆!</entry>
 	<entry key="1315"><![CDATA[不用忘记录制，一个用户一个会是室的情况经常需要录制]]></entry>
 	<entry key="1316"><![CDATA[开支录制]]></entry>
 	<entry key="1323"><![CDATA[剪贴画]]></entry>

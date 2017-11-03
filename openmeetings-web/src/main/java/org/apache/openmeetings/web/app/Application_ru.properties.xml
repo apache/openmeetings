@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Нажмите сюда, чтобы перейти к профайлу и прочитать сообщение ...]]></entry>
 	<entry key="1308"><![CDATA[Id владельца]]></entry>
 	<entry key="1312"><![CDATA[Напрямую загрузите на доску]]></entry>
+	<entry key="1313">Вы действительно хотите удалить эту доску? Это действие не может быть отменено!</entry>
 	<entry key="1315"><![CDATA[Не забудьте начать запись! 1 участник в комнате хочет начать её.]]></entry>
 	<entry key="1316"><![CDATA[Начать запись]]></entry>
 	<entry key="1323"><![CDATA[Фигуры]]></entry>

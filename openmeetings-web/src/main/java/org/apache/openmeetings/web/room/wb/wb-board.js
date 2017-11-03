@@ -50,28 +50,6 @@ var Wb = function() {
 			initToolBtn(cur.data('mode'), false, Clipart(wb, cur));
 		});
 	}
-	function confirmDlg(_id, okHandler) {
-		const confirm = $('#' + _id);
-		confirm.dialog({
-			modal: true
-			, buttons: [
-				{
-					text: confirm.data('btn-ok')
-					, click: function() {
-						okHandler();
-						$(this).dialog("close");
-					}
-				}
-				, {
-					text: confirm.data('btn-cancel')
-					, click: function() {
-						$(this).dialog("close");
-					}
-				}
-			]
-		});
-		return confirm;
-	}
 	function _updateZoomPanel() {
 		const ccount = canvases.length;
 		if (ccount > 1 && role === PRESENTER) {
@@ -117,7 +95,7 @@ var Wb = function() {
 		switch (role) {
 			case PRESENTER:
 				clearAll.click(function() {
-					confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
+					RoomUtil.confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
 				}).removeClass('disabled');
 				z.find('.curr-slide').change(function() {
 					_setSlide($(this).val() - 1);
@@ -149,7 +127,7 @@ var Wb = function() {
 					s.show();
 				});
 				t.find('.om-icon.clear-slide').click(function() {
-					confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
+					RoomUtil.confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
 				});
 				t.find('.om-icon.save').click(function() {
 					wbAction('save', JSON.stringify({wbId: wb.id}));
