@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Текст]]></entry>
 	<entry key="74"><![CDATA[Рисуване]]></entry>
 	<entry key="75"><![CDATA[Чертаене на линия]]></entry>
-	<entry key="76"><![CDATA[Подчертаване]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Правоъгълник]]></entry>
 	<entry key="78"><![CDATA[Елипса]]></entry>
 	<entry key="79"><![CDATA[Стрелка]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Ограничения]]></entry>
 	<entry key="832"><![CDATA[Сигурни ли сте?]]></entry>
 	<entry key="833"><![CDATA[Наистина ли искате да изтриете този елемент? Трябва да натиснете бутона Save, за запазване на промените!]]></entry>
-	<entry key="843"><![CDATA[Свойства]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Показване позицията на мишката на гледащите]]></entry>
 	<entry key="848"><![CDATA[View Screen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>

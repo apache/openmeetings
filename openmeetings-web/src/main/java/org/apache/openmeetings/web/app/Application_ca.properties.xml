@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Text]]></entry>
 	<entry key="74"><![CDATA[Pintar]]></entry>
 	<entry key="75"><![CDATA[Traçar una línia]]></entry>
-	<entry key="76"><![CDATA[Subratllar]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Rectangle]]></entry>
 	<entry key="78"><![CDATA[El·lipse]]></entry>
 	<entry key="79"><![CDATA[Data]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitacions]]></entry>
 	<entry key="832"><![CDATA[¿Està Vè. segur?]]></entry>
 	<entry key="833"><![CDATA[Realment desitja esborrar aquest ítem? Ha de prémer en el botó de guardar per a emmagatzemar els canvis!]]></entry>
-	<entry key="843"><![CDATA[Propietats]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Mostrar la posició del ratolí als participants]]></entry>
 	<entry key="848"><![CDATA[Veure pantalla]]></entry>
 	<entry key="850"><![CDATA[desitja compartir la seva pantalla. Desitja visualitzar-la?]]></entry>

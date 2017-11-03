@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Texto]]></entry>
 	<entry key="74"><![CDATA[Pintar]]></entry>
 	<entry key="75"><![CDATA[Trazar una línea]]></entry>
-	<entry key="76"><![CDATA[Subrayar]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Rectángulo]]></entry>
 	<entry key="78"><![CDATA[Elipse]]></entry>
 	<entry key="79"><![CDATA[Flecha]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitaciones]]></entry>
 	<entry key="832"><![CDATA[¿Está usted seguro?]]></entry>
 	<entry key="833"><![CDATA[¿Realmente desea borrar este ítem? ¡Tiene que pulsar en el botón de guardar para almacenar los cambios!]]></entry>
-	<entry key="843"><![CDATA[Propiedades]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Mostrar la posición del ratón a los participantes]]></entry>
 	<entry key="848"><![CDATA[Ver escritorio]]></entry>
 	<entry key="850"><![CDATA[desea compartir su escritorio. ¿Desea visualizarlo?]]></entry>

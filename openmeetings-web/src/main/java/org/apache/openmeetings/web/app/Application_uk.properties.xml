@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Текст]]></entry>
 	<entry key="74"><![CDATA[Малювання]]></entry>
 	<entry key="75"><![CDATA[Провести лінію]]></entry>
-	<entry key="76"><![CDATA[Підкреслити]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Прямокутник]]></entry>
 	<entry key="78"><![CDATA[Еліпс]]></entry>
 	<entry key="79"><![CDATA[Стрілка]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Обмеження]]></entry>
 	<entry key="832"><![CDATA[Ви впевнені?]]></entry>
 	<entry key="833"><![CDATA[Ви дійсно хочете видалити запис?]]></entry>
-	<entry key="843"><![CDATA[Властивості]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Показувати позицію миші глядачам]]></entry>
 	<entry key="848"><![CDATA[Дивитися екран]]></entry>
 	<entry key="850"><![CDATA[хоче зробити екран загальним. Хочете бачити його?]]></entry>

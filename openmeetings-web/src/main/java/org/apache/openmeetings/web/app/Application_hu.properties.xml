@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Szöveg]]></entry>
 	<entry key="74"><![CDATA[Rajz]]></entry>
 	<entry key="75"><![CDATA[Vonal]]></entry>
-	<entry key="76"><![CDATA[Aláhúzás]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Négyszög]]></entry>
 	<entry key="78"><![CDATA[Ellipszis]]></entry>
 	<entry key="79"><![CDATA[Nyíl]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitációk]]></entry>
 	<entry key="832"><![CDATA[Megerősíti?]]></entry>
 	<entry key="833"><![CDATA[Valóban törli ezt az elemet? Kattintson a mentés gomba a változások végrehajtásához!]]></entry>
-	<entry key="843"><![CDATA[Tulajdonságok]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Mutasd az egér pozíciót a nézőknek]]></entry>
 	<entry key="848"><![CDATA[Képernyő nézete]]></entry>
 	<entry key="850"><![CDATA[megosztotta a képernyőjét. Megnézi?]]></entry>
