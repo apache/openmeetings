@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Κείμενο]]></entry>
 	<entry key="74"><![CDATA[Ζωγραφική]]></entry>
 	<entry key="75"><![CDATA[Σχεδίαση Γραμμής]]></entry>
-	<entry key="76"><![CDATA[Σχεδίαση Υπογράμμισης]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Ορθογώνιο]]></entry>
 	<entry key="78"><![CDATA[Έλλειψη]]></entry>
 	<entry key="79"><![CDATA[Βέλος]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Περιορισμοί]]></entry>
 	<entry key="832"><![CDATA[Είστε σίγουρος;]]></entry>
 	<entry key="833"><![CDATA[Θέλετε πραγματικά να διαγράψετε το συγκεκριμένο Στοιχείο; Πρέπει να πατήσετε το κουμπί αποθήκευσης για να αποθηκευτούν οι αλλαγές!]]></entry>
-	<entry key="843"><![CDATA[Ιδιότητες]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Εμφάνιση θέσης ποντικιού στους θεατές]]></entry>
 	<entry key="848"><![CDATA[View Screen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>

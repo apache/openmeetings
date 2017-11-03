@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[文字列]]></entry>
 	<entry key="74"><![CDATA[自由線]]></entry>
 	<entry key="75"><![CDATA[直線]]></entry>
-	<entry key="76"><![CDATA[下線]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[四角形]]></entry>
 	<entry key="78"><![CDATA[楕円]]></entry>
 	<entry key="79"><![CDATA[矢印]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[制限]]></entry>
 	<entry key="832"><![CDATA[よろしいですか?]]></entry>
 	<entry key="833"><![CDATA[選択された項目を削除してよろしいですか？変更した内容は、保存する必要があります。続いて保存ボタンを押してください。]]></entry>
-	<entry key="843"><![CDATA[プロパティ]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[ビューア上でマウス・ポインタを表示する]]></entry>
 	<entry key="848"><![CDATA[デスクトップを表示する]]></entry>
 	<entry key="850"><![CDATA[」さんがデスクトップ共有を要求してます。表示しますか?]]></entry>

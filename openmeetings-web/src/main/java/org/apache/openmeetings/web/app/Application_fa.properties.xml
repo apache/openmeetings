@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[متن]]></entry>
 	<entry key="74"><![CDATA[كردن نقاشي]]></entry>
 	<entry key="75"><![CDATA[كشيدن خط]]></entry>
-	<entry key="76"><![CDATA[كردن دار خط زير]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[گوش چهار]]></entry>
 	<entry key="78"><![CDATA[بيضي]]></entry>
 	<entry key="79"><![CDATA[پيكان]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitations]]></entry>
 	<entry key="832"><![CDATA[Are you sure?]]></entry>
 	<entry key="833"><![CDATA[Do you really want to delete this Item? You have to press the save button to store the changes!]]></entry>
-	<entry key="843"><![CDATA[Properties]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Show mouse position to viewers]]></entry>
 	<entry key="848"><![CDATA[View Screen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>
