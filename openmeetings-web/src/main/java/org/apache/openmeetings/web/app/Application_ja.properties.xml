@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[メッセージ全体を見るにはここをクリックしてください ...]]></entry>
 	<entry key="1308"><![CDATA[会議室の管理者(室長)]]></entry>
 	<entry key="1312"><![CDATA[ホワイトボードに直接ロードする]]></entry>
+	<entry key="1313">ホワイトボードを削除してよろしいですか？ 注意：削除したホワイトボードは元に戻せません!!</entry>
 	<entry key="1315"><![CDATA[録画する必要がある場合は、録画を開始してください。だれかが録画を開始しない限り、会議の録画はされません。]]></entry>
 	<entry key="1316"><![CDATA[録画を開始]]></entry>
 	<entry key="1323"><![CDATA[クリップアート]]></entry>

@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Haga click aquí para visitar su perfil y ver el mensaje completo ...]]></entry>
 	<entry key="1308"><![CDATA[Propietario Id]]></entry>
 	<entry key="1312"><![CDATA[Cargar directamente a la pizarra]]></entry>
+	<entry key="1313">Realmente quiere suprimir esta pizarra? Esta acción no puede ser deshecha!</entry>
 	<entry key="1315"><![CDATA[No olvide comenzar la grabación! Un usuario por sala necesita comenzarla para tener después el control de la misma.]]></entry>
 	<entry key="1316"><![CDATA[Comenzar grabación]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>

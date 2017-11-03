@@ -3,6 +3,34 @@ const WB_AREA_SEL = '.room.wb.area';
 const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
 var WBA_SEL = WB_AREA_SEL;
 const VID_SEL = '.video.user-video';
+var RoomUtil = (function() {
+	const self = {};
+	function _confirmDlg(_id, okHandler) {
+		const confirm = $('#' + _id);
+		confirm.dialog({
+			modal: true
+			, buttons: [
+				{
+					text: confirm.data('btn-ok')
+					, click: function() {
+						okHandler();
+						$(this).dialog('close');
+					}
+				}
+				, {
+					text: confirm.data('btn-cancel')
+					, click: function() {
+						$(this).dialog('close');
+					}
+				}
+			]
+		});
+		return confirm;
+	}
+
+	self.confirmDlg = _confirmDlg;
+	return self;
+})();
 var VideoUtil = (function() {
 	const self = {};
 	function _getVid(uid) {

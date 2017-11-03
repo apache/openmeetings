@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Kattintson ide a profil megtekintéséhez ...]]></entry>
 	<entry key="1308"><![CDATA[Tulajdonos Id]]></entry>
 	<entry key="1312"><![CDATA[Közvetlen betöltés a táblába]]></entry>
+	<entry key="1313">Valóban eltávolítja ezt a táblát? A művelet nem fordítható vissza!</entry>
 	<entry key="1315"><![CDATA[Ne felejtse el a felvételt indítani! Legalább egy látogató belépése szükséges a felvétel elindításához.]]></entry>
 	<entry key="1316"><![CDATA[Felvétel indítása]]></entry>
 	<entry key="1323"><![CDATA[Ikonok]]></entry>

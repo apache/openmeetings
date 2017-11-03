@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Clique aqui para visitar o seu perfil para ver a mensagem completa ...]]></entry>
 	<entry key="1308"><![CDATA[ID do dono]]></entry>
 	<entry key="1312"><![CDATA[Carregar diretamente na lousa]]></entry>
+	<entry key="1313">Você realmente deseja remover esta lousa? Essa ação não pode ser desfeita!</entry>
 	<entry key="1315"><![CDATA[Não se esqueça de "Iniciar gravação", se você quiser ter a reunião gravada.]]></entry>
 	<entry key="1316"><![CDATA[Iniciar gravação]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>

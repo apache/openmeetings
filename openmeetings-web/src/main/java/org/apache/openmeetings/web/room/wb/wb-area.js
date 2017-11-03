@@ -79,7 +79,7 @@ var DrawWbArea = function() {
 		}
 		li.append($('#wb-tab-close').clone().attr('id', ''));
 		li.find('button').click(function() {
-			wbAction('removeWb', JSON.stringify({wbId: li.data().wbId}));
+			RoomUtil.confirmDlg('wb-confirm-remove', function() { wbAction('removeWb', JSON.stringify({wbId: li.data().wbId})); });
 		});
 	}
 	function _getImage(cnv, fmt) {

@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Click here to visit your profile to see the full message ...]]></entry>
 	<entry key="1308"><![CDATA[Owner ID]]></entry>
 	<entry key="1312"><![CDATA[Load directly to the Whiteboard]]></entry>
+	<entry key="1313">Do you really want to remove this whiteboard? This action cannot be undone.</entry>
 	<entry key="1315"><![CDATA[Do not forget to 'Start recording', if you want have the meeting recorded."]]></entry>
 	<entry key="1316"><![CDATA[Start recording]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>

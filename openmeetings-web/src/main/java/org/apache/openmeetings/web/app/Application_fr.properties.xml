@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Cliquez ici pour aller dans votre profil et voir le message complet...]]></entry>
 	<entry key="1308"><![CDATA[Id du propriétaire]]></entry>
 	<entry key="1312"><![CDATA[Charger directement sur le tableau blanc]]></entry>
+	<entry key="1313">Voulez-vous vraiment supprimer ce tableau blanc ? Cette action ne peut être annulée !</entry>
 	<entry key="1315"><![CDATA[N'oubliez pas de commencer l'enregistrement ! Un utilisateur par salle doit toujours le commencer si vous souhaitez avoir l'enregistrement par la suite.]]></entry>
 	<entry key="1316"><![CDATA[Commencer l'enregistrement]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>
