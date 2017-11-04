@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Text]]></entry>
 	<entry key="74"><![CDATA[Frei zeichnen]]></entry>
 	<entry key="75"><![CDATA[Linien zeichnen]]></entry>
-	<entry key="76"><![CDATA[Unterstreichen]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Rechteck]]></entry>
 	<entry key="78"><![CDATA[Kreis]]></entry>
 	<entry key="79"><![CDATA[Pfeil]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Begrenzungen]]></entry>
 	<entry key="832"><![CDATA[Sind Sie sicher?]]></entry>
 	<entry key="833"><![CDATA[Wirklich löschen? Diese Aktion kann nicht wiederufen werden.]]></entry>
-	<entry key="843"><![CDATA[Einstellungen]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Teilnehmern Mauszeiger anzeigen]]></entry>
 	<entry key="848"><![CDATA[Bildschirm zeigen]]></entry>
 	<entry key="850"><![CDATA[möchte den Bildschirm übertragen. Wollen Sie ihn sehen?]]></entry>
@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Klicken Sie auf Ihr Profil um die ganze Nachricht zu sehen....]]></entry>
 	<entry key="1308"><![CDATA[Eigne ID]]></entry>
 	<entry key="1312"><![CDATA[Direkt auf Whiteboard ablegen]]></entry>
+	<entry key="1313">Soll dieses Whiteboard wirklich entfernt werden? Die Aktion kann nicht rückgängig gemacht werden.</entry>
 	<entry key="1315"><![CDATA[Vergessen Sie nicht die Aufzeichnung zu starten. Ein Nutzer des Raum muß die Aufzeichnung starten, damit diese anschließend zur Verfügung steht.]]></entry>
 	<entry key="1316"><![CDATA[Aufzeichnung starten]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>

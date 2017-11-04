@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Szöveg]]></entry>
 	<entry key="74"><![CDATA[Rajz]]></entry>
 	<entry key="75"><![CDATA[Vonal]]></entry>
-	<entry key="76"><![CDATA[Aláhúzás]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Négyszög]]></entry>
 	<entry key="78"><![CDATA[Ellipszis]]></entry>
 	<entry key="79"><![CDATA[Nyíl]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitációk]]></entry>
 	<entry key="832"><![CDATA[Megerősíti?]]></entry>
 	<entry key="833"><![CDATA[Valóban törli ezt az elemet? Kattintson a mentés gomba a változások végrehajtásához!]]></entry>
-	<entry key="843"><![CDATA[Tulajdonságok]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Mutasd az egér pozíciót a nézőknek]]></entry>
 	<entry key="848"><![CDATA[Képernyő nézete]]></entry>
 	<entry key="850"><![CDATA[megosztotta a képernyőjét. Megnézi?]]></entry>
@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Kattintson ide a profil megtekintéséhez ...]]></entry>
 	<entry key="1308"><![CDATA[Tulajdonos Id]]></entry>
 	<entry key="1312"><![CDATA[Közvetlen betöltés a táblába]]></entry>
+	<entry key="1313">Valóban eltávolítja ezt a táblát? A művelet nem fordítható vissza!</entry>
 	<entry key="1315"><![CDATA[Ne felejtse el a felvételt indítani! Legalább egy látogató belépése szükséges a felvétel elindításához.]]></entry>
 	<entry key="1316"><![CDATA[Felvétel indítása]]></entry>
 	<entry key="1323"><![CDATA[Ikonok]]></entry>

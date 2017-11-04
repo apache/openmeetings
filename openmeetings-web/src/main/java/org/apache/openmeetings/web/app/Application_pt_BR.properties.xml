@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Texto]]></entry>
 	<entry key="74"><![CDATA[Pintura]]></entry>
 	<entry key="75"><![CDATA[Desenhar linha]]></entry>
-	<entry key="76"><![CDATA[Desenhar sublinha]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[Retângulo]]></entry>
 	<entry key="78"><![CDATA[Elipse]]></entry>
 	<entry key="79"><![CDATA[Seta]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitações]]></entry>
 	<entry key="832"><![CDATA[Tem certeza?]]></entry>
 	<entry key="833"><![CDATA[Tem certeza que quer excluir esse item? Você precisa pressionar o botao Salvar para fazer as mudanças!]]></entry>
-	<entry key="843"><![CDATA[Propriedades]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Mostra a posição do mouse para os espectadores]]></entry>
 	<entry key="848"><![CDATA[Ver Tela]]></entry>
 	<entry key="850"><![CDATA[quer compartihar sua tela. Você quer ver?]]></entry>
@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Clique aqui para visitar o seu perfil para ver a mensagem completa ...]]></entry>
 	<entry key="1308"><![CDATA[ID do dono]]></entry>
 	<entry key="1312"><![CDATA[Carregar diretamente na lousa]]></entry>
+	<entry key="1313">Você realmente deseja remover esta lousa? Essa ação não pode ser desfeita!</entry>
 	<entry key="1315"><![CDATA[Não se esqueça de "Iniciar gravação", se você quiser ter a reunião gravada.]]></entry>
 	<entry key="1316"><![CDATA[Iniciar gravação]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>

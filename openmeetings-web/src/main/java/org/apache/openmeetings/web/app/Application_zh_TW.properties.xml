@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[全文]]></entry>
 	<entry key="74"><![CDATA[繪畫]]></entry>
 	<entry key="75"><![CDATA[畫線]]></entry>
-	<entry key="76"><![CDATA[畫強洞底線]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[長方形]]></entry>
 	<entry key="78"><![CDATA[橢圓形]]></entry>
 	<entry key="79"><![CDATA[箭頭]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Limitations]]></entry>
 	<entry key="832"><![CDATA[Are you sure?]]></entry>
 	<entry key="833"><![CDATA[Do you really want to delete this Item? You have to press the save button to store the changes!]]></entry>
-	<entry key="843"><![CDATA[Properties]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[Show mouse position to viewers]]></entry>
 	<entry key="848"><![CDATA[View Screen]]></entry>
 	<entry key="850"><![CDATA[wants to share its screen. Do you want to see it?]]></entry>
@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Click here to visit your profile to see the full message ...]]></entry>
 	<entry key="1308"><![CDATA[Owner Id]]></entry>
 	<entry key="1312"><![CDATA[Do directly load to whiteboard]]></entry>
+	<entry key="1313">Do you really want to remove this whiteboard? This action cannot be undone.</entry>
 	<entry key="1315"><![CDATA[Do not forget start recording! One user per room always needs to start it to have the recording afterwards.]]></entry>
 	<entry key="1316"><![CDATA[Start Recording]]></entry>
 	<entry key="1323"><![CDATA[Cliparts]]></entry>

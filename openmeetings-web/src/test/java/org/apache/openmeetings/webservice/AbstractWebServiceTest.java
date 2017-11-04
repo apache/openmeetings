@@ -60,7 +60,8 @@ import org.junit.BeforeClass;
 public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	private static Tomcat tomcat;
 	public static final String CONTEXT = "/openmeetings";
-	public static final String BASE_SERVICES_URL = "http://localhost:8080" + CONTEXT + "/services";
+	public static final int PORT = 8080;
+	public static final String BASE_SERVICES_URL = String.format("http://localhost:%s%s/services", PORT, CONTEXT);
 	public static final String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
 	public static final String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
 	public static final String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
@@ -96,7 +97,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	@BeforeClass
 	public static void initialize() throws Exception {
 		tomcat = new Tomcat();
-		tomcat.setPort(8080);
+		tomcat.setPort(PORT);
 		File wd = Files.createTempDirectory("om" + UUID.randomUUID().toString()).toFile();
 		tomcat.setBaseDir(wd.getCanonicalPath());
 		tomcat.getHost().setAppBase(wd.getCanonicalPath());

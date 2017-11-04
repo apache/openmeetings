@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[Текст]]></entry>
 	<entry key="74"><![CDATA[Рисование]]></entry>
 	<entry key="75"><![CDATA[Провести линию]]></entry>
-	<entry key="76"><![CDATA[Подчеркнуть]]></entry>
+	<entry key="76"><![CDATA[Маркер]]></entry>
 	<entry key="77"><![CDATA[Прямоугольник]]></entry>
 	<entry key="78"><![CDATA[Эллипс]]></entry>
 	<entry key="79"><![CDATA[Стрелка]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[Ограничения]]></entry>
 	<entry key="832"><![CDATA[Вы уверены?]]></entry>
 	<entry key="833"><![CDATA[Вы действительно хотите удалить запись?]]></entry>
-	<entry key="843"><![CDATA[Свойства]]></entry>
+	<entry key="843"><![CDATA[Свойства инструмента]]></entry>
 	<entry key="844"><![CDATA[Показывать позицию мыши зрителям]]></entry>
 	<entry key="848"><![CDATA[Смотреть экран]]></entry>
 	<entry key="850"><![CDATA[хочет сделать экран общим. Хотите видеть его?]]></entry>
@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[Нажмите сюда, чтобы перейти к профайлу и прочитать сообщение ...]]></entry>
 	<entry key="1308"><![CDATA[Id владельца]]></entry>
 	<entry key="1312"><![CDATA[Напрямую загрузите на доску]]></entry>
+	<entry key="1313">Вы действительно хотите удалить эту доску? Это действие не может быть отменено!</entry>
 	<entry key="1315"><![CDATA[Не забудьте начать запись! 1 участник в комнате хочет начать её.]]></entry>
 	<entry key="1316"><![CDATA[Начать запись]]></entry>
 	<entry key="1323"><![CDATA[Фигуры]]></entry>

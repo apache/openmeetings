@@ -59,7 +59,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[文本]]></entry>
 	<entry key="74"><![CDATA[绘画]]></entry>
 	<entry key="75"><![CDATA[画线]]></entry>
-	<entry key="76"><![CDATA[下划线]]></entry>
+	<entry key="76"><![CDATA[Highligher]]></entry>
 	<entry key="77"><![CDATA[矩形]]></entry>
 	<entry key="78"><![CDATA[椭圆]]></entry>
 	<entry key="79"><![CDATA[箭头]]></entry>
@@ -357,7 +357,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="830"><![CDATA[限制数]]></entry>
 	<entry key="832"><![CDATA[你确认吗？]]></entry>
 	<entry key="833"><![CDATA[你真的确认需要删除这个项目吗？你需要点击保存按钮来保存更改！]]></entry>
-	<entry key="843"><![CDATA[属性]]></entry>
+	<entry key="843"><![CDATA[Tool Properties]]></entry>
 	<entry key="844"><![CDATA[在共享器中显示鼠标位置]]></entry>
 	<entry key="848"><![CDATA[显示屏幕]]></entry>
 	<entry key="850"><![CDATA[想分享他的屏幕。你想看到它吗？]]></entry>
@@ -508,6 +508,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1302"><![CDATA[点此查看简介以及全部的消息]]></entry>
 	<entry key="1308"><![CDATA[成员号]]></entry>
 	<entry key="1312"><![CDATA[直接载入到白板]]></entry>
+	<entry key="1313">您是否真的想删除白板？此动作不可逆!</entry>
 	<entry key="1315"><![CDATA[不用忘记录制，一个用户一个会是室的情况经常需要录制]]></entry>
 	<entry key="1316"><![CDATA[开支录制]]></entry>
 	<entry key="1323"><![CDATA[剪贴画]]></entry>
