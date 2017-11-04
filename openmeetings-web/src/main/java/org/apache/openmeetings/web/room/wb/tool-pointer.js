@@ -8,10 +8,7 @@ var Pointer = function(wb, s) {
 					o.selectable = true;
 				});
 			});
-			s.find('[class^="wb-prop"]').prop('disabled', true);
-			if (!!s.find('.wb-prop-b').button("instance")) {
-				s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
-			}
+			ToolUtil.disableAllProps(s);
 		}
 		, deactivate: function() {
 			wb.eachCanvas(function(canvas) {

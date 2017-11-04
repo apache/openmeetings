@@ -8,7 +8,7 @@ var Paint = function(wb, s) {
 			canvas.freeDrawingBrush.color = paint.stroke.color;
 			canvas.freeDrawingBrush.opacity = paint.opacity; //TODO not working
 		});
-		paint.enableLineProps(s).o.prop('disabled', true); //TODO not working
+		ToolUtil.enableLineProps(s, paint).o.prop('disabled', true); //TODO not working
 	};
 	paint.deactivate = function() {
 		wb.eachCanvas(function(canvas) {

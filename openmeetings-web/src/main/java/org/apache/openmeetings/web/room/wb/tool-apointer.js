@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var APointer = function(wb) {
+var APointer = function(wb, s) {
 	const pointer = Base();
 	pointer.user = '';
 	pointer.create = function(canvas, o) {
@@ -85,6 +85,7 @@ var APointer = function(wb) {
 			canvas.selection = false;
 			canvas.on('mouse:up', pointer.mouseUp);
 		});
+		ToolUtil.disableAllProps(s);
 	}
 	pointer.deactivate = function() {
 		wb.eachCanvas(function(canvas) {
