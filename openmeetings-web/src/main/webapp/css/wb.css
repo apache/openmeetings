@@ -131,6 +131,7 @@
 }
 .wb-settings {
 	position: absolute;
+	z-index: 95;
 }
 .wb-settings, .wb-settings .tab.props {
 	display: inline-block;

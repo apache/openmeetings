@@ -47,7 +47,7 @@ var Wb = function() {
 					c.find('ul li').prepend(old);
 					c.find('a').prepend(cur);
 				});
-			initToolBtn(cur.data('mode'), false, Clipart(wb, cur));
+			initToolBtn(cur.data('mode'), false, Clipart(wb, cur, s));
 		});
 	}
 	function confirmDlg(_id, okHandler) {
@@ -285,7 +285,7 @@ var Wb = function() {
 					}));
 				});
 				_setSize();
-				initToolBtn('apointer', _firstToolItem, APointer(wb));
+				initToolBtn('apointer', _firstToolItem, APointer(wb, s));
 		}
 	}
 	function _findObject(o) {

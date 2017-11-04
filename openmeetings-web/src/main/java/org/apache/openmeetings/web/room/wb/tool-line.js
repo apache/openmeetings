@@ -11,7 +11,7 @@ var Line = function(wb, s) {
 		return line.obj;
 	};
 	line.internalActivate = function() {
-		line.enableLineProps(s);
+		ToolUtil.enableLineProps(s, line);
 	};
 	line.updateShape = function(pointer) {
 		line.obj.set({ x2: pointer.x, y2: pointer.y });
