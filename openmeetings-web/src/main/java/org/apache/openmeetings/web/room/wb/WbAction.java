@@ -22,6 +22,7 @@ public enum WbAction {
 	createWb
 	, removeWb
 	, activateWb
+	, renameWb
 	, setSlide
 	, createObj
 	, modifyObj
