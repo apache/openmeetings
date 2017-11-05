@@ -62,6 +62,18 @@ var DrawWbArea = function() {
 			}
 		});
 	}
+	function _setTabName(li, name) {
+		return li.find('a').attr('title', name)
+			.find('span').text(name)
+	}
+	function _renameTab(obj) {
+		container.find('.wb-tabbar li').each(function(idx) {
+			if (obj.wbId === 1 * $(this).data('wb-id')) {
+				_setTabName($(this), obj.name)
+				return false;
+			}
+		});
+	}
 	function _resizeWbs() {
 		const w = area.width(), hh = area.height()
 			, wbTabs = area.find(".tabs.ui-tabs")
@@ -184,7 +196,23 @@ var DrawWbArea = function() {
 		const tid = self.getWbTabId(obj.wbId)
 			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId)
 			, wb = $('#wb-area').clone().attr('id', tid);
-		li.find('a').text(obj.name).attr('title', obj.name).attr('href', "#" + tid);
+		li.find('a').attr('href', "#" + tid);
+		_setTabName(li, obj.name)
+			.dblclick(function() {
+				if (role !== PRESENTER) {
+					return;
+				}
+				const editor = $('<input name="newName" type="text" style="color: black;"/>')
+					, name = $(this).hide().after(editor.val(obj.name));
+				editor.focus().blur(function() {
+					const newName = $(this).val();
+					if (newName !== "") {
+						wbAction('renameWb', JSON.stringify({wbId: obj.wbId, name: newName}));
+					}
+					$(this).remove();
+					name.show();
+				});
+			});
 
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append(wb);
@@ -205,6 +233,10 @@ var DrawWbArea = function() {
 	self.activateWb = function(obj) {
 		if (!_inited) return;
 		_activateTab(obj.wbId);
+	}
+	self.renameWb = function(obj) {
+		if (!_inited) return;
+		_renameTab(obj);
 	}
 	self.load = function(json) {
 		if (!_inited) return;

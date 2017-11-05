@@ -304,12 +304,23 @@ public class WbPanel extends AbstractWbPanel {
 					}
 				}
 					break;
+				case renameWb:
+				{
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.optLong("wbId", -1));
+					if (wb != null) {
+						WhiteboardCache.update(roomId, wb.setName(obj.getString("name")));
+						sendWbAll(WbAction.renameWb, obj);
+					}
+				}
+					break;
 				case setSlide:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-					wb.setSlide(obj.optInt("slide", 0));
-					WhiteboardCache.update(roomId, wb);
-					sendWbOthers(WbAction.setSlide, obj);
+					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.optLong("wbId", -1));
+					if (wb != null) {
+						wb.setSlide(obj.optInt("slide", 0));
+						WhiteboardCache.update(roomId, wb);
+						sendWbOthers(WbAction.setSlide, obj);
+					}
 				}
 					break;
 				case clearAll:
