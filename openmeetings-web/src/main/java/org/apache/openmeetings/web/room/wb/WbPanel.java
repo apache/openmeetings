@@ -112,14 +112,7 @@ public class WbPanel extends AbstractWbPanel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			Whiteboard wb = WhiteboardCache.get(roomId).get(wb2save);
-			FileItem f = new FileItem();
-			f.setType(BaseFileItem.Type.WmlFile);
-			f.setRoomId(roomId);
-			f.setHash(UUID.randomUUID().toString());
-			f.setName(getModelObject());
-			f = getBean(FileItemDao.class).update(f);
-			String res = wb.save(f.getFile().toPath());
+			String res = saveWb(roomId, wb2save, getModelObject());
 			if (!Strings.isEmpty(res)) {
 				error("Unexpected error while saving WB: " + res);
 				target.add(feedback);
@@ -658,5 +651,16 @@ public class WbPanel extends AbstractWbPanel {
 				removeLast();
 			}
 		}
+	}
+
+	public static String saveWb(Long roomId, Long wbId, String name) {
+		Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
+		FileItem f = new FileItem();
+		f.setType(BaseFileItem.Type.WmlFile);
+		f.setRoomId(roomId);
+		f.setHash(UUID.randomUUID().toString());
+		f.setName(name);
+		f = getBean(FileItemDao.class).update(f);
+		return wb.save(f.getFile().toPath());
 	}
 }
