@@ -307,6 +307,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="705"><![CDATA[回收站]]></entry>
 	<entry key="706"><![CDATA[我的文件(Home Drive)]]></entry>
 	<entry key="707"><![CDATA[会议室文件 (Public Drive)]]></entry>
+	<entry key="711">编辑文件名</entry>
 	<entry key="712"><![CDATA[新建文件夹]]></entry>
 	<entry key="713"><![CDATA[您确定要删除此项目？]]></entry>
 	<entry key="714"><![CDATA[搜索]]></entry>

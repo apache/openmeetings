@@ -307,6 +307,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="705"><![CDATA[Trash (drag and drop item here)]]></entry>
 	<entry key="706"><![CDATA[My files (home drive)]]></entry>
 	<entry key="707"><![CDATA[Room files (public drive)]]></entry>
+	<entry key="711">Edit name</entry>
 	<entry key="712"><![CDATA[New folder]]></entry>
 	<entry key="713"><![CDATA[Are you sure you want to delete this item?]]></entry>
 	<entry key="714"><![CDATA[Search]]></entry>

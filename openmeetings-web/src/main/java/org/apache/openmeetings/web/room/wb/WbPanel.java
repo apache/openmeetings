@@ -190,7 +190,7 @@ public class WbPanel extends AbstractWbPanel {
 			}
 		}
 		Whiteboards wbs = WhiteboardCache.get(roomId, langId);
-		loadWhiteboards(sb, rp.getClient(), wbs, WhiteboardCache.list(roomId, langId));
+		loadWhiteboards(sb, rp.getClient(), wbs, WhiteboardCache.list(roomId));
 		JSONObject wbj = getWbJson(wbs.getActiveWb());
 		sb.append("WbArea.activateWb(").append(wbj).append(");");
 		Whiteboard wb = wbs.get(wbs.getActiveWb());
@@ -250,7 +250,7 @@ public class WbPanel extends AbstractWbPanel {
 			{
 				StringBuilder sb = new StringBuilder("WbArea.initVideos(");
 				JSONArray arr = new JSONArray();
-				for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId, rp.getClient().getUser().getLanguageId())) {
+				for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId)) {
 					Whiteboard wb = entry.getValue();
 					for (JSONObject o : wb.list()) {
 						String ft = o.optString(ATTR_FILE_TYPE);
