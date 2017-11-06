@@ -307,6 +307,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="705"><![CDATA[ゴミ箱 (アイテムをここにドラッグ&ドロップ)]]></entry>
 	<entry key="706"><![CDATA[私のファイル (ホーム・ドライブ)]]></entry>
 	<entry key="707"><![CDATA[会議室のファイル (パブリック・ドライブ)]]></entry>
+	<entry key="711">名前を編集する</entry>
 	<entry key="712"><![CDATA[新規フォルダ]]></entry>
 	<entry key="713"><![CDATA[このアイテムを消去してよろしいですか?]]></entry>
 	<entry key="714"><![CDATA[検索]]></entry>

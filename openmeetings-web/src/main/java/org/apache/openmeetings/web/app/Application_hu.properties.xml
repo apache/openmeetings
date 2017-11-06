@@ -307,6 +307,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="705"><![CDATA[Kuka (húzza bele a kiválasztott elemet)]]></entry>
 	<entry key="706"><![CDATA[Saját fileok (Home Drive)]]></entry>
 	<entry key="707"><![CDATA[Terem fileok (Public Drive)]]></entry>
+	<entry key="711">Név szerkesztése</entry>
 	<entry key="712"><![CDATA[Új könyvtár]]></entry>
 	<entry key="713"><![CDATA[Biztosan törli ezt az elemet?]]></entry>
 	<entry key="714"><![CDATA[Keresés]]></entry>

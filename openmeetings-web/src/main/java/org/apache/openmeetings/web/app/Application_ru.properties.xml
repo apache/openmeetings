@@ -307,6 +307,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="705"><![CDATA[Корзина]]></entry>
 	<entry key="706"><![CDATA[Мои файлы (Локальное устройство)]]></entry>
 	<entry key="707"><![CDATA[Файлы из комнаты (Общее устройство)]]></entry>
+	<entry key="711">Редактировать имя</entry>
 	<entry key="712"><![CDATA[Новая папка]]></entry>
 	<entry key="713"><![CDATA[Вы уверены, что хотите удалить этот пункт?]]></entry>
 	<entry key="714"><![CDATA[Поиск]]></entry>

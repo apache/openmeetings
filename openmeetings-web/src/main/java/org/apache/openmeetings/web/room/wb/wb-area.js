@@ -53,6 +53,9 @@ var DrawWbArea = function() {
 				break;
 		}
 	}
+	function _getWbTab(wbId) {
+		return tabs.find('li[data-wb-id="' + wbId + '"]');
+	}
 	function _activateTab(wbId) {
 		container.find('.wb-tabbar li').each(function(idx) {
 			if (wbId === 1 * $(this).data('wb-id')) {
@@ -67,12 +70,7 @@ var DrawWbArea = function() {
 			.find('span').text(name)
 	}
 	function _renameTab(obj) {
-		container.find('.wb-tabbar li').each(function(idx) {
-			if (obj.wbId === 1 * $(this).data('wb-id')) {
-				_setTabName($(this), obj.name)
-				return false;
-			}
-		});
+		_setTabName(_getWbTab(obj.wbId), obj.name);
 	}
 	function _resizeWbs() {
 		const w = area.width(), hh = area.height()
@@ -187,6 +185,9 @@ var DrawWbArea = function() {
 		});
 		_inited = true;
 		self.setRole(role);
+		$('#wb-rename-menu').menu().find('.wb-rename').click(function() {
+			_getWbTab($(this).parent().data('wb-id')).find('a span').trigger("dblclick");
+		});
 	};
 	self.destroy = function() {
 		$(window).off('keyup', deleteHandler);
@@ -194,8 +195,16 @@ var DrawWbArea = function() {
 	self.create = function(obj) {
 		if (!_inited) return;
 		const tid = self.getWbTabId(obj.wbId)
-			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId)
-			, wb = $('#wb-area').clone().attr('id', tid);
+			, wb = $('#wb-area').clone().attr('id', tid)
+			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId).attr('data-wb-id', obj.wbId)
+				.contextmenu(function(e) {
+					if (role !== PRESENTER) {
+						return;
+					}
+					e.preventDefault();
+					$('#wb-rename-menu').show().data('wb-id', obj.wbId)
+						.position({my: 'left top', collision: 'none', of: _getWbTab(obj.wbId)});
+				});
 		li.find('a').attr('href', "#" + tid);
 		_setTabName(li, obj.name)
 			.dblclick(function() {
@@ -270,7 +279,7 @@ var DrawWbArea = function() {
 	self.removeWb = function(obj) {
 		if (!_inited) return;
 		const tabId = self.getWbTabId(obj.wbId);
-		tabs.find('li[aria-controls="' + tabId + '"]').remove();
+		_getWbTab(obj.wbId).remove();
 		$("#" + tabId).remove();
 		refreshTabs();
 	};
