@@ -24,7 +24,9 @@ var Activities = function() {
 
 	return {
 		init: function() {
-			if (inited) return;
+			if ($('#activities').resizable("instance") !== undefined) {
+				return;
+			}
 			activities = $('#activities');
 			activities.resizable({
 				handles: "n, e"
