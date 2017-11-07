@@ -55,6 +55,13 @@
 			id="strikethrough" class="chat btn btn-default" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a> <a
 			id="underline" class="chat btn btn-default" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a>
 		</div>
+		<div class="btn-group">
+			<a id="hyperlink" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink">&nbsp;</a>
+			<div class="dropdown-menu input-append">
+				<input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+				<button class="btn btn-default" type="button"><wicket:message key="1261"/></button>
+			</div>
+		</div>
 	</div>
 </wicket:panel>
 </html>
