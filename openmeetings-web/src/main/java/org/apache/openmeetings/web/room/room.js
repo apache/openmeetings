@@ -605,6 +605,14 @@ var Room = (function() {
 					break;
 			}
 		}
+		if (e.which === 27) {
+			$('#wb-rename-menu').hide();
+		}
+	}
+	function _mouseHandler(e) {
+		if (e.which === 1) {
+			$('#wb-rename-menu').hide();
+		}
 	}
 	function _setSize() {
 		const sb = $(".room.sidebar")
@@ -667,6 +675,7 @@ var Room = (function() {
 		Wicket.Event.subscribe("/websocket/closed", _close);
 		Wicket.Event.subscribe("/websocket/error", _close);
 		$(window).keyup(_keyHandler);
+		$(document).click(_mouseHandler);
 	}
 	function _unload() {
 		$(window).off('resize.openmeetings');
@@ -681,6 +690,7 @@ var Room = (function() {
 		}
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup', _keyHandler);
+		$(document).off('click', _mouseHandler);
 	}
 	function _showClipboard(txt) {
 		const dlg = $('#clipboard-dialog');
@@ -706,7 +716,6 @@ var Room = (function() {
 	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
 	self.setRights = function(_r) { return options.rights = _r; };
 	self.setSize = _setSize;
-	self.keyHandler = _keyHandler;
 	self.load = _load;
 	self.unload = _unload;
 	self.showClipboard = _showClipboard;

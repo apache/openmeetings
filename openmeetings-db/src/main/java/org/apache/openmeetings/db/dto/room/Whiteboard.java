@@ -158,8 +158,9 @@ public class Whiteboard implements Serializable {
 		return name;
 	}
 
-	public void setName(String name) {
+	public Whiteboard setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public int getSlide() {

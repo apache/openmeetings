@@ -50,7 +50,7 @@ var Arrow = function(wb, s) {
 		});
 	};
 	arrow.internalActivate = function() {
-		arrow.enableAllProps(s);
+		ToolUtil.enableAllProps(s, arrow);
 	};
 	return arrow;
 };

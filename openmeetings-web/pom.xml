@@ -153,6 +153,7 @@
 								<jsSourceFile>wb-all.js</jsSourceFile>
 								<jsSourceFile>uuid.js</jsSourceFile>
 								<jsSourceFile>player.js</jsSourceFile>
+								<jsSourceFile>tool-util.js</jsSourceFile>
 								<jsSourceFile>tool-base.js</jsSourceFile>
 								<jsSourceFile>tool-pointer.js</jsSourceFile>
 								<jsSourceFile>tool-apointer.js</jsSourceFile>

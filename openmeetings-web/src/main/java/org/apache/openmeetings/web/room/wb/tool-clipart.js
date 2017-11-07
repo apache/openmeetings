@@ -1,5 +1,5 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var Clipart = function(wb, btn) {
+var Clipart = function(wb, btn, s) {
 	const art = Shape(wb);
 	art.add2Canvas = function(canvas) {}
 	art.createShape = function(canvas) {
@@ -17,7 +17,7 @@ var Clipart = function(wb, btn) {
 			});
 			canvas.add(art.obj);
 		});
-	}
+	};
 	art.updateShape = function(pointer) {
 		if (!art.obj) {
 			return; // not ready
@@ -29,6 +29,9 @@ var Clipart = function(wb, btn) {
 			, height: art.orig.height * d / art.orig.width
 			, angle: Math.atan2(dy, dx) * 180 / Math.PI
 		});
-	}
+	};
+	art.internalActivate = function() {
+		ToolUtil.disableAllProps(s);
+	};
 	return art;
 };

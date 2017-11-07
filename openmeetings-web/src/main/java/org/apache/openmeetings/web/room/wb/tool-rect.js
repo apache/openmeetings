@@ -14,7 +14,7 @@ var Rect = function(wb, s) {
 		return rect.obj;
 	};
 	rect.internalActivate = function() {
-		rect.enableAllProps(s);
+		ToolUtil.enableAllProps(s, rect);
 	};
 	rect.updateShape = function(pointer) {
 		if (rect.orig.x > pointer.x) {

@@ -44,7 +44,7 @@ var Text = function(wb, s) {
 				}
 			});
 		});
-		text.enableAllProps(s);
+		ToolUtil.enableAllProps(s, text);
 		const b = s.find('.wb-prop-b').button("enable");
 		if (text.style.bold) {
 			b.addClass('ui-state-active selected');

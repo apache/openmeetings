@@ -81,7 +81,7 @@ public class WhiteboardCache {
 		return wbs;
 	}
 
-	public static Set<Entry<Long, Whiteboard>> list(long roomId, Long langId) {
+	public static Set<Entry<Long, Whiteboard>> list(long roomId) {
 		Whiteboards wbs = get(roomId);
 		return wbs.getWhiteboards().entrySet();
 	}
