@@ -86,6 +86,11 @@
 .sound-mute.om-icon {
 	background-image: url(images/sound_mute.png);
 }
+#chat #hyperlink {
+	background-repeat: no-repeat;
+	background-image: url(images/link.png);
+	background-position: center;
+}
 #chat .chat-btn {
 	display: inline-block;
 	float: right;
