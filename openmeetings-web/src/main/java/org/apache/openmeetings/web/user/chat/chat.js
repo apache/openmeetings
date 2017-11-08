@@ -16,7 +16,7 @@ var Chat = function() {
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
 		;
 	let chatTabs, openedHeight = "345px", allPrefix = "All"
-		, roomPrefix = "Room ", typingTimer, audio, s;
+		, roomPrefix = "Room ", typingTimer, audio, s, roomMode = false;
 
 	try {
 		audio = new Audio('./public/chat_message.mp3');
@@ -88,23 +88,29 @@ var Chat = function() {
 	function isInited() {
 		return !!$("#chatTabs").data("ui-tabs");
 	}
-	return {
-		reinit: function(_allPrefix, _roomPrefix) {
-			allPrefix = _allPrefix;
-			roomPrefix = _roomPrefix;
-			initToolbar();
-			chatTabs = $("#chatTabs").tabs({
-				activate: function(event, ui) {
-					$('#activeChatTab').val(ui.newPanel[0].id);
-				}
-			});
-			// close icon: removing the tab on click
-			chatTabs.delegate("span.ui-icon-close", "click", function() {
-				const panelId = $(this).closest("li").remove().attr("aria-controls");
-				$("#" + panelId).remove();
-				chatTabs.tabs("refresh");
-			});
-			$('#chatPanel').resizable({
+	function _reinit(_allPrefix, _roomPrefix) {
+		allPrefix = _allPrefix;
+		roomPrefix = _roomPrefix;
+		initToolbar();
+		chatTabs = $("#chatTabs").tabs({
+			activate: function(event, ui) {
+				$('#activeChatTab').val(ui.newPanel[0].id);
+			}
+		});
+		// close icon: removing the tab on click
+		chatTabs.delegate("span.ui-icon-close", "click", function() {
+			const panelId = $(this).closest("li").remove().attr("aria-controls");
+			$("#" + panelId).remove();
+			chatTabs.tabs("refresh");
+		});
+		if (roomMode) {
+			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-n');
+			$('#chatPopup .control.block .ui-icon').addClass('ui-icon-caret-2-e-w');
+			$('#chatPanel').addClass('room').resizable('destroy');
+		} else {
+			$('#chatPopup .control.block .ui-icon').addClass('ui-icon-caret-1-n');
+			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-2-e-w');
+			$('#chatPanel').removeClass('room').resizable({
 				handles: "n, w"
 				, disabled: isClosed()
 				, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
@@ -115,127 +121,143 @@ var Chat = function() {
 					openedHeight = ui.size.height + "px";
 				}
 			});
-			$('#chatMessage').off().on('input propertychange paste', function () {
-				const room = $('.room.box');
-				if (room.length) {
-					if (!!typingTimer) {
-						clearTimeout(typingTimer);
-					} else {
-						chatActivity('typing_start', room.data('room-id'));
-					}
-					typingTimer = setTimeout(doneTyping, doneTypingInterval);
+		}
+		$('#chatMessage').off().on('input propertychange paste', function () {
+			const room = $('.room.box');
+			if (room.length) {
+				if (!!typingTimer) {
+					clearTimeout(typingTimer);
+				} else {
+					chatActivity('typing_start', room.data('room-id'));
 				}
+				typingTimer = setTimeout(doneTyping, doneTypingInterval);
+			}
+		});
+	}
+	function _removeTab(id) {
+		$('li[aria-controls="' + id + '"]').remove();
+		$('#' + id).remove();
+		if (isInited()) {
+			chatTabs.tabs("refresh");
+		}
+	}
+	function _addTab(id, label) {
+		if (!isInited()) {
+			_reinit();
+		}
+		if ($('#chat').length < 1 || $('#' + id).length) {
+			return;
+		}
+		if (!label) {
+			label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
+		}
+		const li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+		if (id.indexOf("chatTab-r") !== 0) {
+			li.append(closeBlock);
+		}
+		chatTabs.find(".ui-tabs-nav").append(li);
+		chatTabs.append("<div class='messageArea' id='" + id + "'></div>");
+		chatTabs.tabs("refresh");
+		activateTab(id);
+	}
+	function _addMessage(m) {
+		if ($('#chat').length > 0 && m && m.type === "chat") {
+			if (isClosed()) {
+				$('#chatPopup .control.block').addClass('ui-state-highlight');
+				if ($('#chatPanel').is(':visible') && s.chat.muted !== true) {
+					const playPromise = audio.play();
+
+					// In browsers that don’t yet support this functionality,
+					// playPromise won’t be defined.
+					if (playPromise !== undefined) {
+						playPromise.then(function() {
+							// Automatic playback started!
+						}).catch(function() {
+							// Automatic playback failed.
+						});
+					}
+				}
+			}
+			let msg, cm;
+			while (!!(cm = m.msg.pop())) {
+				let area = $('#' + cm.scope);
+				msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
+						.replace(/#\{userId\}/g, cm.from.id)
+						.replace(/#\{imgSrc\}/g, !!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())
+						.replace(/#\{from\}/g, cm.from.name)
+						.replace(/#\{sent\}/g, cm.sent)
+						.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
+				const date = msg.children('.date');
+				date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
+				if ("full" === cm.actions) {
+					date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
+					date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
+					date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
+				}
+				if (cm.needModeration) {
+					msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
+				}
+				if (!area.length) {
+					_addTab(cm.scope, cm.scopeName);
+					area = $('#' + cm.scope);
+				}
+				if (m.mode === "accept") {
+					$('#chat-msg-id-' + cm.id).remove();
+				}
+				const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+				area.append(msg);
+				if (btm) {
+					area.animate({
+						scrollTop: area[0].scrollHeight
+					}, 300);
+				}
+			}
+		}
+	}
+	function _open() {
+		if (isClosed()) {
+			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
+			$('#chatPopup .control.block').removeClass('ui-state-highlight');
+			$('#chatPanel, #chatPopup').animate({height: openedHeight}, 1000);
+			$('#chatPanel').resizable("option", "disabled", false);
+			$('#chat .messageArea').each(function() {
+				$(this).scrollTop($(this)[0].scrollHeight);
 			});
 		}
-		, removeTab: function(id) {
-			$('li[aria-controls="' + id + '"]').remove();
-			$('#' + id).remove();
-			if (isInited()) {
-				chatTabs.tabs("refresh");
-			}
+	}
+	function _close() {
+		if (!isClosed()) {
+			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
+			$('#chatPanel, #chatPopup').animate({height: closedHeight}, 1000);
+			$('#chatPanel').resizable("option", "disabled", true);
 		}
-		, addTab: function(id, label) {
-			if (!isInited()) {
-				this.reinit();
-			}
-			if ($('#chat').length < 1 || $('#' + id).length) {
-				return;
-			}
-			if (!label) {
-				label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
-			}
-			const li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
-			if (id.indexOf("chatTab-r") !== 0) {
-				li.append(closeBlock);
-			}
-			chatTabs.find(".ui-tabs-nav").append(li);
-			chatTabs.append("<div class='messageArea' id='" + id + "'></div>");
-			chatTabs.tabs("refresh");
-			activateTab(id);
+	}
+	function _toggle() {
+		if (isClosed()) {
+			_open();
+		} else {
+			_close();
 		}
-		, addMessage: function(m) {
-			if ($('#chat').length > 0 && m && m.type === "chat") {
-				if (isClosed()) {
-					$('#chatPopup .control.block').addClass('ui-state-highlight');
-					if ($('#chatPanel').is(':visible') && s.chat.muted !== true) {
-						const playPromise = audio.play();
+	}
+	function _emtClick(emoticon) {
+		const editor = $('#chatMessage .wysiwyg-editor');
+		editor.html(editor.html() + ' ' + emoticon + ' ');
+	}
+	function _setRoomMode(_mode) {
+		roomMode = _mode;
+		_reinit(allPrefix, roomPrefix);
+	}
 
-						// In browsers that don’t yet support this functionality,
-						// playPromise won’t be defined.
-						if (playPromise !== undefined) {
-							playPromise.then(function() {
-								// Automatic playback started!
-							}).catch(function() {
-								// Automatic playback failed.
-							});
-						}
-					}
-				}
-				let msg, cm;
-				while (!!(cm = m.msg.pop())) {
-					let area = $('#' + cm.scope);
-					msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
-							.replace(/#\{userId\}/g, cm.from.id)
-							.replace(/#\{imgSrc\}/g, !!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())
-							.replace(/#\{from\}/g, cm.from.name)
-							.replace(/#\{sent\}/g, cm.sent)
-							.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
-					const date = msg.children('.date');
-					date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
-					if ("full" === cm.actions) {
-						date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
-						date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
-						date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
-					}
-					if (cm.needModeration) {
-						msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
-					}
-					if (!area.length) {
-						this.addTab(cm.scope, cm.scopeName);
-						area = $('#' + cm.scope);
-					}
-					if (m.mode === "accept") {
-						$('#chat-msg-id-' + cm.id).remove();
-					}
-					const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
-					area.append(msg);
-					if (btm) {
-						area.animate({
-							scrollTop: area[0].scrollHeight
-						}, 300);
-					}
-				}
-			}
-		}
-		, open: function() {
-			if (isClosed()) {
-				$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
-				$('#chatPopup .control.block').removeClass('ui-state-highlight');
-				$('#chatPanel, #chatPopup').animate({height: openedHeight}, 1000);
-				$('#chatPanel').resizable("option", "disabled", false);
-				$('#chat .messageArea').each(function() {
-					$(this).scrollTop($(this)[0].scrollHeight);
-				});
-			}
-		}
-		, close: function() {
-			if (!isClosed()) {
-				$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
-				$('#chatPanel, #chatPopup').animate({height: closedHeight}, 1000);
-				$('#chatPanel').resizable("option", "disabled", true);
-			}
-		}
-		, toggle: function() {
-			if (isClosed()) {
-				this.open();
-			} else {
-				this.close();
-			}
-		}
-		, emtClick: function(emoticon) {
-			const editor = $('#chatMessage .wysiwyg-editor');
-			editor.html(editor.html() + ' ' + emoticon + ' ');
-		}
+	return {
+		reinit: _reinit
+		, removeTab: _removeTab
+		, addTab: _addTab
+		, addMessage: _addMessage
+		, open: _open
+		, close: _close
+		, toggle: _toggle
+		, emtClick: _emtClick
+		, setRoomMode: _setRoomMode
 	};
 }();
 

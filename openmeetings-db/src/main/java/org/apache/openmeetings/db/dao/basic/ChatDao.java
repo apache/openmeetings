@@ -42,7 +42,7 @@ public class ChatDao {
 
 	//for export
 	public List<ChatMessage> get(int start, int count) {
-		return em.createNamedQuery("getGlobalChatMessages", ChatMessage.class)
+		return em.createNamedQuery("getChatMessages", ChatMessage.class)
 				.setFirstResult(start)
 				.setMaxResults(count)
 				.getResultList();
