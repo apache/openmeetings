@@ -33,7 +33,7 @@
 		<keystore.location>${project.build.directory}/screensharing_sign.keystore</keystore.location>
 		<key.password>secret</key.password>
 		<keystore.password>secret</keystore.password>
-		<keystore.type>jks</keystore.type>
+		<keystore.type>pkcs12</keystore.type>
 		<key.alias>screen</key.alias>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<jnlp.out.dir>${project.build.directory}/jnlp</jnlp.out.dir>
