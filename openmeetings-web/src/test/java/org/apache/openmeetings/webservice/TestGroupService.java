@@ -28,12 +28,12 @@ import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.junit.Test;
 
 public class TestGroupService extends AbstractWebServiceTest {
-	public static final String GROUP_SERVICE_URL = BASE_SERVICES_URL + "/group";
+	public static final String GROUP_SERVICE_MOUNT = "group";
 
 	@Test
 	public void putTest() {
 		ServiceResult r = login();
-		Response resp = getClient(GROUP_SERVICE_URL)
+		Response resp = getClient(getGroupUrl())
 				.path("/")
 				.query("sid", r.getMessage()).put("");
 		assertEquals("Call should NOT be successful", Response.Status.METHOD_NOT_ALLOWED.getStatusCode(), resp.getStatus());
@@ -44,7 +44,7 @@ public class TestGroupService extends AbstractWebServiceTest {
 		ServiceResult r = login();
 		Long groupId = -1L;
 		{
-			Response resp = getClient(GROUP_SERVICE_URL)
+			Response resp = getClient(getGroupUrl())
 					.path("/")
 					.query("sid", r.getMessage()).query("name", "Test Group").post("");
 			assertNotNull("Valid ServiceResult should be returned", resp);
@@ -55,7 +55,7 @@ public class TestGroupService extends AbstractWebServiceTest {
 		}
 		//delete group created
 		{
-			Response resp = getClient(GROUP_SERVICE_URL)
+			Response resp = getClient(getGroupUrl())
 					.path("/" + groupId)
 					.query("sid", r.getMessage()).delete();
 			assertNotNull("Valid ServiceResult should be returned", resp);
@@ -63,5 +63,9 @@ public class TestGroupService extends AbstractWebServiceTest {
 			ServiceResult r1 = resp.readEntity(ServiceResult.class);
 			assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
 		}
+	}
+
+	protected static String getGroupUrl() {
+		return getServiceUrl(GROUP_SERVICE_MOUNT);
 	}
 }

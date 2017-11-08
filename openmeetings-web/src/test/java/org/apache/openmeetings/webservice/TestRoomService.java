@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.Test;
 
 public class TestRoomService extends AbstractWebServiceTest {
-	public static final String ROOM_SERVICE_URL = BASE_SERVICES_URL + "/room";
+	public static final String ROOM_SERVICE_MOUNT = "room";
 	private static final long CAPACITY = 666L;
 
 	@Test
@@ -54,14 +54,14 @@ public class TestRoomService extends AbstractWebServiceTest {
 		r.setName(name);
 		r.setComment(comment);
 		r.setCapacity(CAPACITY);
-		RoomDTO room = getClient(ROOM_SERVICE_URL).path(String.format("/%s/%s/%s", type, UNIT_TEST_EXT_TYPE, extId))
+		RoomDTO room = getClient(getRoomUrl()).path(String.format("/%s/%s/%s", type, UNIT_TEST_EXT_TYPE, extId))
 				.query("sid", sr.getMessage())
 				.query("room", r.toString())
 				.get(RoomDTO.class);
 		assertNotNull("Valid room should be returned", room);
 		assertNotNull("Room ID should be not empty", room.getId());
 
-		RoomDTO room1 = getClient(ROOM_SERVICE_URL).path(String.format("/%s/%s/%s", Room.Type.presentation, UNIT_TEST_EXT_TYPE, extId))
+		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s/%s/%s", Room.Type.presentation, UNIT_TEST_EXT_TYPE, extId))
 				.query("sid", sr.getMessage())
 				.get(RoomDTO.class);
 		assertNotNull("Valid room should be returned", room1);
@@ -77,14 +77,14 @@ public class TestRoomService extends AbstractWebServiceTest {
 			ServiceResult sr = login();
 			sid = sr.getMessage();
 		}
-		RoomDTO room = getClient(ROOM_SERVICE_URL)
+		RoomDTO room = getClient(getRoomUrl())
 				.query("sid", sid)
 				.type(APPLICATION_FORM_URLENCODED)
 				.post(new Form().param("room", r.toString()), RoomDTO.class);
 		assertNotNull("Valid room should be returned", room);
 		assertNotNull("Room ID should be not empty", room.getId());
 
-		RoomDTO room1 = getClient(ROOM_SERVICE_URL).path(String.format("/%s", room.getId()))
+		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s", room.getId()))
 				.query("sid", sid)
 				.get(RoomDTO.class);
 		assertNotNull("Valid room should be returned", room1);
@@ -165,5 +165,9 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 		CallResult<RoomDTO> res = createAndValidate(fileCall.getSid(), r);
 		assertFalse("Room files should NOT be empty", res.getObj().getFiles().isEmpty());
+	}
+
+	protected static String getRoomUrl() {
+		return getServiceUrl(ROOM_SERVICE_MOUNT);
 	}
 }

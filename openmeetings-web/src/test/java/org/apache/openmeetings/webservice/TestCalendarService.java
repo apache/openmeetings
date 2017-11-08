@@ -52,7 +52,7 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class TestCalendarService extends AbstractWebServiceTest {
-	public static final String CALENDAR_SERVICE_URL = BASE_SERVICES_URL + "/calendar";
+	public static final String CALENDAR_SERVICE_MOUNT = "calendar";
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired
@@ -73,7 +73,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		Date start = new Date();
 		Appointment a = createAppointment(getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
 
-		AppointmentDTO app = getClient(CALENDAR_SERVICE_URL).path("/room/" + a.getRoom().getId()).query("sid", sr.getMessage())
+		AppointmentDTO app = getClient(getCalendarUrl()).path("/room/" + a.getRoom().getId()).query("sid", sr.getMessage())
 				.get(AppointmentDTO.class);
 		assertNotNull("Valid DTO should be returned", app);
 	}
@@ -139,7 +139,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 		String sid = loginNewUser();
 
-		Response resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(getCalendarUrl())
 				.path("/")
 				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
@@ -161,7 +161,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	@Test
 	public void testDelete() {
 		ServiceResult sr = login();
-		Response resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(getCalendarUrl())
 				.path("/" + Long.MAX_VALUE) //non-existent ID
 				.query("sid", sr.getMessage())
 				.delete();
@@ -182,7 +182,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		u = createUser(u);
 		ServiceResult sr = login(u.getLogin(), createPass());
 
-		Response resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(getCalendarUrl())
 				.path("/")
 				.query("sid", sr.getMessage())
 				.form(new Form().param("appointment", o.toString()));
@@ -209,7 +209,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 								))
 						);
 
-		Response resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(getCalendarUrl())
 				.path("/")
 				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
@@ -238,7 +238,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 						.put(new JSONObject().put("user", new JSONObject()
 								.put("id", 1))));
 
-		Response resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(getCalendarUrl())
 				.path("/")
 				.query("sid", sid)
 				.form(new Form().param("appointment", o1.toString()));
@@ -263,7 +263,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 		//try to change MM list
 		JSONObject o = AppointmentParamConverter.json(dto);
-		Response resp = getClient(CALENDAR_SERVICE_URL)
+		Response resp = getClient(getCalendarUrl())
 				.path("/")
 				.query("sid", sid)
 				.form(new Form().param("appointment", o.toString()));
@@ -287,7 +287,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		String title = "title" + UUID.randomUUID().toString();
 		String sid = createApp(title);
 		@SuppressWarnings("unchecked")
-		List<AppointmentDTO> list = (List<AppointmentDTO>)getClient(CALENDAR_SERVICE_URL)
+		List<AppointmentDTO> list = (List<AppointmentDTO>)getClient(getCalendarUrl())
 			.path(String.format("/title/%s", title))
 			.query("sid", sid)
 			.getCollection(AppointmentDTO.class);
@@ -297,10 +297,14 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 		title = UUID.randomUUID().toString();
 		@SuppressWarnings("unchecked")
-		List<AppointmentDTO> list1 = (List<AppointmentDTO>)getClient(CALENDAR_SERVICE_URL)
+		List<AppointmentDTO> list1 = (List<AppointmentDTO>)getClient(getCalendarUrl())
 			.path(String.format("/title/%s", title))
 			.query("sid", sid)
 			.getCollection(AppointmentDTO.class);
 		assertEquals("None items should be returned", 0, list1.size());
+	}
+
+	protected static String getCalendarUrl() {
+		return getServiceUrl(CALENDAR_SERVICE_MOUNT);
 	}
 }

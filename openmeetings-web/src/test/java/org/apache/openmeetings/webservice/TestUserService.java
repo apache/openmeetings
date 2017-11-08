@@ -68,7 +68,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		RoomOptionsDTO options = new RoomOptionsDTO()
 				.setRoomId(5L)
 				.setModerator(true);
-		try (Response resp = getClient(USER_SERVICE_URL)
+		try (Response resp = getClient(getUserUrl())
 				.path("/hash")
 				.query("sid", sid)
 				.form(new Form().param("user", user.toString()).param("options", options.toString())))
@@ -121,7 +121,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		u.setTimeZoneId(tz);
 		u.setExternalId(uuid);
 		u.setExternalType(UNIT_TEST_EXT_TYPE);
-		UserDTO user = getClient(USER_SERVICE_URL)
+		UserDTO user = getClient(getUserUrl())
 				.path("/")
 				.query("sid", r.getMessage())
 				.type(APPLICATION_FORM_URLENCODED)
