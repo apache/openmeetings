@@ -24,12 +24,18 @@ import org.apache.openmeetings.db.dto.basic.Info;
 import org.junit.Test;
 
 public class TestInfoService extends AbstractWebServiceTest {
+	private static final String INFO_SERVICE_MOUNT = "info";
+
 	@Test
 	public void infoTest() {
-		Info info = getClient(INFO_SERVICE_URL).path("/version").get(Info.class);
+		Info info = getClient(getInfoUrl()).path("/version").get(Info.class);
 		assertNotNull("Valid info should be returned", info);
 		assertNotNull("Valid BuildDate should be returned", info.getBuildDate());
 		assertNotNull("Valid Revision should be returned", info.getRevision());
 		assertNotNull("Valid Version should be returned", info.getVersion());
+	}
+
+	protected static String getInfoUrl() {
+		return getServiceUrl(INFO_SERVICE_MOUNT);
 	}
 }

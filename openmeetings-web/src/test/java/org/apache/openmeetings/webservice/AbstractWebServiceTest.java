@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +39,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.catalina.LifecycleState;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
@@ -59,12 +61,11 @@ import org.junit.BeforeClass;
 
 public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	private static Tomcat tomcat;
-	public static final String CONTEXT = "/openmeetings";
-	public static final int PORT = 8080;
-	public static final String BASE_SERVICES_URL = String.format("http://localhost:%s%s/services", PORT, CONTEXT);
-	public static final String USER_SERVICE_URL = BASE_SERVICES_URL + "/user";
-	public static final String INFO_SERVICE_URL = BASE_SERVICES_URL + "/info";
-	public static final String FILE_SERVICE_URL = BASE_SERVICES_URL + "/file";
+	private static final String HOST = "localhost";
+	private static final String CONTEXT = "/openmeetings";
+	private static int port = 8080;
+	private static final String USER_SERVICE_MOUNT = "user";
+	private static final String FILE_SERVICE_MOUNT = "file";
 	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public static final long TIMEOUT = 5 * 60 * 1000;
 	protected WicketTester tester;
@@ -83,7 +84,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	}
 
 	public static ServiceResult loginNoCheck(String user, String pass) {
-		ServiceResult sr = getClient(USER_SERVICE_URL).path("/login").query("user", user).query("pass", pass)
+		ServiceResult sr = getClient(getUserUrl()).path("/login").query("user", user).query("pass", pass)
 				.get(ServiceResult.class);
 		return sr;
 	}
@@ -97,15 +98,20 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	@BeforeClass
 	public static void initialize() throws Exception {
 		tomcat = new Tomcat();
-		tomcat.setPort(PORT);
+		Connector connector = new Connector("HTTP/1.1");
+		connector.setAttribute("address", InetAddress.getByName(HOST).getHostAddress());
+		connector.setPort(0);
+		tomcat.getService().addConnector(connector);
+		tomcat.setConnector(connector);
 		File wd = Files.createTempDirectory("om" + UUID.randomUUID().toString()).toFile();
 		tomcat.setBaseDir(wd.getCanonicalPath());
 		tomcat.getHost().setAppBase(wd.getCanonicalPath());
-		tomcat.getHost().setAutoDeploy(true);
-		tomcat.getHost().setDeployOnStartup(true);
+		tomcat.getHost().setAutoDeploy(false);
+		tomcat.getHost().setDeployOnStartup(false);
 		tomcat.addWebapp(CONTEXT, getOmHome().getAbsolutePath());
 		tomcat.getConnector(); // to init the connector
 		tomcat.start();
+		port = tomcat.getConnector().getLocalPort();
 	}
 
 	@Override
@@ -137,7 +143,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		ServiceResult r = login();
 		UserDTO dto = new UserDTO(u);
 		dto.setPassword(createPass());
-		UserDTO user = getClient(USER_SERVICE_URL)
+		UserDTO user = getClient(getUserUrl())
 				.path("/")
 				.query("sid", r.getMessage())
 				.type(APPLICATION_FORM_URLENCODED)
@@ -158,7 +164,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 			List<Attachment> atts = new ArrayList<>();
 			atts.add(new Attachment("file", MediaType.APPLICATION_JSON, file));
 			atts.add(new Attachment("stream", MediaType.APPLICATION_OCTET_STREAM, is));
-			f1 = getClient(FILE_SERVICE_URL)
+			f1 = getClient(getFileUrl())
 					.path("/")
 					.query("sid", r.getMessage())
 					.type(MediaType.MULTIPART_FORM_DATA_TYPE).postCollection(atts, Attachment.class, FileItemDTO.class);
@@ -166,6 +172,18 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 			assertNotNull("Valid FileItem should be returned", f1.getId());
 		}
 		return new CallResult<>(r.getMessage(), f1);
+	}
+
+	protected static String getServiceUrl(String mount) {
+		return String.format("http://%s:%s%s/services/%s", HOST, port, CONTEXT, mount);
+	}
+
+	protected static String getUserUrl() {
+		return getServiceUrl(USER_SERVICE_MOUNT);
+	}
+
+	protected static String getFileUrl() {
+		return getServiceUrl(FILE_SERVICE_MOUNT);
 	}
 
 	public static class CallResult<T> {

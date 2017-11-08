@@ -64,7 +64,7 @@ public class TestFileService extends AbstractWebServiceTest {
 	@Test
 	public void testGetRoom() {
 		ServiceResult r = login();
-		FileExplorerObject fo = getClient(FILE_SERVICE_URL)
+		FileExplorerObject fo = getClient(getFileUrl())
 				.path("/room/5")
 				.query("sid", r.getMessage())
 				.get(FileExplorerObject.class);
