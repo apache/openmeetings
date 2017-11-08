@@ -890,17 +890,17 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	private String getWsUrl(Url reqUrl) {
-		final boolean secure = "http".equalsIgnoreCase(reqUrl.getProtocol());
+		final boolean insecure = "http".equalsIgnoreCase(reqUrl.getProtocol());
 		String delim = ":";
 		String port = reqUrl.getPort() == null || reqUrl.getPort() < 0 ? "" : String.valueOf(reqUrl.getPort());
-		if (!port.isEmpty() && ((secure && 443 == reqUrl.getPort()) || (!secure && 80 == reqUrl.getPort()))) {
+		if (!port.isEmpty() && ((insecure && 80 == reqUrl.getPort()) || (!insecure && 443 == reqUrl.getPort()))) {
 			port = "";
 		}
 		if (port.isEmpty()) {
 			delim = "";
 		}
 		return String.format("%s://%s%s%s;"
-			, secure ? "ws" : "wss"
+			, insecure ? "ws" : "wss"
 			, reqUrl.getHost()
 			, delim
 			, port);
