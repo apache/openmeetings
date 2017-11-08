@@ -97,3 +97,19 @@
 	margin-right: 10px;
 	padding: 4px;
 }
+/* room mode */
+#chatPanel.room {
+	width: 20px;
+	right: 0px;
+	top: 34px;
+}
+#chatPanel.room, #chatPanel.room #chatPopup, #chatPanel.room #chatPopup .control.block {
+	height: 620px !important;
+}
+#chatPanel.room.closed #chatPopup .control.block .label {
+	transform: rotate(90deg);
+	transform-origin: 10% 68% 0px;
+}
+#chatPanel.room.closed #chatPopup #chat {
+	display: none;
+}
