@@ -30,6 +30,9 @@ public class RoomHelper {
 
 	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, String uid) {
 		StreamClient sc = mgr.get(uid);
+		if (sc == null) {
+			return new JSONObject();
+		}
 		JSONObject o = c.toJson(self)
 				.put("sid", sid)
 				.put("uid", sc.getUid())

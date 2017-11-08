@@ -500,11 +500,12 @@ public class RoomPanel extends BasePanel {
 						}
 						Client _c = getClient();
 						boolean self = _c.getSid().equals(c.getSid());
-						if (!self) {
-							JSONObject jo = videoJson(c, self, _c.getSid(), getBean(ISessionManager.class), uid);
+						ISessionManager mgr = getBean(ISessionManager.class);
+						if (!self || Client.Type.room != mgr.get(uid).getType()) { // stream from others or self external video
+							JSONObject jo = videoJson(c, false, _c.getSid(), mgr, uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
-						if (_c.getSid().equals(c.getSid())) {
+						if (self) {
 							update(c.addStream(uid));
 						}
 						updateInterviewRecordingButtons(handler);
