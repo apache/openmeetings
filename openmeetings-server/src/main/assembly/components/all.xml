@@ -34,6 +34,7 @@
 				<exclude>webapps/root/favicon.ico</exclude>
 				<exclude>webapps/root/index.html</exclude>
 				<exclude>lib/commons-io*.jar</exclude>
+				<exclude>lib/commons-lang3*</exclude>
 				<exclude>lib/spring*.jar</exclude>
 				<exclude>plugins/websocket*.jar</exclude>
 				<exclude>plugins/tomcat-embed*.jar</exclude> <!-- added for Red5 lib substitution -->
@@ -141,6 +142,7 @@
 				<include>geronimo-jpa*</include>
 				<include>commons-fileupload*</include>
 				<include>commons-io*</include>
+				<include>commons-lang3*</include>
 			</includes>
 		</fileSet>
 		<fileSet>
