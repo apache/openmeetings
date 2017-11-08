@@ -253,12 +253,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					wresp.setHeader("X-Content-Type-Options", "nosniff");
 					wresp.setHeader("X-Frame-Options", xFrameOptions);
 					Url reqUrl = cycle.getRequest().getUrl();
-					wresp.setHeader("Content-Security-Policy", String.format("%s; connect-src 'self' %s://%s:%s;"
-							, contentSecurityPolicy
-							, "http".equalsIgnoreCase(reqUrl.getProtocol()) ? "ws" : "wss"
-							, reqUrl.getHost()
-							, reqUrl.getPort()
-						));
+					wresp.setHeader("Content-Security-Policy"
+							, String.format("%s; connect-src 'self' %s;", contentSecurityPolicy, getWsUrl(reqUrl)));
 				}
 			}
 		});
@@ -891,5 +887,22 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public void publishWsTopic(IClusterWsMessage msg) {
 		hazelWsTopic.publish(msg);
+	}
+
+	private String getWsUrl(Url reqUrl) {
+		final boolean secure = "http".equalsIgnoreCase(reqUrl.getProtocol());
+		String delim = ":";
+		String port = reqUrl.getPort() == null || reqUrl.getPort() < 0 ? "" : String.valueOf(reqUrl.getPort());
+		if (!port.isEmpty() && ((secure && 443 == reqUrl.getPort()) || (!secure && 80 == reqUrl.getPort()))) {
+			port = "";
+		}
+		if (port.isEmpty()) {
+			delim = "";
+		}
+		return String.format("%s://%s%s%s;"
+			, secure ? "ws" : "wss"
+			, reqUrl.getHost()
+			, delim
+			, port);
 	}
 }
