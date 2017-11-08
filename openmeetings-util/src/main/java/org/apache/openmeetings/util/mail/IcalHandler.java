@@ -64,6 +64,7 @@ public class IcalHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(IcalHandler.class, getWebAppRootKey());
 	static {
 		System.setProperty("net.fortuna.ical4j.timezone.update.enabled", "false");
+		System.setProperty("net.fortuna.ical4j.timezone.cache.impl", "net.fortuna.ical4j.util.MapTimeZoneCache");
 	}
 
 	/** ICal instance */
