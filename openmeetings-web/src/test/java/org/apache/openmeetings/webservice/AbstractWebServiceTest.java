@@ -104,6 +104,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		tomcat.getHost().setAutoDeploy(true);
 		tomcat.getHost().setDeployOnStartup(true);
 		tomcat.addWebapp(CONTEXT, getOmHome().getAbsolutePath());
+		tomcat.getConnector(); // to init the connector
 		tomcat.start();
 	}
 
