@@ -151,12 +151,14 @@ public class SessiondataDao {
 	 */
 	public void clearSessionTable(long timeout) {
 		try {
-			log.debug("****** clearSessionTable: ");
+			log.trace("****** clearSessionTable: ");
 			List<Sessiondata> l = getSessionToDelete(new Date(System.currentTimeMillis() - timeout));
-			log.debug("clearSessionTable: " + l.size());
-			for (Sessiondata sData : l) {
-				sData = em.find(Sessiondata.class, sData.getId());
-				em.remove(sData);
+			if (!l.isEmpty()) {
+				log.debug("clearSessionTable: {}", l.size());
+				for (Sessiondata sData : l) {
+					sData = em.find(Sessiondata.class, sData.getId());
+					em.remove(sData);
+				}
 			}
 		} catch (Exception err) {
 			log.error("clearSessionTable", err);

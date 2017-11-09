@@ -37,6 +37,7 @@ import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -164,11 +165,12 @@ public class Chat extends Panel {
 			ChatDao dao = getBean(ChatDao.class);
 			//TODO limited count should be loaded with "earlier" link
 			StringBuilder sb = new StringBuilder(getReinit());
+			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
 			for(Long roomId : getUserRooms(getUserId())) {
 				Room r = getBean(RoomDao.class).get(roomId);
 				sb.append(addRoom(r));
 			}
-			List<ChatMessage> list = dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30);
+			list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
 			if (!list.isEmpty()) {
 				sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
 			}

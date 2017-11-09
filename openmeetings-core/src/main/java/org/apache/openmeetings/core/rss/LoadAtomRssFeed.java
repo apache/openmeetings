@@ -36,7 +36,7 @@ public class LoadAtomRssFeed {
 	private LoadAtomRssFeed() {}
 
 	public static HttpURLConnection getFeedConnection(String _url) throws IOException {
-		log.debug("getFeedConnection:: " + _url);
+		log.trace("getFeedConnection:: {}", _url);
 
 		URL url = new URL(_url);
 
