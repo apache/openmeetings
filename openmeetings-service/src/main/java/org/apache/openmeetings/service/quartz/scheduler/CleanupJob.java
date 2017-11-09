@@ -72,7 +72,7 @@ public class CleanupJob extends AbstractJob {
 	}
 
 	public void cleanTestSetup() {
-		log.debug("CleanupJob.cleanTestSetup");
+		log.trace("CleanupJob.cleanTestSetup");
 		final long now = System.currentTimeMillis();
 		if (!isInitComplete()) {
 			return;
@@ -100,7 +100,7 @@ public class CleanupJob extends AbstractJob {
 	}
 
 	public void cleanRoomFiles() {
-		log.debug("CleanupJob.cleanRoomFiles");
+		log.trace("CleanupJob.cleanRoomFiles");
 		final long now = System.currentTimeMillis();
 		if (!isInitComplete()) {
 			return;
@@ -150,7 +150,7 @@ public class CleanupJob extends AbstractJob {
 	}
 
 	public void cleanExpiredRecordings() {
-		log.debug("CleanupJob.cleanExpiredRecordings");
+		log.trace("CleanupJob.cleanExpiredRecordings");
 		processExpiringRecordings(true, (rec, days) -> {
 			if (days < 0) {
 				log.debug("cleanExpiredRecordings:: following recording will be deleted {}", rec);
@@ -164,17 +164,19 @@ public class CleanupJob extends AbstractJob {
 	}
 
 	public void cleanExpiredResetHash() {
-		log.debug("CleanupJob.cleanExpiredResetHash");
+		log.trace("CleanupJob.cleanExpiredResetHash");
 		if (!isInitComplete()) {
 			return;
 		}
 		List<User> users = userDao.getByExpiredHash(resetHashTtl);
-		log.debug("... {} expired hashes were found", users.size());
-		for (User u : users) {
-			u.setResetDate(null);
-			u.setResethash(null);
-			userDao.update(u, null);
+		if (!users.isEmpty()) {
+			log.debug("... {} expired hashes were found", users.size());
+			for (User u : users) {
+				u.setResetDate(null);
+				u.setResethash(null);
+				userDao.update(u, null);
+			}
+			log.debug("... DONE CleanupJob.cleanExpiredResetHash");
 		}
-		log.debug("... DONE CleanupJob.cleanExpiredResetHash");
 	}
 }

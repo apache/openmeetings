@@ -27,8 +27,11 @@ import java.net.URL;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.github.openjson.JSONArray;
+
 public class LoadAtomRssFeed {
 	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, getWebAppRootKey());
+	private static JSONArray rss = new JSONArray();
 
 	private LoadAtomRssFeed() {}
 
@@ -46,5 +49,13 @@ public class LoadAtomRssFeed {
 		conn.setUseCaches(false);
 		conn.connect();
 		return conn;
+	}
+
+	public static JSONArray getRss() {
+		return rss;
+	}
+
+	public static void setRss(JSONArray rss) {
+		LoadAtomRssFeed.rss = rss;
 	}
 }

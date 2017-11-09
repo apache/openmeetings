@@ -269,25 +269,27 @@ public class MailHandler {
 	}
 
 	public void resetSendingStatus() {
-		log.debug("resetSendingStatus enter ...");
+		log.trace("resetSendingStatus enter ...");
 		if (!isInitComplete()) {
 			return;
 		}
 		Calendar c = Calendar.getInstance();
 		c.add(Calendar.MILLISECOND, -MAIL_SEND_TIMEOUT);
 		mailMessageDao.resetSendingStatus(c);
-		log.debug("... resetSendingStatus done.");
+		log.trace("... resetSendingStatus done.");
 	}
 
 	public void sendMails() {
 		init();
-		log.debug("sendMails enter ...");
+		log.trace("sendMails enter ...");
 		List<MailMessage> list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
-		log.debug("Number of emails in init queue " + list.size());
-		while (!list.isEmpty()) {
-			send(list.get(0), true);
-			list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
+		if (!list.isEmpty()) {
+			log.debug("Number of emails in init queue {}", list.size());
+			while (!list.isEmpty()) {
+				send(list.get(0), true);
+				list = mailMessageDao.get(0, 1, MailMessage.Status.NONE);
+			}
+			log.debug("... sendMails done.");
 		}
-		log.debug("... sendMails done.");
 	}
 }
