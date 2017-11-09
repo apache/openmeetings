@@ -432,7 +432,7 @@ public class ImportInitvalues {
 		// Yandex
 		OAuthServer yaServer = new OAuthServer();
 		yaServer.setName("Yandex");
-		yaServer.setIconUrl("http://yandex.st/morda-logo/i/favicon.ico");
+		yaServer.setIconUrl("https://yandex.st/morda-logo/i/favicon.ico");
 		yaServer.setClientId(CLIENT_PLACEHOLDER);
 		yaServer.setClientSecret(SECRET_PLACEHOLDER);
 		yaServer.setEnabled(false);
