@@ -54,32 +54,35 @@
 	background: repeating-linear-gradient(-45deg, transparent, transparent 3px, gray 3px, gray 5px);
 }
 .room.wb.area .tools.vertical .bumper {
-	width: 38px;
-	height: 20px;
+	width: 24px;
+	height: 11px;
 }
 .room.wb.area .tools.horisontal .bumper {
-	width: 20px;
-	height: 38px;
+	width: 11px;
+	height: 24px;
 }
 .room.wb.area .tools.vertical {
-	width: 38px;
-	height: 563px;
+	width: 26px;
+	height: 373px;
 }
 .room.wb.area .tools.readonly.vertical {
-	width: 38px;
-	height: 60px;
+	width: 26px;
+	height: 37px;
 }
 .room.wb.area .tools.horisontal {
-	width: 563px;
-	height: 38px;
+	width: 373px;
+	height: 26px;
 }
 .room.wb.area .tools.readonly.horisontal {
-	width: 60px;
-	height: 38px;
+	width: 37px;
+	height: 26px;
 }
 .room.wb.area .tools .om-icon.big {
 	float: left;
 	vertical-align: top;
+	width: 22px;
+	height: 22px;
+	background-size: 20px;
 }
 .room.wb.area .tools .om-icon.big.active {
 	background-color: whitesmoke;
