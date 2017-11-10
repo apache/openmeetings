@@ -118,7 +118,8 @@ public class Whiteboard implements Serializable {
 	}
 
 	public JSONObject get(String uid) {
-		return new JSONObject(roomItems.get(uid));
+		String obj = roomItems.get(uid);
+		return obj == null ? null : new JSONObject(obj);
 	}
 
 	public boolean contains(String uid) {
