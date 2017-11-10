@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.admin.labels;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.wicket.request.resource.ContentDisposition.ATTACHMENT;
+import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +54,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
@@ -175,7 +176,8 @@ public class LangPanel extends AdminBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			{
-				setContentDisposition(ContentDisposition.ATTACHMENT);
+				setContentDisposition(ATTACHMENT);
+				setCacheDuration(NONE);
 			}
 
 			@Override
