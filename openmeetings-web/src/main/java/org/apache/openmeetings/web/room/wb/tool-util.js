@@ -11,8 +11,9 @@ var ToolUtil = (function() {
 		}
 		, enableAllProps: function(s, base) {
 			const c = s.find('.wb-prop-color'), w = s.find('.wb-prop-width')
-				, o = this.enableOpacity(s, base), f = s.find('.wb-prop-fill')
+				, f = s.find('.wb-prop-fill')
 				, lc = s.find('.wb-prop-lock-color'), lf = s.find('.wb-prop-lock-fill');
+			this.enableOpacity(s, base);
 			s.find('.wb-prop-b, .wb-prop-i').button("disable");
 			lc.button("enable").button('option', 'icon', base.stroke.enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
 			lf.button("enable").button('option', 'icon', base.fill.enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
