@@ -6,6 +6,7 @@ var Ellipse = function(wb, s) {
 			strokeWidth: ellipse.stroke.width
 			, fill: ellipse.fill.enabled ? ellipse.fill.color : 'rgba(0,0,0,0)'
 			, stroke: ellipse.stroke.enabled ? ellipse.stroke.color : 'rgba(0,0,0,0)'
+			, opacity: ellipse.opacity
 			, left: ellipse.orig.x
 			, top: ellipse.orig.y
 			, rx: 0

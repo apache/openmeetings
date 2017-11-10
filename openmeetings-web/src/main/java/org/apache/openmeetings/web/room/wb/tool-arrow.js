@@ -17,6 +17,7 @@ var Arrow = function(wb, s) {
 				, strokeWidth: 2
 				, fill: arrow.fill.enabled ? arrow.fill.color : 'rgba(0,0,0,0)'
 				, stroke: arrow.stroke.enabled ? arrow.stroke.color : 'rgba(0,0,0,0)'
+				, opacity: arrow.opacity
 			});
 
 		return arrow.obj;

@@ -6,6 +6,7 @@ var Rect = function(wb, s) {
 			strokeWidth: rect.stroke.width
 			, fill: rect.fill.enabled ? rect.fill.color : 'rgba(0,0,0,0)'
 			, stroke: rect.stroke.enabled ? rect.stroke.color : 'rgba(0,0,0,0)'
+			, opacity: rect.opacity
 			, left: rect.orig.x
 			, top: rect.orig.y
 			, width: 0

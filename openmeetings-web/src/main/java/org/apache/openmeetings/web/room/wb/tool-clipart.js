@@ -14,6 +14,7 @@ var Clipart = function(wb, btn, s) {
 				, height: 0
 				, omType: 'Clipart'
 				, _src: imgSrc
+				, opacity: art.opacity
 			});
 			canvas.add(art.obj);
 		});
@@ -32,6 +33,7 @@ var Clipart = function(wb, btn, s) {
 	};
 	art.internalActivate = function() {
 		ToolUtil.disableAllProps(s);
+		ToolUtil.enableOpacity(s, art);
 	};
 	return art;
 };
