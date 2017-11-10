@@ -18,39 +18,40 @@ var DrawWbArea = function() {
 		}
 		return null;
 	}
-	function deleteHandler(e) {
+	function _performDelete() {
+		const wb = getActive().data()
+			, canvas = wb.getCanvas();
+		if (role !== PRESENTER || !canvas) {
+			return true;
+		}
+		const arr = [];
+		if (!!canvas.getActiveGroup()) {
+			canvas.getActiveGroup().forEachObject(function(o) {
+				arr.push({
+					uid: o.uid
+					, slide: o.slide
+				});
+			});
+		} else {
+			const o = canvas.getActiveObject();
+			if (!!o) {
+				arr.push({
+					uid: o.uid
+					, slide: o.slide
+				});
+			}
+		}
+		wbAction('deleteObj', JSON.stringify({
+			wbId: wb.id
+			, obj: arr
+		}));
+		return false;
+	}
+	function _deleteHandler(e) {
 		switch (e.which) {
 			case 8:  // backspace
 			case 46: // delete
-				{
-					const wb = getActive().data()
-						, canvas = wb.getCanvas();
-					if (!!canvas) {
-						const arr = [];
-						if (!!canvas.getActiveGroup()) {
-							canvas.getActiveGroup().forEachObject(function(o) {
-								arr.push({
-									uid: o.uid
-									, slide: o.slide
-								});
-							});
-						} else {
-							const o = canvas.getActiveObject();
-							if (!!o) {
-								arr.push({
-									uid: o.uid
-									, slide: o.slide
-								});
-							}
-						}
-						wbAction('deleteObj', JSON.stringify({
-							wbId: wb.id
-							, obj: arr
-						}));
-						return false;
-					}
-				}
-				break;
+				return _performDelete();
 		}
 	}
 	function _getWbTab(wbId) {
@@ -145,7 +146,7 @@ var DrawWbArea = function() {
 					const li = $(this);
 					_addCloseBtn(li);
 				});
-				$(window).keyup(deleteHandler);
+				self.addDeleteHandler();
 			}
 		} else {
 			if (prev.length > 0) {
@@ -153,7 +154,7 @@ var DrawWbArea = function() {
 				next.parent().remove();
 				tabsNav.find('li button').remove();
 			}
-			$(window).off('keyup', deleteHandler);
+			self.removeDeleteHandler();
 		}
 		tabs.find(".ui-tabs-panel").each(function() {
 			$(this).data().setRole(role);
@@ -190,7 +191,7 @@ var DrawWbArea = function() {
 		});
 	};
 	self.destroy = function() {
-		$(window).off('keyup', deleteHandler);
+		self.removeDeleteHandler();
 	};
 	self.create = function(obj) {
 		if (!_inited) return;
@@ -323,6 +324,14 @@ var DrawWbArea = function() {
 		wbAction('loadVideos');
 	};
 	self.initVideos = _initVideos;
+	self.addDeleteHandler = function() {
+		if (role === PRESENTER) {
+			$(window).keyup(_deleteHandler);
+		}
+	};
+	self.removeDeleteHandler = function() {
+		$(window).off('keyup', _deleteHandler);
+	};
 	return self;
 };
 $(function() {

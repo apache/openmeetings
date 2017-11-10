@@ -57,6 +57,7 @@ var Text = function(wb, s) {
 		} else {
 			i.removeClass('ui-state-active selected');
 		}
+		WbArea.removeDeleteHandler();
 	};
 	text.deactivate = function() {
 		wb.eachCanvas(function(canvas) {
@@ -68,6 +69,7 @@ var Text = function(wb, s) {
 				}
 			});
 		});
+		WbArea.addDeleteHandler();
 	};
 	return text;
 };
