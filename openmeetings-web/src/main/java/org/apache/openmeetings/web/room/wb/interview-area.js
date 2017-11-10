@@ -84,5 +84,7 @@ var InterviewWbArea = function() {
 	self.resize = _resize;
 	self.setRecStartEnabled = _setRecStartEnabled;
 	self.setRecStopEnabled = _setRecStopEnabled;
+	self.addDeleteHandler = function() {};
+	self.removeDeleteHandler = function() {};
 	return self;
 };
