@@ -109,7 +109,7 @@
 }
 #chatPanel.room.closed #chatPopup .control.block .label {
 	transform: rotate(90deg);
-	transform-origin: -11% 68% 0;
+	transform-origin: -15% 68% 0;
 }
 #chatPanel.room.closed #chatPopup #chat {
 	display: none;

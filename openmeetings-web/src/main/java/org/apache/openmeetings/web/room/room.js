@@ -632,7 +632,8 @@ var Room = (function() {
 		}
 		Chat.setHeight(h);
 		if (typeof WbArea !== 'undefined') {
-			WbArea.resize(sb.width() + 5, w - chat.width(), h);
+			const chW = chat.width();
+			WbArea.resize(sb.width() + 5, chW + 5, w - chW, h);
 		}
 	}
 	function _reload() {
@@ -662,17 +663,18 @@ var Room = (function() {
 		});
 	}
 	function _load() {
-		$(".room.sidebar").ready(function() {
-			_setSize();
-		});
+		$(".room.sidebar")
+			.ready(function() {
+				_setSize();
+			})
+			.resizable({
+				handles: "e"
+				, stop: function() {
+					_setSize();
+				}
+			});
 		$(window).on('resize.openmeetings', function() {
 			_setSize();
-		});
-		$(".room.sidebar").resizable({
-			handles: "e"
-			, stop: function() {
-				_setSize();
-			}
 		});
 		Wicket.Event.subscribe("/websocket/closed", _close);
 		Wicket.Event.subscribe("/websocket/error", _close);

@@ -985,4 +985,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="wizard.button.finish"><![CDATA[Termina]]></entry>
 	<entry key="zoom.fullFit"><![CDATA[Schermo-Intero]]></entry>
 	<entry key="zoom.pageWidth"><![CDATA[Page Width]]></entry>
+	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
+	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 </properties>

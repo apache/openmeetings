@@ -65,10 +65,10 @@ var InterviewWbArea = function() {
 			btns.hide();
 		}
 	}
-	function _resize(posX, w, h) {
+	function _resize(sbW, chW, w, h) {
 		if (!container || !_inited) return;
 		const hh = h - 5;
-		container.width(w).height(h).css('left', posX + "px");
+		container.width(w).height(h).css('left', (isRtl ? chW : sbW) + "px");
 		area.width(w).height(hh);
 	}
 	function _setRecStartEnabled(en) {

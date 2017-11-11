@@ -284,9 +284,9 @@ var DrawWbArea = function() {
 		$("#" + tabId).remove();
 		refreshTabs();
 	};
-	self.resize = function(posX, w, h) {
+	self.resize = function(sbW, chW, w, h) {
 		const hh = h - 5;
-		container.width(w).height(h).css('left', (isRtl ? 0 : posX) + "px");
+		container.width(w).height(h).css('left', (isRtl ? chW : sbW) + "px");
 		if (!container || !_inited) return;
 		area.width(w).height(hh);
 

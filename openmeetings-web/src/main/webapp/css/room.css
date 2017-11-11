@@ -93,12 +93,12 @@
 	width: 315px;
 	position: absolute;
 }
-.room.sidebar .ui-resizable-handle {
+.room.sidebar .ui-resizable-handle, #chatPanel.room .ui-resizable-handle {
 	width: 4px;
 	background-color: #f3f3f4;
 	border: 1px solid #dedee0;
 }
-.room.sidebar .ui-resizable-handle:hover {
+.room.sidebar .ui-resizable-handle:hover, #chatPanel.room .ui-resizable-handle:hover {
 	background-color: #b6bdca;
 	border-color: #bebec3;
 }

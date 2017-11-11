@@ -121,23 +121,25 @@ var Chat = function() {
 			pp.width(closedSize);
 			ctrl.off('click').click(function() {
 				if (p.hasClass('opened')) {
+					ctrl.attr('title', ctrl.data('ttl-dock'));
 					_close(Room.setSize);
 					p.removeClass('opened').hover(_open, _close);
+					_removeResize();
 				} else {
+					ctrl.attr('title', ctrl.data('ttl-undock'));
 					_setOpened();
 				}
-			});
-			if (p.resizable('instance') !== undefined) {
-				p.resizable('destroy');
-			}
+			}).attr('title', ctrl.data('ttl-dock'));
+			_removeResize();
 		} else {
+			ctrl.attr('title', '');
 			icon.addClass(isClosed ? iconOpen : iconClose);
 			ctrl.height(closedSize).width(globalWidth).off('click').click(Chat.toggle);
 			pp.width(globalWidth).height(closedSize);
 			p.removeClass('room')
 				.off('mouseenter mouseleave')
 				.resizable({
-					handles: "n, w"
+					handles: 'n, ' + (isRtl ? 'w' : 'e')
 					, disabled: isClosed()
 					, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
 					, minHeight: 195
@@ -243,7 +245,20 @@ var Chat = function() {
 	}
 	function _setOpened() {
 		p.addClass('opened').off('mouseenter mouseleave');
+		p.resizable({
+			handles: (isRtl ? 'e' : 'w')
+			, alsoResize: '#chatPopup'
+			, stop: function(event, ui) {
+				p.css({'left': ''});
+				openedWidth = ui.size.width + 'px';
+			}
+		});
 		Room.setSize();
+	}
+	function _removeResize() {
+		if (p.resizable('instance') !== undefined) {
+			p.resizable('destroy');
+		}
 	}
 	function _open(handler) {
 		if (isClosed()) {
