@@ -21,7 +21,6 @@
 	z-index: 2000;
 	bottom: 0px;
 	right: 10px;
-	width: 600px;
 	height: 20px;
 }
 #chatPanel #chatPopup {
@@ -53,7 +52,8 @@
 }
 #chatPopup .control.block .label {
 	display: inline-block;
-	padding-left: 20px;
+	width: 70px;
+	padding-left: 5px;
 }
 #chat .messageArea .date {
 	margin-right: 5px;
@@ -103,12 +103,13 @@
 	right: 0px;
 	top: 34px;
 }
-#chatPanel.room, #chatPanel.room #chatPopup, #chatPanel.room #chatPopup .control.block {
-	height: 620px !important;
+#chatPanel.room #chat form {
+	position: absolute;
+	bottom: 0;
 }
 #chatPanel.room.closed #chatPopup .control.block .label {
 	transform: rotate(90deg);
-	transform-origin: 10% 68% 0px;
+	transform-origin: -11% 68% 0;
 }
 #chatPanel.room.closed #chatPopup #chat {
 	display: none;

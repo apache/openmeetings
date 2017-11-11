@@ -11,12 +11,17 @@ var Chat = function() {
 		, messageTemplate = "<div class='new-email om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);privateMessage(e.data(\"userId\"));'></div>"
 		, inviteTemplate = "<div class='invite om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);inviteUser(e.data(\"userId\"));'></div>"
 		, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
-		, closedHeight = "20px"
+		, closedSize = 20
+		, closedSizePx = closedSize + "px"
 		, emoticon = new CSSEmoticon()
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
+		, iconOpen = 'ui-icon-caret-1-n'
+		, iconOpenRoom = 'ui-icon-caret-1-' + (isRtl ? 'e' : 'w')
+		, iconClose = 'ui-icon-caret-1-s'
+		, iconCloseRoom = 'ui-icon-caret-1-' + (isRtl ? 'w' : 'e')
 		;
-	let chatTabs, openedHeight = "345px", allPrefix = "All"
-		, roomPrefix = "Room ", typingTimer, audio, s, roomMode = false;
+	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
+		, roomPrefix = "Room ", typingTimer, audio, s, roomMode = false, globalWidth = 600;
 
 	try {
 		audio = new Audio('./public/chat_message.mp3');
@@ -80,10 +85,10 @@ var Chat = function() {
 		});
 	}
 	function isClosed() {
-		return $('#chatPanel').height() < 24;
+		return p.hasClass('closed');
 	}
 	function activateTab(id) {
-		chatTabs.tabs("option", "active", chatTabs.find('a[href="#' + id + '"]').parent().index());
+		tabs.tabs("option", "active", tabs.find('a[href="#' + id + '"]').parent().index());
 	}
 	function isInited() {
 		return !!$("#chatTabs").data("ui-tabs");
@@ -91,36 +96,58 @@ var Chat = function() {
 	function _reinit(_allPrefix, _roomPrefix) {
 		allPrefix = _allPrefix;
 		roomPrefix = _roomPrefix;
+		p = $('#chatPanel');
+		pp = $('#chatPanel, #chatPopup');
+		ctrl = $('#chatPopup .control.block');
+		icon = $('#chatPopup .control.block .ui-icon');
+		icon.removeClass(function(index, className) {
+			return (className.match (/(^|\s)ui-icon-caret-\S+/g) || []).join(' ');
+		});
 		initToolbar();
-		chatTabs = $("#chatTabs").tabs({
+		tabs = $("#chatTabs").tabs({
 			activate: function(event, ui) {
 				$('#activeChatTab').val(ui.newPanel[0].id);
 			}
 		});
 		// close icon: removing the tab on click
-		chatTabs.delegate("span.ui-icon-close", "click", function() {
+		tabs.delegate("span.ui-icon-close", "click", function() {
 			const panelId = $(this).closest("li").remove().attr("aria-controls");
 			$("#" + panelId).remove();
-			chatTabs.tabs("refresh");
+			tabs.tabs("refresh");
 		});
 		if (roomMode) {
-			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-n');
-			$('#chatPopup .control.block .ui-icon').addClass('ui-icon-caret-2-e-w');
-			$('#chatPanel').addClass('room').resizable('destroy');
-		} else {
-			$('#chatPopup .control.block .ui-icon').addClass('ui-icon-caret-1-n');
-			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-2-e-w');
-			$('#chatPanel').removeClass('room').resizable({
-				handles: "n, w"
-				, disabled: isClosed()
-				, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
-				, minHeight: 195
-				, minWidth: 260
-				, stop: function(event, ui) {
-					$('#chatPanel').css({'top': '', 'left': ''});
-					openedHeight = ui.size.height + "px";
+			icon.addClass(isClosed ? iconOpenRoom : iconCloseRoom);
+			p.addClass('room').hover(_open, _close);
+			pp.width(closedSize);
+			ctrl.off('click').click(function() {
+				if (p.hasClass('opened')) {
+					_close(Room.setSize);
+					p.removeClass('opened').hover(_open, _close);
+				} else {
+					_setOpened();
 				}
 			});
+			if (p.resizable('instance') !== undefined) {
+				p.resizable('destroy');
+			}
+		} else {
+			icon.addClass(isClosed ? iconOpen : iconClose);
+			ctrl.height(closedSize).width(globalWidth).off('click').click(Chat.toggle);
+			pp.width(globalWidth).height(closedSize);
+			p.removeClass('room')
+				.off('mouseenter mouseleave')
+				.resizable({
+					handles: "n, w"
+					, disabled: isClosed()
+					, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
+					, minHeight: 195
+					, minWidth: 260
+					, stop: function(event, ui) {
+						p.css({'top': '', 'left': ''});
+						openedHeight = ui.size.height + "px";
+						globalWidth = ui.size.width;
+					}
+				});
 		}
 		$('#chatMessage').off().on('input propertychange paste', function () {
 			const room = $('.room.box');
@@ -135,10 +162,10 @@ var Chat = function() {
 		});
 	}
 	function _removeTab(id) {
-		$('li[aria-controls="' + id + '"]').remove();
+		$('#chat li[aria-controls="' + id + '"]').remove();
 		$('#' + id).remove();
 		if (isInited()) {
-			chatTabs.tabs("refresh");
+			tabs.tabs("refresh");
 		}
 	}
 	function _addTab(id, label) {
@@ -155,16 +182,16 @@ var Chat = function() {
 		if (id.indexOf("chatTab-r") !== 0) {
 			li.append(closeBlock);
 		}
-		chatTabs.find(".ui-tabs-nav").append(li);
-		chatTabs.append("<div class='messageArea' id='" + id + "'></div>");
-		chatTabs.tabs("refresh");
+		tabs.find(".ui-tabs-nav").append(li);
+		tabs.append("<div class='messageArea' id='" + id + "'></div>");
+		tabs.tabs("refresh");
 		activateTab(id);
 	}
 	function _addMessage(m) {
 		if ($('#chat').length > 0 && m && m.type === "chat") {
 			if (isClosed()) {
-				$('#chatPopup .control.block').addClass('ui-state-highlight');
-				if ($('#chatPanel').is(':visible') && s.chat.muted !== true) {
+				ctrl.addClass('ui-state-highlight');
+				if (p.is(':visible') && s.chat.muted !== true) {
 					const playPromise = audio.play();
 
 					// In browsers that don’t yet support this functionality,
@@ -214,22 +241,54 @@ var Chat = function() {
 			}
 		}
 	}
-	function _open() {
+	function _setOpened() {
+		_open(function() {
+			p.addClass('opened').off('mouseenter mouseleave');
+			Room.setSize();
+		});
+	}
+	function _open(handler) {
 		if (isClosed()) {
-			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
-			$('#chatPopup .control.block').removeClass('ui-state-highlight');
-			$('#chatPanel, #chatPopup').animate({height: openedHeight}, 1000);
-			$('#chatPanel').resizable("option", "disabled", false);
-			$('#chat .messageArea').each(function() {
-				$(this).scrollTop($(this)[0].scrollHeight);
+			icon.removeClass(roomMode ? iconOpenRoom : iconOpen).addClass(roomMode ? iconCloseRoom : iconClose);
+			ctrl.removeClass('ui-state-highlight');
+			let opts;
+			if (roomMode) {
+				opts = {width: openedWidth};
+				ctrl.height(closedSize);
+			} else {
+				opts = {height: openedHeight};
+				p.resizable("option", "disabled", false);
+			}
+			p.removeClass('closed');
+			pp.animate(opts, 1000, function() {
+				p.removeClass('closed');
+				$('#chat .ui-tabs .ui-tabs-panel.messageArea').height(p.height() - closedSize - $('#chat .ui-tabs-nav').height() - $('#chat form').height() - 5);
+				$('#chat .messageArea').each(function() {
+					$(this).scrollTop($(this)[0].scrollHeight);
+				});
+				if (typeof handler === 'function') {
+					handler();
+				}
 			});
 		}
 	}
-	function _close() {
+	function _close(handler) {
 		if (!isClosed()) {
-			$('#chatPopup .control.block .ui-icon').removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
-			$('#chatPanel, #chatPopup').animate({height: closedHeight}, 1000);
-			$('#chatPanel').resizable("option", "disabled", true);
+			icon.removeClass(roomMode ? iconCloseRoom : iconClose).addClass(roomMode ? iconOpenRoom : iconOpen);
+			let opts;
+			if (roomMode) {
+				opts = {width: closedSizePx};
+				ctrl.height(p.height());
+			} else {
+				opts = {height: closedSizePx};
+				p.resizable("option", "disabled", true);
+			}
+			pp.animate(opts, 1000, function() {
+				p.addClass('closed');
+				if (typeof handler === 'function') {
+					handler();
+				}
+			});
 		}
 	}
 	function _toggle() {
@@ -247,6 +306,12 @@ var Chat = function() {
 		roomMode = _mode;
 		_reinit(allPrefix, roomPrefix);
 	}
+	function _setHeight(h) {
+		pp.height(h);
+		if (isClosed()) {
+			ctrl.height(h);
+		}
+	}
 
 	return {
 		reinit: _reinit
@@ -254,10 +319,12 @@ var Chat = function() {
 		, addTab: _addTab
 		, addMessage: _addMessage
 		, open: _open
+		, setOpened: _setOpened
 		, close: _close
 		, toggle: _toggle
 		, emtClick: _emtClick
 		, setRoomMode: _setRoomMode
+		, setHeight: _setHeight
 	};
 }();
 

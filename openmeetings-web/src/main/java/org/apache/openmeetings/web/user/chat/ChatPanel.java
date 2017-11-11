@@ -48,14 +48,14 @@ public class ChatPanel extends Panel {
 			toggle(target, false);
 			return;
 		}
-		StringBuilder sb = new StringBuilder();
-		sb.append("$(function() {");
+		StringBuilder sb = new StringBuilder("$(function() {");
 		if (!chat.isShowDashboardChat()) {
 			sb.append("$('#chatPanel,#chat').show();");
 		}
-		sb.append(chat.addRoom(r));
-		sb.append(r.isChatOpened() ? "Chat.open();" : "Chat.close();");
-		sb.append("});");
+		sb.append("Chat.setRoomMode(true);")
+			.append(chat.addRoom(r))
+			.append("Chat.").append(r.isChatOpened() ? "setOpened" : "close").append("();")
+			.append("});");
 		target.appendJavaScript(sb);
 	}
 
@@ -64,13 +64,13 @@ public class ChatPanel extends Panel {
 			return;
 		}
 		handler.appendJavaScript(String.format("if (typeof Chat == 'object') { Chat.removeTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
+		StringBuilder sb = new StringBuilder("$(function() {")
+				.append("Chat.setRoomMode(false);");
 		if (!chat.isShowDashboardChat()) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("$(function() {");
 			sb.append("$('#chatPanel,#chat').hide();");
-			sb.append("});");
-			handler.appendJavaScript(sb);
 		}
+		sb.append("});");
+		handler.appendJavaScript(sb);
 	}
 
 	public void toggle(IPartialPageRequestHandler handler, boolean visible) {

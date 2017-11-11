@@ -561,12 +561,13 @@ var VideoManager = (function() {
 })();
 var Room = (function() {
 	const self = {};
-	let options, menuHeight;
+	let options, menuHeight, chat;
 
 	function _init(_options) {
 		options = _options;
 		window.WbArea = options.interview ? InterviewWbArea() : DrawWbArea();
 		const menu = $('.room.box .room.menu');
+		chat = $('#chatPanel');
 		menuHeight = menu.length === 0 ? 0 : menu.height();
 		VideoManager.init();
 		Activities.init();
@@ -629,8 +630,9 @@ var Room = (function() {
 		} else {
 			holder.removeClass('big').addClass('small');
 		}
+		Chat.setHeight(h);
 		if (typeof WbArea !== 'undefined') {
-			WbArea.resize(sb.width() + 5, w, h);
+			WbArea.resize(sb.width() + 5, w - chat.width(), h);
 		}
 	}
 	function _reload() {
