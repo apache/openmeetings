@@ -242,10 +242,8 @@ var Chat = function() {
 		}
 	}
 	function _setOpened() {
-		_open(function() {
-			p.addClass('opened').off('mouseenter mouseleave');
-			Room.setSize();
-		});
+		p.addClass('opened').off('mouseenter mouseleave');
+		Room.setSize();
 	}
 	function _open(handler) {
 		if (isClosed()) {
@@ -319,7 +317,11 @@ var Chat = function() {
 		, addTab: _addTab
 		, addMessage: _addMessage
 		, open: _open
-		, setOpened: _setOpened
+		, setOpened: function() {
+			_open(function() {
+				_setOpened();
+			});
+		}
 		, close: _close
 		, toggle: _toggle
 		, emtClick: _emtClick
