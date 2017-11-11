@@ -25,12 +25,10 @@
 	right: initial !important;
 	left: 10px;
 }
-
 #topLinks span {
 	border-right: none !important;
 	border-left: 1px solid black;
 }
-
 #topLinks span:last-child {
 	border-left: none;
 }
@@ -41,6 +39,10 @@
 #chatPanel {
 	right: initial !important;
 	left: 10px;
+}
+#chatPanel.room {
+	right: initial !important;
+	left: 0px;
 }
 .ui-tabs .ui-tabs-nav li {
 	float: right !important;
