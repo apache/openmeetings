@@ -27,6 +27,8 @@ import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
@@ -280,7 +282,7 @@ public abstract class BaseConverter {
 					String[] argv = new String[] {
 							getPathToFFMPEG(), "-y"
 							, "-i", inputFlvFile.getCanonicalPath()
-							, "-af", "aresample=32k:min_comp=0.001:min_hard_comp=0.100000"
+							, "-af", String.format("aresample=%s:min_comp=0.001:min_hard_comp=0.100000", getAudioBitrate())
 							, outputWav.getCanonicalPath()};
 
 					logs.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
@@ -376,8 +378,8 @@ public abstract class BaseConverter {
 				"-profile:v", "baseline",
 				"-c:a", "libfaac",
 				"-c:a", "libfdk_aac",
-				"-ar", "22050",
-				"-b:a", "32k",
+				"-ar", String.valueOf(getAudioRate()),
+				"-b:a", getAudioBitrate(),
 				"-s", getDimensions(r), //
 				mp4path
 				));

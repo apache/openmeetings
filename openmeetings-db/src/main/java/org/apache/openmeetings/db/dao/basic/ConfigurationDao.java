@@ -39,6 +39,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
@@ -57,6 +59,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
@@ -330,6 +334,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				break;
 			case CONFIG_DEFAULT_LANG:
 				reloadDefaultLang();
+			case CONFIG_MP4_AUDIO_RATE:
+				reloadAudioRate();
+				break;
+			case CONFIG_MP4_AUDIO_BITRATE:
 				break;
 		}
 		return entity;
@@ -377,6 +385,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setDefaultLang(getLong(CONFIG_DEFAULT_LANG, 1L));
 	}
 
+	private void reloadAudioRate() {
+		setAudioRate(getInt(CONFIG_MP4_AUDIO_RATE, 22050));
+	}
+
+	private void reloadAudioBitrate() {
+		setAudioBitrate(getString(CONFIG_MP4_AUDIO_BITRATE, "32k"));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -385,6 +401,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadBaseUrl();
 		reloadSipEnabled();
 		reloadGaCode();
+		reloadAudioRate();
+		reloadAudioBitrate();
 		reloadRoomSettings();
 	}
 
