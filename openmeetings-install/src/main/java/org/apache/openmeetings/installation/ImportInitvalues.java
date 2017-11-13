@@ -56,6 +56,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -89,6 +91,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -331,6 +335,8 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_EXT_PROCESS_TTL, String.valueOf(getExtProcessTtl()), Configuration.Type.number, String.format("Time to live in minutes for external processes such as conversion via ffmpeg (default %s minutes)", getExtProcessTtl()), VER_3_3_0);
 		addCfg(list, CONFIG_MYROOMS_ENABLED, String.valueOf(true), Configuration.Type.bool, "Users are allowed to create personal rooms", "3.3.2");
 		addCfg(list, CONFIG_REMINDER_MESSAGE, null, Configuration.Type.string, "Reminder message to notify about upcoming appointment, generated message will be used if not set", VER_2_0);
+		addCfg(list, CONFIG_MP4_AUDIO_RATE, String.valueOf(getAudioRate()), Configuration.Type.number, "Audio sampling rate (in Hz) for MP4 video", "4.0.1");
+		addCfg(list, CONFIG_MP4_AUDIO_BITRATE, String.valueOf(getAudioBitrate()), Configuration.Type.string, "Audio bitrate for MP4 video", "4.0.1");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {
