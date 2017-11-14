@@ -4,21 +4,21 @@ var Activities = function() {
 	let activities, openedHeight = "345px", inited = false;
 
 	function isClosed() {
-		return inited && activities.height() < 24;
+		return activities.height() < 24;
 	}
 	function open() {
 		if (isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 			$('.control.block', activities).removeClass('ui-state-highlight');
 			activities.animate({height: openedHeight}, 1000);
-			activities.resizable("option", "disabled", false);
+			activities.resizable('option', 'disabled', false);
 		}
 	}
 	function close() {
 		if (!isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
 			activities.animate({height: closedHeight}, 1000);
-			activities.resizable("option", "disabled", false);
+			activities.resizable('option', 'disabled', true);
 		}
 	}
 
