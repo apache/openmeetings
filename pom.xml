@@ -66,7 +66,7 @@
 		<spring.version>4.3.12.RELEASE</spring.version>
 		<mina.version>2.0.16</mina.version>
 		<tomcat.version>9.0.1</tomcat.version>
-		<ical4j.version>2.1.1</ical4j.version>
+		<ical4j.version>2.1.4</ical4j.version>
 		<cxf.version>3.2.1</cxf.version>
 		<selenium.version>3.7.1</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
