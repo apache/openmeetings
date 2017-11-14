@@ -127,6 +127,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="245"><![CDATA[Dosyalar]]></entry>
 	<entry key="254"><![CDATA[of]]></entry>
 	<entry key="256"><![CDATA[Önceki sayfaya git]]></entry>
+	<entry key="257">Sonraki sayfaya git</entry>
 	<entry key="259"><![CDATA[Uzaklaştır --]]></entry>
 	<entry key="260"><![CDATA[Yakınlaştır ++]]></entry>
 	<entry key="263"><![CDATA[Konfigürasyon]]></entry>

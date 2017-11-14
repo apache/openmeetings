@@ -127,6 +127,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="245"><![CDATA[Файлове]]></entry>
 	<entry key="254"><![CDATA[от]]></entry>
 	<entry key="256"><![CDATA[Към предишната страница]]></entry>
+	 <entry key="257">Към следващата страница</entry>
 	<entry key="259"><![CDATA[Мащаб --]]></entry>
 	<entry key="260"><![CDATA[Мащаб ++]]></entry>
 	<entry key="263"><![CDATA[Конфигурация]]></entry>
