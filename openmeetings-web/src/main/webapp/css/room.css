@@ -164,6 +164,19 @@
 .room.sidebar .user.list .user .ui-icon.big {
 	background-size: 32px;
 }
+.room.sidebar .icon-undock, .room.sidebar .icon-dock {
+	width: 16px;
+	height: 16px;
+}
+.room.sidebar .icon-undock {
+	background-image: url(images/double-arrow-left.png);
+}
+.room.sidebar .icon-dock {
+	background-image: url(images/double-arrow-right.png);
+}
+.room.sidebar.closed #room-sidebar-tab-users, .room.sidebar.closed #room-sidebar-tab-files {
+	display: none;
+}
 .audio-activity.ui-icon {
 	opacity: 0.2;
 	background-image: url(images/speaking.png);
@@ -454,7 +467,7 @@
 	.room.holder.big .room.sidebar .file.tree .file.item .name
 		, .room.holder.big .room.sidebar .file.tree .file.item .name span
 	{
-		width: 230px;
+		width: 255px;
 	}
 	.room.sidebar .file.tree .file.item .name span {
 		padding: 0;

@@ -560,14 +560,43 @@ var VideoManager = (function() {
 	return self;
 })();
 var Room = (function() {
-	const self = {};
-	let options, menuHeight, chat;
+	const self = {}, isRtl = "rtl" === $('html').attr('dir'), sbSide = isRtl ? 'right' : 'left';
+	let options, menuHeight, chat, sb, dock;
 
 	function _init(_options) {
 		options = _options;
 		window.WbArea = options.interview ? InterviewWbArea() : DrawWbArea();
 		const menu = $('.room.box .room.menu');
 		chat = $('#chatPanel');
+		sb = $('.room.sidebar').css(sbSide, '0px');
+		dock = sb.find('.btn-dock').button({
+			icon: "ui-icon icon-undock"
+			, showLabel: false
+		}).click(function() {
+			const offset = parseInt(sb.css(sbSide));
+			if (offset < 0) {
+				sb.removeClass('closed');
+			}
+			dock.button('option', 'disabled', true);
+			const props = {};
+			props[sbSide] = offset < 0 ? '0px' : (-sb.width() + 45) + 'px';
+			sb.animate(props, 1500
+				, function() {
+					dock.button('option', 'disabled', false)
+						.button('option', 'icon', 'ui-icon ' + (offset < 0 ? 'icon-undock' : 'icon-dock'));
+					if (offset < 0) {
+						dock.attr('title', dock.data('ttl-undock'));
+						_sbAddResizable();
+					} else {
+						dock.attr('title', dock.data('ttl-dock'));
+						sb.addClass('closed').resizable('destroy');
+					}
+					_setSize();
+				});
+		});
+		dock.addClass(isRtl ? 'align-left' : 'align-right').attr('title', dock.data('ttl-undock'))
+			.button('option', 'label', dock.data('ttl-undock'))
+			.button('refresh');
 		menuHeight = menu.length === 0 ? 0 : menu.height();
 		VideoManager.init();
 		Activities.init();
@@ -615,9 +644,15 @@ var Room = (function() {
 			$('#wb-rename-menu').hide();
 		}
 	}
+	function _sbWidth() {
+		if (sb === undefined) {
+			sb = $('.room.sidebar');
+		}
+		return sb === undefined ? 0 : sb.width() + parseInt(sb.css(sbSide));
+	}
 	function _setSize() {
-		const sb = $(".room.sidebar")
-			, w = $(window).width() - sb.width() - 8
+		const sbW = _sbWidth()
+			, w = $(window).width() - sbW - 8
 			, h = $(window).height() - menuHeight - 3
 			, p = sb.find('.tabs')
 			, holder = $('.room.holder');
@@ -625,7 +660,7 @@ var Room = (function() {
 		const hh = h - 5;
 		p.height(hh);
 		$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
-		if (sb.width() > 230) {
+		if (sbW > 255) {
 			holder.addClass('big').removeClass('small');
 		} else {
 			holder.removeClass('big').addClass('small');
@@ -633,7 +668,7 @@ var Room = (function() {
 		Chat.setHeight(h);
 		if (typeof WbArea !== 'undefined') {
 			const chW = chat.width();
-			WbArea.resize(sb.width() + 5, chW + 5, w - chW, h);
+			WbArea.resize(sbW + 5, chW + 5, w - chW, h);
 		}
 	}
 	function _reload() {
@@ -662,17 +697,19 @@ var Room = (function() {
 			]
 		});
 	}
-	function _load() {
-		$(".room.sidebar")
-			.ready(function() {
+	function _sbAddResizable() {
+		sb.resizable({
+			handles: isRtl ? 'w' : 'e'
+			, stop: function() {
 				_setSize();
-			})
-			.resizable({
-				handles: "e"
-				, stop: function() {
-					_setSize();
-				}
-			});
+			}
+		});
+	}
+	function _load() {
+		sb.ready(function() {
+			_setSize();
+		});
+		_sbAddResizable();
 		$(window).on('resize.openmeetings', function() {
 			_setSize();
 		});
