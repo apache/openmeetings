@@ -127,6 +127,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="245"><![CDATA[ファイル]]></entry>
 	<entry key="254"><![CDATA[/]]></entry>
 	<entry key="256"><![CDATA[前へ]]></entry>
+	<entry key="257">次へ</entry>
 	<entry key="259"><![CDATA[縮小]]></entry>
 	<entry key="260"><![CDATA[拡大]]></entry>
 	<entry key="263"><![CDATA[グローバル設定]]></entry>

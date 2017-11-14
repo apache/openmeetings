@@ -535,6 +535,7 @@ var Wb = function() {
 		wb.eachCanvas(function(canvas) {
 			__setSize(canvas);
 		});
+		_setSlide(slide);
 	}
 	function _videoStatus(json) {
 		const g = _findObject(json);

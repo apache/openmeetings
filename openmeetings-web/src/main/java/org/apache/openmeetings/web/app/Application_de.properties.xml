@@ -127,6 +127,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="245"><![CDATA[Dateien]]></entry>
 	<entry key="254"><![CDATA[von]]></entry>
 	<entry key="256"><![CDATA[zur vorherigen Seite springen]]></entry>
+	<entry key="257">zur nächsten Seite springen</entry>
 	<entry key="259"><![CDATA[Zoom --]]></entry>
 	<entry key="260"><![CDATA[Zoom ++]]></entry>
 	<entry key="263"><![CDATA[Konfiguration]]></entry>
