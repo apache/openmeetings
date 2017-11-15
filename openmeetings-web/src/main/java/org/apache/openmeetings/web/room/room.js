@@ -754,7 +754,7 @@ var Room = (function() {
 
 	self.init = _init;
 	self.getMenuHeight = function() { return menuHeight; };
-	self.getOptions = function() { return JSON.parse(JSON.stringify(options)); };
+	self.getOptions = function() { return typeof options === 'object' ? JSON.parse(JSON.stringify(options)) : {}; };
 	self.setRights = function(_r) { return options.rights = _r; };
 	self.setSize = _setSize;
 	self.load = _load;
