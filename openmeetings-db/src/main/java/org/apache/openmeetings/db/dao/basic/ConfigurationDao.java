@@ -334,6 +334,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				break;
 			case CONFIG_DEFAULT_LANG:
 				reloadDefaultLang();
+				break;
 			case CONFIG_MP4_AUDIO_RATE:
 				reloadAudioRate();
 				break;
