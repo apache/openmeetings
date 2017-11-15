@@ -343,8 +343,9 @@ public class User extends HistoricalEntity {
 		return firstname;
 	}
 
-	public void setFirstname(String firstname) {
+	public User setFirstname(String firstname) {
 		this.firstname = firstname;
+		return this;
 	}
 
 	public Date getLastlogin() {
@@ -359,8 +360,9 @@ public class User extends HistoricalEntity {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public User setLastname(String lastname) {
 		this.lastname = lastname;
+		return this;
 	}
 
 	public String getLogin() {
