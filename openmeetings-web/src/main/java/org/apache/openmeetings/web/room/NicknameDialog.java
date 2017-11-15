@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.web.app.Application.update;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -25,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.NonClosableDialog;
@@ -52,8 +54,7 @@ public class NicknameDialog extends NonClosableDialog<User> {
 	public NicknameDialog(String id, final RoomPanel room) {
 		super(id, Application.getString("1287"));
 		this.room = room;
-		User u = room.getClient().getUser();
-		add(form = new Form<>("form", new CompoundPropertyModel<>(u)));
+		add(form = new Form<>("form", new CompoundPropertyModel<>(room.getClient().getUser())));
 	}
 
 	@Override
@@ -105,6 +106,9 @@ public class NicknameDialog extends NonClosableDialog<User> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		room.broadcast(room.getClient());
+		final User u = form.getModelObject();
+		final Client c = room.getClient();
+		c.getUser().setFirstname(u.getFirstname()).setLastname(u.getLastname());
+		room.broadcast(update(c));
 	}
 }
