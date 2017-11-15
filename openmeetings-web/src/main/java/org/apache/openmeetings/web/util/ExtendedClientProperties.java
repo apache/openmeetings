@@ -24,6 +24,7 @@ import static org.apache.openmeetings.web.app.Application.SIGNIN_MAPPING;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.request.IRequestParameters;
 
@@ -80,7 +81,7 @@ public class ExtendedClientProperties extends ClientProperties {
 	@Override
 	public void read(IRequestParameters parameters) {
 		super.read(parameters);
-		String _url = parameters.getParameterValue("codebase").toString(getBaseUrl());
+		String _url = parameters.getParameterValue("codebase").toString(OpenmeetingsVariables.getBaseUrl());
 		StringBuilder sb = cleanUrl(_url);
 		if (sb.charAt(sb.length() - 1) != '/') {
 			sb.append('/');
