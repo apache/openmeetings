@@ -234,7 +234,7 @@ public class Chat extends Panel {
 							WebSocketHelper.sendAll(msg.toString());
 						}
 						chatMessage.setDefaultModelObject("");
-						target.add(chatMessage);
+						target.appendJavaScript("Chat.clean();");
 					};
 				});
 		}

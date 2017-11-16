@@ -21,7 +21,9 @@ var Chat = function() {
 		, iconCloseRoom = 'ui-icon-caret-1-' + (isRtl ? 'w' : 'e')
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
-		, roomPrefix = "Room ", typingTimer, audio, s, roomMode = false, globalWidth = 600;
+		, roomPrefix = "Room ", typingTimer, audio, s, roomMode = false, globalWidth = 600
+		, editor = $('#chatMessage .wysiwyg-editor')
+		;
 
 	try {
 		audio = new Audio('./public/chat_message.mp3');
@@ -100,6 +102,7 @@ var Chat = function() {
 		pp = $('#chatPanel, #chatPopup');
 		ctrl = $('#chatPopup .control.block');
 		icon = $('#chatPopup .control.block .ui-icon');
+		editor = $('#chatMessage .wysiwyg-editor');
 		icon.removeClass(function(index, className) {
 			return (className.match (/(^|\s)ui-icon-caret-\S+/g) || []).join(' ');
 		});
@@ -312,8 +315,10 @@ var Chat = function() {
 		}
 	}
 	function _emtClick(emoticon) {
-		const editor = $('#chatMessage .wysiwyg-editor');
-		editor.html(editor.html() + ' ' + emoticon + ' ');
+		editor.html(editor.html() + ' ' + emoticon + ' ').trigger('change');
+	}
+	function _clean() {
+		editor.html('').trigger('change');
 	}
 	function _setRoomMode(_mode) {
 		roomMode = _mode;
@@ -342,6 +347,7 @@ var Chat = function() {
 		, emtClick: _emtClick
 		, setRoomMode: _setRoomMode
 		, setHeight: _setHeight
+		, clean: _clean
 	};
 }();
 
