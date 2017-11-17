@@ -1,16 +1,4 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-function initVideo(el, id, options) {
-	const type = 'application/x-shockwave-flash'
-		, src = 'public/main.swf?cache' + new Date().getTime()
-		, o = $('<object>').attr('id', id).attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
-	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
-		.append($('<param>').attr('name', 'wmode').attr('value', options.wmode))
-		.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'))
-		.append($('<param>').attr('name', 'allowfullscreen').attr('value', 'false'))
-		.append($('<param>').attr('name', 'flashvars').attr('value', $.param(options)));
-	el.append(o);
-	return o;
-}
 var VideoSettings = (function() {
 	let vs, lm, swf, s, cam, mic, res, o
 		, vidScroll, recBtn, playBtn, recAllowed = false;
@@ -82,7 +70,7 @@ var VideoSettings = (function() {
 		o.mode = 'settings';
 		o.rights = (o.rights || []).join();
 		delete o.keycode;
-		swf = initVideo(vidScroll, 'video-settings-swf', o)[0];
+		swf = initSwf(vidScroll, 'main.swf', 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
 		const rr = vs.find('.cam-resolution').parents('.sett-row');

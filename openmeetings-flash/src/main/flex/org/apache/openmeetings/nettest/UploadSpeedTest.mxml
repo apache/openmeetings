@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
@@ -16,30 +16,8 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
-
 -->
-<html xmlns:wicket="http://wicket.apache.org">
-<wicket:head>
-	<meta http-equiv="cache-control" content="no-cache"/>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<style type="text/css">
-		html,body { /* http://www.quirksmode.org/css/100percheight.html */
-			height: 100%;
-			/* prevent scrollbars */
-			margin: 0;
-			padding: 0;
-			border: 0 none;
-			overflow: hidden;
-		}
-		body {
-			background-color: #ffffff;
-		}
-		img {
-			border: 0 none;
-		}
-	</style>
-</wicket:head>
-<wicket:panel>
-	<noscript>Please enable JavaScript in order to use this application.</noscript>
-</wicket:panel>
-</html>
+<nettest:NetworkTest
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:nettest="org.apache.openmeetings.nettest.*">
+</nettest:NetworkTest>

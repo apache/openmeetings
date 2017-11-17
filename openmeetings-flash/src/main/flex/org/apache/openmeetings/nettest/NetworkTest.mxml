@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<s:Panel width="115" height="150"
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		borderVisible="false" creationComplete="init()">
+	<fx:Script><![CDATA[
+		import flash.globalization.NumberFormatter;
+
+		protected var running:Boolean = false;
+		protected var allTests:Boolean = false;
+		protected var resultText:Boolean = false;
+		private var myMC:MovieClip;
+		private var nf:NumberFormatter = new NumberFormatter("en_US");
+
+		[Embed(source="../../../../assets/notrun.png")]
+		[Bindable]
+		protected var notRunImgCls:Class;
+		[Embed(source="../../../../assets/running.swf")]
+		[Bindable]
+		protected var runCls:Class;
+		[Embed(source="../../../../assets/failed.png")]
+		[Bindable]
+		protected var failedImgCls:Class;
+		[Embed(source="../../../../assets/passed.png")]
+		[Bindable]
+		protected var passedImgCls:Class;
+		[Embed(source="../../../../assets/passed_result.png")]
+		[Bindable]
+		protected var passResultImgCls:Class;
+
+		protected function init():void {
+			addEventListener(MouseEvent.CLICK, clickHandler);
+			myMC = new runCls();
+			container.addChild(myMC);
+			nf.decimalSeparator = ".";
+			nf.fractionalDigits = 2;
+			nf.useGrouping = false;
+		}
+
+		private function clickHandler(evt:MouseEvent):void {
+			if (running) {
+				setStopped();
+			} else {
+				allTests = false;
+				setRunning();
+			}
+		}
+
+		protected function start():void {
+		}
+
+		protected function forcedStop():void {
+		}
+
+		private function hideAll():void {
+			notRun.visible = false;
+			container.visible = false;
+			failed.visible = false;
+			passed.visible = false;
+			passResult.visible = false;
+			result.visible = false;
+		}
+
+		protected function setRunning():void {
+			var app:nettest = parentApplication as nettest;
+			if (app.busy) {
+				return;
+			}
+			app.busy = true;
+			start();
+			running = true;
+			hideAll();
+			container.visible = true;
+			myMC.play();
+		}
+
+		protected function setStopped():void {
+			forcedStop();
+			running = false;
+			hideAll();
+			notRun.visible = true;
+			var app:nettest = parentApplication as nettest;
+			app.busy = false;
+			handleAllTestsMode();
+		}
+
+		protected function setPassed():void {
+			if (running) {
+				running = false;
+				hideAll();
+				if (resultText) {
+					passResult.visible = true;
+					result.visible = true;
+				} else {
+					passed.visible = true;
+				}
+				var app:nettest = parentApplication as nettest;
+				app.busy = false;
+				handleAllTestsMode();
+			}
+		}
+
+		protected function setFailed():void {
+			if (running) {
+				running = false;
+				hideAll();
+				failed.visible = true;
+				var app:nettest = parentApplication as nettest;
+				app.busy = false;
+				handleAllTestsMode();
+			}
+		}
+
+		protected function handleAllTestsMode():void {
+			if (allTests) {
+				var app:nettest = parentApplication as nettest;
+				//canvas.testsView.testAll();
+			}
+		}
+
+		protected function lbl(key:String):String {
+			var app:nettest = parentApplication as nettest;
+			return app.lbl(key);
+		}
+
+		protected function debug(msg:String):void {
+			var str:String = this.title + ": " + msg + "\n";
+			var app:nettest = parentApplication as nettest;
+			app.debug(str);
+		}
+
+		protected function log(msg:String):void {
+			var str:String = this.title + ": " + msg + "\n";
+			var app:nettest = parentApplication as nettest;
+			app.log(str);
+		}
+
+		protected function formatNumber(num:Number):String {
+			return nf.formatNumber(num);
+		}
+
+		protected function getBaseUrl():String {
+			var app:nettest = parentApplication as nettest;
+			var hostUrl:String = app.params.httpProtocol + "://" + app.params.host + ":" + app.params.httpPort + "/" + app.params.path;
+			return hostUrl + (hostUrl.slice(-1) == '/' ? '' : '/');
+		}
+	]]></fx:Script>
+
+	<s:Image id="notRun" source="{notRunImgCls}" visible="true" width="113" height="113" x="0" y="0"/> <!-- toolTip="{exclusiveTitle}" -->
+	<mx:UIComponent id="container" visible="false" width="113" height="113" x="0" y="0"/>
+	<s:Image id="failed" source="{failedImgCls}" visible="false" width="113" height="113" x="0" y="0"/>
+	<s:Image id="passed" source="{passedImgCls}" visible="false" width="113" height="113" x="0" y="0"/>
+	<s:Image id="passResult" source="{passResultImgCls}" visible="false" width="113" height="113" x="0" y="0"/>
+	<s:Label id="result" visible="false" color="white" fontSize="16" x="32" y="32"/>
+</s:Panel>

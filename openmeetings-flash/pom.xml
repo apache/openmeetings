@@ -25,39 +25,87 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>openmeetings-flash</artifactId>
-	<packaging>jar</packaging>
+	<packaging>swf</packaging>
 	<name>Openmeetings Flash</name>
 	<description>Module for OpenMeetings OpenLaszlo/Flex client</description>
 	<properties>
-		<openlaszlo>${project.build.directory}</openlaszlo>
-		<out.dir.swf>${project.build.directory}</out.dir.swf>
-		<webcontent.base.dir>${project.basedir}/src/main</webcontent.base.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
+		<flex.sdk.version>4.16.0</flex.sdk.version>
 	</properties>
+	<repositories>
+		<repository>
+			<id>jpresso</id>
+			<url>http://repository.jspresso.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jpresso</id>
+			<url>http://repository.jspresso.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.flex</groupId>
+			<artifactId>framework</artifactId>
+			<version>${flex.sdk.version}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.adobe.flash.framework</groupId>
+			<artifactId>playerglobal</artifactId>
+			<version>23.0</version>
+			<type>swc</type>
+		</dependency>
+	</dependencies>
 	<build>
-		<!-- sourceDirectory>src/main/flex</sourceDirectory-->
+		<sourceDirectory>src/main/flex</sourceDirectory>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
+				<groupId>net.flexmojos.oss</groupId>
+				<artifactId>flexmojos-maven-plugin</artifactId>
+				<version>7.1.1</version>
+				<extensions>true</extensions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.flex</groupId>
+						<artifactId>compiler</artifactId>
+						<version>${flex.sdk.version}</version>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
 				<executions>
 					<execution>
-						<id>unpack</id>
-						<phase>initialize</phase>
+						<id>main-compile</id>
+						<phase>generate-sources</phase>
 						<goals>
-							<goal>unpack</goal>
+							<goal>compile-swf</goal>
 						</goals>
 						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.openlaszlo</groupId>
-									<artifactId>openlaszlo</artifactId>
-									<version>4.9.8</version>
-									<type>tgz</type>
-									<outputDirectory>${openlaszlo}</outputDirectory>
-								</artifactItem>
-							</artifactItems>
+							<sourceFile>main.mxml</sourceFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>nettest-compile</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>compile-swf</goal>
+						</goals>
+						<configuration>
+							<sourceFile>nettest.mxml</sourceFile>
 						</configuration>
 					</execution>
 				</executions>
@@ -66,11 +114,28 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>compile</phase>
+						<id>main-move</id>
+						<phase>process-sources</phase>
 						<configuration>
-							<exportAntProperties>true</exportAntProperties>
 							<target>
-								<ant antfile="${basedir}/openlaszlo.xml" target="client.only"/>
+								<move verbose="true" force="true" overwrite="true"
+									file="${project.build.directory}/${project.build.finalName}.${project.packaging}"
+									tofile="${project.build.directory}/main.swf"/>
+							</target>
+							<skip>${om.quick.build}</skip>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>nettest-move</id>
+						<phase>process-resources</phase>
+						<configuration>
+							<target>
+								<move verbose="true" force="true" overwrite="true"
+									file="${project.build.directory}/${project.build.finalName}.${project.packaging}"
+									tofile="${project.build.directory}/networktest.swf"/>
 							</target>
 							<skip>${om.quick.build}</skip>
 						</configuration>

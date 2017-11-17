@@ -1,41 +1,17 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
-var labels, config;
-function initSwf(_options) {
-	const options = $.extend({
-		allowfullscreen : 'true',
-		bgcolor : '#ffffff',
-		width : '100%',
-		height : '100%',
-		id : 'lzapp',
-		__lzminimumversion : 8
-	}, _options);
-	$('div[id="contents"], div[id="contents"] > div').css('height', '100%');
-	const embed = $('<embed>')
-		.attr('quality', 'high')
-		.attr('bgcolor', options.bgcolor)
-		.attr('src', "public/" + options.src)
-		.attr('wmode', options.wmode)
-		.attr('allowfullscreen', true)
-		.attr('width', options.width).attr('height', options.height)
-		.attr('id', 'lzapp')
-		.attr('name', 'lzapp')
-		//.attr('flashvars', $.param(options))
-		.attr('swliveconnect', true)
-		.attr('align', 'middle')
-		.attr('allowscriptaccess', 'sameDomain')
-		.attr('type', 'application/x-shockwave-flash')
-		.attr('pluginspage', 'http://www.macromedia.com/go/getflashplayer');
-	$('#swfloading').after($('<div id="lzappContainer">').append(embed)).width('1px').height('1px');
-}
-function loadingComplete() {
-	document.getElementById("swfloading").style.display = 'none';
-	const lzApp = document.getElementById("lzappContainer");
-	lzApp.style.width = '100%';
-	lzApp.style.height = '100%';
+var labels;
+function initSwf(el, swf, id, options) {
+	const type = 'application/x-shockwave-flash'
+		, src = 'public/' + swf + '?cache' + new Date().getTime()
+		, o = $('<object>').attr('id', id).attr('type', type).attr('data', src).attr('width', options.width).attr('height', options.height);
+	o.append($('<param>').attr('name', 'quality').attr('value', 'best'))
+		.append($('<param>').attr('name', 'wmode').attr('value', options.wmode))
+		.append($('<param>').attr('name', 'allowscriptaccess').attr('value', 'sameDomain'))
+		.append($('<param>').attr('name', 'allowfullscreen').attr('value', 'false'))
+		.append($('<param>').attr('name', 'flashvars').attr('value', $.param(options)));
+	el.append(o);
+	return o;
 }
 function getStringLabels() {
 	return labels;
-}
-function getConfig() {
-	return config;
 }

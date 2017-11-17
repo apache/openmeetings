@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<nettest:NetworkTest
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:nettest="org.apache.openmeetings.nettest.*">
+	<fx:Script><![CDATA[
+		private var hostUrl:String;
+		private var request:URLRequest;
+		protected var testTypeParameter:String;
+		protected var loader:URLLoader;
+		private var loaderInited:Boolean = false;
+		protected var verbose:Boolean = false;
+		protected var finishedTestsCount:int;
+		protected var successfulTestsCount:int;
+		protected var wholeTime:int;
+		protected var maxTime:int;
+		protected var minTime:int;
+		protected var startTime:int;
+		protected var testsCount:int;
+
+		private function initLoader():void {
+			hostUrl = getBaseUrl() + "services/networktest?type=" + testTypeParameter;
+			request = new URLRequest(hostUrl);
+
+			loader = new URLLoader();
+			loader.addEventListener(Event.COMPLETE, onComplete);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+
+			loaderInited = true;
+		}
+
+		private function onComplete(event:Event):void {
+			var endTime:int = getTimer();
+			var pingTime:int = endTime - startTime;
+			wholeTime += pingTime;
+			if (pingTime > maxTime) {
+				maxTime = pingTime;
+			}
+			if (pingTime < minTime) {
+				minTime = pingTime;
+			}
+
+			if (verbose) {
+				log(lbl('ping.load') + " = " + pingTime + " " + lbl('ms'));
+			}
+
+			finishedTestsCount++;
+			successfulTestsCount++;
+			if (finishedTestsCount < testsCount && running) {
+				startTime = getTimer();
+				loader.load(request);
+			} else {
+				report();
+			}
+		}
+
+		private function onError(e:ErrorEvent):void {
+			if (verbose) {
+				this.log("Error - " + e);
+			}
+
+			finishedTestsCount++;
+			if (finishedTestsCount < testsCount && running) {
+				startTime = getTimer();
+				loader.load(request);
+			} else {
+				report();
+			}
+		}
+
+		override protected function start():void {
+			if (!loaderInited) {
+				this.initLoader();
+			}
+			finishedTestsCount = 0;
+			successfulTestsCount = 0;
+			wholeTime = 0;
+			maxTime = 0;
+			minTime = 999999;
+
+			this.log(lbl('report.start') + " " + hostUrl);
+			startTime = getTimer();
+			loader.load(request);
+		}
+
+		override protected function forcedStop():void {
+			loader.close();
+			this.log("stopped");
+		}
+
+		protected function generateReport():String {
+			return "";
+		}
+
+		private function report():void {
+			var report:String = lbl('report') + ":";
+			if (successfulTestsCount > 0) {
+				report += "\n" + generateReport();
+			} else {
+				report += " " + lbl('report.con.err');
+			}
+			log(report);
+
+			if (successfulTestsCount > 0) {
+				setPassed();
+			} else {
+				setFailed();
+			}
+		}
+	]]></fx:Script>
+</nettest:NetworkTest>

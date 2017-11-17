@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<nettest:BaseURLLoadTest
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:nettest="org.apache.openmeetings.nettest.*">
+	<fx:Script><![CDATA[
+		override protected function init():void {
+			super.init();
+			testsCount = 1;
+			title = lbl('dwn');
+			testTypeParameter = "download";
+			verbose = false;
+			resultText = true;
+		}
+
+		override protected function generateReport():String {
+			var mBytes:Number = loader.bytesTotal / (1024 * 1024);
+			var timeSec:Number = wholeTime / 1000;
+			var speed:Number = mBytes / timeSec;
+
+			var report:String = lbl('dwn.bytes') + ": " + mBytes + " " + lbl('mb') + "\n";
+			report += lbl('dwn.time') + ": " + timeSec + " " + lbl('sec') + "\n";
+			report += lbl('dwn.speed') + ": " + speed + " " + lbl('mb') + "/" + lbl('sec') + "\n";
+
+			result.text = formatNumber(speed) + "\n" + lbl('mb') + "/" + lbl('sec');
+
+			return report;
+		}
+	]]></fx:Script>
+</nettest:BaseURLLoadTest>
