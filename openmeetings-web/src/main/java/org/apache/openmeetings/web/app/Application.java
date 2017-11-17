@@ -889,7 +889,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		hazelWsTopic.publish(msg);
 	}
 
-	private String getWsUrl(Url reqUrl) {
+	private static String getWsUrl(Url reqUrl) {
 		final boolean insecure = "http".equalsIgnoreCase(reqUrl.getProtocol());
 		String delim = ":";
 		String port = reqUrl.getPort() == null || reqUrl.getPort() < 0 ? "" : String.valueOf(reqUrl.getPort());
