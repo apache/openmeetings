@@ -124,7 +124,7 @@ public class SwfPanel extends BasePanel {
 						.put("flashPort", gs.getBoolean(FLASH_SECURE) ? gs.getString(FLASH_SSL_PORT) : gs.getString(FLASH_PORT))
 						.put("proxy", gs.getBoolean(FLASH_NATIVE_SSL) ? "best" : "none")
 						.put("httpProtocol", url.getProtocol())
-						.put("httpPort", url.getPort())
+						.put("httpPort", url.getPort() > -1 ? url.getPort() : url.getDefaultPort())
 						.put("host", url.getHost())
 						.put("path", path)
 						.put("width", "100%")
