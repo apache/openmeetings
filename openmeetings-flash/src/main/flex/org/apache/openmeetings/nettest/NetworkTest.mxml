@@ -71,6 +71,11 @@
 		protected function forcedStop():void {
 		}
 
+		public function startAllTestsMode(): void {
+			allTests = true;
+			setRunning();
+		}
+
 		private function hideAll():void {
 			notRun.visible = false;
 			container.visible = false;
@@ -133,7 +138,7 @@
 		protected function handleAllTestsMode():void {
 			if (allTests) {
 				var app:nettest = parentApplication as nettest;
-				//canvas.testsView.testAll();
+				app.testAll();
 			}
 		}
 

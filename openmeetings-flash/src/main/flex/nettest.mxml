@@ -23,7 +23,7 @@
 		xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:nettest="org.apache.openmeetings.nettest.*"
 		name="nettest"
 		width="570" height="900" pageTitle="OpenMeetings" fontSize="12" focusEnabled="true"
-		initialize="appInit(event)" uncaughtError="uncaughtError(event)">
+		initialize="appInit(event)" uncaughtError="uncaughtError(event)" applicationComplete="appComplete()">
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 		<mx:TraceTarget/>
@@ -33,9 +33,12 @@
 		import flash.desktop.Clipboard;
 		import flash.desktop.ClipboardFormats;
 
+		import org.apache.openmeetings.nettest.NetworkTest;
+
 		public var params:Object = {};
 		private var logStr:String = "";
 		public var busy:Boolean = false;
+		private var currentTestNumber:int = 0;
 
 		[Embed(source="assets/edit-copy.png")]
 		[Bindable]
@@ -56,6 +59,37 @@
 			for (var i:int = 0; i < lbls.length; ++i) {
 				labels[lbls[i].id] = lbls[i].value;
 			}
+			runLbl.text = lbl('click.play');
+			copyLog.addEventListener(MouseEvent.CLICK, function clickHandler(evt:MouseEvent):void {
+				Clipboard.generalClipboard.clear();
+				Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, logStr);
+			});
+		}
+
+		private function appComplete():void {
+			testAll();
+		}
+
+		public function testAll():void {
+			var nextTest:NetworkTest;
+			if (0 == currentTestNumber) {
+				nextTest = pingTest;
+			} else if (1 == currentTestNumber) {
+				nextTest = portTest;
+			} else if (2 == currentTestNumber) {
+				nextTest = jitterTest;
+			} else if (3 == currentTestNumber) {
+				nextTest = downTest;
+			} else if (4 == currentTestNumber) {
+				nextTest = upTest;
+			} else if (5 == currentTestNumber) {
+				nextTest = null;
+			}
+
+			if (null != nextTest) {
+				currentTestNumber++;
+				nextTest.startAllTestsMode();
+			}
 		}
 
 		private function uncaughtError(e:UncaughtErrorEvent):void {
@@ -73,10 +107,17 @@
 		}
 	]]></fx:Script>
 
-	<s:HGroup id="tests" paddingBottom="15">
-		<nettest:PingTest id="pingTest"/>
-		<nettest:PortAvailabilityTest id="portTest"/>
-		<nettest:JitterTest id="jitterTest"/>
-		<nettest:DownloadSpeedTest id="speedTest"/>
-	</s:HGroup>
+	<s:VGroup paddingTop="20">
+		<s:Group>
+			<s:Label id="runLbl" x="10"/>
+			<s:Image id="copyLog" source="{copyImgCls}" visible="true" width="16" height="16" x="550"/>
+		</s:Group>
+		<s:HGroup id="tests" paddingBottom="15" paddingTop="10">
+			<nettest:PingTest id="pingTest"/>
+			<nettest:PortAvailabilityTest id="portTest"/>
+			<nettest:JitterTest id="jitterTest"/>
+			<nettest:DownloadSpeedTest id="downTest"/>
+			<nettest:UploadSpeedTest id="upTest"/>
+		</s:HGroup>
+	</s:VGroup>
 </s:Application>
