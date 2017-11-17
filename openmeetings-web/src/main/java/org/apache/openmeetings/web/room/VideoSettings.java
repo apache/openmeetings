@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.room.SwfPanel.FLASH_JS_REFERENCE;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
@@ -64,6 +65,7 @@ public class VideoSettings extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(FLASH_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(SETTINGS_JS_REFERENCE)));
 	}
 

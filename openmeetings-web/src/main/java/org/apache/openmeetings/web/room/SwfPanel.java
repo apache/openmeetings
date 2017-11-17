@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
 
@@ -38,7 +37,6 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
@@ -52,6 +50,7 @@ import com.github.openjson.JSONObject;
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, getWebAppRootKey());
+	public static final ResourceReference FLASH_JS_REFERENCE = new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";
 	public static final String SWF_TYPE_SETTINGS = "settings";
@@ -115,9 +114,6 @@ public class SwfPanel extends BasePanel {
 						, "network.test.upl.speed"
 						);
 			}
-			JSONObject options = new JSONObject().put("src", swf + new PageParametersEncoder().encodePageParameters(pp));
-			options.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
-
 			JSONObject s = new JSONObject();
 			try {
 				URL url = new URL(cp.getCodebase());
@@ -130,23 +126,21 @@ public class SwfPanel extends BasePanel {
 						.put("httpProtocol", url.getProtocol())
 						.put("httpPort", url.getPort())
 						.put("host", url.getHost())
-						.put("path", path);
+						.put("path", path)
+						.put("width", "100%")
+						.put("height", "100%")
+						.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
 			} catch (Exception e) {
 				log.error("Error while constructing video settings parameters", e);
 			}
-			initStr = String.format("labels = %s; config = %s; initSwf(%s);", lbls, s, options.toString());
+			initStr = String.format("labels = %s; initSwf(%s, '%s', '%s', %s);"
+					, lbls, "$('.hash-panel-main')", swf, "nettest", s.toString());
 		}
 		return initStr;
 	}
 
 	private String getFlashFile(StringValue type) {
-		String fmt;
-		if (SWF_TYPE_NETWORK.equals(type.toString())) {
-			fmt = "networktesting%s.swf10.swf";
-		} else {
-			return "";
-		}
-		return String.format(fmt, DEVELOPMENT == getApplication().getConfigurationType() ? "debug" : "");
+		return SWF_TYPE_NETWORK.equals(type.toString()) ? "networktest.swf" : "";
 	}
 
 	public static String getStringLabels(String... ids) {

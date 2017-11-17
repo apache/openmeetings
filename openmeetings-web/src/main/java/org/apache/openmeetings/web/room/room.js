@@ -342,7 +342,7 @@ var Video = (function() {
 		o.broadcastId = c.broadcastId;
 		o.type = c.type;
 		delete o.keycode;
-		swf = initVideo(vc, _id + '-swf', o);
+		swf = initSwf(vc, 'main.swf', _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
 		v.dialog("widget").css(_pos);
 	}

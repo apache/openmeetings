@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<nettest:NetworkTest
+		xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:nettest="org.apache.openmeetings.nettest.*">
+	<fx:Script><![CDATA[
+		import mx.core.FlexGlobals;
+
+		private var nc:NetConnection;
+
+		override protected function init():void {
+			super.init();
+			title = lbl('port');
+		}
+
+		override protected function start():void {
+			var app:nettest = parentApplication as nettest;
+			var url:String = app.params.flashProtocol + "://" + app.params.host + ":" + app.params.flashPort + "/" + app.params.path + "hibernate";
+			nc = new NetConnection();
+			nc.addEventListener(NetStatusEvent.NET_STATUS, function onConnectionStatus(e:NetStatusEvent):void {
+				switch (e.info.code) {
+					case 'NetConnection.Connect.Failed':
+						setFailed();
+						break;
+					case 'NetConnection.Connect.Success':
+						if (running) {
+							log(lbl('port.avail') + "\n");
+							setPassed();
+							disconnect();
+						}
+						break;
+				}
+				debug(": RTMP connect status - " + e.info.code);
+			});
+			nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, function (event:AsyncErrorEvent):void {
+				if (running) {
+					log(lbl('report.con.err') + " - " + event + "\n");
+					setFailed();
+				}
+			});
+			nc.client = {
+				onMetaData: function (infoObject:Object):void {
+				}
+				, onBWDone: function (...rest):void {
+				}
+				, onBWCheck: function (...rest):Number {
+					return 0;
+				}
+			};
+			this.log(": " + lbl('report.start') + " " + url);
+			nc.connect(url, {
+				sid: "noclient"
+				, roomClient: true
+				, nativeSsl: 'best' === app.params.proxy
+			});
+		}
+
+		private function disconnect():void {
+			nc.close();
+		}
+	]]></fx:Script>
+</nettest:NetworkTest>
