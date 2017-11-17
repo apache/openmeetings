@@ -1276,6 +1276,20 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>net.flexmojos.oss</groupId>
+										<artifactId>flexmojos-maven-plugin</artifactId>
+										<versionRange>[7.0.0,)</versionRange>
+										<goals>
+											<goal>compile-swf</goal>
+											<goal>test-compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
