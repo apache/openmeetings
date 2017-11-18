@@ -1109,7 +1109,6 @@ public class BackupImport {
 		}
 	}
 
-	//TODO (need to be removed in later versions) HACK to fix old properties
 	public List<FileItem> readFileItemList(File baseDir, String fileName, String listNodeName) throws Exception {
 		List<FileItem> list = new ArrayList<>();
 		File xml = new File(baseDir, fileName);
