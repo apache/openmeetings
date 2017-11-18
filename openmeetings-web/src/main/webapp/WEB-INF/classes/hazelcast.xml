@@ -24,6 +24,13 @@
 		xsi:schemaLocation="http://www.hazelcast.com/schema/config https://hazelcast.com/schema/config/hazelcast-config-3.8.xsd"
 	>
 	<instance-name>server-1</instance-name><!-- MAKE SURE THIS ONE IS UNIQUE -->
+	<network>
+		<join>
+			<multicast enabled="false"/>
+			<tcp-ip enabled="false"/>
+			<aws enabled="false"/>
+		</join>
+	</network>
 	<!--network>
 		<interfaces enabled="true">
 			<interface>192.168.1.*</interface>
