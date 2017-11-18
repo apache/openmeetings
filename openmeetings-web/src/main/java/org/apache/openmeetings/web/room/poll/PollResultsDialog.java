@@ -93,7 +93,6 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
 					Long id = dispForm.getModelObject().getId();
 					getBean(PollDao.class).close(roomId);
@@ -111,7 +110,6 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-				// TODO should rights be additionally checked here????
 				if(button != null && button.match(YES)) {
 					getBean(PollDao.class).delete(dispForm.getModelObject());
 					selForm.updateModel(handler);

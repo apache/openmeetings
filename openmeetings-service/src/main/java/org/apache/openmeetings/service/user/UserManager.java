@@ -137,8 +137,6 @@ public class UserManager implements IUserManager {
 				} else {
 					sendConfirmation = _sendConfirmation.booleanValue();
 				}
-				// TODO: Read and generate SIP-Data via RPC-Interface Issue 1098
-
 				Object user = registerUserInit(UserDao.getDefaultRights(), login,
 						userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, country, town, languageId,
@@ -200,7 +198,6 @@ public class UserManager implements IUserManager {
 			TimeZone timezone, Boolean forceTimeZoneCheck,
 			String userOffers, String userSearchs, Boolean showContactData,
 			Boolean showContactDataToContacts, String activatedHash) throws OmException, NoSuchAlgorithmException {
-		// TODO: make phone number persistent
 		// Check for required data
 		if (login.length() >= getMinLoginLength(cfgDao)) {
 			// Check for duplicates

@@ -156,7 +156,7 @@ public class FileWebService extends BaseWebService {
 				throw new ServiceException("Bad id");
 			}
 			f.setInsertedBy(sd.getUserId());
-			if (stream != null) { //TODO permissions
+			if (stream != null) {
 				try {
 					ProcessResultList result = getBean(FileProcessor.class).processFile(f, stream);
 					if (result.hasError()) {

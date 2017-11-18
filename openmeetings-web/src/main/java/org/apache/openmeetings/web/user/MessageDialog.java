@@ -55,6 +55,7 @@ import org.apache.openmeetings.util.CalendarHelper;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
+import org.apache.openmeetings.web.user.calendar.AppointmentDialog;
 import org.apache.openmeetings.web.util.CalendarWebHelper;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
 import org.apache.openmeetings.web.util.UserMultiChoice;
@@ -123,7 +124,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 
 	public MessageDialog reset(boolean isPrivate) {
-		//TODO should be 'in sync' with appointment
 		LocalDateTime now = ZonedDateTime.now(getZoneId()).toLocalDateTime();
 		start.setModelObject(now);
 		end.setModelObject(now.plus(1, ChronoUnit.HOURS));
@@ -133,10 +133,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		p.setOwner(p.getFrom());
 		p.setIsRead(false);
 		p.setFolderId(INBOX_FOLDER_ID);
-		Room r = new Room();
-		r.setAppointment(true);
-		r.setType(Room.Type.conference);
-		p.setRoom(r);
+		p.setRoom(AppointmentDialog.createAppRoom());
 		setModelObject(p);
 		roomParams.setVisible(getModelObject().isBookedRoom());
 		form.setModelObject(p);

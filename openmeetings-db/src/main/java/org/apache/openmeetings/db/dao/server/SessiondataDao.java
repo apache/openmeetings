@@ -131,7 +131,7 @@ public class SessiondataDao {
 
 	/**
 	 *
-	 * @param date
+	 * @param refreshed
 	 * @return
 	 */
 	private List<Sessiondata> getSessionToDelete(Date refreshed) {
@@ -147,7 +147,7 @@ public class SessiondataDao {
 
 	/**
 	 *
-	 *
+	 * @param timeout
 	 */
 	public void clearSessionTable(long timeout) {
 		try {
@@ -173,7 +173,6 @@ public class SessiondataDao {
 			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
 				String aux = rcl.getSwfurl();
 
-				//TODO this need to be refactored !
 				int start = aux.indexOf("sid=") + 4;
 				int end = start + 32;
 				if (end > aux.length()) {

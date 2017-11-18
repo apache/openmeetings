@@ -70,7 +70,7 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		try {
 			LabelDao.update(panel.language.getValue(), getModelObject());
 		} catch (Exception e) {
-			error("Unexpected error while saving label:" + e.getMessage()); //TODO localize
+			error("Unexpected error while saving label:" + e.getMessage());
 		}
 		hideNewRecord();
 		target.add(panel.listContainer);
@@ -82,7 +82,7 @@ public class LabelsForm extends AdminBaseForm<StringLabel> {
 		try {
 			LabelDao.delete(panel.language.getValue(), getModelObject());
 		} catch (Exception e) {
-			error("Unexpected error while deleting label:" + e.getMessage()); //TODO localize
+			error("Unexpected error while deleting label:" + e.getMessage());
 		}
 		target.add(panel.listContainer);
 		target.appendJavaScript("adminPanelInit();");

@@ -56,7 +56,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  */
 public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
-	private static final List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);  //TODO max vote should be added
+	private static final List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 	private final PollAnswerForm form;
 	private final DialogButton vote = new DialogButton("vote", Application.getString("32"));
 	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));

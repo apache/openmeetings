@@ -450,8 +450,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 
 		public ParamsStep2() {
 			super(paramsStep1);
-			//TODO localize
-			//TODO validation
 			add(new CheckBox("allowFrontendRegister"));
 			add(new CheckBox("sendEmailAtRegister"));
 			add(new CheckBox("sendEmailWithVerficationCode"));
@@ -462,7 +460,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			add(new TextField<String>("mailAuthName"));
 			add(new PasswordTextField("mailAuthPass").setResetPassword(false).setRequired(false));
 			add(new CheckBox("mailUseTls"));
-			//TODO check mail server
 			add(new CheckBox("replyToOrganizer"));
 			add(new LangDropDown("defaultLangId"));
 		}
@@ -610,7 +607,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			super(paramsStep3);
 			add(new RequiredTextField<String>("cryptClassName")); //Validate class
 
-			//TODO add check for red5sip connection
 			add(new CheckBox("sipEnable"));
 			add(new TextField<String>("sipRoomPrefix"));
 			add(new TextField<String>("sipExtenContext"));
@@ -671,7 +667,6 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 					} else {
 						progressBar.setModelObject(Application.get()._getBean(ImportInitvalues.class).getProgress());
 						progressBar.refresh(target);
-						//TODO add current step result as info
 					}
 				}
 			});

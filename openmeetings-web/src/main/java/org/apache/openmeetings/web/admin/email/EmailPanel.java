@@ -53,7 +53,6 @@ public class EmailPanel extends AdminBasePanel {
 				item.add(new Label("id"));
 				item.add(new Label("status", getString("admin.email.status." + m.getStatus().name())));
 				item.add(new Label("subject"));
-				//TODO color for Error
 				item.add(new AjaxEventBehavior("click") {
 					private static final long serialVersionUID = 1L;
 

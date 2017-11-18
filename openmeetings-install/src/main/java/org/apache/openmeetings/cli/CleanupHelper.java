@@ -79,16 +79,15 @@ public class CleanupHelper {
 		List<File> deleted = new ArrayList<>();
 		int missing = 0;
 		for (File f : list(parent, null)) {
-			FileItem item = fileDao.getByHash(f.getName()); // TODO probable extension should be stripped
+			FileItem item = fileDao.getByHash(f.getName());
 			if (item == null) {
 				invalid.add(f);
 			} else if (item.isDeleted()) {
 				deleted.add(f);
 			}
 		}
-		//TODO WML_DIR should also be checked
 		for (FileItem item : fileDao.get()) {
-			if (!item.isDeleted() && item.getHash() != null && !new File(parent, item.getHash()).exists()) {
+			if (!item.isDeleted() && !item.exists()) {
 				missing++;
 			}
 		}

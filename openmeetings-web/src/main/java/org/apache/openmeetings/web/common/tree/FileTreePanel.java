@@ -305,7 +305,6 @@ public abstract class FileTreePanel extends Panel {
 		f.setOwnerId(p.getOwnerId());
 		f.setGroupId(p.getGroupId());
 		f.setRoomId(p.getRoomId());
-		//TODO lastSelected.parent??
 		f.setParentId(Type.Folder == p.getType() ? p.getId() : null);
 		if (isRecording) {
 			getBean(RecordingDao.class).update((Recording)f);

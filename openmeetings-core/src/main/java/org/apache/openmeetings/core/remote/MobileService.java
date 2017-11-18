@@ -168,7 +168,6 @@ public class MobileService {
 				String country = umap.get("stateId");
 				Long langId = Long.valueOf(umap.get("langId"));
 
-				//TODO unify with Register dialog
 				String hash = UUID.randomUUID().toString();
 
 				String baseURL = getBaseUrl();
@@ -273,7 +272,6 @@ public class MobileService {
 			if (conn != null && conn instanceof IServiceCapableConnection) {
 				StreamClient c = sessionManager.get(IClientUtil.getId(conn.getClient()));
 				if (!Strings.isEmpty(c.getAvsettings()) && Client.Type.sharing != c.getType()) {
-					//TODO duplicates !!!!!!!!!!!!!!
 					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getId());
 					add(map, "broadCastId", c.getBroadcastId());

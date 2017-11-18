@@ -188,7 +188,6 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	public List<Room> getAppointedRoomsByUser(long userId) {
-		//TODO generalize with AppointmentDao
 		log.debug("getAppointedRoomsByUser : UserID - " + userId);
 
 		TimeZone timeZone = timezoneUtil.getTimeZone(userDao.get(userId));

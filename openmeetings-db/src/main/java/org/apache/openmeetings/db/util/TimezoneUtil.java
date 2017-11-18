@@ -40,26 +40,19 @@ public class TimezoneUtil {
 	private ConfigurationDao cfgDao;
 
 	/**
-	 * Parameters: ID - the ID for a TimeZone, either an abbreviation such as "PST", a full name such as
-	 * "America/Los_Angeles", or a custom ID such as "GMT-8:00". Note that the support of abbreviations is for JDK 1.1.x
-	 * compatibility only and full names should be used.
-	 *
-	 * Returns: the specified TimeZone, or the GMT zone if the given ID cannot be understood. <br/>
-	 * <br/>
-	 * TODO: Fall-back mechanism and maybe a log output if the given timeZoneId is not found in the list of available
-	 * TimeZones of the current java.util.TimeZone package of the Java SDK the the user is running <br/>
 	 *
 	 * @param timeZoneId
-	 * @return
+	 *            the ID for a TimeZone, either an abbreviation such as "PST", a
+	 *            full name such as "America/Los_Angeles", or a custom ID such as
+	 *            "GMT-8:00". Note that the support of abbreviations is for JDK
+	 *            1.1.x compatibility only and full names should be used.
+	 * @return the specified TimeZone, or the GMT zone if the given ID cannot be
+	 *         understood.
 	 */
-
 	public TimeZone getTimeZone(String timeZoneId) {
 		if (Strings.isEmpty(timeZoneId)) {
 			return getDefaultTimeZone();
 		}
-
-		// see TODO in comments
-
 		return TimeZone.getTimeZone(timeZoneId);
 	}
 

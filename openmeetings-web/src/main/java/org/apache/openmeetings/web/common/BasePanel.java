@@ -48,7 +48,7 @@ public abstract class BasePanel extends Panel {
 		return findParent(MainPanel.class);
 	}
 
-	protected boolean isRtl() { //TODO unify, remove copy/paste
+	protected boolean isRtl() {
 		return FormatHelper.isRtlLanguage(WebSession.get().getLocale().toLanguageTag());
 	}
 

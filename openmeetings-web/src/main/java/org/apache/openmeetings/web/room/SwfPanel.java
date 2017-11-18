@@ -139,7 +139,7 @@ public class SwfPanel extends BasePanel {
 		return initStr;
 	}
 
-	private String getFlashFile(StringValue type) {
+	private static String getFlashFile(StringValue type) {
 		return SWF_TYPE_NETWORK.equals(type.toString()) ? "networktest.swf" : "";
 	}
 

@@ -241,7 +241,6 @@ public class FileItemDao extends BaseFileItemDao {
 						}
 						break;
 					default:
-						// TODO check other types
 						break;
 				}
 			}

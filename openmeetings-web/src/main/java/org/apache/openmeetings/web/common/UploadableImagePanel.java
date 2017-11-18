@@ -69,11 +69,8 @@ public abstract class UploadableImagePanel extends ImagePanel {
 						StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
 						if (sf.isImage()) {
 							processImage(sf, temp);
-						} else {
-							//TODO display error
 						}
 					} catch (Exception e) {
-						// TODO display error
 						log.error("Error", e);
 					} finally {
 						if (temp != null && temp.exists()) {

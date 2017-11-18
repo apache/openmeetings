@@ -113,7 +113,6 @@ public class ImageConverter extends BaseConverter {
 		us.setPictureuri(pictureuri);
 		userDao.update(us, userId);
 
-		//TODO: After uploading a new picture all other clients should refresh
 		return returnMap;
 	}
 

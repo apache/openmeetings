@@ -124,8 +124,7 @@ public class SyncMethod extends DavMethodBase {
 	}
 
 	/**
-	 * Overridden to process the sync-token. Adapted from DavMethodBase. TODO:
-	 * Fix this override.
+	 * Overridden to process the sync-token. Adapted from DavMethodBase.
 	 *
 	 * @see DavMethodBase#processResponseBody(HttpState, HttpConnection)
 	 */

@@ -124,7 +124,6 @@ public class CleanupJob extends AbstractJob {
 				}
 				if (roomId != null && sessionManager.listByRoom(roomId).isEmpty()) {
 					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
-					//TODO need to rework this and remove hardcodings
 					if (files != null && files.length > 0) {
 						log.debug("Room files are too old and no users in the room: " + roomId);
 						FileUtils.deleteDirectory(folder);
@@ -142,7 +141,6 @@ public class CleanupJob extends AbstractJob {
 			return;
 		}
 		try {
-			// TODO Generate report
 			sessionDao.clearSessionTable(sessionTimeout);
 		} catch (Exception err){
 			log.error("execute",err);

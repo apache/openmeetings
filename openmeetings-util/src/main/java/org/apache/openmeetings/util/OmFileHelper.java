@@ -257,7 +257,6 @@ public class OmFileHelper {
 		return new File(parent, name + suffix + ext);
 	}
 
-	// TODO need to be generalized
 	public static File getNewFile(File dir, String name, String ext) throws IOException {
 		File f = new File(dir, getName(name, ext));
 		int recursiveNumber = 0;

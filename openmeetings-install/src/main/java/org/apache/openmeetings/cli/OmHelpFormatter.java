@@ -60,7 +60,6 @@ public class OmHelpFormatter extends HelpFormatter {
 		}
 		for (Option _o : opts.getOptions()) {
 			OmOption o = (OmOption)_o;
-			//TODO need better check (required option should go first and should not be duplicated
 			boolean skipOption = map.containsKey(o.getOpt());
 			boolean mainOption = skipOption || o.getGroup() == null;
 
@@ -99,7 +98,6 @@ public class OmHelpFormatter extends HelpFormatter {
 			maxPrefixLength = Math.max(optBuf.length(), maxPrefixLength);
 
 			if (skipOption) {
-				//TODO need better check (required option should go first and should not be duplicated
 				continue;
 			}
 			String grp = o.getGroup();

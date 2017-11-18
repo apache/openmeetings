@@ -301,7 +301,6 @@ public class RoomMenuPanel extends Panel {
 		actionsMenu.getItems().add(downloadPngMenuItem);
 		actionsMenu.getItems().add(downloadJpgMenuItem);
 		actionsMenu.getItems().add(downloadPdfMenuItem);
-		//TODO add local cache editor
 		menu.add(actionsMenu);
 		return menu;
 	}
@@ -324,7 +323,6 @@ public class RoomMenuPanel extends Panel {
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
 		actionsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
 		inviteMenuItem.setEnabled(notExternalUser && moder);
-		//TODO add check "sharing started"
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
 		applyModerMenuItem.setEnabled(!moder);
@@ -334,7 +332,6 @@ public class RoomMenuPanel extends Panel {
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
 		sipDialerMenuItem.setEnabled(r.isSipEnabled() && isSipEnabled());
-		//TODO sip menus
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
@@ -343,7 +340,6 @@ public class RoomMenuPanel extends Panel {
 			if (recClient != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
 						, recClient.getUser().getLogin(), recClient.getUser().getFirstname(), recClient.getUser().getLastname(), df.format(recClient.getConnectedSince())));
-				//TODO get ConnectedSince of StreamClient
 				roomClass.append(" screen");
 			}
 			Client pubClient = getClientBySid(room.getPublishingUser());
@@ -352,7 +348,7 @@ public class RoomMenuPanel extends Panel {
 					roomTitle.append('\n');
 				}
 				roomTitle.append(String.format("%s %s %s %s %s", getString("1504")
-						, pubClient.getUser().getLogin(), pubClient.getUser().getFirstname(), pubClient.getUser().getLastname(), "URL")); //TODO add URL
+						, pubClient.getUser().getLogin(), pubClient.getUser().getFirstname(), pubClient.getUser().getLastname(), "URL"));
 				roomClass.append(" screen");
 			}
 		}

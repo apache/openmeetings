@@ -163,7 +163,6 @@ public abstract class InvitationForm extends Form<Invitation> {
 		i.setInvitee(u);
 		i.setHash(UUID.randomUUID().toString());
 		if (Type.contact == u.getType()) {
-			//TODO not sure it is right
 			u.setLanguageId(lang.getModelObject());
 		}
 		return getBean(InvitationDao.class).update(i);
@@ -204,7 +203,6 @@ public abstract class InvitationForm extends Form<Invitation> {
 	}
 
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		//TODO need to be reviewed
 		if (button.equals(dialog.cancel)) {
 			dialog.onSuperClick(target, button);
 		} else if (button.equals(dialog.generate)) {

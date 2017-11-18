@@ -126,7 +126,6 @@ public class UserSearchPanel extends UserBasePanel {
 						.add(addOnClick(String.format("addContact(%s);", userId))));
 				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(addOnClick(String.format("privateMessage(%s);", userId))));
 				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(addOnClick(String.format("inviteUser(%s);", userId))));
-				//TODO:: add Picture tooltip
 			}
 		};
 
@@ -145,7 +144,7 @@ public class UserSearchPanel extends UserBasePanel {
 	}
 
 	private static String getName(User u) {
-		return "" + u.getFirstname() + " " + u.getLastname() + " [" + u.getLogin() + "]"; //TODO salutation
+		return "" + u.getFirstname() + " " + u.getLastname() + " [" + u.getLogin() + "]";
 	}
 
 	@Override

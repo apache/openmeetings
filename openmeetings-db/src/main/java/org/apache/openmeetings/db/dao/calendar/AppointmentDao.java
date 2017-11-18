@@ -166,7 +166,7 @@ public class AppointmentDao {
 		q1.setParameter("end", end);
 		q1.setParameter("userId", userId);
 		for (Appointment a : q1.getResultList()) {
-			a.setConnectedEvent(true); //TODO need to be reviewed
+			a.setConnectedEvent(true);
 			listAppoints.add(a);
 		}
 

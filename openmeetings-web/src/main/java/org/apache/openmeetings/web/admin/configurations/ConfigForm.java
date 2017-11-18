@@ -77,7 +77,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 			@Override
 			public Object getDisplayValue(Type rt) {
-				return rt.name();//TODO localization
+				return rt.name();
 			}
 
 			@Override

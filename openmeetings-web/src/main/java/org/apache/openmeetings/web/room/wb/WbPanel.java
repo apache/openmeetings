@@ -335,7 +335,6 @@ public class WbPanel extends AbstractWbPanel {
 					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
 					WhiteboardCache.update(roomId, wb);
 					sendWbOthers(WbAction.setSize, getAddWbJson(wb));
-					//TODO scroll????
 				}
 					break;
 				default:

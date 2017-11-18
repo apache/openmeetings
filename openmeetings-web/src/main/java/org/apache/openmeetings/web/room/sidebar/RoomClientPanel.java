@@ -106,7 +106,6 @@ public class RoomClientPanel extends Panel {
 			statusTitle = "677";
 		}
 		status = String.format("%s %s", status, ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT);
-		//TODO add ability to change 'first/last name'
 		add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, status), AttributeModifier.replace(ATTR_TITLE, getString(statusTitle))));
 	}
 }
