@@ -58,10 +58,10 @@ public class RestCall {
 		requestor.dataFormat = dataFormat;
 
 		//Initiate the transaction
-		if (this.successCallback != null) {
+		if (this.successCallback !== null) {
 			requestor.addEventListener(Event.COMPLETE, successCallback);
 		}
-		if (this.errorCallback != null) {
+		if (this.errorCallback !== null) {
 			requestor.addEventListener("ioError", errorCallback); //IOErrorEvent.IOERROR
 			requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorCallback);
 		}

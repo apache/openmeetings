@@ -45,9 +45,9 @@ public class UploadPostHelper {
 	 * Must be passed as part of the contentType of the UrlRequest
 	 */
 	public static function getBoundary():String {
-		if (_boundary.length == 0) {
-			for (var i:int = 0; i < 0x20; i++ ) {
-				_boundary += String.fromCharCode( int( 97 + Math.random() * 25 ) );
+		if (_boundary.length === 0) {
+			for (var i:int = 0; i < 0x20; ++i) {
+				_boundary += String.fromCharCode(int(97 + Math.random() * 25));
 			}
 		}
 		return _boundary;
@@ -73,7 +73,7 @@ public class UploadPostHelper {
 		postData.endian = Endian.BIG_ENDIAN;
 
 		//add Filename to parameters
-		if(parameters == null) {
+		if(parameters === null) {
 			parameters = [];
 		}
 
@@ -124,8 +124,8 @@ public class UploadPostHelper {
 		var l:int = UploadPostHelper.getBoundary().length;
 
 		p = DOUBLEDASH(p);
-		for (var i:int = 0; i < l; i++ ) {
-			p.writeByte( _boundary.charCodeAt( i ) );
+		for (var i:int = 0; i < l; ++i) {
+			p.writeByte(_boundary.charCodeAt(i));
 		}
 		return p;
 	}
