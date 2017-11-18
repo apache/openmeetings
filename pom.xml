@@ -564,11 +564,31 @@
 			<releases><enabled>true</enabled></releases>
 			<snapshots><enabled>false</enabled></snapshots>
 		</repository>
+		<repository>
+			<id>jpresso</id>
+			<url>http://repository.jspresso.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>apache-snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>jpresso</id>
+			<url>http://repository.jspresso.org/maven2/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencyManagement>
