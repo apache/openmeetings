@@ -132,7 +132,6 @@ public class FolderPanel extends Panel {
 
 	private static void move(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
 		Long pid = p.getId();
-		//TODO parent should not be moved to child !!!!!!!
 		if (pid != null && pid.equals(f.getId())) {
 			return;
 		}

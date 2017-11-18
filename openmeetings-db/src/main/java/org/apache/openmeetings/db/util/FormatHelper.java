@@ -66,7 +66,6 @@ public class FormatHelper {
 		return formatUser(u, false);
 	}
 
-	// TODO check RIGHTS here (email might need to be hidden)
 	public static String formatUser(User u, boolean isHTMLEscape) {
 		String user = "";
 		if (u != null) {

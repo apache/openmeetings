@@ -127,8 +127,6 @@ public class AppointmentLogic {
 				log.debug("doScheduledMeetingReminder : no members in meeting!");
 				continue;
 			}
-			//TODO should we add reminder for the owner????
-
 			// Iterate through all MeetingMembers
 			for (MeetingMember mm : members) {
 				log.debug("doScheduledMeetingReminder : Member " + mm.getUser().getAddress().getEmail());

@@ -191,7 +191,6 @@ public class WebSocketHelper {
 		sendAll(m, true);
 	}
 
-	//TODO should this be unified???
 	private static void sendAll(final String m, boolean publish) {
 		if (publish) {
 			publish(new WsMessageAll(m));

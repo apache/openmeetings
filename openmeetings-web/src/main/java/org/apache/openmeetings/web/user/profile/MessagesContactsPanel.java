@@ -434,7 +434,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			private String getName(UserContact uc) {
-				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname(); //TODO salutation, UNIFY
+				return uc.getOwner().getFirstname() + " " + uc.getOwner().getLastname();
 			}
 
 			@Override
@@ -483,7 +483,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 			}
 		};
 		updateContacts(null);
-		add(contacts.add(dw, pendingContacts, allContacts).setOutputMarkupId(true));//TODO update
+		add(contacts.add(dw, pendingContacts, allContacts).setOutputMarkupId(true));
 
 		//hack to add FixedHeaderTable after Tabs.
 		add(new AbstractDefaultAjaxBehavior() {
@@ -542,7 +542,6 @@ public class MessagesContactsPanel extends UserBasePanel {
 		if (msg != null) {
 			Room r = msg.getRoom();
 			if (r != null) {
-				//TODO add time check
 				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
 				roomContainer.addOrReplace(new Label("start", a == null ? "" : getDateFormat().format(a.getStart())));
 				roomContainer.addOrReplace(new Label("end", a == null ? "" : getDateFormat().format(a.getEnd())));

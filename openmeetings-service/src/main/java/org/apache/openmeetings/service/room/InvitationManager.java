@@ -137,7 +137,6 @@ public class InvitationManager implements IInvitationManager {
 			// Writing back meetingUid
 			if (Strings.isEmpty(a.getIcalId())) {
 				a.setIcalId(meetingId);
-				// TODO should it be saved ???
 			}
 
 			log.debug(handler.getICalDataAsString());

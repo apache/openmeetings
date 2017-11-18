@@ -65,7 +65,7 @@ public class SipDao {
 	}
 
 	private ManagerConnection getConnection() {
-		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection(); // TODO secure
+		DefaultManagerConnection con = (DefaultManagerConnection)factory.createManagerConnection();
 		con.setDefaultEventTimeout(timeout);
 		con.setDefaultResponseTimeout(timeout);
 		con.setSocketReadTimeout((int)timeout);
@@ -162,7 +162,7 @@ public class SipDao {
 		if (r != null) {
 			log.debug("SipDao::countUsers size == " + r.getEvents().size());
 			// "- 1" here means: ListComplete event
-			return r.getEvents().size() - 1; // TODO check if was successfull
+			return r.getEvents().size() - 1;
 		}
 		return 0;
 	}
@@ -189,7 +189,7 @@ public class SipDao {
 		oa.setPriority(1);
 		oa.setTimeout(timeout);
 
-		exec(oa); //TODO handle response
+		exec(oa);
 	}
 
 	public String getUid() {

@@ -96,8 +96,8 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<>(AVAILABLE_TIMEZONES);
 	public static final String WICKET_ROOM_ID = "wicketroomid";
 	private Long userId = null;
-	private Set<Right> rights = new HashSet<>(); //TODO renew somehow on user edit !!!!
-	private long languageId = -1; //TODO renew somehow on user edit !!!!
+	private Set<Right> rights = new HashSet<>();
+	private long languageId = -1;
 	private OmUrlFragment area = null;
 	private TimeZone tz;
 	private TimeZone browserTz;
@@ -243,7 +243,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 					if (markUsed) {
 						soapLogin.setUsed(true);
 						soapLogin.setUseDate(new Date());
-						//soapLogin.setClientURL(clientURL); //TODO
 						soapDao.update(soapLogin);
 					}
 					roomId = soapLogin.getRoomId();

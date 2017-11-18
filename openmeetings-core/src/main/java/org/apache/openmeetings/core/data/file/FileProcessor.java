@@ -55,7 +55,6 @@ public class FileProcessor {
 	@Autowired
 	private DocumentConverter docConverter;
 
-	//TODO this method need to be refactored to throw exceptions
 	public ProcessResultList processFile(FileItem f, InputStream is) throws Exception {
 		ProcessResultList logs = new ProcessResultList();
 		// Generate a random string to prevent any problems with

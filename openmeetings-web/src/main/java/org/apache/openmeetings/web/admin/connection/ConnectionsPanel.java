@@ -57,7 +57,6 @@ public class ConnectionsPanel extends AdminBasePanel {
 		SearchableDataProvider<IClient> sdp = new SearchableDataProvider<IClient>(null) {
 			private static final long serialVersionUID = 1L;
 
-			//TODO add search
 			private List<IClient> list() {
 				List<IClient> l = new ArrayList<>();
 				l.addAll(getBean(ISessionManager.class).list());

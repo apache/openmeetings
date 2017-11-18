@@ -33,7 +33,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class VideoPlayer extends Panel {
 	private static final long serialVersionUID = 1L;
-	private final WebMarkupContainer wait = new WebMarkupContainer("wait"); //TODO not used
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final Mp4RecordingResourceReference mp4RecRes = new Mp4RecordingResourceReference();
 	private final PngRecordingResourceReference posterRecRes = new PngRecordingResourceReference();
@@ -63,7 +62,7 @@ public class VideoPlayer extends Panel {
 		mp4File.setDisplayType(true);
 		mp4File.setType(MP4_MIME_TYPE);
 		player.add(mp4Rec);
-		container.add(wait.setVisible(false), player);
+		container.add(player);
 		update(null, null);
 	}
 

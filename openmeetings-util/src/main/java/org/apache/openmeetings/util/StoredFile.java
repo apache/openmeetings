@@ -54,8 +54,8 @@ public class StoredFile {
 
 	private static final MediaType MIME_JPG = MediaType.parse(JPG_MIME_TYPE);
 	private static final Set<MediaType> PDF_TYPES = new HashSet<>(Arrays.asList(application("pdf"), application("postscript")));
-	private static final Set<MediaType> CHART_TYPES = new HashSet<>(/* TODO have to be tested and re-added Arrays.asList("xchart")*/);
-	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_JPG/* TODO have to be tested and re-added, "xchart"*/));
+	private static final Set<MediaType> CHART_TYPES = new HashSet<>();
+	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_JPG));
 	private static final String ACCEPT_STRING;
 	static {
 		Set<MediaType> types = new LinkedHashSet<>();

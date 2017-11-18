@@ -202,7 +202,7 @@ public class ActivitiesPanel extends Panel {
 			final String fmt = ((BasePage)getPage()).isRtl() ? ACTIVITY_FMT_RTL : ACTIVITY_FMT;
 			switch (a.getType()) {
 				case roomEnter:
-					text = ""; // TODO should this be fixed?
+					text = "";
 					item.setVisible(false);
 					break;
 				case roomExit:
@@ -230,7 +230,7 @@ public class ActivitiesPanel extends Panel {
 					text = String.format(fmt, name, getString("695"), df.format(a.getCreated()));
 					break;
 				case reqRightMute:
-					text = String.format(fmt, name, getString("1399"), df.format(a.getCreated()));//TODO un-mute 1398
+					text = String.format(fmt, name, getString("1399"), df.format(a.getCreated()));
 					break;
 				case reqRightExclusive:
 					text = String.format(fmt, name, getString("1427"), df.format(a.getCreated()));

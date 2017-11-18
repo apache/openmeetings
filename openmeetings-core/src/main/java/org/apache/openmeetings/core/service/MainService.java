@@ -59,7 +59,6 @@ public class MainService {
 				return true;
 			}
 		}
-		// TODO restrict by time???
 		return false;
 	}
 

@@ -274,7 +274,6 @@ public class RoomSidebar extends Panel {
 	}
 
 	private ListView<Client> updateUsers() {
-		//TODO do we need sort??
 		users.setList(getRoomClients(room.getRoom().getId()));
 		return users;
 	}

@@ -176,7 +176,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					ProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
 					logs.add(res);
 					if (res.isOk()) {
-						//TODO need to remove smallest gap
 						long diff = diff(meta.getRecordStart(), meta.getRecording().getRecordStart());
 						if (diff != 0L) {
 							// stub to add
@@ -249,7 +248,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			args.add("-map"); args.add("2:0");
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
-			// TODO additional flag to 'quiet' output should be added
 
 			r.setWidth(2 * flvWidth);
 			r.setHeight(flvHeight);

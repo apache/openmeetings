@@ -125,7 +125,7 @@ public class Chat extends Panel {
 	}
 
 	private String getUid() {
-		return findParent(MainPanel.class).getClient().getUid(); //TODO HACK
+		return findParent(MainPanel.class).getClient().getUid();
 	}
 
 	public JSONObject getMessage(List<ChatMessage> list) {
@@ -163,7 +163,6 @@ public class Chat extends Panel {
 
 		if (showDashboardChat) {
 			ChatDao dao = getBean(ChatDao.class);
-			//TODO limited count should be loaded with "earlier" link
 			StringBuilder sb = new StringBuilder(getReinit());
 			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
 			for(Long roomId : getUserRooms(getUserId())) {

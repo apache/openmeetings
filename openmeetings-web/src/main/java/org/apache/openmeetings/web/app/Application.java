@@ -442,10 +442,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					client.setMic(0);
 					client.setRoom(getBean(RoomDao.class).get(rcl.getRoomId()));
 					addUserToRoom(client);
-					//TODO unify this
 					WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
 				}
-				//TODO rights
 			} else if (client == null && Client.Type.sip == rcl.getType()) {
 				rcl.setLogin(SIP_USER_NAME);
 				rcl.setUserId(SIP_USER_ID);
@@ -461,14 +459,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				client.allow(Room.Right.audio, Room.Right.video);
 				client.set(Activity.broadcastA);
 				addUserToRoom(client);
-				//TODO unify this
 				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
 			} else {
 				return null;
 			}
 		}
 		if (rcl.getRoomId() == null || !rcl.getRoomId().equals(client.getRoom().getId())) {
-			//TODO mobile
 			return null;
 		}
 		User u = client.getUser();
@@ -693,7 +689,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return false;
 	}
 
-	//TODO need more safe way
 	public <T> T _getBean(Class<T> clazz) {
 		WebApplicationContext wac = getWebApplicationContext(getServletContext());
 		return wac == null ? null : wac.getBean(clazz);
@@ -738,7 +733,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
 		if (!isInstalled && isInitComplete()) {
-			//TODO can also check crypt class here
 			isInstalled = result = get()._getBean(UserDao.class).count() > 0;
 		}
 		return result;

@@ -113,7 +113,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	final MessageDialog confirmDelete;
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
-	//TODO need to be unified with RoomInvitationForm
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
 			, new CollectionModel<Group>(new ArrayList<>())
@@ -428,16 +427,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			add(cals.setNullValid(true).setLabel(Model.of("calendar")).setOutputMarkupId(true));
 		}
 
-		private Room createAppRoom() {
-			Room r = new Room();
-			r.setAppointment(true);
-			r.hide(RoomElement.MicrophoneStatus);
-			if (r.getType() == null) {
-				r.setType(Room.Type.conference);
-			}
-			return r;
-		}
-
 		@Override
 		protected void onModelChanged() {
 			super.onModelChanged();
@@ -512,5 +501,15 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				error(Application.getString("1592"));
 			}
 		}
+	}
+
+	public static Room createAppRoom() {
+		Room r = new Room();
+		r.setAppointment(true);
+		r.hide(RoomElement.MicrophoneStatus);
+		if (r.getType() == null) {
+			r.setType(Room.Type.conference);
+		}
+		return r;
 	}
 }

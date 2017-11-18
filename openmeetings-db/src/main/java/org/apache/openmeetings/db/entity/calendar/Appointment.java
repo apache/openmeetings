@@ -67,7 +67,7 @@ import org.simpleframework.xml.Root;
 		query="SELECT a FROM MeetingMember mm INNER JOIN mm.appointment a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "
 			+ "	AND a.id NOT IN (SELECT a.id FROM Appointment a WHERE a.owner.id = :userId)"
-			+ "	AND mm.connectedEvent = false " //TODO review: isConnectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
+			+ "	AND mm.connectedEvent = false " //connectedEvent is set for the MeetingMember if event is created from "Private Messages", it is weird
 			+ "	AND ( "
 			+ "		(a.start BETWEEN :start AND :end) "
 			+ "		OR (a.end BETWEEN :start AND :end) "
@@ -87,7 +87,7 @@ import org.simpleframework.xml.Root;
 		)
 	, @NamedQuery(name="getAppointmentByRoomId", query="SELECT a FROM Appointment a WHERE a.room.id = :roomId")
 	, @NamedQuery(name="getAppointmentByOwnerRoomId", query="SELECT a FROM Appointment a WHERE a.deleted = false AND a.owner.id = :userId AND a.room.id = :roomId")
-	//TODO this query returns duplicates if the user books an appointment with his own user as second meeting-member, swagner 19.02.2012
+	//this query returns duplicates if the user books an appointment with his own user as second meeting-member, swagner 19.02.2012
 	, @NamedQuery(name="appointmentsInRangeByUser",
 		query="SELECT a FROM MeetingMember mm, IN(mm.appointment) a "
 			+ "WHERE mm.deleted = false AND mm.user.id <> a.owner.id AND mm.user.id = :userId "

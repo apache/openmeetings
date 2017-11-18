@@ -90,7 +90,6 @@ public class StartSharingButton extends OmButton {
 
 	@Override
 	public void onClick(AjaxRequestTarget target) {
-		//TODO deny download in case other screen sharing is in progress
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
 			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);

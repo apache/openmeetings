@@ -180,12 +180,10 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 
 	@Override
 	public IModel<BaseFileItem> model(BaseFileItem object) {
-		// TODO LDM should be used
 		return Model.of(object);
 	}
 
 	@Override
 	public void detach() {
-		// TODO LDM should be used
 	}
 }

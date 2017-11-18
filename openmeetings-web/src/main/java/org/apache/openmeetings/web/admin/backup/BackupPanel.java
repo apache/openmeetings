@@ -163,14 +163,12 @@ public class BackupPanel extends AdminBasePanel {
 					}
 					if (th != null) {
 						timer.stop(target);
-						//TODO change text, localize
 						progressBar.setVisible(false);
 						feedback.error(th.getMessage());
 						target.add(feedback);
 					} else {
 						progressBar.setModelObject(progressHolder.getProgress());
 						progressBar.refresh(target);
-						//TODO add current step result as info
 					}
 				}
 			});

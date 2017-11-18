@@ -99,7 +99,6 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 				}
 			}
 		}
-		//TODO should we check parentId here
 		if (r.getOwnerId() == null && r.getGroupId() == null) {
 			//public
 			return r;

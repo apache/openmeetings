@@ -101,7 +101,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	public User getNewUserInstance(User currentUser) {
 		User user = new User();
-		user.setSalutation(Salutation.mr); // TODO: Fix default selection to be configurable
+		user.setSalutation(Salutation.mr);
 		user.setRights(getDefaultRights());
 		user.setLanguageId(getDefaultLang());
 		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
@@ -255,10 +255,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return update(u, updatedBy);
 	}
 
-	// TODO: Why the password field is not set via the Model is because its
-	// FetchType is Lazy, this extra hook here might be not needed with a
-	// different mechanism to protect the password from being read
-	// sebawagner, 01.10.2012
+	// Why the password field is not set via the Model is because its FetchType is Lazy
 	public User update(User user, String password, Long updatedBy) throws NoSuchAlgorithmException {
 		User u = update(user, updatedBy);
 		if (u != null && !Strings.isEmpty(password)) {

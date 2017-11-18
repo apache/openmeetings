@@ -126,7 +126,6 @@ public class RoomInvitationForm extends InvitationForm {
 
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		//TODO need to be reviewed
 		if (button.equals(dialog.send) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
 			for (Group g : groups.getModelObject()) {
 				for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
