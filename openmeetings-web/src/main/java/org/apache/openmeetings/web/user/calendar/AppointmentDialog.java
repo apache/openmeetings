@@ -200,7 +200,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		handler.add(form.add(new JQueryUIBehavior("#tabs", "tabs")));
+		handler.add(form.add(new JQueryUIBehavior(String.format("#%s .tabs", getMarkupId()), "tabs")));
 	}
 
 	@Override
