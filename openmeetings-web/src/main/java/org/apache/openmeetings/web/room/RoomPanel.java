@@ -226,6 +226,7 @@ public class RoomPanel extends BasePanel {
 			pdfWb = null;
 		}
 	};
+	Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -245,7 +246,6 @@ public class RoomPanel extends BasePanel {
 		//let's refresh user in client
 		update(getClient().updateUser(getBean(UserDao.class)));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
-		Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
 		room.add(AttributeModifier.append(ATTR_CLASS, r.getType().name()));
 		room.add(menu = new RoomMenuPanel("menu", this));
@@ -297,8 +297,9 @@ public class RoomPanel extends BasePanel {
 			if (r.isAppointment()) {
 				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
 				if (a != null && !a.isDeleted()) {
-					allowed = a.getOwner().getId().equals(getUserId());
-					log.debug("appointed room, isOwner ? " + allowed);
+					boolean isOwner = a.getOwner().getId().equals(getUserId());
+					allowed = isOwner;
+					log.debug("appointed room, isOwner ? {}", isOwner);
 					if (!allowed) {
 						for (MeetingMember mm : a.getMeetingMembers()) {
 							if (getUserId().equals(mm.getUser().getId())) {
@@ -309,11 +310,11 @@ public class RoomPanel extends BasePanel {
 					}
 					if (allowed) {
 						Calendar c = WebSession.getCalendar();
-						if (c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
+						if (isOwner || c.getTime().after(a.getStart()) && c.getTime().before(a.getEnd())) {
 							eventDetail = new EventDetailDialog(EVENT_DETAILS_ID, a);
 						} else {
 							allowed = false;
-							deniedMessage = getString("error.hash.period") + String.format(" %s - %s", getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
+							deniedMessage = String.format("%s %s - %s", getString("error.hash.period"), getDateFormat().format(a.getStart()), getDateFormat().format(a.getEnd()));
 						}
 					}
 				}
@@ -707,6 +708,9 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	public void cleanup(IPartialPageRequestHandler handler) {
+		if (eventDetail instanceof EventDetailDialog) {
+			((EventDetailDialog)eventDetail).close(handler, null);
+		}
 		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getTopControls().setVisible(true));
 		if (r.isHidden(RoomElement.Chat)) {
 			getMainPanel().getChat().toggle(handler, true);

@@ -672,7 +672,7 @@ var Room = (function() {
 		}
 	}
 	function _reload() {
-		if (!!options.reloadUrl) {
+		if (!!options && !!options.reloadUrl) {
 			window.location.href = options.reloadUrl;
 		} else {
 			window.location.reload();
@@ -706,10 +706,12 @@ var Room = (function() {
 		});
 	}
 	function _load() {
-		sb.ready(function() {
-			_setSize();
-		});
-		_sbAddResizable();
+		if (sb !== undefined) {
+			sb.ready(function() {
+				_setSize();
+			});
+			_sbAddResizable();
+		}
 		$(window).on('resize.openmeetings', function() {
 			_setSize();
 		});

@@ -48,7 +48,7 @@ public class EventDetailDialog extends AbstractDialog<Appointment> {
 		add(new Label("description"));
 		add(new Label("owner.timeZoneId"));
 		add(new Label("start", getDateFormat().format(getModelObject().getStart())));
-		add(new Label("end", getDateFormat().format(getModelObject().getStart())));
+		add(new Label("end", getDateFormat().format(getModelObject().getEnd())));
 		add(new Label("owner.firstname"));
 		add(new Label("owner.lastname"));
 	}
