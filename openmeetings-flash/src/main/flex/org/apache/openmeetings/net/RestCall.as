@@ -62,7 +62,7 @@ public class RestCall {
 			requestor.addEventListener(Event.COMPLETE, successCallback);
 		}
 		if (this.errorCallback !== null) {
-			requestor.addEventListener("ioError", errorCallback); //IOErrorEvent.IOERROR
+			requestor.addEventListener(IOErrorEvent.IO_ERROR, errorCallback); //IOErrorEvent.IOERROR
 			requestor.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorCallback);
 		}
 	}
@@ -89,7 +89,7 @@ public class RestCall {
 	}
 
 	public function close():void {
-		requestor.close()
+		requestor.close();
 	}
 }
 }

@@ -87,7 +87,7 @@ public class UploadPostHelper {
 			}
 			postData = LINEBREAK(postData);
 			if (parameters[j].type) {
-				addContentType(postData, parameters[j].type)
+				addContentType(postData, parameters[j].type);
 			} else {
 				postData = LINEBREAK(postData);
 			}

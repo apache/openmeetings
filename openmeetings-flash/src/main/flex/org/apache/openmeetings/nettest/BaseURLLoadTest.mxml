@@ -74,7 +74,7 @@
 
 		private function onError(e:ErrorEvent):void {
 			if (verbose) {
-				this.log("Error - " + e);
+				log("Error - " + e);
 			}
 
 			finishedTestsCount++;

@@ -33,30 +33,6 @@
 		<skip.site.copy>false</skip.site.copy>
 		<flex.sdk.version>4.16.0</flex.sdk.version>
 	</properties>
-	<repositories>
-		<repository>
-			<id>jpresso</id>
-			<url>http://repository.jspresso.org/maven2/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>jpresso</id>
-			<url>http://repository.jspresso.org/maven2/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.flex</groupId>
