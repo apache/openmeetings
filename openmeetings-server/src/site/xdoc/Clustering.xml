@@ -117,6 +117,18 @@
 						<ul>
 							<li>Set <tt>instance-name</tt> for each server to unique value</li>
 							<li>
+								Comment out/delete following block:
+								<source><![CDATA[
+<network>
+	<join>
+		<multicast enabled="false"/>
+		<tcp-ip enabled="false"/>
+		<aws enabled="false"/>
+	</join>
+</network>
+								]]></source>
+							</li>
+							<li>
 								In case there are more than one network interface with multicast support and/or additional hazelcast configuration is required
 								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html</a>
 							</li>
