@@ -62,7 +62,7 @@ public class OmVideo {
 	}
 
 	private function getVideo():Video {
-		if (vid == null) {
+		if (vid === null) {
 			vid = new Video();
 			vid.width = width;
 			vid.height = height;
@@ -75,25 +75,25 @@ public class OmVideo {
 		return mic;
 	}
 
-	public function resize(width:int, height:int):void {
-		debug("resize:: " + width + "x" + height);
-		this.width = ui.width = width;
-		this.height = ui.height = height;
+	public function resize(_width:int, _height:int):void {
+		debug("resize:: " + _width + "x" + _height);
+		this.width = ui.width = _width;
+		this.height = ui.height = _height;
 	}
 
-	public function vidResize(width:int, height:int):void {
-		debug("vidResize:: " + width + "x" + height);
-		vid.width = width;
-		vid.height = height;
+	public function vidResize(_width:int, _height:int):void {
+		debug("vidResize:: " + _width + "x" + _height);
+		vid.width = _width;
+		vid.height = _height;
 	}
 
 	public function attachCamera(cam:Camera):void {
 		getVideo().attachCamera(cam);
 	}
 
-	public function attachStream(ns:NetStream):void {
-		this.ns = ns;
-		getVideo().attachNetStream(ns);
+	public function attachStream(_ns:NetStream):void {
+		this.ns = _ns;
+		getVideo().attachNetStream(_ns);
 	}
 
 	private function clear():void {
@@ -126,16 +126,12 @@ public class OmVideo {
 	 */
 	public function setStreamVolume(vol:int):void {
 		volume = vol;
-		//debug("setStreamVolume: " + vol);
-		if (ns != null) {
-			//debug("setStreamVolume: not null");
+		if (ns !== null) {
 			ns.soundTransform = new SoundTransform(vol / 100.0);
 		}
 	}
 	private function _setVolume(vol:int):void {
-		//debug("_setVolume: " + vol);
-		if (mic != null) {
-			//debug("_setVolume: not null");
+		if (mic !== null) {
 			mic.gain = vol;
 		}
 	}
@@ -188,18 +184,18 @@ public class OmVideo {
 		debug("netStream_onNetStatus: ", e.info.code);
 	}
 
-	private function _publish(mode:String, name:String, cam:Camera, mic:Microphone, f:Function):void {
-		if (ns != null){
+	private function _publish(_mode:String, name:String, cam:Camera, _mic:Microphone, f:Function):void {
+		if (ns !== null){
 			reset();
 		}
-		this.mode = mode;
-		this.mic = mic;
+		this.mode = _mode;
+		this.mic = _mic;
 		createStream();
 
-		ns.publish(name, (mode == BROADCAST) ? LIVE : mode);
+		ns.publish(name, (mode === BROADCAST) ? LIVE : mode);
 		ns.attachCamera(cam);
 		attachCamera(cam);
-		if (cam != null) {
+		if (cam !== null) {
 			var videoStreamSettings:VideoStreamSettings = null;
 			debug("codec = " + params.videoCodec);
 			if (params.videoCodec === CODEC_H264) {
@@ -218,21 +214,21 @@ public class OmVideo {
 		ns.attachAudio(mic);
 		_setVolume(volume);
 
-		if (f != null) {
+		if (f !== null) {
 			f.call();
 		}
 	}
 
-	private function _connect(url:String):void {
-		nc.connect(url, {
+	private function _connect(_url:String):void {
+		nc.connect(_url, {
 			sid: params.sid
 			, roomClient: true
-			, nativeSsl: 'best' == params.proxyType
+			, nativeSsl: 'best' === params.proxyType
 		});
 	}
 
 	public function connect(callback:Function):void {
-		if (nc == null || !nc.connected) {
+		if (nc === null || !nc.connected) {
 			url = params.url;
 			debug("NetConnection is not connected", url);
 			nc = new NetConnection();
@@ -274,7 +270,7 @@ public class OmVideo {
 					debug("setUid :: ", params);
 				}
 				, newScreenCursor: function(arr:Array):void {
-					if (arr.length > 2 && params.uid == arr[0]) {
+					if (arr.length > 2 && params.uid === arr[0]) {
 						cursorCbk(arr[1] * zoomX(), arr[2] * zoomY());
 					}
 				}
@@ -298,37 +294,34 @@ public class OmVideo {
 		return height / params.height;
 	}
 
-	public function broadcast(name:String, cam:Camera, mic:Microphone):void {
+	public function broadcast(name:String, cam:Camera, _mic:Microphone):void {
 		connect(function():void {
-			_publish(BROADCAST, name, cam, mic, null);
+			_publish(BROADCAST, name, cam, _mic, null);
 		});
 	}
 
-	public function record(name:String, cam:Camera, mic:Microphone, f:Function):void {
+	public function record(name:String, cam:Camera, _mic:Microphone, f:Function):void {
 		connect(function():void {
-			_publish(RECORD, name, cam, mic, f);
+			_publish(RECORD, name, cam, _mic, f);
 		});
 	}
 
 	public function play(name:String):void {
 		connect(function():void {
 			debug("PLAY::", name);
-			if (ns != null){
+			if (ns !== null){
 				reset();
 			}
 			mode = PLAY;
 			createStream();
 			//invokes Method in baseVideoView which shows the stream
 			getVideo().attachNetStream(ns);
-			//FIXME: Commented out, cause this leads to Buffer-Full/Buffer-Empty Events
-			//after re-syncing the stream
-			//this.setBuffer(0.1);
 			ns.play(name);
 		});
 	}
 
 	public function reset():void {
-		if (ns != null) {
+		if (ns !== null) {
 			switch (mode) {
 				case PLAY:
 					ns.pause();
