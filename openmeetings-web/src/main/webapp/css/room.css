@@ -127,6 +127,27 @@
 	background-position: 2px 2px;
 	position: relative;
 }
+.room.sidebar .user.list .user:hover {
+	background-size: 80px 80px;
+	min-height: 80px;
+}
+.room.sidebar .user.list .user:hover .user.name {
+	padding: 0px;
+	margin-top: 84px;
+	min-height: 18px;
+}
+.room.sidebar .user.list .user .user.actions {
+	display: none;
+}
+.room.holder.small .room.sidebar .user.list .user:hover .user.actions {
+	margin-top: 84px;
+}
+.room.holder .room.sidebar .user.list .user:hover .user.actions {
+	display: block;
+	min-height: 18px;
+	padding: 0;
+	margin-right: 35px;
+}
 .room.sidebar .user.list .user.name {
 	line-height: 18px;
 	height: 18px;
@@ -137,17 +158,6 @@
 }
 .room.holder.small .room.sidebar .user.list .user.name {
 	display: none;
-}
-.room.sidebar .user.list .user .user.actions {
-	position: relative;
-	min-height: 18px;
-	padding: 0;
-	padding-left: 44px;
-	visibility: hidden;
-	margin-right: 35px;
-}
-.room.sidebar .user.list .user:hover .user.actions {
-	visibility: visible;
 }
 .room.sidebar .user.list .user .user.actions .ui-icon {
 	margin-right: 2px;
