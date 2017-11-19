@@ -351,7 +351,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return hazelcast.getMap(INVALID_SESSIONS_KEY);
 	}
 
-	private Map<Long, Set<String>> getRooms() {
+	private IMap<Long, Set<String>> getRooms() {
 		return hazelcast.getMap(ROOMS_KEY);
 	}
 
@@ -597,11 +597,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static Client addUserToRoom(Client c) {
 		Long roomId = c.getRoom().getId();
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
-		Map<Long, Set<String>> rooms = get().getRooms();
+		IMap<Long, Set<String>> rooms = get().getRooms();
+		rooms.lock(roomId);
 		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
 		Set<String> set = rooms.get(roomId);
 		set.add(c.getUid());
 		rooms.put(roomId, set);
+		rooms.unlock(roomId);
 		update(c);
 		return c;
 	}
