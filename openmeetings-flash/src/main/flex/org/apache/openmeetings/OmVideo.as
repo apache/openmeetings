@@ -20,6 +20,7 @@ package org.apache.openmeetings {
 import flash.events.AsyncErrorEvent;
 import flash.events.NetStatusEvent;
 import flash.events.IOErrorEvent;
+import flash.events.SecurityErrorEvent;
 import flash.external.ExternalInterface;
 import flash.media.Camera;
 import flash.media.H264Level;
@@ -219,68 +220,74 @@ public class OmVideo {
 		}
 	}
 
-	private function _connect(_url:String):void {
+	private function _connect(_url:String, callback:Function):void {
+		nc = new NetConnection();
+		nc.addEventListener(NetStatusEvent.NET_STATUS, function (e:NetStatusEvent):void {
+			debug("ConnectionStatus: " + e.info.code + ", fallback ? " + fallback);
+			switch (e.info.code) {
+				case 'NetConnection.Connect.Failed':
+				case 'NetConnection.Connect.Rejected':
+					if (!fallback) {
+						fallback = true;
+						url = params.fallback;
+						_connect(url, callback);
+					}
+					break;
+				case 'NetConnection.Connect.Success':
+					callback();
+					break;
+			}
+		});
+		nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, function (event:AsyncErrorEvent):void {
+			debug("OmVideo Async error" + event);
+		});
+		nc.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function (event:SecurityErrorEvent):void {
+			debug("OmVideo Security error" + event);
+		});
+		nc.client = {
+			onMetaData: function (infoObject:Object):void {
+				debug("onMetaData::", infoObject);
+			}
+			, onBWDone: function(...rest):void {
+				debug("onBWDone");
+			}
+			, onBWCheck: function(...rest):Number {
+				debug("onBWCheck");
+				return 0;
+			}
+			, setId: function (id:Number):void {
+				debug("id: " + id); //TODO save connection id
+			}
+			, setUid: function (_uid:String):void {
+				params.selfUid = _uid;
+				debug("setUid :: ", params);
+			}
+			, newScreenCursor: function(arr:Array):void {
+				if (arr.length > 2 && params.uid === arr[0]) {
+					cursorCbk(arr[1] * zoomX(), arr[2] * zoomY());
+				}
+			}
+			, sendVarsToMessageWithClient: function(obj:Object):void {
+				if ("copiedText" === obj[0]) {
+					ExternalInterface.call("Room.showClipboard", obj[1]);
+				}
+			}
+		};
+		var nativeSsl:Boolean = 'true' === params.native;
+		debug("native ? " + nativeSsl + " " + _url);
+		nc.proxyType = nativeSsl ? 'best' : 'none';
 		nc.connect(_url, {
 			sid: params.sid
 			, roomClient: true
-			, nativeSsl: 'best' === params.proxyType
+			, nativeSsl: nativeSsl
 		});
 	}
 
 	public function connect(callback:Function):void {
 		if (nc === null || !nc.connected) {
-			url = params.url;
 			debug("NetConnection is not connected", url);
-			nc = new NetConnection();
-			nc.addEventListener(NetStatusEvent.NET_STATUS, function onConnectionStatus(e:NetStatusEvent):void {
-				debug("ConnectionStatus: " + e.info.code);
-				switch (e.info.code) {
-					case 'NetConnection.Connect.Failed':
-						if (!fallback) {
-							fallback = true;
-							url = params.fallback;
-							_connect(url);
-						}
-						break;
-					case 'NetConnection.Connect.Success':
-						callback();
-						break;
-					//TODO other cases
-				}
-			});
-			nc.addEventListener(AsyncErrorEvent.ASYNC_ERROR, function (event:AsyncErrorEvent):void {
-				debug("OmVideo Async error" + event);
-			});
-			nc.client = {
-				onMetaData: function (infoObject:Object):void {
-					debug("onMetaData::", infoObject);
-				}
-				, onBWDone: function(...rest):void {
-					debug("onBWDone");
-				}
-				, onBWCheck: function(...rest):Number {
-					debug("onBWCheck");
-					return 0;
-				}
-				, setId: function (id:Number):void {
-					debug("id: " + id); //TODO save connection id
-				}
-				, setUid: function (_uid:String):void {
-					params.selfUid = _uid;
-					debug("setUid :: ", params);
-				}
-				, newScreenCursor: function(arr:Array):void {
-					if (arr.length > 2 && params.uid === arr[0]) {
-						cursorCbk(arr[1] * zoomX(), arr[2] * zoomY());
-					}
-				}
-				, sendVarsToMessageWithClient: function(obj:Object):void {
-					if ("copiedText" === obj[0]) {
-						ExternalInterface.call("Room.showClipboard", obj[1]);
-					}
-				}
-			};
-			_connect(url);
+			url = params.url;
+			_connect(url, callback);
 		} else {
 			callback();
 		}
