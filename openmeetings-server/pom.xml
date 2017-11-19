@@ -357,6 +357,7 @@
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-flash</artifactId>
+			<type>swf</type>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
