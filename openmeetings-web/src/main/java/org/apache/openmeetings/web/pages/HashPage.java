@@ -25,6 +25,7 @@ import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -66,7 +67,6 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private final WebMarkupContainer recContainer = new WebMarkupContainer("panel-recording");
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player");
-	private String errorKey = "invalid.hash";
 	private boolean error = true;
 	private MainPanel mp = null;
 	private RoomPanel rp = null;
@@ -98,14 +98,18 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		WebSession ws = WebSession.get();
 		ws.checkHashes(secure, invitation);
 
+		String errorMsg = getString("invalid.hash");
 		recContainer.setVisible(false);
 		add(new EmptyPanel(PANEL_MAIN).setVisible(false));
 		if (!invitation.isEmpty()) {
 			Invitation i = ws.getInvitation();
 			if (i == null) {
-				errorKey = "error.hash.invalid";
+				errorMsg = getString("error.hash.invalid");
 			} else if (!i.isAllowEntry()) {
-				errorKey = Valid.OneTime == i.getValid() ? "error.hash.used" : "error.hash.period";
+				FastDateFormat sdf = WebSession.createDateFormat(i.getInvitee());
+				errorMsg = Valid.OneTime == i.getValid()
+						? getString("error.hash.used")
+						: String.format("%s %s - %s", getString("error.hash.period"), sdf.format(i.getValidFrom()), sdf.format(i.getValidTo()));
 			} else {
 				Recording rec = i.getRecording();
 				if (rec != null) {
@@ -130,7 +134,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		} else if (!secure.isEmpty()) {
 			Long recId = getRecordingId(), roomId = ws.getRoomId();
 			if (recId == null && roomId == null) {
-				errorKey = "1599";
+				errorMsg = getString("1599");
 			} else if (recId != null) {
 				recContainer.setVisible(true);
 				Recording rec = getBean(RecordingDao.class).get(recId);
@@ -166,7 +170,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		add(recContainer.add(vi.setShowShare(false).setOutputMarkupPlaceholderTag(true),
 				vp.setOutputMarkupPlaceholderTag(true)), new InvitationPasswordDialog("i-pass", this));
 		remove(urlParametersReceivingBehavior);
-		add(new MessageDialog("access-denied", getString("invalid.hash"), getString(errorKey), DialogButtons.OK,
+		add(new MessageDialog("access-denied", getString("invalid.hash"), errorMsg, DialogButtons.OK,
 				DialogIcon.ERROR) {
 			private static final long serialVersionUID = 1L;
 

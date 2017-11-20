@@ -350,6 +350,8 @@ var Video = (function() {
 		const opts = Room.getOptions();
 		c.screenActivities = _c.screenActivities;
 		c.activities = _c.activities;
+		c.user.firstName = _c.user.firstName;
+		c.user.lastName = _c.user.lastName;
 		const hasAudio = VideoUtil.hasAudio(c);
 		_handleMicStatus(hasAudio);
 		if (hasAudio) {
@@ -362,6 +364,7 @@ var Video = (function() {
 			c.pod = _c.pod;
 			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
 		}
+		v.dialog('option', 'title', _getName());
 		if (swf[0].update !== undefined) {
 			c.self ? swf[0].update() : swf[0].update(c);
 		}

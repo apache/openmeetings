@@ -60,6 +60,7 @@ import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.message.RoomMessage.Type;
 import org.apache.openmeetings.util.message.TextRoomMessage;
@@ -143,7 +144,7 @@ public class RoomPanel extends BasePanel {
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
 				options.put("reloadUrl", r.getRedirectURL());
 			}
-			StringBuilder sb = new StringBuilder("Room.init(").append(options).append(");")
+			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
 					.append("Room.setSize();");
 			target.appendJavaScript(sb);
@@ -478,7 +479,7 @@ public class RoomPanel extends BasePanel {
 							Client _c = getClient();
 							boolean self = _c.getUid().equals(c.getUid());
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.streamJson(_c.getSid(), self, getBean(ISessionManager.class)).toString()
+									, c.streamJson(_c.getSid(), self, getBean(ISessionManager.class)).toString(new NullStringer())
 									));
 							sidebar.update(handler);
 							menu.update(handler);
