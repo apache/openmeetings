@@ -220,11 +220,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	public String getString(String key, String def) {
 		Configuration c = get(key);
-
-		if (c != null) {
-			return c.getValue() == null ? def : c.getValue();
-		}
-		return def;
+		return c != null && c.getValue() != null ? c.getValue() : def;
 	}
 
 	@Override
