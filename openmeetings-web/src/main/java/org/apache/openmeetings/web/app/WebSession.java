@@ -305,7 +305,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		tz = getBean(TimezoneUtil.class).getTimeZone(u);
 		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
 		setLocale(LocaleHelper.getLocale(u));
-		sdf = FastDateFormat.getDateTimeInstance(SHORT, SHORT, getLocale());
+		sdf = createDateFormat(u);
 	}
 
 	public boolean signIn(String login, String password, Type type, Long domainId) throws OmException {
@@ -562,5 +562,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public ExtendedClientProperties getExtendedProperties() {
 		return extProps;
+	}
+
+	public static FastDateFormat createDateFormat(User u) {
+		return FastDateFormat.getDateTimeInstance(SHORT, SHORT
+				, getBean(TimezoneUtil.class).getTimeZone(u)
+				, LocaleHelper.getLocale(u));
 	}
 }
