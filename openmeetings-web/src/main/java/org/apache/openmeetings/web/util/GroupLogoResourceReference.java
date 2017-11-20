@@ -32,7 +32,10 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -64,7 +67,8 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 			protected ResourceResponse newResourceResponse(Attributes attrs) {
 				Long id = null;
 				boolean allowed = false;
-				if (WebSession.get().isSignedIn()) {
+				WebSession ws = WebSession.get();
+				if (ws.isSignedIn()) {
 					PageParameters params = attrs.getParameters();
 					StringValue _id = params.get("id");
 					try {
@@ -72,8 +76,17 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 					} catch (Exception e) {
 						//no-op expected
 					}
-					if (id == null || hasAdminLevel(getRights()) || null != getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId())) {
-						allowed = true;
+					allowed = id == null || hasAdminLevel(getRights()) || null != getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId());
+					if (!allowed && ws.getInvitation() != null) {
+						Room r = ws.getInvitation().getRoom() == null ? null : getBean(RoomDao.class).get(ws.getInvitation().getRoom().getId());
+						if (r != null && r.getGroups() != null) {
+							for (RoomGroup rg : r.getGroups()) {
+								if (id.equals(rg.getGroup().getId())) {
+									allowed = true;
+									break;
+								}
+							}
+						}
 					}
 				}
 				if (allowed) {
