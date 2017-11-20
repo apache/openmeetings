@@ -46,9 +46,9 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.apache.openmeetings.util.message.RoomMessage;
-import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.IConnection;
 import org.red5.server.api.scope.IScope;
@@ -110,6 +110,7 @@ public class RecordingService {
 			User u = userDao.get(ownerId);
 			if (u != null && User.Type.contact == u.getType()) {
 				ownerId = u.getOwnerId();
+				u = userDao.get(ownerId);
 			}
 			recording.setInsertedBy(ownerId);
 			recording.setType(Type.Recording);
@@ -149,7 +150,7 @@ public class RecordingService {
 				}
 			}
 			// Send notification to all users that the recording has been started
-			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, ownerId, RoomMessage.Type.recordingStarted
+			WebSocketHelper.sendRoom(new TextRoomMessage(roomId, u, RoomMessage.Type.recordingStarted
 					, new JSONObject().put("uid", client.getUid()).put("sid", client.getSid()).toString()));
 		} catch (Exception err) {
 			log.error("[startRecording]", err);
@@ -183,7 +184,7 @@ public class RecordingService {
 				recClient.setRecordingStarted(false);
 				sessionManager.update(recClient);
 			}
-			WebSocketHelper.sendRoom(new TextRoomMessage(stopClient.getRoomId(), stopClient.getUserId(), RoomMessage.Type.recordingStoped, stopClient.getSid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(stopClient.getRoomId(), stopClient, RoomMessage.Type.recordingStoped, stopClient.getSid()));
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null && conn instanceof IServiceCapableConnection) {

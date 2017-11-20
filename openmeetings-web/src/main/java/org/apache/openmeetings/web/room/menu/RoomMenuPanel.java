@@ -46,8 +46,8 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.message.RoomMessage.Type;
-import org.apache.openmeetings.util.message.TextRoomMessage;
+import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
@@ -95,7 +95,7 @@ public class RoomMenuPanel extends Panel {
 		@Override
 		public void onClick(AjaxRequestTarget target) {
 			Client c = room.getClient();
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoom().getId(), c.getUserId(), Type.haveQuestion, c.getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoom().getId(), c, Type.haveQuestion, c.getUid()));
 		}
 	};
 	private final RoomPanel room;

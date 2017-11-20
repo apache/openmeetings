@@ -53,11 +53,11 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.Version;
-import org.apache.openmeetings.util.message.RoomMessage;
-import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.wicket.Application;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -339,7 +339,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 						//Send message to all users
 						sendMessageToCurrentScope("newScreenSharing", client, false);
-						WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.sharingStarted, client.getUid()));
+						WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client, RoomMessage.Type.sharingStarted, client.getUid()));
 					} else {
 						_log.warn("Streaming is already started for the client id={}. Second request is ignored.", client.getId());
 					}
@@ -534,7 +534,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 					.put("type", c.getType())
 					.put("streamId", current.getClient().getId())
 					.put("streamName", streamName);
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c.getUserId(), RoomMessage.Type.newStream, obj.toString(new NullStringer())));
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.newStream, obj.toString(new NullStringer())));
 		} catch (Exception err) {
 			_log.error("[streamPublishStart]", err);
 		}
@@ -612,14 +612,14 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		JSONObject obj = new JSONObject()
 				.put("sid", rcl.getSid())
 				.put("uid", rcl.getUid());
-		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.sharingStoped, obj.toString()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl, RoomMessage.Type.sharingStoped, obj.toString()));
 	}
 
 	private static void sendStreamClosed(StreamClient rcl) {
 		JSONObject obj = new JSONObject()
 				.put("uid", rcl.getUid())
 				.put("sid", rcl.getSid());
-		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl.getUserId(), RoomMessage.Type.closeStream, obj.toString()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(rcl.getRoomId(), rcl, RoomMessage.Type.closeStream, obj.toString()));
 	}
 
 	public long switchMicMuted(String publicSID, boolean mute) {
@@ -925,7 +925,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void micActivity(boolean active) {
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient client = sessionManager.get(IClientUtil.getId(current.getClient()));
-		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.audioActivity
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client, RoomMessage.Type.audioActivity
 				, new JSONObject().put("sid", client.getSid()).put("active", active).toString()));
 	}
 
@@ -991,7 +991,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			sessionManager.update(client);
 			_log.debug("updateSipTransport: {}, {}, {}, {}, {}", new Object[] { client.getUid(), client.getRoomId(),
 					client.getFirstname(), client.getLastname(), client.getAvsettings() });
-			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client.getUserId(), RoomMessage.Type.rightUpdated, client.getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client, RoomMessage.Type.rightUpdated, client.getUid()));
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;

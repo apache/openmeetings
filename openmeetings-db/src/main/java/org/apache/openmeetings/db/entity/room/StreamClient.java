@@ -209,6 +209,7 @@ public class StreamClient implements IClient {
 		this.userId = userId;
 	}
 
+	@Override
 	public String getFirstname() {
 		return firstname;
 	}
@@ -217,6 +218,7 @@ public class StreamClient implements IClient {
 		this.firstname = firstname;
 	}
 
+	@Override
 	public String getLastname() {
 		return lastname;
 	}

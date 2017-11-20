@@ -19,11 +19,8 @@
 package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
-import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
@@ -37,13 +34,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.message.RoomMessage;
-import org.apache.openmeetings.util.message.TextRoomMessage;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
@@ -82,6 +77,10 @@ public class ActivitiesPanel extends Panel {
 	private final AbstractDefaultAjaxBehavior action = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
+		private TextRoomMessage getRemoveMsg(String id) {
+			return new TextRoomMessage(room.getRoom().getId(), room.getClient(), RoomMessage.Type.activityRemove, id);
+		}
+
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
@@ -99,7 +98,7 @@ public class ActivitiesPanel extends Panel {
 						break;
 					case decline:
 						if (room.getClient().hasRight(Right.moderator)) {
-							sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+							sendRoom(getRemoveMsg(id));
 						}
 						break;
 					case accept:
@@ -107,39 +106,39 @@ public class ActivitiesPanel extends Panel {
 						if (room.getClient().hasRight(Right.moderator) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
 							switch (a.getType()) {
 								case reqRightModerator:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.moderator);
 									break;
 								case reqRightAv:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.audio, Right.video);
 									break;
 								case reqRightPresenter:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.presenter);
 									break;
 								case reqRightWb:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.whiteBoard);
 									break;
 								case reqRightShare:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.share);
 									break;
 								case reqRightRemote:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.remoteControl);
 									break;
 								case reqRightA:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.audio);
 									break;
 								case reqRightMute:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.mute);
 									break;
 								case reqRightExclusive:
-									sendRoom(new TextRoomMessage(room.getRoom().getId(), getUserId(), RoomMessage.Type.activityRemove, id));
+									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.exclusive);
 									break;
 								default:
@@ -192,13 +191,7 @@ public class ActivitiesPanel extends Panel {
 					decline.setVisible(false);
 					break;
 			}
-			String name;
-			if (SIP_USER_ID.equals(a.getSender())) {
-				name = SIP_FIRST_NAME;
-			} else {
-				User u = getBean(UserDao.class).get(a.getSender());
-				name = self ? getString("1362") : String.format("%s %s", u.getFirstname(), u.getLastname());
-			}
+			String name = self ? getString("1362") : a.getName();
 			final String fmt = ((BasePage)getPage()).isRtl() ? ACTIVITY_FMT_RTL : ACTIVITY_FMT;
 			switch (a.getType()) {
 				case roomEnter:

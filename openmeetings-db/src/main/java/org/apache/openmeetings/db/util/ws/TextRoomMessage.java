@@ -16,14 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util.message;
+package org.apache.openmeetings.db.util.ws;
+
+import org.apache.openmeetings.db.entity.basic.IClient;
+import org.apache.openmeetings.db.entity.user.User;
 
 public class TextRoomMessage extends RoomMessage {
 	private static final long serialVersionUID = 1L;
 	private final String text;
 
-	public TextRoomMessage(Long roomId, Long userId, Type type, String text) {
-		super(roomId, userId, type);
+	public TextRoomMessage(Long roomId, IClient client, Type type, String text) {
+		super(roomId, client, type);
+		this.text = text;
+	}
+
+	public TextRoomMessage(Long roomId, User u, Type type, String text) {
+		super(roomId, u, type);
 		this.text = text;
 	}
 

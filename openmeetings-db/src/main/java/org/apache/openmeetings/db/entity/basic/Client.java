@@ -133,6 +133,16 @@ public class Client implements IClient {
 	}
 
 	@Override
+	public String getFirstname() {
+		return user.getFirstname();
+	}
+
+	@Override
+	public String getLastname() {
+		return user.getLastname();
+	}
+
+	@Override
 	public String getUid() {
 		return uid;
 	}

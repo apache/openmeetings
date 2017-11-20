@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.core.util.ws;
 
-import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 
 public class WsMessageRoomMsg implements IClusterWsMessage {

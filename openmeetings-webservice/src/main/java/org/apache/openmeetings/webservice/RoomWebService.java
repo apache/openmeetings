@@ -53,8 +53,8 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -244,7 +244,7 @@ public class RoomWebService extends BaseWebService {
 
 			roomDao.update(room, userId);
 
-			WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  userId,  RoomMessage.Type.roomClosed));
+			WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  getUserDao().get(userId),  RoomMessage.Type.roomClosed));
 
 			return new ServiceResult("Closed", Type.SUCCESS);
 		});
