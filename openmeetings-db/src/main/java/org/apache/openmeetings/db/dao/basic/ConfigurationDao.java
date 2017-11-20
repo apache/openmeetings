@@ -222,7 +222,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		Configuration c = get(key);
 
 		if (c != null) {
-			return c.getValue();
+			return c.getValue() == null ? def : c.getValue();
 		}
 		return def;
 	}
