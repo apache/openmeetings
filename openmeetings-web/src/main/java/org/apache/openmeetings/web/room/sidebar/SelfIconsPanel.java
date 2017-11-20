@@ -50,11 +50,12 @@ public class SelfIconsPanel extends ClientIconsPanel {
 	}
 
 	@Override
-	public void update(IPartialPageRequestHandler handler) {
+	public ClientIconsPanel update(IPartialPageRequestHandler handler) {
 		setVisible(true);
 		super.update(handler);
 		settings.update(handler);
 		cam.update(handler);
 		mic.update(handler);
+		return this;
 	}
 }

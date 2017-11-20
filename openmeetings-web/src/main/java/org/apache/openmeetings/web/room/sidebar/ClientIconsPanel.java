@@ -61,7 +61,7 @@ public class ClientIconsPanel extends Panel {
 		update(null);
 	}
 
-	public void update(IPartialPageRequestHandler handler) {
+	public ClientIconsPanel update(IPartialPageRequestHandler handler) {
 		rightModer.update(handler);
 		rightPresenter.update(handler);
 		rightWb.update(handler);
@@ -70,5 +70,6 @@ public class ClientIconsPanel extends Panel {
 		rightAudio.update(handler);
 		rightVideo.update(handler);
 		rightExclsv.update(handler);
+		return this;
 	}
 }
