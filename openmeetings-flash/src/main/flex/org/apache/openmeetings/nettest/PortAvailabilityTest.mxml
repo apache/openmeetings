@@ -63,10 +63,12 @@
 				}
 			};
 			this.log(": " + lbl('report.start') + " " + url);
+			var nativeSsl:Boolean = 'best' === app.params.proxy;
+			nc.proxyType = nativeSsl ? 'best' : 'none';
 			nc.connect(url, {
 				sid: "noclient"
 				, roomClient: true
-				, nativeSsl: 'best' === app.params.proxy
+				, nativeSsl: nativeSsl
 			});
 		}
 
