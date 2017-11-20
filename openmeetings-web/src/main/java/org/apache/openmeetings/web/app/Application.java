@@ -75,8 +75,8 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.apache.openmeetings.util.message.RoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
@@ -395,7 +395,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		Long roomId = c.getRoomId();
 		removeUserFromRoom(c);
 		if (roomId != null) {
-			sendRoom(new RoomMessage(roomId, c.getUserId(), RoomMessage.Type.roomExit));
+			sendRoom(new RoomMessage(roomId, c, RoomMessage.Type.roomExit));
 			getBean(ConferenceLogDao.class).add(
 					ConferenceLog.Type.roomLeave
 					, c.getUserId(), "0", roomId
@@ -442,7 +442,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 					client.setMic(0);
 					client.setRoom(getBean(RoomDao.class).get(rcl.getRoomId()));
 					addUserToRoom(client);
-					WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
+					WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client, RoomMessage.Type.roomEnter));
 				}
 			} else if (client == null && Client.Type.sip == rcl.getType()) {
 				rcl.setLogin(SIP_USER_NAME);
@@ -459,7 +459,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				client.allow(Room.Right.audio, Room.Right.video);
 				client.set(Activity.broadcastA);
 				addUserToRoom(client);
-				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client.getUserId(), RoomMessage.Type.roomEnter));
+				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client, RoomMessage.Type.roomEnter));
 			} else {
 				return null;
 			}

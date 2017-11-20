@@ -30,8 +30,9 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -96,7 +97,7 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 		PollDao dao = getBean(PollDao.class);
 		dao.close(roomId);
 		dao.update(form.getModelObject());
-		sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollCreated));
+		sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollCreated));
 	}
 
 	private class PollForm extends Form<RoomPoll> {

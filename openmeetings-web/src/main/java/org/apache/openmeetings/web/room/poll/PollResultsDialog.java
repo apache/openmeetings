@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +28,9 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
-import org.apache.openmeetings.util.message.RoomMessage;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -101,7 +101,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 					RoomPoll p = getBean(PollDao.class).get(id);
 					selForm.select.setModelObject(p);
 					dispForm.updateModel(p, true, handler);
-					sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollUpdated));
+					sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
 				}
 			}
 		});
@@ -114,7 +114,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 					getBean(PollDao.class).delete(dispForm.getModelObject());
 					selForm.updateModel(handler);
 					dispForm.updateModel(selForm.select.getModelObject(), true, handler);
-					sendRoom(new RoomMessage(roomId, getUserId(), RoomMessage.Type.pollUpdated));
+					sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
 				}
 			}
 		});

@@ -16,11 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util.message;
+package org.apache.openmeetings.db.util.ws;
+
+import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.openmeetings.db.entity.basic.IClient;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.ws.api.message.IWebSocketPushMessage;
 
 public class RoomMessage implements IWebSocketPushMessage {
@@ -58,11 +63,25 @@ public class RoomMessage implements IWebSocketPushMessage {
 	private final String uid;
 	private final Long roomId;
 	private final Long userId;
+	private final String name;
 	private final Type type;
 
-	public RoomMessage(Long roomId, Long userId, Type type) {
+	public RoomMessage(Long roomId, IClient c, Type type) {
+		this(roomId, c.getUserId(), c.getFirstname(), c.getLastname(), type);
+	}
+
+	public RoomMessage(Long roomId, User u, Type type) {
+		this(roomId, u.getId(), u.getFirstname(), u.getLastname(), type);
+	}
+
+	private RoomMessage(Long roomId, Long userId, String firstName, String lastName, Type type) {
 		this.timestamp = new Date();
 		this.roomId = roomId;
+		if (SIP_USER_ID.equals(userId)) {
+			this.name = SIP_FIRST_NAME;
+		} else {
+			name = String.format("%s %s", firstName, lastName);
+		}
 		this.userId = userId;
 		this.type = type;
 		this.uid = UUID.randomUUID().toString();
@@ -78,6 +97,10 @@ public class RoomMessage implements IWebSocketPushMessage {
 
 	public Long getUserId() {
 		return userId;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public Type getType() {

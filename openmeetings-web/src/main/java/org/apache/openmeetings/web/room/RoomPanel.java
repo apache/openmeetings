@@ -60,10 +60,10 @@ import org.apache.openmeetings.db.entity.server.SOAPLogin;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
-import org.apache.openmeetings.util.message.RoomMessage;
-import org.apache.openmeetings.util.message.RoomMessage.Type;
-import org.apache.openmeetings.util.message.TextRoomMessage;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
@@ -148,7 +148,7 @@ public class RoomPanel extends BasePanel {
 					.append(wb.getInitScript())
 					.append("Room.setSize();");
 			target.appendJavaScript(sb);
-			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), getUserId(), RoomMessage.Type.roomEnter));
+			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), _c, RoomMessage.Type.roomEnter));
 			// play video from other participants
 			initVideos(target);
 			getMainPanel().getChat().roomEnter(r, target);
@@ -782,7 +782,7 @@ public class RoomPanel extends BasePanel {
 				break;
 		}
 		if (reqType != null) {
-			WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getUserId(), reqType, getClient().getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), reqType, getClient().getUid()));
 		}
 	}
 
@@ -807,12 +807,12 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void kickUser(Client client) {
-		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client.getUserId(), Type.kick, client.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, Type.kick, client.getUid()));
 	}
 
 	public void broadcast(Client client) {
 		RoomBroadcaster.sendUpdatedClient(client);
-		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getUserId(), RoomMessage.Type.rightUpdated, client.getUid()));
+		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.rightUpdated, client.getUid()));
 	}
 
 	public Room getRoom() {

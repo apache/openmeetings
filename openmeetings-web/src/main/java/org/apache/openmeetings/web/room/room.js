@@ -364,7 +364,8 @@ var Video = (function() {
 			c.pod = _c.pod;
 			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
 		}
-		v.dialog('option', 'title', _getName());
+		const name = _getName();
+		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		if (swf[0].update !== undefined) {
 			c.self ? swf[0].update() : swf[0].update(c);
 		}

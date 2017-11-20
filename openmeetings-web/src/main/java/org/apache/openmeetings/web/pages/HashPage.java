@@ -109,7 +109,9 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				FastDateFormat sdf = WebSession.createDateFormat(i.getInvitee());
 				errorMsg = Valid.OneTime == i.getValid()
 						? getString("error.hash.used")
-						: String.format("%s %s - %s", getString("error.hash.period"), sdf.format(i.getValidFrom()), sdf.format(i.getValidTo()));
+						: String.format("%s %s - %s, %s", getString("error.hash.period")
+								, sdf.format(i.getValidFrom()), sdf.format(i.getValidTo())
+								, i.getInvitee().getTimeZoneId());
 			} else {
 				Recording rec = i.getRecording();
 				if (rec != null) {

@@ -39,6 +39,8 @@ public interface IClient extends IDataProviderEntity {
 	String getSid();
 	Long getUserId();
 	String getLogin();
+	String getFirstname();
+	String getLastname();
 	String getRemoteAddress();
 	Long getRoomId();
 	int getWidth();
