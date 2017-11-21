@@ -23,6 +23,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.pages.BrowserInfoForm;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -33,7 +35,8 @@ public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(MainPanel.class, "main.js")));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BrowserInfoForm.JS)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(MainPanel.class, "main.js"))));
 	}
 
 	@Override

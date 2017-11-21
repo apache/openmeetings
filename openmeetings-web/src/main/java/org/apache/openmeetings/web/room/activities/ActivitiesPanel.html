@@ -23,6 +23,9 @@
 	<div class="ui-widget-header">
 		<div onclick="Activities.toggle();" class="clickable control block ui-widget-header ui-state-active"><div class="ui-icon ui-icon-carat-1-n sort-icon"></div><div class="label"><wicket:message key="1363"/></div></div>
 	</div>
+	<div class="ctrl ui-widget-content">
+		<div><input type="checkbox" id="activity-auto-clean"/><label for="activity-auto-clean"><wicket:message key="activities.autoclean"/></label></div>
+	</div>
 	<div wicket:id="container" class="area ui-widget-content">
 		<div wicket:id="activities" class="activity item ui-helper-clearfix ui-corner-all">
 			<span wicket:id="close" class="ui-icon ui-icon-close ui-corner-all clickable" wicket:message="title:85"></span>

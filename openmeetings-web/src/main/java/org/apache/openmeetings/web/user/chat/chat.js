@@ -1,8 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Chat = function() {
-	const isRtl = "rtl" === $('html').attr('dir')
-		, align = isRtl ? 'align-right' : 'align-left'
-		, alignIco = isRtl ? 'align-left' : 'align-right'
+	const align = Settings.isRtl ? 'align-right' : 'align-left'
+		, alignIco = Settings.isRtl ? 'align-left' : 'align-right'
 		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
 		, msgTemplate = "<div class='clear msg-row' id='chat-msg-id-#{id}'><img class='profile " + align + "' src='#{imgSrc}'/><span class='from " + align + "' data-user-id='#{userId}'>#{from}</span><span class='" + align + "'>#{msg}</span><span class='date " + alignIco + "'>#{sent}</span></div>"
 		, acceptTemplate = "<div class='tick om-icon " + alignIco + " clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='const e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
@@ -16,12 +15,12 @@ var Chat = function() {
 		, emoticon = new CSSEmoticon()
 		, doneTypingInterval = 5000 //time in ms, 5 second for example
 		, iconOpen = 'ui-icon-caret-1-n'
-		, iconOpenRoom = 'ui-icon-caret-1-' + (isRtl ? 'e' : 'w')
+		, iconOpenRoom = 'ui-icon-caret-1-' + (Settings.isRtl ? 'e' : 'w')
 		, iconClose = 'ui-icon-caret-1-s'
-		, iconCloseRoom = 'ui-icon-caret-1-' + (isRtl ? 'w' : 'e')
+		, iconCloseRoom = 'ui-icon-caret-1-' + (Settings.isRtl ? 'w' : 'e')
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
-		, roomPrefix = "Room ", typingTimer, audio, s, roomMode = false, globalWidth = 600
+		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
 		, editor = $('#chatMessage .wysiwyg-editor')
 		;
 
@@ -34,21 +33,13 @@ var Chat = function() {
 		};
 	}
 	function _load() {
-		s = {};
-		try {
-			s = JSON.parse(localStorage.getItem('openmeetings')) || s;
-		} catch (e) {
-			//no-op
-		}
-		if (!s.chat) {
+		const s = Settings.load();
+		if (typeof s.chat === 'undefined') {
 			s.chat = {};
 		}
+		return s;
 	}
-	function _save() {
-		const _s = JSON.stringify(s);
-		localStorage.setItem('openmeetings', _s);
-	}
-	function _updateBtn(a) {
+	function _updateBtn(s, a) {
 		const muted = s.chat.muted === true;
 		a.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
 				.attr('title', a.data(muted ? 'sound-enabled' : 'sound-muted'));
@@ -76,14 +67,14 @@ var Chat = function() {
 				row = $('<tr></tr>');
 			}
 		}
-		_load();
 		const a = $('#chat .audio');
-		_updateBtn(a);
+		_updateBtn(_load(), a);
 		$('#chat .chat-btn').hover(function(){ $(this).addClass('ui-state-hover') }, function(){ $(this).removeClass('ui-state-hover') });
-		a.click(function() {
+		a.off().click(function() {
+			const s = _load();
 			s.chat.muted = !s.chat.muted;
-			_updateBtn(a);
-			_save();
+			_updateBtn(s, a);
+			Settings.save(s);
 		});
 	}
 	function isClosed() {
@@ -142,7 +133,7 @@ var Chat = function() {
 			p.removeClass('room')
 				.off('mouseenter mouseleave')
 				.resizable({
-					handles: 'n, ' + (isRtl ? 'w' : 'e')
+					handles: 'n, ' + (Settings.isRtl ? 'w' : 'e')
 					, disabled: isClosed()
 					, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
 					, minHeight: 195
@@ -196,6 +187,7 @@ var Chat = function() {
 		if ($('#chat').length > 0 && m && m.type === "chat") {
 			if (isClosed()) {
 				ctrl.addClass('ui-state-highlight');
+				const s = _load();
 				if (p.is(':visible') && s.chat.muted !== true) {
 					const playPromise = audio.play();
 
@@ -249,7 +241,7 @@ var Chat = function() {
 	function _setOpened() {
 		p.addClass('opened').off('mouseenter mouseleave');
 		p.resizable({
-			handles: (isRtl ? 'e' : 'w')
+			handles: (Settings.isRtl ? 'e' : 'w')
 			, alsoResize: '#chatPopup'
 			, stop: function(event, ui) {
 				p.css({'left': ''});

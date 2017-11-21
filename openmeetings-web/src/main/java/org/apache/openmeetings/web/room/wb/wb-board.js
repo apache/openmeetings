@@ -205,7 +205,7 @@ var Wb = function() {
 					, containment: 'body'
 					, start: function() {
 						if (!!s.css('bottom')) {
-							s.css('bottom', '').css(isRtl ? 'left' : 'right', '');
+							s.css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
 						}
 					}
 					, drag: function() {
@@ -555,18 +555,18 @@ var Wb = function() {
 			role = _role;
 			const sc = a.find('.scroll-container');
 			z = $('#wb-zoom').clone().attr('id', '')
-				.attr('style', 'position: absolute; top: 0px; ' + (isRtl ? 'right' : 'left') + ': 80px;');
+				.attr('style', 'position: absolute; top: 0px; ' + (Settings.isRtl ? 'right' : 'left') + ': 80px;');
 			if (role === NONE) {
 				t = $('#wb-tools-readonly').clone().attr('id', '');
 				sc.off('scroll', scrollHandler);
 			} else {
 				t = $('#wb-tools').clone().attr('id', '');
 				s = $("#wb-settings").clone().attr('id', '')
-					.attr('style', 'display: none; bottom: 100px; ' + (isRtl ? 'left' : 'right') + ': 100px;');
+					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
 				a.append(s);
 				sc.on('scroll', scrollHandler);
 			}
-			t.attr('style', 'position: absolute; top: 20px; ' + (isRtl ? 'left' : 'right') + ': 20px;');
+			t.attr('style', 'position: absolute; top: 20px; ' + (Settings.isRtl ? 'left' : 'right') + ': 20px;');
 			a.append(t).append(z);
 			showCurrentSlide();
 			t = a.find('.tools'), s = a.find(".wb-settings");
@@ -602,15 +602,15 @@ var Wb = function() {
 	wb.resize = function() {
 		if (t.position().left + t.width() > a.width()) {
 			t.position({
-				my: (isRtl ? 'left' : 'right')
-				, at: (isRtl ? 'left' : 'right') + '-20'
+				my: (Settings.isRtl ? 'left' : 'right')
+				, at: (Settings.isRtl ? 'left' : 'right') + '-20'
 				, of: '#' + a[0].id
 				, collision: "fit"
 			});
 		}
 		if (z.position().left + z.width() > a.width()) {
 			z.position({
-				my: (isRtl ? 'right' : 'left') + ' top'
+				my: (Settings.isRtl ? 'right' : 'left') + ' top'
 				, at: "center top"
 				, of: '#' + a[0].id
 				, collision: "fit"

@@ -286,7 +286,7 @@ var DrawWbArea = function() {
 	};
 	self.resize = function(sbW, chW, w, h) {
 		const hh = h - 5;
-		container.width(w).height(h).css('left', (isRtl ? chW : sbW) + "px");
+		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + "px");
 		if (!container || !_inited) return;
 		area.width(w).height(hh);
 

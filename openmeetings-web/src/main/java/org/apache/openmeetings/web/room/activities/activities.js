@@ -3,6 +3,17 @@ var Activities = function() {
 	const closedHeight = "20px";
 	let activities, openedHeight = "345px", inited = false;
 
+	function _load() {
+		const s = Settings.load();
+		if (typeof s.activity === 'undefined') {
+			s.activity = {};
+		}
+		return s;
+	}
+	function _updateClean(s, a) {
+		const clean = s.activity.clean === true;
+		a.prop('checked', clean);
+	}
 	function isClosed() {
 		return activities.height() < 24;
 	}
@@ -39,6 +50,13 @@ var Activities = function() {
 					openedHeight = ui.size.height + "px";
 				}
 			});
+			const aclean = $('#activity-auto-clean').change(function() {
+				const s = _load();
+				s.activity.clean = $(this).prop('checked');
+				Settings.save(s);
+				_updateClean(s, $(this));
+			});
+			_updateClean(_load(), aclean);
 			inited = true;
 		}
 		, hightlight: function() {

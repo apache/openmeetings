@@ -31,6 +31,10 @@
 	display: inline-block;
 	padding-left: 20px;
 }
+#activities .ctrl {
+	padding-left: 20px;
+	padding-right: 20px;
+}
 #activities .area {
 	height: 319px;
 	overflow-y: auto;

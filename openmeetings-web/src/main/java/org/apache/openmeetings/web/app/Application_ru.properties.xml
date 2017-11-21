@@ -988,4 +988,5 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="zoom.pageWidth"><![CDATA[По ширине страницы]]></entry>
 	<entry key="label.dock.panel"><![CDATA[Кликните чтобы "прилепить" панель]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Кликните чтобы "отлепить" панель]]></entry>
+	<entry key="activities.autoclean"><![CDATA[Авто-очистка]]></entry>
 </properties>
