@@ -43,7 +43,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		AjaxButton newBtn = new AjaxButton("ajax-new-button", form) {
+		final AjaxButton newBtn = new AjaxButton("ajax-new-button", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -63,7 +63,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			}
 		};
 		// add a cancel button that can be used to submit the form via ajax
-		ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), form) {
+		final ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), (Form<?>)null) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
