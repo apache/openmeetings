@@ -49,8 +49,8 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
-import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
+import org.apache.openmeetings.web.common.menu.OmMenuItem;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.user.AboutDialog;
 import org.apache.openmeetings.web.user.InviteUserToRoomDialog;
@@ -221,6 +221,7 @@ public class MainPanel extends Panel {
 		} else {
 			add(new EmptyPanel("dev").setVisible(false));
 		}
+		add(new OmAjaxClientInfoBehavior());
 		add(about, chat = new ChatPanel("chatPanel"));
 		add(newMessage = new MessageDialog("newMessageDialog", new CompoundPropertyModel<>(new PrivateMessage())) {
 			private static final long serialVersionUID = 1L;
@@ -291,7 +292,6 @@ public class MainPanel extends Panel {
 				response.render(new PriorityHeaderItem(getNamedFunction("inviteUser", this, explicit(PARAM_USER_ID))));
 			}
 		});
-		add(new OmAjaxClientInfoBehavior());
 		topLinks.add(new ConfirmableAjaxBorder("logout", getString("310"), getString("634")) {
 			private static final long serialVersionUID = 1L;
 

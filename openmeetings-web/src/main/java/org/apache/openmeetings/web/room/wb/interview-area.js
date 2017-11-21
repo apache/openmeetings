@@ -68,7 +68,7 @@ var InterviewWbArea = function() {
 	function _resize(sbW, chW, w, h) {
 		if (!container || !_inited) return;
 		const hh = h - 5;
-		container.width(w).height(h).css('left', (isRtl ? chW : sbW) + "px");
+		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + "px");
 		area.width(w).height(hh);
 	}
 	function _setRecStartEnabled(en) {

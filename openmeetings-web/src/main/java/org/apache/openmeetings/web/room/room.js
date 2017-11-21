@@ -564,7 +564,7 @@ var VideoManager = (function() {
 	return self;
 })();
 var Room = (function() {
-	const self = {}, isRtl = "rtl" === $('html').attr('dir'), sbSide = isRtl ? 'right' : 'left';
+	const self = {}, sbSide = Settings.isRtl ? 'right' : 'left';
 	let options, menuHeight, chat, sb, dock;
 
 	function _init(_options) {
@@ -598,7 +598,7 @@ var Room = (function() {
 					_setSize();
 				});
 		});
-		dock.addClass(isRtl ? 'align-left' : 'align-right').attr('title', dock.data('ttl-undock'))
+		dock.addClass(Settings.isRtl ? 'align-left' : 'align-right').attr('title', dock.data('ttl-undock'))
 			.button('option', 'label', dock.data('ttl-undock'))
 			.button('refresh');
 		menuHeight = menu.length === 0 ? 0 : menu.height();
@@ -703,7 +703,7 @@ var Room = (function() {
 	}
 	function _sbAddResizable() {
 		sb.resizable({
-			handles: isRtl ? 'w' : 'e'
+			handles: Settings.isRtl ? 'w' : 'e'
 			, stop: function() {
 				_setSize();
 			}

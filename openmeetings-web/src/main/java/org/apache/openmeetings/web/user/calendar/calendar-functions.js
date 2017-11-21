@@ -19,12 +19,12 @@ function toggleDatePicker(id) {
 	dp.datepicker(dp.datepicker("widget").is(":visible") ? "hide" : "show");
 	return false;
 }
-function addCalButton(rtl, id) {
+function addCalButton(id) {
 	const my_button =
 		'<button class="fc-button fc-state-default fc-corner-right fc-corner-left" onclick="return toggleDatePicker(\'' + id + '\');">' +
 		'<input type="text" id="' + id + '" /></button>';
 
-	if (rtl) {
+	if (Settings.isRtl) {
 		$(".fc .fc-toolbar .fc-right").prepend(my_button);
 	} else {
 		$(".fc .fc-toolbar .fc-left").append(my_button);
@@ -43,7 +43,7 @@ function addCalButton(rtl, id) {
 		dayNamesMin: $('#${markupId}').fullCalendar("option","dayNamesShort"),
 		monthNames: $('#${markupId}').fullCalendar("option","monthNames"),
 		monthNamesShort: $('#${markupId}').fullCalendar("option","monthNamesShort"),
-		isRTL: rtl,
+		isRTL: Settings.isRtl,
 		onChangeMonthYear: function(year, month, inst) {
 			$('#${markupId}').fullCalendar('gotoDate', year + '-' + ('0' + month).slice(-2) + '-' + inst.selectedDay);
 		},

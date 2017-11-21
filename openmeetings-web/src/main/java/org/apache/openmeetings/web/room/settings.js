@@ -3,20 +3,14 @@ var VideoSettings = (function() {
 	let vs, lm, swf, s, cam, mic, res, o
 		, vidScroll, recBtn, playBtn, recAllowed = false;
 	function _load() {
-		s = {};
-		try {
-			s = JSON.parse(localStorage.getItem('openmeetings')) || s;
-		} catch (e) {
-			//no-op
-		}
+		s = Settings.load();
 		if (!s.video) {
 			s.video = {};
 		}
 		return s;
 	}
 	function _save(refr) {
-		const _s = JSON.stringify(s);
-		localStorage.setItem('openmeetings', _s);
+		const _s = Settings.save(s);
 		if (typeof avSettings === 'function') {
 			avSettings(_s);
 		}
