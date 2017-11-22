@@ -596,7 +596,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (!getClient().getUid().equals(c.getUid())) {
-							handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
+							handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
 						}
 					}
 						break;
@@ -609,7 +609,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						if (!getClient().getUid().equals(c.getUid())) {
-							handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.mute('%s', %s);}", obj.getString("uid"), obj.getBoolean("mute")));
+							handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.mute('%s', %s);}", obj.getString("uid"), obj.getBoolean("mute")));
 						}
 					}
 						break;
@@ -621,7 +621,7 @@ public class RoomPanel extends BasePanel {
 							// no luck
 							return;
 						}
-						handler.appendJavaScript(String.format("if (typeof VideoManager !== 'undefined') {VideoManager.exclusive('%s');}", uid));
+						handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.exclusive('%s');}", uid));
 					}
 						break;
 				}
@@ -716,7 +716,7 @@ public class RoomPanel extends BasePanel {
 		if (r.isHidden(RoomElement.Chat)) {
 			getMainPanel().getChat().toggle(handler, true);
 		}
-		handler.appendJavaScript("if (typeof Room !== 'undefined') { Room.unload(); }");
+		handler.appendJavaScript("if (typeof(Room) !== 'undefined') { Room.unload(); }");
 		Application.exitRoom(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}

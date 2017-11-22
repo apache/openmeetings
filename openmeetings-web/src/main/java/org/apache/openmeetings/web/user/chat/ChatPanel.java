@@ -63,7 +63,7 @@ public class ChatPanel extends Panel {
 		if (r.isHidden(RoomElement.Chat)) {
 			return;
 		}
-		handler.appendJavaScript(String.format("if (typeof Chat == 'object') { Chat.removeTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
+		handler.appendJavaScript(String.format("if (typeof(Chat) === 'object') { Chat.removeTab('%1$s%2$d'); }", ID_ROOM_PREFIX, r.getId()));
 		StringBuilder sb = new StringBuilder("$(function() {")
 				.append("Chat.setRoomMode(false);");
 		if (!chat.isShowDashboardChat()) {

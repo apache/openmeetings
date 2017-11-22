@@ -18,9 +18,12 @@
  */
 package org.apache.openmeetings.web.common;
 
+import java.util.List;
+
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
+import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -31,12 +34,21 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	private static final long serialVersionUID = 1L;
+	private static final JavaScriptResourceReference MAIN_JS = new JavaScriptResourceReference(MainPanel.class, "main.js") {
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		public List<HeaderItem> getDependencies() {
+			List<HeaderItem> list = super.getDependencies();
+			list.add(JavaScriptHeaderItem.forReference(BrowserInfoForm.JS));
+			return list;
+		}
+	};
 
 	@Override
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BrowserInfoForm.JS)));
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(MainPanel.class, "main.js"))));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(MAIN_JS)));
 	}
 
 	@Override
