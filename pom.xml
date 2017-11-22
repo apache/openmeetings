@@ -864,6 +864,7 @@
 				<configuration>
 					<getRevisionOnlyOnce>true</getRevisionOnlyOnce>
 					<revisionOnScmFailure>${buildnumber}</revisionOnScmFailure>
+					<shortRevisionLength>7</shortRevisionLength>
 				</configuration>
 			</plugin>
 			<plugin>
