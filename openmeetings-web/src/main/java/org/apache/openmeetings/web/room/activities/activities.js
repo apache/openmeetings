@@ -5,7 +5,7 @@ var Activities = function() {
 
 	function _load() {
 		const s = Settings.load();
-		if (typeof s.activity === 'undefined') {
+		if (typeof(s.activity) === 'undefined') {
 			s.activity = {};
 		}
 		return s;

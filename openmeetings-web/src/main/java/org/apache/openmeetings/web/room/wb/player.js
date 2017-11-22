@@ -27,7 +27,7 @@ var Player = (function() {
 				video.visible = false;
 				poster.width = _o.width;
 				poster.height = _o.height;
-				if (typeof _o.status === 'undefined') {
+				if (typeof(_o.status) === 'undefined') {
 					_o.status = {paused: true};
 				}
 				let playable = false;

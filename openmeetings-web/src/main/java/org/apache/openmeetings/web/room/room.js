@@ -670,7 +670,7 @@ var Room = (function() {
 			holder.removeClass('big').addClass('small');
 		}
 		Chat.setHeight(h);
-		if (typeof WbArea !== 'undefined') {
+		if (typeof(WbArea) !== 'undefined') {
 			const chW = chat.width();
 			WbArea.resize(sbW + 5, chW + 5, w - chW, h);
 		}
@@ -728,11 +728,11 @@ var Room = (function() {
 		$(window).off('resize.openmeetings');
 		Wicket.Event.unsubscribe("/websocket/closed", _close);
 		Wicket.Event.unsubscribe("/websocket/error", _close);
-		if (typeof WbArea !== 'undefined') {
+		if (typeof(WbArea) !== 'undefined') {
 			WbArea.destroy();
 			WbArea = undefined;
 		}
-		if (typeof VideoSettings !== 'undefined') {
+		if (typeof(VideoSettings) !== 'undefined') {
 			VideoSettings.close();
 		}
 		$('.ui-dialog.user-video').remove();
@@ -760,7 +760,7 @@ var Room = (function() {
 
 	self.init = _init;
 	self.getMenuHeight = function() { return menuHeight; };
-	self.getOptions = function() { return typeof options === 'object' ? JSON.parse(JSON.stringify(options)) : {}; };
+	self.getOptions = function() { return typeof(options) === 'object' ? JSON.parse(JSON.stringify(options)) : {}; };
 	self.setRights = function(_r) { return options.rights = _r; };
 	self.setSize = _setSize;
 	self.load = _load;

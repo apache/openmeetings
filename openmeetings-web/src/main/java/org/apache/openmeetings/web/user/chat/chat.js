@@ -34,7 +34,7 @@ var Chat = function() {
 	}
 	function _load() {
 		const s = Settings.load();
-		if (typeof s.chat === 'undefined') {
+		if (typeof(s.chat) === 'undefined') {
 			s.chat = {};
 		}
 		return s;
@@ -274,7 +274,7 @@ var Chat = function() {
 				$('#chat .messageArea').each(function() {
 					$(this).scrollTop($(this)[0].scrollHeight);
 				});
-				if (typeof handler === 'function') {
+				if (typeof(handler) === 'function') {
 					handler();
 				}
 			});
@@ -293,7 +293,7 @@ var Chat = function() {
 			}
 			pp.animate(opts, 1000, function() {
 				p.addClass('closed');
-				if (typeof handler === 'function') {
+				if (typeof(handler) === 'function') {
 					handler();
 				}
 			});
@@ -356,7 +356,7 @@ $(function() {
 						Chat.addMessage(m);
 						break;
 					case "typing":
-						if (typeof typingActivity === "function") {
+						if (typeof(typingActivity) === "function") {
 							typingActivity(m.uid, m.active);
 						}
 						break;

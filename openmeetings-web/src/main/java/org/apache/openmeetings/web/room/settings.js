@@ -11,10 +11,10 @@ var VideoSettings = (function() {
 	}
 	function _save(refr) {
 		const _s = Settings.save(s);
-		if (typeof avSettings === 'function') {
+		if (typeof(avSettings) === 'function') {
 			avSettings(_s);
 		}
-		if (refr && typeof VideoManager !== 'undefined' && o.uid) {
+		if (refr && typeof(VideoManager) !== 'undefined' && o.uid) {
 			VideoManager.refresh(o.uid, s.video);
 		}
 	}
