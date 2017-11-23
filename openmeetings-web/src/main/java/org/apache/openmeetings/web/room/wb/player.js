@@ -136,9 +136,9 @@ var Player = (function() {
 				};
 				cProgress.on({
 					'mousedown': function (evt) {
-						const _ptr = canvas.getPointer(evt.e)
+						const _ptr = canvas.getPointer(evt.e, true)
 							, ptr = canvas._normalizePointer(group, _ptr)
-							, l = (group.width / 2 + ptr.x) * canvas.getZoom() - cProgress.aCoords.bl.x;
+							, l = ptr.x - cProgress.aCoords.bl.x + group.width / 2;
 						_sendStatus(group, group.status.paused, l * video.getElement().duration / cProgress.width)
 					}
 				});
