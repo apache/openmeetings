@@ -25,22 +25,12 @@ var DrawWbArea = function() {
 			return true;
 		}
 		const arr = [];
-		if (!!canvas.getActiveGroup()) {
-			canvas.getActiveGroup().forEachObject(function(o) {
-				arr.push({
-					uid: o.uid
-					, slide: o.slide
-				});
+		canvas.getActiveObjects().forEachObject(function(o) {
+			arr.push({
+				uid: o.uid
+				, slide: o.slide
 			});
-		} else {
-			const o = canvas.getActiveObject();
-			if (!!o) {
-				arr.push({
-					uid: o.uid
-					, slide: o.slide
-				});
-			}
-		}
+		});
 		wbAction('deleteObj', JSON.stringify({
 			wbId: wb.id
 			, obj: arr
