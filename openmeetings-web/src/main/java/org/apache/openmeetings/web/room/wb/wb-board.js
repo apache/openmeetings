@@ -633,7 +633,7 @@ var Wb = function() {
 					APointer().create(canvases[o.slide], o);
 					break;
 				case 'video':
-					Player.create(canvases[o.slide], o, role);
+					Player.create(canvases[o.slide], o, wb);
 					break;
 				default:
 				{
@@ -712,7 +712,10 @@ var Wb = function() {
 		for (let i = 0; i < canvases.length; ++i) {
 			func(canvases[i]);
 		}
-	}
+	};
 	wb.videoStatus = _videoStatus;
+	wb.getRole = function() {
+		return role;
+	};
 	return wb;
 };
