@@ -17,7 +17,7 @@ var Player = (function() {
 		}));
 	}
 
-	player.create = function(canvas, _o, _role) {
+	player.create = function(canvas, _o, wb) {
 		const vid = $('<video>').hide().attr('class', 'wb-video slide-' + canvas.slide).attr('id', 'wb-video-' + _o.uid)
 			.attr("width", _o.width).attr("height", _o.height)
 			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src));
@@ -206,7 +206,7 @@ var Player = (function() {
 						fabric.util.requestAnimFrame(render);
 					}
 				}
-				group.setPlayable(_role);
+				group.setPlayable(wb.getRole());
 				canvas.add(group);
 				canvas.renderAll();
 				player.modify(group, _o);
