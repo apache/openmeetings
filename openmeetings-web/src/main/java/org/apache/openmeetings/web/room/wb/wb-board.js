@@ -281,7 +281,7 @@ var Wb = function() {
 		if (!!__o) {
 			const cnvs = canvases[o.slide];
 			if (!!cnvs) {
-				cnvs.discardActiveGroup();
+				cnvs.discardActiveObject();
 				if ('Video' === __o.omType) {
 					$('#wb-video-' + __o.uid).remove();
 				}
@@ -345,7 +345,7 @@ var Wb = function() {
 
 			wb.eachCanvas(function(canvas) {
 				canvas.renderOnAddRemove = true;
-				canvas.renderAll();
+				canvas.requestRenderAll();
 			});
 		});
 	};
@@ -360,7 +360,7 @@ var Wb = function() {
 		return r;
 	}
 	//events
-	function wbObjCreatedHandler(o) {
+	function objCreatedHandler(o) {
 		if (role === NONE && o.type !== 'pointer') return;
 
 		let json;
@@ -385,7 +385,7 @@ var Wb = function() {
 			case 'i-text':
 				o.uid = UUID.generate();
 				o.slide = this.slide;
-				wbObjCreatedHandler(o);
+				objCreatedHandler(o);
 				break;
 			default:
 				o.selectable = this.selection;
@@ -397,7 +397,7 @@ var Wb = function() {
 		if (role === NONE && o.type !== 'pointer') return;
 
 		o.includeDefaultValues = false;
-		if ("group" === o.type && o.omType !== 'Video') {
+		if ("activeSelection" === o.type) {
 			o.clone(function(_o) {
 				// ungrouping
 				_o.includeDefaultValues = false;
@@ -424,7 +424,7 @@ var Wb = function() {
 	function pathCreatedHandler(o) {
 		o.path.uid = UUID.generate();
 		o.path.slide = this.slide;
-		wbObjCreatedHandler(o.path);
+		objCreatedHandler(o.path);
 	};
 	function scrollHandler() {
 		$(this).find('.canvas-container').each(function(idx) {
@@ -462,7 +462,7 @@ var Wb = function() {
 	function setHandlers(canvas) {
 		// off everything first to prevent duplicates
 		canvas.off({
-			'wb:object:created': wbObjCreatedHandler
+			'wb:object:created': objCreatedHandler
 			, 'object:modified': objModifiedHandler
 			, 'object:added': objAddedHandler
 			, 'object:selected': objSelectedHandler
@@ -471,7 +471,7 @@ var Wb = function() {
 			//, 'text:changed': textChangedHandler
 		});
 		canvas.on({
-			'wb:object:created': wbObjCreatedHandler
+			'wb:object:created': objCreatedHandler
 			, 'object:modified': objModifiedHandler
 		});
 		if (role !== NONE) {
@@ -702,7 +702,7 @@ var Wb = function() {
 			}
 			$('.room.wb.area .wb-video.slide-' + _sl).remove();
 			canvas.renderOnAddRemove = true;
-			canvas.renderAll();
+			canvas.requestRenderAll();
 		}
 	};
 	wb.getCanvas = function() {

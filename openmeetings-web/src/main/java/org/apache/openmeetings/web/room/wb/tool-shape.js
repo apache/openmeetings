@@ -21,7 +21,7 @@ var Shape = function(wb) {
 		if (!shape.isDown) return;
 		const pointer = canvas.getPointer(o.e);
 		shape.updateShape(pointer);
-		canvas.renderAll();
+		canvas.requestRenderAll();
 	};
 	shape.updateCreated = function(o) {
 		return o;
@@ -31,7 +31,7 @@ var Shape = function(wb) {
 		shape.isDown = false;
 		shape.obj.setCoords();
 		shape.obj.selectable = false;
-		canvas.renderAll();
+		canvas.requestRenderAll();
 		shape.objectCreated(shape.obj, canvas);
 	};
 	shape.internalActivate = function() {};
