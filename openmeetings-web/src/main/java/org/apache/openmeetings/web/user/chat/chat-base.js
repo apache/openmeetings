@@ -347,7 +347,6 @@ var Chat = function() {
 		, clean: _clean
 	};
 }();
-
 $(function() {
 	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
 		try {

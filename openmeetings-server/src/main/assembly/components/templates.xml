@@ -36,6 +36,7 @@
 			<outputDirectory>${om.webapp}/WEB-INF/classes</outputDirectory>
 			<includes>
 				<include>**/*.js</include>
+				<include>**/*.css</include>
 			</includes>
 		</fileSet>
 		<fileSet>
