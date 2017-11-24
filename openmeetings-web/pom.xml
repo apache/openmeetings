@@ -102,6 +102,7 @@
 								<cssSourceFile>activities.css</cssSourceFile>
 								<cssSourceFile>admin.css</cssSourceFile>
 								<cssSourceFile>calendar.css</cssSourceFile>
+								<cssSourceFile>cssemoticons.css</cssSourceFile>
 								<cssSourceFile>chat.css</cssSourceFile>
 								<cssSourceFile>menu.css</cssSourceFile>
 								<cssSourceFile>room.css</cssSourceFile>
@@ -150,6 +151,7 @@
 							<charset>UTF-8</charset>
 							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
 							<jsSourceFiles>
+								<jsSourceFile>fabric.js</jsSourceFile>
 								<jsSourceFile>wb-all.js</jsSourceFile>
 								<jsSourceFile>uuid.js</jsSourceFile>
 								<jsSourceFile>player.js</jsSourceFile>
@@ -173,6 +175,63 @@
 							<jsFinalFile>wb.js</jsFinalFile>
 							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room/wb/</jsTargetDir>
 							<jsEngine>CLOSURE</jsEngine>
+						</configuration>
+					</execution>
+					<execution>
+						<id>fileinput-js</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/util/upload</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>fileinput.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>fileinput.js</jsFinalFile>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/util/upload</jsTargetDir>
+							<jsEngine>CLOSURE</jsEngine>
+							<cssSourceDir>../java/org/apache/openmeetings/web/util/upload</cssSourceDir>
+							<cssSourceFiles>
+								<cssSourceFile>fileinput.css</cssSourceFile>
+							</cssSourceFiles>
+							<skipMerge>true</skipMerge>
+							<cssFinalFile>fileinput.css</cssFinalFile>
+							<cssTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/util/upload</cssTargetDir>
+						</configuration>
+					</execution>
+					<execution>
+						<id>room-js</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>jquery.dialogextend.js</jsSourceFile>
+								<jsSourceFile>room-base.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>room.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room</jsTargetDir>
+						</configuration>
+					</execution>
+					<execution>
+						<id>chat-js</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/user/chat</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>cssemoticons.js</jsSourceFile>
+								<jsSourceFile>chat-base.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>chat.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/user/chat</jsTargetDir>
 						</configuration>
 					</execution>
 				</executions>

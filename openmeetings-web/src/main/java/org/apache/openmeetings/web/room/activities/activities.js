@@ -87,3 +87,22 @@ var Activities = function() {
 		}
 	};
 }();
+$(function() {
+	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
+		try {
+			if (msg instanceof Blob) {
+				return; //ping
+			}
+			const m = jQuery.parseJSON(msg);
+			if (m) {
+				switch(m.type) {
+					case "activity":
+						Activities.addMessage(m);
+						break;
+				}
+			}
+		} catch (err) {
+			//no-op
+		}
+	});
+});

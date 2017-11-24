@@ -82,8 +82,6 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes.Method;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -104,7 +102,6 @@ public class WbPanel extends AbstractWbPanel {
 	private static final int DEFAULT_HEIGHT = 480;
 	private static final int UNDO_SIZE = 20;
 	public static final ResourceReference WB_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "wb.js");
-	private static final ResourceReference FABRIC_JS_REFERENCE = new JavaScriptResourceReference(WbPanel.class, "fabric.js");
 	private final Long roomId;
 	private long wb2save = -1;
 	private final Map<Long, Deque<UndoObject>> undoList = new HashMap<>();
@@ -153,12 +150,6 @@ public class WbPanel extends AbstractWbPanel {
 				}
 			}, fileName);
 		}
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(JavaScriptHeaderItem.forReference(FABRIC_JS_REFERENCE));
 	}
 
 	@Override
