@@ -110,16 +110,16 @@ var Chat = function() {
 			tabs.tabs("refresh");
 		});
 		if (roomMode) {
-			icon.addClass(isClosed ? iconOpenRoom : iconCloseRoom);
+			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
 			p.addClass('room').hover(_open, _close);
 			pp.width(closedSize);
 			_removeResize();
 		} else {
 			ctrl.attr('title', '');
-			icon.addClass(isClosed ? iconOpen : iconClose);
+			icon.addClass(isClosed() ? iconOpen : iconClose);
 			ctrl.height(closedSize).width(globalWidth).off('click').click(Chat.toggle);
 			pp.width(globalWidth).height(closedSize);
-			p.removeClass('room')
+			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
 				.resizable({
 					handles: 'n, ' + (Settings.isRtl ? 'w' : 'e')
