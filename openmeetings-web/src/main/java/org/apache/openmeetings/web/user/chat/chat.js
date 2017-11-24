@@ -113,17 +113,6 @@ var Chat = function() {
 			icon.addClass(isClosed ? iconOpenRoom : iconCloseRoom);
 			p.addClass('room').hover(_open, _close);
 			pp.width(closedSize);
-			ctrl.off('click').click(function() {
-				if (p.hasClass('opened')) {
-					ctrl.attr('title', ctrl.data('ttl-dock'));
-					_close(Room.setSize);
-					p.removeClass('opened').hover(_open, _close);
-					_removeResize();
-				} else {
-					ctrl.attr('title', ctrl.data('ttl-undock'));
-					_setOpened();
-				}
-			}).attr('title', ctrl.data('ttl-dock'));
 			_removeResize();
 		} else {
 			ctrl.attr('title', '');
@@ -277,6 +266,19 @@ var Chat = function() {
 				if (typeof(handler) === 'function') {
 					handler();
 				}
+				if (roomMode) {
+					ctrl.off('click').click(function() {
+						if (p.hasClass('opened')) {
+							ctrl.attr('title', ctrl.data('ttl-dock'));
+							_close(Room.setSize);
+							p.removeClass('opened').hover(_open, _close);
+							_removeResize();
+						} else {
+							ctrl.attr('title', ctrl.data('ttl-undock'));
+							_setOpened();
+						}
+					}).attr('title', ctrl.data('ttl-dock'));
+				}
 			});
 		}
 	}
@@ -286,13 +288,16 @@ var Chat = function() {
 			let opts;
 			if (roomMode) {
 				opts = {width: closedSizePx};
-				ctrl.height(p.height());
+				ctrl.off('click');
 			} else {
 				opts = {height: closedSizePx};
 				p.resizable("option", "disabled", true);
 			}
 			pp.animate(opts, 1000, function() {
 				p.addClass('closed');
+				if (roomMode) {
+					ctrl.height(p.height());
+				}
 				if (typeof(handler) === 'function') {
 					handler();
 				}
