@@ -36,6 +36,7 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
+import org.apache.tika.exception.UnsupportedFormatException;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,15 +83,13 @@ public class FileProcessor {
 			} else if (sf.isPdf() || sf.isOffice()) {
 				f.setType(Type.Presentation);
 			} else {
-				logs.add(new ProcessResult("The file type cannot be converted :: " + f.getName()));
-				return logs;
+				throw new UnsupportedFormatException("The file type cannot be converted :: " + f.getName());
 			}
 			f.setHash(hash);
 
 			processFile(f, sf, temp, logs);
 		} catch (Exception e) {
 			log.debug("Error while processing the file", e);
-			logs.add(new ProcessResult("Unexpected exception: " + e.getMessage()));
 			throw e;
 		} finally {
 			if (temp != null && temp.exists() && temp.isFile()) {
