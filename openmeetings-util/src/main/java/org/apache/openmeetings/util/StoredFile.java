@@ -34,7 +34,9 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.tika.Tika;
+import org.apache.tika.config.TikaConfig;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.apache.wicket.util.string.Strings;
@@ -57,6 +59,7 @@ public class StoredFile {
 	private static final Set<MediaType> CHART_TYPES = new HashSet<>();
 	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_JPG));
 	private static final String ACCEPT_STRING;
+	private static TikaConfig tika;
 	static {
 		Set<MediaType> types = new LinkedHashSet<>();
 		types.addAll(CONVERT_TYPES);
@@ -71,6 +74,12 @@ public class StoredFile {
 			sb.append(',').append(mt.toString());
 		}
 		ACCEPT_STRING = sb.toString();
+		try {
+			tika = new TikaConfig();
+		} catch (IOException | TikaException e) {
+			log.error("Unexpected exception while initializing TIKA", e);
+			throw new RuntimeException(e);
+		}
 	}
 
 	private String name;
@@ -95,21 +104,20 @@ public class StoredFile {
 		}
 	}
 
-	private void init(String name, String ext, InputStream is) {
-		if (Strings.isEmpty(ext)) {
-			int idx = name.lastIndexOf('.');
-			this.name = idx < 0 ? name : name.substring(0, idx);
-			this.ext = getFileExt(name);
+	private void init(String _name, String _ext, InputStream is) {
+		if (Strings.isEmpty(_ext)) {
+			int idx = _name.lastIndexOf('.');
+			name = idx < 0 ? _name : _name.substring(0, idx);
+			ext = getFileExt(_name);
 		} else {
-			this.name = name;
-			this.ext = ext.toLowerCase();
+			name = _name;
+			ext = _ext.toLowerCase();
 		}
-		Tika tika = new Tika();
 		Metadata md = new Metadata();
 		md.add(RESOURCE_NAME_KEY, String.format(FILE_NAME_FMT, name, ext));
 		try {
-			mime = MediaType.parse(tika.detect(is, md));
-		} catch (Exception e) {
+			mime = tika.getDetector().detect(is == null ? null : TikaInputStream.get(is), md);
+		} catch (Throwable e) {
 			mime = null;
 			log.error("Unexpected exception while detecting mime type", e);
 		}

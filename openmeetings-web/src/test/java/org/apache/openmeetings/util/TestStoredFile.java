@@ -26,7 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.util.StoredFile;
 import org.junit.Test;
 
 public class TestStoredFile extends AbstractJUnitDefaults {

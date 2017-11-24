@@ -30,13 +30,11 @@ import org.apache.openmeetings.core.data.file.FileProcessor;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
-import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -118,7 +116,6 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				return new ArrayList<>();
 			}
 		}));
-		uploadField.add(AttributeModifier.append("accept", StoredFile.getAcceptAttr()));
 		Form<String> nameForm = new Form<>("name-form");
 		fileName = new HiddenField<>("name", Model.of(""));
 		fileName.add(new AjaxFormSubmitBehavior(nameForm, "change") {

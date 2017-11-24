@@ -21,6 +21,7 @@ package org.apache.openmeetings.util;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Test;
@@ -74,6 +75,21 @@ public class TestStoredFile {
 			StoredFile sf = new StoredFile("test", ext, (InputStream)null);
 			assertTrue(String.format("Files of type '%s' should be treated as Convertible", ext), sf.isOffice());
 			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", ext), sf.isVideo());
+		}
+	}
+
+	private static void fileOfficeTest(String path) throws IOException {
+		try (InputStream is = TestStoredFile.class.getResourceAsStream(path)) {
+			StoredFile sf = new StoredFile(path, is);
+			assertTrue(String.format("Files of type '%s' should be treated as Convertible", sf.getExt()), sf.isOffice());
+			assertFalse(String.format("Files of type '%s' should NOT be treated as Video", sf.getExt()), sf.isVideo());
+		}
+	}
+
+	@Test
+	public void testOffice1() throws IOException {
+		for (String path : new String[] {"/ODFtest.odt", "/ODFtest.ods"}) {
+			fileOfficeTest(path);
 		}
 	}
 }
