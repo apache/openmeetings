@@ -151,7 +151,7 @@ var DrawWbArea = function() {
 		});
 	}
 	self.init = function() {
-		container = $(".room.wb.area");
+		container = $('.room.wb.area');
 		tabs = container.find('.tabs');
 		if (tabs.length === 0) return;
 		tabs.tabs({
@@ -227,7 +227,6 @@ var DrawWbArea = function() {
 	self.createWb = function(obj) {
 		if (!_inited) return;
 		self.create(obj);
-		self.setRole(role);
 		_activateTab(obj.wbId);
 	};
 	self.activateWb = function(obj) {

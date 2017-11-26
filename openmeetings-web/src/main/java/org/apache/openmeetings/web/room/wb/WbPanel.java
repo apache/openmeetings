@@ -467,7 +467,7 @@ public class WbPanel extends AbstractWbPanel {
 				.put("width", wb.getWidth())
 				.put("height", wb.getHeight())
 				.put("zoom", wb.getZoom())
-				.put("zoomMode", wb.getZoomMode());
+				.put("zoomMode", wb.getZoomMode().name());
 	}
 
 	@Override
@@ -658,8 +658,13 @@ public class WbPanel extends AbstractWbPanel {
 		return wb.save(f.getFile().toPath());
 	}
 
-	public static StringBuilder loadWhiteboards(Client cl, Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
-		return loadWhiteboards(new StringBuilder(), cl, wbs, boardSet);
+	public void loadWhiteboards(Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
+		for (Entry<Long, Whiteboard> entry : boardSet) {
+			final Whiteboard wb = entry.getValue();
+			sendWbAll(WbAction.create, getAddWbJson(wb));
+			sendWbAll(WbAction.createObj, new JSONObject().put("wbId", wb.getId())
+					.put("obj", getArray(wb.toJson(), null)));
+		}
 	}
 
 	private static StringBuilder loadWhiteboards(StringBuilder sb, Client cl, Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
