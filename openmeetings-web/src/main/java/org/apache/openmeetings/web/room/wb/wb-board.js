@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Wb = function() {
-	const ACTIVE = 'active', BUMPER = 100
-		, wb = {id: -1, name: ''}, canvases = []
+	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
+		, area = $('.room.wb.area .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src'];
 	let a, t, z, s, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'fullFit', role = null;
@@ -512,11 +512,11 @@ var Wb = function() {
 	function _setSize() {
 		switch (zoomMode) {
 			case 'fullFit':
-				zoom = Math.min((a.width() - 10) / width, (a.height() - 10) / height);
+				zoom = Math.min((area.width() - 10) / width, (area.height() - bar.height() - 10) / height);
 				z.find('.zoom').val(zoomMode);
 				break;
 			case 'pageWidth':
-				zoom = (a.width() - 10) / width;
+				zoom = (area.width() - 10) / width;
 				z.find('.zoom').val(zoomMode);
 				break;
 			default:

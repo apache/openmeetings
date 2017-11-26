@@ -19,7 +19,8 @@
 package org.apache.openmeetings.web.room.wb;
 
 public enum WbAction {
-	createWb
+	create //create wb without additional calls
+	, createWb
 	, removeWb
 	, activateWb
 	, renameWb
