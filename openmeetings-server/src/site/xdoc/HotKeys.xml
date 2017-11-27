@@ -29,7 +29,7 @@
 					<th>Config Key</th>
 				</tr>
 				<tr>
-					<td>F12 (code 123)</td>
+					<td>Shift+F12 (code 123)</td>
 					<td>A hot key code for the 'give exclusive audio' functionality.</td>
 					<td>Yes</td>
 					<td>exclusive.audio.keycode</td>
@@ -37,12 +37,11 @@
 				<tr>
 					<td>Shift+F8 (code 119)</td>
 					<td>Room video windows will be "rearranged" using masonry layout</td>
-					<td>No</td>
-					<td>
-					</td>
+					<td>Yes</td>
+					<td>video.arrange.keycode</td>
 				</tr>
 				<tr>
-					<td>F7 (code 118)</td>
+					<td>Shift+F7 (code 118)</td>
 					<td>A hot key code for the 'mute/unmute audio' functionality.</td>
 					<td>Yes</td>
 					<td>mute.keycode</td>
