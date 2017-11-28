@@ -522,7 +522,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Ablehnen]]></entry>
 	<entry key="1362"><![CDATA[Ich]]></entry>
 	<entry key="1363"><![CDATA[Aktivitäten und Aktionen]]></entry>
-	<entry key="1367"><![CDATA[hat den Raum verlassen.]]></entry>
 	<entry key="1386"><![CDATA[Mikrofone für andere stumm schalten]]></entry>
 	<entry key="1399"><![CDATA[bittet den Moderator sein/ihr Mikrofon stummzuschalten.]]></entry>
 	<entry key="1410"><![CDATA[Titel der Abstimmung]]></entry>
@@ -993,4 +992,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Auto-clean]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[hat den Raum verlassen.]]></entry>
 </properties>

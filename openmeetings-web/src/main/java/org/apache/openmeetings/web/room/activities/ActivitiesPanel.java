@@ -19,17 +19,12 @@
 package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
-import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
-import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -41,7 +36,6 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,14 +43,12 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+
+import com.github.openjson.JSONObject;
 
 public class ActivitiesPanel extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -66,14 +58,12 @@ public class ActivitiesPanel extends Panel {
 	private static final String PARAM_ROOM_ID = "roomid";
 	private static final String ACTIVITY_FMT = "%s %s [%s]";
 	private static final String ACTIVITY_FMT_RTL = "%3$s %2$s [%1$s]";
-	private static final String ACTIVITY_FUNC_FMT = "activityAction(%s, '%s', '%s');";
 	private enum Action {
 		accept, decline, close
 	};
 	private static final FastDateFormat df = FastDateFormat.getInstance("HH:mm:ss");
 	private final Map<String, Activity> activities = new LinkedHashMap<>();
 	private final RoomPanel room;
-	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final AbstractDefaultAjaxBehavior action = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -83,6 +73,9 @@ public class ActivitiesPanel extends Panel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
+			if (!isVisible()) {
+				return;
+			}
 			try {
 				String id = getRequest().getRequestParameters().getParameterValue(PARAM_ID).toString();
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
@@ -158,111 +151,6 @@ public class ActivitiesPanel extends Panel {
 			response.render(new PriorityHeaderItem(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_ID))));
 		}
 	};
-	private ListView<Activity> lv = new ListView<Activity>("activities", new ArrayList<Activity>()) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void populateItem(ListItem<Activity> item) {
-			Activity a = item.getModelObject();
-			String text = "";
-			Long roomId = room.getRoom().getId();
-			Component accept = new WebMarkupContainer("accept").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.accept.name(), a.getId())));
-			Component decline = new WebMarkupContainer("decline").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.decline.name(), a.getId())));
-			Component find = new WebMarkupContainer("find").add(addOnClick(String.format("Activities.findUser('%s');", a.getUid()))).setVisible(false);
-			boolean self = getUserId().equals(a.getSender());
-			switch (a.getType()) {
-				case reqRightModerator:
-				case reqRightPresenter:
-				case reqRightWb:
-				case reqRightShare:
-				case reqRightRemote:
-				case reqRightA:
-				case reqRightAv:
-				case reqRightMute:
-				case reqRightExclusive:
-					accept.setVisible(room.getClient().hasRight(Right.moderator));
-					decline.setVisible(room.getClient().hasRight(Right.moderator));
-					break;
-				case haveQuestion:
-					find.setVisible(!self);
-				case roomEnter:
-				case roomExit:
-					accept.setVisible(false);
-					decline.setVisible(false);
-					break;
-			}
-			String name = self ? getString("1362") : a.getName();
-			final String fmt = ((BasePage)getPage()).isRtl() ? ACTIVITY_FMT_RTL : ACTIVITY_FMT;
-			switch (a.getType()) {
-				case roomEnter:
-					text = "";
-					item.setVisible(false);
-					break;
-				case roomExit:
-					text = String.format(fmt, name, getString("1367"), df.format(a.getCreated()));
-					break;
-				case reqRightModerator:
-					text = String.format(fmt, name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
-					break;
-				case reqRightPresenter:
-					text = String.format(fmt, name, getString("right.presenter.request"), df.format(a.getCreated()));
-					break;
-				case reqRightWb:
-					text = String.format(fmt, name, getString("694"), df.format(a.getCreated()));
-					break;
-				case reqRightShare:
-					text = String.format(fmt, name, getString("1070"), df.format(a.getCreated()));
-					break;
-				case reqRightRemote:
-					text = String.format(fmt, name, getString("1082"), df.format(a.getCreated()));
-					break;
-				case reqRightA:
-					text = String.format(fmt, name, getString("1603"), df.format(a.getCreated()));
-					break;
-				case reqRightAv:
-					text = String.format(fmt, name, getString("695"), df.format(a.getCreated()));
-					break;
-				case reqRightMute:
-					text = String.format(fmt, name, getString("1399"), df.format(a.getCreated()));
-					break;
-				case reqRightExclusive:
-					text = String.format(fmt, name, getString("1427"), df.format(a.getCreated()));
-					break;
-				case haveQuestion:
-					text = String.format(fmt, name, getString("693"), df.format(a.getCreated()));
-					break;
-			}
-			final String align = ((BasePage)getPage()).isRtl() ? ALIGN_LEFT : ALIGN_RIGHT;
-			item.add(new WebMarkupContainer("close").add(addOnClick(String.format(ACTIVITY_FUNC_FMT, roomId, Action.close.name(), a.getId())))
-					.add(AttributeModifier.append(ATTR_CLASS, align)));
-			item.add(accept.add(AttributeModifier.append(ATTR_CLASS, align))
-					, decline.add(AttributeModifier.append(ATTR_CLASS, align))
-					, find.add(AttributeModifier.append(ATTR_CLASS, align))
-					, new Label("text", text));
-			item.add(AttributeModifier.append(ATTR_CLASS, getClass(a)));
-		}
-
-		private String getClass(Activity a) {
-			String cls = "ui-state-default";
-			switch (a.getType()) {
-				case reqRightModerator:
-				case reqRightPresenter:
-				case reqRightWb:
-				case reqRightShare:
-				case reqRightRemote:
-				case reqRightA:
-				case reqRightAv:
-				case reqRightMute:
-				case reqRightExclusive:
-				case haveQuestion:
-					cls = "ui-state-highlight";
-					break;
-				case roomEnter:
-				case roomExit:
-			}
-			return cls;
-		}
-	};
 
 	public ActivitiesPanel(String id, RoomPanel room) {
 		super(id);
@@ -270,33 +158,117 @@ public class ActivitiesPanel extends Panel {
 		setVisible(!room.getRoom().isHidden(RoomElement.Activities));
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
-		add(container.add(lv).setOutputMarkupPlaceholderTag(true));
 		add(action);
 	}
 
 	public void add(Activity a, IPartialPageRequestHandler handler) {
-		activities.put(a.getId(), a);
-		update(handler);
-		if (isVisible()) {
-			handler.appendJavaScript("Activities.hightlight();");
+		if (!isVisible()) {
+			return;
 		}
+		activities.put(a.getId(), a);
+		String text = "";
+		final boolean self = getUserId().equals(a.getSender());
+		final String name = self ? getString("1362") : a.getName();
+		final String fmt = ((BasePage)getPage()).isRtl() ? ACTIVITY_FMT_RTL : ACTIVITY_FMT;
+		switch (a.getType()) {
+			case roomEnter:
+				text = String.format(fmt, name, getString("activities.msg.enter"), df.format(a.getCreated()));
+				break;
+			case roomExit:
+				text = String.format(fmt, name, getString("activities.msg.exit"), df.format(a.getCreated()));
+				break;
+			case reqRightModerator:
+				text = String.format(fmt, name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
+				break;
+			case reqRightPresenter:
+				text = String.format(fmt, name, getString("right.presenter.request"), df.format(a.getCreated()));
+				break;
+			case reqRightWb:
+				text = String.format(fmt, name, getString("694"), df.format(a.getCreated()));
+				break;
+			case reqRightShare:
+				text = String.format(fmt, name, getString("1070"), df.format(a.getCreated()));
+				break;
+			case reqRightRemote:
+				text = String.format(fmt, name, getString("1082"), df.format(a.getCreated()));
+				break;
+			case reqRightA:
+				text = String.format(fmt, name, getString("1603"), df.format(a.getCreated()));
+				break;
+			case reqRightAv:
+				text = String.format(fmt, name, getString("695"), df.format(a.getCreated()));
+				break;
+			case reqRightMute:
+				text = String.format(fmt, name, getString("1399"), df.format(a.getCreated()));
+				break;
+			case reqRightExclusive:
+				text = String.format(fmt, name, getString("1427"), df.format(a.getCreated()));
+				break;
+			case haveQuestion:
+				text = String.format(fmt, name, getString("693"), df.format(a.getCreated()));
+				break;
+		}
+		final JSONObject aobj = new JSONObject()
+			.put("id", a.getId())
+			.put("uid", a.getUid())
+			.put("cssClass", getClass(a))
+			.put("text", text)
+			.put("find", false);
+
+		switch (a.getType()) {
+			case reqRightModerator:
+			case reqRightPresenter:
+			case reqRightWb:
+			case reqRightShare:
+			case reqRightRemote:
+			case reqRightA:
+			case reqRightAv:
+			case reqRightMute:
+			case reqRightExclusive:
+				aobj.put("accept", room.getClient().hasRight(Right.moderator));
+				aobj.put("decline", room.getClient().hasRight(Right.moderator));
+				break;
+			case haveQuestion:
+				aobj.put("find", !self);
+			case roomEnter:
+			case roomExit:
+				aobj.put("accept", false);
+				aobj.put("decline", false);
+				break;
+		}
+		handler.appendJavaScript(new StringBuilder("Activities.add(").append(aobj.toString()).append(");"));
 	}
 
 	public void remove(String uid, IPartialPageRequestHandler handler) {
 		activities.remove(uid);
-		update(handler);
-	}
-
-	public void update(IPartialPageRequestHandler handler) {
-		if (isVisible()) {
-			lv.setList(new ArrayList<>(activities.values()));
-			handler.add(container);
-		}
+		handler.appendJavaScript(String.format("Activities.remove('%s');", uid));
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(ActivitiesPanel.class, "activities.js"))));
+	}
+
+	private static CharSequence getClass(Activity a) {
+		StringBuilder cls = new StringBuilder();
+		switch (a.getType()) {
+			case reqRightModerator:
+			case reqRightPresenter:
+			case reqRightWb:
+			case reqRightShare:
+			case reqRightRemote:
+			case reqRightA:
+			case reqRightAv:
+			case reqRightMute:
+			case reqRightExclusive:
+			case haveQuestion:
+				cls.append("ui-state-highlight");
+				break;
+			case roomEnter:
+			case roomExit:
+				cls.append("ui-state-default auto-clean");
+		}
+		return cls;
 	}
 }

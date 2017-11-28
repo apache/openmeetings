@@ -522,7 +522,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Отклонить]]></entry>
 	<entry key="1362"><![CDATA[Я]]></entry>
 	<entry key="1363"><![CDATA[Активность и действия]]></entry>
-	<entry key="1367"><![CDATA[покидает комнату.]]></entry>
 	<entry key="1386"><![CDATA[Дать слово]]></entry>
 	<entry key="1399"><![CDATA[хочет, чтобы модератор выключил его/её микрофон.]]></entry>
 	<entry key="1410"><![CDATA[Название опроса]]></entry>
@@ -989,4 +988,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Кликните чтобы "прилепить" панель]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Кликните чтобы "отлепить" панель]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Авто-очистка]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[входит в комнату.]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[покидает комнату.]]></entry>
 </properties>

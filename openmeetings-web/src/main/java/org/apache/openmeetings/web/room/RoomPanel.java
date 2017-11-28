@@ -532,6 +532,7 @@ public class RoomPanel extends BasePanel {
 					case roomEnter:
 						sidebar.update(handler);
 						menu.update(handler);
+						activities.add(new Activity(m, Activity.Type.roomEnter), handler);
 						break;
 					case roomExit:
 						sidebar.update(handler);

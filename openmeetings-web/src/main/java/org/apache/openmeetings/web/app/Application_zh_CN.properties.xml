@@ -522,7 +522,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[拒绝]]></entry>
 	<entry key="1362"><![CDATA[I]]></entry>
 	<entry key="1363"><![CDATA[活动]]></entry>
-	<entry key="1367"><![CDATA[离开了会议室.]]></entry>
 	<entry key="1386"><![CDATA[给予独家音频]]></entry>
 	<entry key="1399"><![CDATA[请求主持人设置自身为静音]]></entry>
 	<entry key="1410"><![CDATA[调查名称]]></entry>
@@ -978,4 +977,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Auto-clean]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[离开了会议室.]]></entry>
 </properties>

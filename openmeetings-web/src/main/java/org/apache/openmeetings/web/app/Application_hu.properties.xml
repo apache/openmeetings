@@ -522,7 +522,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Tilt]]></entry>
 	<entry key="1362"><![CDATA[I]]></entry>
 	<entry key="1363"><![CDATA[Aktivitások és műveletek]]></entry>
-	<entry key="1367"><![CDATA[kilépett a szobából.]]></entry>
 	<entry key="1386"><![CDATA[Mások mikrofonjának némítása]]></entry>
 	<entry key="1399"><![CDATA[a moderátor némította a mikrofonját.]]></entry>
 	<entry key="1410"><![CDATA[Szavazás neve]]></entry>
@@ -976,4 +975,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Auto-clean]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[kilépett a szobából.]]></entry>
 </properties>

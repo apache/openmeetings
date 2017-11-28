@@ -522,7 +522,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[Rifiuta e rimuovi messaggio]]></entry>
 	<entry key="1362"><![CDATA[I]]></entry>
 	<entry key="1363"><![CDATA[Attività e azioni]]></entry>
-	<entry key="1367"><![CDATA[ha lasciato la stanza.]]></entry>
 	<entry key="1386"><![CDATA[Dai l'audio esclusivo a questo utente. Silenzia microfono degli altri (Puoi anche premere F12)]]></entry>
 	<entry key="1399"><![CDATA[vorrebbe che il moderatore silenzi il suo microfono.]]></entry>
 	<entry key="1410"><![CDATA[Nome sondaggio]]></entry>
@@ -989,4 +988,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Auto-clean]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[ha lasciato la stanza.]]></entry>
 </properties>
