@@ -522,7 +522,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1361"><![CDATA[メッセージを拒否して削除する]]></entry>
 	<entry key="1362"><![CDATA[私]]></entry>
 	<entry key="1363"><![CDATA[アクティビティ/アクション]]></entry>
-	<entry key="1367"><![CDATA[さんは会議室から退室しました]]></entry>
 	<entry key="1386"><![CDATA[他の参加者のマイクを無効にして私のマイクだけを有効にする (F12)]]></entry>
 	<entry key="1399"><![CDATA[さんが、参加者のマイクの無効化を依頼しています。]]></entry>
 	<entry key="1410"><![CDATA[投票名]]></entry>
@@ -988,4 +987,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
 	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
 	<entry key="activities.autoclean"><![CDATA[Auto-clean]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[さんは会議室から退室しました]]></entry>
 </properties>

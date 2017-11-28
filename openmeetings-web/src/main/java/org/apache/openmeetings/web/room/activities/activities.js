@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Activities = function() {
-	const closedHeight = "20px";
-	let activities, openedHeight = "345px", inited = false;
+	const closedHeight = "20px", timeout = 10000;
+	let activities, aclean, area, openedHeight = "345px", inited = false;
 
 	function _load() {
 		const s = Settings.load();
@@ -13,11 +13,16 @@ var Activities = function() {
 	function _updateClean(s, a) {
 		const clean = s.activity.clean === true;
 		a.prop('checked', clean);
+		if (clean) {
+			activities.find('.auto-clean').each(function() {
+				setTimeout(_remove.bind(null, $(this).data().id), timeout);
+			});
+		}
 	}
 	function isClosed() {
 		return activities.height() < 24;
 	}
-	function open() {
+	function _open() {
 		if (isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 			$('.control.block', activities).removeClass('ui-state-highlight');
@@ -25,11 +30,43 @@ var Activities = function() {
 			activities.resizable('option', 'disabled', false);
 		}
 	}
-	function close() {
+	function _close() {
 		if (!isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
 			activities.animate({height: closedHeight}, 1000);
 			activities.resizable('option', 'disabled', true);
+		}
+	}
+	function _findUser(uid) {
+		const m = '5px', t = 50, u = $('#user' + uid);
+		if (u.length === 1) {
+			u[0].scrollIntoView();
+			u.addClass('ui-state-highlight');
+			for(let i = 0; i < 10; i++) {
+				u.animate({marginTop: '-='+m}, t)
+					.animate({marginTop: '+='+m}, t);
+			}
+			u.removeClass('ui-state-highlight', 1500);
+		}
+	}
+	function _hightlight() {
+		if (!inited) return;
+		if (isClosed()) {
+			$('.control.block', activities).addClass('ui-state-highlight');
+		}
+	}
+	function _getId(id) {
+		return 'activity-' + id;
+	}
+	function _action(name, val) {
+		activityAction($('.room.box').data('room-id'), name, val);
+	}
+	function _remove(id) {
+		$('#' + _getId(id)).remove();
+	}
+	function _clearItem(id) {
+		if (aclean.prop('checked')) {
+			_remove(id);
 		}
 	}
 
@@ -50,7 +87,9 @@ var Activities = function() {
 					openedHeight = ui.size.height + "px";
 				}
 			});
-			const aclean = $('#activity-auto-clean').change(function() {
+			area = activities.find('.area');
+			aclean = $('#activity-auto-clean');
+			aclean.change(function() {
 				const s = _load();
 				s.activity.clean = $(this).prop('checked');
 				Settings.save(s);
@@ -59,50 +98,45 @@ var Activities = function() {
 			_updateClean(_load(), aclean);
 			inited = true;
 		}
-		, hightlight: function() {
-			if (!inited) return;
-			if (isClosed()) {
-				$('.control.block', activities).addClass('ui-state-highlight');
-			}
-		}
 		, toggle: function() {
 			if (!inited) return;
 			if (isClosed()) {
-				open();
+				_open();
 			} else {
-				close();
+				_close();
 			}
 		}
-		, findUser: function(uid) {
-			const m = '5px', t = 50, u = $('#user' + uid);
-			if (u.length === 1) {
-				u[0].scrollIntoView();
-				u.addClass('ui-state-highlight');
-				for(let i = 0; i < 10; i++) {
-					u.animate({marginTop: '-='+m}, t)
-						.animate({marginTop: '+='+m}, t);
-				}
-				u.removeClass('ui-state-highlight', 1500);
+		, findUser: _findUser
+		, add: function(obj) {
+			const _id = _getId(obj.id);
+			area.append($('#activity-stub').clone().attr('id', _id).data(obj));
+			const a = $('#' + _id).addClass(obj.cssClass);
+			a.find('.activity-close,.activity-accept,.activity-decline,.activity-find').addClass(Settings.isRtl ? 'align-left' : 'align-right');
+			const acpt = a.find('.activity-accept');
+			if (obj.accept) {
+				acpt.click(function() { _action('accept', obj.id); });
+			} else {
+				acpt.hide();
+			}
+			const dcln = a.find('.activity-decline');
+			if (obj.decline) {
+				dcln.click(function() { _action('decline', obj.id); });
+			} else {
+				dcln.hide();
+			}
+			const fnd = a.find('.activity-find');
+			if (obj.find) {
+				fnd.click(function() { _findUser(obj.uid); });
+			} else {
+				fnd.hide();
+			}
+			a.find('.activity-close').click(function() { a.remove(); _action('close', obj.id); });
+			a.find('.activity-text').text(obj.text);
+			_hightlight();
+			if (aclean.prop('checked')) {
+				setTimeout(_remove.bind(null, obj.id), timeout);
 			}
 		}
+		, remove: _remove
 	};
 }();
-$(function() {
-	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
-		try {
-			if (msg instanceof Blob) {
-				return; //ping
-			}
-			const m = jQuery.parseJSON(msg);
-			if (m) {
-				switch(m.type) {
-					case "activity":
-						Activities.addMessage(m);
-						break;
-				}
-			}
-		} catch (err) {
-			//no-op
-		}
-	});
-});

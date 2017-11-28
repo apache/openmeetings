@@ -26,13 +26,15 @@
 	<div class="ctrl ui-widget-content">
 		<div><input type="checkbox" id="activity-auto-clean"/><label for="activity-auto-clean"><wicket:message key="activities.autoclean"/></label></div>
 	</div>
-	<div wicket:id="container" class="area ui-widget-content">
-		<div wicket:id="activities" class="activity item ui-helper-clearfix ui-corner-all">
-			<span wicket:id="close" class="ui-icon ui-icon-close ui-corner-all clickable" wicket:message="title:85"></span>
-			<span wicket:id="accept" class="ui-icon ui-icon-check ui-corner-all clickable" wicket:message="title:1360"></span>
-			<span wicket:id="decline" class="ui-icon ui-icon-cancel ui-corner-all clickable" wicket:message="title:1361"></span>
-			<span wicket:id="find" class="ui-icon crosshair ui-corner-all clickable" wicket:message="title:find.user"></span>
-			<div wicket:id="text"></div>
+	<div class="area ui-widget-content">
+	</div>
+	<div style="display: none">
+		<div id="activity-stub" class="activity item ui-helper-clearfix ui-corner-all">
+			<span class="activity-close ui-icon ui-icon-close ui-corner-all clickable" wicket:message="title:85"></span>
+			<span class="activity-accept ui-icon ui-icon-check ui-corner-all clickable" wicket:message="title:1360"></span>
+			<span class="activity-decline ui-icon ui-icon-cancel ui-corner-all clickable" wicket:message="title:1361"></span>
+			<span class="activity-find ui-icon crosshair ui-corner-all clickable" wicket:message="title:find.user"></span>
+			<div class="activity-text"></div>
 		</div>
 	</div>
 </wicket:panel>
