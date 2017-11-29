@@ -26,13 +26,7 @@
 		<div id="chatTab-all" class="messageArea"></div>
 	</div>
 	<form wicket:id="sendForm">
-		<div style="display: inline-block;" wicket:id="toolbarContainer"></div>
-		<div class="clickable chat-btn ui-state-default ui-corner-all" wicket:enclosure="ajax-cancel-button">
-			<div class="formCancelButton" wicket:id="ajax-cancel-button" wicket:message="title:442"></div>
-		</div>
-		<div class="clickable chat-btn ui-state-default ui-corner-all">
-			<div class="audio om-icon" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">&nbsp;</div>
-		</div>
+		<div wicket:id="toolbarContainer"></div>
 		<table style="width: 100%">
 			<tr>
 				<td><div id="chatMessage" wicket:id="chatMessage"></div></td>

@@ -105,7 +105,11 @@ form .input {
 }
 #chat .chat-btn {
 	float: left !important;
+}
+#chat .chat-btn:first-of-type {
 	margin-right: initial !important;
+}
+#chat .chat-btn:last-of-type {
 	margin-left: 10px !important;
 }
 .room.sidebar .tab.om-icon.big {

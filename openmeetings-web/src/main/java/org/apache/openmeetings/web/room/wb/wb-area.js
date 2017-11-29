@@ -24,13 +24,13 @@ var DrawWbArea = function() {
 		if (role !== PRESENTER || !canvas) {
 			return true;
 		}
-		const arr = [];
-		canvas.getActiveObjects().forEachObject(function(o) {
+		const arr = [], objs = canvas.getActiveObjects();
+		for (let i =0; i < objs.length; ++i) {
 			arr.push({
-				uid: o.uid
-				, slide: o.slide
+				uid: objs[i].uid
+				, slide: objs[i].slide
 			});
-		});
+		}
 		wbAction('deleteObj', JSON.stringify({
 			wbId: wb.id
 			, obj: arr
@@ -38,10 +38,12 @@ var DrawWbArea = function() {
 		return false;
 	}
 	function _deleteHandler(e) {
-		switch (e.which) {
-			case 8:  // backspace
-			case 46: // delete
-				return _performDelete();
+		if ('BODY' === e.target.tagName) {
+			switch (e.which) {
+				case 8:  // backspace
+				case 46: // delete
+					return _performDelete();
+			}
 		}
 	}
 	function _getWbTab(wbId) {
@@ -80,7 +82,7 @@ var DrawWbArea = function() {
 		}
 		li.append($('#wb-tab-close').clone().attr('id', ''));
 		li.find('button').click(function() {
-			RoomUtil.confirmDlg('wb-confirm-remove', function() { wbAction('removeWb', JSON.stringify({wbId: li.data().wbId})); });
+			OmUtil.confirmDlg('wb-confirm-remove', function() { wbAction('removeWb', JSON.stringify({wbId: li.data().wbId})); });
 		});
 	}
 	function _getImage(cnv, fmt) {

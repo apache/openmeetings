@@ -80,31 +80,35 @@
 	max-height: 70px;
 	max-width: 500px;
 }
-.sound.om-icon {
-	background-image: url(images/sound.png);
-}
-.sound-mute.om-icon {
-	background-image: url(images/sound_mute.png);
-}
-#chat #hyperlink {
+.chat-tool-icon {
 	background-repeat: no-repeat;
-	background-image: url(images/link.png);
-	background-position: center;
-}
-#chat #fontStyle span {
-	background-repeat: no-repeat;
-	background-image: url(images/settings.png);
 	background-position: center;
 	background-size: 16px;
-	display: inline-block;
 	width: 20px;
 	height: 20px;
+	display: inline-block;
+}
+.sound.chat-tool-icon {
+	background-image: url(images/sound.png);
+}
+.sound-mute.chat-tool-icon {
+	background-image: url(images/sound_mute.png);
+}
+.delete.chat-tool-icon {
+	background-image: url(images/cancel_icon.png);
+}
+#chat #hyperlink {
+	background-image: url(images/link.png);
+}
+#chat #fontStyle span {
+	background-image: url(images/settings.png);
 }
 #chat .chat-btn {
 	display: inline-block;
 	float: right;
+}
+#chat .chat-btn:first-of-type {
 	margin-right: 10px;
-	padding: 4px;
 }
 /* room mode */
 #chatPanel.room {
