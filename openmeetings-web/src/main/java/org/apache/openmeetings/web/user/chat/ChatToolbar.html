@@ -50,15 +50,23 @@
 				<li><a data-edit="fontSize 3"><font size="2">Normal</font></a></li>
 				<li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
 			</ul>
-			<a id="bold" class="chat btn btn-default" data-edit="bold" title="Bold (Ctrl/Cmd+B)"> B </a> <a
-			id="italic" class="chat btn btn-default" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a> <a
-			id="strikethrough" class="chat btn btn-default" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a> <a
-			id="underline" class="chat btn btn-default" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a>
+		</div>
+		<div class="btn-group dropup">
+			<a id="fontStyle" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Style">
+				<span>&nbsp;</span>
+				<b class="caret"></b>
+			</a>
+			<ul class="dropdown-menu">
+				<li><a id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B </a></li>
+				<li><a id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a></li>
+				<li><a id="strikethrough" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a></li>
+				<li><a id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a></li>
+			</ul>
 		</div>
 		<div class="btn-group">
 			<a id="hyperlink" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink">&nbsp;</a>
 			<div class="dropdown-menu input-append">
-				<input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+				<input class="span2" placeholder="URL" type="text"/>
 				<button class="btn btn-default" type="button"><wicket:message key="1261"/></button>
 			</div>
 		</div>
