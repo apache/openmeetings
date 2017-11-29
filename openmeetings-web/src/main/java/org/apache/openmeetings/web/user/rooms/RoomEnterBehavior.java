@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
@@ -30,7 +32,7 @@ public class RoomEnterBehavior extends AjaxEventBehavior {
 	protected final Long roomId;
 
 	public RoomEnterBehavior(Long roomId) {
-		super("click");
+		super(EVT_CLICK);
 		this.roomId = roomId;
 	}
 

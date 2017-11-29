@@ -52,7 +52,7 @@ public class OAuthPanel extends AdminBasePanel {
 				final OAuthServer server = item.getModelObject();
 				item.add(new Label("id"));
 				item.add(new Label("name"));
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -60,7 +60,7 @@ public class OAuthPanel extends AdminBasePanel {
 						form.setModelObject(server);
 						form.hideNewRecord();
 						target.add(form, listContainer);
-						target.appendJavaScript("adminPanelInit();");
+						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(server.getId(), form.getModelObject().getId())));

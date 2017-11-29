@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 import java.util.List;
 
@@ -79,13 +80,13 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 
 	public GroupUser getByGroupAndUser(Long groupId, Long userId) {
 		List<GroupUser> list = em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList();
+				.setParameter("groupId", groupId).setParameter(PARAM_USER_ID, userId).getResultList();
 		return list.isEmpty() ? null : list.get(0);
 	}
 
 	public boolean isUserInGroup(long groupId, long userId) {
 		return !em.createNamedQuery("isUserInGroup", GroupUser.class)
-				.setParameter("groupId", groupId).setParameter("userId", userId).getResultList().isEmpty();
+				.setParameter("groupId", groupId).setParameter(PARAM_USER_ID, userId).getResultList().isEmpty();
 	}
 
 	@Override

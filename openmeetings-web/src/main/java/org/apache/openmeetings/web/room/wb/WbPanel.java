@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room.wb;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
@@ -186,7 +187,7 @@ public class WbPanel extends AbstractWbPanel {
 		sb.append("WbArea.activateWb(").append(wbj).append(");");
 		Whiteboard wb = wbs.get(wbs.getActiveWb());
 		if (wb != null) {
-			sb.append("WbArea.setSlide(").append(wbj.put("slide", wb.getSlide())).append(");");
+			sb.append("WbArea.setSlide(").append(wbj.put(ATTR_SLIDE, wb.getSlide())).append(");");
 		}
 		sb.append("WbArea.loadVideos();");
 	}
@@ -255,7 +256,7 @@ public class WbPanel extends AbstractWbPanel {
 							arr.put(new JSONObject()
 									.put("wbId", wb.getId())
 									.put("uid", o.getString("uid"))
-									.put("slide", o.getString("slide"))
+									.put(ATTR_SLIDE, o.getString(ATTR_SLIDE))
 									.put("status", sts));
 						}
 					}
@@ -308,7 +309,7 @@ public class WbPanel extends AbstractWbPanel {
 				{
 					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.optLong("wbId", -1));
 					if (wb != null) {
-						wb.setSlide(obj.optInt("slide", 0));
+						wb.setSlide(obj.optInt(ATTR_SLIDE, 0));
 						WhiteboardCache.update(roomId, wb);
 						sendWbOthers(WbAction.setSlide, obj);
 					}
@@ -388,7 +389,7 @@ public class WbPanel extends AbstractWbPanel {
 				case clearSlide:
 				{
 					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
-					JSONArray arr = wb.clearSlide(obj.getInt("slide"));
+					JSONArray arr = wb.clearSlide(obj.getInt(ATTR_SLIDE));
 					if (arr.length() != 0) {
 						WhiteboardCache.update(roomId, wb);
 						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
@@ -450,7 +451,7 @@ public class WbPanel extends AbstractWbPanel {
 						JSONObject ns = obj.getJSONObject("status");
 						po.put("status", ns.put("updated", System.currentTimeMillis()));
 						WhiteboardCache.update(roomId, wb.put(uid, po));
-						obj.put("slide", po.getInt("slide"));
+						obj.put(ATTR_SLIDE, po.getInt(ATTR_SLIDE));
 						sendWbAll(WbAction.videoStatus, obj);
 					}
 				}
@@ -585,7 +586,7 @@ public class WbPanel extends AbstractWbPanel {
 							.put("width", fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth())
 							.put("height", fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight())
 							.put("uid", wuid)
-							.put("slide", wb.getSlide())
+							.put(ATTR_SLIDE, wb.getSlide())
 							;
 					if (FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType()) {
 						file.put(ATTR_TYPE, "video");

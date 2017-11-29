@@ -22,6 +22,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -78,7 +79,7 @@ public class WbConverter {
 		double top = ((Number)props.get(props.size() - 4)).doubleValue();
 		double w = ((Number)props.get(props.size() - 3)).doubleValue();
 		double h = ((Number)props.get(props.size() - 2)).doubleValue();
-		JSONObject o = new JSONObject().put("slide", 0);
+		JSONObject o = new JSONObject().put(ATTR_SLIDE, 0);
 		if (addDim) {
 			o.put("left", left)
 				.put("top", top)

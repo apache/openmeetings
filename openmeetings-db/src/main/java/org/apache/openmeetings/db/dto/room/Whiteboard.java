@@ -47,6 +47,7 @@ public class Whiteboard implements Serializable {
 	public static final String ATTR_TYPE = "type";
 	public static final String ATTR_FILE_ID = "fileId";
 	public static final String ATTR_FILE_TYPE = "fileType";
+	public static final String ATTR_SLIDE = "slide";
 	public enum ZoomMode {
 		fullFit
 		, pageWidth
@@ -130,7 +131,7 @@ public class Whiteboard implements Serializable {
 		JSONArray arr = new JSONArray();
 		roomItems.entrySet().removeIf(e -> {
 				JSONObject o = new JSONObject(e.getValue());
-				boolean match = !FileItem.Type.Presentation.name().equals(o.optString(ATTR_FILE_TYPE)) && o.optInt("slide", -1) == slide;
+				boolean match = !FileItem.Type.Presentation.name().equals(o.optString(ATTR_FILE_TYPE)) && o.optInt(ATTR_SLIDE, -1) == slide;
 				if (match) {
 					arr.put(e);
 				}

@@ -130,7 +130,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 
 	private void refresh(AjaxRequestTarget target) {
 		target.add(this);
-		target.appendJavaScript("adminPanelInit();");
+		reinitJs(target);
 	}
 
 	private void update(AjaxRequestTarget target) {

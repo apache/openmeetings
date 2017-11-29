@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
+import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
@@ -128,7 +129,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	@Override
 	protected File getFile(FileItem f, Attributes attr) {
 		String ext = f.getType() == FileItem.Type.Presentation
-				? attr.getParameters().get("slide").toString() : null;
+				? attr.getParameters().get(ATTR_SLIDE).toString() : null;
 		return getFile(f, ext);
 	}
 

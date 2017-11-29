@@ -115,7 +115,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 				}
 				item.add(new Label("server", _c.getServerId()));
 				item.add(confirm);
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

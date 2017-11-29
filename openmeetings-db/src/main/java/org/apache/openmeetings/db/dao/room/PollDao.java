@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
@@ -110,7 +111,7 @@ public class PollDao {
 	public boolean hasVoted(Long roomId, Long userId) {
 		return !em.createNamedQuery("hasVoted", RoomPollAnswer.class)
 				.setParameter("roomId", roomId)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.getResultList().isEmpty();
 	}
 }

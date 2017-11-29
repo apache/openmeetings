@@ -484,7 +484,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		target.add(roomList);
 		target.add(pin.setEnabled(getModelObject().isSipEnabled()));
 		updateClients(target);
-		target.appendJavaScript("adminPanelInit();");
+		reinitJs(target);
 	}
 
 	@Override

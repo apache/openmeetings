@@ -197,7 +197,7 @@ public class UserForm extends AdminBaseForm<User> {
 		hideNewRecord();
 		target.add(this);
 		target.add(listContainer);
-		target.appendJavaScript("adminPanelInit();");
+		reinitJs(target);
 		if (u.getGroupUsers().isEmpty()) {
 			warning.open(target);
 		}
@@ -270,7 +270,7 @@ public class UserForm extends AdminBaseForm<User> {
 		updateDomain(target);
 		if (target != null) {
 			target.add(this, listContainer);
-			target.appendJavaScript("adminPanelInit();");
+			reinitJs(target);
 		}
 	}
 

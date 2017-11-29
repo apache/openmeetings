@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.calendar;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
+
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +63,7 @@ public class OmCalendarDao {
 	 */
 	public List<OmCalendar> getByUser(Long userId) {
 		return em.createNamedQuery("getCalendarbyUser", OmCalendar.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.getResultList();
 	}
 
@@ -73,7 +75,7 @@ public class OmCalendarDao {
 	 */
 	public List<OmCalendar> getGoogleCalendars(Long userId) {
 		return em.createNamedQuery("getGoogleCalendars", OmCalendar.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.getResultList();
 	}
 

@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.Version.getVersion;
@@ -253,7 +254,7 @@ public class MobileService {
 			add(result, "sid", sd.getSessionId());
 			add(result, "publicSid", c.getUid());
 			add(result, "status", 0);
-			add(result, "userId", u.getId());
+			add(result, PARAM_USER_ID, u.getId());
 			add(result, "firstname", u.getFirstname());
 			add(result, "lastname", u.getLastname());
 			add(result, "login", u.getLogin());
@@ -275,7 +276,7 @@ public class MobileService {
 					Map<String, Object> map = new HashMap<>();
 					add(map, "streamId", c.getId());
 					add(map, "broadCastId", c.getBroadcastId());
-					add(map, "userId", c.getUserId());
+					add(map, PARAM_USER_ID, c.getUserId());
 					add(map, "firstname", c.getFirstname());
 					add(map, "lastname", c.getLastname());
 					add(map, "publicSid", c.getUid());

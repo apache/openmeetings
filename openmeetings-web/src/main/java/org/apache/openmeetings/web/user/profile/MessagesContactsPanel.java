@@ -172,7 +172,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		};
 		add(addFolder);
 		add(new JQueryBehavior(".email.new", "button"));
-		folders.add(inbox.add(new AjaxEventBehavior("click") {
+		folders.add(inbox.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -180,7 +180,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				selectFolder(inbox, INBOX_FOLDER_ID, target);
 			}
 		}));
-		folders.add(sent.add(new AjaxEventBehavior("click") {
+		folders.add(sent.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -188,7 +188,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				selectFolder(sent, SENT_FOLDER_ID, target);
 			}
 		}));
-		folders.add(trash.add(new AjaxEventBehavior("click") {
+		folders.add(trash.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -196,7 +196,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				selectFolder(trash, TRASH_FOLDER_ID, target);
 			}
 		}));
-		folders.add(new WebMarkupContainer("newdir").add(new AjaxEventBehavior("click") {
+		folders.add(new WebMarkupContainer("newdir").add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -227,7 +227,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						target.add(folders, moveDropDown);
 					}
 				});
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -279,7 +279,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				item.add(new Label("from", getDisplayName(m.getFrom())));
 				item.add(new Label("subject", m.getSubject()));
 				item.add(new Label("send", getDateFormat().format(m.getInserted())));
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -325,7 +325,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 		add(unread.setOutputMarkupId(true));
 
 		add(buttons.setOutputMarkupId(true));
-		buttons.add(toInboxBtn.add(new AjaxEventBehavior("click") {
+		buttons.add(toInboxBtn.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -334,7 +334,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				selectFolder(selectedFolder, selectedFolderModel.getObject(), target);
 			}
 		}));
-		buttons.add(deleteBtn.add(new AjaxEventBehavior("click") {
+		buttons.add(deleteBtn.add(new AjaxEventBehavior(EVT_CLICK) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -348,7 +348,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					target.add(container);
 				}
 			}));
-		buttons.add(readBtn.add(new AjaxEventBehavior("click") {
+		buttons.add(readBtn.add(new AjaxEventBehavior(EVT_CLICK) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -358,7 +358,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					target.add(container, unread);
 				}
 			}));
-		buttons.add(unreadBtn.add(new AjaxEventBehavior("click") {
+		buttons.add(unreadBtn.add(new AjaxEventBehavior(EVT_CLICK) {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -446,7 +446,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 					item.add(AttributeModifier.append(ATTR_CLASS, "unread"));
 				}
 				item.add(new Label("name", getName(uc)));
-				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior("click") {
+				item.add(new WebMarkupContainer("accept").add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -455,7 +455,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 						updateContacts(target);
 					}
 				}).setVisible(uc.isPending()));
-				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior("click") {
+				item.add(new WebMarkupContainer("decline").add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

@@ -29,6 +29,7 @@ import org.apache.wicket.model.IModel;
 
 public abstract class BasePanel extends Panel {
 	private static final long serialVersionUID = 1L;
+	public static final String EVT_CLICK = "click";
 
 	public BasePanel(String id) {
 		super(id);

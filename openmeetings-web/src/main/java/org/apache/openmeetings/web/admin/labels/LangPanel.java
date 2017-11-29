@@ -114,7 +114,7 @@ public class LangPanel extends AdminBasePanel {
 				final StringLabel fv = item.getModelObject();
 				item.add(new Label("key"));
 				item.add(new Label("value"));
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -122,7 +122,7 @@ public class LangPanel extends AdminBasePanel {
 						form.setModelObject(fv);
 						form.hideNewRecord();
 						target.add(form, listContainer);
-						target.appendJavaScript("adminPanelInit();");
+						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(fv.getId(), form.getModelObject().getId())));

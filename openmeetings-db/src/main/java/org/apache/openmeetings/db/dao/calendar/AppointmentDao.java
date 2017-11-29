@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
@@ -158,13 +159,13 @@ public class AppointmentDao {
 		TypedQuery<Appointment> query = em.createNamedQuery("appointmentsInRange", Appointment.class);
 		query.setParameter("start", start);
 		query.setParameter("end", end);
-		query.setParameter("userId", userId);
+		query.setParameter(PARAM_USER_ID, userId);
 
 		List<Appointment> listAppoints = new ArrayList<>(query.getResultList());
 		TypedQuery<Appointment> q1 = em.createNamedQuery("joinedAppointmentsInRange", Appointment.class);
 		q1.setParameter("start", start);
 		q1.setParameter("end", end);
-		q1.setParameter("userId", userId);
+		q1.setParameter(PARAM_USER_ID, userId);
 		for (Appointment a : q1.getResultList()) {
 			a.setConnectedEvent(true);
 			listAppoints.add(a);
@@ -184,20 +185,20 @@ public class AppointmentDao {
 	// next appointment to select date
 	public Appointment getNext(Long userId, Date start) {
 		List<Appointment> list = em.createNamedQuery("getNextAppointment", Appointment.class)
-				.setParameter("start", start).setParameter("userId", userId).getResultList();
+				.setParameter("start", start).setParameter(PARAM_USER_ID, userId).getResultList();
 		return list == null || list.isEmpty() ? null : list.get(0);
 	}
 
 	public List<Appointment> searchByTitle(Long userId, String title) {
 		return em.createNamedQuery("getAppointmentsByTitle", Appointment.class)
-				.setParameter("title", title).setParameter("userId", userId).getResultList();
+				.setParameter("title", title).setParameter(PARAM_USER_ID, userId).getResultList();
 	}
 
 	// ---------------------------------------------------------------------------------------------
 	public Appointment getByRoom(Long userId, Long roomId) {
 		try {
 			List<Appointment> list = em.createNamedQuery("getAppointmentByOwnerRoomId", Appointment.class)
-					.setParameter("userId", userId)
+					.setParameter(PARAM_USER_ID, userId)
 					.setParameter("roomId", roomId)
 					.getResultList();
 
