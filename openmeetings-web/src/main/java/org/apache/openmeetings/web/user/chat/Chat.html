@@ -27,15 +27,11 @@
 	</div>
 	<form wicket:id="sendForm">
 		<div wicket:id="toolbarContainer"></div>
-		<table style="width: 100%">
-			<tr>
-				<td><div id="chatMessage" wicket:id="chatMessage"></div></td>
-				<td style="width: 50px">
-					<div wicket:id="send"><wicket:message key="218"/></div>
-					<input type="hidden" wicket:id="activeTab" id="activeChatTab"/>
-				</td>
-			</tr>
-		</table>
+		<div style="position: relative;">
+			<div id="chatMessage" wicket:id="chatMessage"></div>
+			<div class="send" wicket:id="send" wicket:message="title:218">&crarr;</div>
+			<input type="hidden" wicket:id="activeTab" id="activeChatTab"/>
+		</div>
 	</form>
 </wicket:panel>
 </html>
