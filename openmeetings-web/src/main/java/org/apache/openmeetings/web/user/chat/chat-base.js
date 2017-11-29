@@ -76,6 +76,9 @@ var Chat = function() {
 			_updateBtn(s, a);
 			Settings.save(s);
 		});
+		$('#chat #hyperlink').parent().find('button').off().click(function() {
+			_insertLink();
+		});
 	}
 	function isClosed() {
 		return p.hasClass('closed');
@@ -311,7 +314,7 @@ var Chat = function() {
 			_close();
 		}
 	}
-	function _emtClick(emoticon) {
+	function _editorAppend(emoticon) {
 		editor.html(editor.html() + ' ' + emoticon + ' ').trigger('change');
 	}
 	function _clean() {
@@ -327,7 +330,25 @@ var Chat = function() {
 			ctrl.height(h);
 		}
 	}
-
+	function _insertLink() {
+		const text = $('#chat #hyperlink').parent().find('input').val();
+		if ('' === text) {
+			return;
+		}
+		const a = $('<div>').append($('<a></a>').attr('target', '_blank').attr('href', text).text(text)).html();
+		if (window.getSelection) {
+			const sel = window.getSelection();
+			if (sel.rangeCount) {
+				const range = sel.getRangeAt(0);
+				if ($(range.startContainer).parents('.wysiwyg-editor').length > 0) {
+					range.deleteContents();
+					range.insertNode(a);
+				} else {
+					_editorAppend(a);
+				}
+			}
+		}
+	}
 	return {
 		reinit: _reinit
 		, removeTab: _removeTab
@@ -341,7 +362,7 @@ var Chat = function() {
 		}
 		, close: _close
 		, toggle: _toggle
-		, emtClick: _emtClick
+		, emtClick: _editorAppend
 		, setRoomMode: _setRoomMode
 		, setHeight: _setHeight
 		, clean: _clean

@@ -91,6 +91,15 @@
 	background-image: url(images/link.png);
 	background-position: center;
 }
+#chat #fontStyle span {
+	background-repeat: no-repeat;
+	background-image: url(images/settings.png);
+	background-position: center;
+	background-size: 16px;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+}
 #chat .chat-btn {
 	display: inline-block;
 	float: right;
