@@ -87,7 +87,7 @@ public class Chat extends Panel {
 					}
 				} else if (type != null && type.indexOf("typing") > -1) {
 					WebSocketHelper.sendRoom(roomId
-							, new JSONObject().put("type", "typing")
+							, new JSONObject().put(PARAM_TYPE, "typing")
 									.put("active", type.indexOf("start") > -1)
 									.put("uid", getUid()));
 				}
