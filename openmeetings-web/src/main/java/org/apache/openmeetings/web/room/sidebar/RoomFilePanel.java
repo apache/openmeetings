@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -71,7 +72,7 @@ public class RoomFilePanel extends FileTreePanel {
 	protected Component getUpload() {
 		return super.getUpload()
 				.setVisible(true)
-				.add(new AjaxEventBehavior("click") {
+				.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

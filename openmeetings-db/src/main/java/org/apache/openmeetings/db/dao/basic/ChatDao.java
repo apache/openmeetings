@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
+
 import java.util.Date;
 import java.util.List;
 
@@ -66,7 +68,7 @@ public class ChatDao {
 
 	public List<ChatMessage> getUser(long userId, int start, int count) {
 		return em.createNamedQuery("getChatMessagesByUser", ChatMessage.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.setFirstResult(start)
 				.setMaxResults(count)
 				.getResultList();
@@ -74,7 +76,7 @@ public class ChatDao {
 
 	public List<ChatMessage> getUserRecent(long userId, Date date, int start, int count) {
 		return em.createNamedQuery("getChatMessagesByUserTime", ChatMessage.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.setParameter("date", date)
 				.setFirstResult(start)
 				.setMaxResults(count)
@@ -106,6 +108,6 @@ public class ChatDao {
 	}
 
 	public void deleteUser(Long userId) {
-		em.createNamedQuery("deleteChatUser").setParameter("userId", userId).executeUpdate();
+		em.createNamedQuery("deleteChatUser").setParameter(PARAM_USER_ID, userId).executeUpdate();
 	}
 }

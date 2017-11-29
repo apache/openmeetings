@@ -47,7 +47,7 @@ public abstract class AdminBasePanel extends BasePanel {
 	@Override
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		super.onMenuPanelLoad(handler);
-		handler.appendJavaScript("adminPanelInit();");
+		reinitJs(handler);
 		return this;
 	}
 
@@ -57,5 +57,9 @@ public abstract class AdminBasePanel extends BasePanel {
 			sb.append(" ui-state-default");
 		}
 		return sb;
+	}
+
+	public static void reinitJs(IPartialPageRequestHandler handler) {
+		handler.appendJavaScript("adminPanelInit();");
 	}
 }

@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -98,7 +99,6 @@ public class MainPanel extends Panel {
 	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, getWebAppRootKey());
 	private static final String DELIMITER = "     ";
 	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
-	public static final String PARAM_USER_ID = "userId";
 	private String uid = null;
 	private final MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");

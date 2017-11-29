@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -44,7 +45,7 @@ public class FileItemPanel extends FolderPanel {
 		} else {
 			visible |= !f.exists();
 		}
-		errors.add(new AjaxEventBehavior("click") {
+		errors.add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

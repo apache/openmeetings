@@ -55,7 +55,7 @@ public class RoomsPanel extends AdminBasePanel {
 				item.add(new Label("id"));
 				item.add(new Label("name"));
 				item.add(new Label("ispublic"));
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -64,7 +64,7 @@ public class RoomsPanel extends AdminBasePanel {
 						form.setModelObject(getBean(RoomDao.class).get(roomId));
 						form.updateView(target);
 						target.add(form, listContainer);
-						target.appendJavaScript("adminPanelInit();");
+						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(room.getId(), form.getModelObject().getId())));

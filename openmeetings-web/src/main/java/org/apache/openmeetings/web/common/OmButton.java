@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
@@ -28,7 +30,7 @@ public abstract class OmButton extends Button {
 
 	public OmButton(String id) {
 		super(id);
-		add(new AjaxEventBehavior("click") {
+		add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
@@ -77,7 +78,7 @@ public class UserContactDao {
 
 	public UserContact get(Long userId, Long ownerId) {
 		List<UserContact> ll = em.createNamedQuery("getContactByUserOwner", UserContact.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.setParameter("ownerId", ownerId)
 				.getResultList();
 		log.info("number of contacts:: " + (ll == null ? null : ll.size()));
@@ -91,7 +92,7 @@ public class UserContactDao {
 
 	public List<UserContact> get(long ownerId, int first, int count) {
 		TypedQuery<UserContact> q = em.createNamedQuery("getContactsByUser", UserContact.class);
-		q.setParameter("userId", ownerId);
+		q.setParameter(PARAM_USER_ID, ownerId);
 		q.setFirstResult(first);
 		q.setMaxResults(count);
 		return q.getResultList();
@@ -99,7 +100,7 @@ public class UserContactDao {
 
 	public long count(long ownerId) {
 		TypedQuery<Long> q = em.createNamedQuery("countContactsByUser", Long.class);
-		q.setParameter("userId", ownerId);
+		q.setParameter(PARAM_USER_ID, ownerId);
 		return q.getSingleResult();
 	}
 
@@ -112,7 +113,7 @@ public class UserContactDao {
 
 	public List<UserContact> getContactRequestsByUserAndStatus(Long userId, boolean pending) {
 		return em.createNamedQuery("getContactRequestsByUserAndStatus", UserContact.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.setParameter("pending", pending)
 				.getResultList();
 	}

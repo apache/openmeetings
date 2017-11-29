@@ -245,13 +245,17 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				});
 			}
 
+			private String getDbName(ConnectionProperties props) {
+				return getString("install.wizard.db.step.instructions." + props.getDbType().name());
+			}
+
 			@Override
 			protected void onValidateModelObjects() {
 				ConnectionProperties props = getModelObject();
 				try {
 					Class.forName(props.getDriver());
 				} catch (Exception e) {
-					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this).setParameters(getString("install.wizard.db.step.instructions." + props.getDbType().name())).getObject());
+					form.error(new StringResourceModel("install.wizard.db.step.nodriver", InstallWizard.this).setParameters(getDbName(props)).getObject());
 					return;
 				}
 				boolean valid = true;
@@ -278,10 +282,10 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 						valid &= ps.execute();
 					}
 					if (!valid) {
-						form.error(getString("install.wizard.db.step.notvalid") + "<br/>" + getString("install.wizard.db.step.instructions." + props.getDbType().name()));
+						form.error(getString("install.wizard.db.step.notvalid") + "<br/>" + getDbName(props));
 					}
 				} catch (Exception e) {
-					form.error(e.getMessage() + "<br/>" + getString("install.wizard.db.step.instructions." + props.getDbType().name()));
+					form.error(e.getMessage() + "<br/>" + getDbName(props));
 					log.error("error while testing DB", e);
 					valid = false;
 				}
@@ -483,6 +487,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private final class ParamsStep3 extends BaseStep {
 		private static final long serialVersionUID = 1L;
 		private static final String REGEX = "\\r\\n|\\r|\\n";
+		private static final String OPT_VERSION = "-version";
 		private final TextField<String> ffmpegPath;
 		private final TextField<String> imageMagicPath;
 		private final TextField<String> soxPath;
@@ -506,7 +511,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(imageMagicPath, new String[] {getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
+					checkMagicPath();
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -514,7 +519,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(ffmpegPath, new String[] {getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"});
+					checkFfmpegPath();
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -522,7 +527,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 				private static final long serialVersionUID = 1L;
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					checkToolPath(soxPath, new String[] {getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
+					checkSoxPath();
 					target.add(getFeedbackPanel());
 				}
 			});
@@ -545,6 +550,18 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 			return result.isOk();
 		}
 
+		private boolean checkMagicPath() {
+			return checkToolPath(imageMagicPath, new String[] {getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), OPT_VERSION});
+		}
+
+		private boolean checkFfmpegPath() {
+			return checkToolPath(ffmpegPath, new String[] {getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), OPT_VERSION});
+		}
+
+		private boolean checkSoxPath() {
+			return checkToolPath(soxPath, new String[] {getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"});
+		}
+
 		private boolean checkOfficePath() {
 			String err  = "";
 			try {
@@ -556,9 +573,9 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		}
 
 		private boolean checkAllPath() {
-			boolean result = checkToolPath(imageMagicPath, new String[] {getToolPath(imageMagicPath.getValue(), "convert" + EXEC_EXT), "-version"});
-			result = checkToolPath(ffmpegPath, new String[] {getToolPath(ffmpegPath.getValue(), "ffmpeg" + EXEC_EXT), "-version"}) && result;
-			result = checkToolPath(soxPath, new String[] {getToolPath(soxPath.getValue(), "sox" + EXEC_EXT), "--version"}) && result;
+			boolean result = checkMagicPath();
+			result = checkFfmpegPath() && result;
+			result = checkSoxPath() && result;
 			result = checkOfficePath() && result;
 			isAllChecked = true;
 			return result;

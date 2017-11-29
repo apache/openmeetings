@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.RECENT_ROOMS_COUNT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
@@ -203,7 +204,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		endCal.set(Calendar.SECOND, 59);
 
 		return em.createNamedQuery("appointedRoomsInRangeByUser", Room.class)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.setParameter("start", startCal.getTime())
 				.setParameter("end", endCal.getTime())
 				.getResultList();
@@ -298,7 +299,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 		//(RECENT_ROOMS_COUNT + 1) passes required to preserve the order :(
 		for (ConferenceLog l : em.createNamedQuery("getLogRecentRooms", ConferenceLog.class)
 				.setParameter("roomEnter", ConferenceLog.Type.roomEnter)
-				.setParameter("userId", userId)
+				.setParameter(PARAM_USER_ID, userId)
 				.getResultList())
 		{
 			if (!ids.contains(l.getRoomId())) {

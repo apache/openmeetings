@@ -59,7 +59,7 @@ public class ConfigsPanel extends AdminBasePanel {
 				item.add(new Label("id"));
 				item.add(new Label("key"));
 				item.add(new Label("value"));
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -67,7 +67,7 @@ public class ConfigsPanel extends AdminBasePanel {
 						form.hideNewRecord();
 						form.setModelObject(c);
 						target.add(form, listContainer);
-						target.appendJavaScript("adminPanelInit();");
+						reinitJs(target);
 					}
 				});
 				item.add(AttributeModifier.replace(ATTR_CLASS, getRowClass(c.getId(), form.getModelObject().getId())));

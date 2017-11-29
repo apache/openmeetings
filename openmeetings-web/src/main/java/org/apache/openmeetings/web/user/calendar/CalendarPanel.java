@@ -278,7 +278,7 @@ public class CalendarPanel extends UserBasePanel {
 			protected void populateItem(final ListItem<OmCalendar> item) {
 				item.setOutputMarkupId(true);
 				final OmCalendar cal = item.getModelObject();
-				item.add(new Button("item", new PropertyModel<String>(cal, "title")).add(new AjaxEventBehavior("click") {
+				item.add(new Button("item", new PropertyModel<String>(cal, "title")).add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -290,7 +290,7 @@ public class CalendarPanel extends UserBasePanel {
 			}
 		});
 
-		add(new Button("syncCalendarButton").add(new AjaxEventBehavior("click") {
+		add(new Button("syncCalendarButton").add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -299,7 +299,7 @@ public class CalendarPanel extends UserBasePanel {
 			}
 		}));
 
-		add(new Button("submitCalendar").add(new AjaxEventBehavior("click") {
+		add(new Button("submitCalendar").add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

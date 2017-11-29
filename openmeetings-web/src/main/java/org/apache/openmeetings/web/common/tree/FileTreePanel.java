@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.File;
@@ -122,7 +123,7 @@ public abstract class FileTreePanel extends Panel {
 	private ConfirmableAjaxBorder trashBorder;
 	private final Long roomId;
 	private boolean readOnly = true;
-	private final Component createDir = new WebMarkupContainer("create").add(new AjaxEventBehavior("click") {
+	private final Component createDir = new WebMarkupContainer("create").add(new AjaxEventBehavior(EVT_CLICK) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -205,7 +206,7 @@ public abstract class FileTreePanel extends Panel {
 		form.add(trashToolbar);
 		trashToolbar.add(getUpload());
 		trashToolbar.add(createDir);
-		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior("click") {
+		trashToolbar.add(new WebMarkupContainer("refresh").add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

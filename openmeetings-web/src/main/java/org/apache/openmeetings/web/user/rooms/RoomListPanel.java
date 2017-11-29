@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.user.rooms;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class RoomListPanel extends Panel {
 			protected void populateItem(ListItem<Room> item) {
 				final Room r = item.getModelObject();
 				WebMarkupContainer roomContainer;
-				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior("click"){
+				item.add((roomContainer = new WebMarkupContainer("roomContainer")).add(new AjaxEventBehavior(EVT_CLICK){
 					private static final long serialVersionUID = 1L;
 
 					@Override

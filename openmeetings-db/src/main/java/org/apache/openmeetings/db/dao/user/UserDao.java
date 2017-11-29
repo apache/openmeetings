@@ -20,6 +20,7 @@ package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -437,7 +438,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 */
 	public boolean verifyPassword(Long userId, String password) {
 		List<String> l = em.createNamedQuery("getPassword", String.class)
-			.setParameter("userId", userId).getResultList();
+			.setParameter(PARAM_USER_ID, userId).getResultList();
 		if (l == null || l.size() != 1) {
 			return false;
 		}

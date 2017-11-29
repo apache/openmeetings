@@ -193,7 +193,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PNG));
+			download(target, EXTENSION_PNG);
 		}
 	};
 	private final RoomMenuItem downloadJpgMenuItem = new RoomMenuItem(Application.getString("download.jpg"), Application.getString("download.jpg")) {
@@ -201,7 +201,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_JPG));
+			download(target, EXTENSION_JPG);
 		}
 	};
 	private final RoomMenuItem downloadPdfMenuItem = new RoomMenuItem(Application.getString("download.pdf"), Application.getString("download.pdf")) {
@@ -209,7 +209,7 @@ public class RoomMenuPanel extends Panel {
 
 		@Override
 		public void onClick(AjaxRequestTarget target) {
-			target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PDF));
+			download(target, EXTENSION_PDF);
 		}
 	};
 	private final ImagePanel logo = new ImagePanel("logo") {
@@ -384,5 +384,9 @@ public class RoomMenuPanel extends Panel {
 			}
 			throw new RedirectToUrlException(url);
 		}
+	}
+
+	private static void download(AjaxRequestTarget target, String type) {
+		target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PDF));
 	}
 }

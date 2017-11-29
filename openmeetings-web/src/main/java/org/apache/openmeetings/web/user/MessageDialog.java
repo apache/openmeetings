@@ -25,6 +25,7 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
 
 import java.time.LocalDateTime;
@@ -104,7 +105,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		form.add(new WysiwygEditor("message", toolbar));
 		form.add(roomParamsBlock.setOutputMarkupId(true));
 		final CheckBox bookedRoom = new CheckBox("bookedRoom");
-		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior("click") {
+		form.add(bookedRoom.setOutputMarkupId(true).add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

@@ -73,7 +73,7 @@ public class UsersPanel extends AdminBasePanel {
 				item.add(new Label("login"));
 				item.add(new Label("firstname"));
 				item.add(new Label("lastname"));
-				item.add(new AjaxEventBehavior("click") {
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

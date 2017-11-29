@@ -184,7 +184,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		reminderDays.setEnabled(getModelObject().isLimited());
 		logo.update();
 		target.add(this, groupList);
-		target.appendJavaScript("adminPanelInit();");
+		reinitJs(target);
 	}
 
 	private long getGroupId() {
