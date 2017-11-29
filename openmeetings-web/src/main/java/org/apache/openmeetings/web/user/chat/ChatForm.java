@@ -44,6 +44,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -68,9 +69,13 @@ public class ChatForm extends Form<Void> {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
+					final String txt = chatMessage.getDefaultModelObjectAsString();
+					if (Strings.isEmpty(txt)) {
+						return;
+					}
 					ChatDao dao = getBean(ChatDao.class);
 					ChatMessage m = new ChatMessage();
-					m.setMessage(chatMessage.getDefaultModelObjectAsString());
+					m.setMessage(txt);
 					m.setSent(new Date());
 					m.setFromUser(getBean(UserDao.class).get(getUserId()));
 					try {
