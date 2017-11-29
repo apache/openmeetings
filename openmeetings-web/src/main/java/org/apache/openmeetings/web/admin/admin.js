@@ -5,6 +5,8 @@ function adminPanelInit() {
 	}
 	const f = $('#adminForm'), t = $('#adminTable')
 		, h = $(window).height() - 5;
-	f.height(h - f.position().top);
-	t.height(h - t.position().top);
+	if (f.length === 1 && t.length === 1) {
+		f.height(h - f.position().top);
+		t.height(h - t.position().top);
+	}
 }

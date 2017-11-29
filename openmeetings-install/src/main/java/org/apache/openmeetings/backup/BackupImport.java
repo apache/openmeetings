@@ -364,7 +364,14 @@ public class BackupImport {
 		messageFolderMap.put(TRASH_FOLDER_ID, TRASH_FOLDER_ID);
 
 		File f = unzip(is);
-		Serializer simpleSerializer = new Persister();
+		Registry registry = new Registry();
+		Strategy strategy = new RegistryStrategy(registry);
+		RegistryMatcher matcher = new RegistryMatcher();
+		Serializer simpleSerializer = new Persister(strategy, matcher);
+
+		matcher.bind(Long.class, LongTransform.class);
+		registry.bind(Date.class, DateConverter.class);
+
 		BackupVersion ver = getVersion(simpleSerializer, f);
 		importConfigs(f);
 		importGroups(f, simpleSerializer);
@@ -611,6 +618,7 @@ public class BackupImport {
 		matcher.bind(Integer.class, IntegerTransform.class);
 		registry.bind(User.class, new UserConverter(userDao, userMap));
 		registry.bind(Room.Type.class, RoomTypeConverter.class);
+		registry.bind(Date.class, DateConverter.class);
 		List<Room> list = readList(ser, f, "rooms.xml", "rooms", Room.class);
 		for (Room r : list) {
 			Long roomId = r.getId();
