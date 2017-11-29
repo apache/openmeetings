@@ -95,7 +95,7 @@ var Wb = function() {
 		switch (role) {
 			case PRESENTER:
 				clearAll.click(function() {
-					RoomUtil.confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
+					OmUtil.confirmDlg('clear-all-confirm', function() { wbAction('clearAll', JSON.stringify({wbId: wb.id})); });
 				}).removeClass('disabled');
 				z.find('.curr-slide').change(function() {
 					_setSlide($(this).val() - 1);
@@ -127,7 +127,7 @@ var Wb = function() {
 					s.show();
 				});
 				t.find('.om-icon.clear-slide').click(function() {
-					RoomUtil.confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
+					OmUtil.confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
 				});
 				t.find('.om-icon.save').click(function() {
 					wbAction('save', JSON.stringify({wbId: wb.id}));

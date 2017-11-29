@@ -22,6 +22,34 @@ var Settings = (function() {
 		, save: _save
 	};
 })();
+var OmUtil = (function() {
+	const self = {};
+	function _confirmDlg(_id, okHandler) {
+		const confirm = $('#' + _id);
+		confirm.dialog({
+			modal: true
+			, buttons: [
+				{
+					text: confirm.data('btn-ok')
+					, click: function() {
+						okHandler();
+						$(this).dialog('close');
+					}
+				}
+				, {
+					text: confirm.data('btn-cancel')
+					, click: function() {
+						$(this).dialog('close');
+					}
+				}
+			]
+		});
+		return confirm;
+	}
+
+	self.confirmDlg = _confirmDlg;
+	return self;
+})();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {
 	const l = window.location;
 	info.codebase = l.origin + l.pathname;

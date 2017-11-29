@@ -53,7 +53,7 @@
 		</div>
 		<div class="btn-group dropup">
 			<a id="fontStyle" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Font Style">
-				<span>&nbsp;</span>
+				<span class="chat-tool-icon">&nbsp;</span>
 				<b class="caret"></b>
 			</a>
 			<ul class="dropdown-menu">
@@ -64,12 +64,14 @@
 			</ul>
 		</div>
 		<div class="btn-group">
-			<a id="hyperlink" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink">&nbsp;</a>
+			<a id="hyperlink" class="chat btn chat-tool-icon btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink">&nbsp;</a>
 			<div class="dropdown-menu input-append">
 				<input class="span2" placeholder="URL" type="text"/>
 				<button class="btn btn-default" type="button"><wicket:message key="1261"/></button>
 			</div>
 		</div>
+		<a class="chat-btn chat-tool-icon btn btn-default delete" wicket:message="title:442" wicket:id="ajax-cancel-button"></a>
+		<a class="chat-btn chat-tool-icon btn btn-default audio" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">&nbsp;</a>
 	</div>
 </wicket:panel>
 </html>

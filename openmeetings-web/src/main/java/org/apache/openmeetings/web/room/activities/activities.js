@@ -108,6 +108,7 @@ var Activities = function() {
 		}
 		, findUser: _findUser
 		, add: function(obj) {
+			if (!inited) return;
 			const _id = _getId(obj.id);
 			area.append($('#activity-stub').clone().attr('id', _id).data(obj));
 			const a = $('#' + _id).addClass(obj.cssClass);

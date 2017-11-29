@@ -262,10 +262,7 @@ var Chat = function() {
 			p.removeClass('closed');
 			pp.animate(opts, 1000, function() {
 				p.removeClass('closed');
-				$('#chat .ui-tabs .ui-tabs-panel.messageArea').height(p.height() - closedSize - $('#chat .ui-tabs-nav').height() - $('#chat form').height() - 5);
-				$('#chat .messageArea').each(function() {
-					$(this).scrollTop($(this)[0].scrollHeight);
-				});
+				_setAreaHeight();
 				if (typeof(handler) === 'function') {
 					handler();
 				}
@@ -324,10 +321,18 @@ var Chat = function() {
 		roomMode = _mode;
 		_reinit(allPrefix, roomPrefix);
 	}
+	function _setAreaHeight() {
+		$('#chat .ui-tabs .ui-tabs-panel.messageArea').height(p.height() - closedSize - $('#chat .ui-tabs-nav').height() - $('#chat form').height() - 5);
+		$('#chat .messageArea').each(function() {
+			$(this).scrollTop($(this)[0].scrollHeight);
+		});
+	}
 	function _setHeight(h) {
 		pp.height(h);
 		if (isClosed()) {
 			ctrl.height(h);
+		} else {
+			_setAreaHeight();
 		}
 	}
 	function _insertLink() {
