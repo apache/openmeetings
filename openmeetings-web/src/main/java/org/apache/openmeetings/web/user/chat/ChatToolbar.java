@@ -117,5 +117,6 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 			}
 		};
 		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())));
+		toolbar.add(new WebMarkupContainer("save").setVisible(hasAdminLevel(getRights())));
 	}
 }

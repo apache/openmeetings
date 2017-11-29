@@ -99,6 +99,9 @@
 .delete.chat-tool-icon {
 	background-image: url(images/cancel_icon.png);
 }
+.save.chat-tool-icon {
+	background-image: url(images/file_save_as.png);
+}
 #chat #hyperlink {
 	background-image: url(images/link.png);
 }
