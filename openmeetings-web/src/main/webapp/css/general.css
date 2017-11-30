@@ -578,8 +578,10 @@ div.formSaveBar {
 	margin-top: 2px;
 	vertical-align: super;
 }
-div.formSaveButton input {
-	background: url(images/disk.png) no-repeat;
+div.formSaveButton {
+	background-image: url(images/file_save_as.png);
+	background-repeat: no-repeat;
+	background-size: 18px 18px;
 	float: left;
 	cursor: pointer;
 	width: 18px;

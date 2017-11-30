@@ -103,7 +103,7 @@ var Chat = function() {
 		initToolbar();
 		tabs = $("#chatTabs").tabs({
 			activate: function(event, ui) {
-				$('#activeChatTab').val(ui.newPanel[0].id);
+				$('#activeChatTab').val(ui.newPanel[0].id).trigger('change');
 			}
 		});
 		// close icon: removing the tab on click
@@ -371,6 +371,9 @@ var Chat = function() {
 		, setRoomMode: _setRoomMode
 		, setHeight: _setHeight
 		, clean: _clean
+		, validate: function() {
+			return !!editor && editor.text().trim().length > 0;
+		}
 	};
 }();
 $(function() {

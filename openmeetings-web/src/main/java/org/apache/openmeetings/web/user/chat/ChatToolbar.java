@@ -18,25 +18,36 @@
  */
 package org.apache.openmeetings.web.user.chat;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
-import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
-import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
+import static org.apache.wicket.util.time.Duration.NONE;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.openmeetings.db.dao.basic.ChatDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.StringResourceStream;
 
 import com.googlecode.wicket.jquery.core.IJQueryWidget.JQueryWidget;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar;
@@ -47,8 +58,83 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.toolbar.IWysiwygToolbar;
  */
 public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	private static final long serialVersionUID = 1L;
-	private final WebMarkupContainer toolbar;
+	private static final String CHAT_FNAME_TMPL = "chatlog_%s.txt";
+	private final WebMarkupContainer toolbar = new WebMarkupContainer("toolbar");
+	private final WebMarkupContainer save = new WebMarkupContainer("save");
 	private final ChatForm chatForm;
+	private ConfirmableAjaxBorder delBtn;
+	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
+		private static final long serialVersionUID = 1L;
+		private static final char delimiter = ',';
+		private static final char quoteCharacter = '"';
+		private final String quoteReplacement = new StringBuilder().append(quoteCharacter).append(quoteCharacter).toString();
+
+		{
+			setCacheDuration(NONE);
+		}
+
+		@Override
+		protected ResourceResponse newResourceResponse(Attributes attributes) {
+			ResourceResponse rr = super.newResourceResponse(attributes);
+			final boolean admin = hasAdminLevel(getRights());
+			if (!chatForm.process(
+					() -> admin
+					, r -> admin || isModerator(getUserId(), r.getId())
+					, u -> true))
+			{
+				rr.setError(HttpServletResponse.SC_FORBIDDEN);
+			}
+			return rr;
+		}
+
+		private String getName(User u) {
+			return String.format("%s %s", u.getFirstname(), u.getLastname());
+		}
+
+		private StringBuilder appendQuoted(StringBuilder sb, String value) {
+			return sb.append(quoteCharacter).append(value == null ? "" : value.replace(String.valueOf(quoteCharacter), quoteReplacement)).append(quoteCharacter);
+		}
+
+		private void export(List<ChatMessage> list, StringBuilder sb) {
+			String lineDelim = "";
+			for (ChatMessage msg : list) {
+				sb.append(lineDelim);
+				appendQuoted(sb, getName(msg.getFromUser())).append(delimiter);
+				appendQuoted(sb, getDateFormat().format(msg.getSent())).append(delimiter);
+				appendQuoted(sb, msg.getMessage());
+				lineDelim = "\r\n";
+			}
+		}
+
+		@Override
+		protected IResourceStream getResourceStream(Attributes attributes) {
+			final ChatDao dao = getBean(ChatDao.class);
+			final boolean admin = hasAdminLevel(getRights());
+			final StringBuilder sb = new StringBuilder();
+			chatForm.process(
+					() -> {
+						if (admin) {
+							setFileName(String.format(CHAT_FNAME_TMPL, "global"));
+							export(dao.getGlobal(0, Integer.MAX_VALUE), sb);
+						}
+						return true;
+					}
+					, r -> {
+						if (admin || isModerator(getUserId(), r.getId())) {
+							setFileName(String.format(CHAT_FNAME_TMPL, "room_" + r.getId()));
+							export(dao.getRoom(r.getId(), 0, Integer.MAX_VALUE, true), sb);
+						}
+						return true;
+					}, u -> {
+						setFileName(String.format(CHAT_FNAME_TMPL, "user_" + u.getId()));
+						export(dao.getUser(u.getId(), 0, Integer.MAX_VALUE), sb);
+						return true;
+					});
+			StringResourceStream srs = new StringResourceStream(sb, "text/csv");
+			srs.setCharset(UTF_8);
+			return srs;
+		}
+	});
 
 	/**
 	 * Constructor
@@ -71,7 +157,6 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	public ChatToolbar(String id, ChatForm form, IModel<String> model) {
 		super(id, model);
 		this.chatForm = form;
-		add(toolbar = new WebMarkupContainer("toolbar"));
 	}
 
 	@Override
@@ -82,41 +167,68 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("832"), chatForm) {
+		add(toolbar);
+		add(download);
+		delBtn = new ConfirmableAjaxBorder("delete", getString("80"), getString("832"), chatForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				ChatDao dao = getBean(ChatDao.class);
-				String scope = chatForm.getScope();
-				boolean clean = false;
-				try {
-					if (scope == null || ID_ALL.equals(scope)) {
-						scope = ID_ALL;
-						dao.deleteGlobal();
-						clean = true;
-					} else if (scope.startsWith(ID_ROOM_PREFIX)) {
-						Room r = getBean(RoomDao.class).get(Long.parseLong(scope.substring(ID_ROOM_PREFIX.length())));
-						if (r != null) {
-							dao.deleteRoom(r.getId());
-							clean = true;
+				final ChatDao dao = getBean(ChatDao.class);
+				final String scope = chatForm.getScope();
+				final boolean admin = hasAdminLevel(getRights());
+				chatForm.process(
+					() -> {
+						if (admin) {
+							dao.deleteGlobal();
+							clean(target, ID_ALL);
 						}
-					} else if (scope.startsWith(ID_USER_PREFIX)) {
-						User u = getBean(UserDao.class).get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
-						if (u != null) {
-							dao.deleteUser(u.getId());
-							clean = true;
-						}
+						return true;
 					}
-				} catch (Exception e) {
-					//no-op
-				}
-				if (clean) {
-					target.appendJavaScript("$('#" + scope + "').html('')");
-				}
+					, r -> {
+						if (admin || isModerator(getUserId(), r.getId())) {
+							dao.deleteRoom(r.getId());
+							clean(target, scope);
+						}
+						return true;
+					}, u -> {
+						dao.deleteUser(u.getId());
+						clean(target, scope);
+						return true;
+					});
 			}
 		};
-		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())));
-		toolbar.add(new WebMarkupContainer("save").setVisible(hasAdminLevel(getRights())));
+		toolbar.add(delBtn.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
+				.setOutputMarkupPlaceholderTag(true));
+		toolbar.add(save.setVisible(hasAdminLevel(getRights())).setOutputMarkupId(true)
+				.setOutputMarkupPlaceholderTag(true).add(new AjaxEventBehavior(EVT_CLICK) {
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					protected void onEvent(AjaxRequestTarget target) {
+						download.initiate(target);
+					}
+				}));
+	}
+
+	private void clean(AjaxRequestTarget target, String scope) {
+		target.appendJavaScript("$('#" + scope + "').html('')");
+	}
+
+	void update(AjaxRequestTarget target) {
+		final boolean admin = hasAdminLevel(getRights());
+		chatForm.process(
+			() -> {
+				target.add(save.setVisible(admin), delBtn.setVisible(admin));
+				return true;
+			}
+			, r -> {
+				final boolean moder = admin || isModerator(getUserId(), r.getId());
+				target.add(save.setVisible(moder), delBtn.setVisible(moder));
+				return true;
+			}, u -> {
+				target.add(save.setVisible(true), delBtn.setVisible(true));
+				return true;
+			});
 	}
 }

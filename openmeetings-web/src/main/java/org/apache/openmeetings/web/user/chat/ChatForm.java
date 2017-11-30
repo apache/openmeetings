@@ -30,6 +30,8 @@ import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 
 import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -40,7 +42,11 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.attributes.IAjaxCallListener;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.Model;
@@ -62,10 +68,28 @@ public class ChatForm extends Form<Void> {
 		final ChatToolbar toolbar = new ChatToolbar("toolbarContainer", this);
 		final WysiwygEditor chatMessage = new WysiwygEditor("chatMessage", Model.of(""), toolbar);
 		add(toolbar
-			, activeTab
+			, activeTab.add(new AjaxFormSubmitBehavior(this, "change") {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					toolbar.update(target);
+				}
+			})
 			, chatMessage.setOutputMarkupId(true)
 			, new AjaxButton("send") {
 				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+					super.updateAjaxAttributes(attributes);
+					attributes.getAjaxCallListeners().add(new IAjaxCallListener() {
+						@Override
+						public CharSequence getPrecondition(Component component) {
+							return "return Chat.validate();";
+						}
+					});
+				}
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
@@ -74,32 +98,28 @@ public class ChatForm extends Form<Void> {
 						return;
 					}
 					ChatDao dao = getBean(ChatDao.class);
-					ChatMessage m = new ChatMessage();
+					final ChatMessage m = new ChatMessage();
 					m.setMessage(txt);
 					m.setSent(new Date());
 					m.setFromUser(getBean(UserDao.class).get(getUserId()));
-					try {
-						String scope = getScope();
-						if (scope != null) {
-							if (ID_ALL.equals(scope)) {
-								//we done
-							} else if (scope.startsWith(ID_ROOM_PREFIX)) {
-								Room r = getBean(RoomDao.class).get(Long.parseLong(scope.substring(ID_ROOM_PREFIX.length())));
+					if (!process(
+							() -> true
+							, r -> {
 								if (isUserInRoom(r.getId(), getUserId())) {
 									m.setToRoom(r);
 								} else {
 									log.error("It seems like we are being hacked!!!!");
-									return;
+									return false;
 								}
 								m.setNeedModeration(r.isChatModerated() && !isModerator(m.getFromUser().getId(), r.getId()));
-							} else if (scope.startsWith(ID_USER_PREFIX)) {
-								User u = getBean(UserDao.class).get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
+								return true;
+							}, u -> {
 								m.setToUser(u);
-							}
-						}
-					} catch (Exception e) {
-						//no-op
-					}
+								return true;
+							}))
+					{
+						return;
+					};
 					dao.update(m);
 					JSONObject msg = Chat.getMessage(Arrays.asList(m));
 					if (m.getToRoom() != null) {
@@ -124,5 +144,27 @@ public class ChatForm extends Form<Void> {
 
 	public String getScope() {
 		return activeTab.getModelObject();
+	}
+
+	boolean process(BooleanSupplier processAll, Predicate<Room> processRoom, Predicate<User> processUser) {
+		try {
+			final String scope = getScope();
+			if (Strings.isEmpty(scope) || ID_ALL.equals(scope)) {
+				return processAll.getAsBoolean();
+			} else if (scope.startsWith(ID_ROOM_PREFIX)) {
+				Room r = getBean(RoomDao.class).get(Long.parseLong(scope.substring(ID_ROOM_PREFIX.length())));
+				if (r != null) {
+					return processRoom.test(r);
+				}
+			} else if (scope.startsWith(ID_USER_PREFIX)) {
+				User u = getBean(UserDao.class).get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
+				if (u != null) {
+					return processUser.test(u);
+				}
+			}
+		} catch (Exception e) {
+			//no-op
+		}
+		return false;
 	}
 }
