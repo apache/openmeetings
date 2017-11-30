@@ -40,7 +40,7 @@
 		<!-- plugin versions -->
 		<maven-javadoc-plugin.version>3.0.0-M1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-		<maven-site-plugin.version>3.3</maven-site-plugin.version>
+		<maven-site-plugin.version>3.6</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
 		<maven-enforcer-plugin.version>3.0.0-M1</maven-enforcer-plugin.version>
@@ -48,7 +48,7 @@
 		<checksum-maven-plugin.version>1.6</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.14</license-maven-plugin.version>
-		<reflow-velocity-tools.version>1.1.1</reflow-velocity-tools.version>
+		<reflow-skin.version>1.2.3.DEVACFR</reflow-skin.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.0.2</maven-jar-plugin.version>
@@ -567,12 +567,8 @@
 		<repository>
 			<id>jpresso</id>
 			<url>http://repository.jspresso.org/maven2/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -583,12 +579,14 @@
 		<pluginRepository>
 			<id>jpresso</id>
 			<url>http://repository.jspresso.org/maven2/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>openmeetings-bintray</id>
+			<url>https://dl.bintray.com/openmeetings/maven</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencyManagement>
@@ -840,13 +838,7 @@
 					<dependency>
 						<groupId>lt.velykis.maven.skins</groupId>
 						<artifactId>reflow-velocity-tools</artifactId>
-						<version>${reflow-velocity-tools.version}</version>
-					</dependency>
-					<!-- Reflow skin requires Velocity >= 1.7 -->
-					<dependency>
-						<groupId>org.apache.velocity</groupId>
-						<artifactId>velocity</artifactId>
-						<version>1.7</version>
+						<version>${reflow-skin.version}</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -1052,6 +1044,8 @@
 								<notes></notes>
 								<patterns>
 									<pattern>Licensed MIT</pattern>
+									<pattern>Licensed under MIT</pattern>
+									<pattern>Licensed under the MIT license</pattern>
 									<pattern>MIT/GPL2 Licensed</pattern>
 									<pattern>licensed under the MIT and GPL</pattern>
 								</patterns>

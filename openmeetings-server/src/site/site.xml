@@ -40,18 +40,6 @@
 			<item name="Mailing Lists" href="/mail-lists.html" />
 			<item name="Wiki" href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
 		</menu>
-		<menu name="Development">
-			<item name="Source Code" href="/source-repository.html" />
-			<item name="Bugs / Issues" href="/issue-tracking.html" />
-			<item name="Dependencies" href="/dependencies.html" />
-			<item name="Continuous Integration" href="/integration.html" />
-			<item name="Build Instructions 3.0.x" href="/BuildInstructions_3.0.x.html" />
-			<item name="Build Instructions" href="/BuildInstructions.html" />
-			<item name="JUnit Testing" href="/JUnitTesting.html" />
-			<item name="Manual Testing" href="/ManualTesting.html" />
-			<item name="Release Guide" href="/ReleaseGuide.html" />
-			<item name="Website Guide" href="/WebsiteGuide.html" />
-		</menu>
 		<menu name="Configuration">
 			<item name="Integration" href="#integration">
 				<item name="SOAP/REST API" href="/openmeetings-webservice/apidocs/index.html" target="_blank"/>
@@ -123,6 +111,18 @@
 			<item name="Misc" href="#misc">
 				<item name="Get version info" href="/GetVersionInfo.html" />
 			</item>
+		</menu>
+		<menu name="Development">
+			<item name="Source Code" href="/source-repository.html" />
+			<item name="Bugs / Issues" href="/issue-tracking.html" />
+			<item name="Dependencies" href="/dependencies.html" />
+			<item name="Continuous Integration" href="/integration.html" />
+			<item name="Build Instructions 3.0.x" href="/BuildInstructions_3.0.x.html" />
+			<item name="Build Instructions" href="/BuildInstructions.html" />
+			<item name="JUnit Testing" href="/JUnitTesting.html" />
+			<item name="Manual Testing" href="/ManualTesting.html" />
+			<item name="Release Guide" href="/ReleaseGuide.html" />
+			<item name="Website Guide" href="/WebsiteGuide.html" />
 		</menu>
 	</body>
 	<custom>
