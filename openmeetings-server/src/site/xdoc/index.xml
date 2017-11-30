@@ -90,8 +90,7 @@
 						<li>config types are introduced</li>
 					</ul>
 					Other fixes and improvements
-					<br/>
-					<span class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</span>
+					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -122,14 +121,14 @@
 		<section name="Feature details">
 			<subsection name="Audio and Video Conferencing">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/Features_Screen_Conference_Room_Thumb.png" class="example-image-link"
 								title="OpenMeetings Conference Room" style="float:none; display: block; width:250px;height:175px;border:0;">
 							<img src="images/Features_Screen_Conference_Room_Thumb.png" title="OpenMeetings Conference Room"
 									style="width: 250px; height: 175px;"  alt="" />
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content">There are four options to use OpenMeetings audio/video functions,
 							which you can select during a conference session.
 						</span>
@@ -147,7 +146,7 @@
 			</subsection>
 			<subsection name="Meeting recording and Screen sharing">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/desktopsharing.png" class="example-image-link"
 								title="Screensharing-recording" style="float:none; display: block; width: 140px; height: 150px">
 							<img src="images/desktopsharing.png" title="Screensharing-recording" style="float:none; display: block; width: 140px; height: 150px" alt="" />
@@ -157,7 +156,7 @@
 							<img src="images/recordings_timeleine.png" title="Device" style="float:none; display: block; width: 200px; height: 115px" alt="" />
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<ul>
 							<li>Recorded sessions contain everything including sound recorded
 								from all audio streams in exactly the way you've seen it in the conference.
@@ -172,14 +171,14 @@
 			</subsection>
 			<subsection name="File Explorer">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/file_smal.png" class="example-image-link"
 								title="File Explorer" style="float:none; display: block; width:135px;height:200px;border:0;">
 							<img src="images/file_smal.png" title="File Explorer" alt=""
 									style="float:none; display: block; width:135px;height:200px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content">Advanced File-Explorer in every conference room, Drag and Drop
 							interface for managing uploaded files, including the possibility to
 							create a document tree with folders.
@@ -197,14 +196,14 @@
 			</subsection>
 			<subsection name="Moderating System">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/right_management.png" class="example-image-link"
 								title="Right management" style="float:none; display: block; width:135px;height:216px;border:0;">
 							<img src="images/right_management.png" title="Right management" alt=""
 								 style="float:none; display: block; width:135px;height:216px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content">During a conference, the moderator can adjust the user permission to every user individually.</span>
 						<ul>
 							<li>
@@ -237,7 +236,7 @@
 			</subsection>
 			<subsection name="Multi-Whiteboard and Chat">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/whiteboard.png" class="example-image-link"
 								title="Whiteboard" style="float:none; display: block; width:240px;height:165px;border:0;">
 							<img src="images/whiteboard.png" title="Whiteboard"
@@ -249,7 +248,7 @@
 								 style="float:none; display: block; width: 240px; height: 68px" alt="" />
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content" style="width: 450px">
 							Multi-Whiteboard, you can add new whiteboard instances, each
 							white board can have the full range of tools and
@@ -280,14 +279,14 @@
 			</subsection>
 			<subsection name="User and room management">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/dashboard.png" class="example-image-link"
 								title="Dashboard with MyRooms" style="float:none; display: block; width:250px;height:130px;border:0;">
 							<img src="images/dashboard.png" title="Dashboard with MyRooms" alt=""
 								 style="float:none; display: block; width:250px;height:130px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content" >
 							You can manage users and multiple organizations in a single
 							OpenMeetings instance. You can also create users that only have
@@ -307,14 +306,14 @@
 			</subsection>
 			<subsection name="Private message center">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/privat_messages.png" class="example-image-link"
 								title="Private Messages and Contact Search" style="float:none; display: block; width:230px;height:125px;border:0;">
 							<img src="images/privat_messages.png" title="Private Messages and Contact Search" alt=""
 								 style="float:none; display: block; width:230px;height:125px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content">
 							Send users messages and organize them in folders. You can book
 							conference rooms by sending private messages. The booked event
@@ -330,14 +329,14 @@
 			</subsection>
 			<subsection name="Plan meetings with integrated calendar">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/calendar.png" class="example-image-link"
 								title="Calendar" style="float:none; display: block; width:200px;height:115px;border:0;">
 							<img src="images/calendar.png" title="Calendar" alt=""
 								 style="float:none; display: block; width:200px;height:115px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<ul>
 							<li>Plan your conferencing and invite attendees from OpenMeetings or External.</li>
 							<li>The invited attendees will recieve an E-mail with details to the meetings and a link with a
@@ -350,14 +349,14 @@
 			</subsection>
 			<subsection name="Polls and Votes">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/poll.png" class="example-image-link"
 								title="Create a poll" style="float:none; display: block; width:250px;height:250px;border:0;">
 							<img src="images/poll.png" title="Create a poll" alt=""
 								 style="float:none; display: block; width:250px;height:250px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content">
 							You can create a poll with yes/no or 1-10 questions, let the
 							user vote and see the voting results.
@@ -370,14 +369,14 @@
 			</subsection>
 			<subsection name="Backup">
 				<div class="row">
-					<div class="span3">
+					<div class="col-md-5">
 						<a href="images/backup.png" class="example-image-link"
 								title="Backup" style="float:none; display: block; width:240px;height:135px;border:0;">
 							<img src="images/backup.png" title="Backup" alt=""
 								 style="float:none; display: block; width:250px;height:135px;border:0;"/>
 						</a>
 					</div>
-					<div class="span5">
+					<div class="col-md-5">
 						<span class="p_content">You can backup all user-generated data including files
 							uploaded by the users in a single ZIP file and import that ZIP into
 							a new installation of OpenMeetings again.

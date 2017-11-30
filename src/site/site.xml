@@ -11,11 +11,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
+-->
 <project xmlns="http://maven.apache.org/DECORATION/1.7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
-  name="Apache OpenMeetings Project">
-
+		xsi:schemaLocation="http://maven.apache.org/DECORATION/1.7.0 http://maven.apache.org/xsd/decoration-1.7.0.xsd"
+		name="Apache OpenMeetings Project">
 	<bannerLeft>
 		<name>Apache OpenMeetings</name>
 		<src>http://openmeetings.apache.org/images/logo.png</src>
@@ -30,7 +29,7 @@
 	<skin>
 		<groupId>lt.velykis.maven.skins</groupId>
 		<artifactId>reflow-maven-skin</artifactId>
-		<version>1.1.1</version>
+		<version>${reflow-skin.version}</version>
 	</skin>
 
 	<version position="none"/>
@@ -45,10 +44,10 @@
 			<item name="Wiki" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS"/>
 		</links>
 		<menu ref="modules" inherit="top"/>
-		<footer>
+		<footer><![CDATA[
 			<p>Apache OpenMeetings, OpenMeetings, Apache, the Apache feather, and the Apache OpenMeetings project logo</p>
 			<p>are trademarks of the Apache Software Foundation.</p>
-		</footer>
+		]]></footer>
 	</body>
 
 	<poweredBy></poweredBy>
@@ -59,6 +58,7 @@
 				<name><![CDATA[
 					<span class="color-highlight">Apache</span> OpenMeetings
 				]]></name>
+				<href>http://openmeetings.apache.org/index.html</href>
 			</brand>
 			<absoluteResourceURL>http://openmeetings.apache.org</absoluteResourceURL>
 			<protocolRelativeURLs>true</protocolRelativeURLs>
