@@ -8,6 +8,7 @@ iframe {
 }
 .color-highlight {
 	color: #cb2533;
+	text-transform: uppercase;
 }
 .alignnone.img-responsive {
 	display: inline-block;
