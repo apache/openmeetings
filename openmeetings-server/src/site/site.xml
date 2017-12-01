@@ -135,6 +135,7 @@
 				</index>
 			</pages>
 			<endContent>
+				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
 				<script type="text/javascript" src="$resourcePath/js/jquery-ui.min.js"></script>
 				<script type="text/javascript" src="$resourcePath/js/netcalc.js"></script>
 			</endContent>

@@ -13,6 +13,9 @@ iframe {
 .alignnone.img-responsive {
 	display: inline-block;
 }
+#toc-sidebar {
+	position: absolute;
+}
 /* Call for logo, need to be removed*/
 .powered-preview {
 	background-repeat: no-repeat;
