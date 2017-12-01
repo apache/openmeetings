@@ -22,8 +22,8 @@
 	</bannerLeft>
 	<bannerRight>
 		<name>Apache</name>
-		<src>http://apache.org/img/asf_logo.png</src>
-		<href>http://apache.org</href>
+		<src>https://apache.org/img/asf_logo.png</src>
+		<href>https://apache.org</href>
 	</bannerRight>
 
 	<skin>
