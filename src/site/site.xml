@@ -73,7 +73,7 @@
 			<toc>sidebar</toc>
 			<skinAttribution>false</skinAttribution>
 			<endContent>
-				<script src="$resourcePath/js/site.js"></script>
+				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
 			</endContent>
 		</reflowSkin>
 	</custom>

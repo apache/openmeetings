@@ -23,4 +23,14 @@ $(document).ready(function() {
 	for (var i = 0; i < topics.length; ++i) {
 		$('ul.nav li a[title="' + topics[i] + '"').append('&nbsp;&nbsp;<span class="label label-success">New</span>')
 	}
+	var toc = $('#toc-sidebar'), row = toc.parents('.row');
+	$(document).on('scroll', function() {
+		if (!toc.is(":visible")) {
+			return;
+		}
+		var tv = Math.min(Math.max(0, 60 + $(document).scrollTop() - row.position().top)
+				, row.height() - toc.height() - 20);
+		//console.log("top -> " + tv);
+		toc.css('top', tv + "px");
+	});
 })
