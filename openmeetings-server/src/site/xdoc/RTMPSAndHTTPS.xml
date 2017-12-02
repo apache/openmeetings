@@ -38,7 +38,7 @@
 			</ul>
 		</section>
 		<section name="'Real' certificate">
-			<h3>Prerequisites</h3>
+			<h3>Prerequisites (real)</h3>
 			<ul>
 				<li>You need OpenMeetings 1.9.x or later for this, OpenMeetings 1.8.x does not have those options.</li>
 				<li>Install OpenMeetings according to the install instructions and check that it runs without problems</li>
@@ -97,7 +97,7 @@ Enter key password for <red5>
 				</li>
 			</ol>
 			<h3>Create Keystore using existing key-pair</h3>
-			<h4>Prerequisites</h4>
+			<h4>Prerequisites (existing)</h4>
 			<ul>
 				<li>Server key: red5.key</li>
 				<li>Signed CSR: red5.crt</li>
@@ -140,7 +140,7 @@ keytool -importkeystore -srcstorepass password -srckeystore red5.p12 -srcstorety
 			</ol>
 		</section>
 		<section name="Self-signed certificate">
-			<h3>Prerequisites</h3>
+			<h3>Prerequisites (self-signed)</h3>
 			<ul>
 				<li>Create CA's root certificate: ca.crt</li>
 				<li>Create self-signed server certificate: red5.crt <tt>Common Name (CN) while creating certificate

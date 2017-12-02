@@ -27,9 +27,38 @@
 				<a href="commercial-support.html" target="_blank" rel="nofollow">commercial support</a>.
 			</p>
 			<div>
-				<a href="downloads.html" rel="nofollow">
-					<img src="images/installation_instructions.png" alt="Installation in 3 simple steps" />
-				</a>
+				<div>
+					<h3><b>3 <i>steps</i> to install OpenMeetings</b></h3>
+					<ol class="install-steps">
+						<li class="step download os">
+							<div><a href="downloads.html" rel="nofollow">Download latest .zip (.tar.gz)</a></div>
+							<div class="small">Java 8 required</div>
+						</li>
+						<li class="step unpack">
+							<div>Unpack + run red5.bat (.sh)</div>
+							<div class="small">(Windows: double click red5.bat)</div>
+						</li>
+						<li class="step run">
+							<div>Run Web Installer</div>
+							<div class="small">(goto: <a href="http://localhost:5080/openmeetings/install">http://localhost:5080/openmeetings/install</a>)</div>
+						</li>
+					</ol>
+					<script type="text/javascript"><![CDATA[
+						let osname = 'windows';
+						if (navigator.appVersion.indexOf('Mac') > -1) {
+							osname = 'mac';
+						}
+						if (navigator.appVersion.indexOf('X11') > -1 || navigator.appVersion.indexOf('Linux') > -1) {
+							osname = 'linux';
+						}
+						document.onreadystatechange = () => {
+							if (document.readyState === 'complete') {
+								$('.download.os').css('background-image', 'url(images/download_for_' + osname + '.png)');
+							}
+						};
+					//]]>
+					</script>
+				</div>
 				<p>
 					<i>Note: Openmeetings requires JRE 8, JRE 6/7 is NOT compatible!</i><br />
 					<i>
