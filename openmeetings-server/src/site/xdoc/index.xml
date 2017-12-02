@@ -169,7 +169,7 @@
 					</div>
 				</div>
 			</subsection>
-			<subsection name="File Explorer">
+			<subsection name="Room File Explorer">
 				<div class="row">
 					<div class="col-md-5">
 						<a href="images/file_smal.png" class="example-image-link"
@@ -212,7 +212,11 @@
 							</li>
 							<li>
 								<img src="images/pencil_add.png" class="alignnone" title="Whiteboard Access" alt="" />
-								Allow/Deny to draw on white board
+								Allow/Deny right to draw on white board
+							</li>
+							<li>
+								<img src="images/wand_add.png" class="alignnone" title="Presenter right" alt="" />
+								Add/Remove presenter role
 							</li>
 							<li>
 								<img src="images/monitor_add.png" class="alignnone" title="Screenshare" alt="" />
@@ -223,12 +227,20 @@
 								Allow/Deny Remote Control Screen
 							</li>
 							<li>
-								<img src="images/micro_small.png" class="alignnone" title="Remote control" alt="" />
+								<img src="images/microphone_exclusive.png" class="alignnone" title="Right for exclusive audio" alt="" />
+								Allow/Deny right for exclusive audio
+							</li>
+							<li>
+								<img src="images/micro_small.png" class="alignnone" title="Exclusive audio" alt="" />
 								Give exclusive audio to others or self
 							</li>
 							<li>
-								<img src="images/audio_and_video.png" class="alignnone" title="Video Audio" alt="" />
-								(Re-) Start Audio, Video or Device settings
+								<img src="images/webcam_add.png" class="alignnone" title="Video" alt="" />
+								Allow/Deny Video
+							</li>
+							<li>
+								<img src="images/microphone_add.png" class="alignnone" title="Audio" alt="" />
+								Allow/Deny Audio
 							</li>
 						</ul>
 					</div>
@@ -243,7 +255,7 @@
 								 style="float:none; display: block; width: 240px; height: 165px" alt="" />
 						</a>
 						<a href="images/chat.png" class="example-image-link"
-								title="Chat in Conference Room" style="float:none; display: block; width:240px;height:68px;border:0;">
+								title="Chat in Conference Room" style="float:none; display: block; width:120px;height:240px;border:0;">
 							<img src="images/chat.png" title="Chat in Conference Room"
 								 style="float:none; display: block; width: 240px; height: 68px" alt="" />
 						</a>

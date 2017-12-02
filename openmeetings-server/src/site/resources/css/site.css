@@ -39,3 +39,27 @@ iframe {
 .example-image-link {
 	display: block;
 }
+.install-steps {
+	font-size: 20px;
+	background: linear-gradient(to right, lime, green);
+	color: white !important;
+	max-width: 385px;
+	font-weight: bold;
+}
+.install-steps a {
+	color: white;
+}
+.install-steps .small {
+	font-size: small;
+	text-align: right;
+}
+.install-steps .step {
+	background-repeat: no-repeat;
+	padding-left: 40px;
+}
+.install-steps .step.unpack {
+	background-image: url(../images/box_open.png);
+}
+.install-steps .step.run {
+	background-image: url(../images/world.png);
+}
