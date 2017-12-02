@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.RECENT_ROOMS_COUNT;
@@ -49,7 +50,6 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
@@ -71,8 +71,6 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private SipDao sipDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	@Override
 	public Room get(long id) {
@@ -191,7 +189,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	public List<Room> getAppointedRoomsByUser(long userId) {
 		log.debug("getAppointedRoomsByUser : UserID - " + userId);
 
-		TimeZone timeZone = timezoneUtil.getTimeZone(userDao.get(userId));
+		TimeZone timeZone = getTimeZone(userDao.get(userId));
 
 		Calendar startCal = Calendar.getInstance(timeZone);
 		startCal.set(Calendar.MINUTE, 0);

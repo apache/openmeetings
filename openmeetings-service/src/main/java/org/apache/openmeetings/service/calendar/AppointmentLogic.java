@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.service.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MINUTES_REMINDER_SEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Calendar;
@@ -36,7 +36,6 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +49,6 @@ public class AppointmentLogic {
 	private AppointmentDao appointmentDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private InvitationDao invitationDao;
 	@Autowired
@@ -80,7 +77,7 @@ public class AppointmentLogic {
 	 */
 	// ----------------------------------------------------------------------------------------------
 	public void doScheduledMeetingReminder() {
-		String baseUrl = cfgDao.getString(CONFIG_APPLICATION_BASE_URL, DEFAULT_BASE_URL);
+		String baseUrl = getBaseUrl();
 		if (baseUrl == null || baseUrl.length() < 1) {
 			log.error("Error retrieving baseUrl for application");
 			return;
@@ -108,7 +105,7 @@ public class AppointmentLogic {
 			if (a.isReminderEmailSend()) {
 				continue;
 			}
-			TimeZone ownerZone = timezoneUtil.getTimeZone(a.getOwner().getTimeZoneId());
+			TimeZone ownerZone = getTimeZone(a.getOwner());
 			Calendar aNow = Calendar.getInstance(ownerZone);
 			Calendar aStart = a.startCalendar(ownerZone);
 			aStart.add(Calendar.MINUTE, -minutesReminderSend);

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.calendar.caldav;
 
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.net.URI;
@@ -37,7 +38,6 @@ import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -79,8 +79,6 @@ public class IcalUtils {
 	private static final Logger log = Red5LoggerFactory.getLogger(IcalUtils.class, getWebAppRootKey());
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 	@Autowired
 	private UserDao userDao;
 
@@ -291,11 +289,11 @@ public class IcalUtils {
 			if (timezone != null) {
 				Property tzid = timezone.getProperty(Property.TZID);
 				if (tzid != null) {
-					return timezoneUtil.getTimeZone(tzid.getValue());
+					return getTimeZone(tzid.getValue());
 				}
 			}
 		}
-		return timezoneUtil.getTimeZone(owner);
+		return getTimeZone(owner);
 	}
 
 	/**
@@ -316,7 +314,7 @@ public class IcalUtils {
 		if (tzid == null) {
 			return parseDate(dt.getValue(), acceptedFormats, timeZone);
 		} else {
-			return parseDate(dt.getValue(), acceptedFormats, timezoneUtil.getTimeZone(tzid.getValue()));
+			return parseDate(dt.getValue(), acceptedFormats, getTimeZone(tzid.getValue()));
 		}
 	}
 

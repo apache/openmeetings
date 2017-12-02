@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
@@ -79,6 +80,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -95,6 +97,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
 import org.red5.logging.Red5LoggerFactory;
@@ -335,6 +338,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 				reloadAudioRate();
 				break;
 			case CONFIG_MP4_AUDIO_BITRATE:
+				reloadAudioBitrate();
+				break;
+			case CONFIG_DEFAULT_TIMEZONE:
+				reloadTimezone();
 				break;
 		}
 		return entity;
@@ -390,6 +397,19 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setAudioBitrate(getString(CONFIG_MP4_AUDIO_BITRATE, "32k"));
 	}
 
+	private void reloadTimezone() {
+		String defaultTzName = getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
+
+		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(defaultTzName);
+
+		if (timeZoneByOmTimeZone == null) { //this seems to be impossible
+			// If everything fails take the servers default one
+			log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
+			defaultTzName = TimeZone.getDefault().getID();
+		}
+		OpenmeetingsVariables.setDefaultTimezone(defaultTzName);
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -400,6 +420,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadGaCode();
 		reloadAudioRate();
 		reloadAudioBitrate();
+		reloadTimezone();
 		reloadRoomSettings();
 	}
 

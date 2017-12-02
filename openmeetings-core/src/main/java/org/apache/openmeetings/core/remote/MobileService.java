@@ -63,7 +63,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.LocaleHelper;
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -397,9 +397,9 @@ public class MobileService {
 		m.setToRoom(r);
 		m.setNeedModeration(r.isChatModerated() && !isModerator(c));
 		chatDao.update(m);
-		FastDateFormat fmt = getFmt(u);
+		FastDateFormat fmt = FormatHelper.getDateTimeFormat(u);
 		sendChatMessage(c, m, fmt);
-		WebSocketHelper.sendRoom(m, WebSocketHelper.getMessage(u.getId(), Arrays.asList(m), fmt, null));
+		WebSocketHelper.sendRoom(m, WebSocketHelper.getMessage(u, Arrays.asList(m), null));
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
@@ -430,14 +430,6 @@ public class MobileService {
 		return c.isMod() || c.isSuperMod();
 	}
 
-	private static FastDateFormat getFmt(User u) {
-		return FastDateFormat.getDateTimeInstance(
-				FastDateFormat.SHORT
-				, FastDateFormat.SHORT
-				, TimeZone.getTimeZone(u.getTimeZoneId())
-				, LocaleHelper.getLocale(u));
-	}
-
 	private static Map<String, Object> encodeChatMessage(ChatMessage m, FastDateFormat fmt) {
 		Map<String, Object> mm = new HashMap<>();
 		mm.put("from", String.format("%s %s", m.getFromUser().getFirstname(), m.getFromUser().getLastname()));
@@ -457,7 +449,7 @@ public class MobileService {
 
 			Room r = roomDao.get(roomId);
 			User u = userDao.get(c.getUserId());
-			FastDateFormat fmt = getFmt(u);
+			FastDateFormat fmt = FormatHelper.getDateTimeFormat(u);
 			for (ChatMessage m : chatDao.getRoom(roomId, 0, 30, !r.isChatModerated() || isModerator(c))) {
 				myChatList.add(encodeChatMessage(m, fmt));
 			}

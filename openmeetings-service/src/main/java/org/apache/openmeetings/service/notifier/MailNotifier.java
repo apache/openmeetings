@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.service.notifier;
 
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
+
 import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
@@ -29,9 +31,8 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
-import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
 import org.apache.openmeetings.service.mail.template.subject.AppointmentReminderTemplate;
+import org.apache.openmeetings.service.mail.template.subject.SubjectEmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +42,6 @@ public class MailNotifier implements INotifier {
 	private NotifierService notifier;
 	@Autowired
 	private IInvitationManager invitationManager;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	@PostConstruct
 	private void register() {
@@ -51,7 +50,7 @@ public class MailNotifier implements INotifier {
 
 	@Override
 	public void notify(User u, Appointment a, Invitation inv) throws Exception {
-		TimeZone tz = timezoneUtil.getTimeZone(u.getTimeZoneId());
+		TimeZone tz = getTimeZone(u);
 		SubjectEmailTemplate t = AppointmentReminderTemplate.get(u, a, tz);
 		invitationManager.sendInvitationLink(inv, MessageType.Create, t.getSubject(), t.getEmail(), false);
 	}

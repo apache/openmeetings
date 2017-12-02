@@ -18,10 +18,13 @@
  */
 package org.apache.openmeetings.db.util;
 
+import static java.text.DateFormat.SHORT;
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.user.User;
 
 public class FormatHelper {
@@ -78,5 +81,17 @@ public class FormatHelper {
 			user = isHTMLEscape ? escapeHtml4(user) : user;
 		}
 		return user;
+	}
+
+	public static FastDateFormat getDateFormat(User u) {
+		return FastDateFormat.getDateInstance(SHORT, getTimeZone(u), LocaleHelper.getLocale(u));
+	}
+
+	public static FastDateFormat getTimeFormat(User u) {
+		return FastDateFormat.getTimeInstance(SHORT, getTimeZone(u), LocaleHelper.getLocale(u));
+	}
+
+	public static FastDateFormat getDateTimeFormat(User u) {
+		return FastDateFormat.getDateTimeInstance(SHORT, SHORT, getTimeZone(u), LocaleHelper.getLocale(u));
 	}
 }

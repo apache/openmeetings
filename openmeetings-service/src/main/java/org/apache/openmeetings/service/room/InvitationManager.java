@@ -19,6 +19,7 @@
 package org.apache.openmeetings.service.room;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
@@ -42,7 +43,6 @@ import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.template.InvitationTemplate;
 import org.apache.openmeetings.service.mail.template.subject.CanceledAppointmentTemplate;
 import org.apache.openmeetings.service.mail.template.subject.CreatedAppointmentTemplate;
@@ -69,8 +69,6 @@ public class InvitationManager implements IInvitationManager {
 	private InvitationDao invitationDao;
 	@Autowired
 	private MailHandler mailHandler;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * @author vasya
@@ -84,7 +82,7 @@ public class InvitationManager implements IInvitationManager {
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
 		User owner = a.getOwner();
 		String invitorName = owner.getFirstname() + " " + owner.getLastname();
-		TimeZone tz = timezoneUtil.getTimeZone(mm.getUser());
+		TimeZone tz = getTimeZone(mm.getUser());
 		SubjectEmailTemplate t;
 		switch (type) {
 			case Cancel:
@@ -132,7 +130,7 @@ public class InvitationManager implements IInvitationManager {
 			Appointment a = i.getAppointment();
 			// Create ICal Message
 			String meetingId = handler.addNewMeeting(a.getStart(), a.getEnd(), a.getTitle(), atts, invitationLink,
-					organizerAttendee, a.getIcalId(), timezoneUtil.getTimeZone(owner).getID());
+					organizerAttendee, a.getIcalId(), getTimeZone(owner).getID());
 
 			// Writing back meetingUid
 			if (Strings.isEmpty(a.getIcalId())) {

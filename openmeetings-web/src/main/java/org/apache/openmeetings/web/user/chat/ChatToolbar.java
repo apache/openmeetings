@@ -211,7 +211,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 				}));
 	}
 
-	private void clean(AjaxRequestTarget target, String scope) {
+	private static void clean(AjaxRequestTarget target, String scope) {
 		target.appendJavaScript("$('#" + scope + "').html('')");
 	}
 

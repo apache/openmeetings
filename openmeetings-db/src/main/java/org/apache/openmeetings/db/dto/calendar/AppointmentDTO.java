@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.TimezoneUtil;
 
 import com.github.openjson.JSONObject;
 
@@ -73,7 +74,7 @@ public class AppointmentDTO implements Serializable {
 		id = a.getId();
 		title = a.getTitle();
 		location = a.getLocation();
-		TimeZone tz = TimeZone.getTimeZone(a.getOwner().getTimeZoneId());
+		TimeZone tz = TimezoneUtil.getTimeZone(a.getOwner());
 		start = Calendar.getInstance(tz);
 		start.setTime(a.getStart());
 		end = Calendar.getInstance(tz);

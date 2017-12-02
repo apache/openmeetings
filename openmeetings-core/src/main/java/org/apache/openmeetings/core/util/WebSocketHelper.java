@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
@@ -82,8 +83,11 @@ public class WebSocketHelper {
 		return o.put("scope", scope).put("scopeName", scopeName);
 	}
 
-	public static JSONObject getMessage(long curUserId, List<ChatMessage> list, FastDateFormat fmt, BiConsumer<JSONObject, User> uFmt) {
+	public static JSONObject getMessage(User curUser, List<ChatMessage> list, BiConsumer<JSONObject, User> uFmt) {
 		JSONArray arr = new JSONArray();
+		final FastDateFormat fullFmt = FormatHelper.getDateTimeFormat(curUser);
+		final FastDateFormat dateFmt = FormatHelper.getDateFormat(curUser);
+		final FastDateFormat timeFmt = FormatHelper.getTimeFormat(curUser);
 		for (ChatMessage m : list) {
 			String smsg = m.getMessage();
 			smsg = smsg == null ? smsg : " " + smsg.replaceAll("&nbsp;", " ") + " ";
@@ -93,12 +97,15 @@ public class WebSocketHelper {
 			if (uFmt != null) {
 				uFmt.accept(from, m.getFromUser());
 			}
-			arr.put(setScope(new JSONObject(), m, curUserId)
+			arr.put(setScope(new JSONObject(), m, curUser.getId())
 				.put("id", m.getId())
 				.put("message", smsg)
 				.put("from", from)
-				.put("actions", curUserId == m.getFromUser().getId() ? "short" : "full")
-				.put("sent", fmt.format(m.getSent())));
+				.put("actions", curUser.getId() == m.getFromUser().getId() ? "short" : "full")
+				.put("sent", fullFmt.format(m.getSent()))
+				.put("date", dateFmt.format(m.getSent()))
+				.put("time", timeFmt.format(m.getSent()))
+				);
 		}
 		return new JSONObject()
 			.put("type", "chat")

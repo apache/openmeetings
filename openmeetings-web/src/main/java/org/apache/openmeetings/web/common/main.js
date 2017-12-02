@@ -46,8 +46,12 @@ var OmUtil = (function() {
 		});
 		return confirm;
 	}
+	function _tmpl(tmplId, newId) {
+		return $(tmplId).clone().attr('id', newId || '');
+	}
 
 	self.confirmDlg = _confirmDlg;
+	self.tmpl = _tmpl;
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

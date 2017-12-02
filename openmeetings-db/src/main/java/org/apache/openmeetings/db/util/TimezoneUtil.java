@@ -18,27 +18,15 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 
 import java.util.TimeZone;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TimezoneUtil {
-	private static final Logger log = Red5LoggerFactory.getLogger(TimezoneUtil.class, getWebAppRootKey());
-
-	@Autowired
-	private ConfigurationDao cfgDao;
-
+	private TimezoneUtil() {}
 	/**
 	 *
 	 * @param timeZoneId
@@ -49,29 +37,8 @@ public class TimezoneUtil {
 	 * @return the specified TimeZone, or the GMT zone if the given ID cannot be
 	 *         understood.
 	 */
-	public TimeZone getTimeZone(String timeZoneId) {
-		if (Strings.isEmpty(timeZoneId)) {
-			return getDefaultTimeZone();
-		}
-		return TimeZone.getTimeZone(timeZoneId);
-	}
-
-	/**
-	 * @return The current server configured time zone in the table configuration key: {@link OpenmeetingsVariables#CONFIG_DEFAULT_TIMEZONE}
-	 */
-	public TimeZone getDefaultTimeZone() {
-		String defaultTzName = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
-
-		TimeZone timeZoneByOmTimeZone = TimeZone.getTimeZone(defaultTzName);
-
-		if (timeZoneByOmTimeZone != null) {
-			return timeZoneByOmTimeZone;
-		}
-
-		// If everything fails take the servers default one
-		log.error("There is no correct time zone set in the configuration of OpenMeetings for the key default.timezone or key is missing in table, using default locale!");
-		return TimeZone.getDefault();
-
+	public static TimeZone getTimeZone(String timeZoneId) {
+		return TimeZone.getTimeZone(Strings.isEmpty(timeZoneId) ? getDefaultTimezone() : timeZoneId);
 	}
 
 	/**
@@ -80,17 +47,7 @@ public class TimezoneUtil {
 	 * @param user
 	 * @return
 	 */
-	public TimeZone getTimeZone(User user) {
-		if (user != null && user.getTimeZoneId() != null) {
-
-			TimeZone timeZone = TimeZone.getTimeZone(user.getTimeZoneId());
-
-			if (timeZone != null) {
-				return timeZone;
-			}
-
-		}
-		// if user has not time zone get one from the server configuration
-		return getDefaultTimeZone();
+	public static TimeZone getTimeZone(User user) {
+		return getTimeZone(user == null ? null : user.getTimeZoneId());
 	}
 }

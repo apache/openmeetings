@@ -91,6 +91,10 @@ public class ChatForm extends Form<Void> {
 					});
 				}
 
+				private Chat getChat() {
+					return findParent(Chat.class);
+				}
+
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
 					final String txt = chatMessage.getDefaultModelObjectAsString();
@@ -121,13 +125,13 @@ public class ChatForm extends Form<Void> {
 						return;
 					};
 					dao.update(m);
-					JSONObject msg = Chat.getMessage(Arrays.asList(m));
+					JSONObject msg = getChat().getMessage(Arrays.asList(m));
 					if (m.getToRoom() != null) {
 						getBean(MobileService.class).sendChatMessage(getUid(), m, getDateFormat()); //let's send to mobile users
 						WebSocketHelper.sendRoom(m, msg);
 					} else if (m.getToUser() != null) {
 						WebSocketHelper.sendUser(getUserId(), msg.toString());
-						msg = Chat.getMessage(m.getToUser().getId(), Arrays.asList(m));
+						msg = Chat.getMessage(m.getToUser(), Arrays.asList(m));
 						WebSocketHelper.sendUser(m.getToUser().getId(), msg.toString());
 					} else {
 						WebSocketHelper.sendAll(msg.toString());

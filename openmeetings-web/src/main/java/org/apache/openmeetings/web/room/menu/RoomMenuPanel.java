@@ -23,8 +23,8 @@ import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
@@ -379,14 +379,11 @@ public class RoomMenuPanel extends Panel {
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
 			String url = getBean(ConfigurationDao.class).getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");
-			if (Strings.isEmpty(url)) {
-				url = getBean(ConfigurationDao.class).getString(CONFIG_APPLICATION_BASE_URL, "");
-			}
-			throw new RedirectToUrlException(url);
+			throw new RedirectToUrlException(Strings.isEmpty(url) ? getBaseUrl() : url);
 		}
 	}
 
 	private static void download(AjaxRequestTarget target, String type) {
-		target.appendJavaScript(String.format("WbArea.download('%s');", EXTENSION_PDF));
+		target.appendJavaScript(String.format("WbArea.download('%s');", type));
 	}
 }

@@ -53,7 +53,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
@@ -97,6 +96,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
@@ -523,7 +523,7 @@ public class BackupImport {
 	 */
 	private void importUsers(File f, Long defaultLdapId) throws Exception {
 		log.info("OAuth2 servers import complete, starting user import");
-		String jNameTimeZone = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
+		String jNameTimeZone = getDefaultTimezone();
 		//add existence email from database
 		List<User>  users = userDao.getAllUsers();
 		final Map<String, Integer> userEmailMap = new HashMap<>();

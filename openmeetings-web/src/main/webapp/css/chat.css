@@ -55,20 +55,32 @@
 	width: 70px;
 	padding-left: 5px;
 }
-#chat .messageArea .date {
+#chat .messageArea .time {
 	margin-right: 5px;
 	font-style: italic;
 	font-size: smaller;
 }
-#chat .messageArea img.profile {
-	vertical-align: middle;
-	max-height: 38px;
-	max-width: 38px;
+#chat .messageArea .user-row {
+	background-size: 38px, 38px;
+	background-repeat: no-repeat;
+	padding-left: 40px;
+	min-height: 40px;
+}
+#chat .messageArea .user-row .icons {
+	display: none;
+}
+#chat .messageArea .user-row:hover .icons {
+	display: block;
 }
 #chat .messageArea .from {
 	margin-left: 5px;
 	margin-right: 5px;
 	font-weight: bold;
+}
+#chat .messageArea .date-row {
+	text-align: center;
+	font-style: italic;
+	padding: 5px 0;
 }
 .ui-tabs .ui-tabs-panel.messageArea {
 	height: 165px;

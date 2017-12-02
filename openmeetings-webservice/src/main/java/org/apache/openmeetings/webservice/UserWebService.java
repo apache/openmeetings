@@ -20,7 +20,7 @@ package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
@@ -160,10 +160,9 @@ public class UserWebService extends BaseWebService {
 				throw new ServiceException("User does already exist!");
 			}
 
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			String tz = user.getTimeZoneId();
 			if (Strings.isEmpty(tz)) {
-				tz = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "");
+				tz = getDefaultTimezone();
 			}
 			if (user.getAddress() == null) {
 				user.setAddress(new Address());
@@ -172,6 +171,7 @@ public class UserWebService extends BaseWebService {
 			if (user.getLanguageId() == null) {
 				user.setLanguageId(1L);
 			}
+			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), user.get(userDao));
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
 			passValidator.validate(passVal);

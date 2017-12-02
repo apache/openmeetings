@@ -127,6 +127,7 @@ public class OpenmeetingsVariables {
 	private static Long defaultLang = 1L;
 	private static int audioRate = 22050;
 	private static String audioBitrate = "32k";
+	private static String defaultTimezone = "Europe/Berlin";
 
 	private OpenmeetingsVariables() {}
 
@@ -244,5 +245,13 @@ public class OpenmeetingsVariables {
 
 	public static void setAudioBitrate(String bitrate) {
 		audioBitrate = bitrate;
+	}
+
+	public static String getDefaultTimezone() {
+		return defaultTimezone;
+	}
+
+	public static void setDefaultTimezone(String timezone) {
+		defaultTimezone = timezone;
 	}
 }
