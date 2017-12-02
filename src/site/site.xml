@@ -27,7 +27,7 @@
 	</bannerRight>
 
 	<skin>
-		<groupId>lt.velykis.maven.skins</groupId>
+		<groupId>org.devacfr.maven.skins</groupId>
 		<artifactId>reflow-maven-skin</artifactId>
 		<version>${reflow-skin.version}</version>
 	</skin>
