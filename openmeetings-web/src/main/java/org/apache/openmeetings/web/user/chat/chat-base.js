@@ -216,6 +216,7 @@ var Chat = function() {
 				const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
 				if (lastDate !== cm.date) {
 					area.append(OmUtil.tmpl('#chat-date-template').html(cm.date));
+					lastDate = cm.date;
 				}
 				area.append(msg);
 				if (btm) {
