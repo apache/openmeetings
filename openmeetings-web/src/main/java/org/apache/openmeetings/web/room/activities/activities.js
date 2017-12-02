@@ -110,7 +110,7 @@ var Activities = function() {
 		, add: function(obj) {
 			if (!inited) return;
 			const _id = _getId(obj.id);
-			area.append($('#activity-stub').clone().attr('id', _id).data(obj));
+			area.append(OmUtil.tmpl('#activity-stub', _id).data(obj));
 			const a = $('#' + _id).addClass(obj.cssClass);
 			a.find('.activity-close,.activity-accept,.activity-decline,.activity-find').addClass(Settings.isRtl ? 'align-left' : 'align-right');
 			const acpt = a.find('.activity-accept');

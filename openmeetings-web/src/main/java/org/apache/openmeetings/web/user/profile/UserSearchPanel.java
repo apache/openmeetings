@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.isUserOnline;
@@ -32,7 +33,6 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.web.common.PagingNavigatorPanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.AttributeModifier;
@@ -118,7 +118,7 @@ public class UserSearchPanel extends UserBasePanel {
 				final long userId = u.getId();
 				item.add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, isUserOnline(userId) ? "online" : "offline")));
 				item.add(new Label("name", getName(u)));
-				item.add(new Label("tz", getBean(TimezoneUtil.class).getTimeZone(u).getID()));
+				item.add(new Label("tz", getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
 				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));

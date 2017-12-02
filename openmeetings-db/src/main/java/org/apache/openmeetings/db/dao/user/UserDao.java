@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -53,7 +54,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
@@ -83,8 +83,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	public static Set<Right> getDefaultRights() {
 		Set<Right> rights = new HashSet<>();
@@ -105,7 +103,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		user.setSalutation(Salutation.mr);
 		user.setRights(getDefaultRights());
 		user.setLanguageId(getDefaultLang());
-		user.setTimeZoneId(timezoneUtil.getTimeZone(currentUser).getID());
+		user.setTimeZoneId(getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());

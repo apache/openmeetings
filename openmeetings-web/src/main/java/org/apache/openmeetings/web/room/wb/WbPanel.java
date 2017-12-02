@@ -659,15 +659,6 @@ public class WbPanel extends AbstractWbPanel {
 		return wb.save(f.getFile().toPath());
 	}
 
-	public void loadWhiteboards(Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
-		for (Entry<Long, Whiteboard> entry : boardSet) {
-			final Whiteboard wb = entry.getValue();
-			sendWbAll(WbAction.create, getAddWbJson(wb));
-			sendWbAll(WbAction.createObj, new JSONObject().put("wbId", wb.getId())
-					.put("obj", getArray(wb.toJson(), null)));
-		}
-	}
-
 	private static StringBuilder loadWhiteboards(StringBuilder sb, Client cl, Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
 		for (Entry<Long, Whiteboard> entry : boardSet) {
 			Whiteboard wb = entry.getValue();

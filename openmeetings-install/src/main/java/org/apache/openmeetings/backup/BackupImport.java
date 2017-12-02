@@ -21,6 +21,7 @@ package org.apache.openmeetings.backup;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
@@ -185,7 +186,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.UserContact;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
@@ -313,8 +313,6 @@ public class BackupImport {
 	private PollDao pollDao;
 	@Autowired
 	private ConfigurationDao cfgDao;
-	@Autowired
-	private TimezoneUtil tzUtil;
 	@Autowired
 	private ChatDao chatDao;
 	@Autowired
@@ -1395,7 +1393,7 @@ public class BackupImport {
 					String name = item2.getName();
 					String val = item2.getValue();
 					if (u.getTimeZoneId() == null && "omTimeZone".equals(name)) {
-						u.setTimeZoneId(val == null ? null : tzUtil.getTimeZone(val).getID());
+						u.setTimeZoneId(val == null ? null : getTimeZone(val).getID());
 					}
 					if ("level_id".equals(name)) {
 						levelId = val;

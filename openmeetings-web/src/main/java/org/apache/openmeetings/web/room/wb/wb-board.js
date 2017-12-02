@@ -36,7 +36,7 @@ var Wb = function() {
 		}
 	}
 	function initCliparts() {
-		const c = $('#wb-area-cliparts').clone().attr('id', '');
+		const c = OmUtil.tmpl('#wb-area-cliparts');
 		getBtn('arrow').after(c);
 		c.find('a').prepend(c.find('div.om-icon.big:first'));
 		c.find('.om-icon.clipart').each(function() {
@@ -554,14 +554,14 @@ var Wb = function() {
 			a.find('.wb-zoom').remove();
 			role = _role;
 			const sc = a.find('.scroll-container');
-			z = $('#wb-zoom').clone().attr('id', '')
+			z = OmUtil.tmpl('#wb-zoom')
 				.attr('style', 'position: absolute; top: 0px; ' + (Settings.isRtl ? 'right' : 'left') + ': 80px;');
 			if (role === NONE) {
-				t = $('#wb-tools-readonly').clone().attr('id', '');
+				t = OmUtil.tmpl('#wb-tools-readonly');
 				sc.off('scroll', scrollHandler);
 			} else {
-				t = $('#wb-tools').clone().attr('id', '');
-				s = $("#wb-settings").clone().attr('id', '')
+				t = OmUtil.tmpl('#wb-tools');
+				s = OmUtil.tmpl("#wb-settings")
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
 				a.append(s);
 				sc.on('scroll', scrollHandler);

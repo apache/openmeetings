@@ -2,14 +2,7 @@
 var Chat = function() {
 	const align = Settings.isRtl ? 'align-right' : 'align-left'
 		, alignIco = Settings.isRtl ? 'align-left' : 'align-right'
-		, tabTemplate = "<li><a href='#{href}'>#{label}</a></li>"
-		, msgTemplate = "<div class='clear msg-row' id='chat-msg-id-#{id}'><img class='profile " + align + "' src='#{imgSrc}'/><span class='from " + align + "' data-user-id='#{userId}'>#{from}</span><span class='" + align + "'>#{msg}</span><span class='date " + alignIco + "'>#{sent}</span></div>"
-		, acceptTemplate = "<div class='tick om-icon " + alignIco + " clickable' data-msgid='#{msgid}' data-roomid='#{roomid}' onclick='const e=$(this);chatActivity('accept',e.data(\"roomid\"),e.data(\"msgid\"));e.parent().remove();'></div>"
-		, infoTemplate = "<div class='user om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);showUserInfo(e.data(\"userId\"));'></div>"
-		, addTemplate = "<div class='add om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);addContact(e.data(\"userId\"));'></div>"
-		, messageTemplate = "<div class='new-email om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);privateMessage(e.data(\"userId\"));'></div>"
-		, inviteTemplate = "<div class='invite om-icon " + alignIco + " clickable' data-user-id='#{userId}' onclick='const e=$(this);inviteUser(e.data(\"userId\"));'></div>"
-		, closeBlock = "<span class='ui-icon ui-icon-close' role='presentation'></span>"
+		, msgIdPrefix = 'chat-msg-id-'
 		, closedSize = 20
 		, closedSizePx = closedSize + "px"
 		, emoticon = new CSSEmoticon()
@@ -21,7 +14,7 @@ var Chat = function() {
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
-		, editor = $('#chatMessage .wysiwyg-editor')
+		, editor = $('#chatMessage .wysiwyg-editor'), lastDate
 		;
 
 	try {
@@ -166,9 +159,9 @@ var Chat = function() {
 		if (!label) {
 			label = id === "chatTab-all" ? allPrefix : roomPrefix + id.substr(9);
 		}
-		const li = $(tabTemplate.replace(/#\{href\}/g, "#" + id).replace(/#\{label\}/g, label));
+		const li = $('<li>').append($('<a>').attr('href', '#' + id).text(label));
 		if (id.indexOf("chatTab-r") !== 0) {
-			li.append(closeBlock);
+			li.append(OmUtil.tmpl('#chat-close-block'));
 		}
 		tabs.find(".ui-tabs-nav").append(li);
 		tabs.append("<div class='messageArea' id='" + id + "'></div>");
@@ -197,21 +190,21 @@ var Chat = function() {
 			let msg, cm;
 			while (!!(cm = m.msg.pop())) {
 				let area = $('#' + cm.scope);
-				msg = $(msgTemplate.replace(/#\{id\}/g, cm.id)
-						.replace(/#\{userId\}/g, cm.from.id)
-						.replace(/#\{imgSrc\}/g, !!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now())
-						.replace(/#\{from\}/g, cm.from.name)
-						.replace(/#\{sent\}/g, cm.sent)
-						.replace(/#\{msg\}/g, emoticon.emoticonize(!!cm.message ? cm.message : "")));
-				const date = msg.children('.date');
-				date.after(infoTemplate.replace(/#\{userId\}/g, cm.from.id));
-				if ("full" === cm.actions) {
-					date.after(addTemplate.replace(/#\{userId\}/g, cm.from.id));
-					date.after(messageTemplate.replace(/#\{userId\}/g, cm.from.id));
-					date.after(inviteTemplate.replace(/#\{userId\}/g, cm.from.id));
+				msg = OmUtil.tmpl('#chat-msg-template', msgIdPrefix + cm.id)
+				msg.find('.user-row').css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')');
+				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name);
+				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
+				msg.find('.time').addClass(alignIco).html(cm.time).attr('title', cm.sent);
+				const icons = msg.find('.icons').addClass(align)
+					.append(OmUtil.tmpl('#chat-info-template').addClass(alignIco).data('user-id', cm.from.id));
+				if ('full' === cm.actions) {
+					icons.append(OmUtil.tmpl('#chat-add-template').addClass(alignIco).data('user-id', cm.from.id))
+						.append(OmUtil.tmpl('#chat-message-template').addClass(alignIco).data('user-id', cm.from.id))
+						.append(OmUtil.tmpl('#chat-invite-template').addClass(alignIco).data('user-id', cm.from.id));
 				}
 				if (cm.needModeration) {
-					msg.append(acceptTemplate.replace(/#\{msgid\}/g, cm.id).replace(/#\{roomid\}/g, cm.scope.substring(9)));
+					msg.append(OmUtil.tmpl('#chat-accept-template')
+							.data('msgid', cm.id).data('roomid', cm.scope.substring(9)).find('.tick').addClass(alignIco));
 				}
 				if (!area.length) {
 					_addTab(cm.scope, cm.scopeName);
@@ -221,6 +214,9 @@ var Chat = function() {
 					$('#chat-msg-id-' + cm.id).remove();
 				}
 				const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+				if (lastDate !== cm.date) {
+					area.append(OmUtil.tmpl('#chat-date-template').html(cm.date));
+				}
 				area.append(msg);
 				if (btm) {
 					area.animate({

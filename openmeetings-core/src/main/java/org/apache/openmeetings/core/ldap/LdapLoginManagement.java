@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.ldap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
@@ -63,7 +64,6 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.util.string.Strings;
@@ -135,8 +135,6 @@ public class LdapLoginManagement {
 	private UserDao userDao;
 	@Autowired
 	private GroupDao groupDao;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	private static void bindAdmin(LdapConnection conn, LdapOptions options) throws LdapException {
 		if (!Strings.isEmpty(options.adminDn)) {
@@ -370,7 +368,7 @@ public class LdapLoginManagement {
 			if (tz == null) {
 				tz = options.tz;
 			}
-			u.setTimeZoneId(timezoneUtil.getTimeZone(tz).getID());
+			u.setTimeZoneId(getTimeZone(tz).getID());
 			if (!Strings.isEmpty(options.pictureUri)) {
 				u.setPictureuri(options.pictureUri);
 			}

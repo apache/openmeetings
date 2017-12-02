@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.user;
 
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
@@ -58,7 +59,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
@@ -91,8 +91,6 @@ public class UserManager implements IUserManager {
 	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private ISessionManager sessionManager;
-	@Autowired
-	private TimezoneUtil timezoneUtil;
 
 	/**
 	 * Method to register a new User, User will automatically be added to the
@@ -141,7 +139,7 @@ public class UserManager implements IUserManager {
 						userpass, lastname, firstname, email, age, street,
 						additionalname, fax, zip, country, town, languageId,
 						true, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), phone,
-						sendSMS, sendConfirmation, timezoneUtil.getTimeZone(jNameTimeZone), false, "", "", false, true, null);
+						sendSMS, sendConfirmation, getTimeZone(jNameTimeZone), false, "", "", false, true, null);
 
 				if (user instanceof User && sendConfirmation) {
 					return -40L;

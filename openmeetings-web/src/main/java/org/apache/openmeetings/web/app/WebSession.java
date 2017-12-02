@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static java.text.DateFormat.SHORT;
+import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
@@ -61,8 +61,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.LocaleHelper;
-import org.apache.openmeetings.db.util.TimezoneUtil;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidget;
 import org.apache.openmeetings.web.user.dashboard.MyRoomsWidgetDescriptor;
@@ -302,10 +302,10 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		}
 		languageId = u.getLanguageId();
 		externalType = u.getExternalType();
-		tz = getBean(TimezoneUtil.class).getTimeZone(u);
+		tz = getTimeZone(u);
 		ISO8601FORMAT = FastDateFormat.getInstance(ISO8601_FULL_FORMAT_STRING, tz);
 		setLocale(LocaleHelper.getLocale(u));
-		sdf = createDateFormat(u);
+		sdf = FormatHelper.getDateTimeFormat(u);
 	}
 
 	public boolean signIn(String login, String password, Type type, Long domainId) throws OmException {
@@ -562,11 +562,5 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	public ExtendedClientProperties getExtendedProperties() {
 		return extProps;
-	}
-
-	public static FastDateFormat createDateFormat(User u) {
-		return FastDateFormat.getDateTimeInstance(SHORT, SHORT
-				, getBean(TimezoneUtil.class).getTimeZone(u)
-				, LocaleHelper.getLocale(u));
 	}
 }

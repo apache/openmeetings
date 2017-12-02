@@ -20,6 +20,7 @@ package org.apache.openmeetings.installation;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 
 import java.io.Serializable;
 
@@ -35,7 +36,7 @@ public class InstallationConfig implements Serializable {
 	private String group;
 	private boolean allowFrontendRegister = true;
 	private boolean createDefaultObjects = true;
-	private String timeZone = "Europe/Berlin";
+	private String timeZone = getDefaultTimezone();
 
 	private String cryptClassName = SCryptImplementation.class.getCanonicalName();
 	//email

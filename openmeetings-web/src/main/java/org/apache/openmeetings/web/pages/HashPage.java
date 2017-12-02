@@ -32,6 +32,7 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.common.MainPanel;
@@ -106,7 +107,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			if (i == null) {
 				errorMsg = getString("error.hash.invalid");
 			} else if (!i.isAllowEntry()) {
-				FastDateFormat sdf = WebSession.createDateFormat(i.getInvitee());
+				FastDateFormat sdf = FormatHelper.getDateTimeFormat(i.getInvitee());
 				errorMsg = Valid.OneTime == i.getValid()
 						? getString("error.hash.used")
 						: String.format("%s %s - %s, %s", getString("error.hash.period")

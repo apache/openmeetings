@@ -199,7 +199,7 @@ var Video = (function() {
 			, opts = Room.getOptions();
 		{ //scope
 			const cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
-			cont.append($('#user-video').clone().attr('id', _id).attr('title', name)
+			cont.append(OmUtil.tmpl('#user-video', _id).attr('title', name)
 					.attr('data-client-uid', c.type + c.cuid).data(self));
 		}
 		v = $('#' + _id);

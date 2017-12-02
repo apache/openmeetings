@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getUserRooms;
-import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -41,8 +40,11 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -106,16 +108,22 @@ public class Chat extends Panel {
 		add(new ChatForm("sendForm"));
 	}
 
+	private Client getClient() {
+		return findParent(MainPanel.class).getClient();
+	}
+
 	private String getUid() {
-		return findParent(MainPanel.class).getClient().getUid();
+		return getClient().getUid();
 	}
 
-	public static JSONObject getMessage(List<ChatMessage> list) {
-		return getMessage(getUserId(), list);
+	public JSONObject getMessage(List<ChatMessage> list) {
+		final Client c = getClient();
+		final User curUser = c == null ? getBean(UserDao.class).get(getUserId()) : c.getUser();
+		return getMessage(curUser, list);
 	}
 
-	public static JSONObject getMessage(Long userId, List<ChatMessage> list) {
-		return WebSocketHelper.getMessage(userId, list, getDateFormat(), (o, u) -> o.put("img", getUrl(RequestCycle.get(), u)));
+	public static JSONObject getMessage(User curUser, List<ChatMessage> list) {
+		return WebSocketHelper.getMessage(curUser, list, (o, u) -> o.put("img", getUrl(RequestCycle.get(), u)));
 	}
 
 	public static CharSequence getReinit() {

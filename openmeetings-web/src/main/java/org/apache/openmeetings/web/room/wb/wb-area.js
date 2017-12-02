@@ -80,7 +80,7 @@ var DrawWbArea = function() {
 		if (role !== PRESENTER) {
 			return;
 		}
-		li.append($('#wb-tab-close').clone().attr('id', ''));
+		li.append(OmUtil.tmpl('#wb-tab-close'));
 		li.find('button').click(function() {
 			OmUtil.confirmDlg('wb-confirm-remove', function() { wbAction('removeWb', JSON.stringify({wbId: li.data().wbId})); });
 		});
@@ -122,8 +122,8 @@ var DrawWbArea = function() {
 		if (role === PRESENTER) {
 			if (prev.length === 0) {
 				const cc = tabs.find('.wb-tabbar .scroll-container')
-					, left = $('#wb-tabbar-ctrls-left').clone().attr('id', '')
-					, right = $('#wb-tabbar-ctrls-right').clone().attr('id', '');
+					, left = OmUtil.tmpl('#wb-tabbar-ctrls-left')
+					, right = OmUtil.tmpl('#wb-tabbar-ctrls-right');
 				cc.before(left).after(right);
 				tabs.find('.add.om-icon').click(function() {
 					wbAction('createWb');
@@ -188,8 +188,8 @@ var DrawWbArea = function() {
 	self.create = function(obj) {
 		if (!_inited) return;
 		const tid = self.getWbTabId(obj.wbId)
-			, wb = $('#wb-area').clone().attr('id', tid)
-			, li = $('#wb-area-tab').clone().attr('id', '').data('wb-id', obj.wbId).attr('data-wb-id', obj.wbId)
+			, wb = OmUtil.tmpl('#wb-area', tid)
+			, li = OmUtil.tmpl('#wb-area-tab').data('wb-id', obj.wbId).attr('data-wb-id', obj.wbId)
 				.contextmenu(function(e) {
 					if (role !== PRESENTER) {
 						return;
