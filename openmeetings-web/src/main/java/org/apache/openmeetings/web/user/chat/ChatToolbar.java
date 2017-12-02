@@ -65,9 +65,9 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	private ConfirmableAjaxBorder delBtn;
 	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 		private static final long serialVersionUID = 1L;
-		private static final char delimiter = ',';
-		private static final char quoteCharacter = '"';
-		private final String quoteReplacement = new StringBuilder().append(quoteCharacter).append(quoteCharacter).toString();
+		private static final char DELIMITER = ',';
+		private static final char QUOTE_CHAR = '"';
+		private final String quoteReplacement = new StringBuilder().append(QUOTE_CHAR).append(QUOTE_CHAR).toString();
 
 		{
 			setCacheDuration(NONE);
@@ -92,15 +92,15 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 		}
 
 		private StringBuilder appendQuoted(StringBuilder sb, String value) {
-			return sb.append(quoteCharacter).append(value == null ? "" : value.replace(String.valueOf(quoteCharacter), quoteReplacement)).append(quoteCharacter);
+			return sb.append(QUOTE_CHAR).append(value == null ? "" : value.replace(String.valueOf(QUOTE_CHAR), quoteReplacement)).append(QUOTE_CHAR);
 		}
 
 		private void export(List<ChatMessage> list, StringBuilder sb) {
 			String lineDelim = "";
 			for (ChatMessage msg : list) {
 				sb.append(lineDelim);
-				appendQuoted(sb, getName(msg.getFromUser())).append(delimiter);
-				appendQuoted(sb, getDateFormat().format(msg.getSent())).append(delimiter);
+				appendQuoted(sb, getName(msg.getFromUser())).append(DELIMITER);
+				appendQuoted(sb, getDateFormat().format(msg.getSent())).append(DELIMITER);
 				appendQuoted(sb, msg.getMessage());
 				lineDelim = "\r\n";
 			}
