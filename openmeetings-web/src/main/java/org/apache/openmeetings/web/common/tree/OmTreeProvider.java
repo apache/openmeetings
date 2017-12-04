@@ -185,5 +185,6 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 
 	@Override
 	public void detach() {
+		//no-op
 	}
 }
