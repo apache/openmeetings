@@ -15,7 +15,7 @@ var Activities = function() {
 		a.prop('checked', clean);
 		if (clean) {
 			activities.find('.auto-clean').each(function() {
-				setTimeout(_remove.bind(null, $(this).data().id), timeout);
+				setTimeout(_clearItem.bind(null, $(this).data().id), timeout);
 			});
 		}
 	}
@@ -135,7 +135,7 @@ var Activities = function() {
 			a.find('.activity-text').text(obj.text);
 			_hightlight();
 			if (aclean.prop('checked')) {
-				setTimeout(_remove.bind(null, obj.id), timeout);
+				setTimeout(_clearItem.bind(null, obj.id), timeout);
 			}
 		}
 		, remove: _remove

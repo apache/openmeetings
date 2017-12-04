@@ -97,6 +97,10 @@ public class Chat extends Panel {
 				log.error("Unexpected exception while accepting chat message", e);
 			}
 		}
+
+		private String getUid() {
+			return getClient().getUid();
+		}
 	};
 
 	public Chat(String id) {
@@ -110,10 +114,6 @@ public class Chat extends Panel {
 
 	private Client getClient() {
 		return findParent(MainPanel.class).getClient();
-	}
-
-	private String getUid() {
-		return getClient().getUid();
 	}
 
 	public JSONObject getMessage(List<ChatMessage> list) {
