@@ -78,6 +78,21 @@ import org.springframework.web.context.WebApplicationContext;
 
 public class Admin {
 	private static final Logger _log = Red5LoggerFactory.getLogger(Admin.class);
+	private static final String OPTION_DB_TYPE = "db-type";
+	private static final String OPTION_DB_HOST = "db-host";
+	private static final String OPTION_DB_PORT = "db-port";
+	private static final String OPTION_DB_NAME = "db-name";
+	private static final String OPTION_DB_USER = "db-user";
+	private static final String OPTION_DB_PASS = "db-pass";
+	private static final String OPTION_MAIL_REFERRER = "system-email-address";
+	private static final String OPTION_MAIL_SERVER = "smtp-server";
+	private static final String OPTION_MAIL_PORT = "smtp-port";
+	private static final String OPTION_MAIL_USER = "email-auth-user";
+	private static final String OPTION_MAIL_PASS = "email-auth-pass";
+	private static final String REP_INVALID = "\t\t\tinvalid: ";
+	private static final String REP_DELETED = "\t\t\tdeleted: ";
+	private static final String REP_MISSING = "\t\t\tmissing count: ";
+
 	public static final String RED5_HOME = "red5_home";
 
 	private boolean verbose = false;
@@ -128,22 +143,22 @@ public class Admin {
 		options.addOption(new OmOption("i", "group", null, true, "The name of the default user group (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", "tz", null, true, "Default server time zone, and time zone for the selected user (mutually exclusive with 'file')"));
 		options.addOption(new OmOption("i", null, "password", true, "Password of the default user, minimum " + USER_PASSWORD_MINIMUM_LENGTH + " characters (will be prompted if not set)", true));
-		options.addOption(new OmOption("i", null, "system-email-address", true, String.format("System e-mail address [default: %s]", cfg.getMailReferer()), true));
-		options.addOption(new OmOption("i", null, "smtp-server", true, String.format("SMTP server for outgoing e-mails [default: %s]", cfg.getSmtpServer()), true));
-		options.addOption(new OmOption("i", null, "smtp-port", true, String.format("SMTP server for outgoing e-mails [default: %s]", cfg.getSmtpPort()), true));
-		options.addOption(new OmOption("i", null, "email-auth-user", true, "Email auth username (anonymous connection will be used if not set)", true));
-		options.addOption(new OmOption("i", null, "email-auth-pass", true, "Email auth password (anonymous connection will be used if not set)", true));
+		options.addOption(new OmOption("i", null, OPTION_MAIL_REFERRER, true, String.format("System e-mail address [default: %s]", cfg.getMailReferer()), true));
+		options.addOption(new OmOption("i", null, OPTION_MAIL_SERVER, true, String.format("SMTP server for outgoing e-mails [default: %s]", cfg.getSmtpServer()), true));
+		options.addOption(new OmOption("i", null, OPTION_MAIL_PORT, true, String.format("SMTP server for outgoing e-mails [default: %s]", cfg.getSmtpPort()), true));
+		options.addOption(new OmOption("i", null, OPTION_MAIL_USER, true, "Email auth username (anonymous connection will be used if not set)", true));
+		options.addOption(new OmOption("i", null, OPTION_MAIL_PASS, true, "Email auth password (anonymous connection will be used if not set)", true));
 		options.addOption(new OmOption("i", null, "email-use-tls", false, "Is secure e-mail connection [default: no]", true));
 		options.addOption(new OmOption("i", null, "skip-default-objects", false, "Do not create default rooms and OAuth servers [created by default]", true));
 		options.addOption(new OmOption("i", null, "disable-frontend-register", false, "Do not allow front end register [allowed by default]", true));
 		options.addOption(new OmOption("i", null, "default-language", true, "Default system language as int [1 by default]", true));
 
-		options.addOption(new OmOption("i", null, "db-type", true, "The type of the DB to be used", true));
-		options.addOption(new OmOption("i", null, "db-host", true, "DNS name or IP address of database", true));
-		options.addOption(new OmOption("i", null, "db-port", true, "Database port", true));
-		options.addOption(new OmOption("i", null, "db-name", true, "The name of Openmeetings database", true));
-		options.addOption(new OmOption("i", null, "db-user", true, "User with write access to the DB specified", true));
-		options.addOption(new OmOption("i", null, "db-pass", true, "Password of the user with write access to the DB specified", true));
+		options.addOption(new OmOption("i", null, OPTION_DB_TYPE, true, "The type of the DB to be used", true));
+		options.addOption(new OmOption("i", null, OPTION_DB_HOST, true, "DNS name or IP address of database", true));
+		options.addOption(new OmOption("i", null, OPTION_DB_PORT, true, "Database port", true));
+		options.addOption(new OmOption("i", null, OPTION_DB_NAME, true, "The name of Openmeetings database", true));
+		options.addOption(new OmOption("i", null, OPTION_DB_USER, true, "User with write access to the DB specified", true));
+		options.addOption(new OmOption("i", null, OPTION_DB_PASS, true, "Password of the user with write access to the DB specified", true));
 		options.addOption(new OmOption("i", null, "drop", false, "Drop database before installation", true));
 		options.addOption(new OmOption("i", null, "force", false, "Install without checking the existence of old data in the database.", true));
 		//files
@@ -274,20 +289,20 @@ public class Admin {
 		if (cmdl.hasOption("disable-frontend-register")) {
 			cfg.setAllowFrontendRegister(false);
 		}
-		if (cmdl.hasOption("system-email-address")) {
-			cfg.setMailReferer(cmdl.getOptionValue("system-email-address"));
+		if (cmdl.hasOption(OPTION_MAIL_REFERRER)) {
+			cfg.setMailReferer(cmdl.getOptionValue(OPTION_MAIL_REFERRER));
 		}
-		if (cmdl.hasOption("smtp-server")) {
-			cfg.setSmtpServer(cmdl.getOptionValue("smtp-server"));
+		if (cmdl.hasOption(OPTION_MAIL_SERVER)) {
+			cfg.setSmtpServer(cmdl.getOptionValue(OPTION_MAIL_SERVER));
 		}
-		if (cmdl.hasOption("smtp-port")) {
-			cfg.setSmtpPort(Integer.valueOf(cmdl.getOptionValue("smtp-port")));
+		if (cmdl.hasOption(OPTION_MAIL_PORT)) {
+			cfg.setSmtpPort(Integer.valueOf(cmdl.getOptionValue(OPTION_MAIL_PORT)));
 		}
-		if (cmdl.hasOption("email-auth-user")) {
-			cfg.setMailAuthName(cmdl.getOptionValue("email-auth-user"));
+		if (cmdl.hasOption(OPTION_MAIL_USER)) {
+			cfg.setMailAuthName(cmdl.getOptionValue(OPTION_MAIL_USER));
 		}
-		if (cmdl.hasOption("email-auth-pass")) {
-			cfg.setMailAuthPass(cmdl.getOptionValue("email-auth-pass"));
+		if (cmdl.hasOption(OPTION_MAIL_PASS)) {
+			cfg.setMailAuthPass(cmdl.getOptionValue(OPTION_MAIL_PASS));
 		}
 		if (cmdl.hasOption("email-use-tls")) {
 			cfg.setMailUseTls(true);
@@ -297,14 +312,17 @@ public class Admin {
 		}
 		ConnectionProperties connectionProperties;
 		File conf = OmFileHelper.getPersistence();
-		if (!conf.exists() || cmdl.hasOption("db-type") || cmdl.hasOption("db-host") || cmdl.hasOption("db-port") || cmdl.hasOption("db-name") || cmdl.hasOption("db-user") || cmdl.hasOption("db-pass")) {
-			String dbType = cmdl.getOptionValue("db-type", DbType.derby.name());
+		if (!conf.exists() || cmdl.hasOption(OPTION_DB_TYPE) || cmdl.hasOption(OPTION_DB_HOST)
+				|| cmdl.hasOption(OPTION_DB_PORT) || cmdl.hasOption(OPTION_DB_NAME) || cmdl.hasOption(OPTION_DB_USER)
+				|| cmdl.hasOption(OPTION_DB_PASS))
+		{
+			String dbType = cmdl.getOptionValue(OPTION_DB_TYPE, DbType.derby.name());
 			connectionProperties = ConnectionPropertiesPatcher.patch(dbType
-					, cmdl.getOptionValue("db-host", "localhost")
-					, cmdl.getOptionValue("db-port", null)
-					, cmdl.getOptionValue("db-name", null)
-					, cmdl.getOptionValue("db-user", null)
-					, cmdl.getOptionValue("db-pass", null)
+					, cmdl.getOptionValue(OPTION_DB_HOST, "localhost")
+					, cmdl.getOptionValue(OPTION_DB_PORT, null)
+					, cmdl.getOptionValue(OPTION_DB_NAME, null)
+					, cmdl.getOptionValue(OPTION_DB_USER, null)
+					, cmdl.getOptionValue(OPTION_DB_PASS, null)
 					);
 		} else {
 			//get properties from existent persistence.xml
@@ -374,9 +392,9 @@ public class Admin {
 		CleanupEntityUnit profile = CleanupHelper.getProfileUnit(udao);
 		long restSize = sectionSize - profile.getSizeTotal();
 		report.append("\t\tprofiles: ").append(profile.getHumanTotal()).append("\n");
-		report.append("\t\t\tinvalid: ").append(profile.getHumanInvalid()).append("\n");
-		report.append("\t\t\tdeleted: ").append(profile.getHumanDeleted()).append("\n");
-		report.append("\t\t\tmissing count: ").append(profile.getMissing()).append("\n");
+		report.append(REP_INVALID).append(profile.getHumanInvalid()).append("\n");
+		report.append(REP_DELETED).append(profile.getHumanDeleted()).append("\n");
+		report.append(REP_MISSING).append(profile.getMissing()).append("\n");
 		if (cleanup) {
 			profile.cleanup();
 		}
@@ -397,9 +415,9 @@ public class Admin {
 		CleanupEntityUnit files = CleanupHelper.getFileUnit(fileDao);
 		restSize -= files.getSizeTotal();
 		report.append("\t\tfiles: ").append(files.getHumanTotal()).append("\n");
-		report.append("\t\t\tinvalid: ").append(files.getHumanInvalid()).append("\n");
-		report.append("\t\t\tdeleted: ").append(files.getHumanDeleted()).append("\n");
-		report.append("\t\t\tmissing count: ").append(files.getMissing()).append("\n");
+		report.append(REP_INVALID).append(files.getHumanInvalid()).append("\n");
+		report.append(REP_DELETED).append(files.getHumanDeleted()).append("\n");
+		report.append(REP_MISSING).append(files.getMissing()).append("\n");
 		report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
 		if (cleanup) {
 			files.cleanup();
@@ -414,9 +432,9 @@ public class Admin {
 		long size = OmFileHelper.getSize(hibernateDir);
 		long restSize = rec.getSizeTotal() - size;
 		report.append("\t\tfinal: ").append(OmFileHelper.getHumanSize(size)).append("\n");
-		report.append("\t\t\tinvalid: ").append(rec.getHumanInvalid()).append("\n");
-		report.append("\t\t\tdeleted: ").append(rec.getHumanDeleted()).append("\n");
-		report.append("\t\t\tmissing count: ").append(rec.getMissing()).append("\n");
+		report.append(REP_INVALID).append(rec.getHumanInvalid()).append("\n");
+		report.append(REP_DELETED).append(rec.getHumanDeleted()).append("\n");
+		report.append(REP_MISSING).append(rec.getMissing()).append("\n");
 		report.append("\t\trest: ").append(OmFileHelper.getHumanSize(restSize)).append("\n");
 		if (cleanup) {
 			rec.cleanup();
