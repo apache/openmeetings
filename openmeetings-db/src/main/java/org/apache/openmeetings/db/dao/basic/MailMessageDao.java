@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +58,7 @@ public class MailMessageDao implements IDataProviderDao<MailMessage> {
 	}
 
 	public List<MailMessage> get(int start, int count, Status status) {
-		return em.createNamedQuery("getMailMessagesByStatus", MailMessage.class).setParameter("status", status)
+		return em.createNamedQuery("getMailMessagesByStatus", MailMessage.class).setParameter(PARAM_STATUS, status)
 				.setFirstResult(start).setMaxResults(count).getResultList();
 	}
 

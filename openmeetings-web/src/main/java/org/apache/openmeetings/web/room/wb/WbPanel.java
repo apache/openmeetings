@@ -24,6 +24,7 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
@@ -247,7 +248,7 @@ public class WbPanel extends AbstractWbPanel {
 					for (JSONObject o : wb.list()) {
 						String ft = o.optString(ATTR_FILE_TYPE);
 						if (BaseFileItem.Type.Recording.name().equals(ft) || BaseFileItem.Type.Video.name().equals(ft)) {
-							JSONObject _sts = o.optJSONObject("status");
+							JSONObject _sts = o.optJSONObject(PARAM_STATUS);
 							if (_sts == null) {
 								continue;
 							}
@@ -257,7 +258,7 @@ public class WbPanel extends AbstractWbPanel {
 									.put("wbId", wb.getId())
 									.put("uid", o.getString("uid"))
 									.put(ATTR_SLIDE, o.getString(ATTR_SLIDE))
-									.put("status", sts));
+									.put(PARAM_STATUS, sts));
 						}
 					}
 				}
@@ -448,8 +449,8 @@ public class WbPanel extends AbstractWbPanel {
 					String uid = obj.getString("uid");
 					JSONObject po = wb.get(uid);
 					if (po != null && "video".equals(po.getString(ATTR_TYPE))) {
-						JSONObject ns = obj.getJSONObject("status");
-						po.put("status", ns.put("updated", System.currentTimeMillis()));
+						JSONObject ns = obj.getJSONObject(PARAM_STATUS);
+						po.put(PARAM_STATUS, ns.put("updated", System.currentTimeMillis()));
 						WhiteboardCache.update(roomId, wb.put(uid, po));
 						obj.put(ATTR_SLIDE, po.getInt(ATTR_SLIDE));
 						sendWbAll(WbAction.videoStatus, obj);
@@ -590,7 +591,7 @@ public class WbPanel extends AbstractWbPanel {
 							;
 					if (FileItem.Type.Video == fi.getType() || FileItem.Type.Recording == fi.getType()) {
 						file.put(ATTR_TYPE, "video");
-						file.put("status", new JSONObject()
+						file.put(PARAM_STATUS, new JSONObject()
 								.put("paused", true)
 								.put("pos", 0.0)
 								.put("updated", System.currentTimeMillis()));

@@ -130,7 +130,6 @@ var Video = (function() {
 			return;
 		}
 		if (on) {
-			//TODO buttons
 			v.dialog("option", "position", {my: "center", at: "center", of: WBA_SEL});
 		} else {
 			const h = _resizeDlg(size.width, size.height);
@@ -702,7 +701,7 @@ var Room = (function() {
 		Wicket.Event.unsubscribe("/websocket/error", _close);
 		if (typeof(WbArea) !== 'undefined') {
 			WbArea.destroy();
-			WbArea = undefined;
+			window.WbArea = undefined;
 		}
 		if (typeof(VideoSettings) !== 'undefined') {
 			VideoSettings.close();

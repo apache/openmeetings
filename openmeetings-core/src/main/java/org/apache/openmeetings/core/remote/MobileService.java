@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -187,12 +188,12 @@ public class MobileService {
 				} else if (user instanceof User) {
 					User u = (User)user;
 					if (sendConfirmation) {
-						add(result, "status", -666L);
+						add(result, PARAM_STATUS, -666L);
 					} else {
 						result = login(u, result);
 					}
 				} else {
-					add(result, "status", user);
+					add(result, PARAM_STATUS, user);
 				}
 			}
 		} catch (Exception e) {
@@ -207,7 +208,7 @@ public class MobileService {
 			User u = userDao.login(login, password);
 			result = login(u, result);
 		} catch (OmException e) {
-			result.put("status", e.getKey());
+			result.put(PARAM_STATUS, e.getKey());
 		} catch (Exception e) {
 			log.error("[loginUser]", e);
 		}
@@ -216,7 +217,7 @@ public class MobileService {
 
 	private static Map<String, Object> getResult() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("status", UNKNOWN.getKey());
+		result.put(PARAM_STATUS, UNKNOWN.getKey());
 		return result;
 	}
 
@@ -253,7 +254,7 @@ public class MobileService {
 
 			add(result, "sid", sd.getSessionId());
 			add(result, "publicSid", c.getUid());
-			add(result, "status", 0);
+			add(result, PARAM_STATUS, 0);
 			add(result, PARAM_USER_ID, u.getId());
 			add(result, "firstname", u.getFirstname());
 			add(result, "lastname", u.getLastname());
