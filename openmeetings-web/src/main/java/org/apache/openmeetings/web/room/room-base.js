@@ -710,6 +710,7 @@ var Room = (function() {
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup', _keyHandler);
 		$(document).off('click', _mouseHandler);
+		sb = undefined;
 	}
 	function _showClipboard(txt) {
 		const dlg = $('#clipboard-dialog');
