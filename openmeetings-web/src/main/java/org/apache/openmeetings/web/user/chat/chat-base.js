@@ -86,6 +86,7 @@ var Chat = function() {
 		allPrefix = _allPrefix;
 		roomPrefix = _roomPrefix;
 		p = $('#chatPanel');
+		clearTimeout(p.data('timeout'));
 		pp = $('#chatPanel, #chatPopup');
 		ctrl = $('#chatPopup .control.block');
 		icon = $('#chatPopup .control.block .ui-icon');
@@ -107,7 +108,13 @@ var Chat = function() {
 		});
 		if (roomMode) {
 			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
-			p.addClass('room').hover(_open, _close);
+			p.addClass('room').hover(function() {
+				clearTimeout($(this).data('timeout'));
+				_open();
+			}, function() {
+				var t = setTimeout(_close, 2000);
+				$(this).data('timeout', t);
+			});
 			pp.width(closedSize);
 			_removeResize();
 		} else {
