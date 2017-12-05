@@ -3,6 +3,61 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 4.0.1
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-1705] - Error on Rest api /openmeetings/services//calendar/title/{title}
+    * [OPENMEETINGS-1712] - There is no logout or exit option if come in to room directly by API call
+    * [OPENMEETINGS-1717] - OAuth2 login works weird in FF
+    * [OPENMEETINGS-1718] - Microphone status should be hidden by default
+    * [OPENMEETINGS-1719] - Multiple issues in Language editor
+    * [OPENMEETINGS-1734] - Hide 'TopBar' breaks the room
+    * [OPENMEETINGS-1737] - Troubles with sound at connecting external video source
+    * [OPENMEETINGS-1743] - Tool props should be disabled for APointer, Clipart
+    * [OPENMEETINGS-1747] - OM is inaccessible in Edge browser
+    * [OPENMEETINGS-1749] - RSS need to be loaded asynchronously
+    * [OPENMEETINGS-1751] - Direct WB upload some times is unsuccessful
+    * [OPENMEETINGS-1752] - Opacity can not be set on several WB objects
+    * [OPENMEETINGS-1753] - Del/Backspace keys are not working while writing WB text
+    * [OPENMEETINGS-1755] - Page is changed on 'zoom in'
+    * [OPENMEETINGS-1756] - Nickname dialog is broken
+    * [OPENMEETINGS-1757] - Emotion icon is not displayed in chat
+    * [OPENMEETINGS-1758] - Nettest should be moved to Flex
+    * [OPENMEETINGS-1759] - The meeting time is wrong if I send invitation via calendar
+    * [OPENMEETINGS-1760] - Hazelcast join should be disabled by default
+    * [OPENMEETINGS-1762] - Empty user list on simultaneous room enter
+    * [OPENMEETINGS-1764] - RTMPS connection for room client need to be tested
+    * [OPENMEETINGS-1765] - Settings icon is not displayed at the room with questions not allowed
+    * [OPENMEETINGS-1766] - Group logo in room is not displayed for invited user
+    * [OPENMEETINGS-1769] - Room chat need to be improved
+    * [OPENMEETINGS-1770] - ODF documents are not being converted
+    * [OPENMEETINGS-1772] - Zoom is not correctly applied to hidden WB
+    * [OPENMEETINGS-1773] - Backup import of v 4.0 fails
+    * [OPENMEETINGS-1774] - Product screen-shots need to be updated
+
+** Improvement
+    * [OPENMEETINGS-1735] - TabbedPanel should be replaced with TabBehavior
+    * [OPENMEETINGS-1736] - Close WB is not guarded by confirm dialog
+    * [OPENMEETINGS-1740] - Labels should be updated
+    * [OPENMEETINGS-1742] - Option URLs in the chat
+    * [OPENMEETINGS-1744] - Possibility to rename Whiteboard
+    * [OPENMEETINGS-1748] - Chat should refactored so it can be opened and not overlap WB
+    * [OPENMEETINGS-1750] - WB toolbar icon size should be reduced
+    * [OPENMEETINGS-1754] - Sidebar should be hidable
+    * [OPENMEETINGS-1763] - User avatar should be enlarged on mouse over
+    * [OPENMEETINGS-1767] - There should be no validations on delete
+    * [OPENMEETINGS-1768] - enter/live room activities should auto-dissappear
+    * [OPENMEETINGS-1771] - Minified JS/CSS files should be created at runtime
+
+** New Feature
+    * [OPENMEETINGS-495] - Setting the sound quality of recordings.
+
+** Task
+    * [OPENMEETINGS-1721] - Sonar issues need to be addressed
+    * [OPENMEETINGS-1738] - Library versions should be updated
+
+
 Release Notes - Openmeetings - Version 4.0.0
 ================================================================================================================
 
