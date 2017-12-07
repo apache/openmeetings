@@ -84,6 +84,7 @@ public class RoomWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param type
+	 *            Type of public rooms need to be retrieved
 	 * @return - list of public rooms
 	 */
 	@WebMethod

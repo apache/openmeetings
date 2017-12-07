@@ -79,7 +79,7 @@ public class FileWebService extends BaseWebService {
 	 *            The SID of the User. This SID must be marked as logged in
 	 * @param id
 	 *            the id of the file or folder
-	 * @return - id of the file deleted, error code otherwise
+	 * @return {@link ServiceResult} with result type
 	 */
 	@DELETE
 	@Path("/{id}")
@@ -111,7 +111,7 @@ public class FileWebService extends BaseWebService {
 	 *            the od of the file or folder
 	 * @param externalType
 	 *            the externalType
-	 * @return - null
+	 * @return {@link ServiceResult} with result type
 	 */
 	@DELETE
 	@Path("/{externaltype}/{externalid}")
@@ -275,6 +275,8 @@ public class FileWebService extends BaseWebService {
 	 *            SID The SID of the User. This SID must be marked as logged in
 	 * @param id
 	 *            current file or folder id to be moved
+	 * @param roomId
+	 *            room this file need to be moved
 	 * @param parentId
 	 *            new parent folder id
 	 * @return - resulting file object
