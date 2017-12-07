@@ -82,7 +82,6 @@ public class CalendarWebService extends BaseWebService {
 	 *            end time
 	 *
 	 * @return - list of appointments in range
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@GET
 	@Path("/{start}/{end}")
@@ -111,7 +110,6 @@ public class CalendarWebService extends BaseWebService {
 	 *            end time
 	 *
 	 * @return - list of appointments in range
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@GET
 	@Path("/{userid}/{start}/{end}")
@@ -135,7 +133,6 @@ public class CalendarWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @return - next Calendar event
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@GET
 	@Path("/next")
@@ -155,7 +152,6 @@ public class CalendarWebService extends BaseWebService {
 	 *            the userId the calendar events should be loaded
 	 *
 	 * @return - next Calendar event
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@GET
 	@Path("/next/{userid}")
@@ -171,9 +167,10 @@ public class CalendarWebService extends BaseWebService {
 	 * Load a calendar event by its room id
 	 *
 	 * @param sid
+	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param roomid
+	 *            id of appointment special room
 	 * @return - calendar event by its room id
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@GET
 	@Path("/room/{roomid}")
@@ -193,7 +190,6 @@ public class CalendarWebService extends BaseWebService {
 	 *            the search string
 	 *
 	 * @return - calendar event list
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@GET
 	@Path("/title/{title}")
@@ -210,7 +206,6 @@ public class CalendarWebService extends BaseWebService {
 	 *            calendar event
 	 *
 	 * @return - appointment saved
-	 * @throws {@link ServiceException} in case of any error
 	 */
 	@WebMethod
 	@POST
@@ -249,7 +244,7 @@ public class CalendarWebService extends BaseWebService {
 	 * delete a calendar event
 	 *
 	 * If the given sid is from an Administrator or Web-Service user, the user
-	 * can delete any appointment.<br/>
+	 * can delete any appointment.
 	 * If the sid is assigned to a regular user, he can only delete appointments
 	 * where he is also the owner/creator of the appointment
 	 *
@@ -257,9 +252,7 @@ public class CalendarWebService extends BaseWebService {
 	 *            an authenticated SID
 	 * @param id
 	 *            the id to delete
-	 * @return {@link ServiceResult} of type SUCCESS
-	 *
-	 * @throws {@link ServiceException} in case of any error
+	 * @return {@link ServiceResult} with result type
 	 */
 	@DELETE
 	@Path("/{id}")
