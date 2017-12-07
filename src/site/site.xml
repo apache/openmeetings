@@ -70,7 +70,7 @@
 				<column>Community</column>
 				<column>Development</column>
 			</bottomNav>
-			<toc>sidebar</toc>
+			<toc type="fixed">sidebar</toc>
 			<skinAttribution>false</skinAttribution>
 			<endContent>
 				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
