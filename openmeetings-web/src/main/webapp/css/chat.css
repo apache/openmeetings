@@ -91,7 +91,7 @@
 	margin-right: 22px;
 }
 #chatMessage .wysiwyg-editor {
-	height: 70px;
+	min-height: 70px;
 	max-height: 70px;
 }
 .chat-tool-icon {

@@ -86,6 +86,7 @@ var Chat = function() {
 		allPrefix = _allPrefix;
 		roomPrefix = _roomPrefix;
 		p = $('#chatPanel');
+		clearTimeout(p.data('timeout'));
 		pp = $('#chatPanel, #chatPopup');
 		ctrl = $('#chatPopup .control.block');
 		icon = $('#chatPopup .control.block .ui-icon');
@@ -107,7 +108,13 @@ var Chat = function() {
 		});
 		if (roomMode) {
 			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
-			p.addClass('room').hover(_open, _close);
+			p.addClass('room').hover(function() {
+				clearTimeout($(this).data('timeout'));
+				_open();
+			}, function() {
+				var t = setTimeout(_close, 2000);
+				$(this).data('timeout', t);
+			});
 			pp.width(closedSize);
 			_removeResize();
 		} else {
@@ -118,15 +125,17 @@ var Chat = function() {
 			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
 				.resizable({
-					handles: 'n, ' + (Settings.isRtl ? 'w' : 'e')
+					handles: 'n, ' + (Settings.isRtl ? 'e' : 'w')
 					, disabled: isClosed()
-					, alsoResize: "#chatPopup, #chat .ui-tabs .ui-tabs-panel.messageArea"
+					, alsoResize: "#chatPopup,#chatPopup .control.block,#chat .ui-tabs .ui-tabs-panel.messageArea, #chatMessage .wysiwyg-editor"
 					, minHeight: 195
 					, minWidth: 260
 					, stop: function(event, ui) {
 						p.css({'top': '', 'left': ''});
+						editor.width(p.width() - 30);
 						openedHeight = ui.size.height + "px";
 						globalWidth = ui.size.width;
+						ctrl.width(globalWidth);
 					}
 				});
 		}
@@ -229,11 +238,13 @@ var Chat = function() {
 	}
 	function _setOpened() {
 		p.addClass('opened').off('mouseenter mouseleave');
+		editor.width(p.width() - 30);
 		p.resizable({
 			handles: (Settings.isRtl ? 'e' : 'w')
-			, alsoResize: '#chatPopup'
+			, alsoResize: '#chatPopup, #chatMessage .wysiwyg-editor'
 			, stop: function(event, ui) {
 				p.css({'left': ''});
+				editor.width(p.width() - 30);
 				openedWidth = ui.size.width + 'px';
 			}
 		});
@@ -263,6 +274,7 @@ var Chat = function() {
 				if (typeof(handler) === 'function') {
 					handler();
 				}
+				editor.width(p.width() - 30);
 				if (roomMode) {
 					ctrl.off('click').click(function() {
 						if (p.hasClass('opened')) {

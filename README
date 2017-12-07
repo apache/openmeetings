@@ -12,6 +12,22 @@ Release Notes 4.0.0
 =============
 see CHANGELOG file for detailed log
 
+Release 4.0.1, provides following improvements:
+
+* Openlaszlo code is removed
+* Login via OAuth is improved
+* External video source is room is fixed
+* Multiple improvements of White-board
+* Multiple improvements of Chat
+* JS/CSS files are minified and merged to reduce load time
+* Overall stability is improved
+
+Other fixes and improvements, 43 issues were fixed
+
+Release Notes 4.0.0
+=============
+see CHANGELOG file for detailed log
+
 Release 4.0.0, provides following improvements:
 
 * Room White board is rewritten to use HTML5 instead of Flash

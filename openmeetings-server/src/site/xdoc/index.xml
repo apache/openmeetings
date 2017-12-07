@@ -11,7 +11,7 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- -->
+-->
 <document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
 	<properties>
@@ -69,25 +69,16 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 4.0.0 released!</b>
-				<div>Release 4.0.0, provides following improvements:<br/>
+				<b>Version 4.0.1 released!</b>
+				<div>Release 4.0.1, provides following improvements:<br/>
 					<ul>
-						<li>Room White board is rewritten to use HTML5 instead of Flash</li>
-						<li>All Audio/Video components were rewritten using Apache Flex</li>
-						<li>Bunch of automatic tests were written, code was cleaned-up and simplified</li>
-						<li>outdated SMSlib was removed from the dependencies</li>
-						<li>RTL in room is improved</li>
-						<li>swftool 3rd party tool is not required any more</li>
-						<li>OAuth authorization is fixed additional VK provider is added</li>
-						<li>language resources are minimized</li>
-						<li>performance is improved</li>
-					</ul>
-					<br/>
-					Admin->Config<br/>
-					<br/>
-					<ul>
-						<li>config keys are generalized</li>
-						<li>config types are introduced</li>
+						<li>Openlaszlo code is removed</li>
+						<li>Login via OAuth is improved</li>
+						<li>External video source is room is fixed</li>
+						<li>Multiple improvements of White-board</li>
+						<li>Multiple improvements of Chat</li>
+						<li>JS/CSS files are minified and merged to reduce load time</li>
+						<li>Overall stability is improved</li>
 					</ul>
 					Other fixes and improvements
 					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
@@ -95,12 +86,12 @@
 				<br/>
 
 				<span>
-					515 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.0/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12324572">Detailed list</a>
+					43 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342042">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2017-11-04)</span>
+				<span class="date">(2017-12-09)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
