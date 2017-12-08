@@ -83,7 +83,7 @@ public class GroupWebService extends BaseWebService {
 	 *            The SID from getSession
 	 * @param name
 	 *            the name of the group
-	 * @return the new id of the group or -1 in case an error happened
+	 * @return {@link ServiceResult} with result type, and id of the group added
 	 */
 	@POST
 	@Path("/")
@@ -119,7 +119,7 @@ public class GroupWebService extends BaseWebService {
 	 *            the user id
 	 * @param id
 	 *            the group id
-	 * @return - id of the user added, or error id in case of the error
+	 * @return {@link ServiceResult} with result type, and id of the user added, or error id in case of the error as text
 	 */
 	@POST
 	@Path("/{id}/users/{userid}")
@@ -150,7 +150,7 @@ public class GroupWebService extends BaseWebService {
 	 *            the user id
 	 * @param id
 	 *            the group id
-	 * @return - id of the user added, or error id in case of the error
+	 * @return {@link ServiceResult} with result type, and id of the user added, or error id in case of the error as text
 	 */
 	@DELETE
 	@Path("/{id}/users/{userid}")
@@ -183,7 +183,7 @@ public class GroupWebService extends BaseWebService {
 	 * @param id - Id of group that the room is being paired with
 	 * @param roomid - Id of room to be added
 	 *
-	 * @return Id of the relation created, null or -1 in case of the error
+	 * @return {@link ServiceResult} with result type
 	 */
 	@POST
 	@Path("/{id}/rooms/add/{roomId}")
@@ -265,8 +265,7 @@ public class GroupWebService extends BaseWebService {
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param id
 	 *            the id of the group
-	 *
-	 * @throws {@link ServiceException} in case of any error
+	 * @return {@link ServiceResult} with result type
 	 */
 	@WebMethod
 	@DELETE

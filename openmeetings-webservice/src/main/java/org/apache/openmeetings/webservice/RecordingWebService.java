@@ -70,7 +70,7 @@ public class RecordingWebService extends BaseWebService {
 	 * @param id
 	 *            the id of the recording
 	 *
-	 * @throws {@link ServiceException} in case of any error
+	 * @return {@link ServiceResult} with result type
 	 */
 	@DELETE
 	@Path("/{id}")
