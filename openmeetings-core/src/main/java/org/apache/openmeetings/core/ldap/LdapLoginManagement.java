@@ -164,6 +164,11 @@ public class LdapLoginManagement {
 	 *
 	 * Connection Data is retrieved from ConfigurationFile
 	 *
+	 * @param _login - user login
+	 * @param passwd - user password
+	 * @param domainId - user domain id
+	 * @return - {@link User} with this credentials or <code>null</code>
+	 * @throws OmException - in case of any error
 	 */
 	public User login(String _login, String passwd, Long domainId) throws OmException {
 		log.debug("LdapLoginmanagement.doLdapLogin");

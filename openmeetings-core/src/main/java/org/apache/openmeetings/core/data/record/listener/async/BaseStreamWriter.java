@@ -163,11 +163,12 @@ public abstract class BaseStreamWriter implements Runnable {
 	/**
 	 * Write the actual packet data to the disk and do calculate any needed additional information
 	 *
-	 * @param streampacket
+	 * @param streampacket - received packet
 	 */
 	public abstract void packetReceived(CachedEvent streampacket);
 
 	protected abstract void internalCloseStream();
+
 	/**
 	 * called when the stream is finished written on the disk
 	 */

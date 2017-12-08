@@ -168,7 +168,9 @@ public class ImageConverter extends BaseConverter {
 	/**
 	 * Converts PDF document to the series of images
 	 *
+	 * @param f - {@link FileItem} object to write number of pages and size
 	 * @param pdf - input PDF document
+	 * @param logs - logs of the conversion
 	 * @return - result of conversion
 	 * @throws IOException in case IO exception occurred
 	 */

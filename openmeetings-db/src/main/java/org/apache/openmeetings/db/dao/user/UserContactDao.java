@@ -62,14 +62,14 @@ public class UserContactDao {
 	}
 
 	/**
-	 * @param id
+	 * @param id - id of item to delete
 	 */
 	public void delete(Long id) {
 		em.createNamedQuery("deleteUserContact").setParameter("id", id).executeUpdate();
 	}
 
 	/**
-	 * @param ownerId
+	 * @param ownerId - id of owner
 	 * @return rowcount of update
 	 */
 	public Integer deleteAllUserContacts(Long ownerId) {

@@ -44,7 +44,7 @@ import org.simpleframework.xml.Root;
  * contains meta data about each stream, for example if it is a screen sharing or
  * audio/video stream. There is also a {@link Status} value
  * {@link #streamStatus}, as long as this variable is not set
- * to {@link Status.STOPPED}, the recording process will not proceed and start to convert all
+ * to {@link Status#STOPPED}, the recording process will not proceed and start to convert all
  * input sources to a single recording file.
  *
  * @author sebawagner
@@ -119,7 +119,6 @@ public class RecordingMetaData extends HistoricalEntity {
 
 	/**
 	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
-	 * @see BaseStreamWriter#closeStream()
 	 */
 	@Column(name = "stream_status")
 	@Enumerated(EnumType.STRING)

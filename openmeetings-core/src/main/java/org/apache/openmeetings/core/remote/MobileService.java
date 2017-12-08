@@ -348,6 +348,7 @@ public class MobileService {
 	 *
 	 * @param sid - sid
 	 * @param userId - redundant userId
+	 * @return {@link Map} with publiSid and broadcastId
 	 */
 	public Map<String, Object> roomConnect(String sid, Long userId) {
 		// publicSid is changed on mobile room connect

@@ -166,7 +166,7 @@ public class InvitationDTO implements Serializable {
 	/**
 	 * Method to set valid to date-time in format YYYY-MM-dd HH:mm:ss
 	 *
-	 * @param validFrom
+	 * @param validTo
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
 	 */
 	public void setValidTo(String validTo) {

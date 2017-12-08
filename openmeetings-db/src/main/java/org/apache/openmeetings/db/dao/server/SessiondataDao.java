@@ -117,8 +117,8 @@ public class SessiondataDao {
 
 	/**
 	 *
-	 * @param sid
-	 * @return
+	 * @param sid - sid of {@link Sessiondata} to check
+	 * @return - {@link Sessiondata} for given sid or new {@link Sessiondata}
 	 */
 	public Sessiondata check(String sid) {
 		Sessiondata sd = find(sid);
@@ -131,8 +131,8 @@ public class SessiondataDao {
 
 	/**
 	 *
-	 * @param refreshed
-	 * @return
+	 * @param refreshed - date to compare session update time with
+	 * @return - the list of all expired session data
 	 */
 	private List<Sessiondata> getSessionToDelete(Date refreshed) {
 		try {
@@ -147,7 +147,7 @@ public class SessiondataDao {
 
 	/**
 	 *
-	 * @param timeout
+	 * @param timeout - timeout in millis to check expired sessions
 	 */
 	public void clearSessionTable(long timeout) {
 		try {
@@ -166,7 +166,7 @@ public class SessiondataDao {
 	}
 
 	/**
-	 * @param roomId
+	 * @param roomId - room to clear sessions
 	 */
 	public void clearSessionByRoomId(Long roomId) {
 		try {

@@ -79,8 +79,7 @@ public class IcalHandler {
 	 * Constructor
 	 *
 	 * @param method
-	 *            (@see IcalHandler Constants)
-	 * @throws Exception
+	 *            (@see IcalHandler) constants
 	 */
 	public IcalHandler(Method method) {
 		log.debug("Icalhandler method type : " + method);
@@ -170,6 +169,14 @@ public class IcalHandler {
 	/**
 	 * Use this function to build a valid record for the AttendeeList for
 	 * addMeetings Generate a Attendee
+	 *
+	 * @param emailAdress
+	 *            - email of attendee
+	 * @param displayName
+	 *            - name of attendee
+	 * @param chair
+	 *            - is this organizer
+	 * @return attendee data as {@link Map}
 	 */
 	public Map<String, String> getAttendeeData(String emailAdress, String displayName, boolean chair) {
 		Map<String, String> oneRecord = new HashMap<>();
@@ -182,6 +189,11 @@ public class IcalHandler {
 
 	/**
 	 * Write iCal to File
+	 *
+	 * @param _filerPath
+	 *            - path to '*.ics' file
+	 * @throws Exception
+	 *             - in case of error during writing to the file
 	 */
 	public void writeDataToFile(String _filerPath) throws Exception {
 		String filerPath = _filerPath.endsWith(".ics") ? _filerPath
@@ -195,6 +207,10 @@ public class IcalHandler {
 
 	/**
 	 * Get IcalBody as ByteArray
+	 *
+	 * @return - calendar in ICS format as byte[]
+	 * @throws Exception
+	 *             - in case of error during writing to byte array
 	 */
 	public byte[] getIcalAsByteArray() throws Exception {
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
