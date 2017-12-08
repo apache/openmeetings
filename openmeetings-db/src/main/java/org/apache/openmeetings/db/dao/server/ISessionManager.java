@@ -38,30 +38,29 @@ public interface ISessionManager {
 	/**
 	 * loads the server into the client (only if database cache is used)
 	 *
-	 * @return
+	 * @return - list of all clients
 	 */
 	Collection<StreamClient> list();
 
 	/**
 	 * Get a client by its UID
 	 *
-	 * @param uid
-	 * @return
+	 * @param uid - uid of the client to get
+	 * @return - client with giver uid
 	 */
 	StreamClient get(String uid);
 
 	/**
 	 * Updates {@link StreamClient} in the cache
 	 *
-	 * @param rcm
-	 * @return updated client
+	 * @param rcm - client to update
 	 */
 	void update(IClient rcm);
 
 	/**
 	 * Remove a client from the session store
 	 *
-	 * @param uid
+	 * @param uid - uid of the client to remove
 	 * @return true if client was removed
 	 */
 	boolean remove(String uid);
@@ -71,40 +70,41 @@ public interface ISessionManager {
 	 * needed cause it is invoked internally AFTER the current user has been
 	 * already removed from the ClientList to see if the Room is empty again and
 	 * the PollList can be removed
-	 * @param roomId
-	 * @return
+	 *
+	 * @param roomId - id of the room
+	 * @return - list of all clients in the room
 	 */
 	List<StreamClient> listByRoom(Long roomId);
 
 	/**
 	 * returns number of users performing recording
 	 *
-	 * @param roomId
-	 * @return
+	 * @param roomId - id of the room
+	 * @return - number of recording clients (MUST be 0 or 1)
 	 */
 	long getRecordingCount(Long roomId);
 
 	/**
 	 * returns a number of current users publishing screensharing
 	 *
-	 * @param roomId
-	 * @return
+	 * @param roomId - id of the room
+	 * @return - number of publishing clients (MUST be 0 or 1)
 	 */
 	long getPublishingCount(Long roomId);
 
 	/**
 	 * returns a number of users performing screen-sharing
 	 *
-	 * @param roomId
-	 * @return MUST return 0 or 1
+	 * @param roomId - id of the room
+	 * @return - number of sharing clients (MUST be 0 or 1)
 	 */
 	long getSharingCount(Long roomId);
 
 	/**
 	 * returns number of users sending A/V streams to server
 	 *
-	 * @param roomId
-	 * @return
+	 * @param roomId - id of the room
+	 * @return - number of broadcasting clients
 	 */
 	long getBroadcastingCount(Long roomId);
 
@@ -118,7 +118,7 @@ public interface ISessionManager {
 	/**
 	 * Get a list of rooms with users on particular cluster node.
 	 *
-	 * @param server
+	 * @param serverId - id of the server
 	 * @return a set, a roomId can be only one time in this list
 	 */
 	Set<Long> getActiveRoomIds(String serverId);

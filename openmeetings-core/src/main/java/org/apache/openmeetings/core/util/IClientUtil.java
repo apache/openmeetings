@@ -37,7 +37,7 @@ public class IClientUtil {
 	/**
 	 * Id of {@link StreamClient} for this IConnection
 	 *
-	 * @param conn
+	 * @param client - {@link IClient} to get if from
 	 * @return - Id of {@link StreamClient} for this IConnection, or <code>null</code>
 	 */
 	public static String getId(IClient client) {

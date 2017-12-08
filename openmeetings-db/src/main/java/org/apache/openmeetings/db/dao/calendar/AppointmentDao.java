@@ -31,6 +31,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -249,14 +250,17 @@ public class AppointmentDao {
 	}
 
 	/**
-	 * Bulk Deletes the Appointments related the the calId.<br/>
+	 * Bulk Deletes the Appointments related the the calId.
 	 * Note: Does not automatically, commit, but gets cascaded in the function which calls it.
 	 * If there is a need to commit during this function, use <code>em.flush()</code> and <code>em.clear()</code>
 	 *
 	 * @param calId Calendar Id of the Calendar Id to which the Appointments belong to.
 	 * @return Returns <code>-1</code> if the there was an error executing the query,
 	 * otherwise returns the number of updated rows.
-	 * @see Query#executeUpdate()
+	 * as described here {@link Query#executeUpdate()}
+	 *
+	 * @param calId - id of the calendar
+	 * @return - number of deleted items
 	 */
 	public int deletebyCalendar(Long calId) {
 		return em.createNamedQuery("deleteAppointmentsbyCalendar", Appointment.class)

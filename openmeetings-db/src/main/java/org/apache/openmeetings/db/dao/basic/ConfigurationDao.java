@@ -109,11 +109,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.openjson.JSONObject;
 
 /**
- * Insert/update/Delete on {@link Configuration}<br/>
- * <br/>
- * It provides basic mechanism to get a Conf Key:<br/>
- * {@link #getConfValue(String, Class, String)} <br/>
- * <br/>
+ * Insert/update/Delete on {@link Configuration}
+ *
+ * It provides basic mechanism to get a Conf Key:
+ * {@link #getBool(String, boolean)}
+ * {@link #getLong(String, Long)}
+ * {@link #getInt(String, int)}
+ * {@link #getString(String, String)}
+ *
  * <b> {@link #get(String)} is deprecated!</b>
  *
  * @author swagner
@@ -142,7 +145,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	/**
 	 * Retrieves Configuration regardless of its deleted status
 	 *
-	 * @param key
+	 * @param key - key of the {@link Configuration} to get
 	 * @return correspondent {@link Configuration} or null
 	 */
 	public Configuration forceGet(String key) {

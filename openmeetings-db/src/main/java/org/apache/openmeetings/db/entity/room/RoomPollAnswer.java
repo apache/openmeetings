@@ -131,15 +131,15 @@ public class RoomPollAnswer implements IDataProviderEntity {
 	}
 
 	/**
-	 * @return the votedClient
+	 * @return the voted {@link User}
 	 */
 	public User getVotedUser() {
 		return votedUser;
 	}
 
 	/**
-	 * @param votedClient
-	 *            the votedClient to set
+	 * @param votedUser
+	 *            the voted {@link User} to set
 	 */
 	public void setVotedUser(User votedUser) {
 		this.votedUser = votedUser;

@@ -128,8 +128,10 @@ public class FileItemDao extends BaseFileItemDao {
 	}
 
 	/**
-	 * @param id
-	 * @param name
+	 * @param id - id of file item to rename
+	 * @param name - new name
+	 *
+	 * @return renamed item
 	 */
 	public FileItem rename(Long id, String name) {
 		log.debug("rename started");
@@ -158,10 +160,12 @@ public class FileItemDao extends BaseFileItemDao {
 	}
 
 	/**
-	 * @param id
-	 * @param parentId
-	 * @param isOwner
-	 * @param roomId
+	 * @param id - id of file item to move
+	 * @param parentId - id of parent item
+	 * @param ownerId - id of item owner
+	 * @param roomId - id of room
+	 *
+	 * @return moved item
 	 */
 	public FileItem move(long id, long parentId, long ownerId, long roomId) {
 		log.debug(".move() started");

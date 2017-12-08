@@ -340,11 +340,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * check for duplicates
 	 *
-	 * @param login
-	 * @param type
-	 * @param domainId
-	 * @param id
-	 * @return
+	 * @param login - login to check
+	 * @param type - user {@link Type} to check
+	 * @param domainId - domain to check
+	 * @param id - id of current user to allow self update
+	 * @return <code>true</code> in case login is allowed
 	 */
 	public boolean checkLogin(String login, Type type, Long domainId, Long id) {
 		User u = getByLogin(login, type, domainId);
@@ -354,11 +354,11 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * Checks if a mail is already taken by someone else
 	 *
-	 * @param email
-	 * @param type
-	 * @param domainId
-	 * @param id
-	 * @return
+	 * @param email - email to check
+	 * @param type - user {@link Type} to check
+	 * @param domainId - domain to check
+	 * @param id - id of current user to allow self update
+	 * @return <code>true</code> in case email is allowed
 	 */
 	public boolean checkEmail(String email, Type type, Long domainId, Long id) {
 		log.debug("checkEmail: email = {}, id = {}", email, id);
@@ -410,8 +410,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	/**
-	 * @param search
-	 * @return
+	 * @param search - term to search
+	 * @return - number of matching user
 	 */
 	public Long selectMaxFromUsersWithSearch(String search) {
 		try {
@@ -419,7 +419,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			TypedQuery<Long> query = em.createNamedQuery("selectMaxFromUsersWithSearch", Long.class);
 			query.setParameter("search", StringUtils.lowerCase(search));
 			List<Long> ll = query.getResultList();
-			log.info("selectMaxFromUsers" + ll.get(0));
+			log.info("selectMaxFromUsers {}", ll.get(0));
 			return ll.get(0);
 		} catch (Exception ex2) {
 			log.error("[selectMaxFromUsers] ", ex2);
@@ -430,9 +430,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * Returns true if the password is correct
 	 *
-	 * @param userId
-	 * @param password
-	 * @return
+	 * @param userId - id of the user to check
+	 * @param password - password to check
+	 * @return <code>true</code> if entered password is correct
 	 */
 	public boolean verifyPassword(Long userId, String password) {
 		List<String> l = em.createNamedQuery("getPassword", String.class)
@@ -496,8 +496,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	/**
-	 * @param hash
-	 * @return
+	 * @param hash - activation hash
+	 * @return user with this hash
 	 */
 	public User getByActivationHash(String hash) {
 		return getSingle(em.createQuery("SELECT u FROM User as u WHERE u.activatehash = :activatehash AND u.deleted = false", User.class)
@@ -579,8 +579,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	/**
 	 * login logic
 	 *
-	 * @param userOrEmail: login or email of the user being tested
-	 * @param userpass: password of the user being tested
+	 * @param userOrEmail - login or email of the user being tested
+	 * @param userpass - password of the user being tested
 	 * @return User object in case of successful login
 	 * @throws OmException in case of any issue
 	 */

@@ -35,7 +35,8 @@ public class ImportHelper {
 	 * returns a list of all timezones as a {@link Map}
 	 *
 	 * @param tzList
-	 * @return
+	 *            - timezones to put to resulting {@link Map}
+	 * @return {@link Map} with passed time zones as key and value
 	 */
 	public static Map<String, String> getAllTimeZones(String ... tzList) {
 		Map<String, String> result = new LinkedHashMap<>();

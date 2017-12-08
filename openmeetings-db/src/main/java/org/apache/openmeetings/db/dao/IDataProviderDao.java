@@ -27,7 +27,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
  *
  * @author solomax, swagner
  *
- * @param <T>
+ * @param <T> entity type for this provider
  */
 public interface IDataProviderDao<T extends IDataProviderEntity> {
 	/**
@@ -80,6 +80,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 *
 	 * @param entity - entity to be updated
 	 * @param userId - user performed update
+	 * @return - updated entity
 	 */
 	T update(T entity, Long userId);
 

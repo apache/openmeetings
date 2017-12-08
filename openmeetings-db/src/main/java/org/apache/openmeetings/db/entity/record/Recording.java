@@ -45,16 +45,16 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 /**
- * An item in the file explorer in the recording section. Can be either:<br/>
+ * An item in the file explorer in the recording section. Can be either:
  * <ul>
  * <li>a conference recording</li>
  * <li>a interview recording</li>
  * <li>a folder</li>
  * </ul>
  *
- * Recorded files are situated in: webapps/openmeetings/streams/hibernate.<br/>
+ * Recorded files are situated in: webapps/openmeetings/streams/hibernate.
  * The raw recorded files are situated in:
- * webapps/openmeetings/streams/$ROOM_ID.<br/>
+ * webapps/openmeetings/streams/$ROOM_ID.
  *
  * @author sebawagner
  *

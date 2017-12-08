@@ -60,6 +60,9 @@ public class MeetingMemberDao {
 
 	/**
 	 * Updating MeetingMember
+	 *
+	 * @param meetingMember - entity to update
+	 * @return - updated entity
 	 */
 	// -------------------------------------------------------------------------------
 	public MeetingMember update(MeetingMember meetingMember) {

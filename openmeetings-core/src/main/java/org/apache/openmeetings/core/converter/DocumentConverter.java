@@ -90,6 +90,10 @@ public class DocumentConverter {
 
 	/**
 	 * Generates PDF using JOD Library (external library)
+	 *
+	 * @param in - file to convert
+	 * @param out - file to write result
+	 * @return - result of the conversion as {@link ProcessResult}
 	 */
 	public ProcessResult doJodConvert(File in, File out) {
 		try {

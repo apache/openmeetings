@@ -42,10 +42,12 @@ public class TimezoneUtil {
 	}
 
 	/**
-	 * Returns the timezone based on the user profile, if not return the timezone from the server
+	 * Returns the timezone based on the user profile, if not return the timezone
+	 * from the server
 	 *
 	 * @param user
-	 * @return
+	 *            to get timezone for
+	 * @return {@link TimeZone} of given user
 	 */
 	public static TimeZone getTimeZone(User user) {
 		return getTimeZone(user == null ? null : user.getTimeZoneId());
