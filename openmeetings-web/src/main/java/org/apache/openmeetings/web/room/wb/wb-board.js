@@ -308,7 +308,10 @@ var Wb = function() {
 						addCanvas();
 					}
 					const canvas = canvases[i];
-					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas), {});
+					let scale = width / _o.width;
+					scale = scale < 1 ? 1 : scale;
+					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas)
+							, {scaleX: scale, scaleY: scale});
 				}
 				_updateZoomPanel();
 				if (ccount !== canvases.length) {

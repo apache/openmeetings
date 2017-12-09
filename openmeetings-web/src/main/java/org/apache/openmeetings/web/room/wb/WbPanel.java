@@ -537,8 +537,10 @@ public class WbPanel extends AbstractWbPanel {
 	private static void updateWbSize(Whiteboard wb, final BaseFileItem fi) {
 		int w = fi.getWidth() == null ? DEFAULT_WIDTH : fi.getWidth();
 		int h = fi.getHeight() == null ? DEFAULT_HEIGHT : fi.getHeight();
-		wb.setWidth(Math.max(wb.getWidth(), w));
-		wb.setHeight(Math.max(wb.getHeight(), h));
+		double scale = 1. * wb.getWidth() / w;
+		scale = scale < 1 ? 1 : scale;
+		wb.setWidth(Math.max(wb.getWidth(), (int)(w * scale)));
+		wb.setHeight(Math.max(wb.getHeight(), (int)(h * scale)));
 	}
 
 	@Override
