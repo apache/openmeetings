@@ -177,7 +177,9 @@ public class AppointmentManager {
 	/**
 	 * Create or Update calendar on the database.
 	 *
-	 * @param calendar Calendar to update or create
+	 * @param client - {@link HttpClient} to discover calendar
+	 * @param calendar - calendar to be created
+	 * @return <code>true</code> if calendar was created/updated
 	 */
 	public boolean createCalendar(HttpClient client, OmCalendar calendar) {
 		if (calendar.getId() == null && calendar.getSyncType() != SyncType.GOOGLE_CALENDAR) {
@@ -201,14 +203,22 @@ public class AppointmentManager {
 	}
 
 	/**
-	 * @see OmCalendarDao#getByUser(Long)
+	 * Method to get user's calendars
+	 * please see {@link OmCalendarDao#getByUser(Long)}
+	 *
+	 * @param userid - id of the user
+	 * @return the list of the calendars
 	 */
 	public List<OmCalendar> getCalendars(Long userid) {
 		return calendarDao.getByUser(userid);
 	}
 
 	/**
-	 * @see OmCalendarDao#getGoogleCalendars(Long)
+	 * Method to get user's google calendars
+	 * please see {@link OmCalendarDao#getGoogleCalendars(Long)}
+	 *
+	 * @param userId - id of the user
+	 * @return the list of the calendars
 	 */
 	public List<OmCalendar> getGoogleCalendars(Long userId) {
 		return calendarDao.getGoogleCalendars(userId);
@@ -217,6 +227,7 @@ public class AppointmentManager {
 	/**
 	 * Function which when called performs syncing based on the type of Syncing detected.
 	 *
+	 * @param client - {@link HttpClient} to discover calendar
 	 * @param calendar Calendar who's sync has to take place
 	 */
 	public void syncItem(HttpClient client, OmCalendar calendar) {
@@ -246,6 +257,9 @@ public class AppointmentManager {
 
 	/**
 	 * Syncs all the calendars currrently present on the DB.
+	 *
+	 * @param client - {@link HttpClient} to discover calendar
+	 * @param userId - id of the user
 	 */
 	public void syncItems(HttpClient client, Long userId) {
 		List<OmCalendar> calendars = getCalendars(userId);
@@ -256,6 +270,10 @@ public class AppointmentManager {
 
 	/**
 	 * Function which finds all the calendars of the Principal URL of the calendar
+	 *
+	 * @param client - {@link HttpClient} to discover calendar
+	 * @param calendar - calendar to get principal URL from
+	 * @return - <code>true</code> in case calendar was discovered successfully
 	 */
 	private boolean discoverCalendars(HttpClient client, OmCalendar calendar) {
 		cleanupIdleConnections();
@@ -439,6 +457,10 @@ public class AppointmentManager {
 
 	/**
 	 * Function to initialize the Calendar on the type of syncing and whether it can be used or not.
+	 *
+	 * @param client - {@link HttpClient} to discover calendar
+	 * @param calendar - calendar to be inited
+	 * @return <code>true</code> in case calendar was inited
 	 */
 	private boolean initCalendar(HttpClient client, OmCalendar calendar) {
 
@@ -505,7 +527,9 @@ public class AppointmentManager {
 	 * Function for create/updating multiple appointment on the server.
 	 * Performs modification alongside of creation new events on the server.
 	 *
+	 * @param client - {@link HttpClient} to discover calendar
 	 * @param appointment Appointment to create/update.
+	 * @return <code>true</code> in case item was updated
 	 */
 	public boolean updateItem(HttpClient client, Appointment appointment) {
 		cleanupIdleConnections();
@@ -535,7 +559,9 @@ public class AppointmentManager {
 	 * Delete's on the Server only if the ETag of the Appointment is the one on the server,
 	 * i.e. only if the Event hasn't changed on the Server.
 	 *
+	 * @param client - {@link HttpClient} to discover calendar
 	 * @param appointment Appointment to Delete
+	 * @return <code>true</code> in case item was deleted
 	 */
 	public boolean deleteItem(HttpClient client, Appointment appointment) {
 		cleanupIdleConnections();

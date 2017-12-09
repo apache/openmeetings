@@ -73,11 +73,11 @@ public class InvitationManager implements IInvitationManager {
 	/**
 	 * @author vasya
 	 *
-	 * @param mm
-	 * @param a
-	 * @param message
-	 * @param subject
-	 * @throws Exception
+	 * @param a - appointment this link is related to
+	 * @param mm - attendee being processed
+	 * @param type - type of the message
+	 * @param ical - should iCal appoinment be attached to message
+	 * @throws Exception in case of error happens during sending
 	 */
 	private void sendInvitionLink(Appointment a, MeetingMember mm, MessageType type, boolean ical) throws Exception	{
 		User owner = a.getOwner();
@@ -147,8 +147,9 @@ public class InvitationManager implements IInvitationManager {
 	/**
 	 * @author vasya
 	 *
-	 * @param member
-	 * @param a
+	 * @param a - appointment this link is related to
+	 * @param member - attendee being processed
+	 * @param type - type of the message
 	 */
 	@Override
 	public void processInvitation(Appointment a, MeetingMember member, MessageType type) {

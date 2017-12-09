@@ -105,8 +105,8 @@ public class SyncMethod extends DavMethodBase {
 	 * Adapted from DavMethodBase to handle MultiStatus responses.
 	 *
 	 * @return MultiStatus response
-	 * @throws IOException
-	 * @throws DavException
+	 * @throws IOException if the response body could not be parsed
+	 * @throws DavException in case of error
 	 */
 	@Override
 	public MultiStatus getResponseBodyAsMultiStatus() throws IOException, DavException {
