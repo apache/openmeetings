@@ -29,15 +29,17 @@ import org.w3c.dom.Element;
 
 /**
  * Used to represent a Sync Report, defined in RFC 6578. Taken from RFC 6578 are
- * the following XML definitions <br/>
- * <br/>
+ * the following XML definitions
+ *
  * <code>
  * &lt;!ELEMENT sync-collection (sync-token, sync-level, limit?, prop)&gt;
- * <br/><br/>
- * &lt;!ELEMENT sync-token #PCDATA&gt; <br/>
+ *
+ *
+ * &lt;!ELEMENT sync-token #PCDATA&gt;
  * &lt;!-- Text MUST be a valid URI --&gt;
- * <br/><br/>
- * &lt;!ELEMENT sync-level CDATA&gt; <br/>
+ *
+ *
+ * &lt;!ELEMENT sync-level CDATA&gt;
  * &lt;!-- Text MUST be either "1" or "infinite" --&gt;
  * </code>
  *
@@ -135,8 +137,8 @@ public class SyncReportInfo implements XmlSerializable {
 
 	/**
 	 * @see XmlSerializable#toXml(Document)
-	 * @param document
-	 * @return
+	 * @param document - document to create report info from
+	 * @return report info as {@link Element}
 	 */
 	@Override
 	public Element toXml(Document document) {

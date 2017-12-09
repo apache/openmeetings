@@ -97,28 +97,28 @@ public class UserManager implements IUserManager {
 	 * default user_level(1) new users will be automatically added to the
 	 * Group with the id specified in the configuration value default.group.id
 	 *
-	 * @param login
-	 * @param userpass
-	 * @param lastname
-	 * @param firstname
-	 * @param email
-	 * @param age
-	 * @param street
-	 * @param additionalname
-	 * @param fax
-	 * @param zip
-	 * @param stateId
-	 * @param town
-	 * @param languageId
-	 * @param phone
-	 * @param sendSMS
-	 * @param generateSipUserData
-	 * @param jNameTimeZone
-	 * @param sendConfirmation
-	 * @return
+	 * @param login - user login
+	 * @param password - user password
+	 * @param lastname - user last name
+	 * @param firstname - user first name
+	 * @param email - user email
+	 * @param age - user birthday
+	 * @param street - user address street
+	 * @param additionalname - user additional name
+	 * @param fax - user fax
+	 * @param zip - user zip code
+	 * @param country - user country code
+	 * @param town - user town
+	 * @param languageId - language id
+	 * @param phone - user phone
+	 * @param sendSMS - should SMS be sent to this user
+	 * @param generateSipUserData - should SIP data be generated
+	 * @param jNameTimeZone - the name of the time zone
+	 * @param _sendConfirmation - should confirmation be sent
+	 * @return {@link User} of code of error as {@link String}
 	 */
 	@Override
-	public Object registerUser(String login, String userpass, String lastname,
+	public Object registerUser(String login, String password, String lastname,
 			String firstname, String email, Date age, String street,
 			String additionalname, String fax, String zip, String country,
 			String town, long languageId, String phone, boolean sendSMS,
@@ -136,7 +136,7 @@ public class UserManager implements IUserManager {
 					sendConfirmation = _sendConfirmation.booleanValue();
 				}
 				Object user = registerUserInit(UserDao.getDefaultRights(), login,
-						userpass, lastname, firstname, email, age, street,
+						password, lastname, firstname, email, age, street,
 						additionalname, fax, zip, country, town, languageId,
 						true, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), phone,
 						sendSMS, sendConfirmation, getTimeZone(jNameTimeZone), false, "", "", false, true, null);
@@ -156,36 +156,35 @@ public class UserManager implements IUserManager {
 	}
 
 	/**
-	 * @param user_level
-	 * @param availible
-	 * @param status
-	 * @param login
-	 * @param password
-	 * @param lastname
-	 * @param firstname
-	 * @param email
-	 * @param age
-	 * @param street
-	 * @param additionalname
-	 * @param fax
-	 * @param zip
-	 * @param stateId
-	 * @param town
-	 * @param languageId
-	 * @param sendWelcomeMessage
-	 * @param groups
-	 * @param phone
-	 * @param sendSMS
-	 * @param sendConfirmation
-	 * @param timezone
-	 * @param forceTimeZoneCheck
-	 * @param userOffers
-	 * @param userSearchs
-	 * @param showContactData
-	 * @param showContactDataToContacts
-	 * @return new user OR error code
-	 * @throws NoSuchAlgorithmException
-	 * @throws Exception
+	 * @param rights - {@link Right} to be assigned to the user
+	 * @param login - user login
+	 * @param password - user password
+	 * @param lastname - user last name
+	 * @param firstname - user first name
+	 * @param email - user email
+	 * @param age - user birthday
+	 * @param street - user address street
+	 * @param additionalname - user additional name
+	 * @param fax - user fax
+	 * @param zip - user zip code
+	 * @param country - user country code
+	 * @param town - user town
+	 * @param languageId - language id
+	 * @param sendWelcomeMessage - should confirmation email be sent
+	 * @param groups - ids of user groups
+	 * @param phone - user phone
+	 * @param sendSMS - should SMS be sent to this user
+	 * @param sendConfirmation - should confirmation be sent
+	 * @param timezone - the name of the time zone
+	 * @param forceTimeZoneCheck - should time zone be verified by user
+	 * @param userOffers - what user offers
+	 * @param userSearchs - what user searches
+	 * @param showContactData - is contact data publicly visible
+	 * @param showContactDataToContacts - is contact data visible to contacts
+	 * @param activatedHash - activation hash
+	 * @return {@link User} of code of error as {@link String}
+	 * @throws NoSuchAlgorithmException in case password hashing algorithm is not found
+	 * @throws OmException in case of any issues with provided data
 	 */
 	@Override
 	public Object registerUserInit(Set<Right> rights, String login, String password, String lastname,
@@ -275,9 +274,8 @@ public class UserManager implements IUserManager {
 	}
 
 	/**
-	 * @param sid
-	 * @param room_id
-	 * @return
+	 * @param roomId - id of the room user should be kicked from
+	 * @return <code>true</code> if there were no errors
 	 */
 	@Override
 	public boolean kickUsersByRoomId(Long roomId) {

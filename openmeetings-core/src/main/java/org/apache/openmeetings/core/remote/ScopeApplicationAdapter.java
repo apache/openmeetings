@@ -293,7 +293,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	/**
 	 *
-	 * @param map
+	 * @param map - {@link Map} with all statuses
 	 * @return returns key,value Map with multiple return values or null in case of exception
 	 *
 	 */
@@ -425,12 +425,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * This function is kind of private/protected as the client won't be able
 	 * to call it with proper values.
 	 *
-	 * @param client
-	 * @param scope
+	 * @param client - client who leave
+	 * @param scope - scope being leaved
 	 */
 	public void roomLeaveByScope(StreamClient client, IScope scope) {
 		try {
-			_log.debug("[roomLeaveByScope] currentClient " + client);
+			_log.debug("[roomLeaveByScope] currentClient {}", client);
 			if (Client.Type.sharing == client.getType() && client.isSharingStarted()) {
 				sendSharingStoped(client);
 			}
@@ -656,7 +656,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	/**
 	 * wrapper method
-	 * @param newMessage
+	 *
+	 * @param newMessage - message being sent
 	 */
 	public void sendMessageToMembers(List<?> newMessage) {
 		//Sync to all users of current scope
@@ -792,7 +793,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	/**
 	 * wrapper method
-	 * @param newMessage
+	 *
+	 * @param newMessage - message being sent
 	 * @return 1 in case of success, -1 otherwise
 	 */
 	public int sendMessageWithClient(Object newMessage) {
@@ -808,8 +810,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	/**
 	 * wrapper method
-	 * @param newMessage
-	 * @param sync
+	 *
+	 * @param newMessage - message being sent
+	 * @param sync - send self
 	 * @return 1 in case of success, -1 otherwise
 	 */
 	public int sendMessageWithClientWithSyncObject(Object newMessage, boolean sync) {
@@ -835,9 +838,9 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 * Function is used to send the kick Trigger at the moment,
 	 * it sends a general message to a specific clientId
 	 *
-	 * @param newMessage
-	 * @param uid
-	 * @param scope
+	 * @param newMessage - message being sent
+	 * @param uid - uid of the receiver
+	 * @param scope - scope of message
 	 * @return 1 in case of success, -1 otherwise
 	 */
 	public int sendMessageById(Object newMessage, final String uid, IScope scope) {
@@ -858,8 +861,8 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * Sends a message to a user in the same room by its clientId
 	 *
-	 * @param uid
-	 * @param newMessage
+	 * @param uid - uid of the recepient
+	 * @param newMessage - message being sent
 	 * @return 1 in case of no exceptions, -1 otherwise
 	 */
 	public int sendMessageToClient(final String uid, Object newMessage) {
@@ -900,7 +903,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * Starts recording in interview room
 	 *
-	 * @return - false if there were existing recording, true if recording was started successfully, null if any exception happens
+	 * @param c - client who initiated recording
 	 */
 	public void startInterviewRecording(Client c) {
 		_log.debug("-----------  startInterviewRecording");
@@ -915,7 +918,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	/**
 	 * Stop the recording of the streams and send event to connected users of scope
 	 *
-	 * @return true if interview was found
+	 * @param c - client who stopped recording
 	 */
 	public void stopInterviewRecording(org.apache.openmeetings.db.entity.basic.IClient c) {
 		_log.debug("-----------  stopInterviewRecording");

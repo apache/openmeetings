@@ -29,10 +29,12 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
  * This is a helper class to help Syncing of CalDAV calendars.
  * <p>
  * There are currently three types of Sync Handlers. Namely:
- * <li>ETAGs Sync</li>
- * <li>CTAGs Sync (Similar to ETAGs but an additional step is necessary)</li>
- * <li>WebDAV-Sync Report</li>
- * <li>Calendar-Multiget Report</li>
+ * <ul>
+ *   <li>ETAGs Sync</li>
+ *   <li>CTAGs Sync (Similar to ETAGs but an additional step is necessary)</li>
+ *   <li>WebDAV-Sync Report</li>
+ *   <li>Calendar-Multiget Report</li>
+ * </ul>
  */
 public interface CalendarHandler {
 

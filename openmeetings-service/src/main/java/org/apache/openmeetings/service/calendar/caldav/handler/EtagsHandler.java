@@ -65,9 +65,11 @@ import net.fortuna.ical4j.model.Component;
  * Then, for each href and etag, we get, something like key-value pair.
  * <p>
  * We then check for three things:
- * <li>Addition of a new event.</li>
- * <li>Modification of an existing event.</li>
- * <li>Deletion of events which are not in the response.</li>
+ * <ul>
+ *   <li>Addition of a new event.</li>
+ *   <li>Modification of an existing event.</li>
+ *   <li>Deletion of events which are not in the response.</li>
+ * </ul>
  */
 public class EtagsHandler extends AbstractCalendarHandler {
 	private static final Logger log = Red5LoggerFactory.getLogger(EtagsHandler.class, getWebAppRootKey());
