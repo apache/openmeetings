@@ -134,7 +134,7 @@ var Activities = function() {
 			a.find('.activity-close').click(function() { a.remove(); _action('close', obj.id); });
 			a.find('.activity-text').text(obj.text);
 			_hightlight();
-			if (aclean.prop('checked')) {
+			if (aclean.prop('checked') && a.hasClass('auto-clean')) {
 				setTimeout(_clearItem.bind(null, obj.id), timeout);
 			}
 		}
