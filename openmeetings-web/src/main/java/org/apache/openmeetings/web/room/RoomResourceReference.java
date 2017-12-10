@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
@@ -79,7 +79,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 			default:
 				throw new RuntimeException("Not supported");
 		}
-		return mime;
+		return r.isDeleted() ? PNG_MIME_TYPE : mime;
 	}
 
 	@Override
@@ -98,7 +98,10 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 		if (id == null || !ws.isSignedIn() || c == null) {
 			return null;
 		}
-		FileItem f = getBean(FileItemDao.class).get(id);
+		FileItem f = (FileItem)getBean(FileItemDao.class).getAny(id);
+		if (f == null) {
+			return null;
+		}
 		String ruid = params.get("ruid").toString();
 		String wuid = params.get("wuid").toString();
 		if (c.getRoom() != null) {
@@ -121,7 +124,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	protected File getFile(FileItem f, String ext) {
 		File file = f.getFile(ext);
 		if (file == null || !file.exists()) {
-			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s", EXTENSION_JPG));
+			file = new File(new File(getOmHome(), "default"), String.format("deleted.%s", EXTENSION_PNG));
 		}
 		return file;
 	}

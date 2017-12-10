@@ -22,7 +22,7 @@ var Player = (function() {
 			.attr("width", _o.width).attr("height", _o.height)
 			.append($('<source>').attr('type', 'video/mp4').attr('src', _o._src));
 		$('#wb-tab-' + canvas.wbId).append(vid);
-		new fabric.Image.fromURL(_o._poster, function(poster) {
+		fabric.Image.fromURL(_o._poster, function(poster) {
 			poster.scaleX = poster.scaleY = _o.width / poster.getOriginalSize().width;
 			const video = new fabric.Image(vid[0], {visible: false});
 			if (typeof(_o.status) === 'undefined') {
