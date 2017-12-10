@@ -268,12 +268,15 @@ var Wb = function() {
 	}
 	function _findObject(o) {
 		let _o = null;
-		canvases[o.slide].forEachObject(function(__o) {
-			if (!!__o && o.uid === __o.uid) {
-				_o = __o;
-				return false;
-			}
-		});
+		const cnvs = canvases[o.slide];
+		if (!!cnvs) {
+			cnvs.forEachObject(function(__o) {
+				if (!!__o && o.uid === __o.uid) {
+					_o = __o;
+					return false;
+				}
+			});
+		}
 		return _o;
 	}
 	function _removeHandler(o) {
@@ -301,17 +304,20 @@ var Wb = function() {
 				break;
 			case 'Presentation':
 			{
-				const ccount = canvases.length
-					, count = _o.deleted ? 1 : _o.count;
-				for (let i = 0; i < count; ++i) {
+				const ccount = canvases.length;
+				for (let i = 0; i < _o.count; ++i) {
 					if (canvases.length < i + 1) {
 						addCanvas();
 					}
 					const canvas = canvases[i];
-					let scale = width / _o.width;
-					scale = scale < 1 ? 1 : scale;
-					canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas)
-							, {scaleX: scale, scaleY: scale});
+					if (_o.deleted) {
+						ToolUtil.addDeletedItem(canvas, _o);
+					} else {
+						let scale = width / _o.width;
+						scale = scale < 1 ? 1 : scale;
+						canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas)
+								, {scaleX: scale, scaleY: scale});
+					}
 				}
 				_updateZoomPanel();
 				if (ccount !== canvases.length) {
@@ -320,6 +326,7 @@ var Wb = function() {
 						b.data().deactivate();
 						b.data().activate();
 					}
+					showCurrentSlide();
 				}
 			}
 				break;
@@ -443,7 +450,10 @@ var Wb = function() {
 		a.find('.scroll-container .canvas-container').each(function(idx) {
 			if (role === PRESENTER) {
 				$(this).show();
-				a.find('.scroll-container .canvas-container')[slide].scrollIntoView();
+				const cclist = a.find('.scroll-container .canvas-container');
+				if (cclist.length > slide) {
+					cclist[slide].scrollIntoView();
+				}
 			} else {
 				if (idx === slide) {
 					$(this).show();
@@ -628,9 +638,13 @@ var Wb = function() {
 		showCurrentSlide();
 	};
 	wb.createObj = function(obj) {
-		const arr = [], _arr = Array.isArray(obj) ? obj : [obj];
+		const arr = [], del = [], _arr = Array.isArray(obj) ? obj : [obj];
 		for (let i = 0; i < _arr.length; ++i) {
 			const o = _arr[i];
+			if (!!o.deleted && "Presentation" !== o.fileType) {
+				del.push(o);
+				continue;
+			}
 			switch(o.type) {
 				case 'pointer':
 					APointer().create(canvases[o.slide], o);
@@ -650,6 +664,10 @@ var Wb = function() {
 		}
 		if (arr.length > 0) {
 			_createObject(arr, _createHandler);
+		}
+		for (let i = 0; i < del.length; ++i) {
+			const o = del[i];
+			ToolUtil.addDeletedItem(canvases[o.slide], o);
 		}
 	};
 	wb.load = wb.createObj;

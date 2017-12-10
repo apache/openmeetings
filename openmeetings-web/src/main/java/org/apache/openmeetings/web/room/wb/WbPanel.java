@@ -58,7 +58,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboard.ZoomMode;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
@@ -491,9 +490,7 @@ public class WbPanel extends AbstractWbPanel {
 		try {
 			final long fid = _file.optLong(ATTR_FILE_ID, -1);
 			if (fid > 0) {
-				BaseFileItem fi = FileItem.Type.Recording.name().equals(_file.optString(ATTR_FILE_TYPE))
-						? getBean(RecordingDao.class).get(fid)
-						: getBean(FileItemDao.class).get(fid);
+				BaseFileItem fi = getBean(FileItemDao.class).getAny(fid);
 				if (fi != null) {
 					if (consumer != null) {
 						consumer.accept(fi);

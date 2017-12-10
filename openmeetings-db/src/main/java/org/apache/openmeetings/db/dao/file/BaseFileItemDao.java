@@ -52,6 +52,12 @@ public class BaseFileItemDao {
 		return list.size() == 1 ? list.get(0) : null;
 	}
 
+	public BaseFileItem getAny(Long id) {
+		List<BaseFileItem> list = em.createNamedQuery("getAnyFileById", BaseFileItem.class)
+					.setParameter("id", id).getResultList();
+		return list.size() == 1 ? list.get(0) : null;
+	}
+
 	public void delete(BaseFileItem f) {
 		if (f == null || f.getId() == null) {
 			return;

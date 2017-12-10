@@ -95,6 +95,7 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		final PageParameters pp = new PageParameters()
 				.add("id", fi.getId()).add("uid", c.getUid())
 				.add("ruid", ruid).add("wuid", _file.optString("uid"));
+		file.put("deleted", !fi.exists());
 		switch (fi.getType()) {
 			case Video:
 				ref = new RoomResourceReference();
@@ -109,7 +110,6 @@ public class WbWebSocketHelper extends WebSocketHelper {
 			case Presentation:
 				ref = new RoomResourceReference();
 				file.put("_src", urlFor(ref, pp));
-				file.put("deleted", !fi.exists());
 				break;
 			default:
 				ref = new RoomResourceReference();

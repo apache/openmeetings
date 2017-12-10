@@ -32,5 +32,27 @@ var ToolUtil = (function() {
 				s.find('.wb-prop-b, .wb-prop-i, .wb-prop-lock-color, .wb-prop-lock-fill').button("disable");
 			}
 		}
+		, addDeletedItem: function(canvas, o) {
+			if ("Presentation" === o.fileType) {
+				fabric.Image.fromURL(o._src, function(img) {
+					const sz = img.getOriginalSize();
+					img.width = sz.width;
+					img.height = sz.height;
+					img.scaleX = img.scaleY = canvas.width / (canvas.getZoom() * sz.width);
+					canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+				});
+			} else {
+				fabric.Image.fromURL(o._src || o.src, function(img) {
+					const sz = img.getOriginalSize();
+					img.width = sz.width;
+					img.height = sz.height;
+					img.scaleX = img.scaleY = (o.scaleX || 1.) * o.width / sz.width;
+					img.type = 'image';
+					img.videoStatus = function() {};
+					canvas.add(img);
+					canvas.requestRenderAll();
+				}, o);
+			}
+		}
 	};
 })();

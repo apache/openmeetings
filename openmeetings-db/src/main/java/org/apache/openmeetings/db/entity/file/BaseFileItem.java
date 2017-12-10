@@ -58,6 +58,7 @@ import org.simpleframework.xml.Element;
 @Entity
 @NamedQueries({
 	@NamedQuery(name = "getFileById", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.id = :id")
+	, @NamedQuery(name = "getAnyFileById", query = "SELECT f FROM BaseFileItem f WHERE f.id = :id")
 	, @NamedQuery(name = "getFileByHash", query = "SELECT f FROM BaseFileItem f WHERE f.deleted = false AND f.hash = :hash")
 	, @NamedQuery(name = "getAllFileItemsForRoom", query = "SELECT f FROM BaseFileItem f"
 			+ " WHERE f.deleted = false AND f.type <> :folder"
@@ -263,7 +264,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 
 	public final File getFile(String ext) {
 		File f = null;
-		if (getHash() != null) {
+		if (!isDeleted() && getHash() != null) {
 			File d = new File(getUploadFilesDir(), getHash());
 			switch (getType()) {
 				case WmlFile:
