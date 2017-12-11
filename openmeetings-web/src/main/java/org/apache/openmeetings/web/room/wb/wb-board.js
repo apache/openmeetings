@@ -4,7 +4,7 @@ var Wb = function() {
 		, area = $('.room.wb.area .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
 		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src'];
 	let a, t, z, s, mode, slide = 0, width = 0, height = 0
-			, zoom = 1., zoomMode = 'fullFit', role = null;
+			, zoom = 1., zoomMode = 'pageWidth', role = null;
 
 	function getBtn(m) {
 		return !!t ? t.find(".om-icon." + (m || mode)) : null;
@@ -122,6 +122,7 @@ var Wb = function() {
 				initToolBtn('rect', _firstToolItem, Rect(wb, s));
 				initToolBtn('ellipse', _firstToolItem, Ellipse(wb, s));
 				initToolBtn('arrow', _firstToolItem, Arrow(wb, s));
+				initToolBtn('math', _firstToolItem, TMath(wb, s));
 				initCliparts();
 				t.find(".om-icon.settings").click(function() {
 					s.show();

@@ -152,6 +152,8 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>fabric.js</jsSourceFile>
+								<jsSourceFile>MathJax-config.js</jsSourceFile>
+								<jsSourceFile>MathJax.js</jsSourceFile>
 								<jsSourceFile>wb-all.js</jsSourceFile>
 								<jsSourceFile>uuid.js</jsSourceFile>
 								<jsSourceFile>tool-util.js</jsSourceFile>
@@ -161,6 +163,7 @@
 								<jsSourceFile>tool-apointer.js</jsSourceFile>
 								<jsSourceFile>tool-shape-base.js</jsSourceFile>
 								<jsSourceFile>tool-text.js</jsSourceFile>
+								<jsSourceFile>tool-math.js</jsSourceFile>
 								<jsSourceFile>tool-paint.js</jsSourceFile>
 								<jsSourceFile>tool-shape.js</jsSourceFile>
 								<jsSourceFile>tool-line.js</jsSourceFile>

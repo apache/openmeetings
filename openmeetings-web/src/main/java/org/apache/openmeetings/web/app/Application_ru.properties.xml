@@ -990,4 +990,5 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.autoclean"><![CDATA[Авто-очистка]]></entry>
 	<entry key="activities.msg.enter"><![CDATA[входит в комнату.]]></entry>
 	<entry key="activities.msg.exit"><![CDATA[покидает комнату.]]></entry>
+	<entry key="wb.tool.math.formula"><![CDATA[Математическая формула]]></entry>
 </properties>
