@@ -63,14 +63,14 @@
 }
 .room.wb.area .tools.vertical {
 	width: 31px;
-	height: 448px;
+	height: 479px;
 }
 .room.wb.area .tools.readonly.vertical {
 	width: 31px;
 	height: 42px;
 }
 .room.wb.area .tools.horisontal {
-	width: 448px;
+	width: 479px;
 	height: 31px;
 }
 .room.wb.area .tools.readonly.horisontal {
@@ -125,6 +125,9 @@
 }
 .room.wb.area .tools .om-icon.big.undo {
 	background-image: url(images/arrow_undo.png);
+}
+.room.wb.area .tools .om-icon.big.math {
+	background-image: url(images/math.png);
 }
 .room.wb.area .om-icon.big.next {
 	background-image: url(images/next.png);

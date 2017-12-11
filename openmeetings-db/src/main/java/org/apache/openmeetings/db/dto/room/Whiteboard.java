@@ -58,7 +58,7 @@ public class Whiteboard implements Serializable {
 	private static final int DEFAULT_HEIGHT = 1080;
 	private long id;
 	private double zoom = 1.;
-	private ZoomMode zoomMode = ZoomMode.fullFit;
+	private ZoomMode zoomMode = ZoomMode.pageWidth;
 	private int width = DEFAULT_WIDTH;
 	private int height = DEFAULT_HEIGHT;
 	private Map<String, String> roomItems = Collections.synchronizedMap(new LinkedHashMap<>());
