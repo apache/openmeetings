@@ -302,11 +302,24 @@ var DrawWbArea = function() {
 			}));
 		} else {
 			const cnv = wb.getCanvas()
-				, a = document.createElement('a');
-			a.setAttribute('target', '_blank')
-			a.setAttribute('download', wb.name + '.' + fmt);
-			a.setAttribute('href', _getImage(cnv, fmt));
-			a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
+				, dataUri = _getImage(cnv, fmt)
+				, fName = wb.name + '.' + fmt;
+			if (typeof window.navigator.msSaveOrOpenBlob !== 'undefined') {
+				const byteStr = atob(dataUri.split(',')[1])
+					, mime = dataUri.split(',')[0].split(':')[1].split(';')[0]
+					, ab = new ArrayBuffer(byteStr.length)
+					, ia = new Uint8Array(ab);
+				for (let i = 0; i < byteStr.length; ++i) {
+					ia[i] = byteStr.charCodeAt(i);
+				}
+				window.navigator.msSaveOrOpenBlob(new Blob([ab], {type: mime}), fName);
+			} else {
+				const a = document.createElement('a');
+				a.setAttribute('target', '_blank')
+				a.setAttribute('download', fName);
+				a.setAttribute('href', dataUri);
+				a.dispatchEvent(new MouseEvent('click', {view: window, bubbles: false, cancelable: true}));
+			}
 		}
 	}
 	self.videoStatus = _videoStatus;
