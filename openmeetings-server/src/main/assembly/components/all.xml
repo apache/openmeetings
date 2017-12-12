@@ -36,7 +36,7 @@
 				<exclude>lib/commons-io*.jar</exclude>
 				<exclude>lib/commons-lang3*</exclude>
 				<exclude>lib/spring*.jar</exclude>
-				<!-- Tika related jars are in lib folder
+				<!-- Tika related jars are in lib folder-->
 				<exclude>lib/apache-mime4j*</exclude>
 				<exclude>lib/boilerpipe*</exclude>
 				<exclude>lib/jempbox*</exclude>
@@ -47,7 +47,7 @@
 				<exclude>lib/rome*</exclude>
 				<exclude>lib/tagsoup*</exclude>
 				<exclude>lib/tika*</exclude>
-				 end of Tika libs -->
+				<!-- end of Tika libs -->
 				<exclude>plugins/websocket*.jar</exclude>
 				<exclude>plugins/tomcat-embed*.jar</exclude> <!-- added for Red5 lib substitution -->
 				<exclude>plugins/ecj*.jar</exclude> <!-- added for Red5 lib substitution -->
@@ -221,7 +221,16 @@
 				<include>commons-io*</include>
 				<include>commons-lang3*</include>
 				<!-- Tika related jars are in lib folder -->
-				<include>tika-*</include>
+				<include>apache-mime4j*</include>
+				<include>boilerpipe*</include>
+				<include>jempbox*</include>
+				<include>juniversalchardet*</include>
+				<include>mchange-commons*</include>
+				<include>metadata-extractor*</include>
+				<include>pdfbox*</include>
+				<include>rome*</include>
+				<include>tagsoup*</include>
+				<include>tika*</include>
 				<include>bcmail-*</include>
 				<include>bcpkix-*</include>
 				<include>bzip2-*</include>
