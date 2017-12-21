@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.user.chat;
 
+import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -130,10 +131,18 @@ public class Chat extends Panel {
 	}
 
 	public CharSequence getReinit() {
-		StringBuilder sb = new StringBuilder("Chat.reinit(");
-		sb.append('\'').append(getString("1494")).append('\'')
-				.append(',').append('\'').append(getString("406")).append('\'');
-		return sb.append("); ");
+		StringBuilder sb = new StringBuilder("Chat.reinit(")
+				.append('\'').append(getString("1494")).append('\'')
+				.append(',').append('\'').append(getString("406")).append('\'')
+				.append("); ");
+		return processGlobal(sb);
+	}
+
+	public CharSequence processGlobal(StringBuilder sb) {
+		if (!showDashboardChat) {
+			sb.append(String.format("Chat.removeTab('%s');", ID_ALL));
+		}
+		return sb;
 	}
 
 	public CharSequence addRoom(Room r) {

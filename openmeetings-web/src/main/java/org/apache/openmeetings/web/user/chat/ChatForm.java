@@ -107,7 +107,7 @@ public class ChatForm extends Form<Void> {
 					m.setSent(new Date());
 					m.setFromUser(getBean(UserDao.class).get(getUserId()));
 					if (!process(
-							() -> true
+							() -> getChat().isShowDashboardChat()
 							, r -> {
 								if (isUserInRoom(r.getId(), getUserId())) {
 									m.setToRoom(r);
