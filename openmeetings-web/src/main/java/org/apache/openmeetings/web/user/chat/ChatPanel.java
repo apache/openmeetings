@@ -53,8 +53,9 @@ public class ChatPanel extends Panel {
 		}
 		sb.append("Chat.setRoomMode(true);")
 			.append(chat.addRoom(r))
-			.append("Chat.").append(r.isChatOpened() ? "setOpened" : "close").append("();")
-			.append("});");
+			.append("Chat.").append(r.isChatOpened() ? "setOpened" : "close").append("();");
+		chat.processGlobal(sb);
+		sb.append("});");
 		target.appendJavaScript(sb);
 	}
 
