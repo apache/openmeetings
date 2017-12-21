@@ -34,7 +34,6 @@ import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -210,7 +209,12 @@ public class BackupPanel extends AdminBasePanel {
 					target.add(feedback);
 				}
 			}));
-			add(new Label("cmdLineDesc", Application.getString("1505")).setEscapeModelStrings(false));
+		}
+
+		@Override
+		protected void onInitialize() {
+			add(new Label("cmdLineDesc", getString("1505")).setEscapeModelStrings(false));
+			super.onInitialize();
 		}
 
 		@Override

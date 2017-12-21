@@ -39,7 +39,6 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.util.NonClosableDialog;
@@ -68,15 +67,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class RegisterDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(RegisterDialog.class, getWebAppRootKey());
-	private DialogButton cancelBtn = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private DialogButton registerBtn = new DialogButton("register", Application.getString("121")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public boolean isIndicating() {
-			return true;
-		}
-	};
+	private DialogButton cancelBtn;
+	private DialogButton registerBtn;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> tzModel = Model.of(WebSession.get().getClientTZCode());
 	private RegisterForm form;
@@ -90,16 +82,29 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	private String country;
 	private Long lang;
 
-	final MessageDialog confirmRegistration;
+	MessageDialog confirmRegistration;
 	private boolean sendConfirmation = false;
 	private boolean sendEmailAtRegister = false;
 
 	public RegisterDialog(String id) {
-		super(id, Application.getString("113"));
+		super(id, "");
 		add(form = new RegisterForm("form"));
 		form.setOutputMarkupId(true);
+	}
 
-		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", Application.getString("235"), Application.getString("warn.notverified")) {
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("113"));
+		cancelBtn = new DialogButton("cancel", getString("lbl.cancel"));
+		registerBtn = new DialogButton("register", getString("121")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isIndicating() {
+				return true;
+			}
+		};
+		confirmRegistration = new NonClosableMessageDialog("confirmRegistration", getString("235"), getString("warn.notverified")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -109,6 +114,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		};
 		add(confirmRegistration);
 		reset(null);
+		super.onInitialize();
 	}
 
 	public void setSignInDialog(SignInDialog s) {

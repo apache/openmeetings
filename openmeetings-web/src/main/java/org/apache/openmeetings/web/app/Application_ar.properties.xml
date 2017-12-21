@@ -153,7 +153,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="308"><![CDATA[خروج]]></entry>
 	<entry key="309"><![CDATA[عودة الى غرف]]></entry>
 	<entry key="310"><![CDATA[خروج]]></entry>
-	<entry key="311"><![CDATA[Desktop Viewer]]></entry>
+	<entry key="311"><![CDATA[Forgotten your password?]]></entry>
 	<entry key="312"><![CDATA[start Desktop Viewer]]></entry>
 	<entry key="313"><![CDATA[صوت و صورة]]></entry>
 	<entry key="314"><![CDATA[دردشة]]></entry>
@@ -609,6 +609,18 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1552"><![CDATA[Revision]]></entry>
 	<entry key="1553"><![CDATA[Build date]]></entry>
 	<entry key="1555"><![CDATA[today]]></entry>
+	<entry key="1556">Jan</entry>
+	<entry key="1557">Feb</entry>
+	<entry key="1558">Mar</entry>
+	<entry key="1559">Apr</entry>
+	<entry key="1560">May</entry>
+	<entry key="1561">Jun</entry>
+	<entry key="1562">Jul</entry>
+	<entry key="1563">Aug</entry>
+	<entry key="1564">Sep</entry>
+	<entry key="1565">Oct</entry>
+	<entry key="1566">Nov</entry>
+	<entry key="1567">Dec</entry>
 	<entry key="1571"><![CDATA[OAuth2]]></entry>
 	<entry key="1572"><![CDATA[Manage OAuth2 configurations]]></entry>
 	<entry key="1575"><![CDATA[Icon URL]]></entry>

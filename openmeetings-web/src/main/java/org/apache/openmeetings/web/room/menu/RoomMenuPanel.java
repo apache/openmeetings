@@ -48,7 +48,6 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
 import org.apache.openmeetings.web.common.InvitationDialog;
@@ -78,7 +77,7 @@ public class RoomMenuPanel extends Panel {
 	private final VoteDialog vote;
 	private final PollResultsDialog pollResults;
 	private final SipDialerDialog sipDialer;
-	private final MenuPanel menuPanel;
+	private MenuPanel menuPanel;
 	private final StartSharingButton shareBtn;
 	private final Label roomName;
 	private static final FastDateFormat df = FastDateFormat.getInstance("dd.MM.yyyy HH:mm");
@@ -99,119 +98,21 @@ public class RoomMenuPanel extends Panel {
 		}
 	};
 	private final RoomPanel room;
-	private final RoomMenuItem exitMenuItem = new RoomMenuItem(Application.getString("308"), Application.getString("309"), "room menu exit") {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			exit(target);
-		}
-	};
-	private final RoomMenuItem filesMenu = new RoomMenuItem(Application.getString("245"), null, false);
-	private final RoomMenuItem actionsMenu = new RoomMenuItem(Application.getString("635"), null, false);
-	private final RoomMenuItem inviteMenuItem = new RoomMenuItem(Application.getString("213"), Application.getString("1489"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			invite.updateModel(target);
-			invite.open(target);
-		}
-	};
-	private final RoomMenuItem shareMenuItem = new RoomMenuItem(Application.getString("239"), Application.getString("1480"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			shareBtn.onClick(target);
-		}
-	};
-	private final RoomMenuItem applyModerMenuItem = new RoomMenuItem(Application.getString("784"), Application.getString("1481"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			room.requestRight(Room.Right.moderator, target);
-		}
-	};
-	private final RoomMenuItem applyWbMenuItem = new RoomMenuItem(Application.getString("785"), Application.getString("1492"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			room.requestRight(Room.Right.whiteBoard, target);
-		}
-	};
-	private final RoomMenuItem applyAvMenuItem = new RoomMenuItem(Application.getString("786"), Application.getString("1482"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			room.requestRight(Room.Right.video, target);
-		}
-	};
-	private final RoomMenuItem pollCreateMenuItem = new RoomMenuItem(Application.getString("24"), Application.getString("1483"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			createPoll.updateModel(target);
-			createPoll.open(target);
-		}
-	};
-	private final RoomMenuItem pollVoteMenuItem = new RoomMenuItem(Application.getString("32"), Application.getString("1485"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
-			if (rp != null) {
-				vote.updateModel(target, rp);
-				vote.open(target);
-			}
-		}
-	};
-	private final RoomMenuItem pollResultMenuItem = new RoomMenuItem(Application.getString("37"), Application.getString("1484"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			pollResults.updateModel(target, room.getClient().hasRight(Room.Right.moderator));
-			pollResults.open(target);
-		}
-	};
-	private final RoomMenuItem sipDialerMenuItem = new RoomMenuItem(Application.getString("1447"), Application.getString("1488"), false) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			sipDialer.open(target);
-		}
-	};
-	private final RoomMenuItem downloadPngMenuItem = new RoomMenuItem(Application.getString("download.png"), Application.getString("download.png")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			download(target, EXTENSION_PNG);
-		}
-	};
-	private final RoomMenuItem downloadJpgMenuItem = new RoomMenuItem(Application.getString("download.jpg"), Application.getString("download.jpg")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			download(target, EXTENSION_JPG);
-		}
-	};
-	private final RoomMenuItem downloadPdfMenuItem = new RoomMenuItem(Application.getString("download.pdf"), Application.getString("download.pdf")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClick(AjaxRequestTarget target) {
-			download(target, EXTENSION_PDF);
-		}
-	};
+	private RoomMenuItem exitMenuItem;
+	private RoomMenuItem filesMenu;
+	private RoomMenuItem actionsMenu;
+	private RoomMenuItem inviteMenuItem;
+	private RoomMenuItem shareMenuItem;
+	private RoomMenuItem applyModerMenuItem;
+	private RoomMenuItem applyWbMenuItem;
+	private RoomMenuItem applyAvMenuItem;
+	private RoomMenuItem pollCreateMenuItem;
+	private RoomMenuItem pollVoteMenuItem;
+	private RoomMenuItem pollResultMenuItem;
+	private RoomMenuItem sipDialerMenuItem;
+	private RoomMenuItem downloadPngMenuItem;
+	private RoomMenuItem downloadJpgMenuItem;
+	private RoomMenuItem downloadPdfMenuItem;
 	private final ImagePanel logo = new ImagePanel("logo") {
 		private static final long serialVersionUID = 1L;
 
@@ -227,7 +128,6 @@ public class RoomMenuPanel extends Panel {
 		this.room = room;
 		Room r = room.getRoom();
 		setVisible(!r.isHidden(RoomElement.TopBar));
-		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
@@ -251,7 +151,121 @@ public class RoomMenuPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		exitMenuItem = new RoomMenuItem(getString("308"), getString("309"), "room menu exit") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				exit(target);
+			}
+		};
+		filesMenu = new RoomMenuItem(getString("245"), null, false);
+		actionsMenu = new RoomMenuItem(getString("635"), null, false);
+		inviteMenuItem = new RoomMenuItem(getString("213"), getString("1489"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				invite.updateModel(target);
+				invite.open(target);
+			}
+		};
+		shareMenuItem = new RoomMenuItem(getString("239"), getString("1480"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				shareBtn.onClick(target);
+			}
+		};
+		applyModerMenuItem = new RoomMenuItem(getString("784"), getString("1481"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				room.requestRight(Room.Right.moderator, target);
+			}
+		};
+		applyWbMenuItem = new RoomMenuItem(getString("785"), getString("1492"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				room.requestRight(Room.Right.whiteBoard, target);
+			}
+		};
+		applyAvMenuItem = new RoomMenuItem(getString("786"), getString("1482"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				room.requestRight(Room.Right.video, target);
+			}
+		};
+		pollCreateMenuItem = new RoomMenuItem(getString("24"), getString("1483"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				createPoll.updateModel(target);
+				createPoll.open(target);
+			}
+		};
+		pollVoteMenuItem = new RoomMenuItem(getString("32"), getString("1485"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
+				if (rp != null) {
+					vote.updateModel(target, rp);
+					vote.open(target);
+				}
+			}
+		};
+		pollResultMenuItem = new RoomMenuItem(getString("37"), getString("1484"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				pollResults.updateModel(target, room.getClient().hasRight(Room.Right.moderator));
+				pollResults.open(target);
+			}
+		};
+		sipDialerMenuItem = new RoomMenuItem(getString("1447"), getString("1488"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				sipDialer.open(target);
+			}
+		};
+		downloadPngMenuItem = new RoomMenuItem(getString("download.png"), getString("download.png")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				download(target, EXTENSION_PNG);
+			}
+		};
+		downloadJpgMenuItem = new RoomMenuItem(getString("download.jpg"), getString("download.jpg")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				download(target, EXTENSION_JPG);
+			}
+		};
+		downloadPdfMenuItem = new RoomMenuItem(getString("download.pdf"), getString("download.pdf")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				download(target, EXTENSION_PDF);
+			}
+		};
+		add((menuPanel = new MenuPanel("menu", getMenu())).setVisible(isVisible()));
+
 		add(askBtn.add(AttributeModifier.replace(ATTR_TITLE, getString("84"))));
 		Label demo = new Label("demo", Model.of(""));
 		Room r = room.getRoom();
@@ -271,6 +285,7 @@ public class RoomMenuPanel extends Panel {
 				}
 			});
 		}
+		super.onInitialize();
 	}
 
 	private List<IMenuItem> getMenu() {
@@ -278,7 +293,7 @@ public class RoomMenuPanel extends Panel {
 		exitMenuItem.setEnabled(false);
 		menu.add(exitMenuItem.setTop(true));
 
-		filesMenu.getItems().add(new RoomMenuItem(Application.getString("15"), Application.getString("1479")) {
+		filesMenu.getItems().add(new RoomMenuItem(getString("15"), getString("1479")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

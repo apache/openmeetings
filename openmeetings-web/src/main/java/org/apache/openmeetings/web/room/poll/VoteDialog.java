@@ -32,8 +32,8 @@ import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.room.RoomPollAnswer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.MainPanel;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -58,19 +58,27 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private static final long serialVersionUID = 1L;
 	private static final List<Integer> answers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-	private final PollAnswerForm form;
-	private final DialogButton vote = new DialogButton("vote", Application.getString("32"));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	private PollAnswerForm form;
+	private DialogButton vote;
+	private DialogButton cancel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> user = Model.of((String)null);
 
 	public VoteDialog(String id) {
-		super(id, Application.getString("18"));
-		add(form = new PollAnswerForm("form", new CompoundPropertyModel<>(new RoomPollAnswer())));
+		super(id, "");
 	}
 
-	static String getName(User u) {
-		return u == null ? "" : (getUserId().equals(u.getId()) ? Application.getString("1411") : u.getFirstname() + " " + u.getLastname());
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("18"));
+		add(form = new PollAnswerForm("form", new CompoundPropertyModel<>(new RoomPollAnswer())));
+		vote = new DialogButton("vote", getString("32"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		super.onInitialize();
+	}
+
+	static String getName(Component c, User u) {
+		return u == null ? "" : (getUserId().equals(u.getId()) ? c.getString("1411") : u.getFirstname() + " " + u.getLastname());
 	}
 
 	public void updateModel(IPartialPageRequestHandler target, RoomPoll rp) {
@@ -78,7 +86,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		a.setRoomPoll(rp);
 		User u = getBean(UserDao.class).get(getUserId());
 		a.setVotedUser(u);
-		user.setObject(getName(a.getRoomPoll().getCreator()));
+		user.setObject(getName(this, a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
 		boolean typeNum = a.getRoomPoll() != null && RoomPoll.Type.numeric == a.getRoomPoll().getType();
 		form.typeBool.setVisible(!typeNum);
@@ -136,6 +144,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 		user.detach();
 		super.onDetach();
 	}
+
 	private class PollAnswerForm extends Form<RoomPollAnswer> {
 		private static final long serialVersionUID = 1L;
 		private final WebMarkupContainer typeBool = new WebMarkupContainer("typeBool");

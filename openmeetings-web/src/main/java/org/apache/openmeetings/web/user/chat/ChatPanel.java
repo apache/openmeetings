@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.chat;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
-import static org.apache.openmeetings.web.user.chat.Chat.getReinit;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -78,7 +77,7 @@ public class ChatPanel extends Panel {
 		if (handler != null) {
 			handler.add(this);
 			if (visible) {
-				handler.appendJavaScript(getReinit());
+				handler.appendJavaScript(chat.getReinit());
 			}
 		}
 	}

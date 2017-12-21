@@ -32,7 +32,6 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -64,8 +63,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final Form<String> form;
-	private final DialogButton upload;
-	private final DialogButton cancel;
+	private DialogButton upload;
+	private DialogButton cancel;
 	private final FileUploadField uploadField;
 	private final HiddenField<String> fileName;
 	private final CheckBox toWb = new CheckBox("to-wb", Model.of(false));
@@ -75,19 +74,10 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private final RoomPanel room;
 
 	public UploadDialog(String id, RoomPanel room, RoomFilePanel roomFiles) {
-		super(id, Application.getString("304"));
+		super(id, "");
 		this.roomFiles = roomFiles;
 		this.room = room;
 		add(form = new Form<>("form"));
-		upload = new DialogButton("upload", Application.getString("593"), false) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isIndicating() {
-				return true;
-			}
-		};
-		cancel = new DialogButton("close", Application.getString("85"));
 		toWb.add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
@@ -131,6 +121,21 @@ public class UploadDialog extends AbstractFormDialog<String> {
 		form.add(new UploadProgressBar("progress", form, uploadField));
 		add(nameForm.add(fileName.setOutputMarkupId(true)));
 		add(BootstrapFileUploadBehavior.INSTANCE);
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("304"));
+		upload = new DialogButton("upload", getString("593"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isIndicating() {
+				return true;
+			}
+		};
+		cancel = new DialogButton("close", getString("85"));
+		super.onInitialize();
 	}
 
 	@Override

@@ -28,7 +28,6 @@ import java.util.List;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
@@ -47,23 +46,25 @@ public class NicknameDialog extends NonClosableDialog<User> {
 	private static final long serialVersionUID = 1L;
 	private static final FastDateFormat TIME_DF = FastDateFormat.getInstance("HH:mm:ss");
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final DialogButton ok = new DialogButton("ok", Application.getString("54"));
+	private DialogButton ok;
 	private final RoomPanel room;
 	private final Form<User> form;
 
 	public NicknameDialog(String id, final RoomPanel room) {
-		super(id, Application.getString("1287"));
+		super(id, "");
 		this.room = room;
 		add(form = new Form<>("form", new CompoundPropertyModel<>(room.getClient().getUser())));
 	}
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		getTitle().setObject(getString("1287"));
+		ok = new DialogButton("ok", getString("54"));
 		form.add(feedback);
-		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(Application.getString("135"))).add(minimumLength(4)));
-		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(Application.getString("136"))).add(minimumLength(4)));
-		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(Application.getString("119"))).add(RfcCompliantEmailAddressValidator.getInstance()));
+		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(getString("135"))).add(minimumLength(4)));
+		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(getString("136"))).add(minimumLength(4)));
+		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(getString("119"))).add(RfcCompliantEmailAddressValidator.getInstance()));
+		super.onInitialize();
 	}
 
 	private static boolean isVisible(User u) {
@@ -77,7 +78,7 @@ public class NicknameDialog extends NonClosableDialog<User> {
 		User u = form.getModelObject();
 		boolean visible = isVisible(u);
 		if (visible) {
-			u.setFirstname(Application.getString("433"));
+			u.setFirstname(getString("433"));
 			u.setLastname(String.format("%s %s", u.getFirstname(), TIME_DF.format(new Date())));
 		}
 		behavior.setOption("autoOpen", visible);

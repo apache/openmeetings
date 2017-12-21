@@ -29,7 +29,6 @@ import java.util.List;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -46,15 +45,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(ChangePasswordDialog.class, getWebAppRootKey());
-	private final DialogButton update = new DialogButton("update", Model.of(Application.getString("327"))) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public boolean isIndicating() {
-			return true;
-		}
-	};
-	private final DialogButton cancel = new DialogButton("cancel", Model.of(Application.getString("lbl.cancel")));
+	private DialogButton update;
+	private DialogButton cancel;
 	private final PasswordTextField current = new PasswordTextField("current", Model.of((String)null));
 	private final PasswordTextField pass = new PasswordTextField("pass", Model.of((String)null));
 	private final PasswordTextField pass2 = new PasswordTextField("pass2", Model.of((String)null));
@@ -76,7 +68,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 			}
 			String p1 = pass.getConvertedInput();
 			if (!Strings.isEmpty(p1) && !p1.equals(pass2.getConvertedInput())) {
-				error(Application.getString("232"));
+				error(getString("232"));
 			}
 			super.onValidate();
 		}
@@ -84,12 +76,21 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public ChangePasswordDialog(String id) {
-		super(id, Model.of(Application.getString("327")));
+		super(id, "");
 	}
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		getTitle().setObject(getString("327"));
+		update = new DialogButton("update", Model.of(getString("327"))) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isIndicating() {
+				return true;
+			}
+		};
+		cancel = new DialogButton("cancel", Model.of(getString("lbl.cancel")));
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getBean(UserDao.class).get(getUserId()));
 		add(form.add(
@@ -98,6 +99,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 				, pass2.setLabel(Model.of(getString("116")))
 				, feedback.setOutputMarkupId(true)
 				));
+		super.onInitialize();
 	}
 
 	@Override

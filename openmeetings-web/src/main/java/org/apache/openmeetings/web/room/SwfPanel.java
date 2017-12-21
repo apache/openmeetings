@@ -27,7 +27,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 import java.net.URL;
 
 import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
@@ -143,10 +142,10 @@ public class SwfPanel extends BasePanel {
 		return SWF_TYPE_NETWORK.equals(type.toString()) ? "networktest.swf" : "";
 	}
 
-	public static String getStringLabels(String... ids) {
+	public String getStringLabels(String... ids) {
 		JSONArray arr = new JSONArray();
 		for (String id : ids) {
-			arr.put(new JSONObject().put("id", id).put("value", Application.getString(id)));
+			arr.put(new JSONObject().put("id", id).put("value", getString(id)));
 		}
 		return arr.toString();
 	}

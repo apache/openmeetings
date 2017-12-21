@@ -25,7 +25,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.db.dao.user.UserContactDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ProfileImagePanel;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -45,15 +44,21 @@ public class UserProfilePanel extends UserBasePanel {
 	public UserProfilePanel(String id, CompoundPropertyModel<User> model) {
 		super(id, model);
 
-		add(new ProfileImagePanel("img", model.getObject().getId()));
+	}
+
+	@Override
+	protected void onInitialize() {
+		User u = (User)getDefaultModelObject();
+
+		add(new ProfileImagePanel("img", u.getId()));
 		add(new Label("firstname"));
 		add(new Label("lastname"));
 		add(new Label("timeZoneId"));
 		add(new Label("regdate"));
 		add(new TextArea<String>("userOffers").setEnabled(false));
 		add(new TextArea<String>("userSearchs").setEnabled(false));
-		if (getUserId().equals(model.getObject().getId()) || model.getObject().isShowContactData()
-				|| (model.getObject().isShowContactDataToContacts() && getBean(UserContactDao.class).isContact(model.getObject().getId(), getUserId())))
+		if (getUserId().equals(u.getId()) || u.isShowContactData()
+				|| (u.isShowContactDataToContacts() && getBean(UserContactDao.class).isContact(u.getId(), getUserId())))
 		{
 			addressDenied.setVisible(false);
 			address.add(new Label("address.phone"));
@@ -61,13 +66,15 @@ public class UserProfilePanel extends UserBasePanel {
 			address.add(new Label("address.additionalname"));
 			address.add(new Label("address.zip"));
 			address.add(new Label("address.town"));
-			address.add(new Label("country", getCountryName(model.getObject().getAddress().getCountry(), getLocale())));
+			address.add(new Label("country", getCountryName(u.getAddress().getCountry(), getLocale())));
 			address.add(new Label("address.comment"));
 		} else {
 			address.setVisible(false);
-			addressDenied.setDefaultModelObject(Application.getString(model.getObject().isShowContactDataToContacts() ? "1269" : "1268"));
+			addressDenied.setDefaultModelObject(getString(u.isShowContactDataToContacts() ? "1269" : "1268"));
 		}
-		add(address.setDefaultModel(model));
+		add(address.setDefaultModel(getDefaultModel()));
 		add(addressDenied);
+
+		super.onInitialize();
 	}
 }

@@ -47,7 +47,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ResetPasswordDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton resetBtn = new DialogButton("reset", Application.getString("327"));
+	private DialogButton resetBtn;
 	private Form<String> form = new ResetForm("form");
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private PasswordTextField password;
@@ -55,13 +55,14 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 	MessageDialog confirmReset;
 
 	public ResetPasswordDialog(String id, final User user) {
-		super(id, Application.getString("325"));
+		super(id, "");
 		this.user = user;
 	}
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		getTitle().setObject(getString("325"));
+		resetBtn = new DialogButton("reset", getString("327"));
 		add(form);
 		confirmReset = new NonClosableMessageDialog("confirmReset", getString("325"), getString("332")) {
 			private static final long serialVersionUID = 1L;
@@ -72,6 +73,8 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			}
 		};
 		add(confirmReset);
+
+		super.onInitialize();
 	}
 
 	@Override

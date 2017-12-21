@@ -50,7 +50,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -128,7 +127,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onInitialize() {
 		super.onInitialize();
 		RequiredTextField<String> name = new RequiredTextField<>("name");
-		name.setLabel(new Model<>(Application.getString("165")));
+		name.setLabel(new Model<>(getString("165")));
 		add(name);
 
 		add(new DropDownChoice<>("capacity", //
@@ -145,7 +144,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 					}
 				}));
 
-		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(Application.getString("45"))));
+		add(new RoomTypeDropDown("type").setRequired(true).setLabel(Model.of(getString("45"))));
 
 		add(new TextArea<String>("comment"));
 
@@ -197,7 +196,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 		add(new CheckBox("isDemoRoom"));
 		TextField<Integer> demoTime = new TextField<>("demoTime");
-		demoTime.setLabel(new Model<>(Application.getString("637")));
+		demoTime.setLabel(new Model<>(getString("637")));
 		add(demoTime);
 		add(new CheckBox("allowUserQuestions"));
 		add(new CheckBox("audioOnly"));

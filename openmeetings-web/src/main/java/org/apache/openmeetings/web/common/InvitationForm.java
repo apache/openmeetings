@@ -39,7 +39,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.UserMultiChoice;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -70,7 +69,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(InvitationForm.class, getWebAppRootKey());
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final PasswordTextField passwd;
+	private final PasswordTextField passwd = new PasswordTextField("password");
 	private final DropDownChoice<String> timeZoneId = new DropDownChoice<>("timeZoneId", Model.of((String)null), AVAILABLE_TIMEZONES);
 	private final OmDateTimePicker from = new OmDateTimePicker("from", Model.of(LocalDateTime.now()));
 	private final OmDateTimePicker to = new OmDateTimePicker("to", Model.of(LocalDateTime.now()));
@@ -84,9 +83,12 @@ public abstract class InvitationForm extends Form<Invitation> {
 	public InvitationForm(String id) {
 		super(id, new CompoundPropertyModel<>(new Invitation()));
 		setOutputMarkupId(true);
+	}
 
+	@Override
+	protected void onInitialize() {
 		add(subject, message);
-		recipients.setLabel(Model.of(Application.getString("216"))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+		recipients.setLabel(Model.of(getString("216"))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -118,9 +120,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 		add(valid.add(new Radio<>("one", Model.of(Valid.OneTime))
 				, new Radio<>("period", Model.of(Valid.Period))
 				, new Radio<>("endless", Model.of(Valid.Endless))));
-		add(passwd = new PasswordTextField("password"));
+		add(passwd);
 		Invitation i = getModelObject();
-		passwd.setLabel(Model.of(Application.getString("110"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
+		passwd.setLabel(Model.of(getString("110"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
 		add(from, to, timeZoneId);
 		from.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
 		to.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
@@ -135,6 +137,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 			});
 		add(url.setOutputMarkupId(true));
 		add(lang, feedback);
+		super.onInitialize();
 	}
 
 	protected void updateButtons(AjaxRequestTarget target) {
@@ -146,7 +149,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 	@Override
 	protected void onValidate() {
 		if (from.getConvertedInput() != null && to.getConvertedInput() != null && from.getConvertedInput().isAfter(to.getConvertedInput())) {
-			error(Application.getString("1592"));
+			error(getString("1592"));
 		}
 	}
 

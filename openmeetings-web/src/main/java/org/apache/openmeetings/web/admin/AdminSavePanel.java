@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -29,20 +28,19 @@ import org.apache.wicket.model.Model;
 
 public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private static final long serialVersionUID = 1L;
-	private final Label newRecord;
+	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
 
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
 		this.form = form;
-
-		newRecord = new Label("newRecord", Model.of(Application.getString("155")));
-		add(newRecord.setVisible(false).setOutputMarkupId(true));
 	}
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		newRecord.setDefaultModelObject(getString("155"));
+		add(newRecord.setVisible(false).setOutputMarkupId(true));
+
 		final AjaxButton newBtn = new AjaxButton("ajax-new-button", form) {
 			private static final long serialVersionUID = 1L;
 
@@ -83,6 +81,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			}
 		};
 		add(newBtn.setVisible(isNewBtnVisible()), delBtn.setVisible(isDelBtnVisible()));
+		super.onInitialize();
 	}
 
 	/**

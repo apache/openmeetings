@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.util.NonClosableDialog;
@@ -45,21 +44,21 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final DialogButton check = new DialogButton("check", Application.getString("537"));
+	private DialogButton check;
 	private final Form<Void> form = new Form<>("form");
 	private final PasswordTextField password = new PasswordTextField("password", Model.of((String)null));
 	private final IUpdatable comp;
 
 	public InvitationPasswordDialog(String id, IUpdatable comp) {
-		super(id, Application.getString("230"));
+		super(id, "");
 		this.comp = comp;
-		password.setLabel(Model.of(Application.getString("110"))).add(new IValidator<String>(){
+		password.add(new IValidator<String>(){
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void validate(IValidatable<String> validatable) {
 				if (!CryptProvider.get().verify(validatable.getValue(), WebSession.get().getInvitation().getPassword())) {
-					validatable.error(new ValidationError(Application.getString("error.bad.password")));
+					validatable.error(new ValidationError(getString("error.bad.password")));
 				}
 			}
 		});
@@ -80,6 +79,14 @@ public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 		};
 		form.add(ab);
 		form.setDefaultButton(ab);
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("230"));
+		password.setLabel(Model.of(getString("110")));
+		check = new DialogButton("check", getString("537"));
+		super.onInitialize();
 	}
 
 	@Override

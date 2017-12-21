@@ -29,7 +29,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.user.rooms.RoomListPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -39,9 +38,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InviteUserToRoomDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private final RoomListPanel publicRooms;
-	private final RoomListPanel privateRooms;
+	private DialogButton cancel;
+	private RoomListPanel publicRooms;
+	private RoomListPanel privateRooms;
 	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg");
 	private Long userId;
 
@@ -59,10 +58,17 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 	}
 
 	public InviteUserToRoomDialog(String id) {
-		super(id, Application.getString("1131"));
-		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<Room>(), Application.getString("1135")));
-		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<Room>(), Application.getString("1135")));
+		super(id, "");
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("1131"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		add(publicRooms = new InviteRoomListPanel("publicRooms", new ArrayList<Room>(), getString("1135")));
+		add(privateRooms = new InviteRoomListPanel("privateRooms", new ArrayList<Room>(), getString("1135")));
 		add(inviteMsg);
+		super.onInitialize();
 	}
 
 	private static List<Room> getPrivateRooms(Long userId1, Long userId2, RoomDao roomDao) {

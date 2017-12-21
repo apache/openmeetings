@@ -81,15 +81,8 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(SignInDialog.class, getWebAppRootKey());
 	private Form<String> form;
-	private DialogButton loginBtn = new DialogButton("login", Application.getString("112")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public boolean isIndicating() {
-			return true;
-		}
-	};
-	private DialogButton registerBtn = new DialogButton("register", Application.getString("123"));
+	private DialogButton loginBtn;
+	private DialogButton registerBtn;
 	private String password;
 	private String login;
 	private boolean rememberMe = false;
@@ -99,9 +92,24 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public SignInDialog(String id) {
-		super(id, Application.getString("108"));
+		super(id, "");
 		add(form = new SignInForm("signin"));
 		add(new OmAjaxClientInfoBehavior());
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("108"));
+		loginBtn = new DialogButton("login", getString("112")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isIndicating() {
+				return true;
+			}
+		};
+		registerBtn = new DialogButton("register", getString("123"));
+		super.onInitialize();
 	}
 
 	public void setRegisterDialog(RegisterDialog r) {
@@ -224,9 +232,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 			}
 			add(feedback.setOutputMarkupId(true));
 			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(SignInDialog.this, "login")));
-			loginField.setLabel(Model.of(Application.getString("114")));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
-			passField.setLabel(Model.of(Application.getString("110")));
 			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).get();
 			int selectedLdap = getBean(ConfigurationDao.class).getInt(CONFIG_DEFAULT_LDAP_ID, 0);
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
@@ -289,6 +295,13 @@ public class SignInDialog extends NonClosableDialog<String> {
 						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
 					}
 				}).setVisible(allowOAuthLogin()));
+		}
+
+		@Override
+		protected void onInitialize() {
+			loginField.setLabel(Model.of(getString("114")));
+			passField.setLabel(Model.of(getString("110")));
+			super.onInitialize();
 		}
 
 		private void alreadyLoggedIn() {

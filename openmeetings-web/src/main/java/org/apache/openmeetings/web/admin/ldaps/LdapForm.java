@@ -23,7 +23,6 @@ import static org.apache.openmeetings.web.app.Application.getBean;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -54,13 +53,11 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 
-		add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("165"))));
 		add(new CheckBox("active"));
 		add(new DateLabel("inserted"));
 		add(new Label("insertedby.login"));
 		add(new DateLabel("updated"));
 		add(new Label("updatedby.login"));
-		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(Application.getString("1115"))));
 		add(new CheckBox("addDomainToUserName"));
 		add(new TextField<String>("domain"));
 		add(new TextArea<String>("comment"));
@@ -68,6 +65,13 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	@Override
+	protected void onInitialize() {
+		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
+		add(new RequiredTextField<String>("configFileName").setLabel(Model.of(getString("1115"))));
+		super.onInitialize();
 	}
 
 	@Override

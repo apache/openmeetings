@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -44,12 +43,17 @@ public class SettingsPanel extends UserBasePanel {
 	public static final int EDIT_PROFILE_TAB_ID = 2;
 	public static final int SEARCH_TAB_ID = 3;
 	public static final int DASHBOARD_TAB_ID = 4;
+	public final int active;
 
 	public SettingsPanel(String id, int active) {
 		super(id);
+		this.active = active;
+	}
 
+	@Override
+	protected void onInitialize() {
 		List<ITab> tabs = new ArrayList<>();
-		tabs.add(new AjaxTab(Model.of(Application.getString("1170"))) {
+		tabs.add(new AjaxTab(Model.of(getString("1170"))) {
 			private static final long serialVersionUID = 1L;
 			UserProfilePanel profilePanel = null;
 
@@ -71,7 +75,7 @@ public class SettingsPanel extends UserBasePanel {
 				return super.load(target);
 			}
 		});
-		tabs.add(new AjaxTab(Model.of(Application.getString("1188"))) {
+		tabs.add(new AjaxTab(Model.of(getString("1188"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -79,7 +83,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new MessagesContactsPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(Application.getString("1171"))) {
+		tabs.add(new AbstractTab(Model.of(getString("1171"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -87,7 +91,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new ProfilePanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(Application.getString("1172"))) {
+		tabs.add(new AbstractTab(Model.of(getString("1172"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -95,7 +99,7 @@ public class SettingsPanel extends UserBasePanel {
 				return new UserSearchPanel(panelId);
 			}
 		});
-		tabs.add(new AbstractTab(Model.of(Application.getString("1548"))) {
+		tabs.add(new AbstractTab(Model.of(getString("1548"))) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -104,5 +108,7 @@ public class SettingsPanel extends UserBasePanel {
 			}
 		});
 		add(new TabbedPanel("tabs", tabs, new Options("active", active)).setActiveTab(active));
+
+		super.onInitialize();
 	}
 }

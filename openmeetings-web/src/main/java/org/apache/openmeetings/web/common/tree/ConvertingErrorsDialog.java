@@ -27,7 +27,6 @@ import java.util.List;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItemLog;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -59,8 +58,14 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 	};
 
 	public ConvertingErrorsDialog(String id, IModel<BaseFileItem> model) {
-		super(id, Application.getString("887"), model);
+		super(id, "", model);
 		add(container.add(message.setVisible(false), logView.setVisible(false)).setOutputMarkupId(true));
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("887"));
+		super.onInitialize();
 	}
 
 	@Override
@@ -85,7 +90,7 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 		List<FileItemLog> logs = getBean(FileItemLogDao.class).get(f);
 		if (f.getHash() == null) {
 			message.setVisible(true);
-			message.setDefaultModelObject(Application.getString("888"));
+			message.setDefaultModelObject(getString("888"));
 		} else if (!f.exists()) {
 			message.setVisible(true);
 			message.setDefaultModelObject(getString(f.getType() == BaseFileItem.Type.Recording ? "1595" : "convert.errors.file.missing"));

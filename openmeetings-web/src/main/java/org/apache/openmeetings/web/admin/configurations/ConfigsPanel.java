@@ -48,9 +48,12 @@ public class ConfigsPanel extends AdminBasePanel {
 
 	public ConfigsPanel(String id) {
 		super(id);
+	}
 
+	@Override
+	protected void onInitialize() {
 		SearchableDataView<Configuration> dataView = new SearchableDataView<Configuration>("configList"
-			, new SearchableDataProvider<>(ConfigurationDao.class)) {
+				, new SearchableDataProvider<>(ConfigurationDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -92,5 +95,6 @@ public class ConfigsPanel extends AdminBasePanel {
 		form = new ConfigForm("form", listContainer, new Configuration());
 		form.showNewRecord();
 		add(form);
+		super.onInitialize();
 	}
 }

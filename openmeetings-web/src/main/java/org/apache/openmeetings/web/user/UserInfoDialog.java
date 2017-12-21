@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserContactDao;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.user.profile.UserProfilePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -37,16 +36,25 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 public class UserInfoDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer container = new WebMarkupContainer("container");
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private DialogButton message = new DialogButton("message", Application.getString("1253"));
-	private DialogButton contacts = new DialogButton("contacts", Application.getString("1186"));
+	private DialogButton cancel;
+	private DialogButton message;
+	private DialogButton contacts;
 	private MessageDialog newMessage;
 	private long userId;
 
 	public UserInfoDialog(String id, MessageDialog newMessage) {
-		super(id, Application.getString("1235"));
-		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
+		super(id, "");
 		this.newMessage = newMessage;
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("1235"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		message = new DialogButton("message", getString("1253"));
+		contacts = new DialogButton("contacts", getString("1186"));
+		add(container.add(new WebMarkupContainer("body")).setOutputMarkupId(true));
+		super.onInitialize();
 	}
 
 	public void open(IPartialPageRequestHandler handler, long userId) {

@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.Version.getVersion;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.basic.Label;
 
@@ -37,12 +36,18 @@ public class AboutDialog extends AbstractDialog<String> {
 	private static final long serialVersionUID = 1L;
 
 	public AboutDialog(String id) {
-		super(id, Application.getString("1549"));
+		super(id, "");
 
 		add(new Label("name", getApplicationName()));
 		add(new Label("version", getVersion()));
 		add(new Label("revision", getRevision()));
 		add(new Label("buildDate", getBuildDate()));
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("1549"));
+		super.onInitialize();
 	}
 
 	@Override

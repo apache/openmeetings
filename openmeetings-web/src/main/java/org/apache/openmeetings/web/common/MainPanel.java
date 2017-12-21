@@ -100,10 +100,10 @@ public class MainPanel extends Panel {
 	private static final String DELIMITER = "     ";
 	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	private String uid = null;
-	private final MenuPanel menu;
+	private MenuPanel menu;
 	private final WebMarkupContainer topControls = new WebMarkupContainer("topControls");
 	private final WebMarkupContainer topLinks = new WebMarkupContainer("topLinks");
-	private final MarkupContainer contents;
+	private final MarkupContainer contents = new WebMarkupContainer("contents");
 	private ChatPanel chat;
 	private MessageDialog newMessage;
 	private UserInfoDialog userInfo;
@@ -129,8 +129,6 @@ public class MainPanel extends Panel {
 		setAuto(true);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
-		menu = new MenuPanel("menu", getMainMenu());
-		contents = new WebMarkupContainer("contents");
 		pingTimer.stop(null);
 		add(pingTimer, new WebSocketBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -187,7 +185,7 @@ public class MainPanel extends Panel {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		menu = new MenuPanel("menu", getMainMenu());
 		add(topControls.setOutputMarkupPlaceholderTag(true).setMarkupId("topControls"));
 		add(contents.add(getClient() == null || panel == null ? EMPTY : panel).setOutputMarkupId(true).setMarkupId("contents"));
 		topControls.add(menu.setVisible(false), topLinks.setVisible(false).setOutputMarkupPlaceholderTag(true).setMarkupId("topLinks"));
@@ -301,6 +299,7 @@ public class MainPanel extends Panel {
 				setResponsePage(Application.get().getSignInPageClass());
 			}
 		});
+		super.onInitialize();
 	}
 
 	private IMenuItem getSubItem(String lbl, String title, MenuActions action, MenuParams param) {
@@ -321,7 +320,7 @@ public class MainPanel extends Panel {
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("290", "1450", MenuActions.dashboardModuleStartScreen, null));
 			l.add(getSubItem("291", "1451", MenuActions.dashboardModuleCalendar, null));
-			mmenu.add(new OmMenuItem(Application.getString("124"), l));
+			mmenu.add(new OmMenuItem(getString("124"), l));
 		}
 		{
 			// Conference Menu Points
@@ -346,13 +345,13 @@ public class MainPanel extends Panel {
 					}
 				});
 			}
-			mmenu.add(new OmMenuItem(Application.getString("792"), l));
+			mmenu.add(new OmMenuItem(getString("792"), l));
 		}
 		{
 			// Recording Menu Points
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("395", "1452", MenuActions.recordModule, null));
-			mmenu.add(new OmMenuItem(Application.getString("395"), l));
+			mmenu.add(new OmMenuItem(getString("395"), l));
 		}
 		Set<Right> r = WebSession.getRights();
 		boolean isAdmin = hasAdminLevel(r);
@@ -373,7 +372,7 @@ public class MainPanel extends Panel {
 				l.add(getSubItem("367", "1461", MenuActions.adminModuleBackup, null));
 				l.add(getSubItem("main.menu.admin.email", "main.menu.admin.email.desc", MenuActions.adminModuleEmail, null));
 			}
-			mmenu.add(new OmMenuItem(Application.getString("6"), l));
+			mmenu.add(new OmMenuItem(getString("6"), l));
 		}
 		return mmenu;
 	}

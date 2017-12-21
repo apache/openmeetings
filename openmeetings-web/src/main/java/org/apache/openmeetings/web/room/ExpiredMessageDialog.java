@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 
@@ -33,8 +32,14 @@ public class ExpiredMessageDialog extends MessageDialog {
 	private final RoomMenuPanel menu;
 
 	public ExpiredMessageDialog(String id, String message, RoomMenuPanel menu) {
-		super(id, Application.getString("204"), message, DialogButtons.OK, DialogIcon.ERROR);
+		super(id, "", message, DialogButtons.OK, DialogIcon.ERROR);
 		this.menu = menu;
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("204"));
+		super.onInitialize();
 	}
 
 	@Override

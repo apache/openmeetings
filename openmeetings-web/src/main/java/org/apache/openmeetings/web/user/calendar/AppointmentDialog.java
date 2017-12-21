@@ -51,7 +51,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.OmDateTimePicker;
@@ -105,13 +104,13 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, getWebAppRootKey());
 
 	private AppointmentForm form;
-	private DialogButton save = new DialogButton("save", Application.getString("144"));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private DialogButton delete = new DialogButton("delete", Application.getString("80"));
-	private DialogButton enterRoom = new DialogButton("enterRoom", Application.getString("1282"));
+	private DialogButton save;
+	private DialogButton cancel;
+	private DialogButton delete;
+	private DialogButton enterRoom;
 	private final CalendarPanel calendarPanel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	final MessageDialog confirmDelete;
+	MessageDialog confirmDelete;
 	private final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
 	private final RadioGroup<InviteeType> rdi = new RadioGroup<>("inviteeType", Model.of(InviteeType.user));
 	private final Select2MultiChoice<Group> groups = new Select2MultiChoice<>("groups"
@@ -123,14 +122,23 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		, group
 	}
 
-	public AppointmentDialog(String id, String title, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
-		super(id, title, model, true);
+	public AppointmentDialog(String id, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
+		super(id, "", model, true);
 		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
 		this.calendarPanel = calendarPanel;
 		setOutputMarkupId(true);
 		form = new AppointmentForm("appForm", model);
 		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", Application.getString("80"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("815"));
+		save = new DialogButton("save", getString("144"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		delete = new DialogButton("delete", getString("80"));
+		enterRoom = new DialogButton("enterRoom", getString("1282"));
+		confirmDelete = new MessageDialog("confirmDelete", getString("80"), getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -141,6 +149,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			}
 		};
 		add(confirmDelete);
+		super.onInitialize();
 	}
 
 	@Override
@@ -326,7 +335,6 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			createRoom = myRoomsAllowed;
 			add(feedback.setOutputMarkupId(true));
 			//General
-			add(new RequiredTextField<String>("title").setLabel(Model.of(Application.getString("572"))));
 			add(ownerPanel.add(owner));
 			boolean showGroups = AuthLevelUtil.hasAdminLevel(getRights());
 			add(rdi.add(new AjaxFormChoiceComponentUpdatingBehavior() {
@@ -339,7 +347,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}));
 			groupContainer.add(
-				groups.setLabel(Model.of(Application.getString("126"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true)
+				groups.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true)
 				, new Radio<>("group", Model.of(InviteeType.group))
 			);
 			if (showGroups) {
@@ -380,7 +388,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 				}
 			}.setVisible(myRoomsAllowed));
 			add(createRoomBlock.add(roomType, new CheckBox("moderated")).setEnabled(createRoom).setVisible(myRoomsAllowed).setOutputMarkupId(true));
-			add(groom.setRequired(true).setLabel(Model.of(Application.getString("406"))).setEnabled(!createRoom).setOutputMarkupId(true));
+			groom.setRequired(true).setEnabled(!createRoom).setOutputMarkupId(true);
 			add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 			sipContainer.add(new Label("room.confno", "")).setVisible(false);
 
@@ -477,9 +485,12 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		@Override
 		protected void onInitialize() {
-			super.onInitialize();
+			groups.setLabel(Model.of(getString("126")));
+			add(new RequiredTextField<String>("title").setLabel(Model.of(getString("572"))));
 			add(start.setLabel(Model.of(getString("570"))).setRequired(true)
-					, end.setLabel(Model.of(getString("571"))).setRequired(true));
+					, end.setLabel(Model.of(getString("571"))).setRequired(true)
+					, groom.setLabel(Model.of(getString("406"))));
+			super.onInitialize();
 		}
 
 		private List<Room> getRoomList() {
@@ -498,7 +509,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		@Override
 		protected void onValidate() {
 			if (null != start.getConvertedInput() && null != end.getConvertedInput() && end.getConvertedInput().isBefore(start.getConvertedInput())) {
-				error(Application.getString("1592"));
+				error(getString("1592"));
 			}
 		}
 	}

@@ -51,30 +51,12 @@ public class RoomsPanel extends UserPanel {
 	private final Label roomNameLbl = new Label("roomName", Model.of((String)null));
 	private final Label roomCommentLbl = new Label("roomComment", Model.of((String)null));
 	private List<Client> clientsInRoom = null;
+	private final List<Room> rooms;
 	private Long roomId = 0L;
 
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
-		add(new RoomListPanel("list", rooms, Application.getString("131")) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onContainerClick(AjaxRequestTarget target, Room r) {
-				roomId = r.getId();
-				updateRoomDetails(target);
-			}
-
-			@Override
-			public void onRefreshClick(AjaxRequestTarget target, Room r) {
-				super.onRefreshClick(target, r);
-				roomId = r.getId();
-				updateRoomDetails(target);
-			}
-		});
-
-		// Users in this Room
-		add(details.setOutputMarkupId(true).setVisible(!rooms.isEmpty()));
-		details.add(roomIdLbl, roomNameLbl, roomCommentLbl);
+		this.rooms = rooms;
 		clients = new ListView<Client>("clients", clientsInRoom){
 			private static final long serialVersionUID = 1L;
 
@@ -111,7 +93,33 @@ public class RoomsPanel extends UserPanel {
 				item.add(new Label("from", client.getConnectedSince()));
 			}
 		};
+	}
+
+	@Override
+	protected void onInitialize() {
+		add(new RoomListPanel("list", rooms, getString("131")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onContainerClick(AjaxRequestTarget target, Room r) {
+				roomId = r.getId();
+				updateRoomDetails(target);
+			}
+
+			@Override
+			public void onRefreshClick(AjaxRequestTarget target, Room r) {
+				super.onRefreshClick(target, r);
+				roomId = r.getId();
+				updateRoomDetails(target);
+			}
+		});
+
+		// Users in this Room
+		add(details.setOutputMarkupId(true).setVisible(!rooms.isEmpty()));
+		details.add(roomIdLbl, roomNameLbl, roomCommentLbl);
 		details.add(clientsContainer.add(clients.setOutputMarkupId(true)).setOutputMarkupId(true));
+
+		super.onInitialize();
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {

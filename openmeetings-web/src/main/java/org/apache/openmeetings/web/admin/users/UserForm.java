@@ -47,7 +47,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.util.DateLabel;
@@ -108,7 +107,7 @@ public class UserForm extends AdminBaseForm<User> {
 		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getModelObject())));
-		login.setLabel(Model.of(Application.getString("108")));
+		login.setLabel(Model.of(getString("108")));
 		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
 
 		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {

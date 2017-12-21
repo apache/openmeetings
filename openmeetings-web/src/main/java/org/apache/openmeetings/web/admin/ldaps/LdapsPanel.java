@@ -48,8 +48,12 @@ public class LdapsPanel extends AdminBasePanel {
 
 	public LdapsPanel(String id) {
 		super(id);
+	}
+
+	@Override
+	protected void onInitialize() {
 		SearchableDataView<LdapConfig> dataView = new SearchableDataView<LdapConfig>("ldapList"
-			, new SearchableDataProvider<>(LdapConfigDao.class)) {
+				, new SearchableDataProvider<>(LdapConfigDao.class)) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -91,5 +95,7 @@ public class LdapsPanel extends AdminBasePanel {
 		form = new LdapForm("form", listContainer, new LdapConfig());
 		form.showNewRecord();
 		add(form);
+
+		super.onInitialize();
 	}
 }
