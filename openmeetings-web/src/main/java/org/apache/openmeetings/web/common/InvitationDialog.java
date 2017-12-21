@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.room.Invitation;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
@@ -31,14 +30,23 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
-	public final DialogButton generate = new DialogButton("generate", Application.getString("1526"));
-	public final DialogButton send = new DialogButton("send", Application.getString("218"));
-	public final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	public DialogButton generate;
+	public DialogButton send;
+	public DialogButton cancel;
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
-		super(id, Application.getString("213"),_form.getModel());
+		super(id, "",_form.getModel());
 		add(form = _form);
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("213"));
+		generate = new DialogButton("generate", getString("1526"));
+		send = new DialogButton("send", getString("218"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		super.onInitialize();
 	}
 
 	@Override

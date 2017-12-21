@@ -30,7 +30,6 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -68,9 +67,9 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	private CalendarPanel calendarPanel;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private DialogButton save = new DialogButton("save", Application.getString("144"));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
-	private DialogButton delete = new DialogButton("delete", Application.getString("80"));
+	private DialogButton save;
+	private DialogButton cancel;
+	private DialogButton delete;
 	private UserCalendarForm form;
 	private MessageDialog confirmDelete;
 	private List<OmCalendar> cals; //List of calendars for syncing
@@ -87,12 +86,20 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	private DIALOG_TYPE type = DIALOG_TYPE.UPDATE_CALENDAR;
 	private Appointment appointment = null;
 
-	public CalendarDialog(String id, String title, final CalendarPanel calendarPanel, CompoundPropertyModel<OmCalendar> model) {
-		super(id, title, true);
+	public CalendarDialog(String id, final CalendarPanel calendarPanel, CompoundPropertyModel<OmCalendar> model) {
+		super(id, "", true);
 		this.calendarPanel = calendarPanel;
 		form = new UserCalendarForm("calform", model);
 		add(form);
-		confirmDelete = new MessageDialog("confirmDelete", Application.getString("80"), Application.getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN) {
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("calendar.dialogTitle"));
+		save = new DialogButton("save", getString("144"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		delete = new DialogButton("delete", getString("80"));
+		confirmDelete = new MessageDialog("confirmDelete", getString("80"), getString("833"), DialogButtons.OK_CANCEL, DialogIcon.WARN) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -105,6 +112,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 			}
 		};
 		add(confirmDelete);
+		super.onInitialize();
 	}
 
 	/**
@@ -409,9 +417,9 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 		RequiredTextField<String> title = new RequiredTextField<>("title");
 
 		// Fields required for adding Google Calendar
-		Label urlLabel = new Label("urlLabel", Application.getString("calendar.url")),
-				userLabel = new Label("userLabel", Application.getString("114")),
-				passLabel = new Label("passLabel", Application.getString("110"));
+		private Label urlLabel;
+		private Label userLabel;
+		private Label passLabel;
 
 		AjaxCheckBox gcal; // Checkbox for Google Calendar
 		UrlTextField url = new UrlTextField("url", Model.of(""), new UrlValidator() {
@@ -438,6 +446,13 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 		public UserCalendarForm(String id, CompoundPropertyModel<OmCalendar> model) {
 			super(id, model);
 			setOutputMarkupId(true);
+		}
+
+		@Override
+		protected void onInitialize() {
+			urlLabel = new Label("urlLabel", getString("calendar.url"));
+			userLabel = new Label("userLabel", getString("114"));
+			passLabel = new Label("passLabel", getString("110"));
 			add(title);
 			add(feedback.setOutputMarkupId(true));
 
@@ -463,6 +478,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 			};
 
 			add(gcal);
+			super.onInitialize();
 		}
 
 		@Override
@@ -510,23 +526,23 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 				passLabel.setVisible(false);
 
 				//Google Calendar ID
-				urlLabel.setDefaultModelObject(Application.getString("calendar.googleID"));
+				urlLabel.setDefaultModelObject(getString("calendar.googleID"));
 				url.setEnabled(true);
-				url.setLabel(Model.<String>of(Application.getString("calendar.googleID")));
+				url.setLabel(Model.<String>of(getString("calendar.googleID")));
 
 				//Google API Key
-				userLabel.setDefaultModelObject(Application.getString("calendar.googleKey"));
+				userLabel.setDefaultModelObject(getString("calendar.googleKey"));
 				username.setEnabled(true);
 			} else {
 				gcal.setModelObject(false);
 				pass.setVisible(true);
 				passLabel.setVisible(true);
 
-				userLabel.setDefaultModelObject(Application.getString("114"));
+				userLabel.setDefaultModelObject(getString("114"));
 				username.setModelObject(null);
 
-				urlLabel.setDefaultModelObject(Application.getString("calendar.url"));
-				url.setLabel(Model.of(Application.getString("calendar.url")));
+				urlLabel.setDefaultModelObject(getString("calendar.url"));
+				url.setLabel(Model.of(getString("calendar.url")));
 			}
 
 			//Add new AttributeModifier to change the type of URLTextField, to text for
@@ -565,7 +581,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 							log.error("Error executing the TestConnection");
 						}
 
-						error(Application.getString("calendar.error"));
+						error(getString("calendar.error"));
 						break;
 				}
 			}

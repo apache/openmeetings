@@ -26,7 +26,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.DataViewContainer;
 import org.apache.openmeetings.web.data.OmOrderByBorder;
@@ -49,14 +48,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class UsersPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
-	private final MessageDialog warning = new MessageDialog("warning", Application.getString("797"), Application.getString("warn.nogroup"), DialogButtons.OK, DialogIcon.WARN) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
-			//no-op
-		}
-	};
 	private UserForm form;
 
 	public UsersPanel(String id) {
@@ -102,10 +93,23 @@ public class UsersPanel extends AdminBasePanel {
 			.addLink(new OmOrderByBorder<>("orderByLastName", "lastname", container));
 		add(container.getLinks());
 		add(navigator);
+	}
+
+	@Override
+	protected void onInitialize() {
+		final MessageDialog warning = new MessageDialog("warning", getString("797"), getString("warn.nogroup"), DialogButtons.OK, DialogIcon.WARN) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
+				//no-op
+			}
+		};
 
 		UserDao userDao = getBean(UserDao.class);
 		form = new UserForm("form", listContainer, userDao.getNewUserInstance(userDao.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);
+		super.onInitialize();
 	}
 }

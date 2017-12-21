@@ -27,7 +27,6 @@ import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.db.entity.basic.Configuration.Type;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -67,47 +66,6 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		add(new DropDownChoice<>("type", Arrays.asList(Type.values()), new IChoiceRenderer<Type>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public String getIdValue(Type rt, int index) {
-				return rt.name();
-			}
-
-			@Override
-			public Object getDisplayValue(Type rt) {
-				return rt.name();
-			}
-
-			@Override
-			public Type getObject(String id, IModel<? extends List<? extends Type>> choices) {
-				for (Type rt : choices.getObject()) {
-					if (rt.name().equals(id)) {
-						return rt;
-					}
-				}
-				return null;
-			}
-		}).setLabel(Model.of(Application.getString("45"))).add(new AjaxFormComponentUpdatingBehavior("change") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				update(target);
-			}
-		}));
-		add(new RequiredTextField<String>("key").setLabel(Model.of(Application.getString("265"))).add(new IValidator<String>(){
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void validate(IValidatable<String> validatable) {
-				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
-				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {
-					validatable.error(new ValidationError(Application.getString("error.cfg.exist")));
-				}
-			}
-		}));
 		valueS = new TextField<>("valueS");
 		valueN = new TextField<Long>("valueN") {
 			private static final long serialVersionUID = 1L;
@@ -152,6 +110,47 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		add(new DropDownChoice<>("type", Arrays.asList(Type.values()), new IChoiceRenderer<Type>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public String getIdValue(Type rt, int index) {
+				return rt.name();
+			}
+
+			@Override
+			public Object getDisplayValue(Type rt) {
+				return rt.name();
+			}
+
+			@Override
+			public Type getObject(String id, IModel<? extends List<? extends Type>> choices) {
+				for (Type rt : choices.getObject()) {
+					if (rt.name().equals(id)) {
+						return rt;
+					}
+				}
+				return null;
+			}
+		}).setLabel(Model.of(getString("45"))).add(new AjaxFormComponentUpdatingBehavior("change") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				update(target);
+			}
+		}));
+		add(new RequiredTextField<String>("key").setLabel(Model.of(getString("265"))).add(new IValidator<String>(){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void validate(IValidatable<String> validatable) {
+				Configuration c = getBean(ConfigurationDao.class).forceGet(validatable.getValue());
+				if (c != null && !c.isDeleted() && !c.getId().equals(ConfigForm.this.getModelObject().getId())) {
+					validatable.error(new ValidationError(getString("error.cfg.exist")));
+				}
+			}
+		}));
 		add(valueS.setLabel(Model.of(getString("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(valueN.setLabel(Model.of(getString("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
 		add(valueB.setLabel(Model.of(getString("271"))).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));

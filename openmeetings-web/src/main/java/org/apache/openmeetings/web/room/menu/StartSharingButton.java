@@ -41,7 +41,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.room.VideoSettings;
@@ -70,7 +69,6 @@ public class StartSharingButton extends OmButton {
 		this.uid = uid;
 		setOutputMarkupPlaceholderTag(true);
 		setVisible(false);
-		add(AttributeModifier.replace(ATTR_TITLE, Application.getString("1480")));
 		add(download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 			private static final long serialVersionUID = 1L;
 
@@ -86,6 +84,12 @@ public class StartSharingButton extends OmButton {
 				return srs;
 			}
 		}));
+	}
+
+	@Override
+	protected void onInitialize() {
+		add(AttributeModifier.replace(ATTR_TITLE, getString("1480")));
+		super.onInitialize();
 	}
 
 	@Override

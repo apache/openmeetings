@@ -75,15 +75,18 @@ public class LangPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, getWebAppRootKey());
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final LangForm langForm;
-	private FileUploadField fileUploadField;
+	private LangForm langForm;
+	private final FileUploadField fileUploadField = new FileUploadField("fileInput");
 
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	Map.Entry<Long, Locale> language;
 
 	public LangPanel(String id) {
 		super(id);
+	}
 
+	@Override
+	protected void onInitialize() {
 		// Create feedback panels
 		add(feedback.setOutputMarkupId(true));
 		language = new AbstractMap.SimpleEntry<>(1L, Locale.ENGLISH);
@@ -146,7 +149,6 @@ public class LangPanel extends AdminBasePanel {
 		add(container.getLinks());
 		add(navigator);
 		langForm = new LangForm("langForm", listContainer, this);
-		fileUploadField = new FileUploadField("fileInput");
 		langForm.add(fileUploadField);
 		langForm.add(new UploadProgressBar("progress", langForm, fileUploadField));
 		fileUploadField.add(new AjaxFormSubmitBehavior(langForm, "change") {
@@ -240,11 +242,6 @@ public class LangPanel extends AdminBasePanel {
 			}
 		});
 		add(BootstrapFileUploadBehavior.INSTANCE);
-	}
-
-	@Override
-	protected void onInitialize() {
-		super.onInitialize();
 		add(new ConfirmableAjaxBorder("deleteLangBtn", getString("80"), getString("833")) {
 			private static final long serialVersionUID = 1L;
 
@@ -257,6 +254,7 @@ public class LangPanel extends AdminBasePanel {
 				target.add(listContainer);
 			}
 		});
+		super.onInitialize();
 	}
 
 	public LangForm getLangForm() {

@@ -31,7 +31,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -50,16 +49,24 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton create = new DialogButton("create", Application.getString("22"));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	private DialogButton create;
+	private DialogButton cancel;
 	private final Long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public CreatePollDialog(String id, Long roomId) {
-		super(id, Application.getString("18"), new CompoundPropertyModel<>(new RoomPoll()));
+		super(id, "", new CompoundPropertyModel<>(new RoomPoll()));
 		this.roomId = roomId;
 		add(form = new PollForm("form", getModel()));
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("18"));
+		create = new DialogButton("create", getString("22"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		super.onInitialize();
 	}
 
 	public void updateModel(AjaxRequestTarget target) {
@@ -105,7 +112,11 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 		public PollForm(String id, IModel<RoomPoll> model) {
 			super(id, model);
-			add(new RequiredTextField<String>("name").setLabel(Model.of(Application.getString("1410"))));
+		}
+
+		@Override
+		protected void onInitialize() {
+			add(new RequiredTextField<String>("name").setLabel(Model.of(getString("1410"))));
 			add(new TextArea<String>("question"));
 			add(new DropDownChoice<>("type", Arrays.asList(RoomPoll.Type.values())
 					, new ChoiceRenderer<RoomPoll.Type>() {
@@ -121,8 +132,9 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 							return pt.name();
 						}
 					})
-					.setRequired(true).setLabel(Model.of(Application.getString("21"))));
+					.setRequired(true).setLabel(Model.of(getString("21"))));
 			add(feedback);
+			super.onInitialize();
 		}
 	}
 }

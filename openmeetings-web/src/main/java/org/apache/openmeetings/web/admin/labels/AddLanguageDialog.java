@@ -25,7 +25,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
@@ -43,13 +42,13 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class AddLanguageDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final DialogButton add = new DialogButton("add", Application.getString("366"));
+	private DialogButton add;
 	private final Form<Void> form = new Form<>("addLangForm");
 	private final RequiredTextField<String> iso = new RequiredTextField<>("iso", Model.of(""));
 	private final LangPanel langPanel;
 
 	public AddLanguageDialog(String id, final LangPanel langPanel) {
-		super(id, Application.getString("362"));
+		super(id, "");
 		this.langPanel = langPanel;
 		add(form.add(feedback, iso.setOutputMarkupId(true)));
 		iso.add(new IValidator<String>() {
@@ -72,6 +71,13 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 				}
 			}
 		});
+	}
+
+	@Override
+	protected void onInitialize() {
+		add = new DialogButton("add", getString("366"));
+		getTitle().setObject(getString("362"));
+		super.onInitialize();
 	}
 
 	@Override

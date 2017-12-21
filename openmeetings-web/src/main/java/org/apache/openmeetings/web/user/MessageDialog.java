@@ -84,8 +84,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private static final long serialVersionUID = 1L;
 	private final Form<PrivateMessage> form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	protected DialogButton send = new DialogButton("send", Application.getString("218"));
-	private DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	protected DialogButton send;
+	private DialogButton cancel;
 	private final WebMarkupContainer roomParamsBlock = new WebMarkupContainer("roomParamsBlock");
 	private final WebMarkupContainer roomParams = new WebMarkupContainer("roomParams");
 	private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
@@ -94,8 +94,15 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<User>());
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
-		super(id, Application.getString("1209"), model);
+		super(id, "", model);
 		form = new Form<>("form", getModel());
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("1209"));
+		send = new DialogButton("send", getString("218"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
 
 		form.add(feedback.setOutputMarkupId(true));
 		form.add(new UserMultiChoice("to", modelTo).setRequired(true));
@@ -122,6 +129,8 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		roomParams.add(start);
 		roomParams.add(end);
 		add(form.setOutputMarkupId(true));
+
+		super.onInitialize();
 	}
 
 	public MessageDialog reset(boolean isPrivate) {

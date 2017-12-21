@@ -36,7 +36,6 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.util.CalendarHelper;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.CountryDropDown;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
@@ -79,7 +78,7 @@ public class GeneralUserForm extends Form<User> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(email);
-		email.setLabel(Model.of(Application.getString("119")));
+		email.setLabel(Model.of(getString("119")));
 		email.add(RfcCompliantEmailAddressValidator.getInstance());
 		add(new DropDownChoice<>("salutation"
 				, Arrays.asList(Salutation.values())
@@ -174,7 +173,7 @@ public class GeneralUserForm extends Form<User> {
 	protected void onValidate() {
 		User u = getModelObject();
 		if(!getBean(UserDao.class).checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
-			error(Application.getString("error.email.inuse"));
+			error(getString("error.email.inuse"));
 		}
 		super.onValidate();
 	}

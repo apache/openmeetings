@@ -36,7 +36,6 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
@@ -93,14 +92,6 @@ public class RoomSidebar extends Panel {
 		@Override
 		protected void populateItem(ListItem<Client> item) {
 			item.add(new RoomClientPanel("user", item, room));
-		}
-	};
-	private final NameDialog addFolder = new NameDialog("addFolder", Application.getString("712")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void onSubmit(AjaxRequestTarget target) {
-			roomFiles.createFolder(target, getModelObject());
 		}
 	};
 	private final AbstractDefaultAjaxBehavior roomAction = new AbstractDefaultAjaxBehavior() {
@@ -242,6 +233,14 @@ public class RoomSidebar extends Panel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		final NameDialog addFolder = new NameDialog("addFolder", getString("712")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				roomFiles.createFolder(target, getModelObject());
+			}
+		};
 		final Form<?> form = new Form<>("form");
 		ConfirmableBorderDialog confirmTrash = new ConfirmableBorderDialog("confirm-trash", getString("80"), getString("713"), form);
 		roomFiles = new RoomFilePanel("tree", room, addFolder, confirmTrash);

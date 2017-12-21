@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.room.SipDao;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -40,8 +39,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class SipDialerDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
-	private final DialogButton call = new DialogButton("call", Application.getString("1448"));
-	private final DialogButton close = new DialogButton("close", Application.getString("85"));
+	private DialogButton call;
+	private DialogButton close;
 	private final Form<String> form = new Form<>("form", Model.of(""));
 	private final TextField<String> number = new TextField<>("number", Model.of(""));
 	private final RoomPanel room;
@@ -68,8 +67,10 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
 		setTitle(Model.of(getString("1003")));
+		call = new DialogButton("call", getString("1448"));
+		close = new DialogButton("close", getString("85"));
+		super.onInitialize();
 	}
 
 	@Override

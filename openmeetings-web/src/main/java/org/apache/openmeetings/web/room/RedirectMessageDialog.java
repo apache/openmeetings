@@ -43,7 +43,7 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	private Component label;
 
 	public RedirectMessageDialog(String id, String labelId, boolean autoOpen, String url) {
-		super(id, Application.getString("204"), "", new ArrayList<DialogButton>(), DialogIcon.ERROR);
+		super(id, "", "", new ArrayList<DialogButton>(), DialogIcon.ERROR);
 		this.labelId = labelId;
 		this.url = url;
 		this.autoOpen = autoOpen;
@@ -51,10 +51,11 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
+		getTitle().setObject(getString("204"));
 		if (autoOpen) {
 			startTimer(null);
 		}
+		super.onInitialize();
 	}
 
 	private void startTimer(IPartialPageRequestHandler handler) {

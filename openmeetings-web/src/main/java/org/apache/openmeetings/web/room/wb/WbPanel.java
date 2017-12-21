@@ -70,7 +70,6 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -130,7 +129,7 @@ public class WbPanel extends AbstractWbPanel {
 
 		@Override
 		protected String getAddStr() {
-			return Application.getString("144");
+			return getString("144");
 		}
 	};
 

@@ -33,7 +33,6 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.room.InvitationManager;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.GroupChoiceProvider;
 import org.apache.openmeetings.web.common.InvitationForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -83,7 +82,7 @@ public class RoomInvitationForm extends InvitationForm {
 			}
 		}));
 		groupContainer.add(
-			groups.setLabel(Model.of(Application.getString("126"))).setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
+			groups.setRequired(true).add(new AjaxFormComponentUpdatingBehavior("change") {
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -98,6 +97,12 @@ public class RoomInvitationForm extends InvitationForm {
 		rdi.add(new Radio<>("user", Model.of(InviteeType.user)));
 		add(sipContainer.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		sipContainer.add(new Label("room.confno", "")).setVisible(false);
+	}
+
+	@Override
+	protected void onInitialize() {
+		groups.setLabel(Model.of(getString("126")));
+		super.onInitialize();
 	}
 
 	@Override

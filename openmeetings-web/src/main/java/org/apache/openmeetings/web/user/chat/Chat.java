@@ -45,7 +45,6 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -107,9 +106,13 @@ public class Chat extends Panel {
 		super(id);
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
+	}
 
+	@Override
+	protected void onInitialize() {
 		add(chatActivity);
 		add(new ChatForm("sendForm"));
+		super.onInitialize();
 	}
 
 	private Client getClient() {
@@ -126,16 +129,16 @@ public class Chat extends Panel {
 		return WebSocketHelper.getMessage(curUser, list, (o, u) -> o.put("img", getUrl(RequestCycle.get(), u)));
 	}
 
-	public static CharSequence getReinit() {
+	public CharSequence getReinit() {
 		StringBuilder sb = new StringBuilder("Chat.reinit(");
-		sb.append('\'').append(Application.getString("1494")).append('\'')
-				.append(',').append('\'').append(Application.getString("406")).append('\'');
+		sb.append('\'').append(getString("1494")).append('\'')
+				.append(',').append('\'').append(getString("406")).append('\'');
 		return sb.append("); ");
 	}
 
 	public CharSequence addRoom(Room r) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), Application.getString("406")));
+		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), getString("406")));
 		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
 		if (!list.isEmpty()) {
 			sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");

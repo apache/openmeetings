@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.common;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -37,8 +36,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public abstract class NameDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton add;
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	private DialogButton add;
+	private DialogButton cancel;
 	private final Form<String> form;
 	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final String name;
@@ -51,14 +50,14 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	public NameDialog(String id, String name) {
 		super(id, "", Model.of(name));
 		this.name = name;
-		add = new DialogButton("add", getAddStr());
 		form = new Form<>("form", getModel());
 	}
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
 		setTitle(Model.of(getTitleStr()));
+		add = new DialogButton("add", getAddStr());
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
 		form.add(new Label("label", getLabelStr())
 				, title = new RequiredTextField<>("title", getModel())
 				, feedback.setOutputMarkupId(true)
@@ -77,6 +76,7 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 				});
 		title.setLabel(Model.of(getLabelStr()));
 		add(form.setOutputMarkupId(true));
+		super.onInitialize();
 	}
 
 	@Override
@@ -120,6 +120,6 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	}
 
 	protected String getAddStr() {
-		return Application.getString("1261");
+		return getString("1261");
 	}
 }

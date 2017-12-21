@@ -25,7 +25,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.record.RecordingContainerData;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
@@ -35,18 +34,22 @@ public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");
-	private final NameDialog addFolder = new NameDialog("addFolder", Application.getString("712")) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void onSubmit(AjaxRequestTarget target) {
-			fileTree.createFolder(target, getModelObject());
-		}
-	};
-	private final FileTreePanel fileTree;
+	private FileTreePanel fileTree;
 
 	public RecordingsPanel(String id) {
 		super(id);
+	}
+
+	@Override
+	protected void onInitialize() {
+		final NameDialog addFolder = new NameDialog("addFolder", getString("712")) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				fileTree.createFolder(target, getModelObject());
+			}
+		};
 		add(fileTree = new FileTreePanel("tree", null, addFolder, null) {
 			private static final long serialVersionUID = 1L;
 
@@ -66,5 +69,7 @@ public class RecordingsPanel extends UserBasePanel {
 			}
 		});
 		add(video, info, addFolder);
+
+		super.onInitialize();
 	}
 }

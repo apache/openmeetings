@@ -28,11 +28,12 @@ import org.apache.wicket.markup.html.basic.Label;
 
 public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
+	private String title;
+	private String desc;
 
 	public RoomsSelectorPanel(String id, MenuParams param) {
 		super(id);
 
-		String title, desc;
 		RoomDao roomDao = Application.getBean(RoomDao.class);
 		switch (param) {
 			case myTabButton:
@@ -52,7 +53,12 @@ public class RoomsSelectorPanel extends UserBasePanel {
 				add(new RoomsPanel("rooms", roomDao.getPublicRooms()));
 				break;
 		}
-		add(new Label("title", Application.getString(title)));
-		add(new Label("desc", Application.getString(desc)));
+	}
+
+	@Override
+	protected void onInitialize() {
+		add(new Label("title", getString(title)));
+		add(new Label("desc", getString(desc)));
+		super.onInitialize();
 	}
 }

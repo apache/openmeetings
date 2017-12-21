@@ -35,7 +35,6 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.util.NonClosableMessageDialog;
@@ -66,8 +65,8 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	private static final Logger log = Red5LoggerFactory.getLogger(ForgetPasswordDialog.class, getWebAppRootKey());
 	private static final long serialVersionUID = 1L;
-	private final DialogButton send = new DialogButton("send", Application.getString("317"));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	private DialogButton send;
+	private DialogButton cancel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IValidator<String> emailValidator = RfcCompliantEmailAddressValidator.getInstance();
 	private final RequiredTextField<String> name = new RequiredTextField<>("name", Model.of((String)null));
@@ -143,8 +142,9 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onInitialize() {
-		super.onInitialize();
 		setTitle(Model.of(getString("312")));
+		send = new DialogButton("send", getString("317"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
 		add(form);
 		confirmDialog = new NonClosableMessageDialog("confirmDialog", getString("312"), getString("321")) {
 			private static final long serialVersionUID = 1L;
@@ -155,6 +155,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 			}
 		};
 		add(confirmDialog);
+		super.onInitialize();
 	}
 
 	private void updateLabel(IPartialPageRequestHandler handler) {

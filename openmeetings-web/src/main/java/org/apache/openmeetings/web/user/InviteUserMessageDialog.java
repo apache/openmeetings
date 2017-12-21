@@ -27,7 +27,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -40,15 +39,23 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InviteUserMessageDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private final DialogButton send = new DialogButton("send", Application.getString("213"));
-	private final DialogButton cancel = new DialogButton("cancel", Application.getString("lbl.cancel"));
+	private DialogButton send;
+	private DialogButton cancel;
 	private final Form<Void> form = new Form<>("form");
 	private final TextArea<String> message = new TextArea<>("message", Model.of(""));
 	private final CheckBox enterRoom = new CheckBox("enterRoom", Model.of(false));
 
 	public InviteUserMessageDialog(String id) {
-		super(id, Application.getString("1138"));
+		super(id, "");
 		add(form.add(message.setRequired(true), enterRoom.setOutputMarkupId(true)).setOutputMarkupId(true));
+	}
+
+	@Override
+	protected void onInitialize() {
+		getTitle().setObject(getString("1138"));
+		send = new DialogButton("send", getString("213"));
+		cancel = new DialogButton("cancel", getString("lbl.cancel"));
+		super.onInitialize();
 	}
 
 	public void open(IPartialPageRequestHandler handler, Long roomId, Long userId) {

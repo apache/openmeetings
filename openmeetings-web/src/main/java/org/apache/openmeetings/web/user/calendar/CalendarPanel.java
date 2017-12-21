@@ -41,7 +41,6 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -92,19 +91,21 @@ public class CalendarPanel extends UserBasePanel {
 		}
 	};
 	private Calendar calendar;
-	private final CalendarDialog calendarDialog;
+	private CalendarDialog calendarDialog;
 	private AppointmentDialog dialog;
-	private final WebMarkupContainer calendarListContainer;
+	private final WebMarkupContainer calendarListContainer = new WebMarkupContainer("calendarListContainer");
 	private transient HttpClient client = null; // Non-Serializable HttpClient.
 
 	public CalendarPanel(String id) {
 		super(id);
+	}
 
+	@Override
+	protected void onInitialize() {
 		final Form<Date> form = new Form<>("form");
 		add(form);
 
-		dialog = new AppointmentDialog("appointment", Application.getString("815")
-				, this, new CompoundPropertyModel<>(getDefault()));
+		dialog = new AppointmentDialog("appointment", this, new CompoundPropertyModel<>(getDefault()));
 		add(dialog);
 
 		boolean isRtl = isRtl();
@@ -118,24 +119,24 @@ public class CalendarPanel extends UserBasePanel {
 		options.set("timeFormat", Options.asString("H(:mm)"));
 
 		options.set("buttonText", new JSONObject()
-				.put("month", Application.getString("801"))
-				.put("week", Application.getString("800"))
-				.put("day", Application.getString("799"))
-				.put("today", Application.getString("1555")).toString());
+				.put("month", getString("801"))
+				.put("week", getString("800"))
+				.put("day", getString("799"))
+				.put("today", getString("1555")).toString());
 
 		JSONArray monthes = new JSONArray();
 		JSONArray shortMonthes = new JSONArray();
 		JSONArray days = new JSONArray();
 		JSONArray shortDays = new JSONArray();
 		// first week day must be Sunday
-		days.put(0, Application.getString("466"));
-		shortDays.put(0, Application.getString("459"));
+		days.put(0, getString("466"));
+		shortDays.put(0, getString("459"));
 		for (int i = 0; i < 12; i++) {
-			monthes.put(i, Application.getString(String.valueOf(469 + i)));
-			shortMonthes.put(i, Application.getString(String.valueOf(1556 + i)));
+			monthes.put(i, getString(String.valueOf(469 + i)));
+			shortMonthes.put(i, getString(String.valueOf(1556 + i)));
 			if (i + 1 < 7) {
-				days.put(i + 1, Application.getString(String.valueOf(460 + i)));
-				shortDays.put(i + 1, Application.getString(String.valueOf(453 + i)));
+				days.put(i + 1, getString(String.valueOf(460 + i)));
+				shortDays.put(i + 1, getString(String.valueOf(453 + i)));
 			}
 		}
 		options.set("monthNames", monthes.toString());
@@ -254,12 +255,10 @@ public class CalendarPanel extends UserBasePanel {
 		add(refreshTimer);
 		add(syncTimer);
 
-		calendarDialog = new CalendarDialog("calendarDialog", Application.getString("calendar.dialogTitle"),
-				this, new CompoundPropertyModel<>(getDefaultCalendar()));
+		calendarDialog = new CalendarDialog("calendarDialog", this, new CompoundPropertyModel<>(getDefaultCalendar()));
 
 		add(calendarDialog);
 
-		calendarListContainer = new WebMarkupContainer("calendarListContainer");
 		calendarListContainer.setOutputMarkupId(true);
 		calendarListContainer.add(new ListView<OmCalendar>("items", new LoadableDetachableModel<List<OmCalendar>>() {
 			private static final long serialVersionUID = 1L;
@@ -310,6 +309,8 @@ public class CalendarPanel extends UserBasePanel {
 		}));
 
 		add(calendarListContainer);
+
+		super.onInitialize();
 	}
 
 	@Override
@@ -379,11 +380,11 @@ public class CalendarPanel extends UserBasePanel {
 		}
 	}
 
-	private static OmCalendar getDefaultCalendar() {
+	private OmCalendar getDefaultCalendar() {
 		OmCalendar calendar = new OmCalendar();
 		calendar.setDeleted(false);
 		calendar.setOwner(getBean(UserDao.class).get(getUserId()));
-		calendar.setTitle(Application.getString("calendar.defaultTitle"));
+		calendar.setTitle(getString("calendar.defaultTitle"));
 		return calendar;
 	}
 
@@ -397,11 +398,11 @@ public class CalendarPanel extends UserBasePanel {
 		calendarDialog.open(target, type, a);
 	}
 
-	private static Appointment getDefault() {
+	private Appointment getDefault() {
 		Appointment a = new Appointment();
 		a.setReminder(Reminder.ical);
 		a.setOwner(getBean(UserDao.class).get(getUserId()));
-		a.setTitle(Application.getString("1444"));
+		a.setTitle(getString("1444"));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;
 	}

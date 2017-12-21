@@ -22,7 +22,6 @@ import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CALENDAR;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -39,11 +38,15 @@ public class StartWidgetView extends WidgetView {
 
 	public StartWidgetView(String id, Model<Widget> model) {
 		super(id, model);
+	}
+
+	@Override
+	protected void onInitialize() {
 		add(new WebMarkupContainer("step1").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step2").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step3").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
-		add(new Label("123msg", Application.getString("widget.start.desc")).setEscapeModelStrings(false));
+		add(new Label("123msg", getString("widget.start.desc")).setEscapeModelStrings(false));
 		add(new Button("start").add(new PublicRoomsEventBehavior()));
 		add(new Button("calendar").add(new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
@@ -53,6 +56,7 @@ public class StartWidgetView extends WidgetView {
 				((MainPage)getPage()).updateContents(CALENDAR, target);
 			}
 		}));
+		super.onInitialize();
 	}
 
 	private class PublicRoomsEventBehavior extends AjaxEventBehavior {
