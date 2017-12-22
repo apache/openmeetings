@@ -189,35 +189,37 @@ public class OmVideo {
 		if (ns !== null){
 			reset();
 		}
-		this.mode = _mode;
-		this.mic = _mic;
-		createStream();
+		nc.call("resize", new Responder(function ():void {
+			this.mode = _mode;
+			this.mic = _mic;
+			createStream();
 
-		ns.publish(name, (mode === BROADCAST) ? LIVE : mode);
-		ns.attachCamera(cam);
-		attachCamera(cam);
-		if (cam !== null) {
-			var videoStreamSettings:VideoStreamSettings = null;
-			debug("codec = " + params.videoCodec);
-			if (params.videoCodec === CODEC_H264) {
-				var vss:H264VideoStreamSettings = new H264VideoStreamSettings();
-				vss.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
-				videoStreamSettings = vss;
-			} else {
-				videoStreamSettings = new VideoStreamSettings();
+			ns.publish(name, (mode === BROADCAST) ? LIVE : mode);
+			ns.attachCamera(cam);
+			attachCamera(cam);
+			if (cam !== null) {
+				var videoStreamSettings:VideoStreamSettings = null;
+				debug("codec = " + params.videoCodec);
+				if (params.videoCodec === CODEC_H264) {
+					var vss:H264VideoStreamSettings = new H264VideoStreamSettings();
+					vss.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_5_1);
+					videoStreamSettings = vss;
+				} else {
+					videoStreamSettings = new VideoStreamSettings();
+				}
+				videoStreamSettings.setQuality(cam.bandwidth, cam.quality);
+				videoStreamSettings.setKeyFrameInterval(cam.keyFrameInterval);
+				debug("::camera settings ", cam.keyFrameInterval, cam.width, cam.height, cam.fps);
+				videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
+				ns.videoStreamSettings = videoStreamSettings;
 			}
-			videoStreamSettings.setQuality(cam.bandwidth, cam.quality);
-			videoStreamSettings.setKeyFrameInterval(cam.keyFrameInterval);
-			debug("::camera settings ", cam.keyFrameInterval, cam.width, cam.height, cam.fps);
-			videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
-			ns.videoStreamSettings = videoStreamSettings;
-		}
-		ns.attachAudio(mic);
-		_setVolume(volume);
+			ns.attachAudio(mic);
+			_setVolume(volume);
 
-		if (f !== null) {
-			f.call();
-		}
+			if (f !== null) {
+				f.call();
+			}
+		}), cam === null ? 0 : cam.width, cam === null ? 0 : cam.height);
 	}
 
 	private function _connect(_url:String, callback:Function):void {

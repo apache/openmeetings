@@ -98,8 +98,9 @@ public class StreamClient implements IClient {
 		return width;
 	}
 
-	public void setWidth(int width) {
+	public StreamClient setWidth(int width) {
 		this.width = width;
+		return this;
 	}
 
 	@Override
@@ -107,8 +108,9 @@ public class StreamClient implements IClient {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public StreamClient setHeight(int height) {
 		this.height = height;
+		return this;
 	}
 
 	@Override

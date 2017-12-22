@@ -1006,4 +1006,16 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		Client cl = getApp().getOmClientBySid(c.getSid());
 		return new CheckDto(cl);
 	}
+
+	public void resize(Double width, Double height) {
+		if (width == null || height == null) {
+			return;
+		}
+		IConnection current = Red5.getConnectionLocal();
+		StreamClient c = sessionManager.get(IClientUtil.getId(current.getClient()));
+		if (c == null) {
+			return;
+		}
+		sessionManager.update(c.setWidth(width.intValue()).setHeight(height.intValue()));
+	}
 }
