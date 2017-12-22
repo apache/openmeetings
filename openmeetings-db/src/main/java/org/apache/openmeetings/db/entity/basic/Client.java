@@ -414,6 +414,9 @@ public class Client implements IClient {
 		boolean avFound = false;
 		for (String _uid : streams) {
 			StreamClient rc = mgr.get(_uid);
+			if (rc == null) {
+				continue;
+			}
 			Type t = rc.getType();
 			if (Type.room == t) {
 				avFound = true;

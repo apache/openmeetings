@@ -342,12 +342,16 @@ var Video = (function() {
 		}
 	}
 	function _refresh(_opts) {
-		if (swf[0].refresh !== undefined) {
+		if (typeof(swf[0].refresh) === 'function') {
 			const opts = _opts || {};
 			if (!Room.getOptions().interview && !isNaN(opts.width)) {
 				_resizeDlg(opts.width, opts.height);
 			}
-			swf[0].refresh(opts);
+			try {
+				swf[0].refresh(opts);
+			} catch (e) {
+				//swf might throw
+			}
 		}
 	}
 	function _setRights(_r) {
