@@ -1,4 +1,43 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+var StaticTMath = (function() {
+	function tex2svg(tex, callback, _errCallback) {
+		const errCallback = _errCallback || function() {};
+		let error = false;
+		const wrapper = $('<div>').html('\\[' + tex + '\\]');
+		MathJax.Hub.Register.MessageHook('TeX Jax - parse error', function(message) {
+			errCallback(message[1]);
+			error = true;
+		});
+		MathJax.Hub.Register.MessageHook('Math Processing Error', function(message) {
+			errCallback(message[2]);
+			error = true;
+		});
+		MathJax.Hub.Queue(['Typeset', MathJax.Hub, wrapper[0]]);
+		MathJax.Hub.Queue(function() {
+			if (!error) {
+				const mjOut = wrapper[0].getElementsByTagName('svg')[0];
+				$(mjOut).attr('xmlns', 'http://www.w3.org/2000/svg');
+				callback(mjOut.outerHTML);
+			}
+		});
+	}
+	function create(o, canvas, callback, errCallback) {
+		tex2svg(o.formula, function(svg) {
+			fabric.loadSVGFromString(svg, function(objects, options) {
+				const obj = fabric.util.groupSVGElements(objects, $.extend({}, o, options));
+				canvas.add(obj).requestRenderAll();
+				if (typeof(callback) === 'function') {
+					callback(obj);
+				}
+			});
+		}, errCallback);
+	}
+
+	return {
+		tex2svg: tex2svg
+		, create: create
+	}
+})();
 var TMath = function(wb, s) {
 	const math = ShapeBase();
 	math.obj = null;
@@ -6,33 +45,45 @@ var TMath = function(wb, s) {
 	math.mouseDown = function(o) {
 		const canvas = this
 			, pointer = canvas.getPointer(o.e)
-			, ao = canvas.getActiveObject();
+			, ao = canvas.getActiveObject()
+			, fml = wb.getFormula()
+			, ta = fml.find('textarea');
+		fml.show();
 		if (!!ao && ao.omType === 'Math') {
 			math.obj = ao;
+			ta.val(math.obj.formula);
 		} else {
-			function tex2svg(tex, callback) {
-				const wrapper = $("<div>").html(tex);
-				MathJax.Hub.Queue(["Typeset", MathJax.Hub, wrapper[0]]);
-				MathJax.Hub.Queue(function() {
-					const mjOut = wrapper[0].getElementsByTagName("svg")[0];
-					$(mjOut).attr("xmlns", "http://www.w3.org/2000/svg");
-					callback(mjOut.outerHTML);
+			const err = fml.find('.status');
+			err.text('');
+			function highlight(el) {
+				el.addClass('ui-state-highlight', 2000, function() {
+					el.focus();
+					el.removeClass('ui-state-highlight', 2000);
 				});
 			}
-			tex2svg('\\[f(a) = \\frac{1}{2\\pi i} \\oint\\frac{f(z)}{z-a}dz;   \\sqrt{x}   \\]', function(svg) {
-				fabric.loadSVGFromString(svg, function(objects, options) {
-					math.obj = fabric.util.groupSVGElements(objects, options);
-					//this have to be checked ....
-					canvas.add(math.obj.set({
-						scaleX: 10
-						, scaleY: 10
-						, left: pointer.x
-						, top: pointer.y
-						, omType: 'Math'
-					})).requestRenderAll();
+			if (ta.val().trim() === '') {
+				highlight(ta);
+				return;
+			}
+			StaticTMath.create(
+				{
+					scaleX: 10
+					, scaleY: 10
+					, left: pointer.x
+					, top: pointer.y
+					, omType: 'Math'
+					, formula: ta.val()
+				}
+				, canvas
+				, function(obj) {
+					math.obj = obj;
 					math.objectCreated(math.obj, canvas);
-				});
-			});
+				}
+				, function(msg) {
+					err.text(msg);
+					highlight(err);
+				}
+			);
 		}
 	};
 	math.activate = function() {

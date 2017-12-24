@@ -1,9 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Player = (function() {
 	const player = {}, mainColor = '#ff6600', rad = 20;
-	function _filter(_o, props) {
-		return props.reduce((result, key) => { result[key] = _o[key]; return result; }, {});
-	}
 	function _sendStatus(g, _paused, _pos) {
 		g.status.paused = _paused;
 		g.status.pos = _pos;
@@ -107,7 +104,7 @@ var Player = (function() {
 				, objectCaching: false
 				, omType: 'Video'
 				, selectable: canvas.selection
-			}, _filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height', 'status']));
+			}, ToolUtil.filter(_o, ['fileId', 'fileType', 'slide', 'uid', '_poster', '_src', 'width', 'height', 'status']));
 			const group = new fabric.Group([video, poster, play, progress, cProgress], opts);
 
 			const updateControls = function() {
@@ -219,7 +216,7 @@ var Player = (function() {
 			, scaleX: 1
 			, scaleY: 1
 			, top: 10
-		}, _filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
+		}, ToolUtil.filter(_o, ['angle', 'left', 'scaleX', 'scaleY', 'top']));
 		g.set(opts);
 		g.canvas.requestRenderAll();
 	};

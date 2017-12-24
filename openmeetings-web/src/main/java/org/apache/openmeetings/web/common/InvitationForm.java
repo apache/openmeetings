@@ -123,18 +123,15 @@ public abstract class InvitationForm extends Form<Invitation> {
 		add(passwd);
 		Invitation i = getModelObject();
 		passwd.setLabel(Model.of(getString("110"))).setOutputMarkupId(true).setEnabled(i.isPasswordProtected());
-		add(from, to, timeZoneId);
-		from.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
-		to.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true);
-		timeZoneId.setEnabled(i.getValid() == Valid.Period).setOutputMarkupId(true)
-			.add(new AjaxFormComponentUpdatingBehavior("change") {
-				private static final long serialVersionUID = 1L;
+		add(from.setOutputMarkupId(true), to.setOutputMarkupId(true), timeZoneId.setOutputMarkupId(true));
+		timeZoneId.add(new AjaxFormComponentUpdatingBehavior("change") {
+			private static final long serialVersionUID = 1L;
 
-				@Override
-				protected void onUpdate(AjaxRequestTarget target) {
-					//no-op added to preserve selection
-				}
-			});
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				//no-op added to preserve selection
+			}
+		});
 		add(url.setOutputMarkupId(true));
 		add(lang, feedback);
 		super.onInitialize();
@@ -198,6 +195,10 @@ public abstract class InvitationForm extends Form<Invitation> {
 		recipients.setModelObject(new ArrayList<User>());
 		recipients.setEnabled(true);
 		passwd.setEnabled(false);
+		final boolean isPeriod = i.getValid() == Valid.Period;
+		from.setEnabled(isPeriod);
+		to.setEnabled(isPeriod);
+		timeZoneId.setEnabled(isPeriod);
 		target.add(this);
 	}
 
