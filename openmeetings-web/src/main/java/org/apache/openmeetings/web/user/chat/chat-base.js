@@ -201,7 +201,7 @@ var Chat = function() {
 				let area = $('#' + cm.scope);
 				msg = OmUtil.tmpl('#chat-msg-template', msgIdPrefix + cm.id)
 				msg.find('.user-row').css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')');
-				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name);
+				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
 				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				msg.find('.time').addClass(alignIco).html(cm.time).attr('title', cm.sent);
 				const icons = msg.find('.icons').addClass(align)

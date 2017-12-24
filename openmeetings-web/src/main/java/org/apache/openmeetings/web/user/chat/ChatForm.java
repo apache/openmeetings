@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.user.chat;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
+import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.isUserInRoom;
@@ -39,6 +40,7 @@ import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.common.MainPanel;
@@ -106,6 +108,7 @@ public class ChatForm extends Form<Void> {
 					m.setMessage(txt);
 					m.setSent(new Date());
 					m.setFromUser(getBean(UserDao.class).get(getUserId()));
+					m.setFromName(getDisplayName(getClient().getUser()));
 					if (!process(
 							() -> getChat().isShowDashboardChat()
 							, r -> {
@@ -142,8 +145,12 @@ public class ChatForm extends Form<Void> {
 			});
 	}
 
+	private Client getClient() {
+		return findParent(MainPanel.class).getClient();
+	}
+
 	private String getUid() {
-		return findParent(MainPanel.class).getClient().getUid();
+		return getClient().getUid();
 	}
 
 	public String getScope() {
