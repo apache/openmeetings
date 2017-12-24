@@ -2,8 +2,8 @@
 var Wb = function() {
 	const ACTIVE = 'active', BUMPER = 100, wb = {id: -1, name: ''}, canvases = []
 		, area = $('.room.wb.area .wb-area .tabs.ui-tabs'), bar = area.find('.wb-tabbar')
-		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src'];
-	let a, t, z, s, mode, slide = 0, width = 0, height = 0
+		, extraProps = ['uid', 'fileId', 'fileType', 'count', 'slide', 'omType', '_src', 'formula'];
+	let a, t, z, s, f, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'pageWidth', role = null;
 
 	function getBtn(m) {
@@ -127,6 +127,9 @@ var Wb = function() {
 				t.find(".om-icon.settings").click(function() {
 					s.show();
 				});
+				t.find(".om-icon.math").click(function() {
+					f.show();
+				});
 				t.find('.om-icon.clear-slide').click(function() {
 					OmUtil.confirmDlg('clear-slide-confirm', function() { wbAction('clearSlide', JSON.stringify({wbId: wb.id, slide: slide})); });
 				});
@@ -214,6 +217,22 @@ var Wb = function() {
 							return false;
 						}
 					}
+				});
+				f.draggable({
+					scroll: false
+					, containment: 'body'
+					, start: function() {
+						if (!!f.css('bottom')) {
+							f.css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
+						}
+					}
+					, drag: function() {
+						if (f.position().x + f.width() >= f.parent().width()) {
+							return false;
+						}
+					}
+				}).resizable({
+					alsoResize: f.find('.text-container')
 				});
 			case NONE:
 				_updateZoomPanel();
@@ -363,10 +382,15 @@ var Wb = function() {
 
 	function toOmJson(o) {
 		const r = o.toJSON(extraProps);
-		if (o.omType === 'Video') {
-			r.type = 'video';
-			delete r.objects;
-			return r;
+		switch (o.omType) {
+			case 'Video':
+				r.type = 'video';
+				delete r.objects;
+				break;
+			case 'Math':
+				r.type = 'math';
+				delete r.objects;
+				break;
 		}
 		return r;
 	}
@@ -557,6 +581,12 @@ var Wb = function() {
 			g.videoStatus(json.status);
 		}
 	}
+	function __safeRemove(e) {
+		if (typeof(e) === 'object') {
+			e.remove();
+		}
+	}
+
 	wb.setRole = function(_role) {
 		if (role !== _role) {
 			const btn = getBtn();
@@ -570,14 +600,19 @@ var Wb = function() {
 			const sc = a.find('.scroll-container');
 			z = OmUtil.tmpl('#wb-zoom')
 				.attr('style', 'position: absolute; top: 0px; ' + (Settings.isRtl ? 'right' : 'left') + ': 80px;');
+			__safeRemove(t);
+			__safeRemove(s);
+			__safeRemove(f);
 			if (role === NONE) {
 				t = OmUtil.tmpl('#wb-tools-readonly');
 				sc.off('scroll', scrollHandler);
 			} else {
 				t = OmUtil.tmpl('#wb-tools');
-				s = OmUtil.tmpl("#wb-settings")
+				s = OmUtil.tmpl('#wb-settings')
 					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
-				a.append(s);
+				f = OmUtil.tmpl('#wb-formula')
+					.attr('style', 'display: none; bottom: 100px; ' + (Settings.isRtl ? 'left' : 'right') + ': 100px;');
+				a.append(s, f);
 				sc.on('scroll', scrollHandler);
 			}
 			t.attr('style', 'position: absolute; top: 20px; ' + (Settings.isRtl ? 'left' : 'right') + ': 20px;');
@@ -653,6 +688,9 @@ var Wb = function() {
 				case 'video':
 					Player.create(canvases[o.slide], o, wb);
 					break;
+				case 'math':
+					StaticTMath.create(o, canvases[o.slide]);
+					break;
 				default:
 				{
 					const __o = _findObject(o);
@@ -686,6 +724,12 @@ var Wb = function() {
 					if (!!g) {
 						Player.modify(g, o);
 					}
+				}
+					break;
+				case 'math':
+				{
+					_removeHandler(o);
+					StaticTMath.create(o, canvases[o.slide]);
 				}
 					break;
 				default:
@@ -738,6 +782,9 @@ var Wb = function() {
 	wb.videoStatus = _videoStatus;
 	wb.getRole = function() {
 		return role;
+	};
+	wb.getFormula = function() {
+		return f;
 	};
 	return wb;
 };
