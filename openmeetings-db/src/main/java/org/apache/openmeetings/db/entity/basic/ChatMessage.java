@@ -96,6 +96,10 @@ public class ChatMessage implements IDataProviderEntity {
 	@Element(name = "needModeration", data = true, required = false)
 	private boolean needModeration;
 
+	@Column(name = "from_name")
+	@Element(name = "from_name", data = true, required = false)
+	private String fromName; // this is required for users with no first/last name specified
+
 	@Override
 	public Long getId() {
 		return id;
@@ -152,5 +156,13 @@ public class ChatMessage implements IDataProviderEntity {
 
 	public void setNeedModeration(boolean needModeration) {
 		this.needModeration = needModeration;
+	}
+
+	public String getFromName() {
+		return fromName;
+	}
+
+	public void setFromName(String fromName) {
+		this.fromName = fromName;
 	}
 }
