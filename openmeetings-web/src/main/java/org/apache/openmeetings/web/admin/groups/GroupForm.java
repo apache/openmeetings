@@ -83,6 +83,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 
 	public GroupForm(String id, WebMarkupContainer groupList, Group group) {
 		super(id, new CompoundPropertyModel<>(group));
+		setMultiPart(true);
 		this.groupList = groupList;
 		setOutputMarkupId(true);
 
