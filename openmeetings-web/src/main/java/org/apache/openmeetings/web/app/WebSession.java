@@ -42,6 +42,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IWebSession;
@@ -95,6 +96,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<>(AVAILABLE_TIMEZONES);
 	public static final String WICKET_ROOM_ID = "wicketroomid";
+	private final AtomicInteger pageId = new AtomicInteger(0);
 	private Long userId = null;
 	private Set<Right> rights = new HashSet<>();
 	private long languageId = -1;
@@ -133,6 +135,18 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		tz = null;
 		browserTz = null;
 		extProps = new ExtendedClientProperties();
+	}
+
+	@Override
+	public void invalidateNow() {
+		super.invalidateNow();
+		pageId.set(0);
+	}
+
+	@Override
+	public int nextPageId() {
+		super.nextPageId();
+		return pageId.getAndIncrement();
 	}
 
 	@Override
