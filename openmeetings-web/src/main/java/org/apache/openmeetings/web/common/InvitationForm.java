@@ -139,8 +139,8 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	protected void updateButtons(AjaxRequestTarget target) {
 		Collection<User> recpnts = recipients.getModelObject();
-		dialog.send.setEnabled(!recpnts.isEmpty(), target);
-		dialog.generate.setEnabled(recpnts.size() == 1, target);
+		dialog.getSend().setEnabled(!recpnts.isEmpty(), target);
+		dialog.getGenerate().setEnabled(recpnts.size() == 1, target);
 	}
 
 	@Override
@@ -207,9 +207,9 @@ public abstract class InvitationForm extends Form<Invitation> {
 	}
 
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(dialog.cancel)) {
+		if (button.equals(dialog.getCancel())) {
 			dialog.onSuperClick(target, button);
-		} else if (button.equals(dialog.generate)) {
+		} else if (button.equals(dialog.getGenerate())) {
 			Invitation i = create(recipients.getModelObject().iterator().next());
 			setModelObject(i);
 			url.setModelObject(getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl()));
