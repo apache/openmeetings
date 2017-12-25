@@ -14,7 +14,7 @@ var Chat = function() {
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
-		, editor = $('#chatMessage .wysiwyg-editor'), lastDate
+		, editor = $('#chatMessage .wysiwyg-editor')
 		;
 
 	try {
@@ -223,9 +223,9 @@ var Chat = function() {
 					$('#chat-msg-id-' + cm.id).remove();
 				}
 				const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
-				if (lastDate !== cm.date) {
+				if (area.data('lastDate') !== cm.date) {
 					area.append(OmUtil.tmpl('#chat-date-template').html(cm.date));
-					lastDate = cm.date;
+					area.data('lastDate', cm.date);
 				}
 				area.append(msg);
 				if (btm) {
