@@ -1000,4 +1000,5 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
 	<entry key="activities.msg.exit"><![CDATA[ha salido de la sala.]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
+	<entry key="lbl.update"><![CDATA[Update]]></entry>
 </properties>

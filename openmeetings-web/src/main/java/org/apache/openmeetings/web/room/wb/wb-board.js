@@ -218,6 +218,28 @@ var Wb = function() {
 						}
 					}
 				});
+				f.find('.ui-dialog-titlebar-close').click(function() {
+					f.hide();
+				});
+				f.find('.update-btn').button().click(function() {
+					const o = _findObject({
+						uid: $(this).data('uid')
+						, slide: $(this).data('slide')
+					});
+					o.formula = f.find('textarea').val();
+					_removeHandler(o);
+					const cnvs = canvases[o.slide];
+					StaticTMath.create(toOmJson(o), cnvs
+						, function(obj) {
+							obj.type = 'group';
+							cnvs.trigger("object:modified", {target: obj});
+						}
+						, function(msg) {
+							const err = f.find('.status');
+							err.text(msg);
+							StaticTMath.highlight(err);
+						});
+				}).parent().css('text-align', Settings.isRtl ? 'left' : 'right');
 				f.draggable({
 					scroll: false
 					, containment: 'body'
