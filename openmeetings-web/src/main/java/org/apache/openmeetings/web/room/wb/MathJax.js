@@ -3289,7 +3289,25 @@ MathJax.Hub.Startup = {
   
 MathJax.Ajax.Preloading(
 "[MathJax]/jax/element/mml/jax.js",
+"[MathJax]/jax/element/mml/optable/Arrows.js",
+"[MathJax]/jax/element/mml/optable/MiscMathSymbolsA.js",
+"[MathJax]/jax/element/mml/optable/Dingbats.js",
+"[MathJax]/jax/element/mml/optable/GeneralPunctuation.js",
+"[MathJax]/jax/element/mml/optable/SpacingModLetters.js",
+"[MathJax]/jax/element/mml/optable/MiscTechnical.js",
+"[MathJax]/jax/element/mml/optable/SupplementalArrowsA.js",
+"[MathJax]/jax/element/mml/optable/GreekAndCoptic.js",
+"[MathJax]/jax/element/mml/optable/LetterlikeSymbols.js",
+"[MathJax]/jax/element/mml/optable/SupplementalArrowsB.js",
 "[MathJax]/jax/element/mml/optable/BasicLatin.js",
+"[MathJax]/jax/element/mml/optable/MiscSymbolsAndArrows.js",
+"[MathJax]/jax/element/mml/optable/CombDiacritMarks.js",
+"[MathJax]/jax/element/mml/optable/GeometricShapes.js",
+"[MathJax]/jax/element/mml/optable/MathOperators.js",
+"[MathJax]/jax/element/mml/optable/MiscMathSymbolsB.js",
+"[MathJax]/jax/element/mml/optable/SuppMathOperators.js",
+"[MathJax]/jax/element/mml/optable/CombDiactForSymbols.js",
+"[MathJax]/jax/element/mml/optable/Latin1Supplement.js",
 "[MathJax]/extensions/MathEvents.js",
 "[MathJax]/extensions/tex2jax.js",
 "[MathJax]/jax/input/TeX/config.js",
@@ -3307,8 +3325,34 @@ MathJax.Ajax.Preloading(
 "[MathJax]/jax/output/SVG/fonts/TeX/fontdata.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/fontdata-extra.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/Main.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/Arrows.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/BoxDrawing.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/CombDiacritMarks.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/Dingbats.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/EnclosedAlphanum.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/GeneralPunctuation.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/GeometricShapes.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/GreekAndCoptic.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/Latin1Supplement.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/LatinExtendedA.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/LetterlikeSymbols.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/MathOperators.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/MiscMathSymbolsB.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/MiscSymbols.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/MiscTechnical.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/PUA.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/SpacingModLetters.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/AMS/Regular/SuppMathOperators.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/BasicLatin.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/CombDiacritMarks.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/GeometricShapes.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/GreekAndCoptic.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/LatinExtendedA.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/LatinExtendedB.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/LetterlikeSymbols.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/MiscSymbols.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/SpacingModLetters.js",
+"[MathJax]/jax/output/SVG/fonts/TeX/Main/Regular/SuppMathOperators.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/Size1/Regular/Main.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/Size2/Regular/Main.js",
 "[MathJax]/jax/output/SVG/fonts/TeX/Size3/Regular/Main.js",
@@ -5136,6 +5180,611 @@ MathJax.ElementJax.mml.loadComplete("jax.js");
 
 /*************************************************************
  *
+ *  MathJax/jax/output/HTML-CSS/optable/Arrows.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      infix: {
+        '\u219A': MO.RELACCENT, // leftwards arrow with stroke
+        '\u219B': MO.RELACCENT, // rightwards arrow with stroke
+        '\u219C': MO.WIDEREL,  // leftwards wave arrow
+        '\u219D': MO.WIDEREL,  // rightwards wave arrow
+        '\u219E': MO.WIDEREL,  // leftwards two headed arrow
+        '\u219F': MO.WIDEREL,  // upwards two headed arrow
+        '\u21A0': MO.WIDEREL,  // rightwards two headed arrow
+        '\u21A1': MO.RELSTRETCH, // downwards two headed arrow
+        '\u21A2': MO.WIDEREL,  // leftwards arrow with tail
+        '\u21A3': MO.WIDEREL,  // rightwards arrow with tail
+        '\u21A4': MO.WIDEREL,  // leftwards arrow from bar
+        '\u21A5': MO.RELSTRETCH, // upwards arrow from bar
+        '\u21A7': MO.RELSTRETCH, // downwards arrow from bar
+        '\u21A8': MO.RELSTRETCH, // up down arrow with base
+        '\u21AB': MO.WIDEREL,  // leftwards arrow with loop
+        '\u21AC': MO.WIDEREL,  // rightwards arrow with loop
+        '\u21AD': MO.WIDEREL,  // left right wave arrow
+        '\u21AE': MO.RELACCENT, // left right arrow with stroke
+        '\u21AF': MO.RELSTRETCH, // downwards zigzag arrow
+        '\u21B0': MO.RELSTRETCH, // upwards arrow with tip leftwards
+        '\u21B1': MO.RELSTRETCH, // upwards arrow with tip rightwards
+        '\u21B2': MO.RELSTRETCH, // downwards arrow with tip leftwards
+        '\u21B3': MO.RELSTRETCH, // downwards arrow with tip rightwards
+        '\u21B4': MO.RELSTRETCH, // rightwards arrow with corner downwards
+        '\u21B5': MO.RELSTRETCH, // downwards arrow with corner leftwards
+        '\u21B6': MO.RELACCENT, // anticlockwise top semicircle arrow
+        '\u21B7': MO.RELACCENT, // clockwise top semicircle arrow
+        '\u21B8': MO.REL,      // north west arrow to long bar
+        '\u21B9': MO.WIDEREL,  // leftwards arrow to bar over rightwards arrow to bar
+        '\u21BA': MO.REL,      // anticlockwise open circle arrow
+        '\u21BB': MO.REL,      // clockwise open circle arrow
+        '\u21BE': MO.RELSTRETCH, // upwards harpoon with barb rightwards
+        '\u21BF': MO.RELSTRETCH, // upwards harpoon with barb leftwards
+        '\u21C2': MO.RELSTRETCH, // downwards harpoon with barb rightwards
+        '\u21C3': MO.RELSTRETCH, // downwards harpoon with barb leftwards
+        '\u21C4': MO.WIDEREL,  // rightwards arrow over leftwards arrow
+        '\u21C5': MO.RELSTRETCH, // upwards arrow leftwards of downwards arrow
+        '\u21C6': MO.WIDEREL,  // leftwards arrow over rightwards arrow
+        '\u21C7': MO.WIDEREL,  // leftwards paired arrows
+        '\u21C8': MO.RELSTRETCH, // upwards paired arrows
+        '\u21C9': MO.WIDEREL,  // rightwards paired arrows
+        '\u21CA': MO.RELSTRETCH, // downwards paired arrows
+        '\u21CB': MO.WIDEREL,  // leftwards harpoon over rightwards harpoon
+        '\u21CD': MO.RELACCENT, // leftwards double arrow with stroke
+        '\u21CE': MO.RELACCENT, // left right double arrow with stroke
+        '\u21CF': MO.RELACCENT, // rightwards double arrow with stroke
+        '\u21D6': MO.RELSTRETCH, // north west double arrow
+        '\u21D7': MO.RELSTRETCH, // north east double arrow
+        '\u21D8': MO.RELSTRETCH, // south east double arrow
+        '\u21D9': MO.RELSTRETCH, // south west double arrow
+        '\u21DA': MO.WIDEREL,  // leftwards triple arrow
+        '\u21DB': MO.WIDEREL,  // rightwards triple arrow
+        '\u21DC': MO.WIDEREL,  // leftwards squiggle arrow
+        '\u21DD': MO.WIDEREL,  // rightwards squiggle arrow
+        '\u21DE': MO.REL,      // upwards arrow with double stroke
+        '\u21DF': MO.REL,      // downwards arrow with double stroke
+        '\u21E0': MO.WIDEREL,  // leftwards dashed arrow
+        '\u21E1': MO.RELSTRETCH, // upwards dashed arrow
+        '\u21E2': MO.WIDEREL,  // rightwards dashed arrow
+        '\u21E3': MO.RELSTRETCH, // downwards dashed arrow
+        '\u21E4': MO.WIDEREL,  // leftwards arrow to bar
+        '\u21E5': MO.WIDEREL,  // rightwards arrow to bar
+        '\u21E6': MO.WIDEREL,  // leftwards white arrow
+        '\u21E7': MO.RELSTRETCH, // upwards white arrow
+        '\u21E8': MO.WIDEREL,  // rightwards white arrow
+        '\u21E9': MO.RELSTRETCH, // downwards white arrow
+        '\u21EA': MO.RELSTRETCH, // upwards white arrow from bar
+        '\u21EB': MO.RELSTRETCH, // upwards white arrow on pedestal
+        '\u21EC': MO.RELSTRETCH, // upwards white arrow on pedestal with horizontal bar
+        '\u21ED': MO.RELSTRETCH, // upwards white arrow on pedestal with vertical bar
+        '\u21EE': MO.RELSTRETCH, // upwards white double arrow
+        '\u21EF': MO.RELSTRETCH, // upwards white double arrow on pedestal
+        '\u21F0': MO.WIDEREL,  // rightwards white arrow from wall
+        '\u21F1': MO.REL,      // north west arrow to corner
+        '\u21F2': MO.REL,      // south east arrow to corner
+        '\u21F3': MO.RELSTRETCH, // up down white arrow
+        '\u21F4': MO.RELACCENT, // right arrow with small circle
+        '\u21F5': MO.RELSTRETCH, // downwards arrow leftwards of upwards arrow
+        '\u21F6': MO.WIDEREL,  // three rightwards arrows
+        '\u21F7': MO.RELACCENT, // leftwards arrow with vertical stroke
+        '\u21F8': MO.RELACCENT, // rightwards arrow with vertical stroke
+        '\u21F9': MO.RELACCENT, // left right arrow with vertical stroke
+        '\u21FA': MO.RELACCENT, // leftwards arrow with double vertical stroke
+        '\u21FB': MO.RELACCENT, // rightwards arrow with double vertical stroke
+        '\u21FC': MO.RELACCENT, // left right arrow with double vertical stroke
+        '\u21FD': MO.WIDEREL,  // leftwards open-headed arrow
+        '\u21FE': MO.WIDEREL,  // rightwards open-headed arrow
+        '\u21FF': MO.WIDEREL   // left right open-headed arrow
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/Arrows.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/MiscMathSymbolsA.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u27E6': MO.OPEN,     // mathematical left white square bracket
+        '\u27EA': MO.OPEN,     // mathematical left double angle bracket
+        '\u27EC': MO.OPEN      // mathematical left white tortoise shell bracket
+      },
+      postfix: {
+        '\u27E7': MO.CLOSE,    // mathematical right white square bracket
+        '\u27EB': MO.CLOSE,    // mathematical right double angle bracket
+        '\u27ED': MO.CLOSE     // mathematical right white tortoise shell bracket
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/MiscMathSymbolsA.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/Dingbats.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u2772': MO.OPEN      // light left tortoise shell bracket ornament
+      },
+      postfix: {
+        '\u2773': MO.CLOSE     // light right tortoise shell bracket ornament
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/Dingbats.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/GeneralPunctuation.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u2016': [0,0,TEXCLASS.ORD,{fence: true, stretchy: true}], // double vertical line
+        '\u2018': [0,0,TEXCLASS.OPEN,{fence: true}], // left single quotation mark
+        '\u201C': [0,0,TEXCLASS.OPEN,{fence: true}]  // left double quotation mark
+      },
+      postfix: {
+        '\u2016': [0,0,TEXCLASS.ORD,{fence: true, stretchy: true}], // double vertical line
+        '\u2019': [0,0,TEXCLASS.CLOSE,{fence: true}], // right single quotation mark
+        '\u201D': [0,0,TEXCLASS.CLOSE,{fence: true}]  // right double quotation mark
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/GeneralPunctuation.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/SpacingModLetters.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      postfix: {
+        '\u02CD': MO.WIDEACCENT, // modifier letter low macron
+        '\u02DA': MO.ACCENT,   // ring above
+        '\u02DD': MO.ACCENT,   // double acute accent
+        '\u02F7': MO.WIDEACCENT  // modifier letter low tilde
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/SpacingModLetters.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/MiscTechnical.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      postfix: {
+        '\u23B4': MO.WIDEACCENT, // top square bracket
+        '\u23B5': MO.WIDEACCENT, // bottom square bracket
+        '\u23DC': MO.WIDEACCENT, // top parenthesis
+        '\u23DD': MO.WIDEACCENT, // bottom parenthesis
+        '\u23E0': MO.WIDEACCENT, // top tortoise shell bracket
+        '\u23E1': MO.WIDEACCENT  // bottom tortoise shell bracket
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/MiscTechnical.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/SupplementalArrowsA.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      infix: {
+        '\u27F0': MO.RELSTRETCH, // upwards quadruple arrow
+        '\u27F1': MO.RELSTRETCH, // downwards quadruple arrow
+        '\u27FB': MO.WIDEREL,  // long leftwards arrow from bar
+        '\u27FD': MO.WIDEREL,  // long leftwards double arrow from bar
+        '\u27FE': MO.WIDEREL,  // long rightwards double arrow from bar
+        '\u27FF': MO.WIDEREL   // long rightwards squiggle arrow
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/SupplementalArrowsA.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/GreekAndCoptic.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      infix: {
+        '\u03F6': MO.REL       // greek reversed lunate epsilon symbol
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/GreekAndCoptic.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/LetterlikeSymbols.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u2145': MO.ORD21,    // double-struck italic capital d
+        '\u2146': [2,0,TEXCLASS.ORD]  // double-struck italic small d
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/LetterlikeSymbols.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/SupplementalArrowsB.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      infix: {
+        '\u2900': MO.RELACCENT, // rightwards two-headed arrow with vertical stroke
+        '\u2901': MO.RELACCENT, // rightwards two-headed arrow with double vertical stroke
+        '\u2902': MO.RELACCENT, // leftwards double arrow with vertical stroke
+        '\u2903': MO.RELACCENT, // rightwards double arrow with vertical stroke
+        '\u2904': MO.RELACCENT, // left right double arrow with vertical stroke
+        '\u2905': MO.RELACCENT, // rightwards two-headed arrow from bar
+        '\u2906': MO.RELACCENT, // leftwards double arrow from bar
+        '\u2907': MO.RELACCENT, // rightwards double arrow from bar
+        '\u2908': MO.REL,      // downwards arrow with horizontal stroke
+        '\u2909': MO.REL,      // upwards arrow with horizontal stroke
+        '\u290A': MO.RELSTRETCH, // upwards triple arrow
+        '\u290B': MO.RELSTRETCH, // downwards triple arrow
+        '\u290C': MO.WIDEREL,  // leftwards double dash arrow
+        '\u290D': MO.WIDEREL,  // rightwards double dash arrow
+        '\u290E': MO.WIDEREL,  // leftwards triple dash arrow
+        '\u290F': MO.WIDEREL,  // rightwards triple dash arrow
+        '\u2910': MO.WIDEREL,  // rightwards two-headed triple dash arrow
+        '\u2911': MO.RELACCENT, // rightwards arrow with dotted stem
+        '\u2912': MO.RELSTRETCH, // upwards arrow to bar
+        '\u2913': MO.RELSTRETCH, // downwards arrow to bar
+        '\u2914': MO.RELACCENT, // rightwards arrow with tail with vertical stroke
+        '\u2915': MO.RELACCENT, // rightwards arrow with tail with double vertical stroke
+        '\u2916': MO.RELACCENT, // rightwards two-headed arrow with tail
+        '\u2917': MO.RELACCENT, // rightwards two-headed arrow with tail with vertical stroke
+        '\u2918': MO.RELACCENT, // rightwards two-headed arrow with tail with double vertical stroke
+        '\u2919': MO.RELACCENT, // leftwards arrow-tail
+        '\u291A': MO.RELACCENT, // rightwards arrow-tail
+        '\u291B': MO.RELACCENT, // leftwards double arrow-tail
+        '\u291C': MO.RELACCENT, // rightwards double arrow-tail
+        '\u291D': MO.RELACCENT, // leftwards arrow to black diamond
+        '\u291E': MO.RELACCENT, // rightwards arrow to black diamond
+        '\u291F': MO.RELACCENT, // leftwards arrow from bar to black diamond
+        '\u2920': MO.RELACCENT, // rightwards arrow from bar to black diamond
+        '\u2921': MO.RELSTRETCH, // north west and south east arrow
+        '\u2922': MO.RELSTRETCH, // north east and south west arrow
+        '\u2923': MO.REL,      // north west arrow with hook
+        '\u2924': MO.REL,      // north east arrow with hook
+        '\u2925': MO.REL,      // south east arrow with hook
+        '\u2926': MO.REL,      // south west arrow with hook
+        '\u2927': MO.REL,      // north west arrow and north east arrow
+        '\u2928': MO.REL,      // north east arrow and south east arrow
+        '\u2929': MO.REL,      // south east arrow and south west arrow
+        '\u292A': MO.REL,      // south west arrow and north west arrow
+        '\u292B': MO.REL,      // rising diagonal crossing falling diagonal
+        '\u292C': MO.REL,      // falling diagonal crossing rising diagonal
+        '\u292D': MO.REL,      // south east arrow crossing north east arrow
+        '\u292E': MO.REL,      // north east arrow crossing south east arrow
+        '\u292F': MO.REL,      // falling diagonal crossing north east arrow
+        '\u2930': MO.REL,      // rising diagonal crossing south east arrow
+        '\u2931': MO.REL,      // north east arrow crossing north west arrow
+        '\u2932': MO.REL,      // north west arrow crossing north east arrow
+        '\u2933': MO.RELACCENT, // wave arrow pointing directly right
+        '\u2934': MO.REL,      // arrow pointing rightwards then curving upwards
+        '\u2935': MO.REL,      // arrow pointing rightwards then curving downwards
+        '\u2936': MO.REL,      // arrow pointing downwards then curving leftwards
+        '\u2937': MO.REL,      // arrow pointing downwards then curving rightwards
+        '\u2938': MO.REL,      // right-side arc clockwise arrow
+        '\u2939': MO.REL,      // left-side arc anticlockwise arrow
+        '\u293A': MO.RELACCENT, // top arc anticlockwise arrow
+        '\u293B': MO.RELACCENT, // bottom arc anticlockwise arrow
+        '\u293C': MO.RELACCENT, // top arc clockwise arrow with minus
+        '\u293D': MO.RELACCENT, // top arc anticlockwise arrow with plus
+        '\u293E': MO.REL,      // lower right semicircular clockwise arrow
+        '\u293F': MO.REL,      // lower left semicircular anticlockwise arrow
+        '\u2940': MO.REL,      // anticlockwise closed circle arrow
+        '\u2941': MO.REL,      // clockwise closed circle arrow
+        '\u2942': MO.RELACCENT, // rightwards arrow above short leftwards arrow
+        '\u2943': MO.RELACCENT, // leftwards arrow above short rightwards arrow
+        '\u2944': MO.RELACCENT, // short rightwards arrow above leftwards arrow
+        '\u2945': MO.RELACCENT, // rightwards arrow with plus below
+        '\u2946': MO.RELACCENT, // leftwards arrow with plus below
+        '\u2947': MO.RELACCENT, // rightwards arrow through x
+        '\u2948': MO.RELACCENT, // left right arrow through small circle
+        '\u2949': MO.REL,      // upwards two-headed arrow from small circle
+        '\u294A': MO.RELACCENT, // left barb up right barb down harpoon
+        '\u294B': MO.RELACCENT, // left barb down right barb up harpoon
+        '\u294C': MO.REL,      // up barb right down barb left harpoon
+        '\u294D': MO.REL,      // up barb left down barb right harpoon
+        '\u294E': MO.WIDEREL,  // left barb up right barb up harpoon
+        '\u294F': MO.RELSTRETCH, // up barb right down barb right harpoon
+        '\u2950': MO.WIDEREL,  // left barb down right barb down harpoon
+        '\u2951': MO.RELSTRETCH, // up barb left down barb left harpoon
+        '\u2952': MO.WIDEREL,  // leftwards harpoon with barb up to bar
+        '\u2953': MO.WIDEREL,  // rightwards harpoon with barb up to bar
+        '\u2954': MO.RELSTRETCH, // upwards harpoon with barb right to bar
+        '\u2955': MO.RELSTRETCH, // downwards harpoon with barb right to bar
+        '\u2956': MO.RELSTRETCH, // leftwards harpoon with barb down to bar
+        '\u2957': MO.RELSTRETCH, // rightwards harpoon with barb down to bar
+        '\u2958': MO.RELSTRETCH, // upwards harpoon with barb left to bar
+        '\u2959': MO.RELSTRETCH, // downwards harpoon with barb left to bar
+        '\u295A': MO.WIDEREL,  // leftwards harpoon with barb up from bar
+        '\u295B': MO.WIDEREL,  // rightwards harpoon with barb up from bar
+        '\u295C': MO.RELSTRETCH, // upwards harpoon with barb right from bar
+        '\u295D': MO.RELSTRETCH, // downwards harpoon with barb right from bar
+        '\u295E': MO.WIDEREL,  // leftwards harpoon with barb down from bar
+        '\u295F': MO.WIDEREL,  // rightwards harpoon with barb down from bar
+        '\u2960': MO.RELSTRETCH, // upwards harpoon with barb left from bar
+        '\u2961': MO.RELSTRETCH, // downwards harpoon with barb left from bar
+        '\u2962': MO.RELACCENT, // leftwards harpoon with barb up above leftwards harpoon with barb down
+        '\u2963': MO.REL,      // upwards harpoon with barb left beside upwards harpoon with barb right
+        '\u2964': MO.RELACCENT, // rightwards harpoon with barb up above rightwards harpoon with barb down
+        '\u2965': MO.REL,      // downwards harpoon with barb left beside downwards harpoon with barb right
+        '\u2966': MO.RELACCENT, // leftwards harpoon with barb up above rightwards harpoon with barb up
+        '\u2967': MO.RELACCENT, // leftwards harpoon with barb down above rightwards harpoon with barb down
+        '\u2968': MO.RELACCENT, // rightwards harpoon with barb up above leftwards harpoon with barb up
+        '\u2969': MO.RELACCENT, // rightwards harpoon with barb down above leftwards harpoon with barb down
+        '\u296A': MO.RELACCENT, // leftwards harpoon with barb up above long dash
+        '\u296B': MO.RELACCENT, // leftwards harpoon with barb down below long dash
+        '\u296C': MO.RELACCENT, // rightwards harpoon with barb up above long dash
+        '\u296D': MO.RELACCENT, // rightwards harpoon with barb down below long dash
+        '\u296E': MO.RELSTRETCH, // upwards harpoon with barb left beside downwards harpoon with barb right
+        '\u296F': MO.RELSTRETCH, // downwards harpoon with barb left beside upwards harpoon with barb right
+        '\u2970': MO.RELACCENT, // right double arrow with rounded head
+        '\u2971': MO.RELACCENT, // equals sign above rightwards arrow
+        '\u2972': MO.RELACCENT, // tilde operator above rightwards arrow
+        '\u2973': MO.RELACCENT, // leftwards arrow above tilde operator
+        '\u2974': MO.RELACCENT, // rightwards arrow above tilde operator
+        '\u2975': MO.RELACCENT, // rightwards arrow above almost equal to
+        '\u2976': MO.RELACCENT, // less-than above leftwards arrow
+        '\u2977': MO.RELACCENT, // leftwards arrow through less-than
+        '\u2978': MO.RELACCENT, // greater-than above rightwards arrow
+        '\u2979': MO.RELACCENT, // subset above rightwards arrow
+        '\u297A': MO.RELACCENT, // leftwards arrow through subset
+        '\u297B': MO.RELACCENT, // superset above leftwards arrow
+        '\u297C': MO.RELACCENT, // left fish tail
+        '\u297D': MO.RELACCENT, // right fish tail
+        '\u297E': MO.REL,      // up fish tail
+        '\u297F': MO.REL       // down fish tail
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/SupplementalArrowsB.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
  *  MathJax/jax/output/HTML-CSS/optable/BasicLatin.js
  *
  *  Copyright (c) 2010-2017 The MathJax Consortium
@@ -5197,6 +5846,909 @@ MathJax.ElementJax.mml.loadComplete("jax.js");
   });
 
   MathJax.Ajax.loadComplete(MML.optableDir+"/BasicLatin.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/MiscSymbolsAndArrows.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      infix: {
+        '\u2B45': MO.RELSTRETCH, // leftwards quadruple arrow
+        '\u2B46': MO.RELSTRETCH  // rightwards quadruple arrow
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/MiscSymbolsAndArrows.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/CombDiacritMarks.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      postfix: {
+        '\u0311': MO.ACCENT    // combining inverted breve
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/CombDiacritMarks.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/GeometricShapes.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      infix: {
+        '\u25A0': MO.BIN3,     // black square
+        '\u25A1': MO.BIN3,     // white square
+        '\u25AA': MO.BIN3,     // black small square
+        '\u25AB': MO.BIN3,     // white small square
+        '\u25AD': MO.BIN3,     // white rectangle
+        '\u25AE': MO.BIN3,     // black vertical rectangle
+        '\u25AF': MO.BIN3,     // white vertical rectangle
+        '\u25B0': MO.BIN3,     // black parallelogram
+        '\u25B1': MO.BIN3,     // white parallelogram
+        '\u25B2': MO.BIN4,     // black up-pointing triangle
+        '\u25B4': MO.BIN4,     // black up-pointing small triangle
+        '\u25B6': MO.BIN4,     // black right-pointing triangle
+        '\u25B7': MO.BIN4,     // white right-pointing triangle
+        '\u25B8': MO.BIN4,     // black right-pointing small triangle
+        '\u25BC': MO.BIN4,     // black down-pointing triangle
+        '\u25BE': MO.BIN4,     // black down-pointing small triangle
+        '\u25C0': MO.BIN4,     // black left-pointing triangle
+        '\u25C1': MO.BIN4,     // white left-pointing triangle
+        '\u25C2': MO.BIN4,     // black left-pointing small triangle
+        '\u25C4': MO.BIN4,     // black left-pointing pointer
+        '\u25C5': MO.BIN4,     // white left-pointing pointer
+        '\u25C6': MO.BIN4,     // black diamond
+        '\u25C7': MO.BIN4,     // white diamond
+        '\u25C8': MO.BIN4,     // white diamond containing black small diamond
+        '\u25C9': MO.BIN4,     // fisheye
+        '\u25CC': MO.BIN4,     // dotted circle
+        '\u25CD': MO.BIN4,     // circle with vertical fill
+        '\u25CE': MO.BIN4,     // bullseye
+        '\u25CF': MO.BIN4,     // black circle
+        '\u25D6': MO.BIN4,     // left half black circle
+        '\u25D7': MO.BIN4,     // right half black circle
+        '\u25E6': MO.BIN4      // white bullet
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/GeometricShapes.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/MathOperators.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u2204': MO.ORD21,    // there does not exist
+        '\u221B': MO.ORD11,    // cube root
+        '\u221C': MO.ORD11,    // fourth root
+        '\u2221': MO.ORD,      // measured angle
+        '\u2222': MO.ORD,      // spherical angle
+        '\u222C': MO.INTEGRAL, // double integral
+        '\u222D': MO.INTEGRAL, // triple integral
+        '\u222F': MO.INTEGRAL, // surface integral
+        '\u2230': MO.INTEGRAL, // volume integral
+        '\u2231': MO.INTEGRAL, // clockwise integral
+        '\u2232': MO.INTEGRAL, // clockwise contour integral
+        '\u2233': MO.INTEGRAL  // anticlockwise contour integral
+      },
+      infix: {
+        '\u2201': [1,2,TEXCLASS.ORD], // complement
+        '\u2206': MO.BIN3,     // increment
+        '\u220A': MO.REL,      // small element of
+        '\u220C': MO.REL,      // does not contain as member
+        '\u220D': MO.REL,      // small contains as member
+        '\u220E': MO.BIN3,     // end of proof
+        '\u2214': MO.BIN4,     // dot plus
+        '\u221F': MO.REL,      // right angle
+        '\u2224': MO.REL,      // does not divide
+        '\u2226': MO.REL,      // not parallel to
+        '\u2234': MO.REL,      // therefore
+        '\u2235': MO.REL,      // because
+        '\u2236': MO.REL,      // ratio
+        '\u2237': MO.REL,      // proportion
+        '\u2238': MO.BIN4,     // dot minus
+        '\u2239': MO.REL,      // excess
+        '\u223A': MO.BIN4,     // geometric proportion
+        '\u223B': MO.REL,      // homothetic
+        '\u223D': MO.REL,      // reversed tilde
+        '\u223D\u0331': MO.BIN3, // reversed tilde with underline
+        '\u223E': MO.REL,      // inverted lazy s
+        '\u223F': MO.BIN3,     // sine wave
+        '\u2241': MO.REL,      // not tilde
+        '\u2242': MO.REL,      // minus tilde
+        '\u2242\u0338': MO.REL, // minus tilde with slash
+        '\u2244': MO.REL,      // not asymptotically equal to
+        '\u2246': MO.REL,      // approximately but not actually equal to
+        '\u2247': MO.REL,      // neither approximately nor actually equal to
+        '\u2249': MO.REL,      // not almost equal to
+        '\u224A': MO.REL,      // almost equal or equal to
+        '\u224B': MO.REL,      // triple tilde
+        '\u224C': MO.REL,      // all equal to
+        '\u224E': MO.REL,      // geometrically equivalent to
+        '\u224E\u0338': MO.REL, // geometrically equivalent to with slash
+        '\u224F': MO.REL,      // difference between
+        '\u224F\u0338': MO.REL, // difference between with slash
+        '\u2251': MO.REL,      // geometrically equal to
+        '\u2252': MO.REL,      // approximately equal to or the image of
+        '\u2253': MO.REL,      // image of or approximately equal to
+        '\u2254': MO.REL,      // colon equals
+        '\u2255': MO.REL,      // equals colon
+        '\u2256': MO.REL,      // ring in equal to
+        '\u2257': MO.REL,      // ring equal to
+        '\u2258': MO.REL,      // corresponds to
+        '\u2259': MO.REL,      // estimates
+        '\u225A': MO.REL,      // equiangular to
+        '\u225C': MO.REL,      // delta equal to
+        '\u225D': MO.REL,      // equal to by definition
+        '\u225E': MO.REL,      // measured by
+        '\u225F': MO.REL,      // questioned equal to
+        '\u2262': MO.REL,      // not identical to
+        '\u2263': MO.REL,      // strictly equivalent to
+        '\u2266': MO.REL,      // less-than over equal to
+        '\u2266\u0338': MO.REL, // less-than over equal to with slash
+        '\u2267': MO.REL,      // greater-than over equal to
+        '\u2268': MO.REL,      // less-than but not equal to
+        '\u2269': MO.REL,      // greater-than but not equal to
+        '\u226A\u0338': MO.REL, // much less than with slash
+        '\u226B\u0338': MO.REL, // much greater than with slash
+        '\u226C': MO.REL,      // between
+        '\u226D': MO.REL,      // not equivalent to
+        '\u226E': MO.REL,      // not less-than
+        '\u226F': MO.REL,      // not greater-than
+        '\u2270': MO.REL,      // neither less-than nor equal to
+        '\u2271': MO.REL,      // neither greater-than nor equal to
+        '\u2272': MO.REL,      // less-than or equivalent to
+        '\u2273': MO.REL,      // greater-than or equivalent to
+        '\u2274': MO.REL,      // neither less-than nor equivalent to
+        '\u2275': MO.REL,      // neither greater-than nor equivalent to
+        '\u2276': MO.REL,      // less-than or greater-than
+        '\u2277': MO.REL,      // greater-than or less-than
+        '\u2278': MO.REL,      // neither less-than nor greater-than
+        '\u2279': MO.REL,      // neither greater-than nor less-than
+        '\u227C': MO.REL,      // precedes or equal to
+        '\u227D': MO.REL,      // succeeds or equal to
+        '\u227E': MO.REL,      // precedes or equivalent to
+        '\u227F': MO.REL,      // succeeds or equivalent to
+        '\u227F\u0338': MO.REL, // succeeds or equivalent to with slash
+        '\u2280': MO.REL,      // does not precede
+        '\u2281': MO.REL,      // does not succeed
+        '\u2282\u20D2': MO.REL, // subset of with vertical line
+        '\u2283\u20D2': MO.REL, // superset of with vertical line
+        '\u2284': MO.REL,      // not a subset of
+        '\u2285': MO.REL,      // not a superset of
+        '\u2288': MO.REL,      // neither a subset of nor equal to
+        '\u2289': MO.REL,      // neither a superset of nor equal to
+        '\u228A': MO.REL,      // subset of with not equal to
+        '\u228B': MO.REL,      // superset of with not equal to
+        '\u228C': MO.BIN4,     // multiset
+        '\u228D': MO.BIN4,     // multiset multiplication
+        '\u228F': MO.REL,      // square image of
+        '\u228F\u0338': MO.REL, // square image of with slash
+        '\u2290': MO.REL,      // square original of
+        '\u2290\u0338': MO.REL, // square original of with slash
+        '\u229A': MO.BIN4,     // circled ring operator
+        '\u229B': MO.BIN4,     // circled asterisk operator
+        '\u229C': MO.BIN4,     // circled equals
+        '\u229D': MO.BIN4,     // circled dash
+        '\u229E': MO.BIN4,     // squared plus
+        '\u229F': MO.BIN4,     // squared minus
+        '\u22A0': MO.BIN4,     // squared times
+        '\u22A1': MO.BIN4,     // squared dot operator
+        '\u22A6': MO.REL,      // assertion
+        '\u22A7': MO.REL,      // models
+        '\u22A9': MO.REL,      // forces
+        '\u22AA': MO.REL,      // triple vertical bar right turnstile
+        '\u22AB': MO.REL,      // double vertical bar double right turnstile
+        '\u22AC': MO.REL,      // does not prove
+        '\u22AD': MO.REL,      // not true
+        '\u22AE': MO.REL,      // does not force
+        '\u22AF': MO.REL,      // negated double vertical bar double right turnstile
+        '\u22B0': MO.REL,      // precedes under relation
+        '\u22B1': MO.REL,      // succeeds under relation
+        '\u22B2': MO.REL,      // normal subgroup of
+        '\u22B3': MO.REL,      // contains as normal subgroup
+        '\u22B4': MO.REL,      // normal subgroup of or equal to
+        '\u22B5': MO.REL,      // contains as normal subgroup or equal to
+        '\u22B6': MO.REL,      // original of
+        '\u22B7': MO.REL,      // image of
+        '\u22B8': MO.REL,      // multimap
+        '\u22B9': MO.REL,      // hermitian conjugate matrix
+        '\u22BA': MO.BIN4,     // intercalate
+        '\u22BB': MO.BIN4,     // xor
+        '\u22BC': MO.BIN4,     // nand
+        '\u22BD': MO.BIN4,     // nor
+        '\u22BE': MO.BIN3,     // right angle with arc
+        '\u22BF': MO.BIN3,     // right triangle
+        '\u22C7': MO.BIN4,     // division times
+        '\u22C9': MO.BIN4,     // left normal factor semidirect product
+        '\u22CA': MO.BIN4,     // right normal factor semidirect product
+        '\u22CB': MO.BIN4,     // left semidirect product
+        '\u22CC': MO.BIN4,     // right semidirect product
+        '\u22CD': MO.REL,      // reversed tilde equals
+        '\u22CE': MO.BIN4,     // curly logical or
+        '\u22CF': MO.BIN4,     // curly logical and
+        '\u22D0': MO.REL,      // double subset
+        '\u22D1': MO.REL,      // double superset
+        '\u22D2': MO.BIN4,     // double intersection
+        '\u22D3': MO.BIN4,     // double union
+        '\u22D4': MO.REL,      // pitchfork
+        '\u22D5': MO.REL,      // equal and parallel to
+        '\u22D6': MO.REL,      // less-than with dot
+        '\u22D7': MO.REL,      // greater-than with dot
+        '\u22D8': MO.REL,      // very much less-than
+        '\u22D9': MO.REL,      // very much greater-than
+        '\u22DA': MO.REL,      // less-than equal to or greater-than
+        '\u22DB': MO.REL,      // greater-than equal to or less-than
+        '\u22DC': MO.REL,      // equal to or less-than
+        '\u22DD': MO.REL,      // equal to or greater-than
+        '\u22DE': MO.REL,      // equal to or precedes
+        '\u22DF': MO.REL,      // equal to or succeeds
+        '\u22E0': MO.REL,      // does not precede or equal
+        '\u22E1': MO.REL,      // does not succeed or equal
+        '\u22E2': MO.REL,      // not square image of or equal to
+        '\u22E3': MO.REL,      // not square original of or equal to
+        '\u22E4': MO.REL,      // square image of or not equal to
+        '\u22E5': MO.REL,      // square original of or not equal to
+        '\u22E6': MO.REL,      // less-than but not equivalent to
+        '\u22E7': MO.REL,      // greater-than but not equivalent to
+        '\u22E8': MO.REL,      // precedes but not equivalent to
+        '\u22E9': MO.REL,      // succeeds but not equivalent to
+        '\u22EA': MO.REL,      // not normal subgroup of
+        '\u22EB': MO.REL,      // does not contain as normal subgroup
+        '\u22EC': MO.REL,      // not normal subgroup of or equal to
+        '\u22ED': MO.REL,      // does not contain as normal subgroup or equal
+        '\u22F0': MO.REL,      // up right diagonal ellipsis
+        '\u22F2': MO.REL,      // element of with long horizontal stroke
+        '\u22F3': MO.REL,      // element of with vertical bar at end of horizontal stroke
+        '\u22F4': MO.REL,      // small element of with vertical bar at end of horizontal stroke
+        '\u22F5': MO.REL,      // element of with dot above
+        '\u22F6': MO.REL,      // element of with overbar
+        '\u22F7': MO.REL,      // small element of with overbar
+        '\u22F8': MO.REL,      // element of with underbar
+        '\u22F9': MO.REL,      // element of with two horizontal strokes
+        '\u22FA': MO.REL,      // contains with long horizontal stroke
+        '\u22FB': MO.REL,      // contains with vertical bar at end of horizontal stroke
+        '\u22FC': MO.REL,      // small contains with vertical bar at end of horizontal stroke
+        '\u22FD': MO.REL,      // contains with overbar
+        '\u22FE': MO.REL,      // small contains with overbar
+        '\u22FF': MO.REL       // z notation bag membership
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/MathOperators.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/MiscMathSymbolsB.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u2980': [0,0,TEXCLASS.ORD,{fence: true, stretchy: true}], // triple vertical bar delimiter
+        '\u2983': MO.OPEN,     // left white curly bracket
+        '\u2985': MO.OPEN,     // left white parenthesis
+        '\u2987': MO.OPEN,     // z notation left image bracket
+        '\u2989': MO.OPEN,     // z notation left binding bracket
+        '\u298B': MO.OPEN,     // left square bracket with underbar
+        '\u298D': MO.OPEN,     // left square bracket with tick in top corner
+        '\u298F': MO.OPEN,     // left square bracket with tick in bottom corner
+        '\u2991': MO.OPEN,     // left angle bracket with dot
+        '\u2993': MO.OPEN,     // left arc less-than bracket
+        '\u2995': MO.OPEN,     // double left arc greater-than bracket
+        '\u2997': MO.OPEN,     // left black tortoise shell bracket
+        '\u29FC': MO.OPEN      // left-pointing curved angle bracket
+      },
+      postfix: {
+        '\u2980': [0,0,TEXCLASS.ORD,{fence: true, stretchy: true}], // triple vertical bar delimiter
+        '\u2984': MO.CLOSE,    // right white curly bracket
+        '\u2986': MO.CLOSE,    // right white parenthesis
+        '\u2988': MO.CLOSE,    // z notation right image bracket
+        '\u298A': MO.CLOSE,    // z notation right binding bracket
+        '\u298C': MO.CLOSE,    // right square bracket with underbar
+        '\u298E': MO.CLOSE,    // right square bracket with tick in bottom corner
+        '\u2990': MO.CLOSE,    // right square bracket with tick in top corner
+        '\u2992': MO.CLOSE,    // right angle bracket with dot
+        '\u2994': MO.CLOSE,    // right arc greater-than bracket
+        '\u2996': MO.CLOSE,    // double right arc less-than bracket
+        '\u2998': MO.CLOSE,    // right black tortoise shell bracket
+        '\u29FD': MO.CLOSE     // right-pointing curved angle bracket
+      },
+      infix: {
+        '\u2981': MO.BIN3,     // z notation spot
+        '\u2982': MO.BIN3,     // z notation type colon
+        '\u2999': MO.BIN3,     // dotted fence
+        '\u299A': MO.BIN3,     // vertical zigzag line
+        '\u299B': MO.BIN3,     // measured angle opening left
+        '\u299C': MO.BIN3,     // right angle variant with square
+        '\u299D': MO.BIN3,     // measured right angle with dot
+        '\u299E': MO.BIN3,     // angle with s inside
+        '\u299F': MO.BIN3,     // acute angle
+        '\u29A0': MO.BIN3,     // spherical angle opening left
+        '\u29A1': MO.BIN3,     // spherical angle opening up
+        '\u29A2': MO.BIN3,     // turned angle
+        '\u29A3': MO.BIN3,     // reversed angle
+        '\u29A4': MO.BIN3,     // angle with underbar
+        '\u29A5': MO.BIN3,     // reversed angle with underbar
+        '\u29A6': MO.BIN3,     // oblique angle opening up
+        '\u29A7': MO.BIN3,     // oblique angle opening down
+        '\u29A8': MO.BIN3,     // measured angle with open arm ending in arrow pointing up and right
+        '\u29A9': MO.BIN3,     // measured angle with open arm ending in arrow pointing up and left
+        '\u29AA': MO.BIN3,     // measured angle with open arm ending in arrow pointing down and right
+        '\u29AB': MO.BIN3,     // measured angle with open arm ending in arrow pointing down and left
+        '\u29AC': MO.BIN3,     // measured angle with open arm ending in arrow pointing right and up
+        '\u29AD': MO.BIN3,     // measured angle with open arm ending in arrow pointing left and up
+        '\u29AE': MO.BIN3,     // measured angle with open arm ending in arrow pointing right and down
+        '\u29AF': MO.BIN3,     // measured angle with open arm ending in arrow pointing left and down
+        '\u29B0': MO.BIN3,     // reversed empty set
+        '\u29B1': MO.BIN3,     // empty set with overbar
+        '\u29B2': MO.BIN3,     // empty set with small circle above
+        '\u29B3': MO.BIN3,     // empty set with right arrow above
+        '\u29B4': MO.BIN3,     // empty set with left arrow above
+        '\u29B5': MO.BIN3,     // circle with horizontal bar
+        '\u29B6': MO.BIN4,     // circled vertical bar
+        '\u29B7': MO.BIN4,     // circled parallel
+        '\u29B8': MO.BIN4,     // circled reverse solidus
+        '\u29B9': MO.BIN4,     // circled perpendicular
+        '\u29BA': MO.BIN4,     // circle divided by horizontal bar and top half divided by vertical bar
+        '\u29BB': MO.BIN4,     // circle with superimposed x
+        '\u29BC': MO.BIN4,     // circled anticlockwise-rotated division sign
+        '\u29BD': MO.BIN4,     // up arrow through circle
+        '\u29BE': MO.BIN4,     // circled white bullet
+        '\u29BF': MO.BIN4,     // circled bullet
+        '\u29C0': MO.REL,      // circled less-than
+        '\u29C1': MO.REL,      // circled greater-than
+        '\u29C2': MO.BIN3,     // circle with small circle to the right
+        '\u29C3': MO.BIN3,     // circle with two horizontal strokes to the right
+        '\u29C4': MO.BIN4,     // squared rising diagonal slash
+        '\u29C5': MO.BIN4,     // squared falling diagonal slash
+        '\u29C6': MO.BIN4,     // squared asterisk
+        '\u29C7': MO.BIN4,     // squared small circle
+        '\u29C8': MO.BIN4,     // squared square
+        '\u29C9': MO.BIN3,     // two joined squares
+        '\u29CA': MO.BIN3,     // triangle with dot above
+        '\u29CB': MO.BIN3,     // triangle with underbar
+        '\u29CC': MO.BIN3,     // s in triangle
+        '\u29CD': MO.BIN3,     // triangle with serifs at bottom
+        '\u29CE': MO.REL,      // right triangle above left triangle
+        '\u29CF': MO.REL,      // left triangle beside vertical bar
+        '\u29CF\u0338': MO.REL, // left triangle beside vertical bar with slash
+        '\u29D0': MO.REL,      // vertical bar beside right triangle
+        '\u29D0\u0338': MO.REL, // vertical bar beside right triangle with slash
+        '\u29D1': MO.REL,      // bowtie with left half black
+        '\u29D2': MO.REL,      // bowtie with right half black
+        '\u29D3': MO.REL,      // black bowtie
+        '\u29D4': MO.REL,      // times with left half black
+        '\u29D5': MO.REL,      // times with right half black
+        '\u29D6': MO.BIN4,     // white hourglass
+        '\u29D7': MO.BIN4,     // black hourglass
+        '\u29D8': MO.BIN3,     // left wiggly fence
+        '\u29D9': MO.BIN3,     // right wiggly fence
+        '\u29DB': MO.BIN3,     // right double wiggly fence
+        '\u29DC': MO.BIN3,     // incomplete infinity
+        '\u29DD': MO.BIN3,     // tie over infinity
+        '\u29DE': MO.REL,      // infinity negated with vertical bar
+        '\u29DF': MO.BIN3,     // double-ended multimap
+        '\u29E0': MO.BIN3,     // square with contoured outline
+        '\u29E1': MO.REL,      // increases as
+        '\u29E2': MO.BIN4,     // shuffle product
+        '\u29E3': MO.REL,      // equals sign and slanted parallel
+        '\u29E4': MO.REL,      // equals sign and slanted parallel with tilde above
+        '\u29E5': MO.REL,      // identical to and slanted parallel
+        '\u29E6': MO.REL,      // gleich stark
+        '\u29E7': MO.BIN3,     // thermodynamic
+        '\u29E8': MO.BIN3,     // down-pointing triangle with left half black
+        '\u29E9': MO.BIN3,     // down-pointing triangle with right half black
+        '\u29EA': MO.BIN3,     // black diamond with down arrow
+        '\u29EB': MO.BIN3,     // black lozenge
+        '\u29EC': MO.BIN3,     // white circle with down arrow
+        '\u29ED': MO.BIN3,     // black circle with down arrow
+        '\u29EE': MO.BIN3,     // error-barred white square
+        '\u29EF': MO.BIN3,     // error-barred black square
+        '\u29F0': MO.BIN3,     // error-barred white diamond
+        '\u29F1': MO.BIN3,     // error-barred black diamond
+        '\u29F2': MO.BIN3,     // error-barred white circle
+        '\u29F3': MO.BIN3,     // error-barred black circle
+        '\u29F4': MO.REL,      // rule-delayed
+        '\u29F5': MO.BIN4,     // reverse solidus operator
+        '\u29F6': MO.BIN4,     // solidus with overbar
+        '\u29F7': MO.BIN4,     // reverse solidus with horizontal stroke
+        '\u29F8': MO.BIN3,     // big solidus
+        '\u29F9': MO.BIN3,     // big reverse solidus
+        '\u29FA': MO.BIN3,     // double plus
+        '\u29FB': MO.BIN3,     // triple plus
+        '\u29FE': MO.BIN4,     // tiny
+        '\u29FF': MO.BIN4      // miny
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/MiscMathSymbolsB.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/SuppMathOperators.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      prefix: {
+        '\u2A03': MO.OP,       // n-ary union operator with dot
+        '\u2A05': MO.OP,       // n-ary square intersection operator
+        '\u2A07': MO.OP,       // two logical and operator
+        '\u2A08': MO.OP,       // two logical or operator
+        '\u2A09': MO.OP,       // n-ary times operator
+        '\u2A0A': MO.OP,       // modulo two sum
+        '\u2A0B': MO.INTEGRAL2, // summation with integral
+        '\u2A0C': MO.INTEGRAL, // quadruple integral operator
+        '\u2A0D': MO.INTEGRAL2, // finite part integral
+        '\u2A0E': MO.INTEGRAL2, // integral with double stroke
+        '\u2A0F': MO.INTEGRAL2, // integral average with slash
+        '\u2A10': MO.OP,       // circulation function
+        '\u2A11': MO.OP,       // anticlockwise integration
+        '\u2A12': MO.OP,       // line integration with rectangular path around pole
+        '\u2A13': MO.OP,       // line integration with semicircular path around pole
+        '\u2A14': MO.OP,       // line integration not including the pole
+        '\u2A15': MO.INTEGRAL2, // integral around a point operator
+        '\u2A16': MO.INTEGRAL2, // quaternion integral operator
+        '\u2A17': MO.INTEGRAL2, // integral with leftwards arrow with hook
+        '\u2A18': MO.INTEGRAL2, // integral with times sign
+        '\u2A19': MO.INTEGRAL2, // integral with intersection
+        '\u2A1A': MO.INTEGRAL2, // integral with union
+        '\u2A1B': MO.INTEGRAL2, // integral with overbar
+        '\u2A1C': MO.INTEGRAL2, // integral with underbar
+        '\u2AFC': MO.OP,       // large triple vertical bar operator
+        '\u2AFF': MO.OP        // n-ary white vertical bar
+      },
+      infix: {
+        '\u2A1D': MO.BIN3,     // join
+        '\u2A1E': MO.BIN3,     // large left triangle operator
+        '\u2A1F': MO.BIN3,     // z notation schema composition
+        '\u2A20': MO.BIN3,     // z notation schema piping
+        '\u2A21': MO.BIN3,     // z notation schema projection
+        '\u2A22': MO.BIN4,     // plus sign with small circle above
+        '\u2A23': MO.BIN4,     // plus sign with circumflex accent above
+        '\u2A24': MO.BIN4,     // plus sign with tilde above
+        '\u2A25': MO.BIN4,     // plus sign with dot below
+        '\u2A26': MO.BIN4,     // plus sign with tilde below
+        '\u2A27': MO.BIN4,     // plus sign with subscript two
+        '\u2A28': MO.BIN4,     // plus sign with black triangle
+        '\u2A29': MO.BIN4,     // minus sign with comma above
+        '\u2A2A': MO.BIN4,     // minus sign with dot below
+        '\u2A2B': MO.BIN4,     // minus sign with falling dots
+        '\u2A2C': MO.BIN4,     // minus sign with rising dots
+        '\u2A2D': MO.BIN4,     // plus sign in left half circle
+        '\u2A2E': MO.BIN4,     // plus sign in right half circle
+        '\u2A30': MO.BIN4,     // multiplication sign with dot above
+        '\u2A31': MO.BIN4,     // multiplication sign with underbar
+        '\u2A32': MO.BIN4,     // semidirect product with bottom closed
+        '\u2A33': MO.BIN4,     // smash product
+        '\u2A34': MO.BIN4,     // multiplication sign in left half circle
+        '\u2A35': MO.BIN4,     // multiplication sign in right half circle
+        '\u2A36': MO.BIN4,     // circled multiplication sign with circumflex accent
+        '\u2A37': MO.BIN4,     // multiplication sign in double circle
+        '\u2A38': MO.BIN4,     // circled division sign
+        '\u2A39': MO.BIN4,     // plus sign in triangle
+        '\u2A3A': MO.BIN4,     // minus sign in triangle
+        '\u2A3B': MO.BIN4,     // multiplication sign in triangle
+        '\u2A3C': MO.BIN4,     // interior product
+        '\u2A3D': MO.BIN4,     // righthand interior product
+        '\u2A3E': MO.BIN4,     // z notation relational composition
+        '\u2A40': MO.BIN4,     // intersection with dot
+        '\u2A41': MO.BIN4,     // union with minus sign
+        '\u2A42': MO.BIN4,     // union with overbar
+        '\u2A43': MO.BIN4,     // intersection with overbar
+        '\u2A44': MO.BIN4,     // intersection with logical and
+        '\u2A45': MO.BIN4,     // union with logical or
+        '\u2A46': MO.BIN4,     // union above intersection
+        '\u2A47': MO.BIN4,     // intersection above union
+        '\u2A48': MO.BIN4,     // union above bar above intersection
+        '\u2A49': MO.BIN4,     // intersection above bar above union
+        '\u2A4A': MO.BIN4,     // union beside and joined with union
+        '\u2A4B': MO.BIN4,     // intersection beside and joined with intersection
+        '\u2A4C': MO.BIN4,     // closed union with serifs
+        '\u2A4D': MO.BIN4,     // closed intersection with serifs
+        '\u2A4E': MO.BIN4,     // double square intersection
+        '\u2A4F': MO.BIN4,     // double square union
+        '\u2A50': MO.BIN4,     // closed union with serifs and smash product
+        '\u2A51': MO.BIN4,     // logical and with dot above
+        '\u2A52': MO.BIN4,     // logical or with dot above
+        '\u2A53': MO.BIN4,     // double logical and
+        '\u2A54': MO.BIN4,     // double logical or
+        '\u2A55': MO.BIN4,     // two intersecting logical and
+        '\u2A56': MO.BIN4,     // two intersecting logical or
+        '\u2A57': MO.BIN4,     // sloping large or
+        '\u2A58': MO.BIN4,     // sloping large and
+        '\u2A59': MO.REL,      // logical or overlapping logical and
+        '\u2A5A': MO.BIN4,     // logical and with middle stem
+        '\u2A5B': MO.BIN4,     // logical or with middle stem
+        '\u2A5C': MO.BIN4,     // logical and with horizontal dash
+        '\u2A5D': MO.BIN4,     // logical or with horizontal dash
+        '\u2A5E': MO.BIN4,     // logical and with double overbar
+        '\u2A5F': MO.BIN4,     // logical and with underbar
+        '\u2A60': MO.BIN4,     // logical and with double underbar
+        '\u2A61': MO.BIN4,     // small vee with underbar
+        '\u2A62': MO.BIN4,     // logical or with double overbar
+        '\u2A63': MO.BIN4,     // logical or with double underbar
+        '\u2A64': MO.BIN4,     // z notation domain antirestriction
+        '\u2A65': MO.BIN4,     // z notation range antirestriction
+        '\u2A66': MO.REL,      // equals sign with dot below
+        '\u2A67': MO.REL,      // identical with dot above
+        '\u2A68': MO.REL,      // triple horizontal bar with double vertical stroke
+        '\u2A69': MO.REL,      // triple horizontal bar with triple vertical stroke
+        '\u2A6A': MO.REL,      // tilde operator with dot above
+        '\u2A6B': MO.REL,      // tilde operator with rising dots
+        '\u2A6C': MO.REL,      // similar minus similar
+        '\u2A6D': MO.REL,      // congruent with dot above
+        '\u2A6E': MO.REL,      // equals with asterisk
+        '\u2A6F': MO.REL,      // almost equal to with circumflex accent
+        '\u2A70': MO.REL,      // approximately equal or equal to
+        '\u2A71': MO.BIN4,     // equals sign above plus sign
+        '\u2A72': MO.BIN4,     // plus sign above equals sign
+        '\u2A73': MO.REL,      // equals sign above tilde operator
+        '\u2A74': MO.REL,      // double colon equal
+        '\u2A75': MO.REL,      // two consecutive equals signs
+        '\u2A76': MO.REL,      // three consecutive equals signs
+        '\u2A77': MO.REL,      // equals sign with two dots above and two dots below
+        '\u2A78': MO.REL,      // equivalent with four dots above
+        '\u2A79': MO.REL,      // less-than with circle inside
+        '\u2A7A': MO.REL,      // greater-than with circle inside
+        '\u2A7B': MO.REL,      // less-than with question mark above
+        '\u2A7C': MO.REL,      // greater-than with question mark above
+        '\u2A7D': MO.REL,      // less-than or slanted equal to
+        '\u2A7D\u0338': MO.REL, // less-than or slanted equal to with slash
+        '\u2A7E': MO.REL,      // greater-than or slanted equal to
+        '\u2A7E\u0338': MO.REL, // greater-than or slanted equal to with slash
+        '\u2A7F': MO.REL,      // less-than or slanted equal to with dot inside
+        '\u2A80': MO.REL,      // greater-than or slanted equal to with dot inside
+        '\u2A81': MO.REL,      // less-than or slanted equal to with dot above
+        '\u2A82': MO.REL,      // greater-than or slanted equal to with dot above
+        '\u2A83': MO.REL,      // less-than or slanted equal to with dot above right
+        '\u2A84': MO.REL,      // greater-than or slanted equal to with dot above left
+        '\u2A85': MO.REL,      // less-than or approximate
+        '\u2A86': MO.REL,      // greater-than or approximate
+        '\u2A87': MO.REL,      // less-than and single-line not equal to
+        '\u2A88': MO.REL,      // greater-than and single-line not equal to
+        '\u2A89': MO.REL,      // less-than and not approximate
+        '\u2A8A': MO.REL,      // greater-than and not approximate
+        '\u2A8B': MO.REL,      // less-than above double-line equal above greater-than
+        '\u2A8C': MO.REL,      // greater-than above double-line equal above less-than
+        '\u2A8D': MO.REL,      // less-than above similar or equal
+        '\u2A8E': MO.REL,      // greater-than above similar or equal
+        '\u2A8F': MO.REL,      // less-than above similar above greater-than
+        '\u2A90': MO.REL,      // greater-than above similar above less-than
+        '\u2A91': MO.REL,      // less-than above greater-than above double-line equal
+        '\u2A92': MO.REL,      // greater-than above less-than above double-line equal
+        '\u2A93': MO.REL,      // less-than above slanted equal above greater-than above slanted equal
+        '\u2A94': MO.REL,      // greater-than above slanted equal above less-than above slanted equal
+        '\u2A95': MO.REL,      // slanted equal to or less-than
+        '\u2A96': MO.REL,      // slanted equal to or greater-than
+        '\u2A97': MO.REL,      // slanted equal to or less-than with dot inside
+        '\u2A98': MO.REL,      // slanted equal to or greater-than with dot inside
+        '\u2A99': MO.REL,      // double-line equal to or less-than
+        '\u2A9A': MO.REL,      // double-line equal to or greater-than
+        '\u2A9B': MO.REL,      // double-line slanted equal to or less-than
+        '\u2A9C': MO.REL,      // double-line slanted equal to or greater-than
+        '\u2A9D': MO.REL,      // similar or less-than
+        '\u2A9E': MO.REL,      // similar or greater-than
+        '\u2A9F': MO.REL,      // similar above less-than above equals sign
+        '\u2AA0': MO.REL,      // similar above greater-than above equals sign
+        '\u2AA1': MO.REL,      // double nested less-than
+        '\u2AA1\u0338': MO.REL, // double nested less-than with slash
+        '\u2AA2': MO.REL,      // double nested greater-than
+        '\u2AA2\u0338': MO.REL, // double nested greater-than with slash
+        '\u2AA3': MO.REL,      // double nested less-than with underbar
+        '\u2AA4': MO.REL,      // greater-than overlapping less-than
+        '\u2AA5': MO.REL,      // greater-than beside less-than
+        '\u2AA6': MO.REL,      // less-than closed by curve
+        '\u2AA7': MO.REL,      // greater-than closed by curve
+        '\u2AA8': MO.REL,      // less-than closed by curve above slanted equal
+        '\u2AA9': MO.REL,      // greater-than closed by curve above slanted equal
+        '\u2AAA': MO.REL,      // smaller than
+        '\u2AAB': MO.REL,      // larger than
+        '\u2AAC': MO.REL,      // smaller than or equal to
+        '\u2AAD': MO.REL,      // larger than or equal to
+        '\u2AAE': MO.REL,      // equals sign with bumpy above
+        '\u2AAF\u0338': MO.REL, // precedes above single-line equals sign with slash
+        '\u2AB0\u0338': MO.REL, // succeeds above single-line equals sign with slash
+        '\u2AB1': MO.REL,      // precedes above single-line not equal to
+        '\u2AB2': MO.REL,      // succeeds above single-line not equal to
+        '\u2AB3': MO.REL,      // precedes above equals sign
+        '\u2AB4': MO.REL,      // succeeds above equals sign
+        '\u2AB5': MO.REL,      // precedes above not equal to
+        '\u2AB6': MO.REL,      // succeeds above not equal to
+        '\u2AB7': MO.REL,      // precedes above almost equal to
+        '\u2AB8': MO.REL,      // succeeds above almost equal to
+        '\u2AB9': MO.REL,      // precedes above not almost equal to
+        '\u2ABA': MO.REL,      // succeeds above not almost equal to
+        '\u2ABB': MO.REL,      // double precedes
+        '\u2ABC': MO.REL,      // double succeeds
+        '\u2ABD': MO.REL,      // subset with dot
+        '\u2ABE': MO.REL,      // superset with dot
+        '\u2ABF': MO.REL,      // subset with plus sign below
+        '\u2AC0': MO.REL,      // superset with plus sign below
+        '\u2AC1': MO.REL,      // subset with multiplication sign below
+        '\u2AC2': MO.REL,      // superset with multiplication sign below
+        '\u2AC3': MO.REL,      // subset of or equal to with dot above
+        '\u2AC4': MO.REL,      // superset of or equal to with dot above
+        '\u2AC5': MO.REL,      // subset of above equals sign
+        '\u2AC6': MO.REL,      // superset of above equals sign
+        '\u2AC7': MO.REL,      // subset of above tilde operator
+        '\u2AC8': MO.REL,      // superset of above tilde operator
+        '\u2AC9': MO.REL,      // subset of above almost equal to
+        '\u2ACA': MO.REL,      // superset of above almost equal to
+        '\u2ACB': MO.REL,      // subset of above not equal to
+        '\u2ACC': MO.REL,      // superset of above not equal to
+        '\u2ACD': MO.REL,      // square left open box operator
+        '\u2ACE': MO.REL,      // square right open box operator
+        '\u2ACF': MO.REL,      // closed subset
+        '\u2AD0': MO.REL,      // closed superset
+        '\u2AD1': MO.REL,      // closed subset or equal to
+        '\u2AD2': MO.REL,      // closed superset or equal to
+        '\u2AD3': MO.REL,      // subset above superset
+        '\u2AD4': MO.REL,      // superset above subset
+        '\u2AD5': MO.REL,      // subset above subset
+        '\u2AD6': MO.REL,      // superset above superset
+        '\u2AD7': MO.REL,      // superset beside subset
+        '\u2AD8': MO.REL,      // superset beside and joined by dash with subset
+        '\u2AD9': MO.REL,      // element of opening downwards
+        '\u2ADA': MO.REL,      // pitchfork with tee top
+        '\u2ADB': MO.REL,      // transversal intersection
+        '\u2ADC': MO.REL,      // forking
+        '\u2ADD': MO.REL,      // nonforking
+        '\u2ADE': MO.REL,      // short left tack
+        '\u2ADF': MO.REL,      // short down tack
+        '\u2AE0': MO.REL,      // short up tack
+        '\u2AE1': MO.REL,      // perpendicular with s
+        '\u2AE2': MO.REL,      // vertical bar triple right turnstile
+        '\u2AE3': MO.REL,      // double vertical bar left turnstile
+        '\u2AE4': MO.REL,      // vertical bar double left turnstile
+        '\u2AE5': MO.REL,      // double vertical bar double left turnstile
+        '\u2AE6': MO.REL,      // long dash from left member of double vertical
+        '\u2AE7': MO.REL,      // short down tack with overbar
+        '\u2AE8': MO.REL,      // short up tack with underbar
+        '\u2AE9': MO.REL,      // short up tack above short down tack
+        '\u2AEA': MO.REL,      // double down tack
+        '\u2AEB': MO.REL,      // double up tack
+        '\u2AEC': MO.REL,      // double stroke not sign
+        '\u2AED': MO.REL,      // reversed double stroke not sign
+        '\u2AEE': MO.REL,      // does not divide with reversed negation slash
+        '\u2AEF': MO.REL,      // vertical line with circle above
+        '\u2AF0': MO.REL,      // vertical line with circle below
+        '\u2AF1': MO.REL,      // down tack with circle below
+        '\u2AF2': MO.REL,      // parallel with horizontal stroke
+        '\u2AF3': MO.REL,      // parallel with tilde operator
+        '\u2AF4': MO.BIN4,     // triple vertical bar binary relation
+        '\u2AF5': MO.BIN4,     // triple vertical bar with horizontal stroke
+        '\u2AF6': MO.BIN4,     // triple colon operator
+        '\u2AF7': MO.REL,      // triple nested less-than
+        '\u2AF8': MO.REL,      // triple nested greater-than
+        '\u2AF9': MO.REL,      // double-line slanted less-than or equal to
+        '\u2AFA': MO.REL,      // double-line slanted greater-than or equal to
+        '\u2AFB': MO.BIN4,     // triple solidus binary relation
+        '\u2AFD': MO.BIN4,     // double solidus operator
+        '\u2AFE': MO.BIN3      // white vertical bar
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/SuppMathOperators.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/CombDiactForSymbols.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      postfix: {
+        '\u20DB': MO.ACCENT,   // combining three dots above
+        '\u20DC': MO.ACCENT    // combining four dots above
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/CombDiactForSymbols.js");
+
+})(MathJax.ElementJax.mml);
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/HTML-CSS/optable/Latin1Supplement.js
+ *
+ *  Copyright (c) 2010-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+(function (MML) {
+  var MO = MML.mo.OPTYPES;
+  var TEXCLASS = MML.TEXCLASS;
+
+  MathJax.Hub.Insert(MML.mo.prototype,{
+    OPTABLE: {
+      postfix: {
+        '\u00B0': MO.ORD,      // degree sign
+        '\u00B4': MO.ACCENT,   // acute accent
+        '\u00B8': MO.ACCENT    // cedilla
+      }
+    }
+  });
+
+  MathJax.Ajax.loadComplete(MML.optableDir+"/Latin1Supplement.js");
 
 })(MathJax.ElementJax.mml);
 
@@ -14850,6 +16402,939 @@ MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/Main.js");
 
 /*************************************************************
  *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/Arrows.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // LEFTWARDS ARROW
+    0x2190: [437,-64,500,64,423,'292 419Q292 400 261 347T211 275H306Q319 275 338 275T364 276Q399 276 410 271T422 250T411 230T366 225H306H211Q214 222 232 197T271 136T292 82Q292 71 285 68T262 64H250H241Q221 64 216 67T205 83Q186 127 153 167T78 230Q64 238 64 250Q64 258 69 263T82 272T106 288T139 318Q162 342 177 365T198 402T209 425T223 436Q224 437 252 437H258Q292 437 292 419'],
+
+    // RIGHTWARDS ARROW
+    0x2192: [437,-64,500,58,417,'188 417Q188 437 221 437H233Q256 437 263 434T275 417Q294 373 327 333T402 270Q417 261 417 250Q417 241 410 236T382 217T341 182Q315 155 299 128T275 85T263 66Q259 64 231 64H219Q197 64 191 72T193 100Q202 124 215 147T239 185T257 210T267 223L269 225H174H116Q80 225 69 229T58 250T70 271T114 276Q121 276 140 276T174 275H269L267 277Q266 280 257 291T233 325T205 374Q188 408 188 417'],
+
+    // LEFTWARDS ARROW WITH STROKE
+    0x219A: [437,-60,1000,56,942,'942 250Q942 244 928 230H511L457 148Q440 124 420 93Q404 68 400 64T389 60Q381 60 375 66T368 81Q368 88 415 159L462 230H175L188 214Q210 188 235 145T264 85Q264 75 260 74T231 72L206 74L191 103Q169 142 164 150Q130 195 64 239Q56 244 56 250T64 261Q115 294 142 323T191 397L206 428H231Q255 428 259 426T264 414Q260 397 235 355T188 288L175 272L331 270Q488 270 491 272Q491 275 542 352T597 432Q602 437 609 437Q617 437 622 432T628 417T582 341L537 272L735 270H931Q942 257 942 250'],
+
+    // RIGHTWARDS ARROW WITH STROKE
+    0x219B: [437,-60,1000,54,942,'54 250Q54 258 66 270H277L488 272L542 350Q596 431 602 435Q604 437 609 437Q617 437 622 432T628 417T582 341L537 272L608 270H751L822 272L808 288Q786 313 761 355T733 414Q733 424 737 426T766 428H793L806 397Q829 354 864 314Q896 284 928 263Q942 257 942 250T928 237Q887 208 864 185Q829 147 806 103L793 74L766 72Q742 72 738 73T733 85Q735 102 756 137T797 198L817 225L822 230H511L457 148Q440 124 420 93Q404 68 400 64T389 60Q381 60 375 66T368 81Q368 88 415 159L462 230H264L66 232Q54 239 54 250'],
+
+    // LEFTWARDS TWO HEADED ARROW
+    0x219E: [417,-83,1000,56,944,'56 250Q103 277 142 322T199 417H221Q244 417 244 416Q244 414 237 397T208 344T158 278L151 270H276L285 277Q322 306 349 345T388 417H434Q434 413 424 392T393 338T349 279L340 270H634Q933 270 937 266L938 265Q944 259 944 250T938 235L937 234Q933 230 634 230H340L349 221Q372 196 393 163T424 108T434 83H388Q377 116 350 155T285 223L276 230H151L158 222Q186 191 207 156T236 104T244 84Q244 83 221 83H199Q181 133 142 178T56 250'],
+
+    // RIGHTWARDS TWO HEADED ARROW
+    0x21A0: [417,-83,1000,55,943,'943 250Q895 221 856 177T801 83H778Q755 83 755 84Q755 86 762 103T791 156T841 222L848 230H723L714 223Q677 194 650 155T611 83H565Q565 87 575 108T606 162T650 221L659 230H365Q66 230 62 234L61 235Q55 241 55 250T61 265L62 266Q66 270 365 270H659L650 279Q627 304 606 337T575 392T565 417H611Q622 384 649 345T714 277L723 270H848L841 278Q813 309 792 344T763 396T755 416Q755 417 778 417H801Q817 367 856 323T943 250'],
+
+    // LEFTWARDS ARROW WITH TAIL
+    0x21A2: [417,-83,1111,56,1031,'56 250Q103 277 142 322T199 417H221Q244 417 244 416Q244 414 237 397T208 344T158 278L151 270H873L882 277Q919 306 946 345T985 417H1031Q1031 413 1021 392T990 338T946 279L937 270V230L946 221Q969 196 990 163T1021 108T1031 83H985Q974 116 947 155T882 223L873 230H151L158 222Q186 191 207 156T236 104T244 84Q244 83 221 83H199Q181 133 142 178T56 250'],
+
+    // RIGHTWARDS ARROW WITH TAIL
+    0x21A3: [417,-83,1111,79,1054,'1054 250Q1006 221 967 177T912 83H889Q866 83 866 84Q866 86 873 103T902 156T952 222L959 230H237L228 223Q191 194 164 155T125 83H79Q79 87 89 108T120 162T164 221L173 230V270L164 279Q141 304 120 337T89 392T79 417H125Q136 384 163 345T228 277L237 270H959L952 278Q924 309 903 344T874 396T866 416Q866 417 889 417H912Q928 367 967 323T1054 250'],
+
+    // LEFTWARDS ARROW WITH LOOP
+    0x21AB: [576,41,1000,56,965,'56 250Q103 277 142 322T199 417H221Q244 417 244 416Q244 414 237 397T208 344T158 278L151 270H622V305Q622 356 624 388T635 460T661 521T709 559T785 575Q813 575 833 573T880 561T923 534T952 483T964 405Q964 374 959 350T942 307T918 276T884 255T847 242T804 235T760 231T713 230H662V-27Q654 -41 644 -41H642H640Q628 -41 622 -27V230H151L158 222Q186 191 207 156T236 104T244 84Q244 83 221 83H199Q181 133 142 178T56 250ZM924 403Q924 474 894 505T794 536Q758 536 734 526T696 500T675 453T665 395T662 319V270H699Q826 270 875 295T924 403'],
+
+    // RIGHTWARDS ARROW WITH LOOP
+    0x21AC: [575,41,1000,35,943,'35 405Q35 454 48 489T86 542T137 567T195 575Q229 575 251 571T301 554T345 510T370 429Q377 384 377 305V270H848L841 278Q813 309 792 344T763 396T755 416Q755 417 778 417H801Q817 367 856 323T943 250Q896 221 857 177T801 83H778Q755 83 755 84Q755 86 762 103T791 156T841 222L848 230H377V-27Q369 -41 359 -41H357Q342 -41 337 -25V230H286Q247 231 225 232T169 238T115 255T75 284T45 333T35 405ZM75 406Q75 322 123 296T300 270H337V319Q335 432 317 477T240 534Q232 535 197 535Q140 535 108 507T75 406'],
+
+    // LEFT RIGHT WAVE ARROW
+    0x21AD: [417,-83,1389,57,1331,'57 250Q159 311 200 417H246L242 407Q215 340 159 278L152 270H276L315 310Q354 349 358 351Q366 356 376 351Q378 350 455 273L530 196L606 273Q683 350 686 351Q694 354 703 351Q705 350 782 273L858 196L933 273Q1010 350 1012 351Q1022 356 1030 351Q1034 349 1073 310L1112 270H1236L1229 278Q1173 340 1146 407L1142 417H1188Q1233 306 1331 250Q1231 192 1188 83H1142L1146 93Q1173 160 1229 222L1236 230H1168Q1155 230 1139 230T1119 229Q1112 229 1108 229T1099 231T1092 233T1085 238T1078 245T1068 256T1056 269L1021 304L984 267Q948 230 910 191T867 149Q857 144 848 150Q844 151 770 227T694 304T618 228T540 150Q531 144 521 149Q517 152 479 191T404 267L367 304L332 269Q328 264 320 256T310 246T303 239T296 234T289 231T280 229T269 229Q265 229 249 229T220 230H152L159 222Q215 160 242 93L246 83H223L200 84L195 96Q152 190 57 250'],
+
+    // LEFT RIGHT ARROW WITH STROKE
+    0x21AE: [437,-60,1000,56,942,'491 272Q491 275 542 352T597 432Q602 437 609 437Q617 437 622 432T628 417T582 341L537 272L608 270H751L822 272L808 288Q786 313 761 355T733 414Q733 424 737 426T766 428H793L806 397Q829 354 864 314Q896 284 928 263Q942 257 942 250T928 237Q887 208 864 185Q829 147 806 103L793 74L766 72Q742 72 738 73T733 85Q735 102 756 137T797 198L817 225L822 230H511L457 148Q440 124 420 93Q404 68 400 64T389 60Q381 60 375 66T368 81Q368 88 415 159L462 230H175L188 214Q210 188 235 145T264 85Q264 75 260 74T231 72L206 74L191 103Q169 142 164 150Q130 195 64 239Q56 244 56 250T64 261Q115 294 142 323T191 397L206 428H231Q255 428 259 426T264 414Q260 397 235 355T188 288L175 272L331 270Q488 270 491 272'],
+
+    // UPWARDS ARROW WITH TIP LEFTWARDS
+    0x21B0: [722,0,500,56,444,'56 555Q74 567 79 570T107 592T141 625T170 667T198 722H221Q244 722 244 721Q244 718 236 699T207 647T161 587L151 576L291 575H292H293H294H296H297H298H299H300H301H302H304H305H306H307H308H309H310H311H312H314H315H316H317H318H319H320H321H322H323H324H325H327H328H329H330H331H332H333H334H335H336H337H338H339H340H341H342H343H345Q435 574 438 570L439 569L440 568Q444 564 444 287Q444 15 442 12Q436 0 424 0T406 12Q404 15 404 275V535H151L162 523Q187 495 207 462T236 410T244 389H198L193 402Q171 457 131 497T56 555'],
+
+    // UPWARDS ARROW WITH TIP RIGHTWARDS
+    0x21B1: [722,0,500,55,443,'301 722Q339 618 443 555L437 551Q431 547 422 541T401 526T377 504T352 477T327 443T306 402L301 389H255Q255 392 263 410T291 461T337 523L348 535H95V275Q95 15 93 12Q87 0 75 0T57 12Q55 15 55 287Q55 564 59 568L60 569Q64 573 76 573T208 575L348 576L338 587Q314 613 294 646T264 698T255 721Q255 722 278 722H301'],
+
+    // ANTICLOCKWISE TOP SEMICIRCLE ARROW
+    0x21B6: [461,1,1000,17,950,'361 210Q373 210 373 182V177Q373 155 370 151T348 139Q303 118 267 84T216 28T201 1Q197 -1 196 -1Q189 -1 184 8Q166 39 143 64T99 104T61 129T32 144T19 150Q17 152 17 179Q17 203 21 208Q28 210 39 206Q106 178 157 135L175 119V126Q179 130 179 155Q182 173 193 201Q228 305 312 374T510 459Q532 461 551 461H567Q678 461 784 386Q835 344 861 301Q902 245 926 173T950 32Q950 15 944 8Q930 -6 917 8Q910 12 910 43Q901 208 801 314T561 421Q453 421 359 359Q300 319 263 258T217 126L216 125Q216 124 216 123T217 122Q219 122 229 131T260 156T301 181Q314 189 336 199T361 210'],
+
+    // CLOCKWISE TOP SEMICIRCLE ARROW
+    0x21B7: [460,1,1000,46,982,'972 209Q980 209 981 204T982 179Q982 155 979 151T957 139Q915 121 878 86T815 8Q808 -1 803 -1Q801 -1 797 1Q797 6 783 28T732 84T650 139L628 150Q626 152 626 177Q626 201 630 206Q636 210 637 210Q650 210 697 181Q727 166 764 137L784 119L782 132Q767 239 689 318T499 417Q474 421 442 421Q343 421 261 369T130 219Q86 121 86 28Q86 15 79 8Q73 1 66 1T53 8Q46 15 46 30Q46 102 77 192T186 361Q274 443 386 459Q396 460 426 460Q515 460 588 431T703 361T773 271T812 187T822 132Q822 123 825 123Q936 209 972 209'],
+
+    // ANTICLOCKWISE OPEN CIRCLE ARROW
+    0x21BA: [650,83,778,56,722,'369 543T369 563T397 583Q408 583 440 579L454 577L464 581Q492 592 516 609T552 638T565 650Q604 638 607 637Q606 636 598 628T585 614T570 601T548 584T523 568L510 560L516 558Q522 555 527 553T541 546T559 536T580 523T603 506T626 485Q722 384 722 250Q722 106 622 12T387 -83Q253 -83 155 12T56 250Q56 357 110 433T235 545Q244 550 252 550Q270 550 270 531Q270 522 261 515T238 501T202 477T159 433Q95 352 95 250Q95 131 178 45T388 -42Q511 -42 596 43T682 250Q682 340 636 408T522 511Q495 526 488 526Q488 525 488 525T487 522T485 515L490 506Q505 481 516 451T531 404T535 384L532 385Q529 386 524 387T513 390L491 397L488 408Q472 483 413 542L399 543Q369 543 369 563'],
+
+    // CLOCKWISE OPEN CIRCLE ARROW
+    0x21BB: [650,83,778,56,721,'170 637L213 650Q270 597 313 581L323 577L337 579Q369 583 380 583Q408 583 408 563T380 543H378L364 542Q305 483 289 408L286 397L264 390Q259 389 254 388T245 385L242 384Q242 387 246 403T261 450T287 506L292 515Q291 519 291 521T290 524T289 526Q284 526 265 517T216 486T160 434T114 354T95 249Q95 132 178 45T388 -42Q513 -42 597 44T682 250Q682 337 638 404T532 506Q529 508 525 510T519 514T515 516T511 519T509 522T508 526T507 531Q507 550 525 550Q533 550 542 545Q569 532 596 511T653 454T702 366T721 250Q721 151 672 74T547 -43T388 -83Q254 -83 155 12T56 250Q56 385 151 485Q164 498 179 509T205 528T228 542T247 551T260 558L267 560L254 568Q215 590 170 637'],
+
+    // UPWARDS HARPOON WITH BARB RIGHTWARDS
+    0x21BE: [694,194,417,188,375,'188 258V694H208L215 682Q246 628 293 594T375 551V528Q375 505 374 505Q369 505 351 510T299 534T237 578L228 587V205Q228 -178 226 -182Q221 -194 208 -194T190 -182Q188 -178 188 258'],
+
+    // UPWARDS HARPOON WITH BARB LEFTWARDS
+    0x21BF: [694,194,417,41,228,'41 551Q76 559 123 592T201 682L208 694H228V258Q228 -178 226 -182Q221 -194 208 -194T190 -182Q188 -178 188 205V587L179 578Q151 552 117 534T65 511T42 505Q41 505 41 528V551'],
+
+    // DOWNWARDS HARPOON WITH BARB RIGHTWARDS
+    0x21C2: [694,194,417,188,375,'190 682Q195 694 208 694T226 683Q228 679 228 296V-87L237 -78Q265 -52 299 -34T351 -11T374 -5Q375 -5 375 -28V-51Q340 -60 293 -92T215 -182L208 -194H188V242Q188 678 190 682'],
+
+    // DOWNWARDS HARPOON WITH BARB LEFTWARDS
+    0x21C3: [694,194,417,41,228,'188 295V573Q188 657 189 672T200 692Q206 694 208 694Q221 694 226 683Q228 679 228 242V-194H208L201 -182Q170 -128 123 -94T41 -51V-28Q41 -5 42 -5Q47 -5 65 -10T117 -34T179 -78L188 -87V295'],
+
+    // RIGHTWARDS ARROW OVER LEFTWARDS ARROW
+    0x21C4: [667,0,1000,55,944,'943 500Q895 471 856 427T801 333H778Q755 333 755 334Q755 336 762 353T791 406T841 472L848 480H459Q70 480 67 482Q55 488 55 500T67 518Q70 520 459 520H848L841 528Q813 559 792 594T763 646T755 666Q755 667 778 667H801Q817 617 856 573T943 500ZM56 167Q102 194 141 238T198 333H221Q244 333 244 332Q221 265 161 198L151 187H539Q928 187 930 186Q944 182 944 167Q944 155 934 149Q930 147 541 147H151L160 137Q185 110 205 77T235 24T244 1Q244 0 221 0H199Q158 106 56 167'],
+
+    // LEFTWARDS ARROW OVER RIGHTWARDS ARROW
+    0x21C6: [667,0,1000,55,944,'56 500Q103 527 142 572T199 667H221Q244 667 244 666Q244 664 237 647T208 594T158 528L151 520H539Q928 520 932 518Q944 513 944 500T932 482Q928 480 539 480H151L158 472Q186 441 207 406T236 354T244 334Q244 333 221 333H199Q181 383 142 428T56 500ZM943 167Q835 101 801 0H778Q755 0 755 1T758 9T765 25T771 39Q800 94 839 137L848 147H458Q68 147 66 149Q55 154 55 167Q55 182 69 186Q71 187 460 187H848L838 198Q811 228 791 261T762 314L755 332Q755 333 778 333H801Q841 227 943 167'],
+
+    // LEFTWARDS PAIRED ARROWS
+    0x21C7: [583,83,1000,55,944,'930 437Q944 426 944 416T934 399Q930 397 540 397H150L159 387Q185 360 205 328T234 277T243 252Q243 237 217 191T159 113L150 103H540Q930 103 934 101Q944 94 944 84Q944 71 930 64L540 63H151Q180 34 203 -2T236 -61L244 -83H198Q178 -31 142 11T66 77L55 83L65 89Q157 145 197 246Q199 250 190 269Q150 359 65 411L55 417L66 423Q106 447 142 489T198 583H244Q202 488 151 437H930'],
+
+    // UPWARDS PAIRED ARROWS
+    0x21C8: [694,193,833,83,749,'83 551Q190 590 250 694Q251 689 263 671T307 621T380 567Q409 551 416 551Q422 551 447 563T511 608T577 684L582 694Q642 591 749 551V528Q749 505 748 505Q745 505 724 515T669 546T612 590L602 599V-181Q595 -193 585 -193H582H581Q568 -193 565 -183L563 -179L562 209V598L552 589Q517 556 473 531T414 506H412Q411 506 393 514T361 530T324 553T280 589L270 598V-179Q255 -192 250 -193H247Q237 -193 230 -181V599L220 590Q197 567 164 546T110 515T84 505Q83 505 83 528V551'],
+
+    // RIGHTWARDS PAIRED ARROWS
+    0x21C9: [583,83,1000,55,944,'55 416Q55 427 70 437H848Q819 466 796 502T764 561L755 583H801Q821 531 857 489T933 423L944 417L934 411Q843 355 802 254Q800 250 809 231Q849 141 934 89L944 83L933 77Q893 53 857 11T801 -83H755Q797 12 848 63H459L70 64Q55 70 55 84Q55 94 65 101Q69 103 459 103H849L840 113Q806 148 779 196T756 254Q756 255 760 264T770 286T786 315T809 351T840 387L849 397H459Q69 397 65 399Q55 406 55 416'],
+
+    // DOWNWARDS PAIRED ARROWS
+    0x21CA: [694,194,833,83,749,'230 681Q240 694 251 694Q260 693 270 680V-98L280 -89Q297 -73 314 -60T348 -38T374 -24T397 -13T412 -6H414Q428 -6 473 -32T552 -89L562 -98V291L563 680Q570 693 582 693Q593 694 602 681V-99L612 -90Q635 -68 668 -47T723 -15T748 -5Q749 -5 749 -28V-51Q642 -91 582 -194L577 -184Q551 -141 512 -108T447 -63T416 -51T385 -63T321 -108T255 -184L250 -194Q189 -89 83 -51V-28Q83 -5 84 -5Q88 -5 109 -15T164 -46T220 -90L230 -99V681'],
+
+    // LEFTWARDS HARPOON OVER RIGHTWARDS HARPOON
+    0x21CB: [514,14,1000,55,944,'195 504L198 514H221Q244 514 244 512Q244 508 239 490T215 437T171 376L162 367H545Q928 367 932 365Q944 360 944 347T932 329Q928 327 492 327H55V347L67 354Q113 379 146 420T195 504ZM67 171Q70 173 507 173H944V153L932 146Q839 95 804 -4L801 -14H778Q755 -14 755 -12Q768 59 828 124L837 133H454Q71 133 67 135Q55 140 55 153Q55 165 67 171'],
+
+    // RIGHTWARDS HARPOON OVER LEFTWARDS HARPOON
+    0x21CC: [514,14,1000,55,944,'755 512Q755 514 778 514H801L804 503Q805 501 812 486T824 462T839 437T862 408T892 381T932 354L944 347V327H507Q70 327 67 329Q55 335 55 347T67 365Q70 367 454 367H837L828 376Q803 403 785 437T761 489T755 512ZM55 153V173H492Q928 173 932 171Q944 166 944 153T932 135Q928 133 545 133H162L171 124Q198 95 216 61T239 8L244 -12Q244 -14 221 -14H198L195 -4Q160 95 67 146L55 153'],
+
+    // LEFTWARDS DOUBLE ARROW WITH STROKE
+    0x21CD: [535,35,1000,54,942,'397 525Q410 525 414 524T418 516Q418 506 394 467T331 381L319 367H473L624 369L657 445Q674 487 684 507T699 531T709 534Q717 534 722 528T728 516Q728 510 695 434Q689 418 683 402T672 377T668 367H928Q942 355 942 347Q942 341 928 327H791Q651 327 651 325Q649 324 620 251T586 174Q586 172 757 172H928Q942 158 942 152Q942 143 928 132H568L537 54Q510 -9 503 -22T486 -35Q479 -35 473 -29T466 -17T495 61L526 132H319L331 118Q364 81 391 37T418 -17Q418 -23 415 -24T401 -26Q398 -26 397 -26L384 -24L377 -13Q344 49 301 97T218 170T143 210T84 233T55 245Q54 253 59 256T86 267Q281 327 377 512L384 525H397ZM606 325Q606 327 439 327H275Q258 312 179 265L148 249Q228 206 262 181L275 172H544L575 247L606 325'],
+
+    // LEFT RIGHT DOUBLE ARROW WITH STROKE
+    0x21CE: [534,37,1000,32,965,'395 -24T395 -19T417 57T440 132H255L266 116Q308 64 340 -6Q342 -17 337 -21Q335 -26 320 -26T302 -19Q302 -15 294 4T265 54T217 117T145 182T49 236Q30 243 33 254Q40 261 49 263Q98 283 142 315T214 379T263 442T293 493T302 519Q305 525 320 525T337 521Q342 516 340 505Q308 435 266 383L255 370L384 367H515Q561 522 569 530Q574 534 580 534Q587 534 594 528T602 516Q602 512 580 441T557 367H651L742 370L731 383Q689 435 657 505Q655 516 660 521Q662 525 677 525T695 519Q695 515 703 496T732 446T780 383T853 317T949 263Q967 258 964 245Q959 240 949 236Q897 215 852 182T779 116T731 52T703 3T695 -19Q692 -26 677 -26T660 -21Q655 -17 657 -6Q670 21 682 42T702 77T717 99T728 114T735 122T739 126T740 130T613 132H482L460 54Q440 -9 433 -23T415 -37Q408 -37 402 -31ZM502 325Q502 327 360 327H217L195 310Q173 291 120 256L111 250Q114 248 143 229T195 190L217 172H335L453 174L502 325ZM886 250Q885 251 865 263T831 286T802 310L780 327H544L535 299Q531 283 511 223L495 174L637 172H780L802 190Q843 225 877 243L886 250'],
+
+    // RIGHTWARDS DOUBLE ARROW WITH STROKE
+    0x21CF: [534,36,1000,55,943,'346 174Q348 176 378 249T411 325Q411 327 239 327H68Q55 342 55 347Q55 354 68 367H428L459 445Q487 509 494 521T510 534Q517 534 524 527T531 516Q531 515 502 438L471 367H677L666 381Q631 421 605 463T578 516Q578 522 582 523T599 525H615L619 512Q659 437 714 383T812 309T896 272T942 254Q943 246 938 243T911 232Q718 172 619 -13L615 -24L599 -26Q578 -26 578 -17Q578 -11 587 6T617 53T666 118L677 132H373L339 54Q323 12 313 -8T298 -32T288 -35Q280 -35 275 -29T269 -17Q269 -14 298 57T328 132H68Q55 145 55 152Q55 156 56 158T62 165T68 172H206Q346 172 346 174ZM848 249Q763 297 735 318L722 327H455L422 252L391 174Q391 172 557 172H722L735 181Q773 210 819 234L848 249'],
+
+    // LEFTWARDS TRIPLE ARROW
+    0x21DA: [611,111,1000,76,945,'944 54Q942 44 929 36H372Q372 34 377 26T395 -4T422 -58Q442 -109 442 -110T408 -111H374L370 -100Q282 124 87 243L76 250L87 257Q284 377 370 600L374 611H408Q442 611 442 610Q423 550 381 480Q380 478 379 475T376 471T374 468T372 465V464H929Q942 456 944 446Q944 442 943 439T941 434T938 430T935 428T931 426T928 424H344L336 414Q277 336 200 277L191 270H560Q929 270 933 268Q944 262 944 250Q944 237 933 232Q929 230 560 230H191L200 223Q279 162 336 86L344 76H928Q929 76 931 75T934 73T938 70T941 66T943 61T944 54'],
+
+    // RIGHTWARDS TRIPLE ARROW
+    0x21DB: [611,111,1000,55,923,'56 250Q56 260 68 270H808L799 277Q720 338 663 414L655 424H363Q71 424 68 426Q55 432 55 444T68 462Q71 464 349 464H627Q627 466 622 474T604 504T577 558Q557 609 557 610T591 611H626L629 600Q717 376 912 257L923 250L912 243Q715 123 629 -100L626 -111H591Q557 -111 557 -110Q576 -50 618 20Q619 22 620 25T623 29T625 32T626 35L627 36H349Q71 36 68 38Q55 44 55 56T68 74Q71 76 363 76H655L663 86Q722 164 799 223L808 230H438L68 231Q56 236 56 250'],
+
+    // RIGHTWARDS SQUIGGLE ARROW
+    0x21DD: [417,-83,1000,56,943,'76 230Q68 230 62 237T56 250Q56 257 63 264T91 291Q102 300 108 306L159 351Q168 356 177 351L218 316L303 239L353 195Q376 214 403 239L488 316L529 351Q538 356 546 351Q548 350 594 310L638 270H848L841 278Q813 309 792 344T763 396T755 416Q755 417 778 417H801Q817 367 856 323T943 250Q895 221 856 177T801 83H778Q755 83 755 84Q755 86 762 103T791 156T841 222L848 230H737Q625 230 622 232Q620 233 599 251T558 288L537 306Q537 305 451 228T362 149Q353 146 345 149Q341 150 255 227T169 306Q167 306 129 270Q123 265 115 257T102 245T93 237T84 232T76 230'],
+
+    // LEFTWARDS DASHED ARROW
+    0x21E0: [437,-64,1334,64,1251,'292 419Q292 400 261 347T211 275H306H364Q400 275 411 271T422 250T411 230T366 225H306H211Q214 222 232 197T271 136T292 82Q292 71 285 68T262 64H250H241Q221 64 216 67T205 83Q186 127 153 167T78 230Q64 238 64 250Q64 258 69 263T82 272T106 288T139 318Q162 342 177 365T198 402T209 425T223 436Q224 437 252 437H258Q292 437 292 419ZM501 237T501 250T515 270H819Q834 262 834 250T819 230H515Q501 237 501 250ZM918 237T918 250T932 270H1236Q1251 262 1251 250T1236 230H932Q918 237 918 250'],
+
+    // RIGHTWARDS DASHED ARROW
+    0x21E2: [437,-64,1334,84,1251,'84 237T84 250T98 270H402Q417 262 417 250T402 230H98Q84 237 84 250ZM501 237T501 250T515 270H819Q834 262 834 250T819 230H515Q501 237 501 250ZM1022 417Q1022 437 1055 437H1067Q1090 437 1097 434T1109 417Q1128 373 1161 333T1236 270Q1251 261 1251 250Q1251 241 1244 236T1216 217T1175 182Q1149 155 1133 128T1109 85T1097 66Q1093 64 1065 64H1053Q1031 64 1025 72T1027 100Q1036 124 1049 147T1073 185T1091 210T1101 223L1103 225H1008H950Q914 225 903 229T892 250T903 270T948 275H1008H1103L1101 277Q1100 280 1091 291T1067 325T1039 374Q1022 408 1022 417']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/Arrows.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/BoxDrawing.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // BOX DRAWINGS LIGHT DOWN AND RIGHT
+    0x250C: [694,-306,500,55,444,'76 306Q62 306 59 319T55 386V500V596Q55 664 57 676T68 692Q71 694 250 694Q428 694 432 692Q444 685 444 674Q444 665 432 656Q428 654 261 654H95V487Q95 355 95 336T90 312Q84 306 76 306'],
+
+    // BOX DRAWINGS LIGHT DOWN AND LEFT
+    0x2510: [694,-306,500,55,445,'424 306Q418 306 413 310T406 318L404 321V654H238Q71 654 68 656Q55 662 55 674T68 692Q71 694 250 694H379Q432 694 438 688Q443 683 443 662T444 500T444 338T438 312Q432 306 424 306'],
+
+    // BOX DRAWINGS LIGHT UP AND RIGHT
+    0x2514: [366,22,500,55,444,'55 172V287Q55 341 58 353T76 366Q88 366 95 351V18H261Q428 18 432 16Q444 9 444 -2Q444 -11 432 -20Q428 -22 250 -22H120Q67 -22 61 -16Q56 -11 56 10T55 172'],
+
+    // BOX DRAWINGS LIGHT UP AND LEFT
+    0x2518: [366,22,500,55,444,'404 351Q410 366 424 366Q437 366 440 353T444 288V172V72Q444 8 443 -4T432 -20Q428 -22 250 -22Q71 -22 68 -20Q55 -14 55 -2T68 16Q71 18 238 18H404V351'],
+
+    // BOX DRAWINGS LIGHT DIAGONAL UPPER RIGHT TO LOWER LEFT
+    0x2571: [694,195,889,0,860,'19 -195Q13 -195 7 -188T0 -176Q0 -169 18 -151L822 683Q835 694 840 694T852 688T860 674Q860 667 810 614T460 252Q57 -167 44 -179Q27 -195 19 -195'],
+
+    // BOX DRAWINGS LIGHT DIAGONAL UPPER LEFT TO LOWER RIGHT
+    0x2572: [694,195,889,0,860,'0 675Q0 681 6 687T19 694Q27 694 44 678L460 247Q759 -62 809 -115T860 -175Q860 -183 852 -189T840 -195Q835 -195 822 -184L18 649Q0 667 0 675']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/BoxDrawing.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/CombDiacritMarks.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // COMBINING CIRCUMFLEX ACCENT
+    0x302: [845,-561,0,-2347,13,'-2332 561Q-2336 563 -2340 577T-2346 604L-2347 618Q-2347 625 -2340 628T-2310 635Q-2302 636 -2297 637Q-2270 641 -1712 745Q-1185 845 -1168 845Q-1166 845 -581 739L5 630Q13 630 13 618Q7 565 -1 561Q-4 561 -584 654Q-716 675 -867 699T-1092 736T-1166 748Q-1168 748 -1240 737T-1466 700T-1750 654Q-2330 561 -2332 561'],
+
+    // COMBINING TILDE
+    0x303: [899,-628,0,-2332,-3,'-1529 788Q-1616 788 -1727 772T-1936 732T-2120 685T-2258 645T-2315 628Q-2322 628 -2322 632Q-2325 637 -2329 668T-2331 704Q-2331 713 -2297 732Q-2278 739 -2091 795Q-1711 898 -1507 898Q-1440 898 -1386 895Q-1324 887 -1277 872T-1146 819Q-1047 776 -977 758T-806 739Q-719 739 -608 755T-399 795T-215 842T-77 882T-20 899Q-13 899 -13 895Q-10 890 -6 860T-4 824Q-4 818 -37 795Q-60 787 -244 732Q-523 657 -735 632Q-771 629 -841 629Q-944 629 -1013 644T-1189 708Q-1285 751 -1356 769T-1529 788']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/CombDiacritMarks.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/Dingbats.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // CHECK MARK
+    0x2713: [706,34,833,84,749,'84 231Q84 244 114 264T170 285Q176 285 183 274T224 205Q267 129 268 129Q271 141 279 163T318 250T389 378T502 523T662 673Q702 706 732 706H734Q749 706 749 695Q749 682 730 666T660 607T559 505Q387 299 328 29Q324 0 295 -17T245 -34H241Q234 -34 225 -21T185 46Q166 79 154 101Q84 223 84 231'],
+
+    // MALTESE CROSS
+    0x2720: [716,22,833,48,786,'195 702T195 706T201 716H632Q638 710 638 706T636 700T621 690Q436 581 427 374V357H430Q554 357 645 421Q682 447 711 483T755 542T770 567Q775 572 786 563V131Q777 125 774 125T762 139Q709 228 642 274T482 333Q452 337 430 337H427V320Q430 279 437 247T462 170T521 82T621 4Q630 -2 633 -4T637 -7T638 -12Q638 -16 632 -22H201Q195 -16 195 -12T197 -6T212 4Q397 113 406 320V337H403Q279 337 188 273Q151 247 122 211T78 152T63 127Q58 122 48 131V563Q54 569 59 569Q62 569 71 555Q124 466 191 420T351 361Q381 357 403 357H406V374Q403 415 396 447T371 525T312 613T212 690Q199 697 197 699']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/Dingbats.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/EnclosedAlphanum.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // CIRCLED LATIN CAPITAL LETTER S
+    0x24C8: [709,175,902,8,894,'451 -175Q328 -175 226 -115T66 47T8 267Q8 303 15 342T39 431T94 531T186 622Q239 663 307 686T424 709H440Q604 709 716 622Q757 592 788 555T838 482T869 414T886 350T892 301T894 267Q894 147 835 45T674 -116T451 -175ZM854 268Q854 375 802 467T657 614T450 670Q283 670 166 552T49 267Q49 99 167 -18T453 -136Q617 -136 735 -18T854 268ZM273 378Q273 430 309 474T409 527Q411 527 417 527T428 528Q498 528 549 484L567 505Q583 528 590 528H594Q600 528 606 522V350L600 344H586Q577 344 574 344T569 347T566 357Q542 491 432 491Q389 491 365 465T340 407Q340 391 344 378T358 356T377 340T400 328T421 321T443 316T459 313Q499 305 517 300T559 279T601 238Q629 195 629 148Q629 80 583 33T471 -14Q392 -14 330 30Q312 6 293 -13Q292 -14 285 -14Q279 -14 273 -8V77V138Q273 160 275 165T286 170H294H307Q313 164 313 158Q313 108 350 67T471 26Q512 26 537 54T562 119Q562 137 558 151T544 176T527 193T504 205T483 212T459 218T441 222Q391 232 368 241T318 273Q273 316 273 378']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/EnclosedAlphanum.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/GeneralPunctuation.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // REVERSED PRIME
+    0x2035: [560,-43,275,12,244,'12 501Q12 527 31 542T63 558Q73 560 77 560Q114 560 128 528Q133 518 188 293T244 61Q244 56 223 50T195 43Q192 43 190 45T102 263T14 486Q12 496 12 501']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/GeneralPunctuation.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/GeometricShapes.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // BLACK SQUARE
+    0x25A0: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H709Q719 681 722 674V15Q719 10 709 1L390 0H71'],
+
+    // WHITE SQUARE
+    0x25A1: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H709Q719 681 722 674V15Q719 10 709 1L390 0H71ZM682 40V649H95V40H682'],
+
+    // BLACK UP-POINTING TRIANGLE
+    0x25B2: [575,20,722,84,637,'99 -20Q84 -11 84 0Q84 5 148 145T278 424L342 563Q347 575 360 575Q368 575 375 570Q376 569 441 430T571 148T637 0Q637 -11 622 -20H99'],
+
+    // WHITE UP-POINTING TRIANGLE
+    0x25B3: [575,20,722,84,637,'99 -20Q84 -11 84 0Q84 5 148 145T278 424L342 563Q347 575 360 575Q368 575 375 570Q376 569 441 430T571 148T637 0Q637 -11 622 -20H99ZM476 260L360 509L248 266Q137 24 135 22Q135 20 360 20Q586 20 586 21L476 260'],
+
+    // BLACK RIGHT-POINTING TRIANGLE
+    0x25B6: [540,41,778,83,694,'83 523Q83 524 85 527T92 535T103 539Q107 539 389 406T680 268Q694 260 694 249Q694 239 687 234Q685 232 395 95L107 -41H101Q90 -40 83 -26V523'],
+
+    // BLACK DOWN-POINTING TRIANGLE
+    0x25BC: [576,19,722,84,637,'84 556Q84 567 99 576H622Q637 567 637 556Q637 551 572 409T441 127T375 -14Q368 -19 360 -19H358Q349 -19 342 -7T296 92Q249 193 211 275Q84 550 84 556'],
+
+    // WHITE DOWN-POINTING TRIANGLE
+    0x25BD: [576,19,722,84,637,'84 556Q84 567 99 576H622Q637 567 637 556Q637 551 572 409T441 127T375 -14Q368 -19 360 -19H358Q349 -19 342 -7T296 92Q249 193 211 275Q84 550 84 556ZM586 534Q586 536 361 536Q135 536 135 535L358 52L361 47L473 290Q584 532 586 534'],
+
+    // BLACK LEFT-POINTING TRIANGLE
+    0x25C0: [539,41,778,83,694,'694 -26Q686 -40 676 -41H670L382 95Q92 232 90 234Q83 239 83 249Q83 262 96 267Q101 270 379 401T665 537Q671 539 674 539Q686 539 694 524V-26'],
+
+    // LOZENGE
+    0x25CA: [716,132,667,56,611,'318 709Q325 716 332 716Q340 716 344 713T474 511Q611 298 611 292Q611 285 526 152Q494 103 474 72Q347 -128 344 -130Q340 -132 333 -132T322 -130Q319 -128 257 -31T131 169T60 278Q56 285 56 292Q56 298 60 305Q73 326 194 516T318 709ZM567 290T567 291T451 475T333 658L100 293Q100 288 215 108L333 -74Q334 -74 450 108']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/GeometricShapes.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/GreekAndCoptic.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // GREEK SMALL LETTER DIGAMMA
+    0x3DD: [605,85,778,55,719,'477 261Q477 257 473 256T455 253T417 251T348 250H235L155 -77L146 -82Q137 -85 109 -85Q55 -85 55 -77L139 261Q224 596 226 598Q229 603 239 603Q240 603 254 603T290 603T341 604T405 605T477 605Q656 603 687 602T719 596Q719 589 692 588T513 585H319L282 427L242 272Q242 270 351 270Q388 270 410 270T444 269T460 267T469 265T477 261'],
+
+    // GREEK KAPPA SYMBOL
+    0x3F0: [434,6,667,37,734,'228 325Q170 322 156 316T127 309Q108 309 104 314Q99 319 99 322T108 341Q125 376 171 400T268 425H271Q302 425 319 396Q328 377 328 358Q328 332 324 314Q311 270 286 221Q274 194 274 192H275Q339 234 484 325T639 421Q669 434 691 434T723 425T734 406Q734 394 719 381Q715 376 644 330L575 287L566 267Q543 233 526 176Q520 160 515 143T508 115T506 105Q506 103 533 103Q585 103 607 110T641 118Q670 118 670 107Q670 100 661 85Q643 50 598 27T504 3Q465 3 450 36Q441 51 441 73Q441 84 444 96Q452 146 484 205L497 236L324 125Q143 12 135 10Q103 -6 77 -6Q61 -6 49 2T37 21Q37 36 49 46T124 96L195 141L204 156Q219 179 243 248T264 323Q264 325 228 325']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/GreekAndCoptic.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/Latin1Supplement.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // YEN SIGN
+    0xA5: [683,0,750,11,738,'515 0Q494 3 374 3Q256 3 235 0H224V46H257Q316 47 324 58Q327 62 327 137V213H133Q121 213 113 213T97 213T86 213T78 213T73 214T70 215T69 216T68 218T67 220Q64 225 66 231T73 240Q76 242 202 242H327V273L247 407H115Q81 407 75 408T67 414Q64 419 66 425T73 434Q76 436 153 436Q228 436 228 437Q227 440 173 530T115 623Q101 637 31 637H11V683H20Q66 681 153 681Q169 681 202 681T262 682L288 683H298V637H280Q230 636 230 621Q230 619 250 584Q255 576 264 561T286 526T305 494L340 437L403 436H467L513 514Q564 596 564 605Q564 608 560 616Q550 634 517 637H508V683H516Q531 680 633 680Q722 680 731 683H738V637H723Q644 632 617 595Q614 591 568 515T521 437T597 436T676 434Q681 432 683 426T682 414T671 409T589 407H503L422 273V242H547Q673 242 676 240Q681 238 683 232T682 220Q682 219 682 218T681 217T679 216T677 215T672 214T664 213T652 213T637 213T616 213H422V139V87Q422 64 425 58T441 49Q456 46 503 46H525V0H515ZM449 406Q449 407 403 407Q358 407 358 406L370 387Q381 368 392 350L404 331Q447 404 449 406'],
+
+    // REGISTERED SIGN
+    0xAE: [709,176,947,32,915,'915 266Q915 140 852 38T689 -120T474 -175Q312 -175 188 -71T38 190Q32 220 32 266V287Q32 345 57 416T129 545Q192 624 282 666T464 709Q513 709 522 708Q599 698 665 666T776 590T853 493T900 387T915 287V266ZM875 285Q875 339 853 399T789 517T676 616T519 668Q510 669 465 669Q380 669 299 630T155 514T77 336Q72 312 72 285V266V256Q72 123 163 11Q290 -135 474 -135Q614 -135 727 -46Q875 81 875 266V285ZM276 457Q275 458 274 460T272 463T270 465T267 467T264 469T258 471T252 472T243 473T232 474T218 474H204V514H335Q477 514 499 510Q560 502 610 467T661 375Q661 362 658 350T648 327T635 308T618 292T601 280T583 269T568 262T554 256L547 253Q548 252 556 247T570 237T586 223T602 202T614 174Q616 169 626 123T638 72Q652 23 683 23Q715 23 720 68Q721 78 724 81T740 84T756 82T760 70Q760 47 747 25T715 -7Q700 -14 673 -14Q672 -14 662 -14T643 -12T619 -7T593 2T568 16T547 37T534 67Q531 80 531 97Q531 103 531 116T532 136Q532 218 472 236Q466 238 413 239H360V148L361 58Q366 47 375 44T418 40H432V0H424Q409 3 318 3T212 0H204V40H218Q242 40 253 42T268 47T276 58V457ZM376 473Q365 471 363 464T360 430V366V276H416Q421 276 434 276T453 276T469 277T486 279T501 282T517 287T529 294T542 305Q561 324 561 375Q561 424 545 444T482 472Q478 473 427 474Q415 474 403 474T384 474L376 473'],
+
+    // LATIN SMALL LETTER ETH
+    0xF0: [749,21,556,42,509,'75 566V604Q75 624 79 629T102 635Q124 635 127 629T131 588L133 550L191 588L249 628L231 635Q176 654 124 657Q116 657 106 658L95 659Q94 661 94 687T95 715Q99 717 113 717Q195 717 282 679L309 668L331 681Q351 697 391 721Q428 748 435 748Q437 749 446 749Q470 749 473 746Q478 744 478 681V621Q466 615 456 615Q435 615 424 624L422 661V699L382 675L344 648Q353 639 366 630Q480 538 504 413Q509 393 509 333V313Q509 284 507 257T495 184T466 102T413 33T329 -16Q311 -21 275 -21Q226 -21 195 -10Q150 7 110 50T53 141Q42 179 42 227Q42 332 101 403T245 474Q282 474 314 461T359 436T380 415Q386 405 389 408Q389 426 378 475Q368 505 355 529T329 567T306 590T288 603L282 606L120 501Q116 500 102 500Q84 500 75 506V566ZM388 225Q388 376 309 410Q299 416 273 419Q216 419 191 390Q174 371 168 342T162 218Q162 112 184 79Q212 39 273 39Q312 39 342 62T380 121Q388 159 388 225']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/Latin1Supplement.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/LatinExtendedA.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // LATIN SMALL LETTER H WITH STROKE
+    0x127: [695,13,540,42,562,'182 599Q182 611 174 615T133 619Q118 619 114 621T109 630Q109 636 114 656T122 681Q125 685 202 688Q272 695 286 695Q304 695 304 684Q304 682 295 644T282 597Q282 592 360 592H399Q430 592 445 587T460 563Q460 552 451 541L442 535H266L251 468Q247 453 243 436T236 409T233 399Q233 395 244 404Q295 441 357 441Q405 441 445 417T485 333Q485 284 449 178T412 58T426 44Q447 44 466 68Q485 87 500 130L509 152H531H543Q562 152 562 144Q562 128 546 93T494 23T415 -13Q385 -13 359 3T322 44Q318 52 318 77Q318 99 352 196T386 337Q386 386 346 386Q318 386 286 370Q267 361 245 338T211 292Q207 287 193 235T162 113T138 21Q128 7 122 4Q105 -12 83 -12Q66 -12 54 -2T42 26L166 530Q166 534 161 534T129 535Q127 535 122 535T112 534Q74 534 74 562Q74 570 77 576T84 585T96 589T109 591T124 592T138 592L182 595V599']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/LatinExtendedA.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/LetterlikeSymbols.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // stix-/hbar - Planck's over 2pi
+    0x210F: [695,13,540,42,562,'150 475Q147 475 118 466T82 457Q73 457 64 467T54 487Q54 490 55 492Q63 506 64 506Q67 512 118 526Q162 541 169 546Q173 559 175 575Q181 596 181 604Q181 613 166 617Q164 617 153 618T135 619Q119 619 114 621T109 630Q109 636 114 656T122 681Q125 685 202 688Q272 695 286 695Q304 695 304 684Q304 682 291 628L278 577L386 612Q466 635 476 635T492 627T499 607Q499 593 489 586Q485 583 373 546L262 512Q262 511 248 455T233 397T236 397T244 404Q295 441 357 441Q405 441 445 417T485 333Q485 284 449 178T412 58T426 44Q447 44 466 68Q485 87 500 130L509 152H531H543Q562 152 562 144Q562 128 546 93T494 23T415 -13Q385 -13 359 3T322 44Q318 52 318 77Q318 99 352 196T386 337Q386 386 346 386Q318 386 286 370Q267 361 245 338T211 292Q207 287 193 235T162 113T138 21Q128 7 122 4Q105 -12 83 -12Q66 -12 54 -2T42 26Q42 45 98 257L151 475H150'],
+
+    // INVERTED OHM SIGN
+    0x2127: [685,22,722,44,675,'126 584Q119 584 110 539T97 493Q95 490 73 490Q44 490 44 501Q44 515 62 590Q75 672 82 679Q84 684 177 684Q193 684 214 684T241 685Q265 685 271 682T277 664V648Q271 572 229 434T186 231Q186 173 203 132T247 70T302 42T360 33Q391 33 419 42T474 72T517 133T533 231Q533 297 491 437T442 648Q442 675 446 679Q448 684 542 684Q635 684 637 681Q640 678 657 594T675 501Q675 490 646 490Q624 490 622 493Q620 493 609 538T593 584Q591 585 585 585T569 586T551 588H513Q514 586 518 573T538 531T582 453Q647 340 660 277Q663 259 663 232Q663 194 657 177Q652 151 629 112T560 39Q495 -5 424 -19Q403 -22 360 -22Q318 -22 297 -19Q239 -8 193 18T120 74T80 131T62 177Q56 194 56 229Q56 281 74 328T137 453Q160 491 174 518T193 555T201 575T206 588H168Q160 587 150 587T134 586T126 584'],
+
+    // TURNED CAPITAL F
+    0x2132: [695,1,556,55,497,'457 681Q471 695 477 695Q485 695 497 681V12L484 -1H68Q55 14 55 19T68 39H457V328H215L211 335Q198 346 211 359L217 368H457V681'],
+
+    // BET SYMBOL
+    0x2136: [763,21,667,-22,687,'56 706V726Q56 763 76 763Q83 763 87 759T98 741Q108 726 116 721L127 717L340 715Q547 712 564 709Q575 705 587 692Q599 680 605 663L609 650V137H676Q687 124 687 115Q687 110 678 100T622 43L558 -21H-9Q-22 -6 -22 -1T-13 14T42 72L107 137H569V339Q569 541 567 546Q558 555 554 557L545 563H329Q118 566 101 569Q90 573 78 586Q54 610 54 661Q54 670 56 706'],
+
+    // GIMEL SYMBOL
+    0x2137: [764,43,444,-22,421,'56 750Q68 764 76 764Q88 764 97 743T125 717Q131 715 240 715T358 713Q421 691 421 640Q421 608 399 588T358 566Q353 566 352 565T351 557L356 526Q356 488 379 346T402 97Q400 21 385 -12Q366 -43 351 -43Q335 -43 329 -10Q316 40 316 64Q316 67 315 67Q313 67 269 26L222 -21H-9Q-22 -7 -22 -1Q-22 4 -14 14T42 73L107 137H311V564H211H164Q115 564 93 573T60 615Q56 630 56 690V750'],
+
+    // DALET SYMBOL
+    0x2138: [764,43,667,54,640,'62 757Q69 764 75 764Q87 764 97 741Q102 731 105 728T117 721L129 715H349Q569 715 580 710Q618 701 635 670Q640 661 640 639Q640 609 622 590Q617 583 604 575T580 566H573V553Q575 547 576 531T582 469T600 353Q624 205 624 104Q624 46 617 17T591 -32Q581 -43 573 -43Q550 -43 540 44Q535 73 533 319V564H322Q117 566 100 570Q90 573 77 586Q54 609 54 663Q54 689 55 706Q55 738 56 745T62 757'],
+
+    // TURNED SANS-SERIF CAPITAL G
+    0x2141: [705,23,639,37,577,'239 665Q194 665 154 653T90 629T66 617Q59 617 53 623T46 637Q46 652 66 659Q129 695 197 701Q218 705 248 705Q293 705 335 693Q371 684 435 644Q543 562 573 417Q577 393 577 341Q577 290 573 266Q531 83 384 10Q346 -9 315 -16T234 -23H206Q202 -23 183 -23T152 -21T120 -18T88 -10T63 3T44 24L37 35V297L50 310H235Q248 297 248 290Q248 285 235 270H77V103Q77 88 77 80T77 63T78 50T80 43T82 38T85 35T89 32T95 30Q126 20 206 17Q289 17 330 30Q407 55 460 120T533 275Q538 305 538 342Q538 486 452 575T239 665']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/LetterlikeSymbols.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/MathOperators.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // COMPLEMENT
+    0x2201: [846,22,500,56,444,'404 269Q412 269 418 267T428 261T435 253T441 245L444 240V172Q444 103 443 96Q440 81 431 65T403 27T344 -7T250 -21T156 -8T97 27T69 65T58 96Q56 103 56 413Q56 722 58 729Q74 822 215 845Q221 846 229 846H243Q282 846 290 845Q422 826 443 729Q444 722 444 653V586L442 583Q441 580 440 578T436 573T430 567T423 562T415 558T404 556Q377 556 367 583Q364 590 364 654V719Q363 721 360 726T355 733Q326 766 250 766H249Q235 766 219 765T174 752T137 719V107Q145 83 178 71T251 58H254Q340 58 364 107V172Q364 176 364 187T363 204Q363 269 404 269'],
+
+    // THERE DOES NOT EXIST
+    0x2204: [860,166,556,55,497,'55 676Q55 688 66 694H199L333 696L351 772Q364 827 370 843T386 860Q393 860 399 854T406 841Q406 836 391 765L375 696Q375 694 431 694H484Q491 688 497 681V12L493 5L486 1L353 -1H219L202 -79Q184 -153 180 -159Q175 -166 165 -166Q146 -166 146 -148Q146 -141 161 -76T177 -4Q177 -1 122 -1H68Q55 12 55 20T66 39H126L186 41L219 181Q226 215 234 251T246 305T251 325Q251 328 166 328H79Q68 345 68 347Q68 352 75 359L82 368H262L291 505Q298 539 306 575T319 630T324 650V654H68Q55 669 55 676ZM457 368V654H411Q366 654 366 652Q365 651 361 634T349 580T333 514Q303 373 302 372V368H457ZM457 39V328H375Q293 328 293 325Q292 322 260 183T228 41T344 39H457'],
+
+    // EMPTY SET
+    0x2205: [587,3,778,55,720,'624 470Q624 468 639 446T668 382T683 291Q683 181 612 99T437 -1Q425 -2 387 -2T337 -1Q245 18 193 70L179 81L131 39Q96 8 89 3T75 -3Q55 -3 55 17Q55 24 61 30T111 73Q154 113 151 113Q151 114 140 130T115 177T95 241Q94 253 94 291T95 341Q112 431 173 495Q265 587 385 587Q410 587 437 581Q522 571 582 513L595 501L642 541Q689 586 695 586Q696 586 697 586T699 587Q706 587 713 583T720 568Q720 560 711 551T664 510Q651 499 642 490T628 475T624 470ZM564 477Q517 522 448 539Q428 546 375 546Q290 546 229 492T144 370Q133 332 133 279Q136 228 151 195Q157 179 168 160T184 141Q186 141 375 307T564 477ZM642 290Q642 318 637 343T625 386T611 416T598 436T593 444Q590 444 402 277T213 108Q213 104 231 89T293 55T392 37Q495 37 568 111T642 290'],
+
+    // SMALL CONTAINS AS MEMBER
+    0x220D: [440,1,429,102,456,'154 -1Q122 -1 112 3T102 26Q102 63 158 63H178Q192 64 206 65T228 66T240 68Q301 85 324 146L329 157H244Q158 157 153 161Q149 162 145 169T140 183Q140 201 158 215L167 221H256L344 223L349 237Q352 262 352 287Q352 308 351 315Q341 352 315 368T256 385Q231 385 206 376T166 356T149 346Q143 346 138 364T132 388Q132 396 147 406Q198 440 252 440Q291 440 318 435Q421 404 451 301Q456 288 456 248V234Q456 151 391 86Q330 25 240 3Q212 -1 154 -1'],
+
+    // MINUS SIGN
+    0x2212: [270,-230,500,84,417,'84 237T84 250T98 270H402Q417 262 417 250T402 230H98Q84 237 84 250'],
+
+    // DOT PLUS
+    0x2214: [766,93,778,57,722,'339 717Q339 739 354 752T388 766Q410 766 424 751T439 716T424 681T390 666Q369 666 354 681T339 717ZM57 237T57 250T71 270H369V425L370 581Q380 594 389 594Q402 594 409 579V270H707Q722 262 722 250T707 230H409V-79Q401 -93 391 -93H389H387Q375 -93 369 -79V230H71Q57 237 57 250'],
+
+    // SET MINUS
+    0x2216: [430,23,778,91,685,'91 404T91 410T97 423T111 430Q117 430 395 224Q676 13 678 10Q685 3 685 -3T678 -16T664 -23Q658 -23 380 184T98 397Q91 404 91 410'],
+
+    // PROPORTIONAL TO
+    0x221D: [472,-28,778,56,722,'56 250Q56 346 122 409T276 472Q349 472 407 430T486 326L489 316Q490 317 493 326T501 345T514 367T531 393Q557 425 602 448T698 472Q722 472 722 452Q722 437 702 435T642 421T571 377Q520 323 520 250Q520 179 568 126T693 68Q722 66 722 48Q722 28 698 28Q636 28 576 67T493 174L490 184Q489 181 483 167T475 150T468 136T458 120T447 107T432 90T412 73Q350 28 277 28Q188 28 122 91T56 250ZM199 68T278 68T408 122T459 250Q459 322 414 370T308 430Q302 431 273 431Q204 431 150 380T96 250Q96 176 147 122'],
+
+    // ANGLE
+    0x2220: [694,0,722,55,666,'71 0L68 2Q65 3 63 5T58 11T55 20Q55 22 57 28Q67 43 346 361Q397 420 474 508Q595 648 616 671T647 694T661 688T666 674Q666 668 663 663Q662 662 627 622T524 503T390 350L120 41L386 40H653Q666 30 666 20Q666 8 651 0H71'],
+
+    // MEASURED ANGLE
+    0x2221: [714,20,722,55,666,'71 0L68 2Q65 3 63 5T58 11T55 20Q55 22 57 28Q64 38 348 373T638 712Q644 714 646 714Q653 714 659 709T666 694V693Q666 687 633 647Q619 631 576 580Q528 524 495 485Q336 296 329 289Q328 288 348 264T395 182T433 54L434 40H651Q666 32 666 20T651 0H436Q431 -20 416 -20Q400 -20 396 -4V0H71ZM394 40Q394 51 389 76T366 149T319 234L302 256L119 41L256 40H394'],
+
+    // SPHERICAL ANGLE
+    0x2222: [551,51,722,55,666,'666 -32Q666 -51 646 -51Q639 -51 365 85L75 228Q55 238 55 250Q55 257 59 262T68 268L72 270L611 536Q642 551 647 551T659 547T666 532Q666 521 657 515L525 449Q525 448 535 424T556 352T566 250T556 148T536 77T525 51L657 -15Q666 -21 666 -32ZM526 250Q526 297 517 342T499 409T488 431Q487 431 304 341T121 250T304 159T488 69Q526 143 526 250'],
+
+    // DIVIDES
+    0x2223: [430,23,222,91,131,'91 417Q104 430 111 430T131 417V-10Q116 -23 111 -23T91 -10V417'],
+
+    // DOES NOT DIVIDE
+    0x2224: [750,252,278,-20,296,'118 737Q131 750 138 750L151 746L158 739V579L160 421L213 470Q269 519 276 519Q284 519 290 513T296 499V498Q296 493 291 488T244 445Q225 428 213 417L158 368V-239Q143 -252 136 -252L124 -248L120 -241L118 44V328L62 279Q4 231 0 230Q-8 230 -14 236T-20 250Q-20 257 -11 265T62 332L118 384V737'],
+
+    // PARALLEL TO
+    0x2225: [431,23,389,55,331,'55 417Q69 431 76 431T95 419V-12Q84 -23 76 -23Q72 -23 69 -22T62 -16T55 -10V417ZM293 419Q300 431 310 431L324 424L331 417V-10Q316 -23 309 -23L297 -19L293 -12V419'],
+
+    // NOT PARALLEL TO
+    0x2226: [751,250,500,-20,518,'131 737Q134 739 138 743T144 748T151 750T171 737V199L327 357V737Q340 750 347 750Q351 750 353 749T360 743T367 737V397L429 457Q493 518 498 519Q506 519 512 512T518 500Q518 489 442 417L367 339V-237Q352 -250 346 -250L333 -243L327 -237V301L171 143V-237Q156 -250 151 -250T131 -237V101L69 41Q24 -3 15 -12T0 -21Q-8 -21 -14 -14T-20 -2Q-20 5 -7 19T56 81L131 159V737'],
+
+    // THEREFORE
+    0x2234: [471,82,667,24,643,'273 411Q273 437 291 454T334 471Q358 471 375 454T393 411T376 368T333 351Q307 351 290 368T273 411ZM84 38Q110 38 126 21T143 -22Q143 -46 127 -64T83 -82Q57 -82 41 -65T24 -22Q24 4 41 21T84 38ZM524 -22Q524 4 541 21T584 38Q608 38 625 21T643 -22Q643 -45 627 -63T583 -82Q557 -82 541 -65T524 -22'],
+
+    // BECAUSE
+    0x2235: [471,82,667,23,644,'23 411Q23 437 41 454T84 471Q108 471 125 454T143 411T126 368T83 351Q57 351 40 368T23 411ZM523 411Q523 437 541 454T584 471Q608 471 625 454T643 411T626 368T583 351Q557 351 540 368T523 411ZM274 -22Q274 4 291 21T334 38Q356 38 374 22T392 -22T375 -65T333 -82Q307 -82 291 -65T274 -22'],
+
+    // TILDE OPERATOR
+    0x223C: [365,-132,778,55,719,'73 132Q55 132 55 172Q55 220 79 272Q95 301 111 319Q148 353 195 363Q199 364 212 364Q262 364 294 350T408 272Q472 222 522 212Q537 208 555 208Q606 208 646 243Q671 268 680 296T691 342T702 365Q713 365 716 354T719 314Q714 236 664 179L660 176Q657 173 654 170T644 163T631 154T615 146T596 139T574 134T549 132Q510 132 465 156T386 211T307 265T223 290Q162 290 124 249T86 165Q86 155 82 144T73 132'],
+
+    // REVERSED TILDE
+    0x223D: [367,-133,778,56,722,'222 133Q147 133 102 197T56 335Q56 362 66 365Q71 369 77 364Q83 356 84 335T90 298Q102 254 137 222T223 189Q258 189 292 206T355 250T413 301T477 346T550 367Q628 367 673 309T722 171Q722 133 708 133Q703 133 699 141T694 162Q694 220 655 265T555 311Q519 311 485 293T421 248T363 196T298 152T222 133'],
+
+    // stix-not, vert, similar
+    0x2241: [467,-32,778,55,719,'220 366Q258 366 297 347T361 308T391 288Q394 288 464 370Q494 407 510 425T535 454T546 465T552 467H553Q560 467 566 461T573 448Q573 439 499 350Q424 266 424 261Q424 259 442 247T492 222T554 209Q607 209 646 243Q671 268 680 295T690 341T702 366Q719 366 719 314Q716 265 695 226Q682 199 664 179Q614 132 555 132Q517 132 477 151T412 190T383 210T347 172T278 89T233 37Q228 32 220 32Q210 32 206 38T201 48Q201 57 266 137Q272 144 275 148Q351 231 351 237Q351 239 333 251T283 276T221 289Q159 289 123 248T86 166Q86 156 82 145T73 132Q55 132 55 172Q55 220 79 272Q95 301 111 319Q161 366 220 366'],
+
+    // MINUS TILDE
+    0x2242: [463,-34,778,55,720,'55 439T55 443T56 449T62 456T68 463H706Q720 449 720 443T706 423H68Q55 439 55 443ZM56 72Q56 112 73 152T130 225T224 257Q259 257 294 240T360 199T419 149T484 107T553 90Q603 90 643 125T691 223Q693 257 704 257Q717 257 717 221Q717 147 671 91T554 34Q517 34 481 51T414 93T355 142T291 184T222 201Q172 201 131 167T84 67Q81 34 71 34Q56 37 56 72'],
+
+    // APPROXIMATELY BUT NOT ACTUALLY EQUAL TO
+    0x2246: [652,155,778,54,720,'55 417Q55 479 101 528T222 578Q259 578 294 564T393 507Q413 493 434 480T469 460T484 454L537 549Q587 639 595 647Q600 652 607 652Q615 652 621 647T628 634Q628 625 575 536Q524 446 524 443Q527 440 555 440Q603 440 644 469T691 547Q694 578 706 578T718 556Q718 555 718 551T717 545Q717 488 684 445T595 387Q582 384 558 384Q530 384 508 389L493 394L404 238L557 236H708Q720 224 720 217T706 196H379L291 43L499 41H708Q720 29 720 21T706 1H268L226 -71Q186 -143 179 -148Q173 -155 165 -155T152 -150T146 -137Q146 -133 184 -64L222 1H144L66 3L59 7Q54 14 54 20Q54 29 66 41H246L333 194Q333 196 202 196H68Q55 211 55 218T66 236H213L357 238L457 409L437 421Q432 423 393 450T307 500T222 523Q171 523 129 491T84 414Q82 383 70 383Q55 383 55 417'],
+
+    // ALMOST EQUAL TO
+    0x2248: [481,-49,778,55,719,'55 326Q55 394 101 437T226 481Q268 479 313 460T392 419T469 379T555 361Q622 361 662 401Q686 423 688 450Q693 479 702 479H705Q719 479 719 442Q719 367 670 327T554 286Q512 286 466 304T386 345T307 385T220 404Q184 404 157 394T120 374L111 363Q86 339 86 317Q86 288 71 288Q55 288 55 326ZM55 90Q55 164 105 205T226 246Q269 243 314 224T392 183T470 144T558 126Q622 126 662 166Q686 187 688 214Q693 244 704 244Q716 244 719 210Q719 165 702 132T658 82T605 58T552 50T498 58T447 77T384 110Q322 146 302 152Q263 168 220 168Q179 168 144 152Q128 147 107 125T86 81Q86 52 71 52Q55 52 55 90'],
+
+    // ALMOST EQUAL OR EQUAL TO
+    0x224A: [579,39,778,51,725,'220 523Q163 523 124 486T84 412Q81 383 69 383Q56 383 56 413Q56 441 67 470Q78 508 111 537T187 575Q203 579 219 579Q248 579 271 572Q304 565 393 508Q498 439 551 439Q620 439 662 486Q688 512 693 557Q693 565 697 572T707 579Q719 579 719 548Q719 483 673 434T550 384Q512 384 467 405T386 453T305 501T220 523ZM222 288Q164 288 124 251T84 177Q81 148 69 148Q56 148 56 178Q56 206 67 235Q78 274 111 302T187 339Q198 343 220 343Q244 343 259 341T308 322T393 272Q496 203 553 203Q612 203 651 241T691 312Q693 343 705 343Q719 343 719 313Q719 245 673 199Q626 148 552 148Q513 148 467 170T385 218T304 266T222 288ZM51 -19Q51 -6 62 -1H387Q713 -1 715 -3Q725 -10 725 -20Q725 -27 718 -34Q714 -38 672 -38T387 -39H62Q51 -25 51 -19'],
+
+    // GEOMETRICALLY EQUIVALENT TO
+    0x224E: [492,-8,778,56,723,'245 367Q251 415 288 453T392 492Q445 492 485 456T532 367H707Q722 359 722 347Q722 334 711 331T665 327H608H509Q500 332 498 336Q496 338 493 363T472 411Q443 451 389 451H387Q335 451 305 411Q290 392 287 374T282 344T268 327H72Q56 332 56 347Q56 360 70 367H245ZM56 153Q56 168 72 173H268Q277 168 279 164Q281 162 284 137T305 89Q334 49 389 49H391Q442 49 472 89Q487 108 490 126T495 156T509 173H608H666Q701 173 711 170T722 153T707 133H532Q526 81 486 45T389 8Q331 8 291 45T245 133H70Q56 140 56 153'],
+
+    // DIFFERENCE BETWEEN
+    0x224F: [492,-133,778,56,722,'245 367Q251 415 288 453T392 492Q445 492 485 456T532 367H707Q722 359 722 347Q722 334 711 331T665 327H608H509Q500 332 498 336Q496 338 493 363T472 411Q443 451 389 451H387Q335 451 305 411Q290 392 287 374T282 344T268 327H72Q56 332 56 347Q56 360 70 367H245ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153'],
+
+    // GEOMETRICALLY EQUAL TO
+    0x2251: [609,108,778,56,722,'421 474T389 474T339 493T321 541Q321 566 337 587T391 609Q456 602 456 541Q456 512 439 493ZM56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153ZM421 -108T389 -108T339 -89T321 -41Q321 -16 337 5T391 27Q456 20 456 -41Q456 -70 439 -89'],
+
+    // APPROXIMATELY EQUAL TO OR THE IMAGE OF
+    0x2252: [601,101,778,15,762,'15 541Q15 569 33 585T75 601T117 585T135 541Q135 514 118 498T75 481T32 498T15 541ZM56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153ZM642 -41Q642 -17 658 0T702 18Q726 18 744 3T762 -41Q762 -67 745 -84T702 -101Q676 -101 659 -85T642 -41'],
+
+    // IMAGE OF OR APPROXIMATELY EQUAL TO
+    0x2253: [601,102,778,14,762,'642 541Q642 569 660 585T702 601T744 585T762 541Q762 515 745 498T702 481Q676 481 659 497T642 541ZM56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153ZM14 -41Q14 -15 31 1T74 18Q101 18 118 0T135 -41Q135 -64 118 -83T75 -102Q51 -102 33 -85T14 -41'],
+
+    // RING IN EQUAL TO
+    0x2256: [367,-133,778,56,722,'56 347Q56 360 70 367H707Q722 359 722 347Q722 334 711 331T658 327H586H465L472 318Q496 288 496 250T472 182L465 173H586H663Q700 173 711 170T722 153T707 133H70Q56 140 56 153Q56 168 72 173H312L305 182Q281 212 281 250T305 318L312 327H72Q56 332 56 347ZM473 250Q473 265 472 273T460 297T428 327H349Q328 313 318 298T306 273T304 250Q304 235 305 227T317 203T349 173H428Q449 187 459 202T471 227T473 250'],
+
+    // RING EQUAL TO
+    0x2257: [721,-133,778,56,722,'279 612Q279 656 310 688T388 721Q433 721 465 689T498 612Q498 573 470 538T389 503Q336 503 308 538T279 612ZM458 614Q458 637 452 651T433 672T411 679T383 680T352 675T333 664T324 647T321 629T320 611Q320 593 321 584T332 562T359 545Q366 543 389 543H391Q406 543 414 544T435 552T452 573T458 614ZM56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153'],
+
+    // DELTA EQUAL TO
+    0x225C: [859,-133,778,56,723,'192 482H190Q187 483 185 484T181 488T177 493T175 501Q175 506 178 512Q184 523 278 687T375 853Q379 857 383 857Q385 857 387 858T390 859Q397 859 403 853Q405 851 499 687T600 512Q603 506 603 501Q603 488 587 482H192ZM548 523L389 798Q388 798 309 661T230 523T389 522T548 523ZM56 347Q56 360 70 367H708Q723 359 723 347Q723 336 709 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H709Q723 163 723 153Q723 140 708 133H70Q56 140 56 153'],
+
+    // LESS-THAN OVER EQUAL TO
+    0x2266: [753,175,778,83,694,'674 753Q682 753 688 747T694 732T687 718Q686 717 417 589L151 463L399 345Q687 209 691 204Q694 198 694 193Q694 175 676 173H670L382 309Q92 446 90 448Q83 453 83 465Q84 476 96 482Q104 486 382 617T665 751Q669 753 674 753ZM84 39Q84 49 99 59H678Q694 53 694 39Q694 26 679 19H98Q84 26 84 39ZM83 -157Q83 -153 84 -150T86 -145T89 -141T92 -139T96 -137T99 -135H678Q694 -146 694 -155Q694 -168 679 -175H98Q84 -168 83 -157'],
+
+    // GREATER-THAN OVER EQUAL TO
+    0x2267: [753,175,778,82,694,'83 733Q83 741 89 747T99 753Q107 753 253 685T543 548T687 478Q694 473 694 463T687 448Q685 446 395 309L107 173H101Q83 175 83 193Q83 194 83 196Q82 203 98 212Q117 222 248 284Q326 321 378 345L626 463L360 589Q291 622 200 665Q112 706 98 714T83 733ZM84 39Q84 49 99 59H678Q694 53 694 39Q694 26 679 19H98Q84 26 84 39ZM83 -157Q83 -153 84 -150T86 -145T89 -141T92 -139T96 -137T99 -135H678Q694 -146 694 -155Q694 -168 679 -175H98Q84 -168 83 -157'],
+
+    // stix-less, vert, not double equals
+    0x2268: [752,286,778,82,694,'86 472Q93 477 381 614T673 752Q680 752 686 746T693 732T689 721Q686 715 418 590L151 461L418 332Q684 207 689 201Q693 195 693 190Q693 183 687 177T675 170Q668 170 380 307T86 450Q82 454 82 461Q82 467 86 472ZM82 33Q82 37 83 40T89 47T95 54H473L520 105Q569 156 571 156Q573 157 578 157Q586 157 592 151T598 136Q598 130 562 92L526 56L604 54H682Q693 43 693 35Q693 31 692 28T686 21T680 14H489L342 -139L513 -142H682Q693 -148 693 -160Q693 -167 680 -182H304L258 -230Q248 -240 237 -251T221 -268T211 -278T203 -284T197 -286Q189 -286 184 -280T178 -264Q178 -257 213 -219L249 -182H171L93 -179L86 -175Q82 -170 82 -163Q82 -155 95 -142H289L360 -64L433 14H262L93 16Q82 23 82 33'],
+
+    // stix-gt, vert, not double equals
+    0x2269: [752,286,778,82,693,'89 745Q95 752 100 752Q106 752 394 615T689 472Q693 468 693 461T689 450Q684 445 396 308T100 170Q95 170 89 176T82 190Q82 195 86 201Q91 208 358 332L624 461L358 590Q90 715 86 721Q82 725 82 731Q82 739 89 745ZM82 33Q82 37 83 40T89 47T95 54H473L520 105Q569 156 571 156Q573 157 578 157Q586 157 592 151T598 136Q598 130 562 92L526 56L604 54H682Q693 43 693 35Q693 31 692 28T686 21T680 14H489L342 -139L513 -142H682Q693 -148 693 -160Q693 -167 680 -182H304L258 -230Q248 -240 237 -251T221 -268T211 -278T203 -284T197 -286Q189 -286 184 -280T178 -264Q178 -257 213 -219L249 -182H171L93 -179L86 -175Q82 -170 82 -163Q82 -155 95 -142H289L360 -64L433 14H262L93 16Q82 23 82 33'],
+
+    // BETWEEN
+    0x226C: [751,251,500,74,425,'104 730Q104 749 123 749Q130 749 138 745Q186 717 237 671L250 659L261 670Q297 703 332 726T375 750T389 744T395 730Q395 721 390 717T364 699T322 668Q290 641 283 632Q280 628 281 627T293 612Q425 454 425 250Q425 144 388 51T293 -112Q282 -125 281 -126T283 -132Q306 -162 379 -209Q395 -219 395 -230Q395 -238 389 -244T375 -250T335 -228T262 -171L250 -159L238 -170Q202 -203 167 -226T124 -250T110 -244T104 -230Q104 -219 121 -209Q199 -156 216 -132Q219 -128 218 -127T206 -112Q74 46 74 250T206 612Q217 625 218 626T216 632Q199 656 121 709Q104 719 104 730ZM249 -94Q364 61 364 250Q364 430 265 574Q253 590 249 594L242 583Q134 439 134 250Q134 114 192 -1Q212 -44 242 -83L249 -94'],
+
+    // stix-not, vert, less-than
+    0x226E: [709,209,778,82,693,'693 -14T693 -20T687 -33T675 -41Q667 -41 506 37L344 112Q342 112 262 -46Q184 -196 176 -205Q172 -209 168 -209T162 -208Q155 -208 151 -203T146 -190Q146 -178 171 -137Q193 -91 251 21L306 132L198 183Q142 208 118 220T88 238T82 249Q82 253 86 261Q92 267 278 357L464 443L529 572Q561 637 577 667T597 703T607 708Q615 708 622 702T629 688Q629 680 575 579L524 474Q524 473 545 482T598 508Q666 541 673 541T686 535T693 521Q693 512 679 504T589 459L493 414L360 150Q366 148 378 142T431 116T529 70Q686 -8 689 -10Q693 -14 693 -20ZM380 277L433 383Q432 385 292 319T151 250T237 209T324 170L380 277'],
+
+    // stix-not, vert, greater-than
+    0x226F: [708,209,778,82,693,'82 514T82 520T89 533T100 541Q106 541 271 463Q434 386 435 386L515 543Q593 699 600 706Q604 708 607 708Q615 708 622 702T629 688T549 526Q509 445 491 407T473 368Q522 343 580 317Q636 291 660 278T688 261T693 250V249Q693 241 681 234T580 184Q533 161 502 146Q317 59 315 59Q312 56 246 -74Q197 -170 186 -189T168 -209Q164 -209 162 -208Q155 -208 151 -203T146 -190Q146 -187 200 -79L253 28L218 11Q182 -6 144 -23T100 -41Q95 -41 89 -35T82 -21Q82 -12 96 -4T186 41L284 88L349 217Q377 273 395 311T413 350Q413 351 253 428Q101 498 86 510Q82 514 82 520ZM624 250Q461 330 455 330Q454 331 453 329T448 321T441 308T430 287T416 259T398 223L342 114L624 250'],
+
+    // stix-not, vert, less-than-or-equal
+    0x2270: [801,303,778,81,694,'82 -124Q82 -120 83 -117T89 -110T95 -103H220L284 50Q346 204 344 206L218 268Q153 297 123 313T87 333T82 344T86 355Q104 369 291 455Q491 552 491 553L542 673Q581 767 590 784T609 801Q616 801 622 795T629 781Q629 773 586 677Q546 581 546 577L609 606Q669 635 673 635Q680 635 686 629T693 615Q693 610 692 608T670 593T604 561L524 521L400 226L542 157Q617 123 649 107T687 85T694 72Q694 66 690 60T679 54Q664 54 526 121Q513 127 495 136T464 150T438 162T416 173T399 180T388 185L384 186Q383 186 322 41L262 -103H680Q682 -105 684 -108T688 -113T691 -118T693 -124Q693 -134 682 -141L464 -143H246L213 -219Q182 -292 178 -299Q172 -303 166 -303T153 -297T146 -283Q146 -282 174 -213T202 -143H146L93 -141Q82 -134 82 -124ZM418 370L466 495Q464 495 308 420T151 344T204 317T311 267T364 244Q364 247 418 370'],
+
+    // stix-not, vert, greater-than-or-equal
+    0x2271: [801,303,778,82,694,'97 54Q82 54 82 72Q82 79 86 84Q95 91 222 153L351 215L398 324L442 433L258 519Q95 597 87 604Q82 608 82 615T88 628T102 635Q107 635 424 484L458 468L524 630Q593 789 597 795Q601 801 609 801Q616 801 622 795T629 781L562 615L493 450L589 406Q665 371 679 362T694 344Q694 339 693 337T677 326T631 302T538 257Q504 241 465 223T406 195T386 186Q384 185 322 39L262 -103H680Q682 -105 684 -108T688 -113T691 -118T693 -124Q693 -134 682 -141L464 -143H246L213 -219Q182 -292 178 -299Q172 -303 166 -303T153 -297T146 -283Q146 -282 174 -213T202 -143H146L93 -141Q82 -134 82 -124Q82 -120 83 -117T89 -110T95 -103H220L273 26Q326 156 326 157L218 106Q109 54 97 54ZM553 379Q480 412 480 415Q479 415 460 372T423 285T406 241Q408 240 516 291T624 344L553 379'],
+
+    // stix-less-than or (contour) similar
+    0x2272: [732,228,778,56,722,'674 732Q682 732 688 726T694 711T687 697Q686 696 417 568L151 442L399 324Q687 188 691 183Q694 177 694 172Q694 154 676 152H670L382 288Q92 425 90 427Q83 432 83 444Q84 455 96 461Q104 465 382 596T665 730Q669 732 674 732ZM56 -194Q56 -107 106 -51T222 6Q260 6 296 -12T362 -56T420 -108T483 -153T554 -171Q616 -171 654 -128T694 -29Q696 6 708 6Q722 6 722 -26Q722 -102 676 -164T557 -227Q518 -227 481 -209T415 -165T358 -113T294 -69T223 -51Q163 -51 125 -93T83 -196Q81 -228 69 -228Q56 -228 56 -202V-194'],
+
+    // stix-greater-than or (contour) similar
+    0x2273: [732,228,778,56,722,'90 697Q83 704 83 712T88 726T99 732Q107 732 253 664T543 527T687 457Q694 452 694 442T687 427Q685 425 395 288L107 152H101Q83 154 83 172Q83 173 83 175Q82 182 98 191Q117 201 248 263Q326 300 378 324L626 442L360 568Q91 696 90 697ZM56 -194Q56 -107 106 -51T222 6Q260 6 296 -12T362 -56T420 -108T483 -153T554 -171Q616 -171 654 -128T694 -29Q696 6 708 6Q722 6 722 -26Q722 -102 676 -164T557 -227Q518 -227 481 -209T415 -165T358 -113T294 -69T223 -51Q163 -51 125 -93T83 -196Q81 -228 69 -228Q56 -228 56 -202V-194'],
+
+    // LESS-THAN OR GREATER-THAN
+    0x2276: [681,253,778,44,734,'734 181Q734 173 728 167T714 161Q711 161 386 280T54 404Q44 408 44 421Q44 432 52 437Q66 443 388 562T714 681Q721 681 727 675T734 661Q734 651 722 645Q711 639 462 546Q441 539 420 531L122 421L420 311L723 198Q734 192 734 181ZM44 247Q44 255 50 261T63 267Q66 267 391 148T723 24Q734 18 734 7T723 -10Q716 -14 391 -133T63 -253Q56 -253 50 -247T44 -233Q44 -223 55 -217Q67 -210 317 -118Q337 -110 357 -103L655 7L357 117L54 230Q44 236 44 247'],
+
+    // GREATER-THAN OR LESS-THAN
+    0x2277: [681,253,778,83,694,'83 661Q83 668 88 674T104 681Q111 679 396 560Q686 437 687 436Q694 431 694 421T687 406Q686 405 543 344T253 222T101 161Q83 163 83 180Q83 194 95 199Q96 199 130 213T232 257T361 311L621 421L357 532Q307 553 233 584Q121 631 102 640T83 661ZM673 267Q694 267 694 248Q694 237 687 232Q684 229 420 118L156 7L416 -103L683 -215Q694 -222 694 -233Q694 -251 676 -253Q670 -253 524 -192T235 -70T90 -8Q83 -1 83 7Q83 19 94 24Q97 25 378 144T667 266Q669 267 673 267'],
+
+    // PRECEDES OR EQUAL TO
+    0x227C: [580,153,778,83,694,'112 270Q83 270 83 290Q83 301 94 307Q98 310 118 310Q516 310 620 464Q635 486 642 510T651 548T657 571T675 580Q693 577 693 559V552Q684 472 628 410T465 314Q436 303 372 290Q373 290 388 287T425 278T465 266Q674 199 693 28L694 17Q688 5 683 3Q677 0 673 0Q656 0 653 24Q623 270 118 270H112ZM110 116Q83 116 83 136T110 156H113Q134 156 160 155T231 146T318 128T407 95T489 44T550 -30T583 -131Q583 -153 563 -153Q556 -153 553 -152T547 -145T542 -127Q531 -54 478 0Q425 53 333 83T123 116H110'],
+
+    // SUCCEEDS OR EQUAL TO
+    0x227D: [580,154,778,83,694,'668 310Q694 310 694 290Q694 285 691 279Q684 271 664 270Q550 268 464 257T301 220T179 146T124 27Q119 0 103 0T83 16Q83 21 83 31T92 68T113 121T157 177T229 231Q295 268 405 290Q404 290 389 293T352 302T312 314Q138 371 96 500Q83 541 83 562Q83 568 89 574T103 580Q115 580 120 570T126 542T138 497T173 442Q289 310 659 310H668ZM194 -131Q201 -60 241 -6T343 82T477 133T628 155Q632 155 644 155T661 156Q685 155 690 147Q694 143 694 136Q694 132 693 129T689 124T685 120T681 117L656 116Q596 114 543 106T436 79T342 35T272 -33T235 -127Q231 -154 212 -154Q203 -153 199 -147T194 -136V-131'],
+
+    // PRECEDES OR EQUIVALENT TO
+    0x227E: [732,228,778,56,722,'84 442Q84 455 91 459T117 463Q120 463 126 463T137 462Q388 466 512 526T653 705Q657 732 676 732Q685 731 689 725T694 714V708Q689 662 672 624T626 559T569 513T500 479T435 458T373 442Q379 441 404 435T440 426T477 414T533 392Q592 362 630 319T681 241T694 174Q694 153 674 153Q662 153 657 163T652 188T640 231T606 287Q500 416 137 422H114Q104 422 98 423T88 428T84 442ZM56 -194Q56 -107 106 -51T222 6Q260 6 296 -12T362 -56T420 -108T483 -153T554 -171Q616 -171 654 -128T694 -29Q696 6 708 6Q722 6 722 -26Q722 -102 676 -164T557 -227Q518 -227 481 -209T415 -165T358 -113T294 -69T223 -51Q163 -51 125 -93T83 -196Q81 -228 69 -228Q56 -228 56 -202V-194'],
+
+    // SUCCEEDS OR EQUIVALENT TO
+    0x227F: [732,228,778,56,722,'84 710Q84 732 102 732Q115 732 119 722T125 696T137 652T171 597Q277 468 640 462H661Q694 462 694 442T661 422H640Q578 421 526 417T415 403T309 376T222 333T156 268T124 179Q122 162 118 158T103 153Q100 153 98 153T95 154T93 155T90 158T85 163Q83 167 83 176Q88 222 105 260T151 325T208 371T277 405T342 426T404 442Q401 443 380 447T345 456T302 469T245 492Q125 551 92 661Q84 695 84 710ZM56 -194Q56 -107 106 -51T222 6Q260 6 296 -12T362 -56T420 -108T483 -153T554 -171Q616 -171 654 -128T694 -29Q696 6 708 6Q722 6 722 -26Q722 -102 676 -164T557 -227Q518 -227 481 -209T415 -165T358 -113T294 -69T223 -51Q163 -51 125 -93T83 -196Q81 -228 69 -228Q56 -228 56 -202V-194'],
+
+    // DOES NOT PRECEDE
+    0x2280: [705,208,778,82,693,'386 292Q388 292 439 393T543 598T598 703Q599 703 603 704T609 705Q616 705 622 699T629 685T533 494Q440 308 440 305Q451 310 462 312Q547 342 592 388T651 505Q654 525 658 532T673 539Q680 539 686 533T693 519Q693 495 678 450Q638 341 500 283Q433 259 418 259Q416 259 411 251T406 241T415 239Q482 224 544 190Q674 121 691 -10Q693 -28 691 -32Q684 -43 672 -43Q664 -43 658 -37Q656 -33 650 -6T634 47T589 109T500 168Q473 179 436 190T388 201H386L284 -1Q261 -45 232 -101T191 -181T178 -206Q176 -206 172 -207T166 -208Q160 -208 153 -202T146 -188Q146 -185 246 12Q344 206 344 210Q344 213 305 217T213 225T124 228H95Q82 241 82 248Q82 253 95 268H124Q172 268 236 273T343 283T386 292'],
+
+    // stix-not (vert) succeeds
+    0x2281: [705,208,778,82,693,'103 -43Q96 -43 89 -39T82 -26L84 -10Q105 141 275 212Q342 236 355 236Q360 236 364 245L369 256H360Q284 280 275 283Q115 351 86 490Q82 507 82 517Q82 526 88 532T103 538Q110 538 115 534Q119 531 122 517T128 486T143 444T174 397T231 351T320 310Q371 292 389 292L491 496Q595 701 598 703Q599 703 603 704T609 705Q616 705 622 699T629 685Q629 684 531 485Q431 296 431 288Q431 278 520 273T651 268H680Q693 253 693 248Q693 241 680 228H651Q591 228 491 218T386 201L284 -1Q261 -45 232 -101T191 -181T178 -206Q176 -206 172 -207T166 -208Q160 -208 153 -202T146 -188Q146 -182 302 125L335 190L324 185Q313 185 289 172Q241 153 208 128T159 78T135 31T124 -11T118 -37Q112 -43 103 -43'],
+
+    // stix-/nsubseteq N: not (vert) subset, equals
+    0x2288: [801,303,778,83,693,'146 -283Q146 -282 174 -213T202 -143H115Q102 -127 102 -123T115 -103H220L291 68L278 73Q203 101 153 157T86 288Q83 309 83 344Q83 380 86 399Q107 480 160 539Q222 601 298 621Q328 630 345 631T435 635L526 637L560 715Q587 778 593 789T609 801Q616 801 622 795T629 781Q629 780 625 771T614 742T600 706L571 637Q571 635 626 635H680Q693 620 693 613T689 601L682 597L618 595H553L449 346Q425 288 399 223T359 127T346 95H356Q365 95 381 95T417 94T463 93T515 93H682Q693 82 693 74T680 53H511Q420 55 335 55L329 57L262 -103H680Q682 -105 684 -108T688 -113T691 -118T693 -124Q693 -134 682 -141L464 -143H246L213 -219Q182 -292 178 -299Q172 -303 166 -303T153 -297T146 -283ZM509 590Q509 595 438 595Q354 595 318 586Q246 567 195 516T126 395Q123 378 123 344T126 293Q141 229 184 181T291 110L306 104L406 346L509 590'],
+
+    // stix-/nsupseteq N: not (vert) superset, equals
+    0x2289: [801,303,778,82,691,'82 606T82 613T95 635H251H348Q408 635 435 632T502 615L515 608L520 617Q520 619 558 708Q584 774 591 787T609 801Q616 801 622 795T629 781Q629 775 562 615L551 590L569 577Q646 527 678 437Q691 398 691 344T678 250Q653 182 597 132T469 64Q427 53 366 53H326L295 -25L262 -103H660Q673 -118 673 -124Q673 -129 669 -136L662 -141L453 -143H246L213 -219Q182 -292 178 -299Q172 -303 166 -303T153 -297T146 -283Q146 -282 174 -213T202 -143H95Q82 -128 82 -123T95 -103H220L251 -25L284 53H189L93 55L86 59Q82 64 82 71T95 93H302L400 333Q498 569 498 573L444 590Q431 593 260 595L93 597L86 601Q82 606 82 613ZM652 344V354Q652 451 575 521Q571 526 557 538T537 551Q534 551 533 548Q533 543 438 319L344 95L371 93H386Q487 93 557 150T649 293Q652 309 652 344'],
+
+    // stix-subset, not equals, variant
+    0x228A: [635,241,778,84,693,'693 72Q693 68 692 66T686 59T680 52H524Q398 52 367 53T309 63Q236 82 180 132T98 250Q84 288 84 343Q84 397 98 437Q126 515 193 568T346 632Q347 632 373 633T440 634T520 635H680Q693 620 693 615Q693 608 680 595H526Q364 595 353 592Q279 582 221 539T138 430Q124 392 124 343Q124 296 138 257Q163 192 221 149T353 95Q364 92 526 92H680Q693 79 693 72ZM102 -132T102 -125T115 -103H382L420 -68Q429 -60 438 -52T452 -39T463 -28T472 -20T478 -14T483 -10T487 -7T490 -6T493 -5T496 -5Q502 -5 508 -12T515 -28Q515 -34 513 -37Q512 -38 507 -42T492 -55T475 -70L440 -101L562 -103H682Q693 -114 693 -122T680 -143H395L355 -179Q289 -241 280 -241Q273 -241 267 -235T260 -221T265 -208T300 -174L335 -143H224L113 -141L106 -137Q102 -132 102 -125'],
+
+    // stix-superset, not equals, variant
+    0x228B: [635,241,778,82,691,'82 615Q82 620 95 635H251Q378 635 409 634T469 623Q540 605 596 555T678 437Q691 397 691 343T678 250Q649 172 581 119T426 55Q415 52 251 52H95Q93 55 89 59T84 65T82 72Q82 79 95 92H249Q411 92 422 95Q496 105 554 148T638 257Q651 296 651 343Q651 391 638 430Q613 495 555 538T422 592Q411 595 249 595H95Q82 608 82 615ZM82 -132T82 -125T95 -103H380L420 -57Q452 -21 460 -14T474 -6Q482 -6 488 -12T495 -25T451 -81L433 -101L549 -103H662Q673 -114 673 -122T660 -143H395L355 -190Q311 -239 309 -239Q305 -241 302 -241Q294 -241 287 -235T280 -221T324 -163L342 -143H218L93 -141L86 -137Q82 -132 82 -125'],
+
+    // SQUARE IMAGE OF
+    0x228F: [539,41,778,83,694,'83 523Q87 535 99 539H679Q694 531 694 519Q694 506 679 499H123V-1H678Q694 -7 694 -21Q694 -34 679 -41H98Q93 -38 84 -28L83 247V523'],
+
+    // SQUARE ORIGINAL OF
+    0x2290: [539,41,778,64,714,'64 506T64 519T78 539H699Q706 536 714 526V-28Q706 -38 699 -41H78Q64 -34 64 -21Q64 -6 80 -1H674V499H78Q64 506 64 519'],
+
+    // CIRCLED RING OPERATOR
+    0x229A: [583,82,778,57,721,'57 250Q57 327 87 392T166 497T270 560T382 582H394Q512 582 610 500Q721 401 721 250Q721 112 626 15T389 -82Q251 -82 154 13T57 250ZM682 129T682 250T596 457T390 543Q269 543 183 457T96 250Q96 132 180 45T389 -43Q511 -43 596 43ZM250 250Q250 316 295 352T384 388Q451 388 489 347T528 250Q528 192 487 152T389 112Q331 112 291 152T250 250ZM488 250Q488 290 460 319T389 349Q348 349 319 320T290 250Q290 208 320 180T389 151Q431 151 459 181T488 250'],
+
+    // CIRCLED ASTERISK OPERATOR
+    0x229B: [583,82,778,57,721,'57 250Q57 327 87 392T166 497T270 560T382 582H394Q512 582 610 500Q721 401 721 250Q721 112 626 15T389 -82Q251 -82 154 13T57 250ZM682 129T682 250T596 457T390 543Q269 543 183 457T96 250Q96 132 180 45T389 -43Q511 -43 596 43ZM204 339Q204 357 215 366T238 375Q247 375 283 348Q300 336 311 328L368 286Q369 286 366 323T359 398T355 437Q357 456 379 465Q380 465 384 465T391 466Q403 465 412 457T423 437Q423 436 420 398T413 323T410 286L467 328Q476 334 486 341T501 353T513 361T523 368T529 372T535 374T541 375Q554 375 564 365T575 339Q575 325 566 318T519 292Q504 285 496 281L430 250L496 219Q552 192 559 188T572 175Q575 168 575 161Q575 148 566 137T541 126H538Q530 126 499 149Q480 163 467 172L410 214Q409 214 412 177T419 102T423 63Q423 59 421 54T411 43T389 36T368 42T357 54T355 63Q355 64 358 102T365 177T368 214L311 172Q302 165 293 159T279 148T268 140T260 134T254 131T250 128T246 127T242 126T238 126Q223 126 214 135T204 161T213 183T282 219L348 250L282 281Q226 308 219 312T206 325Q204 330 204 339'],
+
+    // CIRCLED DASH
+    0x229D: [583,82,778,57,721,'57 250Q57 327 87 392T166 497T270 560T382 582H394Q512 582 610 500Q721 401 721 250Q721 112 626 15T389 -82Q251 -82 154 13T57 250ZM682 129T682 250T596 457T390 543Q269 543 183 457T96 250Q96 132 180 45T389 -43Q511 -43 596 43ZM223 250Q223 263 233 267T280 271Q289 271 325 271T389 270H490Q535 270 545 267T555 250Q555 241 549 235Q544 231 527 231T389 230Q239 230 235 232Q223 236 223 250'],
+
+    // SQUARED PLUS
+    0x229E: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H709Q719 681 722 674V15Q719 10 709 1L390 0H71ZM369 365V649H95V365H369ZM682 365V649H409V365H682ZM369 40V325H95V40H369ZM682 40V325H409V40H682'],
+
+    // SQUARED MINUS
+    0x229F: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H709Q719 681 722 674V15Q719 10 709 1L390 0H71ZM682 365V649H95V365H682ZM682 40V325H95V40H682'],
+
+    // SQUARED TIMES
+    0x22A0: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H707Q714 686 722 676V13Q714 3 707 0H71ZM123 649Q147 625 214 555T335 430T389 374L654 649H123ZM95 70Q99 74 229 209T360 345L95 619V70ZM682 70V619L418 346Q417 344 549 207L682 70ZM654 41L400 304L388 315L123 41L256 40H522L654 41'],
+
+    // SQUARED DOT OPERATOR
+    0x22A1: [689,0,778,55,722,'71 0Q59 4 55 16V346L56 676Q64 686 70 689H709Q719 681 722 674V15Q719 10 709 1L390 0H71ZM682 40V649H95V40H682ZM330 345Q330 371 347 388T390 405Q412 405 430 389T448 345Q448 317 430 301T389 285T348 301T330 345'],
+
+    // TRUE
+    0x22A8: [695,0,611,55,556,'55 678Q55 679 56 681T58 684T61 688T65 691T70 693T77 694Q88 692 95 679V464H540Q554 456 555 446Q555 442 554 439T552 434T549 430T546 428T542 426T539 424H95V270H539Q540 270 542 269T545 267T549 264T552 260T554 255T555 248Q554 238 540 230H95V15Q88 2 77 0Q73 0 70 1T65 3T61 6T59 9T57 13T55 16V678'],
+
+    // FORCES
+    0x22A9: [695,0,722,55,666,'55 678Q55 679 56 681T58 684T61 688T65 691T70 693T77 694Q88 692 95 679V15Q88 2 77 0Q73 0 70 1T65 3T61 6T59 9T57 13T55 16V678ZM249 678Q249 679 250 681T252 684T255 688T259 691T264 693T271 694Q282 692 289 679V367H651Q666 359 666 347Q666 334 651 327H289V15Q282 2 271 0Q267 0 264 1T259 3T255 6T253 9T251 13T249 16V678'],
+
+    // TRIPLE VERTICAL BAR RIGHT TURNSTILE
+    0x22AA: [695,0,889,55,833,'55 678Q55 679 56 681T58 684T61 688T65 691T70 693T77 694Q88 692 95 679V15Q88 2 77 0Q73 0 70 1T65 3T61 6T59 9T57 13T55 16V678ZM237 678Q237 679 238 681T240 684T243 688T247 691T252 693T259 694Q270 692 277 679V15Q270 2 259 0Q255 0 252 1T247 3T243 6T241 9T239 13T237 16V678ZM419 678Q419 679 420 681T422 684T425 688T429 691T434 693T441 694Q452 692 459 679V367H818Q833 359 833 347Q833 334 818 327H459V15Q452 2 441 0Q437 0 434 1T429 3T425 6T423 9T421 13T419 16V678'],
+
+    // DOES NOT PROVE
+    0x22AC: [696,1,611,-55,554,'56 681Q70 695 76 695T96 681V368H243L381 530Q521 692 525 692Q537 700 547 688Q554 682 554 674Q554 671 553 669T548 661T539 649T522 631T499 604T465 565T421 512Q296 373 296 368H416H476Q525 368 539 365T554 348Q554 334 543 328H261L96 141V12Q81 -1 75 -1Q65 -1 58 10L56 50V92L18 48Q7 37 -1 28T-13 14T-19 6T-23 1T-27 0T-33 -1Q-42 -1 -48 4T-55 19Q-55 24 -47 34T12 103L56 155V681ZM205 326Q205 328 152 328H96V263Q96 203 98 203Q99 203 123 231T174 290T205 326'],
+
+    // NOT TRUE
+    0x22AD: [695,1,611,-55,554,'56 681Q70 695 76 695T96 681V466H327L425 579Q522 692 527 692Q529 693 534 693Q542 693 547 688T553 674Q553 668 549 663Q549 662 538 650T504 611T463 563L381 468L461 466H543Q554 453 554 446T541 426H345L209 272L376 270H543Q554 257 554 251T541 230H174L96 141V12Q81 -1 75 -1Q65 -1 58 10L56 50V92L18 48Q7 37 -1 28T-13 14T-19 6T-23 1T-27 0T-33 -1Q-42 -1 -48 4T-55 19Q-55 24 -47 34T12 103L56 155V681ZM267 399L292 426H96V270H158L201 321Q256 382 267 399ZM118 228L119 229Q119 230 109 230H96V201L107 212Q118 227 118 228'],
+
+    // DOES NOT FORCE
+    0x22AE: [695,1,722,-55,665,'56 681Q70 695 77 695T96 683V428L98 175L252 323V681Q264 695 272 695Q278 695 292 681V526Q292 368 296 368Q298 368 447 510Q638 695 642 695H645Q651 695 658 688T665 673Q665 666 661 661Q659 660 639 641T578 582T505 512L356 370L505 368H654Q665 357 665 349Q665 343 652 328H314L303 317L292 308V12Q289 10 285 6T279 1T272 -1Q265 -1 252 12V139Q252 266 249 266L96 119V12Q80 -1 76 -1T70 0T63 6T56 12V79L29 55Q-26 -1 -35 -1Q-42 -1 -48 5T-55 19Q-55 25 -51 30T-15 66Q5 86 18 99L56 135V681'],
+
+    // NEGATED DOUBLE VERTICAL BAR DOUBLE RIGHT TURNSTILE
+    0x22AF: [695,1,722,-55,665,'56 681Q70 695 77 695T96 683V428L98 175L252 323V681Q264 695 272 695Q278 695 292 681V466H401L503 563L621 679Q637 695 645 695Q652 695 658 688T665 673Q665 670 663 666Q663 665 651 652T611 612T561 563L458 468L556 466H654Q665 455 665 447T652 426H416L294 308L292 288V270H652Q665 255 665 250T652 230H292V12Q289 10 285 6T279 1T272 -1Q265 -1 252 12V139Q252 266 249 266L96 119V12Q80 -1 76 -1T70 0T63 6T56 12V79L29 55Q-26 -1 -35 -1Q-42 -1 -48 5T-55 19Q-55 25 -51 30T-15 66Q5 86 18 99L56 135V681ZM358 426H292V361L325 392L358 426'],
+
+    // NORMAL SUBGROUP OF
+    0x22B2: [539,41,778,83,694,'694 -26Q686 -40 676 -41H670L382 95Q92 232 90 234Q83 239 83 249Q83 262 96 267Q101 270 379 401T665 537Q671 539 674 539Q686 539 694 524V-26ZM654 11T654 249T653 487T402 369T151 249L275 190Q399 131 524 72T652 11Q654 11 654 249'],
+
+    // CONTAINS AS NORMAL SUBGROUP
+    0x22B3: [540,41,778,83,694,'83 523Q83 524 85 527T92 535T103 539Q107 539 389 406T680 268Q694 260 694 249Q694 239 687 234Q685 232 395 95L107 -41H101Q90 -40 83 -26V523ZM376 368Q323 393 254 425T155 472L125 487Q123 487 123 249T125 11Q127 12 252 71T502 190L626 249L376 368'],
+
+    // NORMAL SUBGROUP OF OR EQUAL TO
+    0x22B4: [636,138,778,83,695,'694 71Q686 58 676 56H670L382 192Q92 329 90 331Q83 336 83 346Q83 359 96 364Q101 367 379 498T665 634Q671 636 674 636Q686 636 694 621V71ZM654 108T654 346T653 584T402 466T151 346L275 287Q399 228 524 169T652 108Q654 108 654 346ZM83 -120Q83 -116 84 -113T86 -108T89 -104T92 -102T96 -100T99 -98H678Q679 -98 681 -99T684 -101T688 -104T691 -108T693 -113T694 -120Q692 -130 679 -138H98Q84 -130 83 -120'],
+
+    // CONTAINS AS NORMAL SUBGROUP OR EQUAL TO
+    0x22B5: [637,138,778,83,695,'83 620Q83 621 85 624T92 632T103 636Q107 636 389 503T680 365Q694 357 694 346Q694 336 687 331Q685 329 395 192L107 56H101Q90 58 83 71V620ZM376 465Q323 490 254 522T155 570L125 584Q123 584 123 346T125 108Q127 109 252 168T502 287L626 346L376 465ZM83 -120Q83 -116 84 -113T86 -108T89 -104T92 -102T96 -100T99 -98H678Q679 -98 681 -99T684 -101T688 -104T691 -108T693 -113T694 -120Q692 -130 679 -138H98Q84 -130 83 -120'],
+
+    // MULTIMAP
+    0x22B8: [408,-92,1111,55,1055,'1055 250Q1055 190 1012 141T896 92Q858 92 828 106T781 140T755 180T741 214L738 228V230H405Q71 230 68 232Q55 238 55 250T68 268Q71 270 405 270H738V272L740 280Q742 287 745 297T754 321T771 348T796 374T832 396T881 408H891Q969 408 1012 360T1055 250ZM896 132Q948 132 981 166T1014 250Q1014 301 985 330T920 367Q914 368 891 368Q853 368 816 338T778 250Q778 198 812 165T896 132'],
+
+    // INTERCALATE
+    0x22BA: [431,212,556,57,501,'318 -182Q302 -212 280 -212H278H275Q249 -212 239 -182L238 84V351H162L87 352Q57 362 57 391T84 429Q89 431 280 431H470L474 429Q477 427 479 426T484 423T490 417T495 410T499 402T500 391Q500 365 470 352L394 351H318V-182'],
+
+    // XOR
+    0x22BB: [716,0,611,55,555,'56 697Q56 706 62 711T75 716Q86 716 90 709Q91 708 104 680T147 592T199 483L305 261L411 483Q443 548 481 629Q512 694 518 705T535 716Q543 716 549 710T555 700Q555 693 501 577T388 340T325 210Q316 194 305 194Q292 194 285 210Q282 219 224 339T111 574T56 697ZM55 14T55 20T59 31T66 38T71 40H540Q555 32 555 20T540 0H71Q70 0 67 2T59 9'],
+
+    // NAND
+    0x22BC: [716,0,611,54,555,'55 698Q56 708 70 716H540Q554 708 555 698Q555 694 554 691T552 686T549 682T546 680T542 678T539 676H71Q70 676 68 677T65 679T61 682T58 686T56 691T55 698ZM555 18Q554 12 549 6T536 0H535Q525 0 515 17T459 132Q430 194 410 235L305 455L199 233Q176 185 147 125T105 36T90 7Q85 0 75 0Q63 0 58 11Q55 15 55 21Q58 31 170 266T285 507Q295 522 305 522T320 515Q322 513 439 268L555 24V18'],
+
+    // DOT OPERATOR
+    0x22C5: [189,0,278,55,222,'71 0Q59 4 55 16V96L56 176Q59 180 66 187L70 189H209Q219 181 222 174V15Q219 10 209 1L140 0H71'],
+
+    // DIVISION TIMES
+    0x22C7: [545,44,778,55,720,'366 543Q374 545 382 545Q405 545 419 538Q429 534 443 521T462 496Q466 478 466 467Q466 438 444 412Q422 390 388 390Q352 390 331 412Q311 434 311 467Q311 499 331 518Q345 533 366 543ZM146 472Q146 479 153 485T166 492Q171 492 187 476T279 385L386 278L495 385Q600 492 608 492Q615 492 621 486T628 472Q628 467 614 452T531 367L435 270H706Q720 256 720 250Q720 241 706 230H435L531 132Q600 63 614 48T628 27Q628 20 622 14T608 7Q600 7 495 114L386 221L279 114Q204 39 188 23T166 7Q159 7 153 13T146 27Q146 32 160 47T244 132L339 230H68Q55 243 55 250Q55 255 68 270H339L244 367Q175 436 161 451T146 472ZM466 34Q466 4 447 -20T388 -44Q353 -44 331 -22Q311 1 311 34Q311 66 331 85Q347 101 366 110Q374 112 382 112Q405 112 419 105Q429 100 443 87T462 63Q466 45 466 34'],
+
+    // LEFT NORMAL FACTOR SEMIDIRECT PRODUCT
+    0x22C9: [492,-8,778,146,628,'146 479Q159 492 166 492Q171 492 189 475T279 386L386 279L495 386Q598 492 608 492Q615 492 621 486T628 472Q628 464 522 357L415 250L522 144Q628 37 628 28Q628 21 622 15T608 8Q599 8 495 115L386 221L279 115Q204 40 188 24T166 8Q162 8 160 9T153 15T146 21V479ZM186 77L359 250L186 424V77'],
+
+    // RIGHT NORMAL FACTOR SEMIDIRECT PRODUCT
+    0x22CA: [492,-8,778,146,628,'146 472Q146 479 152 485T166 492Q171 492 189 475T279 386L386 279L495 386Q598 492 608 492Q615 492 628 479V21Q615 8 608 8Q599 8 495 115L386 221L279 115Q204 40 188 24T166 8Q159 8 153 14T146 28Q146 37 253 144L359 250L253 357Q146 464 146 472ZM588 77V424L499 337L415 250L588 77'],
+
+    // LEFT SEMIDIRECT PRODUCT
+    0x22CB: [694,23,778,55,722,'55 674Q55 682 62 688T76 694H77Q83 694 100 677T208 561Q320 440 410 342Q462 286 541 201Q677 55 699 30T722 -2Q722 -9 716 -15T701 -22T688 -17Q687 -15 542 141T394 301L388 306L240 146Q119 15 101 -3T75 -22T61 -16T55 -2Q55 4 67 19T158 117Q190 151 209 172L361 336L209 500Q62 657 57 667Q55 671 55 674'],
+
+    // RIGHT SEMIDIRECT PRODUCT
+    0x22CC: [694,22,778,55,722,'84 -22T76 -22T62 -16T55 -2Q55 4 78 30T249 215Q321 293 367 342Q672 672 683 682Q695 694 702 694Q710 694 716 688T722 674Q722 668 710 653T619 555Q587 521 568 500L416 336L568 172Q715 15 720 5Q722 1 722 -2Q722 -9 716 -15T702 -22H700Q693 -22 671 1T537 146L389 306Q387 304 340 253T237 143T135 33L89 -17Q84 -22 76 -22'],
+
+    // REVERSED TILDE EQUALS
+    0x22CD: [464,-36,778,56,722,'56 433Q56 464 71 464Q74 464 77 461Q82 454 82 438T91 397T123 347Q166 307 222 307Q264 307 308 331T386 385T465 438T556 463Q631 463 676 408T722 283Q722 250 708 250Q704 250 699 257Q695 265 693 286T682 330Q670 350 655 367Q612 407 556 407Q514 407 470 383T393 329T314 276T222 251Q148 251 102 306T56 433ZM57 56Q57 71 73 76H706Q722 70 722 56Q722 44 707 36H71Q57 43 57 56'],
+
+    // CURLY LOGICAL OR
+    0x22CE: [578,21,760,83,676,'83 558Q83 566 89 572T104 578Q108 578 116 577T146 570T190 555T239 526T286 480Q308 453 325 420T351 358T367 304T376 265T380 251T381 253Q381 262 395 312Q428 434 492 499T642 576Q654 578 655 578Q664 578 670 572T676 558Q676 543 657 540T599 524T525 476Q406 362 400 29V8Q400 -21 380 -21Q369 -21 362 -11Q360 -7 360 12Q360 115 348 200T308 360T231 480T111 537Q83 540 83 558'],
+
+    // CURLY LOGICAL AND
+    0x22CF: [578,22,760,83,676,'104 -22Q95 -22 89 -16T83 -2Q83 11 98 16T135 23T192 46T256 103Q360 233 360 549Q360 554 360 557T361 563T362 567T364 569T367 572T371 576Q377 578 380 578Q401 578 401 547Q401 543 401 537T400 527Q409 53 648 19Q676 16 676 -2Q676 -10 670 -16T655 -22Q654 -22 642 -20Q556 -9 492 56T395 244Q381 294 381 303Q381 305 380 305T374 275T352 201T310 110T234 27T117 -20Q105 -22 104 -22'],
+
+    // DOUBLE SUBSET
+    0x22D0: [541,41,778,84,694,'84 250Q84 372 166 450T360 539Q361 539 370 539T395 539T430 540T475 540T524 540H679Q694 532 694 520Q694 511 681 501L522 500H470H441Q366 500 338 496T266 472Q244 461 224 446T179 404T139 337T124 250V245Q124 157 185 89Q244 25 328 7Q348 2 366 2T522 0H681Q694 -10 694 -20Q694 -32 679 -40H526Q510 -40 480 -40T434 -41Q350 -41 289 -25T172 45Q84 127 84 250ZM694 134Q694 123 679 114H425H384Q350 114 326 121T277 154Q238 193 238 251Q238 322 295 361Q318 378 339 382T412 387Q423 387 459 387T520 386H679Q694 377 694 366Q694 354 679 346H519Q493 346 458 346T411 347Q360 347 341 342T303 315Q278 287 278 250Q278 210 301 187T351 156Q358 154 519 154H679Q694 146 694 134'],
+
+    // DOUBLE SUPERSET
+    0x22D1: [541,40,778,83,693,'83 520Q83 532 98 540H251Q267 540 297 540T343 541Q427 541 488 525T605 455Q693 374 693 250Q693 165 650 99T545 0T415 -39Q407 -40 251 -40H98Q83 -32 83 -20Q83 -10 96 0H255H308H337Q412 0 439 4T512 28Q533 39 553 54T599 96T639 163T654 250Q654 341 592 411Q557 449 512 472Q468 491 439 495T335 500H306H255L96 501Q83 511 83 520ZM83 366Q83 376 96 386H244Q280 386 317 386T378 386L402 387Q456 387 498 348T540 250Q540 203 512 168T446 120Q427 114 353 114H99Q84 120 84 134Q84 147 98 154H258Q284 154 319 154T366 153Q416 153 436 158T474 185Q500 214 500 250Q500 290 477 313T426 344Q419 346 258 346H98Q83 354 83 366'],
+
+    // DOUBLE INTERSECTION
+    0x22D2: [598,22,667,55,611,'88 -21T75 -21T55 -7V200Q55 231 55 280Q56 414 60 428Q61 430 61 431Q77 500 152 549T332 598Q443 598 522 544T610 405Q611 399 611 194V-7Q604 -22 591 -22Q582 -22 572 -9L570 405Q563 433 556 449T529 485Q498 519 445 538T334 558Q251 558 179 518T96 401Q95 396 95 193V-7Q88 -21 75 -21ZM229 -21H227Q215 -21 209 -7V166Q209 304 209 327T215 363Q226 398 259 421T333 444Q380 444 414 416T455 347Q457 339 457 166V-7Q449 -21 439 -21H437H435Q423 -21 417 -7V164Q417 303 417 325T411 358Q387 403 333 403T255 358Q250 347 250 325T249 164V-7Q241 -21 231 -21H229'],
+
+    // DOUBLE UNION
+    0x22D3: [598,22,667,55,611,'591 598H592Q604 598 611 583V376Q611 345 611 296Q610 162 606 148Q605 146 605 145Q586 68 507 23T333 -22Q268 -22 209 -1T106 66T56 173Q55 180 55 384L56 585Q66 598 75 598Q85 598 95 585V378L96 172L98 162Q112 95 181 57T332 18Q415 18 487 58T570 175Q571 180 571 383V583Q579 598 591 598ZM437 598Q450 598 457 583V410Q457 237 455 229Q448 189 414 161T333 132Q291 132 255 157T211 230Q209 237 209 412L210 585Q220 598 229 598Q242 598 249 583V412Q249 273 249 251T255 218Q279 173 333 173T411 218Q416 229 416 251T417 412V583Q425 598 437 598'],
+
+    // PITCHFORK
+    0x22D4: [736,22,667,56,611,'76 -22Q64 -22 56 -7V176L57 360L59 370Q66 401 83 426T123 468T171 495T221 513T265 522T298 527L311 528H314V625L315 723Q325 736 334 736Q346 736 354 721V528H356L368 527Q380 526 399 523T441 515T490 498T537 472T578 433T606 379Q611 359 611 171V-7Q604 -21 591 -21T571 -7V170Q571 313 571 337T565 375Q555 408 526 432T461 467T402 482T365 487H354V-7Q347 -21 334 -21T314 -7V487H303Q251 484 207 467Q121 438 99 367L97 357L96 174V-9Q86 -22 76 -22'],
+
+    // LESS-THAN WITH DOT
+    0x22D6: [541,41,778,82,694,'86 261Q92 267 381 404T673 541Q680 541 686 535T693 521T689 510Q684 504 418 379L151 250L418 121Q686 -4 689 -10Q693 -14 693 -21T687 -34T675 -41Q668 -41 380 96T86 239Q82 244 82 250Q82 257 86 261ZM610 250Q610 224 592 198T531 172Q498 172 475 195Q453 214 453 250Q453 308 513 328Q515 330 535 330Q569 328 589 304T610 250'],
+
+    // GREATER-THAN WITH DOT
+    0x22D7: [541,41,778,82,693,'82 521Q82 529 89 535T100 541Q107 541 395 404T689 261Q693 257 693 250T689 239Q684 234 396 97T100 -41Q95 -41 89 -35T82 -21Q82 -12 96 -4Q118 9 358 121L624 250L358 379Q91 503 86 510Q82 514 82 521ZM165 250Q165 282 188 306T239 330Q262 330 275 323Q303 312 318 283Q322 272 322 250Q322 213 300 195Q277 172 246 172Q224 172 213 177Q165 200 165 250'],
+
+    // VERY MUCH LESS-THAN
+    0x22D8: [568,67,1333,56,1277,'639 -48Q639 -54 634 -60T619 -67H618Q612 -67 536 -26Q430 33 329 88Q61 235 59 239Q56 243 56 250T59 261Q62 266 336 415T615 567L619 568Q622 567 625 567Q639 562 639 548Q639 540 633 534Q632 532 374 391L117 250L374 109Q632 -32 633 -34Q639 -40 639 -48ZM958 -48Q958 -54 953 -60T938 -67H937Q931 -67 855 -26Q749 33 648 88Q380 235 378 239Q375 243 375 250T378 261Q381 266 655 415T934 567L938 568Q941 567 944 567Q958 562 958 548Q958 540 952 534Q951 532 693 391L436 250L693 109Q951 -32 952 -34Q958 -40 958 -48ZM1277 -48Q1277 -54 1272 -60T1257 -67H1256Q1250 -67 1174 -26Q1068 33 967 88Q699 235 697 239Q694 243 694 250T697 261Q700 266 974 415T1253 567L1257 568Q1260 567 1263 567Q1277 562 1277 548Q1277 540 1271 534Q1270 532 1012 391L755 250L1012 109Q1270 -32 1271 -34Q1277 -40 1277 -48'],
+
+    // VERY MUCH GREATER-THAN
+    0x22D9: [568,68,1333,55,1277,'75 -67Q65 -67 60 -61T55 -48Q55 -40 61 -34Q62 -32 329 109L595 250L329 391Q62 532 61 534Q55 540 55 548Q55 562 69 567H77Q81 567 222 493T506 342T653 264Q667 250 653 236Q649 234 504 157T220 7T77 -67H75ZM364 547Q364 563 381 567L384 568Q387 568 518 499T795 353T955 269Q967 261 967 250T955 231Q925 216 780 139T513 -3T383 -67Q373 -67 369 -60T364 -47Q364 -40 370 -34Q373 -31 639 109L904 250L639 391Q373 531 370 534Q364 540 364 547ZM674 538T674 548T681 562T693 567Q699 567 816 505Q915 453 993 412Q1050 382 1132 339Q1241 282 1259 271T1277 250Q1277 241 1263 232Q1246 221 985 84Q698 -67 692 -67Q674 -67 674 -47Q674 -38 680 -33Q683 -30 947 109L1213 250L947 391Q683 530 680 533Q674 538 674 548'],
+
+    // stix-less, equal, slanted, greater
+    0x22DA: [886,386,778,83,674,'674 445Q674 438 669 432T655 425T369 531T90 640Q83 645 83 655Q83 668 95 673Q644 886 654 886Q662 886 668 880T674 866Q674 856 663 850Q649 843 411 751L160 655L407 560Q474 534 561 501Q646 469 660 462T674 445ZM84 250Q84 260 99 270H658Q674 264 674 250Q674 238 659 230H98Q84 237 84 250ZM83 55Q83 68 94 73Q98 76 104 76Q108 75 383 -30T664 -138Q674 -144 674 -155Q674 -165 667 -170Q664 -173 385 -279T104 -386Q85 -386 83 -368Q83 -354 92 -349Q93 -349 347 -251L597 -155L346 -59Q296 -40 223 -12Q118 28 101 36T83 55'],
+
+    // stix-greater, equal, slanted, less
+    0x22DB: [886,386,778,83,674,'111 425T102 425T88 431T83 445V446Q83 455 96 461Q111 469 203 504Q287 536 350 560L597 655L346 751Q94 848 92 850Q83 856 83 866Q83 873 88 879T104 886Q109 885 386 779T667 670Q674 665 674 655T667 640Q665 638 388 532ZM84 250Q84 260 99 270H658Q674 264 674 250Q674 238 659 230H98Q84 237 84 250ZM653 76Q656 76 660 75T669 68T674 56Q674 46 665 40Q663 38 411 -59L160 -155L410 -251Q664 -349 665 -349Q674 -354 674 -368Q672 -386 654 -386Q650 -386 371 -279T90 -170Q83 -165 83 -155Q83 -144 93 -138Q645 76 653 76'],
+
+    // EQUAL TO OR PRECEDES
+    0x22DE: [734,0,778,83,694,'113 424Q83 424 83 444Q83 453 96 464H121Q181 466 234 474T341 501T435 545T505 613T542 707Q545 734 564 734Q583 731 583 714Q583 658 560 613T500 538T414 486T321 453T229 434T156 426T113 424ZM112 270Q83 270 83 290Q83 301 94 307Q98 310 118 310Q624 310 653 556Q657 580 675 580Q693 577 693 559V552Q684 472 628 410T465 314Q436 303 372 290Q373 290 388 287T425 278T465 266Q674 199 693 28L694 17L692 14Q691 11 689 8T683 3T673 0Q657 0 653 24Q623 270 118 270H112'],
+
+    // EQUAL TO OR SUCCEEDS
+    0x22DF: [734,0,778,83,694,'195 713Q195 725 201 729T214 734Q227 734 231 722T238 691T255 641T299 580Q405 474 656 464H681Q694 451 694 443Q694 424 670 424H664Q535 424 415 465T235 595Q195 657 195 713ZM668 310Q694 310 694 290Q694 285 691 279Q684 271 664 270Q550 268 464 257T301 220T179 146T124 27Q119 0 103 0T83 16Q83 21 83 31T92 68T113 121T157 177T229 231Q295 268 405 290Q404 290 389 293T352 302T312 314Q138 371 96 500Q83 541 83 562Q83 568 89 574T103 580Q115 580 120 570T126 542T138 497T173 442Q289 310 659 310H668'],
+
+    // stix-not (vert) precedes or contour equals
+    0x22E0: [801,303,778,82,693,'82 344Q82 349 95 364H124Q266 364 398 390L429 397L509 595Q519 619 536 659Q581 766 590 783T609 801Q616 801 622 795T629 781Q629 776 553 595Q533 548 516 506T489 439T480 415Q482 415 505 426T538 444Q632 498 651 601Q654 621 658 628T673 635Q680 635 686 629T693 615Q693 591 678 546Q636 433 484 375L458 364L451 348Q443 332 443 329T455 324Q480 316 503 307T560 277T619 233T664 170T691 86Q693 68 691 64Q684 53 672 53Q664 53 658 59Q657 60 650 97T617 174T538 244Q515 257 476 273T428 289Q425 289 412 256Q381 179 344 90L262 -103H680Q682 -105 684 -108T688 -113T691 -118T693 -124Q693 -134 682 -141L464 -143H246L213 -219Q182 -292 178 -299Q172 -303 166 -303T153 -297T146 -283Q146 -282 174 -213T202 -143H95Q82 -128 82 -123T95 -103H220L302 97Q384 288 384 299Q384 302 341 308T235 319T124 324H95Q82 337 82 344ZM399 338Q403 338 406 346L409 353L375 344Q375 343 384 341T399 338'],
+
+    // stix-not (vert) succeeds or contour equals
+    0x22E1: [801,303,778,82,694,'146 -283Q146 -282 174 -213T202 -143H95Q82 -127 82 -123T95 -103H220L300 93Q343 196 374 270Q385 294 386 299L373 295Q331 287 289 268Q241 249 208 224T159 174T135 127T124 85T118 59Q112 53 103 53Q91 53 84 64Q82 68 84 86Q96 185 174 248T375 337L400 344Q399 344 381 348T351 355T316 364T276 379T235 398T193 424T155 456T122 497T98 546Q82 587 82 615Q82 622 88 628T102 635Q112 635 116 628T124 601Q128 579 134 562T159 515T207 463T290 418T415 384L422 381L506 586Q571 744 584 772T609 801Q616 801 622 795T629 781T544 577Q525 529 504 478T473 402T462 375Q480 373 500 373Q579 364 651 364H680Q682 361 686 357T691 351T693 344Q693 337 680 324H651Q553 324 451 310L433 308L349 104L262 -101L473 -103H682Q694 -115 694 -123Q694 -133 682 -141L464 -143H246L213 -219Q182 -292 178 -299Q172 -303 166 -303T153 -297T146 -283'],
+
+    // LESS-THAN BUT NOT EQUIVALENT TO
+    0x22E6: [730,359,778,55,719,'86 450Q93 455 380 592T673 730Q680 730 686 724T693 710Q693 702 688 699Q686 693 417 568L151 439L417 310Q685 185 688 179Q693 176 693 168Q693 161 687 155T675 148Q668 148 380 285T86 428Q74 438 86 450ZM55 -205Q55 -175 64 -142T92 -76T145 -22T222 -1Q288 -1 362 -66Q369 -72 372 -75T378 -79T382 -81T384 -79Q389 -74 439 21Q483 100 490 111T504 122Q510 122 518 118T526 103Q526 101 510 69T467 -12T419 -99L413 -112L433 -128Q498 -180 553 -180Q605 -180 646 -139Q672 -112 681 -77T693 -21T706 -1Q719 -1 719 -33Q719 -39 717 -57Q708 -141 655 -190Q625 -224 586 -232Q568 -237 551 -237Q487 -237 413 -172L391 -155Q391 -157 335 -255Q297 -325 286 -342T268 -359Q260 -359 254 -353T248 -339T304 -230L359 -126Q359 -124 337 -107T302 -81Q262 -57 221 -57Q170 -57 130 -93T84 -201Q82 -236 70 -236Q55 -236 55 -205'],
+
+    // GREATER-THAN BUT NOT EQUIVALENT TO
+    0x22E7: [730,359,778,55,719,'88 723Q95 730 99 730Q106 730 394 593T688 450Q693 447 693 439T688 428Q683 423 395 286T99 148Q94 148 88 155T82 168Q82 175 86 179Q89 184 357 310L624 439L357 568Q88 694 86 699Q81 703 81 711T88 723ZM55 -205Q55 -175 64 -142T92 -76T145 -22T222 -1Q288 -1 362 -66Q369 -72 372 -75T378 -79T382 -81T384 -79Q389 -74 439 21Q483 100 490 111T504 122Q510 122 518 118T526 103Q526 101 510 69T467 -12T419 -99L413 -112L433 -128Q498 -180 553 -180Q605 -180 646 -139Q672 -112 681 -77T693 -21T706 -1Q719 -1 719 -33Q719 -39 717 -57Q708 -141 655 -190Q625 -224 586 -232Q568 -237 551 -237Q487 -237 413 -172L391 -155Q391 -157 335 -255Q297 -325 286 -342T268 -359Q260 -359 254 -353T248 -339T304 -230L359 -126Q359 -124 337 -107T302 -81Q262 -57 221 -57Q170 -57 130 -93T84 -201Q82 -236 70 -236Q55 -236 55 -205'],
+
+    // PRECEDES BUT NOT EQUIVALENT TO
+    0x22E8: [730,359,778,55,719,'95 419Q81 433 81 439T95 459H124Q318 459 455 501Q515 521 556 550T615 607T641 659T652 702T659 725Q667 730 673 730Q680 730 686 724T693 710Q693 682 677 641Q668 616 654 594T622 554T586 522T545 497T504 477T464 462T428 452T397 444T375 439Q379 437 410 430T476 411T551 379T625 321T677 237Q693 196 693 168Q693 161 687 155T673 148Q662 148 658 154T651 181Q638 253 591 300T455 377Q318 419 124 419H95ZM55 -205Q55 -175 64 -142T92 -76T145 -22T222 -1Q288 -1 362 -66Q369 -72 372 -75T378 -79T382 -81T384 -79Q389 -74 439 21Q483 100 490 111T504 122Q510 122 518 118T526 103Q526 101 510 69T467 -12T419 -99L413 -112L433 -128Q498 -180 553 -180Q605 -180 646 -139Q672 -112 681 -77T693 -21T706 -1Q719 -1 719 -33Q719 -39 717 -57Q708 -141 655 -190Q625 -224 586 -232Q568 -237 551 -237Q487 -237 413 -172L391 -155Q391 -157 335 -255Q297 -325 286 -342T268 -359Q260 -359 254 -353T248 -339T304 -230L359 -126Q359 -124 337 -107T302 -81Q262 -57 221 -57Q170 -57 130 -93T84 -201Q82 -236 70 -236Q55 -236 55 -205'],
+
+    // SUCCEEDS BUT NOT EQUIVALENT TO
+    0x22E9: [730,359,778,55,719,'679 459Q693 445 693 439Q693 430 679 419H651Q455 419 319 377Q231 347 184 300T124 181Q120 161 116 155T102 148Q95 148 89 154T82 168Q82 192 97 237Q111 275 137 306T188 355T249 391T307 414T361 429T399 439Q397 440 364 447T298 467T224 499T149 557T97 641Q82 686 82 710Q82 717 88 723T102 730L115 725Q118 722 124 697Q137 625 184 578T319 501Q456 459 651 459H679ZM55 -205Q55 -175 64 -142T92 -76T145 -22T222 -1Q288 -1 362 -66Q369 -72 372 -75T378 -79T382 -81T384 -79Q389 -74 439 21Q483 100 490 111T504 122Q510 122 518 118T526 103Q526 101 510 69T467 -12T419 -99L413 -112L433 -128Q498 -180 553 -180Q605 -180 646 -139Q672 -112 681 -77T693 -21T706 -1Q719 -1 719 -33Q719 -39 717 -57Q708 -141 655 -190Q625 -224 586 -232Q568 -237 551 -237Q487 -237 413 -172L391 -155Q391 -157 335 -255Q297 -325 286 -342T268 -359Q260 -359 254 -353T248 -339T304 -230L359 -126Q359 -124 337 -107T302 -81Q262 -57 221 -57Q170 -57 130 -93T84 -201Q82 -236 70 -236Q55 -236 55 -205'],
+
+    // NOT NORMAL SUBGROUP OF
+    0x22EA: [707,208,778,82,693,'693 -30Q686 -41 673 -41Q661 -41 506 34L346 110L280 -44Q228 -162 216 -185T193 -208Q177 -208 173 -192Q173 -186 242 -30T311 128Q271 145 184 186T86 236Q82 240 82 246Q82 251 86 259Q96 267 271 350L449 434L506 565Q537 635 551 664T571 700T582 706Q587 706 593 701T600 690Q600 679 553 572Q504 463 504 461L586 501Q672 539 673 539Q679 539 693 525V-30ZM653 10V488L566 445L480 405L422 276Q415 260 405 236T388 199T376 171T368 151T366 145Q368 143 510 77T653 10ZM422 374Q422 376 420 376T285 313T151 248Q315 168 326 163Q415 356 422 374'],
+
+    // DOES NOT CONTAIN AS NORMAL SUBGROUP
+    0x22EB: [706,208,778,82,693,'82 525Q96 539 102 539Q103 539 122 530T186 501T266 463L426 388Q428 388 495 541Q564 694 569 699Q573 706 581 706Q587 706 593 702T600 691Q600 676 533 528Q515 486 506 465T485 418T470 381T466 370Q466 369 575 316Q676 269 689 259Q693 253 693 248Q693 242 689 236Q688 235 506 145Q328 63 324 59Q324 50 266 -70Q224 -169 214 -188T193 -208Q177 -208 173 -192Q173 -183 222 -77Q244 -29 257 2T269 34L186 -6Q108 -43 99 -43Q93 -43 82 -30V525ZM271 416Q129 485 126 485H125Q122 485 122 250Q122 10 124 10L211 50L295 92L411 350Q411 351 271 416ZM624 248L449 332L440 319Q434 297 393 214Q353 121 353 119Q355 119 489 182T624 248'],
+
+    // stix-not, vert, left triangle, equals
+    0x22EC: [802,303,778,82,693,'82 -123Q82 -114 93 -103H166L238 -101L293 50Q349 200 349 204L220 266Q166 291 140 304T100 325T84 336T82 344Q82 353 94 360Q112 372 282 453L473 541L482 568Q487 578 529 693Q559 785 569 795Q573 802 581 802Q587 802 593 797T599 786Q599 775 564 675L526 570Q526 568 561 584T633 617T673 635Q679 635 693 621V66Q686 54 679 54Q665 54 526 119Q491 137 458 153T405 177T386 184Q385 182 334 42T282 -101T482 -103H680Q682 -105 684 -108T688 -113T691 -118T693 -124Q693 -134 682 -141L473 -143H266L238 -219Q217 -278 210 -290T193 -303Q178 -303 173 -287Q173 -279 198 -214L222 -145Q222 -143 158 -143L93 -141L86 -136Q82 -131 82 -123ZM653 106V584L506 513L453 370Q442 339 428 300T407 243T400 224Q403 222 527 164T653 106ZM453 486Q453 488 451 488T300 417T151 344L224 308Q247 298 285 279T331 257L364 241L453 486'],
+
+    // stix-not, vert, right triangle, equals
+    0x22ED: [801,303,778,82,693,'82 621Q96 635 102 635T249 568L420 486L449 473L469 533Q563 789 569 797Q573 801 581 801Q598 801 600 786Q602 781 544 617L484 455Q531 435 584 408Q677 364 689 355Q693 351 693 344Q693 339 692 337T676 325T631 302T538 257Q504 241 465 223T406 195T386 186Q384 184 333 44T282 -101Q282 -103 482 -103H680Q682 -105 684 -108T688 -113T691 -118T693 -124Q693 -134 682 -141L473 -143H266L238 -219Q217 -278 210 -290T193 -303Q178 -303 173 -287Q173 -279 198 -214L222 -145Q222 -143 158 -143L93 -141L86 -136Q82 -131 82 -123Q82 -114 93 -103H166L238 -101L333 159Q326 159 220 106Q110 54 97 54Q89 54 82 66V621ZM298 501Q155 567 142 575L122 584V344Q122 106 124 106Q125 106 180 132T291 185T351 213Q355 217 393 326L433 435Q433 436 298 501ZM549 381Q472 417 471 417L406 241Q408 240 516 291T624 344L549 381']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/MathOperators.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/MiscMathSymbolsB.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // BLACK LOZENGE
+    0x29EB: [716,132,667,56,611,'318 709Q325 716 332 716Q340 716 344 713T474 511Q611 298 611 292Q611 285 526 152Q494 103 474 72Q347 -128 344 -130Q340 -132 333 -132T322 -130Q319 -128 257 -31T131 169T60 278Q56 285 56 292Q56 298 60 305Q73 326 194 516T318 709']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/MiscMathSymbolsB.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/MiscSymbols.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // BLACK STAR
+    0x2605: [694,111,944,49,895,'367 395Q374 416 398 492T442 627T463 688Q463 692 467 692Q471 694 472 694Q478 694 484 680T523 562Q553 469 576 400L577 395H731H819Q872 395 883 394T895 384Q895 380 891 376T832 333Q794 305 767 285Q643 195 643 194L690 47Q737 -96 737 -103Q737 -111 727 -111Q721 -111 594 -18L472 71L350 -18Q223 -111 217 -111Q207 -111 207 -103Q207 -96 254 47L301 194Q301 195 241 239T118 328T51 378Q49 382 49 384Q49 392 58 393T110 395H213H367']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/MiscSymbols.js");
+
+/*************************************************************
+ *
  *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/MiscTechnical.js
  *
  *  Copyright (c) 2011-2017 The MathJax Consortium
@@ -14880,6 +17365,210 @@ MathJax.Hub.Insert(
 );
 
 MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/MiscTechnical.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/PUA.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // ??
+    0xE006: [430,23,222,-20,240,'91 417Q104 430 111 430T131 417V301L171 341Q201 373 207 378T220 384Q227 384 233 377T240 366Q240 357 187 299L131 244V-10Q116 -23 111 -23T91 -10V201L49 157Q20 127 14 121T0 115Q-8 115 -14 121T-20 132Q-20 139 17 178Q29 191 36 199L91 257V417'],
+
+    // ??
+    0xE007: [431,24,389,-20,407,'56 417Q68 431 76 431L89 426L96 419V317L98 215L193 273L291 330V375L293 419Q301 431 311 431Q331 431 331 388L333 355L356 370Q381 384 388 384Q394 384 400 377T407 363Q407 354 367 328L331 308V-10Q316 -23 310 -23Q300 -23 293 -12L291 135V284L98 168L96 77V-12Q84 -24 76 -24L62 -19L58 -12L56 66V144L31 128Q5 114 -2 114Q-8 114 -14 121T-20 136Q-20 142 -14 147T20 170L56 190V417'],
+
+    // ??
+    0xE008: [605,85,778,55,719,'477 261Q477 257 473 256T455 253T417 251T348 250H235L155 -77L146 -82Q137 -85 109 -85Q55 -85 55 -77L139 261Q224 596 226 598Q229 603 239 603Q240 603 254 603T290 603T341 604T405 605T477 605Q656 603 687 602T719 596Q719 589 692 588T513 585H319L282 427L242 272Q242 270 351 270Q388 270 410 270T444 269T460 267T469 265T477 261'],
+
+    // ??
+    0xE009: [434,6,667,37,734,'228 325Q170 322 156 316T127 309Q108 309 104 314Q99 319 99 322T108 341Q125 376 171 400T268 425H271Q302 425 319 396Q328 377 328 358Q328 332 324 314Q311 270 286 221Q274 194 274 192H275Q339 234 484 325T639 421Q669 434 691 434T723 425T734 406Q734 394 719 381Q715 376 644 330L575 287L566 267Q543 233 526 176Q520 160 515 143T508 115T506 105Q506 103 533 103Q585 103 607 110T641 118Q670 118 670 107Q670 100 661 85Q643 50 598 27T504 3Q465 3 450 36Q441 51 441 73Q441 84 444 96Q452 146 484 205L497 236L324 125Q143 12 135 10Q103 -6 77 -6Q61 -6 49 2T37 21Q37 36 49 46T124 96L195 141L204 156Q219 179 243 248T264 323Q264 325 228 325'],
+
+    // ??
+    0xE00C: [752,284,778,81,694,'86 472Q93 477 381 614T673 752Q680 752 686 746T693 732T689 721Q686 715 418 590L151 461L418 332Q684 207 689 201Q693 195 693 190Q693 183 687 177T675 170Q668 170 380 307T86 450Q82 454 82 461Q82 467 86 472ZM369 101V126Q369 156 382 156H384Q385 157 386 157Q409 157 409 115V98V54H680Q693 39 693 34T680 14H409V-142H680Q693 -155 693 -162Q693 -167 680 -182H409V-273Q396 -284 388 -284Q382 -284 369 -275V-182H95Q82 -167 82 -162Q82 -155 95 -142H369V14H95Q93 17 89 21T84 27T82 34T83 40T89 47T95 54H369V101'],
+
+    // ??
+    0xE00D: [752,284,778,81,693,'89 745Q95 752 100 752Q106 752 394 615T689 472Q693 468 693 461T689 450Q684 445 396 308T100 170Q95 170 89 176T82 190Q82 195 86 201Q91 208 358 332L624 461L358 590Q90 715 86 721Q82 725 82 731Q82 739 89 745ZM369 101V126Q369 156 382 156H384Q385 157 386 157Q409 157 409 115V98V54H680Q693 39 693 34T680 14H409V-142H680Q693 -155 693 -162Q693 -167 680 -182H409V-273Q396 -284 388 -284Q382 -284 369 -275V-182H95Q82 -167 82 -162Q82 -155 95 -142H369V14H95Q93 17 89 21T84 27T82 34T83 40T89 47T95 54H369V101'],
+
+    // stix-not greater, double equals
+    0xE00E: [919,421,778,82,694,'97 172Q82 172 82 190Q82 197 86 201Q94 209 173 246T327 319T402 357Q405 360 434 448T462 539L278 628Q96 713 86 721Q82 725 82 732T88 745T102 752Q103 752 125 742T198 709T293 666Q342 642 385 622T453 590T478 579Q479 579 506 659T562 824T598 915Q602 919 609 919T622 913T629 901Q629 898 571 728Q546 656 531 608T518 559Q555 539 602 519Q664 488 679 479T694 461Q694 457 689 450Q680 443 616 413T494 356T435 326L389 190L342 57L513 55H682Q694 43 694 34Q694 28 689 21L682 17L506 15H329L322 -8Q320 -13 310 -41T295 -85L275 -141H680Q682 -143 684 -146T688 -151T691 -156T693 -162Q693 -172 682 -179L473 -181H262L220 -303Q192 -388 185 -404T166 -421Q160 -421 153 -415T146 -403Q146 -400 179 -302T220 -185Q220 -181 158 -181L93 -179L86 -174Q82 -169 82 -161Q82 -152 93 -141H164L233 -139L260 -63L286 15H189L93 17L86 21Q82 26 82 34Q82 44 93 55H198L300 57L342 179Q350 204 361 238T378 286T382 301L246 237Q111 172 97 172ZM624 461Q621 464 560 492Q512 518 503 518Q500 518 500 517Q499 513 488 479T465 413T453 379L624 461'],
+
+    // stix-not greater-or-equal, slanted
+    0xE00F: [801,303,778,82,694,'97 54Q82 54 82 72Q82 79 86 84Q95 91 222 153L351 215L398 324L442 433L258 519Q95 597 87 604Q82 608 82 615T88 628T102 635Q107 635 424 484L458 468L524 630Q593 789 597 795Q601 801 609 801Q616 801 622 795T629 781L562 615L493 450L589 406Q665 371 679 362T694 344Q694 339 693 337T677 326T631 302T538 257Q504 241 465 223T406 195T386 186Q383 185 344 92T306 -3L486 81Q662 168 673 168Q680 168 686 162T693 148T689 137Q688 136 482 35L280 -59L233 -176Q184 -291 178 -299Q172 -303 166 -303T153 -297T146 -283Q146 -279 185 -186T224 -90Q225 -88 223 -88Q219 -88 193 -101Q109 -143 98 -143Q82 -138 82 -122Q82 -116 85 -113T108 -98T171 -67L249 -30L289 61Q297 81 307 107T321 144T326 157L218 106Q109 54 97 54ZM553 379Q480 412 480 415Q479 415 460 372T423 285T406 241Q408 240 516 291T624 344L553 379'],
+
+    // stix-not less-or-equal, slanted
+    0xE010: [801,303,778,81,694,'102 168Q103 168 151 146T247 102T295 81Q299 85 322 144T344 206L218 268Q153 297 123 313T87 333T82 344T86 355Q104 369 291 455Q491 552 491 553L542 673Q581 767 590 784T609 801Q616 801 622 795T629 781Q629 773 586 677Q546 581 546 577L609 606Q669 635 673 635Q680 635 686 629T693 615Q693 610 692 608T670 593T604 561L524 521L400 226L542 157Q617 123 649 107T687 85T694 72Q694 66 690 60T679 54Q665 54 526 119Q394 186 386 186Q385 186 342 88L331 61L509 -23Q680 -105 688 -111Q693 -115 693 -122T688 -135T675 -141H673Q664 -141 491 -59Q320 21 316 21H315L249 -136Q183 -293 178 -299Q172 -303 166 -303T153 -297T146 -283Q146 -282 154 -261T181 -197T213 -119L280 41Q280 46 186 86Q157 101 121 119Q92 133 87 136T82 148Q82 155 88 161T102 168ZM418 370L466 495Q464 495 308 420T151 344T204 317T311 267T364 244Q364 247 418 370'],
+
+    // stix-not less, double equals
+    0xE011: [919,421,778,82,694,'82 34Q82 44 93 55H198L300 57L342 179Q351 207 362 238T378 286T384 303T238 377Q109 435 86 450Q82 454 82 460T86 472Q90 476 302 579L511 679Q512 679 553 795Q569 842 577 866T592 903T600 917T608 919Q615 919 622 912T629 901Q629 899 595 799Q589 777 581 753T569 717T564 703L618 728Q666 752 673 752T686 746T693 732Q693 723 683 717T615 683L546 650L491 488Q464 410 450 368T438 326Q493 297 562 266Q660 219 677 209T694 190Q694 183 690 177T678 171Q664 171 546 228L424 286Q422 286 382 172L342 57L513 55H682Q694 43 694 34Q694 28 689 21L682 17L506 15H329L322 -8Q320 -13 310 -41T295 -85L275 -141H680Q682 -143 684 -146T688 -151T691 -156T693 -162Q693 -172 682 -179L473 -181H262L220 -303Q192 -388 185 -404T166 -421Q160 -421 153 -415T146 -403Q146 -400 179 -302T220 -185Q220 -181 158 -181L93 -179L86 -174Q82 -169 82 -161Q82 -152 93 -141H164L233 -139L260 -63L286 15H189L93 17L86 21Q82 26 82 34ZM495 623Q495 626 493 626T321 544T151 461L398 343Q399 343 405 360T423 415T446 483Q457 513 469 551T488 606T495 623'],
+
+    // stix-not subset, double equals
+    0xE016: [828,330,778,82,694,'82 -6Q82 1 95 14H262L295 94Q331 171 331 174Q324 175 312 178T267 194T206 227T146 283T98 368Q84 406 84 461T98 554Q126 632 194 685T349 750Q360 752 480 752H591L604 783Q620 819 624 821Q631 828 640 828Q653 825 658 810Q658 808 646 781L635 754Q635 752 658 752Q680 752 686 746Q693 739 693 732Q693 728 692 726T686 719T680 712H615L506 466Q479 407 451 344T408 248T393 214Q393 210 535 210H680Q693 194 693 190T680 170H373L340 92L304 14H680Q693 1 693 -6Q693 -11 680 -26H286L253 -103L218 -179L451 -181H682Q694 -193 694 -201Q694 -212 682 -219L440 -221H200L178 -270Q160 -309 154 -319T139 -330Q122 -330 118 -312L155 -223Q155 -221 126 -221H95Q82 -206 82 -201T95 -181H175L206 -108Q237 -35 242 -30Q242 -26 169 -26H95Q82 -11 82 -6ZM571 710Q571 712 469 712Q443 712 416 712T371 711T351 710Q279 700 221 656T138 548Q124 508 124 461T138 374Q186 245 351 212L460 459Q571 709 571 710'],
+
+    // ??
+    0xE017: [752,332,778,81,694,'82 -14T82 -7T95 15H431L529 170H435Q341 170 333 175Q149 218 98 368Q84 406 84 461Q84 515 98 555Q126 633 193 686T346 750Q347 750 373 750T440 751T520 752H680Q693 739 693 732Q693 727 680 712H526Q364 712 353 710Q268 700 207 646T126 512Q123 496 123 461T126 410Q141 350 180 304T280 232Q312 217 344 214T464 210H555L589 261Q613 301 620 311T635 321Q644 321 650 315T657 301Q657 296 651 286T630 252T604 212Q604 210 642 210H680Q693 197 693 190Q693 186 692 184T686 177T680 170H578L526 92L478 17L580 15H682Q693 4 693 -4T680 -25H451L353 -179L518 -181H682Q694 -193 694 -201Q694 -211 682 -219L504 -221H326L293 -272Q257 -332 246 -332Q238 -332 232 -326T225 -313Q225 -310 226 -308Q226 -305 251 -265T278 -223Q278 -221 186 -221H95Q93 -218 89 -214T84 -208T82 -201T95 -181H306L404 -25H249L93 -23L86 -19Q82 -14 82 -7'],
+
+    // stix-not superset, double equals
+    0xE018: [828,330,778,82,694,'82 732Q82 739 95 752H251H348Q420 752 460 744T551 708Q566 697 566 701Q618 815 624 821Q631 828 640 828Q653 825 658 810L600 677Q600 671 615 656T653 605T689 517Q692 496 692 461T689 406Q668 325 615 266Q572 221 513 196T391 170H373L340 92L304 14H680Q693 1 693 -6Q693 -11 680 -26H286L253 -103L218 -179L451 -181H682Q694 -193 694 -201Q694 -212 682 -219L440 -221H200L178 -270Q160 -309 154 -319T139 -330Q122 -330 118 -312L155 -223Q155 -221 126 -221H95Q82 -206 82 -201T95 -181H175L206 -108Q237 -35 242 -30Q242 -26 169 -26H95Q82 -11 82 -6Q82 1 95 14H262L295 92L331 170H95Q93 172 91 175T87 180T84 185T82 191Q82 199 93 210H220L349 212L549 659Q507 692 462 702T338 712H249H95Q82 727 82 732ZM652 473Q652 513 636 552T603 611T582 632Q581 632 487 422T393 210Q424 210 460 220T535 253T605 316T649 410Q652 427 652 461V473'],
+
+    // ??
+    0xE019: [752,333,778,82,693,'82 732Q82 739 95 752H251Q415 752 426 750Q539 736 615 657Q667 599 689 517Q692 496 692 461T689 406Q668 325 615 266Q522 170 382 170H355L326 95Q319 80 311 59T298 28T293 17Q293 15 486 15H680Q693 0 693 -6T680 -25H275L213 -179L449 -181H682Q693 -192 693 -199T680 -221H198L178 -270Q153 -333 139 -333Q132 -333 126 -327T119 -314T135 -266T153 -223Q153 -221 124 -221H95Q82 -207 82 -201T95 -181H171L233 -25H162L93 -23L86 -19Q82 -14 82 -7T95 15H251L313 170H202L93 172L86 177Q82 182 82 190Q82 199 93 210H211L329 212L349 261Q366 301 372 311T386 321Q392 321 399 315T407 302Q407 295 390 254T373 210Q374 209 377 209Q412 209 444 217Q512 231 564 273T638 377Q651 414 651 461Q651 509 638 548Q613 613 555 656T422 710Q411 712 249 712H95Q82 727 82 732'],
+
+    // ??
+    0xE01A: [634,255,778,84,694,'693 -115T693 -122T680 -144H315L269 -199Q221 -255 213 -255H212Q203 -255 197 -248T193 -231Q195 -225 229 -184L262 -144H186L113 -142L106 -137Q102 -130 102 -125Q102 -119 115 -104H298L426 52H386Q342 54 309 63Q236 79 180 129T98 249Q84 289 84 343Q84 398 98 436Q126 514 193 567T346 632Q347 632 373 632T440 633T520 634H680Q682 631 686 627T691 621T693 614T680 594H526Q364 594 353 592Q268 581 207 528T126 394Q123 378 123 343T126 292Q141 231 181 185T280 114Q329 92 415 92H462L506 147Q554 203 562 203H563Q572 203 578 196T582 178Q579 173 546 132L513 94L598 92H682Q693 81 693 73T680 52H480L349 -102L515 -104H682Q693 -115 693 -122'],
+
+    // ??
+    0xE01B: [634,254,778,82,691,'82 610T82 614T83 620T89 627T95 634H251Q378 634 409 633T469 623Q540 604 596 554T678 436Q691 397 691 343T678 249Q653 181 597 131T469 63Q427 52 362 52H315L213 -102L438 -104H662Q673 -115 673 -123Q673 -129 660 -144H186L151 -197Q114 -250 109 -253Q106 -254 104 -254Q100 -254 98 -253Q91 -253 87 -248T82 -235Q82 -230 109 -186L138 -144H115Q82 -144 82 -125Q82 -119 95 -104H166L266 49Q266 52 182 52H95Q82 65 82 72Q82 76 83 78T89 85T95 92H295L329 143Q365 195 369 198Q372 203 380 203Q385 203 391 197T398 185Q398 184 398 184L399 182Q399 175 369 129L344 94Q344 92 376 92Q402 92 422 94Q496 104 554 147T638 256Q651 295 651 343Q651 390 638 429Q613 494 555 537T422 592Q411 594 249 594H95Q82 610 82 614']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/PUA.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/SpacingModLetters.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // MODIFIER LETTER CIRCUMFLEX ACCENT
+    0x2C6: [845,-561,2333,-14,2346,'1 561Q-3 563 -6 577T-12 604L-14 618Q-14 625 -7 628T23 635Q31 636 36 637Q63 641 621 745Q1148 845 1165 845Q1167 845 1752 739L2338 630Q2346 630 2346 618Q2340 565 2332 561Q2329 561 1749 654Q1617 675 1466 699T1241 736T1167 748Q1165 748 1093 737T867 700T583 654Q3 561 1 561'],
+
+    // SMALL TILDE
+    0x2DC: [899,-628,2333,1,2330,'804 788Q717 788 606 772T397 732T213 685T75 645T18 628Q11 628 11 632Q8 637 4 668T2 704Q2 713 36 732Q55 739 242 795Q622 898 826 898Q893 898 947 895Q1009 887 1056 872T1187 819Q1286 776 1356 758T1527 739Q1614 739 1725 755T1934 795T2118 842T2256 882T2313 899Q2320 899 2320 895Q2323 890 2327 860T2329 824Q2329 818 2296 795Q2273 787 2089 732Q1810 657 1598 632Q1562 629 1492 629Q1389 629 1320 644T1144 708Q1048 751 977 769T804 788']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/SpacingModLetters.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/AMS/Regular/SuppMathOperators.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_AMS'],
+  {
+    // LOGICAL AND WITH DOUBLE OVERBAR
+    0x2A5E: [813,97,611,54,555,'55 795Q56 806 70 813H540Q554 806 555 795Q555 791 554 788T552 783T549 779T546 777T542 775T539 773H71Q70 773 68 774T65 776T61 779T58 783T56 788T55 795ZM55 601Q56 612 70 619H540Q554 612 555 601Q555 597 554 594T552 589T549 585T546 583T542 581T539 579H71Q70 579 68 580T65 582T61 585T58 589T56 594T55 601ZM75 -97Q67 -97 61 -91T55 -81Q55 -71 169 166T285 410Q295 425 305 425Q311 425 316 422T323 414L325 410Q327 404 441 167T555 -81Q555 -85 549 -91T535 -97T520 -90Q519 -89 506 -61T463 27T411 136L305 358L199 136Q167 71 129 -10Q98 -75 92 -86T75 -97'],
+
+    // LESS-THAN OR SLANTED EQUAL TO
+    0x2A7D: [636,138,778,83,694,'674 636Q682 636 688 630T694 615T687 601Q686 600 417 472L151 346L399 228Q687 92 691 87Q694 81 694 76Q694 58 676 56H670L382 192Q92 329 90 331Q83 336 83 348Q84 359 96 365Q104 369 382 500T665 634Q669 636 674 636ZM94 170Q102 172 104 172Q110 171 254 103T535 -30T678 -98Q694 -106 694 -118Q694 -136 676 -138H670L382 -2Q92 135 90 137Q83 142 83 154Q84 164 94 170'],
+
+    // GREATER-THAN OR SLANTED EQUAL TO
+    0x2A7E: [636,138,778,82,694,'83 616Q83 624 89 630T99 636Q107 636 253 568T543 431T687 361Q694 356 694 346T687 331Q685 329 395 192L107 56H101Q83 58 83 76Q83 77 83 79Q82 86 98 95Q117 105 248 167Q326 204 378 228L626 346L360 472Q291 505 200 548Q112 589 98 597T83 616ZM674 172Q692 172 694 154Q694 142 687 137Q685 135 395 -2L107 -138H101Q83 -136 83 -118Q83 -106 96 -100Q100 -98 380 35T665 170T674 172'],
+
+    // LESS-THAN OR APPROXIMATE
+    0x2A85: [762,290,778,55,722,'667 761Q669 762 673 762Q682 762 688 756T694 741Q694 731 687 727Q684 724 420 613L156 502L416 392Q476 367 544 338T647 295T682 280Q694 274 694 262Q694 244 676 242Q670 242 524 303T235 425T90 487Q83 493 83 501Q83 514 94 519Q97 520 378 639T667 761ZM55 -23Q55 43 103 90T223 138Q265 138 316 114Q342 100 393 68L443 36Q502 0 554 0Q609 0 650 32T694 109Q694 138 708 138Q710 138 713 136T719 127T722 108Q722 37 673 -9T557 -56Q514 -56 468 -35T387 13T308 60T223 82Q167 82 127 50T83 -27Q81 -56 69 -56Q55 -56 55 -23ZM55 -257Q55 -191 103 -144T223 -96Q265 -96 316 -120Q342 -134 393 -166L443 -198Q502 -234 554 -234Q609 -234 650 -202T694 -125Q694 -96 708 -96Q710 -96 713 -98T719 -107T722 -126Q722 -197 673 -243T557 -290Q514 -290 468 -269T387 -221T308 -174T223 -152Q167 -152 127 -184T83 -261Q80 -290 69 -290Q55 -290 55 -257'],
+
+    // GREATER-THAN OR APPROXIMATE
+    0x2A86: [762,290,778,55,722,'90 727Q83 734 83 743Q83 751 89 756T104 762Q111 760 396 641Q686 518 687 517Q694 512 694 502T687 487Q686 486 543 425T253 303T101 242Q83 244 83 262Q83 274 95 280Q96 280 130 294T232 338T361 392L621 502L357 613Q93 724 90 727ZM55 -23Q55 43 103 90T223 138Q265 138 316 114Q342 100 393 68L443 36Q502 0 554 0Q609 0 650 32T694 109Q694 138 708 138Q710 138 713 136T719 127T722 108Q722 37 673 -9T557 -56Q514 -56 468 -35T387 13T308 60T223 82Q167 82 127 50T83 -27Q81 -56 69 -56Q55 -56 55 -23ZM55 -257Q55 -191 103 -144T223 -96Q265 -96 316 -120Q342 -134 393 -166L443 -198Q502 -234 554 -234Q609 -234 650 -202T694 -125Q694 -96 708 -96Q710 -96 713 -98T719 -107T722 -126Q722 -197 673 -243T557 -290Q514 -290 468 -269T387 -221T308 -174T223 -152Q167 -152 127 -184T83 -261Q80 -290 69 -290Q55 -290 55 -257'],
+
+    // LESS-THAN AND SINGLE-LINE NOT EQUAL TO
+    0x2A87: [636,241,778,82,694,'380 497Q445 528 522 564T636 618T673 635Q680 635 686 628T693 615T689 603Q686 599 418 472L151 343L418 215Q686 88 689 83Q693 79 693 72T687 59T675 52Q669 52 381 189T86 332Q82 337 82 344Q82 350 86 355Q91 359 380 497ZM82 -130T82 -124T95 -103H380L431 -54Q476 -6 486 -6Q491 -6 498 -12T505 -27Q505 -28 505 -29T504 -32Q503 -33 498 -38T485 -53T469 -70L438 -103H680Q682 -106 686 -110T691 -116T693 -123Q693 -130 680 -143H398L346 -192Q300 -241 291 -241Q271 -241 271 -221Q271 -209 306 -179L340 -143H95Q82 -130 82 -124'],
+
+    // GREATER-THAN AND SINGLE-LINE NOT EQUAL TO
+    0x2A88: [635,241,778,82,693,'82 614Q82 620 86 625T94 632T100 635Q106 635 394 498T689 355Q693 349 693 343Q693 338 689 332Q683 327 395 190T100 52Q95 52 89 58T82 72Q82 80 95 88Q114 99 358 215L624 343L358 472Q89 599 86 603Q82 607 82 614ZM82 -130T82 -124T95 -103H380L431 -54Q476 -6 486 -6Q491 -6 498 -12T505 -27Q505 -28 505 -29T504 -32Q503 -33 498 -38T485 -53T469 -70L438 -103H680Q682 -106 686 -110T691 -116T693 -123Q693 -130 680 -143H398L346 -192Q300 -241 291 -241Q271 -241 271 -221Q271 -209 306 -179L340 -143H95Q82 -130 82 -124'],
+
+    // LESS-THAN AND NOT APPROXIMATE
+    0x2A89: [761,387,778,57,718,'86 512Q93 518 381 639T673 761Q680 761 686 755T693 741Q693 733 688 730Q685 723 419 612L155 501L419 390Q685 277 688 272Q693 269 693 261Q693 254 687 248T675 241Q669 241 381 362T86 490Q74 500 86 512ZM70 -59Q57 -59 57 -24Q57 40 104 87Q116 102 146 118Q186 136 231 136Q232 136 242 135T258 133T276 128T302 118T334 101T377 74Q386 69 396 63T411 53T417 50Q435 87 453 134Q491 223 495 227Q498 230 505 230Q513 230 519 225T526 212Q526 203 491 118T453 30Q453 22 489 10T553 -3Q589 -3 622 14Q653 28 669 50T688 90T694 122T706 136Q718 136 718 114Q718 113 718 109T717 103Q717 31 668 -14T554 -60Q529 -60 499 -50T451 -32T433 -24Q431 -24 404 -90T375 -157Q375 -159 402 -178T473 -218T553 -239Q599 -239 641 -211T691 -130Q694 -99 706 -99T718 -122Q718 -123 718 -127T717 -133Q717 -204 668 -249T559 -295Q512 -295 470 -275T355 -206L322 -290Q313 -310 304 -332T289 -367T282 -382Q277 -387 270 -387Q262 -387 255 -382T248 -368Q248 -361 322 -186Q311 -177 280 -166T222 -155Q189 -155 153 -173Q122 -186 106 -208T87 -248T82 -280T71 -294Q57 -294 57 -259Q57 -195 104 -148Q122 -126 155 -113T220 -99Q245 -99 276 -109T324 -127T342 -135Q397 -2 397 1Q386 10 367 23T302 58T222 80Q175 80 132 52T84 -28Q82 -59 70 -59'],
+
+    // GREATER-THAN AND NOT APPROXIMATE
+    0x2A8A: [761,387,778,57,718,'86 730Q81 734 81 740Q81 747 88 754T99 761Q103 761 392 640T688 512Q693 509 693 501T688 490Q682 484 394 363T99 241Q94 241 88 248T82 261Q82 268 86 272Q89 277 355 390L619 501L355 612Q89 723 86 730ZM70 -59Q57 -59 57 -24Q57 40 104 87Q116 102 146 118Q186 136 231 136Q232 136 242 135T258 133T276 128T302 118T334 101T377 74Q386 69 396 63T411 53T417 50Q435 87 453 134Q491 223 495 227Q498 230 505 230Q513 230 519 225T526 212Q526 203 491 118T453 30Q453 22 489 10T553 -3Q589 -3 622 14Q653 28 669 50T688 90T694 122T706 136Q718 136 718 114Q718 113 718 109T717 103Q717 31 668 -14T554 -60Q529 -60 499 -50T451 -32T433 -24Q431 -24 404 -90T375 -157Q375 -159 402 -178T473 -218T553 -239Q599 -239 641 -211T691 -130Q694 -99 706 -99T718 -122Q718 -123 718 -127T717 -133Q717 -204 668 -249T559 -295Q512 -295 470 -275T355 -206L322 -290Q313 -310 304 -332T289 -367T282 -382Q277 -387 270 -387Q262 -387 255 -382T248 -368Q248 -361 322 -186Q311 -177 280 -166T222 -155Q189 -155 153 -173Q122 -186 106 -208T87 -248T82 -280T71 -294Q57 -294 57 -259Q57 -195 104 -148Q122 -126 155 -113T220 -99Q245 -99 276 -109T324 -127T342 -135Q397 -2 397 1Q386 10 367 23T302 58T222 80Q175 80 132 52T84 -28Q82 -59 70 -59'],
+
+    // LESS-THAN ABOVE DOUBLE-LINE EQUAL ABOVE GREATER-THAN
+    0x2A8B: [1003,463,778,83,694,'674 1003Q681 1003 687 999T694 983Q694 973 683 967Q669 959 420 868L162 772L422 676Q683 579 685 577Q694 571 694 560Q694 550 687 546T673 541Q669 542 384 647T93 755Q83 760 83 772Q83 783 91 788Q98 791 383 897T674 1003ZM84 354T84 367T98 387H679Q694 379 694 367Q694 354 679 347H98Q84 354 84 367ZM84 160T84 173T98 193H679Q694 185 694 173Q694 160 679 153H98Q84 160 84 173ZM94 -3Q102 -1 104 -1Q107 -2 392 -107T684 -215Q694 -219 694 -232Q694 -241 687 -247Q686 -248 395 -357Q106 -463 101 -463Q83 -461 83 -443Q83 -431 94 -426Q97 -423 357 -328L615 -232L355 -136Q94 -39 92 -37Q83 -31 83 -21Q83 -9 94 -3'],
+
+    // GREATER-THAN ABOVE DOUBLE-LINE EQUAL ABOVE LESS-THAN
+    0x2A8C: [1003,463,778,83,694,'104 541Q98 541 91 545T83 560Q83 571 92 577Q94 579 355 676L615 772L357 868Q108 959 94 967Q83 973 83 983Q83 989 87 996T104 1003Q109 1002 396 896T687 787Q694 781 694 772Q694 759 684 755Q678 752 393 647T104 541ZM84 367Q84 380 98 387H679Q694 379 694 367Q694 356 680 348L390 347H100Q84 352 84 367ZM84 173Q84 188 100 193H680Q694 183 694 173Q694 160 679 153H98Q84 160 84 173ZM674 -1Q682 -1 688 -6T694 -20Q694 -31 685 -37Q683 -39 422 -136L162 -232L420 -328Q680 -423 683 -426Q694 -431 694 -443Q694 -461 676 -463Q671 -463 382 -357Q91 -248 90 -247Q83 -242 83 -232Q83 -220 93 -215Q667 -1 674 -1'],
+
+    // SLANTED EQUAL TO OR LESS-THAN
+    0x2A95: [636,138,778,83,694,'674 636Q682 636 688 631T694 616Q694 605 687 601Q685 599 395 462L107 326H101Q83 328 83 345Q83 358 96 365Q102 367 382 500T665 634Q671 636 674 636ZM674 442Q692 442 694 424Q694 412 687 407Q686 406 417 278L151 152L399 34Q687 -102 691 -107Q694 -113 694 -118Q694 -136 676 -138H670L382 -2Q92 135 90 137Q83 142 83 154Q84 165 96 171Q104 175 382 306T665 440Q669 442 674 442'],
+
+    // SLANTED EQUAL TO OR GREATER-THAN
+    0x2A96: [636,138,778,83,694,'83 616Q83 624 89 630T99 636Q107 636 253 568T543 431T687 361Q694 354 694 346Q694 328 676 326H670L382 462Q317 493 226 535Q119 585 101 595T83 616ZM94 440Q102 442 104 442Q110 441 254 373T535 240T678 172Q679 172 680 171Q694 164 694 153T687 137Q685 135 395 -2L107 -138H101Q83 -136 83 -118Q83 -106 93 -101L128 -84Q163 -68 230 -36T361 26L626 152L360 278Q91 406 90 407Q83 412 83 424Q84 434 94 440'],
+
+    // PRECEDES ABOVE NOT EQUAL TO
+    0x2AB5: [752,286,778,82,693,'653 734Q653 738 660 745T673 752T686 745T693 723Q672 555 466 485Q390 463 378 463Q373 463 373 461Q373 458 378 458Q390 458 466 436Q562 404 620 350Q682 283 693 198Q693 183 686 176Q681 170 674 170T660 176T653 187Q653 192 652 200T646 228T631 265T602 307T555 350Q435 431 151 441H95Q82 454 82 460T95 481H151Q165 482 197 483T238 485Q427 500 528 554T649 707Q653 729 653 734ZM82 33Q82 37 83 40T89 47T95 54H473L520 105Q569 156 571 156Q573 157 578 157Q586 157 592 151T598 136Q598 130 562 92L526 56L604 54H682Q693 43 693 35Q693 31 692 28T686 21T680 14H489L342 -139L513 -142H682Q693 -148 693 -160Q693 -167 680 -182H304L258 -230Q248 -240 237 -251T221 -268T211 -278T203 -284T197 -286Q189 -286 184 -280T178 -264Q178 -257 213 -219L249 -182H171L93 -179L86 -175Q82 -170 82 -163Q82 -155 95 -142H289L360 -64L433 14H262L93 16Q82 23 82 33'],
+
+    // SUCCEEDS ABOVE NOT EQUAL TO
+    0x2AB6: [752,286,778,82,693,'693 466T693 460T680 441H624Q608 439 577 438T538 436Q349 421 248 367T126 214Q122 192 122 187Q122 183 116 177T102 170Q95 170 89 176Q82 183 82 198Q93 283 155 350Q213 404 309 436Q385 458 398 458Q402 458 402 461Q402 463 398 463Q385 463 309 485Q103 555 82 723Q82 738 89 745T102 752T115 745T122 734Q122 721 126 701T155 640T220 572Q340 490 624 481H680Q693 466 693 460ZM82 33Q82 37 83 40T89 47T95 54H473L520 105Q569 156 571 156Q573 157 578 157Q586 157 592 151T598 136Q598 130 562 92L526 56L604 54H682Q693 43 693 35Q693 31 692 28T686 21T680 14H489L342 -139L513 -142H682Q693 -148 693 -160Q693 -167 680 -182H304L258 -230Q248 -240 237 -251T221 -268T211 -278T203 -284T197 -286Q189 -286 184 -280T178 -264Q178 -257 213 -219L249 -182H171L93 -179L86 -175Q82 -170 82 -163Q82 -155 95 -142H289L360 -64L433 14H262L93 16Q82 23 82 33'],
+
+    // PRECEDES ABOVE ALMOST EQUAL TO
+    0x2AB7: [761,294,778,57,717,'82 494T82 501T95 521H171Q405 527 511 569Q630 618 651 732Q652 734 653 740T655 748T658 754T663 759T672 761L686 754Q693 747 693 734Q684 668 648 623Q627 591 573 557T442 507L417 501Q428 496 442 494Q520 478 573 444T648 378Q684 333 693 267Q693 254 686 247Q673 234 659 245Q657 247 651 269Q630 383 511 432Q406 474 171 481H95Q82 494 82 501ZM70 -59Q57 -59 57 -26Q57 30 90 73T177 132Q191 136 226 136Q228 136 239 136T253 135T267 132T287 125T311 113T346 95T391 67Q462 20 502 5Q519 1 553 1Q586 1 602 5Q641 18 664 45T691 107Q694 136 704 136Q717 136 717 115V105Q717 39 671 -9T554 -58Q518 -58 481 -43T382 14Q302 63 273 74Q255 78 222 78Q188 78 173 74Q90 46 84 -28Q82 -59 70 -59ZM71 -294Q57 -294 57 -262Q57 -205 90 -162T177 -104Q191 -99 226 -99Q266 -103 277 -106Q310 -119 391 -168Q455 -212 502 -231Q519 -235 553 -235Q586 -235 602 -231Q640 -218 661 -195T686 -151T693 -115T704 -99Q717 -99 717 -121V-131Q717 -198 671 -246T556 -294Q519 -294 482 -279T382 -222Q307 -175 273 -162Q255 -157 222 -157Q188 -157 173 -162Q133 -175 110 -201T84 -264Q82 -294 71 -294'],
+
+    // SUCCEEDS ABOVE ALMOST EQUAL TO
+    0x2AB8: [761,294,778,57,717,'693 501Q693 493 679 481H604Q369 474 264 432Q143 382 124 269Q116 246 115 245Q101 234 88 247Q82 254 82 267Q89 329 126 378Q147 410 201 444T333 494L357 501Q354 502 340 505T318 510T295 516T269 525T243 535T215 548T188 565Q142 599 126 623Q89 672 82 734Q82 761 102 761L115 756Q116 755 124 732Q143 619 264 569Q371 527 604 521H679Q693 507 693 501ZM70 -59Q57 -59 57 -26Q57 30 90 73T177 132Q191 136 226 136Q228 136 239 136T253 135T267 132T287 125T311 113T346 95T391 67Q462 20 502 5Q519 1 553 1Q586 1 602 5Q641 18 664 45T691 107Q694 136 704 136Q717 136 717 115V105Q717 39 671 -9T554 -58Q518 -58 481 -43T382 14Q302 63 273 74Q255 78 222 78Q188 78 173 74Q90 46 84 -28Q82 -59 70 -59ZM71 -294Q57 -294 57 -262Q57 -205 90 -162T177 -104Q191 -99 226 -99Q266 -103 277 -106Q310 -119 391 -168Q455 -212 502 -231Q519 -235 553 -235Q586 -235 602 -231Q640 -218 661 -195T686 -151T693 -115T704 -99Q717 -99 717 -121V-131Q717 -198 671 -246T556 -294Q519 -294 482 -279T382 -222Q307 -175 273 -162Q255 -157 222 -157Q188 -157 173 -162Q133 -175 110 -201T84 -264Q82 -294 71 -294'],
+
+    // PRECEDES ABOVE NOT ALMOST EQUAL TO
+    0x2AB9: [761,337,778,57,718,'82 494T82 501T95 521H171Q256 523 317 528T441 548T543 584T613 644T651 732Q652 734 653 740T655 748T658 754T663 759T672 761L686 754Q693 747 693 734Q686 686 664 647T615 586T548 545T482 518T417 501Q419 500 451 493T517 471T590 434T657 367T693 267Q693 241 673 241Q664 241 659 245Q656 249 650 273T635 323T593 380T511 432Q406 474 171 481H95Q82 494 82 501ZM57 -26Q57 39 101 87T219 136Q254 136 277 130Q320 114 382 72Q419 50 424 45Q426 45 459 110Q496 178 497 179Q500 180 504 180Q509 180 517 175T526 161Q526 158 495 90L462 25Q462 21 502 5Q519 1 553 1Q586 1 602 5Q641 18 664 45T691 107Q694 136 706 136T718 115Q718 114 718 111T717 105Q717 39 671 -9T554 -58L459 -33Q450 -29 444 -27T437 -26L371 -155L391 -168Q485 -235 538 -235H553Q586 -235 602 -230Q683 -204 691 -128Q694 -99 706 -99T718 -120Q718 -121 718 -124T717 -130Q717 -199 670 -246T557 -294T393 -228Q353 -205 351 -201Q348 -201 315 -266Q294 -310 285 -323T268 -337Q259 -337 254 -331T248 -317Q248 -305 282 -246L313 -181Q313 -177 273 -161Q255 -157 222 -157Q188 -157 173 -161Q134 -174 113 -198T88 -242T82 -278T71 -294Q57 -294 57 -261Q57 -204 91 -161T179 -104Q195 -99 228 -99Q274 -102 315 -124Q337 -132 337 -130L404 -1L384 12Q319 58 273 74Q255 79 222 79Q188 79 173 74Q133 61 112 37T88 -7T82 -43T70 -59Q57 -59 57 -26'],
+
+    // SUCCEEDS ABOVE NOT ALMOST EQUAL TO
+    0x2ABA: [761,337,778,57,718,'693 501Q693 493 679 481H604Q548 479 509 477T418 469T331 454T257 429T194 392T150 340T124 270Q117 247 115 245Q101 236 88 247Q82 254 82 267Q89 330 126 379Q147 411 202 444T333 494L357 501Q239 531 188 565Q142 599 126 623Q89 672 82 734Q82 761 102 761L115 756Q116 755 124 732Q133 678 166 640T241 579T349 544T470 527T604 521H679Q693 507 693 501ZM57 -26Q57 39 101 87T219 136Q254 136 277 130Q320 114 382 72Q419 50 424 45Q426 45 459 110Q496 178 497 179Q500 180 504 180Q509 180 517 175T526 161Q526 158 495 90L462 25Q462 21 502 5Q519 1 553 1Q586 1 602 5Q641 18 664 45T691 107Q694 136 706 136T718 115Q718 114 718 111T717 105Q717 39 671 -9T554 -58L459 -33Q450 -29 444 -27T437 -26L371 -155L391 -168Q485 -235 538 -235H553Q586 -235 602 -230Q683 -204 691 -128Q694 -99 706 -99T718 -120Q718 -121 718 -124T717 -130Q717 -199 670 -246T557 -294T393 -228Q353 -205 351 -201Q348 -201 315 -266Q294 -310 285 -323T268 -337Q259 -337 254 -331T248 -317Q248 -305 282 -246L313 -181Q313 -177 273 -161Q255 -157 222 -157Q188 -157 173 -161Q134 -174 113 -198T88 -242T82 -278T71 -294Q57 -294 57 -261Q57 -204 91 -161T179 -104Q195 -99 228 -99Q274 -102 315 -124Q337 -132 337 -130L404 -1L384 12Q319 58 273 74Q255 79 222 79Q188 79 173 74Q133 61 112 37T88 -7T82 -43T70 -59Q57 -59 57 -26'],
+
+    // SUBSET OF ABOVE EQUALS SIGN
+    0x2AC5: [754,215,778,84,694,'84 463Q84 585 166 663T360 752Q361 752 370 752T395 752T430 752T475 753T524 753H679Q694 746 694 733Q694 724 681 714L522 713H470H441Q366 713 338 709T266 685Q244 674 224 659T179 617T139 550T124 463V458Q124 370 185 302Q244 238 328 220Q348 215 366 215T522 213H681Q694 203 694 193Q694 180 679 173H526Q510 173 480 173T434 172Q350 172 289 188T172 258Q84 340 84 463ZM84 -14T84 -1T98 19H679Q694 11 694 -1Q694 -14 679 -21H98Q84 -14 84 -1ZM84 -208T84 -195T98 -175H679Q694 -183 694 -195Q694 -208 679 -215H98Q84 -208 84 -195'],
+
+    // SUPERSET OF ABOVE EQUALS SIGN
+    0x2AC6: [754,215,778,83,694,'83 733Q83 746 98 753H251Q267 753 297 753T343 754Q427 754 488 738T605 668Q693 587 693 463Q693 378 650 312T545 213T415 174Q407 173 251 173H98Q83 180 83 193Q83 203 96 213H255H308H337Q412 213 439 217T512 241Q533 252 553 267T599 309T639 376T654 463Q654 554 592 624Q557 662 512 685Q468 704 439 708T335 713H306H255L96 714Q83 724 83 733ZM84 -14T84 -1T98 19H679Q694 11 694 -1Q694 -14 679 -21H98Q84 -14 84 -1ZM84 -208T84 -195T98 -175H679Q694 -183 694 -195Q694 -208 679 -215H98Q84 -208 84 -195'],
+
+    // stix-subset not double equals, variant
+    0x2ACB: [783,385,778,82,694,'693 221Q693 214 680 201H524Q398 201 367 202T309 212Q236 230 180 280T98 398Q84 438 84 492T98 585Q126 663 193 716T346 781Q347 781 373 781T440 782T520 783H680Q682 780 686 776T691 770T693 763T680 743H526Q364 743 353 741Q279 730 221 687T138 578Q124 540 124 492T138 405Q163 340 221 297T353 243Q364 241 526 241H680Q682 238 686 234T691 228T693 221ZM82 -48T82 -41T95 -19H462L513 41L569 105Q574 110 582 110T596 104T602 90Q602 87 600 83Q600 77 555 30L515 -17L600 -19H682Q693 -30 693 -38T680 -59H480L415 -137L349 -213L515 -215H682Q693 -226 693 -233T680 -255H313L260 -317Q224 -360 212 -372T192 -385Q184 -385 179 -377T173 -362Q174 -361 218 -306L260 -255H178L93 -253L86 -248Q82 -243 82 -235Q82 -226 93 -215H195L295 -213L362 -137L426 -59H260L93 -57L86 -53Q82 -48 82 -41'],
+
+    // SUPERSET OF ABOVE NOT EQUAL TO
+    0x2ACC: [783,385,778,82,693,'82 759T82 763T83 769T89 776T95 783H251Q378 783 409 782T469 772Q540 753 596 703T678 585Q691 546 691 492T678 398Q649 320 581 267T426 203Q415 201 251 201H95Q82 214 82 221Q82 225 83 227T89 234T95 241H249Q411 241 422 243Q496 253 554 296T638 405Q651 444 651 492Q651 539 638 578Q613 643 555 686T422 741Q411 743 249 743H95Q82 759 82 763ZM82 -48T82 -41T95 -19H462L513 41L569 105Q574 110 582 110T596 104T602 90Q602 87 600 83Q600 77 555 30L515 -17L600 -19H682Q693 -30 693 -38T680 -59H480L415 -137L349 -213L515 -215H682Q693 -226 693 -233T680 -255H313L260 -317Q224 -360 212 -372T192 -385Q184 -385 179 -377T173 -362Q174 -361 218 -306L260 -255H178L93 -253L86 -248Q82 -243 82 -235Q82 -226 93 -215H195L295 -213L362 -137L426 -59H260L93 -57L86 -53Q82 -48 82 -41']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/AMS/Regular/SuppMathOperators.js");
 
 /*************************************************************
  *
@@ -15027,6 +17716,384 @@ MathJax.Hub.Insert(
 );
 
 MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/BasicLatin.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/CombDiacritMarks.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // COMBINING GRAVE ACCENT
+    0x300: [699,-505,0,-394,-204,'-394 655Q-394 671 -381 685T-350 699Q-334 699 -323 688Q-310 671 -278 629T-225 561T-205 533T-218 519L-233 505L-304 563Q-381 626 -387 634Q-394 643 -394 655'],
+
+    // COMBINING ACUTE ACCENT
+    0x301: [699,-505,0,-297,-107,'-151 699Q-133 699 -120 686T-107 656Q-107 651 -108 647T-113 637T-120 627T-133 616T-149 602T-170 585T-197 563L-268 505L-283 519Q-297 533 -296 533Q-296 534 -271 567T-218 636T-187 678L-184 681Q-182 684 -179 686T-172 692T-163 697T-151 699'],
+
+    // COMBINING CIRCUMFLEX ACCENT
+    0x302: [694,-531,0,-388,-113,'-388 560L-251 694L-243 686Q-113 562 -113 560L-139 531Q-141 532 -197 581L-250 627L-305 580Q-318 569 -331 557T-352 538L-360 532Q-362 530 -375 546L-388 560'],
+
+    // COMBINING TILDE
+    0x303: [668,-565,0,-417,-84,'-321 601Q-336 601 -349 595T-369 584T-389 565L-403 577L-417 588Q-417 589 -405 603T-379 633T-358 654Q-335 668 -313 668T-247 650T-180 632Q-165 632 -152 638T-132 649T-112 668L-98 656L-84 645Q-125 586 -156 572Q-170 565 -187 565Q-208 565 -252 583T-321 601'],
+
+    // COMBINING MACRON
+    0x304: [590,-544,0,-431,-70,'-431 544V590H-70V544H-431'],
+
+    // COMBINING BREVE
+    0x306: [694,-515,0,-408,-93,'-250 515Q-321 515 -362 565T-408 683V694H-371V689Q-371 688 -371 683T-370 675Q-363 631 -331 599T-252 567Q-196 567 -163 608T-130 689V694H-93V683Q-97 617 -139 566T-250 515'],
+
+    // COMBINING DOT ABOVE
+    0x307: [669,-549,0,-310,-191,'-310 609Q-310 637 -292 653T-248 669Q-225 667 -208 652T-191 609Q-191 579 -208 564T-250 549Q-275 549 -292 564T-310 609'],
+
+    // COMBINING DIAERESIS
+    0x308: [669,-554,0,-405,-95,'-405 612Q-405 633 -388 651T-347 669T-307 652T-290 612Q-290 588 -306 571T-348 554L-373 560Q-405 577 -405 612ZM-211 611Q-211 634 -196 649T-165 668Q-164 668 -160 668T-154 669Q-131 669 -114 652T-96 612T-113 572T-154 554Q-177 554 -194 570T-211 611'],
+
+    // COMBINING RING ABOVE
+    0x30A: [715,-542,0,-353,-148,'-353 628Q-353 669 -321 692T-256 715Q-202 715 -175 689T-148 629Q-148 592 -177 567T-251 542Q-298 542 -325 567T-353 628ZM-187 628Q-187 660 -200 669T-241 678H-247Q-252 678 -258 678T-266 679Q-283 679 -293 674T-308 659T-312 644T-313 629Q-313 600 -302 590Q-290 579 -250 579H-235Q-221 579 -212 581T-195 595T-187 628'],
+
+    // COMBINING DOUBLE ACUTE ACCENT
+    0x30B: [701,-510,0,-378,-80,'-292 701Q-278 701 -262 690T-246 658Q-246 649 -250 641Q-252 637 -297 574T-344 510L-378 528Q-378 530 -355 598T-327 676Q-316 701 -292 701ZM-126 701Q-112 701 -96 690T-80 658Q-80 649 -84 641Q-86 637 -131 574T-178 510L-212 528Q-212 530 -189 598T-161 676Q-150 701 -126 701'],
+
+    // COMBINING CARON
+    0x30C: [644,-513,0,-386,-115,'-386 611L-373 630L-364 644Q-362 644 -307 612Q-252 581 -250 581L-194 612Q-139 644 -137 644L-115 611L-182 562L-251 513L-386 611'],
+
+    // COMBINING LONG SOLIDUS OVERLAY
+    0x338: [716,215,0,-639,-140,'-612 -215T-619 -215T-631 -212T-637 -204T-639 -197Q-639 -190 -634 -183Q-621 -157 -400 274T-176 707Q-173 716 -160 716Q-153 716 -148 712T-142 703T-140 696Q-140 691 -372 241T-608 -212Q-612 -215 -619 -215']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/CombDiacritMarks.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/GeometricShapes.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // WHITE UP-POINTING TRIANGLE
+    0x25B3: [716,0,889,59,828,'75 0L72 2Q69 3 67 5T62 11T59 20Q59 24 62 30Q65 37 245 370T428 707Q428 708 430 710T436 714T444 716Q451 716 455 712Q459 710 644 368L828 27V20Q828 7 814 0H75ZM610 347L444 653Q443 653 278 347T113 40H775Q775 42 610 347'],
+
+    // WHITE RIGHT-POINTING SMALL TRIANGLE
+    0x25B9: [505,5,500,26,473,'26 489Q33 505 43 505Q51 505 260 385Q464 266 471 259Q473 257 473 250Q473 242 469 239Q459 231 260 115Q51 -5 43 -5Q39 -5 35 -1T28 7L26 11V489ZM412 250L67 450Q66 450 66 250T67 50Q69 51 240 150T412 250'],
+
+    // WHITE DOWN-POINTING TRIANGLE
+    0x25BD: [500,215,889,59,828,'59 480Q59 485 61 489T66 495T72 498L75 500H814Q828 493 828 480V474L644 132Q458 -210 455 -212Q451 -215 444 -215T433 -212Q429 -210 342 -49T164 282T64 466Q59 478 59 480ZM775 460H113Q113 459 278 153T444 -153T610 153T775 460'],
+
+    // WHITE LEFT-POINTING SMALL TRIANGLE
+    0x25C3: [505,5,500,26,473,'473 10Q466 -5 454 -5Q451 -5 445 -3Q444 -3 343 56T140 173T35 234Q26 239 26 250T35 266Q40 269 240 384T445 503Q451 505 453 505Q466 505 473 490V10ZM433 50T433 250T432 450T259 351T87 250T258 150T432 50Q433 50 433 250'],
+
+    // LARGE CIRCLE
+    0x25EF: [715,215,1000,56,944,'56 250Q56 353 95 442T196 589T335 681T491 715Q573 715 635 693Q694 673 747 635T846 543T917 412T944 250Q944 58 815 -78T500 -215Q457 -215 429 -210Q274 -183 165 -56T56 250ZM500 -176Q664 -176 784 -54T904 250Q904 418 799 536T543 674Q534 675 493 675Q425 675 357 647T229 567T133 432T96 250Q96 160 129 80T217 -56T346 -144T500 -176']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/GeometricShapes.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/GreekAndCoptic.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // GREEK CAPITAL LETTER GAMMA
+    0x393: [680,0,625,25,582,'128 619Q121 626 117 628T101 631T58 634H25V680H554V676Q556 670 568 560T582 444V440H542V444Q542 445 538 478T523 545T492 598Q454 634 349 634H334Q264 634 249 633T233 621Q232 618 232 339L233 61Q240 54 245 52T270 48T333 46H360V0H348Q324 3 182 3Q51 3 36 0H25V46H58Q100 47 109 49T128 61V619'],
+
+    // GREEK CAPITAL LETTER DELTA
+    0x394: [716,0,833,46,786,'51 0Q46 4 46 7Q46 9 215 357T388 709Q391 716 416 716Q439 716 444 709Q447 705 616 357T786 7Q786 4 781 0H51ZM507 344L384 596L137 92L383 91H630Q630 93 507 344'],
+
+    // GREEK CAPITAL LETTER THETA
+    0x398: [705,23,778,56,722,'56 340Q56 423 86 494T164 610T270 680T388 705Q521 705 621 601T722 341Q722 260 693 191T617 75T510 4T388 -22T267 3T160 74T85 189T56 340ZM610 339Q610 428 590 495T535 598T463 651T384 668Q332 668 289 638T221 566Q168 485 168 339Q168 274 176 235Q189 158 228 105T324 28Q356 16 388 16Q415 16 442 24T501 54T555 111T594 205T610 339ZM223 263V422H263V388H514V422H554V263H514V297H263V263H223'],
+
+    // GREEK CAPITAL LETTER LAMDA
+    0x39B: [716,0,694,32,661,'320 708Q326 716 340 716H348H355Q367 716 372 708Q374 706 423 547T523 226T575 62Q581 52 591 50T634 46H661V0H653Q644 3 532 3Q411 3 390 0H379V46H392Q464 46 464 65Q463 70 390 305T316 539L246 316Q177 95 177 84Q177 72 198 59T248 46H253V0H245Q230 3 130 3Q47 3 38 0H32V46H45Q112 51 127 91Q128 92 224 399T320 708'],
+
+    // GREEK CAPITAL LETTER XI
+    0x39E: [677,0,667,42,624,'47 509L55 676Q55 677 333 677T611 676L619 509Q619 508 599 508T579 510Q579 529 575 557T564 589Q550 594 333 594T102 589Q95 586 91 558T87 510Q87 508 67 508T47 509ZM139 260V445H179V394H487V445H527V260H487V311H179V260H139ZM50 0L42 180H62Q82 180 82 178Q82 133 89 105Q92 93 95 90T108 86Q137 83 333 83Q530 83 558 86Q568 87 571 90T577 105Q584 133 584 178Q584 180 604 180H624L616 0H50'],
+
+    // GREEK CAPITAL LETTER PI
+    0x3A0: [680,0,750,25,724,'128 619Q121 626 117 628T101 631T58 634H25V680H724V634H691Q651 633 640 631T622 619V61Q628 51 639 49T691 46H724V0H713Q692 3 569 3Q434 3 425 0H414V46H447Q489 47 498 49T517 61V634H232V348L233 61Q239 51 250 49T302 46H335V0H324Q303 3 180 3Q45 3 36 0H25V46H58Q100 47 109 49T128 61V619'],
+
+    // GREEK CAPITAL LETTER SIGMA
+    0x3A3: [683,0,722,55,666,'666 247Q664 244 652 126T638 4V0H351Q131 0 95 0T57 5V6Q54 12 57 17L73 36Q89 54 121 90T182 159L305 299L56 644L55 658Q55 677 60 681Q63 683 351 683H638V679Q640 674 652 564T666 447V443H626V447Q618 505 604 543T559 605Q529 626 478 631T333 637H294H189L293 494Q314 465 345 422Q400 346 400 340Q400 338 399 337L154 57Q407 57 428 58Q476 60 508 68T551 83T575 103Q595 125 608 162T624 225L626 251H666V247'],
+
+    // GREEK CAPITAL LETTER UPSILON
+    0x3A5: [705,0,778,55,722,'55 551Q55 604 91 654T194 705Q240 705 277 681T334 624T367 556T385 498L389 474L392 488Q394 501 400 521T414 566T438 615T473 659T521 692T584 705Q620 705 648 689T691 647T714 597T722 551Q722 540 719 538T699 536Q680 536 677 541Q677 542 677 544T676 548Q676 576 650 596T588 616H582Q538 616 505 582Q466 543 454 477T441 318Q441 301 441 269T442 222V61Q448 55 452 53T478 48T542 46H569V0H557Q533 3 389 3T221 0H209V46H236Q256 46 270 46T295 47T311 48T322 51T328 54T332 57T337 61V209Q337 383 333 415Q313 616 189 616Q154 616 128 597T101 548Q101 540 97 538T78 536Q63 536 59 538T55 551'],
+
+    // GREEK CAPITAL LETTER PHI
+    0x3A6: [683,0,722,55,665,'312 622Q310 623 307 625T303 629T297 631T286 634T270 635T246 636T211 637H184V683H196Q220 680 361 680T526 683H538V637H511Q468 637 447 635T422 631T411 622V533L425 531Q525 519 595 466T665 342Q665 301 642 267T583 209T506 172T425 152L411 150V61Q417 55 421 53T447 48T511 46H538V0H526Q502 3 361 3T196 0H184V46H211Q231 46 245 46T270 47T286 48T297 51T303 54T307 57T312 61V150H310Q309 151 289 153T232 166T160 195Q149 201 136 210T103 238T69 284T56 342Q56 414 128 467T294 530Q309 532 310 533H312V622ZM170 342Q170 207 307 188H312V495H309Q301 495 282 491T231 469T186 423Q170 389 170 342ZM415 188Q487 199 519 236T551 342Q551 384 539 414T507 459T470 481T434 491T415 495H410V188H415'],
+
+    // GREEK CAPITAL LETTER PSI
+    0x3A8: [683,0,778,55,722,'340 622Q338 623 335 625T331 629T325 631T314 634T298 635T274 636T239 637H212V683H224Q248 680 389 680T554 683H566V637H539Q479 637 464 635T439 622L438 407Q438 192 439 192Q443 193 449 195T474 207T507 232T536 276T557 344Q560 365 562 417T573 493Q587 536 620 544Q627 546 671 546H715L722 540V515Q714 509 708 509Q680 505 671 476T658 392T644 307Q599 177 451 153L438 151V106L439 61Q446 54 451 52T476 48T539 46H566V0H554Q530 3 389 3T224 0H212V46H239Q259 46 273 46T298 47T314 48T325 51T331 54T335 57T340 61V151Q126 178 117 406Q115 503 69 509Q55 509 55 526Q55 541 59 543T86 546H107H120Q150 546 161 543T184 528Q198 514 204 493Q212 472 213 420T226 316T272 230Q287 216 303 207T330 194L339 192Q340 192 340 407V622'],
+
+    // GREEK CAPITAL LETTER OMEGA
+    0x3A9: [705,0,722,44,677,'55 454Q55 503 75 546T127 617T197 665T272 695T337 704H352Q396 704 404 703Q527 687 596 615T666 454Q666 392 635 330T559 200T499 83V80H543Q589 81 600 83T617 93Q622 102 629 135T636 172L637 177H677V175L660 89Q645 3 644 2V0H552H488Q461 0 456 3T451 20Q451 89 499 235T548 455Q548 512 530 555T483 622T424 656T361 668Q332 668 303 658T243 626T193 560T174 456Q174 380 222 233T270 20Q270 7 263 0H77V2Q76 3 61 89L44 175V177H84L85 172Q85 171 88 155T96 119T104 93Q109 86 120 84T178 80H222V83Q206 132 162 199T87 329T55 454']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/GreekAndCoptic.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/LatinExtendedA.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // LATIN SMALL LETTER DOTLESS I
+    0x131: [443,0,278,26,255,'247 0Q232 3 143 3Q132 3 106 3T56 1L34 0H26V46H42Q70 46 91 49Q100 53 102 60T104 102V205V293Q104 345 102 359T88 378Q74 385 41 385H30V408Q30 431 32 431L42 432Q52 433 70 434T106 436Q123 437 142 438T171 441T182 442H185V62Q190 52 197 50T232 46H255V0H247']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/LatinExtendedA.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/LatinExtendedB.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // LATIN SMALL LETTER DOTLESS J
+    0x237: [443,205,306,-55,218,'28 -163Q58 -168 64 -168Q124 -168 135 -77Q137 -65 137 141T136 353Q132 371 120 377T72 385H52V408Q52 431 54 431L58 432Q62 432 70 432T87 433T108 434T133 436Q151 437 171 438T202 441T214 442H218V184Q217 -36 217 -59T211 -98Q195 -145 153 -175T58 -205Q9 -205 -23 -179T-55 -117Q-55 -94 -40 -79T-2 -64T36 -79T52 -118Q52 -143 28 -163']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/LatinExtendedB.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/LetterlikeSymbols.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // stix-/hbar - Planck's over 2pi
+    0x210F: [695,13,540,42,562,'182 599Q182 611 174 615T133 619Q118 619 114 621T109 630Q109 636 114 656T122 681Q125 685 202 688Q272 695 286 695Q304 695 304 684Q304 682 295 644T282 597Q282 592 360 592H399Q430 592 445 587T460 563Q460 552 451 541L442 535H266L251 468Q247 453 243 436T236 409T233 399Q233 395 244 404Q295 441 357 441Q405 441 445 417T485 333Q485 284 449 178T412 58T426 44Q447 44 466 68Q485 87 500 130L509 152H531H543Q562 152 562 144Q562 128 546 93T494 23T415 -13Q385 -13 359 3T322 44Q318 52 318 77Q318 99 352 196T386 337Q386 386 346 386Q318 386 286 370Q267 361 245 338T211 292Q207 287 193 235T162 113T138 21Q128 7 122 4Q105 -12 83 -12Q66 -12 54 -2T42 26L166 530Q166 534 161 534T129 535Q127 535 122 535T112 534Q74 534 74 562Q74 570 77 576T84 585T96 589T109 591T124 592T138 592L182 595V599'],
+
+    // BLACK-LETTER CAPITAL I
+    0x2111: [705,10,722,55,693,'55 507Q55 589 116 647T260 705Q395 705 526 541Q542 522 549 517T567 512Q595 512 621 521T647 550Q647 553 647 555T650 558T653 560T657 561T661 561T665 561T670 561Q681 561 685 561T691 558T693 548Q693 515 657 495T565 475Q518 475 481 495T418 543T371 599T320 647T259 667Q194 667 148 622T102 508Q102 468 119 436T164 385T220 357T273 347Q282 347 284 344T287 329Q287 317 285 314T272 310Q193 310 124 364T55 507ZM420 312Q420 367 464 399T564 431Q613 431 651 406T693 336Q693 325 689 323T667 320Q654 320 651 322T647 335Q645 360 622 376T566 393H563Q557 393 551 391T537 381T523 356T517 312Q517 287 535 265T574 229T613 190T631 132Q628 74 586 37T487 -9Q478 -10 417 -10H387Q344 -10 310 4T215 69Q130 142 71 146Q59 146 57 149T55 163Q55 177 58 180T75 183H108Q177 183 207 170T306 93Q346 56 368 40T420 13Q474 25 503 60T533 136Q533 160 516 182T477 219T438 257T420 304V312'],
+
+    // SCRIPT SMALL L
+    0x2113: [706,20,417,7,397,'345 104T349 104T361 95T369 80T352 59Q268 -20 206 -20Q170 -20 146 3T113 53T99 104L94 129Q94 130 79 116T48 86T28 70Q22 70 15 79T7 94Q7 98 12 103T58 147L91 179V185Q91 186 91 191T92 200Q92 282 128 400T223 612T336 705Q397 705 397 636V627Q397 453 194 233Q185 223 180 218T174 211T171 208T165 201L163 186Q159 142 159 123Q159 17 208 17Q228 17 253 30T293 56T335 94Q345 104 349 104ZM360 634Q360 655 354 661T336 668Q328 668 322 666T302 645T272 592Q252 547 229 467T192 330L179 273Q179 272 186 280T204 300T221 322Q327 453 355 590Q360 612 360 634'],
+
+    // SCRIPT CAPITAL P
+    0x2118: [453,216,636,67,625,'300 74Q300 133 338 133Q350 133 356 126T363 109Q363 88 340 76Q340 71 342 62T358 39T393 26Q435 26 474 67T532 182T551 290Q551 325 535 349T484 373Q430 373 378 348T291 289T228 218T187 157T174 130Q254 30 265 10Q276 -15 276 -41Q276 -101 235 -158T142 -216Q112 -216 90 -195T67 -118Q67 -40 104 64L110 81Q81 118 81 174Q81 268 134 360T247 453Q252 453 255 451T258 447L259 445Q259 432 253 420Q251 416 242 416Q209 411 176 341T142 203Q142 193 143 184T146 170T149 165L158 180Q215 280 303 345T485 410Q548 410 586 368T625 255Q625 157 553 74T389 -10H383Q349 -10 325 14Q302 37 300 74ZM105 -123Q105 -134 106 -141T110 -158T122 -173T145 -178Q155 -178 160 -176Q184 -163 199 -132T214 -73Q214 -69 214 -66T213 -59T212 -53T209 -47T205 -41T199 -33T193 -25T184 -14T174 -1L165 10Q156 22 148 32L139 43Q138 43 130 15T113 -54T105 -123'],
+
+    // BLACK-LETTER CAPITAL R
+    0x211C: [716,22,722,40,715,'300 614L306 620Q311 626 316 631T332 646T356 663T386 679T425 695T473 707T531 715Q534 715 543 715T557 716Q570 716 572 714Q574 713 644 580T715 444Q715 441 713 439Q712 438 677 419T602 379T549 354L550 348Q550 337 555 238T561 128Q561 122 560 115T559 101Q559 63 591 25L599 18L631 51Q665 85 671 85Q674 85 687 78T702 68Q704 63 702 59Q702 58 659 20T613 -21Q612 -22 598 -22Q556 -22 526 -8T484 27T466 66T461 101Q461 110 462 116T463 129Q463 135 458 232T452 331V338H343V280Q342 195 333 157Q316 64 267 12Q233 -22 193 -22Q155 -22 122 2T72 74Q72 76 70 76T67 74T60 74T48 82Q40 91 40 95Q40 100 42 102T57 109V113Q57 118 66 127T81 137Q88 137 93 123Q105 127 108 126Q111 124 118 117T127 107Q127 101 123 98T113 93T107 90Q107 86 115 71T143 37T189 15H192Q230 15 239 96Q244 135 244 334Q244 510 242 542Q236 584 233 596Q223 630 205 649T166 668Q136 668 118 642T100 584Q100 567 110 554T137 522T166 486Q194 446 194 401V389Q189 243 114 243Q91 243 77 260T59 294T55 322Q55 331 59 333T75 336T91 334T95 322Q95 280 113 280Q134 280 140 305T147 375V391Q147 417 139 435T101 487Q56 540 56 572V580Q56 630 86 667T169 704Q214 704 247 676T300 614ZM324 562Q326 555 330 539T336 515T340 484T343 427V384H424L505 385Q537 396 584 422L609 435Q610 435 594 465T550 550Q536 575 520 605T496 650L488 664L476 662Q348 633 324 562'],
+
+    // ALEF SYMBOL
+    0x2135: [694,0,611,55,555,'55 613Q55 643 61 663T74 688T85 694Q94 694 94 681Q98 632 134 588L412 285Q416 311 430 397T447 509V519L438 526Q407 554 398 571T388 617T394 664T407 688T418 694Q425 694 427 684Q429 675 454 635T488 586Q490 584 496 579T513 563T537 540Q555 516 555 487Q555 460 549 441T537 416T528 409Q519 409 517 415T513 435T503 463Q492 481 490 481Q454 264 454 246Q454 237 479 212T529 152T555 79Q555 32 538 9Q531 1 524 1Q516 1 516 13Q512 62 476 106Q468 115 337 258T195 412L193 406Q191 401 189 394T183 377T176 352T171 322T167 284T165 240Q165 224 166 220Q171 199 211 152T252 70Q252 45 235 29T203 8T175 1Q170 0 115 0H79Q60 0 58 3T55 20Q55 31 58 34Q60 37 76 37Q112 39 126 46T140 70Q140 96 112 148T83 236Q83 281 102 334T140 419T159 452Q55 556 55 613']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/LetterlikeSymbols.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/MiscSymbols.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // BLACK SPADE SUIT
+    0x2660: [727,131,778,55,723,'181 -21Q134 -21 96 27T55 193Q55 224 58 247T82 317T143 410Q172 443 234 498Q282 543 314 598T360 687T380 725Q386 727 389 727Q395 727 398 725T406 716T413 702T423 677T439 641Q481 556 544 498Q633 420 678 353T723 204Q723 142 711 94T669 12T590 -21Q520 -21 490 8T459 66V70H409V62Q409 22 416 -17T430 -82T437 -112Q437 -131 407 -131Q403 -131 397 -131T389 -130T382 -130T372 -131Q341 -131 341 -111Q341 -107 348 -82T362 -18T369 62V70H319V66Q319 57 314 44T297 16T257 -10T191 -21H181'],
+
+    // WHITE HEART SUIT
+    0x2661: [716,33,778,55,723,'55 490Q55 557 71 604T114 674T167 706T222 716Q279 716 322 684T389 605Q391 610 395 617T414 643T447 677T494 704T555 716Q642 716 682 652T723 490Q723 455 718 426T684 342T602 227Q573 196 537 161T485 110T449 63T412 -8Q408 -22 404 -27T389 -33Q382 -33 379 -31T372 -23T366 -8T355 18T335 54Q319 81 298 104T239 163T176 227Q102 310 79 371T55 490ZM198 674Q143 664 119 613T95 491Q95 415 137 346Q174 282 265 194T384 48L389 39Q391 42 397 54T406 71T415 86T427 104T442 122T464 146T491 172Q571 249 613 303Q683 396 683 487Q683 581 649 631Q613 676 556 676Q495 676 457 634T410 538Q407 514 390 514Q386 514 380 517Q372 520 369 536T355 581T319 635Q277 675 223 675H217H208L204 674Q200 674 198 674'],
+
+    // WHITE DIAMOND SUIT
+    0x2662: [727,162,778,55,723,'370 714Q370 717 375 722T388 727Q398 727 403 721T417 697Q420 692 421 689Q536 465 709 304Q723 291 723 282T709 260Q529 93 406 -153Q402 -162 390 -162H389Q379 -162 376 -158T357 -125Q247 89 89 241L64 265Q55 272 55 282Q55 287 57 290T64 300T77 312T98 331T127 361Q197 435 258 523T344 663L370 714ZM655 299Q568 384 508 470T389 662L376 638Q362 613 341 577T289 497T215 399T123 299L105 282L123 265Q210 180 270 94T389 -98L402 -74Q416 -49 437 -13T489 67T563 165T655 265L673 282L655 299'],
+
+    // BLACK CLUB SUIT
+    0x2663: [726,131,778,28,750,'213 532Q213 615 265 670T389 726Q461 726 513 671T565 532Q565 511 562 492T553 458T541 432T526 409T512 393T498 379L490 371L511 326Q512 326 516 330T528 341T546 353T572 363T606 368Q664 368 707 315T750 174Q750 87 699 33T579 -22Q567 -22 553 -20T517 -10T479 16T459 63V70H409V62Q409 22 416 -17T430 -82T437 -112Q437 -131 407 -131Q403 -131 397 -131T389 -130T382 -130T372 -131Q341 -131 341 -111Q341 -107 348 -82T362 -18T369 62V70H319V63Q315 25 281 2T197 -22Q132 -22 80 32T28 174Q28 255 69 311T175 368Q192 368 207 364T232 353T250 341T262 331T267 326L288 371L280 378Q272 385 267 391T253 407T238 430T226 457T217 492T213 532'],
+
+    // MUSIC FLAT SIGN
+    0x266D: [750,22,389,55,332,'200 467Q254 467 293 428T332 321Q332 147 104 -11L88 -22H75Q62 -22 56 -16L55 362V647Q55 743 60 748Q63 750 76 750H83Q87 750 95 744V434L104 440Q144 467 200 467ZM237 322Q237 360 225 388T183 417Q158 417 134 407T101 378Q96 370 96 349T95 197V34Q152 91 194 167T237 322'],
+
+    // MUSIC NATURAL SIGN
+    0x266E: [734,223,389,65,324,'65 721Q78 734 94 734Q100 734 104 727V444L116 449Q129 454 157 465T208 486Q313 527 314 527Q318 527 324 521V-210Q306 -223 294 -223Q289 -223 284 -216V-13L270 -18Q257 -24 231 -34T180 -54Q77 -96 74 -96T65 -90V721ZM104 13Q282 84 283 85Q284 85 284 252Q284 418 283 418L230 396L140 360L104 346V13'],
+
+    // MUSIC SHARP SIGN
+    0x266F: [723,223,389,55,333,'101 -223Q94 -223 93 -217T91 -188V-151Q91 -88 90 -88Q87 -88 80 -92T68 -96Q62 -96 56 -90L55 -50V-22Q55 -8 58 -4T78 5L91 10V177Q91 343 90 343Q87 343 80 339T68 335Q62 335 56 341L55 381V409Q55 423 58 427T78 436L91 441V543V616Q91 643 93 648T106 656Q119 662 126 659Q130 657 130 645T131 554V456L257 503V607L258 710L260 712Q261 715 272 719T286 723Q293 723 295 715T297 671V617Q297 519 298 519Q301 519 307 522T319 526Q327 526 333 521V437L330 435Q328 432 312 427L297 421V254Q297 88 298 88Q301 88 307 91T319 95Q327 95 333 90V6L330 4Q328 1 312 -4L297 -10V-78V-122Q297 -145 295 -149T282 -156Q274 -160 268 -160Q257 -160 257 -130V-89V-25L131 -72V-210Q123 -215 116 -218T104 -222L101 -223ZM257 72V406L131 359V25L257 72']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/MiscSymbols.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/SpacingModLetters.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // RING ABOVE
+    0x2DA: [715,-542,500,147,352,'147 628Q147 669 179 692T244 715Q298 715 325 689T352 629Q352 592 323 567T249 542Q202 542 175 567T147 628ZM313 628Q313 660 300 669T259 678H253Q248 678 242 678T234 679Q217 679 207 674T192 659T188 644T187 629Q187 600 198 590Q210 579 250 579H265Q279 579 288 581T305 595T313 628']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/SpacingModLetters.js");
+
+/*************************************************************
+ *
+ *  MathJax/jax/output/SVG/fonts/TeX/svg/Main/Regular/SuppMathOperators.js
+ *
+ *  Copyright (c) 2011-2017 The MathJax Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ */
+
+MathJax.Hub.Insert(
+  MathJax.OutputJax.SVG.FONTDATA.FONTS['MathJax_Main'],
+  {
+    // AMALGAMATION OR COPRODUCT
+    0x2A3F: [683,0,750,28,721,'28 660Q28 676 31 679T46 683H50Q87 681 182 681Q217 681 247 681T294 682T315 682Q321 682 323 682T328 679T331 673T332 660Q332 643 328 640T304 637Q239 637 231 626Q229 620 229 334V46H520V334Q520 620 518 626Q510 637 445 637Q426 637 422 640T417 660Q417 675 420 678T432 682H435Q437 682 467 682T569 681T671 681T703 682Q714 682 717 679T721 660Q721 643 717 640T693 637Q628 637 620 626Q619 623 619 342Q619 60 620 57Q628 46 693 46Q714 46 717 43T721 23Q721 5 715 1Q713 0 374 0Q36 0 34 1Q28 5 28 23Q28 40 31 43T56 46Q121 46 129 57Q131 63 131 342Q131 620 129 626Q121 637 56 637Q35 637 32 640T28 660']
+  }
+);
+
+MathJax.Ajax.loadComplete(MathJax.OutputJax.SVG.fontDir+"/Main/Regular/SuppMathOperators.js");
 
 /*************************************************************
  *
