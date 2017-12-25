@@ -56,11 +56,11 @@
 				<span class="chat-tool-icon">&nbsp;</span>
 				<b class="caret"></b>
 			</a>
-			<ul class="dropdown-menu">
-				<li><a id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B </a></li>
-				<li><a id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a></li>
-				<li><a id="strikethrough" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a></li>
-				<li><a id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a></li>
+			<ul class="dropdown-menu btns-only">
+				<li><a class="chat-btn chat-tool-icon btn btn-default" id="bold" data-edit="bold" title="Bold (Ctrl/Cmd+B)" style="font-weight: bold;"> B </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default" id="italic" data-edit="italic" title="Italic (Ctrl/Cmd+I)" style="font-style: italic;"> I </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default" id="strikethrough" data-edit="strikethrough" title="Strikethrough" style="text-decoration: line-through;"> S </a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default" id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a></li>
 			</ul>
 		</div>
 		<div class="btn-group">
@@ -70,9 +70,17 @@
 				<button class="btn btn-default" type="button"><wicket:message key="1261"/></button>
 			</div>
 		</div>
-		<a class="chat-btn chat-tool-icon btn btn-default save" wicket:message="title:197" wicket:id="save"></a>
-		<a class="chat-btn chat-tool-icon btn btn-default delete" wicket:message="title:442" wicket:id="delete"></a>
-		<a class="chat-btn chat-tool-icon btn btn-default audio" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">&nbsp;</a>
+		<div class="btn-group dropup">
+			<a id="actions" class="chat btn btn-default dropdown-toggle" data-toggle="dropdown" wicket:message="title:635">
+				<span class="list chat-tool-icon">&nbsp;</span>
+				<b class="caret"></b>
+			</a>
+			<ul class="dropdown-menu btns-only">
+				<li><a class="chat-btn chat-tool-icon btn btn-default save" wicket:message="title:197" wicket:id="save"></a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default delete" wicket:message="title:442" wicket:id="delete"></a></li>
+				<li><a class="chat-btn chat-tool-icon btn btn-default audio" wicket:message="data-sound-enabled:sound.mute,data-sound-muted:sound.enable">&nbsp;</a></li>
+			</ul>
+		</div>
 	</div>
 </wicket:panel>
 </html>

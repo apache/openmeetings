@@ -102,6 +102,9 @@
 	height: 20px;
 	display: inline-block;
 }
+.list.chat-tool-icon {
+	background-image: url(images/list.png);
+}
 .sound.chat-tool-icon {
 	background-image: url(images/sound.png);
 }
@@ -155,4 +158,11 @@
 }
 #chatPanel.room.closed #chatPopup #chat {
 	display: none;
+}
+ul.dropdown-menu.btns-only, ul.dropdown-menu.btns-only li {
+	max-width: 62px;
+	min-width: 62px;
+}
+ul.dropdown-menu.btns-only li .chat-btn {
+	float: none !important;
 }
