@@ -111,8 +111,8 @@ public class RoomInvitationForm extends InvitationForm {
 			super.updateButtons(target);
 		} else {
 			Collection<Group> to = groups.getModelObject();
-			dialog.send.setEnabled(!to.isEmpty(), target);
-			dialog.generate.setEnabled(false, target);
+			dialog.getSend().setEnabled(!to.isEmpty(), target);
+			dialog.getGenerate().setEnabled(false, target);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class RoomInvitationForm extends InvitationForm {
 
 	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
-		if (button.equals(dialog.send) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
+		if (button.equals(dialog.getSend()) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
 			for (Group g : groups.getModelObject()) {
 				for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
 					Invitation i = create(ou.getUser());

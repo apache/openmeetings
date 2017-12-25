@@ -30,9 +30,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
-	DialogButton generate;
-	DialogButton send;
-	DialogButton cancel;
+	private DialogButton generate;
+	private DialogButton send;
+	private DialogButton cancel;
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
@@ -100,5 +100,17 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		//designed to be empty because of multiple submit buttons
+	}
+
+	public DialogButton getGenerate() {
+		return generate;
+	}
+
+	public DialogButton getSend() {
+		return send;
+	}
+
+	public DialogButton getCancel() {
+		return cancel;
 	}
 }
