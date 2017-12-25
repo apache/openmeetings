@@ -25,6 +25,7 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
+import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
@@ -35,6 +36,7 @@ import static org.apache.openmeetings.util.OmFileHelper.PROFILES_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILES_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.RECORDING_FILE_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.THUMB_IMG_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.getCssDir;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OmFileHelper.getFileName;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
@@ -1017,7 +1019,7 @@ public class BackupImport {
 
 	private void importFolders(File importBaseDir) throws IOException {
 		// Now check the room files and import them
-		File roomFilesFolder = new File(importBaseDir, BCKP_ROOM_FILES);
+		final File roomFilesFolder = new File(importBaseDir, BCKP_ROOM_FILES);
 
 		File uploadDir = getUploadDir();
 
@@ -1061,16 +1063,24 @@ public class BackupImport {
 		}
 
 		// Now check the recordings and import them
-		File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
+		final File recDir = new File(importBaseDir, BCKP_RECORD_FILES);
 		log.debug("sourceDirRec PATH " + recDir.getCanonicalPath());
 		if (recDir.exists()) {
+			final File hiberDir = getStreamsHibernateDir();
 			for (File r : recDir.listFiles()) {
 				String n = fileMap.get(r.getName());
 				if (n != null) {
-					FileUtils.copyFile(r, new File(getStreamsHibernateDir(), n));
+					FileUtils.copyFile(r, new File(hiberDir, n));
 				} else {
-					FileUtils.copyFileToDirectory(r, getStreamsHibernateDir());
+					FileUtils.copyFileToDirectory(r, hiberDir);
 				}
+			}
+		}
+		final File cssDir = new File(importBaseDir, CSS_DIR);
+		if (cssDir.exists()) {
+			final File wCssDir = getCssDir();
+			for (File css : cssDir.listFiles()) {
+				FileUtils.copyFileToDirectory(css, wCssDir);
 			}
 		}
 	}

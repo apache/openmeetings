@@ -22,7 +22,11 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OmFileHelper.BACKUP_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
+import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
 import static org.apache.openmeetings.util.OmFileHelper.IMPORT_DIR;
+import static org.apache.openmeetings.util.OmFileHelper.getCustomCss;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.ByteArrayOutputStream;
@@ -85,7 +89,6 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;
@@ -181,7 +184,7 @@ public class BackupExport {
 
 			if (includeFiles) {
 				//##################### Backup Room Files
-				for (File file : OmFileHelper.getUploadDir().listFiles()) {
+				for (File file : getUploadDir().listFiles()) {
 					String fName = file.getName();
 					if (file.isDirectory() && !IMPORT_DIR.equals(fName) && !BACKUP_DIR.equals(fName)) {
 						log.debug("### " + file.getName());
@@ -190,9 +193,14 @@ public class BackupExport {
 				}
 
 				//##################### Backup Recording Files
-				File recDir = OmFileHelper.getStreamsHibernateDir();
+				final File recDir = getStreamsHibernateDir();
 				writeZipDir(BCKP_RECORD_FILES, recDir.toURI(), recDir, zos);
 				progressHolder.setProgress(90);
+
+				final File customCss = getCustomCss();
+				if (customCss != null && customCss.exists() && customCss.isFile()) {
+					writeZip(CSS_DIR, customCss.getParentFile().toURI(), customCss, zos);
+				}
 			}
 		}
 		progressHolder.setProgress(100);
@@ -518,18 +526,22 @@ public class BackupExport {
 		root.commit();
 	}
 
+	private void writeZip(String prefix, URI base, File file, ZipOutputStream zos) throws IOException {
+		String path = prefix + "/" + base.relativize(file.toURI()).toString();
+		log.debug("Writing '" + path + "' to zip file");
+		ZipEntry zipEntry = new ZipEntry(path);
+		zos.putNextEntry(zipEntry);
+
+		FileUtils.copyFile(file, zos);
+		zos.closeEntry();
+	}
+
 	private void writeZipDir(String prefix, URI base, File dir, ZipOutputStream zos) throws IOException {
 		for (File file : dir.listFiles()) {
 			if (file.isDirectory()) {
 				writeZipDir(prefix, base, file, zos);
 			} else {
-				String path = prefix + "/" + base.relativize(file.toURI()).toString();
-				log.debug("Writing '" + path + "' to zip file");
-				ZipEntry zipEntry = new ZipEntry(path);
-				zos.putNextEntry(zipEntry);
-
-				FileUtils.copyFile(file, zos);
-				zos.closeEntry();
+				writeZip(prefix, base, file, zos);
 			}
 		}
 	}
