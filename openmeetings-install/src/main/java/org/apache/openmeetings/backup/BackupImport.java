@@ -687,7 +687,7 @@ public class BackupImport {
 			if (m.getFromUser() == null || m.getFromUser().getId() == null) {
 				continue;
 			}
-			chatDao.update(m);
+			chatDao.update(m, m.getSent());
 		}
 	}
 
