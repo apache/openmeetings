@@ -46,6 +46,8 @@ public class OmFileHelper {
 	public static final String IMPORT_DIR = "import";
 	public static final String PROFILES_DIR = "profiles";
 	public static final String SCREENSHARING_DIR = "screensharing";
+	public static final String CSS_DIR = "css";
+	public static final String CUSTOM_CSS = "custom.css";
 	public static final String FILES_DIR = "files";
 	public static final String HIBERNATE = "hibernate";
 	public static final String PERSISTENCE_NAME = "classes/META-INF/persistence.xml";
@@ -243,6 +245,14 @@ public class OmFileHelper {
 
 	public static File getImagesDir() {
 		return new File(OmFileHelper.omHome, IMAGES_DIR);
+	}
+
+	public static File getCssDir() {
+		return new File(OmFileHelper.omHome, CSS_DIR);
+	}
+
+	public static File getCustomCss() {
+		return new File(getCssDir(), CUSTOM_CSS);
 	}
 
 	public static File appendSuffix(File original, String suffix) {
