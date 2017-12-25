@@ -32,37 +32,40 @@ var StaticTMath = (function() {
 			});
 		}, errCallback);
 	}
-
-	return {
-		tex2svg: tex2svg
-		, create: create
-	}
-})();
-var TMath = function(wb, s) {
-	const math = ShapeBase();
-	math.obj = null;
-
 	function highlight(el) {
 		el.addClass('ui-state-highlight', 2000, function() {
 			el.focus();
 			el.removeClass('ui-state-highlight', 2000);
 		});
 	}
+
+	return {
+		tex2svg: tex2svg
+		, create: create
+		, highlight: highlight
+	}
+})();
+var TMath = function(wb, s) {
+	const math = ShapeBase();
+	math.obj = null;
+
 	math.mouseDown = function(o) {
 		const canvas = this
 			, pointer = canvas.getPointer(o.e)
 			, ao = canvas.getActiveObject()
 			, fml = wb.getFormula()
-			, ta = fml.find('textarea');
+			, ta = fml.find('textarea')
+			, upd = fml.find('.update-btn');
 		fml.show();
 		if (!!ao && ao.omType === 'Math') {
-			math.obj = ao;
-			ta.val(math.obj.formula);
+			upd.data('uid', ao.uid);
+			upd.data('slide', ao.slide);
+			ta.val(ao.formula);
 		} else {
 			const err = fml.find('.status');
 			err.text('');
 			if (ta.val().trim() === '') {
-				highlight(ta);
+				StaticTMath.highlight(ta);
 				return;
 			}
 			StaticTMath.create(
@@ -78,10 +81,11 @@ var TMath = function(wb, s) {
 				, function(obj) {
 					math.obj = obj;
 					math.objectCreated(math.obj, canvas);
+					canvas.setActiveObject(math.obj);
 				}
 				, function(msg) {
 					err.text(msg);
-					highlight(err);
+					StaticTMath.highlight(err);
 				}
 			);
 		}
