@@ -991,4 +991,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.msg.exit"><![CDATA[kilépett a szobából.]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
 	<entry key="lbl.update"><![CDATA[Update]]></entry>
+	<entry key="send.on.enter"><![CDATA[Send on Enter]]></entry>
+	<entry key="send.on.ctrl.enter"><![CDATA[Send on Ctrl+Enter]]></entry>
 </properties>

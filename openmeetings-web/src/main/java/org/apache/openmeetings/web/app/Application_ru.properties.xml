@@ -1004,4 +1004,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="activities.msg.exit"><![CDATA[покидает комнату.]]></entry>
 	<entry key="wb.tool.math.formula"><![CDATA[Математическая формула]]></entry>
 	<entry key="lbl.update"><![CDATA[Изменить]]></entry>
+	<entry key="send.on.enter"><![CDATA[Отправить по Enter]]></entry>
+	<entry key="send.on.ctrl.enter"><![CDATA[Отправить по Ctrl+Enter]]></entry>
 </properties>

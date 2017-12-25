@@ -123,6 +123,11 @@
 #chat #fontStyle span {
 	background-image: url(images/settings.png);
 }
+.send-ctrl.chat-tool-icon {
+	background-image: url(images/key_ctrl.png);
+	background-position: 0px 0px;
+	background-size: 25px;
+}
 #chat .chat-btn {
 	display: inline-block;
 	float: right;
