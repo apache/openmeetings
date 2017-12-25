@@ -42,6 +42,12 @@ var TMath = function(wb, s) {
 	const math = ShapeBase();
 	math.obj = null;
 
+	function highlight(el) {
+		el.addClass('ui-state-highlight', 2000, function() {
+			el.focus();
+			el.removeClass('ui-state-highlight', 2000);
+		});
+	}
 	math.mouseDown = function(o) {
 		const canvas = this
 			, pointer = canvas.getPointer(o.e)
@@ -55,12 +61,6 @@ var TMath = function(wb, s) {
 		} else {
 			const err = fml.find('.status');
 			err.text('');
-			function highlight(el) {
-				el.addClass('ui-state-highlight', 2000, function() {
-					el.focus();
-					el.removeClass('ui-state-highlight', 2000);
-				});
-			}
 			if (ta.val().trim() === '') {
 				highlight(ta);
 				return;

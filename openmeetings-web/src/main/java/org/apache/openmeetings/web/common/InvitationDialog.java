@@ -30,9 +30,9 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	private static final long serialVersionUID = 1L;
-	public DialogButton generate;
-	public DialogButton send;
-	public DialogButton cancel;
+	DialogButton generate;
+	DialogButton send;
+	DialogButton cancel;
 	private final InvitationForm form;
 
 	public InvitationDialog(String id, final InvitationForm _form) {
