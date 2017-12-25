@@ -367,9 +367,8 @@ public class IcalUtils {
 	 *
 	 * @param appointment to be converted to iCalendar
 	 * @return iCalendar representation of the Appointment
-	 * @throws NoSuchElementException - in case time zone was not found
 	 */
-	public Calendar parseAppointmenttoCalendar(Appointment appointment) throws NoSuchElementException {
+	public Calendar parseAppointmenttoCalendar(Appointment appointment) {
 		String tzid = parseTimeZone(null, appointment.getOwner()).getID();
 
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
@@ -452,9 +451,8 @@ public class IcalUtils {
 	 * @param appointments List of Appointments for the Calendar
 	 * @param ownerId      Owner of the Appointments
 	 * @return VCALENDAR representation of the Appointments
-	 * @throws NoSuchElementException in case time zone was not found
 	 */
-	public Calendar parseAppointmentstoCalendar(List<Appointment> appointments, Long ownerId) throws NoSuchElementException {
+	public Calendar parseAppointmentstoCalendar(List<Appointment> appointments, Long ownerId) {
 		String tzid = parseTimeZone(null, userDao.get(ownerId)).getID();
 
 		TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();

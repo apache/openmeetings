@@ -381,11 +381,11 @@ public class CalendarPanel extends UserBasePanel {
 	}
 
 	private OmCalendar getDefaultCalendar() {
-		OmCalendar calendar = new OmCalendar();
-		calendar.setDeleted(false);
-		calendar.setOwner(getBean(UserDao.class).get(getUserId()));
-		calendar.setTitle(getString("calendar.defaultTitle"));
-		return calendar;
+		OmCalendar c = new OmCalendar();
+		c.setDeleted(false);
+		c.setOwner(getBean(UserDao.class).get(getUserId()));
+		c.setTitle(getString("calendar.defaultTitle"));
+		return c;
 	}
 
 	//Function which delegates the syncing of the Calendar to CalendarDialog
