@@ -214,7 +214,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 			setModelObject(i);
 			url.setModelObject(getInvitationLink(i, WebSession.get().getExtendedProperties().getBaseUrl()));
 			target.add(url);
-		} else if (button.equals(dialog.send)) {
+		} else if (button.equals(dialog.getSend())) {
 			if (Strings.isEmpty(url.getModelObject())) {
 				for (User u : recipients.getModelObject()) {
 					Invitation i = create(u);
