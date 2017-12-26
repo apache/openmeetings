@@ -11,10 +11,11 @@ var Chat = function() {
 		, iconOpenRoom = 'ui-icon-caret-1-' + (Settings.isRtl ? 'e' : 'w')
 		, iconClose = 'ui-icon-caret-1-s'
 		, iconCloseRoom = 'ui-icon-caret-1-' + (Settings.isRtl ? 'w' : 'e')
+		, SEND_ENTER = 'enter', SEND_CTRL = 'ctrl'
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
-		, editor = $('#chatMessage .wysiwyg-editor')
+		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn = SEND_CTRL;
 		;
 
 	try {
@@ -28,14 +29,32 @@ var Chat = function() {
 	function _load() {
 		const s = Settings.load();
 		if (typeof(s.chat) === 'undefined') {
-			s.chat = {};
+			s.chat = {
+				muted: false
+				, sendOn: SEND_CTRL
+			};
 		}
+		muted = s.chat.muted === true;
+		sendOn = s.chat.sendOn === SEND_ENTER ? SEND_ENTER : SEND_CTRL;
 		return s;
 	}
-	function _updateBtn(s, a) {
-		const muted = s.chat.muted === true;
-		a.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
-				.attr('title', a.data(muted ? 'sound-enabled' : 'sound-muted'));
+	function _updateAudioBtn(btn) {
+		btn.removeClass('sound' + (muted ? '' : '-mute')).addClass('sound' + (muted ? '-mute' : ''))
+				.attr('title', btn.data(muted ? 'sound-enabled' : 'sound-muted'));
+	}
+	function _updateSendBtn(btn) {
+		const ctrl = sendOn === SEND_CTRL;
+		if (ctrl) {
+			btn.addClass('send-ctrl');
+			editor.off('keydown', _sendOnEnter).keydown('Ctrl+return', _sendOnEnter);
+		} else {
+			btn.removeClass('send-ctrl');
+			editor.off('keydown', _sendOnEnter).keydown('return', _sendOnEnter);
+		}
+		btn.attr('title', btn.data(ctrl ? 'send-ctrl' : 'send-enter'));
+	}
+	function _sendOnEnter() {
+		$('#chat .send').trigger('click');
 	}
 	function doneTyping () {
 		typingTimer = null;
@@ -61,12 +80,23 @@ var Chat = function() {
 			}
 		}
 		const a = $('#chat .audio');
-		_updateBtn(_load(), a);
+		const sbtn = $('#chat .send-btn');
+		{ //scope
+			_load();
+			_updateAudioBtn(a);
+			_updateSendBtn(sbtn)
+		}
 		$('#chat .chat-btn').hover(function(){ $(this).addClass('ui-state-hover') }, function(){ $(this).removeClass('ui-state-hover') });
 		a.off().click(function() {
 			const s = _load();
-			s.chat.muted = !s.chat.muted;
-			_updateBtn(s, a);
+			muted = s.chat.muted = !s.chat.muted;
+			_updateAudioBtn(a);
+			Settings.save(s);
+		});
+		sbtn.off().click(function() {
+			const s = _load();
+			sendOn = s.chat.sendOn = s.chat.sendOn !== SEND_CTRL ? SEND_CTRL : SEND_ENTER;
+			_updateSendBtn(sbtn);
 			Settings.save(s);
 		});
 		$('#chat #hyperlink').parent().find('button').off().click(function() {
@@ -182,7 +212,7 @@ var Chat = function() {
 			if (isClosed()) {
 				ctrl.addClass('ui-state-highlight');
 				const s = _load();
-				if (p.is(':visible') && s.chat.muted !== true) {
+				if (p.is(':visible') && !muted) {
 					const playPromise = audio.play();
 
 					// In browsers that don’t yet support this functionality,
