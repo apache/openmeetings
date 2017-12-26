@@ -92,6 +92,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_REMINDER_MESSAGE = "reminder.message";
 	public static final String CONFIG_MP4_AUDIO_RATE = "mp4.audio.rate";
 	public static final String CONFIG_MP4_AUDIO_BITRATE = "mp4.audio.bitrate";
+	public static final String CONFIG_REST_ALLOW_ORIGIN = "rest.allow.origin";
 
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:;";
@@ -129,6 +130,7 @@ public class OpenmeetingsVariables {
 	private static int audioRate = 22050;
 	private static String audioBitrate = "32k";
 	private static String defaultTimezone = "Europe/Berlin";
+	private static String restAllowOrigin = null;
 
 	private OpenmeetingsVariables() {}
 
@@ -254,5 +256,13 @@ public class OpenmeetingsVariables {
 
 	public static void setDefaultTimezone(String timezone) {
 		defaultTimezone = timezone;
+	}
+
+	public static String getRestAllowOrigin() {
+		return restAllowOrigin;
+	}
+
+	public static void setRestAllowOrigin(String allowOrigin) {
+		restAllowOrigin = allowOrigin;
 	}
 }
