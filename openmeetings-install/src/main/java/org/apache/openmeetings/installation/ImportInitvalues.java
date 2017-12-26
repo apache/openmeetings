@@ -70,6 +70,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REMINDER_MESSAGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REPLY_TO_ORGANIZER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_ALLOW_REMOTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_FPS_SHOW;
@@ -337,6 +338,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_REMINDER_MESSAGE, null, Configuration.Type.string, "Reminder message to notify about upcoming appointment, generated message will be used if not set", VER_2_0);
 		addCfg(list, CONFIG_MP4_AUDIO_RATE, String.valueOf(getAudioRate()), Configuration.Type.number, "Audio sampling rate (in Hz) for MP4 video", "4.0.1");
 		addCfg(list, CONFIG_MP4_AUDIO_BITRATE, String.valueOf(getAudioBitrate()), Configuration.Type.string, "Audio bitrate for MP4 video", "4.0.1");
+		addCfg(list, CONFIG_REST_ALLOW_ORIGIN, null, Configuration.Type.string, "List of addresses browser Ajax REST requests are allowed from", "4.0.2");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

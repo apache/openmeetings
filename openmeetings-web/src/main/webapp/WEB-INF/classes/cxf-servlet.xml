@@ -55,6 +55,9 @@
 			<bean id="userDtoMessageBodyWriter" class="org.apache.openmeetings.webservice.util.UserMessageBodyWriter" />
 			<bean id="omParamProvider" class="org.apache.openmeetings.webservice.util.OmParamConverterProvider"/>
 		</jaxrs:providers>
+		<jaxrs:outInterceptors>
+			<bean id="allowOriginProvider" class="org.apache.openmeetings.webservice.util.AllowOriginProvider"/>
+		</jaxrs:outInterceptors>
 	</jaxrs:server>
 	<jaxws:endpoint id="calendarServiceWS" address="/CalendarService" implementor="#calendarWebService"/>
 	<jaxws:endpoint id="errorServiceWS" address="/ErrorService" implementor="#errorWebService" />
