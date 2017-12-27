@@ -97,6 +97,9 @@
 			<includes>
 				<include>*.swf</include>
 			</includes>
+			<excludes>
+				<exclude>openmeetings-flash-*.swf</exclude>
+			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}</directory>
