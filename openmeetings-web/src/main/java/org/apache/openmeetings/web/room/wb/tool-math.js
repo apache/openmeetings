@@ -25,6 +25,8 @@ var StaticTMath = (function() {
 		tex2svg(o.formula, function(svg) {
 			fabric.loadSVGFromString(svg, function(objects, options) {
 				const obj = fabric.util.groupSVGElements(objects, $.extend({}, o, options));
+				obj.selectable = canvas.selection;
+				obj.type = 'group';
 				canvas.add(obj).requestRenderAll();
 				if (typeof(callback) === 'function') {
 					callback(obj);
@@ -81,7 +83,11 @@ var TMath = function(wb, s) {
 				, function(obj) {
 					math.obj = obj;
 					math.objectCreated(math.obj, canvas);
-					canvas.setActiveObject(math.obj);
+					if (wb.getRole() !== NONE) {
+						canvas.setActiveObject(math.obj);
+					}
+					upd.data('uid', math.obj.uid);
+					upd.data('slide', math.obj.slide);
 				}
 				, function(msg) {
 					err.text(msg);

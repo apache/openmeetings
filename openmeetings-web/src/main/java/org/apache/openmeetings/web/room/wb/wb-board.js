@@ -231,7 +231,6 @@ var Wb = function() {
 					const cnvs = canvases[o.slide];
 					StaticTMath.create(toOmJson(o), cnvs
 						, function(obj) {
-							obj.type = 'group';
 							cnvs.trigger("object:modified", {target: obj});
 						}
 						, function(msg) {
