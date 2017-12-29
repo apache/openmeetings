@@ -52,7 +52,10 @@ public class ConvertingErrorsDialog extends AbstractDialog<BaseFileItem> {
 			item.add(new Label("exitCode", l.getExitCode()));
 			item.add(new Label("message", l.getMessage()));
 			if (!l.isOk()) {
-				item.add(AttributeModifier.replace(ATTR_CLASS, "alert"));
+				item.add(AttributeModifier.append(ATTR_CLASS, "alert"));
+			}
+			if (l.isWarn()) {
+				item.add(AttributeModifier.append(ATTR_CLASS, "warn"));
 			}
 		}
 	};
