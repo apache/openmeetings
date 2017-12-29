@@ -27,10 +27,10 @@ var StaticTMath = (function() {
 				const obj = fabric.util.groupSVGElements(objects, $.extend({}, o, options));
 				obj.selectable = canvas.selection;
 				obj.type = 'group';
-				canvas.add(obj).requestRenderAll();
 				if (typeof(callback) === 'function') {
 					callback(obj);
 				}
+				canvas.add(obj).requestRenderAll();
 			});
 		}, errCallback);
 	}

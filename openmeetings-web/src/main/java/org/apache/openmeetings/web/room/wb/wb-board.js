@@ -226,11 +226,12 @@ var Wb = function() {
 						uid: $(this).data('uid')
 						, slide: $(this).data('slide')
 					});
-					o.formula = f.find('textarea').val();
-					_removeHandler(o);
+					const json = toOmJson(o);
+					json.formula = f.find('textarea').val();
 					const cnvs = canvases[o.slide];
-					StaticTMath.create(toOmJson(o), cnvs
+					StaticTMath.create(json, cnvs
 						, function(obj) {
+							_removeHandler(o);
 							cnvs.trigger("object:modified", {target: obj});
 						}
 						, function(msg) {
