@@ -98,7 +98,7 @@ public class RoomClientPanel extends Panel {
 		if (c.hasRight(Right.moderator)) {
 			status = "status-mod";
 			statusTitle = "679";
-		} else if (c.hasRight(Right.whiteBoard)) {
+		} else if (c.hasRight(Right.whiteBoard) || c.hasRight(Right.presenter)) {
 			status = "status-wb";
 			statusTitle = "678";
 		} else {
