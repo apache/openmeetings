@@ -36,6 +36,7 @@ public class ProcessResult {
 	private String error;
 	private Integer exitCode;
 	private String out;
+	private boolean optional = false;
 
 	public ProcessResult() {
 		this(null, null, null);
@@ -56,24 +57,27 @@ public class ProcessResult {
 		return out;
 	}
 
-	public void setOut(String out) {
+	public ProcessResult setOut(String out) {
 		this.out = out;
+		return this;
 	}
 
 	public String getCommand() {
 		return command;
 	}
 
-	public void setCommand(String command) {
+	public ProcessResult setCommand(String command) {
 		this.command = command;
+		return this;
 	}
 
 	public String getProcess() {
 		return process;
 	}
 
-	public void setProcess(String process) {
+	public ProcessResult setProcess(String process) {
 		this.process = process;
+		return this;
 	}
 
 	public String getException() {
@@ -88,8 +92,9 @@ public class ProcessResult {
 		return error;
 	}
 
-	public void setError(String error) {
+	public ProcessResult setError(String error) {
 		this.error = error;
+		return this;
 	}
 
 	public Integer getExitCode() {
@@ -101,8 +106,21 @@ public class ProcessResult {
 		return this;
 	}
 
+	public boolean isOptional() {
+		return optional;
+	}
+
+	public ProcessResult setOptional(boolean optional) {
+		this.optional = optional;
+		return this;
+	}
+
 	public boolean isOk() {
-		return ZERO.equals(exitCode);
+		return optional || !isWarn();
+	}
+
+	public boolean isWarn() {
+		return !ZERO.equals(exitCode);
 	}
 
 	public String buildLogMessage() {
@@ -112,6 +130,7 @@ public class ProcessResult {
 			.append("exception: ").append(exception).append("\r\n")
 			.append("error: ").append(error).append("\r\n")
 			.append("exitValue: ").append(exitCode).append("\r\n")
+			.append("optional: ").append(optional).append("\r\n")
 			.append("out: ").append(out).append("\r\n").toString();
 	}
 }

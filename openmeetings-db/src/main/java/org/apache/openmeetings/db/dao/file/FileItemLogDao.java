@@ -56,14 +56,15 @@ public class FileItemLogDao {
 				.executeUpdate();
 	}
 
-	public FileItemLog add(String name, BaseFileItem f, ProcessResult returnMap) {
-		log.trace("Adding log: {}, {}, {}", name, f, returnMap);
-		FileItemLog l = new FileItemLog();
-		l.setInserted(new Date());
-		l.setExitCode(returnMap.getExitCode());
-		l.setFileId(f.getId());
-		l.setMessage(returnMap.buildLogMessage());
-		l.setName(name);
+	public FileItemLog add(String name, BaseFileItem f, ProcessResult r) {
+		log.trace("Adding log: {}, {}, {}", name, f, r);
+		FileItemLog l = new FileItemLog()
+				.setInserted(new Date())
+				.setExitCode(r.getExitCode())
+				.setFileId(f.getId())
+				.setMessage(r.buildLogMessage())
+				.setName(name)
+				.setOptional(r.isOptional());
 
 		em.persist(l);
 		return l;

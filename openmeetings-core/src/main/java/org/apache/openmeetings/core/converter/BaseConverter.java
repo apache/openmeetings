@@ -202,11 +202,11 @@ public abstract class BaseConverter {
 	protected RecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
 		RecordingMetaData metaData = metaDataDao.get(metaId);
 		if (metaData.getStreamStatus() != Status.STOPPED) {
-			log.debug("### meta Stream not yet written to disk " + metaId);
+			log.debug("### meta Stream not yet written to disk {}", metaId);
 			long counter = 0;
 			long maxTimestamp = 0;
 			while(true) {
-				log.trace("### Stream not yet written Thread Sleep - " + metaId);
+				log.trace("### Stream not yet written Thread Sleep - {}", metaId);
 
 				metaData = metaDataDao.get(metaId);
 
@@ -259,14 +259,14 @@ public abstract class BaseConverter {
 			List<RecordingMetaData> metaDataList) {
 		try {
 			// Init variables
-			log.debug("### meta Data Number - " + metaDataList.size());
+			log.debug("### meta Data Number - {}", metaDataList.size());
 			log.debug("###################################################");
 
 			for (RecordingMetaData metaData : metaDataList) {
 				long metaId = metaData.getId();
-				log.debug("### processing metadata: " + metaId);
+				log.debug("### processing metadata: {}", metaId);
 				if (metaData.getStreamStatus() == Status.NONE) {
-					log.debug("Stream has not been started, error in recording " + metaId);
+					log.debug("Stream has not been started, error in recording {}", metaId);
 					continue;
 				}
 
@@ -284,8 +284,8 @@ public abstract class BaseConverter {
 							, "-i", inputFlvFile.getCanonicalPath()
 							, "-af", String.format("aresample=%s:min_comp=0.001:min_hard_comp=0.100000", getAudioBitrate())
 							, outputWav.getCanonicalPath()};
-
-					logs.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv));
+					//there might be no audio in the stream
+					logs.add(ProcessHelper.executeScript("stripAudioFromFLVs", argv, true));
 				}
 
 				if (outputWav.exists() && outputWav.length() != 0) {
@@ -319,7 +319,7 @@ public abstract class BaseConverter {
 						}
 
 						if (soxArgs != null) {
-							log.debug("START fillGap ################# Delta-ID :: " + metaDelta.getId());
+							log.debug("START fillGap ################# Delta-ID :: {}", metaDelta.getId());
 
 							metaDeltaDao.update(metaDelta);
 							counter++;
@@ -353,7 +353,6 @@ public abstract class BaseConverter {
 					// Finally add it to the row!
 					waveFiles.add(outputFullWav);
 				}
-
 				metaDataDao.update(metaData);
 			}
 		} catch (Exception err) {

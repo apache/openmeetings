@@ -39,7 +39,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @Entity
 @NamedQueries({
 		@NamedQuery(name = "getFileLogsByFile", query = "SELECT fl FROM FileItemLog fl WHERE fl.fileId = :fileId"),
-		@NamedQuery(name = "countErrorFileLogsByFile", query = "SELECT COUNT(fl) FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.exitCode <> 0"),
+		@NamedQuery(name = "countErrorFileLogsByFile", query = "SELECT COUNT(fl) FROM FileItemLog fl WHERE fl.fileId = :fileId AND fl.optional = false AND fl.exitCode <> 0"),
 		@NamedQuery(name = "deleteErrorFileLogsByFile", query = "DELETE FROM FileItemLog fl WHERE fl.fileId = :fileId") })
 @Table(name = "file_log")
 public class FileItemLog implements IDataProviderEntity {
@@ -66,6 +66,9 @@ public class FileItemLog implements IDataProviderEntity {
 	@Column(name = "exit_code")
 	private Integer exitCode;
 
+	@Column(name = "optional", nullable = false)
+	private boolean optional;
+
 	@Override
 	public Long getId() {
 		return id;
@@ -80,40 +83,45 @@ public class FileItemLog implements IDataProviderEntity {
 		return fileId;
 	}
 
-	public void setFileId(Long fileId) {
+	public FileItemLog setFileId(Long fileId) {
 		this.fileId = fileId;
+		return this;
 	}
 
 	public Date getInserted() {
 		return inserted;
 	}
 
-	public void setInserted(Date inserted) {
+	public FileItemLog setInserted(Date inserted) {
 		this.inserted = inserted;
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public FileItemLog setName(String name) {
 		this.name = name;
+		return this;
 	}
 
 	public String getMessage() {
 		return bytes == null ? null : new String(bytes, UTF_8);
 	}
 
-	public void setMessage(String message) {
+	public FileItemLog setMessage(String message) {
 		setBytes(message.getBytes(UTF_8));
+		return this;
 	}
 
 	public Integer getExitCode() {
 		return exitCode;
 	}
 
-	public void setExitCode(Integer exitCode) {
+	public FileItemLog setExitCode(Integer exitCode) {
 		this.exitCode = exitCode;
+		return this;
 	}
 
 	public byte[] getBytes() {
@@ -125,6 +133,19 @@ public class FileItemLog implements IDataProviderEntity {
 	}
 
 	public boolean isOk() {
-		return ZERO.equals(exitCode);
+		return optional || !isWarn();
+	}
+
+	public boolean isWarn() {
+		return !ZERO.equals(exitCode);
+	}
+
+	public boolean isOptional() {
+		return optional;
+	}
+
+	public FileItemLog setOptional(boolean optional) {
+		this.optional = optional;
+		return this;
 	}
 }

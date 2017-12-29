@@ -161,6 +161,9 @@
 .dialog.errors .alert {
 	color: red;
 }
+.dialog.errors .warn {
+	color: #afaf09;
+}
 .dialog.errors .message {
 	display: block;
 	unicode-bidi: embed;

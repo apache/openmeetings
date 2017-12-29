@@ -35,20 +35,6 @@ public class ProcessHelper {
 
 	private ProcessHelper() {}
 
-	public static ProcessResult executeScriptWindows(String process, String[] argv) {
-		try {
-			String[] cmd = new String[argv.length + 2];
-			cmd[0] = "cmd.exe";
-			cmd[1] = "/C";
-			System.arraycopy(argv, 0, cmd, 2, argv.length);
-			Map<String, String> env = new HashMap<>();
-			return executeScript(process, cmd, env);
-		} catch (Exception t) {
-			log.error("executeScriptWindows", t);
-			return new ProcessResult(process, t.getMessage(), t);
-		}
-	}
-
 	private static String getCommand(String[] argv) {
 		StringBuilder tString = new StringBuilder();
 		for (int i = 0; i < argv.length; i++) {
@@ -71,19 +57,24 @@ public class ProcessHelper {
 	}
 
 	public static ProcessResult executeScript(String process, String[] argv) {
-		Map<String, String> env = new HashMap<>();
-		return executeScript(process, argv, env);
+		return executeScript(process, argv, false);
 	}
 
-	public static ProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env) {
-		ProcessResult res = new ProcessResult();
-		res.setProcess(process);
+	public static ProcessResult executeScript(String process, String[] argv, boolean optional) {
+		Map<String, String> env = new HashMap<>();
+		return executeScript(process, argv, env, optional);
+	}
+
+	private static ProcessResult executeScript(String process, String[] argv, Map<? extends String, ? extends String> env, boolean optional) {
+		ProcessResult res = new ProcessResult()
+				.setProcess(process)
+				.setOptional(optional);
 		debugCommandStart(process, argv);
 
 		Process proc = null;
 		try {
-			res.setCommand(getCommand(argv));
-			res.setOut("");
+			res.setCommand(getCommand(argv))
+				.setOut("");
 
 			// By using the process Builder we have access to modify the
 			// environment variables
@@ -98,14 +89,14 @@ public class ProcessHelper {
 			// its finished
 			proc.waitFor(getExtProcessTtl(), TimeUnit.MINUTES);
 
-			res.setExitCode(proc.exitValue());
-			res.setOut(IOUtils.toString(proc.getInputStream(), UTF_8));
-			res.setError(IOUtils.toString(proc.getErrorStream(), UTF_8));
+			res.setExitCode(proc.exitValue())
+				.setOut(IOUtils.toString(proc.getInputStream(), UTF_8))
+				.setError(IOUtils.toString(proc.getErrorStream(), UTF_8));
 		} catch (Throwable t) {
 			log.error("executeScript", t);
-			res.setError(t.getMessage());
-			res.setException(t.toString());
-			res.setExitCode(-1);
+			res.setExitCode(-1)
+				.setError(t.getMessage())
+				.setException(t.toString());
 		} finally {
 			if (proc != null) {
 				proc.destroy();
