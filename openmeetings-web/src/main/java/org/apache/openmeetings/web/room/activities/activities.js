@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Activities = function() {
-	const closedHeight = "20px", timeout = 10000;
-	let activities, aclean, area, openedHeight = "345px", inited = false;
+	const closedHeight = 20, closedHeightPx = closedHeight + 'px', timeout = 10000;
+	let activities, aclean, area, openedHeight = 345, openedHeightPx = openedHeight + 'px', inited = false;
 
 	function _load() {
 		const s = Settings.load();
@@ -26,14 +26,34 @@ var Activities = function() {
 		if (isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-n').addClass('ui-icon-caret-1-s');
 			$('.control.block', activities).removeClass('ui-state-highlight');
-			activities.animate({height: openedHeight}, 1000);
+			activities.animate(
+				{
+					height: openedHeightPx
+					, top: '-' + openedHeightPx
+				}
+				, 1000
+				, function() {
+					activities.css({'top': ''});
+					Room.setSize();
+				}
+			);
 			activities.resizable('option', 'disabled', false);
 		}
 	}
 	function _close() {
 		if (!isClosed()) {
 			$('.control.block .ui-icon', activities).removeClass('ui-icon-caret-1-s').addClass('ui-icon-caret-1-n');
-			activities.animate({height: closedHeight}, 1000);
+			activities.animate(
+				{
+					height: closedHeight
+					, top: (openedHeight - closedHeight) + 'px'
+				}
+				, 1000
+				, function() {
+					activities.css({'top': ''});
+					Room.setSize();
+				}
+			);
 			activities.resizable('option', 'disabled', true);
 		}
 	}
@@ -77,14 +97,16 @@ var Activities = function() {
 			}
 			activities = $('#activities');
 			activities.resizable({
-				handles: "n, e"
+				handles: 'n'
 				, disabled: isClosed()
-				, alsoResize: "#activities .area"
+				, alsoResize: '#activities .area'
 				, minHeight: 195
-				, minWidth: 260
+				, resize: function(event, ui) {
+					activities.css({'top': ''});
+				}
 				, stop: function(event, ui) {
-					activities.css({'top': '', 'right': ''});
-					openedHeight = ui.size.height + "px";
+					openedHeight = ui.size.height;
+					openedHeightPx = openedHeight + 'px';
 				}
 			});
 			area = activities.find('.area');

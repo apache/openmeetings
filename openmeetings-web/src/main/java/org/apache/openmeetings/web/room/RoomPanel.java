@@ -68,7 +68,6 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.pages.BasePage;
-import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
 import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.room.menu.RoomMenuPanel;
 import org.apache.openmeetings.web.room.sidebar.RoomSidebar;
@@ -189,7 +188,6 @@ public class RoomPanel extends BasePanel {
 
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
-	private ActivitiesPanel activities;
 	private final AbstractWbPanel wb;
 	private String sharingUser = null;
 	private String recordingUser = null;
@@ -283,7 +281,6 @@ public class RoomPanel extends BasePanel {
 		}
 		room.add(roomEnter);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
-		room.add(activities = new ActivitiesPanel("activities", this));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
 			room.setVisible(false);
@@ -532,49 +529,49 @@ public class RoomPanel extends BasePanel {
 					case roomEnter:
 						sidebar.update(handler);
 						menu.update(handler);
-						activities.add(new Activity(m, Activity.Type.roomEnter), handler);
+						sidebar.addActivity(new Activity(m, Activity.Type.roomEnter), handler);
 						break;
 					case roomExit:
 						sidebar.update(handler);
-						activities.add(new Activity(m, Activity.Type.roomExit), handler);
+						sidebar.addActivity(new Activity(m, Activity.Type.roomExit), handler);
 						break;
 					case roomClosed:
 						handler.add(room.setVisible(false));
 						roomClosed.open(handler);
 						break;
 					case requestRightModerator:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightModerator), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightModerator), handler);
 						break;
 					case requestRightPresenter:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightPresenter), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightPresenter), handler);
 						break;
 					case requestRightWb:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightWb), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightWb), handler);
 						break;
 					case requestRightShare:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightShare), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightShare), handler);
 						break;
 					case requestRightRemote:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightRemote), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightRemote), handler);
 						break;
 					case requestRightA:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightA), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightA), handler);
 						break;
 					case requestRightAv:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightAv), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightAv), handler);
 						break;
 					case requestRightMute:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightMute), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightMute), handler);
 						break;
 					case requestRightExclusive:
-						activities.add(new Activity((TextRoomMessage)m, Activity.Type.reqRightExclusive), handler);
+						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightExclusive), handler);
 						break;
 					case activityRemove:
-						activities.remove(((TextRoomMessage)m).getText(), handler);
+						sidebar.removeActivity(((TextRoomMessage)m).getText(), handler);
 						break;
 					case haveQuestion:
 						if (getClient().hasRight(Room.Right.moderator) || getUserId().equals(m.getUserId())) {
-							activities.add(new Activity((TextRoomMessage)m, Activity.Type.haveQuestion), handler);
+							sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.haveQuestion), handler);
 						}
 						break;
 					case kick:
@@ -840,10 +837,6 @@ public class RoomPanel extends BasePanel {
 
 	public AbstractWbPanel getWb() {
 		return wb;
-	}
-
-	public ActivitiesPanel getActivities() {
-		return activities;
 	}
 
 	public String getSharingUser() {

@@ -540,13 +540,14 @@ var VideoManager = (function() {
 })();
 var Room = (function() {
 	const self = {}, sbSide = Settings.isRtl ? 'right' : 'left';
-	let options, menuHeight, chat, sb, dock;
+	let options, menuHeight, chat, sb, dock, activities;
 
 	function _init(_options) {
 		options = _options;
 		window.WbArea = options.interview ? InterviewWbArea() : DrawWbArea();
 		const menu = $('.room.box .room.menu');
 		chat = $('#chatPanel');
+		activities = $('#activities');
 		sb = $('.room.sidebar').css(sbSide, '0px');
 		dock = sb.find('.btn-dock').button({
 			icon: "ui-icon icon-undock"
@@ -578,7 +579,9 @@ var Room = (function() {
 			.button('refresh');
 		menuHeight = menu.length === 0 ? 0 : menu.height();
 		VideoManager.init();
-		Activities.init();
+		if (typeof(Activities) !== 'undefined') {
+			Activities.init();
+		}
 	}
 	function _getSelfAudioClient() {
 		const vw = $('#video' + Room.getOptions().uid);
@@ -632,13 +635,17 @@ var Room = (function() {
 	function _setSize() {
 		const sbW = _sbWidth()
 			, w = $(window).width() - sbW - 8
+			, ah = !!activities && activities.is(':visible') ? activities.height() : 0
 			, h = $(window).height() - menuHeight - 3
+			, hh = h - 5
 			, p = sb.find('.tabs')
-			, holder = $('.room.holder');
-		sb.height(h);
-		const hh = h - 5;
-		p.height(hh);
-		$(".user.list", p).height(hh - $("ul", p).height() - $(".user.header", p).height() - 5);
+			, ulh = $("ul", p).height()
+			, holder = $('.room.holder')
+			, fl = $('.file.list', p);
+		sb.height(h - ah);
+		p.height(hh - ah);
+		$('.user.list', p).height(hh - ulh - ah - $('.user.header', p).height() - 5);
+		$('.trees', fl).height(hh - ulh - ah - $('.trash-toolbar', fl).height() - $('.sizes', fl).height() - 5);
 		if (sbW > 255) {
 			holder.addClass('big').removeClass('small');
 		} else {
