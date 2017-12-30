@@ -17,12 +17,14 @@
  * under the License.
  */
 #activities {
-	position: fixed;
-	z-index: 2000;
-	bottom: 0px;
-	left: 10px;
-	width: 600px;
 	height: 20px;
+	overflow: hidden;
+}
+#activities .ui-resizable-handle {
+	width: 100%;
+}
+#activities .ui-widget-header {
+	white-space: nowrap;
 }
 #activities .control.block .ui-icon {
 	text-align: center;
@@ -30,6 +32,8 @@
 #activities .control.block .label {
 	display: inline-block;
 	padding-left: 20px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 #activities .ctrl {
 	padding-left: 20px;

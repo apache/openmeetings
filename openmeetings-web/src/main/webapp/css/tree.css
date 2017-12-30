@@ -25,8 +25,6 @@
 	display: inline-block;
 }
 .file.tree .trees {
-	min-height: 400px;
-	max-height: 600px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }

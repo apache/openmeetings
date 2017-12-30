@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -43,6 +42,8 @@ import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 import org.apache.openmeetings.web.room.VideoSettings;
+import org.apache.openmeetings.web.room.activities.ActivitiesPanel;
+import org.apache.openmeetings.web.room.activities.Activity;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -86,6 +87,7 @@ public class RoomSidebar extends Panel {
 	private boolean avInited = false;
 	private Client kickedClient;
 	private VideoSettings settings = new VideoSettings("settings");
+	private ActivitiesPanel activities;
 	private final ListView<Client> users = new ListView<Client>("user", new ArrayList<Client>()) {
 		private static final long serialVersionUID = 1L;
 
@@ -127,7 +129,7 @@ public class RoomSidebar extends Panel {
 					{
 						JSONObject obj = uid.isEmpty() ? new JSONObject() : new JSONObject(uid);
 						Client _c = getOnlineClient(obj.getString("uid"));
-						if (_c == null || !_c.hasActivity(Activity.broadcastA)) {
+						if (_c == null || !_c.hasActivity(Client.Activity.broadcastA)) {
 							return;
 						}
 						if (cl.hasRight(Right.moderator) || cl.getUid().equals(_c.getUid())) {
@@ -192,7 +194,7 @@ public class RoomSidebar extends Panel {
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
-				Activity a = Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
+				Client.Activity a = Client.Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				StringValue podStr = getRequest().getRequestParameters().getParameterValue(PARAM_POD);
 				Pod pod = podStr.isEmpty() ? Pod.none : Pod.valueOf(podStr.toString());
 				Client c = getOnlineClient(uid);
@@ -215,7 +217,7 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
-						toggleActivity(c, Activity.broadcastAV, Pod.none);
+						toggleActivity(c, Client.Activity.broadcastAV, Pod.none);
 					}
 				}
 				sendUpdatedClient(c);
@@ -260,6 +262,7 @@ public class RoomSidebar extends Panel {
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
 		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
+		add(activities = new ActivitiesPanel("activities", room));
 	}
 
 	@Override
@@ -306,26 +309,26 @@ public class RoomSidebar extends Panel {
 		upload.open(handler);
 	}
 
-	public void toggleActivity(Client c, Activity a, Pod _pod) {
+	public void toggleActivity(Client c, Client.Activity a, Pod _pod) {
 		if (c == null) {
 			return;
 		}
 		if (!activityAllowed(c, a, room.getRoom()) && room.getClient().hasRight(Right.moderator)) {
-			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
+			if (a == Client.Activity.broadcastA || a == Client.Activity.broadcastAV) {
 				c.allow(Room.Right.audio);
 			}
-			if (!room.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
+			if (!room.getRoom().isAudioOnly() && (a == Client.Activity.broadcastV || a == Client.Activity.broadcastAV)) {
 				c.allow(Room.Right.video);
 			}
 		}
 		if (activityAllowed(c, a, room.getRoom())) {
-			if (a == Activity.broadcastA && !c.isMicEnabled()) {
+			if (a == Client.Activity.broadcastA && !c.isMicEnabled()) {
 				return;
 			}
-			if (a == Activity.broadcastV && !c.isCamEnabled()) {
+			if (a == Client.Activity.broadcastV && !c.isCamEnabled()) {
 				return;
 			}
-			if (a == Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
+			if (a == Client.Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
 				return;
 			}
 			Pod pod = c.getPod();
@@ -340,7 +343,7 @@ public class RoomSidebar extends Panel {
 		}
 	}
 
-	public static boolean activityAllowed(Client c, Activity a, Room room) {
+	public static boolean activityAllowed(Client c, Client.Activity a, Room room) {
 		boolean r = false;
 		switch (a) {
 			case broadcastA:
@@ -360,5 +363,13 @@ public class RoomSidebar extends Panel {
 
 	public void setFilesActive(IPartialPageRequestHandler handler) {
 		handler.appendJavaScript("$('#room-sidebar-tabs').tabs('option', 'active', 1);");
+	}
+
+	public void addActivity(Activity a, IPartialPageRequestHandler handler) {
+		activities.add(a, handler);
+	}
+
+	public void removeActivity(String uid, IPartialPageRequestHandler handler) {
+		activities.remove(uid, handler);
 	}
 }
