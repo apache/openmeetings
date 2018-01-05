@@ -30,15 +30,22 @@
 </wicket:head>
 <wicket:panel>
 	<script type="text/javascript">
-		$(function() {
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_FAILURE, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE, showBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_SUCCESS, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() {
-				Wicket.WebSocket.send("socketConnected");
-			});
-		});
+		(function () {
+			const f = function() {
+				Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_FAILURE, hideBusyIndicator);
+				Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE, showBusyIndicator);
+				Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_SUCCESS, hideBusyIndicator);
+				Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, hideBusyIndicator);
+				Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() {
+					Wicket.WebSocket.send("socketConnected");
+				});
+			};
+			if ('complete' === document.readyState) {
+				f();
+			} else {
+				window.addEventListener('load', f);
+			}
+		})();
 	</script>
 	<div wicket:id="topControls">
 		<div wicket:id="topLinks"><span

@@ -31,9 +31,16 @@
 	</wicket:head>
 	<wicket:extend>
 		<script type="text/javascript">
-			$(function(){
-				$('#area').val(location.hash);
-			});
+			(function () {
+				const f = function() {
+					$('#area').val(location.hash);
+				};
+				if ('complete' === document.readyState) {
+					f();
+				} else {
+					window.addEventListener('load', f);
+				}
+			})();
 		</script>
 		<div wicket:id="signin"></div>
 		<div wicket:id="register"></div>
