@@ -230,13 +230,13 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 	private static Integer[] getValues(RoomPoll p) {
 		Integer[] values = initValues(p != null && RoomPoll.Type.numeric == p.getType() ? 10 : 2);
-		if (p != null && RoomPoll.Type.numeric == p.getType()) {
+		if (p != null) {
 			for (RoomPollAnswer a : p.getAnswers()) {
-				values[a.getPointList() - 1] ++;
-			}
-		} else if (p != null) {
-			for (RoomPollAnswer a : p.getAnswers()) {
-				values[a.getAnswer() ? 0 : 1] ++;
+				if (RoomPoll.Type.numeric == p.getType()) {
+					values[a.getPointList() - 1] ++;
+				} else {
+					values[Boolean.FALSE.equals(a.getAnswer()) ? 0 : 1] ++;
+				}
 			}
 		}
 		return values;

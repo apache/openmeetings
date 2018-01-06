@@ -997,4 +997,5 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="lbl.update"><![CDATA[Update]]></entry>
 	<entry key="send.on.enter"><![CDATA[Send on Enter]]></entry>
 	<entry key="send.on.ctrl.enter"><![CDATA[Send on Ctrl+Enter]]></entry>
+	<entry key="menu.polls"><![CDATA[Polls]]></entry>
 </properties>
