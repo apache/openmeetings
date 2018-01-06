@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Activities = function() {
-	const closedHeight = 20, closedHeightPx = closedHeight + 'px', timeout = 10000;
+	const closedHeight = 20, timeout = 10000;
 	let activities, aclean, area, openedHeight = 345, openedHeightPx = openedHeight + 'px', inited = false;
 
 	function _load() {
