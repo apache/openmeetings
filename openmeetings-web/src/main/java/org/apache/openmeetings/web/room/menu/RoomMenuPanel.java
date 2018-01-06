@@ -101,6 +101,7 @@ public class RoomMenuPanel extends Panel {
 	private RoomMenuItem exitMenuItem;
 	private RoomMenuItem filesMenu;
 	private RoomMenuItem actionsMenu;
+	private RoomMenuItem pollsMenu;
 	private RoomMenuItem inviteMenuItem;
 	private RoomMenuItem shareMenuItem;
 	private RoomMenuItem applyModerMenuItem;
@@ -161,6 +162,8 @@ public class RoomMenuPanel extends Panel {
 		};
 		filesMenu = new RoomMenuItem(getString("245"), null, false);
 		actionsMenu = new RoomMenuItem(getString("635"), null, false);
+		pollsMenu = new RoomMenuItem(getString("menu.polls"), null, false);
+
 		inviteMenuItem = new RoomMenuItem(getString("213"), getString("1489"), false) {
 			private static final long serialVersionUID = 1L;
 
@@ -309,14 +312,17 @@ public class RoomMenuPanel extends Panel {
 		actionsMenu.getItems().add(applyModerMenuItem);
 		actionsMenu.getItems().add(applyWbMenuItem);
 		actionsMenu.getItems().add(applyAvMenuItem);
-		actionsMenu.getItems().add(pollCreateMenuItem);
-		actionsMenu.getItems().add(pollResultMenuItem);
-		actionsMenu.getItems().add(pollVoteMenuItem);
 		actionsMenu.getItems().add(sipDialerMenuItem);
 		actionsMenu.getItems().add(downloadPngMenuItem);
 		actionsMenu.getItems().add(downloadJpgMenuItem);
 		actionsMenu.getItems().add(downloadPdfMenuItem);
 		menu.add(actionsMenu);
+
+		pollsMenu.setTop(true);
+		pollsMenu.getItems().add(pollCreateMenuItem);
+		pollsMenu.getItems().add(pollResultMenuItem);
+		pollsMenu.getItems().add(pollVoteMenuItem);
+		menu.add(pollsMenu);
 		return menu;
 	}
 
@@ -337,6 +343,7 @@ public class RoomMenuPanel extends Panel {
 		filesMenu.setEnabled(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
 		actionsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
+		pollsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
