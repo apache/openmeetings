@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
@@ -45,6 +47,7 @@ import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.common.ComunityUserForm;
@@ -92,6 +95,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private final PasswordTextField password = new PasswordTextField("password", new Model<String>());
 	private final MessageDialog warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
+	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
 
 	public UserForm(String id, WebMarkupContainer listContainer, final User user, MessageDialog warning) {
 		super(id, new CompoundPropertyModel<>(user));
@@ -165,6 +169,7 @@ public class UserForm extends AdminBaseForm<User> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+		add(adminPass);
 	}
 
 	@Override
@@ -177,25 +182,44 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
+		if (isAdminPassRequired()) {
+			adminPass.open(target);
+		} else {
+			saveUser(target);
+		}
+	}
+
+	private static boolean checkLevel(Set<User.Right> rights) {
+		return hasAdminLevel(rights) || AuthLevelUtil.hasWebServiceLevel(rights);
+	}
+
+	boolean isAdminPassRequired() {
 		User u = getModelObject();
+		UserDao dao = getBean(UserDao.class);
+		User ou = dao.get(u.getId());
+		return checkLevel(u.getRights()) || (ou != null && checkLevel(ou.getRights()));
+	}
+
+	void saveUser(AjaxRequestTarget target) {
+		User u = getModelObject();
+		final UserDao dao = getBean(UserDao.class);
+		final boolean isNew = u.getId() == null;
+		boolean sendEmailAtRegister = getBean(ConfigurationDao.class).getBool(CONFIG_EMAIL_AT_REGISTER, false);
+		if (isNew && sendEmailAtRegister) {
+			u.setActivatehash(UUID.randomUUID().toString());
+		}
 		try {
-			boolean isNew = u.getId() == null;
-			boolean sendEmailAtRegister = getBean(ConfigurationDao.class).getBool(CONFIG_EMAIL_AT_REGISTER, false);
-			if (isNew && sendEmailAtRegister) {
-				u.setActivatehash(UUID.randomUUID().toString());
-			}
-			u = getBean(UserDao.class).update(u, password.getConvertedInput(), getUserId());
-			if (isNew && sendEmailAtRegister) {
-				String email = u.getAddress().getEmail();
-				getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
-			}
+			u = dao.update(u, password.getConvertedInput(), getUserId());
 		} catch (Exception e) {
 			log.error("[onSaveSubmit]: ", e);
 		}
-		setModelObject(getBean(UserDao.class).get(u.getId()));
+		if (isNew && sendEmailAtRegister) {
+			String email = u.getAddress().getEmail();
+			getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
+		}
+		setModelObject(dao.get(u.getId()));
 		hideNewRecord();
-		target.add(this);
-		target.add(listContainer);
+		target.add(this, listContainer);
 		reinitJs(target);
 		if (u.getGroupUsers().isEmpty()) {
 			warning.open(target);
