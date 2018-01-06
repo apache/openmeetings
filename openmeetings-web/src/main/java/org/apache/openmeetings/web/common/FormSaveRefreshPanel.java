@@ -28,13 +28,17 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public abstract class FormSaveRefreshPanel<T> extends Panel {
 	private static final long serialVersionUID = 1L;
-	protected final KendoFeedbackPanel feedback;
+	private final Form<T> form;
+	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	public FormSaveRefreshPanel(String id, Form<T> form) {
 		super(id);
+		this.form = form;
 		setOutputMarkupId(true);
+	}
 
-		feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	@Override
+	protected void onInitialize() {
 		add(feedback.setOutputMarkupId(true));
 
 		// add a save button that can be used to submit the form via ajax
@@ -76,8 +80,9 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 				onRefreshError(target, form);
 			}
 		});
-
+		super.onInitialize();
 	}
+
 	/**
 	 * Hide the new record text
 	 */

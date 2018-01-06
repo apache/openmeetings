@@ -211,7 +211,6 @@ var Chat = function() {
 		if ($('#chat').length > 0 && m && m.type === "chat") {
 			if (isClosed()) {
 				ctrl.addClass('ui-state-highlight');
-				const s = _load();
 				if (p.is(':visible') && !muted) {
 					const playPromise = audio.play();
 
