@@ -71,6 +71,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
+import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.select2.Response;
@@ -183,6 +184,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
+			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> saveUser(t));
 			adminPass.open(target);
 		} else {
 			saveUser(target);
@@ -245,12 +247,21 @@ public class UserForm extends AdminBaseForm<User> {
 		update(target);
 	}
 
-	@Override
-	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+	private void deleteUser(AjaxRequestTarget target) {
 		UserDao userDao = getBean(UserDao.class);
 		userDao.delete(getModelObject(), getUserId());
 		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
 		update(target);
+	}
+
+	@Override
+	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
+		if (isAdminPassRequired()) {
+			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> deleteUser(t));
+			adminPass.open(target);
+		} else {
+			deleteUser(target);
+		}
 	}
 
 	public void updateDomain(AjaxRequestTarget target) {

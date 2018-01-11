@@ -26,9 +26,11 @@ import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
+import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -42,6 +44,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final Form<String> form = new Form<>("form");
 	private final PasswordTextField pass = new PasswordTextField("password");
+	private SerializableConsumer<AjaxRequestTarget> action = null;
 
 	public PasswordDialog(String id) {
 		super(id, "");
@@ -56,7 +59,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 		setTitle(Model.of(getString("537")));
 		ok = new DialogButton("ok", getString("54"));
 		cancel = new DialogButton("cancel", getString("lbl.cancel"));
-		add(form.add(feedback, pass.setRequired(false).setLabel(Model.of(getString("110")))));
+		add(form.add(feedback, pass.setRequired(false).setLabel(Model.of(getString("110"))).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true)));
 		super.onInitialize();
 	}
 
@@ -81,10 +84,20 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
+	protected void onOpen(IPartialPageRequestHandler handler) {
+		handler.add(pass.setModelObject(""));
+		super.onOpen(handler);
+	}
+
+	@Override
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
 		if (!form.hasError() || !button.equals(ok)) {
 			super.onClick(target, button);
 		}
+	}
+
+	public void setAction(SerializableConsumer<AjaxRequestTarget> action) {
+		this.action = action;
 	}
 
 	@Override
@@ -93,7 +106,9 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 		if (uf.isAdminPassRequired()) {
 			final UserDao dao = getBean(UserDao.class);
 			if (dao.verifyPassword(getUserId(), pass.getConvertedInput())) {
-				uf.saveUser(target);
+				if (action != null) {
+					action.accept(target);
+				}
 			} else {
 				form.error(getString("error.bad.password"));
 				target.add(feedback);
