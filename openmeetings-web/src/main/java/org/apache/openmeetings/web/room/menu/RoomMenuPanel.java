@@ -107,6 +107,7 @@ public class RoomMenuPanel extends Panel {
 	private RoomMenuItem applyModerMenuItem;
 	private RoomMenuItem applyWbMenuItem;
 	private RoomMenuItem applyAvMenuItem;
+	private RoomMenuItem pollQuickMenuItem;
 	private RoomMenuItem pollCreateMenuItem;
 	private RoomMenuItem pollVoteMenuItem;
 	private RoomMenuItem pollResultMenuItem;
@@ -203,6 +204,15 @@ public class RoomMenuPanel extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				room.requestRight(Room.Right.video, target);
+			}
+		};
+		pollQuickMenuItem = new RoomMenuItem(getString("menu.polls.quick.title"), getString("menu.polls.quick.descr"), false) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				//createPoll.updateModel(target);
+				//createPoll.open(target);
 			}
 		};
 		pollCreateMenuItem = new RoomMenuItem(getString("24"), getString("1483"), false) {
@@ -319,6 +329,7 @@ public class RoomMenuPanel extends Panel {
 		menu.add(actionsMenu);
 
 		pollsMenu.setTop(true);
+		pollsMenu.getItems().add(pollQuickMenuItem);
 		pollsMenu.getItems().add(pollCreateMenuItem);
 		pollsMenu.getItems().add(pollResultMenuItem);
 		pollsMenu.getItems().add(pollVoteMenuItem);
@@ -350,6 +361,7 @@ public class RoomMenuPanel extends Panel {
 		applyModerMenuItem.setEnabled(!moder);
 		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
+		pollQuickMenuItem.setEnabled(moder);
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
