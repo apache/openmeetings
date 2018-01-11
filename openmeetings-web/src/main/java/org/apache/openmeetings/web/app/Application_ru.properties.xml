@@ -1007,4 +1007,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="send.on.enter"><![CDATA[Отправить по Enter]]></entry>
 	<entry key="send.on.ctrl.enter"><![CDATA[Отправить по Ctrl+Enter]]></entry>
 	<entry key="menu.polls"><![CDATA[Голосования]]></entry>
+	<entry key="menu.polls.quick.title"><![CDATA[Создать быстрый опрос]]></entry>
+	<entry key="menu.polls.quick.descr"><![CDATA[Собрать отзывы без создания голосования]]></entry>
 </properties>
