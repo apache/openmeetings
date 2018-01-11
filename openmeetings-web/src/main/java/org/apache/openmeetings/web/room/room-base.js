@@ -633,10 +633,12 @@ var Room = (function() {
 		return sb === undefined ? 0 : sb.width() + parseInt(sb.css(sbSide));
 	}
 	function _setSize() {
-		const sbW = _sbWidth()
-			, w = $(window).width() - sbW - 8
+		const tw = window.innerWidth
+			, th = window.innerHeight
+			, sbW = _sbWidth()
+			, w = tw - sbW - 8
 			, ah = !!activities && activities.is(':visible') ? activities.height() : 0
-			, h = $(window).height() - menuHeight - 3
+			, h = th - menuHeight - 3
 			, hh = h - 5
 			, p = sb.find('.tabs')
 			, ulh = $("ul", p).height()
