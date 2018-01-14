@@ -429,6 +429,7 @@ public class BackupImport {
 				}
 				if (BaseFileItem.Type.Presentation == bfi.getType()) {
 					convertOldPresentation((FileItem)bfi);
+					fileItemDao._update(bfi);
 				}
 				if (BaseFileItem.Type.WmlFile == bfi.getType()) {
 					try {
