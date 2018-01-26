@@ -3,7 +3,7 @@
  * @author Sebastien Briquet
  */
 function getCalendarHeight() {
-	return $(window).height() - $('#${markupId}').position().top - 20;
+	return window.innerHeight - $('#${markupId}').position().top - 20;
 }
 function setCalendarHeight() {
 	const cal = $('#${markupId}');

@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
@@ -99,7 +100,7 @@ public class WbConverter {
 		if (props.size() < 12) {
 			return;
 		}
-		String color = getColor((Integer)props.get(2));
+		String color = getColor(getInt(props, 2));
 		String style = (String)props.get(4);
 		JSONObject o = setColor(init(wb, props), color, color)
 				.put(ATTR_TYPE, "i-text")
@@ -118,7 +119,7 @@ public class WbConverter {
 		if (props.size() < 13) {
 			return;
 		}
-		String color = getColor((Integer)props.get(4));
+		String color = getColor(getInt(props, 4));
 		JSONObject o = setColor(init(wb, props), color, null)
 				.put(ATTR_TYPE, "path")
 				.put(ATTR_STROKE, props.get(3));
@@ -127,13 +128,13 @@ public class WbConverter {
 		JSONArray path = new JSONArray();
 		for (List<?> point : points) {
 			if (path.length() == 0) {
-				path.put(new JSONArray(Arrays.asList("M", (Integer)point.get(1), (Integer)point.get(2))));
+				path.put(new JSONArray(Arrays.asList("M", getInt(point, 1), getInt(point, 2))));
 			} else if (path.length() == points.size() - 1) {
-				path.put(new JSONArray(Arrays.asList("L", (Integer)point.get(3), (Integer)point.get(4))));
+				path.put(new JSONArray(Arrays.asList("L", getInt(point, 3), getInt(point, 4))));
 			} else {
 				path.put(new JSONArray(Arrays.asList("Q"
-						, (Integer)point.get(1), (Integer)point.get(2)
-						, (Integer)point.get(3), (Integer)point.get(4))));
+						, getInt(point, 1), getInt(point, 2)
+						, getInt(point, 3), getInt(point, 4))));
 			}
 		}
 		add(wb, o.put("path", path).put(ATTR_OPACITY, props.get(5)));
@@ -143,7 +144,7 @@ public class WbConverter {
 		if (props.size() < 16) {
 			return;
 		}
-		String color = getColor((Integer)props.get(1));
+		String color = getColor(getInt(props, 1));
 		add(wb, setColor(init(wb, props), color, color)
 				.put(ATTR_TYPE, "line")
 				.put(ATTR_STROKE, props.get(2))
@@ -154,13 +155,23 @@ public class WbConverter {
 				.put("y2", props.get(7)));
 	}
 
+	private static int getInt(List<?> props, int idx) {
+		Object o = props.get(idx);
+		if (o instanceof Number) {
+			return ((Number) o).intValue();
+		} else if (o instanceof String) {
+			return NumberUtils.toInt((String)o);
+		}
+		return 0;
+	}
+
 	private static JSONObject processRect(Whiteboard wb, List<?> props) {
 		if (props.size() < 15) {
 			return null;
 		}
 		return setColor(init(wb, props)
-					, 1 == (Integer)props.get(4) ? getColor((Integer)props.get(1)) : null
-					, 1 == (Integer)props.get(5) ? getColor((Integer)props.get(3)) : null)
+					, 1 == getInt(props, 4) ? getColor(getInt(props, 1)) : null
+					, 1 == getInt(props, 5) ? getColor(getInt(props, 3)) : null)
 				.put(ATTR_TYPE, "rect")
 				.put(ATTR_STROKE, props.get(2))
 				.put(ATTR_OPACITY, props.get(6));

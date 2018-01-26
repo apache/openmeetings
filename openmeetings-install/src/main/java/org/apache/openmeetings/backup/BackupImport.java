@@ -424,8 +424,12 @@ public class BackupImport {
 
 		if (ver.compareTo(BackupVersion.get("4.0.0")) < 0) {
 			for (BaseFileItem bfi : files) {
+				if (bfi.isDeleted()) {
+					continue;
+				}
 				if (BaseFileItem.Type.Presentation == bfi.getType()) {
 					convertOldPresentation((FileItem)bfi);
+					fileItemDao._update(bfi);
 				}
 				if (BaseFileItem.Type.WmlFile == bfi.getType()) {
 					try {
@@ -487,7 +491,7 @@ public class BackupImport {
 			if (CONFIG_CRYPT.equals(c.getKey())) {
 				try {
 					Class<?> clazz = Class.forName(c.getValue());
-					clazz.newInstance();
+					clazz.getDeclaredConstructor().newInstance();
 				} catch (Exception e) {
 					log.warn("Not existing Crypt class found {}, replacing with SCryptImplementation", c.getValue());
 					c.setValue(SCryptImplementation.class.getCanonicalName());
