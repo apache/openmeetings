@@ -113,6 +113,8 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.core.request.handler.BookmarkableListenerRequestHandler;
 import org.apache.wicket.core.request.handler.ListenerRequestHandler;
 import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.markup.head.ResourceAggregator;
+import org.apache.wicket.markup.head.filter.JavaScriptDeferHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.pageStore.IDataStore;
 import org.apache.wicket.protocol.ws.WebSocketAwareCsrfPreventionRequestCycleListener;
@@ -260,6 +262,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		});
 
 		super.init();
+		setHeaderResponseDecorator(response -> new ResourceAggregator(new JavaScriptDeferHeaderResponse(response)));
 
 		// register some widgets
 		dashboardContext = new DashboardContext();
