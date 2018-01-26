@@ -154,6 +154,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String WBS_KEY = "WBS_KEY";
+	private static final String QUICKPOLL_KEY = "QUICKPOLL_KEY";
 	private static final String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
 	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
@@ -362,6 +363,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public IMap<Long, Whiteboards> getWhiteboards() {
 		return hazelcast.getMap(WBS_KEY);
+	}
+
+	public IMap<Long, Map<Long, Boolean>> getQuickPolls() {
+		return hazelcast.getMap(QUICKPOLL_KEY);
 	}
 
 	@Override

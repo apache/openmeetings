@@ -361,7 +361,7 @@ public class RoomMenuPanel extends Panel {
 		applyModerMenuItem.setEnabled(!moder);
 		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
-		pollQuickMenuItem.setEnabled(moder);
+		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter)); // not started
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
