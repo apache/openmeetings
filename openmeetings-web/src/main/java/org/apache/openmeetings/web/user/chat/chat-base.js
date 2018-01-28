@@ -379,7 +379,14 @@ var Chat = function() {
 		if ('' === text) {
 			return;
 		}
-		const a = $('<div>').append($('<a></a>').attr('target', '_blank').attr('href', text).text(text)).html();
+		let url = text.trim();
+		if ('' === url) {
+			return;
+		}
+		if (!/^(https?:)?\/\//i.test(url)) {
+			url = 'http://' + url;
+		}
+		const a = $('<div>').append($('<a></a>').attr('target', '_blank').attr('href', url).text(url)).html();
 		if (window.getSelection) {
 			const sel = window.getSelection();
 			if (sel.rangeCount) {
