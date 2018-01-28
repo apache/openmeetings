@@ -31,7 +31,7 @@ public class CallbackFunctionHelper {
 
 	private static StringBuilder getNamedFunctionStr(String name, AbstractDefaultAjaxBehavior b, CallbackParameter... extraParameters) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("function ").append(name).append("(");
+		sb.append("window.").append(name).append(" = function(");
 		boolean first = true;
 		for (CallbackParameter curExtraParameter : extraParameters) {
 			if (curExtraParameter.getFunctionParameterName() != null) {
