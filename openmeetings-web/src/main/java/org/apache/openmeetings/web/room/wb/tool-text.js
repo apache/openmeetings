@@ -3,7 +3,7 @@ var Text = function(wb, s) {
 	const text = ShapeBase();
 	text.obj = null;
 	text.fill.color = '#000000';
-	text.stroke.width = 12; //fontSize
+	text.stroke.width = 50; //fontSize
 	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
 
