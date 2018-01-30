@@ -22,6 +22,7 @@ var Text = function(wb, s) {
 				, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
 				//, strokeWidth: text.stroke.width
 				, fontSize: text.stroke.width
+				, fontFamily: text.fontFamily
 				, opacity: text.opacity
 			});
 			if (text.style.bold) {
@@ -44,6 +45,7 @@ var Text = function(wb, s) {
 				}
 			});
 		});
+		text.fontFamily = $('#wb-text-style-block').css('font-family');
 		ToolUtil.enableAllProps(s, text);
 		const b = s.find('.wb-prop-b').button("enable");
 		if (text.style.bold) {
