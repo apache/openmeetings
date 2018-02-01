@@ -28,8 +28,8 @@
 			<ul>
 				<li>please open following file in the Git:<br/>
 					<a
-						href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css;hb=HEAD"
-						target="_blank" rel="nofollow">https://git-wip-us.apache.org/repos/asf/openmeetings.git/?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css;hb=HEAD
+						href="https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css"
+						target="_blank" rel="nofollow">https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/css/theme_om/jquery-ui.css
 					</a><br/>
 					Or if you already installed OpenMeetings on your machine at:<br />
 					<tt>/webapps/openmeetings/css/theme_om/jquery-ui.css</tt>

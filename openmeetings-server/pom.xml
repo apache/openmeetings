@@ -43,9 +43,9 @@
 	</properties>
 	<url>http://openmeetings.apache.org</url>
 	<scm>
-		<connection>scm:git:http://git-wip-us.apache.org/repos/asf/openmeetings.git</connection>
-		<developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/openmeetings.git</developerConnection>
-		<url>https://git-wip-us.apache.org/repos/asf?p=openmeetings.git</url>
+		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
+		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
+		<url>https://github.com/apache/openmeetings.git</url>
 		<tag>HEAD</tag>
 	</scm>
 	<profiles>
