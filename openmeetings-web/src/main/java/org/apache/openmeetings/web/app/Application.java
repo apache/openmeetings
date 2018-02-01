@@ -177,6 +177,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	protected void init() {
 		setWicketApplicationName(super.getName());
+		setHeaderResponseDecorator(response -> new ResourceAggregator(new JavaScriptDeferHeaderResponse(response)));
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
@@ -262,7 +263,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		});
 
 		super.init();
-		setHeaderResponseDecorator(response -> new ResourceAggregator(new JavaScriptDeferHeaderResponse(response)));
 
 		// register some widgets
 		dashboardContext = new DashboardContext();
