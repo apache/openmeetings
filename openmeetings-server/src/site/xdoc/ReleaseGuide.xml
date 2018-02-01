@@ -74,7 +74,7 @@
 								<li>
 									If that is "success" then add your key to:
 									<br />
-									<a href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=KEYS;hb=HEAD">https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=KEYS;hb=HEAD</a>
+									<a href="https://github.com/apache/openmeetings/blob/master/KEYS">https://github.com/apache/openmeetings/blob/master/KEYS</a>
 									<br />
 									<br />
 									and follow the instructions in the file.
@@ -118,7 +118,7 @@
 					<li>Update final SCM URL located at <tt>pom.xml</tt> and <tt>openmeetings-server/pom.xml</tt>
 						<source><![CDATA[
 <scm>
-    <url>https://git-wip-us.apache.org/repos/asf?p=openmeetings.git</url>
+    <url>https://github.com/apache/openmeetings.git</url>
 
     SET https://github.com/apache/openmeetings/tree/4.0.0RC1
 						]]></source>
@@ -246,8 +246,8 @@ for f in `ls -1 *.tar.gz *.zip`; do sha256sum -c $f.sha256; done
 						</source>
 						<p>
 							Create signatures with the your KEY for every file, the KEY must be available at:<br />
-							<a href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=KEYS;hb=HEAD">
-								https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=KEYS;hb=HEAD
+							<a href="https://github.com/apache/openmeetings/blob/master/KEYS">
+								https://github.com/apache/openmeetings/blob/master/KEYS
 							</a>
 						</p>
 						<source>
@@ -290,7 +290,7 @@ for f in `ls -1 *.tar.gz *.zip`; do gpg --verify $f.asc; done
 						[ANNOUNCE] Apache OpenMeetings x.xx released
 					</li>
 					<li>
-						Update release section of DOAP file <tt>openmeetings-site/doap.rdf (https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git;a=blob;f=doap.rdf;hb=HEAD)</tt>
+						Update release section of DOAP file <tt>openmeetings-site/doap.rdf (https://github.com/apache/openmeetings-site/blob/asf-site/doap.rdf)</tt>
 					</li>
 					<li>
 						Add a section to <a href="downloads.html">downloads</a> website.<br />
