@@ -138,19 +138,13 @@ var Chat = function() {
 		});
 		if (roomMode) {
 			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
-			p.addClass('room').hover(function() {
-				clearTimeout($(this).data('timeout'));
-				_open();
-			}, function() {
-				var t = setTimeout(_close, 2000);
-				$(this).data('timeout', t);
-			});
+			p.addClass('room');
 			pp.width(closedSize);
 			_removeResize();
 		} else {
 			ctrl.attr('title', '');
 			icon.addClass(isClosed() ? iconOpen : iconClose);
-			ctrl.height(closedSize).width(globalWidth).off('click').click(Chat.toggle);
+			ctrl.height(closedSize).width(globalWidth);
 			pp.width(globalWidth).height(closedSize);
 			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
@@ -169,6 +163,7 @@ var Chat = function() {
 					}
 				});
 		}
+		ctrl.off('click').click(Chat.toggle);
 		$('#chatMessage').off().on('input propertychange paste', function () {
 			const room = $('.room.box');
 			if (room.length) {
@@ -266,18 +261,17 @@ var Chat = function() {
 		}
 	}
 	function _setOpened() {
-		p.addClass('opened').off('mouseenter mouseleave');
 		editor.width(p.width() - 30);
 		p.resizable({
 			handles: (Settings.isRtl ? 'e' : 'w')
 			, alsoResize: '#chatPopup, #chatMessage .wysiwyg-editor'
+			, minWidth: 120
 			, stop: function(event, ui) {
 				p.css({'left': ''});
 				editor.width(p.width() - 30);
 				openedWidth = ui.size.width + 'px';
 			}
 		});
-		Room.setSize();
 	}
 	function _removeResize() {
 		if (p.resizable('instance') !== undefined) {
@@ -304,18 +298,10 @@ var Chat = function() {
 					handler();
 				}
 				editor.width(p.width() - 30);
+				ctrl.attr('title', ctrl.data('ttl-undock'));
 				if (roomMode) {
-					ctrl.off('click').click(function() {
-						if (p.hasClass('opened')) {
-							ctrl.attr('title', ctrl.data('ttl-dock'));
-							_close(Room.setSize);
-							p.removeClass('opened').hover(_open, _close);
-							_removeResize();
-						} else {
-							ctrl.attr('title', ctrl.data('ttl-undock'));
-							_setOpened();
-						}
-					}).attr('title', ctrl.data('ttl-dock'));
+					_setOpened();
+					Room.setSize();
 				}
 			});
 		}
@@ -326,7 +312,6 @@ var Chat = function() {
 			let opts;
 			if (roomMode) {
 				opts = {width: closedSizePx};
-				ctrl.off('click');
 			} else {
 				opts = {height: closedSizePx};
 				p.resizable("option", "disabled", true);
@@ -335,9 +320,14 @@ var Chat = function() {
 				p.addClass('closed');
 				if (roomMode) {
 					ctrl.height(p.height());
+					_removeResize();
 				}
 				if (typeof(handler) === 'function') {
 					handler();
+				}
+				ctrl.attr('title', ctrl.data('ttl-dock'));
+				if (roomMode) {
+					Room.setSize();
 				}
 			});
 		}
