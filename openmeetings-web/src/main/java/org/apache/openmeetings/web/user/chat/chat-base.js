@@ -70,7 +70,7 @@ var Chat = function() {
 		let row = $('<tr></tr>');
 		for (let i = 0; i < emots.length; ++i) {
 			row.append($('<td>').append(
-					$('<div>').addClass('emt').html(emoticon.emoticonize(emots[i], {animate: false}))
+					$('<div>').addClass('emt').html(emoticon.emoticonize(emots[i]))
 						.data('emt', emots[i]).click(function() {Chat.emtClick($(this).data('emt'));})
 				));
 			if (i !== 0 && i % rowSize === 0) {
@@ -104,6 +104,7 @@ var Chat = function() {
 		$('#chat #hyperlink').parent().find('button').off().click(function() {
 			_insertLink();
 		});
+		emoticon.animate();
 	}
 	function isClosed() {
 		return p.hasClass('closed');
@@ -260,6 +261,7 @@ var Chat = function() {
 					_scrollDown(area);
 				}
 			}
+			emoticon.animate();
 		}
 	}
 	function _setOpened() {
