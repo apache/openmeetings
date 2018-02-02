@@ -71,7 +71,6 @@ var CSSEmoticon = function() {
 
 	this.defaults = {animate: true, delay: 500, exclude: 'pre,code,.no-emoticons'}
 };
-
 CSSEmoticon.prototype.emoticonize = function(str, options) {
 	const opts = $.extend({}, this.defaults, options);
 
@@ -94,13 +93,14 @@ CSSEmoticon.prototype.emoticonize = function(str, options) {
 		const regexp = this.twoCharacterEmoticons[key];
 		str = str.replace(regexp, "$1<span class='" + cssClass + " spaced-emoticon'>$2</span>");
 	}
-
+	return str;
+};
+CSSEmoticon.prototype.animate = function(options) {
+	const opts = $.extend({}, this.defaults, options);
 	// animate emoticons
 	if (opts.animate) {
 		setTimeout(function () {
 			$('.un-transformed-emoticon').removeClass('un-transformed-emoticon');
 		}, opts.delay);
 	}
-
-	return str;
 };
