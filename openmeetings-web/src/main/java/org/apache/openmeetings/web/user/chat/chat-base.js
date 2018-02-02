@@ -61,9 +61,6 @@ var Chat = function() {
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
 	function initToolbar() {
-		const emtBtn = $('#emoticons');
-		emtBtn.html('');
-		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
 		const emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
 		for (let ei in emoticon.specialEmoticons) {
 			emots.push(ei);
@@ -72,13 +69,18 @@ var Chat = function() {
 		emotMenuList.html('');
 		let row = $('<tr></tr>');
 		for (let i = 0; i < emots.length; ++i) {
-			row.append('<td><div class="emt" onclick="Chat.emtClick(\'' + emots[i] + '\');">'
-				+ emoticon.emoticonize(emots[i]) + '</div></td>');
+			row.append($('<td>').append(
+					$('<div>').addClass('emt').html(emoticon.emoticonize(emots[i], {animate: false}))
+						.data('emt', emots[i]).click(function() {Chat.emtClick($(this).data('emt'));})
+				));
 			if (i !== 0 && i % rowSize === 0) {
 				emotMenuList.append(row);
 				row = $('<tr></tr>');
 			}
 		}
+		const emtBtn = $('#emoticons');
+		emtBtn.html('');
+		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
 		const a = $('#chat .audio');
 		const sbtn = $('#chat .send-btn');
 		{ //scope
@@ -228,7 +230,6 @@ var Chat = function() {
 				msg = OmUtil.tmpl('#chat-msg-template', msgIdPrefix + cm.id)
 				msg.find('.user-row').css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')');
 				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
-				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				msg.find('.time').addClass(alignIco).html(cm.time).attr('title', cm.sent);
 				const icons = msg.find('.icons').addClass(align)
 					.append(OmUtil.tmpl('#chat-info-template').addClass(alignIco).data('user-id', cm.from.id));
@@ -254,6 +255,7 @@ var Chat = function() {
 					area.data('lastDate', cm.date);
 				}
 				area.append(msg);
+				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				if (btm) {
 					_scrollDown(area);
 				}
