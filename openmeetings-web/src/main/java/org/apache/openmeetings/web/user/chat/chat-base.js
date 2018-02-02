@@ -127,7 +127,9 @@ var Chat = function() {
 		initToolbar();
 		tabs = $("#chatTabs").tabs({
 			activate: function(event, ui) {
-				$('#activeChatTab').val(ui.newPanel[0].id).trigger('change');
+				const ct = ui.newPanel[0].id;
+				_scrollDown($('#' + ct));
+				$('#activeChatTab').val(ct).trigger('change');
 			}
 		});
 		// close icon: removing the tab on click
@@ -246,16 +248,14 @@ var Chat = function() {
 				if (m.mode === "accept") {
 					$('#chat-msg-id-' + cm.id).remove();
 				}
-				const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+				const btm = area[0].scrollHeight - (area.scrollTop() + area.innerHeight()) < 3; //approximately equal
 				if (area.data('lastDate') !== cm.date) {
 					area.append(OmUtil.tmpl('#chat-date-template').html(cm.date));
 					area.data('lastDate', cm.date);
 				}
 				area.append(msg);
 				if (btm) {
-					area.animate({
-						scrollTop: area[0].scrollHeight
-					}, 300);
+					_scrollDown(area);
 				}
 			}
 		}
@@ -293,7 +293,6 @@ var Chat = function() {
 			p.removeClass('closed');
 			pp.animate(opts, 1000, function() {
 				p.removeClass('closed');
-				_setAreaHeight();
 				if (typeof(handler) === 'function') {
 					handler();
 				}
@@ -303,6 +302,7 @@ var Chat = function() {
 					_setOpened();
 					Room.setSize();
 				}
+				_setAreaHeight();
 			});
 		}
 	}
@@ -349,10 +349,15 @@ var Chat = function() {
 		roomMode = _mode;
 		_reinit(allPrefix, roomPrefix);
 	}
+	function _scrollDown(area) {
+		area.animate({
+			scrollTop: area[0].scrollHeight
+		}, 300);
+	}
 	function _setAreaHeight() {
 		$('#chat .ui-tabs .ui-tabs-panel.messageArea').height(p.height() - closedSize - $('#chat .ui-tabs-nav').height() - $('#chat form').height() - 5);
 		$('#chat .messageArea').each(function() {
-			$(this).scrollTop($(this)[0].scrollHeight);
+			_scrollDown($(this));
 		});
 	}
 	function _setHeight(h) {
