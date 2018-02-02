@@ -28,11 +28,13 @@
 			<p>$RED5_HOME/webapps/openmeetings/WEB-INF/red5-web.properties </p>
 			<p>Content: </p>
 			<source>webapp.virtualHosts=*,localhost, 127.0.0.1</source>
-			Sample file:
-			<a
-				href="https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties;hb=HEAD"
-				rel="nofollow">https://git-wip-us.apache.org/repos/asf/openmeetings.git/KEYS?p=openmeetings.git;a=blob;f=openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties;hb=HEAD
-			</a>
+			<p>
+				Sample file:
+				<a
+					href="https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties"
+					rel="nofollow">https://github.com/apache/openmeetings/blob/master/openmeetings-web/src/main/webapp/WEB-INF/red5-web.properties
+				</a>
+			</p>
 		</section>
 		<section name="Client Side">
 			<p>And you can restrict the access also for the client side: Every

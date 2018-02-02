@@ -63,10 +63,10 @@
 				<li><a class="chat-btn chat-tool-icon btn btn-default" id="underline" data-edit="underline" title="Underline (Ctrl/Cmd+U)" style="text-decoration: underline;"> U </a></li>
 			</ul>
 		</div>
-		<div class="btn-group">
+		<div class="btn-group dropup">
 			<a id="hyperlink" class="chat btn chat-tool-icon btn-default dropdown-toggle" data-toggle="dropdown" title="Hyperlink">&nbsp;</a>
-			<div class="dropdown-menu input-append">
-				<input class="span2" placeholder="URL" type="text"/>
+			<div wicket:id="hyperlink" class="dropdown-menu input-append">
+				<input class="span2" placeholder="URL" type="text" onkeypress="if (event.keyCode === 13) {$(this).parent().find('button').trigger('click');}; return event.keyCode !== 13;"/>
 				<button class="btn btn-default" type="button"><wicket:message key="1261"/></button>
 			</div>
 		</div>

@@ -39,7 +39,7 @@
 			</div>
 
 			<p>Get the source: </p>
-			<source><![CDATA[git clone https://git-wip-us.apache.org/repos/asf/openmeetings.git]]></source>
+			<source><![CDATA[git clone https://github.com/apache/openmeetings.git]]></source>
 			<p>Run the command: </p>
 			<source><![CDATA[mvn clean install -P allModules]]></source>
 		</section>

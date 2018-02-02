@@ -47,12 +47,12 @@
 						OpenMeetings website (<a href="http://openmeetings.apache.org/">http://openmeetings.apache.org/</a>) is a copy from the Git repository.<br />
 						The files in the Git to be synced are at:
 						<br />
-						<a href="https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git">https://git-wip-us.apache.org/repos/asf?p=openmeetings-site.git</a><br/>
+						<a href="https://github.com/apache/openmeetings-site.git">https://github.com/apache/openmeetings-site.git</a><br/>
 					</p>
 					<div>
 						To update the website you need to clone asf-site:<br />
 						<source><![CDATA[
-git clone https://git-wip-us.apache.org/repos/asf/openmeetings-site.git site
+git clone https://github.com/apache/openmeetings-site.git site
 git checkout asf-site
 						]]></source>
 						edit the files in the folder <tt>openmeetings-server/src/site</tt><br/>

@@ -61,9 +61,6 @@ var Chat = function() {
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
 	function initToolbar() {
-		const emtBtn = $('#emoticons');
-		emtBtn.html('');
-		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
 		const emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
 		for (let ei in emoticon.specialEmoticons) {
 			emots.push(ei);
@@ -72,13 +69,18 @@ var Chat = function() {
 		emotMenuList.html('');
 		let row = $('<tr></tr>');
 		for (let i = 0; i < emots.length; ++i) {
-			row.append('<td><div class="emt" onclick="Chat.emtClick(\'' + emots[i] + '\');">'
-				+ emoticon.emoticonize(emots[i]) + '</div></td>');
+			row.append($('<td>').append(
+					$('<div>').addClass('emt').html(emoticon.emoticonize(emots[i]))
+						.data('emt', emots[i]).click(function() {Chat.emtClick($(this).data('emt'));})
+				));
 			if (i !== 0 && i % rowSize === 0) {
 				emotMenuList.append(row);
 				row = $('<tr></tr>');
 			}
 		}
+		const emtBtn = $('#emoticons');
+		emtBtn.html('');
+		emtBtn.append(' ' + emoticon.emoticonize(':)') + ' <b class="caret"></b>');
 		const a = $('#chat .audio');
 		const sbtn = $('#chat .send-btn');
 		{ //scope
@@ -102,6 +104,7 @@ var Chat = function() {
 		$('#chat #hyperlink').parent().find('button').off().click(function() {
 			_insertLink();
 		});
+		emoticon.animate();
 	}
 	function isClosed() {
 		return p.hasClass('closed');
@@ -127,7 +130,9 @@ var Chat = function() {
 		initToolbar();
 		tabs = $("#chatTabs").tabs({
 			activate: function(event, ui) {
-				$('#activeChatTab').val(ui.newPanel[0].id).trigger('change');
+				const ct = ui.newPanel[0].id;
+				_scrollDown($('#' + ct));
+				$('#activeChatTab').val(ct).trigger('change');
 			}
 		});
 		// close icon: removing the tab on click
@@ -138,19 +143,13 @@ var Chat = function() {
 		});
 		if (roomMode) {
 			icon.addClass(isClosed() ? iconOpenRoom : iconCloseRoom);
-			p.addClass('room').hover(function() {
-				clearTimeout($(this).data('timeout'));
-				_open();
-			}, function() {
-				var t = setTimeout(_close, 2000);
-				$(this).data('timeout', t);
-			});
+			p.addClass('room');
 			pp.width(closedSize);
 			_removeResize();
 		} else {
 			ctrl.attr('title', '');
 			icon.addClass(isClosed() ? iconOpen : iconClose);
-			ctrl.height(closedSize).width(globalWidth).off('click').click(Chat.toggle);
+			ctrl.height(closedSize).width(globalWidth);
 			pp.width(globalWidth).height(closedSize);
 			p.removeClass('room opened').addClass('closed')
 				.off('mouseenter mouseleave')
@@ -169,6 +168,7 @@ var Chat = function() {
 					}
 				});
 		}
+		ctrl.off('click').click(Chat.toggle);
 		$('#chatMessage').off().on('input propertychange paste', function () {
 			const room = $('.room.box');
 			if (room.length) {
@@ -231,7 +231,6 @@ var Chat = function() {
 				msg = OmUtil.tmpl('#chat-msg-template', msgIdPrefix + cm.id)
 				msg.find('.user-row').css('background-image', 'url(' + (!!cm.from.img ? cm.from.img : './profile/' + cm.from.id + '?anticache=' + Date.now()) + ')');
 				msg.find('.from').addClass(align).data('user-id', cm.from.id).html(cm.from.name || cm.from.displayName);
-				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				msg.find('.time').addClass(alignIco).html(cm.time).attr('title', cm.sent);
 				const icons = msg.find('.icons').addClass(align)
 					.append(OmUtil.tmpl('#chat-info-template').addClass(alignIco).data('user-id', cm.from.id));
@@ -251,33 +250,32 @@ var Chat = function() {
 				if (m.mode === "accept") {
 					$('#chat-msg-id-' + cm.id).remove();
 				}
-				const btm = area.scrollTop() + area.innerHeight() >= area[0].scrollHeight;
+				const btm = area[0].scrollHeight - (area.scrollTop() + area.innerHeight()) < 3; //approximately equal
 				if (area.data('lastDate') !== cm.date) {
 					area.append(OmUtil.tmpl('#chat-date-template').html(cm.date));
 					area.data('lastDate', cm.date);
 				}
 				area.append(msg);
+				msg.find('.msg').addClass(align).html(emoticon.emoticonize(!!cm.message ? cm.message : ""));
 				if (btm) {
-					area.animate({
-						scrollTop: area[0].scrollHeight
-					}, 300);
+					_scrollDown(area);
 				}
 			}
+			emoticon.animate();
 		}
 	}
 	function _setOpened() {
-		p.addClass('opened').off('mouseenter mouseleave');
 		editor.width(p.width() - 30);
 		p.resizable({
 			handles: (Settings.isRtl ? 'e' : 'w')
 			, alsoResize: '#chatPopup, #chatMessage .wysiwyg-editor'
+			, minWidth: 120
 			, stop: function(event, ui) {
 				p.css({'left': ''});
 				editor.width(p.width() - 30);
 				openedWidth = ui.size.width + 'px';
 			}
 		});
-		Room.setSize();
 	}
 	function _removeResize() {
 		if (p.resizable('instance') !== undefined) {
@@ -299,24 +297,16 @@ var Chat = function() {
 			p.removeClass('closed');
 			pp.animate(opts, 1000, function() {
 				p.removeClass('closed');
-				_setAreaHeight();
 				if (typeof(handler) === 'function') {
 					handler();
 				}
 				editor.width(p.width() - 30);
+				ctrl.attr('title', ctrl.data('ttl-undock'));
 				if (roomMode) {
-					ctrl.off('click').click(function() {
-						if (p.hasClass('opened')) {
-							ctrl.attr('title', ctrl.data('ttl-dock'));
-							_close(Room.setSize);
-							p.removeClass('opened').hover(_open, _close);
-							_removeResize();
-						} else {
-							ctrl.attr('title', ctrl.data('ttl-undock'));
-							_setOpened();
-						}
-					}).attr('title', ctrl.data('ttl-dock'));
+					_setOpened();
+					Room.setSize();
 				}
+				_setAreaHeight();
 			});
 		}
 	}
@@ -326,7 +316,6 @@ var Chat = function() {
 			let opts;
 			if (roomMode) {
 				opts = {width: closedSizePx};
-				ctrl.off('click');
 			} else {
 				opts = {height: closedSizePx};
 				p.resizable("option", "disabled", true);
@@ -335,9 +324,14 @@ var Chat = function() {
 				p.addClass('closed');
 				if (roomMode) {
 					ctrl.height(p.height());
+					_removeResize();
 				}
 				if (typeof(handler) === 'function') {
 					handler();
+				}
+				ctrl.attr('title', ctrl.data('ttl-dock'));
+				if (roomMode) {
+					Room.setSize();
 				}
 			});
 		}
@@ -359,10 +353,15 @@ var Chat = function() {
 		roomMode = _mode;
 		_reinit(allPrefix, roomPrefix);
 	}
+	function _scrollDown(area) {
+		area.animate({
+			scrollTop: area[0].scrollHeight
+		}, 300);
+	}
 	function _setAreaHeight() {
 		$('#chat .ui-tabs .ui-tabs-panel.messageArea').height(p.height() - closedSize - $('#chat .ui-tabs-nav').height() - $('#chat form').height() - 5);
 		$('#chat .messageArea').each(function() {
-			$(this).scrollTop($(this)[0].scrollHeight);
+			_scrollDown($(this));
 		});
 	}
 	function _setHeight(h) {
@@ -379,7 +378,14 @@ var Chat = function() {
 		if ('' === text) {
 			return;
 		}
-		const a = $('<div>').append($('<a></a>').attr('target', '_blank').attr('href', text).text(text)).html();
+		let url = text.trim();
+		if ('' === url) {
+			return;
+		}
+		if (!/^(https?:)?\/\//i.test(url)) {
+			url = 'http://' + url;
+		}
+		const a = $('<div>').append($('<a></a>').attr('target', '_blank').attr('href', url).text(url)).html();
 		if (window.getSelection) {
 			const sel = window.getSelection();
 			if (sel.rangeCount) {

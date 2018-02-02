@@ -71,56 +71,36 @@ var CSSEmoticon = function() {
 
 	this.defaults = {animate: true, delay: 500, exclude: 'pre,code,.no-emoticons'}
 };
+CSSEmoticon.prototype.emoticonize = function(str, options) {
+	const opts = $.extend({}, this.defaults, options);
 
-CSSEmoticon.prototype.emoticonize = function (str, options) {
-	// $.extend({}, this.defaults, options);
-	var opts = {};
-
-	for (var key in this.defaults) {
-		opts[key] = this.defaults[key];
-	}
-
-	for (var key in options) {
-		opts[key] = options[key];
-	}
-
-	var exclude = 'span.css-emoticon';
-	if (opts.exclude) {
-		exclude += ',' + opts.exclude;
-	}
-	var excludeArray = exclude.split(',');
-
-	var cssClass = 'css-emoticon';
+	let cssClass = 'css-emoticon';
 	if (opts.animate) {
 		cssClass += ' un-transformed-emoticon animated-emoticon';
 	}
 
 	for (var emoticon in this.specialEmoticons) {
-		var specialCssClass = cssClass + " " + this.specialEmoticons[emoticon].cssClass;
+		const specialCssClass = cssClass + " " + this.specialEmoticons[emoticon].cssClass;
 		str = str.replace(this.specialEmoticons[emoticon].regexp, "$1<span class='" + specialCssClass + "'>$2</span>");
 	}
 
 	for (var key in this.threeCharacterEmoticons) {
-		var regexp = this.threeCharacterEmoticons[key];
+		const regexp = this.threeCharacterEmoticons[key];
 		str = str.replace(regexp, "$1<span class='" + cssClass + "'>$2</span>");
 	}
 
 	for (var key in this.twoCharacterEmoticons) {
-		var regexp = this.twoCharacterEmoticons[key];
+		const regexp = this.twoCharacterEmoticons[key];
 		str = str.replace(regexp, "$1<span class='" + cssClass + " spaced-emoticon'>$2</span>");
 	}
-
+	return str;
+};
+CSSEmoticon.prototype.animate = function(options) {
+	const opts = $.extend({}, this.defaults, options);
 	// animate emoticons
 	if (opts.animate) {
 		setTimeout(function () {
-			var untransformed = document.body.getElementsByClassName("un-transformed-emoticon");
-			for(var key in untransformed) {
-				if(typeof untransformed[key] == "object") {
-					untransformed[key].classList.remove("un-transformed-emoticon");
-				}
-			}
+			$('.un-transformed-emoticon').removeClass('un-transformed-emoticon');
 		}, opts.delay);
 	}
-
-	return str;
 };
