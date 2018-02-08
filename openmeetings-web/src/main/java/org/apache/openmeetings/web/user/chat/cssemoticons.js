@@ -64,6 +64,11 @@ var CSSEmoticon = function() {
 				m.text = m.text.replace(/=/g, '&#61;').replace(/[+]/g, '&#43;');
 				self.matchers.push(createMatcher(m));
 			}
+			if (m.text.indexOf('\'') > -1) {
+				m = JSON.parse(JSON.stringify(m));
+				m.text = m.text.replace(/'/g, '&#39;');
+				self.matchers.push(createMatcher(m));
+			}
 		}
 	}
 	addMatchers([
