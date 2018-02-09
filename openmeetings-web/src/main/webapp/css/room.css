@@ -409,6 +409,25 @@
 .room.sidebar .tab.om-icon.big.file {
 	background-image: url(images/folder_explore.png);
 }
+.ui-state-active .badge {
+	color: #337ab7;
+	background-color: #fff;
+}
+
+.badge {
+	display: inline-block;
+	min-width: 10px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	background-color: #777;
+	border-radius: 10px;
+}
 /************ VIDEO **************/
 .room.box .user-video {
 	display: inline-block !important;

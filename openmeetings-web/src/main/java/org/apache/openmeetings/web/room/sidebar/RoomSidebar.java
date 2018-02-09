@@ -51,10 +51,12 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
@@ -225,6 +227,7 @@ public class RoomSidebar extends Panel {
 			}
 		}
 	};
+	private final Label userCount = new Label("user-count", Model.of(""));
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
@@ -249,7 +252,7 @@ public class RoomSidebar extends Panel {
 		add(selfRights, userList.add(updateUsers()).setOutputMarkupId(true)
 				, fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
-		add(addFolder, settings);
+		add(addFolder, settings, userCount.setOutputMarkupId(true));
 		add(toggleRight, toggleActivity, roomAction, avSettings);
 		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
 			private static final long serialVersionUID = 1L;
@@ -290,7 +293,8 @@ public class RoomSidebar extends Panel {
 	public void update(IPartialPageRequestHandler handler) {
 		updateShowFiles(handler);
 		updateUsers();
-		handler.add(selfRights.update(handler), userList);
+		userCount.setDefaultModelObject(users.getList().size());
+		handler.add(selfRights.update(handler), userList, userCount);
 	}
 
 	public void updateFiles(IPartialPageRequestHandler handler) {
