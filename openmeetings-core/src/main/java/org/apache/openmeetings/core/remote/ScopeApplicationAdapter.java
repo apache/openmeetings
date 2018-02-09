@@ -240,6 +240,21 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 		return true;
 	}
 
+	@Override
+	public IScope getChildScope(String name) {
+		IScope sc = null;
+		try {
+			sc = super.getChildScope(name);
+		} catch (Exception e) {
+			//no-op, scope doesn't exist while testing
+		}
+		return sc;
+	}
+
+	public IScope getChildScope(Long roomId) {
+		return getChildScope(String.valueOf(roomId));
+	}
+
 	public Map<String, String> screenSharerAction(Map<String, Object> map) {
 		Map<String, String> returnMap = new HashMap<>();
 		try {
@@ -390,12 +405,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void dropSharing(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
-		IScope scope = null;
-		try {
-			scope = getChildScope(String.valueOf(roomId));
-		} catch (Exception e) {
-			//no-op, scope doesn't exist while testing
-		}
+		IScope scope = getChildScope(roomId);
 		//Elvis has left the building
 		new MessageSender(scope, "stopStream", new Object(), this) {
 			@Override
@@ -410,7 +420,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 
 	public void roomLeaveByScope(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
 		StreamClient rcl = sessionManager.get(c.getUid());
-		IScope scope = getChildScope(String.valueOf(roomId));
+		IScope scope = getChildScope(roomId);
 		_log.debug("[roomLeaveByScope] {} {} {} {}", c.getUid(), roomId, rcl, scope);
 		if (rcl != null && scope != null) {
 			roomLeaveByScope(rcl, scope);
@@ -687,7 +697,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendToScope(final Long roomId, String method, Object obj) {
-		new MessageSender(getChildScope(String.valueOf(roomId)), method, obj, this) {
+		new MessageSender(getChildScope(roomId), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
@@ -912,7 +922,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return;
 		}
 
-		recordingService.startRecording(getChildScope(String.valueOf(c.getRoom().getId())), c, true);
+		recordingService.startRecording(getChildScope(c.getRoomId()), c, true);
 	}
 
 	/**
@@ -922,7 +932,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 	public void stopInterviewRecording(org.apache.openmeetings.db.entity.basic.IClient c) {
 		_log.debug("-----------  stopInterviewRecording");
-		recordingService.stopRecording(getChildScope(String.valueOf(c.getRoomId())), c);
+		recordingService.stopRecording(getChildScope(c.getRoomId()), c);
 	}
 
 	public void micActivity(boolean active) {
