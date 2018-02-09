@@ -722,13 +722,8 @@ public class RoomPanel extends BasePanel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "jquery.dialogextend.js"))));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(interview ? INTERVIEWWB_JS_REFERENCE : WB_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
-		if (interview) {
-			response.render(JavaScriptHeaderItem.forReference(INTERVIEWWB_JS_REFERENCE));
-		} else {
-			response.render(JavaScriptHeaderItem.forReference(WB_JS_REFERENCE));
-		}
 		if (room.isVisible()) {
 			response.render(OnDomReadyHeaderItem.forScript(roomEnter.getCallbackScript()));
 		}

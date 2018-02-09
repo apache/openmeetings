@@ -168,7 +168,7 @@ var Video = (function() {
 			vol.addClass('ui-state-error');
 			_handleMicStatus(false);
 		}
-		if (swf[0].setVolume !== undefined) {
+		if (typeof(swf[0].setVolume) === 'function') {
 			swf[0].setVolume(val);
 		}
 	}
@@ -337,7 +337,7 @@ var Video = (function() {
 		}
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
-		if (swf[0].update !== undefined) {
+		if (typeof(swf[0].update) === 'function') {
 			c.self ? swf[0].update() : swf[0].update(c);
 		}
 	}
@@ -355,8 +355,13 @@ var Video = (function() {
 		}
 	}
 	function _setRights(_r) {
-		if (swf[0].setRights !== undefined) {
+		if (typeof(swf[0].setRights) === 'function') {
 			swf[0].setRights(_r);
+		}
+	}
+	function _cleanup() {
+		if (typeof(swf[0].cleanup) === 'function') {
+			swf[0].cleanup();
 		}
 	}
 
@@ -368,6 +373,7 @@ var Video = (function() {
 	self.securityMode = _securityMode;
 	self.client = function() { return c; };
 	self.setRights = _setRights;
+	self.cleanup = _cleanup;
 	return self;
 });
 var VideoManager = (function() {
