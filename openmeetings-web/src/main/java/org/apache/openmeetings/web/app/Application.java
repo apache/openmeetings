@@ -629,7 +629,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				ScopeApplicationAdapter scApp = getBean(ScopeApplicationAdapter.class);
 				scApp.dropSharing(_c, roomId);
 				Client c = (Client)_c;
-				IScope sc = scApp.getChildScope(String.valueOf(roomId));
+				IScope sc = scApp.getChildScope(roomId);
 				for (String uid : c.getStreams()) {
 					scApp.sendMessageById("quit", uid, sc);
 				}
