@@ -128,6 +128,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.validation.validator.UrlValidator;
+import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
@@ -625,8 +626,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 			if (_c instanceof Client) {
-				getBean(ScopeApplicationAdapter.class).dropSharing(_c, roomId);
+				ScopeApplicationAdapter scApp = getBean(ScopeApplicationAdapter.class);
+				scApp.dropSharing(_c, roomId);
 				Client c = (Client)_c;
+				IScope sc = scApp.getChildScope(String.valueOf(roomId));
+				for (String uid : c.getStreams()) {
+					scApp.sendMessageById("quit", uid, sc);
+				}
 				c.setRoom(null);
 				c.clear();
 				update(c);

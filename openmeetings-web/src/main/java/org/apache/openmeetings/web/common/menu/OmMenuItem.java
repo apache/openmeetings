@@ -21,8 +21,9 @@ package org.apache.openmeetings.web.common.menu;
 import java.util.List;
 
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
+import com.googlecode.wicket.jquery.ui.widget.menu.MenuItem;
 
-public class OmMenuItem extends com.googlecode.wicket.jquery.ui.widget.menu.MenuItem {
+public class OmMenuItem extends MenuItem {
 	private static final long serialVersionUID = 1L;
 	private String desc;
 	private boolean top;
