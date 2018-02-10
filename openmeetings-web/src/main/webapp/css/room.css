@@ -89,7 +89,7 @@
 	width: 28px;
 }
 .room.sidebar {
-	min-width: 150px;
+	min-width: 155px;
 	width: 315px;
 	position: absolute;
 }
@@ -394,9 +394,19 @@
 	overflow: hidden;
 	white-space: nowrap;
 }
+.room.holder.small .room.sidebar .tab.user.om-icon.big {
+	max-width: 20px;
+}
 .room.holder.small .room.sidebar .tab.om-icon.big {
 	max-width: 0px;
 	padding-right: 0;
+}
+.room.holder.small .room.sidebar .tab.om-icon.big .label {
+	display: none;
+}
+.room.holder.small .room.sidebar .tab.om-icon.big .badge {
+	margin-left: -20px;
+	margin-top: 15px;
 }
 .room.holder.small .room.sidebar .file.tree .file.item .name
 	, .room.holder.small .room.sidebar .file.tree .file.item .name span
@@ -472,7 +482,7 @@
 }
 @media screen and (max-width: 1280px) {
 	.room.sidebar {
-		width: 150px;
+		width: 155px;
 	}
 	.room.holder .room.sidebar .tab.om-icon.big {
 		max-width: 0px;
