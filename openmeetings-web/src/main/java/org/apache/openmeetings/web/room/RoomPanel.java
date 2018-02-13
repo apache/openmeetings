@@ -799,10 +799,6 @@ public class RoomPanel extends BasePanel {
 		broadcast(client);
 	}
 
-	public void kickUser(Client client) {
-		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, Type.kick, client.getUid()));
-	}
-
 	public void broadcast(Client client) {
 		RoomBroadcaster.sendUpdatedClient(client);
 		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.rightUpdated, client.getUid()));
