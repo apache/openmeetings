@@ -76,6 +76,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
@@ -413,6 +414,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			get().getOnlineUsers().remove(c.getUid());
 			get().getUidBySid().remove(c.getSid());
 		}
+	}
+
+	public static void kickUser(Client client) {
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, RoomMessage.Type.kick, client.getUid()));
 	}
 
 	private static boolean hasVideo(StreamClient rcl) {

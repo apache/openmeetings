@@ -21,6 +21,7 @@ package org.apache.openmeetings.web.room.sidebar;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.Application.getRoomClients;
+import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -259,7 +260,7 @@ public class RoomSidebar extends Panel {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				room.kickUser(kickedClient);
+				kickUser(kickedClient);
 			}
 		});
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
