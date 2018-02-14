@@ -64,6 +64,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.github.openjson.JSONObject;
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 
 public class RoomSidebar extends Panel {
@@ -265,7 +266,7 @@ public class RoomSidebar extends Panel {
 		});
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
-		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
+		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs", new Options("activate", "function(event, ui) {Room.setSize();}")));
 		add(activities = new ActivitiesPanel("activities", room));
 	}
 

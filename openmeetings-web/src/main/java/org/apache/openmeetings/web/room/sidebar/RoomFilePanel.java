@@ -81,4 +81,12 @@ public class RoomFilePanel extends FileTreePanel {
 					}
 				});
 	}
+
+	@Override
+	public void select(BaseFileItem fi, AjaxRequestTarget target, boolean shift, boolean ctrl) {
+		super.select(fi, target, shift, ctrl);
+		if (target != null) {
+			target.appendJavaScript("Room.setSize();");
+		}
+	}
 }
