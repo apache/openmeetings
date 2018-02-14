@@ -653,7 +653,7 @@ var Room = (function() {
 		sb.height(h - ah);
 		p.height(hh - ah);
 		$('.user.list', p).height(hh - ulh - ah - $('.user.header', p).height() - 5);
-		$('.trees', fl).height(hh - ulh - ah - $('.trash-toolbar', fl).height() - $('.sizes', fl).height() - 5);
+		$('.trees', fl).height(hh - ulh - ah - $('.trash-toolbar', fl).height() - $('.footer', fl).height() - 5);
 		if (sbW > 255) {
 			holder.addClass('big').removeClass('small');
 		} else {
