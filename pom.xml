@@ -58,7 +58,7 @@
 		<maven-war-plugin.version>3.2.0</maven-war-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>4.12</junit.version>
-		<wicket.version>8.0.0-SNAPSHOT</wicket.version>
+		<wicket.version>8.0.0-M9</wicket.version>
 		<wicketju.version>8.0.0-SNAPSHOT</wicketju.version>
 		<wickets.version>8.0.0-SNAPSHOT</wickets.version>
 		<red5-server.version>1.0.10-M4</red5-server.version>
