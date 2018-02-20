@@ -60,6 +60,9 @@ var Chat = function() {
 		typingTimer = null;
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
+	function _emtClick() {
+		_editorAppend($(this).data('emt'));
+	}
 	function initToolbar() {
 		const emots = emoticon.emoticons;
 		const rowSize = 20, emotMenuList = $('#emotMenuList');
@@ -72,7 +75,7 @@ var Chat = function() {
 			}
 			row.append($('<td>').append(
 					$('<div>').addClass('emt').html(emoticon.emoticonize(emots[i]))
-						.data('emt', emots[i]).click(function() {Chat.emtClick($(this).data('emt'));})
+						.data('emt', emots[i]).click(_emtClick)
 				));
 		}
 		const emtBtn = $('#emoticons');
@@ -409,7 +412,6 @@ var Chat = function() {
 		}
 		, close: _close
 		, toggle: _toggle
-		, emtClick: _editorAppend
 		, setRoomMode: _setRoomMode
 		, setHeight: _setHeight
 		, clean: _clean
