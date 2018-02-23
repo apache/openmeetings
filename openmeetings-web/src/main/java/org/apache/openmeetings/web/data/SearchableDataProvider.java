@@ -33,7 +33,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author swagner
  *
- * @param <T>
+ * @param <T> - Entity class being used by this Provider
  */
 public class SearchableDataProvider<T extends IDataProviderEntity> extends SortableDataProvider<T, String> {
 	private static final long serialVersionUID = 1L;

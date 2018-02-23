@@ -61,7 +61,7 @@ public abstract class OmRedirectTimerBehavior extends AbstractAjaxTimerBehavior 
 	}
 
 	/**
-	 * @param remain
+	 * @param remain - time in seconds until redirect
 	 */
 	protected void onTimer(int remain) {
 	}

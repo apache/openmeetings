@@ -31,7 +31,6 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -227,8 +226,10 @@ public class ScreenSharerFrame extends JFrame {
 
 	/**
 	 * Create the frame.
-	 * @throws AWTException
-	 * @throws IOException
+	 *
+	 * @param core - core object
+	 * @param textLabels - translated labels
+	 * @throws AWTException - in case of AWT exception
 	 */
 	public ScreenSharerFrame(final Core core, String[] textLabels) throws AWTException {
 		this.core = core;
