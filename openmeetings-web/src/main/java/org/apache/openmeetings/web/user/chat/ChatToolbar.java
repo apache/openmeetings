@@ -142,6 +142,8 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	 *
 	 * @param id
 	 *            the markup-id
+	 * @param form
+	 *            chat form
 	 */
 	public ChatToolbar(String id, ChatForm form) {
 		this(id, form, null);
@@ -152,6 +154,8 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	 *
 	 * @param id
 	 *            the markup-id
+	 * @param form
+	 *            chat form
 	 * @param model
 	 *            the {@link org.apache.wicket.model.IModel}
 	 */

@@ -108,8 +108,8 @@ public class RoomListPanel extends Panel {
 
 	/**
 	 * this method need to be overriden to perform custom actions on room container click
-	 * @param target
-	 * @param r
+	 * @param target - the {@link AjaxRequestTarget}
+	 * @param r - current {@link Room}
 	 */
 	public void onContainerClick(AjaxRequestTarget target, Room r) {
 		//no-op
@@ -117,8 +117,8 @@ public class RoomListPanel extends Panel {
 
 	/**
 	 * this method need to be overriden to perform custom actions on room refresh click
-	 * @param target
-	 * @param r
+	 * @param target - the {@link AjaxRequestTarget}
+	 * @param r - current {@link Room}
 	 */
 	public void onRefreshClick(AjaxRequestTarget target, Room r) {
 		//no-op
@@ -126,6 +126,8 @@ public class RoomListPanel extends Panel {
 
 	/**
 	 * this method need to be overriden to perform custom actions on room enter click
+	 * @param target - the {@link AjaxRequestTarget}
+	 * @param roomId - id of the room being entered
 	 */
 	public void onRoomEnter(AjaxRequestTarget target, Long roomId) {
 		RoomEnterBehavior.roomEnter((MainPage)getPage(), target, roomId);

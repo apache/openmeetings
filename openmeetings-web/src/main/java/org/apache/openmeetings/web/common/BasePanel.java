@@ -57,7 +57,8 @@ public abstract class BasePanel extends Panel {
 	 * Overwrite this method to execute Java code after Panel is loaded by the
 	 * {@link MenuPanel}
 	 *
-	 * @param target
+	 * @param handler - request handler to update menu
+	 * @return - this for chaining
 	 */
 	public BasePanel onMenuPanelLoad(IPartialPageRequestHandler handler) {
 		handler.add(getBasePage().getHeader().setVisible(true), getMainPanel().getMenu().setVisible(true)
@@ -69,7 +70,7 @@ public abstract class BasePanel extends Panel {
 	/**
 	 * This method should be overridden to perform necessary cleanup: remove timers etc.
 	 *
-	 * @param handler
+	 * @param handler - request handler to perform cleanup
 	 */
 	public void cleanup(IPartialPageRequestHandler handler) {
 	}
@@ -77,7 +78,7 @@ public abstract class BasePanel extends Panel {
 	/**
 	 * This method should be overridden to perform after "new message" dialog was closed.
 	 *
-	 * @param handler
+	 * @param handler - request handler to perform action after "new message" dialog was closed.
 	 */
 	public void onNewMessageClose(IPartialPageRequestHandler handler) {
 	}
