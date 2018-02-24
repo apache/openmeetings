@@ -38,7 +38,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -53,6 +52,7 @@ import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -313,7 +313,6 @@ public class RoomWebService extends BaseWebService {
 	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) {
 		return performCall(sid, User.Right.Soap, sd -> {
 			List<RoomCountDTO> roomBeans = new ArrayList<>();
-			IApplication app = getApp();
 			List<Room> rooms = getRoomDao().get(ids);
 
 			for (Room room : rooms) {
@@ -321,7 +320,7 @@ public class RoomWebService extends BaseWebService {
 				rCountBean.setRoomId(room.getId());
 				rCountBean.setRoomName(room.getName());
 				rCountBean.setMaxUser(room.getCapacity());
-				rCountBean.setRoomCount(app.getOmRoomClients(room.getId()).size());
+				rCountBean.setRoomCount(getBean(IClientManager.class).listByRoom(room.getId()).size());
 
 				roomBeans.add(rCountBean);
 			}

@@ -30,7 +30,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.UserPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -123,7 +123,7 @@ public class RoomsPanel extends UserPanel {
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {
-		clients.setDefaultModelObject(Application.getRoomClients(roomId));
+		clients.setDefaultModelObject(getBean(ClientManager.class).listByRoom(roomId));
 		Room room = getBean(RoomDao.class).get(roomId);
 		roomIdLbl.setDefaultModelObject(room.getId());
 		roomNameLbl.setDefaultModelObject(room.getName());

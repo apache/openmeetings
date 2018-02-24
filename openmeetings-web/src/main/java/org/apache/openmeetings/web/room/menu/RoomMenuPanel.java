@@ -26,9 +26,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
-import static org.apache.openmeetings.web.app.Application.exitRoom;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getClientBySid;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
@@ -48,6 +46,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ImagePanel;
 import org.apache.openmeetings.web.common.InvitationDialog;
@@ -370,13 +369,14 @@ public class RoomMenuPanel extends Panel {
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {
-			Client recClient = getClientBySid(room.getRecordingUser());
+			ClientManager cm = getBean(ClientManager.class);
+			Client recClient = cm.getBySid(room.getRecordingUser());
 			if (recClient != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
 						, recClient.getUser().getLogin(), recClient.getUser().getFirstname(), recClient.getUser().getLastname(), df.format(recClient.getConnectedSince())));
 				roomClass.append(" screen");
 			}
-			Client pubClient = getClientBySid(room.getPublishingUser());
+			Client pubClient = cm.getBySid(room.getPublishingUser());
 			if (pubClient != null) {
 				if (recClient != null) {
 					roomTitle.append('\n');
@@ -408,7 +408,7 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {
-		exitRoom(room.getClient());
+		getBean(ClientManager.class).exitRoom(room.getClient());
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {

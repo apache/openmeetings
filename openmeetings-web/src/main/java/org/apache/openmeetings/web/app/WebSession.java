@@ -45,7 +45,7 @@ import java.util.TimeZone;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IWebSession;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement;
+import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
@@ -118,7 +118,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 
 	@Override
 	public void invalidate() {
-		Application.get().invalidateClient(userId, getId());
+		getBean(ClientManager.class).invalidate(userId, getId());
 		super.invalidate();
 		userId = null;
 		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
@@ -312,7 +312,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		User u;
 		switch (type) {
 			case ldap:
-				u = getBean(LdapLoginManagement.class).login(login, password, domainId);
+				u = getBean(LdapLoginManager.class).login(login, password, domainId);
 				break;
 			case user:
 				/* we will allow login against internal DB in case user 'guess' LDAP password */

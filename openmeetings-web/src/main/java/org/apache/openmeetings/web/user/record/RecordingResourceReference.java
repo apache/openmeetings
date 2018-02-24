@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getExternalType;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -27,7 +26,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.util.Map.Entry;
 
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -37,7 +35,9 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
@@ -88,9 +88,9 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		if (id.equals(getRecordingId())) {
 			return r;
 		}
-		Client c = getOnlineClient(uid);
+		Client c = getBean(ClientManager.class).get(uid);
 		if (c != null && c.getRoom() != null) {
-			Whiteboards wbs = WhiteboardCache.get(c.getRoom().getId());
+			Whiteboards wbs = getBean(WhiteboardManager.class).get(c.getRoom().getId());
 			if (wbs != null && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
 					if (e.getValue().contains(r.getHash())) {

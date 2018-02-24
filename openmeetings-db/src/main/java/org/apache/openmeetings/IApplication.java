@@ -18,26 +18,17 @@
  */
 package org.apache.openmeetings;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dto.room.Whiteboards;
-import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.Invitation;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.request.IExceptionMapper;
 import org.apache.wicket.request.IRequestMapper;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import com.hazelcast.core.IMap;
 
 public interface IApplication {
 	<T> T getOmBean(Class<T> clazz);
@@ -51,31 +42,14 @@ public interface IApplication {
 	String getOmContactsLink();
 	String getOmInvitationLink(Invitation i);
 	String urlForActivatePage(PageParameters pp);
-	void invalidateClient(Long userId, String sessionId);
 	void setXFrameOptions(String xFrameOptions);
 	void setContentSecurityPolicy(String contentSecurityPolicy);
 
-	void exit(IClient c);
-	IClient update(IClient c);
-
-	// web client
-	Client getOmClient(String uid);
-	Client getOmClientBySid(String sid);
-	Client getOmOnlineClient(String uid);
-	List<Client> getOmRoomClients(Long roomId);
-	List<Client> getOmClients(Long userId);
-
-	// stream client
-	StreamClient updateClient(StreamClient rcl, boolean forceSize);
 	String getServerId();
-	Map<String, StreamClient> getStreamClients();
-	Set<Long> getActiveRoomIds();
 
 	//JPA
 	void updateJpaAddresses(ConfigurationDao dao);
 
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);
-
-	IMap<Long, Whiteboards> getWhiteboards();
 }

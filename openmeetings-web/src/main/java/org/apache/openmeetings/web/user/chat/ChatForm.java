@@ -24,7 +24,6 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.isUserInRoom;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
@@ -43,6 +42,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -112,7 +112,7 @@ public class ChatForm extends Form<Void> {
 					if (!process(
 							() -> getChat().isShowDashboardChat()
 							, r -> {
-								if (isUserInRoom(r.getId(), getUserId())) {
+								if (getBean(ClientManager.class).isInRoom(r.getId(), getUserId())) {
 									m.setToRoom(r);
 								} else {
 									log.error("It seems like we are being hacked!!!!");

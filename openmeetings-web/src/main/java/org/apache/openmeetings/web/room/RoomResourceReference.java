@@ -26,21 +26,21 @@ import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.File;
 import java.util.Map.Entry;
 
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.FileItem;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
@@ -94,7 +94,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
-		Client c = getOnlineClient(uid);
+		Client c = getBean(ClientManager.class).get(uid);
 		if (id == null || !ws.isSignedIn() || c == null) {
 			return null;
 		}
@@ -105,7 +105,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 		String ruid = params.get("ruid").toString();
 		String wuid = params.get("wuid").toString();
 		if (c.getRoom() != null) {
-			Whiteboards wbs = WhiteboardCache.get(c.getRoom().getId());
+			Whiteboards wbs = getBean(WhiteboardManager.class).get(c.getRoom().getId());
 			if (!Strings.isEmpty(wuid) && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
 					JSONObject file = e.getValue().get(wuid);

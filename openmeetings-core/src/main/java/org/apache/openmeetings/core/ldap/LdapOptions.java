@@ -25,9 +25,9 @@ import java.util.Properties;
 
 import org.apache.directory.api.ldap.model.message.AliasDerefMode;
 import org.apache.directory.api.ldap.model.message.SearchScope;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement.AuthType;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement.GroupMode;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement.Provisionning;
+import org.apache.openmeetings.core.ldap.LdapLoginManager.AuthType;
+import org.apache.openmeetings.core.ldap.LdapLoginManager.GroupMode;
+import org.apache.openmeetings.core.ldap.LdapLoginManager.Provisionning;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 

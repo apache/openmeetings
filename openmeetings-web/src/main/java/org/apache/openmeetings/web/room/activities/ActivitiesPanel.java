@@ -20,7 +20,7 @@ package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getOnlineClient;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -34,6 +34,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
@@ -95,7 +96,7 @@ public class ActivitiesPanel extends Panel {
 						}
 						break;
 					case accept:
-						Client client = getOnlineClient(a.getUid());
+						Client client = getBean(ClientManager.class).get(a.getUid());
 						if (room.getClient().hasRight(Right.moderator) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
 							switch (a.getType()) {
 								case reqRightModerator:

@@ -16,9 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.db.dao.server;
+package org.apache.openmeetings.db.manager;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,15 +31,19 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
  * @author sebawagner
  *
  */
-public interface ISessionManager {
+public interface IStreamClientManager {
 	StreamClient add(StreamClient c);
 
 	/**
-	 * loads the server into the client (only if database cache is used)
+	 * Get all ClientList Objects of that room and domain This Function is
+	 * needed cause it is invoked internally AFTER the current user has been
+	 * already removed from the ClientList to see if the Room is empty again and
+	 * the PollList can be removed
 	 *
-	 * @return - list of all clients
+	 * @param roomId - id of the room
+	 * @return - list of all clients in the room
 	 */
-	Collection<StreamClient> list();
+	List<StreamClient> list(Long roomId);
 
 	/**
 	 * Get a client by its UID
@@ -55,7 +58,9 @@ public interface ISessionManager {
 	 *
 	 * @param rcm - client to update
 	 */
-	void update(IClient rcm);
+	IClient update(IClient rcm);
+
+	StreamClient update(StreamClient rcl, boolean forceSize);
 
 	/**
 	 * Remove a client from the session store
@@ -64,17 +69,6 @@ public interface ISessionManager {
 	 * @return true if client was removed
 	 */
 	boolean remove(String uid);
-
-	/**
-	 * Get all ClientList Objects of that room and domain This Function is
-	 * needed cause it is invoked internally AFTER the current user has been
-	 * already removed from the ClientList to see if the Room is empty again and
-	 * the PollList can be removed
-	 *
-	 * @param roomId - id of the room
-	 * @return - list of all clients in the room
-	 */
-	List<StreamClient> listByRoom(Long roomId);
 
 	/**
 	 * returns number of users performing recording
@@ -107,13 +101,6 @@ public interface ISessionManager {
 	 * @return - number of broadcasting clients
 	 */
 	long getBroadcastingCount(Long roomId);
-
-	/**
-	 * Get a list of all rooms with users in the system.
-	 *
-	 * @return a set, a roomId can be only one time in this list
-	 */
-	Set<Long> getActiveRoomIds();
 
 	/**
 	 * Get a list of rooms with users on particular cluster node.

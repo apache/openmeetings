@@ -27,14 +27,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
-import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.ClientManager;
+import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -59,8 +59,8 @@ public class ConnectionsPanel extends AdminBasePanel {
 
 			private List<IClient> list() {
 				List<IClient> l = new ArrayList<>();
-				l.addAll(getBean(ISessionManager.class).list());
-				l.addAll(Application.getClients());
+				l.addAll(getBean(StreamClientManager.class).list());
+				l.addAll(getBean(ClientManager.class).list());
 				return l;
 			}
 
@@ -93,7 +93,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 							getBean(IUserManager.class).kickById(_c.getUid());
 						} else {
 							Client c = (Client)_c;
-							Application.get().invalidateClient(c.getUserId(), c.getSessionId());
+							getBean(ClientManager.class).invalidate(c.getUserId(), c.getSessionId());
 						}
 						target.add(container, details.setVisible(false));
 					}

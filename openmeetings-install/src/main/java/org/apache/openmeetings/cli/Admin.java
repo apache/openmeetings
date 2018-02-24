@@ -52,7 +52,7 @@ import org.apache.openjpa.lib.log.LogFactoryImpl.LogImpl;
 import org.apache.openmeetings.backup.BackupExport;
 import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.backup.ProgressHolder;
-import org.apache.openmeetings.core.ldap.LdapLoginManagement;
+import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
@@ -380,7 +380,7 @@ public class Admin {
 			throw new ExitException();
 		}
 		Long domainId = Long.valueOf(cmdl.getOptionValue('d'));
-		getApplicationContext().getBean(LdapLoginManagement.class).importUsers(domainId, cmdl.hasOption("print-only"));
+		getApplicationContext().getBean(LdapLoginManager.class).importUsers(domainId, cmdl.hasOption("print-only"));
 	}
 
 	private void reportUploads(StringBuilder report, boolean cleanup) throws IOException {

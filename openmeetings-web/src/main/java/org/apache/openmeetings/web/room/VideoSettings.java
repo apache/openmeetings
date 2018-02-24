@@ -34,10 +34,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -110,7 +110,7 @@ public class VideoSettings extends Panel {
 		if (servers.size() > 1) {
 			for (Member m : servers) {
 				String serverId = m.getStringAttribute(NAME_ATTR_KEY);
-				Set<Long> roomIds = getBean(ISessionManager.class).getActiveRoomIds(serverId);
+				Set<Long> roomIds = getBean(StreamClientManager.class).getActiveRoomIds(serverId);
 				if (roomIds.contains(roomId)) {
 					// if the room is already opened on a server, redirect the user to that one,
 					log.debug("Room is already opened on a server {}", m.getAddress());

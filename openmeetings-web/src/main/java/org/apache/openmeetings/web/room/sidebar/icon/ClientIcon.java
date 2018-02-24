@@ -20,12 +20,13 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.web.app.Application.getOnlineClient;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
@@ -90,6 +91,6 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	}
 
 	protected Client getClient() {
-		return getOnlineClient(uid);
+		return getBean(ClientManager.class).get(uid);
 	}
 }

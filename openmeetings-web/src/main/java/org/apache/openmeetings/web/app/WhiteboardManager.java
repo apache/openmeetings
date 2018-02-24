@@ -16,38 +16,50 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.core.data.whiteboard;
+package org.apache.openmeetings.web.app;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
+import static org.apache.openmeetings.web.app.Application.getHazelcast;
 
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
+import org.apache.openmeetings.db.manager.IWhiteboardManager;
+import org.springframework.stereotype.Component;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 /**
- * Memory based cache, configured as singleton in spring configuration
+ * Hazelcast based Whiteboard manager
  *
  * @author sebawagner
  *
  */
-public class WhiteboardCache {
-	private WhiteboardCache() {}
+@Component
+public class WhiteboardManager implements IWhiteboardManager {
+	private static final String WBS_KEY = "WBS_KEY";
+	private HazelcastInstance hazelcast;
 
-	private static IMap<Long, Whiteboards> getCache() {
-		return getApp().getWhiteboards();
+	@PostConstruct
+	private void init() {
+		this.hazelcast = getHazelcast();
 	}
 
-	public static boolean tryLock(Long roomId) {
+	private IMap<Long, Whiteboards> getCache() {
+		return hazelcast.getMap(WBS_KEY);
+	}
+
+	public boolean tryLock(Long roomId) {
 		return getCache().tryLock(roomId);
 	}
 
-	public static void unlock(Long roomId) {
+	public void unlock(Long roomId) {
 		getCache().unlock(roomId);
 	}
 
@@ -59,15 +71,16 @@ public class WhiteboardCache {
 		return sb.toString();
 	}
 
-	public static boolean contains(Long roomId) {
+	public boolean contains(Long roomId) {
 		return getCache().containsKey(roomId);
 	}
 
-	public static Whiteboards get(Long roomId) {
+	@Override
+	public Whiteboards get(Long roomId) {
 		return get(roomId, null);
 	}
 
-	public static Whiteboards get(Long roomId, Long langId) {
+	public Whiteboards get(Long roomId, Long langId) {
 		if (roomId == null) {
 			return null;
 		}
@@ -81,12 +94,12 @@ public class WhiteboardCache {
 		return wbs;
 	}
 
-	public static Set<Entry<Long, Whiteboard>> list(long roomId) {
+	public Set<Entry<Long, Whiteboard>> list(long roomId) {
 		Whiteboards wbs = get(roomId);
 		return wbs.getWhiteboards().entrySet();
 	}
 
-	public static Whiteboard add(long roomId, Long langId) {
+	public Whiteboard add(long roomId, Long langId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = add(wbs, langId);
 		update(wbs);
@@ -99,7 +112,7 @@ public class WhiteboardCache {
 		return wb;
 	}
 
-	public static Whiteboard clear(long roomId, Long wbId) {
+	public Whiteboard clear(long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = wbs.get(wbId);
 		if (wb != null) {
@@ -109,26 +122,26 @@ public class WhiteboardCache {
 		return wb;
 	}
 
-	public static Whiteboard remove(long roomId, Long wbId) {
+	public Whiteboard remove(long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		Whiteboard wb = wbs.getWhiteboards().remove(wbId);
 		update(wbs);
 		return wb;
 	}
 
-	public static void activate(long roomId, Long wbId) {
+	public void activate(long roomId, Long wbId) {
 		Whiteboards wbs = get(roomId);
 		wbs.setActiveWb(wbId);
 		update(wbs);
 	}
 
-	public static void update(long roomId, Whiteboard wb) {
+	public void update(long roomId, Whiteboard wb) {
 		Whiteboards wbs = get(roomId);
 		wbs.update(wb);
 		update(wbs);
 	}
 
-	private static void update(Whiteboards wbs) {
+	private void update(Whiteboards wbs) {
 		getCache().put(wbs.getRoomId(), wbs);
 	}
 }

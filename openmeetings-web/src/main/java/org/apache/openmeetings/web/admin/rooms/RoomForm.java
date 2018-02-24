@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZE;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -34,22 +35,21 @@ import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -93,21 +93,20 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private final WebMarkupContainer moderatorContainer = new WebMarkupContainer("moderatorContainer");
 	private final WebMarkupContainer filesContainer = new WebMarkupContainer("filesContainer");
 	private final WebMarkupContainer clientsContainer = new WebMarkupContainer("clientsContainer");
-	private final ListView<StreamClient> clients = new ListView<StreamClient>("clients", new ArrayList<>()) {
+	private final ListView<Client> clients = new ListView<Client>("clients", new ArrayList<>()) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void populateItem(final ListItem<StreamClient> item) {
-			StreamClient client = item.getModelObject();
-			item.add(new Label("clientId", "" + client.getId()))
+		protected void populateItem(final ListItem<Client> item) {
+			Client client = item.getModelObject();
+			item.add(new Label("clientId", "" + client.getUserId()))
 				.add(new Label("clientLogin", "" + client.getLogin()))
 				.add(new ConfirmableAjaxBorder("clientDelete", getString("80"), getString("833")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						StreamClient c = item.getModelObject();
-						getBean(UserManager.class).kickById(c.getUid());
+						kickUser(item.getModelObject());
 						updateClients(target);
 					}
 				});
@@ -420,7 +419,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = getModelObject().getId() != null ? getModelObject().getId() : 0;
-		final List<StreamClient> clientsInRoom = getBean(ISessionManager.class).listByRoom(roomId);
+		final List<Client> clientsInRoom = getBean(ClientManager.class).listByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}

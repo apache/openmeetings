@@ -19,7 +19,6 @@
 package org.apache.openmeetings.core.service;
 
 import static org.apache.openmeetings.core.converter.BaseConverter.printMetaInfo;
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
@@ -27,7 +26,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
@@ -36,7 +34,6 @@ import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
@@ -46,6 +43,8 @@ import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IClientManager;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -73,9 +72,10 @@ public class RecordingService {
 	 */
 	private static final Map<Long, StreamListener> streamListeners = new ConcurrentHashMap<>();
 
-	// Spring Beans
 	@Autowired
-	private ISessionManager sessionManager;
+	private IStreamClientManager streamClientManager;
+	@Autowired
+	private IClientManager clientManager;
 	@Autowired
 	private UserDao userDao;
 	@Autowired
@@ -135,13 +135,11 @@ public class RecordingService {
 			// Update Client and set Flag
 			client.setRecordingStarted(true);
 			if (!(client instanceof Client)) {
-				IApplication iapp = getApp();
-				Client c = iapp.getOmClientBySid(client.getSid());
+				Client c = clientManager.getBySid(client.getSid());
 				c.setRecordingId(recordingId);
 				c.setRecordingStarted(true);
-				iapp.update(c);
 			}
-			sessionManager.update(client);
+			streamClientManager.update(client);
 
 			// get all stream and start recording them
 			for (IConnection conn : scope.getClientConnections()) {
@@ -165,9 +163,8 @@ public class RecordingService {
 				log.error("Unable to find recordingId on recording stop");
 				return;
 			}
-			IApplication iapp = getApp();
 			Client recClient = null;
-			for (Client c : iapp.getOmRoomClients(client.getRoomId())) {
+			for (Client c : clientManager.listByRoom(client.getRoomId())) {
 				if (c.getRecordingId() != null) {
 					recClient = c;
 					break;
@@ -182,13 +179,13 @@ public class RecordingService {
 				// Store to database
 				recClient.setRecordingId(null);
 				recClient.setRecordingStarted(false);
-				sessionManager.update(recClient);
+				streamClientManager.update(recClient);
 			}
 			WebSocketHelper.sendRoom(new TextRoomMessage(stopClient.getRoomId(), stopClient, RoomMessage.Type.recordingStoped, stopClient.getSid()));
 			// get all stream and stop recording them
 			for (IConnection conn : scope.getClientConnections()) {
 				if (conn != null && conn instanceof IServiceCapableConnection) {
-					StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
+					StreamClient rcl = streamClientManager.get(IClientUtil.getId(conn.getClient()));
 					stopStreamRecord(scope, rcl);
 				}
 			}
@@ -319,7 +316,7 @@ public class RecordingService {
 
 		// Remove Meta Data
 		rcl.setMetaId(null);
-		sessionManager.update(rcl);
+		streamClientManager.update(rcl);
 	}
 
 	public void startStreamRecord(IConnection conn) {
@@ -331,7 +328,7 @@ public class RecordingService {
 	private void startStreamRecord(IConnection conn, Long recordingId, boolean isInterview) {
 		Date now = new Date();
 
-		StreamClient rcl = sessionManager.get(IClientUtil.getId(conn.getClient()));
+		StreamClient rcl = streamClientManager.get(IClientUtil.getId(conn.getClient()));
 		String broadcastId = rcl.getBroadcastId();
 		if (rcl.getMetaId() != null && streamListeners.get(rcl.getMetaId()) != null) {
 			log.debug("startStreamRecord[{}]:: existing metaId: {}", broadcastId, rcl.getMetaId());
@@ -353,7 +350,7 @@ public class RecordingService {
 
 					// Add Meta Data
 					rcl.setMetaId(metaId);
-					sessionManager.update(rcl);
+					streamClientManager.update(rcl);
 				}
 			} else if ("av".equals(rcl.getAvsettings()) || audioOnly || videoOnly) {
 				// if the user does publish av, a, v
@@ -368,7 +365,7 @@ public class RecordingService {
 
 				// Add Meta Data
 				rcl.setMetaId(metaId);
-				sessionManager.update(rcl);
+				streamClientManager.update(rcl);
 			}
 		}
 		log.debug("startStreamRecord[{}]:: resulting metaId: {}", broadcastId, rcl.getMetaId());
