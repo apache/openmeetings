@@ -24,31 +24,31 @@
 		<section name="Downloads">
 			<p>
 				All downloads should be verified using the Apache OpenMeetings code
-				signing <a href="https://www.apache.org/dist/openmeetings/4.0.1/KEYS">KEYS</a>, <br/>
+				signing <a href="https://www.apache.org/dist/openmeetings/4.0.2/KEYS">KEYS</a>, <br/>
 				Here are <a href="https://www.apache.org/dyn/closer.cgi#verify">the instructions</a><br/>
 				<br/>
-				changes: <a href="https://www.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a>.
+				changes: <a href="https://www.apache.org/dist/openmeetings/4.0.2/CHANGELOG">CHANGELOG</a>.
 			</p>
 			<p>
 				All versions are available for download as source and binary.
 			</p>
 			<subsection name="Latest Official Release">
 				<p>
-					Apache Openmeetings 4.0.1
+					Apache OpenMeetings 4.0.2
 				</p>
 				<ul>
 					<li>
 						Binaries:
 						<ul>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.1/bin/apache-openmeetings-4.0.1.zip">apache-openmeetings-4.0.1.zip</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/bin/apache-openmeetings-4.0.1.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/bin/apache-openmeetings-4.0.1.zip.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.2/bin/apache-openmeetings-4.0.2.zip">apache-openmeetings-4.0.2.zip</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/bin/apache-openmeetings-4.0.2.zip.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/bin/apache-openmeetings-4.0.2.zip.sha256">[SHA256]</a>
 							</li>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.1/bin/apache-openmeetings-4.0.1.tar.gz">apache-openmeetings-4.0.1.tar.gz</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/bin/apache-openmeetings-4.0.1.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/bin/apache-openmeetings-4.0.1.tar.gz.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.2/bin/apache-openmeetings-4.0.2.tar.gz">apache-openmeetings-4.0.2.tar.gz</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/bin/apache-openmeetings-4.0.2.tar.gz.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/bin/apache-openmeetings-4.0.2.tar.gz.sha256">[SHA256]</a>
 							</li>
 						</ul>
 					</li>
@@ -56,22 +56,22 @@
 						Sources:
 						<ul>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.1/src/apache-openmeetings-4.0.1-src.zip">apache-openmeetings-4.0.1-src.zip</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/src/apache-openmeetings-4.0.1-src.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/src/apache-openmeetings-4.0.1-src.zip.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.2/src/apache-openmeetings-4.0.2-src.zip">apache-openmeetings-4.0.2-src.zip</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/src/apache-openmeetings-4.0.2-src.zip.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/src/apache-openmeetings-4.0.2-src.zip.sha256">[SHA256]</a>
 							</li>
 							<li>
-								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.1/src/apache-openmeetings-4.0.1-src.tar.gz">apache-openmeetings-4.0.1-src.tar.gz</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/src/apache-openmeetings-4.0.1-src.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.1/src/apache-openmeetings-4.0.1-src.tar.gz.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.2/src/apache-openmeetings-4.0.2-src.tar.gz">apache-openmeetings-4.0.2-src.tar.gz</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/src/apache-openmeetings-4.0.2-src.tar.gz.asc">[SIG]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.2/src/apache-openmeetings-4.0.2-src.tar.gz.sha256">[SHA256]</a>
 							</li>
 						</ul>
 					</li>
 					<li>
-						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.1">https://github.com/openmeetings/openmeetings-docker/tree/4.0.1</a>
+						Docker image: <a href="https://github.com/openmeetings/openmeetings-docker/tree/4.0.2">https://github.com/openmeetings/openmeetings-docker/tree/4.0.2</a>
 					</li>
 					<li>
-						ISO: <a href="https://om.alteametasoft.com/om_4.0.1.qcow2">https://om.alteametasoft.com/om_4.0.1.qcow2</a> (QEMU qcow2 format)
+						ISO: <a href="https://om.alteametasoft.com/om_4.0.2.qcow2">https://om.alteametasoft.com/om_4.0.2.qcow2</a> (QEMU qcow2 format)
 						<source>
 <![CDATA[
 #######      PLEASE CHANGE ALL PASSWORDS !!
@@ -85,7 +85,7 @@ OM:            om_admin/1Q2w3e4r5t^y
 # run
 #   memory          ==: "-m 2G"
 #   number of cores ==: "-smp 1"
-qemu-system-x86_64 -boot d -smp 1 -m 2G -drive format=qcow2,file=om_4.0.1.qcow2 -net user,hostfwd=tcp::10022-:22,hostfwd=tcp::15080-:5080 -net nic
+qemu-system-x86_64 -boot d -smp 1 -m 2G -drive format=qcow2,file=om_4.0.2.qcow2 -net user,hostfwd=tcp::10022-:22,hostfwd=tcp::15080-:5080 -net nic
 
 # connect
 ssh om_admin@localhost -p10022
