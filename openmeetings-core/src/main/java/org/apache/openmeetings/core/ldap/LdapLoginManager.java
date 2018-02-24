@@ -79,8 +79,8 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class LdapLoginManagement {
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManagement.class, getWebAppRootKey());
+public class LdapLoginManager {
+	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManager.class, getWebAppRootKey());
 	// LDAP custom attribute mapping keys
 	private static final String CONFIGKEY_LDAP_KEY_LOGIN = "ldap_user_attr_login";
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";
@@ -171,7 +171,7 @@ public class LdapLoginManagement {
 	 * @throws OmException - in case of any error
 	 */
 	public User login(String _login, String passwd, Long domainId) throws OmException {
-		log.debug("LdapLoginmanagement.doLdapLogin");
+		log.debug("LdapLoginmanager.doLdapLogin");
 		if (!userDao.validLogin(_login)) {
 			log.error("Invalid login provided");
 			return null;

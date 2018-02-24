@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.RoomHelper;
 import org.apache.wicket.protocol.ws.api.registry.IKey;
 import org.apache.wicket.util.string.Strings;
@@ -409,7 +409,7 @@ public class Client implements IClient {
 		return json;
 	}
 
-	public JSONObject streamJson(String _sid, boolean self, ISessionManager mgr) {
+	public JSONObject streamJson(String _sid, boolean self, IStreamClientManager mgr) {
 		JSONArray _streams = new JSONArray();
 		boolean avFound = false;
 		for (String _uid : streams) {

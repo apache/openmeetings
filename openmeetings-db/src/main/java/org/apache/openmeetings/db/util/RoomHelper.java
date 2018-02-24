@@ -18,9 +18,9 @@
  */
 package org.apache.openmeetings.db.util;
 
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -28,7 +28,7 @@ import com.github.openjson.JSONObject;
 public class RoomHelper {
 	private RoomHelper() {}
 
-	public static JSONObject videoJson(Client c, boolean self, String sid, ISessionManager mgr, String uid) {
+	public static JSONObject videoJson(Client c, boolean self, String sid, IStreamClientManager mgr, String uid) {
 		StreamClient sc = mgr.get(uid);
 		if (sc == null) {
 			return new JSONObject();

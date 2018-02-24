@@ -19,8 +19,7 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getOnlineClient;
-import static org.apache.openmeetings.web.app.Application.getRoomClients;
+import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -36,6 +35,7 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder.ConfirmableBorderDialog;
@@ -110,12 +110,13 @@ public class RoomSidebar extends Panel {
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
+				ClientManager cm = getBean(ClientManager.class);
 				Client cl = room.getClient();
 				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				switch (a) {
 					case kick:
 						if (cl.hasRight(Right.moderator)) {
-							kickedClient = getOnlineClient(uid);
+							kickedClient = cm.get(uid);
 							if (kickedClient == null) {
 								return;
 							}
@@ -132,7 +133,7 @@ public class RoomSidebar extends Panel {
 					case mute:
 					{
 						JSONObject obj = uid.isEmpty() ? new JSONObject() : new JSONObject(uid);
-						Client _c = getOnlineClient(obj.getString("uid"));
+						Client _c = cm.get(obj.getString("uid"));
 						if (_c == null || !_c.hasActivity(Client.Activity.broadcastA)) {
 							return;
 						}
@@ -163,7 +164,7 @@ public class RoomSidebar extends Panel {
 				}
 				Right right = Right.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_RIGHT).toString());
 				if (room.getClient().hasRight(Right.moderator)) {
-					Client client = getOnlineClient(uid);
+					Client client = getBean(ClientManager.class).get(uid);
 					if (client == null) {
 						return;
 					}
@@ -201,7 +202,7 @@ public class RoomSidebar extends Panel {
 				Client.Activity a = Client.Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				StringValue podStr = getRequest().getRequestParameters().getParameterValue(PARAM_POD);
 				Pod pod = podStr.isEmpty() ? Pod.none : Pod.valueOf(podStr.toString());
-				Client c = getOnlineClient(uid);
+				Client c = getBean(ClientManager.class).get(uid);
 				toggleActivity(c, a, pod);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
@@ -280,7 +281,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private ListView<Client> updateUsers() {
-		users.setList(getRoomClients(room.getRoom().getId()));
+		users.setList(getBean(ClientManager.class).listByRoom(room.getRoom().getId()));
 		return users;
 	}
 

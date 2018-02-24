@@ -31,6 +31,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class SessiondataDao {
 	private EntityManager em;
 
 	@Autowired
-	private ISessionManager sessionManager;
+	private IStreamClientManager streamClientManager;
 
 	private static Sessiondata newInstance() {
 		log.debug("startsession :: startsession");
@@ -170,7 +171,7 @@ public class SessiondataDao {
 	 */
 	public void clearSessionByRoomId(Long roomId) {
 		try {
-			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
+			for (StreamClient rcl : streamClientManager.list(roomId)) {
 				String aux = rcl.getSwfurl();
 
 				int start = aux.indexOf("sid=") + 4;

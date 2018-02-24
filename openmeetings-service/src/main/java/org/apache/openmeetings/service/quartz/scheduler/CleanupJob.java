@@ -30,13 +30,13 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
+import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +51,11 @@ public class CleanupJob extends AbstractJob {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private ISessionManager sessionManager;
+	private IStreamClientManager streamClientManager;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private IWhiteboardManager wbManager;
 
 	public void setSessionTimeout(long sessionTimeout) {
 		this.sessionTimeout = sessionTimeout;
@@ -114,7 +116,7 @@ public class CleanupJob extends AbstractJob {
 				Long roomId = null;
 				if (NumberUtils.isCreatable(folder.getName())) {
 					roomId = Long.valueOf(folder.getName());
-					Whiteboards wbList = WhiteboardCache.get(roomId);
+					Whiteboards wbList = wbManager.get(roomId);
 					for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
 						if (!e.getValue().isEmpty()) {
 							roomId = null;
@@ -122,7 +124,7 @@ public class CleanupJob extends AbstractJob {
 						}
 					}
 				}
-				if (roomId != null && sessionManager.listByRoom(roomId).isEmpty()) {
+				if (roomId != null && streamClientManager.list(roomId).isEmpty()) {
 					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
 					if (files != null && files.length > 0) {
 						log.debug("Room files are too old and no users in the room: " + roomId);

@@ -23,9 +23,7 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.addOnlineUser;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.Application.getOnlineClient;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
@@ -48,6 +46,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.menu.MainMenuItem;
 import org.apache.openmeetings.web.common.menu.MenuPanel;
@@ -139,7 +138,7 @@ public class MainPanel extends Panel {
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
 				uid = client.getUid();
-				addOnlineUser(cp.update(client));
+				getBean(ClientManager.class).add(cp.update(client));
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
 
@@ -176,7 +175,7 @@ public class MainPanel extends Panel {
 				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
 				//no chance to stop pingTimer here :(
 				if (uid != null) {
-					Application.get().exit(getClient());
+					getBean(ClientManager.class).exit(getClient());
 					uid = null;
 				}
 			}
@@ -436,6 +435,6 @@ public class MainPanel extends Panel {
 	}
 
 	public Client getClient() {
-		return getOnlineClient(uid);
+		return getBean(ClientManager.class).get(uid);
 	}
 }

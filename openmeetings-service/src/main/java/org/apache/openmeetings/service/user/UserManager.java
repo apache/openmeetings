@@ -46,7 +46,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.server.ISessionManager;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
@@ -59,6 +58,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
@@ -86,11 +86,11 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private UserDao userDao;
 	@Autowired
-	private EmailManager emailManagement;
+	private EmailManager emailManager;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
-	private ISessionManager sessionManager;
+	private IStreamClientManager streamClientManager;
 
 	/**
 	 * Method to register a new User, User will automatically be added to the
@@ -203,7 +203,7 @@ public class UserManager implements IUserManager {
 			if (checkName && checkEmail) {
 				String hash = Strings.isEmpty(activatedHash) ? UUID.randomUUID().toString() : activatedHash;
 				if (sendWelcomeMessage && email.length() != 0) {
-					emailManagement.sendMail(login, email, hash, sendConfirmation, languageId);
+					emailManager.sendMail(login, email, hash, sendConfirmation, languageId);
 				}
 				Address a =  new Address();
 				a.setStreet(street);
@@ -282,7 +282,7 @@ public class UserManager implements IUserManager {
 		try {
 			sessionDao.clearSessionByRoomId(roomId);
 
-			for (StreamClient rcl : sessionManager.listByRoom(roomId)) {
+			for (StreamClient rcl : streamClientManager.list(roomId)) {
 				if (rcl == null) {
 					return true;
 				}
@@ -304,7 +304,7 @@ public class UserManager implements IUserManager {
 	@Override
 	public boolean kickById(String uid) {
 		try {
-			StreamClient rcl = sessionManager.get(uid);
+			StreamClient rcl = streamClientManager.get(uid);
 
 			if (rcl == null) {
 				return true;

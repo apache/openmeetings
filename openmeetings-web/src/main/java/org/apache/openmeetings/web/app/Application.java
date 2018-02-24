@@ -18,10 +18,6 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
-import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
-import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
@@ -41,38 +37,22 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.core.remote.MobileService;
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
-import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.Pod;
-import org.apache.openmeetings.db.entity.basic.IClient;
-import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
@@ -127,9 +107,7 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
-import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.validation.validator.UrlValidator;
-import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
@@ -141,7 +119,6 @@ import org.wicketstuff.datastores.hazelcast.HazelcastDataStore;
 import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import com.hazelcast.core.ITopic;
 import com.hazelcast.core.Member;
 import com.hazelcast.core.MemberAttributeEvent;
@@ -151,12 +128,7 @@ import com.hazelcast.core.MembershipListener;
 public class Application extends AuthenticatedWebApplication implements IApplication {
 	private static final Logger log = getLogger(Application.class, getWebAppRootKey());
 	private static boolean isInstalled;
-	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
-	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
-	private static final String ROOMS_KEY = "ROOMS_KEY";
-	private static final String WBS_KEY = "WBS_KEY";
-	private static final String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
 	public static final String NAME_ATTR_KEY = "name";
 	//additional maps for faster searching should be created
 	private DashboardContext dashboardContext;
@@ -169,9 +141,9 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static final String HASH_MAPPING = "/hash";
 	public static final String SIGNIN_MAPPING = "/signin";
 	public static final String NOTINIT_MAPPING = "/notinited";
+	private final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
 	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
-	private final HazelcastInstance hazelcast = Hazelcast.getOrCreateHazelcastInstance(new XmlConfigBuilder().build());
 	private ITopic<IClusterWsMessage> hazelWsTopic;
 
 	@Override
@@ -194,18 +166,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
 				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
-				for (Map.Entry<String, Client> e : getOnlineUsers().entrySet()) {
-					if (serverId.equals(e.getValue().getServerId())) {
-						exit(e.getValue());
-					}
-				}
-				Map<String, StreamClient> streams = getStreamClients();
-				for (Iterator<Map.Entry<String, StreamClient>> iter = streams.entrySet().iterator(); iter.hasNext(); ) {
-					Map.Entry<String, StreamClient> e = iter.next();
-					if (serverId.equals(e.getValue().getServerId())) {
-						iter.remove();
-					}
-				}
+				getBean(ClientManager.class).clean(serverId);
+				getBean(StreamClientManager.class).clean(serverId);
 				updateJpaAddresses(_getBean(ConfigurationDao.class));
 			}
 
@@ -260,7 +222,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 		});
-
 		super.init();
 
 		// register some widgets
@@ -345,244 +306,18 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return get().dashboardContext;
 	}
 
-	private Map<String, Client> getOnlineUsers() {
-		return hazelcast.getMap(ONLINE_USERS_KEY);
+	//package private
+	static HazelcastInstance getHazelcast() {
+		return get().hazelcast;
 	}
 
-	private Map<String, String> getInvalidSessions() {
+	//package private
+	Map<String, String> getInvalidSessions() {
 		return hazelcast.getMap(INVALID_SESSIONS_KEY);
-	}
-
-	private IMap<Long, Set<String>> getRooms() {
-		return hazelcast.getMap(ROOMS_KEY);
-	}
-
-	private Map<String, String> getUidBySid() {
-		return hazelcast.getMap(UID_BY_SID_KEY);
-	}
-
-	@Override
-	public IMap<Long, Whiteboards> getWhiteboards() {
-		return hazelcast.getMap(WBS_KEY);
-	}
-
-	@Override
-	public Set<Long> getActiveRoomIds() {
-		return getRooms().keySet();
-	}
-
-	@Override
-	public Map<String, StreamClient> getStreamClients() {
-		return hazelcast.getMap(STREAM_CLIENT_KEY);
-	}
-
-	@Override
-	public IClient update(IClient c) {
-		if (c instanceof StreamClient) {
-			hazelcast.getMap(STREAM_CLIENT_KEY).put(c.getUid(), c);
-		} else {
-			update((Client)c);
-		}
-		return c;
-	}
-
-	public static void addOnlineUser(Client c) {
-		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoom());
-		c.setServerId(get().getServerId());
-		get().getOnlineUsers().put(c.getUid(), c);
-		get().getUidBySid().put(c.getSid(), c.getUid());
-	}
-
-	public static void exitRoom(IClient c) {
-		Long roomId = c.getRoomId();
-		removeUserFromRoom(c);
-		if (roomId != null) {
-			sendRoom(new RoomMessage(roomId, c, RoomMessage.Type.roomExit));
-			getBean(ConferenceLogDao.class).add(
-					ConferenceLog.Type.roomLeave
-					, c.getUserId(), "0", roomId
-					, c.getRemoteAddress()
-					, String.valueOf(roomId));
-		}
-	}
-
-	@Override
-	public void exit(IClient c) {
-		if (c != null) {
-			exitRoom(c);
-			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
-			get().getOnlineUsers().remove(c.getUid());
-			get().getUidBySid().remove(c.getSid());
-		}
 	}
 
 	public static void kickUser(Client client) {
 		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, RoomMessage.Type.kick, client.getUid()));
-	}
-
-	private static boolean hasVideo(StreamClient rcl) {
-		return rcl != null && rcl.getAvsettings().contains("v");
-	}
-
-	private static boolean hasVideo(Client c) {
-		return c != null && c.hasActivity(Activity.broadcastV);
-	}
-
-	@Override
-	public StreamClient updateClient(StreamClient rcl, boolean forceSize) {
-		if (rcl == null) {
-			return null;
-		}
-		Client client = getClientBySid(rcl.getSid());
-		if (client == null) {
-			if (Client.Type.mobile == rcl.getType()) {
-				Sessiondata sd = getBean(SessiondataDao.class).check(rcl.getSid());
-				UserDao udao = getBean(UserDao.class);
-				User u = udao.get(sd.getUserId());
-				rcl = getBean(MobileService.class).create(rcl, u);
-				//Mobile client enters the room
-				client = new Client(rcl, udao.get(rcl.getUserId()));
-				addOnlineUser(client);
-				if (rcl.getRoomId() != null) {
-					client.setCam(0);
-					client.setMic(0);
-					client.setRoom(getBean(RoomDao.class).get(rcl.getRoomId()));
-					addUserToRoom(client);
-					WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client, RoomMessage.Type.roomEnter));
-				}
-			} else if (client == null && Client.Type.sip == rcl.getType()) {
-				rcl.setLogin(SIP_USER_NAME);
-				rcl.setUserId(SIP_USER_ID);
-				//SipTransport enters the room
-				User u = new User();
-				u.setId(SIP_USER_ID);
-				u.setLogin(SIP_USER_NAME);
-				u.setFirstname(SIP_FIRST_NAME);
-				client = new Client(rcl, u);
-				addOnlineUser(client);
-				client.setCam(0);
-				client.setMic(0);
-				client.allow(Room.Right.audio, Room.Right.video);
-				client.set(Activity.broadcastA);
-				addUserToRoom(client);
-				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client, RoomMessage.Type.roomEnter));
-			} else {
-				return null;
-			}
-		}
-		if (rcl.getRoomId() == null || !rcl.getRoomId().equals(client.getRoom().getId())) {
-			return null;
-		}
-		User u = client.getUser();
-		rcl.setUserId(u.getId());
-		rcl.setLogin(u.getLogin());
-		rcl.setFirstname(u.getFirstname());
-		rcl.setLastname(u.getLastname());
-		rcl.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
-		rcl.setSuperMod(client.hasRight(Right.superModerator));
-		rcl.setMod(client.hasRight(Right.moderator));
-		if (client.hasActivity(Activity.broadcastA) && client.getMic() < 0) {
-			client.remove(Activity.broadcastA);
-		}
-		if (client.hasActivity(Activity.broadcastV) && client.getCam() < 0) {
-			client.remove(Activity.broadcastV);
-		}
-		if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
-			if (forceSize || rcl.getWidth() == 0 || rcl.getHeight() == 0) {
-				rcl.setWidth(client.getWidth());
-				rcl.setHeight(client.getHeight());
-			}
-			if (client.getPod() != Pod.none) {
-				rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
-			}
-			StringBuilder sb = new StringBuilder();
-			if (client.hasActivity(Activity.broadcastA)) {
-				sb.append('a');
-			}
-			if (client.hasActivity(Activity.broadcastV)) {
-				sb.append('v');
-			}
-			if (!rcl.isBroadcasting() || hasVideo(rcl) != hasVideo(client)) {
-				rcl.setBroadcasting(true);
-			}
-			rcl.setAvsettings(sb.toString());
-		} else {
-			rcl.setAvsettings("n");
-			rcl.setBroadcasting(false);
-		}
-		return rcl;
-	}
-
-	public static Client getOnlineClient(String uid) {
-		return uid == null ? null : get().getOnlineUsers().get(uid);
-	}
-
-	@Override
-	public Client getOmOnlineClient(String uid) {
-		return getOnlineClient(uid);
-	}
-
-	@Override
-	public Client getOmClientBySid(String sid) {
-		return getClientBySid(sid);
-	}
-
-	public static Client getClientBySid(String sid) {
-		if (sid == null) {
-			return null;
-		}
-		String uid = get().getUidBySid().get(sid);
-		return uid == null ? null : get().getOnlineUsers().get(uid);
-	}
-
-	public static boolean isUserOnline(Long userId) {
-		boolean isUserOnline = false;
-		for (Map.Entry<String, Client> e : get().getOnlineUsers().entrySet()) {
-			if (e.getValue().getUserId().equals(userId)) {
-				isUserOnline = true;
-				break;
-			}
-		}
-		return isUserOnline;
-	}
-
-	public static List<Client> getClients() {
-		return new ArrayList<>(get().getOnlineUsers().values());
-	}
-
-	public static List<Client> getClients(Long userId) {
-		List<Client> result =  new ArrayList<>();
-		for (Map.Entry<String, Client> e : get().getOnlineUsers().entrySet()) {
-			if (e.getValue().getUserId().equals(userId)) {
-				result.add(e.getValue());
-				break;
-			}
-		}
-		return result;
-	}
-
-	public static Client getClientByKeys(Long userId, String sessionId) {
-		Client client = null;
-		for (Map.Entry<String, Client> e : get().getOnlineUsers().entrySet()) {
-			Client c = e.getValue();
-			if (c.getUserId().equals(userId) && c.getSessionId().equals(sessionId)) {
-				client = c;
-				break;
-			}
-		}
-		return client;
-	}
-
-	@Override
-	public void invalidateClient(Long userId, String sessionId) {
-		Client client = getClientByKeys(userId, sessionId);
-		if (client != null) {
-			Map<String, String> invalid = getInvalidSessions();
-			if (!invalid.containsKey(client.getSessionId())) {
-				invalid.put(client.getSessionId(), client.getUid());
-				exit(client);
-			}
-		}
 	}
 
 	public static boolean isInvaldSession(String sessionId) {
@@ -593,113 +328,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		if (sessionId != null){
 			get().getInvalidSessions().remove(sessionId);
 		}
-	}
-
-	public static Client update(Client c) {
-		get().getOnlineUsers().put(c.getUid(), c); // update in storage
-		return c;
-	}
-
-	public static Client addUserToRoom(Client c) {
-		Long roomId = c.getRoom().getId();
-		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
-		IMap<Long, Set<String>> rooms = get().getRooms();
-		rooms.lock(roomId);
-		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
-		Set<String> set = rooms.get(roomId);
-		set.add(c.getUid());
-		rooms.put(roomId, set);
-		rooms.unlock(roomId);
-		update(c);
-		return c;
-	}
-
-	public static IClient removeUserFromRoom(IClient _c) {
-		Long roomId = _c.getRoomId();
-		log.debug("Removing online room client: {}, room: {}", _c.getUid(), roomId);
-		if (roomId != null) {
-			Map<Long, Set<String>> rooms = get().getRooms();
-			Set<String> clients = rooms.get(roomId);
-			if (clients != null) {
-				clients.remove(_c.getUid());
-				rooms.put(roomId, clients);
-			}
-			if (_c instanceof StreamClient) {
-				StreamClient sc = (StreamClient)_c;
-				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
-					getBean(ScopeApplicationAdapter.class).roomLeaveByScope(_c, roomId);
-				}
-			}
-			if (_c instanceof Client) {
-				ScopeApplicationAdapter scApp = getBean(ScopeApplicationAdapter.class);
-				scApp.dropSharing(_c, roomId);
-				Client c = (Client)_c;
-				IScope sc = scApp.getChildScope(roomId);
-				for (String uid : c.getStreams()) {
-					scApp.sendMessageById("quit", uid, sc);
-				}
-				c.setRoom(null);
-				c.clear();
-				update(c);
-			}
-		}
-		return _c;
-	}
-
-	@Override
-	public List<Client> getOmRoomClients(Long roomId) {
-		return getRoomClients(roomId);
-	}
-
-	@Override
-	public List<Client> getOmClients(Long userId) {
-		return getClients(userId);
-	}
-
-	public static List<Client> getRoomClients(Long roomId) {
-		return getRoomClients(roomId, null);
-	}
-
-	public static List<Client> getRoomClients(Long roomId, Predicate<Client> filter) {
-		List<Client> clients = new ArrayList<>();
-		if (roomId != null) {
-			Set<String> uids = get().getRooms().get(roomId);
-			if (uids != null) {
-				for (String uid : uids) {
-					Client c = getOnlineClient(uid);
-					if (c != null && (filter == null || filter.test(c))) {
-						clients.add(c);
-					}
-				}
-			}
-		}
-		return clients;
-	}
-
-	public static Set<Long> getUserRooms(Long userId) {
-		Set<Long> result = new HashSet<>();
-		for (Entry<Long, Set<String>> me : get().getRooms().entrySet()) {
-			for (String uid : me.getValue()) {
-				Client c = getOnlineClient(uid);
-				if (c != null && c.getUserId().equals(userId)) {
-					result.add(me.getKey());
-				}
-			}
-		}
-		return result;
-	}
-
-	public static boolean isUserInRoom(long roomId, long userId) {
-		Set<String> clients = get().getRooms().get(roomId);
-		if (clients != null) {
-			for (String uid : clients) {
-				Client c = getOnlineClient(uid);
-				if (c != null && c.getUserId().equals(userId)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	public <T> T _getBean(Class<T> clazz) {
@@ -846,11 +474,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Override
 	public String getOmString(String key, final Locale loc, String... params) {
 		return getString(key, loc, params);
-	}
-
-	@Override
-	public Client getOmClient(String uid) {
-		return getOnlineClient(uid);
 	}
 
 	@Override

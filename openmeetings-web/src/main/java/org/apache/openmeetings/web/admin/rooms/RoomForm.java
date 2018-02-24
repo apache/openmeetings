@@ -49,7 +49,7 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
-import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.openmeetings.web.util.RoomTypeDropDown;
@@ -419,7 +419,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = getModelObject().getId() != null ? getModelObject().getId() : 0;
-		final List<Client> clientsInRoom = Application.getRoomClients(roomId);
+		final List<Client> clientsInRoom = getBean(ClientManager.class).listByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}

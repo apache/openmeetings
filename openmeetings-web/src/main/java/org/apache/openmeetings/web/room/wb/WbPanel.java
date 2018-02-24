@@ -56,7 +56,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.directory.api.util.Strings;
-import org.apache.openmeetings.core.data.whiteboard.WhiteboardCache;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboard.ZoomMode;
@@ -70,6 +69,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.util.OmFileHelper;
+import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -155,8 +155,9 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	void internalWbLoad(StringBuilder sb) {
 		Long langId = rp.getClient().getUser().getLanguageId();
-		if (!WhiteboardCache.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
-			if (WhiteboardCache.tryLock(roomId)) {
+		WhiteboardManager wbm = getBean(WhiteboardManager.class);
+		if (!wbm.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
+			if (wbm.tryLock(roomId)) {
 				try {
 					TreeMap<Long, List<BaseFileItem>> files = new TreeMap<>();
 					for (RoomFile rf : rp.getRoom().getFiles()) {
@@ -167,21 +168,21 @@ public class WbPanel extends AbstractWbPanel {
 						}
 						bfl.add(rf.getFile());
 					}
-					Whiteboards _wbs = WhiteboardCache.get(roomId, langId);
+					Whiteboards _wbs = wbm.get(roomId, langId);
 					for (Map.Entry<Long, List<BaseFileItem>> e : files.entrySet()) {
-						Whiteboard wb = WhiteboardCache.add(roomId, langId);
+						Whiteboard wb = wbm.add(roomId, langId);
 						_wbs.setActiveWb(wb.getId());
 						for (BaseFileItem fi : e.getValue()) {
 							sendFileToWb(fi, false);
 						}
 					}
 				} finally {
-					WhiteboardCache.unlock(roomId);
+					wbm.unlock(roomId);
 				}
 			}
 		}
-		Whiteboards wbs = WhiteboardCache.get(roomId, langId);
-		loadWhiteboards(sb, rp.getClient(), wbs, WhiteboardCache.list(roomId));
+		Whiteboards wbs = wbm.get(roomId, langId);
+		loadWhiteboards(sb, rp.getClient(), wbs, wbm.list(roomId));
 		JSONObject wbj = getWbJson(wbs.getActiveWb());
 		sb.append("WbArea.activateWb(").append(wbj).append(");");
 		Whiteboard wb = wbs.get(wbs.getActiveWb());
@@ -199,6 +200,7 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
 		Client c = rp.getClient();
+		WhiteboardManager wbm = getBean(WhiteboardManager.class);
 		switch (a) {
 			case createObj:
 			case modifyObj:
@@ -241,7 +243,7 @@ public class WbPanel extends AbstractWbPanel {
 			{
 				StringBuilder sb = new StringBuilder("WbArea.initVideos(");
 				JSONArray arr = new JSONArray();
-				for (Entry<Long, Whiteboard> entry : WhiteboardCache.list(roomId)) {
+				for (Entry<Long, Whiteboard> entry : wbm.list(roomId)) {
 					Whiteboard wb = entry.getValue();
 					for (JSONObject o : wb.list()) {
 						String ft = o.optString(ATTR_FILE_TYPE);
@@ -273,7 +275,7 @@ public class WbPanel extends AbstractWbPanel {
 			switch (a) {
 				case createWb:
 				{
-					Whiteboard wb = WhiteboardCache.add(roomId, c.getUser().getLanguageId());
+					Whiteboard wb = wbm.add(roomId, c.getUser().getLanguageId());
 					sendWbAll(WbAction.createWb, getAddWbJson(wb));
 				}
 					break;
@@ -281,7 +283,7 @@ public class WbPanel extends AbstractWbPanel {
 				{
 					long id = obj.optLong("wbId", -1);
 					if (id > -1) {
-						WhiteboardCache.remove(roomId, id);
+						wbm.remove(roomId, id);
 						sendWbAll(WbAction.removeWb, obj);
 					}
 				}
@@ -290,26 +292,26 @@ public class WbPanel extends AbstractWbPanel {
 				{
 					long _id = obj.optLong("wbId", -1);
 					if (_id > -1) {
-						WhiteboardCache.activate(roomId, _id);
+						wbm.activate(roomId, _id);
 						sendWbAll(WbAction.activateWb, obj);
 					}
 				}
 					break;
 				case renameWb:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.optLong("wbId", -1));
+					Whiteboard wb = wbm.get(roomId).get(obj.optLong("wbId", -1));
 					if (wb != null) {
-						WhiteboardCache.update(roomId, wb.setName(obj.getString("name")));
+						wbm.update(roomId, wb.setName(obj.getString("name")));
 						sendWbAll(WbAction.renameWb, obj);
 					}
 				}
 					break;
 				case setSlide:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.optLong("wbId", -1));
+					Whiteboard wb = wbm.get(roomId).get(obj.optLong("wbId", -1));
 					if (wb != null) {
 						wb.setSlide(obj.optInt(ATTR_SLIDE, 0));
-						WhiteboardCache.update(roomId, wb);
+						wbm.update(roomId, wb);
 						sendWbOthers(WbAction.setSlide, obj);
 					}
 				}
@@ -321,10 +323,10 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case setSize:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					wb.setZoom(obj.getDouble("zoom"));
 					wb.setZoomMode(ZoomMode.valueOf(obj.getString("zoomMode")));
-					WhiteboardCache.update(roomId, wb);
+					wbm.update(roomId, wb);
 					sendWbOthers(WbAction.setSize, getAddWbJson(wb));
 				}
 					break;
@@ -337,17 +339,17 @@ public class WbPanel extends AbstractWbPanel {
 			switch (a) {
 				case createObj:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					JSONObject o = obj.getJSONObject("obj");
 					wb.put(o.getString("uid"), o);
-					WhiteboardCache.update(roomId, wb);
+					wbm.update(roomId, wb);
 					addUndo(wb.getId(), new UndoObject(UndoObject.Type.add, o));
 					sendWbOthers(WbAction.createObj, obj);
 				}
 					break;
 				case modifyObj:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					JSONArray arr = obj.getJSONArray("obj");
 					JSONArray undo = new JSONArray();
 					for (int i = 0; i < arr.length(); ++i) {
@@ -360,7 +362,7 @@ public class WbPanel extends AbstractWbPanel {
 						}
 					}
 					if (arr.length() != 0) {
-						WhiteboardCache.update(roomId, wb);
+						wbm.update(roomId, wb);
 						addUndo(wb.getId(), new UndoObject(UndoObject.Type.modify, undo));
 					}
 					sendWbOthers(WbAction.modifyObj, obj);
@@ -368,7 +370,7 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case deleteObj:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					JSONArray arr = obj.getJSONArray("obj");
 					JSONArray undo = new JSONArray();
 					for (int i = 0; i < arr.length(); ++i) {
@@ -379,7 +381,7 @@ public class WbPanel extends AbstractWbPanel {
 						}
 					}
 					if (undo.length() != 0) {
-						WhiteboardCache.update(roomId, wb);
+						wbm.update(roomId, wb);
 						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, undo));
 					}
 					sendWbAll(WbAction.deleteObj, obj);
@@ -387,10 +389,10 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case clearSlide:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					JSONArray arr = wb.clearSlide(obj.getInt(ATTR_SLIDE));
 					if (arr.length() != 0) {
-						WhiteboardCache.update(roomId, wb);
+						wbm.update(roomId, wb);
 						addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
 					}
 					sendWbAll(WbAction.clearSlide, obj);
@@ -405,13 +407,13 @@ public class WbPanel extends AbstractWbPanel {
 					Long wbId = obj.getLong("wbId");
 					UndoObject uo = getUndo(wbId);
 					if (uo != null) {
-						Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
+						Whiteboard wb = wbm.get(roomId).get(wbId);
 						switch (uo.getType()) {
 							case add:
 							{
 								JSONObject o = new JSONObject(uo.getObject());
 								wb.remove(o.getString("uid"));
-								WhiteboardCache.update(roomId, wb);
+								wbm.update(roomId, wb);
 								sendWbAll(WbAction.deleteObj, obj.put("obj", new JSONArray().put(o)));
 							}
 								break;
@@ -422,7 +424,7 @@ public class WbPanel extends AbstractWbPanel {
 									JSONObject o = arr.getJSONObject(i);
 									wb.put(o.getString("uid"), o);
 								}
-								WhiteboardCache.update(roomId, wb);
+								wbm.update(roomId, wb);
 								sendWbAll(WbAction.createObj, obj.put("obj", new JSONArray(uo.getObject())));
 							}
 								break;
@@ -433,7 +435,7 @@ public class WbPanel extends AbstractWbPanel {
 									JSONObject o = arr.getJSONObject(i);
 									wb.put(o.getString("uid"), o);
 								}
-								WhiteboardCache.update(roomId, wb);
+								wbm.update(roomId, wb);
 								sendWbAll(WbAction.modifyObj, obj.put("obj", arr));
 							}
 								break;
@@ -443,13 +445,13 @@ public class WbPanel extends AbstractWbPanel {
 					break;
 				case videoStatus:
 				{
-					Whiteboard wb = WhiteboardCache.get(roomId).get(obj.getLong("wbId"));
+					Whiteboard wb = wbm.get(roomId).get(obj.getLong("wbId"));
 					String uid = obj.getString("uid");
 					JSONObject po = wb.get(uid);
 					if (po != null && "video".equals(po.getString(ATTR_TYPE))) {
 						JSONObject ns = obj.getJSONObject(PARAM_STATUS);
 						po.put(PARAM_STATUS, ns.put("updated", System.currentTimeMillis()));
-						WhiteboardCache.update(roomId, wb.put(uid, po));
+						wbm.update(roomId, wb.put(uid, po));
 						obj.put(ATTR_SLIDE, po.getInt(ATTR_SLIDE));
 						sendWbAll(WbAction.videoStatus, obj);
 					}
@@ -517,7 +519,8 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	private void clearAll(Long roomId, long wbId) {
-		Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
+		WhiteboardManager wbm = getBean(WhiteboardManager.class);
+		Whiteboard wb = wbm.get(roomId).get(wbId);
 		if (wb == null) {
 			return;
 		}
@@ -525,7 +528,7 @@ public class WbPanel extends AbstractWbPanel {
 		if (arr.length() != 0) {
 			addUndo(wb.getId(), new UndoObject(UndoObject.Type.remove, arr));
 		}
-		wb = WhiteboardCache.clear(roomId, wbId);
+		wb = wbm.clear(roomId, wbId);
 		sendWbAll(WbAction.clearAll, new JSONObject().put("wbId", wbId));
 		sendWbAll(WbAction.setSize, getAddWbJson(wb));
 	}
@@ -542,7 +545,8 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
-			Whiteboards wbs = WhiteboardCache.get(roomId);
+			WhiteboardManager wbm = getBean(WhiteboardManager.class);
+			Whiteboards wbs = wbm.get(roomId);
 			String wuid = UUID.randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
 			switch (fi.getType()) {
@@ -561,7 +565,7 @@ public class WbPanel extends AbstractWbPanel {
 									return addFileUrl(rp.getClient(), wbs.getUid(), o, _f -> updateWbSize(wb, _f));
 								});
 							if (updated[0]) {
-								WhiteboardCache.update(roomId, wb);
+								wbm.update(roomId, wb);
 							}
 							sendWbAll(WbAction.setSize, getAddWbJson(wb));
 							sendWbAll(WbAction.load, getObjWbJson(wb.getId(), arr));
@@ -600,7 +604,7 @@ public class WbPanel extends AbstractWbPanel {
 					}
 					wb.put(wuid, file);
 					updateWbSize(wb, fi);
-					WhiteboardCache.update(roomId, wb);
+					wbm.update(roomId, wb);
 					sendWbAll(WbAction.setSize, getAddWbJson(wb));
 					WbWebSocketHelper.sendWbFile(roomId, wb.getId(), ruid, file, fi);
 				}
@@ -648,7 +652,7 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	public static String saveWb(Long roomId, Long wbId, String name) {
-		Whiteboard wb = WhiteboardCache.get(roomId).get(wbId);
+		Whiteboard wb = getBean(WhiteboardManager.class).get(roomId).get(wbId);
 		FileItem f = new FileItem();
 		f.setType(BaseFileItem.Type.WmlFile);
 		f.setRoomId(roomId);

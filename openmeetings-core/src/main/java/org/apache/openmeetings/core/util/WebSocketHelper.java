@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
@@ -182,7 +183,7 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageUser(userId, m));
 		}
-		send(a -> ((IApplication)a).getOmClients(userId), (t, c) -> {
+		send(a -> ((IApplication)a).getOmBean(IClientManager.class).listByUser(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
 			} catch (IOException e) {
@@ -230,7 +231,7 @@ public class WebSocketHelper {
 	}
 
 	private static void sendRoom(final Long roomId, BiConsumer<IWebSocketConnection, Client> consumer, Predicate<Client> check) {
-		send(a -> ((IApplication)a).getOmRoomClients(roomId), consumer, check);
+		send(a -> ((IApplication)a).getOmBean(IClientManager.class).listByRoom(roomId), consumer, check);
 	}
 
 	private static void send(
