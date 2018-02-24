@@ -3,7 +3,55 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
-Release Notes - Openmeetings - Version 4.0.1
+Release Notes - OpenMeetings - Version 4.0.2
+================================================================================================================
+
+** Vulnerability
+    * CVE-2017-15719 - Wicket jQuery UI: XSS in WYSIWYG editor
+    * CVE-2018-1286 - Apache OpenMeetings - Insufficient Access Controls
+
+** Bug
+    * [OPENMEETINGS-1775] - Send on Enter/Ctrl+Enter should be added
+    * [OPENMEETINGS-1776] - Deleted recording is played on whiteboard
+    * [OPENMEETINGS-1778] - all messages will be deleted in a&a using autoclean-function
+    * [OPENMEETINGS-1779] - whiteboard zoom on uploaded document
+    * [OPENMEETINGS-1781] - Invited guest's name shows as null null in chat
+    * [OPENMEETINGS-1784] - Download as PDF is broken
+    * [OPENMEETINGS-1785] - User's video frame is not resized for other participants when user change video settings
+    * [OPENMEETINGS-1786] - After re-entering My conference room on demo-server I meet quite another interface with not working widgets and whiteboard
+    * [OPENMEETINGS-1799] - Tab for global chat is displayed in room if global chat is OFF
+    * [OPENMEETINGS-1801] - Users sometimes are being duplicated in room
+    * [OPENMEETINGS-1802] - Group delete is broken
+    * [OPENMEETINGS-1807] - encoding on dashboard
+    * [OPENMEETINGS-1809] - Presenter is not marked as having WB permission
+    * [OPENMEETINGS-1817] - Link Feature in Chat doesn't work as expected
+    * [OPENMEETINGS-1820] - rendering of smilies in chat doesn't work as expected
+    * [OPENMEETINGS-1827] - Error Creating new Group
+    * [OPENMEETINGS-1829] - Audio is being translated to room after room exit
+    * [OPENMEETINGS-1832] - File Info will be generated underneath a&a
+
+** New Feature
+    * [OPENMEETINGS-1815] - Show number of users in the room
+
+** Improvement
+    * [OPENMEETINGS-1780] - save and restore also custom.css while backup & restore
+    * [OPENMEETINGS-1783] - Mathematical formulas on WB
+    * [OPENMEETINGS-1790] - Translations need to be improved
+    * [OPENMEETINGS-1805] - There should be possibility to allow rest calls from specific addresses
+    * [OPENMEETINGS-1808] - Optional conversion operations should not display errors
+    * [OPENMEETINGS-1810] - A&A should be reworked
+    * [OPENMEETINGS-1812] - Admin password should be checked while creating/modifying user with high privileges
+    * [OPENMEETINGS-1818] - Hover should be removed from chat
+    * [OPENMEETINGS-1821] - Default WB tool settings should be enhanced
+    * [OPENMEETINGS-1824] - There should be the way to set WB text font
+    * [OPENMEETINGS-1825] - Chat issues and improvements
+
+** Task
+    * [OPENMEETINGS-1777] - Library versions should be updated
+    * [OPENMEETINGS-1803] - Sonar issues need to be addressed
+
+
+Release Notes - OpenMeetings - Version 4.0.1
 ================================================================================================================
 
 ** Bug
@@ -58,7 +106,7 @@ Release Notes - Openmeetings - Version 4.0.1
     * [OPENMEETINGS-1738] - Library versions should be updated
 
 
-Release Notes - Openmeetings - Version 4.0.0
+Release Notes - OpenMeetings - Version 4.0.0
 ================================================================================================================
 
 ** Sub-task
@@ -591,7 +639,7 @@ Release Notes - Openmeetings - Version 4.0.0
     * [OPENMEETINGS-1214] - LDAP import AD groups
 
 
-Release Notes - Openmeetings - Version 3.3.2
+Release Notes - OpenMeetings - Version 3.3.2
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-1688] - Selected icon tool is not availble after Undo
@@ -606,7 +654,7 @@ Release Notes - Openmeetings - Version 3.3.2
     * [OPENMEETINGS-1008] - New Setting: Can user create rooms
 
 
-Release Notes - Openmeetings - Version 3.3.1
+Release Notes - OpenMeetings - Version 3.3.1
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-1660] - UserWebService.add method is broken
@@ -634,7 +682,7 @@ Release Notes - Openmeetings - Version 3.3.1
     * [OPENMEETINGS-1678] - Eraser tool need to be added to WB
 
 
-Release Notes - Openmeetings - Version 3.3.0
+Release Notes - OpenMeetings - Version 3.3.0
 ================================================================================================================
 ** Vulnerability
     * CVE-2017-7663 - Apache OpenMeetings XSS in chat
@@ -675,7 +723,7 @@ Release Notes - Openmeetings - Version 3.3.0
     * [OPENMEETINGS-1650] - Make Audio Alerts Configurable
 
 
-Release Notes - Openmeetings - Version 3.2.1
+Release Notes - OpenMeetings - Version 3.2.1
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-571] - Chat area does not resize when resizing browser window
@@ -733,7 +781,7 @@ Release Notes - Openmeetings - Version 3.2.1
     * [OPENMEETINGS-573] - Audio notification for new chat message
 
 
-Release Notes - Openmeetings - Version 3.2.0
+Release Notes - OpenMeetings - Version 3.2.0
 ================================================================================================================
 ** Sub-task
     * [OPENMEETINGS-896] - Basic room layout should be created
@@ -878,7 +926,7 @@ Release Notes - Openmeetings - Version 3.2.0
     * [OPENMEETINGS-853] - temporary uploaded files
 
 
-Release Notes - Openmeetings - Version 3.1.5
+Release Notes - OpenMeetings - Version 3.1.5
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-863] - Video Problem
@@ -896,7 +944,7 @@ Release Notes - Openmeetings - Version 3.1.5
     * [OPENMEETINGS-1531] - 3.1.5 - Library versions should be updated
 
 
-Release Notes - Openmeetings - Version 3.1.4
+Release Notes - OpenMeetings - Version 3.1.4
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-827] - Video play/stop event acceptable one time in all tab
@@ -956,7 +1004,7 @@ Release Notes - Openmeetings - Version 3.1.4
     * [OPENMEETINGS-1516] - Users are kicked off the rooms and participant list is incomplete
 
 
-Release Notes - Openmeetings - Version 3.1.3
+Release Notes - OpenMeetings - Version 3.1.3
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-508] - Network testing page is not localized
@@ -986,7 +1034,7 @@ Release Notes - Openmeetings - Version 3.1.3
     * [OPENMEETINGS-1453] - Provision for getting OpenMeetings version from SOAP/REST api
 
 
-Release Notes - Openmeetings - Version 3.1.2
+Release Notes - OpenMeetings - Version 3.1.2
 ================================================================================================================
 ** Vulnerability
     * CVE-2016-3089 - Apache Openmeetings XSS in SWF panel
@@ -1055,7 +1103,7 @@ Release Notes - Openmeetings - Version 3.1.2
     * [OPENMEETINGS-853] - temporary uploaded files
 
 
-Release Notes - Openmeetings - Version 3.1.1
+Release Notes - OpenMeetings - Version 3.1.1
 ================================================================================================================
 ** Vulnerability
     * CVE-2016-0783 - Predictable password reset token
@@ -1079,7 +1127,7 @@ Release Notes - Openmeetings - Version 3.1.1
     * [OPENMEETINGS-1337] - Library versions should be updated (3.1.1)
 
 
-Release Notes - Openmeetings - Version 3.1.0
+Release Notes - OpenMeetings - Version 3.1.0
 ================================================================================================================
 ** Sub-task
     * [OPENMEETINGS-1118] - SOAP/REST methods need to be implemented using CXF
@@ -1169,7 +1217,7 @@ Release Notes - Openmeetings - Version 3.1.0
     * [OPENMEETINGS-1315] - build code sucess, but run red5.bat happen error
 
 
-Release Notes - Openmeetings - Version 3.0.7
+Release Notes - OpenMeetings - Version 3.0.7
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-1211] - the use of icons in users tab is illogical
@@ -1198,7 +1246,7 @@ Release Notes - Openmeetings - Version 3.0.7
     * [OPENMEETINGS-1214] - LDAP import AD groups
 
 
-Release Notes - Openmeetings - Version 3.0.6
+Release Notes - OpenMeetings - Version 3.0.6
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-1202] - Send Invitation error with moodle
@@ -1212,7 +1260,7 @@ Release Notes - Openmeetings - Version 3.0.6
     * [OPENMEETINGS-1206] - Room service should be updated to be able to generate invitation hash with first and last name
 
 
-Release Notes - Openmeetings - Version 3.0.5
+Release Notes - OpenMeetings - Version 3.0.5
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-889] - "Upload new image" button should have the same style with other buttons
@@ -1237,7 +1285,7 @@ Release Notes - Openmeetings - Version 3.0.5
     * [OPENMEETINGS-1198] - Simplify Database Install
 
 
-Release Notes - Openmeetings - Version 3.0.4
+Release Notes - OpenMeetings - Version 3.0.4
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-878] - Sign Web-Start application with trusted root cert
@@ -1315,7 +1363,7 @@ Release Notes - Openmeetings - Version 3.0.4
     * [OPENMEETINGS-1065] - add ability to minimize screen-sharing video
 
 
-Release Notes - Openmeetings - Version 3.0.3
+Release Notes - OpenMeetings - Version 3.0.3
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-270] - MemoryLeak / Dead-Lock in FlvRecorderConverter
@@ -1398,7 +1446,7 @@ Release Notes - Openmeetings - Version 3.0.3
     * [OPENMEETINGS-1066] - re-order fields on screen-sharing applet
 
 
-Release Notes - Openmeetings - Version 3.0.2
+Release Notes - OpenMeetings - Version 3.0.2
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-604] - Pop up message remain same after quitting the room created by Book conference room option in the email
@@ -1419,7 +1467,7 @@ Release Notes - Openmeetings - Version 3.0.2
     * [OPENMEETINGS-982] - ApplicationContext recreation should be avoided
 
 
-Release Notes - Openmeetings - Version 3.0.1
+Release Notes - OpenMeetings - Version 3.0.1
 ================================================================================================================
 ** Sub-task
     * [OPENMEETINGS-937] - Screen sharing application should create recordings with size multiple by 16
@@ -1453,7 +1501,7 @@ Release Notes - Openmeetings - Version 3.0.1
     * [OPENMEETINGS-939] - Not ready recordings should have special icon
 
 
-Release Notes - Openmeetings - Version 3.0.0
+Release Notes - OpenMeetings - Version 3.0.0
 ================================================================================================================
 ** Sub-task
     * [OPENMEETINGS-746] - Replace OmTimeZone in User Entity with String tz and fix all dependencies
@@ -1736,7 +1784,7 @@ Release Notes - Openmeetings - Version 3.0.0
     * [OPENMEETINGS-622] - Removing the menu items and customizing dashboard
 
 
-Release Notes - Openmeetings - Version 2.2.0 Apache Release
+Release Notes - OpenMeetings - Version 2.2.0 Apache Release
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-671] - Calendar is shown incompletely when book conference room
@@ -1769,7 +1817,7 @@ Release Notes - Openmeetings - Version 2.2.0 Apache Release
     * [OPENMEETINGS-790] - Red5 version in 2.x branch should be bumped
 
 
-Release Notes - Openmeetings - Version 2.1.1 Apache Release
+Release Notes - OpenMeetings - Version 2.1.1 Apache Release
 ================================================================================================================
 ** Bug
     * [OPENMEETINGS-432] - video only room is coming with white board also
@@ -1795,7 +1843,7 @@ Release Notes - Openmeetings - Version 2.1.1 Apache Release
     * [OPENMEETINGS-589] - Configurable hot key for Mute/Unmute should be added
 
 
-Release Notes - Openmeetings - Version 2.1 Apache Release
+Release Notes - OpenMeetings - Version 2.1 Apache Release
 ================================================================================================================
 ** Sub-task
     * [OPENMEETINGS-448] - Test and fix latest trunk to be able to import all old download zip's

@@ -39,6 +39,29 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
+		<section name="CVE-2017-15719 - Wicket jQuery UI: XSS in WYSIWYG editor">
+			<p>Severity: High</p>
+			<p>Vendor: wicket-jquery-ui</p>
+			<p>Versions Affected: &lt;= 6.28.0, &lt;= 7.9.1, &lt;= 8.0.0-M8</p>
+			<p>Description: Attacker can submit arbitrary JS code to WYSIWYG editor<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-15719">CVE-2017-15719</a>
+			</p>
+			<p>The issue was fixed in 6.28.1, 7.9.2, 8.0.0-M8.1<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 4.0.2</p>
+			<p>Credit: This issue was identified by Sahil Dhar of Security Innovation Inc</p>
+		</section>
+		<section name="CVE-2018-1286 - Apache OpenMeetings - Insufficient Access Controls">
+			<p>Severity: Medium</p>
+			<p>Vendor: The Apache Software Foundation</p>
+			<p>Versions Affected: Apache OpenMeetings 3.0.0</p>
+			<p>Description: CRUD operations on privileged users are not password protected allowing an authenticated attacker 
+				to deny service for privileged users.<br/>
+				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1286">CVE-2018-1286</a>
+			</p>
+			<p>The issue was fixed in 4.0.2<br/>
+				All users are recommended to upgrade to Apache OpenMeetings 4.0.2</p>
+			<p>Credit: This issue was identified by Sahil Dhar of Security Innovation Inc</p>
+		</section>
 		<section name="CVE-2017-7663 - Apache OpenMeetings - XSS in chat">
 			<p>Severity: High</p>
 			<p>Vendor: The Apache Software Foundation</p>

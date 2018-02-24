@@ -131,19 +131,13 @@ git tag -s 4.0.0RC1 -m "4.0.0 Release Candidate 1 tag"
 git push origin 4.0.0RC1
 						</source>
 					</li>
-					<li>Deploy release artifacts to Maven
-						<ul>
-							<li>
-							<source>
-mvn clean
-mvn deploy -Pdeploy,rc
-							</source>
-							</li>
-						</ul>
+					<li>
+						<p>Deploy release artifacts to Maven</p>
+						<source>mvn clean &amp;&amp; mvn deploy -Pdeploy,rc</source>
 					</li>
 					<li>
 						<p>Run the command: </p>
-						<source>mvn clean install -P allModules,rc</source>
+						<source>mvn clean &amp;&amp; mvn install -P allModules,rc</source>
 					</li>
 					<li>
 						<p>Test building the source on windows and OSx or Linux</p>
