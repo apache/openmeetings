@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -51,16 +52,19 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
 import com.github.openjson.JSONObject;
+import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 
 public class RoomSidebar extends Panel {
@@ -226,6 +230,7 @@ public class RoomSidebar extends Panel {
 			}
 		}
 	};
+	private final Label userCount = new Label("user-count", Model.of(""));
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
@@ -250,19 +255,19 @@ public class RoomSidebar extends Panel {
 		add(selfRights, userList.add(updateUsers()).setOutputMarkupId(true)
 				, fileTab.setVisible(!room.isInterview()), roomFiles.setVisible(!room.isInterview()));
 
-		add(addFolder, settings);
+		add(addFolder, settings, userCount.setOutputMarkupId(true));
 		add(toggleRight, toggleActivity, roomAction, avSettings);
 		add(confirmKick = new ConfirmableAjaxBorder("confirm-kick", getString("603"), getString("605")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				room.kickUser(kickedClient);
+				kickUser(kickedClient);
 			}
 		});
 		add(form.add(confirmTrash), upload = new UploadDialog("upload", room, roomFiles));
 		updateShowFiles(null);
-		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs"));
+		add(new JQueryUIBehavior("#room-sidebar-tabs", "tabs", new Options("activate", "function(event, ui) {Room.setSize();}")));
 		add(activities = new ActivitiesPanel("activities", room));
 	}
 
@@ -291,7 +296,8 @@ public class RoomSidebar extends Panel {
 	public void update(IPartialPageRequestHandler handler) {
 		updateShowFiles(handler);
 		updateUsers();
-		handler.add(selfRights.update(handler), userList);
+		userCount.setDefaultModelObject(users.getList().size());
+		handler.add(selfRights.update(handler), userList, userCount);
 	}
 
 	public void updateFiles(IPartialPageRequestHandler handler) {

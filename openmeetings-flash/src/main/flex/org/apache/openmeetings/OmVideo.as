@@ -268,8 +268,11 @@ public class OmVideo {
 				}
 			}
 			, sendVarsToMessageWithClient: function(obj:Object):void {
+				debug("sendVarsToMessageWithClient :: ", obj);
 				if ("copiedText" === obj[0]) {
 					ExternalInterface.call("Room.showClipboard", obj[1]);
+				} else if ("quit" === obj["message"]) {
+					reset();
 				}
 			}
 		};
@@ -330,6 +333,7 @@ public class OmVideo {
 	}
 
 	public function reset():void {
+		debug("reset:: ns ?== null " + (ns === null));
 		if (ns !== null) {
 			switch (mode) {
 				case PLAY:

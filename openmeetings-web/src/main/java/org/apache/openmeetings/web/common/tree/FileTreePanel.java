@@ -341,7 +341,7 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	void updateNode(AjaxRequestTarget target, BaseFileItem fi) {
-		if (fi != null && target != null) {
+		if (fi != null && !fi.isDeleted() && target != null) {
 			if (Type.Folder == fi.getType()) {
 				tree.updateBranch(fi, target);
 			} else {
@@ -408,7 +408,7 @@ public abstract class FileTreePanel extends Panel {
 			selected.put(fi.getHash(), fi);
 			lastSelected = fi;
 		}
-		updateSelected(target); //all finaly selected are in the update list
+		updateSelected(target); //all finally selected are in the update list
 		if (target != null) {
 			target.add(trashBorder, download.setVisible(isDownloadable(lastSelected)));
 		}

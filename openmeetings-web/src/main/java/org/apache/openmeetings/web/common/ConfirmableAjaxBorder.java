@@ -100,7 +100,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	/**
 	 * Gives a chance to the specializations to modify the attributes.
 	 *
-	 * @param attributes attributes
+	 * @param attributes - attributes
 	 */
 	protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
 	}
@@ -112,8 +112,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	/**
 	 * Triggered when the form is submitted, but the validation failed
 	 *
-	 * @param target the {@link AjaxRequestTarget}
-	 * @param form the {@link Form}
+	 * @param target - the {@link AjaxRequestTarget}
 	 */
 	protected void onError(AjaxRequestTarget target) {
 	}
@@ -121,8 +120,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	/**
 	 * Triggered when the form is submitted, and the validation succeed
 	 *
-	 * @param target the {@link AjaxRequestTarget}
-	 * @param form the {@link Form}
+	 * @param target - the {@link AjaxRequestTarget}
 	 */
 	protected abstract void onSubmit(AjaxRequestTarget target);
 

@@ -407,12 +407,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void dropSharing(org.apache.openmeetings.db.entity.basic.IClient c, Long roomId) {
-		IScope scope = null;
-		try {
-			scope = getChildScope(String.valueOf(roomId));
-		} catch (Exception e) {
-			//no-op, scope doesn't exist while testing
-		}
+		IScope scope = getChildScope(roomId);
 		//Elvis has left the building
 		new MessageSender(scope, "stopStream", new Object(), this) {
 			@Override
@@ -704,7 +699,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	public void sendToScope(final Long roomId, String method, Object obj) {
-		new MessageSender(getChildScope(String.valueOf(roomId)), method, obj, this) {
+		new MessageSender(getChildScope(roomId), method, obj, this) {
 			@Override
 			public boolean filter(IConnection conn) {
 				StreamClient rcl = streamClientManager.get(IClientUtil.getId(conn.getClient()));
@@ -929,7 +924,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			return;
 		}
 
-		recordingService.startRecording(getChildScope(String.valueOf(c.getRoom().getId())), c, true);
+		recordingService.startRecording(getChildScope(c.getRoomId()), c, true);
 	}
 
 	/**
@@ -939,7 +934,7 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	 */
 	public void stopInterviewRecording(org.apache.openmeetings.db.entity.basic.IClient c) {
 		_log.debug("-----------  stopInterviewRecording");
-		recordingService.stopRecording(getChildScope(String.valueOf(c.getRoomId())), c);
+		recordingService.stopRecording(getChildScope(c.getRoomId()), c);
 	}
 
 	public void micActivity(boolean active) {
