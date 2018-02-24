@@ -341,7 +341,7 @@ public abstract class FileTreePanel extends Panel {
 	}
 
 	void updateNode(AjaxRequestTarget target, BaseFileItem fi) {
-		if (fi != null && target != null) {
+		if (fi != null && !fi.isDeleted() && target != null) {
 			if (Type.Folder == fi.getType()) {
 				tree.updateBranch(fi, target);
 			} else {
