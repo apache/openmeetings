@@ -22,6 +22,31 @@
 	<body>
 		<section name="News">
 			<div class="bs-callout bs-callout-info">
+				<b>Version 4.0.1 released!</b>
+				<div>Release 4.0.1, provides following improvements:<br/>
+					<ul>
+						<li>Openlaszlo code is removed</li>
+						<li>Login via OAuth is improved</li>
+						<li>External video source is room is fixed</li>
+						<li>Multiple improvements of White-board</li>
+						<li>Multiple improvements of Chat</li>
+						<li>JS/CSS files are minified and merged to reduce load time</li>
+						<li>Overall stability is improved</li>
+					</ul>
+					Other fixes and improvements
+					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+				</div>
+				<br/>
+
+				<span>
+					43 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.1/CHANGELOG">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342042">Detailed list</a>
+				</span>
+				<span> See <a href="downloads.html">Downloads page</a>.</span>
+				<span class="date">(2017-12-09)</span>
+			</div>
+			<div class="bs-callout bs-callout-info">
 				<b>Version 4.0.0 released!</b>
 				<div>Release 4.0.0, provides following improvements:<br/>
 					<ul>

@@ -48,10 +48,9 @@ public class LangForm extends Form<Void> {
 	/**
 	 * Render Main
 	 *
-	 * @param id
-	 * @param listContainer
-	 * @param language
-	 * @param langPanel
+	 * @param id - id of this form
+	 * @param listContainer - container holds list of labels
+	 * @param langPanel - language panel
 	 */
 	public LangForm(String id, final WebMarkupContainer listContainer, final LangPanel langPanel) {
 		super(id);

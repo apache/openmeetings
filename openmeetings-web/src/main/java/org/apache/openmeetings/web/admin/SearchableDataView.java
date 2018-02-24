@@ -27,7 +27,7 @@ import org.apache.wicket.markup.repeater.data.DataView;
  *
  * @author swagner
  *
- * @param <T>
+ * @param <T> - Entity class being used by this Data View
  */
 public abstract class SearchableDataView<T extends IDataProviderEntity> extends DataView<T> {
 	private static final long serialVersionUID = 1L;

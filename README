@@ -8,7 +8,33 @@ Apache OpenMeetings provides video conferencing, instant messaging, white board,
 collaborative document editing and other groupware tools using API functions of 
 the Red5 Streaming Server for Remoting and Streaming. 
 
-Release Notes 4.0.0
+Release Notes 4.0.2
+=============
+see CHANGELOG file for detailed log
+
+Release 4.0.2, provides following improvements:
+
+Security fixes in Chat and Admin
+
+Chat:
+* Send on Enter/Ctrl+Enter
+* Invited guest's name displayed as expected
+* Turned OFF global chat is not displayed
+* Link works as expected
+* Smiles works as expected
+* Hover removed from chat
+
+Room:
+* Download as PDF
+* Download/screen-sharing application in IE
+* No duplicated users
+* Activities&Actions improved
+* Number of users is displayed in the room
+* Mathematical formulas on WB
+
+Other fixes and improvements, 32 issues were fixed
+
+Release Notes 4.0.1
 =============
 see CHANGELOG file for detailed log
 

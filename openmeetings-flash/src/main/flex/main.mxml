@@ -182,6 +182,7 @@
 						}
 					});
 					ExternalInterface.addCallback("setRights", setRightsCallback);
+					ExternalInterface.addCallback("cleanup", cleanupCallback);
 					video.connect(function ():void {
 						// trust no-one
 						video.getNc().call("check", new Responder(function (check:Object):void {
@@ -246,6 +247,7 @@
 					});
 					ExternalInterface.addCallback("refresh", refreshCallback);
 					ExternalInterface.addCallback("setRights", setRightsCallback);
+					ExternalInterface.addCallback("cleanup", cleanupCallback);
 					copyPasteCtxMenu.clipboardMenu = true;
 				}
 					break;
@@ -428,6 +430,11 @@
 			rights = _rights;
 			_updateExclusive();
 			_updateRemote();
+		}
+
+		private function cleanupCallback():void {
+			debug("cleanupCallback");
+			video.reset();
 		}
 
 		private function refreshCallback(opts:Object):void {

@@ -260,19 +260,19 @@ webapps/root/WEB-INF/web.xml
 
 webapps/openmeetings/WEB-INF/lib/animal-sniffer-annotations-1.14.jar
 webapps/openmeetings/WEB-INF/lib/api-all-*.jar
-webapps/openmeetings/WEB-INF/lib/asterisk-java-1.0.0-final.jar
-webapps/openmeetings/WEB-INF/lib/cache-api-1.0.0.jar
+webapps/openmeetings/WEB-INF/lib/asterisk-java-2.0.2.jar
 webapps/openmeetings/WEB-INF/lib/caldav4j-*.jar
 webapps/openmeetings/WEB-INF/lib/commons-*.jar
 webapps/openmeetings/WEB-INF/lib/cxf-*.jar
 webapps/openmeetings/WEB-INF/lib/derby*.jar
 webapps/openmeetings/WEB-INF/lib/dom4j-2.1.0.jar
+webapps/openmeetings/WEB-INF/lib/fontbox-2.0.8.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
 webapps/openmeetings/WEB-INF/lib/gson-2.8.2.jar
 webapps/openmeetings/WEB-INF/lib/hazelcast-*.jar
 webapps/openmeetings/WEB-INF/lib/httpcore-*.jar
-webapps/openmeetings/WEB-INF/lib/jackrabbit-webdav-2.12.1.jar
+webapps/openmeetings/WEB-INF/lib/jackrabbit-webdav-2.13.5.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
 webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
 webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.3.jar
@@ -282,12 +282,13 @@ webapps/openmeetings/WEB-INF/lib/jsr305-1.3.9.jar
 webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
-webapps/openmeetings/WEB-INF/lib/neethi-3.1.0.jar
+webapps/openmeetings/WEB-INF/lib/neethi-3.1.1.jar
 webapps/openmeetings/WEB-INF/lib/openjpa-2.4.2.jar
 webapps/openmeetings/WEB-INF/lib/openjson-1.0.8.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
+webapps/openmeetings/WEB-INF/lib/owasp-java-html-sanitizer-20171016.1.jar
 webapps/openmeetings/WEB-INF/lib/pdfbox-*.jar
 webapps/openmeetings/WEB-INF/lib/ridl-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
@@ -301,7 +302,7 @@ webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
 webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-3.17.jar
 webapps/openmeetings/WEB-INF/lib/xml-apis-*.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
-webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.2.jar
+webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.3.jar
 
 webapps/openmeetings/screenshare/openmeetings-screenshare-*.jar
 
@@ -1396,7 +1397,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
  iCal4j - License
  
-webapps/openmeetings/WEB-INF/lib/ical4j-2.0.4.jar
+webapps/openmeetings/WEB-INF/lib/ical4j-2.1.5.jar
  
 ======================================================================================================================
 
@@ -2562,6 +2563,7 @@ EXHIBIT A -Mozilla Public License.
 
  =======================================================================================
 
+webapps/openmeetings/WEB-INF/lib/checker-compat-qual-2.0.0.jar
 webapps/openmeetings/WEB-INF/lib/jdk-serializable-functional-1.8.3.jar
 
 The MIT License (MIT)

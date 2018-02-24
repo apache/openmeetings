@@ -117,6 +117,10 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 
 	/**
 	 * Open the Dialog with a specific type of Appointment Based Prompts
+	 *
+	 * @param handler - the {@link IPartialPageRequestHandler}
+	 * @param type - the {@link DIALOG_TYPE} being opened
+	 * @param a - the {@link Appointment}
 	 */
 	public void open(IPartialPageRequestHandler handler, DIALOG_TYPE type, Appointment a) {
 		this.type = type;
@@ -149,6 +153,10 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 
 	/**
 	 * Open the Dialog with a specific type of Calendar Based Prompts
+	 *
+	 * @param handler - the {@link IPartialPageRequestHandler}
+	 * @param type - the {@link DIALOG_TYPE} being opened
+	 * @param c - the {@link OmCalendar}
 	 */
 	public void open(IPartialPageRequestHandler handler, DIALOG_TYPE type, OmCalendar c) {
 		this.type = type;

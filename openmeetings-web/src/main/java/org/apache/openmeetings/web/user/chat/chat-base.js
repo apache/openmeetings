@@ -60,23 +60,23 @@ var Chat = function() {
 		typingTimer = null;
 		chatActivity('typing_stop', $('.room.box').data('room-id'));
 	}
+	function _emtClick() {
+		_editorAppend($(this).data('emt'));
+	}
 	function initToolbar() {
-		const emots = [].concat.apply([], [emoticon.threeCharEmoticons, emoticon.twoCharEmoticons]);
-		for (let ei in emoticon.specialEmoticons) {
-			emots.push(ei);
-		}
+		const emots = emoticon.emoticons;
 		const rowSize = 20, emotMenuList = $('#emotMenuList');
 		emotMenuList.html('');
-		let row = $('<tr></tr>');
+		let row;
 		for (let i = 0; i < emots.length; ++i) {
+			if (i % rowSize === 0) {
+				row = $('<tr></tr>');
+				emotMenuList.append(row);
+			}
 			row.append($('<td>').append(
 					$('<div>').addClass('emt').html(emoticon.emoticonize(emots[i]))
-						.data('emt', emots[i]).click(function() {Chat.emtClick($(this).data('emt'));})
+						.data('emt', emots[i]).click(_emtClick)
 				));
-			if (i !== 0 && i % rowSize === 0) {
-				emotMenuList.append(row);
-				row = $('<tr></tr>');
-			}
 		}
 		const emtBtn = $('#emoticons');
 		emtBtn.html('');
@@ -412,7 +412,6 @@ var Chat = function() {
 		}
 		, close: _close
 		, toggle: _toggle
-		, emtClick: _editorAppend
 		, setRoomMode: _setRoomMode
 		, setHeight: _setHeight
 		, clean: _clean

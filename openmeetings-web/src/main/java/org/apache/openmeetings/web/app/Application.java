@@ -76,6 +76,7 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
@@ -128,6 +129,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.validation.validator.UrlValidator;
+import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
@@ -419,6 +421,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
+	public static void kickUser(Client client) {
+		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoom().getId(), client, RoomMessage.Type.kick, client.getUid()));
+	}
+
 	private static boolean hasVideo(StreamClient rcl) {
 		return rcl != null && rcl.getAvsettings().contains("v");
 	}
@@ -630,8 +636,13 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				}
 			}
 			if (_c instanceof Client) {
-				getBean(ScopeApplicationAdapter.class).dropSharing(_c, roomId);
+				ScopeApplicationAdapter scApp = getBean(ScopeApplicationAdapter.class);
+				scApp.dropSharing(_c, roomId);
 				Client c = (Client)_c;
+				IScope sc = scApp.getChildScope(roomId);
+				for (String uid : c.getStreams()) {
+					scApp.sendMessageById("quit", uid, sc);
+				}
 				c.setRoom(null);
 				c.clear();
 				update(c);
