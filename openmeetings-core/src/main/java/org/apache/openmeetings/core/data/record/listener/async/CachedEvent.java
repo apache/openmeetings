@@ -21,15 +21,13 @@ package org.apache.openmeetings.core.data.record.listener.async;
 import java.util.Date;
 
 import org.apache.mina.core.buffer.IoBuffer;
-import org.red5.server.api.stream.IStreamPacket;
-import org.red5.server.net.rtmp.event.VideoData.FrameType;
 
-public class CachedEvent implements IStreamPacket {
+public class CachedEvent/* implements IStreamPacket*/ {
 	private byte dataType;
 	private int timestamp; //this is the timeStamp, showing the time elapsed since the microphone was turned on
 	private IoBuffer data;
 	private Date currentTime; //this is the actually current timeStamp when the packet with audio data did enter the server
-	private FrameType frameType = FrameType.UNKNOWN;
+	//private FrameType frameType = FrameType.UNKNOWN;
 
 	public Date getCurrentTime() {
 		return currentTime;
@@ -51,6 +49,7 @@ public class CachedEvent implements IStreamPacket {
 		this.data = data;
 	}
 
+	/*
 	@Override
 	public byte getDataType() {
 		return dataType;
@@ -73,4 +72,5 @@ public class CachedEvent implements IStreamPacket {
 	public void setFrameType(FrameType frameType) {
 		this.frameType = frameType;
 	}
+	*/
 }

@@ -18,10 +18,8 @@
  */
 package org.apache.openmeetings.web.app;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getHazelcast;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,6 +32,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
@@ -42,7 +41,7 @@ import com.hazelcast.core.IMap;
 
 @Component
 public class QuickPollManager {
-	private static final Logger log = getLogger(QuickPollManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(QuickPollManager.class);
 	private static final String QPOLLS_KEY = "QPOLLS_KEY";
 	private HazelcastInstance hazelcast;
 

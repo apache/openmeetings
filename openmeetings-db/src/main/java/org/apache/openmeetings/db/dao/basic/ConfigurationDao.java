@@ -58,7 +58,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
@@ -102,8 +101,8 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,7 +126,7 @@ import com.github.openjson.JSONObject;
 @Repository
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
-	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationDao.class);
 	private static final String[] searchFields = {"key", "value"};
 
 	@PersistenceContext

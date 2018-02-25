@@ -25,9 +25,8 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MainService {
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, OpenmeetingsVariables.getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MainService.class);
 
 	@Autowired
 	private AppointmentDao appointmentDao;

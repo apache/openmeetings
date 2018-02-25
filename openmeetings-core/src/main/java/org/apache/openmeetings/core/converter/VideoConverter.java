@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.converter;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -31,13 +30,13 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VideoConverter extends BaseConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(VideoConverter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(VideoConverter.class);
 
 	public void convertVideo(FileItem f, String ext, ProcessResultList logs) {
 		try {

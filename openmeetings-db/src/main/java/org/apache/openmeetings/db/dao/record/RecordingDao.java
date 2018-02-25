@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.dao.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -37,8 +36,8 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.Recording.Status;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class RecordingDao extends BaseFileItemDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RecordingDao.class);
 
 	@Autowired
 	private UserDao userDao;

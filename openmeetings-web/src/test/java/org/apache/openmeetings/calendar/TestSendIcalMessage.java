@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
@@ -46,8 +44,8 @@ import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.util.mail.ByteArrayDataSource;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
@@ -68,7 +66,7 @@ import net.fortuna.ical4j.model.property.Uid;
 import net.fortuna.ical4j.model.property.Version;
 
 public class TestSendIcalMessage extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestSendIcalMessage.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestSendIcalMessage.class);
 
 	@Autowired
 	private MailHandler mailHandler;

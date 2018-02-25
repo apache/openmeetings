@@ -24,7 +24,6 @@ import static org.apache.openmeetings.core.rss.LoadAtomRssFeed.setRss;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.IOException;
@@ -43,8 +42,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,7 +52,7 @@ import com.github.openjson.JSONObject;
 
 @Component("reminderJob")
 public class ReminderJob extends AbstractJob {
-	private static Logger log = Red5LoggerFactory.getLogger(ReminderJob.class, getWebAppRootKey());
+	private static Logger log = LoggerFactory.getLogger(ReminderJob.class);
 	private static final int MAX_ITEM_COUNT = 5;
 	@Autowired
 	private AppointmentLogic appointmentLogic;

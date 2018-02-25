@@ -18,22 +18,20 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Sebastian Wagner 27.08.2005 - 19:24:25
  *
  */
 public class CalendarPatterns {
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPatterns.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(CalendarPatterns.class);
 
 	public static final FastDateFormat dateFormat__ddMMyyyyHHmmss = FastDateFormat.getInstance("dd.MM.yyyy HH:mm:ss");
 	public static final FastDateFormat dateFormat__ddMMyyyy = FastDateFormat.getInstance("dd.MM.yyyy");

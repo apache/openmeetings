@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -81,8 +80,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Select2MultiChoice;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -101,7 +100,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDialog.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(AppointmentDialog.class);
 
 	private AppointmentForm form;
 	private DialogButton save;

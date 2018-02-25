@@ -25,7 +25,6 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
@@ -86,8 +85,8 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -95,7 +94,7 @@ import com.github.openjson.JSONTokener;
 
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(WbPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(WbPanel.class);
 	private static final int UPLOAD_WB_LEFT = 0;
 	private static final int UPLOAD_WB_TOP = 0;
 	private static final int DEFAULT_WIDTH = 640;

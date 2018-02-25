@@ -18,23 +18,13 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.red5.io.IoConstants.TYPE_AUDIO;
-import static org.red5.server.net.rtmp.event.VideoData.FrameType.KEYFRAME;
-
 import java.util.Date;
 
-import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StreamAudioWriter extends BaseStreamWriter {
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamAudioWriter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(StreamAudioWriter.class);
 
 	private int duration = 0;
 
@@ -46,19 +36,21 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	private long byteCount = 0;
 
 	// Autowire is not possible
-	protected final RecordingMetaDeltaDao metaDeltaDao;
+	//protected final RecordingMetaDeltaDao metaDeltaDao;
 
 	private boolean isInterview = false;
 
+	/*
 	public StreamAudioWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData, boolean isInterview) {
 		super(streamName, scope, metaDataId, isScreenData);
 
 		this.metaDeltaDao = getApp().getOmBean(RecordingMetaDeltaDao.class);
 		this.isInterview = isInterview;
 	}
-
+	*/
 	@Override
 	public void packetReceived(CachedEvent streampacket) {
+		/*
 		try {
 			// We only care about audio at this moment
 			if (isInterview || TYPE_AUDIO == streampacket.getDataType()) {
@@ -173,10 +165,12 @@ public class StreamAudioWriter extends BaseStreamWriter {
 		} catch (Exception e) {
 			log.error("##REC:: [packetReceived]", e);
 		}
+		*/
 	}
 
 	@Override
 	protected void internalCloseStream() {
+		/*
 		try {
 			// We do not add any End Padding or count the gaps for the
 			// Screen Data, cause there is no!
@@ -212,5 +206,6 @@ public class StreamAudioWriter extends BaseStreamWriter {
 		} catch (Exception err) {
 			log.error("##REC:: [internalCloseStream]", err);
 		}
+		*/
 	}
 }

@@ -21,23 +21,19 @@ package org.apache.openmeetings.service.user;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -51,7 +47,6 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
@@ -62,9 +57,8 @@ import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,7 +69,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserManager implements IUserManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UserManager.class);
 
 	@Autowired
 	private SessiondataDao sessionDao;
@@ -279,6 +273,7 @@ public class UserManager implements IUserManager {
 	 */
 	@Override
 	public boolean kickUsersByRoomId(Long roomId) {
+		/*
 		try {
 			sessionDao.clearSessionByRoomId(roomId);
 
@@ -298,11 +293,13 @@ public class UserManager implements IUserManager {
 		} catch (Exception err) {
 			log.error("[kickUsersByRoomId]", err);
 		}
+		*/
 		return false;
 	}
 
 	@Override
 	public boolean kickById(String uid) {
+		/*
 		try {
 			StreamClient rcl = streamClientManager.get(uid);
 
@@ -327,6 +324,7 @@ public class UserManager implements IUserManager {
 		} catch (Exception err) {
 			log.error("[kickById]", err);
 		}
+		*/
 		return false;
 	}
 

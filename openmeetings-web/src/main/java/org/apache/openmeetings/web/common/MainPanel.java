@@ -22,7 +22,6 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -86,8 +85,8 @@ import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.util.time.Duration;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -95,7 +94,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MainPanel.class);
 	private static final String DELIMITER = "     ";
 	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	private String uid = null;

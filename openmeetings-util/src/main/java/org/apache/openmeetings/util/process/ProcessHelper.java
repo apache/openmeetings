@@ -26,12 +26,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProcessHelper {
-	public static final Logger log = Red5LoggerFactory.getLogger(ProcessHelper.class, OpenmeetingsVariables.getWebAppRootKey());
+	public static final Logger log = LoggerFactory.getLogger(ProcessHelper.class);
 
 	private ProcessHelper() {}
 

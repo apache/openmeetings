@@ -20,7 +20,6 @@ package org.apache.openmeetings.service.room;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,8 +50,8 @@ import org.apache.openmeetings.service.mail.template.subject.UpdatedAppointmentT
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.mail.IcalHandler;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +62,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InvitationManager implements IInvitationManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(InvitationManager.class);
 
 	@Autowired
 	private InvitationDao invitationDao;

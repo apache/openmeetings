@@ -24,13 +24,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_RSS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -83,6 +81,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.WidgetFactory;
@@ -90,7 +89,7 @@ import org.wicketstuff.dashboard.web.DashboardContext;
 
 public class WebSession extends AbstractAuthenticatedWebSession implements IWebSession {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = getLogger(WebSession.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(WebSession.class);
 	public static final int MILLIS_IN_MINUTE = 60000;
 	public static final List<String> AVAILABLE_TIMEZONES = Arrays.asList(TimeZone.getAvailableIDs());
 	public static final Set<String> AVAILABLE_TIMEZONE_SET = new LinkedHashSet<>(AVAILABLE_TIMEZONES);

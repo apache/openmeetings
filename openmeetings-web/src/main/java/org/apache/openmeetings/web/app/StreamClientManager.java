@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_FIRST_NAME;
 import static org.apache.openmeetings.db.dao.room.SipDao.SIP_USER_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getHazelcast;
 
 import java.util.Collection;
@@ -53,9 +52,8 @@ import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.Server;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -71,7 +69,7 @@ import com.hazelcast.core.HazelcastInstance;
  */
 @Component
 public class StreamClientManager implements IStreamClientManager {
-	protected static final Logger log = Red5LoggerFactory.getLogger(StreamClientManager.class, getWebAppRootKey());
+	protected static final Logger log = LoggerFactory.getLogger(StreamClientManager.class);
 	private static final String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
 	private HazelcastInstance hazelcast;
 

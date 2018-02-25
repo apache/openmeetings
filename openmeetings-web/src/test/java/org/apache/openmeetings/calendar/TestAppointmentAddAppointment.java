@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -43,12 +42,12 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAppointmentAddAppointment extends AbstractWicketTester {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestAppointmentAddAppointment.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestAppointmentAddAppointment.class);
 
 	@Autowired
 	private AppointmentLogic appointmentLogic;

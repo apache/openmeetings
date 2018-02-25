@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -32,14 +30,14 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract Class which contains all the common code for all Handlers.
  */
 public abstract class AbstractCalendarHandler implements CalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(AbstractCalendarHandler.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(AbstractCalendarHandler.class);
 
 	protected HttpClient client;
 	protected OmCalendar calendar;

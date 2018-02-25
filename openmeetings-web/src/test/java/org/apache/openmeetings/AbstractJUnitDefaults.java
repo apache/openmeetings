@@ -39,12 +39,12 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.junit.Before;
-import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
-	private static final Logger log = Red5LoggerFactory.getLogger(AbstractJUnitDefaults.class);
+	private static final Logger log = LoggerFactory.getLogger(AbstractJUnitDefaults.class);
 	private static final String timeZone = "Europe/Berlin";
 	public static final int ONE_HOUR = 60 * 60 * 1000;
 	public static final String adminUsername = "admin";

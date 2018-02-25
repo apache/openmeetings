@@ -21,7 +21,6 @@ package org.apache.openmeetings.core.data.file;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.InputStream;
@@ -37,14 +36,14 @@ import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.tika.exception.UnsupportedFormatException;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FileProcessor {
-	private static final Logger log = Red5LoggerFactory.getLogger(FileProcessor.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(FileProcessor.class);
 
 	//Spring loaded Beans
 	@Autowired

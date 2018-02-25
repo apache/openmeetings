@@ -19,13 +19,12 @@
 package org.apache.openmeetings.util.crypt;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CryptProvider {
-	private static final Logger log = Red5LoggerFactory.getLogger(CryptProvider.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(CryptProvider.class);
 	private static volatile ICrypt crypt;
 
 	private CryptProvider() {}

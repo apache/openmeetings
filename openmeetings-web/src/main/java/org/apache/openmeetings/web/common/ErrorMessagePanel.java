@@ -18,18 +18,16 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.PrintWriter;
 
 import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ErrorMessagePanel extends Panel {
-	private static final Logger log = Red5LoggerFactory.getLogger(ErrorMessagePanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ErrorMessagePanel.class);
 	private static final long serialVersionUID = 1L;
 
 	public ErrorMessagePanel(String id, String msg, Throwable err) {

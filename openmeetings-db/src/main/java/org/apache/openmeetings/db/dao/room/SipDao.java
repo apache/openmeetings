@@ -33,11 +33,11 @@ import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
-import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 public class SipDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(SipDao.class);
+	private static final Logger log = LoggerFactory.getLogger(SipDao.class);
 	public static final String ASTERISK_OM_FAMILY = "openmeetings";
 	public static final String ASTERISK_OM_KEY = "rooms";
 	public static final String SIP_FIRST_NAME = "SIP Transport";

@@ -22,19 +22,14 @@ import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.util.Version.getVersion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -43,10 +38,7 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter.MessageSender;
 import org.apache.openmeetings.core.service.MainService;
-import org.apache.openmeetings.core.util.IClientUtil;
-import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -56,28 +48,21 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
-import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IConnection;
-import org.red5.server.api.Red5;
-import org.red5.server.api.service.IServiceCapableConnection;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("mobile.service")
 public class MobileService {
-	private static final Logger log = Red5LoggerFactory.getLogger(MainService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MainService.class);
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -116,7 +101,7 @@ public class MobileService {
 	}
 
 	public long switchMicMuted(String publicSID, boolean mute) {
-		return scopeAdapter.switchMicMuted(publicSID, mute);
+		return 0L; //return scopeAdapter.switchMicMuted(publicSID, mute);
 	}
 
 	public Map<String, Object> checkServer() {
@@ -244,6 +229,7 @@ public class MobileService {
 	}
 
 	private Map<String, Object> login(User u, Map<String, Object> result) {
+		/*
 		if (u != null) {
 			IConnection conn = Red5.getConnectionLocal();
 			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
@@ -263,11 +249,13 @@ public class MobileService {
 			add(result, "language", u.getLanguageId());
 			add(result, "version", getVersion());
 		}
+		*/
 		return result;
 	}
 
 	public List<Map<String, Object>> getVideoStreams() {
 		List<Map<String, Object>> result = new ArrayList<>();
+		/*
 		// Notify all clients of the same scope (room)
 		IConnection current = Red5.getConnectionLocal();
 		for (IConnection conn : current.getScope().getClientConnections()) {
@@ -291,6 +279,7 @@ public class MobileService {
 				}
 			}
 		}
+		*/
 		return result;
 	}
 
@@ -312,6 +301,7 @@ public class MobileService {
 
 	public List<Map<String, Object>> getRooms() {
 		List<Map<String, Object>> result = new ArrayList<>();
+		/*
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
 		User u = userDao.get(c.getUserId());
@@ -340,6 +330,7 @@ public class MobileService {
 		for (Room r : roomDao.getPublicRooms()) {
 			addRoom("public", null, false, result, r);
 		}
+		*/
 		return result;
 	}
 
@@ -351,16 +342,20 @@ public class MobileService {
 	 * @return {@link Map} with publiSid and broadcastId
 	 */
 	public Map<String, Object> roomConnect(String sid, Long userId) {
+		Map<String, Object> result = new HashMap<>();
+		/*
 		// publicSid is changed on mobile room connect
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
-		Map<String, Object> result = new HashMap<>();
 		result.put("publicSid", c.getUid());
 		result.put("broadCastId", c.getBroadcastId());
+		*/
 		return result;
 	}
 
 	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
+		Map<String, Object> result = new HashMap<>();
+		/*
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
 		c.setAvsettings(avMode);
@@ -377,16 +372,17 @@ public class MobileService {
 		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);
 		hsm.put("message", new String[]{"avsettings", "0", avMode});
-		Map<String, Object> result = new HashMap<>();
 		if (!"n".equals(avMode)) {
 			result.put("broadcastId", c.getBroadcastId());
 		}
 
 		scopeAdapter.sendMessageToCurrentScope("sendVarsToMessageWithClient", hsm, true, false);
+		*/
 		return result;
 	}
 
 	public void sendChatMessage(String msg) {
+		/*
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
 
@@ -402,6 +398,7 @@ public class MobileService {
 		FastDateFormat fmt = FormatHelper.getDateTimeFormat(u);
 		sendChatMessage(c, m, fmt);
 		WebSocketHelper.sendRoom(m, WebSocketHelper.getMessage(u, Arrays.asList(m), null));
+		*/
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
@@ -409,6 +406,7 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(StreamClient c, ChatMessage m, FastDateFormat fmt) {
+		/*
 		if (c == null) {
 			return;
 		}
@@ -426,6 +424,7 @@ public class MobileService {
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
 			}
 		}.start();
+		*/
 	}
 
 	private static boolean isModerator(StreamClient c) {
@@ -442,6 +441,7 @@ public class MobileService {
 
 	public List<Map<String, Object>> getRoomChatHistory() {
 		List<Map<String,Object>> myChatList = new ArrayList<>();
+		/*
 		try {
 			IConnection current = Red5.getConnectionLocal();
 			StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
@@ -459,6 +459,7 @@ public class MobileService {
 		} catch (Exception err) {
 			log.error("[getRoomChatHistory] ",err);
 		}
+		*/
 		return myChatList;
 	}
 

@@ -20,9 +20,7 @@ package org.apache.openmeetings.web.util;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OmFileHelper.getUserDashboard;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,6 +30,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.dashboard.Dashboard;
 import org.wicketstuff.dashboard.DashboardPersister;
 import org.wicketstuff.dashboard.WidgetComparator;
@@ -40,7 +39,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class UserDashboardPersister implements DashboardPersister {
-	private static final Logger log = getLogger(UserDashboardPersister.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UserDashboardPersister.class);
 
 	@Override
 	public Dashboard load() {

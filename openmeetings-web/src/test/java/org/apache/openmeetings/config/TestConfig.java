@@ -19,7 +19,6 @@
 package org.apache.openmeetings.config;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_SERVER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -28,11 +27,11 @@ import java.util.List;
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestConfig extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestConfig.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestConfig.class);
 
 	@Test
 	public void getConfigKey() {

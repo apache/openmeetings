@@ -18,16 +18,10 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import java.io.IOException;
 
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
-import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
@@ -55,6 +49,7 @@ public class InterviewWbPanel extends AbstractWbPanel {
 
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
+		/*
 		Client c = rp.getClient();
 		if (c.hasRight(Room.Right.moderator)) {
 			switch (a) {
@@ -72,5 +67,6 @@ public class InterviewWbPanel extends AbstractWbPanel {
 					//no-op
 			}
 		}
+		*/
 	}
 }

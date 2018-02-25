@@ -19,9 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getHazelcast;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,12 +36,11 @@ import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
-import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +49,7 @@ import com.hazelcast.core.IMap;
 
 @Component
 public class ClientManager implements IClientManager {
-	private static final Logger log = getLogger(ClientManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ClientManager.class);
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
 	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
@@ -158,6 +155,7 @@ public class ClientManager implements IClientManager {
 	}
 
 	public IClient removeFromRoom(IClient _c) {
+		/*
 		Long roomId = _c.getRoomId();
 		log.debug("Removing online room client: {}, room: {}", _c.getUid(), roomId);
 		if (roomId != null) {
@@ -185,6 +183,7 @@ public class ClientManager implements IClientManager {
 				update(c);
 			}
 		}
+		*/
 		return _c;
 	}
 

@@ -21,11 +21,11 @@ package org.apache.openmeetings.util;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Version {
-	private static final Logger log = Red5LoggerFactory.getLogger(Version.class, OpenmeetingsVariables.getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(Version.class);
 	private static final int TOTAL_LENGTH = 78;
 	private static String version = null;
 	private static String revision = null;

@@ -24,7 +24,6 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.Closeable;
 import java.io.File;
@@ -67,8 +66,8 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,7 +79,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LdapLoginManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapLoginManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(LdapLoginManager.class);
 	// LDAP custom attribute mapping keys
 	private static final String CONFIGKEY_LDAP_KEY_LOGIN = "ldap_user_attr_login";
 	private static final String CONFIGKEY_LDAP_KEY_LASTNAME = "ldap_user_attr_lastname";

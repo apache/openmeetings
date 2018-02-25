@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
@@ -40,12 +39,12 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.io.IOUtils;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProfileImageResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ProfileImageResourceReference.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ProfileImageResourceReference.class);
 
 	public ProfileImageResourceReference() {
 		super(ProfileImageResourceReference.class, "profile");

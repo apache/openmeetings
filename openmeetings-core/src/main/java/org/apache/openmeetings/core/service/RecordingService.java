@@ -18,52 +18,28 @@
  */
 package org.apache.openmeetings.core.service;
 
-import static org.apache.openmeetings.core.converter.BaseConverter.printMetaInfo;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
-import org.apache.openmeetings.core.util.IClientUtil;
-import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.IClient;
-import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
-import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.util.ws.RoomMessage;
-import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.CalendarPatterns;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.IConnection;
-import org.red5.server.api.scope.IScope;
-import org.red5.server.api.service.IServiceCapableConnection;
-import org.red5.server.api.stream.IBroadcastStream;
-import org.red5.server.api.stream.IStreamListener;
-import org.red5.server.stream.ClientBroadcastStream;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.openjson.JSONObject;
-
 @Service
 public class RecordingService {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RecordingService.class);
 
 	/**
 	 * Stores a reference to all available listeners we need that reference, as the internal references stored with the
@@ -94,6 +70,7 @@ public class RecordingService {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
+	/*
 	public void startRecording(final IScope scope, IClient client, boolean isInterview) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
@@ -204,7 +181,7 @@ public class RecordingService {
 			log.error("[-- stopRecording --]", err);
 		}
 	}
-
+	*/
 	/**
 	 * Start recording the published stream for the specified broadcast-Id
 	 *
@@ -215,6 +192,7 @@ public class RecordingService {
 	 * @param isScreenSharing
 	 * @param isInterview
 	 */
+	/*
 	private void addListener(IConnection conn, String broadcastid, String streamName, Long metaId, boolean isScreenSharing, boolean isInterview) {
 		log.debug("Recording show for: {}", conn.getScope().getContextPath());
 		log.debug("Name of CLient and Stream to be recorded: {}", broadcastid);
@@ -234,7 +212,7 @@ public class RecordingService {
 
 		streamListeners.put(metaId, streamListener);
 		stream.addStreamListener(streamListener);
-	}
+	}*/
 
 	/**
 	 * Stops recording the publishing stream for the specified IConnection.
@@ -243,6 +221,7 @@ public class RecordingService {
 	 * @param broadcastId
 	 * @param metaId
 	 */
+	/*
 	private void removeListener(IScope scope, String broadcastId, Long metaId) {
 		try {
 			log.debug("** removeListener: scope: {}, broadcastId: {} || {}", scope, broadcastId, scope.getContextPath());
@@ -370,4 +349,5 @@ public class RecordingService {
 		}
 		log.debug("startStreamRecord[{}]:: resulting metaId: {}", broadcastId, rcl.getMetaId());
 	}
+	*/
 }

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Date;
 import java.util.List;
@@ -29,8 +28,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.entity.user.UserContact;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class UserContactDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserContactDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UserContactDao.class);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

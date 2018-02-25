@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -53,8 +52,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
@@ -62,7 +61,7 @@ import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
 
 public class ChatForm extends Form<Void> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ChatForm.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ChatForm.class);
 	private final HiddenField<String> activeTab = new HiddenField<>("activeTab", Model.of(""));
 
 	public ChatForm(String id) {

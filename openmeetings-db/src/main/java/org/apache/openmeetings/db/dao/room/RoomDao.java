@@ -22,7 +22,6 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.RECENT_ROOMS_COUNT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
 import java.util.ArrayList;
@@ -51,8 +50,8 @@ import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.util.DaoHelper;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +59,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class RoomDao implements IGroupAdminDataProviderDao<Room> {
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RoomDao.class);
 	private static final String[] searchFields = {"name"};
 
 	@PersistenceContext

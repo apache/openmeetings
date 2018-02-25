@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -90,8 +89,8 @@ import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -105,7 +104,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RoomPanel.class);
 	private static final String ACCESS_DENIED_ID = "access-denied";
 	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {

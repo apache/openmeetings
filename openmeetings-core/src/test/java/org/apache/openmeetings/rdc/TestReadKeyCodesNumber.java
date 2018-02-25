@@ -18,14 +18,12 @@
  */
 package org.apache.openmeetings.rdc;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestReadKeyCodesNumber {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestReadKeyCodesNumber.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestReadKeyCodesNumber.class);
 
 	@Test
 	public void testTestKeyCodesNumber() {

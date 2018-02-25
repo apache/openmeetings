@@ -18,19 +18,17 @@
  */
 package org.apache.openmeetings.core.rss;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 
 public class LoadAtomRssFeed {
-	private static final Logger log = Red5LoggerFactory.getLogger(LoadAtomRssFeed.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(LoadAtomRssFeed.class);
 	private static JSONArray rss = new JSONArray();
 
 	private LoadAtomRssFeed() {}

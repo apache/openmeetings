@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -28,11 +26,11 @@ import java.util.Set;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LocaleHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(LocaleHelper.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(LocaleHelper.class);
 
 	private LocaleHelper() {}
 

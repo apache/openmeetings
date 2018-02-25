@@ -21,7 +21,6 @@ package org.apache.openmeetings.util;
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.tika.metadata.TikaMetadataKeys.RESOURCE_NAME_KEY;
 import static org.apache.tika.mime.MediaType.application;
 
@@ -40,11 +39,11 @@ import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StoredFile {
-	private static final Logger log = Red5LoggerFactory.getLogger(StoredFile.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(StoredFile.class);
 	private static final String MIME_AUDIO = "audio";
 	private static final String MIME_VIDEO = "video";
 	private static final String MIME_IMAGE = "image";

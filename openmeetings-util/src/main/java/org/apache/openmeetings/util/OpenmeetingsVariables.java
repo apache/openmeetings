@@ -115,7 +115,6 @@ public class OpenmeetingsVariables {
 	public static final int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
 
-	private static String webAppRootKey = null;
 	private static String cryptClassName = null;
 	private static String wicketApplicationName = null;
 	private static String applicationName = null;
@@ -180,14 +179,6 @@ public class OpenmeetingsVariables {
 
 	public static void setWicketApplicationName(String name) {
 		wicketApplicationName = name;
-	}
-
-	public static String getWebAppRootKey() {
-		return webAppRootKey;
-	}
-
-	public static void setWebAppRootKey(String key) {
-		webAppRootKey = key;
 	}
 
 	/**

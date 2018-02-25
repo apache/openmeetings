@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
@@ -57,8 +56,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -69,7 +68,7 @@ import com.googlecode.wicket.jquery.ui.calendar.EventSource.GoogleCalendar;
 import com.googlecode.wicket.jquery.ui.form.button.Button;
 
 public class CalendarPanel extends UserBasePanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(CalendarPanel.class);
 	private static final long serialVersionUID = 1L;
 	private static final String JS_MARKUP = "setCalendarHeight();";
 	private final AbstractAjaxTimerBehavior refreshTimer = new AbstractAjaxTimerBehavior(Duration.seconds(10)) {

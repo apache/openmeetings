@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.Calendar;
@@ -50,8 +49,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -66,7 +65,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/calendar")
 public class CalendarWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(CalendarWebService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(CalendarWebService.class);
 
 	private static AppointmentDao getDao() {
 		return getBean(AppointmentDao.class);

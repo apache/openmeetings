@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.record;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.Date;
 import java.util.List;
 
@@ -28,8 +26,8 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class RecordingMetaDataDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingMetaDataDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RecordingMetaDataDao.class);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

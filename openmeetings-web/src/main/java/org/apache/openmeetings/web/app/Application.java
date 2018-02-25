@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
@@ -29,7 +28,6 @@ import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.wicket.resource.JQueryResourceReference.getV3;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.net.UnknownHostException;
@@ -109,6 +107,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
 import org.wicketstuff.dashboard.web.DashboardContext;
@@ -126,7 +125,7 @@ import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
 
 public class Application extends AuthenticatedWebApplication implements IApplication {
-	private static final Logger log = getLogger(Application.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(Application.class);
 	private static boolean isInstalled;
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	public static final String NAME_ATTR_KEY = "name";

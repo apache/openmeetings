@@ -93,11 +93,6 @@
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
-			<groupId>org.red5</groupId>
-			<artifactId>red5-client</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-util</artifactId>
 			<version>${project.version}</version>

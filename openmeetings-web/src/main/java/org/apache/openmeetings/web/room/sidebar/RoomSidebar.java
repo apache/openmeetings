@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
@@ -60,8 +59,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.Options;
@@ -69,7 +68,7 @@ import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RoomSidebar.class);
 	public static final String FUNC_TOGGLE_RIGHT = "toggleRight";
 	public static final String FUNC_TOGGLE_ACTIVITY = "toggleActivity";
 	public static final String FUNC_ACTION = "roomAction";

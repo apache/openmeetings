@@ -18,9 +18,6 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -32,10 +29,11 @@ import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class FileItemResourceReference<T extends BaseFileItem> extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
-	protected static final Logger log = getLogger(FileItemResourceReference.class, getWebAppRootKey());
+	protected static final Logger log = LoggerFactory.getLogger(FileItemResourceReference.class);
 
 	public FileItemResourceReference(String name) {
 		super(name);

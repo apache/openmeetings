@@ -22,7 +22,6 @@ import static javax.servlet.http.HttpServletResponse.SC_CREATED;
 import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,8 +51,8 @@ import org.osaf.caldav4j.model.request.CalendarQuery;
 import org.osaf.caldav4j.model.request.CompFilter;
 import org.osaf.caldav4j.model.response.CalendarDataProperty;
 import org.osaf.caldav4j.util.UrlUtils;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
@@ -72,7 +71,7 @@ import net.fortuna.ical4j.model.Component;
  * </ul>
  */
 public class EtagsHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(EtagsHandler.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(EtagsHandler.class);
 
 	public EtagsHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
 		super(path, calendar, client, appointmentDao, utils);

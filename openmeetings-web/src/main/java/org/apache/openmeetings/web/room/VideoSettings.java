@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.SwfPanel.FLASH_JS_REFERENCE;
@@ -45,15 +44,15 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.hazelcast.core.Member;
 
 public class VideoSettings extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(VideoSettings.class);
 	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
 	public static final String URL = "url";
 	public static final String FALLBACK = "fallback";

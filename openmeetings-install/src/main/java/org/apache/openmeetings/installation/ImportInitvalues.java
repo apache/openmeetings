@@ -95,7 +95,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_M
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -119,14 +118,14 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ImportInitvalues {
-	private static final Logger log = Red5LoggerFactory.getLogger(ImportInitvalues.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ImportInitvalues.class);
 	private static final String VER_1_8 = "1.8.x";
 	private static final String VER_1_9 = "1.9.x";
 	private static final String VER_2_0 = "2.0.x";

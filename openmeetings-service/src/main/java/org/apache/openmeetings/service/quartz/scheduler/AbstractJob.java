@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.service.quartz.scheduler;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.time.Instant;
@@ -29,12 +28,12 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJob {
-	private static Logger log = Red5LoggerFactory.getLogger(AbstractJob.class, getWebAppRootKey());
+	private static Logger log = LoggerFactory.getLogger(AbstractJob.class);
 	@Autowired
 	private GroupDao groupDao;
 	@Autowired

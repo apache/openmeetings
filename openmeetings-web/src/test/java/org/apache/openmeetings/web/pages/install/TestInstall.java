@@ -29,12 +29,10 @@ import static org.apache.openmeetings.AbstractWicketTester.countErrors;
 import static org.apache.openmeetings.AbstractWicketTester.getButtonBehavior;
 import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,11 +52,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class TestInstall {
-	private static final Logger log = getLogger(TestInstall.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestInstall.class);
 	private static final String DERBY_HOME = "derby.system.home";
 	private static final String WIZARD_PATH = "wizard";
 	private File tempFolder;

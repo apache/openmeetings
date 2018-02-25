@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.log;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.Date;
 
 import javax.persistence.EntityManager;
@@ -27,15 +25,15 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.log.ConferenceLog.Type;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
 public class ConferenceLogDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(ConferenceLogDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ConferenceLogDao.class);
 
 	@PersistenceContext
 	private EntityManager em;

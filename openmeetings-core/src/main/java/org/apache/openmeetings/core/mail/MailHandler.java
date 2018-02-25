@@ -28,7 +28,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.ByteArrayInputStream;
@@ -61,8 +60,8 @@ import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.db.entity.basic.MailMessage.Status;
 import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
@@ -77,7 +76,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("mailHandler")
 public class MailHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(MailHandler.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MailHandler.class);
 	private static final int MAIL_SEND_TIMEOUT = 60 * 60 * 1000; // 1 hour
 	private static final int MAXIMUM_ERROR_COUNT = 5;
 

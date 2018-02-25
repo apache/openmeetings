@@ -24,7 +24,6 @@ import static javax.servlet.http.HttpServletResponse.SC_NOT_FOUND;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
 import static javax.servlet.http.HttpServletResponse.SC_PRECONDITION_FAILED;
 import static org.apache.jackrabbit.webdav.DavServletResponse.SC_INSUFFICIENT_SPACE_ON_RESOURCE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,8 +43,8 @@ import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncMethod;
 import org.apache.openmeetings.service.calendar.caldav.methods.SyncReportInfo;
 import org.osaf.caldav4j.model.response.CalendarDataProperty;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class used to sync events using WebDAV-Sync defined in RFC 6578.
@@ -54,7 +53,7 @@ import org.slf4j.Logger;
  * modified or deleted.
  */
 public class WebDAVSyncHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(WebDAVSyncHandler.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(WebDAVSyncHandler.class);
 
 	public static final DavPropertyName DNAME_SYNCTOKEN = DavPropertyName.create(SyncReportInfo.XML_SYNC_TOKEN,
 			SyncReportInfo.NAMESPACE);

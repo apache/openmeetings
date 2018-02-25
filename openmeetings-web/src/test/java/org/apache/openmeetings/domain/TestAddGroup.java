@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.domain;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
@@ -27,12 +26,12 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAddGroup extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestAddGroup.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestAddGroup.class);
 
 	@Autowired
 	private GroupDao groupDao;

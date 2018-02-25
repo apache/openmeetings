@@ -19,14 +19,12 @@
 package org.apache.openmeetings;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 
 import java.io.Serializable;
@@ -51,13 +49,14 @@ import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
 
 public class AbstractWicketTester extends AbstractJUnitDefaults {
-	private static final Logger log = getLogger(AbstractWicketTester.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(AbstractWicketTester.class);
 	public static final String PATH_CHILD = "main-container:main:contents:child";
 	public static final String PATH_MENU = "main-container:main:topControls:menu:menu";
 	protected WicketTester tester;

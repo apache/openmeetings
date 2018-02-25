@@ -18,9 +18,7 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
@@ -44,11 +42,12 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 public class ApplicationHelper {
-	private static final Logger log = getLogger(ApplicationHelper.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ApplicationHelper.class);
 	private static final Object SYNC_OBJ = new Object();
 
 	private ApplicationHelper() {}

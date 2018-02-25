@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
@@ -41,14 +40,14 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
 
 public class ProfileForm extends Form<User> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ProfileForm.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ProfileForm.class);
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;

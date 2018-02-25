@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
@@ -36,14 +34,14 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.util.crypt.CryptProvider;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvitationDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(InvitationDTO.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(InvitationDTO.class);
 	private static final FastDateFormat SDF = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
 	private String email;

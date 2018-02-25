@@ -19,7 +19,6 @@
 package org.apache.openmeetings.service.calendar.caldav;
 
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.net.URI;
 import java.text.ParsePosition;
@@ -40,8 +39,8 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.fortuna.ical4j.model.Calendar;
@@ -76,7 +75,7 @@ import net.fortuna.ical4j.model.property.Version;
  */
 @org.springframework.stereotype.Component
 public class IcalUtils {
-	private static final Logger log = Red5LoggerFactory.getLogger(IcalUtils.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(IcalUtils.class);
 	public static final String PROD_ID = "-//Events Calendar//Apache Openmeetings//EN";
 
 	@Autowired

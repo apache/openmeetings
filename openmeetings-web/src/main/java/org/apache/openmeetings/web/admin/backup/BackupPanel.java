@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -50,8 +49,8 @@ import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.time.Duration;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
@@ -64,7 +63,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  *
  */
 public class BackupPanel extends AdminBasePanel {
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(BackupPanel.class);
 	private static final long serialVersionUID = 1L;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));

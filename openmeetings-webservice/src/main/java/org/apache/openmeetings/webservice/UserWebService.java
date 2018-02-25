@@ -21,7 +21,6 @@ package org.apache.openmeetings.webservice;
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
@@ -68,8 +67,8 @@ import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
 import org.apache.wicket.validation.ValidationError;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -86,7 +85,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
 public class UserWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserWebService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 
 	/**
 	 * @param user - login or email of Openmeetings user with admin or SOAP-rights

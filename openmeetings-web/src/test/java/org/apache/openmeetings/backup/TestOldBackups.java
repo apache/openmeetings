@@ -20,7 +20,6 @@ package org.apache.openmeetings.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -37,12 +36,12 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.junit.After;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestOldBackups extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestOldBackups.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestOldBackups.class);
 	private String cryptClass = null;
 
 	@Autowired

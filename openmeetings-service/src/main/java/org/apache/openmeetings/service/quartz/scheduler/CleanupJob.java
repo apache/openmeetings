@@ -21,7 +21,6 @@ package org.apache.openmeetings.service.quartz.scheduler;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.File;
@@ -37,12 +36,12 @@ import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CleanupJob extends AbstractJob {
-	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, getWebAppRootKey());
+	private static Logger log = LoggerFactory.getLogger(CleanupJob.class);
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
 	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour

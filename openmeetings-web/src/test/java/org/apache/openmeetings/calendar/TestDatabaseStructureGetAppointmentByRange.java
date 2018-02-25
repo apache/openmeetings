@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -29,12 +28,12 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestDatabaseStructureGetAppointmentByRange extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetAppointmentByRange.class);
 
 	@Autowired
 	private AppointmentDao appointmentDao;

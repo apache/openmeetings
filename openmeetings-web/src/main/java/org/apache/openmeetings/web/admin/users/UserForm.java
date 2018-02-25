@@ -23,7 +23,6 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -72,8 +71,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
 
@@ -87,7 +86,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
  */
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(UserForm.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UserForm.class);
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
