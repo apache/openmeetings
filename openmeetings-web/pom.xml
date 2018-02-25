@@ -213,6 +213,9 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>jquery.dialogextend.js</jsSourceFile>
+								<jsSourceFile>video-util.js</jsSourceFile>
+								<jsSourceFile>video.js</jsSourceFile>
+								<jsSourceFile>video-manager.js</jsSourceFile>
 								<jsSourceFile>room-base.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>room.js</jsFinalFile>

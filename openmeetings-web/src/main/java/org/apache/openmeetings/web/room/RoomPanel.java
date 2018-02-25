@@ -58,6 +58,7 @@ import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.web.app.ClientManager;
+import org.apache.openmeetings.web.app.QuickPollManager;
 import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
@@ -139,7 +140,8 @@ public class RoomPanel extends BasePanel {
 			}
 			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
 					.append(wb.getInitScript())
-					.append("Room.setSize();");
+					.append("Room.setSize();")
+					.append(getQuickPollJs());
 			target.appendJavaScript(sb);
 			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), _c, RoomMessage.Type.roomEnter));
 			// play video from other participants
@@ -618,10 +620,20 @@ public class RoomPanel extends BasePanel {
 						handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.exclusive('%s');}", uid));
 					}
 						break;
+					case quickPollUpdated:
+					{
+						menu.update(handler);
+						handler.appendJavaScript(getQuickPollJs());
+					}
+						break;
 				}
 			}
 		}
 		super.onEvent(event);
+	}
+
+	private String getQuickPollJs() {
+		return String.format("Room.quickPoll(%s);", getBean(QuickPollManager.class).toJson(r.getId()));
 	}
 
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {

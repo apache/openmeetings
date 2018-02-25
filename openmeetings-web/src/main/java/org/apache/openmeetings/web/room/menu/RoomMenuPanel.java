@@ -27,7 +27,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
@@ -37,11 +36,9 @@ import java.util.List;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.room.PollDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.db.entity.room.RoomPoll;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.util.ws.RoomMessage.Type;
@@ -55,12 +52,10 @@ import org.apache.openmeetings.web.common.menu.MenuPanel;
 import org.apache.openmeetings.web.common.menu.RoomMenuItem;
 import org.apache.openmeetings.web.room.OmRedirectTimerBehavior;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.poll.CreatePollDialog;
-import org.apache.openmeetings.web.room.poll.PollResultsDialog;
-import org.apache.openmeetings.web.room.poll.VoteDialog;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -72,9 +67,6 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 public class RoomMenuPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final InvitationDialog invite;
-	private final CreatePollDialog createPoll;
-	private final VoteDialog vote;
-	private final PollResultsDialog pollResults;
 	private final SipDialerDialog sipDialer;
 	private MenuPanel menuPanel;
 	private final StartSharingButton shareBtn;
@@ -100,16 +92,11 @@ public class RoomMenuPanel extends Panel {
 	private RoomMenuItem exitMenuItem;
 	private RoomMenuItem filesMenu;
 	private RoomMenuItem actionsMenu;
-	private RoomMenuItem pollsMenu;
 	private RoomMenuItem inviteMenuItem;
 	private RoomMenuItem shareMenuItem;
 	private RoomMenuItem applyModerMenuItem;
 	private RoomMenuItem applyWbMenuItem;
 	private RoomMenuItem applyAvMenuItem;
-	private RoomMenuItem pollQuickMenuItem;
-	private RoomMenuItem pollCreateMenuItem;
-	private RoomMenuItem pollVoteMenuItem;
-	private RoomMenuItem pollResultMenuItem;
 	private RoomMenuItem sipDialerMenuItem;
 	private RoomMenuItem downloadPngMenuItem;
 	private RoomMenuItem downloadJpgMenuItem;
@@ -122,6 +109,7 @@ public class RoomMenuPanel extends Panel {
 			return getUrl(getRequestCycle(), getGroup().getId());
 		}
 	};
+	private final PollsSubMenu pollsSubMenu;
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
@@ -137,10 +125,8 @@ public class RoomMenuPanel extends Panel {
 		RoomInvitationForm rif = new RoomInvitationForm("form", room.getRoom().getId());
 		add(invite = new InvitationDialog("invite", rif));
 		rif.setDialog(invite);
-		add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
-		add(vote = new VoteDialog("vote"));
-		add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
 		add(sipDialer = new SipDialerDialog("sipDialer", room));
+		pollsSubMenu = new PollsSubMenu(room, this);
 	}
 
 	private Group getGroup() {
@@ -162,8 +148,7 @@ public class RoomMenuPanel extends Panel {
 		};
 		filesMenu = new RoomMenuItem(getString("245"), null, false);
 		actionsMenu = new RoomMenuItem(getString("635"), null, false);
-		pollsMenu = new RoomMenuItem(getString("menu.polls"), null, false);
-
+		pollsSubMenu.init();
 		inviteMenuItem = new RoomMenuItem(getString("213"), getString("1489"), false) {
 			private static final long serialVersionUID = 1L;
 
@@ -203,45 +188,6 @@ public class RoomMenuPanel extends Panel {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				room.requestRight(Room.Right.video, target);
-			}
-		};
-		pollQuickMenuItem = new RoomMenuItem(getString("menu.polls.quick.title"), getString("menu.polls.quick.descr"), false) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				//createPoll.updateModel(target);
-				//createPoll.open(target);
-			}
-		};
-		pollCreateMenuItem = new RoomMenuItem(getString("24"), getString("1483"), false) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				createPoll.updateModel(target);
-				createPoll.open(target);
-			}
-		};
-		pollVoteMenuItem = new RoomMenuItem(getString("32"), getString("1485"), false) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
-				if (rp != null) {
-					vote.updateModel(target, rp);
-					vote.open(target);
-				}
-			}
-		};
-		pollResultMenuItem = new RoomMenuItem(getString("37"), getString("1484"), false) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				pollResults.updateModel(target, room.getClient().hasRight(Room.Right.moderator));
-				pollResults.open(target);
 			}
 		};
 		sipDialerMenuItem = new RoomMenuItem(getString("1447"), getString("1488"), false) {
@@ -300,6 +246,12 @@ public class RoomMenuPanel extends Panel {
 		super.onInitialize();
 	}
 
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		pollsSubMenu.renderHead(response);
+	}
+
 	private List<IMenuItem> getMenu() {
 		List<IMenuItem> menu = new ArrayList<>();
 		exitMenuItem.setEnabled(false);
@@ -327,12 +279,7 @@ public class RoomMenuPanel extends Panel {
 		actionsMenu.getItems().add(downloadPdfMenuItem);
 		menu.add(actionsMenu);
 
-		pollsMenu.setTop(true);
-		pollsMenu.getItems().add(pollQuickMenuItem);
-		pollsMenu.getItems().add(pollCreateMenuItem);
-		pollsMenu.getItems().add(pollResultMenuItem);
-		pollsMenu.getItems().add(pollVoteMenuItem);
-		menu.add(pollsMenu);
+		menu.add(pollsSubMenu.getMenu());
 		return menu;
 	}
 
@@ -345,25 +292,19 @@ public class RoomMenuPanel extends Panel {
 		downloadPngMenuItem.setEnabled(!isInterview);
 		downloadJpgMenuItem.setEnabled(!isInterview);
 		downloadPdfMenuItem.setEnabled(!isInterview);
-		PollDao pollDao = getBean(PollDao.class);
-		boolean pollExists = pollDao.hasPoll(r.getId());
 		User u = room.getClient().getUser();
 		boolean notExternalUser = u.getType() != User.Type.contact;
 		exitMenuItem.setEnabled(notExternalUser);
 		filesMenu.setEnabled(!isInterview && room.getSidebar().isShowFiles());
 		boolean moder = room.getClient().hasRight(Room.Right.moderator);
+		pollsSubMenu.update(moder, notExternalUser, r);
 		actionsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
-		pollsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
 		applyModerMenuItem.setEnabled(!moder);
 		applyWbMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.whiteBoard));
 		applyAvMenuItem.setEnabled(!room.getClient().hasRight(Room.Right.audio) || !room.getClient().hasRight(Room.Right.video));
-		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter)); // not started
-		pollCreateMenuItem.setEnabled(moder);
-		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
-		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
 		sipDialerMenuItem.setEnabled(r.isSipEnabled() && isSipEnabled());
 		menuPanel.update(handler);
 		StringBuilder roomClass = new StringBuilder("room name");
@@ -392,18 +333,7 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void updatePoll(IPartialPageRequestHandler handler, Long createdBy) {
-		RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
-		if (rp != null) {
-			vote.updateModel(handler, rp);
-		} else {
-			vote.close(handler, null);
-		}
-		if (createdBy != null && !getUserId().equals(createdBy)) {
-			vote.open(handler);
-		}
-		if (pollResults.isOpened()) {
-			pollResults.updateModel(handler, room.getClient().hasRight(Room.Right.moderator));
-		}
+		pollsSubMenu.updatePoll(handler, createdBy);
 		update(handler);
 	}
 
