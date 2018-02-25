@@ -148,7 +148,7 @@ public class RoomSidebar extends Panel {
 					default:
 				}
 			} catch (Exception e) {
-				log.error("Unexpected exception while toggle 'action'", e);
+				log.error("Unexpected exception while toggle 'roomAction'", e);
 			}
 		}
 	};
