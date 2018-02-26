@@ -26,8 +26,6 @@ import static org.red5.logging.Red5LoggerFactory.getLogger;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -37,22 +35,15 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 @Component
 public class QuickPollManager {
 	private static final Logger log = getLogger(QuickPollManager.class, getWebAppRootKey());
 	private static final String QPOLLS_KEY = "QPOLLS_KEY";
-	private HazelcastInstance hazelcast;
-
-	@PostConstruct
-	private void init() {
-		this.hazelcast = getHazelcast();
-	}
 
 	private IMap<Long, Map<Long, Boolean>> map() {
-		return hazelcast.getMap(QPOLLS_KEY);
+		return getHazelcast().getMap(QPOLLS_KEY);
 	}
 
 	public boolean isStarted(Long roomId) {

@@ -31,8 +31,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -47,7 +45,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 @Component
@@ -56,28 +53,22 @@ public class ClientManager implements IClientManager {
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
 	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
-	private HazelcastInstance hazelcast;
 
 	@Autowired
 	private ConferenceLogDao confLogDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
-	@PostConstruct
-	private void init() {
-		this.hazelcast = getHazelcast();
-	}
-
 	private Map<String, Client> map() {
-		return hazelcast.getMap(ONLINE_USERS_KEY);
+		return getHazelcast().getMap(ONLINE_USERS_KEY);
 	}
 
 	private Map<String, String> mapUidBySid() {
-		return hazelcast.getMap(UID_BY_SID_KEY);
+		return getHazelcast().getMap(UID_BY_SID_KEY);
 	}
 
 	private IMap<Long, Set<String>> getRooms() {
-		return hazelcast.getMap(ROOMS_KEY);
+		return getHazelcast().getMap(ROOMS_KEY);
 	}
 
 	public void add(Client c) {
