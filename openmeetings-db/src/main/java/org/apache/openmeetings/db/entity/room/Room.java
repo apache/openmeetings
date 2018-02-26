@@ -112,6 +112,7 @@ public class Room extends HistoricalEntity {
 		, Activities
 		, Files
 		, ActionMenu
+		, PollMenu
 		, ScreenSharing
 		, Whiteboard
 		, MicrophoneStatus
