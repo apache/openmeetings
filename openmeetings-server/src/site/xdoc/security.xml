@@ -53,7 +53,7 @@
 		<section name="CVE-2018-1286 - Apache OpenMeetings - Insufficient Access Controls">
 			<p>Severity: Medium</p>
 			<p>Vendor: The Apache Software Foundation</p>
-			<p>Versions Affected: Apache OpenMeetings 3.0.0</p>
+			<p>Versions Affected: Apache OpenMeetings 3.0.0 - 4.0.1</p>
 			<p>Description: CRUD operations on privileged users are not password protected allowing an authenticated attacker 
 				to deny service for privileged users.<br/>
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1286">CVE-2018-1286</a>
