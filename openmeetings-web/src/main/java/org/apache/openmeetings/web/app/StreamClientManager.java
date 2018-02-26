@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.remote.MobileService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -59,8 +57,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastInstance;
-
 /**
  * Handle {@link StreamClient} objects.
  *
@@ -73,7 +69,6 @@ import com.hazelcast.core.HazelcastInstance;
 public class StreamClientManager implements IStreamClientManager {
 	protected static final Logger log = Red5LoggerFactory.getLogger(StreamClientManager.class, getWebAppRootKey());
 	private static final String STREAM_CLIENT_KEY = "STREAM_CLIENT_KEY";
-	private HazelcastInstance hazelcast;
 
 	@Autowired
 	private ClientManager clientManager;
@@ -86,13 +81,8 @@ public class StreamClientManager implements IStreamClientManager {
 	@Autowired
 	private RoomDao roomDao;
 
-	@PostConstruct
-	private void init() {
-		this.hazelcast = getHazelcast();
-	}
-
 	public Map<String, StreamClient> map() {
-		return hazelcast.getMap(STREAM_CLIENT_KEY);
+		return getHazelcast().getMap(STREAM_CLIENT_KEY);
 	}
 
 	@Override
@@ -123,7 +113,7 @@ public class StreamClientManager implements IStreamClientManager {
 	@Override
 	public IClient update(IClient c) {
 		if (c instanceof StreamClient) {
-			hazelcast.getMap(STREAM_CLIENT_KEY).put(c.getUid(), c);
+			map().put(c.getUid(), (StreamClient)c);
 		} else {
 			clientManager.update((Client)c);
 		}

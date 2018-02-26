@@ -24,15 +24,12 @@ import static org.apache.openmeetings.web.app.Application.getHazelcast;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.springframework.stereotype.Component;
 
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
 /**
@@ -44,15 +41,9 @@ import com.hazelcast.core.IMap;
 @Component
 public class WhiteboardManager implements IWhiteboardManager {
 	private static final String WBS_KEY = "WBS_KEY";
-	private HazelcastInstance hazelcast;
-
-	@PostConstruct
-	private void init() {
-		this.hazelcast = getHazelcast();
-	}
 
 	private IMap<Long, Whiteboards> getCache() {
-		return hazelcast.getMap(WBS_KEY);
+		return getHazelcast().getMap(WBS_KEY);
 	}
 
 	public boolean tryLock(Long roomId) {
