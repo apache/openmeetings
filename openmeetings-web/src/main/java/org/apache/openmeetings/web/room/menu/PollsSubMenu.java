@@ -67,6 +67,9 @@ public class PollsSubMenu implements Serializable {
 		@Override
 		protected void respond(AjaxRequestTarget target) {
 			try {
+				if (room.getRoom().isHidden(RoomElement.PollMenu)) {
+					return;
+				}
 				String action = mp.getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString();
 				QuickPollManager qm = getBean(QuickPollManager.class);
 				Client c = room.getClient();
@@ -81,6 +84,7 @@ public class PollsSubMenu implements Serializable {
 			}
 		}
 	};
+	private final boolean visible;
 
 	public PollsSubMenu(final RoomPanel room, final RoomMenuPanel mp) {
 		this.room = room;
@@ -88,6 +92,7 @@ public class PollsSubMenu implements Serializable {
 		mp.add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
 		mp.add(vote = new VoteDialog("vote"));
 		mp.add(pollResults = new PollResultsDialog("pollResults", room.getRoom().getId()));
+		visible = !room.getRoom().isHidden(RoomElement.PollMenu);
 	}
 
 	public void init() {
@@ -143,9 +148,12 @@ public class PollsSubMenu implements Serializable {
 	}
 
 	public void update(final boolean moder, final boolean notExternalUser, final Room r) {
+		if (!visible) {
+			return;
+		}
 		PollDao pollDao = getBean(PollDao.class);
 		boolean pollExists = pollDao.hasPoll(r.getId());
-		pollsMenu.setEnabled((moder && !r.isHidden(RoomElement.ActionMenu)) || (!moder && r.isAllowUserQuestions()));
+		pollsMenu.setEnabled((moder && visible) || (!moder && r.isAllowUserQuestions()));
 		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter) && !getBean(QuickPollManager.class).isStarted(r.getId()));
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
@@ -169,5 +177,9 @@ public class PollsSubMenu implements Serializable {
 
 	public void renderHead(IHeaderResponse response) {
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_QPOLL_ACTION, quickPollAction, explicit(PARAM_ACTION), explicit(PARAM_VOTE))));
+	}
+
+	public boolean isVisible() {
+		return visible;
 	}
 }
