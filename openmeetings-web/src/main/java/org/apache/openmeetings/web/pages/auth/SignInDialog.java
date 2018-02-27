@@ -65,6 +65,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,6 +90,9 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private ForgetPasswordDialog f;
 	private LdapConfig domain;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+
+	@SpringBean
+	private ConfigurationDao cfgDao;
 
 	public SignInDialog(String id) {
 		super(id, "");

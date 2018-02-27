@@ -21,13 +21,29 @@ package org.apache.openmeetings.util;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
+
 public class OMContextListener implements ServletContextListener {
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		System.setProperty("current_openmeetings_context_name", pathToName(event));
-		System.setProperty("webapp.contextPath", String.format("/%s"));
-		System.setProperty("logback.configurationFile", "logback-config.xml");
+		String ctx = pathToName(event);
+		System.setProperty("current_openmeetings_context_name", ctx);
+		System.setProperty("webapp.contextPath", String.format("/%s", ctx));
+		try {
+			LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
+			JoranConfigurator configurator = new JoranConfigurator();
+			configurator.setContext(context);
+			context.reset();
+			configurator.doConfigure("logback-config.xml");
+		} catch (JoranException je) {
+			// StatusPrinter will handle this
+		}
+		//System.setProperty("logback.configurationFile", "logback-config.xml");
 	}
 
 	private static String pathToName(ServletContextEvent event) {
@@ -36,5 +52,9 @@ public class OMContextListener implements ServletContextListener {
 			contextName = "root";
 		}
 		return contextName;
+	}
+
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
 	}
 }

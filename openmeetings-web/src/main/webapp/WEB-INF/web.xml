@@ -21,36 +21,9 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-	<context-param>
-		<param-name>globalScope</param-name>
-		<param-value>default</param-value>
-	</context-param>
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/red5-*.xml</param-value>
-	</context-param>
-	<context-param>
-		<param-name>locatorFactorySelector</param-name>
-		<param-value>red5.xml</param-value>
-	</context-param>
-	<context-param>
-		<param-name>parentContextKey</param-name>
-		<param-value>default.context</param-value>
-	</context-param>
-
 	<listener>
 		<listener-class>org.apache.openmeetings.util.OMContextListener</listener-class>
 	</listener>
-
-	<filter>
-		<filter-name>LoggerContextFilter</filter-name>
-		<filter-class>org.red5.logging.LoggerContextFilter</filter-class>
-		<async-supported>true</async-supported>
-	</filter>
-	<filter-mapping>
-		<filter-name>LoggerContextFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
 
 	<filter>
 		<filter-name>OpenmeetingsApplication</filter-name>
@@ -61,8 +34,12 @@
 			<param-value>org.apache.openmeetings.web.app.Application</param-value>
 		</init-param>
 		<init-param>
+			<param-name>applicationFactoryClassName</param-name>
+			<param-value>org.apache.wicket.spring.SpringWebApplicationFactory</param-value>
+		</init-param>
+		<init-param>
 			<param-name>configuration</param-name>
-			<param-value>${wicket.mode}</param-value>
+			<param-value>${wicket.configuration}</param-value>
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
@@ -73,6 +50,11 @@
 		<filter-name>OpenmeetingsApplication</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>CXFServlet</servlet-name>
 		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
@@ -87,12 +69,6 @@
 		<servlet-name>CXFServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-
-	<!-- remove the following servlet tags if you want to disable remoting for this application -->
-	<servlet>
-		<servlet-name>gateway</servlet-name>
-		<servlet-class>org.red5.server.net.servlet.AMFGatewayServlet</servlet-class>
-	</servlet>
 
 	<mime-mapping>
 		<extension>inc</extension>

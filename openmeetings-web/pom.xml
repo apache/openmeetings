@@ -251,9 +251,35 @@
 					<filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
 					<webResources>
 						<webResource>
+							<directory>${project.basedir}/src/main/java</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+							<includes>
+								<include>**/*.html</include>
+								<include>**/*.css</include>
+								<include>**/*.js</include>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</webResource>
+						<webResource>
+							<directory>${project.parent.basedir}/openmeetings-service/src/main/java</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+							<includes>
+								<include>**/*.html</include>
+								<include>**/*.css</include>
+								<include>**/*.js</include>
+								<include>**/*.xml</include>
+								<include>**/*.properties</include>
+							</includes>
+						</webResource>
+						<webResource>
 							<directory>${project.build.directory}/generated-res</directory>
 							<targetPath>WEB-INF/classes/META-INF</targetPath>
 							<filtering>true</filtering>
+						</webResource>
+						<webResource>
+							<directory>${project.build.directory}/generated-sources/main/java/</directory>
+							<targetPath>WEB-INF/classes</targetPath>
 						</webResource>
 					</webResources>
 				</configuration>
@@ -436,13 +462,34 @@
 						<languages.home>${project.build.directory}/test-root/languages</languages.home>
 						<red5.root>red5.root</red5.root>
 						<backups.dir>${old-backups.dir}</backups.dir>
-						<logback.ContextSelector>org.red5.logging.LoggingContextSelector</logback.ContextSelector>
 						<catalina.useNaming>true</catalina.useNaming>
 					</systemPropertyVariables>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${jetty9.version}</version>
+					<configuration>
+						<!--systemProperties>
+							<systemProperty>
+								<name>logback.configurationFile</name>
+								<value>${project.build.directory}/${project.build.finalName}/WEB-INF/classes/logback-config.xml</value>
+							</systemProperty>
+						</systemProperties-->
+						<webApp>
+							<contextPath>/openmeetings</contextPath>
+						</webApp>
+						<!-- jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml-->
+						<jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-http.xml</jettyXml>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
 		<dependency>
@@ -498,6 +545,11 @@
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-spring</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.googlecode.wicket-jquery-ui</groupId>
 			<artifactId>wicket-jquery-ui-core</artifactId>
 			<version>${wicketju.version}</version>
@@ -548,44 +600,6 @@
 			<version>${wickets.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-websocket</artifactId>
-			<version>${tomcat.version}</version>
-			<!--exclusions> commented for Red5 lib substitution
-				<exclusion>
-					<groupId>org.apache.tomcat.embed</groupId>
-					<artifactId>tomcat-embed-core</artifactId>
-				</exclusion>
-			</exclusions-->
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-catalina-ha</artifactId>
-			<version>${tomcat.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.tomcat</groupId>
-					<artifactId>tomcat-coyote</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.tomcat</groupId>
-					<artifactId>tomcat-juli</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.tomcat</groupId>
-					<artifactId>tomcat-catalina</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.tomcat</groupId>
-					<artifactId>tomcat-util</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.tomcat</groupId>
-					<artifactId>tomcat-util-scan</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
@@ -614,12 +628,6 @@
 			<version>${cxf.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!--dependency> commented for Red5 lib substitution
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-			<version>${tomcat.version}</version>
-			<scope>test</scope>
-		</dependency-->
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbynet</artifactId>
@@ -637,21 +645,18 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		 <!-- added for Red5 lib substitution -->
+		<!-- JETTY DEPENDENCIES FOR TESTING -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>${spring.version}</version>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<scope>test</scope>
+			<version>${jetty9.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-			<version>${tomcat.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<version>${tomcat.version}</version>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-jmx</artifactId>
+			<version>${jetty9.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>
