@@ -82,6 +82,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
@@ -377,6 +378,7 @@ public class RoomPanel extends BasePanel {
 		if (room.isVisible()) {
 			add(new NicknameDialog("nickname", this));
 			add(download);
+			add(new BaseWebSocketBehavior("media"));
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}

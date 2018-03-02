@@ -57,6 +57,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -109,7 +110,6 @@ public class RoomSidebar extends Panel {
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
-				ClientManager cm = getBean(ClientManager.class);
 				Client cl = room.getClient();
 				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				switch (a) {
@@ -163,7 +163,7 @@ public class RoomSidebar extends Panel {
 				}
 				Right right = Right.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_RIGHT).toString());
 				if (room.getClient().hasRight(Right.moderator)) {
-					Client client = getBean(ClientManager.class).get(uid);
+					Client client = cm.get(uid);
 					if (client == null) {
 						return;
 					}
@@ -201,7 +201,7 @@ public class RoomSidebar extends Panel {
 				Client.Activity a = Client.Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				StringValue podStr = getRequest().getRequestParameters().getParameterValue(PARAM_POD);
 				Pod pod = podStr.isEmpty() ? Pod.none : Pod.valueOf(podStr.toString());
-				Client c = getBean(ClientManager.class).get(uid);
+				Client c = cm.get(uid);
 				toggleActivity(c, a, pod);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
@@ -230,6 +230,9 @@ public class RoomSidebar extends Panel {
 		}
 	};
 	private final Label userCount = new Label("user-count", Model.of(""));
+
+	@SpringBean
+	private ClientManager cm;
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);

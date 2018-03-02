@@ -23,7 +23,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
 import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
 import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.room.SwfPanel.FLASH_JS_REFERENCE;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
@@ -64,7 +63,6 @@ public class VideoSettings extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(FLASH_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(SETTINGS_JS_REFERENCE)));
 	}
 
@@ -73,7 +71,7 @@ public class VideoSettings extends Panel {
 	}
 
 	public static JSONObject getInitJson(ExtendedClientProperties cp, Long roomId, String sid) {
-		String scope = roomId == null ? OmFileHelper.HIBERNATE : "" + roomId;
+		String scope = roomId == null ? OmFileHelper.HIBERNATE : String.valueOf(roomId);
 		JSONObject gs = OpenmeetingsVariables.getRoomSettings();
 		JSONObject s = new JSONObject(gs.toString())
 				.put("sid", sid)

@@ -3,10 +3,136 @@ var VideoManager = (function() {
 	const self = {};
 	let share, inited = false;
 
+/*FIXME TODO*/
+	function onNewParticipant(request) {
+		receiveVideo(request.uid);
+	}
+
+	function receiveVideoResponse(result) {
+		participants[result.uid].rtcPeer.processAnswer (result.sdpAnswer, function (error) {
+			if (error) return console.error (error);
+		});
+	}
+
+	function onExistingParticipants(msg) {
+		const uid = Room.getOptions().uid;
+		const w = $('#' + VideoUtil.getVid(uid))
+			, v = w.data()
+			, cl = v.client();
+		console.log(uid + " registered in room");
+
+		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+			{
+				localVideo: v.video()
+				, mediaConstraints:
+					{ //each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+						audio : VideoUtil.hasAudio(cl)
+						, video : VideoUtil.hasVideo(cl)
+						/* TODO FIXME {
+							mandatory : {
+								maxWidth : cl.width,
+								maxFrameRate : cl.height,
+								minFrameRate : 15
+							}
+						}*/
+					}
+				, onicecandidate: v.onIceCandidate.bind(v)
+			}
+			, function (error) {
+				if (error) {
+					return console.error(error);
+				}
+				this.generateOffer(v.offerToReceiveVideo.bind(v));
+			}));
+		msg.data.forEach(receiveVideo);
+	}
+
+	function leaveRoom() {
+		sendMessage({
+			id : 'leaveRoom'
+		});
+
+		for ( var key in participants) {
+			participants[key].dispose();
+		}
+
+		document.getElementById('join').style.display = 'block';
+		document.getElementById('room').style.display = 'none';
+	}
+
+	function receiveVideo(sender) {
+		var participant = new Participant(sender);
+		participants[sender] = participant;
+		var video = participant.getVideoElement();
+
+		var options = {
+	      remoteVideo: video,
+	      onicecandidate: participant.onIceCandidate.bind(participant)
+	    }
+
+		participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+				function (error) {
+				  if(error) {
+					  return console.error(error);
+				  }
+				  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
+		});;
+	}
+
+	function onParticipantLeft(request) {
+		console.log('Participant ' + request.uid + ' left');
+		var participant = participants[request.uid];
+		participant.dispose();
+		delete participants[request.uid];
+	}
+
+	/*FIXME TODO*/
+
+	function _onWsMessage(jqEvent, msg) {
+		try {
+			if (msg instanceof Blob) {
+				return; //ping
+			}
+			const m = jQuery.parseJSON(msg);
+			if (m && 'kurento' === m.type) {
+				console.info('Received message: ' + m);
+
+				switch (m.id) {
+					case 'existingParticipants':
+						onExistingParticipants(m);
+						break;
+					case 'newParticipantArrived':
+						onNewParticipant(m);
+						break;
+					case 'participantLeft':
+						onParticipantLeft(m);
+						break;
+					case 'receiveVideoAnswer':
+						receiveVideoResponse(m);
+						break;
+					case 'iceCandidate':
+						participants[m.uid].rtcPeer.addIceCandidate(m.candidate, function (error) {
+							if (error) {
+								console.error("Error adding candidate: " + error);
+								return;
+							}
+						});
+						break;
+					default:
+						console.error('Unrecognized message', m);
+				}
+			}
+		} catch (err) {
+			//no-op
+			console.error(err);
+		}
+	}
+	
 	function _init() {
 		if ($(WB_AREA_SEL + ' .wb-area .tabs').length > 0) {
 			WBA_SEL = WBA_WB_SEL;
 		}
+		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 		inited = true;
@@ -26,6 +152,11 @@ var VideoManager = (function() {
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
 			if (av && v.length !== 1 && !!cl.self) {
+				self.sendMessage({
+					id: 'joinRoom' //TODO stream uid
+					, type: 'kurento'
+				});
+
 				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
 			} else if (av && v.length === 1) {
 				v.data().update(cl);
@@ -159,11 +290,19 @@ var VideoManager = (function() {
 	self.update = _update;
 	self.play = _play;
 	self.close = _close;
-	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
 	self.micActivity = _micActivity;
 	self.refresh = _refresh;
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.sendMessage = function(m) {
+		m.type = 'kurento';
+		const msg = JSON.stringify(m);
+		console.log('Senging message: ' + msg);
+		Wicket.WebSocket.send(msg);
+	};
+	self.destroy = function() {
+		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
+	}
 	return self;
 })();

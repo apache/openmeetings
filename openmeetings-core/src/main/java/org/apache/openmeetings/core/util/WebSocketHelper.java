@@ -121,6 +121,18 @@ public class WebSocketHelper {
 		}
 	}
 
+	public static void sendClient(final Client _c, JSONObject msg) { //TODO unify
+		if (_c != null) {
+			send(a -> Arrays.asList(_c), (t, c) -> {
+				try {
+					t.sendMessage(msg.toString());
+				} catch (IOException e) {
+					log.error("Error while broadcasting byte[] to room", e);
+				}
+			}, null);
+		}
+	}
+
 	public static void send(IClusterWsMessage _m) {
 		if (_m instanceof WsMessageRoomMsg) {
 			sendRoom(((WsMessageRoomMsg)_m).getMsg(), false);

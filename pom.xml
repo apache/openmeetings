@@ -102,7 +102,6 @@
 				<module>openmeetings-service</module>
 				<module>openmeetings-webservice</module>
 				<module>openmeetings-web</module>
-				<module>openmeetings-flash</module>
 				<module>openmeetings-screenshare</module>
 				<module>openmeetings-server</module>
 			</modules>
@@ -565,23 +564,11 @@
 			<releases><enabled>true</enabled></releases>
 			<snapshots><enabled>false</enabled></snapshots>
 		</repository>
-		<repository>
-			<id>jpresso</id>
-			<url>http://repository.jspresso.org/maven2/</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
-		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>apache-snapshots</id>
 			<url>https://repository.apache.org/content/groups/snapshots</url>
-		</pluginRepository>
-		<pluginRepository>
-			<id>jpresso</id>
-			<url>http://repository.jspresso.org/maven2/</url>
-			<releases><enabled>true</enabled></releases>
-			<snapshots><enabled>true</enabled></snapshots>
 		</pluginRepository>
 		<pluginRepository>
 			<id>openmeetings-bintray</id>
@@ -1302,20 +1289,6 @@
 										<versionRange>[1.6.0,)</versionRange>
 										<goals>
 											<goal>java</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>net.flexmojos.oss</groupId>
-										<artifactId>flexmojos-maven-plugin</artifactId>
-										<versionRange>[7.0.0,)</versionRange>
-										<goals>
-											<goal>compile-swf</goal>
-											<goal>test-compile</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

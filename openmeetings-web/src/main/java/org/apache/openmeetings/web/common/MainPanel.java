@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -84,11 +86,13 @@ import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
@@ -116,6 +120,9 @@ public class MainPanel extends Panel {
 			WebSocketHelper.sendClient(getClient(), new byte[]{getUserId().byteValue()});
 		}
 	};
+
+	@SpringBean
+	private KurentoHandler kHandler;
 
 	public MainPanel(String id) {
 		this(id, null);
@@ -149,6 +156,15 @@ public class MainPanel extends Panel {
 					}
 					log.debug("WebSocketBehavior:: pingTimer is attached");
 					pingTimer.restart(handler);
+				}
+				final JSONObject m;
+				try {
+					m = new JSONObject(msg.getText());
+					if (KURENTO_TYPE.equals(m.getString("type"))) {
+						kHandler.onMessage(uid, m);
+					}
+				} catch (Exception e) {
+					//no-op
 				}
 			}
 

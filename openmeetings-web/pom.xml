@@ -217,6 +217,7 @@
 								<jsSourceFile>video.js</jsSourceFile>
 								<jsSourceFile>video-manager.js</jsSourceFile>
 								<jsSourceFile>room-base.js</jsSourceFile>
+								<jsSourceFile>kurento-utils.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>room.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>

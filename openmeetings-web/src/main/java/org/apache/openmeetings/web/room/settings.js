@@ -64,7 +64,7 @@ var VideoSettings = (function() {
 		o.mode = 'settings';
 		o.rights = (o.rights || []).join();
 		delete o.keycode;
-		swf = initSwf(vidScroll, 'main.swf', 'video-settings-swf', o)[0];
+		//FIXME TODO swf = initSwf(vidScroll, 'main.swf', 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
 		const rr = vs.find('.cam-resolution').parents('.sett-row');
