@@ -86,6 +86,7 @@ import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
@@ -151,7 +152,7 @@ public class RoomPanel extends BasePanel {
 				sidebar.setFilesActive(target);
 			}
 			if (Room.Type.presentation != r.getType()) {
-				List<Client> mods = getBean(ClientManager.class).listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
+				List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
 				if (mods.isEmpty()) {
 					waitApplyModeration.open(target);
 				}
@@ -163,7 +164,7 @@ public class RoomPanel extends BasePanel {
 			StringBuilder sb = new StringBuilder();
 			boolean hasStreams = false;
 			Client _c = getClient();
-			for (Client c: getBean(ClientManager.class).listByRoom(getRoom().getId())) {
+			for (Client c: cm.listByRoom(getRoom().getId())) {
 				boolean self = _c.getUid().equals(c.getUid());
 				for (String uid : c.getStreams()) {
 					JSONObject jo = videoJson(c, self, c.getSid(), getBean(StreamClientManager.class), uid);
@@ -223,6 +224,9 @@ public class RoomPanel extends BasePanel {
 	};
 	Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
+	@SpringBean
+	private ClientManager cm;
+
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
@@ -239,7 +243,6 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		//let's refresh user in client
-		ClientManager cm = getBean(ClientManager.class);
 		cm.update(getClient().updateUser(getBean(UserDao.class)));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
@@ -399,7 +402,6 @@ public class RoomPanel extends BasePanel {
 			if (wsEvent.getMessage() instanceof RoomMessage) {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
 				IPartialPageRequestHandler handler = wsEvent.getHandler();
-				ClientManager cm = getBean(ClientManager.class);
 				switch (m.getType()) {
 					case pollCreated:
 						menu.updatePoll(handler, m.getUserId());
@@ -642,7 +644,7 @@ public class RoomPanel extends BasePanel {
 		if (interview && _c.hasRight(Right.moderator)) {
 			if (recordingUser == null) {
 				boolean hasStreams = false;
-				for (Client cl : getBean(ClientManager.class).listByRoom(r.getId())) {
+				for (Client cl : cm.listByRoom(r.getId())) {
 					if (!cl.getStreams().isEmpty()) {
 						hasStreams = true;
 						break;
@@ -661,7 +663,6 @@ public class RoomPanel extends BasePanel {
 		if (room.isVisible()) {
 			//We are setting initial rights here
 			Client c = getClient();
-			ClientManager cm = getBean(ClientManager.class);
 			cm.addToRoom(c.setRoom(getRoom()));
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
@@ -677,12 +678,16 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	public static boolean isModerator(long userId, long roomId) {
-		return hasRight(userId, roomId, Right.moderator);
+	public boolean isModerator(long userId, long roomId) {
+		return isModerator(cm, userId, roomId);
 	}
 
-	public static boolean hasRight(long userId, long roomId, Right r) {
-		for (Client c : getBean(ClientManager.class).listByRoom(roomId)) {
+	public static boolean isModerator(ClientManager cm, long userId, long roomId) {
+		return hasRight(cm, userId, roomId, Right.moderator);
+	}
+
+	public static boolean hasRight(ClientManager cm, long userId, long roomId, Right r) {
+		for (Client c : cm.listByRoom(roomId)) {
 			if (c.getUserId().equals(userId) && c.hasRight(r)) {
 				return true;
 			}
@@ -725,7 +730,7 @@ public class RoomPanel extends BasePanel {
 			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("if (typeof(Room) !== 'undefined') { Room.unload(); }");
-		getBean(ClientManager.class).exitRoom(getClient());
+		cm.exitRoom(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
 
@@ -741,7 +746,6 @@ public class RoomPanel extends BasePanel {
 
 	public void requestRight(Right right, IPartialPageRequestHandler handler) {
 		RoomMessage.Type reqType = null;
-		ClientManager cm = getBean(ClientManager.class);
 		List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
 		if (mods.isEmpty()) {
 			if (r.isModerated()) {
@@ -750,7 +754,7 @@ public class RoomPanel extends BasePanel {
 				return;
 			} else {
 				// we found no-one we can ask, allow right
-				broadcast(getBean(ClientManager.class).update(getClient().allow(right)));
+				broadcast(cm.update(getClient().allow(right)));
 			}
 		}
 		// ask
@@ -791,8 +795,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void allowRight(Client client, Right... rights) {
-		client.allow(rights);
-		getBean(ClientManager.class).update(client);
+		cm.update(client.allow(rights));
 		broadcast(client);
 	}
 
@@ -806,7 +809,7 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.broadcastV);
 		}
-		getBean(ClientManager.class).update(client);
+		cm.update(client);
 		broadcast(client);
 	}
 

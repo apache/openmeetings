@@ -41,19 +41,15 @@ import com.github.openjson.JSONObject;
  * @since 4.3.1
  */
 public class KUser implements Closeable {
-
 	private static final Logger log = LoggerFactory.getLogger(KUser.class);
 
 	private final String uid;
-
 	private final MediaPipeline pipeline;
-
 	private final Long roomId;
 	private final WebRtcEndpoint outgoingMedia;
 	private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
 	public KUser(final KurentoHandler h, final String uid, Long roomId, MediaPipeline pipeline) {
-
 		this.pipeline = pipeline;
 		this.uid = uid;
 		this.roomId = roomId;
@@ -66,7 +62,7 @@ public class KUser implements Closeable {
 				JSONObject response = newKurentoMsg();
 				response.put("id", "iceCandidate");
 				response.put("uid", uid);
-				response.put("candidate", JsonUtils.toJsonObject(event.getCandidate()));
+				response.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate())));
 				h.sendClient(uid, response);
 			}
 		});
@@ -96,7 +92,7 @@ public class KUser implements Closeable {
 
 		final String ipSdpAnswer = this.getEndpointForUser(h, sender).processOffer(sdpOffer);
 		final JSONObject scParams = newKurentoMsg();
-		scParams.put("id", "receiveVideoAnswer");
+		scParams.put("id", "videoResponse");
 		scParams.put("uid", sender.getUid());
 		scParams.put("sdpAnswer", ipSdpAnswer);
 
@@ -126,7 +122,7 @@ public class KUser implements Closeable {
 					JSONObject response = newKurentoMsg();
 					response.put("id", "iceCandidate");
 					response.put("uid", sender.getUid());
-					response.put("candidate", JsonUtils.toJsonObject(event.getCandidate()));
+					response.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate())));
 					h.sendClient(uid, response);
 				}
 			});
@@ -212,6 +208,10 @@ public class KUser implements Closeable {
 		}
 	}
 
+	private static JSONObject convert(com.google.gson.JsonObject o) {
+		return new JSONObject(o.toString());
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -219,7 +219,6 @@ public class KUser implements Closeable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-
 		if (this == obj) {
 			return true;
 		}

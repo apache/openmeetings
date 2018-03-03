@@ -55,6 +55,7 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +80,7 @@ public class Chat extends Panel {
 					long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong();
 					ChatDao dao = getBean(ChatDao.class);
 					ChatMessage m = dao.get(msgId);
-					if (m.isNeedModeration() && isModerator(getUserId(), roomId)) {
+					if (m.isNeedModeration() && isModerator(cm, getUserId(), roomId)) {
 						m.setNeedModeration(false);
 						dao.update(m);
 						WebSocketHelper.sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept"));
@@ -101,6 +102,9 @@ public class Chat extends Panel {
 			return getClient().getUid();
 		}
 	};
+
+	@SpringBean
+	private ClientManager cm;
 
 	public Chat(String id) {
 		super(id);
@@ -147,7 +151,7 @@ public class Chat extends Panel {
 	public CharSequence addRoom(Room r) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), getString("406")));
-		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(getUserId(), r.getId()));
+		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(cm, getUserId(), r.getId()));
 		if (!list.isEmpty()) {
 			sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
 		}
@@ -164,7 +168,7 @@ public class Chat extends Panel {
 			ChatDao dao = getBean(ChatDao.class);
 			StringBuilder sb = new StringBuilder(getReinit());
 			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
-			for(Long roomId : getBean(ClientManager.class).listRoomIds(getUserId())) {
+			for(Long roomId : cm.listRoomIds(getUserId())) {
 				Room r = getBean(RoomDao.class).get(roomId);
 				sb.append(addRoom(r));
 			}

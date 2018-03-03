@@ -8,13 +8,18 @@ var VideoManager = (function() {
 		receiveVideo(request.uid);
 	}
 
-	function receiveVideoResponse(result) {
-		participants[result.uid].rtcPeer.processAnswer (result.sdpAnswer, function (error) {
-			if (error) return console.error (error);
+	function onVideoResponse(m) {
+		const w = $('#' + VideoUtil.getVid(m.uid))
+			, v = w.data()
+
+		v.getPeer().processAnswer(m.sdpAnswer, function (error) {
+			if (error) {
+				return console.error(error);
+			}
 		});
 	}
 
-	function onExistingParticipants(msg) {
+	function onBroadcast(msg) {
 		const uid = Room.getOptions().uid;
 		const w = $('#' + VideoUtil.getVid(uid))
 			, v = w.data()
@@ -44,7 +49,7 @@ var VideoManager = (function() {
 				}
 				this.generateOffer(v.offerToReceiveVideo.bind(v));
 			}));
-		msg.data.forEach(receiveVideo);
+		// TODO FIXME msg.data.forEach(receiveVideo);
 	}
 
 	function leaveRoom() {
@@ -98,8 +103,8 @@ var VideoManager = (function() {
 				console.info('Received message: ' + m);
 
 				switch (m.id) {
-					case 'existingParticipants':
-						onExistingParticipants(m);
+					case 'broadcast':
+						onBroadcast(m);
 						break;
 					case 'newParticipantArrived':
 						onNewParticipant(m);
@@ -107,16 +112,21 @@ var VideoManager = (function() {
 					case 'participantLeft':
 						onParticipantLeft(m);
 						break;
-					case 'receiveVideoAnswer':
-						receiveVideoResponse(m);
+					case 'videoResponse':
+						onVideoResponse(m);
 						break;
 					case 'iceCandidate':
-						participants[m.uid].rtcPeer.addIceCandidate(m.candidate, function (error) {
-							if (error) {
-								console.error("Error adding candidate: " + error);
-								return;
-							}
-						});
+						{
+							const w = $('#' + VideoUtil.getVid(m.uid))
+								, v = w.data()
+
+							v.getPeer().addIceCandidate(m.candidate, function (error) {
+								if (error) {
+									console.error("Error adding candidate: " + error);
+									return;
+								}
+							});
+						}
 						break;
 					default:
 						console.error('Unrecognized message', m);

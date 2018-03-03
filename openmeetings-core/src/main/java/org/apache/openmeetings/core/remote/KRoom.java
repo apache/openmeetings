@@ -33,7 +33,6 @@ import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 /**
@@ -41,7 +40,7 @@ import com.github.openjson.JSONObject;
  * @since 4.3.1
  */
 public class KRoom implements Closeable {
-	private final Logger log = LoggerFactory.getLogger(KRoom.class);
+	private final static Logger log = LoggerFactory.getLogger(KRoom.class);
 
 	private final Map<String, KUser> participants = new ConcurrentHashMap<>();
 	private final MediaPipeline pipeline;
@@ -64,11 +63,11 @@ public class KRoom implements Closeable {
 
 	public KUser join(final KurentoHandler h, String uid) {
 		log.info("ROOM {}: adding participant {}", roomId, uid);
-		final KUser participant = new KUser(h, uid, this.roomId, this.pipeline);
-		joinRoom(h, participant);
-		participants.put(participant.getUid(), participant);
-		sendParticipantNames(h, participant);
-		return participant;
+		final KUser u = new KUser(h, uid, this.roomId, this.pipeline);
+		joinRoom(h, u);
+		participants.put(u.getUid(), u);
+		broadcast(h, u);
+		return u;
 	}
 
 	public void leave(final KurentoHandler h, KUser user) {
@@ -89,7 +88,6 @@ public class KRoom implements Closeable {
 			h.sendClient(participant.getUid(), msg);
 			participantsList.add(participant.getUid());
 		}
-
 		return participantsList;
 	}
 
@@ -111,30 +109,17 @@ public class KRoom implements Closeable {
 			log.debug("ROOM {}: The users {} could not be notified that {} left the room", this.roomId,
 					unnotifiedParticipants, name);
 		}
-
 	}
 
-	public void sendParticipantNames(final KurentoHandler h, KUser user) {
-		final JSONArray participantsArray = new JSONArray();
-		for (final KUser participant : this.getParticipants()) {
-			if (!participant.equals(user)) {
-				participantsArray.put(participant.getUid());
-			}
-		}
-
+	private static void broadcast(final KurentoHandler h, KUser user) {
 		final JSONObject msg = newKurentoMsg();
-		msg.put("id", "existingParticipants");
-		msg.put("data", participantsArray);
-		log.debug("PARTICIPANT {}: sending a list of {} participants", user.getUid(), participantsArray.length());
+		msg.put("id", "broadcast");
+		log.debug("User {}: has started broadcast", user.getUid());
 		h.sendClient(user.getUid(), msg);
 	}
 
 	public Collection<KUser> getParticipants() {
 		return participants.values();
-	}
-
-	public KUser getParticipant(String name) {
-		return participants.get(name);
 	}
 
 	@Override
@@ -157,8 +142,6 @@ public class KRoom implements Closeable {
 				log.warn("PARTICIPANT {}: Could not release Pipeline", KRoom.this.roomId);
 			}
 		});
-
 		log.debug("Room {} closed", this.roomId);
 	}
-
 }

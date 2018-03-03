@@ -5,6 +5,7 @@ var InterviewWbArea = function() {
 		, _inited = false, recStart, recStop;
 
 	function _init() {
+		Wicket.Event.subscribe("/websocket/message", wbWsHandler);
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
 		btns = $('.pod-row .pod-container .pod a.choose-btn');
@@ -79,7 +80,9 @@ var InterviewWbArea = function() {
 	}
 
 	self.init = _init;
-	self.destroy = function() {};
+	self.destroy = function() {
+		Wicket.Event.unsubscribe("/websocket/message", wbWsHandler);
+	};
 	self.setRole = _setRole;
 	self.resize = _resize;
 	self.setRecStartEnabled = _setRecStartEnabled;

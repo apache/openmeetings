@@ -38,6 +38,8 @@ public class KurentoHandler {
 	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
 	public final static String KURENTO_TYPE = "kurento";
 	private final KurentoClient client = KurentoClient.create();
+	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
+	private final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
 
 	@Autowired
 	private IClientManager clientManager;
@@ -82,8 +84,9 @@ public class KurentoHandler {
 		log.info("PARTICIPANT {}: trying to join room {}", c, c.getRoomId());
 
 		KRoom room = getRoom(c.getRoomId());
+		clientManager.update(c.addStream(c.getUid()));
 		final KUser user = room.join(this, c.getUid());
-		register(user);
+		usersByUid.put(user.getUid(), user);
 	}
 
 	void sendClient(String uid, JSONObject msg) {
@@ -98,8 +101,6 @@ public class KurentoHandler {
 		}
 	}
 
-	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
-
 	/**
 	 * Looks for a room in the active room list.
 	 *
@@ -113,7 +114,7 @@ public class KurentoHandler {
 		KRoom room = rooms.get(roomId);
 
 		if (room == null) {
-			log.debug("Room {} not existent. Will create now!", roomId);
+			log.debug("Room {} does not exist. Will create now!", roomId);
 			room = new KRoom(roomId, client.createMediaPipeline());
 			rooms.put(roomId, room);
 		}
@@ -131,13 +132,6 @@ public class KurentoHandler {
 		this.rooms.remove(room.getRoomId());
 		room.close();
 		log.info("Room {} removed and closed", room.getRoomId());
-	}
-
-
-	private final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
-
-	public void register(KUser user) {
-		usersByUid.put(user.getUid(), user);
 	}
 
 	public KUser getByUid(String uid) {
