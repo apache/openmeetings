@@ -39,7 +39,7 @@ public class KurentoHandler {
 	public final static String KURENTO_TYPE = "kurento";
 	private final KurentoClient client = KurentoClient.create();
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
-	private final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
+	final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
 
 	@Autowired
 	private IClientManager clientManager;
@@ -48,32 +48,35 @@ public class KurentoHandler {
 		final Client c = clientManager.get(uid);
 
 		if (c != null) {
-			log.debug("Incoming message from user '{}': {}", c.getUser(), msg);
+			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 		} else {
 			log.debug("Incoming message from new user: {}", msg);
 		}
-		final KUser user = getByUid(uid);
+		KUser user = getByUid(uid);
 		switch (msg.getString("id")) {
 			case "joinRoom":
 				joinRoom(c);
 				break;
 			case "receiveVideoFrom":
-				final String senderName = msg.getString("sender");
-				final KUser sender = getByUid(senderName);
+				final String senderUid = msg.getString("sender");
+				final KUser sender = getByUid(senderUid);
 				final String sdpOffer = msg.getString("sdpOffer");
+				if (user == null) {
+					KRoom room = getRoom(c.getRoomId());
+					user = room.addUser(this, uid);
+				}
 				user.receiveVideoFrom(this, sender, sdpOffer);
-				break;
-			case "leaveRoom":
-				leaveRoom(user);
 				break;
 			case "onIceCandidate":
 				JSONObject candidate = msg.getJSONObject("candidate");
 
-				if (c != null) {
-					IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
-							candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
-					user.addCandidate(cand, msg.getString("name"));
+				if (user == null) {
+					KRoom room = getRoom(c.getRoomId());
+					user = room.addUser(this, uid);
 				}
+				IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
+						candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
+				user.addCandidate(cand, msg.getString("name"));
 				break;
 			default:
 				break;
@@ -85,20 +88,11 @@ public class KurentoHandler {
 
 		KRoom room = getRoom(c.getRoomId());
 		clientManager.update(c.addStream(c.getUid()));
-		final KUser user = room.join(this, c.getUid());
-		usersByUid.put(user.getUid(), user);
+		room.join(this, c.getUid());
 	}
 
 	void sendClient(String uid, JSONObject msg) {
 		WebSocketHelper.sendClient(clientManager.get(uid), msg);
-	}
-
-	private void leaveRoom(KUser user) {
-		final KRoom room = getRoom(user.getRoomId());
-		room.leave(this, user);
-		if (room.getParticipants().isEmpty()) {
-			removeRoom(room);
-		}
 	}
 
 	/**

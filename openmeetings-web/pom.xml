@@ -476,12 +476,12 @@
 					<artifactId>jetty-maven-plugin</artifactId>
 					<version>${jetty9.version}</version>
 					<configuration>
-						<!--systemProperties>
+						<systemProperties>
 							<systemProperty>
-								<name>logback.configurationFile</name>
-								<value>${project.build.directory}/${project.build.finalName}/WEB-INF/classes/logback-config.xml</value>
+								<name>current_openmeetings_log_dir</name>
+								<value>${project.build.directory}</value>
 							</systemProperty>
-						</systemProperties-->
+						</systemProperties>
 						<webApp>
 							<contextPath>/openmeetings</contextPath>
 						</webApp>

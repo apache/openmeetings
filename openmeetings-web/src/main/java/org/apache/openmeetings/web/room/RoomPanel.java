@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
@@ -165,9 +164,8 @@ public class RoomPanel extends BasePanel {
 			boolean hasStreams = false;
 			Client _c = getClient();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
-				boolean self = _c.getUid().equals(c.getUid());
 				for (String uid : c.getStreams()) {
-					JSONObject jo = videoJson(c, self, c.getSid(), getBean(StreamClientManager.class), uid);
+					JSONObject jo = videoJson(c, c.getSid(), uid);
 					sb.append(String.format("VideoManager.play(%s);", jo));
 					hasStreams = true;
 				}
@@ -502,7 +500,7 @@ public class RoomPanel extends BasePanel {
 						boolean self = _c.getSid().equals(c.getSid());
 						StreamClientManager mgr = getBean(StreamClientManager.class);
 						if (!self || Client.Type.room != mgr.get(uid).getType()) { // stream from others or self external video
-							JSONObject jo = videoJson(c, false, _c.getSid(), mgr, uid);
+							JSONObject jo = videoJson(c, _c.getSid(), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
 						if (self) {
@@ -858,5 +856,28 @@ public class RoomPanel extends BasePanel {
 
 	public boolean isInterview() {
 		return interview;
+	}
+
+	public JSONObject videoJson(Client c, String sid, String uid) {
+		/*
+		TODO streams
+		StreamClient sc = mgr.get(uid);
+		if (sc == null) {
+			return new JSONObject();
+		}
+		*/
+		JSONObject o = c.toJson(getUid().equals(c.getUid()))
+				.put("sid", sid)
+				.put("uid", c.getUid())
+				 /*TODO
+				 .put("uid", sc.getUid())
+				.put("broadcastId", sc.getBroadcastId())
+				.put("width", sc.getWidth())
+				.put("height", sc.getHeight())
+				.put("type", sc.getType());
+		return addScreenActivities(o, sc);
+		*/
+				;
+		return o;
 	}
 }

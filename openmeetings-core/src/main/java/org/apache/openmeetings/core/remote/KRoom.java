@@ -61,11 +61,16 @@ public class KRoom implements Closeable {
 		this.close();
 	}
 
-	public KUser join(final KurentoHandler h, String uid) {
+	public KUser addUser(final KurentoHandler h, String uid) {
 		log.info("ROOM {}: adding participant {}", roomId, uid);
 		final KUser u = new KUser(h, uid, this.roomId, this.pipeline);
-		joinRoom(h, u);
 		participants.put(u.getUid(), u);
+		h.usersByUid.put(u.getUid(), u);
+		return u;
+	}
+
+	public KUser join(final KurentoHandler h, String uid) {
+		KUser u = addUser(h, uid);
 		broadcast(h, u);
 		return u;
 	}
@@ -74,21 +79,6 @@ public class KRoom implements Closeable {
 		log.debug("PARTICIPANT {}: Leaving room {}", user.getUid(), this.roomId);
 		this.removeParticipant(h, user.getUid());
 		user.close();
-	}
-
-	private Collection<String> joinRoom(final KurentoHandler h, KUser newParticipant) {
-		final JSONObject msg = newKurentoMsg();
-		msg.put("id", "newParticipantArrived");
-		msg.put("name", newParticipant.getUid());
-
-		final List<String> participantsList = new ArrayList<>(participants.values().size());
-		log.debug("ROOM {}: notifying other participants of new participant {}", roomId, newParticipant.getUid());
-
-		for (final KUser participant : participants.values()) {
-			h.sendClient(participant.getUid(), msg);
-			participantsList.add(participant.getUid());
-		}
-		return participantsList;
 	}
 
 	private void removeParticipant(final KurentoHandler h, String name) {

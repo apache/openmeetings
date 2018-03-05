@@ -4,10 +4,6 @@ var VideoManager = (function() {
 	let share, inited = false;
 
 /*FIXME TODO*/
-	function onNewParticipant(request) {
-		receiveVideo(request.uid);
-	}
-
 	function onVideoResponse(m) {
 		const w = $('#' + VideoUtil.getVid(m.uid))
 			, v = w.data()
@@ -49,48 +45,25 @@ var VideoManager = (function() {
 				}
 				this.generateOffer(v.offerToReceiveVideo.bind(v));
 			}));
-		// TODO FIXME msg.data.forEach(receiveVideo);
 	}
 
-	function leaveRoom() {
-		sendMessage({
-			id : 'leaveRoom'
-		});
-
-		for ( var key in participants) {
-			participants[key].dispose();
-		}
-
-		document.getElementById('join').style.display = 'block';
-		document.getElementById('room').style.display = 'none';
+	function receiveVideo(uid) {
+		const w = $('#' + VideoUtil.getVid(uid))
+			, v = w.data()
+			, cl = v.client();
+		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+			{
+				remoteVideo: v.video()
+				, onicecandidate: v.onIceCandidate.bind(v)
+			}
+			, function (error) {
+				if(error) {
+					return console.error(error);
+				}
+				this.generateOffer(v.offerToReceiveVideo.bind(v));
+			}
+		));
 	}
-
-	function receiveVideo(sender) {
-		var participant = new Participant(sender);
-		participants[sender] = participant;
-		var video = participant.getVideoElement();
-
-		var options = {
-	      remoteVideo: video,
-	      onicecandidate: participant.onIceCandidate.bind(participant)
-	    }
-
-		participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-				function (error) {
-				  if(error) {
-					  return console.error(error);
-				  }
-				  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
-		});;
-	}
-
-	function onParticipantLeft(request) {
-		console.log('Participant ' + request.uid + ' left');
-		var participant = participants[request.uid];
-		participant.dispose();
-		delete participants[request.uid];
-	}
-
 	/*FIXME TODO*/
 
 	function _onWsMessage(jqEvent, msg) {
@@ -105,12 +78,6 @@ var VideoManager = (function() {
 				switch (m.id) {
 					case 'broadcast':
 						onBroadcast(m);
-						break;
-					case 'newParticipantArrived':
-						onNewParticipant(m);
-						break;
-					case 'participantLeft':
-						onParticipantLeft(m);
 						break;
 					case 'videoResponse':
 						onVideoResponse(m);
@@ -216,6 +183,7 @@ var VideoManager = (function() {
 			});
 		} else if ('sharing' !== c.type) {
 			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
+			receiveVideo(c.uid);
 		}
 	}
 	function _close(uid, showShareBtn) {

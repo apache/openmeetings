@@ -24,7 +24,7 @@
 	<jmxConfigurator contextName="${current_openmeetings_context_name}" />
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<File>log/${current_openmeetings_context_name}.log</File>
+		<File>${current_openmeetings_log_dir}/${current_openmeetings_context_name}.log</File>
 		<Append>false</Append>
 		<Encoding>UTF-8</Encoding>
 		<BufferedIO>false</BufferedIO>
@@ -47,7 +47,7 @@
 	</appender>
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %r %L %c{15} [%.15thread] - %m%n</pattern>
+			<pattern>%highlight(%-5level) %d{MM-dd HH:mm:ss.SSS } %cyan(%c{15}:%L [%.15thread]) - %m%n</pattern>
 		</layout>
 	</appender>
 	<logger name="com.mchange.v2" level="ERROR" />

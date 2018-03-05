@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.util;
 
+import java.io.InputStream;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -25,24 +27,32 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
-import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
 
 public class OMContextListener implements ServletContextListener {
+	private static final String LOG_DIR_PROP = "current_openmeetings_log_dir";
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		String ctx = pathToName(event);
 		System.setProperty("current_openmeetings_context_name", ctx);
+		if (System.getProperty(LOG_DIR_PROP) == null) {
+			System.setProperty(LOG_DIR_PROP, "log");
+		}
 		System.setProperty("webapp.contextPath", String.format("/%s", ctx));
+		LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
 		try {
-			LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
 			JoranConfigurator configurator = new JoranConfigurator();
 			configurator.setContext(context);
 			context.reset();
-			configurator.doConfigure("logback-config.xml");
-		} catch (JoranException je) {
+			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-config.xml")) {
+				configurator.doConfigure(cfgIs);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			// StatusPrinter will handle this
 		}
+		StatusPrinter.printInCaseOfErrorsOrWarnings(context);
 		//System.setProperty("logback.configurationFile", "logback-config.xml");
 	}
 

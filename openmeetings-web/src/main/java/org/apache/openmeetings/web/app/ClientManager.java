@@ -147,7 +147,6 @@ public class ClientManager implements IClientManager {
 	}
 
 	public IClient removeFromRoom(IClient _c) {
-		/*
 		Long roomId = _c.getRoomId();
 		log.debug("Removing online room client: {}, room: {}", _c.getUid(), roomId);
 		if (roomId != null) {
@@ -157,25 +156,28 @@ public class ClientManager implements IClientManager {
 				clients.remove(_c.getUid());
 				rooms.put(roomId, clients);
 			}
+			/* FIXME TODO KurentoHandler
 			if (_c instanceof StreamClient) {
 				StreamClient sc = (StreamClient)_c;
 				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
 					scopeAdapter.roomLeaveByScope(_c, roomId);
 				}
 			}
+			 */
 			if (_c instanceof Client) {
-				scopeAdapter.dropSharing(_c, roomId);
+				//FIXME TODO scopeAdapter.dropSharing(_c, roomId);
 				Client c = (Client)_c;
+				/* FIXME TODO
 				IScope sc = scopeAdapter.getChildScope(roomId);
 				for (String uid : c.getStreams()) {
 					scopeAdapter.sendMessageById("quit", uid, sc);
 				}
+				*/
 				c.setRoom(null);
 				c.clear();
 				update(c);
 			}
 		}
-		*/
 		return _c;
 	}
 
