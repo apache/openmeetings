@@ -21,13 +21,12 @@ package org.apache.openmeetings.web.room.sidebar.icon.activity;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class CamActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
-	public CamActivityIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Activity.broadcastV, room);
+	public CamActivityIcon(String id, String uid) {
+		super(id, uid, Activity.broadcastV);
 		mainCssClass = "activity cam ";
 	}
 

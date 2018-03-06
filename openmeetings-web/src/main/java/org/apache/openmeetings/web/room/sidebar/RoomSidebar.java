@@ -237,7 +237,7 @@ public class RoomSidebar extends Panel {
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
 		this.room = room;
-		selfRights = new SelfIconsPanel("icons", room.getUid(), room, true);
+		selfRights = new SelfIconsPanel("icons", room.getUid(), true);
 	}
 
 	@Override
@@ -288,7 +288,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
-		if (room.isInterview()) {
+		if (room.isInterview() || room.getRoom() == null) {
 			return;
 		}
 		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.presenter);

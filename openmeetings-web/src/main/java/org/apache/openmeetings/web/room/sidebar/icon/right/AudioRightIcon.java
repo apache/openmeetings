@@ -19,13 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class AudioRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public AudioRightIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Right.audio, room);
+	public AudioRightIcon(String id, String uid) {
+		super(id, uid, Right.audio);
 		mainCssClass = "right audio bumper ";
 	}
 

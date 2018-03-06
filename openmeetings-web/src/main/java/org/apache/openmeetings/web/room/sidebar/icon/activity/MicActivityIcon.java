@@ -20,13 +20,12 @@ package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class MicActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
 
-	public MicActivityIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Activity.broadcastA, room);
+	public MicActivityIcon(String id, String uid) {
+		super(id, uid, Activity.broadcastA);
 		mainCssClass = "activity mic bumper ";
 	}
 

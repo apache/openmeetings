@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -42,9 +41,9 @@ public class ChatPanel extends Panel {
 		add(chat = new Chat("chat"));
 	}
 
-	public void roomEnter(Room r, AjaxRequestTarget target) {
+	public void roomEnter(Room r, IPartialPageRequestHandler handler) {
 		if (r.isHidden(RoomElement.Chat)) {
-			toggle(target, false);
+			toggle(handler, false);
 			return;
 		}
 		StringBuilder sb = new StringBuilder("$(function() {");
@@ -56,7 +55,7 @@ public class ChatPanel extends Panel {
 			.append("Chat.").append(r.isChatOpened() ? "setOpened" : "close").append("();");
 		chat.processGlobal(sb);
 		sb.append("});");
-		target.appendJavaScript(sb);
+		handler.appendJavaScript(sb);
 	}
 
 	public void roomExit(Room r, IPartialPageRequestHandler handler) {

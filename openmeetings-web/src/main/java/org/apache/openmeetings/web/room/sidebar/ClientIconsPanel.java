@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.right.AudioRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ExclusiveRightIcon;
 import org.apache.openmeetings.web.room.sidebar.icon.right.ModeratorRightIcon;
@@ -41,18 +40,18 @@ public class ClientIconsPanel extends Panel {
 	private final VideoRightIcon rightVideo;
 	private final ExclusiveRightIcon rightExclsv;
 
-	public ClientIconsPanel(String id, String uid, RoomPanel room) {
+	public ClientIconsPanel(String id, String uid) {
 		super(id);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
-		add(rightModer = new ModeratorRightIcon("right-moder", uid, room));
-		add(rightPresenter = new PresenterRightIcon("right-presenter", uid, room));
-		add(rightWb = new WhiteboardRightIcon("right-wb", uid, room));
-		add(rightScreen = new ScreenShareRightIcon("right-screen-share", uid, room));
-		add(rightRemote = new RemoteControlRightIcon("right-remote-control", uid, room));
-		add(rightAudio = new AudioRightIcon("right-audio", uid, room));
-		add(rightVideo = new VideoRightIcon("right-video", uid, room));
-		add(rightExclsv = new ExclusiveRightIcon("right-exclsv", uid, room));
+		add(rightModer = new ModeratorRightIcon("right-moder", uid));
+		add(rightPresenter = new PresenterRightIcon("right-presenter", uid));
+		add(rightWb = new WhiteboardRightIcon("right-wb", uid));
+		add(rightScreen = new ScreenShareRightIcon("right-screen-share", uid));
+		add(rightRemote = new RemoteControlRightIcon("right-remote-control", uid));
+		add(rightAudio = new AudioRightIcon("right-audio", uid));
+		add(rightVideo = new VideoRightIcon("right-video", uid));
+		add(rightExclsv = new ExclusiveRightIcon("right-exclsv", uid));
 	}
 
 	@Override

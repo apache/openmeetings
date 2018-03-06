@@ -129,7 +129,7 @@ var VideoManager = (function() {
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
 			if (av && v.length !== 1 && !!cl.self) {
-				self.sendMessage({
+				OmUtil.sendMessage({
 					id: 'joinRoom' //TODO stream uid
 					, type: 'kurento'
 				});
@@ -273,12 +273,6 @@ var VideoManager = (function() {
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
-	self.sendMessage = function(m) {
-		m.type = 'kurento';
-		const msg = JSON.stringify(m);
-		console.log('Senging message: ' + msg);
-		Wicket.WebSocket.send(msg);
-	};
 	self.destroy = function() {
 		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
 	}

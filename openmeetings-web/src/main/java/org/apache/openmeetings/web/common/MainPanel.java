@@ -156,15 +156,21 @@ public class MainPanel extends Panel {
 					}
 					log.debug("WebSocketBehavior:: pingTimer is attached");
 					pingTimer.restart(handler);
-				}
-				final JSONObject m;
-				try {
-					m = new JSONObject(msg.getText());
-					if (KURENTO_TYPE.equals(m.getString("type"))) {
-						kHandler.onMessage(uid, m);
+				} else {
+					final JSONObject m;
+					try {
+						m = new JSONObject(msg.getText());
+						if (KURENTO_TYPE.equals(m.optString("type"))) {
+							kHandler.onMessage(uid, m);
+						} else {
+							BasePanel p = getCurrentPanel();
+							if (p != null) {
+								p.process(handler, m);
+							}
+						}
+					} catch (Exception e) {
+						//no-op
 					}
-				} catch (Exception e) {
-					//no-op
 				}
 			}
 

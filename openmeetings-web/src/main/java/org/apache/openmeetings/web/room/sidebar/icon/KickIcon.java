@@ -21,14 +21,13 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_ACTION;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.RoomPanel.Action;
 
 public class KickIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 
-	public KickIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, room);
+	public KickIcon(String id, String uid) {
+		super(id, uid);
 		mainCssClass = "kick ";
 	}
 
@@ -39,7 +38,7 @@ public class KickIcon extends ClientIcon {
 
 	@Override
 	protected boolean isClickable() {
-		return !self && room.getClient().hasRight(Right.moderator) && !getClient().hasRight(Right.superModerator);
+		return !self && roomHasRight(Right.moderator) && !hasRight(Right.superModerator);
 	}
 
 	@Override

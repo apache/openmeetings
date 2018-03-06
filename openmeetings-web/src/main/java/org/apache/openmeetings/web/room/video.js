@@ -277,8 +277,9 @@ var Video = (function() {
 	self.getPeer = function() { return rtcPeer; };
 	self.onIceCandidate = function(candidate, wp) {
 		console.log("Local candidate" + JSON.stringify(candidate));
-		VideoManager.sendMessage({
+		OmUtil.sendMessage({
 			id: 'onIceCandidate'
+			, type: 'kurento'
 			, candidate: candidate
 			, uid: c.uid
 		});
@@ -288,8 +289,9 @@ var Video = (function() {
 			return console.error("sdp offer error");
 		}
 		console.log('Invoking SDP offer callback function');
-		VideoManager.sendMessage({
+		OmUtil.sendMessage({
 			id : "receiveVideoFrom"
+			, type: 'kurento'
 			, sender: c.uid
 			, sdpOffer: offerSdp
 		});
