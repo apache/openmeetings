@@ -72,7 +72,6 @@ import org.apache.openmeetings.web.room.wb.WbPanel;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
@@ -80,7 +79,6 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
@@ -116,69 +114,6 @@ public class RoomPanel extends BasePanel {
 	private final Room r;
 	private final boolean interview;
 	private final WebMarkupContainer room = new WebMarkupContainer("roomContainer");
-	private final AbstractDefaultAjaxBehavior roomEnter = new AbstractDefaultAjaxBehavior() {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void respond(AjaxRequestTarget target) {
-			WebSession ws = WebSession.get();
-			ExtendedClientProperties cp = ws.getExtendedProperties();
-			getBean(ConferenceLogDao.class).add(
-					ConferenceLog.Type.roomEnter
-					, getUserId(), "0", r.getId()
-					, cp.getRemoteAddress()
-					, "" + r.getId());
-			Client _c = getClient();
-			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
-					.put("uid", _c.getUid())
-					.put("rights", _c.toJson(true).getJSONArray("rights"))
-					.put("interview", interview)
-					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
-					.put("exclusiveTitle", getString("1386"));
-			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
-				options.put("reloadUrl", r.getRedirectURL());
-			}
-			StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
-					.append(wb.getInitScript())
-					.append("Room.setSize();")
-					.append(getQuickPollJs());
-			target.appendJavaScript(sb);
-			WebSocketHelper.sendRoom(new RoomMessage(r.getId(), _c, RoomMessage.Type.roomEnter));
-			// play video from other participants
-			initVideos(target);
-			getMainPanel().getChat().roomEnter(r, target);
-			if (r.isFilesOpened()) {
-				sidebar.setFilesActive(target);
-			}
-			if (Room.Type.presentation != r.getType()) {
-				List<Client> mods = getBean(ClientManager.class).listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
-				if (mods.isEmpty()) {
-					waitApplyModeration.open(target);
-				}
-			}
-			wb.update(target);
-		}
-
-		private void initVideos(AjaxRequestTarget target) {
-			StringBuilder sb = new StringBuilder();
-			boolean hasStreams = false;
-			Client _c = getClient();
-			for (Client c: getBean(ClientManager.class).listByRoom(getRoom().getId())) {
-				boolean self = _c.getUid().equals(c.getUid());
-				for (String uid : c.getStreams()) {
-					JSONObject jo = videoJson(c, self, c.getSid(), getBean(StreamClientManager.class), uid);
-					sb.append(String.format("VideoManager.play(%s);", jo));
-					hasStreams = true;
-				}
-			}
-			if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
-				sb.append("WbArea.setRecStartEnabled(true);");
-			}
-			if (!Strings.isEmpty(sb)) {
-				target.appendJavaScript(sb);
-			}
-		}
-	};
 	private RedirectMessageDialog roomClosed;
 	private MessageDialog clientKicked, waitForModerator, waitApplyModeration;
 
@@ -276,7 +211,6 @@ public class RoomPanel extends BasePanel {
 			};
 			room.add(wbArea.add(wb));
 		}
-		room.add(roomEnter);
 		room.add(sidebar = new RoomSidebar("sidebar", this));
 		add(roomClosed = new RedirectMessageDialog("room-closed", "1098", r.isClosed(), r.getRedirectURL()));
 		if (r.isClosed()) {
@@ -733,9 +667,6 @@ public class RoomPanel extends BasePanel {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(interview ? INTERVIEWWB_JS_REFERENCE : WB_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(RoomPanel.class, "room.js"))));
-		if (room.isVisible()) {
-			response.render(OnDomReadyHeaderItem.forScript(roomEnter.getCallbackScript()));
-		}
 	}
 
 	public void requestRight(Right right, IPartialPageRequestHandler handler) {
@@ -812,6 +743,77 @@ public class RoomPanel extends BasePanel {
 	public void broadcast(Client client) {
 		RoomBroadcaster.sendUpdatedClient(client);
 		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.rightUpdated, client.getUid()));
+	}
+
+	@Override
+	protected void process(IPartialPageRequestHandler handler, JSONObject o) {
+		if (room.isVisible() && "room".equals(o.optString("area"))) {
+			final String type = o.optString("type");
+			if ("room".equals(type)) {
+				if ("roomEnter".equals(o.optString("action"))) {
+					onRoomEnter(handler);
+				}
+			}
+		}
+	}
+
+	private void onRoomEnter(IPartialPageRequestHandler handler) {
+		WebSession ws = WebSession.get();
+		ExtendedClientProperties cp = ws.getExtendedProperties();
+		getBean(ConferenceLogDao.class).add(
+				ConferenceLog.Type.roomEnter
+				, getUserId(), "0", r.getId()
+				, cp.getRemoteAddress()
+				, "" + r.getId());
+		Client _c = getClient();
+		JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
+				.put("uid", _c.getUid())
+				.put("rights", _c.toJson(true).getJSONArray("rights"))
+				.put("interview", interview)
+				.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
+				.put("exclusiveTitle", getString("1386"));
+		if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {
+			options.put("reloadUrl", r.getRedirectURL());
+		}
+		StringBuilder sb = new StringBuilder("Room.init(").append(options.toString(new NullStringer())).append(");")
+				.append(wb.getInitScript())
+				.append("Room.setSize();")
+				.append(getQuickPollJs());
+		handler.appendJavaScript(sb);
+		WebSocketHelper.sendRoom(new RoomMessage(r.getId(), _c, RoomMessage.Type.roomEnter));
+		// play video from other participants
+		initVideos(handler);
+		getMainPanel().getChat().roomEnter(r, handler);
+		if (r.isFilesOpened()) {
+			sidebar.setFilesActive(handler);
+		}
+		if (Room.Type.presentation != r.getType()) {
+			List<Client> mods = getBean(ClientManager.class).listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
+			if (mods.isEmpty()) {
+				waitApplyModeration.open(handler);
+			}
+		}
+		wb.update(handler);
+	}
+
+	private void initVideos(IPartialPageRequestHandler handler) {
+		StringBuilder sb = new StringBuilder();
+		boolean hasStreams = false;
+		Client _c = getClient();
+		for (Client c: getBean(ClientManager.class).listByRoom(getRoom().getId())) {
+			boolean self = _c.getUid().equals(c.getUid());
+			for (String uid : c.getStreams()) {
+				JSONObject jo = videoJson(c, self, c.getSid(), getBean(StreamClientManager.class), uid);
+				sb.append(String.format("VideoManager.play(%s);", jo));
+				hasStreams = true;
+			}
+		}
+		if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+			sb.append("WbArea.setRecStartEnabled(true);");
+		}
+		if (!Strings.isEmpty(sb)) {
+			handler.appendJavaScript(sb);
+		}
 	}
 
 	public Room getRoom() {

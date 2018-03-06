@@ -24,13 +24,12 @@ import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.web.pages.BasePage;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class RefreshIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 
-	public RefreshIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, room);
+	public RefreshIcon(String id, String uid) {
+		super(id, uid);
 		mainCssClass = "restart ";
 	}
 

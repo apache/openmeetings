@@ -19,13 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class ModeratorRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public ModeratorRightIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Right.moderator, room);
+	public ModeratorRightIcon(String id, String uid) {
+		super(id, uid, Right.moderator);
 		mainCssClass = "right moderator bumper ";
 	}
 

@@ -21,20 +21,19 @@ package org.apache.openmeetings.web.room.sidebar.icon.right;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class PresenterRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public PresenterRightIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Right.presenter, room);
+	public PresenterRightIcon(String id, String uid) {
+		super(id, uid, Right.presenter);
 		mainCssClass = "right presenter bumper ";
 	}
 
 	@Override
 	protected String getTitle() {
 		String title;
-		if (getClient().hasRight(right)) {
+		if (hasRight(right)) {
 			title = self ? "right.presenter.allowed.self" : "right.presenter.remove";
 		} else {
 			title = self ? "right.presenter.request.self" : "right.presenter.request";
@@ -44,7 +43,7 @@ public class PresenterRightIcon extends RoomRightIcon {
 
 	@Override
 	protected boolean visible() {
-		Room r = room.getRoom();
+		Room r = getRoom();
 		return Room.Type.interview != r.getType() && !r.isHidden(RoomElement.Whiteboard) && super.visible();
 	}
 }

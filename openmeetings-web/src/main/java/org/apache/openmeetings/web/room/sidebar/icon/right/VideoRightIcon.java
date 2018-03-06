@@ -19,13 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class VideoRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public VideoRightIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Right.video, room);
+	public VideoRightIcon(String id, String uid) {
+		super(id, uid, Right.video);
 		mainCssClass = "right camera ";
 	}
 
@@ -36,6 +35,6 @@ public class VideoRightIcon extends RoomRightIcon {
 
 	@Override
 	protected boolean visible() {
-		return !room.getRoom().isAudioOnly() && super.visible();
+		return !getRoom().isAudioOnly() && super.visible();
 	}
 }

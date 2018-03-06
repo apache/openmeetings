@@ -20,18 +20,17 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class UserSpeaksIcon extends ClientIcon {
 	private static final long serialVersionUID = 1L;
 
-	public UserSpeaksIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, room);
+	public UserSpeaksIcon(String id, String uid) {
+		super(id, uid);
 		mainCssClass = "audio-activity ";
 	}
 
 	private boolean isActive() {
-		return getClient().hasActivity(Activity.broadcastA) && room.getClient().hasRight(Room.Right.exclusive);
+		return getClient().hasActivity(Activity.broadcastA) && roomHasRight(Room.Right.exclusive);
 	}
 
 	@Override

@@ -239,17 +239,19 @@ public class WebSocketHelper {
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
-		Application app = (Application)getApp();
-		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
-		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor();
-		for (Client c : func.apply(app)) {
-			if (check == null || check.test(c)) {
-				final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
-				if (wc != null && wc.isOpen()) {
-					executor.run(() -> consumer.accept(wc, c));
+		new Thread(() -> {
+			Application app = (Application)getApp();
+			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+			Executor executor = settings.getWebSocketPushMessageExecutor();
+			for (Client c : func.apply(app)) {
+				if (check == null || check.test(c)) {
+					final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
+					if (wc != null && wc.isOpen()) {
+						executor.run(() -> consumer.accept(wc, c));
+					}
 				}
 			}
-		}
+		}).start();
 	}
 }

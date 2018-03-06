@@ -24,7 +24,6 @@ import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.activityAllow
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
 
 public abstract class RoomActivityIcon extends ClientIcon {
@@ -33,8 +32,8 @@ public abstract class RoomActivityIcon extends ClientIcon {
 	private static final String CLS_DISABLED = "disabled";
 	protected final Activity activity;
 
-	public RoomActivityIcon(String id, String uid, Activity activity, RoomPanel room) {
-		super(id, uid, room);
+	public RoomActivityIcon(String id, String uid, Activity activity) {
+		super(id, uid);
 		this.activity = activity;
 	}
 
@@ -44,8 +43,9 @@ public abstract class RoomActivityIcon extends ClientIcon {
 	}
 
 	protected boolean visible() {
-		return Room.Type.interview != room.getRoom().getType()
-				&& activityAllowed(getClient(), activity, room.getRoom());
+		Room r = getRoom();
+		return Room.Type.interview != r.getType()
+				&& activityAllowed(getClient(), activity, r);
 	}
 
 	@Override
