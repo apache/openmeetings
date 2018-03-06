@@ -26,6 +26,8 @@ import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.openmeetings.web.room.RoomPanel;
@@ -37,17 +39,16 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	private static final long serialVersionUID = 1L;
 	protected static final String ICON_CLASS = "ui-icon ";
 	protected static final String CLS_CLICKABLE = "clickable ";
-	protected final RoomPanel room;
 	protected final boolean self;
 	protected final String uid;
 	protected String mainCssClass;
 	protected final StringBuilder cssClass = new StringBuilder(ICON_CLASS);
 
-	public ClientIcon(String id, String uid, RoomPanel room) {
+	public ClientIcon(String id, String uid) {
 		super(id);
-		this.room = room;
 		this.uid = uid;
-		self = room.getClient().getUid().equals(uid);
+		Client rc = getRoomClient();
+		self = rc == null ? false : rc.getUid().equals(uid);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 	}
@@ -92,5 +93,29 @@ public abstract class ClientIcon extends WebMarkupContainer {
 
 	protected Client getClient() {
 		return getBean(ClientManager.class).get(uid);
+	}
+
+	protected boolean hasRight(Right right) {
+		Client c = getClient();
+		return c == null ? false : c.hasRight(right);
+	}
+
+	protected boolean roomHasRight(Right right) {
+		Client rc = getRoomClient();
+		return rc == null ? false : rc.hasRight(right);
+	}
+
+	protected Client getRoomClient() {
+		RoomPanel rp = getRoomPanel();
+		return rp == null ? null : rp.getClient();
+	}
+
+	protected RoomPanel getRoomPanel() {
+		return findParent(RoomPanel.class);
+	}
+
+	protected Room getRoom() {
+		RoomPanel rp = getRoomPanel();
+		return rp == null ? null : rp.getRoom();
 	}
 }

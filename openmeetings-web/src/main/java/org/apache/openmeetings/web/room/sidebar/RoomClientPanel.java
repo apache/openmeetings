@@ -51,20 +51,20 @@ public class RoomClientPanel extends Panel {
 		item.setMarkupId(String.format("user%s", c.getUid()));
 		item.add(AttributeModifier.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
 		item.add(AttributeModifier.append("data-userid", c.getUserId()));
-		add(new RefreshIcon("refresh", uid, room));
+		add(new RefreshIcon("refresh", uid));
 		final String name = getName(c);
 		add(new Label("name", name));
-		add(new UserSpeaksIcon("user-speaks", uid, room));
+		add(new UserSpeaksIcon("user-speaks", uid));
 		item.add(AttributeModifier.replace(ATTR_TITLE, name));
 		WebMarkupContainer actions = new WebMarkupContainer("actions");
-		actions.add(new KickIcon("kick", uid, room));
+		actions.add(new KickIcon("kick", uid));
 		actions.add(new WebMarkupContainer("privateChat").setVisible(!room.getRoom().isHidden(RoomElement.Chat) && !getUserId().equals(c.getUserId())));
 		actions.setVisible(room.getClient().hasRight(Right.moderator));
 		if (c.getUid().equals(room.getClient().getUid())) {
-			actions.add(new SelfIconsPanel("icons", uid, room, false));
+			actions.add(new SelfIconsPanel("icons", uid, false));
 			item.add(AttributeModifier.append(ATTR_CLASS, "current"));
 		} else {
-			actions.add(new ClientIconsPanel("icons", uid, room));
+			actions.add(new ClientIconsPanel("icons", uid));
 		}
 		add(actions);
 	}

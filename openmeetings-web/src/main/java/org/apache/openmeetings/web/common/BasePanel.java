@@ -27,6 +27,8 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
+import com.github.openjson.JSONObject;
+
 public abstract class BasePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	public static final String EVT_CLICK = "click";
@@ -81,5 +83,14 @@ public abstract class BasePanel extends Panel {
 	 * @param handler - request handler to perform action after "new message" dialog was closed.
 	 */
 	public void onNewMessageClose(IPartialPageRequestHandler handler) {
+	}
+
+	/**
+	 * Handler for WebSocket messages
+	 *
+	 * @param handler - handler to perform update
+	 * @param o - message to process
+	 */
+	protected void process(IPartialPageRequestHandler handler, JSONObject o) {
 	}
 }

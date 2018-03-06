@@ -19,13 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class ScreenShareRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public ScreenShareRightIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Right.share, room);
+	public ScreenShareRightIcon(String id, String uid) {
+		super(id, uid, Right.share);
 		mainCssClass = "right screen-share ";
 	}
 
@@ -36,6 +35,6 @@ public class ScreenShareRightIcon extends RoomRightIcon {
 
 	@Override
 	protected boolean visible() {
-		return room.screenShareAllowed() && super.visible();
+		return getRoomPanel().screenShareAllowed() && super.visible();
 	}
 }

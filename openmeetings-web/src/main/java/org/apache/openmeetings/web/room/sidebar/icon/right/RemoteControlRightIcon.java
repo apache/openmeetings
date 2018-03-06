@@ -19,13 +19,12 @@
 package org.apache.openmeetings.web.room.sidebar.icon.right;
 
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.web.room.RoomPanel;
 
 public class RemoteControlRightIcon extends RoomRightIcon {
 	private static final long serialVersionUID = 1L;
 
-	public RemoteControlRightIcon(String id, String uid, RoomPanel room) {
-		super(id, uid, Right.remoteControl, room);
+	public RemoteControlRightIcon(String id, String uid) {
+		super(id, uid, Right.remoteControl);
 		mainCssClass = "right remote-control bumper ";
 	}
 
@@ -36,6 +35,6 @@ public class RemoteControlRightIcon extends RoomRightIcon {
 
 	@Override
 	protected boolean visible() {
-		return room.screenShareAllowed() && super.visible();
+		return getRoomPanel().screenShareAllowed() && super.visible();
 	}
 }

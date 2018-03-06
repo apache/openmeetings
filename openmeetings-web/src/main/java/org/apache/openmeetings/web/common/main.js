@@ -52,6 +52,10 @@ var OmUtil = (function() {
 
 	self.confirmDlg = _confirmDlg;
 	self.tmpl = _tmpl;
+	self.sendMessage = function(m) {
+		const msg = JSON.stringify(m || {});
+		Wicket.WebSocket.send(msg);
+	};
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

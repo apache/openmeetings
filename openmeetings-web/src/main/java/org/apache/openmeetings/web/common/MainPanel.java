@@ -90,6 +90,7 @@ import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.wicketstuff.urlfragment.UrlFragment;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
@@ -150,6 +151,17 @@ public class MainPanel extends Panel {
 					}
 					log.debug("WebSocketBehavior:: pingTimer is attached");
 					pingTimer.restart(handler);
+				} else {
+					final JSONObject m;
+					try {
+						m = new JSONObject(msg.getText());
+						BasePanel p = getCurrentPanel();
+						if (p != null) {
+							p.process(handler, m);
+						}
+					} catch (Exception e) {
+						//no-op
+					}
 				}
 			}
 
