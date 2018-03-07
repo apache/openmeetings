@@ -393,7 +393,8 @@ public class RoomPanel extends BasePanel {
 
 	@Override
 	public void onEvent(IEvent<?> event) {
-		if (event.getPayload() instanceof WebSocketPushPayload) {
+		Client _c = getClient();
+		if (_c != null && event.getPayload() instanceof WebSocketPushPayload) {
 			WebSocketPushPayload wsEvent = (WebSocketPushPayload) event.getPayload();
 			if (wsEvent.getMessage() instanceof RoomMessage) {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
@@ -471,7 +472,6 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
-							Client _c = getClient();
 							boolean self = _c.getUid().equals(c.getUid());
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
 									, c.streamJson(_c.getSid(), self, getBean(StreamClientManager.class)).toString(new NullStringer())
@@ -495,7 +495,6 @@ public class RoomPanel extends BasePanel {
 							log.error("Not existing user in newStream {} !!!!", uid);
 							return;
 						}
-						Client _c = getClient();
 						boolean self = _c.getSid().equals(c.getSid());
 						StreamClientManager mgr = getBean(StreamClientManager.class);
 						if (!self || Client.Type.room != mgr.get(uid).getType()) { // stream from others or self external video
@@ -515,7 +514,6 @@ public class RoomPanel extends BasePanel {
 						Client c = cm.getBySid(obj.getString("sid"));
 						if (c != null) {
 							//c == null means client exits the room
-							Client _c = getClient();
 							if (_c.getUid().equals(c.getUid())) {
 								cm.update(c.removeStream(uid));
 							}
@@ -568,18 +566,18 @@ public class RoomPanel extends BasePanel {
 						sidebar.removeActivity(((TextRoomMessage)m).getText(), handler);
 						break;
 					case haveQuestion:
-						if (getClient().hasRight(Room.Right.moderator) || getUserId().equals(m.getUserId())) {
+						if (_c.hasRight(Room.Right.moderator) || getUserId().equals(m.getUserId())) {
 							sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.haveQuestion), handler);
 						}
 						break;
 					case kick:
 						{
 							String uid = ((TextRoomMessage)m).getText();
-							if (getClient().getUid().equals(uid)) {
+							if (_c.getUid().equals(uid)) {
 								handler.add(room.setVisible(false));
 								getMainPanel().getChat().toggle(handler, false);
 								clientKicked.open(handler);
-								cm.exitRoom(getClient());
+								cm.exitRoom(_c);
 							}
 						}
 						break;
@@ -591,7 +589,7 @@ public class RoomPanel extends BasePanel {
 							log.error("Not existing user in audioActivity {} !!!!", obj);
 							return;
 						}
-						if (!getClient().getUid().equals(c.getUid())) {
+						if (!_c.getUid().equals(c.getUid())) {
 							handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
 						}
 					}
@@ -604,7 +602,7 @@ public class RoomPanel extends BasePanel {
 							log.error("Not existing user in mute {} !!!!", obj);
 							return;
 						}
-						if (!getClient().getUid().equals(c.getUid())) {
+						if (!_c.getUid().equals(c.getUid())) {
 							handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.mute('%s', %s);}", obj.getString("uid"), obj.getBoolean("mute")));
 						}
 					}
