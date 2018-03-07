@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon;
 
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.room.Room;
 
@@ -30,7 +31,8 @@ public class UserSpeaksIcon extends ClientIcon {
 	}
 
 	private boolean isActive() {
-		return getClient().hasActivity(Activity.broadcastA) && roomHasRight(Room.Right.exclusive);
+		Client c = getClient();
+		return c != null && (c.hasActivity(Activity.broadcastA) && roomHasRight(Room.Right.exclusive));
 	}
 
 	@Override

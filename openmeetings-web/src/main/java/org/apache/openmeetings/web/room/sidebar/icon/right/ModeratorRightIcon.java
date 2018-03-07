@@ -31,7 +31,7 @@ public class ModeratorRightIcon extends RoomRightIcon {
 	@Override
 	protected String getTitle() {
 		String title;
-		if (getClient().hasRight(right)) {
+		if (hasRight()) {
 			title = isSelf() ? "688" : "675";
 		} else {
 			title = isSelf() ? "81" : "676";
