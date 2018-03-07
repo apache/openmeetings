@@ -37,13 +37,13 @@ var VideoManager = (function() {
 							}
 						}*/
 					}
-				, onicecandidate: v.onIceCandidate.bind(v)
+				, onicecandidate: v.onIceCandidate
 			}
 			, function (error) {
 				if (error) {
 					return console.error(error);
 				}
-				this.generateOffer(v.offerToReceiveVideo.bind(v));
+				this.generateOffer(v.offerToReceiveVideo);
 			}));
 	}
 
@@ -54,13 +54,13 @@ var VideoManager = (function() {
 		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 			{
 				remoteVideo: v.video()
-				, onicecandidate: v.onIceCandidate.bind(v)
+				, onicecandidate: v.onIceCandidate
 			}
 			, function (error) {
 				if(error) {
 					return console.error(error);
 				}
-				this.generateOffer(v.offerToReceiveVideo.bind(v));
+				this.generateOffer(v.offerToReceiveVideo);
 			}
 		));
 	}

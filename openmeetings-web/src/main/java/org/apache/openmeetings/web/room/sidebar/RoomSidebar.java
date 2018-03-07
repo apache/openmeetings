@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -283,7 +282,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private ListView<Client> updateUsers() {
-		users.setList(getBean(ClientManager.class).listByRoom(room.getRoom().getId()));
+		users.setList(cm.listByRoom(room.getRoom().getId()));
 		return users;
 	}
 

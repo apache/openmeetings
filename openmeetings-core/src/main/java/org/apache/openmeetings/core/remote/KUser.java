@@ -90,13 +90,13 @@ public class KUser implements Closeable {
 
 		log.trace("USER {}: SdpOffer for {} is {}", this.uid, sender.getUid(), sdpOffer);
 
-		final String ipSdpAnswer = this.getEndpointForUser(h, sender).processOffer(sdpOffer);
+		final String sdpAnswer = this.getEndpointForUser(h, sender).processOffer(sdpOffer);
 		final JSONObject scParams = newKurentoMsg();
 		scParams.put("id", "videoResponse");
 		scParams.put("uid", sender.getUid());
-		scParams.put("sdpAnswer", ipSdpAnswer);
+		scParams.put("sdpAnswer", sdpAnswer);
 
-		log.trace("USER {}: SdpAnswer for {} is {}", this.uid, sender.getUid(), ipSdpAnswer);
+		log.trace("USER {}: SdpAnswer for {} is {}", this.uid, sender.getUid(), sdpAnswer);
 		h.sendClient(uid, scParams);
 		log.debug("gather candidates");
 		this.getEndpointForUser(h, sender).gatherCandidates();

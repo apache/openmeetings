@@ -36,7 +36,7 @@
 		</layout>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<!-- daily rollover -->
-			<fileNamePattern>log\${current_openmeetings_context_name}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<fileNamePattern>${current_openmeetings_log_dir}/${current_openmeetings_context_name}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<!-- or whenever the file size reaches 100MB -->
 				<maxFileSize>50MB</maxFileSize>

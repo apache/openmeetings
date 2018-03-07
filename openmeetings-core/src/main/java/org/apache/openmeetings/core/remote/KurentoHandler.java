@@ -76,7 +76,7 @@ public class KurentoHandler {
 				}
 				IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
 						candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
-				user.addCandidate(cand, msg.getString("name"));
+				user.addCandidate(cand, msg.getString("uid"));
 				break;
 			default:
 				break;
