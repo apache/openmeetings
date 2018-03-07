@@ -199,6 +199,9 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	protected void processWbAction(WbAction a, JSONObject obj, AjaxRequestTarget target) throws IOException {
 		Client c = rp.getClient();
+		if (c == null) {
+			return;
+		}
 		WhiteboardManager wbm = getBean(WhiteboardManager.class);
 		switch (a) {
 			case createObj:

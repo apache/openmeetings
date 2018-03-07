@@ -296,7 +296,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
-		if (room.getRoom() == null) {
+		if (room.getRoom() == null || room.getClient() != null) {
 			return;
 		}
 		updateShowFiles(handler);
