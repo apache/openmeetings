@@ -132,7 +132,13 @@ public class ClientManager implements IClientManager {
 		return getRooms().keySet();
 	}
 
-	public Client addToRoom(Client c) {
+	/**
+	 * This method will return count of users in room _after_ adding
+	 *
+	 * @param c - client to be added to the room
+	 * @return count of users in room _after_ adding
+	 */
+	public int addToRoom(Client c) {
 		Long roomId = c.getRoom().getId();
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
 		IMap<Long, Set<String>> rooms = getRooms();
@@ -140,10 +146,11 @@ public class ClientManager implements IClientManager {
 		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
 		Set<String> set = rooms.get(roomId);
 		set.add(c.getUid());
+		final int count = set.size();
 		rooms.put(roomId, set);
 		rooms.unlock(roomId);
 		update(c);
-		return c;
+		return count;
 	}
 
 	public IClient removeFromRoom(IClient _c) {

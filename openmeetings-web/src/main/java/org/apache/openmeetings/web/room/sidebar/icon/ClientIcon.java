@@ -39,7 +39,7 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	private static final long serialVersionUID = 1L;
 	protected static final String ICON_CLASS = "ui-icon ";
 	protected static final String CLS_CLICKABLE = "clickable ";
-	protected final boolean self;
+	private boolean self;
 	protected final String uid;
 	protected String mainCssClass;
 	protected final StringBuilder cssClass = new StringBuilder(ICON_CLASS);
@@ -47,8 +47,6 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	public ClientIcon(String id, String uid) {
 		super(id);
 		this.uid = uid;
-		Client rc = getRoomClient();
-		self = rc == null ? false : rc.getUid().equals(uid);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 	}
@@ -56,6 +54,8 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
+		Client rc = getRoomClient();
+		self = rc == null ? false : rc.getUid().equals(uid);
 		update(null);
 	}
 
@@ -117,5 +117,9 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	protected Room getRoom() {
 		RoomPanel rp = getRoomPanel();
 		return rp == null ? null : rp.getRoom();
+	}
+
+	public boolean isSelf() {
+		return self;
 	}
 }
