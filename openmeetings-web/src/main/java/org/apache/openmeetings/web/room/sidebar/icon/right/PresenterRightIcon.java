@@ -34,9 +34,9 @@ public class PresenterRightIcon extends RoomRightIcon {
 	protected String getTitle() {
 		String title;
 		if (hasRight(right)) {
-			title = self ? "right.presenter.allowed.self" : "right.presenter.remove";
+			title = isSelf() ? "right.presenter.allowed.self" : "right.presenter.remove";
 		} else {
-			title = self ? "right.presenter.request.self" : "right.presenter.request";
+			title = isSelf() ? "right.presenter.request.self" : "right.presenter.request";
 		}
 		return getString(title);
 	}

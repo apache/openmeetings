@@ -32,9 +32,9 @@ public class ModeratorRightIcon extends RoomRightIcon {
 	protected String getTitle() {
 		String title;
 		if (getClient().hasRight(right)) {
-			title = self ? "688" : "675";
+			title = isSelf() ? "688" : "675";
 		} else {
-			title = self ? "81" : "676";
+			title = isSelf() ? "81" : "676";
 		}
 		return getString(title);
 	}

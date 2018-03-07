@@ -286,7 +286,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private void updateShowFiles(IPartialPageRequestHandler handler) {
-		if (room.isInterview() || room.getRoom() == null) {
+		if (room.isInterview()) {
 			return;
 		}
 		showFiles = !room.getRoom().isHidden(RoomElement.Files) && room.getClient().hasRight(Right.presenter);
@@ -294,6 +294,9 @@ public class RoomSidebar extends Panel {
 	}
 
 	public void update(IPartialPageRequestHandler handler) {
+		if (room.getRoom() == null) {
+			return;
+		}
 		updateShowFiles(handler);
 		updateUsers();
 		userCount.setDefaultModelObject(users.getList().size());

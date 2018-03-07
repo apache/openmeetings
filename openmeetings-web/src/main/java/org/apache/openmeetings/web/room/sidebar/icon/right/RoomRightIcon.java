@@ -35,7 +35,7 @@ public abstract class RoomRightIcon extends ClientIcon {
 
 	@Override
 	protected boolean isClickable() {
-		return (self && !hasRight()) || !self && hasRight(Right.moderator);
+		return (isSelf() && !hasRight()) || !isSelf() && hasRight(Right.moderator);
 	}
 
 	protected boolean hasRight() {
@@ -49,8 +49,8 @@ public abstract class RoomRightIcon extends ClientIcon {
 
 	protected boolean visible() {
 		return !hasRight(Right.superModerator) && (
-				(self && !hasRight() && getRoom().isAllowUserQuestions())
-				|| (!self && hasRight(Right.moderator))
+				(isSelf() && !hasRight() && getRoom().isAllowUserQuestions())
+				|| (!isSelf() && hasRight(Right.moderator))
 			);
 	}
 

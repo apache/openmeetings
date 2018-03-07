@@ -35,9 +35,9 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 	protected String getTitle() {
 		String title;
 		if (getClient().hasRight(right)) {
-			title = self ? "689" : "612";
+			title = isSelf() ? "689" : "612";
 		} else {
-			title = self ? "686" : "694";
+			title = isSelf() ? "686" : "694";
 		}
 		return getString(title);
 	}
