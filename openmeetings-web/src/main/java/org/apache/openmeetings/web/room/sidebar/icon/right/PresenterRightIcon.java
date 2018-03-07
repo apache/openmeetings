@@ -33,7 +33,7 @@ public class PresenterRightIcon extends RoomRightIcon {
 	@Override
 	protected String getTitle() {
 		String title;
-		if (hasRight(right)) {
+		if (hasRight()) {
 			title = isSelf() ? "right.presenter.allowed.self" : "right.presenter.remove";
 		} else {
 			title = isSelf() ? "right.presenter.request.self" : "right.presenter.request";

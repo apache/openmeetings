@@ -34,7 +34,7 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 	@Override
 	protected String getTitle() {
 		String title;
-		if (getClient().hasRight(right)) {
+		if (hasRight()) {
 			title = isSelf() ? "689" : "612";
 		} else {
 			title = isSelf() ? "686" : "694";
@@ -45,7 +45,7 @@ public class WhiteboardRightIcon extends RoomRightIcon {
 	@Override
 	protected boolean hasRight() {
 		final Client c = getClient();
-		return c.hasRight(Right.presenter) || c.hasRight(right);
+		return c != null && (c.hasRight(Right.presenter) || c.hasRight(right));
 	}
 
 	@Override
