@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -27,8 +26,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.UUID;
-
-import javax.ws.rs.core.Form;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
@@ -39,7 +36,6 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.Test;
 
 public class TestRoomService extends AbstractWebServiceTest {
-	public static final String ROOM_SERVICE_MOUNT = "room";
 	private static final long CAPACITY = 666L;
 
 	@Test
@@ -66,34 +62,6 @@ public class TestRoomService extends AbstractWebServiceTest {
 				.get(RoomDTO.class);
 		assertNotNull("Valid room should be returned", room1);
 		assertEquals("Same Room should be returned", room.getId(), room1.getId());
-	}
-
-	private static CallResult<RoomDTO> createAndValidate(RoomDTO r) {
-		return createAndValidate(null, r);
-	}
-
-	private static CallResult<RoomDTO> createAndValidate(String sid, RoomDTO r) {
-		if (sid == null) {
-			ServiceResult sr = login();
-			sid = sr.getMessage();
-		}
-		RoomDTO room = getClient(getRoomUrl())
-				.query("sid", sid)
-				.type(APPLICATION_FORM_URLENCODED)
-				.post(new Form().param("room", r.toString()), RoomDTO.class);
-		assertNotNull("Valid room should be returned", room);
-		assertNotNull("Room ID should be not empty", room.getId());
-
-		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s", room.getId()))
-				.query("sid", sid)
-				.get(RoomDTO.class);
-		assertNotNull("Valid room should be returned", room1);
-		assertEquals("Room with same ID should be returned", room.getId(), room1.getId());
-		assertEquals("Room with same Name should be returned", r.getName(), room1.getName());
-		assertEquals("Room with same ExternalType should be returned", r.getExternalType(), room1.getExternalType());
-		assertEquals("Room with same ExternalId should be returned", r.getExternalId(), room1.getExternalId());
-		//TODO check other fields
-		return new CallResult<>(sid, room1);
 	}
 
 	@Test
@@ -165,9 +133,5 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 		CallResult<RoomDTO> res = createAndValidate(fileCall.getSid(), r);
 		assertFalse("Room files should NOT be empty", res.getObj().getFiles().isEmpty());
-	}
-
-	protected static String getRoomUrl() {
-		return getServiceUrl(ROOM_SERVICE_MOUNT);
 	}
 }

@@ -48,6 +48,7 @@ import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
@@ -65,6 +66,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	private static final String CONTEXT = "/openmeetings";
 	private static int port = 8080;
 	private static final String USER_SERVICE_MOUNT = "user";
+	private static final String ROOM_SERVICE_MOUNT = "room";
 	private static final String FILE_SERVICE_MOUNT = "file";
 	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public static final long TIMEOUT = 5 * 60 * 1000;
@@ -139,6 +141,34 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		}
 	}
 
+	protected static CallResult<RoomDTO> createAndValidate(RoomDTO r) {
+		return createAndValidate(null, r);
+	}
+
+	protected static CallResult<RoomDTO> createAndValidate(String sid, RoomDTO r) {
+		if (sid == null) {
+			ServiceResult sr = login();
+			sid = sr.getMessage();
+		}
+		RoomDTO room = getClient(getRoomUrl())
+				.query("sid", sid)
+				.type(APPLICATION_FORM_URLENCODED)
+				.post(new Form().param("room", r.toString()), RoomDTO.class);
+		assertNotNull("Valid room should be returned", room);
+		assertNotNull("Room ID should be not empty", room.getId());
+
+		RoomDTO room1 = getClient(getRoomUrl()).path(String.format("/%s", room.getId()))
+				.query("sid", sid)
+				.get(RoomDTO.class);
+		assertNotNull("Valid room should be returned", room1);
+		assertEquals("Room with same ID should be returned", room.getId(), room1.getId());
+		assertEquals("Room with same Name should be returned", r.getName(), room1.getName());
+		assertEquals("Room with same ExternalType should be returned", r.getExternalType(), room1.getExternalType());
+		assertEquals("Room with same ExternalId should be returned", r.getExternalId(), room1.getExternalId());
+		//TODO check other fields
+		return new CallResult<>(sid, room1);
+	}
+
 	public void webCreateUser(User u) {
 		ServiceResult r = login();
 		UserDTO dto = new UserDTO(u);
@@ -180,6 +210,10 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 
 	protected static String getUserUrl() {
 		return getServiceUrl(USER_SERVICE_MOUNT);
+	}
+
+	protected static String getRoomUrl() {
+		return getServiceUrl(ROOM_SERVICE_MOUNT);
 	}
 
 	protected static String getFileUrl() {
