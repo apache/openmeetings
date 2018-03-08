@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.GroupDTO;
 import org.junit.Test;
 
@@ -53,20 +54,21 @@ public class TestGroupService extends AbstractWebServiceTest {
 		assertEquals("Call should NOT be successful", Response.Status.METHOD_NOT_ALLOWED.getStatusCode(), resp.getStatus());
 	}
 
+	private static Long createGroup(String sid, String name) {
+		Response resp = getClient(getGroupUrl())
+				.path("/")
+				.query("sid", sid).query("name", name).post("");
+		assertNotNull("Valid ServiceResult should be returned", resp);
+		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		ServiceResult r1 = resp.readEntity(ServiceResult.class);
+		assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
+		return Long.valueOf(r1.getMessage());
+	}
+
 	@Test
 	public void addRemoveTest() {
 		ServiceResult r = login();
-		Long groupId = -1L;
-		{
-			Response resp = getClient(getGroupUrl())
-					.path("/")
-					.query("sid", r.getMessage()).query("name", "Test Group").post("");
-			assertNotNull("Valid ServiceResult should be returned", resp);
-			assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
-			ServiceResult r1 = resp.readEntity(ServiceResult.class);
-			assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
-			groupId = Long.valueOf(r1.getMessage());
-		}
+		Long groupId = createGroup(r.getMessage(), "Test Group");
 		//delete group created
 		{
 			Response resp = getClient(getGroupUrl())
@@ -77,6 +79,24 @@ public class TestGroupService extends AbstractWebServiceTest {
 			ServiceResult r1 = resp.readEntity(ServiceResult.class);
 			assertEquals("OM Call should be successful", r1.getType(), Type.SUCCESS.name());
 		}
+	}
+
+	@Test
+	public void addRoomTest() {
+		//create new group
+		ServiceResult sr = login();
+		Long groupId = createGroup(sr.getMessage(), "Group WS");
+		RoomDTO rdto = new RoomDTO();
+		rdto.setName("Group WS Room");
+		CallResult<RoomDTO> room = createAndValidate(sr.getMessage(), rdto);
+
+		Response resp = getClient(getGroupUrl())
+				.path(String.format("/%s/rooms/add/%s", groupId, room.getObj().getId()))
+				.query("sid", sr.getMessage()).query("name", "Test Group").post("");
+		assertNotNull("Valid ServiceResult should be returned", resp);
+		assertEquals("Call should be successful", Response.Status.OK.getStatusCode(), resp.getStatus());
+		ServiceResult sr1 = resp.readEntity(ServiceResult.class);
+		assertEquals("OM Call should be successful", sr1.getType(), Type.SUCCESS.name());
 	}
 
 	protected static String getGroupUrl() {

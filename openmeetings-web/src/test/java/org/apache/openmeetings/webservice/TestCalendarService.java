@@ -35,7 +35,6 @@ import javax.ws.rs.core.Response;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
@@ -53,8 +52,6 @@ import com.github.openjson.JSONObject;
 
 public class TestCalendarService extends AbstractWebServiceTest {
 	public static final String CALENDAR_SERVICE_MOUNT = "calendar";
-	@Autowired
-	private GroupDao groupDao;
 	@Autowired
 	private RoomDao roomDao;
 	@Autowired

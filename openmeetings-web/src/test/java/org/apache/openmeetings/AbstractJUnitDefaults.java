@@ -60,7 +60,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Autowired
 	protected UserDao userDao;
 	@Autowired
-	private GroupDao groupDao;
+	protected GroupDao groupDao;
 	@Autowired
 	private ImportInitvalues importInitvalues;
 	@Autowired
