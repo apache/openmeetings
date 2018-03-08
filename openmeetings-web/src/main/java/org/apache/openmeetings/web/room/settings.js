@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var VideoSettings = (function() {
-	let vs, lm, swf, s, cam, mic, res, o
-		, vidScroll, recBtn, playBtn, recAllowed = false;
+	let vs, lm, s, cam, mic, res, o
+		, vidScroll, vid, recBtn, playBtn, recAllowed = false;
 	function _load() {
 		s = Settings.load();
 		if (!s.video) {
@@ -18,6 +18,20 @@ var VideoSettings = (function() {
 			VideoManager.refresh(o.uid, s.video);
 		}
 	}
+	function _clear() {
+		if (vid.length === 1) {
+			const ms = vid[0].srcObject;
+			if (ms !== null && 'function' === typeof(ms.getAudioTracks)) {
+				ms.getAudioTracks().forEach(function(track) {
+					track.stop();
+				});
+				ms.getVideoTracks().forEach(function(track) {
+					track.stop();
+				});
+				vid[0].srcObject = null;
+			}
+		}
+	}
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
 		vs = $('#video-settings');
@@ -26,12 +40,13 @@ var VideoSettings = (function() {
 		mic = vs.find('select.mic');
 		res = vs.find('select.cam-resolution');
 		vidScroll = vs.find('.vid-block .video-conainer');
+		vid = vidScroll.find('video');
 		recBtn = vs.find('.rec-start').click(function() {
 			recBtn.prop('disabled', true).button('refresh'); //TODO disable drop-downs
-			swf.startRec();
+			//FIXME TODO swf.startRec();
 		});
 		playBtn = vs.find('.play').click(function() {
-			swf.play();
+			//FIXME TODO swf.play();
 		});
 		vs.dialog({
 			classes: {
@@ -47,12 +62,14 @@ var VideoSettings = (function() {
 					}
 					, click: function() {
 						_save(true);
+						_clear();
 						vs.dialog("close");
 					}
 				}
 				, {
 					text: vs.data('btn-cancel')
 					, click: function() {
+						_clear();
 						vs.dialog("close");
 					}
 				}
@@ -64,7 +81,6 @@ var VideoSettings = (function() {
 		o.mode = 'settings';
 		o.rights = (o.rights || []).join();
 		delete o.keycode;
-		//FIXME TODO swf = initSwf(vidScroll, 'main.swf', 'video-settings-swf', o)[0];
 		vs.find('input, button').prop('disabled', true);
 		vs.find('button').button();
 		const rr = vs.find('.cam-resolution').parents('.sett-row');
@@ -80,14 +96,50 @@ var VideoSettings = (function() {
 		recBtn.prop('disabled', !recAllowed && (s.video.cam > -1 || s.video.mic > -1)).button('refresh');
 	}
 	function _readValues() {
+		const v = cam.find('option:selected')
+			, m = mic.find('option:selected')
+			, o = res.find('option:selected').data();
 		s.video.cam = 1 * cam.val();
 		s.video.mic = 1 * mic.val();
-		const o = res.find('option:selected').data();
 		s.video.width = o.width;
 		s.video.height = o.height;
-		$(swf).attr('width', Math.max(300, s.video.width)).attr('height', Math.max(200, s.video.height));
+		vid.width(o.width).height(o.height);
 		vidScroll.scrollLeft(Math.max(0, s.video.width / 2 - 150))
 			.scrollTop(Math.max(0, s.video.height / 2 - 110));
+		_clear();
+		let enabled = false;
+		const constraints = {};
+		//TODO add check if constraint is supported
+		if (s.video.cam > -1) {
+			constraints.video = {
+				width: o.width
+				, height: o.height
+				, deviceId: { exact: v.data('device-id')  }
+				, frameRate: { max: 30 }
+			};
+			enabled = true;
+		} else {
+			constraints.video = false;
+		}
+		//TODO enable audio for recordings only
+		if (s.video.mic > -1) {
+			constraints.audio = {
+				sampleSize: 22
+				, echoCancellation: true
+			};
+			enabled = true;
+		} else {
+			constraints.audio = false;
+		}
+		if (enabled) {
+			navigator.mediaDevices.getUserMedia(constraints)
+				.then(function(stream) {
+					vid[0].srcObject = stream;
+				})
+				.catch(function(err) {
+					_error(err.name + ": " + err.message);
+				});
+		}
 		_updateRec();
 	}
 
@@ -102,53 +154,75 @@ var VideoSettings = (function() {
 	function _micActivity(level) {
 		lm.progressbar("value", Math.max(0, level));
 	}
-	function _initSwf() {
-		const obj = swf.getDevices();
+	function _error(msg) {
+		//FIXME TODO status field
+		console.error(msg);
+	}
+	function _initDevices() {
+		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+			_error("enumerateDevices() not supported.");
+			return;
+		}
 		cam.find('option[value!="-1"]').remove();
-		for (let i = 0; i < obj.cams.length; ++i) {
-			const o = $('<option></option>').attr('value', i).text(obj.cams[i]);
-			if (i === s.video.cam) {
-				o.prop('selected', true);
-			}
-			cam.append(o);
-		}
-		cam.prop('disabled', false).change(function() {
-			_readValues();
-			swf.camChanged(s.video.cam);
-		});
 		mic.find('option[value!="-1"]').remove();
-		for (let i = 0; i < obj.mics.length; ++i) {
-			const o = $('<option></option>').attr('value', i).text(obj.mics[i]);
-			if (i === s.video.mic) {
-				o.prop('selected', true);
-			}
-			mic.append(o);
-		}
-		mic.prop('disabled', false).change(function() {
-			_readValues();
-			swf.micChanged(s.video.mic);
-		});
-		res.change(function() {
-			_readValues();
-			swf.resChanged(s.video.width, s.video.height);
-		});
-		res.find('option').each(function() {
-			const o = $(this).data();
-			if (o.width === s.video.width && o.height === s.video.height) {
-				$(this).prop('selected', true);
-				return false;
-			}
-		});
-		_readValues();
-		swf.init(s.video.cam, s.video.mic, s.video.width, s.video.height);
+		navigator.mediaDevices.getUserMedia({video:true, audio:true})
+			.then(function(stream) {
+				return navigator.mediaDevices.enumerateDevices()
+					.then(function(devices) {
+						return devices;
+					})
+					.catch(function(err) { throw err; });
+			})
+			.then(function(devices) {
+				let cCount = 0, mCount = 0;
+				devices.forEach(function(device) {
+					if ('audioinput' === device.kind) {
+						const o = $('<option></option>').attr('value', mCount).text(device.label)
+							.data('device-id', device.deviceId);
+						if (mCount === s.video.cam) {
+							o.prop('selected', true);
+						}
+						mic.append(o);
+						mCount++;
+					} else if ('videoinput' === device.kind) {
+						const o = $('<option></option>').attr('value', cCount).text(device.label)
+							.data('device-id', device.deviceId);
+						if (cCount === s.video.cam) {
+							o.prop('selected', true);
+						}
+						cam.append(o);
+						cCount++;
+					}
+				});
+				cam.prop('disabled', false).change(function() {
+					_readValues();
+				});
+				mic.prop('disabled', false).change(function() {
+					_readValues();
+				});
+				res.change(function() {
+					_readValues();
+				});
+				res.find('option').each(function() {
+					const o = $(this).data();
+					if (o.width === s.video.width && o.height === s.video.height) {
+						$(this).prop('selected', true);
+						return false;
+					}
+				});
+				_readValues();
+			})
+			.catch(function(err) {
+				_error(err.name + ": " + err.message);
+			});
 	}
 	function _open() {
 		recAllowed = false;
 		vs.dialog('open');
+		_initDevices();
 	}
 	return {
 		init: _init
-		, initSwf: _initSwf
 		, open: _open
 		, allowRec: _allowRec
 		, allowPlay: _allowPlay

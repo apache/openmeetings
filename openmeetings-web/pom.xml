@@ -481,12 +481,15 @@
 								<name>current_openmeetings_log_dir</name>
 								<value>${project.build.directory}</value>
 							</systemProperty>
+							<systemProperty>
+								<name>maven.project.build.directory.test-classes</name>
+								<value>${project.basedir}/src/test/resources</value>
+							</systemProperty>
 						</systemProperties>
 						<webApp>
 							<contextPath>/openmeetings</contextPath>
 						</webApp>
-						<!-- jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml-->
-						<jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-http.xml</jettyXml>
+						<jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml>
 					</configuration>
 				</plugin>
 			</plugins>
