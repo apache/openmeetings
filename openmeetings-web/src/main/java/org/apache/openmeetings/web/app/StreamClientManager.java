@@ -73,6 +73,8 @@ public class StreamClientManager implements IStreamClientManager {
 	@Autowired
 	private ClientManager clientManager;
 	@Autowired
+	private StreamClientManager streamClientManager;
+	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
 	private UserDao userDao;
@@ -180,10 +182,10 @@ public class StreamClientManager implements IStreamClientManager {
 		rcl.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
 		rcl.setSuperMod(client.hasRight(Right.superModerator));
 		rcl.setMod(client.hasRight(Right.moderator));
-		if (client.hasActivity(Activity.broadcastA) && client.getMic() < 0) {
+		if (client.hasActivity(Activity.broadcastA) && !client.isMicEnabled()) {
 			client.remove(Activity.broadcastA);
 		}
-		if (client.hasActivity(Activity.broadcastV) && client.getCam() < 0) {
+		if (client.hasActivity(Activity.broadcastV) && !client.isCamEnabled()) {
 			client.remove(Activity.broadcastV);
 		}
 		if (client.hasActivity(Activity.broadcastA) || client.hasActivity(Activity.broadcastV)) {
@@ -209,6 +211,8 @@ public class StreamClientManager implements IStreamClientManager {
 			rcl.setAvsettings("n");
 			rcl.setBroadcasting(false);
 		}
+		clientManager.update(client);
+		streamClientManager.update(rcl);
 		return rcl;
 	}
 

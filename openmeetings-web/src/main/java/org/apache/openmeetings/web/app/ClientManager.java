@@ -59,15 +59,15 @@ public class ClientManager implements IClientManager {
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
-	private Map<String, Client> map() {
+	private static Map<String, Client> map() {
 		return getHazelcast().getMap(ONLINE_USERS_KEY);
 	}
 
-	private Map<String, String> mapUidBySid() {
+	private static Map<String, String> mapUidBySid() {
 		return getHazelcast().getMap(UID_BY_SID_KEY);
 	}
 
-	private IMap<Long, Set<String>> getRooms() {
+	private static IMap<Long, Set<String>> getRooms() {
 		return getHazelcast().getMap(ROOMS_KEY);
 	}
 
@@ -260,7 +260,7 @@ public class ClientManager implements IClientManager {
 		return false;
 	}
 
-	private Client getByKeys(Long userId, String sessionId) {
+	private static Client getByKeys(Long userId, String sessionId) {
 		Client client = null;
 		for (Map.Entry<String, Client> e : map().entrySet()) {
 			Client c = e.getValue();
