@@ -187,7 +187,7 @@ public class GroupWebService extends BaseWebService {
 	 * @return {@link ServiceResult} with result type
 	 */
 	@POST
-	@Path("/{id}/rooms/add/{roomId}")
+	@Path("/{id}/rooms/add/{roomid}")
 	public ServiceResult addRoom(
 			@QueryParam("sid") @WebParam(name="sid") String sid
 			, @PathParam("id") @WebParam(name="id") Long id
