@@ -62,8 +62,6 @@ public class RoomBroadcaster {
 		if (rcl == null) {
 			return;
 		}
-
-		// Put the mod-flag to true for this client
 		getBean(StreamClientManager.class).update(rcl);
 	}
 }

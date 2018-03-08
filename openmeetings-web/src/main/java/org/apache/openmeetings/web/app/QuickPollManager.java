@@ -42,7 +42,7 @@ public class QuickPollManager {
 	private static final Logger log = getLogger(QuickPollManager.class, getWebAppRootKey());
 	private static final String QPOLLS_KEY = "QPOLLS_KEY";
 
-	private IMap<Long, Map<Long, Boolean>> map() {
+	private static IMap<Long, Map<Long, Boolean>> map() {
 		return getHazelcast().getMap(QPOLLS_KEY);
 	}
 

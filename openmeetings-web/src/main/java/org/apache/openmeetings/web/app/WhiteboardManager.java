@@ -42,16 +42,16 @@ import com.hazelcast.core.IMap;
 public class WhiteboardManager implements IWhiteboardManager {
 	private static final String WBS_KEY = "WBS_KEY";
 
-	private IMap<Long, Whiteboards> getCache() {
+	private static IMap<Long, Whiteboards> map() {
 		return getHazelcast().getMap(WBS_KEY);
 	}
 
 	public boolean tryLock(Long roomId) {
-		return getCache().tryLock(roomId);
+		return map().tryLock(roomId);
 	}
 
 	public void unlock(Long roomId) {
-		getCache().unlock(roomId);
+		map().unlock(roomId);
 	}
 
 	private static String getDefaultName(Long langId, int num) {
@@ -63,7 +63,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 	}
 
 	public boolean contains(Long roomId) {
-		return getCache().containsKey(roomId);
+		return map().containsKey(roomId);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 		if (roomId == null) {
 			return null;
 		}
-		Whiteboards wbs = getCache().get(roomId);
+		Whiteboards wbs = map().get(roomId);
 		if (wbs == null) {
 			wbs = new Whiteboards(roomId);
 			Whiteboard wb = add(wbs, langId);
@@ -132,7 +132,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 		update(wbs);
 	}
 
-	private void update(Whiteboards wbs) {
-		getCache().put(wbs.getRoomId(), wbs);
+	private static void update(Whiteboards wbs) {
+		map().put(wbs.getRoomId(), wbs);
 	}
 }
