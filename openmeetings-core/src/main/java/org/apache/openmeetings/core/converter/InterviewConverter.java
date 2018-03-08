@@ -100,7 +100,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		Recording r = null;
 		try {
 			r = recordingDao.get(id);
-			log.debug("recording " + r.getId());
+			log.debug("recording {}", r.getId());
 			if (Strings.isEmpty(r.getHash())) {
 				r.setHash(UUID.randomUUID().toString());
 			}
@@ -172,7 +172,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							, "-v", "error"
 							, "-f", "null"
 							, "file.null"};
-					ProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args);
+					ProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args, true);
 					logs.add(res);
 					if (res.isOk()) {
 						long diff = diff(meta.getRecordStart(), meta.getRecording().getRecordStart());

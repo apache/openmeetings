@@ -470,7 +470,9 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 			c.setBroadcastId(streamName);
 
 			if (Client.Type.sharing != c.getType() && Client.Type.mobile != c.getType()) {
-				c.setAvsettings("av");
+				if (Strings.isEmpty(c.getAvsettings()) || "n".equals(c.getAvsettings())) {
+					c.setAvsettings("av");
+				}
 				c.setBroadcasting(true);
 				if (c.getWidth() == 0 || c.getHeight() == 0) {
 					c.setWidth(320);
