@@ -19,16 +19,30 @@
 package org.apache.openmeetings.webservice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.Collection;
 
 import javax.ws.rs.core.Response;
 
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.user.GroupDTO;
 import org.junit.Test;
 
 public class TestGroupService extends AbstractWebServiceTest {
 	public static final String GROUP_SERVICE_MOUNT = "group";
+
+	@Test
+	public void list() {
+		ServiceResult r = login();
+		Collection<? extends GroupDTO> groups = getClient(getGroupUrl())
+				.path("/")
+				.query("sid", r.getMessage()).getCollection(GroupDTO.class);
+		assertNotNull("Collection should be not null", groups);
+		assertFalse("Collection should be not empty", groups.isEmpty());
+	}
 
 	@Test
 	public void putTest() {

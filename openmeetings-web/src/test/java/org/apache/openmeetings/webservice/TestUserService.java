@@ -20,9 +20,11 @@ package org.apache.openmeetings.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -130,5 +132,15 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotNull("Id should not be NULL", user.getId());
 		assertEquals("OM Call should be successful", u.getLogin(), user.getLogin());
 		assertEquals("OM Call should be successful", tz, user.getTimeZoneId());
+	}
+
+	@Test
+	public void list() {
+		ServiceResult r = login();
+		Collection<? extends UserDTO> users = getClient(getUserUrl())
+				.path("/")
+				.query("sid", r.getMessage()).getCollection(UserDTO.class);
+		assertNotNull("Collection should be not null", users);
+		assertFalse("Collection should be not empty", users.isEmpty());
 	}
 }

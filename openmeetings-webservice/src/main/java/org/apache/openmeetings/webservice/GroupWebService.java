@@ -45,6 +45,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
+import org.apache.openmeetings.db.dto.user.GroupDTO;
 import org.apache.openmeetings.db.dto.user.UserSearchResult;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -104,8 +105,8 @@ public class GroupWebService extends BaseWebService {
 	 */
 	@GET
 	@Path("/")
-	public List<Group> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> getDao().get(0, Integer.MAX_VALUE));
+	public List<GroupDTO> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
+		return performCall(sid, User.Right.Soap, sd -> GroupDTO.list(getDao().get(0, Integer.MAX_VALUE)));
 	}
 
 	/**
