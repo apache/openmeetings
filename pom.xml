@@ -64,7 +64,7 @@
 		<red5-client.version>1.0.10-M4</red5-client.version>
 		<spring.version>4.3.14.RELEASE</spring.version>
 		<mina.version>2.0.16</mina.version>
-		<tomcat.version>9.0.6</tomcat.version>
+		<tomcat.version>9.0.5</tomcat.version>
 		<ical4j.version>2.1.5</ical4j.version>
 		<cxf.version>3.2.2</cxf.version>
 		<selenium.version>3.9.1</selenium.version>
