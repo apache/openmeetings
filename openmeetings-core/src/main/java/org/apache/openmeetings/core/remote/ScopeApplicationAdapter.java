@@ -277,7 +277,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 *
 	 * @param map - {@link Map} with all statuses
 	 * @return returns key,value Map with multiple return values or null in case of exception
@@ -354,7 +354,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * Logic must be before roomDisconnect cause otherwise you cannot throw a
 	 * message to each one
 	 *
@@ -403,7 +403,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * Removes the Client from the List, stops recording, adds the Room-Leave
 	 * event to running recordings, clear Polls and removes Client from any list
 	 *
@@ -448,7 +448,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * This method handles the Event after a stream has been added all connected
 	 * Clients in the same room will get a notification
 	 *
@@ -531,7 +531,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * This method handles the Event after a stream has been removed all
 	 * connected Clients in the same room will get a notification
 	 *
@@ -645,6 +645,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 		sendMessageToCurrentScope("sendVarsToMessage", newMessage, true);
 		return 1;
 	}
+	*/
 
 	/**
 	 * wrapper method
@@ -792,7 +793,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * wrapper method
 	 *
 	 * @param newMessage - message being sent
@@ -838,7 +839,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * Function is used to send the kick Trigger at the moment,
 	 * it sends a general message to a specific clientId
 	 *
@@ -864,7 +865,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 	}
 	*/
 
-	/**
+	/*
 	 * Sends a message to a user in the same room by its clientId
 	 *
 	 * @param uid - uid of the recepient
@@ -957,6 +958,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 		}
 		return ids;
 	}
+	*/
 
 	/**
 	 * Returns number of SIP conference participants

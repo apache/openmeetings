@@ -20,6 +20,7 @@ package org.apache.openmeetings.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.AbstractWicketTester.getWicketTester;
+import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -27,16 +28,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.ManagementFactory;
+import java.net.InetAddress;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.management.MBeanServer;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.catalina.LifecycleState;
+import org.apache.catalina.connector.Connector;
+import org.apache.catalina.startup.Tomcat;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
@@ -51,20 +55,13 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
 import org.apache.wicket.util.tester.WicketTester;
-import org.eclipse.jetty.jmx.MBeanContainer;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 
 public class AbstractWebServiceTest extends AbstractJUnitDefaults {
-	private static Server server;
+	private static Tomcat tomcat;
 	private static final String HOST = "localhost";
 	private static final String CONTEXT = "/openmeetings";
 	private static int port = 8080;
@@ -102,27 +99,21 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 
 	@BeforeClass
 	public static void initialize() throws Exception {
-		server = new Server();
-		HttpConfiguration config = new HttpConfiguration();
-		ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(config));
-		http.setPort(0);
-		http.setIdleTimeout(1000 * 60 * 60);
-		server.addConnector(http);
-
-		WebAppContext bb = new WebAppContext();
-		bb.setServer(server);
-		bb.setContextPath("/");
-		bb.setWar("src/main/webapp");
-
-		server.setHandler(bb);
-
-		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-		server.addEventListener(mBeanContainer);
-		server.addBean(mBeanContainer);
-		server.start();
-		server.join();
-		port = ((ServerConnector)server.getConnectors()[0]).getLocalPort();
+		tomcat = new Tomcat();
+		Connector connector = new Connector("HTTP/1.1");
+		connector.setAttribute("address", InetAddress.getByName(HOST).getHostAddress());
+		connector.setPort(0);
+		tomcat.getService().addConnector(connector);
+		tomcat.setConnector(connector);
+		File wd = Files.createTempDirectory("om" + UUID.randomUUID().toString()).toFile();
+		tomcat.setBaseDir(wd.getCanonicalPath());
+		tomcat.getHost().setAppBase(wd.getCanonicalPath());
+		tomcat.getHost().setAutoDeploy(false);
+		tomcat.getHost().setDeployOnStartup(false);
+		tomcat.addWebapp(CONTEXT, getOmHome().getAbsolutePath());
+		tomcat.getConnector(); // to init the connector
+		tomcat.start();
+		port = tomcat.getConnector().getLocalPort();
 	}
 
 	@Override
@@ -142,8 +133,11 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 
 	@AfterClass
 	public static void destroy() throws Exception {
-		if (server != null && (AbstractLifeCycle.STARTING.equals(server.getState()) || AbstractLifeCycle.STARTED.equals(server.getState()))) {
-			server.stop();
+		if (tomcat.getServer() != null && tomcat.getServer().getState() != LifecycleState.DESTROYED) {
+			if (tomcat.getServer().getState() != LifecycleState.STOPPED) {
+				tomcat.stop();
+			}
+			tomcat.destroy();
 		}
 	}
 

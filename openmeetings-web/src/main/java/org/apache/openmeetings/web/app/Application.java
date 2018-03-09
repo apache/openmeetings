@@ -276,10 +276,12 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 
 		log.debug("InitComponent::PostConstruct");
 		try {
-			OmFileHelper.setOmHome(new File(getServletContext().getRealPath("/"))); //FIXME TODO move to OMContextListener
-			LabelDao.initLanguageMap();  //FIXME TODO move to OMContextListener
+			if (OmFileHelper.getOmHome() == null) {
+				OmFileHelper.setOmHome(new File(getServletContext().getRealPath("/")));
+			}
+			LabelDao.initLanguageMap();
 
-			log.debug("webAppPath : {}", OmFileHelper.getOmHome()); //FIXME TODO move to OMContextListener
+			log.debug("webAppPath : {}", OmFileHelper.getOmHome());
 
 			// Init all global config properties
 			cfgDao.reinit();

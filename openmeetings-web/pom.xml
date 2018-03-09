@@ -464,6 +464,7 @@
 						<red5.root>red5.root</red5.root>
 						<backups.dir>${old-backups.dir}</backups.dir>
 						<catalina.useNaming>true</catalina.useNaming>
+						<current_openmeetings_log_dir>${project.build.directory}</current_openmeetings_log_dir>
 					</systemPropertyVariables>
 					<skip>${maven.test.skip}</skip>
 				</configuration>
@@ -642,24 +643,11 @@
 			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>pdfbox</artifactId>
 			<version>${pdfbox.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.pdfbox</groupId>
-					<artifactId>pdfbox-tools</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- JETTY DEPENDENCIES FOR TESTING -->
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-webapp</artifactId>
-			<scope>test</scope>
-			<version>${jetty9.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-jmx</artifactId>
-			<version>${jetty9.version}</version>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-websocket</artifactId>
+			<version>${tomcat.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

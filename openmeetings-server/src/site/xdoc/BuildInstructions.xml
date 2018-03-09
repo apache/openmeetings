@@ -58,6 +58,7 @@
 			<source>mvn org.apache.maven.plugins:maven-dependency-plugin:3.0.0:analyze-only</source>
 		</section>
 		<section name="Tips and Gotchas">
+			<p>Eclipse ANSI colors plugin for colors in console</p>
 			<source><![CDATA[
 MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql,jetty jetty:run-exploded
 

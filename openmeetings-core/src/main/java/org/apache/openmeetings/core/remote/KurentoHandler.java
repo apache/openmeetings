@@ -98,8 +98,8 @@ public class KurentoHandler {
 	/**
 	 * Looks for a room in the active room list.
 	 *
-	 * @param roomName
-	 *            the name of the room
+	 * @param roomId
+	 *            the Id of the room
 	 * @return the room if it was already created, or a new one if it is the first
 	 *         time this room is accessed
 	 */

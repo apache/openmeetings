@@ -72,7 +72,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	}
 	*/
 
-	/**
+	/*
 	 * Initialization
 	 *
 	 * @throws IOException
