@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.util.time.Duration.NONE;
@@ -50,14 +49,14 @@ import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
 public class StartSharingButton extends OmButton {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(StartSharingButton.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(StartSharingButton.class);
 	private static final String CDATA_BEGIN = "<![CDATA[";
 	private static final String CDATA_END = "]]>";
 	private final AjaxDownloadBehavior download;

@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,14 +36,14 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RecordingConverter extends BaseConverter implements IRecordingConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(RecordingConverter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RecordingConverter.class);
 
 	// Spring loaded Beans
 	@Autowired

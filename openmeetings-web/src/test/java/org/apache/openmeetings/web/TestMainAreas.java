@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_BACKUP;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_CALENDAR;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_CONFIG;
@@ -37,7 +36,6 @@ import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_ROOM;
 import static org.apache.openmeetings.web.util.OmUrlFragment.TYPE_USER;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.function.Consumer;
 
@@ -70,11 +68,12 @@ import org.apache.wicket.authorization.UnauthorizedInstantiationException;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.junit.Test;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.ui.widget.tabs.TabbedPanel;
 
 public class TestMainAreas extends AbstractWicketTester {
-	private static final Logger log = getLogger(TestMainAreas.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestMainAreas.class);
 
 	@Test
 	public void testDashboard() throws OmException {

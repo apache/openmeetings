@@ -18,25 +18,13 @@
  */
 package org.apache.openmeetings.core.data.record.listener;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
-import java.util.Date;
-
-import org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter;
-import org.apache.openmeetings.core.data.record.listener.async.CachedEvent;
-import org.apache.openmeetings.core.data.record.listener.async.StreamAudioWriter;
-import org.apache.openmeetings.core.data.record.listener.async.StreamVideoWriter;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.scope.IScope;
-import org.red5.server.api.stream.IBroadcastStream;
-import org.red5.server.api.stream.IStreamListener;
-import org.red5.server.api.stream.IStreamPacket;
-import org.red5.server.net.rtmp.event.VideoData;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class StreamListener implements IStreamListener {
-	private static final Logger log = Red5LoggerFactory.getLogger(StreamListener.class, getWebAppRootKey());
+public class StreamListener /*implements IStreamListener*/ {
+	private static final Logger log = LoggerFactory.getLogger(StreamListener.class);
 
+	/*
 	private final BaseStreamWriter streamWriter;
 
 	public StreamListener(boolean isAudio, String streamName, IScope scope, Long metaDataId,
@@ -70,4 +58,5 @@ public class StreamListener implements IStreamListener {
 	public void closeStream() {
 		streamWriter.stop();
 	}
+	*/
 }

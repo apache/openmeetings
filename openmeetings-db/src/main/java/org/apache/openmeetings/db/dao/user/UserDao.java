@@ -23,7 +23,6 @@ import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -60,8 +59,8 @@ import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,7 +74,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class UserDao implements IGroupAdminDataProviderDao<User> {
-	private static final Logger log = Red5LoggerFactory.getLogger(UserDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UserDao.class);
 	private static final String[] searchFields = {"lastname", "firstname", "login", "address.email", "address.town"};
 
 	@PersistenceContext

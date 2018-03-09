@@ -19,7 +19,6 @@
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 
@@ -38,8 +37,8 @@ import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
 import org.osaf.caldav4j.CalDAVConstants;
 import org.osaf.caldav4j.methods.PropFindMethod;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for Syncing through the help of Ctags.
@@ -49,7 +48,7 @@ import org.slf4j.Logger;
  * @see CalendarHandler
  */
 public class CtagHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(CtagHandler.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(CtagHandler.class);
 
 	public static final Namespace NAMESPACE_CALSERVER = Namespace.getNamespace("cs", "http://calendarserver.org/ns/");
 	public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag", NAMESPACE_CALSERVER);

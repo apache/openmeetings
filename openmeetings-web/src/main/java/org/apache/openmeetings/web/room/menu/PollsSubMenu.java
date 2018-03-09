@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.PARAM_ACTION;
@@ -43,12 +42,12 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PollsSubMenu implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(PollsSubMenu.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(PollsSubMenu.class);
 	private static final String FUNC_QPOLL_ACTION = "quickPollAction";
 	private static final String PARAM_VOTE = "vote";
 	private static final String ACTION_CLOSE = "close";

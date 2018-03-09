@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.domain;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -26,11 +25,11 @@ import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestUserGroupAggregation extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestUserGroupAggregation.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestUserGroupAggregation.class);
 
 	@Test
 	public void testitNow() {

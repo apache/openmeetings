@@ -18,20 +18,26 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_CSP_SELF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.HEADER_XFRAME_SAMEORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.wicket.resource.JQueryResourceReference.getV3;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
+import java.io.File;
 import java.net.UnknownHostException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -48,6 +54,7 @@ import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -57,7 +64,9 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
+import org.apache.openmeetings.util.Version;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.openmeetings.web.pages.AccessDeniedPage;
 import org.apache.openmeetings.web.pages.ActivatePage;
@@ -107,8 +116,12 @@ import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
 import org.wicketstuff.dashboard.web.DashboardContext;
@@ -125,8 +138,9 @@ import com.hazelcast.core.MemberAttributeEvent;
 import com.hazelcast.core.MembershipEvent;
 import com.hazelcast.core.MembershipListener;
 
+@Component
 public class Application extends AuthenticatedWebApplication implements IApplication {
-	private static final Logger log = getLogger(Application.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(Application.class);
 	private static boolean isInstalled;
 	private static final String INVALID_SESSIONS_KEY = "INVALID_SESSIONS_KEY";
 	public static final String NAME_ATTR_KEY = "name";
@@ -145,6 +159,11 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private String xFrameOptions = HEADER_XFRAME_SAMEORIGIN;
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
 	private ITopic<IClusterWsMessage> hazelWsTopic;
+
+	@Autowired
+	private ConfigurationDao cfgDao;
+	@Autowired
+	private RecordingDao recordingDao;
 
 	@Override
 	protected void init() {
@@ -253,6 +272,31 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+
+		log.debug("InitComponent::PostConstruct");
+		try {
+			if (OmFileHelper.getOmHome() == null) {
+				OmFileHelper.setOmHome(new File(getServletContext().getRealPath("/")));
+			}
+			LabelDao.initLanguageMap();
+
+			log.debug("webAppPath : {}", OmFileHelper.getOmHome());
+
+			// Init all global config properties
+			cfgDao.reinit();
+
+			setInitComplete(true);
+			// Init properties
+			setXFrameOptions(cfgDao.getString(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN));
+			setContentSecurityPolicy(cfgDao.getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
+			updateJpaAddresses(cfgDao);
+			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
+			Version.logOMStarted();
+			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
+		} catch (Exception err) {
+			log.error("[appStart]", err);
+		}
 	}
 
 	private static class NoVersionMapper extends MountedMapper {

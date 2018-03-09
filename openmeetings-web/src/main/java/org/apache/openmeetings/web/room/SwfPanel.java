@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SS
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.net.URL;
 
@@ -40,15 +39,15 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class SwfPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(SwfPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(SwfPanel.class);
 	public static final ResourceReference FLASH_JS_REFERENCE = new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
 	public static final String SWF = "swf";
 	public static final String SWF_TYPE_NETWORK = "network";

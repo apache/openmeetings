@@ -18,15 +18,13 @@
  */
 package org.apache.openmeetings.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.junit.Test;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestDatabaseStructureGetUserStart extends AbstractJUnitDefaults {
-	private static final Logger log = Red5LoggerFactory.getLogger(TestDatabaseStructureGetUserStart.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(TestDatabaseStructureGetUserStart.class);
 
 	@Test
 	public void testAddingGroup() {

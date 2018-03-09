@@ -3,10 +3,113 @@ var VideoManager = (function() {
 	const self = {};
 	let share, inited = false;
 
+/*FIXME TODO*/
+	function onVideoResponse(m) {
+		const w = $('#' + VideoUtil.getVid(m.uid))
+			, v = w.data()
+
+		v.getPeer().processAnswer(m.sdpAnswer, function (error) {
+			if (error) {
+				return console.error(error);
+			}
+		});
+	}
+
+	function onBroadcast(msg) {
+		const uid = Room.getOptions().uid;
+		const w = $('#' + VideoUtil.getVid(uid))
+			, v = w.data()
+			, cl = v.client();
+		console.log(uid + " registered in room");
+
+		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+			{
+				localVideo: v.video()
+				, mediaConstraints:
+					{ //each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+						audio : VideoUtil.hasAudio(cl)
+						, video : VideoUtil.hasVideo(cl)
+						/* TODO FIXME {
+							mandatory : {
+								maxWidth : cl.width,
+								maxFrameRate : cl.height,
+								minFrameRate : 15
+							}
+						}*/
+					}
+				, onicecandidate: v.onIceCandidate
+			}
+			, function (error) {
+				if (error) {
+					return console.error(error);
+				}
+				this.generateOffer(v.offerToReceiveVideo);
+			}));
+	}
+
+	function receiveVideo(uid) {
+		const w = $('#' + VideoUtil.getVid(uid))
+			, v = w.data()
+			, cl = v.client();
+		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+			{
+				remoteVideo: v.video()
+				, onicecandidate: v.onIceCandidate
+			}
+			, function (error) {
+				if(error) {
+					return console.error(error);
+				}
+				this.generateOffer(v.offerToReceiveVideo);
+			}
+		));
+	}
+	/*FIXME TODO*/
+
+	function _onWsMessage(jqEvent, msg) {
+		try {
+			if (msg instanceof Blob) {
+				return; //ping
+			}
+			const m = jQuery.parseJSON(msg);
+			if (m && 'kurento' === m.type) {
+				console.info('Received message: ' + m);
+
+				switch (m.id) {
+					case 'broadcast':
+						onBroadcast(m);
+						break;
+					case 'videoResponse':
+						onVideoResponse(m);
+						break;
+					case 'iceCandidate':
+						{
+							const w = $('#' + VideoUtil.getVid(m.uid))
+								, v = w.data()
+
+							v.getPeer().addIceCandidate(m.candidate, function (error) {
+								if (error) {
+									console.error("Error adding candidate: " + error);
+									return;
+								}
+							});
+						}
+						break;
+					default:
+						console.error('Unrecognized message', m);
+				}
+			}
+		} catch (err) {
+			//no-op
+			console.error(err);
+		}
+	}
+	
 	function _init() {
 		if ($(WB_AREA_SEL + ' .wb-area .tabs').length > 0) {
 			WBA_SEL = WBA_WB_SEL;
 		}
+		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 		inited = true;
@@ -26,6 +129,11 @@ var VideoManager = (function() {
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
 			if (av && v.length !== 1 && !!cl.self) {
+				OmUtil.sendMessage({
+					id: 'joinRoom' //TODO stream uid
+					, type: 'kurento'
+				});
+
 				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
 			} else if (av && v.length === 1) {
 				v.data().update(cl);
@@ -75,6 +183,7 @@ var VideoManager = (function() {
 			});
 		} else if ('sharing' !== c.type) {
 			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
+			receiveVideo(c.uid);
 		}
 	}
 	function _close(uid, showShareBtn) {
@@ -159,11 +268,13 @@ var VideoManager = (function() {
 	self.update = _update;
 	self.play = _play;
 	self.close = _close;
-	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
 	self.micActivity = _micActivity;
 	self.refresh = _refresh;
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.destroy = function() {
+		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
+	}
 	return self;
 })();

@@ -18,36 +18,11 @@
  */
 package org.apache.openmeetings.core.data.record.listener.async;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.apache.openmeetings.util.OmFileHelper;
-import org.red5.io.IStreamableFile;
-import org.red5.io.ITag;
-import org.red5.io.ITagWriter;
-import org.red5.io.flv.impl.Tag;
-import org.red5.logging.Red5LoggerFactory;
-import org.red5.server.api.scope.IScope;
-import org.red5.server.api.service.IStreamableFileService;
-import org.red5.server.api.stream.IStreamableFileFactory;
-import org.red5.server.stream.StreamableFileFactory;
-import org.red5.server.util.ScopeUtils;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseStreamWriter implements Runnable {
-	private static final Logger log = Red5LoggerFactory.getLogger(BaseStreamWriter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(BaseStreamWriter.class);
 	private static final int MINUTE_MULTIPLIER = 60 * 1000;
 	public static final int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
 	protected int startTimeStamp = -1;
@@ -60,6 +35,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	// thread will be stopped as soon as the queue is empty
 	private boolean dostopping = false;
 
+	/*
 	protected ITagWriter writer = null;
 
 	protected Long metaDataId = null;
@@ -94,13 +70,15 @@ public abstract class BaseStreamWriter implements Runnable {
 
 		open();
 	}
+	*/
 
-	/**
+	/*
 	 * Initialization
 	 *
 	 * @throws IOException
 	 *             I/O exception
 	 */
+	/*
 	private void init() throws IOException {
 		file = new File(OmFileHelper.getStreamsSubDir(scope.getName()), OmFileHelper.getName(streamName, EXTENSION_FLV));
 
@@ -128,9 +106,10 @@ public abstract class BaseStreamWriter implements Runnable {
 	public void stop() {
 		dostopping = true;
 	}
-
+	*/
 	@Override
 	public void run() {
+		/*
 		log.debug("##REC:: stream writer started");
 		long lastPackedRecieved = System.currentTimeMillis() + TIME_TO_WAIT_FOR_FRAME;
 		long counter = 0;
@@ -158,6 +137,7 @@ public abstract class BaseStreamWriter implements Runnable {
 			}
 		}
 		log.debug("##REC:: stream writer stopped");
+		 */
 	}
 
 	/**
@@ -172,6 +152,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	/**
 	 * called when the stream is finished written on the disk
 	 */
+	/*
 	public void closeStream() {
 		try {
 			writer.close();
@@ -213,4 +194,5 @@ public abstract class BaseStreamWriter implements Runnable {
 
 		writer.writeTag(tag);
 	}
+	*/
 }

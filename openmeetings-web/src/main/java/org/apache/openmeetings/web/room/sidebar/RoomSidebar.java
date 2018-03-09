@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.room.sidebar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.room.RoomBroadcaster.sendUpdatedClient;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -58,10 +56,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.Options;
@@ -69,7 +68,7 @@ import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomSidebar.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RoomSidebar.class);
 	public static final String FUNC_TOGGLE_RIGHT = "toggleRight";
 	public static final String FUNC_TOGGLE_ACTIVITY = "toggleActivity";
 	public static final String FUNC_ACTION = "roomAction";
@@ -110,7 +109,6 @@ public class RoomSidebar extends Panel {
 				if (Strings.isEmpty(uid)) {
 					return;
 				}
-				ClientManager cm = getBean(ClientManager.class);
 				Client cl = room.getClient();
 				Action a = Action.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString());
 				switch (a) {
@@ -164,7 +162,7 @@ public class RoomSidebar extends Panel {
 				}
 				Right right = Right.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_RIGHT).toString());
 				if (room.getClient().hasRight(Right.moderator)) {
-					Client client = getBean(ClientManager.class).get(uid);
+					Client client = cm.get(uid);
 					if (client == null) {
 						return;
 					}
@@ -202,7 +200,7 @@ public class RoomSidebar extends Panel {
 				Client.Activity a = Client.Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
 				StringValue podStr = getRequest().getRequestParameters().getParameterValue(PARAM_POD);
 				Pod pod = podStr.isEmpty() ? Pod.none : Pod.valueOf(podStr.toString());
-				Client c = getBean(ClientManager.class).get(uid);
+				Client c = cm.get(uid);
 				toggleActivity(c, a, pod);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
@@ -231,6 +229,9 @@ public class RoomSidebar extends Panel {
 		}
 	};
 	private final Label userCount = new Label("user-count", Model.of(""));
+
+	@SpringBean
+	private ClientManager cm;
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);
@@ -281,7 +282,7 @@ public class RoomSidebar extends Panel {
 	}
 
 	private ListView<Client> updateUsers() {
-		users.setList(getBean(ClientManager.class).listByRoom(room.getRoom().getId()));
+		users.setList(cm.listByRoom(room.getRoom().getId()));
 		return users;
 	}
 

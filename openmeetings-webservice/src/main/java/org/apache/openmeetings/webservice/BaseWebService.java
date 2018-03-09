@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.webservice.error.ServiceException.NO_PERMISSION;
 
@@ -38,11 +37,11 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.Application;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(BaseWebService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(BaseWebService.class);
 
 	static IApplication getApp() {
 		return (IApplication)Application.get(getWicketApplicationName());

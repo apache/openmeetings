@@ -20,28 +20,12 @@ package org.apache.openmeetings.db.util;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class RoomHelper {
 	private RoomHelper() {}
-
-	public static JSONObject videoJson(Client c, boolean self, String sid, IStreamClientManager mgr, String uid) {
-		StreamClient sc = mgr.get(uid);
-		if (sc == null) {
-			return new JSONObject();
-		}
-		JSONObject o = c.toJson(self)
-				.put("sid", sid)
-				.put("uid", sc.getUid())
-				.put("broadcastId", sc.getBroadcastId())
-				.put("width", sc.getWidth())
-				.put("height", sc.getHeight())
-				.put("type", sc.getType());
-		return addScreenActivities(o, sc);
-	}
 
 	public static JSONObject addScreenActivities(JSONObject o, StreamClient sc) {
 		JSONArray a = new JSONArray();

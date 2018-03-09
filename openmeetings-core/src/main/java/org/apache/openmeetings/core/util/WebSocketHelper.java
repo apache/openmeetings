@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.util;
 
 import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -52,14 +51,14 @@ import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class WebSocketHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(WebSocketHelper.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(WebSocketHelper.class);
 	public static final String ID_TAB_PREFIX = "chatTab-";
 	public static final String ID_ALL = ID_TAB_PREFIX + "all";
 	public static final String ID_ROOM_PREFIX = ID_TAB_PREFIX + "r";
@@ -115,6 +114,18 @@ public class WebSocketHelper {
 			send(a -> Arrays.asList(_c), (t, c) -> {
 				try {
 					t.sendMessage(b, 0, b.length);
+				} catch (IOException e) {
+					log.error("Error while broadcasting byte[] to room", e);
+				}
+			}, null);
+		}
+	}
+
+	public static void sendClient(final Client _c, JSONObject msg) { //TODO unify
+		if (_c != null) {
+			send(a -> Arrays.asList(_c), (t, c) -> {
+				try {
+					t.sendMessage(msg.toString());
 				} catch (IOException e) {
 					log.error("Error while broadcasting byte[] to room", e);
 				}

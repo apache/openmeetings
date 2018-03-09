@@ -18,16 +18,14 @@
  */
 package org.apache.openmeetings.db.dto.user;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
 import org.apache.openmeetings.db.entity.server.OAuthServer;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONException;
@@ -35,7 +33,7 @@ import com.github.openjson.JSONObject;
 
 public class OAuthUser implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(OAuthUser.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(OAuthUser.class);
 	private final String uid;
 	private String email;
 	private String firstName;

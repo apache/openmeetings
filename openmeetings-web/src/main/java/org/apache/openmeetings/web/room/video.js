@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Video = (function() {
 	const self = {};
-	let c, v, vc, t, f, swf, size, vol, slider, handle
+	let c, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
 		, lastVolume = 50;
 
 	function _getName() {
@@ -15,20 +15,9 @@ var Video = (function() {
 		_resize(_w, _h);
 		return h;
 	}
-	function _securityMode(on) {
-		if (Room.getOptions().interview) {
-			return;
-		}
-		if (on) {
-			v.dialog("option", "position", {my: "center", at: "center", of: WBA_SEL});
-		} else {
-			const h = _resizeDlg(size.width, size.height);
-			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
-		}
-	}
 	function _resize(w, h) {
 		vc.width(w).height(h);
-		swf.attr('width', w).attr('height', h);
+		video.width(w).height(h);
 	}
 	function _handleMicStatus(state) {
 		if (!f.is(":visible")) {
@@ -58,9 +47,11 @@ var Video = (function() {
 			vol.addClass('ui-state-error');
 			_handleMicStatus(false);
 		}
+		/* TODO
 		if (typeof(swf[0].setVolume) === 'function') {
 			swf[0].setVolume(val);
 		}
+		*/
 	}
 	function _mute(mute) {
 		if (!slider) {
@@ -83,8 +74,8 @@ var Video = (function() {
 		size = {width: c.width, height: c.height};
 		const _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
-			, _w = c.self ? Math.max(300, c.width) : c.width
-			, _h = c.self ? Math.max(200, c.height) : c.height
+			, _w = c.width
+			, _h = c.height
 			, opts = Room.getOptions();
 		{ //scope
 			const cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
@@ -109,7 +100,6 @@ var Video = (function() {
 				const w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(":visible") ? f.height() : 0);
 				_resize(w, h);
-				swf[0].vidResize(w, h);
 			}
 			, close: function() {
 				VideoManager.close(c.uid, true);
@@ -181,6 +171,10 @@ var Video = (function() {
 				vol.hide();
 			}
 		}
+		v.on("remove", function () {
+			console.log('Disposing participant ' + c.uid);
+			rtcPeer.dispose();
+		});
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 		//broadcast
@@ -203,8 +197,15 @@ var Video = (function() {
 		o.broadcastId = c.broadcastId;
 		o.type = c.type;
 		delete o.keycode;
+
+		video = $('<video>').attr('id', 'vid' + _id).width(o.width).height(o.height)
+			.prop('autoplay', true).prop('controls', false);
+
+		vc.append(video);
+		/* TODO
 		swf = initSwf(vc, 'main.swf', _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
+		*/
 		v.dialog("widget").css(_pos);
 	}
 	function _update(_c) {
@@ -227,11 +228,14 @@ var Video = (function() {
 		}
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
+		/* TODO
 		if (typeof(swf[0].update) === 'function') {
 			c.self ? swf[0].update() : swf[0].update(c);
 		}
+		*/
 	}
 	function _refresh(_opts) {
+		/*
 		if (typeof(swf[0].refresh) === 'function') {
 			const opts = _opts || {};
 			if (!Room.getOptions().interview && !isNaN(opts.width)) {
@@ -243,16 +247,21 @@ var Video = (function() {
 				//swf might throw
 			}
 		}
+		*/
 	}
 	function _setRights(_r) {
+		/*
 		if (typeof(swf[0].setRights) === 'function') {
 			swf[0].setRights(_r);
 		}
+		*/
 	}
 	function _cleanup() {
+		/*
 		if (typeof(swf[0].cleanup) === 'function') {
 			swf[0].cleanup();
 		}
+		*/
 	}
 
 	self.update = _update;
@@ -260,9 +269,33 @@ var Video = (function() {
 	self.mute = _mute;
 	self.isMuted = function() { return 0 === slider.slider("option", "value"); };
 	self.init = _init;
-	self.securityMode = _securityMode;
 	self.client = function() { return c; };
 	self.setRights = _setRights;
 	self.cleanup = _cleanup;
+	self.video = function() { return video[0]; };
+	self.setPeer = function(p) { rtcPeer = p; };
+	self.getPeer = function() { return rtcPeer; };
+	self.onIceCandidate = function(candidate, wp) {
+		console.log("Local candidate" + JSON.stringify(candidate));
+		OmUtil.sendMessage({
+			id: 'onIceCandidate'
+			, type: 'kurento'
+			, candidate: candidate
+			, uid: c.uid
+		});
+	};
+	self.offerToReceiveVideo = function(error, offerSdp, wp) {
+		if (error) {
+			return console.error("sdp offer error");
+		}
+		console.log('Invoking SDP offer callback function');
+		OmUtil.sendMessage({
+			id : "receiveVideoFrom"
+			, type: 'kurento'
+			, sender: c.uid
+			, sdpOffer: offerSdp
+		});
+	}
+
 	return self;
 });

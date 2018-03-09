@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -85,9 +86,10 @@ import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
 
 import com.github.openjson.JSONObject;
@@ -96,7 +98,7 @@ import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
 
 public class MainPanel extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MainPanel.class);
 	private static final String DELIMITER = "     ";
 	private final WebMarkupContainer EMPTY = new WebMarkupContainer(CHILD_ID);
 	private String uid = null;
@@ -118,6 +120,9 @@ public class MainPanel extends Panel {
 			WebSocketHelper.sendClient(getClient(), new byte[]{getUserId().byteValue()});
 		}
 	};
+
+	@SpringBean
+	private KurentoHandler kHandler;
 
 	public MainPanel(String id) {
 		this(id, null);
@@ -155,9 +160,13 @@ public class MainPanel extends Panel {
 					final JSONObject m;
 					try {
 						m = new JSONObject(msg.getText());
-						BasePanel p = getCurrentPanel();
-						if (p != null) {
-							p.process(handler, m);
+						if (KURENTO_TYPE.equals(m.optString("type"))) {
+							kHandler.onMessage(uid, m);
+						} else {
+							BasePanel p = getCurrentPanel();
+							if (p != null) {
+								p.process(handler, m);
+							}
 						}
 					} catch (Exception e) {
 						//no-op

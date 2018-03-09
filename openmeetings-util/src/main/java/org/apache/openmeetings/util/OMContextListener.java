@@ -18,22 +18,42 @@
  */
 package org.apache.openmeetings.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setWebAppRootKey;
+import java.io.InputStream;
 
 import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-import org.red5.logging.ContextLoggingListener;
+import org.slf4j.LoggerFactory;
 
-public class OMContextListener extends ContextLoggingListener {
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.util.StatusPrinter;
+
+public class OMContextListener implements ServletContextListener {
+	private static final String LOG_DIR_PROP = "current_openmeetings_log_dir";
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
-		setWebAppRootKey(pathToName(event));
-		System.setProperty("current_openmeetings_context_name", getWebAppRootKey());
-		System.setProperty("webapp.contextPath", String.format("/%s", getWebAppRootKey()));
-		System.setProperty("logback.configurationFile", "logback-config.xml");
-		super.contextInitialized(event);
+		String ctx = pathToName(event);
+		System.setProperty("current_openmeetings_context_name", ctx);
+		if (System.getProperty(LOG_DIR_PROP) == null) {
+			System.setProperty(LOG_DIR_PROP, "log");
+		}
+		System.setProperty("webapp.contextPath", String.format("/%s", ctx));
+		LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();
+		try {
+			JoranConfigurator configurator = new JoranConfigurator();
+			configurator.setContext(context);
+			context.reset();
+			try (InputStream cfgIs = getClass().getResourceAsStream("/logback-config.xml")) {
+				configurator.doConfigure(cfgIs);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// StatusPrinter will handle this
+		}
+		StatusPrinter.printInCaseOfErrorsOrWarnings(context);
+		//System.setProperty("logback.configurationFile", "logback-config.xml");
 	}
 
 	private static String pathToName(ServletContextEvent event) {
@@ -42,5 +62,9 @@ public class OMContextListener extends ContextLoggingListener {
 			contextName = "root";
 		}
 		return contextName;
+	}
+
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
 	}
 }

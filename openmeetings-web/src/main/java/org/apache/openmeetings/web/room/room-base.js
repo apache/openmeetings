@@ -173,11 +173,14 @@ var Room = (function() {
 		$(window).off('resize.openmeetings');
 		Wicket.Event.unsubscribe("/websocket/closed", _close);
 		Wicket.Event.unsubscribe("/websocket/error", _close);
-		if (typeof(WbArea) !== 'undefined') {
+		if (typeof(WbArea) === 'object') {
 			WbArea.destroy();
 			window.WbArea = undefined;
 		}
-		if (typeof(VideoSettings) !== 'undefined') {
+		if (typeof(VideoManager) === 'object') {
+			VideoManager.destroy();
+		}
+		if (typeof(VideoSettings) === 'object') {
 			VideoSettings.close();
 		}
 		$('.ui-dialog.user-video').remove();
@@ -302,7 +305,6 @@ function sipKeyUp(evt) {
 		$('#sip-dialer-btn-' + k).removeClass('ui-state-active');
 	}
 }
-/***** functions required by SWF   ******/
 function typingActivity(uid, active) {
 	const u = $('#user' + uid + ' .typing-activity.ui-icon');
 	if (active) {

@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.pages.install;
 import static org.apache.openmeetings.core.converter.BaseConverter.EXEC_EXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONE_SET;
 import static org.apache.wicket.validation.validator.RangeValidator.range;
@@ -79,8 +78,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -96,7 +95,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(InstallWizard.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(InstallWizard.class);
 	private final IDynamicWizardStep welcomeStep;
 	private final IDynamicWizardStep dbStep;
 	private final ParamsStep1 paramsStep1;

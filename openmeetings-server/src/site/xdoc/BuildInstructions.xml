@@ -58,6 +58,13 @@
 			<source>mvn org.apache.maven.plugins:maven-dependency-plugin:3.0.0:analyze-only</source>
 		</section>
 		<section name="Tips and Gotchas">
+			<p>Eclipse ANSI colors plugin for colors in console</p>
+			<source><![CDATA[
+MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql,jetty jetty:run-exploded
+
+cd ..; mvn clean install -pl openmeetings-util -P allModules,quick; cd openmeetings-web;
+
+			]]></source>
 			<p>To compile only client you can run following command: </p>
 			<source>
 <![CDATA[
@@ -67,19 +74,19 @@ mvn install -P allModules -pl openmeetings-flash               # compiles a comp
 			<p>In case you would like to develop Openmeetings you need to run <i>"unpacked"</i> build: </p>
 			<source>
 <![CDATA[
-mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dwicket.mode=DEVELOPMENT
+mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dwicket.configuration=DEVELOPMENT
 ]]>
 			</source>
 			<p>After modifications are made you can run <i>"quick"</i> build: </p>
 			<source>
 <![CDATA[
-mvn install -P allModules,quick,mysql -pl openmeetings-web -pl openmeetings-server -Dwicket.mode=DEVELOPMENT
+mvn install -P allModules,quick,mysql -pl openmeetings-web -pl openmeetings-server -Dwicket.configuration=DEVELOPMENT
 ]]>
 			</source>
 			<p>Any number of projects can be specified during build: </p>
 			<source>
 <![CDATA[
-mvn install -P allModules,quick,mysql -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dwicket.mode=DEVELOPMENT
+mvn install -P allModules,quick,mysql -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dwicket.configuration=DEVELOPMENT
 ]]>
 			</source>
 			<div>

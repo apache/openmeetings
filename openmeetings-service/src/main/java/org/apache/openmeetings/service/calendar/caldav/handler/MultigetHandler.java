@@ -19,7 +19,6 @@
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,8 +41,8 @@ import org.osaf.caldav4j.model.request.CalendarData;
 import org.osaf.caldav4j.model.request.CalendarMultiget;
 import org.osaf.caldav4j.model.request.CompFilter;
 import org.osaf.caldav4j.model.response.CalendarDataProperty;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
@@ -56,7 +55,7 @@ import net.fortuna.ical4j.model.Component;
  * @see CalendarHandler
  */
 public class MultigetHandler extends AbstractCalendarHandler {
-	private static final Logger log = Red5LoggerFactory.getLogger(MultigetHandler.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MultigetHandler.class);
 
 	private CalendarMultiget query;
 	private boolean isMultigetDisabled = false, onlyEtag = false;

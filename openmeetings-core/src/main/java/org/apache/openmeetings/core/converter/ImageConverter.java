@@ -28,7 +28,6 @@ import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_DPI;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.process.ProcessResult.ZERO;
 import static org.apache.tika.metadata.HttpHeaders.CONTENT_TYPE;
 
@@ -52,15 +51,15 @@ import org.apache.tika.metadata.TIFF;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.parser.image.ImageParser;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.xml.sax.helpers.DefaultHandler;
 
 @Component
 public class ImageConverter extends BaseConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(ImageConverter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ImageConverter.class);
 	private static final String PAGE_TMPLT = DOC_PAGE_PREFIX + "-%04d." + EXTENSION_PNG;
 
 	@Autowired

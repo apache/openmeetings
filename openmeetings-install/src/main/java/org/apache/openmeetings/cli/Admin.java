@@ -71,13 +71,13 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.mail.MailUtil;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
-import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.web.context.WebApplicationContext;
 
 public class Admin {
-	private static final Logger _log = Red5LoggerFactory.getLogger(Admin.class);
+	private static final Logger _log = LoggerFactory.getLogger(Admin.class);
 	private static final String OPTION_DB_TYPE = "db-type";
 	private static final String OPTION_DB_HOST = "db-host";
 	private static final String OPTION_DB_PORT = "db-port";

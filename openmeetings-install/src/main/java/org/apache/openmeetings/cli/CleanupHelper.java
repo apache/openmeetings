@@ -34,11 +34,11 @@ import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 public class CleanupHelper {
-	private static final Logger log = Red5LoggerFactory.getLogger(CleanupHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(CleanupHelper.class);
 	private static File hibernateDir = OmFileHelper.getStreamsHibernateDir();
 
 	private CleanupHelper() {}

@@ -25,14 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE_PROXY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
@@ -47,18 +39,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENAB
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_FPS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
@@ -73,15 +54,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOri
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.TimeZone;
 
 import javax.persistence.EntityManager;
@@ -98,12 +75,11 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
 import org.apache.openmeetings.util.DaoHelper;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,7 +103,7 @@ import com.github.openjson.JSONObject;
 @Repository
 @Transactional
 public class ConfigurationDao implements IDataProviderDao<Configuration> {
-	private static final Logger log = Red5LoggerFactory.getLogger(ConfigurationDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ConfigurationDao.class);
 	private static final String[] searchFields = {"key", "value"};
 
 	@PersistenceContext
@@ -289,14 +265,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity = em.merge(entity);
 		}
 		switch (key) {
-			case CONFIG_FLASH_SECURE:
-			case CONFIG_FLASH_SECURE_PROXY:
-			case CONFIG_FLASH_VIDEO_CODEC:
-			case CONFIG_FLASH_VIDEO_FPS:
-			case CONFIG_FLASH_VIDEO_BANDWIDTH:
-			case CONFIG_FLASH_CAM_QUALITY:
-			case CONFIG_FLASH_ECHO_PATH:
-			case CONFIG_FLASH_MIC_RATE:
+			case CONFIG_KEYCODE_ARRANGE:
+			case CONFIG_KEYCODE_EXCLUSIVE:
+			case CONFIG_KEYCODE_MUTE:
 				reloadRoomSettings();
 				break;
 			case CONFIG_MAX_UPLOAD_SIZE:
@@ -439,21 +410,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 
 	private JSONObject reloadRoomSettings() {
 		try {
-			Properties props = new Properties();
-			try (InputStream is = new FileInputStream(new File(new File(OmFileHelper.getRootDir(), "conf"), "red5.properties"))) {
-				props.load(is);
-			}
 			setRoomSettings(new JSONObject()
-				.put(FLASH_SECURE, getBool(CONFIG_FLASH_SECURE, false))
-				.put(FLASH_NATIVE_SSL, "best".equals(getString(CONFIG_FLASH_SECURE_PROXY, "none")))
-				.put(FLASH_PORT, props.getProperty("rtmp.port"))
-				.put(FLASH_SSL_PORT, props.getProperty("rtmps.port"))
-				.put(FLASH_VIDEO_CODEC, getString(CONFIG_FLASH_VIDEO_CODEC, "h263"))
-				.put(FLASH_FPS, getLong(CONFIG_FLASH_VIDEO_FPS, 30L))
-				.put(FLASH_BANDWIDTH, getLong(CONFIG_FLASH_VIDEO_BANDWIDTH, 0L))
-				.put(FLASH_QUALITY, getLong(CONFIG_FLASH_CAM_QUALITY, 90L))
-				.put(FLASH_ECHO_PATH, getLong(CONFIG_FLASH_ECHO_PATH, 128L))
-				.put(FLASH_MIC_RATE, getLong(CONFIG_FLASH_MIC_RATE, 22L))
 				.put("keycode", new JSONObject()
 						.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
 						.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))

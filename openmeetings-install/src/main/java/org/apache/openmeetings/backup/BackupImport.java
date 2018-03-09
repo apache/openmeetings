@@ -99,7 +99,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -179,7 +178,6 @@ import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.util.crypt.SCryptImplementation;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.convert.Registry;
 import org.simpleframework.xml.convert.RegistryStrategy;
@@ -189,12 +187,13 @@ import org.simpleframework.xml.stream.InputNode;
 import org.simpleframework.xml.stream.NodeBuilder;
 import org.simpleframework.xml.transform.RegistryMatcher;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BackupImport {
-	private static final Logger log = Red5LoggerFactory.getLogger(BackupImport.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(BackupImport.class);
 	private static final String LDAP_EXT_TYPE = "LDAP";
 	private static final Map<String, String> outdatedConfigKeys = new HashMap<>();
 	private static final Map<String, Configuration.Type> configTypes = new HashMap<>();

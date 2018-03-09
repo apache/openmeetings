@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 
@@ -33,12 +32,12 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.util.lang.Bytes;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(UploadableImagePanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(UploadableImagePanel.class);
 	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<FileUpload>());
 
 	public UploadableImagePanel(String id) {

@@ -18,16 +18,14 @@
  */
 package org.apache.openmeetings.core.notifier;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.user.User;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,7 +35,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class NotifierService {
-	private static final Logger log = Red5LoggerFactory.getLogger(NotifierService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(NotifierService.class);
 
 	private List<INotifier> notifiers = new ArrayList<>();
 

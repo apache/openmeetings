@@ -20,7 +20,6 @@ package org.apache.openmeetings.service.calendar.caldav;
 
 import static javax.servlet.http.HttpServletResponse.SC_NO_CONTENT;
 import static javax.servlet.http.HttpServletResponse.SC_OK;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.IOException;
 import java.net.URI;
@@ -55,8 +54,8 @@ import org.apache.openmeetings.service.calendar.caldav.handler.EtagsHandler;
 import org.apache.openmeetings.service.calendar.caldav.handler.WebDAVSyncHandler;
 import org.apache.wicket.util.string.Strings;
 import org.osaf.caldav4j.CalDAVConstants;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
@@ -67,7 +66,7 @@ import org.w3c.dom.Element;
  */
 @Component
 public class AppointmentManager {
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(AppointmentManager.class);
 
 	//HttpClient and ConnectionManager Params
 	private static final int IDLE_CONNECTION_TIMEOUT = 30000; // 30 seconds

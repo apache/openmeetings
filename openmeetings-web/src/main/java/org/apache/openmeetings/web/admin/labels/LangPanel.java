@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.labels;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.wicket.request.resource.ContentDisposition.ATTACHMENT;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -58,8 +57,8 @@ import org.apache.wicket.request.resource.ResourceStreamResource;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
@@ -73,7 +72,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
  */
 public class LangPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(LangPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(LangPanel.class);
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private LangForm langForm;
 	private final FileUploadField fileUploadField = new FileUploadField("fileInput");

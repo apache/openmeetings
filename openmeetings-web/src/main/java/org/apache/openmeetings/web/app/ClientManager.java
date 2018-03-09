@@ -19,9 +19,7 @@
 package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getHazelcast;
-import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,17 +29,15 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
-import org.red5.server.api.scope.IScope;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,15 +45,17 @@ import com.hazelcast.core.IMap;
 
 @Component
 public class ClientManager implements IClientManager {
-	private static final Logger log = getLogger(ClientManager.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ClientManager.class);
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
 	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
 
 	@Autowired
 	private ConferenceLogDao confLogDao;
+	/*
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
+	*/
 
 	private static Map<String, Client> map() {
 		return getHazelcast().getMap(ONLINE_USERS_KEY);
@@ -165,19 +163,23 @@ public class ClientManager implements IClientManager {
 				clients.remove(_c.getUid());
 				rooms.put(roomId, clients);
 			}
+			/* FIXME TODO KurentoHandler
 			if (_c instanceof StreamClient) {
 				StreamClient sc = (StreamClient)_c;
 				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
 					scopeAdapter.roomLeaveByScope(_c, roomId);
 				}
 			}
+			 */
 			if (_c instanceof Client) {
-				scopeAdapter.dropSharing(_c, roomId);
+				//FIXME TODO scopeAdapter.dropSharing(_c, roomId);
 				Client c = (Client)_c;
+				/* FIXME TODO
 				IScope sc = scopeAdapter.getChildScope(roomId);
 				for (String uid : c.getStreams()) {
 					scopeAdapter.sendMessageById("quit", uid, sc);
 				}
+				*/
 				c.setRoom(null);
 				c.clear();
 				update(c);

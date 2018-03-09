@@ -18,19 +18,17 @@
  */
 package org.apache.openmeetings.util.crypt;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.security.NoSuchAlgorithmException;
 
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Package private SHA256 implementation to be able to authenticate against
  * passwords created using OM earlier than 3.1.0
  */
 class MD5Implementation {
-	private static final Logger log = Red5LoggerFactory.getLogger(MD5Implementation.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MD5Implementation.class);
 
 	private MD5Implementation() {}
 

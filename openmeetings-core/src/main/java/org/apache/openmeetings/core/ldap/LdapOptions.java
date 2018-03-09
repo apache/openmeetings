@@ -19,7 +19,6 @@
 package org.apache.openmeetings.core.ldap;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Properties;
 
@@ -28,11 +27,11 @@ import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.openmeetings.core.ldap.LdapLoginManager.AuthType;
 import org.apache.openmeetings.core.ldap.LdapLoginManager.GroupMode;
 import org.apache.openmeetings.core.ldap.LdapLoginManager.Provisionning;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LdapOptions {
-	private static final Logger log = Red5LoggerFactory.getLogger(LdapOptions.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(LdapOptions.class);
 	private static final String EMPTY_FORMAT = "%s";
 	private static final String CONFIGKEY_LDAP_HOST = "ldap_conn_host";
 	private static final String CONFIGKEY_LDAP_PORT = "ldap_conn_port";

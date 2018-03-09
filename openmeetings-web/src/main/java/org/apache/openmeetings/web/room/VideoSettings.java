@@ -18,26 +18,12 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.NAME_ATTR_KEY;
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.room.SwfPanel.FLASH_JS_REFERENCE;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -45,15 +31,14 @@ import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
-import com.hazelcast.core.Member;
 
 public class VideoSettings extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(VideoSettings.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(VideoSettings.class);
 	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
 	public static final String URL = "url";
 	public static final String FALLBACK = "fallback";
@@ -65,18 +50,19 @@ public class VideoSettings extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(FLASH_JS_REFERENCE)));
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(SETTINGS_JS_REFERENCE)));
 	}
 
+	/* FIXME TODO
 	private static String getUri(String protocol, String host, Object port, String app) {
 		return String.format("%s://%s:%s/%s", protocol, host, port, app);
 	}
+	*/
 
 	public static JSONObject getInitJson(ExtendedClientProperties cp, Long roomId, String sid) {
-		String scope = roomId == null ? OmFileHelper.HIBERNATE : "" + roomId;
-		JSONObject gs = OpenmeetingsVariables.getRoomSettings();
-		JSONObject s = new JSONObject(gs.toString())
+		String scope = roomId == null ? OmFileHelper.HIBERNATE : String.valueOf(roomId);
+		//FIXME TODO JSONObject gs = OpenmeetingsVariables.getRoomSettings();
+		JSONObject s = new JSONObject()//FIXME TODO new JSONObject(gs.toString())
 				.put("sid", sid)
 				.put("debug", DEVELOPMENT == Application.get().getConfigurationType())
 				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
@@ -84,6 +70,7 @@ public class VideoSettings extends Panel {
 			URL url = new URL(cp.getCodebase());
 			String path = url.getPath();
 			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
+			/* FIXME TODO
 			String host = getHost(roomId, url.getHost());
 			int port = url.getPort() > -1 ? url.getPort() : url.getDefaultPort();
 			if (gs.getBoolean(FLASH_SECURE)) {
@@ -93,12 +80,14 @@ public class VideoSettings extends Panel {
 				s.put(URL, getUri("rtmp", host, gs.getString(FLASH_PORT), path));
 				s.put(FALLBACK, getUri("rtmpt", host, port, path));
 			}
+			*/
 		} catch (Exception e) {
 			log.error("Error while constructing video settings parameters", e);
 		}
 		return s;
 	}
 
+	/* FIXME TODO
 	private static String getHost(Long roomId, String _host) {
 		if (roomId == null) {
 			return _host;
@@ -130,4 +119,5 @@ public class VideoSettings extends Panel {
 		}
 		return result == null ? _host : result.getAddress().getHost();
 	}
+	*/
 }

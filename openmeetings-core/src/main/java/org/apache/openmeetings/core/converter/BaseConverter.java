@@ -29,7 +29,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMA
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,13 +54,12 @@ import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
-import org.red5.io.flv.impl.FLVWriter;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class BaseConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(BaseConverter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(BaseConverter.class);
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 	public static final String EXEC_EXT = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") < 0 ? "" : ".exe";
 
@@ -226,6 +224,7 @@ public abstract class BaseConverter {
 					if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
 						if (metaSer.exists()) {
 							log.debug("### long time without any update, trying to repair ... ");
+							/*
 							try {
 								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
 									log.debug("### Repairing was successful ... ");
@@ -235,6 +234,7 @@ public abstract class BaseConverter {
 							} catch (IOException e) {
 								log.error("### Error while file repairing ... ", e);
 							}
+							*/
 						} else {
 							log.debug("### long time without any update, closing ... ");
 						}

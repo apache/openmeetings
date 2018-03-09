@@ -153,6 +153,7 @@ var DrawWbArea = function() {
 		});
 	}
 	self.init = function() {
+		Wicket.Event.subscribe("/websocket/message", wbWsHandler);
 		container = $('.room.wb.area');
 		tabs = container.find('.tabs');
 		if (tabs.length === 0) return;
@@ -184,6 +185,7 @@ var DrawWbArea = function() {
 	};
 	self.destroy = function() {
 		self.removeDeleteHandler();
+		Wicket.Event.unsubscribe("/websocket/message", wbWsHandler);
 	};
 	self.create = function(obj) {
 		if (!_inited) return;
@@ -338,18 +340,3 @@ var DrawWbArea = function() {
 	};
 	return self;
 };
-$(function() {
-	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
-		try {
-			if (msg instanceof Blob) {
-				return; //ping
-			}
-			const m = jQuery.parseJSON(msg);
-			if (m && 'wb' === m.type && typeof(WbArea) !== 'undefined' && !!m.func) {
-				WbArea[m.func](m.param);
-			}
-		} catch (err) {
-			//no-op
-		}
-	});
-});

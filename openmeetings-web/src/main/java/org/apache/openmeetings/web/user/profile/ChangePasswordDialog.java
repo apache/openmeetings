@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -34,8 +33,8 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -44,7 +43,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(ChangePasswordDialog.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(ChangePasswordDialog.class);
 	private DialogButton update;
 	private DialogButton cancel;
 	private final PasswordTextField current = new PasswordTextField("current", Model.of((String)null));

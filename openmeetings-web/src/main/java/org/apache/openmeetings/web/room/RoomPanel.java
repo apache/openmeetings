@@ -18,9 +18,7 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.db.util.RoomHelper.videoJson;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -83,15 +81,17 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.protocol.ws.api.BaseWebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.event.WebSocketPushPayload;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -105,7 +105,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 @AuthorizeInstantiation("Room")
 public class RoomPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomPanel.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RoomPanel.class);
 	private static final String ACCESS_DENIED_ID = "access-denied";
 	private static final String EVENT_DETAILS_ID = "event-details";
 	public enum Action {
@@ -151,7 +151,7 @@ public class RoomPanel extends BasePanel {
 				sidebar.setFilesActive(target);
 			}
 			if (Room.Type.presentation != r.getType()) {
-				List<Client> mods = getBean(ClientManager.class).listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
+				List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
 				if (mods.isEmpty()) {
 					waitApplyModeration.open(target);
 				}
@@ -163,10 +163,9 @@ public class RoomPanel extends BasePanel {
 			StringBuilder sb = new StringBuilder();
 			boolean hasStreams = false;
 			Client _c = getClient();
-			for (Client c: getBean(ClientManager.class).listByRoom(getRoom().getId())) {
-				boolean self = _c.getUid().equals(c.getUid());
+			for (Client c: cm.listByRoom(getRoom().getId())) {
 				for (String uid : c.getStreams()) {
-					JSONObject jo = videoJson(c, self, c.getSid(), getBean(StreamClientManager.class), uid);
+					JSONObject jo = videoJson(c, c.getSid(), uid);
 					sb.append(String.format("VideoManager.play(%s);", jo));
 					hasStreams = true;
 				}
@@ -223,6 +222,9 @@ public class RoomPanel extends BasePanel {
 	};
 	Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
+	@SpringBean
+	private ClientManager cm;
+
 	public RoomPanel(String id, Room r) {
 		super(id);
 		this.r = r;
@@ -239,7 +241,6 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		//let's refresh user in client
-		ClientManager cm = getBean(ClientManager.class);
 		cm.update(getClient().updateUser(getBean(UserDao.class)));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
@@ -378,6 +379,7 @@ public class RoomPanel extends BasePanel {
 		if (room.isVisible()) {
 			add(new NicknameDialog("nickname", this));
 			add(download);
+			add(new BaseWebSocketBehavior("media"));
 		} else {
 			add(new WebMarkupContainer("nickname").setVisible(false));
 		}
@@ -399,7 +401,6 @@ public class RoomPanel extends BasePanel {
 			if (wsEvent.getMessage() instanceof RoomMessage) {
 				RoomMessage m = (RoomMessage)wsEvent.getMessage();
 				IPartialPageRequestHandler handler = wsEvent.getHandler();
-				ClientManager cm = getBean(ClientManager.class);
 				switch (m.getType()) {
 					case pollCreated:
 						menu.updatePoll(handler, m.getUserId());
@@ -498,7 +499,7 @@ public class RoomPanel extends BasePanel {
 						boolean self = _c.getSid().equals(c.getSid());
 						StreamClientManager mgr = getBean(StreamClientManager.class);
 						if (!self || Client.Type.room != mgr.get(uid).getType()) { // stream from others or self external video
-							JSONObject jo = videoJson(c, false, _c.getSid(), mgr, uid);
+							JSONObject jo = videoJson(c, _c.getSid(), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
 						if (self) {
@@ -639,7 +640,7 @@ public class RoomPanel extends BasePanel {
 		if (interview && _c.hasRight(Right.moderator)) {
 			if (recordingUser == null) {
 				boolean hasStreams = false;
-				for (Client cl : getBean(ClientManager.class).listByRoom(r.getId())) {
+				for (Client cl : cm.listByRoom(r.getId())) {
 					if (!cl.getStreams().isEmpty()) {
 						hasStreams = true;
 						break;
@@ -658,7 +659,6 @@ public class RoomPanel extends BasePanel {
 		if (room.isVisible()) {
 			//We are setting initial rights here
 			Client c = getClient();
-			ClientManager cm = getBean(ClientManager.class);
 			final int count = cm.addToRoom(c.setRoom(getRoom()));
 			SOAPLogin soap = WebSession.get().getSoapLogin();
 			if (soap != null && soap.isModerator()) {
@@ -674,12 +674,16 @@ public class RoomPanel extends BasePanel {
 		}
 	}
 
-	public static boolean isModerator(long userId, long roomId) {
-		return hasRight(userId, roomId, Right.moderator);
+	public boolean isModerator(long userId, long roomId) {
+		return isModerator(cm, userId, roomId);
 	}
 
-	public static boolean hasRight(long userId, long roomId, Right r) {
-		for (Client c : getBean(ClientManager.class).listByRoom(roomId)) {
+	public static boolean isModerator(ClientManager cm, long userId, long roomId) {
+		return hasRight(cm, userId, roomId, Right.moderator);
+	}
+
+	public static boolean hasRight(ClientManager cm, long userId, long roomId, Right r) {
+		for (Client c : cm.listByRoom(roomId)) {
 			if (c.getUserId().equals(userId) && c.hasRight(r)) {
 				return true;
 			}
@@ -722,7 +726,7 @@ public class RoomPanel extends BasePanel {
 			getMainPanel().getChat().toggle(handler, true);
 		}
 		handler.appendJavaScript("if (typeof(Room) !== 'undefined') { Room.unload(); }");
-		getBean(ClientManager.class).exitRoom(getClient());
+		cm.exitRoom(getClient());
 		getMainPanel().getChat().roomExit(r, handler);
 	}
 
@@ -738,7 +742,6 @@ public class RoomPanel extends BasePanel {
 
 	public void requestRight(Right right, IPartialPageRequestHandler handler) {
 		RoomMessage.Type reqType = null;
-		ClientManager cm = getBean(ClientManager.class);
 		List<Client> mods = cm.listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
 		if (mods.isEmpty()) {
 			if (r.isModerated()) {
@@ -747,7 +750,7 @@ public class RoomPanel extends BasePanel {
 				return;
 			} else {
 				// we found no-one we can ask, allow right
-				broadcast(getBean(ClientManager.class).update(getClient().allow(right)));
+				broadcast(cm.update(getClient().allow(right)));
 			}
 		}
 		// ask
@@ -788,8 +791,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void allowRight(Client client, Right... rights) {
-		client.allow(rights);
-		getBean(ClientManager.class).update(client);
+		cm.update(client.allow(rights));
 		broadcast(client);
 	}
 
@@ -803,7 +805,7 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.broadcastV);
 		}
-		getBean(ClientManager.class).update(client);
+		cm.update(client);
 		broadcast(client);
 	}
 
@@ -862,5 +864,28 @@ public class RoomPanel extends BasePanel {
 
 	public boolean isInterview() {
 		return interview;
+	}
+
+	public JSONObject videoJson(Client c, String sid, String uid) {
+		/*
+		TODO streams
+		StreamClient sc = mgr.get(uid);
+		if (sc == null) {
+			return new JSONObject();
+		}
+		*/
+		JSONObject o = c.toJson(getUid().equals(c.getUid()))
+				.put("sid", sid)
+				.put("uid", c.getUid())
+				 /*TODO
+				 .put("uid", sc.getUid())
+				.put("broadcastId", sc.getBroadcastId())
+				.put("width", sc.getWidth())
+				.put("height", sc.getHeight())
+				.put("type", sc.getType());
+		return addScreenActivities(o, sc);
+		*/
+				;
+		return o;
 	}
 }

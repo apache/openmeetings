@@ -18,10 +18,6 @@
  */
 package org.apache.openmeetings.core.util;
 
-import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.red5.server.api.IClient;
-import org.red5.server.api.scope.IScope;
-
 public class IClientUtil {
 	private enum ConAttrs {
 		omId
@@ -29,10 +25,12 @@ public class IClientUtil {
 		, recordingId
 	}
 
+	/*
 	public static void init(IClient client, String uid, boolean sharing) {
 		client.setAttribute(ConAttrs.omId.name(), uid);
 		client.setAttribute(ConAttrs.sharing.name(), sharing);
 	}
+	*/
 
 	/**
 	 * Id of {@link StreamClient} for this IConnection
@@ -40,6 +38,7 @@ public class IClientUtil {
 	 * @param client - {@link IClient} to get if from
 	 * @return - Id of {@link StreamClient} for this IConnection, or <code>null</code>
 	 */
+	/*
 	public static String getId(IClient client) {
 		Object o = client.getAttribute(ConAttrs.omId.name());
 		return o instanceof String ? (String)o : null;
@@ -56,4 +55,5 @@ public class IClientUtil {
 	public static void setRecordingId(IScope scope, Long recordingId) {
 		scope.setAttribute(ConAttrs.recordingId.name(), recordingId);
 	}
+	*/
 }

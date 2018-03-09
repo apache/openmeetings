@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.pages.BasePage;
 import org.apache.wicket.AttributeModifier;
@@ -47,6 +48,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 
@@ -80,7 +82,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 			final boolean admin = hasAdminLevel(getRights());
 			if (!chatForm.process(
 					() -> admin
-					, r -> admin || isModerator(getUserId(), r.getId())
+					, r -> admin || isModerator(cm, getUserId(), r.getId())
 					, u -> true))
 			{
 				rr.setError(HttpServletResponse.SC_FORBIDDEN);
@@ -121,7 +123,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 						return true;
 					}
 					, r -> {
-						if (admin || isModerator(getUserId(), r.getId())) {
+						if (admin || isModerator(cm, getUserId(), r.getId())) {
 							setFileName(String.format(CHAT_FNAME_TMPL, "room_" + r.getId()));
 							export(dao.getRoom(r.getId(), 0, Integer.MAX_VALUE, true), sb);
 						}
@@ -136,6 +138,9 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 			return srs;
 		}
 	});
+
+	@SpringBean
+	private ClientManager cm;
 
 	/**
 	 * Constructor
@@ -192,7 +197,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 						return true;
 					}
 					, r -> {
-						if (admin || isModerator(getUserId(), r.getId())) {
+						if (admin || isModerator(cm, getUserId(), r.getId())) {
 							dao.deleteRoom(r.getId());
 							clean(target, scope);
 						}
@@ -229,7 +234,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 				return true;
 			}
 			, r -> {
-				final boolean moder = admin || isModerator(getUserId(), r.getId());
+				final boolean moder = admin || isModerator(cm, getUserId(), r.getId());
 				target.add(save.setVisible(moder), delBtn.setVisible(moder));
 				return true;
 			}, u -> {

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.webservice;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 
 import java.util.ArrayList;
@@ -56,8 +55,8 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -72,7 +71,7 @@ import org.springframework.stereotype.Service;
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/room")
 public class RoomWebService extends BaseWebService {
-	private static final Logger log = Red5LoggerFactory.getLogger(RoomWebService.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(RoomWebService.class);
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of

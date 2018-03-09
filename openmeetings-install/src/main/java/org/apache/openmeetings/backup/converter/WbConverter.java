@@ -25,7 +25,6 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WML;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,8 +43,8 @@ import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -53,7 +52,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
 
 public class WbConverter {
-	private static final Logger log = Red5LoggerFactory.getLogger(WbConverter.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(WbConverter.class);
 	private static final String ATTR_STROKE = "strokeWidth";
 	private static final String ATTR_OPACITY = "opacity";
 	private static final String TYPE_IMAGE = "image";

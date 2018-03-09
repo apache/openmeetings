@@ -9,18 +9,18 @@ var VideoUtil = (function() {
 		return "video" + uid;
 	}
 	function _isSharing(c) {
-		return 'sharing' === c.type && c.screenActivities.indexOf('sharing') > -1;
+		return 'sharing' === c.type && c.screenActivities.includes('sharing');
 	}
 	function _isRecording(c) {
 		return 'sharing' === c.type
-			&& c.screenActivities.indexOf('recording') > -1
-			&& c.screenActivities.indexOf('sharing') < 0;
+			&& c.screenActivities.includes('recording')
+			&& !c.screenActivities.includes('sharing');
 	}
 	function _hasAudio(c) {
-		return c.activities.indexOf('broadcastA') > -1;
+		return c.activities.includes('broadcastA');
 	}
 	function _hasVideo(c) {
-		return c.activities.indexOf('broadcastV') > -1;
+		return c.activities.includes('broadcastV');
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);

@@ -30,7 +30,7 @@
 	<name>Openmeetings Server</name>
 	<description>Module for OpenMeetings server assembly</description>
 	<properties>
-		<server.dir>${project.build.directory}/red5-server</server.dir>
+		<server.dir>${project.build.directory}/web-server</server.dir>
 		<languages.dir>../openmeetings-web/src/main/java/org/apache/openmeetings/web/app</languages.dir>
 		<assembly.finalName>apache-openmeetings-${project.version}</assembly.finalName>
 		<assembly.descriptor>server</assembly.descriptor>
@@ -39,7 +39,7 @@
 		<dist.om.dir>${dist.webapps}/openmeetings</dist.om.dir>
 		<om.webapp>webapps/openmeetings</om.webapp>
 		<root.webapp>webapps/root</root.webapp>
-		<red5-server-file.dir>red5-server</red5-server-file.dir>
+		<server-file.dir>web-server</server-file.dir>
 	</properties>
 	<url>http://openmeetings.apache.org</url>
 	<scm>
@@ -114,10 +114,10 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>prepare-red5-server</id>
+			<id>prepare-web-server</id>
 			<activation>
 				<file>
-					<missing>red5-server/red5-server-1.0.10-M4.tar.gz</missing> <!-- TODO should be in-sync with global property -->
+					<missing>web-server/apache-tomcat-9.0.5.tar.gz</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
@@ -127,16 +127,16 @@
 						<artifactId>wagon-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>download-red5-server</id>
+								<id>download-web-server</id>
 								<phase>process-resources</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
 								<configuration>
-									<url>https://github.com/Red5/red5-server/releases/download</url>
-									<fromFile>v${red5-server.version}/red5-server-${red5-server.version}.tar.gz</fromFile>
-									<toDir>${red5-server-file.dir}</toDir>
-									<skip>${red5-server.dwnd.skip}</skip>
+									<url>http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-9/v${tomcat.version}/bin</url>
+									<fromFile>apache-tomcat-${tomcat.version}.tar.gz</fromFile>
+									<toDir>${server-file.dir}</toDir>
+									<skip>${server.dwnd.skip}</skip>
 								</configuration>
 							</execution>
 						</executions>
@@ -296,14 +296,14 @@
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>unpack-red5-server</id>
+						<id>unpack-web-server</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
 						<configuration>
 							<target>
-								<untar src="${red5-server-file.dir}/red5-server-${red5-server.version}.tar.gz" dest="${project.build.directory}"
+								<untar src="${server-file.dir}/apache-tomcat-${tomcat.version}.tar.gz" dest="${project.build.directory}"
 									compression="gzip" overwrite="true"/>
 							</target>
 							<skip>${om.quick.build}</skip>
@@ -353,11 +353,6 @@
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>
 			<artifactId>openmeetings-screenshare</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openmeetings</groupId>
-			<artifactId>openmeetings-flash</artifactId>
-			<type>swf</type>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openmeetings</groupId>

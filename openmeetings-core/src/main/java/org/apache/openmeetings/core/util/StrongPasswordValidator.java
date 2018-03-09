@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.Map;
 
 import org.apache.directory.api.util.Strings;
@@ -29,12 +27,12 @@ import org.apache.wicket.util.collections.MicroMap;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StrongPasswordValidator implements IValidator<String> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(StrongPasswordValidator.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(StrongPasswordValidator.class);
 	private final int minLength;
 	private final boolean web;
 	private User u;

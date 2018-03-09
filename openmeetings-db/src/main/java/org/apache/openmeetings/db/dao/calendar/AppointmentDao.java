@@ -20,7 +20,6 @@ package org.apache.openmeetings.db.dao.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,8 +41,8 @@ import org.apache.openmeetings.db.entity.calendar.Appointment.Reminder;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class AppointmentDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(AppointmentDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(AppointmentDao.class);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired

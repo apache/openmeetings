@@ -21,7 +21,6 @@ package org.apache.openmeetings.db.dao.user;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Collection;
 import java.util.Date;
@@ -36,15 +35,15 @@ import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.string.Strings;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
 public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
-	private static final Logger log = Red5LoggerFactory.getLogger(PrivateMessageDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(PrivateMessageDao.class);
 	@PersistenceContext
 	private EntityManager em;
 

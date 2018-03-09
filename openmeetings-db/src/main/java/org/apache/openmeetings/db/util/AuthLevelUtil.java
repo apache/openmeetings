@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,11 +27,11 @@ import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.db.entity.room.RoomModerator;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuthLevelUtil {
-	private static final Logger log = Red5LoggerFactory.getLogger(AuthLevelUtil.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(AuthLevelUtil.class);
 
 	private AuthLevelUtil() {}
 

@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.db.dao.file;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
@@ -32,8 +30,8 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class FileItemDao extends BaseFileItemDao {
-	private static final Logger log = Red5LoggerFactory.getLogger(FileItemDao.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(FileItemDao.class);
 
 	public List<FileItem> getByRoom(Long roomId) {
 		log.debug("getByRoom roomId :: " + roomId);
