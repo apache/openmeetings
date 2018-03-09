@@ -19,6 +19,7 @@
 package org.apache.openmeetings;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertEquals;
@@ -33,23 +34,28 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.util.OMContextListener;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
+import org.apache.wicket.RuntimeConfigurationType;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.feedback.ExactLevelFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.protocol.http.mock.MockServletContext;
 import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
@@ -61,12 +67,26 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	public static final String PATH_MENU = "main-container:main:topControls:menu:menu";
 	protected WicketTester tester;
 
-	public static WicketTester getWicketTester() {
-		return getWicketTester(-1);
+	@Autowired
+	private Application app;
+
+	public static WicketTester getWicketTester(Application app) {
+		return getWicketTester(app, -1);
 	}
 
-	public static WicketTester getWicketTester(long langId) {
-		WebApplication app = (WebApplication)ensureApplication(langId);
+	public static WicketTester getWicketTester(Application app, long langId) {
+		if (app.getName() == null) {
+			//FIXME TODO re-use this for templates
+			app.setName(getWicketApplicationName());
+			app.setServletContext(new MockServletContext(app, null));
+			app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
+			ServletContext sc = app.getServletContext();
+			OMContextListener omcl = new OMContextListener();
+			omcl.contextInitialized(new ServletContextEvent(sc));
+			ThreadContext.setApplication(app);
+			app.initApplication();
+		}
+		ensureApplication(langId); // to ensure WebSession is attached
 
 		WicketTester tester = new WicketTester(app, app.getServletContext());
 		setInitComplete(true);
@@ -96,7 +116,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		tester = getWicketTester();
+		tester = getWicketTester(app);
 		assertNotNull("Web session should not be null", WebSession.get());
 		Locale[] locales = Locale.getAvailableLocales();
 		tester.getSession().setLocale(locales[rnd.nextInt(locales.length)]);

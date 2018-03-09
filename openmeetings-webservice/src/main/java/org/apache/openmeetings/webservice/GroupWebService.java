@@ -38,10 +38,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.SearchResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -54,6 +52,7 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -72,9 +71,10 @@ import org.springframework.stereotype.Service;
 public class GroupWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(GroupWebService.class);
 
-	private static GroupDao getDao() {
-		return getBean(GroupDao.class);
-	}
+	@Autowired
+	private GroupDao groupDao;
+	@Autowired
+	private GroupUserDao groupUserDao;
 
 	/**
 	 * add a new group
@@ -92,7 +92,7 @@ public class GroupWebService extends BaseWebService {
 		return performCall(sid, User.Right.Soap, sd -> {
 			Group o = new Group();
 			o.setName(name);
-			return new ServiceResult(String.valueOf(getDao().update(o, sd.getUserId()).getId()), Type.SUCCESS);
+			return new ServiceResult(String.valueOf(groupDao.update(o, sd.getUserId()).getId()), Type.SUCCESS);
 		});
 	}
 
@@ -106,7 +106,7 @@ public class GroupWebService extends BaseWebService {
 	@GET
 	@Path("/")
 	public List<GroupDTO> get(@QueryParam("sid") @WebParam(name="sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> GroupDTO.list(getDao().get(0, Integer.MAX_VALUE)));
+		return performCall(sid, User.Right.Soap, sd -> GroupDTO.list(groupDao.get(0, Integer.MAX_VALUE)));
 	}
 
 	/**
@@ -130,10 +130,9 @@ public class GroupWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
-			if (!getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
-				UserDao userDao = getUserDao();
+			if (!groupUserDao.isUserInGroup(id, userid)) {
 				User u = userDao.get(userid);
-				u.getGroupUsers().add(new GroupUser(getDao().get(id), u));
+				u.getGroupUsers().add(new GroupUser(groupDao.get(id), u));
 				userDao.update(u, sd.getUserId());
 			}
 			return new ServiceResult(String.valueOf(userid), Type.SUCCESS);
@@ -161,8 +160,7 @@ public class GroupWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
-			if (getBean(GroupUserDao.class).isUserInGroup(id, userid)) {
-				UserDao userDao = getUserDao();
+			if (groupUserDao.isUserInGroup(id, userid)) {
 				User u = userDao.get(userid);
 				for (Iterator<GroupUser> iter = u.getGroupUsers().iterator(); iter.hasNext(); ) {
 					GroupUser gu = iter.next();
@@ -194,7 +192,6 @@ public class GroupWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
-			RoomDao roomDao = getRoomDao();
 			Room r = roomDao.get(roomid);
 			if (r != null) {
 				if (r.getGroups() == null) {
@@ -207,7 +204,7 @@ public class GroupWebService extends BaseWebService {
 					}
 				}
 				if (!found) {
-					r.getGroups().add(new RoomGroup(getDao().get(id), r));
+					r.getGroups().add(new RoomGroup(groupDao.get(id), r));
 					roomDao.update(r, sd.getUserId());
 					return new ServiceResult("Success", Type.SUCCESS);
 				}
@@ -247,11 +244,10 @@ public class GroupWebService extends BaseWebService {
 		return performCall(sid, User.Right.Soap, sd -> {
 			SearchResult<User> result = new SearchResult<>();
 			result.setObjectName(User.class.getName());
-			GroupUserDao dao = getBean(GroupUserDao.class);
-			result.setRecords(dao.count(id));
+			result.setRecords(groupUserDao.count(id));
 			result.setResult(new ArrayList<User>());
 			String order = isAlphanumeric(orderby) ? orderby : "id";
-			for (GroupUser ou : dao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
+			for (GroupUser ou : groupUserDao.get(id, null, start, max, order + " " + (asc ? "ASC" : "DESC"))) {
 				result.getResult().add(ou.getUser());
 			}
 			return new UserSearchResult(result);
@@ -272,8 +268,7 @@ public class GroupWebService extends BaseWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Admin, sd -> {
-			GroupDao dao = getDao();
-			dao.delete(dao.get(id), sd.getUserId());
+			groupDao.delete(groupDao.get(id), sd.getUserId());
 
 			return new ServiceResult("Deleted", Type.SUCCESS);
 		});

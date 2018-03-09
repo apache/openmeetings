@@ -121,6 +121,7 @@ import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
@@ -160,6 +161,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private String contentSecurityPolicy = OpenmeetingsVariables.HEADER_CSP_SELF;
 	private ITopic<IClusterWsMessage> hazelWsTopic;
 
+	@Autowired
+	private ApplicationContext ctx;
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired
@@ -272,7 +275,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
 		log.debug("InitComponent::PostConstruct");
 		try {

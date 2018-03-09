@@ -52,6 +52,7 @@ import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
 import org.apache.wicket.util.tester.WicketTester;
@@ -59,6 +60,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	private static Tomcat tomcat;
@@ -71,6 +73,9 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public static final long TIMEOUT = 5 * 60 * 1000;
 	protected WicketTester tester;
+
+	@Autowired
+	private Application app;
 
 	public static WebClient getClient(String url) {
 		WebClient c = WebClient.create(url, Arrays.asList(new AppointmentMessageBodyReader()))
@@ -119,7 +124,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		tester = getWicketTester();
+		tester = getWicketTester(app);
 		assertNotNull("Web session should not be null", WebSession.get());
 	}
 

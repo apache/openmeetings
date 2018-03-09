@@ -39,7 +39,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -57,6 +56,7 @@ import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -72,6 +72,15 @@ import org.springframework.stereotype.Service;
 @Path("/room")
 public class RoomWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(RoomWebService.class);
+
+	@Autowired
+	private IUserManager userManager;
+	@Autowired
+	private IClientManager clientManager;
+	@Autowired
+	private InvitationDao inviteDao;
+	@Autowired
+	private InvitationManager inviteManager;
 
 	/**
 	 * Returns an Object of Type RoomsList which contains a list of
@@ -90,7 +99,7 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) {
-		return performCall(sid, User.Right.Room, sd -> RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type))));
+		return performCall(sid, User.Right.Room, sd -> RoomDTO.list(roomDao.getPublicRooms(Room.Type.valueOf(type))));
 	}
 
 	/**
@@ -104,18 +113,17 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/{id}")
 	public RoomDTO getRoomById(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
-		return performCall(sid, User.Right.Soap, sd -> new RoomDTO(getRoomDao().get(id)));
+		return performCall(sid, User.Right.Soap, sd -> new RoomDTO(roomDao.get(id)));
 	}
 
 	/*
 	 * This method is required to set additional fields on room sub-objects
 	 * for ex: RoomFile.roomId
 	 */
-	private static Room updateRtoRoom(Room r, Long userId) {
+	private Room updateRtoRoom(Room r, Long userId) {
 		if (r.getFiles() == null) {
 			r.setFiles(new ArrayList<>());
 		}
-		RoomDao roomDao = getRoomDao();
 		if (r.getId() == null) {
 			List<RoomFile> files = r.getFiles();
 			r.setFiles(null);
@@ -155,13 +163,12 @@ public class RoomWebService extends BaseWebService {
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId
 			, @WebParam(name="room") @QueryParam("room") RoomDTO room) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			RoomDao roomDao = getRoomDao();
 			Room r = roomDao.getExternal(Room.Type.valueOf(type), externalType, externalId);
 			if (r == null) {
 				if (room == null) {
 					return null;
 				} else {
-					r = room.get(getFileDao());
+					r = room.get(fileDao);
 					r.setExternalType(externalType);
 					r.setExternalId(externalId);
 					r = updateRtoRoom(r, sd.getUserId());
@@ -188,7 +195,7 @@ public class RoomWebService extends BaseWebService {
 	@Path("/")
 	public RoomDTO add(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="room") @FormParam("room") RoomDTO room) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			Room r = room.get(getFileDao());
+			Room r = room.get(fileDao);
 			r = updateRtoRoom(r, sd.getUserId());
 			return new RoomDTO(r);
 		});
@@ -207,7 +214,6 @@ public class RoomWebService extends BaseWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			RoomDao roomDao = getRoomDao();
 			Room r = roomDao.get(id);
 			if (r == null) {
 				return new ServiceResult("Not found", Type.SUCCESS);
@@ -238,13 +244,12 @@ public class RoomWebService extends BaseWebService {
 	public ServiceResult close(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
 			Long userId = sd.getUserId();
-			RoomDao roomDao = getRoomDao();
 			Room room = roomDao.get(id);
 			room.setClosed(true);
 
 			roomDao.update(room, userId);
 
-			WebSocketHelper.sendRoom(new RoomMessage(room.getId(),  getUserDao().get(userId),  RoomMessage.Type.roomClosed));
+			WebSocketHelper.sendRoom(new RoomMessage(room.getId(), userDao.get(userId),  RoomMessage.Type.roomClosed));
 
 			return new ServiceResult("Closed", Type.SUCCESS);
 		});
@@ -269,7 +274,6 @@ public class RoomWebService extends BaseWebService {
 	@Path("/open/{id}")
 	public ServiceResult open(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			RoomDao roomDao = getRoomDao();
 			Room room = roomDao.get(id);
 			room.setClosed(false);
 			roomDao.update(room, sd.getUserId());
@@ -294,7 +298,7 @@ public class RoomWebService extends BaseWebService {
 	@Path("/kick/{id}")
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			boolean result = getBean(IUserManager.class).kickUsersByRoomId(id);
+			boolean result = userManager.kickUsersByRoomId(id);
 			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
 		});
 	}
@@ -312,14 +316,14 @@ public class RoomWebService extends BaseWebService {
 	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) {
 		return performCall(sid, User.Right.Soap, sd -> {
 			List<RoomCountDTO> roomBeans = new ArrayList<>();
-			List<Room> rooms = getRoomDao().get(ids);
+			List<Room> rooms = roomDao.get(ids);
 
 			for (Room room : rooms) {
 				RoomCountDTO rCountBean = new RoomCountDTO();
 				rCountBean.setRoomId(room.getId());
 				rCountBean.setRoomName(room.getName());
 				rCountBean.setMaxUser(room.getCapacity());
-				rCountBean.setRoomCount(getBean(IClientManager.class).listByRoom(room.getId()).size());
+				rCountBean.setRoomCount(clientManager.listByRoom(room.getId()).size());
 
 				roomBeans.add(rCountBean);
 			}
@@ -345,13 +349,13 @@ public class RoomWebService extends BaseWebService {
 	{
 		log.debug("[hash] invite {}", invite);
 		return performCall(sid, User.Right.Soap, sd -> {
-			Invitation i = invite.get(sd.getUserId(), getUserDao(), getRoomDao());
-			i = getBean(InvitationDao.class).update(i);
+			Invitation i = invite.get(sd.getUserId(), userDao, roomDao);
+			i = inviteDao.update(i);
 
 			if (i != null) {
 				if (sendmail) {
 					try {
-						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
+						inviteManager.sendInvitationLink(i, MessageType.Create, invite.getSubject(), invite.getMessage(), false);
 					} catch (Exception e) {
 						throw new ServiceException(e.getMessage());
 					}

@@ -93,7 +93,7 @@
 			<http-method>GET</http-method>
 			<http-method>POST</http-method>
 		</web-resource-collection>
-		<!-- no auth-constraint tag here -->
+		<!-- no auth-constraint means everybody allowed -->
 	</security-constraint>
 	<security-constraint>
 		<web-resource-collection>

@@ -25,7 +25,6 @@ import static org.junit.Assert.fail;
 
 import java.util.Set;
 
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -44,13 +43,8 @@ public class TestBaseService {
 	}
 
 	@Test
-	public void testGetBeanExc() {
-		checkException(() -> BaseWebService.getBean(UserDao.class));
-	}
-
-	@Test
 	public void testCheck() {
-		Sessiondata sd = BaseWebService.check(null);
+		Sessiondata sd = new BaseWebService() {}.check(null);
 		assertNotNull("NOT null Sessiondata should be returned", sd);
 		assertNull("UserId should be null", sd.getUserId());
 	}
@@ -62,17 +56,17 @@ public class TestBaseService {
 
 	@Test
 	public void testGetRights1() {
-		checkRights(BaseWebService.getRights(1L));
+		checkRights(new BaseWebService() {}.getRights(1L));
 	}
 
 	@Test
 	public void testGetRights2() {
-		checkRights(BaseWebService.getRights(""));
+		checkRights(new BaseWebService() {}.getRights(""));
 	}
 
 	@Test
 	public void testPerformCall() {
-		checkException(() -> BaseWebService.performCall("", sd -> true
+		checkException(() -> new BaseWebService() {}.performCall("", sd -> true
 				, sd -> { throw new RuntimeException("test"); }));
 	}
 }

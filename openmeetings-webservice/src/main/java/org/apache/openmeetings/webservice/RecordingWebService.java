@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -58,9 +59,9 @@ import org.springframework.stereotype.Service;
 public class RecordingWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(RecordingWebService.class);
 
-	private static RecordingDao getDao() {
-		return getBean(RecordingDao.class);
-	}
+	@Autowired
+	private RecordingDao recordingDao;
+
 	/**
 	 * Deletes a flv recording
 	 *
@@ -75,8 +76,7 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			RecordingDao dao = getDao();
-			dao.delete(dao.get(id));
+			recordingDao.delete(recordingDao.get(id));
 			return new ServiceResult("Deleted", Type.SUCCESS);
 		});
 	}
@@ -97,7 +97,7 @@ public class RecordingWebService extends BaseWebService {
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType
 			, @PathParam("externalid") @WebParam(name="externalid") String externalId) {
 		log.debug("getExternal:: type {}, id {}", externalType, externalId);
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(getDao().getByExternalId(externalId, externalType)));
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByExternalId(externalId, externalType)));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/{externaltype}")
 	public List<RecordingDTO> getExternalByType(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("externaltype") @WebParam(name="externaltype") String externalType) {
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(getDao().getByExternalType(externalType)));
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByExternalType(externalType)));
 	}
 
 	/**
@@ -131,6 +131,6 @@ public class RecordingWebService extends BaseWebService {
 	@Path("/room/{roomid}")
 	public List<RecordingDTO> getExternalByRoom(@WebParam(name="sid") @QueryParam("sid") String sid
 			, @PathParam("roomid") @WebParam(name="roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(getDao().getByRoomId(roomId)));
+		return performCall(sid, User.Right.Soap, sd -> RecordingDTO.list(recordingDao.getByRoomId(roomId)));
 	}
 }

@@ -465,6 +465,7 @@
 						<backups.dir>${old-backups.dir}</backups.dir>
 						<catalina.useNaming>true</catalina.useNaming>
 						<current_openmeetings_log_dir>${project.build.directory}</current_openmeetings_log_dir>
+						<current_openmeetings_context_name>openmeetings</current_openmeetings_context_name>
 					</systemPropertyVariables>
 					<skip>${maven.test.skip}</skip>
 				</configuration>

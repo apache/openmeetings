@@ -40,7 +40,6 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.apache.openmeetings.core.data.file.FileProcessor;
-import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.file.FileExplorerObject;
@@ -53,6 +52,7 @@ import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -71,6 +71,9 @@ import org.springframework.stereotype.Service;
 public class FileWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(FileWebService.class);
 
+	@Autowired
+	private FileProcessor fileProcessor;
+
 	/**
 	 * deletes files or folders based on it id
 	 *
@@ -83,8 +86,7 @@ public class FileWebService extends BaseWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
-		FileItemDao dao = getFileDao();
-		FileItem f = dao.get(id);
+		FileItem f = fileDao.get(id);
 		return performCall(sid, sd -> {
 				Long userId = sd.getUserId();
 				Set<Right> rights = getRights(userId);
@@ -95,7 +97,7 @@ public class FileWebService extends BaseWebService {
 				if (f == null) {
 					return new ServiceResult("Bad id", Type.ERROR);
 				}
-				dao.delete(f);
+				fileDao.delete(f);
 				return new ServiceResult("Deleted", Type.SUCCESS);
 			});
 	}
@@ -121,9 +123,8 @@ public class FileWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
-			FileItemDao dao = getFileDao();
-			FileItem f = dao.get(externalId, externalType);
-			dao.delete(f);
+			FileItem f = fileDao.get(externalId, externalType);
+			fileDao.delete(f);
 			return new ServiceResult("Deleted", Type.SUCCESS);
 		});
 	}
@@ -157,7 +158,7 @@ public class FileWebService extends BaseWebService {
 			f.setInsertedBy(sd.getUserId());
 			if (stream != null) {
 				try {
-					ProcessResultList result = getBean(FileProcessor.class).processFile(f, stream);
+					ProcessResultList result = fileProcessor.processFile(f, stream);
 					if (result.hasError()) {
 						throw new ServiceException(result.getLogMessage());
 					}
@@ -165,7 +166,7 @@ public class FileWebService extends BaseWebService {
 					throw new ServiceException(e.getMessage());
 				}
 			} else {
-				f = getFileDao().update(f);
+				f = fileDao.update(f);
 			}
 			return new FileItemDTO(f);
 		});
@@ -189,16 +190,15 @@ public class FileWebService extends BaseWebService {
 	{
 		log.debug("getRoom::roomId {}", roomId);
 		return performCall(sid, User.Right.Room, sd -> {
-			FileItemDao dao = getFileDao();
 			FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 			// Home File List
-			List<FileItem> fList = dao.getByOwner(sd.getUserId());
-			fileExplorerObject.setUser(fList, dao.getSize(fList));
+			List<FileItem> fList = fileDao.getByOwner(sd.getUserId());
+			fileExplorerObject.setUser(fList, fileDao.getSize(fList));
 
 			// Public File List
-			List<FileItem> rList = dao.getByRoom(roomId);
-			fileExplorerObject.setRoom(rList, dao.getSize(rList));
+			List<FileItem> rList = fileDao.getByRoom(roomId);
+			fileExplorerObject.setRoom(rList, fileDao.getSize(rList));
 
 			return fileExplorerObject;
 		});
@@ -226,16 +226,15 @@ public class FileWebService extends BaseWebService {
 	{
 		log.debug("getRoomByParent {}", parentId);
 		return performCall(sid, User.Right.Room, sd -> {
-			FileItemDao dao = getFileDao();
 			List<FileItem> list;
 			if (parentId < 0) {
 				if (parentId == -1) {
-					list = dao.getByOwner(sd.getUserId());
+					list = fileDao.getByOwner(sd.getUserId());
 				} else {
-					list = dao.getByRoom(roomId);
+					list = fileDao.getByRoom(roomId);
 				}
 			} else {
-				list = dao.getByParent(parentId);
+				list = fileDao.getByParent(parentId);
 			}
 			return FileItemDTO.list(list);
 		});
@@ -262,7 +261,7 @@ public class FileWebService extends BaseWebService {
 	{
 		log.debug("rename {}", id);
 		return performCall(sid, User.Right.Soap, sd -> {
-			FileItem f = getFileDao().rename(id, name);
+			FileItem f = fileDao.rename(id, name);
 			return f == null ? null : new FileItemDTO(f);
 		});
 	}
@@ -290,7 +289,7 @@ public class FileWebService extends BaseWebService {
 	{
 		log.debug("move {}", id);
 		return performCall(sid, User.Right.Soap, sd -> {
-			FileItem f = getFileDao().move(id, parentId, sd.getUserId(), roomId);
+			FileItem f = fileDao.move(id, parentId, sd.getUserId(), roomId);
 			return f == null ? null : new FileItemDTO(f);
 		});
 	}

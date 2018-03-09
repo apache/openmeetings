@@ -46,8 +46,6 @@ import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
@@ -69,6 +67,7 @@ import org.apache.wicket.validation.Validatable;
 import org.apache.wicket.validation.ValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -87,6 +86,15 @@ import org.springframework.stereotype.Service;
 public class UserWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 
+	@Autowired
+	private ConfigurationDao cfgDao;
+	@Autowired
+	private UserManager userManager;
+	@Autowired
+	private IClientManager clientManager;
+	@Autowired
+	private SOAPLoginDao soapDao;
+
 	/**
 	 * @param user - login or email of Openmeetings user with admin or SOAP-rights
 	 * @param pass - password
@@ -99,12 +107,12 @@ public class UserWebService extends BaseWebService {
 	public ServiceResult login(@WebParam(name="user") @QueryParam("user") String user, @WebParam(name="pass") @QueryParam("pass") String pass) {
 		try {
 			log.debug("Login user");
-			User u = getUserDao().login(user, pass);
+			User u = userDao.login(user, pass);
 			if (u == null) {
 				return new ServiceResult("error.bad.credentials", Type.ERROR);
 			}
 
-			Sessiondata sd = getSessionDao().create(u.getId(), u.getLanguageId());
+			Sessiondata sd = sessionDao.create(u.getId(), u.getLanguageId());
 			log.debug("Login user: {}", u.getId());
 			return new ServiceResult(sd.getSessionId(), Type.SUCCESS);
 		} catch (OmException oe) {
@@ -127,7 +135,7 @@ public class UserWebService extends BaseWebService {
 	@GET
 	@Path("/")
 	public List<UserDTO> get(@WebParam(name="sid") @QueryParam("sid") String sid) {
-		return performCall(sid, User.Right.Soap, sd -> UserDTO.list(getUserDao().getAllUsers()));
+		return performCall(sid, User.Right.Soap, sd -> UserDTO.list(userDao.getAllUsers()));
 	}
 
 	/**
@@ -153,7 +161,6 @@ public class UserWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
-			UserDao userDao = getUserDao();
 			User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
 			if (testUser != null) {
@@ -171,7 +178,6 @@ public class UserWebService extends BaseWebService {
 			if (user.getLanguageId() == null) {
 				user.setLanguageId(1L);
 			}
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), user.get(userDao));
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
 			passValidator.validate(passVal);
@@ -183,7 +189,7 @@ public class UserWebService extends BaseWebService {
 				log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
 				throw new ServiceException(sb.toString());
 			}
-			Object _user = getBean(UserManager.class).registerUser(user.getLogin(), user.getPassword(),
+			Object _user = userManager.registerUser(user.getLogin(), user.getPassword(),
 					user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
 					user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
 					, user.getAddress().getTown(), user.getLanguageId(),
@@ -231,7 +237,6 @@ public class UserWebService extends BaseWebService {
 	@Path("/{id}")
 	public ServiceResult delete(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Admin, sd -> {
-			UserDao userDao = getUserDao();
 			userDao.delete(userDao.get(id), sd.getUserId());
 
 			return new ServiceResult("Deleted", Type.SUCCESS);
@@ -260,7 +265,6 @@ public class UserWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Admin, sd -> {
-			UserDao userDao = getUserDao();
 			User user = userDao.getExternalUser(externalId, externalType);
 
 			// Setting user deleted
@@ -305,7 +309,7 @@ public class UserWebService extends BaseWebService {
 
 			log.debug("xmlString " + xmlString);
 
-			String hash = getBean(SOAPLoginDao.class).addSOAPLogin(sid, options.getRoomId(),
+			String hash = soapDao.addSOAPLogin(sid, options.getRoomId(),
 					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
 					options.getRecordingId(),
 					options.isAllowRecording()
@@ -316,7 +320,7 @@ public class UserWebService extends BaseWebService {
 					sd.setPermanent(true);
 				}
 				sd.setXml(xmlString);
-				getSessionDao().update(sd);
+				sessionDao.update(sd);
 				return new ServiceResult(hash, Type.SUCCESS);
 			}
 			return UNKNOWN;
@@ -336,7 +340,7 @@ public class UserWebService extends BaseWebService {
 	@Path("/kick/{uid}")
 	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			boolean success = getBean(IUserManager.class).kickById(uid);
+			boolean success = userManager.kickById(uid);
 
 			return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
 		});
@@ -354,6 +358,6 @@ public class UserWebService extends BaseWebService {
 	@GET
 	@Path("/count/{roomid}")
 	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(getBean(IClientManager.class).listByRoom(roomId).size()), Type.SUCCESS));
+		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
 	}
 }

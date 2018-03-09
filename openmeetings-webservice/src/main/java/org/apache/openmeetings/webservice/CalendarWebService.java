@@ -40,7 +40,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
-import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
@@ -51,6 +50,7 @@ import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -67,9 +67,8 @@ import org.springframework.stereotype.Service;
 public class CalendarWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(CalendarWebService.class);
 
-	private static AppointmentDao getDao() {
-		return getBean(AppointmentDao.class);
-	}
+	@Autowired
+	private AppointmentDao dao;
 	/**
 	 * Load appointments by a start / end range for the current SID
 	 *
@@ -93,7 +92,7 @@ public class CalendarWebService extends BaseWebService {
 				, start == null ? "" : start.getTime()
 				, end == null ? "" : end.getTime());
 		return performCall(sid, User.Right.Room
-				, sd -> AppointmentDTO.list(getDao().getInRange(sd.getUserId(), start.getTime(), end.getTime())));
+				, sd -> AppointmentDTO.list(dao.getInRange(sd.getUserId(), start.getTime(), end.getTime())));
 	}
 
 	/**
@@ -123,7 +122,7 @@ public class CalendarWebService extends BaseWebService {
 				, start == null ? "" : start.getTime()
 				, end == null ? "" : end.getTime());
 		return performCall(sid, User.Right.Soap
-				, sd -> AppointmentDTO.list(getDao().getInRange(userid, start.getTime(), end.getTime())));
+				, sd -> AppointmentDTO.list(dao.getInRange(userid, start.getTime(), end.getTime())));
 	}
 
 	/**
@@ -137,7 +136,7 @@ public class CalendarWebService extends BaseWebService {
 	@Path("/next")
 	public AppointmentDTO next(@QueryParam("sid") @WebParam(name="sid") String sid) {
 		return performCall(sid, User.Right.Room, sd -> {
-			Appointment a = getDao().getNext(sd.getUserId(), new Date());
+			Appointment a = dao.getNext(sd.getUserId(), new Date());
 			return a == null ? null : new AppointmentDTO(a);
 		});
 	}
@@ -156,7 +155,7 @@ public class CalendarWebService extends BaseWebService {
 	@Path("/next/{userid}")
 	public AppointmentDTO nextForUser(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("userid") @WebParam(name="userid") long userid) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			Appointment a = getDao().getNext(userid, new Date());
+			Appointment a = dao.getNext(userid, new Date());
 			return a == null ? null : new AppointmentDTO(a);
 		});
 	}
@@ -175,7 +174,7 @@ public class CalendarWebService extends BaseWebService {
 	@Path("/room/{roomid}")
 	public AppointmentDTO getByRoom(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("roomid") @WebParam(name="roomid") long roomid) {
 		return performCall(sid, User.Right.Room, sd -> {
-			Appointment a = getDao().getByRoom(sd.getUserId(), roomid);
+			Appointment a = dao.getByRoom(sd.getUserId(), roomid);
 			return a == null ? null : new AppointmentDTO(a);
 		});
 	}
@@ -193,7 +192,7 @@ public class CalendarWebService extends BaseWebService {
 	@GET
 	@Path("/title/{title}")
 	public List<AppointmentDTO> getByTitle(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("title") @WebParam(name="title") String title) {
-		return performCall(sid, User.Right.Room, sd -> AppointmentDTO.list(getDao().searchByTitle(sd.getUserId(), title)));
+		return performCall(sid, User.Right.Room, sd -> AppointmentDTO.list(dao.searchByTitle(sd.getUserId(), title)));
 	}
 
 	/**
@@ -213,7 +212,6 @@ public class CalendarWebService extends BaseWebService {
 		//Seems to be create
 		log.debug("save SID: {}", sid);
 
-		UserDao userDao = getUserDao();
 		return performCall(sid, sd -> {
 				User u = userDao.get(sd.getUserId());
 				if (!AuthLevelUtil.hasUserLevel(u.getRights())) {
@@ -225,13 +223,12 @@ public class CalendarWebService extends BaseWebService {
 						|| appointment.getOwner().getId().equals(u.getId());
 			}, sd -> {
 				User u = userDao.get(sd.getUserId());
-				AppointmentDao dao = getDao();
-				Appointment a = appointment.get(userDao, getFileDao(), dao, u);
+				Appointment a = appointment.get(userDao, fileDao, dao, u);
 				if (a.getRoom().getId() != null) {
 					if (a.getRoom().isAppointment()) {
 						a.getRoom().setIspublic(false);
 					} else {
-						a.setRoom(getRoomDao().get(a.getRoom().getId()));
+						a.setRoom(roomDao.get(a.getRoom().getId()));
 					}
 				}
 				return new AppointmentDTO(dao.update(a, u.getId()));
@@ -256,7 +253,6 @@ public class CalendarWebService extends BaseWebService {
 	@DELETE
 	@Path("/{id}")
 	public ServiceResult delete(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("id") @WebParam(name="id") Long id) {
-		AppointmentDao dao = getDao();
 		Appointment a = dao.get(id);
 		return performCall(sid, sd -> {
 				Set<Right> rights = getRights(sd.getUserId());
