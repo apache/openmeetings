@@ -21,6 +21,9 @@ package org.apache.openmeetings.core.remote;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.manager.IClientManager;
@@ -37,12 +40,29 @@ import com.github.openjson.JSONObject;
 public class KurentoHandler {
 	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
 	public final static String KURENTO_TYPE = "kurento";
-	private final KurentoClient client = KurentoClient.create();
+	private KurentoClient client;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
 
 	@Autowired
 	private IClientManager clientManager;
+
+	@PostConstruct
+	private void init() {
+		try {
+			// TODO check connection, reconnect, listeners etc.
+			client = KurentoClient.create();
+		} catch (Exception e) {
+			log.error("Fail to create Kurento client", e);
+		}
+	}
+
+	@PreDestroy
+	private void destroy() {
+		if (client != null) {
+			destroy();
+		}
+	}
 
 	public void onMessage(String uid, JSONObject msg) {
 		final Client c = clientManager.get(uid);
