@@ -23,10 +23,12 @@ import java.io.Closeable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.kurento.client.ConnectionStateChangedEvent;
 import org.kurento.client.Continuation;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.IceCandidateFoundEvent;
+import org.kurento.client.MediaFlowOutStateChangeEvent;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
@@ -53,10 +55,11 @@ public class KUser implements Closeable {
 		this.pipeline = pipeline;
 		this.uid = uid;
 		this.roomId = roomId;
-		this.outgoingMedia = new WebRtcEndpoint.Builder(pipeline).build();
+		//TODO Min/MaxVideoSendBandwidth
+		//TODO Min/Max Audio/Video RecvBandwidth
+		outgoingMedia = new WebRtcEndpoint.Builder(pipeline).build();
 
-		this.outgoingMedia.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-
+		outgoingMedia.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 			@Override
 			public void onEvent(IceCandidateFoundEvent event) {
 				JSONObject response = newKurentoMsg();
@@ -64,6 +67,19 @@ public class KUser implements Closeable {
 				response.put("uid", uid);
 				response.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate())));
 				h.sendClient(uid, response);
+			}
+		});
+		//TODO add logic here
+		outgoingMedia.addConnectionStateChangedListener(new EventListener<ConnectionStateChangedEvent>() {
+			@Override
+			public void onEvent(ConnectionStateChangedEvent event) {
+				log.warn("StateChanged {} -> {}", event.getOldState(), event.getNewState());
+			}
+		});
+		outgoingMedia.addMediaFlowOutStateChangeListener(new EventListener<MediaFlowOutStateChangeEvent>() {
+			@Override
+			public void onEvent(MediaFlowOutStateChangeEvent event) {
+				log.warn("MediaFlowOutStateChange {}", event.getState());
 			}
 		});
 	}
