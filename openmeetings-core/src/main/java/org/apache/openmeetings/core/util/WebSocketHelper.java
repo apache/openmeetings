@@ -46,11 +46,13 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.Application;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -211,19 +213,24 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageAll(m));
 		}
-		Application app = (Application)getApp();
-		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
-		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor();
-		for (IWebSocketConnection c : reg.getConnections(app)) {
-			executor.run(() -> {
-				try {
-					c.sendMessage(m);
-				} catch (IOException e) {
-					log.error("Error while sending message to ALL", e);
-				}
-			});
-		}
+		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
+		new Thread(() -> {
+			Application app = (Application)getApp();
+			ThreadContext.setRequestCycle(requestCycle);
+			ThreadContext.setApplication(app);
+			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+			Executor executor = settings.getWebSocketPushMessageExecutor();
+			for (IWebSocketConnection c : reg.getConnections(app)) {
+				executor.run(() -> {
+					try {
+						c.sendMessage(m);
+					} catch (IOException e) {
+						log.error("Error while sending message to ALL", e);
+					}
+				});
+			}
+		}).start();
 	}
 
 	protected static void publish(IClusterWsMessage m) {
@@ -250,8 +257,11 @@ public class WebSocketHelper {
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
+		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
 		new Thread(() -> {
 			Application app = (Application)getApp();
+			ThreadContext.setRequestCycle(requestCycle);
+			ThreadContext.setApplication(app);
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();
