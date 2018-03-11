@@ -18,6 +18,9 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_SRC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM__SRC;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -197,13 +200,13 @@ public class Whiteboard implements Serializable {
 			JSONObject o = new JSONObject(e.getValue());
 			//filtering
 			if ("Clipart".equals(o.opt("omType"))) {
-				if (o.has("_src")) {
-					o.put("src", o.get("_src"));
+				if (o.has(PARAM__SRC)) {
+					o.put(PARAM_SRC, o.get(PARAM__SRC));
 				}
 			} else {
-				o.remove("src");
+				o.remove(PARAM_SRC);
 			}
-			o.remove("_src");
+			o.remove(PARAM__SRC);
 			items.put(e.getKey(), o);
 		}
 		json.put(ITEMS_KEY, items);
