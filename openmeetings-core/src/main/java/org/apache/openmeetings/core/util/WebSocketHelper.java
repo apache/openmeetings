@@ -47,13 +47,11 @@ import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.Application;
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.protocol.ws.WebSocketSettings;
 import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
 import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
 import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
 import org.apache.wicket.protocol.ws.concurrent.Executor;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
@@ -202,11 +200,8 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageAll(m));
 		}
-		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
 		new Thread(() -> {
 			Application app = (Application)getApp();
-			ThreadContext.setRequestCycle(requestCycle);
-			ThreadContext.setApplication(app);
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();
@@ -246,11 +241,8 @@ public class WebSocketHelper {
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
-		final RequestCycle requestCycle = ThreadContext.getRequestCycle();
 		new Thread(() -> {
 			Application app = (Application)getApp();
-			ThreadContext.setRequestCycle(requestCycle);
-			ThreadContext.setApplication(app);
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
 			Executor executor = settings.getWebSocketPushMessageExecutor();
