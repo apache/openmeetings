@@ -60,7 +60,7 @@
 					}
 					var ib = e.closest('table').find('.logo-square');
 					l.css('background-image', 'url(' + ib.attr('src') + ')');
-					$('#Preview')[0].scrollIntoView();
+					$('#_toc_preview')[0].scrollIntoView();
 				}
 			//]]>
 			</script>
@@ -135,6 +135,18 @@
 						<tr>
 							<td>Author</td>
 							<td>Kristopher Herrick</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-big" src="images/logos/logo_om_big8.png" alt="Apache OpenMeetings"/></td>
+							<td><span class="btn btn-primary" onclick="applyLogoBig($(this));">Apply</span></td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Rick Irish</td>
 						</tr>
 					</table>
 				</li>
@@ -246,6 +258,18 @@
 						<tr>
 							<td>Author</td>
 							<td>Kristopher Herrick</td>
+						</tr>
+					</table>
+				</li>
+				<li>
+					<table>
+						<tr>
+							<td><img class="logo-square" src="images/logos/logo_om_small12.png" alt="Square version" width="50"/></td>
+							<td><span class="btn btn-primary" onclick="applyLogoSmall($(this));">Apply</span></td>
+						</tr>
+						<tr>
+							<td>Author</td>
+							<td>Rick Irish</td>
 						</tr>
 					</table>
 				</li>
