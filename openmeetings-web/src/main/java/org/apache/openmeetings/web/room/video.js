@@ -198,7 +198,9 @@ var Video = (function() {
 		o.type = c.type;
 		delete o.keycode;
 
-		video = $('<video>').attr('id', 'vid' + _id).width(o.width).height(o.height)
+		video = $('<video>').attr('id', 'vid' + _id)
+			.attr('poster', 'profile/' + o.userId + '?anti=' + new Date().time) //TODO add normal URL
+			.width(o.width).height(o.height)
 			.prop('autoplay', true).prop('controls', false);
 
 		vc.append(video);

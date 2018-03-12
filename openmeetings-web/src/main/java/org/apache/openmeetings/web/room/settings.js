@@ -18,16 +18,16 @@ var VideoSettings = (function() {
 			VideoManager.refresh(o.uid, s.video);
 		}
 	}
-	function _clear() {
-		if (vid.length === 1) {
-			const ms = vid[0].srcObject;
-			if (ms !== null && 'function' === typeof(ms.getAudioTracks)) {
-				ms.getAudioTracks().forEach(function(track) {
-					track.stop();
-				});
-				ms.getVideoTracks().forEach(function(track) {
-					track.stop();
-				});
+	function _clear(_ms) {
+		const ms = _ms || (vid.length === 1 ? vid[0].srcObject : null);
+		if (ms !== null && 'function' === typeof(ms.getAudioTracks)) {
+			ms.getAudioTracks().forEach(function(track) {
+				track.stop();
+			});
+			ms.getVideoTracks().forEach(function(track) {
+				track.stop();
+			});
+			if (vid.length === 1) {
 				vid[0].srcObject = null;
 			}
 		}
@@ -74,6 +74,9 @@ var VideoSettings = (function() {
 					}
 				}
 			]
+			, close: function() {
+				_clear();
+			}
 		});
 		lm.progressbar({ value: 0 });
 		o.width = 300;
@@ -167,11 +170,13 @@ var VideoSettings = (function() {
 		mic.find('option[value!="-1"]').remove();
 		navigator.mediaDevices.getUserMedia({video:true, audio:true})
 			.then(function(stream) {
-				return navigator.mediaDevices.enumerateDevices()
+				const devices = navigator.mediaDevices.enumerateDevices()
 					.then(function(devices) {
 						return devices;
 					})
 					.catch(function(err) { throw err; });
+				_clear(stream);
+				return devices;
 			})
 			.then(function(devices) {
 				let cCount = 0, mCount = 0;
@@ -219,6 +224,7 @@ var VideoSettings = (function() {
 	function _open() {
 		recAllowed = false;
 		vs.dialog('open');
+		_load();
 		_initDevices();
 	}
 	return {
