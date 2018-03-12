@@ -33,7 +33,7 @@
 			</p>
 			<p>
 				REFERENCES -> permalink to the announce email in archives<br/>
-				Going forward, please include the product and version information in the description itself 
+				Going forward, please include the <b>product and version information</b> in the <b>description</b> itself
 				as well as in the "[PRODUCT]" and "[VERSION]" lines in your submissions. 
 				While this may seem redundant, including the information in both places satisfies different use cases and supports automation.
 			</p>
