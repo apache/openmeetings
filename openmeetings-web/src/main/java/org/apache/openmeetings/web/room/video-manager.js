@@ -106,9 +106,6 @@ var VideoManager = (function() {
 	}
 	
 	function _init() {
-		if ($(WB_AREA_SEL + ' .wb-area .tabs').length > 0) {
-			WBA_SEL = WBA_WB_SEL;
-		}
 		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
@@ -176,7 +173,7 @@ var VideoManager = (function() {
 			share.tooltip().off('click').click(function() {
 				const v = $('#' + VideoUtil.getVid(c.uid))
 				if (v.length !== 1) {
-					Video().init(c, $(WBA_SEL).offset());
+					Video().init(c, VideoUtil.container().offset());
 				} else {
 					v.dialog('open');
 				}
