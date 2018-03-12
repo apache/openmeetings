@@ -1,7 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 const WB_AREA_SEL = '.room.wb.area';
 const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
-var WBA_SEL = WB_AREA_SEL;
 const VID_SEL = '.video.user-video';
 var VideoUtil = (function() {
 	const self = {};
@@ -38,11 +37,16 @@ var VideoUtil = (function() {
 			, right: winoff.left + win.width()
 			, bottom: winoff.top + win.height()};
 	}
+	function _container() {
+		const a = $(WB_AREA_SEL);
+		const c = a.find('.wb-area .tabs .ui-tabs-panel');
+		return c.length > 0 ? $(WBA_WB_SEL) : a;
+	}
 	function _getPos(list, w, h) {
 		if (Room.getOptions().interview) {
 			return {left: 0, top: 0};
 		}
-		const wba = $(WBA_SEL), woffset = wba.offset()
+		const wba = _container(), woffset = wba.offset()
 			, offsetX = 20, offsetY = 10
 			, area = {left: woffset.left, top: woffset.top, right: woffset.left + wba.width(), bottom: woffset.top + wba.height()};
 		const rectNew = {
@@ -106,6 +110,7 @@ var VideoUtil = (function() {
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;
 	self.getPos = _getPos;
+	self.container = _container;
 	self.arrange = _arrange;
 	return self;
 })();

@@ -20,7 +20,7 @@ var Video = (function() {
 			return;
 		}
 		if (on) {
-			v.dialog("option", "position", {my: "center", at: "center", of: WBA_SEL});
+			v.dialog("option", "position", {my: "center", at: "center", of: VideoUtil.container()});
 		} else {
 			const h = _resizeDlg(size.width, size.height);
 			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));

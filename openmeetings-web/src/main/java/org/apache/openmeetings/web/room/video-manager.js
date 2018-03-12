@@ -4,9 +4,6 @@ var VideoManager = (function() {
 	let share, inited = false;
 
 	function _init() {
-		if ($(WB_AREA_SEL + ' .wb-area .tabs').length > 0) {
-			WBA_SEL = WBA_WB_SEL;
-		}
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 		inited = true;
@@ -68,7 +65,7 @@ var VideoManager = (function() {
 			share.tooltip().off('click').click(function() {
 				const v = $('#' + VideoUtil.getVid(c.uid))
 				if (v.length !== 1) {
-					Video().init(c, $(WBA_SEL).offset());
+					Video().init(c, VideoUtil.container().offset());
 				} else {
 					v.dialog('open');
 				}
