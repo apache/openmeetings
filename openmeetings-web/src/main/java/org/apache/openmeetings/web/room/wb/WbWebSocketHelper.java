@@ -136,7 +136,8 @@ public class WbWebSocketHelper extends WebSocketHelper {
 		return String.format("%s&uid=%s", url, c.getUid());
 	}
 
-	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject f) {
+	private static JSONObject patchUrls(BaseFileItem fi, Client c, JSONObject _f) {
+		JSONObject f = new JSONObject(_f.toString()); // deep copy to ensure thread safety
 		switch (fi.getType()) {
 			case Video:
 				f.put(PARAM__SRC, patchUrl(f.getString(PARAM__SRC), c));
