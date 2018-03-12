@@ -91,7 +91,7 @@ public class CleanupJob extends AbstractJob {
 					continue;
 				}
 				for (File file : files) {
-					log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
+					log.debug("expired TEST SETUP found: {}", file.getCanonicalPath());
 					file.delete();
 				}
 			}
@@ -126,7 +126,7 @@ public class CleanupJob extends AbstractJob {
 				if (roomId != null && streamClientManager.list(roomId).isEmpty()) {
 					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
 					if (files != null && files.length > 0) {
-						log.debug("Room files are too old and no users in the room: " + roomId);
+						log.debug("Room files are too old and no users in the room: {}", roomId);
 						FileUtils.deleteDirectory(folder);
 					}
 				}
