@@ -99,7 +99,7 @@ public class StartSharingButton extends OmButton {
 			Client c = getBean(ClientManager.class).get(uid);
 			String sid = c.getSid();
 			Long roomId = c.getRoom().getId();
-			JSONObject s = VideoSettings.getInitJson(WebSession.get().getExtendedProperties(), roomId, sid);
+			JSONObject s = VideoSettings.getInitJson(sid);
 			String _url = s.getString(VideoSettings.URL);
 			Room room = getBean(RoomDao.class).get(roomId);
 			StreamClientManager streamClientManager = getBean(StreamClientManager.class);

@@ -18,27 +18,21 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
-import java.net.URL;
-
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
 public class VideoSettings extends Panel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(VideoSettings.class);
 	private static final ResourceReference SETTINGS_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "settings.js");
 	public static final String URL = "url";
 	public static final String FALLBACK = "fallback";
@@ -53,71 +47,9 @@ public class VideoSettings extends Panel {
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(SETTINGS_JS_REFERENCE)));
 	}
 
-	/* FIXME TODO
-	private static String getUri(String protocol, String host, Object port, String app) {
-		return String.format("%s://%s:%s/%s", protocol, host, port, app);
-	}
-	*/
-
-	public static JSONObject getInitJson(ExtendedClientProperties cp, Long roomId, String sid) {
-		String scope = roomId == null ? OmFileHelper.HIBERNATE : String.valueOf(roomId);
-		//FIXME TODO JSONObject gs = OpenmeetingsVariables.getRoomSettings();
-		JSONObject s = new JSONObject()//FIXME TODO new JSONObject(gs.toString())
+	public static JSONObject getInitJson(String sid) {
+		return new JSONObject(getRoomSettings().toString())
 				.put("sid", sid)
-				.put("debug", DEVELOPMENT == Application.get().getConfigurationType())
-				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
-		try {
-			URL url = new URL(cp.getCodebase());
-			String path = url.getPath();
-			path = path.substring(1, path.indexOf('/', 2) + 1) + scope;
-			/* FIXME TODO
-			String host = getHost(roomId, url.getHost());
-			int port = url.getPort() > -1 ? url.getPort() : url.getDefaultPort();
-			if (gs.getBoolean(FLASH_SECURE)) {
-				s.put(URL, getUri("rtmps", host, gs.getString(FLASH_SSL_PORT), path));
-				s.put(FALLBACK, getUri("rtmps", host, port, path));
-			} else {
-				s.put(URL, getUri("rtmp", host, gs.getString(FLASH_PORT), path));
-				s.put(FALLBACK, getUri("rtmpt", host, port, path));
-			}
-			*/
-		} catch (Exception e) {
-			log.error("Error while constructing video settings parameters", e);
-		}
-		return s;
+				.put("debug", DEVELOPMENT == Application.get().getConfigurationType());
 	}
-
-	/* FIXME TODO
-	private static String getHost(Long roomId, String _host) {
-		if (roomId == null) {
-			return _host;
-		}
-		long minimum = -1;
-		Member result = null;
-		Map<Member, Set<Long>> activeRoomsMap = new HashMap<>();
-		List<Member> servers = Application.get().getServers();
-		if (servers.size() > 1) {
-			for (Member m : servers) {
-				String serverId = m.getStringAttribute(NAME_ATTR_KEY);
-				Set<Long> roomIds = getBean(StreamClientManager.class).getActiveRoomIds(serverId);
-				if (roomIds.contains(roomId)) {
-					// if the room is already opened on a server, redirect the user to that one,
-					log.debug("Room is already opened on a server {}", m.getAddress());
-					return m.getAddress().getHost();
-				}
-				activeRoomsMap.put(m, roomIds);
-			}
-			for (Map.Entry<Member, Set<Long>> entry : activeRoomsMap.entrySet()) {
-				Set<Long> roomIds = entry.getValue();
-				long capacity = getBean(RoomDao.class).getRoomsCapacityByIds(roomIds);
-				if (minimum < 0 || capacity < minimum) {
-					minimum = capacity;
-					result = entry.getKey();
-				}
-				log.debug("Checking server: {} Number of rooms {} RoomIds: {} max(Sum): {}", entry.getKey(), roomIds.size(), roomIds, capacity);
-			}
-		}
-		return result == null ? _host : result.getAddress().getHost();
-	}
-	*/
 }

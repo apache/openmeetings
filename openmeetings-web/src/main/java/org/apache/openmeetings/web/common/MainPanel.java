@@ -23,7 +23,6 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getParam;
@@ -123,6 +122,14 @@ public class MainPanel extends Panel {
 
 	@SpringBean
 	private KurentoHandler kHandler;
+	@SpringBean
+	private ClientManager clientManager;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public MainPanel(String id) {
 		this(id, null);
@@ -142,9 +149,9 @@ public class MainPanel extends Panel {
 			protected void onConnect(ConnectedMessage msg) {
 				super.onConnect(msg);
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
-				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), getBean(UserDao.class));
+				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), userDao);
 				uid = client.getUid();
-				getBean(ClientManager.class).add(cp.update(client));
+				clientManager.add(cp.update(client));
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
 
@@ -196,7 +203,7 @@ public class MainPanel extends Panel {
 				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
 				//no chance to stop pingTimer here :(
 				if (uid != null) {
-					getBean(ClientManager.class).exit(getClient());
+					clientManager.exit(getClient());
 					uid = null;
 				}
 			}
@@ -347,10 +354,10 @@ public class MainPanel extends Panel {
 			List<IMenuItem> l = new ArrayList<>();
 			l.add(getSubItem("777", "1506", MenuActions.conferenceModuleRoomList, MenuParams.publicTabButton));
 			l.add(getSubItem("779", "1507", MenuActions.conferenceModuleRoomList, MenuParams.privateTabButton));
-			if (getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true)) {
+			if (cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true)) {
 				l.add(getSubItem("781", "1508", MenuActions.conferenceModuleRoomList, MenuParams.myTabButton));
 			}
-			List<Room> recent = getBean(RoomDao.class).getRecent(getUserId());
+			List<Room> recent = roomDao.getRecent(getUserId());
 			if (!recent.isEmpty()) {
 				l.add(new OmMenuItem(DELIMITER, (String)null));
 			}
@@ -456,6 +463,6 @@ public class MainPanel extends Panel {
 	}
 
 	public Client getClient() {
-		return getBean(ClientManager.class).get(uid);
+		return clientManager.get(uid);
 	}
 }

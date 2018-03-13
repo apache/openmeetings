@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var VideoSettings = (function() {
-	let vs, lm, s, cam, mic, res, o
+	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp
 		, vidScroll, vid, recBtn, playBtn, recAllowed = false;
 	function _load() {
 		s = Settings.load();
@@ -31,6 +31,11 @@ var VideoSettings = (function() {
 				vid[0].srcObject = null;
 			}
 		}
+		if (!!rtcPeer) {
+			rtcPeer.dispose();
+		}
+		offerSdp = null;
+		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
 	}
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
@@ -43,7 +48,19 @@ var VideoSettings = (function() {
 		vid = vidScroll.find('video');
 		recBtn = vs.find('.rec-start').click(function() {
 			recBtn.prop('disabled', true).button('refresh'); //TODO disable drop-downs
-			//FIXME TODO swf.startRec();
+			cam.prop('disabled', true);
+			mic.prop('disabled', true);
+			res.prop('disabled', true);
+
+			console.info('Invoking SDP offer callback function');
+			const cnts = _constraints();
+			OmUtil.sendMessage({
+				id : 'testStart'
+				, type: 'kurento'
+				, sdpOffer: offerSdp
+				, video: cnts.video !== false
+				, audio: cnts.audio !== false
+			});
 		});
 		playBtn = vs.find('.play').click(function() {
 			//FIXME TODO swf.play();
@@ -98,6 +115,34 @@ var VideoSettings = (function() {
 	function _updateRec() {
 		recBtn.prop('disabled', !recAllowed && (s.video.cam > -1 || s.video.mic > -1)).button('refresh');
 	}
+	function _constraints() {
+		const cnts = {}
+			, v = cam.find('option:selected')
+			, m = mic.find('option:selected');
+		//TODO add check if constraint is supported
+		if (s.video.cam > -1) {
+			cnts.video = {
+				width: s.video.width
+				, height: s.video.height
+				, deviceId: { exact: v.data('device-id')  }
+				, frameRate: { max: 30 }
+			};
+		} else {
+			cnts.video = false;
+		}
+		//TODO enable audio for recordings only
+		if (s.video.mic > -1) {
+			//TODO remove hardcodings
+			cnts.audio = {
+				sampleSize: 22
+				, deviceId: { exact: m.data('device-id')  }
+				, echoCancellation: true
+			};
+		} else {
+			cnts.audio = false;
+		}
+		return cnts;
+	}
 	function _readValues() {
 		const v = cam.find('option:selected')
 			, m = mic.find('option:selected')
@@ -110,37 +155,34 @@ var VideoSettings = (function() {
 		vidScroll.scrollLeft(Math.max(0, s.video.width / 2 - 150))
 			.scrollTop(Math.max(0, s.video.height / 2 - 110));
 		_clear();
-		let enabled = false;
-		const constraints = {};
-		//TODO add check if constraint is supported
-		if (s.video.cam > -1) {
-			constraints.video = {
-				width: o.width
-				, height: o.height
-				, deviceId: { exact: v.data('device-id')  }
-				, frameRate: { max: 30 }
-			};
-			enabled = true;
-		} else {
-			constraints.video = false;
-		}
-		//TODO enable audio for recordings only
-		if (s.video.mic > -1) {
-			constraints.audio = {
-				sampleSize: 22
-				, echoCancellation: true
-			};
-			enabled = true;
-		} else {
-			constraints.audio = false;
-		}
-		if (enabled) {
-			navigator.mediaDevices.getUserMedia(constraints)
-				.then(function(stream) {
-					vid[0].srcObject = stream;
-				})
-				.catch(function(err) {
-					_error(err.name + ": " + err.message);
+		const cnts = _constraints();
+		if (cnts.video !== false || cnts.audio !== false) {
+			const options = {
+				localVideo: vid[0]
+				, mediaConstraints: cnts
+				, onicecandidate: function (candidate) {
+					console.log('Local candidate' + JSON.stringify(candidate));
+					OmUtil.sendMessage({
+						id : 'onTestIceCandidate'
+						, type: 'kurento'
+						, candidate: candidate
+					});
+				}
+
+			}
+			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+				options
+				, function(error) {
+					if (error) {
+						return _error(error);
+					}
+					rtcPeer.generateOffer(function(error, _offerSdp) {
+						if (error) {
+							return console.error('Error generating the offer');
+						}
+						offerSdp = _offerSdp;
+						_allowRec(true);
+					});
 				});
 		}
 		_updateRec();
@@ -159,7 +201,7 @@ var VideoSettings = (function() {
 	}
 	function _error(msg) {
 		//FIXME TODO status field
-		console.error(msg);
+		return console.error(msg);
 	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
@@ -222,17 +264,55 @@ var VideoSettings = (function() {
 			});
 	}
 	function _open() {
+		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		recAllowed = false;
 		vs.dialog('open');
 		_load();
 		_initDevices();
 	}
+	//FIXME TODO, try to unify this
+	function _onWsMessage(jqEvent, msg) {
+		try {
+			if (msg instanceof Blob) {
+				return; //ping
+			}
+			const m = jQuery.parseJSON(msg);
+			if (m && 'kurento' === m.type) {
+				console.info('Received message: ' + m);
+				/* FIXME TODO
+				switch (m.id) {
+					case 'broadcast':
+						onBroadcast(m);
+						break;
+					case 'videoResponse':
+						onVideoResponse(m);
+						break;
+					case 'iceCandidate':
+						{
+							const w = $('#' + VideoUtil.getVid(m.uid))
+								, v = w.data()
+
+							v.getPeer().addIceCandidate(m.candidate, function (error) {
+								if (error) {
+									console.error("Error adding candidate: " + error);
+									return;
+								}
+							});
+						}
+						break;
+					default:
+						console.error('Unrecognized message', m);
+				}
+				*/
+			}
+		} catch (err) {
+			//no-op
+			console.error(err);
+		}
+	}
 	return {
 		init: _init
 		, open: _open
-		, allowRec: _allowRec
-		, allowPlay: _allowPlay
-		, micActivity: _micActivity
 		, close: function() { vs.dialog('close'); }
 		, load: _load
 		, save: _save

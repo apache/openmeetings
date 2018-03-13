@@ -98,6 +98,10 @@ public class KurentoHandler {
 						candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
 				user.addCandidate(cand, msg.getString("uid"));
 				break;
+			case "testStart":
+				break;
+			case "onTestIceCandidate":
+				break;
 			default:
 				break;
 		}
@@ -149,7 +153,7 @@ public class KurentoHandler {
 	}
 
 	public KUser getByUid(String uid) {
-		return usersByUid.get(uid);
+		return uid == null ? null : usersByUid.get(uid);
 	}
 
 	public boolean exists(String name) {

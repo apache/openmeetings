@@ -129,7 +129,7 @@ public class RoomPanel extends BasePanel {
 					, cp.getRemoteAddress()
 					, "" + r.getId());
 			Client _c = getClient();
-			JSONObject options = VideoSettings.getInitJson(cp, r.getId(), _c.getSid())
+			JSONObject options = VideoSettings.getInitJson(_c.getSid())
 					.put("uid", _c.getUid())
 					.put("rights", _c.toJson(true).getJSONArray("rights"))
 					.put("interview", interview)

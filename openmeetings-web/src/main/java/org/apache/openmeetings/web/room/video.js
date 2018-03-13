@@ -173,7 +173,9 @@ var Video = (function() {
 		}
 		v.on("remove", function () {
 			console.log('Disposing participant ' + c.uid);
-			rtcPeer.dispose();
+			if (!!rtcPeer) {
+				rtcPeer.dispose();
+			}
 		});
 		vc = v.find('.video');
 		vc.width(_w).height(_h);

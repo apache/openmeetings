@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF;
 import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
@@ -26,6 +26,7 @@ import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.record.Recording;
@@ -42,7 +43,6 @@ import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
-import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -50,10 +50,21 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
+import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
+import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
+import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
+import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
+import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
+import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
@@ -62,6 +73,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(HashPage.class);
 	public static final String PANEL_MAIN = "panel-main";
 	public static final String INVITATION_HASH = "invitation";
 	private static final String HASH = "secure";
@@ -73,6 +85,13 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private RoomPanel rp = null;
 	private final PageParameters p;
 
+	@SpringBean
+	private KurentoHandler kHandler;
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private RecordingDao recDao;
+
 	public HashPage(PageParameters p) {
 		this.p = p;
 	}
@@ -81,7 +100,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		getLoader().setVisible(true);
 		getHeader().setVisible(false);
 		// need to re-fetch Room object to initialize all collections
-		Room room = getBean(RoomDao.class).get(roomId);
+		Room room = roomDao.get(roomId);
 		if (room != null && !room.isDeleted()) {
 			error = false;
 			rp = new RoomPanel(CHILD_ID, room);
@@ -140,7 +159,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				errorMsg = getString("1599");
 			} else if (recId != null) {
 				recContainer.setVisible(true);
-				Recording rec = getBean(RecordingDao.class).get(recId);
+				Recording rec = recDao.get(recId);
 				vi.update(null, rec);
 				vp.update(null, rec);
 				error = false;
@@ -155,18 +174,55 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				error = false;
 			}
 			if (SWF_TYPE_SETTINGS.equals(swf.toString())) {
-				replace(new VideoSettings(PANEL_MAIN).add(new OmAjaxClientInfoBehavior() {
-					private static final long serialVersionUID = 1L;
+				replace(new VideoSettings(PANEL_MAIN)
+					.add(new OmAjaxClientInfoBehavior() {
+						private static final long serialVersionUID = 1L;
 
-					@Override
-					protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
-						super.onClientInfo(target, info);
-						ExtendedClientProperties cp = (ExtendedClientProperties)info.getProperties();
-						target.appendJavaScript(
-								String.format("VideoSettings.init(%s);VideoSettings.open();"
-										, VideoSettings.getInitJson(cp, null, "noclient")));
-					}
-				}));
+						@Override
+						protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
+							super.onClientInfo(target, info);
+							target.appendJavaScript(
+									String.format("VideoSettings.init(%s);VideoSettings.open();", VideoSettings.getInitJson("noclient")));
+						}
+					}, new WebSocketBehavior() { //This WS will not be created in room
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
+							final JSONObject m;
+							try {
+								m = new JSONObject(msg.getText());
+								if (KURENTO_TYPE.equals(m.optString("type"))) {
+									kHandler.onMessage(null, m);
+								}
+							} catch (Exception e) {
+								//no-op
+							}
+						}
+
+						@Override
+						protected void onAbort(AbortedMessage msg) {
+							super.onAbort(msg);
+							closeHandler(msg);
+						}
+
+						@Override
+						protected void onClose(ClosedMessage msg) {
+							super.onClose(msg);
+							closeHandler(msg);
+						}
+
+						@Override
+						protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
+							super.onError(handler, msg);
+							closeHandler(msg);
+						}
+
+						private void closeHandler(AbstractClientMessage msg) {
+							log.debug("HashPage::WebSocketBehavior::closeHandler {}", msg);
+							//TODO FIXME perform Kurento clean-up (is this necessary???)
+						}
+					}));
 				error = false;
 			}
 		}
