@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 
 import java.util.Locale;
 
+import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.util.FormatHelper;
@@ -30,20 +30,20 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class AbstractTemplatePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	public static final String COMP_ID = "template";
 	protected final Locale locale;
 
+	@SpringBean
+	protected IApplication app;
+
 	protected AbstractTemplatePanel(Locale locale) {
 		super(COMP_ID);
 		this.locale = locale == null ? getDefault() : locale;
 		add(new TransparentWebMarkupContainer("container").add(AttributeModifier.append("dir", FormatHelper.isRtlLanguage(this.locale.toLanguageTag()) ? "rtl" : "ltr")));
-	}
-
-	public static <T> T getBean(Class<T> clazz) {
-		return ensureApplication().getOmBean(clazz);
 	}
 
 	public static IWebSession getOmSession() {
@@ -54,7 +54,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 		return LabelDao.getLocale(getDefaultLang());
 	}
 
-	public static String getString(String id, Locale locale, String... params) {
-		return ensureApplication().getOmString(id, locale, params);
+	public String getString(String id, Locale locale, String... params) {
+		return app.getOmString(id, locale, params);
 	}
 }

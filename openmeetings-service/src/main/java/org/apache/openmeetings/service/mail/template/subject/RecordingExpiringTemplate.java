@@ -29,12 +29,16 @@ import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.service.mail.template.OmTextLabel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	private static final long serialVersionUID = 1L;
 	private final Recording rec;
 	private long remainingDays;
 	private final User u;
+
+	@SpringBean
+	protected RoomDao roomDao;
 
 	private RecordingExpiringTemplate(User u, final Recording rec, long remainingDays) {
 		super(LocaleHelper.getLocale(u));
@@ -60,7 +64,7 @@ public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	@Override
 	Fragment getSubjectFragment() {
 		Fragment f = new Fragment(COMP_ID, "subject", this);
-		Room room = getBean(RoomDao.class).get(rec.getRoomId());
+		Room room = roomDao.get(rec.getRoomId());
 		f.add(new OmTextLabel("prefix", getString("template.recording.expiring.subj.prefix", locale))
 				, new OmTextLabel("room", room == null ? null : getString("template.recording.expiring.subj.room", locale, room.getName())).setVisible(room != null)
 				);

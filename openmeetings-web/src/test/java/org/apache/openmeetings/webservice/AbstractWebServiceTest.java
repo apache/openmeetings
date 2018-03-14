@@ -19,6 +19,11 @@
 package org.apache.openmeetings.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
+import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
+import static org.apache.openmeetings.AbstractJUnitDefaults.ensureSchema;
+import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +48,8 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.cxf.jaxrs.ext.multipart.Attachment;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
-import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.AbstractSpringTest;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
@@ -51,12 +57,14 @@ import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.webservice.util.AppointmentMessageBodyReader;
 import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
-public class AbstractWebServiceTest extends AbstractJUnitDefaults {
+public class AbstractWebServiceTest {
 	private static Tomcat tomcat;
 	private static final String HOST = "localhost";
 	private static final String CONTEXT = "/openmeetings";
@@ -66,6 +74,10 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	private static final String FILE_SERVICE_MOUNT = "file";
 	public static final String UNIT_TEST_EXT_TYPE = "om_unit_tests";
 	public static final long TIMEOUT = 5 * 60 * 1000;
+
+	protected static <T> T getBean(Class<T> clazz) {
+		return ensureApplication()._getOmBean(clazz);
+	}
 
 	public static WebClient getClient(String url) {
 		WebClient c = WebClient.create(url, Arrays.asList(new AppointmentMessageBodyReader()))
@@ -94,6 +106,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 
 	@BeforeClass
 	public static void initialize() throws Exception {
+		AbstractSpringTest.init();
 		tomcat = new Tomcat();
 		Connector connector = new Connector("HTTP/1.1");
 		connector.setAttribute("address", InetAddress.getByName(HOST).getHostAddress());
@@ -109,6 +122,11 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 		tomcat.getConnector(); // to init the connector
 		tomcat.start();
 		port = tomcat.getConnector().getLocalPort();
+	}
+
+	@Before
+	public void setUp() throws Exception {
+		ensureSchema(getBean(UserDao.class), getBean(ImportInitvalues.class));
 	}
 
 	@AfterClass

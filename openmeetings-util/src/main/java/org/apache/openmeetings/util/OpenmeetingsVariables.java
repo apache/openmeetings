@@ -132,6 +132,7 @@ public class OpenmeetingsVariables {
 	private static String audioBitrate = "32k";
 	private static String defaultTimezone = "Europe/Berlin";
 	private static String restAllowOrigin = null;
+	private static Class<?> appClass = null;
 
 	private OpenmeetingsVariables() {}
 
@@ -257,5 +258,13 @@ public class OpenmeetingsVariables {
 
 	public static void setRestAllowOrigin(String allowOrigin) {
 		restAllowOrigin = allowOrigin;
+	}
+
+	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
+		if (appClass == null) {
+			//HACK to resolve package dependencies
+			appClass = Class.forName("org.apache.openmeetings.web.app.Application");
+		}
+		return appClass;
 	}
 }

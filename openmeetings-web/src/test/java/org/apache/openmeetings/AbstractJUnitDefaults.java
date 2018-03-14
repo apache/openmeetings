@@ -18,8 +18,10 @@
  */
 package org.apache.openmeetings;
 
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setWicketApplicationName;
 import static org.junit.Assert.assertNotNull;
 
@@ -34,10 +36,10 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
+import org.apache.openmeetings.web.app.Application;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,22 +67,24 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	private ImportInitvalues importInitvalues;
 	@Autowired
 	protected ConfigurationDao cfgDao;
+	@Autowired
+	protected Application app;
 
 	@Before
 	public void setUp() throws Exception {
-		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
-		try {
-			cfgDao.reinit();
-		} catch (Exception e) {
-			log.warn("DB seems not to be inited", e);
+		if (app.getName() == null) {
+			app.setName(DEFAULT_CONTEXT_NAME);
 		}
-		if (userDao.count() < 1) {
-			makeDefaultScheme();
-			// regular user
-			createSystemUser(regularUsername, false);
+		if (getWicketApplicationName() == null) {
+			setWicketApplicationName(app.getName());
+		}
+		ensureApplication();
+		ensureSchema(userDao, importInitvalues);
+	}
 
-			// group admin
-			createSystemUser(groupAdminUsername, true);
+	public static void ensureSchema(UserDao userDao, ImportInitvalues importInitvalues) throws Exception {
+		if (userDao.count() < 1) {
+			makeDefaultScheme(importInitvalues);
 			log.info("Default scheme created successfully");
 		} else {
 			log.info("Default scheme already created");
@@ -105,9 +109,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return getAppointment(owner, null, start, end);
 	}
 
-	public Appointment getAppointment(User owner, Room r, Date start, Date end) {
-		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
-
+	public static Appointment getAppointment(User owner, Room r, Date start, Date end) {
 		// add new appointment
 		Appointment ap = new Appointment();
 
@@ -141,11 +143,16 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return ap;
 	}
 
-	public Appointment createAppointment(Appointment ap) {
+	public static Appointment createAppointment(AppointmentDao appointmentDao, Appointment ap) {
+		assertNotNull("Can't access to appointment dao implimentation", appointmentDao);
 		// add new appointment
 		ap = appointmentDao.update(ap, null, false);
-		assertNotNull("Cann't add appointment", ap.getId());
+		assertNotNull("Can't add appointment", ap.getId());
 		return ap;
+	}
+
+	public Appointment createAppointment(Appointment ap) {
+		return createAppointment(appointmentDao, ap);
 	}
 
 	public User getUser() throws Exception {
@@ -160,11 +167,11 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return String.format("email%s@local", uid);
 	}
 
-	protected String createPass() {
+	public static String createPass() {
 		return "pass1_!@#$%_A";
 	}
 
-	public User getUser(String uuid) throws Exception {
+	public static User getUser(String uuid) throws Exception {
 		User u = new User();
 		// add user
 		u.setFirstname("firstname" + uuid);
@@ -174,19 +181,9 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.getAddress().setEmail(getEmail(uuid));
 		u.setRights(UserDao.getDefaultRights());
 		u.setTimeZoneId("Asia/Bangkok");
-		u.updatePassword(cfgDao, createPass());
+		u.updatePassword(null, createPass()); // NO SIP
 		u.setLanguageId(1L);
 		return u;
-	}
-
-	public User createSystemUser(String login, boolean groupAdmin) throws Exception {
-		User u = getUser();
-		GroupUser gu = new GroupUser(groupDao.get(group), u);
-		gu.setModerator(groupAdmin);
-		u.getGroupUsers().add(gu);
-		u.setLogin(login);
-		u.updatePassword(cfgDao, userpass);
-		return createUser(u);
 	}
 
 	public User createUser() throws Exception {
@@ -197,13 +194,17 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		return createUser(getUser(uuid));
 	}
 
-	public User createUser(User u) {
+	public static User createUser(UserDao userDao, User u) {
 		u = userDao.update(u, null);
 		assertNotNull("Can't add user", u);
 		return u;
 	}
 
-	private void makeDefaultScheme() throws Exception {
+	public User createUser(User u) {
+		return createUser(userDao, u);
+	}
+
+	private static void makeDefaultScheme(ImportInitvalues importInitvalues) throws Exception {
 		InstallationConfig cfg = new InstallationConfig();
 		cfg.setUsername(adminUsername);
 		cfg.setPassword(userpass);
@@ -211,6 +212,11 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		cfg.setGroup(group);
 		cfg.setTimeZone(timeZone);
 		importInitvalues.loadAll(cfg, false);
+		// regular user
+		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, regularUsername, userpass, false);
+
+		// group admin
+		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, groupAdminUsername, userpass, true);
 	}
 
 	public User getContact(String uuid, Long ownerId) {

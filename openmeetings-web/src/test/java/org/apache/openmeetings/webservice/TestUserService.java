@@ -19,6 +19,11 @@
 package org.apache.openmeetings.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
+import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
+import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
+import static org.apache.openmeetings.AbstractJUnitDefaults.rnd;
+import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -97,6 +102,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		ServiceResult r1 = getHash(r.getMessage(), false);
 		assertEquals("OM Call should be successful", Type.SUCCESS.name(), r1.getType());
 
+		ensureApplication(-1L); // to ensure WebSession is attached
 		WebSession ws = WebSession.get();
 		assertTrue(ws.signIn(adminUsername, userpass, User.Type.user, null));
 		Long userId0 = WebSession.getUserId();

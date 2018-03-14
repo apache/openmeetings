@@ -19,8 +19,6 @@
 package org.apache.openmeetings;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.setInitComplete;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,28 +30,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import javax.servlet.ServletContextEvent;
-
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
-import org.apache.openmeetings.util.OMContextListener;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.pages.MainPage;
-import org.apache.wicket.RuntimeConfigurationType;
-import org.apache.wicket.ThreadContext;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
 import org.apache.wicket.feedback.ExactLevelFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.protocol.http.mock.MockServletContext;
 import org.apache.wicket.protocol.ws.util.tester.WebSocketTester;
 import org.apache.wicket.util.lang.Args;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
@@ -64,29 +55,14 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	public static final String PATH_MENU = "main-container:main:topControls:menu:menu";
 	protected WicketTester tester;
 
-	@Autowired
-	private Application app;
-
 	public static WicketTester getWicketTester(Application app) {
 		return getWicketTester(app, -1);
 	}
 
 	public static WicketTester getWicketTester(Application app, long langId) {
-		boolean testerNeedInit = app.getName() != null;
-		if (!testerNeedInit) {
-			//FIXME TODO re-use this for templates
-			app.setName(getWicketApplicationName());
-			app.setServletContext(new MockServletContext(app, null));
-			app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
-			OMContextListener omcl = new OMContextListener();
-			omcl.contextInitialized(new ServletContextEvent(app.getServletContext()));
-			ThreadContext.setApplication(app);
-			app.initApplication();
-		}
 		ensureApplication(langId); // to ensure WebSession is attached
 
-		WicketTester tester = new WicketTester(app, app.getServletContext(), testerNeedInit);
-		setInitComplete(true);
+		WicketTester tester = new WicketTester(app, app.getServletContext(), false);
 		return tester;
 	}
 

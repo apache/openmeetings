@@ -18,6 +18,11 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.AbstractJUnitDefaults.ONE_HOUR;
+import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
+import static org.apache.openmeetings.AbstractJUnitDefaults.createUser;
+import static org.apache.openmeetings.AbstractJUnitDefaults.getAppointment;
+import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -32,9 +37,13 @@ import java.util.UUID;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
+import org.apache.openmeetings.AbstractJUnitDefaults;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.calendar.MeetingMemberDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.calendar.AppointmentDTO;
 import org.apache.openmeetings.db.dto.calendar.MeetingMemberDTO;
@@ -45,30 +54,23 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.webservice.util.AppointmentParamConverter;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class TestCalendarService extends AbstractWebServiceTest {
 	public static final String CALENDAR_SERVICE_MOUNT = "calendar";
-	@Autowired
-	private RoomDao roomDao;
-	@Autowired
-	private MeetingMemberDao mmDao;
-	@Autowired
-	private InvitationDao invitationDao;
 
 	private void actualTest(Room r) throws Exception {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
+		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
 		webCreateUser(u);
 		ServiceResult sr = login(u.getLogin(), createPass());
-		u = userDao.get(u.getId());
+		u = getBean(UserDao.class).get(u.getId());
 
 		Date start = new Date();
-		Appointment a = createAppointment(getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
+		Appointment a = AbstractJUnitDefaults.createAppointment(getBean(AppointmentDao.class), getAppointment(u, r, start, new Date(start.getTime() + ONE_HOUR)));
 
 		AppointmentDTO app = getClient(getCalendarUrl()).path("/room/" + a.getRoom().getId()).query("sid", sr.getMessage())
 				.get(AppointmentDTO.class);
@@ -82,7 +84,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 	@Test
 	public void testGetByPublicRoom() throws Exception {
-		actualTest(roomDao.get(5L)); //default public presentation room
+		actualTest(getBean(RoomDao.class).get(5L)); //default public presentation room
 	}
 
 	private static JSONObject createAppointment(String title) {
@@ -125,7 +127,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 	private String loginNewUser() throws Exception {
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
+		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
 		webCreateUser(u);
 		ServiceResult sr = login(u.getLogin(), createPass());
 		return sr.getMessage();
@@ -175,8 +177,8 @@ public class TestCalendarService extends AbstractWebServiceTest {
 
 		String uuid = UUID.randomUUID().toString();
 		User u = getUser(uuid);
-		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
-		u = createUser(u);
+		u.getGroupUsers().add(new GroupUser(getBean(GroupDao.class).get(1L), u));
+		u = createUser(getBean(UserDao.class), u);
 		ServiceResult sr = login(u.getLogin(), createPass());
 
 		Response resp = getClient(getCalendarUrl())
@@ -253,6 +255,7 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		String sid = loginNewUser();
 		AppointmentDTO dto = createEventWithGuests(sid);
 		List<MeetingMemberDTO> initialList = new ArrayList<>(dto.getMeetingMembers());
+		MeetingMemberDao mmDao = getBean(MeetingMemberDao.class);
 		MeetingMember mm = mmDao.get(initialList.get(initialList.size() - 1).getId());
 		Long mmId = mm.getId(), mmUserId = mm.getUser().getId();
 		String hash = mm.getInvitation().getHash();
@@ -273,8 +276,8 @@ public class TestCalendarService extends AbstractWebServiceTest {
 		assertEquals("DTO should have 1 attendees", 1, dto.getMeetingMembers().size());
 
 		assertNull("Meeting member should deleted", mmDao.get(mmId));
-		assertNull("Invitation should deleted", invitationDao.getByHash(hash, true, false));
-		User uc = userDao.get(mmUserId);
+		assertNull("Invitation should deleted", getBean(InvitationDao.class).getByHash(hash, true, false));
+		User uc = getBean(UserDao.class).get(mmUserId);
 		assertNotNull("Meeting member user should not be deleted", uc);
 		assertFalse("Meeting member user should not be deleted", uc.isDeleted());
 	}

@@ -435,6 +435,14 @@ public class ImportInitvalues {
 		}
 	}
 
+	public User createSystemUser(User u, String group, String login, String pass, boolean groupAdmin) throws Exception {
+		GroupUser gu = new GroupUser(groupDao.get(group), u);
+		gu.setModerator(groupAdmin);
+		u.getGroupUsers().add(gu);
+		u.setLogin(login);
+		return userDao.update(u, pass, null);
+	}
+
 	public void loadInitialOAuthServers() {
 		// Yandex
 		OAuthServer yaServer = new OAuthServer();

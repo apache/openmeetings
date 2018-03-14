@@ -48,6 +48,6 @@ public class CreatedAppointmentTemplate extends InvitedAppointmentTemplate {
 
 	@Override
 	String getPrefix() {
-		return ensureApplication().getOmString("1151", locale);
+		return app.getOmString("1151", locale);
 	}
 }

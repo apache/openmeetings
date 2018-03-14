@@ -277,7 +277,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/group/${id}", new GroupLogoResourceReference());
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
-		log.debug("InitComponent::PostConstruct");
+		log.debug("Application::init");
 		try {
 			if (OmFileHelper.getOmHome() == null) {
 				OmFileHelper.setOmHome(new File(getServletContext().getRealPath("/")));
@@ -289,7 +289,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			// Init all global config properties
 			cfgDao.reinit();
 
-			setInitComplete(true);
 			// Init properties
 			setXFrameOptions(cfgDao.getString(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN));
 			setContentSecurityPolicy(cfgDao.getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
@@ -297,6 +296,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
+
+			setInitComplete(true);
 		} catch (Exception err) {
 			log.error("[appStart]", err);
 		}

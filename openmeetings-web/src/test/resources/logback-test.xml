@@ -25,7 +25,6 @@
 
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${current_openmeetings_log_dir}/${current_openmeetings_context_name}.log</file>
-		<append>false</append>
 		<immediateFlush>true</immediateFlush>
 		<encoder>
 			<charset>UTF-8</charset>

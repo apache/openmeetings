@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -31,12 +32,9 @@ import org.apache.openmeetings.db.dto.record.RecordingDTO;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestRecordingService extends AbstractWebServiceTest {
 	public static final String RECORD_SERVICE_MOUNT = "record";
-	@Autowired
-	private RecordingDao recordingDao;
 
 	private User getExternalUser() throws Exception {
 		String uuid = UUID.randomUUID().toString();
@@ -54,7 +52,7 @@ public class TestRecordingService extends AbstractWebServiceTest {
 		r.setInsertedBy(u.getId());
 		r.setComment("Created by Unit Tests");
 		r.setRoomId(5L);
-		r = recordingDao.update(r);
+		r = getBean(RecordingDao.class).update(r);
 		ServiceResult sr = login();
 		Collection<? extends RecordingDTO> recs = getClient(getRecordUrl()).path("/" + UNIT_TEST_EXT_TYPE).query("sid", sr.getMessage())
 				.getCollection(RecordingDTO.class);

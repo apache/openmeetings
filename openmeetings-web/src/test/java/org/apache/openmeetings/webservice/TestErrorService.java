@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.AbstractJUnitDefaults.rnd;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 

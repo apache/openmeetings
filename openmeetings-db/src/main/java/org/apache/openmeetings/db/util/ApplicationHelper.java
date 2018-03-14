@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.db.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
@@ -29,6 +31,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.util.OMContextListener;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.wicket.Application;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.ThreadContext;
@@ -52,11 +55,46 @@ public class ApplicationHelper {
 
 	private ApplicationHelper() {}
 
-	public static IApplication ensureApplication() {
-		return ensureApplication(-1L);
+	private static WebApplication createApp(WebApplication _app) {
+		WebApplication app = _app;
+		if (app == null) {
+			// This is the case for non-web-app applications (command line admin)
+			try {
+				app = (WebApplication)OpenmeetingsVariables.getAppClass().newInstance();
+				ServletContext sc = new MockServletContext(app, null);
+				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
+				xmlContext.setConfigLocation("classpath:applicationContext.xml");
+				xmlContext.setServletContext(sc);
+				xmlContext.refresh();
+				sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
+				app.setServletContext(sc);
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				log.error("Failed to create Application");
+			}
+		}
+		return app;
 	}
 
-	public static IApplication _ensureApplication() {
+	private static WebApplication initApp(WebApplication app) {
+		if (app != null) {
+			if (app.getName() == null && getWicketApplicationName() == null) {
+				app.setName(DEFAULT_CONTEXT_NAME);
+			}
+			try {
+				app.getServletContext();
+			} catch(IllegalStateException e) {
+				app.setServletContext(new MockServletContext(app, null));
+			}
+			app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
+			OMContextListener omcl = new OMContextListener();
+			omcl.contextInitialized(new ServletContextEvent(app.getServletContext()));
+			ThreadContext.setApplication(app);
+			app.initApplication();
+		}
+		return app;
+	}
+
+	public static IApplication ensureApplication() {
 		if (Application.exists()) {
 			return (IApplication)Application.get();
 		}
@@ -64,29 +102,12 @@ public class ApplicationHelper {
 			if (Application.exists()) {
 				return (IApplication)Application.get();
 			}
-			WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
+			WebApplication app = createApp((WebApplication)Application.get(getWicketApplicationName()));
 			LabelDao.initLanguageMap();
-			if (app == null) {
-				try {
-					app = (WebApplication)LabelDao.getAppClass().newInstance();
-				} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-					log.error("Failed to create Application");
-					return null;
+			if (app != null) {
+				if (!isInitComplete()) {
+					initApp(app);
 				}
-				app.setServletContext(new MockServletContext(app, null));
-				app.setName(getWicketApplicationName());
-				ServletContext sc = app.getServletContext();
-				OMContextListener omcl = new OMContextListener();
-				omcl.contextInitialized(new ServletContextEvent(sc));
-				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
-				xmlContext.setConfigLocation("classpath:applicationContext.xml");
-				xmlContext.setServletContext(sc);
-				xmlContext.refresh();
-				sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
-				app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
-				ThreadContext.setApplication(app);
-				app.initApplication();
-			} else {
 				ThreadContext.setApplication(app);
 			}
 			return (IApplication)Application.get(getWicketApplicationName());
@@ -94,7 +115,7 @@ public class ApplicationHelper {
 	}
 
 	public static IApplication ensureApplication(Long langId) {
-		IApplication a = _ensureApplication();
+		IApplication a = ensureApplication();
 		if (ThreadContext.getRequestCycle() == null) {
 			ServletWebRequest req = new ServletWebRequest(new MockHttpServletRequest((Application)a, new MockHttpSession(a.getServletContext()), a.getServletContext()), "");
 			RequestCycleContext rctx = new RequestCycleContext(req, new MockWebResponse(), a.getRootRequestMapper(), a.getExceptionMapperProvider().get());

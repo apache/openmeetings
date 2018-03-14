@@ -18,8 +18,9 @@
  */
 package org.apache.openmeetings.db.dao.label;
 
-import static org.apache.openmeetings.db.util.ApplicationHelper._ensureApplication;
+import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getAppClass;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,25 +91,17 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	public static String getString(String key, long langId) {
-		return _ensureApplication().getOmString(key, langId);
+		return ensureApplication().getOmString(key, langId);
 	}
 
 	private static File getLangFile() {
 		return new File(OmFileHelper.getLanguagesDir(), OmFileHelper.LANG_FILE_NAME);
 	}
 
-	public static synchronized Class<?> getAppClass() throws ClassNotFoundException {
-		if (appClass == null) {
-			//HACK to resolve package dependencies
-			appClass = Class.forName("org.apache.openmeetings.web.app.Application");
-		}
-		return appClass;
-	}
-
 	public static void initLanguageMap() {
 		SAXReader reader = new SAXReader();
 		try {
-			getAppClass();
+			appClass = getAppClass();
 			Document document = reader.read(getLangFile());
 			Element root = document.getRootElement();
 			languages.clear();
