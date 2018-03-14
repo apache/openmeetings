@@ -23,7 +23,6 @@ import java.util.function.Supplier;
 
 import javax.servlet.ServletContext;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.util.ws.IClusterWsMessage;
 import org.apache.wicket.request.IExceptionMapper;
@@ -48,7 +47,7 @@ public interface IApplication {
 	String getServerId();
 
 	//JPA
-	void updateJpaAddresses(ConfigurationDao dao);
+	void updateJpaAddresses();
 
 	//WS
 	void publishWsTopic(IClusterWsMessage msg);

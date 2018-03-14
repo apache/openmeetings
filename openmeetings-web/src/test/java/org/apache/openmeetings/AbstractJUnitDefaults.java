@@ -39,8 +39,8 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.installation.ImportInitvalues;
 import org.apache.openmeetings.installation.InstallationConfig;
 import org.junit.Before;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
@@ -69,7 +69,11 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	@Before
 	public void setUp() throws Exception {
 		setWicketApplicationName(DEFAULT_CONTEXT_NAME);
-		cfgDao.reinit();
+		try {
+			cfgDao.reinit();
+		} catch (Exception e) {
+			log.warn("DB seems not to be inited", e);
+		}
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
 			// regular user

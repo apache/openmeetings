@@ -35,7 +35,6 @@ import static org.apache.openmeetings.web.pages.HashPage.INVITATION_HASH;
 import static org.apache.openmeetings.web.user.rooms.RoomEnterBehavior.getRoomUrlFragment;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 import static org.apache.wicket.resource.JQueryResourceReference.getV3;
-import static org.springframework.web.context.support.WebApplicationContextUtils.getWebApplicationContext;
 
 import java.io.File;
 import java.net.UnknownHostException;
@@ -123,7 +122,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 import org.wicketstuff.dashboard.WidgetRegistry;
 import org.wicketstuff.dashboard.web.DashboardContext;
 import org.wicketstuff.dashboard.web.DashboardContextInjector;
@@ -167,6 +165,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private ConfigurationDao cfgDao;
 	@Autowired
 	private RecordingDao recordingDao;
+	@Autowired
+	private UserDao userDao;
 
 	@Override
 	protected void init() {
@@ -190,7 +190,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
 				getBean(ClientManager.class).clean(serverId);
 				getBean(StreamClientManager.class).clean(serverId);
-				updateJpaAddresses(_getBean(ConfigurationDao.class));
+				updateJpaAddresses();
 			}
 
 			@Override
@@ -201,7 +201,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			@Override
 			public void memberAdded(MembershipEvent evt) {
 				//server added, need to process persistent addresses
-				updateJpaAddresses(_getBean(ConfigurationDao.class));
+				updateJpaAddresses();
 				//check for duplicate instance-names
 				Set<String> names = new HashSet<>();
 				for (Member m : evt.getMembers()) {
@@ -293,7 +293,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			// Init properties
 			setXFrameOptions(cfgDao.getString(CONFIG_HEADER_XFRAME, HEADER_XFRAME_SAMEORIGIN));
 			setContentSecurityPolicy(cfgDao.getString(CONFIG_HEADER_CSP, HEADER_CSP_SELF));
-			updateJpaAddresses(cfgDao);
+			updateJpaAddresses();
 			setExtProcessTtl(cfgDao.getInt(CONFIG_EXT_PROCESS_TTL, getExtProcessTtl()));
 			Version.logOMStarted();
 			recordingDao.resetProcessingStatus(); //we are starting so all processing recordings are now errors
@@ -378,8 +378,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	public <T> T _getBean(Class<T> clazz) {
-		WebApplicationContext wac = getWebApplicationContext(getServletContext());
-		return wac == null ? null : wac.getBean(clazz);
+		return ctx == null ? null : ctx.getBean(clazz);
 	}
 
 	public static String getString(String id) {
@@ -421,7 +420,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	public static boolean isInstalled() {
 		boolean result = isInstalled;
 		if (!isInstalled && isInitComplete()) {
-			isInstalled = result = get()._getBean(UserDao.class).count() > 0;
+			isInstalled = result = get().userDao.count() > 0;
 		}
 		return result;
 	}
@@ -543,7 +542,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	}
 
 	@Override
-	public void updateJpaAddresses(ConfigurationDao dao) {
+	public void updateJpaAddresses() {
 		StringBuilder sb = new StringBuilder();
 		String delim = "";
 		for (Member m : hazelcast.getCluster().getMembers()) {
@@ -554,7 +553,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			sb.append("localhost");
 		}
 		try {
-			dao.updateClusterAddresses(sb.toString());
+			cfgDao.updateClusterAddresses(sb.toString());
 		} catch (UnknownHostException e) {
 			log.error("Uexpected exception while updating JPA addresses", e);
 			throw new WicketRuntimeException(e);

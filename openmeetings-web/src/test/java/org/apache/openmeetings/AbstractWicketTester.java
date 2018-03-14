@@ -26,14 +26,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
 import org.apache.openmeetings.db.entity.user.User;
@@ -56,7 +54,6 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.ButtonAjaxBehavior;
@@ -75,32 +72,26 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	public static WicketTester getWicketTester(Application app, long langId) {
-		if (app.getName() == null) {
+		boolean testerNeedInit = app.getName() != null;
+		if (!testerNeedInit) {
 			//FIXME TODO re-use this for templates
 			app.setName(getWicketApplicationName());
 			app.setServletContext(new MockServletContext(app, null));
 			app.setConfigurationType(RuntimeConfigurationType.DEPLOYMENT);
-			ServletContext sc = app.getServletContext();
 			OMContextListener omcl = new OMContextListener();
-			omcl.contextInitialized(new ServletContextEvent(sc));
+			omcl.contextInitialized(new ServletContextEvent(app.getServletContext()));
 			ThreadContext.setApplication(app);
 			app.initApplication();
 		}
 		ensureApplication(langId); // to ensure WebSession is attached
 
-		WicketTester tester = new WicketTester(app, app.getServletContext());
+		WicketTester tester = new WicketTester(app, app.getServletContext(), testerNeedInit);
 		setInitComplete(true);
 		return tester;
 	}
 
 	public static void destroy(WicketTester tester) {
 		if (tester != null) {
-			ServletContext sc = tester.getServletContext();
-			try {
-				((XmlWebApplicationContext)sc.getAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE)).close();
-			} catch (Exception e) {
-				log.error("Unexpected error while destroying XmlWebApplicationContext", e);
-			}
 			tester.destroy();
 		}
 	}
