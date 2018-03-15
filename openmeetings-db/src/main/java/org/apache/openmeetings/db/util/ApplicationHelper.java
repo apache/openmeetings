@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.db.util;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 import static org.springframework.web.context.WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE;
@@ -61,12 +60,15 @@ public class ApplicationHelper {
 			// This is the case for non-web-app applications (command line admin)
 			try {
 				app = (WebApplication)OpenmeetingsVariables.getAppClass().newInstance();
+				app.setName("--dumb--"); //temporary name for temporary application
 				ServletContext sc = new MockServletContext(app, null);
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
 				xmlContext.setConfigLocation("classpath:applicationContext.xml");
 				xmlContext.setServletContext(sc);
 				xmlContext.refresh();
 				sc.setAttribute(ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, xmlContext);
+				app = xmlContext.getBean(WebApplication.class);
+				app.setName(getWicketApplicationName());
 				app.setServletContext(sc);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				log.error("Failed to create Application");
@@ -77,9 +79,6 @@ public class ApplicationHelper {
 
 	private static WebApplication initApp(WebApplication app) {
 		if (app != null) {
-			if (app.getName() == null && getWicketApplicationName() == null) {
-				app.setName(DEFAULT_CONTEXT_NAME);
-			}
 			try {
 				app.getServletContext();
 			} catch(IllegalStateException e) {
@@ -133,7 +132,7 @@ public class ApplicationHelper {
 	public static void destroyApplication() {
 		WebApplication app = (WebApplication)Application.get(getWicketApplicationName());
 		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
-		app.internalDestroy(); //need to be called to
+		app.internalDestroy(); //need to be called too
 		if (ctx != null) {
 			((XmlWebApplicationContext)ctx).destroy();
 		}
