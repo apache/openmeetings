@@ -43,7 +43,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	private DialogButton cancel;
 	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final Form<String> form = new Form<>("form");
-	private final PasswordTextField pass = new PasswordTextField("password");
+	private final PasswordTextField pass = new PasswordTextField("password", Model.of(""));
 	private SerializableConsumer<AjaxRequestTarget> action = null;
 
 	public PasswordDialog(String id) {

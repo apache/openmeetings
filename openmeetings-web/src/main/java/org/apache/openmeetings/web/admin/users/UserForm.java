@@ -184,10 +184,10 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		if (isAdminPassRequired()) {
-			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> saveUser(t));
+			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> saveUser(t, password.getModelObject()));
 			adminPass.open(target);
 		} else {
-			saveUser(target);
+			saveUser(target, password.getConvertedInput());
 		}
 	}
 
@@ -202,7 +202,7 @@ public class UserForm extends AdminBaseForm<User> {
 		return checkLevel(u.getRights()) || (ou != null && checkLevel(ou.getRights()));
 	}
 
-	void saveUser(AjaxRequestTarget target) {
+	private void saveUser(AjaxRequestTarget target, String pass) {
 		User u = getModelObject();
 		final UserDao dao = getBean(UserDao.class);
 		final boolean isNew = u.getId() == null;
@@ -211,7 +211,7 @@ public class UserForm extends AdminBaseForm<User> {
 			u.setActivatehash(UUID.randomUUID().toString());
 		}
 		try {
-			u = dao.update(u, password.getConvertedInput(), getUserId());
+			u = dao.update(u, pass, getUserId());
 		} catch (Exception e) {
 			log.error("[onSaveSubmit]: ", e);
 		}
