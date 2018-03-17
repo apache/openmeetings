@@ -52,10 +52,10 @@ public class RedirectMessageDialog extends NonClosableMessageDialog {
 	@Override
 	protected void onInitialize() {
 		getTitle().setObject(getString("204"));
+		super.onInitialize();
 		if (autoOpen) {
 			startTimer(null);
 		}
-		super.onInitialize();
 	}
 
 	private void startTimer(IPartialPageRequestHandler handler) {

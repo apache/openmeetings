@@ -408,6 +408,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1091"><![CDATA[高清晰]]></entry>
 	<entry key="1092"><![CDATA[一般清晰]]></entry>
 	<entry key="1093"><![CDATA[低清晰度]]></entry>
+	<entry key="1098">会议已经关闭，您将重定向到其它网址</entry>
 	<entry key="1099"><![CDATA[关闭会议室]]></entry>
 	<entry key="1100"><![CDATA[关闭后展示给用户的地址URL]]></entry>
 	<entry key="1101"><![CDATA[会议室关闭设置]]></entry>
