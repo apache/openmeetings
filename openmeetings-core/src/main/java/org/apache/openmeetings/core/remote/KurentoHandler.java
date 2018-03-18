@@ -18,15 +18,22 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.manager.IClientManager;
+import org.apache.wicket.Application;
+import org.apache.wicket.protocol.ws.WebSocketSettings;
+import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
+import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
+import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
+import org.apache.wicket.protocol.ws.concurrent.Executor;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
 import org.slf4j.Logger;
@@ -43,9 +50,12 @@ public class KurentoHandler {
 	private KurentoClient client;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
+	final Map<String, KTestUser> testsByUid = new ConcurrentHashMap<>();
 
 	@Autowired
 	private IClientManager clientManager;
+	@Autowired
+	private Application app;
 
 	@PostConstruct
 	private void init() {
@@ -64,46 +74,67 @@ public class KurentoHandler {
 		}
 	}
 
-	public void onMessage(String uid, JSONObject msg) {
-		final Client c = clientManager.get(uid);
+	public void onMessage(IWsClient _c, JSONObject msg) {
+		final String cmdId = msg.getString("id");
+		if ("test".equals(msg.getString("mode"))) {
+			KTestUser user = getTestByUid(_c.getUid());
+			switch (cmdId) {
+				case "testStart":
+				{
+					//TODO FIXME assert null user ???
+					user = new KTestUser(_c, msg, this, client.createMediaPipeline());
+					testsByUid.put(_c.getUid(), user);
+				}
+					break;
+				case "onTestIceCandidate":
+				{
+					JSONObject candidate = msg.getJSONObject("candidate");
 
-		if (c != null) {
-			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
+					if (user != null) {
+						IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
+								candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
+						user.addCandidate(cand);
+					}
+				}
+					break;
+			}
 		} else {
-			log.debug("Incoming message from new user: {}", msg);
-		}
-		KUser user = getByUid(uid);
-		switch (msg.getString("id")) {
-			case "joinRoom":
-				joinRoom(c);
-				break;
-			case "receiveVideoFrom":
-				final String senderUid = msg.getString("sender");
-				final KUser sender = getByUid(senderUid);
-				final String sdpOffer = msg.getString("sdpOffer");
-				if (user == null) {
-					KRoom room = getRoom(c.getRoomId());
-					user = room.addUser(this, uid);
-				}
-				user.receiveVideoFrom(this, sender, sdpOffer);
-				break;
-			case "onIceCandidate":
-				JSONObject candidate = msg.getJSONObject("candidate");
+			final Client c = (Client)_c;
 
-				if (user == null) {
-					KRoom room = getRoom(c.getRoomId());
-					user = room.addUser(this, uid);
+			if (c != null) {
+				log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
+			} else {
+				log.debug("Incoming message from new user: {}", msg);
+			}
+			KUser user = getByUid(_c.getUid());
+			switch (cmdId) {
+				case "joinRoom":
+					joinRoom(c);
+					break;
+				case "receiveVideoFrom":
+					final String senderUid = msg.getString("sender");
+					final KUser sender = getByUid(senderUid);
+					final String sdpOffer = msg.getString("sdpOffer");
+					if (user == null) {
+						KRoom room = getRoom(c.getRoomId());
+						user = room.addUser(this, _c.getUid());
+					}
+					user.receiveVideoFrom(this, sender, sdpOffer);
+					break;
+				case "onIceCandidate":
+				{
+					JSONObject candidate = msg.getJSONObject("candidate");
+
+					if (user == null) {
+						KRoom room = getRoom(c.getRoomId());
+						user = room.addUser(this, _c.getUid());
+					}
+					IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
+							candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
+					user.addCandidate(cand, msg.getString("uid"));
 				}
-				IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
-						candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
-				user.addCandidate(cand, msg.getString("uid"));
-				break;
-			case "testStart":
-				break;
-			case "onTestIceCandidate":
-				break;
-			default:
-				break;
+					break;
+			}
 		}
 	}
 
@@ -115,8 +146,25 @@ public class KurentoHandler {
 		room.join(this, c.getUid());
 	}
 
-	void sendClient(String uid, JSONObject msg) {
-		WebSocketHelper.sendClient(clientManager.get(uid), msg);
+	public void sendClient(String uid, JSONObject msg) {
+		sendClient(clientManager.get(uid), msg);
+	}
+
+	//FIXME TODO UNIFY THIS
+	void sendClient(IWsClient client, JSONObject msg) {
+		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+		Executor executor = settings.getWebSocketPushMessageExecutor(); //FIXME TODO
+		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
+		if (wc != null && wc.isOpen()) {
+			executor.run(() -> {
+				try {
+					wc.sendMessage(msg.toString());
+				} catch (IOException e) {
+					log.error("Error while sending message to client", e);
+				}
+			});
+		}
 	}
 
 	/**
@@ -156,11 +204,19 @@ public class KurentoHandler {
 		return uid == null ? null : usersByUid.get(uid);
 	}
 
+	public KTestUser getTestByUid(String uid) {
+		return uid == null ? null : testsByUid.get(uid);
+	}
+
 	public boolean exists(String name) {
 		return usersByUid.keySet().contains(name);
 	}
 
 	static JSONObject newKurentoMsg() {
 		return new JSONObject().put("type", KURENTO_TYPE);
+	}
+
+	static JSONObject newTestKurentoMsg() {
+		return newKurentoMsg().put("mode", "test");
 	}
 }

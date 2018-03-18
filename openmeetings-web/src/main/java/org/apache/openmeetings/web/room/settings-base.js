@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var VideoSettings = (function() {
-	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp
+	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp, timer
 		, vidScroll, vid, recBtn, playBtn, recAllowed = false;
 	function _load() {
 		s = Settings.load();
@@ -35,6 +35,9 @@ var VideoSettings = (function() {
 			rtcPeer.dispose();
 		}
 		offerSdp = null;
+	}
+	function _close() {
+		_clear();
 		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
 	}
 	function _init(options) {
@@ -45,9 +48,10 @@ var VideoSettings = (function() {
 		mic = vs.find('select.mic');
 		res = vs.find('select.cam-resolution');
 		vidScroll = vs.find('.vid-block .video-conainer');
+		timer = vidScroll.find('.timer');
 		vid = vidScroll.find('video');
 		recBtn = vs.find('.rec-start').click(function() {
-			recBtn.prop('disabled', true).button('refresh'); //TODO disable drop-downs
+			recBtn.prop('disabled', true).button('refresh');
 			cam.prop('disabled', true);
 			mic.prop('disabled', true);
 			res.prop('disabled', true);
@@ -57,10 +61,20 @@ var VideoSettings = (function() {
 			OmUtil.sendMessage({
 				id : 'testStart'
 				, type: 'kurento'
+				, mode: 'test'
 				, sdpOffer: offerSdp
 				, video: cnts.video !== false
 				, audio: cnts.audio !== false
 			});
+			rtcPeer.on('icecandidate', function (candidate) {
+					console.log('Local candidate' + JSON.stringify(candidate));
+					OmUtil.sendMessage({
+						id : 'onTestIceCandidate'
+						, type: 'kurento'
+						, mode: 'test'
+						, candidate: candidate
+					});
+				});
 		});
 		playBtn = vs.find('.play').click(function() {
 			//FIXME TODO swf.play();
@@ -79,20 +93,20 @@ var VideoSettings = (function() {
 					}
 					, click: function() {
 						_save(true);
-						_clear();
+						_close();
 						vs.dialog("close");
 					}
 				}
 				, {
 					text: vs.data('btn-cancel')
 					, click: function() {
-						_clear();
+						_close();
 						vs.dialog("close");
 					}
 				}
 			]
 			, close: function() {
-				_clear();
+				_close();
 			}
 		});
 		lm.progressbar({ value: 0 });
@@ -157,28 +171,16 @@ var VideoSettings = (function() {
 		_clear();
 		const cnts = _constraints();
 		if (cnts.video !== false || cnts.audio !== false) {
-			const options = {
-				localVideo: vid[0]
-				, mediaConstraints: cnts
-				, onicecandidate: function (candidate) {
-					console.log('Local candidate' + JSON.stringify(candidate));
-					OmUtil.sendMessage({
-						id : 'onTestIceCandidate'
-						, type: 'kurento'
-						, candidate: candidate
-					});
-				}
-
-			}
 			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-				options
-				, function(error) {
+				{
+					localVideo: vid[0], mediaConstraints: cnts
+				}, function(error) {
 					if (error) {
 						return _error(error);
 					}
 					rtcPeer.generateOffer(function(error, _offerSdp) {
 						if (error) {
-							return console.error('Error generating the offer');
+							return _error('Error generating the offer');
 						}
 						offerSdp = _offerSdp;
 						_allowRec(true);
@@ -266,6 +268,7 @@ var VideoSettings = (function() {
 	function _open() {
 		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		recAllowed = false;
+		timer.hide();
 		vs.dialog('open');
 		_load();
 		_initDevices();
@@ -277,43 +280,44 @@ var VideoSettings = (function() {
 				return; //ping
 			}
 			const m = jQuery.parseJSON(msg);
-			if (m && 'kurento' === m.type) {
-				console.info('Received message: ' + m);
-				/* FIXME TODO
+			if (m && 'kurento' === m.type && 'test' === m.mode) {
+				console.info('Received message: ', m);
 				switch (m.id) {
-					case 'broadcast':
-						onBroadcast(m);
-						break;
-					case 'videoResponse':
-						onVideoResponse(m);
-						break;
-					case 'iceCandidate':
-						{
-							const w = $('#' + VideoUtil.getVid(m.uid))
-								, v = w.data()
+					case 'testStartResponse':
+						console.log('SDP answer received from server. Processing ...');
 
-							v.getPeer().addIceCandidate(m.candidate, function (error) {
-								if (error) {
-									console.error("Error adding candidate: " + error);
-									return;
-								}
-							});
-						}
+						rtcPeer.processAnswer(m.sdpAnswer, function(error) {
+							if (error) {
+								return _error(error);
+							}
+						});
+						break;
+					case 'testIceCandidate':
+						rtcPeer.addIceCandidate(m.candidate, function(error) {
+							if (error) {
+								return _error('Error adding candidate: ' + error);
+							}
+						});
+						break;
+					case 'testRecording':
+						timer.show().find('.time').text(m.time);
+						break;
+					case 'testStopped':
+						timer.hide();
 						break;
 					default:
-						console.error('Unrecognized message', m);
+						_error('Unrecognized message', m);
 				}
-				*/
 			}
 		} catch (err) {
 			//no-op
-			console.error(err);
+			_error(err);
 		}
 	}
 	return {
 		init: _init
 		, open: _open
-		, close: function() { vs.dialog('close'); }
+		, close: function() { _close(); vs.dialog('close'); }
 		, load: _load
 		, save: _save
 	};

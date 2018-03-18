@@ -29,6 +29,7 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.db.entity.basic.WsClient;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
@@ -55,6 +56,7 @@ import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
 import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
 import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
 import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
+import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
 import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
 import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.request.IRequestParameters;
@@ -186,6 +188,13 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 						}
 					}, new WebSocketBehavior() { //This WS will not be created in room
 						private static final long serialVersionUID = 1L;
+						private WsClient c = null;
+
+						@Override
+						protected void onConnect(ConnectedMessage message) {
+							super.onConnect(message);
+							c = new WsClient(message.getSessionId(), message.getKey().hashCode());
+						}
 
 						@Override
 						protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
@@ -193,7 +202,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 							try {
 								m = new JSONObject(msg.getText());
 								if (KURENTO_TYPE.equals(m.optString("type"))) {
-									kHandler.onMessage(null, m);
+									kHandler.onMessage(c, m);
 								}
 							} catch (Exception e) {
 								//no-op

@@ -182,9 +182,7 @@ public class KUser implements Closeable {
 			log.trace("PARTICIPANT {}: Released incoming EP for {}", this.uid, remoteParticipantName);
 
 			final WebRtcEndpoint ep = this.incomingMedia.get(remoteParticipantName);
-
 			ep.release(new Continuation<Void>() {
-
 				@Override
 				public void onSuccess(Void result) throws Exception {
 					log.trace("PARTICIPANT {}: Released successfully incoming EP for {}", KUser.this.uid,

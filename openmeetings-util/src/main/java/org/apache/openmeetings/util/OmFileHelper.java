@@ -188,7 +188,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsSubDir(Long id) {
-		return getStreamsSubDir("" + id);
+		return getStreamsSubDir(String.valueOf(id));
 	}
 
 	public static File getStreamsSubDir(String name) {

@@ -349,6 +349,13 @@
 .ui-dialog.video .vid-block .video-conainer {
 	overflow: auto;
 	max-height: 300px;
+	position: relative;
+}
+.ui-dialog.video .vid-block .video-conainer .timer {
+	background-color:grey;
+	width: 2.2em;
+	height: 1em;
+	position:absolute;
 }
 .ui-dialog.video .sett-row select, .ui-dialog.video .level-meter {
 	width: 250px;

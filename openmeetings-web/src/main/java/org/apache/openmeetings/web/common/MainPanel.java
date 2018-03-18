@@ -168,7 +168,7 @@ public class MainPanel extends Panel {
 					try {
 						m = new JSONObject(msg.getText());
 						if (KURENTO_TYPE.equals(m.optString("type"))) {
-							kHandler.onMessage(uid, m);
+							kHandler.onMessage(getClient(), m);
 						} else {
 							BasePanel p = getCurrentPanel();
 							if (p != null) {

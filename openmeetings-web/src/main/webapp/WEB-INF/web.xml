@@ -47,8 +47,7 @@
 		</init-param>
 		<init-param>
 			<param-name>ignorePaths</param-name>
-			<!-- FIXME TODO check all this -->
-			<param-value>media,conf,css,default,docs,images,js,persistence,public,screenshare,streams,upload,uploadtemp,services,DownloadHandler</param-value>
+			<param-value>conf,css,docs,images,js,persistence,public,screenshare,streams,upload,services</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>

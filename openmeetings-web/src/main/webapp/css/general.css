@@ -69,7 +69,7 @@ html, body {
 	position: absolute;
 	right: 0;
 	margin: 2px;
-	background-image: url(../images/ajax-loader.gif);
+	background-image: url(images/ajax-loader.gif);
 	background-repeat: no-repeat;
 	background-size: 28px 28px;
 }

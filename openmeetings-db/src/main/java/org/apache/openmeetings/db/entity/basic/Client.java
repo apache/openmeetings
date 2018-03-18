@@ -33,7 +33,6 @@ import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.util.RoomHelper;
-import org.apache.wicket.protocol.ws.api.registry.IKey;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
@@ -44,7 +43,7 @@ import com.github.openjson.JSONObject;
  * @author solomax
  *
  */
-public class Client implements IClient {
+public class Client implements IClient, IWsClient {
 	private static final long serialVersionUID = 1L;
 
 	public enum Activity {
@@ -59,7 +58,7 @@ public class Client implements IClient {
 		none, left, right;
 	}
 	private final String sessionId;
-	private int pageId;
+	private final int pageId;
 	private User user;
 	private Room room;
 	private final String uid;
@@ -96,21 +95,14 @@ public class Client implements IClient {
 		this.remoteAddress = rcl.getRemoteAddress();
 	}
 
+	@Override
 	public String getSessionId() {
 		return sessionId;
 	}
 
+	@Override
 	public int getPageId() {
 		return pageId;
-	}
-
-	public Client setPageId(IKey key) {
-		this.pageId = key.hashCode();
-		return this;
-	}
-
-	public void setPageId(int pageId) {
-		this.pageId = pageId;
 	}
 
 	public User getUser() {
