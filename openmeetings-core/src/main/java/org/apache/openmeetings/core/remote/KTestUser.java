@@ -62,6 +62,7 @@ public class KTestUser {
 		//FIXME TODO generated file uid
 		initRecPath(_c.getUid());
 		final RecorderEndpoint recorder = new RecorderEndpoint.Builder(pipeline, recPath)
+				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
 
 		recorder.addRecordingListener(new EventListener<RecordingEvent>() {
