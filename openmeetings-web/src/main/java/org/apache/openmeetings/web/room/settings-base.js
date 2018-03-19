@@ -1,7 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var VideoSettings = (function() {
 	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp, timer
-		, vidScroll, vid, recBtn, playBtn, recAllowed = false;
+		, vidScroll, vid, recBtn, playBtn, recAllowed = false
+		, audioCtx, levelAnalyser, levelMic, levelScript;
 	function _load() {
 		s = Settings.load();
 		if (!s.video) {
@@ -33,6 +34,13 @@ var VideoSettings = (function() {
 		}
 		if (!!rtcPeer) {
 			rtcPeer.dispose();
+		}
+		if (!!audioCtx) {
+			levelMic.disconnect(levelScript);
+			levelScript.disconnect(audioCtx.destination);
+			levelMic.disconnect(levelAnalyser);
+			levelAnalyser.disconnect(levelScript);
+			audioCtx = null;
 		}
 		offerSdp = null;
 	}
@@ -178,6 +186,32 @@ var VideoSettings = (function() {
 					if (error) {
 						return _error(error);
 					}
+					audioCtx = new AudioContext();
+					levelAnalyser = new AnalyserNode(audioCtx, {
+						fftSize: 512
+						, smoothingTimeConstant: 0.5,
+					});
+					levelScript = audioCtx.createScriptProcessor(2048, 1, 1);
+					levelMic = audioCtx.createMediaStreamSource(rtcPeer.getLocalStream());
+					levelMic.connect(levelScript);
+					levelScript.connect(audioCtx.destination);
+					levelMic.connect(levelAnalyser);
+					levelAnalyser.connect(levelScript);
+					const arr =  new Uint8Array(levelAnalyser.frequencyBinCount);
+					let t = Date.now();
+					levelScript.onaudioprocess = function(event) {
+						if (Date.now() - t < 200) {
+							return;
+						}
+						t = Date.now();
+						levelAnalyser.getByteFrequencyData(arr);
+						let avg = 0.0;
+						for (let i = 0; i < arr.length; ++i) {
+							avg += arr[i];
+						}
+						avg /= arr.length;
+						_micActivity(100 * avg / 255);
+					};
 					rtcPeer.generateOffer(function(error, _offerSdp) {
 						if (error) {
 							return _error('Error generating the offer');
