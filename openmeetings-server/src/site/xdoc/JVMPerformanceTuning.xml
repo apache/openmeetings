@@ -42,7 +42,7 @@ export JAVA_OPTS="-Xrs -Xms512M -Xmx1024M -Xss128K -XX:NewSize=256m \
 
 # start Red5
 echo "Setting Hi Performance Options"
-exec $RED5_HOME/red5.sh >> $RED5_HOME/log/jvm.stdout 2>&1 &
+exec $RED5_HOME/red5.sh >> $RED5_HOME/logs/jvm.stdout 2>&1 &
 ]]>
 			</source>
 

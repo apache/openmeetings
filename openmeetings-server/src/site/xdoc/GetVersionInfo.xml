@@ -29,7 +29,7 @@
 			<p>The version is printed into openmeetings.log file</p>
 			<p>
 				Run openmeetings<br/>
-				Open OM_HOME/log/openmeetings.log
+				Open OM_HOME/logs/openmeetings.log
 			</p>
 			<p>You get something like this: </p>
 			<source>

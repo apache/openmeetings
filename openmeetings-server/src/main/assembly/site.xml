@@ -44,15 +44,6 @@
 			</excludes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-flash/target/site</directory>
-			<outputDirectory>openmeetings-flash</outputDirectory>
-			<excludes>
-				<exclude>javadoc.sh</exclude>
-				<exclude>options</exclude>
-				<exclude>packages</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-install/target/site</directory>
 			<outputDirectory>openmeetings-install</outputDirectory>
 			<excludes>

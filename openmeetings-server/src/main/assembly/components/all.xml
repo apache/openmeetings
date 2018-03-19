@@ -24,35 +24,14 @@
 			<directory>${server.dir}</directory>
 			<outputDirectory></outputDirectory>
 			<excludes>
-				<exclude>webapps/installer/**</exclude>
-				<exclude>webapps/live/**</exclude>
-				<exclude>webapps/vod/**</exclude>
-				<exclude>webapps/oflaDemo/**</exclude>
-				<exclude>webapps/chat/**</exclude>
-				<exclude>webapps/root/demos/**</exclude>
-				<exclude>webapps/root/crossdomain.xml</exclude>
-				<exclude>webapps/root/favicon.ico</exclude>
-				<exclude>webapps/root/index.html</exclude>
-				<exclude>lib/commons-io*.jar</exclude>
-				<exclude>lib/commons-lang3*</exclude>
-				<exclude>lib/spring*.jar</exclude>
-				<!-- Tika related jars are in lib folder-->
-				<exclude>lib/apache-mime4j*</exclude>
-				<exclude>lib/boilerpipe*</exclude>
-				<exclude>lib/jempbox*</exclude>
-				<exclude>lib/juniversalchardet*</exclude>
-				<exclude>lib/mchange-commons*</exclude>
-				<exclude>lib/metadata-extractor*</exclude>
-				<exclude>lib/pdfbox*</exclude>
-				<exclude>lib/rome*</exclude>
-				<exclude>lib/tagsoup*</exclude>
-				<exclude>lib/tika*</exclude>
-				<!-- end of Tika libs -->
-				<exclude>plugins/websocket*.jar</exclude>
-				<exclude>plugins/tomcat-embed*.jar</exclude> <!-- added for Red5 lib substitution -->
-				<exclude>plugins/ecj*.jar</exclude> <!-- added for Red5 lib substitution -->
-				<exclude>*.sh</exclude>
-				<exclude>conf/jee-container.xml</exclude>
+				<exclude>bin/*.sh</exclude>
+				<exclude>conf/server.xml</exclude>
+				<exclude>conf/tomcat-users*</exclude>
+				<exclude>webapps/docs/**</exclude>
+				<exclude>webapps/examples/**</exclude>
+				<exclude>webapps/host-manager/**</exclude>
+				<exclude>webapps/manager/**</exclude>
+				<exclude>webapps/ROOT/**</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -64,17 +43,25 @@
 			</includes>
 		</fileSet>
 		<fileSet>
+			<directory>${server.dir}/bin</directory>
+			<outputDirectory>bin</outputDirectory>
+			<fileMode>0755</fileMode>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
+		<fileSet>
 			<directory>src/main/assembly/scripts</directory>
 			<outputDirectory></outputDirectory>
 			<fileMode>0755</fileMode>
 		</fileSet>
 		<fileSet>
-			<directory>src/main/assembly/root</directory>
-			<outputDirectory>${root.webapp}</outputDirectory>
-		</fileSet>
-		<fileSet>
 			<directory>src/main/assembly/conf</directory>
 			<outputDirectory>conf</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>src/main/assembly/ROOT</directory>
+			<outputDirectory>${root.webapp}</outputDirectory>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-screenshare/target/jnlp</directory>
@@ -92,16 +79,6 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-flash/target</directory>
-			<outputDirectory>${om.webapp}/public</outputDirectory>
-			<includes>
-				<include>*.swf</include>
-			</includes>
-			<excludes>
-				<exclude>openmeetings-flash-*.swf</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
 			<directory>${project.parent.basedir}</directory>
 			<outputDirectory></outputDirectory>
 			<includes>
@@ -109,6 +86,13 @@
 				<include>LICENSE</include>
 				<include>NOTICE</include>
 				<include>README</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/src/test/resources</directory>
+			<outputDirectory>conf</outputDirectory>
+			<includes>
+				<include>keystore</include>
 			</includes>
 		</fileSet>
 		<fileSet>
@@ -123,87 +107,6 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>META-INF/**</exclude>
-				<exclude>WEB-INF/classes/META-INF/**</exclude>
-				<exclude>WEB-INF/lib/asm*</exclude>
-				<exclude>WEB-INF/lib/aopalliance*</exclude>
-				<exclude>WEB-INF/lib/bcprov-*</exclude>
-				<exclude>WEB-INF/lib/cglib-nodep*</exclude>
-				<exclude>WEB-INF/lib/jcl-over-slf4j*</exclude>
-				<exclude>WEB-INF/lib/jul-to-slf4j*</exclude>
-				<exclude>WEB-INF/lib/slf4j-*</exclude>
-				<exclude>WEB-INF/lib/ecj-*</exclude> <!-- added for Red5 lib substitution -->
-				<exclude>WEB-INF/lib/tomcat-*</exclude>
-				<exclude>WEB-INF/lib/spring-*</exclude>
-				<exclude>WEB-INF/lib/mina-core-*</exclude>
-				<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
-				<exclude>WEB-INF/lib/commons-fileupload*</exclude>
-				<exclude>WEB-INF/lib/commons-io*</exclude>
-				<exclude>WEB-INF/lib/commons-codec*</exclude>
-				<exclude>WEB-INF/lib/commons-collections-*</exclude>
-				<exclude>WEB-INF/lib/commons-lang3*</exclude>
-				<exclude>WEB-INF/lib/commons-compress*</exclude>
-				<exclude>WEB-INF/lib/httpclient*</exclude>
-				<exclude>WEB-INF/lib/httpcore*</exclude>
-				<exclude>WEB-INF/lib/xmpcore*</exclude>
-				<exclude>WEB-INF/lib/quartz*</exclude>
-				<!-- Tika related jars are in lib folder -->
-				<exclude>WEB-INF/lib/apache-mime4j*</exclude>
-				<exclude>WEB-INF/lib/boilerpipe*</exclude>
-				<exclude>WEB-INF/lib/ehcache-core*</exclude>
-				<exclude>WEB-INF/lib/jempbox*</exclude>
-				<exclude>WEB-INF/lib/juniversalchardet*</exclude>
-				<exclude>WEB-INF/lib/mchange-commons*</exclude>
-				<exclude>WEB-INF/lib/metadata-extractor*</exclude>
-				<exclude>WEB-INF/lib/pdfbox*</exclude>
-				<exclude>WEB-INF/lib/rome*</exclude>
-				<exclude>WEB-INF/lib/tagsoup*</exclude>
-				<exclude>WEB-INF/lib/tika*</exclude>
-				<exclude>WEB-INF/lib/animal-sniffer-annotations*</exclude>
-				<exclude>WEB-INF/lib/bcmail-*</exclude>
-				<exclude>WEB-INF/lib/bcpkix-*</exclude>
-				<exclude>WEB-INF/lib/bzip2-*</exclude>
-				<exclude>WEB-INF/lib/cdm-*</exclude>
-				<exclude>WEB-INF/lib/commons-csv-*</exclude>
-				<exclude>WEB-INF/lib/commons-exec-*</exclude>
-				<exclude>WEB-INF/lib/commons-vfs2-*</exclude>
-				<exclude>WEB-INF/lib/curvesapi-*</exclude>
-				<exclude>WEB-INF/lib/error_prone_annotations-*</exclude>
-				<exclude>WEB-INF/lib/geoapi-*</exclude>
-				<exclude>WEB-INF/lib/grib-*</exclude>
-				<exclude>WEB-INF/lib/guava-*</exclude>
-				<exclude>WEB-INF/lib/httpmime-*</exclude>
-				<exclude>WEB-INF/lib/httpservices-*</exclude>
-				<exclude>WEB-INF/lib/isoparser-*</exclude>
-				<exclude>WEB-INF/lib/j2objc-annotations-*</exclude>
-				<exclude>WEB-INF/lib/jackcess-*</exclude>
-				<exclude>WEB-INF/lib/jackson-core-*</exclude>
-				<exclude>WEB-INF/lib/java-libpst-*</exclude>
-				<exclude>WEB-INF/lib/jcip-annotations-*</exclude>
-				<exclude>WEB-INF/lib/jcommander-*</exclude>
-				<exclude>WEB-INF/lib/jdom2-*</exclude>
-				<exclude>WEB-INF/lib/jhighlight-*</exclude>
-				<exclude>WEB-INF/lib/jmatio-*</exclude>
-				<exclude>WEB-INF/lib/jna-*</exclude>
-				<exclude>WEB-INF/lib/joda-time-*</exclude>
-				<exclude>WEB-INF/lib/json-*</exclude>
-				<exclude>WEB-INF/lib/json-simple-*</exclude>
-				<exclude>WEB-INF/lib/jsoup-*</exclude>
-				<exclude>WEB-INF/lib/jsr-275-*</exclude>
-				<exclude>WEB-INF/lib/jsr305-*</exclude>
-				<exclude>WEB-INF/lib/junrar-*</exclude>
-				<exclude>WEB-INF/lib/maven-scm-*</exclude>
-				<exclude>WEB-INF/lib/netcdf4-*</exclude>
-				<exclude>WEB-INF/lib/opennlp-tools-*</exclude>
-				<exclude>WEB-INF/lib/plexus-utils-*</exclude>
-				<exclude>WEB-INF/lib/poi-*</exclude>
-				<exclude>WEB-INF/lib/protobuf-java-*</exclude>
-				<exclude>WEB-INF/lib/regexp-*</exclude>
-				<exclude>WEB-INF/lib/sentiment-analysis-parser-*</exclude>
-				<exclude>WEB-INF/lib/sis-*</exclude>
-				<exclude>WEB-INF/lib/udunits-*</exclude>
-				<exclude>WEB-INF/lib/vorbis-java-*</exclude>
-				<exclude>WEB-INF/lib/xmlbeans-*</exclude>
-				<exclude>WEB-INF/lib/xz-*</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
@@ -212,81 +115,6 @@
 			<filtered>true</filtered>
 			<includes>
 				<include>WEB-INF/classes/META-INF/**</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
-			<outputDirectory>lib</outputDirectory>
-			<includes>
-				<include>spring-*</include>
-				<include>geronimo-jpa*</include>
-				<include>commons-fileupload*</include>
-				<include>commons-io*</include>
-				<include>commons-lang3*</include>
-				<!-- Tika related jars are in lib folder -->
-				<include>apache-mime4j*</include>
-				<include>boilerpipe*</include>
-				<include>jempbox*</include>
-				<include>juniversalchardet*</include>
-				<include>mchange-commons*</include>
-				<include>metadata-extractor*</include>
-				<include>pdfbox*</include>
-				<include>rome*</include>
-				<include>tagsoup*</include>
-				<include>tika*</include>
-				<include>bcmail-*</include>
-				<include>bcpkix-*</include>
-				<include>bzip2-*</include>
-				<include>cdm-*</include>
-				<include>commons-csv-*</include>
-				<include>commons-exec-*</include>
-				<include>commons-vfs2-*</include>
-				<include>curvesapi-*</include>
-				<include>error_prone_annotations-*</include>
-				<include>geoapi-*</include>
-				<include>grib-*</include>
-				<include>guava-*</include>
-				<include>httpmime-*</include>
-				<include>httpservices-*</include>
-				<include>isoparser-*</include>
-				<include>j2objc-annotations-*</include>
-				<include>jackcess-*</include>
-				<include>jackson-core-*</include>
-				<include>java-libpst-*</include>
-				<include>jcip-annotations-*</include>
-				<include>jcommander-*</include>
-				<include>jdom2-*</include>
-				<include>jhighlight-*</include>
-				<include>jmatio-*</include>
-				<include>jna-*</include>
-				<include>joda-time-*</include>
-				<include>json-*</include>
-				<include>json-simple-*</include>
-				<include>jsoup-*</include>
-				<include>jsr-275-*</include>
-				<include>jsr305-*</include>
-				<include>junrar-*</include>
-				<include>maven-scm-*</include>
-				<include>netcdf4-*</include>
-				<include>opennlp-tools-*</include>
-				<include>plexus-utils-*</include>
-				<include>poi-*</include>
-				<include>protobuf-java-*</include>
-				<include>regexp-*</include>
-				<include>sentiment-analysis-parser-*</include>
-				<include>sis-*</include>
-				<include>udunits-*</include>
-				<include>vorbis-java-*</include>
-				<include>xmlbeans-*</include>
-				<include>xz-*</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
-			<outputDirectory>plugins</outputDirectory>
-			<includes>
-				<include>ecj-*</include> <!-- added for Red5 lib substitution -->
-				<include>tomcat-*</include>
 			</includes>
 		</fileSet>
 		<fileSet>

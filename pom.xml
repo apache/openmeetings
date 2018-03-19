@@ -591,12 +591,6 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.openmeetings</groupId>
-				<artifactId>openmeetings-flash</artifactId>
-				<version>${project.version}</version>
-				<type>swf</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.openmeetings</groupId>
 				<artifactId>openmeetings-install</artifactId>
 				<version>${project.version}</version>
 			</dependency>

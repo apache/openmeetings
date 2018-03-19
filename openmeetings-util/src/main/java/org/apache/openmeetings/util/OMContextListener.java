@@ -37,7 +37,7 @@ public class OMContextListener implements ServletContextListener {
 		String ctx = pathToName(event);
 		System.setProperty("current_openmeetings_context_name", ctx);
 		if (System.getProperty(LOG_DIR_PROP) == null) {
-			System.setProperty(LOG_DIR_PROP, "log");
+			System.setProperty(LOG_DIR_PROP, "logs");
 		}
 		System.setProperty("webapp.contextPath", String.format("/%s", ctx));
 		LoggerContext context = (LoggerContext)LoggerFactory.getILoggerFactory();

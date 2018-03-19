@@ -259,7 +259,7 @@
 					then access your OM installation
 				</li>
 				<li>If you have Problems with conversion-jobs check your openmeetings log
-					output (available at <tt>$RED5_HOME/log/openmeetings.log</tt>). There will be error Messages which help you. You must
+					output (available at <tt>$RED5_HOME/logs/openmeetings.log</tt>). There will be error Messages which help you. You must
 					install OpenOffice, ImageMagick and GhostScript to run
 					all conversion-Jobs correctly.
 				</li>
