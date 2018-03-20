@@ -1,8 +1,65 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+var MicLevel = (function() {
+	let ctx, analyser, mic, script;
+
+	function _meter(cnts, rtcPeer, _micActivity, _error) {
+		if (!rtcPeer || 'function' !== typeof(rtcPeer.getLocalStream)) {
+			return;
+		}
+		const stream = rtcPeer.getLocalStream();
+		if (!stream || stream.getAudioTracks().length < 1) {
+			return;
+		}
+		try {
+			ctx = new AudioContext();
+			analyser = new AnalyserNode(ctx, {
+				fftSize: 512
+				, smoothingTimeConstant: 0.5,
+			});
+			script = ctx.createScriptProcessor(2048, 1, 1);
+			mic = ctx.createMediaStreamSource(stream);
+			mic.connect(script);
+			script.connect(ctx.destination);
+			mic.connect(analyser);
+			analyser.connect(script);
+			const arr =  new Uint8Array(analyser.frequencyBinCount);
+			let t = Date.now();
+			script.onaudioprocess = function(event) {
+				if (Date.now() - t < 200) {
+					return;
+				}
+				t = Date.now();
+				analyser.getByteFrequencyData(arr);
+				let avg = 0.0;
+				for (let i = 0; i < arr.length; ++i) {
+					avg += arr[i];
+				}
+				avg /= arr.length;
+				_micActivity(100 * avg / 255);
+				console.log("avg = " + avg);
+			};
+		} catch (err) {
+			_error(err);
+		}
+	}
+	function _dispose() {
+		if (!!ctx) {
+			mic.disconnect(script);
+			script.disconnect(ctx.destination);
+			mic.disconnect(analyser);
+			analyser.disconnect(script);
+			ctx = null;
+		}
+	}
+	return {
+		meter: _meter
+		, dispose: _dispose
+	};
+});
 var VideoSettings = (function() {
 	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp, timer
 		, vidScroll, vid, recBtn, playBtn, recAllowed = false
-		, audioCtx, levelAnalyser, levelMic, levelScript;
+		, errs, level;
 	function _load() {
 		s = Settings.load();
 		if (!s.video) {
@@ -35,12 +92,9 @@ var VideoSettings = (function() {
 		if (!!rtcPeer) {
 			rtcPeer.dispose();
 		}
-		if (!!audioCtx) {
-			levelMic.disconnect(levelScript);
-			levelScript.disconnect(audioCtx.destination);
-			levelMic.disconnect(levelAnalyser);
-			levelAnalyser.disconnect(levelScript);
-			audioCtx = null;
+		if (!!level) {
+			level.dispose();
+			level = null;
 		}
 		offerSdp = null;
 	}
@@ -50,6 +104,9 @@ var VideoSettings = (function() {
 	}
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
+		errs = $('#jsNotifications').kendoNotification({
+			autoHideAfter: 20000
+		}).data("kendoNotification");
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam');
@@ -186,32 +243,8 @@ var VideoSettings = (function() {
 					if (error) {
 						return _error(error);
 					}
-					audioCtx = new AudioContext();
-					levelAnalyser = new AnalyserNode(audioCtx, {
-						fftSize: 512
-						, smoothingTimeConstant: 0.5,
-					});
-					levelScript = audioCtx.createScriptProcessor(2048, 1, 1);
-					levelMic = audioCtx.createMediaStreamSource(rtcPeer.getLocalStream());
-					levelMic.connect(levelScript);
-					levelScript.connect(audioCtx.destination);
-					levelMic.connect(levelAnalyser);
-					levelAnalyser.connect(levelScript);
-					const arr =  new Uint8Array(levelAnalyser.frequencyBinCount);
-					let t = Date.now();
-					levelScript.onaudioprocess = function(event) {
-						if (Date.now() - t < 200) {
-							return;
-						}
-						t = Date.now();
-						levelAnalyser.getByteFrequencyData(arr);
-						let avg = 0.0;
-						for (let i = 0; i < arr.length; ++i) {
-							avg += arr[i];
-						}
-						avg /= arr.length;
-						_micActivity(100 * avg / 255);
-					};
+					level = MicLevel();
+					level.meter(rtcPeer, _micActivity, _error);
 					rtcPeer.generateOffer(function(error, _offerSdp) {
 						if (error) {
 							return _error('Error generating the offer');
@@ -236,7 +269,10 @@ var VideoSettings = (function() {
 		lm.progressbar("value", Math.max(0, level));
 	}
 	function _error(msg) {
-		//FIXME TODO status field
+		if (typeof(msg) === 'object') {
+			msg = msg.name + ": " + msg.message;
+		}
+		errs.show(msg, "error");
 		return console.error(msg);
 	}
 	function _initDevices() {
@@ -296,7 +332,7 @@ var VideoSettings = (function() {
 				_readValues();
 			})
 			.catch(function(err) {
-				_error(err.name + ": " + err.message);
+				_error(err);
 			});
 	}
 	function _open() {
@@ -340,7 +376,7 @@ var VideoSettings = (function() {
 						timer.hide();
 						break;
 					default:
-						_error('Unrecognized message', m);
+						_error('Unrecognized message: ' + msg);
 				}
 			}
 		} catch (err) {
