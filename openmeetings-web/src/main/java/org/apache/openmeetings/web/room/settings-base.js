@@ -1,8 +1,8 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var MicLevel = (function() {
-	let ctx, analyser, mic, script;
+	let ctx, mic, script, vol = .0;
 
-	function _meter(cnts, rtcPeer, _micActivity, _error) {
+	function _meter(rtcPeer, _micActivity, _error) {
 		if (!rtcPeer || 'function' !== typeof(rtcPeer.getLocalStream)) {
 			return;
 		}
@@ -12,31 +12,26 @@ var MicLevel = (function() {
 		}
 		try {
 			ctx = new AudioContext();
-			analyser = new AnalyserNode(ctx, {
-				fftSize: 512
-				, smoothingTimeConstant: 0.5,
-			});
-			script = ctx.createScriptProcessor(2048, 1, 1);
+			script = ctx.createScriptProcessor(512);
 			mic = ctx.createMediaStreamSource(stream);
 			mic.connect(script);
 			script.connect(ctx.destination);
-			mic.connect(analyser);
-			analyser.connect(script);
-			const arr =  new Uint8Array(analyser.frequencyBinCount);
 			let t = Date.now();
 			script.onaudioprocess = function(event) {
+				const arr = event.inputBuffer.getChannelData()
+					, al = arr.length;
+				let avg = 0.0;
+				for (let i = 0; i < al; ++i) {
+					avg += arr[i] * arr[i];
+				}
+				avg = Math.sqrt(avg / al);
+				vol = Math.max(avg, vol * .95);
+				//we will continuously get volume but do not perform re-draw too often
 				if (Date.now() - t < 200) {
 					return;
 				}
 				t = Date.now();
-				analyser.getByteFrequencyData(arr);
-				let avg = 0.0;
-				for (let i = 0; i < arr.length; ++i) {
-					avg += arr[i];
-				}
-				avg /= arr.length;
-				_micActivity(100 * avg / 255);
-				console.log("avg = " + avg);
+				_micActivity(140 * vol); // magic number
 			};
 		} catch (err) {
 			_error(err);
@@ -46,8 +41,7 @@ var MicLevel = (function() {
 		if (!!ctx) {
 			mic.disconnect(script);
 			script.disconnect(ctx.destination);
-			mic.disconnect(analyser);
-			analyser.disconnect(script);
+			script.onaudioprocess = null;
 			ctx = null;
 		}
 	}
