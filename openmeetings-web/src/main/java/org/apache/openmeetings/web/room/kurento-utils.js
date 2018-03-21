@@ -2,7 +2,7 @@
 var freeice = require('freeice');
 var inherits = require('inherits');
 var UAParser = require('ua-parser-js');
-var uuid = require('uuid');
+window.UUID = require('uuid');
 var hark = require('hark');
 var EventEmitter = require('events').EventEmitter;
 var recursive = require('merge').recursive.bind(undefined, true);
@@ -134,7 +134,7 @@ function WebRtcPeer(mode, options, callback) {
     var dataChannelConfig = options.dataChannelConfig;
     var useDataChannels = options.dataChannels || false;
     var dataChannel;
-    var guid = uuid.v4();
+    var guid = UUID.v4();
     var configuration = recursive({ iceServers: freeice() }, options.configuration);
     var onicecandidate = options.onicecandidate;
     if (onicecandidate)

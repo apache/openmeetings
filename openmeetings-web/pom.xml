@@ -155,7 +155,6 @@
 								<jsSourceFile>MathJax-config.js</jsSourceFile>
 								<jsSourceFile>MathJax.js</jsSourceFile>
 								<jsSourceFile>wb-all.js</jsSourceFile>
-								<jsSourceFile>uuid.js</jsSourceFile>
 								<jsSourceFile>tool-util.js</jsSourceFile>
 								<jsSourceFile>player.js</jsSourceFile>
 								<jsSourceFile>tool-base.js</jsSourceFile>

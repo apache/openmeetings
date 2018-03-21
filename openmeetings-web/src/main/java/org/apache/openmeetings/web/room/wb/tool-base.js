@@ -2,7 +2,7 @@
 var Base = function() {
 	const base = {};
 	base.objectCreated = function(o, canvas) {
-		o.uid = UUID.generate();
+		o.uid = UUID.v4();
 		o.slide = canvas.slide;
 		canvas.trigger("wb:object:created", o);
 		return o.uid;

@@ -440,7 +440,7 @@ var Wb = function() {
 		if (!!o.loaded) return;
 		switch(o.type) {
 			case 'i-text':
-				o.uid = UUID.generate();
+				o.uid = UUID.v4();
 				o.slide = this.slide;
 				objCreatedHandler(o);
 				break;
@@ -479,7 +479,7 @@ var Wb = function() {
 		s.find('.wb-dim-h').val(o.height);
 	}
 	function pathCreatedHandler(o) {
-		o.path.uid = UUID.generate();
+		o.path.uid = UUID.v4();
 		o.path.slide = this.slide;
 		objCreatedHandler(o.path);
 	};
