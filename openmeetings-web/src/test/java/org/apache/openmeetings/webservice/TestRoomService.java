@@ -25,18 +25,27 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
+import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
+import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.file.FileItemDTO;
+import org.apache.openmeetings.db.dto.room.InvitationDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
 import org.apache.openmeetings.db.dto.room.RoomFileDTO;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestRoomService extends AbstractWebServiceTest {
 	private static final long CAPACITY = 666L;
+
+	@Autowired
+	private RoomDao roomDao;
 
 	@Test
 	public void testExternal() {
@@ -133,5 +142,31 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 		CallResult<RoomDTO> res = createAndValidate(fileCall.getSid(), r);
 		assertFalse("Room files should NOT be empty", res.getObj().getFiles().isEmpty());
+	}
+
+	@Test
+	public void testHash() {
+		List<Room> rooms = roomDao.get(0,  100);
+		assertFalse("Room list should not be empty", rooms.isEmpty());
+
+		ServiceResult sr = login();
+		ServiceResult res = getClient(getRoomUrl())
+				.path("/hash")
+				.query("sid", sr.getMessage())
+				.query("invite", new InvitationDTO()
+						.setFirstname("Mark")
+						.setLastname("Steven")
+						.setEmail("abc@gmail.com")
+						.setPassword("Sys@123!")
+						.setPasswordProtected(true)
+						.setSubject("Health Meeting")
+						.setRoomId(rooms.get(0).getId())
+						.setMessage("Meeting")
+						.setValid(Valid.Period)
+						.setValidFrom("2018-03-19 02:25:12")
+						.setValidTo("2018-04-20 02:25:12")
+						.toString())
+				.post("", ServiceResult.class);
+		assertEquals("Login should be successful", Type.SUCCESS.name(), res.getType());
 	}
 }

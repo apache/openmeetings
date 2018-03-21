@@ -39,6 +39,8 @@ import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 
+import com.github.openjson.JSONObject;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class InvitationDTO implements Serializable {
@@ -67,72 +69,81 @@ public class InvitationDTO implements Serializable {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public InvitationDTO setEmail(String email) {
 		this.email = email;
+		return this;
 	}
 
 	public String getFirstname() {
 		return firstname;
 	}
 
-	public void setFirstname(String firstname) {
+	public InvitationDTO setFirstname(String firstname) {
 		this.firstname = firstname;
+		return this;
 	}
 
 	public String getLastname() {
 		return lastname;
 	}
 
-	public void setLastname(String lastname) {
+	public InvitationDTO setLastname(String lastname) {
 		this.lastname = lastname;
+		return this;
 	}
 
 	public String getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public InvitationDTO setMessage(String message) {
 		this.message = message;
+		return this;
 	}
 
 	public String getSubject() {
 		return subject;
 	}
 
-	public void setSubject(String subject) {
+	public InvitationDTO setSubject(String subject) {
 		this.subject = subject;
+		return this;
 	}
 
 	public Long getRoomId() {
 		return roomId;
 	}
 
-	public void setRoomId(Long roomId) {
+	public InvitationDTO setRoomId(Long roomId) {
 		this.roomId = roomId;
+		return this;
 	}
 
 	public boolean isPasswordProtected() {
 		return passwordProtected;
 	}
 
-	public void setPasswordProtected(boolean passwordProtected) {
+	public InvitationDTO setPasswordProtected(boolean passwordProtected) {
 		this.passwordProtected = passwordProtected;
+		return this;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public InvitationDTO setPassword(String password) {
 		this.password = password;
+		return this;
 	}
 
 	public Valid getValid() {
 		return valid;
 	}
 
-	public void setValid(Valid valid) {
+	public InvitationDTO setValid(Valid valid) {
 		this.valid = valid;
+		return this;
 	}
 
 	/**
@@ -150,8 +161,9 @@ public class InvitationDTO implements Serializable {
 	 * @param validFrom
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
 	 */
-	public void setValidFrom(String validFrom) {
+	public InvitationDTO setValidFrom(String validFrom) {
 		this.validFrom = validFrom;
+		return this;
 	}
 
 	/**
@@ -169,8 +181,9 @@ public class InvitationDTO implements Serializable {
 	 * @param validTo
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
 	 */
-	public void setValidTo(String validTo) {
+	public InvitationDTO setValidTo(String validTo) {
 		this.validTo = validTo;
+		return this;
 	}
 
 	public long getLanguageId() {
@@ -220,5 +233,33 @@ public class InvitationDTO implements Serializable {
 		i.setInserted(new Date());
 		i.setAppointment(null);
 		return i;
+	}
+
+	public static InvitationDTO fromString(String s) {
+		return get(new JSONObject(s));
+	}
+
+	public static InvitationDTO get(JSONObject o) {
+		if (o == null) {
+			return null;
+		}
+		InvitationDTO i = new InvitationDTO();
+		i.firstname = o.optString("firstname");
+		i.lastname = o.optString("lastname");
+		i.email = o.optString("email");
+		i.password = o.optString("password");
+		i.passwordProtected = o.optBoolean("passwordProtected", false);
+		i.subject = o.optString("subject");
+		i.roomId = o.getLong("roomId");
+		i.message = o.optString("message");
+		i.valid = Valid.valueOf(o.optString("valid", Valid.Period.name()));
+		i.validFrom = o.optString("validFrom");
+		i.validTo = o.optString("validTo");
+		return i;
+	}
+
+	@Override
+	public String toString() {
+		return new JSONObject(this).toString();
 	}
 }
