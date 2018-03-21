@@ -18,7 +18,7 @@ var MicLevel = (function() {
 			script.connect(ctx.destination);
 			let t = Date.now();
 			script.onaudioprocess = function(event) {
-				const arr = event.inputBuffer.getChannelData()
+				const arr = event.inputBuffer.getChannelData(0)
 					, al = arr.length;
 				let avg = 0.0;
 				for (let i = 0; i < al; ++i) {
@@ -85,6 +85,7 @@ var VideoSettings = (function() {
 		}
 		if (!!rtcPeer) {
 			rtcPeer.dispose();
+			rtcPeer = null;
 		}
 		if (!!level) {
 			level.dispose();
@@ -307,13 +308,13 @@ var VideoSettings = (function() {
 						cCount++;
 					}
 				});
-				cam.prop('disabled', false).change(function() {
+				cam.prop('disabled', false).off().change(function() {
 					_readValues();
 				});
-				mic.prop('disabled', false).change(function() {
+				mic.prop('disabled', false).off().change(function() {
 					_readValues();
 				});
-				res.change(function() {
+				res.off().change(function() {
 					_readValues();
 				});
 				res.find('option').each(function() {
@@ -333,6 +334,7 @@ var VideoSettings = (function() {
 		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		recAllowed = false;
 		timer.hide();
+		_micActivity(0);
 		vs.dialog('open');
 		_load();
 		_initDevices();
