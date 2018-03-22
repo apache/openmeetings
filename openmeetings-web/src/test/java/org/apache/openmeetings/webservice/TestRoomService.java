@@ -39,13 +39,9 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestRoomService extends AbstractWebServiceTest {
 	private static final long CAPACITY = 666L;
-
-	@Autowired
-	private RoomDao roomDao;
 
 	@Test
 	public void testExternal() {
@@ -146,7 +142,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 	@Test
 	public void testHash() {
-		List<Room> rooms = roomDao.get(0,  100);
+		List<Room> rooms = getBean(RoomDao.class).get(0,  100);
 		assertFalse("Room list should not be empty", rooms.isEmpty());
 
 		ServiceResult sr = login();
