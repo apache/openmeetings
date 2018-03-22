@@ -66,7 +66,7 @@ public class ChatForm extends Form<Void> {
 	private final HiddenField<String> activeTab = new HiddenField<>("activeTab", Model.of(""));
 
 	@SpringBean
-	private transient ClientManager cm;
+	private ClientManager cm;
 
 	public ChatForm(String id) {
 		super(id);

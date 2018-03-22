@@ -68,13 +68,13 @@ public class KurentoHandler {
 
 	public void onMessage(IWsClient _c, JSONObject msg) {
 		final String cmdId = msg.getString("id");
-		if ("test".equals(msg.getString("mode"))) {
+		if ("test".equals(msg.optString("mode"))) {
 			KTestUser user = getTestByUid(_c.getUid());
 			switch (cmdId) {
 				case "start":
 				{
 					//TODO FIXME assert null user ???
-					user = new KTestUser(_c, msg, this, client.createMediaPipeline());
+					user = new KTestUser(_c, msg, client.createMediaPipeline());
 					testsByUid.put(_c.getUid(), user);
 				}
 					break;
@@ -88,6 +88,9 @@ public class KurentoHandler {
 						user.addCandidate(cand);
 					}
 				}
+					break;
+				case "play":
+					user.play(_c, msg, client.createMediaPipeline());
 					break;
 			}
 		} else {

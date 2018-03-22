@@ -38,7 +38,7 @@ public class RecordingExpiringTemplate extends SubjectEmailTemplate {
 	private final User u;
 
 	@SpringBean
-	protected transient RoomDao roomDao;
+	protected RoomDao roomDao;
 
 	private RecordingExpiringTemplate(User u, final Recording rec, long remainingDays) {
 		super(LocaleHelper.getLocale(u));

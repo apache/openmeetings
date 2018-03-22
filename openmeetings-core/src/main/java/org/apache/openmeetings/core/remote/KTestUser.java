@@ -32,12 +32,15 @@ import java.util.concurrent.TimeUnit;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.kurento.client.Continuation;
+import org.kurento.client.EndOfStreamEvent;
+import org.kurento.client.ErrorEvent;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
+import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.RecordingEvent;
 import org.kurento.client.StoppedEvent;
@@ -56,7 +59,8 @@ public class KTestUser {
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestUser(IWsClient _c, JSONObject msg, KurentoHandler handler, MediaPipeline pipeline) {
+	public KTestUser(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		webRtcEndpoint.connect(webRtcEndpoint);
 
@@ -84,6 +88,7 @@ public class KTestUser {
 			@Override
 			public void onEvent(StoppedEvent event) {
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
+				release();
 			}
 		});
 		switch (profile) {
@@ -107,18 +112,7 @@ public class KTestUser {
 		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
 
 		// 4. Gather ICE candidates
-		webRtcEndpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-			@Override
-			public void onEvent(IceCandidateFoundEvent event) {
-				IceCandidate cand = event.getCandidate();
-				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
-						.put("id", "iceCandidate")
-						.put("candidate", new JSONObject()
-								.put("candidate", cand.getCandidate())
-								.put("sdpMid", cand.getSdpMid())
-								.put("sdpMLineIndex", cand.getSdpMLineIndex())));
-			}
-		});
+		addIceListener(_c);
 
 		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 				.put("id", "startResponse")
@@ -137,8 +131,72 @@ public class KTestUser {
 		});
 	}
 
+	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+		// 1. Media logic
+		this.pipeline = pipeline;
+		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
+		PlayerEndpoint player = new PlayerEndpoint.Builder(pipeline, recPath).build();
+		player.connect(webRtcEndpoint);
+
+		// Player listeners
+		player.addErrorListener(new EventListener<ErrorEvent>() {
+			@Override
+			public void onEvent(ErrorEvent event) {
+				log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
+				sendPlayEnd(_c);
+			}
+		});
+		player.addEndOfStreamListener(new EventListener<EndOfStreamEvent>() {
+			@Override
+			public void onEvent(EndOfStreamEvent event) {
+				log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
+				sendPlayEnd(_c);
+			}
+		});
+
+		// 3. SDP negotiation
+		String sdpOffer = msg.getString("sdpOffer");
+		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
+
+		// 4. Gather ICE candidates
+		addIceListener(_c);
+
+		// 5. Play recorded stream
+		player.play();
+
+		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+				.put("id", "playResponse")
+				.put("sdpAnswer", sdpAnswer));
+
+		webRtcEndpoint.gatherCandidates();
+	}
+
 	public void addCandidate(IceCandidate cand) {
-		webRtcEndpoint.addIceCandidate(cand);
+		if (webRtcEndpoint != null) {
+			webRtcEndpoint.addIceCandidate(cand);
+		}
+	}
+
+	private void addIceListener(IWsClient _c) {
+		// 4. Gather ICE candidates
+		webRtcEndpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
+			@Override
+			public void onEvent(IceCandidateFoundEvent event) {
+				IceCandidate cand = event.getCandidate();
+				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+						.put("id", "iceCandidate")
+						.put("candidate", new JSONObject()
+								.put("candidate", cand.getCandidate())
+								.put("sdpMid", cand.getSdpMid())
+								.put("sdpMLineIndex", cand.getSdpMLineIndex())));
+			}
+		});
+	}
+
+	private void sendPlayEnd(IWsClient _c) {
+		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+				.put("id", "playStopped"));
+		release();
 	}
 
 	private static MediaProfileSpecType getProfile(JSONObject msg) {
@@ -160,5 +218,26 @@ public class KTestUser {
 		} catch (IOException e) {
 			log.error("Uexpected error while creating recording URI", e);
 		}
+	}
+
+	public void release() {
+		pipeline.release(new Continuation<Void>() {
+			@Override
+			public void onSuccess(Void result) throws Exception {
+				log.info("Pipeline released successfully");
+				cleanup();
+			}
+
+			@Override
+			public void onError(Throwable cause) throws Exception {
+				log.info("Error releasing pipeline ", cause);
+				cleanup();
+			}
+		});
+	}
+
+	private void cleanup() {
+		webRtcEndpoint = null;
+		pipeline = null;
 	}
 }

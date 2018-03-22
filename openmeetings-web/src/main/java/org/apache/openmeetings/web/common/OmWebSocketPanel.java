@@ -92,7 +92,7 @@ public abstract class OmWebSocketPanel extends Panel {
 						OmWebSocketPanel.this.onMessage(handler, m);
 					}
 				} catch (Exception e) {
-					//no-op
+					log.error("Error while processing incoming message", e);
 				}
 			}
 		}
@@ -116,7 +116,7 @@ public abstract class OmWebSocketPanel extends Panel {
 		}
 	};
 	@SpringBean
-	private transient KurentoHandler kHandler;
+	private KurentoHandler kHandler;
 
 	public OmWebSocketPanel(String id) {
 		super(id);
@@ -126,9 +126,19 @@ public abstract class OmWebSocketPanel extends Panel {
 
 	protected abstract IWsClient getWsClient();
 
+	/**
+	 * Override this method to add your own logic
+	 *
+	 * @param message - connected message
+	 */
 	protected void onConnect(ConnectedMessage message) {
 	}
 
+	/**
+	 * Override this method to add your own logic
+	 *
+	 * @param handler - handler to perform some updates
+	 */
 	protected void onConnect(WebSocketRequestHandler handler) {
 	}
 
@@ -136,6 +146,12 @@ public abstract class OmWebSocketPanel extends Panel {
 		log.debug("WebSocketBehavior::closeHandler {}", msg);
 	}
 
+	/**
+	 * Override this method to add your own logic
+	 *
+	 * @param handler - handler to perform some updates
+	 * @param m - incoming message as {@link JSONObject}
+	 */
 	protected void onMessage(WebSocketRequestHandler handler, JSONObject m) {
 	}
 

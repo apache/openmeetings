@@ -140,7 +140,7 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 	});
 
 	@SpringBean
-	private transient ClientManager cm;
+	private ClientManager cm;
 
 	/**
 	 * Constructor

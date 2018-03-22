@@ -97,6 +97,15 @@ var VideoSettings = (function() {
 		_clear();
 		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
 	}
+	function _onIceCandidate(candidate) {
+		console.log('Local candidate' + JSON.stringify(candidate));
+		OmUtil.sendMessage({
+			id : 'iceCandidate'
+			, type: 'kurento'
+			, mode: 'test'
+			, candidate: candidate
+		});
+	}
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
 		errs = $('#jsNotifications').kendoNotification({
@@ -112,6 +121,7 @@ var VideoSettings = (function() {
 		vid = vidScroll.find('video');
 		recBtn = vs.find('.rec-start').click(function() {
 			recBtn.prop('disabled', true).button('refresh');
+			playBtn.prop('disabled', true).button('refresh');
 			cam.prop('disabled', true);
 			mic.prop('disabled', true);
 			res.prop('disabled', true);
@@ -126,18 +136,40 @@ var VideoSettings = (function() {
 				, video: cnts.video !== false
 				, audio: cnts.audio !== false
 			});
-			rtcPeer.on('icecandidate', function (candidate) {
-					console.log('Local candidate' + JSON.stringify(candidate));
-					OmUtil.sendMessage({
-						id : 'iceCandidate'
-						, type: 'kurento'
-						, mode: 'test'
-						, candidate: candidate
-					});
-				});
+			rtcPeer.on('icecandidate', _onIceCandidate);
 		});
 		playBtn = vs.find('.play').click(function() {
-			//FIXME TODO swf.play();
+			recBtn.prop('disabled', true).button('refresh');
+			playBtn.prop('disabled', true).button('refresh');
+			cam.prop('disabled', true);
+			mic.prop('disabled', true);
+			res.prop('disabled', true);
+			_clear();
+			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+				{
+					remoteVideo: vid[0]
+					, mediaConstraints: {
+						audio: true
+						, video: true
+					}
+					, onicecandidate: _onIceCandidate
+				}
+				, function(error) {
+					if (error) {
+						return _error(error);
+					}
+					rtcPeer.generateOffer(function(error, offerSdp) {
+						if (error) {
+							return _error('Error generating the offer');
+						}
+						OmUtil.sendMessage({
+							id : 'play'
+							, type: 'kurento'
+							, mode: 'test'
+							, sdpOffer: offerSdp
+						});
+					});
+				});
 		});
 		vs.dialog({
 			classes: {
@@ -187,7 +219,7 @@ var VideoSettings = (function() {
 		_save(); // trigger settings update
 	}
 	function _updateRec() {
-		recBtn.prop('disabled', !recAllowed && (s.video.cam > -1 || s.video.mic > -1)).button('refresh');
+		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0)).button('refresh');
 	}
 	function _constraints() {
 		const cnts = {}
@@ -348,6 +380,7 @@ var VideoSettings = (function() {
 			if (m && 'kurento' === m.type && 'test' === m.mode) {
 				console.info('Received message: ', m);
 				switch (m.id) {
+					case 'playResponse':
 					case 'startResponse':
 						console.log('SDP answer received from server. Processing ...');
 
@@ -368,8 +401,9 @@ var VideoSettings = (function() {
 						timer.show().find('.time').text(m.time);
 						break;
 					case 'recStopped':
+					case 'playStopped':
 						timer.hide();
-						recBtn.prop('disabled', false).button('refresh');
+						_updateRec();
 						playBtn.prop('disabled', false).button('refresh');
 						cam.prop('disabled', false);
 						mic.prop('disabled', false);
