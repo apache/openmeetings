@@ -25,6 +25,7 @@ import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
@@ -39,6 +40,7 @@ public class VideoSettings extends Panel {
 
 	public VideoSettings(String id) {
 		super(id);
+		add(new EmptyPanel("ws-panel"));
 	}
 
 	@Override

@@ -53,8 +53,6 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -64,7 +62,6 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(HashPage.class);
 	public static final String APP = "app";
 	public static final String APP_TYPE_NETWORK = "network";
 	public static final String APP_TYPE_SETTINGS = "settings";
@@ -170,16 +167,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 			}
 			if (APP_TYPE_SETTINGS.equals(app.toString())) {
 				replace(new VideoSettings(PANEL_MAIN)
-					.add(new OmAjaxClientInfoBehavior() {
-						private static final long serialVersionUID = 1L;
-
-						@Override
-						protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
-							super.onClientInfo(target, info);
-							target.appendJavaScript(
-									String.format("VideoSettings.init(%s);VideoSettings.open();", VideoSettings.getInitJson("noclient")));
-						}
-					}, new OmWebSocketBehavior("ws-panel") {
+					.replace(new OmWebSocketPanel("ws-panel") {
 						private static final long serialVersionUID = 1L;
 						private WsClient c = null;
 
@@ -191,6 +179,16 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 						@Override
 						protected IWsClient getWsClient() {
 							return c;
+						}
+					})
+					.add(new OmAjaxClientInfoBehavior() {
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
+							super.onClientInfo(target, info);
+							target.appendJavaScript(
+									String.format("VideoSettings.init(%s);VideoSettings.open();", VideoSettings.getInitJson("noclient")));
 						}
 					}));
 				error = false;

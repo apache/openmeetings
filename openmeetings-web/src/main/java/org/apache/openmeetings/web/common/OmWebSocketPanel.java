@@ -56,7 +56,7 @@ public abstract class OmWebSocketPanel extends Panel {
 		@Override
 		protected void onTimer(AjaxRequestTarget target) {
 			log.debug("Sending WebSocket PING");
-			WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId().byteValue()});
+			WebSocketHelper.sendClient(getWsClient(), new byte[]{getUserId() == null ? 0 : getUserId().byteValue()});
 		}
 	};
 	private final WebSocketBehavior wsBehavior = new WebSocketBehavior() {
