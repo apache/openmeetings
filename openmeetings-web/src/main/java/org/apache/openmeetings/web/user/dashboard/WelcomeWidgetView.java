@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.user.dashboard;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
+import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
@@ -73,7 +73,7 @@ public class WelcomeWidgetView extends WidgetView {
 
 			@Override
 			public void onClick() {
-				setResponsePage(HashPage.class, new PageParameters().add(SWF, SWF_TYPE_NETWORK));
+				setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK));
 			}
 		});
 	}

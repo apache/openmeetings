@@ -22,6 +22,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SS
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
+import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
 
 import java.net.URL;
 
@@ -30,13 +32,8 @@ import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
 import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -45,20 +42,16 @@ import org.slf4j.LoggerFactory;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
-public class SwfPanel extends BasePanel {
+public class NetTestPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(SwfPanel.class);
-	public static final ResourceReference FLASH_JS_REFERENCE = new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
-	public static final String SWF = "swf";
-	public static final String SWF_TYPE_NETWORK = "network";
-	public static final String SWF_TYPE_SETTINGS = "settings";
+	private static final Logger log = LoggerFactory.getLogger(NetTestPanel.class);
 	private final PageParameters pp;
 
-	public SwfPanel(String id) {
+	public NetTestPanel(String id) {
 		this(id, new PageParameters());
 	}
 
-	public SwfPanel(String id, PageParameters pp) {
+	public NetTestPanel(String id, PageParameters pp) {
 		super(id);
 		this.pp = pp;
 	}
@@ -79,23 +72,13 @@ public class SwfPanel extends BasePanel {
 		});
 	}
 
-	private static ResourceReference newResourceReference() {
-		return new JavaScriptResourceReference(SwfPanel.class, "swf-functions.js");
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(newResourceReference())));
-	}
-
 	public String getInitFunction(PageParameters pp, ExtendedClientProperties cp) {
 		String initStr = null;
-		StringValue type = pp.get(SWF);
+		StringValue type = pp.get(APP);
 		String swf = getFlashFile(type);
 		if (!Strings.isEmpty(swf)) {
 			String lbls = null;
-			if (SWF_TYPE_NETWORK.equals(type.toString())) {
+			if (APP_TYPE_NETWORK.equals(type.toString())) {
 				lbls = getStringLabels(
 						"network.test.ms", "network.test.mb", "network.test.sec"
 						, "network.test.click.play", "network.test.copy.log"
@@ -138,7 +121,7 @@ public class SwfPanel extends BasePanel {
 	}
 
 	private static String getFlashFile(StringValue type) {
-		return SWF_TYPE_NETWORK.equals(type.toString()) ? "networktest.swf" : "";
+		return APP_TYPE_NETWORK.equals(type.toString()) ? "networktest.swf" : "";
 	}
 
 	public String getStringLabels(String... ids) {

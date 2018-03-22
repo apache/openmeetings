@@ -20,9 +20,6 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CHILD_ID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
@@ -39,8 +36,8 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
+import org.apache.openmeetings.web.room.NetTestPanel;
 import org.apache.openmeetings.web.room.RoomPanel;
-import org.apache.openmeetings.web.room.SwfPanel;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
@@ -76,6 +73,10 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class HashPage extends BaseInitedPage implements IUpdatable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(HashPage.class);
+	public static final String APP = "app";
+	public static final String APP_TYPE_NETWORK = "network";
+	public static final String APP_TYPE_SETTINGS = "settings";
+	public static final String SWF = "swf";
 	public static final String PANEL_MAIN = "panel-main";
 	public static final String INVITATION_HASH = "invitation";
 	private static final String HASH = "secure";
@@ -169,13 +170,15 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 				createRoom(roomId);
 			}
 		}
+
 		StringValue swf = p.get(SWF);
-		if (!swf.isEmpty()) {
-			if (SWF_TYPE_NETWORK.equals(swf.toString())) {
-				replace(new SwfPanel(PANEL_MAIN, p));
+		StringValue app = swf.isEmpty() ? p.get(APP) : swf;
+		if (!app.isEmpty()) {
+			if (APP_TYPE_NETWORK.equals(app.toString())) {
+				replace(new NetTestPanel(PANEL_MAIN, p));
 				error = false;
 			}
-			if (SWF_TYPE_SETTINGS.equals(swf.toString())) {
+			if (APP_TYPE_SETTINGS.equals(app.toString())) {
 				replace(new VideoSettings(PANEL_MAIN)
 					.add(new OmAjaxClientInfoBehavior() {
 						private static final long serialVersionUID = 1L;

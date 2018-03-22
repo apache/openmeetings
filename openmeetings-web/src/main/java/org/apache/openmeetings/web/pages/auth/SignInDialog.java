@@ -21,11 +21,11 @@ package org.apache.openmeetings.web.pages.auth;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
 import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.showAuth;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_NETWORK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -272,7 +272,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 				@Override
 				public void onClick() {
-					setResponsePage(HashPage.class, new PageParameters().add(SWF, SWF_TYPE_NETWORK));
+					setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK));
 				}
 			});
 			add(new WebMarkupContainer("oauthContainer").add(
