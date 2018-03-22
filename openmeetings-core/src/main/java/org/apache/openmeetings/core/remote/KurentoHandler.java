@@ -18,22 +18,16 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.manager.IClientManager;
-import org.apache.wicket.Application;
-import org.apache.wicket.protocol.ws.WebSocketSettings;
-import org.apache.wicket.protocol.ws.api.IWebSocketConnection;
-import org.apache.wicket.protocol.ws.api.registry.IWebSocketConnectionRegistry;
-import org.apache.wicket.protocol.ws.api.registry.PageIdKey;
-import org.apache.wicket.protocol.ws.concurrent.Executor;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
 import org.slf4j.Logger;
@@ -54,8 +48,6 @@ public class KurentoHandler {
 
 	@Autowired
 	private IClientManager clientManager;
-	@Autowired
-	private Application app;
 
 	@PostConstruct
 	private void init() {
@@ -79,14 +71,14 @@ public class KurentoHandler {
 		if ("test".equals(msg.getString("mode"))) {
 			KTestUser user = getTestByUid(_c.getUid());
 			switch (cmdId) {
-				case "testStart":
+				case "start":
 				{
 					//TODO FIXME assert null user ???
 					user = new KTestUser(_c, msg, this, client.createMediaPipeline());
 					testsByUid.put(_c.getUid(), user);
 				}
 					break;
-				case "onTestIceCandidate":
+				case "iceCandidate":
 				{
 					JSONObject candidate = msg.getJSONObject("candidate");
 
@@ -147,24 +139,7 @@ public class KurentoHandler {
 	}
 
 	public void sendClient(String uid, JSONObject msg) {
-		sendClient(clientManager.get(uid), msg);
-	}
-
-	//FIXME TODO UNIFY THIS
-	void sendClient(IWsClient client, JSONObject msg) {
-		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
-		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor(); //FIXME TODO
-		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
-		if (wc != null && wc.isOpen()) {
-			executor.run(() -> {
-				try {
-					wc.sendMessage(msg.toString());
-				} catch (IOException e) {
-					log.error("Error while sending message to client", e);
-				}
-			});
-		}
+		WebSocketHelper.sendClient(clientManager.get(uid), msg);
 	}
 
 	/**

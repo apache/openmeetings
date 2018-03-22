@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.core.remote.KurentoHandler.KURENTO_TYPE;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
@@ -36,12 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.openmeetings.core.remote.KurentoHandler;
-import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.PrivateMessage;
 import org.apache.openmeetings.db.entity.user.User.Right;
@@ -65,7 +63,6 @@ import org.apache.openmeetings.web.util.OmUrlFragment.MenuActions;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -77,16 +74,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.protocol.ws.api.WebSocketBehavior;
 import org.apache.wicket.protocol.ws.api.WebSocketRequestHandler;
-import org.apache.wicket.protocol.ws.api.message.AbortedMessage;
 import org.apache.wicket.protocol.ws.api.message.AbstractClientMessage;
-import org.apache.wicket.protocol.ws.api.message.ClosedMessage;
 import org.apache.wicket.protocol.ws.api.message.ConnectedMessage;
-import org.apache.wicket.protocol.ws.api.message.ErrorMessage;
-import org.apache.wicket.protocol.ws.api.message.TextMessage;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.urlfragment.UrlFragment;
@@ -110,26 +101,15 @@ public class MainPanel extends Panel {
 	private UserInfoDialog userInfo;
 	private BasePanel panel;
 	private InviteUserToRoomDialog inviteUser;
-	private AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		protected void onTimer(AjaxRequestTarget target) {
-			log.debug("Sending WebSocket PING");
-			WebSocketHelper.sendClient(getClient(), new byte[]{getUserId().byteValue()});
-		}
-	};
 
 	@SpringBean
-	private transient KurentoHandler kHandler;
+	private ClientManager clientManager;
 	@SpringBean
-	private transient ClientManager clientManager;
+	private ConfigurationDao cfgDao;
 	@SpringBean
-	private transient ConfigurationDao cfgDao;
+	private UserDao userDao;
 	@SpringBean
-	private transient UserDao userDao;
-	@SpringBean
-	private transient RoomDao roomDao;
+	private RoomDao roomDao;
 
 	public MainPanel(String id) {
 		this(id, null);
@@ -141,13 +121,11 @@ public class MainPanel extends Panel {
 		setAuto(true);
 		setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
-		pingTimer.stop(null);
-		add(pingTimer, new WebSocketBehavior() {
+		add(new OmWebSocketPanel("ws-panel") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onConnect(ConnectedMessage msg) {
-				super.onConnect(msg);
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), userDao);
 				uid = client.getUid();
@@ -156,56 +134,32 @@ public class MainPanel extends Panel {
 			}
 
 			@Override
-			protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
-				if ("socketConnected".equals(msg.getText())) {
-					if (panel != null) {
-						updateContents(panel, handler);
-					}
-					log.debug("WebSocketBehavior:: pingTimer is attached");
-					pingTimer.restart(handler);
-				} else {
-					final JSONObject m;
-					try {
-						m = new JSONObject(msg.getText());
-						if (KURENTO_TYPE.equals(m.optString("type"))) {
-							kHandler.onMessage(getClient(), m);
-						} else {
-							BasePanel p = getCurrentPanel();
-							if (p != null) {
-								p.process(handler, m);
-							}
-						}
-					} catch (Exception e) {
-						//no-op
-					}
+			protected void onConnect(WebSocketRequestHandler handler) {
+				if (panel != null) {
+					updateContents(panel, handler);
 				}
 			}
 
 			@Override
-			protected void onAbort(AbortedMessage msg) {
-				super.onAbort(msg);
-				closeHandler(msg);
+			protected void onMessage(WebSocketRequestHandler handler, JSONObject m) {
+				BasePanel p = getCurrentPanel();
+				if (p != null) {
+					p.process(handler, m);
+				}
 			}
 
 			@Override
-			protected void onClose(ClosedMessage msg) {
-				super.onClose(msg);
-				closeHandler(msg);
-			}
-
-			@Override
-			protected void onError(WebSocketRequestHandler handler, ErrorMessage msg) {
-				super.onError(handler, msg);
-				closeHandler(msg);
-			}
-
-			private void closeHandler(AbstractClientMessage msg) {
-				log.debug("WebSocketBehavior::closeHandler [uid: {}, session: {}, key: {}]", uid, msg.getSessionId(), msg.getKey());
-				//no chance to stop pingTimer here :(
+			protected void closeHandler(AbstractClientMessage msg) {
+				super.closeHandler(msg);
 				if (uid != null) {
 					clientManager.exit(getClient());
 					uid = null;
 				}
+			}
+
+			@Override
+			protected IWsClient getWsClient() {
+				return getClient();
 			}
 		});
 	}

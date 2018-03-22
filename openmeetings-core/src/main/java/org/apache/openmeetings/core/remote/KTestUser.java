@@ -29,6 +29,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.kurento.client.Continuation;
 import org.kurento.client.EventListener;
@@ -71,7 +72,7 @@ public class KTestUser {
 			public void onEvent(RecordingEvent event) {
 				recTime = 0;
 				recHandle = scheduler.scheduleAtFixedRate(
-						() -> handler.sendClient(_c, newTestKurentoMsg().put("id", "testRecording").put("time", recTime++))
+						() -> WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recording").put("time", recTime++))
 						, 0, 1, TimeUnit.SECONDS);
 				scheduler.schedule(() -> {
 						recorder.stop();
@@ -82,7 +83,7 @@ public class KTestUser {
 		recorder.addStoppedListener(new EventListener<StoppedEvent>() {
 			@Override
 			public void onEvent(StoppedEvent event) {
-				handler.sendClient(_c, newTestKurentoMsg().put("id", "testStopped"));
+				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
 			}
 		});
 		switch (profile) {
@@ -110,8 +111,8 @@ public class KTestUser {
 			@Override
 			public void onEvent(IceCandidateFoundEvent event) {
 				IceCandidate cand = event.getCandidate();
-				handler.sendClient(_c, newTestKurentoMsg()
-						.put("id", "testIceCandidate")
+				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+						.put("id", "iceCandidate")
 						.put("candidate", new JSONObject()
 								.put("candidate", cand.getCandidate())
 								.put("sdpMid", cand.getSdpMid())
@@ -119,8 +120,8 @@ public class KTestUser {
 			}
 		});
 
-		handler.sendClient(_c, newTestKurentoMsg()
-				.put("id", "testStartResponse")
+		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+				.put("id", "startResponse")
 				.put("sdpAnswer", sdpAnswer));
 		webRtcEndpoint.gatherCandidates();
 		recorder.record(new Continuation<Void>() {

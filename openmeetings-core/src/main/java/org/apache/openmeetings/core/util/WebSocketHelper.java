@@ -22,10 +22,10 @@ import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -38,6 +38,7 @@ import org.apache.openmeetings.core.util.ws.WsMessageRoomMsg;
 import org.apache.openmeetings.core.util.ws.WsMessageUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
@@ -109,27 +110,40 @@ public class WebSocketHelper {
 			.put("msg", arr);
 	}
 
-	public static void sendClient(final Client _c, byte[] b) {
+	public static void sendClient(final IWsClient _c, byte[] b) {
 		if (_c != null) {
-			send(a -> Arrays.asList(_c), (t, c) -> {
+			sendClient(_c, c -> {
 				try {
-					t.sendMessage(b, 0, b.length);
+					c.sendMessage(b, 0, b.length);
 				} catch (IOException e) {
-					log.error("Error while broadcasting byte[] to room", e);
+					log.error("Error while sending binary message to client", e);
 				}
-			}, null);
+			});
 		}
 	}
 
-	public static void sendClient(final Client _c, JSONObject msg) { //TODO unify
+	public static void sendClient(final IWsClient _c, JSONObject msg) {
 		if (_c != null) {
-			send(a -> Arrays.asList(_c), (t, c) -> {
+			sendClient(_c, c -> {
 				try {
-					t.sendMessage(msg.toString());
+					c.sendMessage(msg.toString());
 				} catch (IOException e) {
-					log.error("Error while broadcasting byte[] to room", e);
+					log.error("Error while sending message to client", e);
 				}
-			}, null);
+			});
+		}
+	}
+
+	private static void sendClient(IWsClient client, Consumer<IWebSocketConnection> wsc) {
+		Application app = (Application)getApp();
+		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
+		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
+		Executor executor = settings.getWebSocketPushMessageExecutor(); //FIXME TODO
+		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
+		if (wc != null && wc.isOpen()) {
+			executor.run(() -> {
+				wsc.accept(wc);
+			});
 		}
 	}
 

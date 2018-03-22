@@ -35,9 +35,6 @@
 			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE, showBusyIndicator);
 			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_SUCCESS, hideBusyIndicator);
 			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() {
-				Wicket.WebSocket.send("socketConnected");
-			});
 		});
 	</script>
 	<div wicket:id="topControls">

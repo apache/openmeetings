@@ -119,7 +119,7 @@ var VideoSettings = (function() {
 			console.info('Invoking SDP offer callback function');
 			const cnts = _constraints();
 			OmUtil.sendMessage({
-				id : 'testStart'
+				id : 'start'
 				, type: 'kurento'
 				, mode: 'test'
 				, sdpOffer: offerSdp
@@ -129,7 +129,7 @@ var VideoSettings = (function() {
 			rtcPeer.on('icecandidate', function (candidate) {
 					console.log('Local candidate' + JSON.stringify(candidate));
 					OmUtil.sendMessage({
-						id : 'onTestIceCandidate'
+						id : 'iceCandidate'
 						, type: 'kurento'
 						, mode: 'test'
 						, candidate: candidate
@@ -204,7 +204,6 @@ var VideoSettings = (function() {
 		} else {
 			cnts.video = false;
 		}
-		//TODO enable audio for recordings only
 		if (s.video.mic > -1) {
 			//TODO remove hardcodings
 			cnts.audio = {
@@ -349,7 +348,7 @@ var VideoSettings = (function() {
 			if (m && 'kurento' === m.type && 'test' === m.mode) {
 				console.info('Received message: ', m);
 				switch (m.id) {
-					case 'testStartResponse':
+					case 'startResponse':
 						console.log('SDP answer received from server. Processing ...');
 
 						rtcPeer.processAnswer(m.sdpAnswer, function(error) {
@@ -358,18 +357,23 @@ var VideoSettings = (function() {
 							}
 						});
 						break;
-					case 'testIceCandidate':
+					case 'iceCandidate':
 						rtcPeer.addIceCandidate(m.candidate, function(error) {
 							if (error) {
 								return _error('Error adding candidate: ' + error);
 							}
 						});
 						break;
-					case 'testRecording':
+					case 'recording':
 						timer.show().find('.time').text(m.time);
 						break;
-					case 'testStopped':
+					case 'recStopped':
 						timer.hide();
+						recBtn.prop('disabled', false).button('refresh');
+						playBtn.prop('disabled', false).button('refresh');
+						cam.prop('disabled', false);
+						mic.prop('disabled', false);
+						res.prop('disabled', false);
 						break;
 					default:
 						_error('Unrecognized message: ' + msg);

@@ -72,7 +72,7 @@ var VideoManager = (function() {
 				return; //ping
 			}
 			const m = jQuery.parseJSON(msg);
-			if (m && 'kurento' === m.type) {
+			if (m && 'kurento' === m.type && 'test' !== m.mode) {
 				console.info('Received message: ' + m);
 
 				switch (m.id) {
