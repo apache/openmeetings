@@ -38,7 +38,7 @@ public abstract class AbstractTemplatePanel extends Panel {
 	protected final Locale locale;
 
 	@SpringBean
-	protected IApplication app;
+	protected transient IApplication app;
 
 	protected AbstractTemplatePanel(Locale locale) {
 		super(COMP_ID);

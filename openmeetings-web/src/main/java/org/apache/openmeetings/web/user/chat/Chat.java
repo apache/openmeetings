@@ -104,7 +104,7 @@ public class Chat extends Panel {
 	};
 
 	@SpringBean
-	private ClientManager cm;
+	private transient ClientManager cm;
 
 	public Chat(String id) {
 		super(id);

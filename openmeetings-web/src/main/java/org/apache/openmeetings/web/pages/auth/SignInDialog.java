@@ -92,7 +92,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 
 	@SpringBean
-	private ConfigurationDao cfgDao;
+	private transient ConfigurationDao cfgDao;
 
 	public SignInDialog(String id) {
 		super(id, "");

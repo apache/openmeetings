@@ -89,11 +89,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	private final PageParameters p;
 
 	@SpringBean
-	private KurentoHandler kHandler;
+	private transient KurentoHandler kHandler;
 	@SpringBean
-	private RoomDao roomDao;
+	private transient RoomDao roomDao;
 	@SpringBean
-	private RecordingDao recDao;
+	private transient RecordingDao recDao;
 
 	public HashPage(PageParameters p) {
 		this.p = p;

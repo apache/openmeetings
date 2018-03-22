@@ -231,7 +231,7 @@ public class RoomSidebar extends Panel {
 	private final Label userCount = new Label("user-count", Model.of(""));
 
 	@SpringBean
-	private ClientManager cm;
+	private transient ClientManager cm;
 
 	public RoomSidebar(String id, final RoomPanel room) {
 		super(id);

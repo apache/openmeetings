@@ -121,15 +121,15 @@ public class MainPanel extends Panel {
 	};
 
 	@SpringBean
-	private KurentoHandler kHandler;
+	private transient KurentoHandler kHandler;
 	@SpringBean
-	private ClientManager clientManager;
+	private transient ClientManager clientManager;
 	@SpringBean
-	private ConfigurationDao cfgDao;
+	private transient ConfigurationDao cfgDao;
 	@SpringBean
-	private UserDao userDao;
+	private transient UserDao userDao;
 	@SpringBean
-	private RoomDao roomDao;
+	private transient RoomDao roomDao;
 
 	public MainPanel(String id) {
 		this(id, null);

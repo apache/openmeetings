@@ -223,7 +223,7 @@ public class RoomPanel extends BasePanel {
 	Component eventDetail = new WebMarkupContainer(EVENT_DETAILS_ID).setVisible(false);
 
 	@SpringBean
-	private ClientManager cm;
+	private transient ClientManager cm;
 
 	public RoomPanel(String id, Room r) {
 		super(id);

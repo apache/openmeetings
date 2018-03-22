@@ -65,6 +65,9 @@ public class ChatForm extends Form<Void> {
 	private static final Logger log = LoggerFactory.getLogger(ChatForm.class);
 	private final HiddenField<String> activeTab = new HiddenField<>("activeTab", Model.of(""));
 
+	@SpringBean
+	private transient ClientManager cm;
+
 	public ChatForm(String id) {
 		super(id);
 		final ChatToolbar toolbar = new ChatToolbar("toolbarContainer", this);
@@ -144,9 +147,6 @@ public class ChatForm extends Form<Void> {
 				};
 			});
 	}
-
-	@SpringBean
-	private ClientManager cm;
 
 	private Client getClient() {
 		return findParent(MainPanel.class).getClient();
