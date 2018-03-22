@@ -351,11 +351,9 @@
 	max-height: 300px;
 	position: relative;
 }
-.ui-dialog.video .vid-block .video-conainer .timer {
-	background-color:grey;
-	width: 2.2em;
-	height: 1em;
-	position:absolute;
+.sett-container .vid-block .timer {
+	float: left;
+	padding: 2px 4px;
 }
 .ui-dialog.video .sett-row select, .ui-dialog.video .level-meter {
 	width: 250px;

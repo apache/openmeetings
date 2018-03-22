@@ -117,7 +117,7 @@ var VideoSettings = (function() {
 		mic = vs.find('select.mic');
 		res = vs.find('select.cam-resolution');
 		vidScroll = vs.find('.vid-block .video-conainer');
-		timer = vidScroll.find('.timer');
+		timer = vs.find('.timer');
 		vid = vidScroll.find('video');
 		recBtn = vs.find('.rec-start').click(function() {
 			recBtn.prop('disabled', true).button('refresh');
