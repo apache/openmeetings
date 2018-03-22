@@ -62,7 +62,8 @@
 			<source><![CDATA[
 MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded
 
-cd ..; mvn clean install -pl openmeetings-util -P allModules,quick; cd openmeetings-web;
+#Quick rebuild and run
+cd ..; mvn clean install -PallModules,quick,mysql -pl openmeetings-util,openmeetings-core; cd openmeetings-web; MAVEN_OPTS='-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n' mvn clean -P allModules,quick,mysql jetty:run-exploded
 
 			]]></source>
 			<p>To compile only client you can run following command: </p>
@@ -80,13 +81,13 @@ mvn clean install -P allModules,unpacked,mysql -DskipTests=true -Dwicket.configu
 			<p>After modifications are made you can run <i>"quick"</i> build: </p>
 			<source>
 <![CDATA[
-mvn install -P allModules,quick,mysql -pl openmeetings-web -pl openmeetings-server -Dwicket.configuration=DEVELOPMENT
+mvn install -P allModules,quick,mysql -pl openmeetings-web,openmeetings-server -Dwicket.configuration=DEVELOPMENT
 ]]>
 			</source>
 			<p>Any number of projects can be specified during build: </p>
 			<source>
 <![CDATA[
-mvn install -P allModules,quick,mysql -pl openmeetings-util -pl openmeetings-db -pl openmeetings-core -pl openmeetings-install -pl openmeetings-service -pl openmeetings-web -pl openmeetings-server -pl openmeetings-webservice -Dwicket.configuration=DEVELOPMENT
+mvn install -P allModules,quick,mysql -pl openmeetings-util,openmeetings-db,openmeetings-core,openmeetings-install,openmeetings-service,openmeetings-web,openmeetings-server,openmeetings-webservice -Dwicket.configuration=DEVELOPMENT
 ]]>
 			</source>
 			<div>

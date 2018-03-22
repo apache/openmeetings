@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.newTestKurentoMsg;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,14 +86,14 @@ public class KTestUser {
 			}
 		});
 		switch (profile) {
-			case MP4:
+			case WEBM:
 				webRtcEndpoint.connect(recorder, MediaType.AUDIO);
 				webRtcEndpoint.connect(recorder, MediaType.VIDEO);
 				break;
-			case MP4_AUDIO_ONLY:
+			case WEBM_AUDIO_ONLY:
 				webRtcEndpoint.connect(recorder, MediaType.AUDIO);
 				break;
-			case MP4_VIDEO_ONLY:
+			case WEBM_VIDEO_ONLY:
 				webRtcEndpoint.connect(recorder, MediaType.VIDEO);
 				break;
 			default:
@@ -142,18 +143,17 @@ public class KTestUser {
 	private static MediaProfileSpecType getProfile(JSONObject msg) {
 		boolean a  = msg.getBoolean("audio"), v = msg.getBoolean("video");
 		if (a && v) {
-			return MediaProfileSpecType.MP4;
+			return MediaProfileSpecType.WEBM;
 		} else if (v) {
-			return MediaProfileSpecType.MP4_VIDEO_ONLY;
+			return MediaProfileSpecType.WEBM_VIDEO_ONLY;
 		} else {
-			return MediaProfileSpecType.MP4_AUDIO_ONLY;
+			return MediaProfileSpecType.WEBM_AUDIO_ONLY;
 		}
 	}
 
 	private void initRecPath(String uid) {
 		try {
-			//File f = new File(getStreamsDir(), String.format("%s%s.mp4", TEST_SETUP_PREFIX, uid));
-			File f = new File("/tmp/", String.format("%s%s.mp4", TEST_SETUP_PREFIX, uid));
+			File f = new File(getStreamsDir(), String.format("%s%s.webm", TEST_SETUP_PREFIX, uid));
 			recPath = String.format("file://%s", f.getCanonicalPath());
 			log.info("Configured to record to {}", recPath);
 		} catch (IOException e) {
