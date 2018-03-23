@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>org.kurento</groupId>
 			<artifactId>kurento-client</artifactId>
-			<version>6.6.2</version>
+			<version>6.7.1</version>
 		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
