@@ -513,11 +513,11 @@ var Wb = function() {
 	/*TODO interactive text change
 	var textEditedHandler = function (e) {
 		var obj = e.target;
-		console.log('Text Edit Exit', obj);
+		OmUtil.log('Text Edit Exit', obj);
 	};
 	var textChangedHandler = function (e) {
 		var obj = e.target;
-		console.log('Text Changed', obj);
+		OmUtil.log('Text Changed', obj);
 	};*/
 	function setHandlers(canvas) {
 		// off everything first to prevent duplicates

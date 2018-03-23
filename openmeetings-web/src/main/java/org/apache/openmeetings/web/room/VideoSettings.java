@@ -19,9 +19,7 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
-import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
@@ -51,7 +49,6 @@ public class VideoSettings extends Panel {
 
 	public static JSONObject getInitJson(String sid) {
 		return new JSONObject(getRoomSettings().toString())
-				.put("sid", sid)
-				.put("debug", DEVELOPMENT == Application.get().getConfigurationType());
+				.put("sid", sid);
 	}
 }

@@ -23,7 +23,12 @@ var Settings = (function() {
 	};
 })();
 var OmUtil = (function() {
+	let options, errs
 	const self = {};
+
+	function _init(_options) {
+		options = _options;
+	}
 	function _confirmDlg(_id, okHandler) {
 		const confirm = $('#' + _id);
 		confirm.dialog({
@@ -49,13 +54,44 @@ var OmUtil = (function() {
 	function _tmpl(tmplId, newId) {
 		return $(tmplId).clone().attr('id', newId || '');
 	}
+	function _error(msg) {
+		if (typeof(msg) === 'object') {
+			msg = msg.name + ": " + msg.message;
+		}
+		if (!!errs && errs.length > 0) {
+			errs.data("kendoNotification").show(msg, "error");
+		}
+		return console.error(msg);
+	}
+	function _debugEnabled() {
+		return !!options && !!options.debug;
+	}
+	function _info() {
+		if (_debugEnabled()) {
+			console.info.apply(this, arguments);
+		}
+	}
+	function _log() {
+		if (_debugEnabled()) {
+			console.log.apply(this, arguments);
+		}
+	}
 
+	self.init = _init;
 	self.confirmDlg = _confirmDlg;
 	self.tmpl = _tmpl;
-	self.sendMessage = function(m) {
-		const msg = JSON.stringify(m || {});
+	self.debugEnabled = _debugEnabled;
+	self.enableDebug = function() { if (!!options) { options.debug = true; } };
+	self.sendMessage = function(_m, _base) {
+		const base = _base || {}
+			, m = _m || {}
+			, msg = JSON.stringify($.extend({}, base, m));
 		Wicket.WebSocket.send(msg);
 	};
+	self.initErrs = function(_e) { errs = _e; };
+	self.error = _error;
+	self.info = _info;
+	self.log = _log;
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

@@ -18,8 +18,11 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
+
 import java.util.List;
 
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxClientInfoBehavior;
@@ -31,6 +34,8 @@ import org.apache.wicket.markup.html.pages.BrowserInfoForm;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+import com.github.openjson.JSONObject;
 
 public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	private static final long serialVersionUID = 1L;
@@ -49,6 +54,10 @@ public class OmAjaxClientInfoBehavior extends AjaxClientInfoBehavior {
 	public void renderHead(Component component, IHeaderResponse response) {
 		super.renderHead(component, response);
 		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(MAIN_JS)));
+		response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forScript(
+				String.format("OmUtil.init(%s)", new JSONObject()
+						.put("debug", DEVELOPMENT == Application.get().getConfigurationType()))
+				, "om-util-init")));
 	}
 
 	@Override

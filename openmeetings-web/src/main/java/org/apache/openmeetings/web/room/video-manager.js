@@ -10,7 +10,7 @@ var VideoManager = (function() {
 
 		v.getPeer().processAnswer(m.sdpAnswer, function (error) {
 			if (error) {
-				return console.error(error);
+				return OmUtil.error(error);
 			}
 		});
 	}
@@ -20,7 +20,7 @@ var VideoManager = (function() {
 		const w = $('#' + VideoUtil.getVid(uid))
 			, v = w.data()
 			, cl = v.client();
-		console.log(uid + " registered in room");
+		OmUtil.log(uid + " registered in room");
 
 		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
 			{
@@ -41,7 +41,7 @@ var VideoManager = (function() {
 			}
 			, function (error) {
 				if (error) {
-					return console.error(error);
+					return OmUtil.error(error);
 				}
 				this.generateOffer(v.offerToReceiveVideo);
 			}));
@@ -58,7 +58,7 @@ var VideoManager = (function() {
 			}
 			, function (error) {
 				if(error) {
-					return console.error(error);
+					return OmUtil.error(error);
 				}
 				this.generateOffer(v.offerToReceiveVideo);
 			}
@@ -73,7 +73,7 @@ var VideoManager = (function() {
 			}
 			const m = jQuery.parseJSON(msg);
 			if (m && 'kurento' === m.type && 'test' !== m.mode) {
-				console.info('Received message: ' + m);
+				OmUtil.info('Received message: ' + m);
 
 				switch (m.id) {
 					case 'broadcast':
@@ -89,19 +89,19 @@ var VideoManager = (function() {
 
 							v.getPeer().addIceCandidate(m.candidate, function (error) {
 								if (error) {
-									console.error("Error adding candidate: " + error);
+									OmUtil.error("Error adding candidate: " + error);
 									return;
 								}
 							});
 						}
 						break;
 					default:
-						console.error('Unrecognized message', m);
+						OmUtil.error('Unrecognized message ' + msg);
 				}
 			}
 		} catch (err) {
 			//no-op
-			console.error(err);
+			OmUtil.error(err);
 		}
 	}
 	
@@ -126,9 +126,8 @@ var VideoManager = (function() {
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
 			if (av && v.length !== 1 && !!cl.self) {
-				OmUtil.sendMessage({
+				VideoManager.sendMessage({
 					id: 'joinRoom' //TODO stream uid
-					, type: 'kurento'
 				});
 
 				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
@@ -270,6 +269,9 @@ var VideoManager = (function() {
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.sendMessage = function(_m) {
+		OmUtil.sendMessage(_m, {type: 'kurento'});
+	}
 	self.destroy = function() {
 		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
 	}

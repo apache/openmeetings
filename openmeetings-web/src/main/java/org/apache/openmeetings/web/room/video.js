@@ -172,7 +172,7 @@ var Video = (function() {
 			}
 		}
 		v.on("remove", function () {
-			console.log('Disposing participant ' + c.uid);
+			OmUtil.log('Disposing participant ' + c.uid);
 			if (!!rtcPeer) {
 				rtcPeer.dispose();
 			}
@@ -280,22 +280,20 @@ var Video = (function() {
 	self.setPeer = function(p) { rtcPeer = p; };
 	self.getPeer = function() { return rtcPeer; };
 	self.onIceCandidate = function(candidate, wp) {
-		console.log("Local candidate" + JSON.stringify(candidate));
-		OmUtil.sendMessage({
+		OmUtil.log("Local candidate" + JSON.stringify(candidate));
+		VideoManager.sendMessage({
 			id: 'onIceCandidate'
-			, type: 'kurento'
 			, candidate: candidate
 			, uid: c.uid
 		});
 	};
 	self.offerToReceiveVideo = function(error, offerSdp, wp) {
 		if (error) {
-			return console.error("sdp offer error");
+			return OmUtil.error("sdp offer error");
 		}
-		console.log('Invoking SDP offer callback function');
-		OmUtil.sendMessage({
+		OmUtil.log('Invoking SDP offer callback function');
+		VideoManager.sendMessage({
 			id : "receiveVideoFrom"
-			, type: 'kurento'
 			, sender: c.uid
 			, sdpOffer: offerSdp
 		});
