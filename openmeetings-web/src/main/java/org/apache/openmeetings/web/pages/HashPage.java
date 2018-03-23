@@ -162,7 +162,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		StringValue app = swf.isEmpty() ? p.get(APP) : swf;
 		if (!app.isEmpty()) {
 			if (APP_TYPE_NETWORK.equals(app.toString())) {
-				replace(new NetTestPanel(PANEL_MAIN, p));
+				replace(new NetTestPanel(PANEL_MAIN));
 				error = false;
 			}
 			if (APP_TYPE_SETTINGS.equals(app.toString())) {

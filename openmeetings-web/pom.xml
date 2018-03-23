@@ -98,6 +98,7 @@
 						<configuration>
 							<charset>UTF-8</charset>
 							<cssSourceFiles>
+								<cssSourceFile>nettest.css</cssSourceFile>
 								<cssSourceFile>general.css</cssSourceFile>
 								<cssSourceFile>activities.css</cssSourceFile>
 								<cssSourceFile>admin.css</cssSourceFile>
@@ -235,6 +236,23 @@
 								<jsSourceFile>kurento-utils.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>settings.js</jsFinalFile>
+							<jsEngine>CLOSURE</jsEngine>
+							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room</jsTargetDir>
+						</configuration>
+					</execution>
+					<execution>
+						<id>nettest-js</id>
+						<goals>
+							<goal>minify</goal>
+						</goals>
+						<configuration>
+							<charset>UTF-8</charset>
+							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
+							<jsSourceFiles>
+								<jsSourceFile>nettest-base.js</jsSourceFile>
+								<jsSourceFile>network.js</jsSourceFile>
+							</jsSourceFiles>
+							<jsFinalFile>nettest.js</jsFinalFile>
 							<jsEngine>CLOSURE</jsEngine>
 							<jsTargetDir>../generated-sources/main/java/org/apache/openmeetings/web/room</jsTargetDir>
 						</configuration>

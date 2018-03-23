@@ -18,42 +18,32 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_PORT;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_SSL_PORT;
-import static org.apache.openmeetings.web.pages.HashPage.APP;
-import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
-
-import java.net.URL;
-
-import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.common.OmAjaxClientInfoBehavior;
-import org.apache.openmeetings.web.util.ExtendedClientProperties;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
-import org.apache.wicket.util.string.Strings;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class NetTestPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(NetTestPanel.class);
-	private final PageParameters pp;
+	private static final ResourceReference NETTEST_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "nettest.js");
 
 	public NetTestPanel(String id) {
-		this(id, new PageParameters());
+		super(id);
 	}
 
-	public NetTestPanel(String id, PageParameters pp) {
-		super(id);
-		this.pp = pp;
+	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(JavaScriptHeaderItem.forReference(NETTEST_JS_REFERENCE));
 	}
 
 	@Override
@@ -65,21 +55,7 @@ public class NetTestPanel extends BasePanel {
 			@Override
 			protected void onClientInfo(AjaxRequestTarget target, WebClientInfo info) {
 				super.onClientInfo(target, info);
-				ExtendedClientProperties cp = (ExtendedClientProperties)info.getProperties();
-				PageParameters spp = new PageParameters(pp);
-				target.appendJavaScript(getInitFunction(spp, cp));
-			}
-		});
-	}
-
-	public String getInitFunction(PageParameters pp, ExtendedClientProperties cp) {
-		String initStr = null;
-		StringValue type = pp.get(APP);
-		String swf = getFlashFile(type);
-		if (!Strings.isEmpty(swf)) {
-			String lbls = null;
-			if (APP_TYPE_NETWORK.equals(type.toString())) {
-				lbls = getStringLabels(
+				target.appendJavaScript(String.format("NetTest.init(%s);", getStringLabels(
 						"network.test.ms", "network.test.mb", "network.test.sec"
 						, "network.test.click.play", "network.test.copy.log"
 						, "network.test.report", "network.test.report.start", "network.test.report.error"
@@ -93,42 +69,16 @@ public class NetTestPanel extends BasePanel {
 						, "network.test.dwn.speed"
 						, "network.test.upl", "network.test.upl.bytes", "network.test.upl.time"
 						, "network.test.upl.speed"
-						);
+						)));
 			}
-			JSONObject s = new JSONObject();
-			try {
-				URL url = new URL(cp.getCodebase());
-				String path = url.getPath();
-				path = path.substring(1, path.indexOf('/', 2) + 1);
-				JSONObject gs = OpenmeetingsVariables.getRoomSettings();
-				s.put("flashProtocol", gs.getBoolean(FLASH_SECURE) ? "rtmps" : "rtmp")
-						.put("flashPort", gs.getBoolean(FLASH_SECURE) ? gs.getString(FLASH_SSL_PORT) : gs.getString(FLASH_PORT))
-						.put("proxy", gs.getBoolean(FLASH_NATIVE_SSL) ? "best" : "none")
-						.put("httpProtocol", url.getProtocol())
-						.put("httpPort", url.getPort() > -1 ? url.getPort() : url.getDefaultPort())
-						.put("host", url.getHost())
-						.put("path", path)
-						.put("width", "100%")
-						.put("height", "100%")
-						.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
-			} catch (Exception e) {
-				log.error("Error while constructing video settings parameters", e);
-			}
-			initStr = String.format("labels = %s; initSwf(%s, '%s', '%s', %s);"
-					, lbls, "$('.hash-panel-main')", swf, "nettest", s.toString());
-		}
-		return initStr;
+		});
 	}
 
-	private static String getFlashFile(StringValue type) {
-		return APP_TYPE_NETWORK.equals(type.toString()) ? "networktest.swf" : "";
-	}
-
-	public String getStringLabels(String... ids) {
-		JSONArray arr = new JSONArray();
+	public JSONObject getStringLabels(String... ids) {
+		JSONObject o = new JSONObject();
 		for (String id : ids) {
-			arr.put(new JSONObject().put("id", id).put("value", getString(id)));
+			o.put(id.substring("network.test.".length()), getString(id));
 		}
-		return arr.toString();
+		return o;
 	}
 }
