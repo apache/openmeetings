@@ -92,6 +92,7 @@ var VideoSettings = (function() {
 			level.dispose();
 			level = null;
 		}
+		_micActivity(0);
 		offerSdp = null;
 	}
 	function _close() {
@@ -356,11 +357,17 @@ var VideoSettings = (function() {
 		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		recAllowed = false;
 		timer.hide();
-		_micActivity(0);
 		playBtn.prop('disabled', true).button('refresh');
 		vs.dialog('open');
 		_load();
 		_initDevices();
+	}
+	function _onStop() {
+		_updateRec();
+		playBtn.prop('disabled', false).button('refresh');
+		cam.prop('disabled', false);
+		mic.prop('disabled', false);
+		res.prop('disabled', false);
 	}
 	//FIXME TODO, try to unify this
 	function _onWsMessage(jqEvent, msg) {
@@ -393,13 +400,12 @@ var VideoSettings = (function() {
 						timer.show().find('.time').text(m.time);
 						break;
 					case 'recStopped':
-					case 'playStopped':
 						timer.hide();
-						_updateRec();
-						playBtn.prop('disabled', false).button('refresh');
-						cam.prop('disabled', false);
-						mic.prop('disabled', false);
-						res.prop('disabled', false);
+						_onStop()
+						break;
+					case 'playStopped':
+						_onStop();
+						_readValues();
 						break;
 					default:
 						OmUtil.error('Unrecognized message: ' + msg);
