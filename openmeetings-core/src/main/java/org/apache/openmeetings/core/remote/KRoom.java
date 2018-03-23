@@ -1,20 +1,24 @@
 /*
  * (C) Copyright 2014 Kurento (http://kurento.org/)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License") +  you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
@@ -56,11 +60,6 @@ public class KRoom implements Closeable {
 		log.info("ROOM {} has been created", roomId);
 	}
 
-	@PreDestroy
-	private void shutdown() {
-		this.close();
-	}
-
 	public KUser addUser(final KurentoHandler h, String uid) {
 		log.info("ROOM {}: adding participant {}", roomId, uid);
 		final KUser u = new KUser(h, uid, this.roomId, this.pipeline);
@@ -78,7 +77,7 @@ public class KRoom implements Closeable {
 	public void leave(final KurentoHandler h, KUser user) {
 		log.debug("PARTICIPANT {}: Leaving room {}", user.getUid(), this.roomId);
 		this.removeParticipant(h, user.getUid());
-		user.close();
+		user.release();
 	}
 
 	private void removeParticipant(final KurentoHandler h, String name) {
@@ -112,10 +111,11 @@ public class KRoom implements Closeable {
 		return participants.values();
 	}
 
+	@PreDestroy
 	@Override
 	public void close() {
 		for (final KUser user : participants.values()) {
-			user.close();
+			user.release();
 		}
 
 		participants.clear();

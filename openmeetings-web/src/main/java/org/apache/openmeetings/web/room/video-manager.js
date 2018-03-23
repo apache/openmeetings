@@ -74,7 +74,6 @@ var VideoManager = (function() {
 			const m = jQuery.parseJSON(msg);
 			if (m && 'kurento' === m.type && 'test' !== m.mode) {
 				OmUtil.info('Received message: ' + m);
-
 				switch (m.id) {
 					case 'broadcast':
 						onBroadcast(m);
@@ -96,11 +95,10 @@ var VideoManager = (function() {
 						}
 						break;
 					default:
-						OmUtil.error('Unrecognized message ' + msg);
+						//no-op
 				}
 			}
 		} catch (err) {
-			//no-op
 			OmUtil.error(err);
 		}
 	}

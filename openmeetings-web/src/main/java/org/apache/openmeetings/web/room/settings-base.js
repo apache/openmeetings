@@ -123,10 +123,7 @@ var VideoSettings = (function() {
 			.button({icon: "ui-icon-bullet"})
 			.click(function() {
 				recBtn.prop('disabled', true).button('refresh');
-				playBtn.prop('disabled', true).button('refresh');
-				cam.prop('disabled', true);
-				mic.prop('disabled', true);
-				res.prop('disabled', true);
+				_setEnabled(true);
 
 				OmUtil.info('Invoking SDP offer callback function');
 				const cnts = _constraints();
@@ -142,10 +139,7 @@ var VideoSettings = (function() {
 			.button({icon: "ui-icon-play"})
 			.click(function() {
 				recBtn.prop('disabled', true).button('refresh');
-				playBtn.prop('disabled', true).button('refresh');
-				cam.prop('disabled', true);
-				mic.prop('disabled', true);
-				res.prop('disabled', true);
+				_setEnabled(true);
 				_clear();
 				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 					{
@@ -362,12 +356,15 @@ var VideoSettings = (function() {
 		_load();
 		_initDevices();
 	}
+	function _setEnabled(enabled) {
+		playBtn.prop('disabled', enabled).button('refresh');
+		cam.prop('disabled', enabled);
+		mic.prop('disabled', enabled);
+		res.prop('disabled', enabled);
+	}
 	function _onStop() {
 		_updateRec();
-		playBtn.prop('disabled', false).button('refresh');
-		cam.prop('disabled', false);
-		mic.prop('disabled', false);
-		res.prop('disabled', false);
+		_setEnabled(false);
 	}
 	//FIXME TODO, try to unify this
 	function _onWsMessage(jqEvent, msg) {
@@ -376,43 +373,50 @@ var VideoSettings = (function() {
 				return; //ping
 			}
 			const m = jQuery.parseJSON(msg);
-			if (m && 'kurento' === m.type && 'test' === m.mode) {
-				OmUtil.info('Received message: ', m);
+			if (m && 'kurento' === m.type) {
+				if ('test' === m.mode) {
+					OmUtil.info('Received message: ', m);
+					switch (m.id) {
+						case 'playResponse':
+						case 'startResponse':
+							OmUtil.log('SDP answer received from server. Processing ...');
+							rtcPeer.processAnswer(m.sdpAnswer, function(error) {
+								if (error) {
+									return OmUtil.error(error);
+								}
+							});
+							break;
+						case 'iceCandidate':
+							rtcPeer.addIceCandidate(m.candidate, function(error) {
+								if (error) {
+									return OmUtil.error('Error adding candidate: ' + error);
+								}
+							});
+							break;
+						case 'recording':
+							timer.show().find('.time').text(m.time);
+							break;
+						case 'recStopped':
+							timer.hide();
+							_onStop()
+							break;
+						case 'playStopped':
+							_onStop();
+							_readValues();
+							break;
+						default:
+							// no-op
+					}
+				}
 				switch (m.id) {
-					case 'playResponse':
-					case 'startResponse':
-						OmUtil.log('SDP answer received from server. Processing ...');
-
-						rtcPeer.processAnswer(m.sdpAnswer, function(error) {
-							if (error) {
-								return OmUtil.error(error);
-							}
-						});
-						break;
-					case 'iceCandidate':
-						rtcPeer.addIceCandidate(m.candidate, function(error) {
-							if (error) {
-								return OmUtil.error('Error adding candidate: ' + error);
-							}
-						});
-						break;
-					case 'recording':
-						timer.show().find('.time').text(m.time);
-						break;
-					case 'recStopped':
-						timer.hide();
-						_onStop()
-						break;
-					case 'playStopped':
-						_onStop();
-						_readValues();
+					case 'error':
+						OmUtil.error(m.message);
 						break;
 					default:
-						OmUtil.error('Unrecognized message: ' + msg);
+						//no-op
 				}
 			}
 		} catch (err) {
-			//no-op
 			OmUtil.error(err);
 		}
 	}

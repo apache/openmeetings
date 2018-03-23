@@ -62,11 +62,15 @@ public class KurentoHandler {
 	@PreDestroy
 	private void destroy() {
 		if (client != null) {
-			destroy();
+			client.destroy();
 		}
 	}
 
 	public void onMessage(IWsClient _c, JSONObject msg) {
+		if (client == null) {
+			sendError(_c, "Multimedia server is inaccessible");
+			return;
+		}
 		final String cmdId = msg.getString("id");
 		if ("test".equals(msg.optString("mode"))) {
 			KTestUser user = getTestByUid(_c.getUid());
@@ -145,6 +149,26 @@ public class KurentoHandler {
 		WebSocketHelper.sendClient(clientManager.get(uid), msg);
 	}
 
+	public static void sendError(IWsClient c, String msg) {
+		WebSocketHelper.sendClient(c, newKurentoMsg()
+				.put("id", "error")
+				.put("message", msg));
+	}
+
+	public void remove(IWsClient c) {
+		final String uid = c.getUid();
+		final boolean test = !(c instanceof Client);
+		IKUser u = test ? getTestByUid(uid) : getByUid(uid);
+		if (u != null) {
+			u.release();
+			if (test) {
+				testsByUid.remove(uid);
+			} else {
+				usersByUid.remove(uid);
+			}
+		}
+	}
+
 	/**
 	 * Looks for a room in the active room list.
 	 *
@@ -178,16 +202,12 @@ public class KurentoHandler {
 		log.info("Room {} removed and closed", room.getRoomId());
 	}
 
-	public KUser getByUid(String uid) {
+	private KUser getByUid(String uid) {
 		return uid == null ? null : usersByUid.get(uid);
 	}
 
-	public KTestUser getTestByUid(String uid) {
+	private KTestUser getTestByUid(String uid) {
 		return uid == null ? null : testsByUid.get(uid);
-	}
-
-	public boolean exists(String name) {
-		return usersByUid.keySet().contains(name);
 	}
 
 	static JSONObject newKurentoMsg() {

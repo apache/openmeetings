@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.core.remote.KurentoHandler.newTestKurentoMsg;
+import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 
@@ -50,10 +51,12 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
-public class KTestUser {
+public class KTestUser implements IKUser {
 	private final static Logger log = LoggerFactory.getLogger(KTestUser.class);
 	private MediaPipeline pipeline;
 	private WebRtcEndpoint webRtcEndpoint;
+	private PlayerEndpoint player;
+	private RecorderEndpoint recorder;
 	private String recPath = null;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private ScheduledFuture<?> recHandle;
@@ -67,7 +70,7 @@ public class KTestUser {
 		MediaProfileSpecType profile = getProfile(msg);
 		//FIXME TODO generated file uid
 		initRecPath(_c.getUid());
-		final RecorderEndpoint recorder = new RecorderEndpoint.Builder(pipeline, recPath)
+		recorder = new RecorderEndpoint.Builder(pipeline, recPath)
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
 
@@ -126,6 +129,7 @@ public class KTestUser {
 
 			@Override
 			public void onError(Throwable cause) throws Exception {
+				sendError(_c, "Failed to start recording");
 				log.error("Failed to start recording", cause);
 			}
 		});
@@ -135,7 +139,7 @@ public class KTestUser {
 		// 1. Media logic
 		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
-		PlayerEndpoint player = new PlayerEndpoint.Builder(pipeline, recPath).build();
+		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
 		player.connect(webRtcEndpoint);
 
 		// Player listeners
@@ -220,7 +224,9 @@ public class KTestUser {
 		}
 	}
 
+	@Override
 	public void release() {
+		//TODO improve this
 		pipeline.release(new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
@@ -234,6 +240,36 @@ public class KTestUser {
 				cleanup();
 			}
 		});
+		if (player != null) {
+			player.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.info("Pipeline released successfully");
+					player = null;
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.info("Error releasing pipeline ", cause);
+					player = null;
+				}
+			});
+		}
+		if (recorder != null) {
+			recorder.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.info("Pipeline released successfully");
+					recorder = null;
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.info("Error releasing pipeline ", cause);
+					recorder = null;
+				}
+			});
+		}
 	}
 
 	private void cleanup() {

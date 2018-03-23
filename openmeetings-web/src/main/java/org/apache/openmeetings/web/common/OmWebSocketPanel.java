@@ -144,6 +144,7 @@ public abstract class OmWebSocketPanel extends Panel {
 
 	protected void closeHandler(AbstractClientMessage msg) {
 		log.debug("WebSocketBehavior::closeHandler {}", msg);
+		kHandler.remove(getWsClient());
 	}
 
 	/**
