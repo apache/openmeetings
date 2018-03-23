@@ -22,7 +22,7 @@ package org.apache.openmeetings.webservice;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -44,50 +44,40 @@ public class NetTestWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 	enum TestType {
 		UNKNOWN,
-		PING,
 		JITTER,
 		DOWNLOAD_SPEED,
 		UPLOAD_SPEED
 	}
 
-	private static final int PING_PACKET_SIZE = 64;
 	private static final int JITTER_PACKET_SIZE = 1024;
-	private static final int DOWNLOAD_PACKET_SIZE = 1024*1024;
+	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
+	private static final int MAX_DOWNLOAD_SIZE = 16 * 1024 * 1024;
 
-	private final byte[] pingData;
 	private final byte[] jitterData;
-	private final byte[] downloadData;
 
 	public NetTestWebService() {
-		pingData = new byte[PING_PACKET_SIZE];
 		jitterData = new byte[JITTER_PACKET_SIZE];
-		downloadData = new byte[DOWNLOAD_PACKET_SIZE];
 
-		Arrays.fill(pingData, (byte) '0');
-		Arrays.fill(jitterData, (byte) '0');
-		Arrays.fill(downloadData, (byte) '0');
+		ThreadLocalRandom.current().nextBytes(jitterData);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public Response get(@QueryParam("module") String module, @QueryParam("size") long size) {
+	public Response get(@QueryParam("module") String module, @QueryParam("size") int _size) {
+		int size = Math.min(_size, MAX_DOWNLOAD_SIZE);
 		TestType testType = getTypeByString(module);
 		log.debug("Network test:: get");
 
 		// choose data to send
 		byte[] data = new byte[0];
 		switch (testType) {
-			case PING:
-				data = pingData;
-				break;
 			case JITTER:
 				data = jitterData;
 				break;
 			case DOWNLOAD_SPEED:
-				data = downloadData;
-				break;
-			case UPLOAD_SPEED:
+				data = new byte[size];
+				ThreadLocalRandom.current().nextBytes(data);
 				break;
 			default:
 				break;
@@ -105,9 +95,12 @@ public class NetTestWebService {
 	@Path("/")
 	public void upload(
 			@QueryParam("module") String module
-			, @QueryParam("size") long size
+			, @QueryParam("size") int size
 			, InputStream stream) throws IOException
 	{
+		if (size > MAX_UPLOAD_SIZE) {
+			return;
+		}
 		byte[] b = new byte[1024];
 		while (stream.read(b) >= 0 ) {
 			//no-op
@@ -115,9 +108,7 @@ public class NetTestWebService {
 	}
 
 	private static TestType getTypeByString(String typeString) {
-		if ("ping".equals(typeString)) {
-			return TestType.PING;
-		} else if ("latency".equals(typeString)) {
+		if ("latency".equals(typeString)) {
 			return TestType.JITTER;
 		} else if ("download".equals(typeString)) {
 			return TestType.DOWNLOAD_SPEED;

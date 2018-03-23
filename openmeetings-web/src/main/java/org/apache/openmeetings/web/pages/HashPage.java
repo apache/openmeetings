@@ -41,6 +41,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.room.VideoSettings;
 import org.apache.openmeetings.web.user.record.VideoInfo;
 import org.apache.openmeetings.web.user.record.VideoPlayer;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -162,7 +163,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 		StringValue app = swf.isEmpty() ? p.get(APP) : swf;
 		if (!app.isEmpty()) {
 			if (APP_TYPE_NETWORK.equals(app.toString())) {
-				replace(new NetTestPanel(PANEL_MAIN));
+				replace(new NetTestPanel(PANEL_MAIN).add(AttributeModifier.append("class", "app")));
 				error = false;
 			}
 			if (APP_TYPE_SETTINGS.equals(app.toString())) {

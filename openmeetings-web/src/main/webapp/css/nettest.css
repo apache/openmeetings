@@ -16,6 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+.hash-panel-main.app {
+	width: 100%;
+	height: calc(100% - 50px);
+}
+.nettest {
+	padding: 20px;
+	height: calc(100% - 50px);
+}
 .nettest .test {
 	display: inline-block;
+}
+.nettest .output {
+	border-radius: 10px;
+	border: 1px solid #cccccc;
+	min-height: calc(100% - 50px);
+	max-height: calc(100% - 50px);
+	margin-top: 20px;
+	overflow: auto;
+}
+.nettest output {
+}
+.nettest output .module {
+	color: #6b0df7;
+	padding: 0 5px;
+}
+.nettest output .delim {
+	color: green;
+}
+.nettest output .value {
+	color: green;
+	padding: 0 5px;
 }
