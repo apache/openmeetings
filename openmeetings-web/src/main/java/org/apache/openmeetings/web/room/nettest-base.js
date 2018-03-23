@@ -27,6 +27,7 @@ var NetTest = (function() {
 			.on('start', _start)
 			.on('progress', _progress)
 			.on('restart', _restart)
+			.on('error', _error)
 			.on('end', _end);
 		net.download
 			.on('start', _start)
@@ -69,6 +70,9 @@ var NetTest = (function() {
 			+ _value(size / 1024 / 1024, lbls['mb'])
 			+ ' of data...'
 		));
+	}
+	function _error() {
+		_log($('<span class="error></span>"'))
 	}
 	function _end(avg) {
 		_log('Final average speed: ' + _value(avg / 1024 / 1024, _mbps()));

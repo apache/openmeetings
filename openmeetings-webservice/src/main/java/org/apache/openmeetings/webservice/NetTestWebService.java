@@ -34,7 +34,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -72,8 +71,8 @@ public class NetTestWebService {
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public Response get(@QueryParam("type") String type) {
-		TestType testType = getTypeByString(type);
+	public Response get(@QueryParam("module") String module, @QueryParam("size") long size) {
+		TestType testType = getTypeByString(module);
 		log.debug("Network test:: get");
 
 		// choose data to send
@@ -95,15 +94,20 @@ public class NetTestWebService {
 		}
 
 		ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new ByteArrayInputStream(data));
-		response.header("Cache-Control", "no-cache");
+		response.header("Cache-Control", "no-cache, no-store, no-transform");
+		response.header("Pragma", "no-cache");
 		response.header("Content-Length", String.valueOf(data.length));
 		return response.build();
 	}
 
 	@POST
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public void upload(@Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM) InputStream stream) throws IOException {
+	public void upload(
+			@QueryParam("module") String module
+			, @QueryParam("size") long size
+			, InputStream stream) throws IOException
+	{
 		byte[] b = new byte[1024];
 		while (stream.read(b) >= 0 ) {
 			//no-op
@@ -113,7 +117,7 @@ public class NetTestWebService {
 	private static TestType getTypeByString(String typeString) {
 		if ("ping".equals(typeString)) {
 			return TestType.PING;
-		} else if ("jitter".equals(typeString)) {
+		} else if ("latency".equals(typeString)) {
 			return TestType.JITTER;
 		} else if ("download".equals(typeString)) {
 			return TestType.DOWNLOAD_SPEED;
