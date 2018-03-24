@@ -1,6 +1,6 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var NetTest = (function() {
-	const self = {}, LIMIT = 2000;
+	const self = {}, PINGS = 10, LIMIT = 2000, URL = './services/networktest/';
 	let output, lbls, net, tests, testName, testLabel;
 
 	// Based on
@@ -17,17 +17,30 @@ var NetTest = (function() {
 				tests[testName].start();
 			});
 
-		net = new Network({
-			endpoint: './services/networktest/'
-		});
+		net = new Network();
 		tests = {
-			latency: {
+			ping: {
 				start: function() {
 					const t = net.latency;
 					t.settings({
-						measures: 5
+						endpoint: URL + '?type=ping'
+						, measures: PINGS
+						, attempts: 1
+					});
+					t.off('end').on('end', _pingEnd);
+					t.start();
+					t.trigger('start');
+				}
+			}
+			, jitter: {
+				start: function() {
+					const t = net.latency;
+					t.settings({
+						endpoint: URL + '?type=jitter'
+						, measures: 5
 						, attempts: 3
 					});
+					t.off('end').on('end', _jitterEnd);
 					t.start();
 					t.trigger('start');
 				}
@@ -36,8 +49,8 @@ var NetTest = (function() {
 				start: function() {
 					const t = net.upload;
 					t.settings({
-						delay: LIMIT
-						, measures: 5
+						endpoint: URL + '?type=upload'
+						, delay: LIMIT
 						, data: {
 							size: 1 * 1024 * 1024
 							, multiplier: 2
@@ -50,8 +63,8 @@ var NetTest = (function() {
 				start: function() {
 					const t = net.download;
 					t.settings({
-						delay: LIMIT
-						, measures: 5
+						endpoint: URL + '?type=download'
+						, delay: LIMIT
 						, data: {
 							size: 1 * 1024 * 1024
 							, multiplier: 2
@@ -70,37 +83,19 @@ var NetTest = (function() {
 			.on('start', _start)
 			.on('restart', _restart)
 			.on('end', _end);
-		net.latency
-			.on('start', _start)
-			.on('end', function(avg, _all) {
-				const all = $('<span></span>').append('[');
-				let delim = '';
-				let max = 0, min = Number.MAX_VALUE;
-				for (let i = 0; i < _all.length; ++i) {
-					const v = _all[i];
-					max = Math.max(max, v);
-					min = Math.min(min, v);
-					all.append(delim).append(_value(v, lbls['ms']));
-					delim = ',';
-				}
-				all.append(']');
-				_log(all);
-				_log($('<span></span>').append(lbls['jitter.avg']).append(_value(avg, lbls['ms'])));
-				_log($('<span></span>').append(lbls['jitter.min']).append(_value(min, lbls['ms'])));
-				_log($('<span></span>').append(lbls['jitter.max']).append(_value(max, lbls['ms'])));
-				_log($('<span></span>').append(lbls['jitter'])
-						.append(':').append(_value(max - avg, lbls['ms']))
-						.append(';').append(_value(min - avg, lbls['ms'])));
-			});
+		net.latency.on('start', _start);
 	}
 	function __start(size, newSection) {
 		const msg = $('<span></span>').append(lbls['report.start']);
+		let upDown = false;
 		if (testName === 'upload') {
 			msg.append(lbls['upl.bytes']);
+			upDown = true;
 		} else if (testName === 'download') {
 			msg.append(lbls['dwn.bytes']);
+			upDown = true;
 		}
-		if (testName !== 'latency') {
+		if (upDown) {
 			msg.append(_value(size / 1024 / 1024, lbls['mb']));
 		}
 		msg.append('...');
@@ -108,6 +103,31 @@ var NetTest = (function() {
 	}
 	function _start(size) {
 		__start(size, true);
+	}
+	function _jitterEnd(avg, _all) {
+		const all = $('<span></span>').append('[');
+		let delim = '';
+		let max = 0, min = Number.MAX_VALUE;
+		for (let i = 0; i < _all.length; ++i) {
+			const v = _all[i];
+			max = Math.max(max, v);
+			min = Math.min(min, v);
+			all.append(delim).append(_value(v, lbls['ms']));
+			delim = ',';
+		}
+		all.append(']');
+		_log(all);
+		_log($('<span></span>').append(lbls['jitter.avg']).append(_value(avg, lbls['ms'])));
+		_log($('<span></span>').append(lbls['jitter.min']).append(_value(min, lbls['ms'])));
+		_log($('<span></span>').append(lbls['jitter.max']).append(_value(max, lbls['ms'])));
+		_log($('<span></span>').append(lbls['jitter'])
+				.append(':').append(_value(max - avg, lbls['ms']))
+				.append(';').append(_value(min - avg, lbls['ms'])));
+	}
+	function _pingEnd(avg, _all) {
+		_log($('<span></span>').append(lbls['ping.avg']).append(_value(avg, lbls['ms'])));
+		_log($('<span></span>').append(lbls['ping.rcv']).append(_value(_all.length, '')));
+		_log($('<span></span>').append(lbls['ping.lost']).append(_value(PINGS - _all.length, '')));
 	}
 	function _restart(size) {
 		__start(size, false);

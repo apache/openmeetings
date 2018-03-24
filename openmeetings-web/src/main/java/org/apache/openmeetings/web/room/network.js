@@ -420,8 +420,7 @@ var BandwidthModule = (function (_HttpModule) {
                 // 2 MB for upload, 10 MB for download
                 size: loadingType == 'upload' ? 2 * 1024 * 1024 : 10 * 1024 * 1024,
                 multiplier: 2
-            },
-            measures: -1
+            }
         }).settings(settings);
 
         this._loadingType = loadingType;
@@ -591,9 +590,8 @@ var BandwidthModule = (function (_HttpModule) {
     }, {
         key: '_end',
         value: function _end() {
-            const measures = --this.settings().measures;
             // A timeout or an abort occured, bypass the further requests and trigger the "end" event.
-            if (this._intendedEnd || measures == 0) {
+            if (this._intendedEnd) {
                 this._isRestarting = false;
                 this.trigger('end', this._avgSpeed, this._speedRecords);
             }
@@ -603,7 +601,7 @@ var BandwidthModule = (function (_HttpModule) {
                     var dataSettings = this.settings().data,
                         size = dataSettings.size * dataSettings.multiplier;
 
-                    this.settings({ data: { size: size }, measures: measures });
+                    this.settings({ data: { size: size } });
                     this.trigger('restart', size);
 
                     this._isRestarting = true;

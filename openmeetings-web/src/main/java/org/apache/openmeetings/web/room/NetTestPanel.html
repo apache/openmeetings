@@ -27,7 +27,12 @@
 	<noscript>Please enable JavaScript in order to use this application.</noscript>
 	<div class="nettest">
 		<div class="test">
-			<button type="button" data-measure="latency" data-start="true" data-next="upload" wicket:message="data-lbl:network.test.jitter">
+			<button type="button" data-measure="ping" data-start="true" data-next="jitter" wicket:message="data-lbl:network.test.ping">
+				<span class="ui-icon ui-icon-clock"></span> <wicket:message key="network.test.ping"/>
+			</button>
+		</div>
+		<div class="test">
+			<button type="button" data-measure="jitter" data-start="true" data-next="upload" wicket:message="data-lbl:network.test.jitter">
 				<span class="ui-icon ui-icon-clock"></span> <wicket:message key="network.test.jitter"/>
 			</button>
 		</div>

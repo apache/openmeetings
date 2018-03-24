@@ -19,7 +19,6 @@
 package org.apache.openmeetings.webservice;
 
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ThreadLocalRandom;
@@ -44,71 +43,78 @@ public class NetTestWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 	enum TestType {
 		UNKNOWN,
+		PING,
 		JITTER,
 		DOWNLOAD_SPEED,
 		UPLOAD_SPEED
 	}
 
+	private static final int PING_PACKET_SIZE = 64;
 	private static final int JITTER_PACKET_SIZE = 1024;
 	private static final int MAX_UPLOAD_SIZE = 16 * 1024 * 1024;
-	private static final int MAX_DOWNLOAD_SIZE = 16 * 1024 * 1024;
-
-	private final byte[] jitterData;
 
 	public NetTestWebService() {
-		jitterData = new byte[JITTER_PACKET_SIZE];
-
-		ThreadLocalRandom.current().nextBytes(jitterData);
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public Response get(@QueryParam("module") String module, @QueryParam("size") int _size) {
-		int size = Math.min(_size, MAX_DOWNLOAD_SIZE);
-		TestType testType = getTypeByString(module);
+	public Response get(@QueryParam("type") String type, @QueryParam("size") int _size) {
+		final int size;
+		TestType testType = getTypeByString(type);
 		log.debug("Network test:: get");
 
 		// choose data to send
-		byte[] data = new byte[0];
 		switch (testType) {
-			case JITTER:
-				data = jitterData;
+			case PING:
+				size = PING_PACKET_SIZE;
 				break;
-			case DOWNLOAD_SPEED:
-				data = new byte[size];
-				ThreadLocalRandom.current().nextBytes(data);
+			case JITTER:
+				size = JITTER_PACKET_SIZE;
 				break;
 			default:
+				size = _size;
 				break;
 		}
+		ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new InputStream() {
+			int pos = 0;
 
-		ResponseBuilder response = Response.ok().type(MediaType.APPLICATION_OCTET_STREAM).entity(new ByteArrayInputStream(data));
+			@Override
+			public int read() throws IOException {
+				pos++;
+				return pos > size ? -1 : ThreadLocalRandom.current().nextInt(0, 0xFF);
+			}
+
+			@Override
+			public int available() throws IOException {
+				return size - pos;
+			}
+		});
 		response.header("Cache-Control", "no-cache, no-store, no-transform");
 		response.header("Pragma", "no-cache");
-		response.header("Content-Length", String.valueOf(data.length));
+		response.header("Content-Length", String.valueOf(size));
 		return response.build();
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Path("/")
-	public void upload(
-			@QueryParam("module") String module
-			, @QueryParam("size") int size
-			, InputStream stream) throws IOException
-	{
+	public void upload(@QueryParam("size") int size, InputStream stream) throws IOException {
 		if (size > MAX_UPLOAD_SIZE) {
 			return;
 		}
 		byte[] b = new byte[1024];
-		while (stream.read(b) >= 0 ) {
-			//no-op
+		int totalCount = 0, count = 0;
+		while ((count = stream.read(b)) > -1) {
+			totalCount += count;
 		};
+		log.debug("Total bytes read {}", totalCount);
 	}
 
 	private static TestType getTypeByString(String typeString) {
-		if ("latency".equals(typeString)) {
+		if ("ping".equals(typeString)) {
+			return TestType.PING;
+		} else if ("jitter".equals(typeString)) {
 			return TestType.JITTER;
 		} else if ("download".equals(typeString)) {
 			return TestType.DOWNLOAD_SPEED;
