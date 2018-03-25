@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var NetTest = (function() {
 	const self = {}, PINGS = 10, LIMIT = 2000, URL = './services/networktest/';
-	let output, lbls, net, tests, testName, testLabel;
+	let output, lbls, net, tests, testName, testLabel, testNext, bulk = true;
 
 	// Based on
 	// https://github.com/nesk/network.js/blob/master/example/main.js
@@ -35,9 +35,11 @@ var NetTest = (function() {
 			.button()
 			.click(function() {
 				const btn = $(this);
+				btn.removeClass('complete').removeClass('not-started').addClass('started');
 				testLabel = btn.data('lbl');
 				testName = btn.data('measure');
 				tests[testName].start();
+				btn.find('.value').html('');
 			});
 
 		net = new Network();
@@ -107,6 +109,7 @@ var NetTest = (function() {
 			.on('restart', _restart)
 			.on('end', _end);
 		net.latency.on('start', _start);
+		$('.nettest button[data-start="true"]').click()
 	}
 	function __start(size, newSection) {
 		const msg = $('<span></span>').append(lbls['report.start']);
@@ -146,12 +149,13 @@ var NetTest = (function() {
 		_log($('<span></span>').append(lbls['jitter'])
 				.append(':').append(_value(max - avg, lbls['ms']))
 				.append(';').append(_value(min - avg, lbls['ms'])));
+		_setResult('')
 	}
 	function _pingEnd(avg, _all) {
 		_log($('<span></span>').append(lbls['ping.avg']).append(_value(avg, lbls['ms'])));
 		_log($('<span></span>').append(lbls['ping.rcv']).append(_value(_all.length, '')));
 		_log($('<span></span>').append(lbls['ping.lost']).append(_value(PINGS - _all.length, '')));
-		$('#test-ping .value').html(_value(avg, lbls['ms']));
+		_setResult(_value(avg, lbls['ms']))
 	}
 	function _restart(size) {
 		__start(size, false);
@@ -159,11 +163,30 @@ var NetTest = (function() {
 	function _mbps() {
 		return lbls['mb'] + '/' + lbls['sec'];
 	}
+	function _btn() {
+		return $('#test-' + testName + ' button.test-btn');
+	}
+	function _setResult(val) {
+		const btn = _btn();
+		btn.addClass('complete').removeClass('started');
+		btn.find('.value').html(val);
+		testNext = btn.data('next');
+		if (!testNext) {
+			bulk = false;
+			return;
+		}
+		if (bulk) {
+			testName = testNext;
+			_btn().click();
+		}
+	}
 	function _end(avg) {
-		const msg = $('<span></span>')
-			.append(lbls[testName === 'upload' ? 'upl.speed' : 'dwn.speed'])
-			.append(_value(avg / 1024 / 1024, _mbps()));
+		const val = _value(avg / 1024 / 1024, _mbps())
+			, msg = $('<span></span>')
+				.append(lbls[testName === 'upload' ? 'upl.speed' : 'dwn.speed'])
+				.append(val);
 		_log(msg);
+		_setResult(val)
 	}
 	function _delimiter(text) {
 		return $('<span class="delim"></span>').html(text);

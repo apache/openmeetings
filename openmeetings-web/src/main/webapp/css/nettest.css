@@ -30,10 +30,31 @@
 	width: 200px;
 	height: 100px;
 }
-.nettest .test-container .value {
+.nettest .test-container button .value {
 	display: inline-block;
 	width: 80px;
 	height: 40px;
+}
+.nettest .test-container button.not-started
+	, .nettest .test-container button.started
+{
+	background-color: #cccccc;
+}
+.nettest .test-container button.not-started .value
+	, .nettest .test-container button.started .value
+{
+	background-size: 40px;
+	background-repeat: no-repeat;
+	background-position-x: 20px;
+}
+.nettest .test-container button.not-started .value {
+	background-image: url(images/notrun.png);
+}
+.nettest .test-container button.started .value {
+	background-image: url(images/ajax-loader.gif);
+}
+.nettest .test-container button.complete {
+	background-color: lawngreen;
 }
 .nettest .nettest-dialog {
 	padding: 0;
