@@ -11,5 +11,6 @@
 target
 
 # OM
+openmeetings-server/red5-server
 openmeetings-server/web-server
 
