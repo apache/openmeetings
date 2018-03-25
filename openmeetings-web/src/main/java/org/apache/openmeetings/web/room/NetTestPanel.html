@@ -26,25 +26,33 @@
 <wicket:panel>
 	<noscript>Please enable JavaScript in order to use this application.</noscript>
 	<div class="nettest">
-		<div class="test">
-			<button type="button" data-measure="ping" data-start="true" data-next="jitter" wicket:message="data-lbl:network.test.ping">
-				<span class="ui-icon ui-icon-clock"></span> <wicket:message key="network.test.ping"/>
-			</button>
+		<div class="test-container" id="test-ping">
+			<div class="test" wicket:message="title:network.test.ping" data-icon="ui-icon-clock">
+				<button type="button" data-measure="ping" data-start="true" data-next="jitter" wicket:message="data-lbl:network.test.ping">
+					<span class="value"></span>
+				</button>
+			</div>
 		</div>
-		<div class="test">
-			<button type="button" data-measure="jitter" data-start="true" data-next="upload" wicket:message="data-lbl:network.test.jitter">
-				<span class="ui-icon ui-icon-clock"></span> <wicket:message key="network.test.jitter"/>
-			</button>
+		<div class="test-container" id="test-jitter">
+			<div class="test" wicket:message="title:network.test.jitter" data-icon="ui-icon-clock">
+				<button type="button" data-measure="jitter" data-start="true" data-next="upload" wicket:message="data-lbl:network.test.jitter">
+					<span class="value"></span>
+				</button>
+			</div>
 		</div>
-		<div class="test">
-			<button type="button" data-measure="upload" data-next="download" wicket:message="data-lbl:network.test.upl">
-				<span class="ui-icon ui-icon-arrowthickstop-1-n"></span> <wicket:message key="network.test.upl"/>
-			</button>
+		<div class="test-container" id="test-upload">
+			<div class="test" wicket:message="title:network.test.upl" data-icon="ui-icon-arrowthickstop-1-n">
+				<button type="button" data-measure="upload" data-next="download" wicket:message="data-lbl:network.test.upl">
+					<span class="value"></span>
+				</button>
+			</div>
 		</div>
-		<div class="test">
-			<button type="button" data-measure="download" wicket:message="data-lbl:network.test.dwn">
-				<span class="ui-icon ui-icon-arrowthickstop-1-s"></span> <wicket:message key="network.test.dwn"/>
-			</button>
+		<div class="test-container" id="test-download">
+			<div class="test" wicket:message="title:network.test.dwn" data-icon="ui-icon-arrowthickstop-1-s">
+				<button type="button" data-measure="download" wicket:message="data-lbl:network.test.dwn">
+					<span class="value"></span>
+				</button>
+			</div>
 		</div>
 		<div class="output">
 			<output></output>

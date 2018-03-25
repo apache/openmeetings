@@ -22,10 +22,25 @@
 }
 .nettest {
 	padding: 20px;
-	height: calc(100% - 50px);
+	height: calc(100% - 100px);
 }
-.nettest .test {
+.nettest .test-container {
 	display: inline-block;
+	position: relative;
+	width: 200px;
+	height: 100px;
+}
+.nettest .test-container .value {
+	display: inline-block;
+	width: 80px;
+	height: 40px;
+}
+.nettest .nettest-dialog {
+	padding: 0;
+}
+.nettest .nettest-dialog .test.ui-widget-content {
+	padding: 0 35px;
+	overflow: hidden;
 }
 .nettest .output {
 	border-radius: 10px;

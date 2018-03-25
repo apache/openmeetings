@@ -8,6 +8,29 @@ var NetTest = (function() {
 	function _init(_lbls) {
 		lbls = _lbls;
 		output = $('.nettest output');
+		$('.nettest .test-container').each(function() {
+			const cont = $(this)
+				, d = cont.find('.test');
+			d.dialog({
+				closeOnEscape: false
+				, classes: {
+					'ui-dialog': 'ui-corner-all nettest-dialog'
+					, 'ui-dialog-titlebar': 'ui-corner-all no-close'
+				}
+				, autoOpen: true
+				, resizable: false
+				, draggable: false
+				, modal: false
+				, appendTo: '#' + cont.attr('id')
+				, position: {my: "left top", at: "left top", of: cont}
+				, minWidth: 190
+				, width: 190
+				, maxWidth: 190
+				, height: 100
+			});
+			d.parent().find('.ui-dialog-titlebar .ui-dialog-title')
+				.prepend($('<span class="ui-icon"></span>').addClass(d.data('icon')));
+		});
 		$('.nettest button')
 			.button()
 			.click(function() {
@@ -128,6 +151,7 @@ var NetTest = (function() {
 		_log($('<span></span>').append(lbls['ping.avg']).append(_value(avg, lbls['ms'])));
 		_log($('<span></span>').append(lbls['ping.rcv']).append(_value(_all.length, '')));
 		_log($('<span></span>').append(lbls['ping.lost']).append(_value(PINGS - _all.length, '')));
+		$('#test-ping .value').html(_value(avg, lbls['ms']));
 	}
 	function _restart(size) {
 		__start(size, false);
