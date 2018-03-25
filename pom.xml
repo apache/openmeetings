@@ -1055,6 +1055,7 @@
 						</licenseFamilies>
 						<excludes>
 							<exclude>**/*.mp3</exclude>
+							<exclude>**/keystore</exclude>
 						</excludes>
 					</configuration>
 				</plugin>
