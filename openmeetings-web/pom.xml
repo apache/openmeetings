@@ -34,7 +34,7 @@
 		<mssql.version>6.2.1.jre8</mssql.version>
 		<old-backups.dir>${project.build.directory}/test-data</old-backups.dir>
 		<site.basedir>${project.parent.basedir}</site.basedir>
-		<pdfbox.version>2.0.8</pdfbox.version>
+		<pdfbox.version>2.0.9</pdfbox.version>
 	</properties>
 	<profiles>
 		<profile>
