@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.chat;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_CHAT;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -67,7 +66,7 @@ public class Chat extends Panel {
 	private static final String PARAM_MSG_ID = "msgid";
 	private static final String PARAM_ROOM_ID = "roomid";
 	private static final String PARAM_TYPE = "type";
-	private boolean showDashboardChat = getBean(ConfigurationDao.class).getBool(CONFIG_DASHBOARD_SHOW_CHAT, true);
+	private boolean showDashboardChat;
 	private final AbstractDefaultAjaxBehavior chatActivity = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
@@ -78,11 +77,10 @@ public class Chat extends Panel {
 				long roomId = getRequest().getRequestParameters().getParameterValue(PARAM_ROOM_ID).toLong();
 				if ("accept".equals(type)) {
 					long msgId = getRequest().getRequestParameters().getParameterValue(PARAM_MSG_ID).toLong();
-					ChatDao dao = getBean(ChatDao.class);
-					ChatMessage m = dao.get(msgId);
+					ChatMessage m = chatDao.get(msgId);
 					if (m.isNeedModeration() && isModerator(cm, getUserId(), roomId)) {
 						m.setNeedModeration(false);
-						dao.update(m);
+						chatDao.update(m);
 						WebSocketHelper.sendRoom(m, getMessage(Arrays.asList(m)).put("mode",  "accept"));
 					} else {
 						log.error("It seems like we are being hacked!!!!");
@@ -105,9 +103,18 @@ public class Chat extends Panel {
 
 	@SpringBean
 	private ClientManager cm;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private ChatDao chatDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public Chat(String id) {
 		super(id);
+		showDashboardChat = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_CHAT, true);
 		setOutputMarkupPlaceholderTag(true);
 		setMarkupId(id);
 	}
@@ -125,7 +132,7 @@ public class Chat extends Panel {
 
 	public JSONObject getMessage(List<ChatMessage> list) {
 		final Client c = getClient();
-		final User curUser = c == null ? getBean(UserDao.class).get(getUserId()) : c.getUser();
+		final User curUser = c == null ? userDao.get(getUserId()) : c.getUser();
 		return getMessage(curUser, list);
 	}
 
@@ -151,7 +158,7 @@ public class Chat extends Panel {
 	public CharSequence addRoom(Room r) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("Chat.addTab('%1$s%2$d', '%3$s %2$d');", ID_ROOM_PREFIX, r.getId(), getString("406")));
-		List<ChatMessage> list = getBean(ChatDao.class).getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(cm, getUserId(), r.getId()));
+		List<ChatMessage> list = chatDao.getRoom(r.getId(), 0, 30, !r.isChatModerated() || isModerator(cm, getUserId(), r.getId()));
 		if (!list.isEmpty()) {
 			sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
 		}
@@ -165,14 +172,13 @@ public class Chat extends Panel {
 		response.render(new PriorityHeaderItem(getNamedFunction("chatActivity", chatActivity, explicit(PARAM_TYPE), explicit(PARAM_ROOM_ID), explicit(PARAM_MSG_ID))));
 
 		if (showDashboardChat) {
-			ChatDao dao = getBean(ChatDao.class);
 			StringBuilder sb = new StringBuilder(getReinit());
-			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
+			List<ChatMessage> list = new ArrayList<>(chatDao.getGlobal(0, 30));
 			for(Long roomId : cm.listRoomIds(getUserId())) {
-				Room r = getBean(RoomDao.class).get(roomId);
+				Room r = roomDao.get(roomId);
 				sb.append(addRoom(r));
 			}
-			list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
+			list.addAll(chatDao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
 			if (!list.isEmpty()) {
 				sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
 			}

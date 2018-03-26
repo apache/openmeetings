@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user.chat;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -111,26 +110,25 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 		@Override
 		protected IResourceStream getResourceStream(Attributes attributes) {
-			final ChatDao dao = getBean(ChatDao.class);
 			final boolean admin = hasAdminLevel(getRights());
 			final StringBuilder sb = new StringBuilder();
 			chatForm.process(
 					() -> {
 						if (admin) {
 							setFileName(String.format(CHAT_FNAME_TMPL, "global"));
-							export(dao.getGlobal(0, Integer.MAX_VALUE), sb);
+							export(chatDao.getGlobal(0, Integer.MAX_VALUE), sb);
 						}
 						return true;
 					}
 					, r -> {
 						if (admin || isModerator(cm, getUserId(), r.getId())) {
 							setFileName(String.format(CHAT_FNAME_TMPL, "room_" + r.getId()));
-							export(dao.getRoom(r.getId(), 0, Integer.MAX_VALUE, true), sb);
+							export(chatDao.getRoom(r.getId(), 0, Integer.MAX_VALUE, true), sb);
 						}
 						return true;
 					}, u -> {
 						setFileName(String.format(CHAT_FNAME_TMPL, "user_" + u.getId()));
-						export(dao.getUser(u.getId(), 0, Integer.MAX_VALUE), sb);
+						export(chatDao.getUser(u.getId(), 0, Integer.MAX_VALUE), sb);
 						return true;
 					});
 			StringResourceStream srs = new StringResourceStream(sb, "text/csv");
@@ -141,6 +139,8 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 	@SpringBean
 	private ClientManager cm;
+	@SpringBean
+	private ChatDao chatDao;
 
 	/**
 	 * Constructor
@@ -185,25 +185,24 @@ public class ChatToolbar extends Panel implements IWysiwygToolbar {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				final ChatDao dao = getBean(ChatDao.class);
 				final String scope = chatForm.getScope();
 				final boolean admin = hasAdminLevel(getRights());
 				chatForm.process(
 					() -> {
 						if (admin) {
-							dao.deleteGlobal();
+							chatDao.deleteGlobal();
 							clean(target, ID_ALL);
 						}
 						return true;
 					}
 					, r -> {
 						if (admin || isModerator(cm, getUserId(), r.getId())) {
-							dao.deleteRoom(r.getId());
+							chatDao.deleteRoom(r.getId());
 							clean(target, scope);
 						}
 						return true;
 					}, u -> {
-						dao.deleteUser(u.getId());
+						chatDao.deleteUser(u.getId());
 						clean(target, scope);
 						return true;
 					});

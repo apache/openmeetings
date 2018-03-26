@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.util;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -35,11 +34,13 @@ import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
 import org.apache.wicket.resource.FileSystemResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +48,14 @@ import org.slf4j.LoggerFactory;
 public class GroupLogoResourceReference extends FileSystemResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(GroupLogoResourceReference.class);
+	@SpringBean
+	private GroupUserDao groupUserDao;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public GroupLogoResourceReference() {
 		super(GroupLogoResourceReference.class, "grouplogo");
+		Injector.get().inject(this);
 	}
 
 	@Override
@@ -75,9 +81,9 @@ public class GroupLogoResourceReference extends FileSystemResourceReference {
 					} catch (Exception e) {
 						//no-op expected
 					}
-					allowed = id == null || hasAdminLevel(getRights()) || null != getBean(GroupUserDao.class).getByGroupAndUser(id, getUserId());
+					allowed = id == null || hasAdminLevel(getRights()) || null != groupUserDao.getByGroupAndUser(id, getUserId());
 					if (!allowed && ws.getInvitation() != null) {
-						Room r = ws.getInvitation().getRoom() == null ? null : getBean(RoomDao.class).get(ws.getInvitation().getRoom().getId());
+						Room r = ws.getInvitation().getRoom() == null ? null : roomDao.get(ws.getInvitation().getRoom().getId());
 						if (r != null && r.getGroups() != null) {
 							for (RoomGroup rg : r.getGroups()) {
 								if (id.equals(rg.getGroup().getId())) {

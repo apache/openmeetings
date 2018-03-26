@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -50,6 +49,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.JQueryIcon;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
@@ -71,7 +71,7 @@ public class VideoInfo extends Panel {
 
 		@Override
 		protected void onSubmit(AjaxRequestTarget target) {
-			final IRecordingConverter converter = isInterview ? getBean(InterviewConverter.class) : getBean(RecordingConverter.class);
+			final IRecordingConverter converter = isInterview ? interviewConverter : recordingConverter;
 			new Thread() {
 				@Override
 				public void run() {
@@ -113,6 +113,14 @@ public class VideoInfo extends Panel {
 			invite.open(target);
 		}
 	};
+	@SpringBean
+	private InterviewConverter interviewConverter;
+	@SpringBean
+	private RecordingConverter recordingConverter;
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private RecordingMetaDataDao metaDao;
 
 	public VideoInfo(String id) {
 		this(id, null);
@@ -142,7 +150,7 @@ public class VideoInfo extends Panel {
 			try {
 				String name = null;
 				if (r.getRoomId() != null) {
-					Room room = getBean(RoomDao.class).get(r.getRoomId());
+					Room room = roomDao.get(r.getRoomId());
 					if (room != null) {
 						name = room.getName();
 						isInterview = Room.Type.interview == room.getType();
@@ -154,7 +162,7 @@ public class VideoInfo extends Panel {
 			}
 
 			if (r.getOwnerId() != null && r.getOwnerId().equals(getUserId()) && r.getStatus() != Status.RECORDING && r.getStatus() != Status.CONVERTING) {
-				List<RecordingMetaData> metas = getBean(RecordingMetaDataDao.class).getByRecording(r.getId());
+				List<RecordingMetaData> metas = metaDao.getByRecording(r.getId());
 				for (RecordingMetaData meta : metas) {
 					if (r.getRoomId() == null || !getRecordingMetaData(r.getRoomId(), meta.getStreamName()).exists()) {
 						break;

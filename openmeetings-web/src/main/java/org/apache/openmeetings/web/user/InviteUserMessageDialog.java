@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.user;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,6 +31,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -44,6 +43,10 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String> {
 	private final Form<Void> form = new Form<>("form");
 	private final TextArea<String> message = new TextArea<>("message", Model.of(""));
 	private final CheckBox enterRoom = new CheckBox("enterRoom", Model.of(false));
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public InviteUserMessageDialog(String id) {
 		super(id, "");
@@ -59,8 +62,8 @@ public class InviteUserMessageDialog extends AbstractFormDialog<String> {
 	}
 
 	public void open(IPartialPageRequestHandler handler, Long roomId, Long userId) {
-		Room r = getBean(RoomDao.class).get(roomId);
-		User u = getBean(UserDao.class).get(userId);
+		Room r = roomDao.get(roomId);
+		User u = userDao.get(userId);
 		message.setModelObject(String.format("%s %s %s %s", u.getFirstname(), u.getLastname(), getString("1137"), r.getName()));
 		enterRoom.setModelObject(false);
 		handler.add(form);

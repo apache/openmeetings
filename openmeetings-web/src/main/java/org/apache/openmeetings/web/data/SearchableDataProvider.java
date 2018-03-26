@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.data;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.get;
 
 import java.util.Iterator;
 
@@ -50,7 +50,7 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 	}
 
 	protected IDataProviderDao<T> getDao() {
-		return getBean(clazz);
+		return get().getBean(clazz);
 	}
 
 	protected String getSortStr() {

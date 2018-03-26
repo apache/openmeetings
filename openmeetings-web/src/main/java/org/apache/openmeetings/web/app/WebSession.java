@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOAR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getDashboardContext;
 import static org.apache.openmeetings.web.app.Application.isInvaldSession;
 import static org.apache.openmeetings.web.app.Application.removeInvalidSession;
@@ -45,10 +44,10 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.IWebSession;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
@@ -77,7 +76,9 @@ import org.apache.wicket.authentication.IAuthenticationStrategy;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.core.request.ClientInfo;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -110,14 +111,29 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	private String externalType;
 	private boolean kickedByAdmin = false;
 	private ExtendedClientProperties extProps = new ExtendedClientProperties();
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private InvitationDao inviteDao;
+	@SpringBean
+	private SOAPLoginDao soapDao;
+	@SpringBean
+	private SessiondataDao sessionDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private LdapLoginManager ldapManager;
+	@SpringBean
+	private ConfigurationDao cfgDao;
 
 	public WebSession(Request request) {
 		super(request);
+		Injector.get().inject(this);
 	}
 
 	@Override
 	public void invalidate() {
-		getBean(ClientManager.class).invalidate(userId, getId());
+		cm.invalidate(userId, getId());
 		super.invalidate();
 		userId = null;
 		rights = Collections.unmodifiableSet(Collections.<Right>emptySet());
@@ -187,7 +203,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (isSignedIn()) {
 					invalidateNow();
 				}
-				i = getBean(InvitationDao.class).getByHash(invitation.toString(), false, true);
+				i = inviteDao.getByHash(invitation.toString(), false, true);
 				if (i != null && i.isAllowEntry()) {
 					Set<Right> hrights = new HashSet<>();
 					if (i.getRoom() != null) {
@@ -208,18 +224,15 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public boolean signIn(String secureHash, boolean markUsed) {
-		SOAPLoginDao soapDao = getBean(SOAPLoginDao.class);
 		SOAPLogin soapLogin = soapDao.get(secureHash);
 		if (soapLogin == null) {
 			return false;
 		}
 		if (!soapLogin.isUsed() || soapLogin.getAllowSameURLMultipleTimes()) {
-			SessiondataDao sessionDao = getBean(SessiondataDao.class);
 			Sessiondata sd = sessionDao.check(soapLogin.getSessionHash());
 			if (sd.getXml() != null) {
 				RemoteSessionObject remoteUser = RemoteSessionObject.fromXml(sd.getXml());
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
-					UserDao userDao = getBean(UserDao.class);
 					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
 					if (user == null) {
 						user = userDao.getNewUserInstance(null);
@@ -311,15 +324,15 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		User u;
 		switch (type) {
 			case ldap:
-				u = getBean(LdapLoginManager.class).login(login, password, domainId);
+				u = ldapManager.login(login, password, domainId);
 				break;
 			case user:
 				/* we will allow login against internal DB in case user 'guess' LDAP password */
-				u = getBean(UserDao.class).login(login, password);
+				u = userDao.login(login, password);
 				break;
 			case oauth:
 				// we did all the checks at this stage, just set the user
-				u = getBean(UserDao.class).getByLogin(login, Type.oauth, domainId);
+				u = userDao.getByLogin(login, Type.oauth, domainId);
 				break;
 			default:
 				throw new OmException("error.unknown");
@@ -353,7 +366,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		WebSession session = get();
 		if (session.languageId < 0) {
 			if (session.isSignedIn()) {
-				session.languageId = getBean(UserDao.class).get(session.userId).getLanguageId();
+				session.languageId = session.userDao.get(session.userId).getLanguageId();
 			} else {
 				session.languageId = getDefaultLang();
 			}
@@ -438,7 +451,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 	}
 
 	public Long getLanguageByLocale() {
-		return getBean(IUserManager.class).getLanguage(getLocale());
+		return LabelDao.getLanguage(getLocale(), getDefaultLang());
 	}
 
 	public String getClientTZCode() {
@@ -475,7 +488,6 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 		DashboardContext dashboardContext = getDashboardContext();
 		dashboard = (UserDashboard)dashboardContext.getDashboardPersister().load();
 		boolean existMyRoomWidget = false, existRssWidget = false, existAdminWidget = false;
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		boolean showMyRoomConfValue = cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true) && cfgDao.getBool(CONFIG_DASHBOARD_SHOW_MYROOMS, false);
 		boolean showRssConfValue = cfgDao.getBool(CONFIG_DASHBOARD_SHOW_RSS, false);
 		boolean showAdminWidget = getRights().contains(User.Right.Admin);

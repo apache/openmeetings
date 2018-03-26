@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.wb.InterviewWbPanel.INTERVIEWWB_JS_REFERENCE;
@@ -123,7 +122,7 @@ public class RoomPanel extends BasePanel {
 		protected void respond(AjaxRequestTarget target) {
 			WebSession ws = WebSession.get();
 			ExtendedClientProperties cp = ws.getExtendedProperties();
-			getBean(ConferenceLogDao.class).add(
+			confLogDao.add(
 					ConferenceLog.Type.roomEnter
 					, getUserId(), "0", r.getId()
 					, cp.getRemoteAddress()
@@ -224,6 +223,16 @@ public class RoomPanel extends BasePanel {
 
 	@SpringBean
 	private ClientManager cm;
+	@SpringBean
+	private StreamClientManager scm;
+	@SpringBean
+	private ConferenceLogDao confLogDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private AppointmentDao apptDao;
+	@SpringBean
+	private QuickPollManager qpollManager;
 
 	public RoomPanel(String id, Room r) {
 		super(id);
@@ -241,7 +250,7 @@ public class RoomPanel extends BasePanel {
 	protected void onInitialize() {
 		super.onInitialize();
 		//let's refresh user in client
-		cm.update(getClient().updateUser(getBean(UserDao.class)));
+		cm.update(getClient().updateUser(userDao));
 		Component accessDenied = new WebMarkupContainer(ACCESS_DENIED_ID).setVisible(false);
 
 		room.add(AttributeModifier.append(ATTR_CLASS, r.getType().name()));
@@ -291,7 +300,7 @@ public class RoomPanel extends BasePanel {
 			boolean allowed = false;
 			String deniedMessage = null;
 			if (r.isAppointment()) {
-				Appointment a = getBean(AppointmentDao.class).getByRoom(r.getId());
+				Appointment a = apptDao.getByRoom(r.getId());
 				if (a != null && !a.isDeleted()) {
 					boolean isOwner = a.getOwner().getId().equals(getUserId());
 					allowed = isOwner;
@@ -475,7 +484,7 @@ public class RoomPanel extends BasePanel {
 							}
 							boolean self = _c.getUid().equals(c.getUid());
 							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.streamJson(_c.getSid(), self, getBean(StreamClientManager.class)).toString(new NullStringer())
+									, c.streamJson(_c.getSid(), self, scm).toString(new NullStringer())
 									));
 							sidebar.update(handler);
 							menu.update(handler);
@@ -497,8 +506,7 @@ public class RoomPanel extends BasePanel {
 							return;
 						}
 						boolean self = _c.getSid().equals(c.getSid());
-						StreamClientManager mgr = getBean(StreamClientManager.class);
-						if (!self || Client.Type.room != mgr.get(uid).getType()) { // stream from others or self external video
+						if (!self || Client.Type.room != scm.get(uid).getType()) { // stream from others or self external video
 							JSONObject jo = videoJson(c, _c.getSid(), uid);
 							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
 						}
@@ -632,7 +640,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	private String getQuickPollJs() {
-		return String.format("Room.quickPoll(%s);", getBean(QuickPollManager.class).toJson(r.getId()));
+		return String.format("Room.quickPoll(%s);", qpollManager.toJson(r.getId()));
 	}
 
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
@@ -665,7 +673,7 @@ public class RoomPanel extends BasePanel {
 				c.allow(Right.superModerator);
 				cm.update(c);
 			} else {
-				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? getBean(AppointmentDao.class).getByRoom(r.getId()) : null, count);
+				Set<Right> rr = AuthLevelUtil.getRoomRight(c.getUser(), r, r.isAppointment() ? apptDao.getByRoom(r.getId()) : null, count);
 				if (!rr.isEmpty()) {
 					c.allow(rr);
 					cm.update(c);

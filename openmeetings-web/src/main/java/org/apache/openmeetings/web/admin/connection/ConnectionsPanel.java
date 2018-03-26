@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.connection;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -45,11 +44,18 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.form.button.ButtonBehavior;
 
 public class ConnectionsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private StreamClientManager scm;
+	@SpringBean
+	private IUserManager userManager;
 
 	public ConnectionsPanel(String id) {
 		super(id);
@@ -59,8 +65,8 @@ public class ConnectionsPanel extends AdminBasePanel {
 
 			private List<IClient> list() {
 				List<IClient> l = new ArrayList<>();
-				l.addAll(getBean(StreamClientManager.class).list());
-				l.addAll(getBean(ClientManager.class).list());
+				l.addAll(scm.list());
+				l.addAll(cm.list());
 				return l;
 			}
 
@@ -90,10 +96,10 @@ public class ConnectionsPanel extends AdminBasePanel {
 					protected void onSubmit(AjaxRequestTarget target) {
 						IClient _c = item.getModelObject();
 						if (_c instanceof StreamClient) {
-							getBean(IUserManager.class).kickById(_c.getUid());
+							userManager.kickById(_c.getUid());
 						} else {
 							Client c = (Client)_c;
-							getBean(ClientManager.class).invalidate(c.getUserId(), c.getSessionId());
+							cm.invalidate(c.getUserId(), c.getSessionId());
 						}
 						target.add(container, details.setVisible(false));
 					}

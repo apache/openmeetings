@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -54,6 +53,7 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -67,6 +67,10 @@ public class GeneralUserForm extends Form<User> {
 	private LocalDate age;
 	private final List<GroupUser> grpUsers = new ArrayList<>();
 	private final boolean isAdminForm;
+	@SpringBean
+	private GroupDao groupDao;
+	@SpringBean
+	private UserDao userDao;
 
 	public GeneralUserForm(String id, IModel<User> model, boolean isAdminForm) {
 		super(id, model);
@@ -143,7 +147,7 @@ public class GeneralUserForm extends Form<User> {
 			public GroupUser fromId(String _id) {
 				Long id = Long.parseLong(_id);
 				User u = GeneralUserForm.this.getModelObject();
-				Group g = getBean(GroupDao.class).get(id);
+				Group g = groupDao.get(id);
 				GroupUser gu = new GroupUser(g, u);
 				int idx = grpUsers.indexOf(gu);
 				return idx < 0 ? gu : grpUsers.get(idx);
@@ -156,8 +160,8 @@ public class GeneralUserForm extends Form<User> {
 		grpUsers.addAll(u.getGroupUsers());
 		if (isAdminForm) {
 			List<Group> grpList = hasGroupAdminLevel(getRights())
-					? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
-					: getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+					? groupDao.get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+					: groupDao.get(0, Integer.MAX_VALUE);
 			for (Group g : grpList) {
 				GroupUser gu = new GroupUser(g, u);
 				int idx = grpUsers.indexOf(gu);
@@ -172,7 +176,7 @@ public class GeneralUserForm extends Form<User> {
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
-		if(!getBean(UserDao.class).checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
+		if(!userDao.checkEmail(email.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("error.email.inuse"));
 		}
 		super.onValidate();

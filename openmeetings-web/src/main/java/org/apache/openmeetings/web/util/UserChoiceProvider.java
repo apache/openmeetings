@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.HashMap;
@@ -29,6 +28,7 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.FormatHelper;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.Validatable;
 import org.wicketstuff.select2.Response;
@@ -39,8 +39,10 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	private static final int PAGE_SIZE = 10;
 	private final Map<String, User> newContacts = new HashMap<>();
+	@SpringBean
+	private UserDao userDao;
 
-	public static User getUser(String value) {
+	public User getUser(String value) {
 		User u = null;
 		if (!Strings.isEmpty(value)) {
 			String email = null;
@@ -70,7 +72,7 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 				Validatable<String> valEmail = new Validatable<>(email);
 				RfcCompliantEmailAddressValidator.getInstance().validate(valEmail);
 				if (valEmail.isValid()) {
-					u = getBean(UserDao.class).getContact(email, fName, lName, getUserId());
+					u = userDao.getContact(email, fName, lName, getUserId());
 				}
 			}
 		}
@@ -98,10 +100,9 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 		if (c != null) {
 			response.add(c);
 		}
-		UserDao dao = getBean(UserDao.class);
-		response.addAll(dao.get(term, page * PAGE_SIZE, PAGE_SIZE, null, true, getUserId()));
+		response.addAll(userDao.get(term, page * PAGE_SIZE, PAGE_SIZE, null, true, getUserId()));
 
-		response.setHasMore(page < dao.countUsers(term, getUserId()) / PAGE_SIZE);
+		response.setHasMore(page < userDao.countUsers(term, getUserId()) / PAGE_SIZE);
 	}
 
 	@Override
@@ -110,7 +111,7 @@ public class UserChoiceProvider extends RestrictiveChoiceProvider<User> {
 		if (newContacts.containsKey(id)) {
 			u = newContacts.get(id);
 		} else {
-			u = getBean(UserDao.class).get(Long.valueOf(id));
+			u = userDao.get(Long.valueOf(id));
 		}
 		return u;
 	}

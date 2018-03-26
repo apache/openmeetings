@@ -76,6 +76,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -106,6 +107,8 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 	private Throwable th = null;
 	private DbType initDbType = null;
 	private DbType dbType = null;
+	@SpringBean
+	private ImportInitvalues initvalues;
 
 	//onInit, applyState
 	public InstallWizard(String id, String title) {
@@ -681,7 +684,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 							, desc.setVisible(false)
 							);
 					} else {
-						progressBar.setModelObject(Application.get()._getBean(ImportInitvalues.class).getProgress());
+						progressBar.setModelObject(initvalues.getProgress());
 						progressBar.refresh(target);
 					}
 				}
@@ -707,7 +710,7 @@ public class InstallWizard extends AbstractWizard<InstallationConfig> {
 		public void startInstallation(AjaxRequestTarget target) {
 			started = true;
 			timer.restart(target);
-			new Thread(new InstallProcess(Application.get()._getBean(ImportInitvalues.class))
+			new Thread(new InstallProcess(initvalues)
 				, "Openmeetings - Installation").start();
 			desc.setDefaultModelObject(getString("install.wizard.install.started"));
 			target.add(desc, container);

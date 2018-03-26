@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room.sidebar.icon;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
@@ -34,6 +33,7 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class ClientIcon extends WebMarkupContainer {
 	private static final long serialVersionUID = 1L;
@@ -43,6 +43,8 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	protected final String uid;
 	protected String mainCssClass;
 	protected final StringBuilder cssClass = new StringBuilder(ICON_CLASS);
+	@SpringBean
+	private ClientManager cm;
 
 	public ClientIcon(String id, String uid) {
 		super(id);
@@ -92,7 +94,7 @@ public abstract class ClientIcon extends WebMarkupContainer {
 	}
 
 	protected Client getClient() {
-		return getBean(ClientManager.class).get(uid);
+		return cm.get(uid);
 	}
 
 	protected boolean hasRight(Right right) {

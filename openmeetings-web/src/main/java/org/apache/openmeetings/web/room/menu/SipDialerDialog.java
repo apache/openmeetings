@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,6 +28,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -44,6 +43,8 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 	private final Form<String> form = new Form<>("form", Model.of(""));
 	private final TextField<String> number = new TextField<>("number", Model.of(""));
 	private final RoomPanel room;
+	@SpringBean
+	private SipDao sipDao;
 
 	public SipDialerDialog(String id, RoomPanel room) {
 		super(id, "");
@@ -100,6 +101,6 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		getBean(SipDao.class).joinToConfCall(number.getModelObject(), room.getRoom());
+		sipDao.joinToConfCall(number.getModelObject(), room.getRoom());
 	}
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -33,16 +32,21 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 
 public class RoomsTabbedPanel extends UserPanel {
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private UserDao userDao;
 
 	public RoomsTabbedPanel(String id) {
 		super(id);
 
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = userDao.get(getUserId());
 		add(new ListView<GroupUser>("orgTabs", u.getGroupUsers()) {
 			private static final long serialVersionUID = 1L;
 
@@ -61,7 +65,7 @@ public class RoomsTabbedPanel extends UserPanel {
 			protected void populateItem(ListItem<GroupUser> item) {
 				Group org = item.getModelObject().getGroup();
 				item.add(new RoomsPanel("rooms"
-					, getBean(RoomDao.class).getGroupRooms(org.getId()))
+					, roomDao.getGroupRooms(org.getId()))
 					.setMarkupId("org" + org.getId())).setRenderBodyOnly(true);
 			}
 		});

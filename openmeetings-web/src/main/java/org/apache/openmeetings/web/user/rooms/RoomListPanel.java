@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.rooms;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import java.util.List;
@@ -37,6 +36,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -48,6 +48,8 @@ import com.googlecode.wicket.jquery.ui.widget.tooltip.TooltipBehavior;
 public class RoomListPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final ListView<Room> list;
+	@SpringBean
+	private ClientManager cm;
 
 	public RoomListPanel(String id, List<Room> rooms, final String label) {
 		super(id);
@@ -71,7 +73,7 @@ public class RoomListPanel extends Panel {
 				final WebMarkupContainer info = new WebMarkupContainer("info");
 				roomContainer.add(info.setOutputMarkupId(true)
 						.add(AttributeModifier.append(ATTR_TITLE, getString(String.format("room.type.%s.desc", r.getType().name())))));
-				final Label curUsers = new Label("curUsers", new Model<>(getBean(ClientManager.class).listByRoom(r.getId()).size()));
+				final Label curUsers = new Label("curUsers", new Model<>(cm.listByRoom(r.getId()).size()));
 				roomContainer.add(curUsers.setOutputMarkupId(true));
 				roomContainer.add(new Label("totalUsers", r.getCapacity()));
 				item.add(new Button("btn").add(new Label("label", label)).add(new RoomEnterBehavior(r.getId()) {
@@ -87,7 +89,7 @@ public class RoomListPanel extends Panel {
 
 					@Override
 					public void onClick(AjaxRequestTarget target) {
-						target.add(curUsers.setDefaultModelObject(getBean(ClientManager.class).listByRoom(r.getId()).size()));
+						target.add(curUsers.setDefaultModelObject(cm.listByRoom(r.getId()).size()));
 						onRefreshClick(target, r);
 					}
 

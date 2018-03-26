@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 
 import java.util.ArrayList;
@@ -43,6 +42,7 @@ import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +60,12 @@ public class RoomInvitationForm extends InvitationForm {
 			, new CollectionModel<>(new ArrayList<Group>())
 			, new GroupChoiceProvider());
 	final WebMarkupContainer sipContainer = new WebMarkupContainer("sip-container");
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private GroupUserDao groupUserDao;
+	@SpringBean
+	private InvitationManager invitationManager;
 
 	enum InviteeType {
 		user
@@ -119,7 +125,7 @@ public class RoomInvitationForm extends InvitationForm {
 	public void updateModel(AjaxRequestTarget target) {
 		super.updateModel(target);
 		Invitation i = getModelObject();
-		i.setRoom(getBean(RoomDao.class).get(roomId));
+		i.setRoom(roomDao.get(roomId));
 		if (i.getRoom() != null) {
 			target.add(sipContainer.replace(new Label("room.confno", i.getRoom().getConfno())).setVisible(i.getRoom().isSipEnabled()));
 		}
@@ -132,10 +138,10 @@ public class RoomInvitationForm extends InvitationForm {
 	public void onClick(AjaxRequestTarget target, DialogButton button) {
 		if (button.equals(dialog.getSend()) && Strings.isEmpty(url.getModelObject()) && rdi.getModelObject() == InviteeType.group) {
 			for (Group g : groups.getModelObject()) {
-				for (GroupUser ou : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
+				for (GroupUser ou : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {
 					Invitation i = create(ou.getUser());
 					try {
-						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+						invitationManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
 					} catch (Exception e) {
 						log.error("error while sending invitation by Group ", e);
 					}

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
+import static org.apache.openmeetings.web.app.Application.get;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.core.mail.MailHandler;
@@ -34,12 +34,12 @@ public class ContactsHelper {
 	private ContactsHelper() {}
 
 	public static Object addUserToContactList(long userIdToAdd) {
-		boolean isContact = getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
+		boolean isContact = get().getBean(UserContactDao.class).isContact(userIdToAdd, getUserId());
 
 		if (isContact) {
 			return "error.contact.added";
 		}
-		UserContact contact = getBean(UserContactDao.class).add(userIdToAdd, getUserId(), true);
+		UserContact contact = get().getBean(UserContactDao.class).add(userIdToAdd, getUserId(), true);
 
 		User user = contact.getOwner();
 		User userToAdd = contact.getContact();
@@ -47,18 +47,18 @@ public class ContactsHelper {
 		String subj = user.getFirstname() + " " + user.getLastname() + " " + Application.getString("1193");
 		String message = RequestContactTemplate.getEmail(userToAdd, user);
 
-		getBean(PrivateMessageDao.class).addPrivateMessage(
-			subj, message, user, userToAdd, userToAdd, true, contact.getId());
+		get().getBean(PrivateMessageDao.class).addPrivateMessage(
+				subj, message, user, userToAdd, userToAdd, true, contact.getId());
 
 		if (userToAdd.getAddress() != null) {
-			getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
+			get().getBean(MailHandler.class).send(userToAdd.getAddress().getEmail(), subj, message);
 		}
 
 		return contact;
 	}
 
 	public static Object acceptUserContact(long userContactId) {
-		UserContactDao dao = getBean(UserContactDao.class);
+		UserContactDao dao = get().getBean(UserContactDao.class);
 		UserContact contact = dao.get(userContactId);
 
 		if (contact == null) {
@@ -81,10 +81,10 @@ public class ContactsHelper {
 
 			String subj = contact.getContact().getFirstname() + " " + contact.getContact().getLastname() + " " + Application.getString("1198");
 
-			getBean(PrivateMessageDao.class).addPrivateMessage(
+			get().getBean(PrivateMessageDao.class).addPrivateMessage(
 					subj, message, contact.getContact(), user, user, false, 0L);
 
-			getBean(MailHandler.class).send(user.getAddress().getEmail(), subj, message);
+			get().getBean(MailHandler.class).send(user.getAddress().getEmail(), subj, message);
 		}
 		return userContactId;
 	}

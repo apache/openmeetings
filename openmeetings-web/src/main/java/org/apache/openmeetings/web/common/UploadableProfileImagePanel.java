@@ -18,17 +18,22 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
 import java.io.File;
 
 import org.apache.openmeetings.core.converter.ImageConverter;
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.util.StoredFile;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UploadableProfileImagePanel extends UploadableImagePanel {
 	private static final long serialVersionUID = 1L;
 	private final long userId;
+	@SpringBean
+	private ImageConverter converter;
+	@SpringBean
+	private UserDao userDao;
 
 	public UploadableProfileImagePanel(String id, final long userId) {
 		super(id);
@@ -37,11 +42,11 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 
 	@Override
 	protected void processImage(StoredFile sf, File f) throws Exception {
-		getBean(ImageConverter.class).convertImageUserProfile(f, userId, sf.isAsIs());
+		converter.convertImageUserProfile(f, userId, sf.isAsIs());
 	}
 
 	@Override
 	protected String getImageUrl() {
-		return getUrl(getRequestCycle(), userId);
+		return getUrl(getRequestCycle(), userDao.get(userId));
 	}
 }

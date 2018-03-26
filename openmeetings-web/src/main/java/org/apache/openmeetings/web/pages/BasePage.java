@@ -20,6 +20,8 @@ package org.apache.openmeetings.web.pages;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getGaCode;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
+import static org.apache.openmeetings.web.app.Application.isInstalled;
 import static org.apache.wicket.RuntimeConfigurationType.DEVELOPMENT;
 
 import java.util.HashMap;
@@ -28,9 +30,11 @@ import java.util.Map;
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.HeaderPanel;
+import org.apache.openmeetings.web.pages.install.InstallWizardPage;
 import org.apache.openmeetings.web.util.OmUrlFragment;
 import org.apache.openmeetings.web.util.OmUrlFragment.AreaKeys;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -53,6 +57,13 @@ public abstract class BasePage extends AsyncUrlFragmentAwarePage {
 	private final WebMarkupContainer loader = new WebMarkupContainer("main-loader");
 
 	public BasePage() {
+		if (isInitComplete()) {
+			if (!isInstalled()) {
+				throw new RestartResponseException(InstallWizardPage.class);
+			}
+		} else {
+			throw new RestartResponseException(NotInitedPage.class);
+		}
 		options = new HashMap<>();
 		options.put("fragmentIdentifierSuffix", "");
 		options.put("keyValueDelimiter", "/");

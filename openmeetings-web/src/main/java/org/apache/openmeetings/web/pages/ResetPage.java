@@ -23,15 +23,18 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.pages.auth.ResetPasswordDialog;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class ResetPage extends BaseNotInitedPage {
 	private static final long serialVersionUID = 1L;
 	public static final String RESET_PARAM = "hash";
+	@SpringBean
+	private UserDao userDao;
 
 	public ResetPage(PageParameters pp) {
 		String resetHash = pp.get(RESET_PARAM).toString();
 		if (resetHash != null) {
-			User user = Application.getBean(UserDao.class).getUserByHash(resetHash);
+			User user = userDao.getUserByHash(resetHash);
 			if (user != null) {
 				add(new ResetPasswordDialog("resetPassword", user));
 				return;

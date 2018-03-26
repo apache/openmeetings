@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -40,6 +38,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
 
 public class RoomsPanel extends UserPanel {
@@ -53,6 +52,12 @@ public class RoomsPanel extends UserPanel {
 	private List<Client> clientsInRoom = null;
 	private final List<Room> rooms;
 	private Long roomId = 0L;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public RoomsPanel(String id, List<Room> rooms) {
 		super(id);
@@ -78,7 +83,7 @@ public class RoomsPanel extends UserPanel {
 					protected byte[] getData(Attributes attributes) {
 						String uri = null;
 						if (userId != null) {
-							uri = getBean(UserDao.class).get(userId > 0 ? userId : -userId).getPictureuri();
+							uri = userDao.get(userId > 0 ? userId : -userId).getPictureuri();
 						}
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
 						try (InputStream is = new FileInputStream(img)) {
@@ -123,8 +128,8 @@ public class RoomsPanel extends UserPanel {
 	}
 
 	void updateRoomDetails(AjaxRequestTarget target) {
-		clients.setDefaultModelObject(getBean(ClientManager.class).listByRoom(roomId));
-		Room room = getBean(RoomDao.class).get(roomId);
+		clients.setDefaultModelObject(cm.listByRoom(roomId));
+		Room room = roomDao.get(roomId);
 		roomIdLbl.setDefaultModelObject(room.getId());
 		roomNameLbl.setDefaultModelObject(room.getName());
 		roomCommentLbl.setDefaultModelObject(room.getComment());

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.util.time.Duration.NONE;
 
 import java.io.File;
@@ -47,6 +46,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.resource.FileSystemResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -67,6 +67,10 @@ public class BackupPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	@SpringBean
+	private BackupExport backupExport;
+	@SpringBean
+	private BackupImport backupImport;
 
 	/**
 	 * Form to handle upload files
@@ -137,7 +141,7 @@ public class BackupPanel extends AdminBasePanel {
 					progressHolder = new ProgressHolder();
 
 					timer.restart(target);
-					new Thread(new BackupProcess(getBean(BackupExport.class), includeFilesInBackup.getObject())
+					new Thread(new BackupProcess(backupExport, includeFilesInBackup.getObject())
 						, "Openmeetings - " + dateString).start();
 
 					// repaint the feedback panel so that it is hidden
@@ -193,7 +197,7 @@ public class BackupPanel extends AdminBasePanel {
 							target.add(feedback);
 							return;
 						}
-						getBean(BackupImport.class).performImport(upload.getInputStream());
+						backupImport.performImport(upload.getInputStream());
 					} catch (Exception e) {
 						log.error("Exception on panel backup upload ", e);
 						feedback.error(e);

@@ -26,7 +26,6 @@ import static org.apache.openmeetings.cli.CleanupHelper.getRecUnit;
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadDir;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.cli.CleanupEntityUnit;
 import org.apache.openmeetings.cli.CleanupUnit;
@@ -39,6 +38,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.ConfirmAjaxButton;
@@ -57,6 +57,12 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 	private final CleanupEntityUnitPanel fin;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private FileItemDao fileDao;
+	@SpringBean
+	private RecordingDao recDao;
 
 	public AdminCleanupInfoDialog(String id) {
 		super(id, "");
@@ -109,12 +115,12 @@ public class AdminCleanupInfoDialog extends AbstractDialog<String> {
 
 	private void update(AjaxRequestTarget target) {
 		uploadSize.setDefaultModelObject(getHumanSize(getUploadDir()));
-		profile.setDefaultModelObject(getProfileUnit(getBean(UserDao.class)));
+		profile.setDefaultModelObject(getProfileUnit(userDao));
 		imp.setDefaultModelObject(getImportUnit());
 		backup.setDefaultModelObject(getBackupUnit());
-		files.setDefaultModelObject(getFileUnit(getBean(FileItemDao.class)));
+		files.setDefaultModelObject(getFileUnit(fileDao));
 		streamsSize.setDefaultModelObject(getHumanSize(getStreamsDir()));
-		fin.setDefaultModelObject(getRecUnit(getBean(RecordingDao.class)));
+		fin.setDefaultModelObject(getRecUnit(recDao));
 		target.add(container);
 	}
 

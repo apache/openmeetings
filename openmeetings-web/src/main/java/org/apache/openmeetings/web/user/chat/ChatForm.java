@@ -22,7 +22,6 @@ import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ALL;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_ROOM_PREFIX;
 import static org.apache.openmeetings.core.util.WebSocketHelper.ID_USER_PREFIX;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getDateFormat;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.RoomPanel.isModerator;
@@ -67,6 +66,14 @@ public class ChatForm extends Form<Void> {
 
 	@SpringBean
 	private ClientManager cm;
+	@SpringBean
+	private ChatDao chatDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private MobileService mobileService;
 
 	public ChatForm(String id) {
 		super(id);
@@ -106,11 +113,10 @@ public class ChatForm extends Form<Void> {
 					if (Strings.isEmpty(txt)) {
 						return;
 					}
-					ChatDao dao = getBean(ChatDao.class);
 					final ChatMessage m = new ChatMessage();
 					m.setMessage(txt);
 					m.setSent(new Date());
-					m.setFromUser(getBean(UserDao.class).get(getUserId()));
+					m.setFromUser(userDao.get(getUserId()));
 					m.setFromName(getDisplayName(getClient().getUser()));
 					if (!process(
 							() -> getChat().isShowDashboardChat()
@@ -130,10 +136,10 @@ public class ChatForm extends Form<Void> {
 					{
 						return;
 					};
-					dao.update(m);
+					chatDao.update(m);
 					JSONObject msg = getChat().getMessage(Arrays.asList(m));
 					if (m.getToRoom() != null) {
-						getBean(MobileService.class).sendChatMessage(getUid(), m, getDateFormat()); //let's send to mobile users
+						mobileService.sendChatMessage(getUid(), m, getDateFormat()); //let's send to mobile users
 						WebSocketHelper.sendRoom(m, msg);
 					} else if (m.getToUser() != null) {
 						WebSocketHelper.sendUser(getUserId(), msg.toString());
@@ -166,12 +172,12 @@ public class ChatForm extends Form<Void> {
 			if (Strings.isEmpty(scope) || ID_ALL.equals(scope)) {
 				return processAll.getAsBoolean();
 			} else if (scope.startsWith(ID_ROOM_PREFIX)) {
-				Room r = getBean(RoomDao.class).get(Long.parseLong(scope.substring(ID_ROOM_PREFIX.length())));
+				Room r = roomDao.get(Long.parseLong(scope.substring(ID_ROOM_PREFIX.length())));
 				if (r != null) {
 					return processRoom.test(r);
 				}
 			} else if (scope.startsWith(ID_USER_PREFIX)) {
-				User u = getBean(UserDao.class).get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
+				User u = userDao.get(Long.parseLong(scope.substring(ID_USER_PREFIX.length())));
 				if (u != null) {
 					return processUser.test(u);
 				}

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +37,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -53,6 +53,10 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 	private PasswordTextField password;
 	private final User user;
 	MessageDialog confirmReset;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private UserDao userDao;
 
 	public ResetPasswordDialog(String id, final User user) {
 		super(id, "");
@@ -106,7 +110,7 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		try {
-			getBean(UserDao.class).resetPassword(user, password.getConvertedInput());
+			userDao.resetPassword(user, password.getConvertedInput());
 		} catch (Exception e) {
 			error(e.getMessage());
 		}
@@ -138,7 +142,6 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			login.setOutputMarkupId(true);
 			add(password = new PasswordTextField("password", new Model<String>()));
 			password.setLabel(Model.of(getString("328"))).setOutputMarkupId(true);
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			password.setRequired(false).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), user));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
 			confirmPassword.setLabel(Model.of(getString("116"))).setOutputMarkupId(true);

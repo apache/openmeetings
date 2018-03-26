@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
@@ -80,6 +79,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.Select2MultiChoice;
@@ -120,6 +120,18 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		user
 		, group
 	}
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private AppointmentDao apptDao;
+	@SpringBean
+	private GroupUserDao groupUserDao;
+	@SpringBean
+	private AppointmentManager apptManager;
+	@SpringBean
+	private ConfigurationDao cfgDao;
 
 	public AppointmentDialog(String id, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
 		super(id, "", model, true);
@@ -184,7 +196,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	protected void deleteAppointment(IPartialPageRequestHandler handler) {
 		Appointment a = getModelObject();
-		getBean(AppointmentDao.class).delete(a, getUserId());
+		apptDao.delete(a, getUserId());
 		calendarPanel.refresh(handler);
 		if (a.getCalendar() != null && a.getHref() != null) {
 			calendarPanel.updatedeleteAppointment(handler, CalendarDialog.DIALOG_TYPE.DELETE_APPOINTMENT, a);
@@ -235,7 +247,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		if (InviteeType.group == rdi.getModelObject()) {
 			//lets iterate through all group users
 			for (Group g : groups.getModelObject()) {
-				for (GroupUser gu : getBean(GroupUserDao.class).get(g.getId(), 0, Integer.MAX_VALUE)) {
+				for (GroupUser gu : groupUserDao.get(g.getId(), 0, Integer.MAX_VALUE)) {
 					User u = gu.getUser();
 					if (!currentIds.contains(u.getId())) {
 						users.add(u);
@@ -279,7 +291,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		a.setStart(getDate(form.start.getModelObject()));
 		a.setEnd(getDate(form.end.getModelObject()));
 		a.setCalendar(form.cals.getModelObject());
-		getBean(AppointmentDao.class).update(a, getUserId());
+		apptDao.update(a, getUserId());
 		if (a.getCalendar() != null) {
 			calendarPanel.updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
 		}
@@ -319,7 +331,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 					}
 
 					private List<OmCalendar> getCalendarList(){
-						return getBean(AppointmentManager.class).getCalendars(getUserId());
+						return apptManager.getCalendars(getUserId());
 					}
 				},
 				new ChoiceRenderer<OmCalendar>("title", "id")
@@ -330,7 +342,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 			super(id, model);
 			setOutputMarkupId(true);
 
-			myRoomsAllowed = getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true);
+			myRoomsAllowed = cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true);
 			createRoom = myRoomsAllowed;
 			add(feedback.setOutputMarkupId(true));
 			//General
@@ -494,10 +506,9 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 		private List<Room> getRoomList() {
 			List<Room> result = new ArrayList<>();
-			RoomDao dao = getBean(RoomDao.class);
-			result.addAll(dao.getPublicRooms());
-			for (GroupUser ou : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
-				result.addAll(dao.getGroupRooms(ou.getGroup().getId()));
+			result.addAll(roomDao.getPublicRooms());
+			for (GroupUser ou : userDao.get(getUserId()).getGroupUsers()) {
+				result.addAll(roomDao.getGroupRooms(ou.getGroup().getId()));
 			}
 			if (getModelObject().getRoom() != null && getModelObject().getRoom().isAppointment()) {
 				result.add(getModelObject().getRoom());

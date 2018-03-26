@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
@@ -49,6 +48,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.Select2Choice;
 
@@ -72,7 +72,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 
 		@Override
 		protected void processImage(StoredFile sf, File f) throws Exception {
-			getBean(ImageConverter.class).resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
+			imageConverter.resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
 		}
 
 		@Override
@@ -80,6 +80,12 @@ public class GroupForm extends AdminBaseForm<Group> {
 			return getString("admin.group.form.logo");
 		}
 	};
+	@SpringBean
+	private ImageConverter imageConverter;
+	@SpringBean
+	private GroupUserDao groupUserDao;
+	@SpringBean
+	private GroupDao groupDao;
 
 	public GroupForm(String id, WebMarkupContainer groupList, Group group) {
 		super(id, new CompoundPropertyModel<>(group));
@@ -107,7 +113,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 				User u = userToadd.getModelObject();
 				boolean found = false;
 				if (o.getId() != null) {
-					found = null != getBean(GroupUserDao.class).getByGroupAndUser(o.getId(), u.getId());
+					found = null != groupUserDao.getByGroupAndUser(o.getId(), u.getId());
 				}
 				if (!found && u != null) {
 					for (GroupUser ou : usersPanel.getUsers2add()) {
@@ -202,7 +208,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Group org = getModelObject();
 		if (org.getId() != null) {
-			org = getBean(GroupDao.class).get(org.getId());
+			org = groupDao.get(org.getId());
 		} else {
 			org = new Group();
 		}
@@ -212,7 +218,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		getBean(GroupDao.class).delete(getModelObject(), getUserId());
+		groupDao.delete(getModelObject(), getUserId());
 		setModelObject(new Group());
 		updateView(target);
 	}
@@ -220,10 +226,10 @@ public class GroupForm extends AdminBaseForm<Group> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Group o = getModelObject();
-		o = getBean(GroupDao.class).update(o, getUserId());
+		o = groupDao.update(o, getUserId());
 		setModelObject(o);
 		for (GroupUser grpUser : usersPanel.getUsers2add()) {
-			GroupUsersPanel.update(grpUser);
+			usersPanel.update(grpUser);
 		}
 		hideNewRecord();
 		updateView(target);

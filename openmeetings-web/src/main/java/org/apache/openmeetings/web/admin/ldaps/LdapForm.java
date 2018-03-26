@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.ldaps;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
@@ -36,6 +34,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 
 /**
@@ -47,6 +46,8 @@ import org.apache.wicket.util.time.Duration;
 public class LdapForm extends AdminBaseForm<LdapConfig> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
+	@SpringBean
+	private LdapConfigDao ldapDao;
 
 	public LdapForm(String id, WebMarkupContainer listContainer, final LdapConfig ldapConfig) {
 		super(id, new CompoundPropertyModel<>(ldapConfig));
@@ -76,7 +77,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		setModelObject(getBean(LdapConfigDao.class).update(getModelObject(), WebSession.getUserId()));
+		setModelObject(ldapDao.update(getModelObject(), WebSession.getUserId()));
 		hideNewRecord();
 		target.add(this, listContainer);
 		reinitJs(target);
@@ -93,7 +94,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		LdapConfig ldapConfig = this.getModelObject();
 		if (ldapConfig.getId() != null) {
-			ldapConfig = getBean(LdapConfigDao.class).get(ldapConfig.getId());
+			ldapConfig = ldapDao.get(ldapConfig.getId());
 		} else {
 			ldapConfig = new LdapConfig();
 		}
@@ -104,7 +105,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		getBean(LdapConfigDao.class).delete(getModelObject(), WebSession.getUserId());
+		ldapDao.delete(getModelObject(), WebSession.getUserId());
 		this.setModelObject(new LdapConfig());
 		target.add(listContainer);
 		target.add(this);

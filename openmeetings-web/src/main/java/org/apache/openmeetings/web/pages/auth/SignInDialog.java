@@ -20,11 +20,8 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LDAP_ID;
 import static org.apache.openmeetings.web.app.Application.getAuthenticationStrategy;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
-import static org.apache.openmeetings.web.pages.auth.SignInPage.allowOAuthLogin;
-import static org.apache.openmeetings.web.pages.auth.SignInPage.allowRegister;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.showAuth;
 
 import java.util.ArrayList;
@@ -65,6 +62,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,10 +86,18 @@ public class SignInDialog extends NonClosableDialog<String> {
 	private RegisterDialog r;
 	private ForgetPasswordDialog f;
 	private LdapConfig domain;
+	private SignInPage page;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private LdapConfigDao ldapDao;
+	@SpringBean
+	private OAuth2Dao oauthDao;
 
-	public SignInDialog(String id) {
+	public SignInDialog(String id, SignInPage page) {
 		super(id, "");
+		this.page = page;
 		add(form = new SignInForm("signin"));
 		add(new OmAjaxClientInfoBehavior());
 	}
@@ -133,7 +139,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 	@Override
 	public int getWidth() {
-		return allowOAuthLogin()? 550: 450;
+		return page.allowOAuthLogin()? 550: 450;
 	}
 
 	@Override
@@ -147,7 +153,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 	@Override
 	protected List<DialogButton> getButtons() {
 		List<DialogButton> list = new ArrayList<>();
-		if (allowRegister()) {
+		if (page.allowRegister()) {
 			list.add(registerBtn);
 		}
 		list.add(loginBtn);
@@ -232,8 +238,8 @@ public class SignInDialog extends NonClosableDialog<String> {
 			add(feedback.setOutputMarkupId(true));
 			add(loginField = new RequiredTextField<>("login", new PropertyModel<String>(SignInDialog.this, "login")));
 			add(passField = new PasswordTextField("pass", new PropertyModel<String>(SignInDialog.this, "password")).setResetPassword(true));
-			List<LdapConfig> ldaps = getBean(LdapConfigDao.class).get();
-			int selectedLdap = getBean(ConfigurationDao.class).getInt(CONFIG_DEFAULT_LDAP_ID, 0);
+			List<LdapConfig> ldaps = ldapDao.get();
+			int selectedLdap = cfgDao.getInt(CONFIG_DEFAULT_LDAP_ID, 0);
 			domain = ldaps.get(selectedLdap < ldaps.size() && selectedLdap > 0 ? selectedLdap : 0);
 			add(new WebMarkupContainer("ldap")
 				.add(new DropDownChoice<>("domain", new PropertyModel<LdapConfig>(SignInDialog.this, "domain")
@@ -272,7 +278,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 				}
 			});
 			add(new WebMarkupContainer("oauthContainer").add(
-				new ListView<OAuthServer>("oauthList", getBean(OAuth2Dao.class).getActive()) {
+				new ListView<OAuthServer>("oauthList", oauthDao.getActive()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -293,7 +299,7 @@ public class SignInDialog extends NonClosableDialog<String> {
 						btn.add(lbl);
 						item.add(btn.setDefaultFormProcessing(false)); //skip all rules, go to redirect
 					}
-				}).setVisible(allowOAuthLogin()));
+				}).setVisible(page.allowOAuthLogin()));
 		}
 
 		@Override

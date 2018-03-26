@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
@@ -38,6 +37,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -51,9 +51,12 @@ public class ProfileForm extends Form<User> {
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;
+	@SpringBean
+	private UserDao userDao;
 
 	public ProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
-		super(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(getUserId())));
+		super(id);
+		setModel(new CompoundPropertyModel<>(userDao.get(getUserId())));
 		userForm = new GeneralUserForm("general", getModel(), false);
 		this.chPwdDlg = chPwdDlg;
 	}
@@ -69,7 +72,7 @@ public class ProfileForm extends Form<User> {
 			private void refreshUser() {
 				User u = getModelObject();
 				if (u.getId() != null) {
-					u = getBean(UserDao.class).get(u.getId());
+					u = userDao.get(u.getId());
 				} else {
 					u = new User();
 				}
@@ -79,7 +82,7 @@ public class ProfileForm extends Form<User> {
 			@Override
 			protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 				try {
-					getBean(UserDao.class).update(getModelObject(), null, getUserId());
+					userDao.update(getModelObject(), null, getUserId());
 				} catch (Exception e) {
 					error(e.getMessage());
 				}
@@ -113,7 +116,7 @@ public class ProfileForm extends Form<User> {
 	@Override
 	protected void onValidate() {
 		String p = passwd.getConvertedInput();
-		if (!Strings.isEmpty(p) && !getBean(UserDao.class).verifyPassword(getModelObject().getId(), p)) {
+		if (!Strings.isEmpty(p) && !userDao.verifyPassword(getModelObject().getId(), p)) {
 			error(getString("231"));
 			// add random timeout
 			try {

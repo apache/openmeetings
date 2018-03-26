@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.users;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -38,6 +37,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
@@ -49,6 +49,8 @@ public class UsersPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private UserForm form;
+	@SpringBean
+	private UserDao userDao;
 
 	public UsersPanel(String id) {
 		super(id);
@@ -69,7 +71,7 @@ public class UsersPanel extends AdminBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						form.setModelObject(getBean(UserDao.class).get(userId));
+						form.setModelObject(userDao.get(userId));
 						form.hideNewRecord();
 						form.update(target);
 					}
@@ -106,7 +108,6 @@ public class UsersPanel extends AdminBasePanel {
 			}
 		};
 
-		UserDao userDao = getBean(UserDao.class);
 		form = new UserForm("form", listContainer, userDao.getNewUserInstance(userDao.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);

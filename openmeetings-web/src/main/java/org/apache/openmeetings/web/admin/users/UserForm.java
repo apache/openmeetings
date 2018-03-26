@@ -23,7 +23,6 @@ import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -68,6 +67,7 @@ import org.apache.wicket.markup.html.panel.IMarkupSourcingStrategy;
 import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
@@ -96,6 +96,16 @@ public class UserForm extends AdminBaseForm<User> {
 	private final MessageDialog warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private EmailManager emainManager;
+	@SpringBean
+	private LdapConfigDao ldapDao;
+	@SpringBean
+	private OAuth2Dao oauthDao;
 
 	public UserForm(String id, WebMarkupContainer listContainer, final User user, MessageDialog warning) {
 		super(id, new CompoundPropertyModel<>(user));
@@ -108,7 +118,6 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getModelObject())));
 		login.setLabel(Model.of(getString("108")));
@@ -196,29 +205,27 @@ public class UserForm extends AdminBaseForm<User> {
 
 	boolean isAdminPassRequired() {
 		User u = getModelObject();
-		UserDao dao = getBean(UserDao.class);
-		User ou = dao.get(u.getId());
+		User ou = userDao.get(u.getId());
 		return checkLevel(u.getRights()) || (ou != null && checkLevel(ou.getRights()));
 	}
 
 	private void saveUser(AjaxRequestTarget target, String pass) {
 		User u = getModelObject();
-		final UserDao dao = getBean(UserDao.class);
 		final boolean isNew = u.getId() == null;
-		boolean sendEmailAtRegister = getBean(ConfigurationDao.class).getBool(CONFIG_EMAIL_AT_REGISTER, false);
+		boolean sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 		if (isNew && sendEmailAtRegister) {
 			u.setActivatehash(UUID.randomUUID().toString());
 		}
 		try {
-			u = dao.update(u, pass, getUserId());
+			u = userDao.update(u, pass, getUserId());
 		} catch (Exception e) {
 			log.error("[onSaveSubmit]: ", e);
 		}
 		if (isNew && sendEmailAtRegister) {
 			String email = u.getAddress().getEmail();
-			getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
+			emainManager.sendMail(login.getValue(), email, u.getActivatehash(), false, null);
 		}
-		setModelObject(dao.get(u.getId()));
+		setModelObject(userDao.get(u.getId()));
 		hideNewRecord();
 		target.add(this, listContainer);
 		reinitJs(target);
@@ -229,7 +236,6 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		UserDao userDao = getBean(UserDao.class);
 		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
 		update(target);
 	}
@@ -238,16 +244,15 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		User user = getModelObject();
 		if (user.getId() != null) {
-			user = getBean(UserDao.class).get(user.getId());
+			user = userDao.get(user.getId());
 		} else {
-			user = getBean(UserDao.class).getNewUserInstance(null);
+			user = userDao.getNewUserInstance(null);
 		}
 		setModelObject(user);
 		update(target);
 	}
 
 	private void deleteUser(AjaxRequestTarget target) {
-		UserDao userDao = getBean(UserDao.class);
 		userDao.delete(getModelObject(), getUserId());
 		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
 		update(target);
@@ -268,13 +273,13 @@ public class UserForm extends AdminBaseForm<User> {
 		final Map<Long, String> values = new HashMap<>();
 		List<Long> ids = new ArrayList<>();
 		if (u.getType() == Type.ldap) {
-			for (LdapConfig c : getBean(LdapConfigDao.class).getActive()) {
+			for (LdapConfig c : ldapDao.getActive()) {
 				ids.add(c.getId());
 				values.put(c.getId(), c.getName());
 			}
 		}
 		if (u.getType() == Type.oauth) {
-			for (OAuthServer s : getBean(OAuth2Dao.class).getActive()) {
+			for (OAuthServer s : oauthDao.getActive()) {
 				ids.add(s.getId());
 				values.put(s.getId(), s.getName());
 			}
@@ -310,7 +315,7 @@ public class UserForm extends AdminBaseForm<User> {
 	@Override
 	protected void onValidate() {
 		User u = getModelObject();
-		if(!getBean(UserDao.class).checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
+		if(!userDao.checkLogin(login.getConvertedInput(), u.getType(), u.getDomainId(), u.getId())) {
 			error(getString("error.login.inuse"));
 		}
 		super.onValidate();

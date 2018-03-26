@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
@@ -45,6 +44,7 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -63,6 +63,10 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	private DialogButton cancel;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final IModel<String> user = Model.of((String)null);
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private PollDao pollDao;
 
 	public VoteDialog(String id) {
 		super(id, "");
@@ -84,7 +88,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	public void updateModel(IPartialPageRequestHandler target, RoomPoll rp) {
 		RoomPollAnswer a = new RoomPollAnswer();
 		a.setRoomPoll(rp);
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = userDao.get(getUserId());
 		a.setVotedUser(u);
 		user.setObject(getName(this, a.getRoomPoll().getCreator()));
 		form.setModelObject(a);
@@ -129,12 +133,11 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		RoomPollAnswer a = form.getModelObject();
-		PollDao dao = getBean(PollDao.class);
 		Long roomId = a.getRoomPoll().getRoom().getId();
-		if (!dao.hasVoted(roomId, getUserId())) {
+		if (!pollDao.hasVoted(roomId, getUserId())) {
 			a.setVoteDate(new Date());
 			a.getRoomPoll().getAnswers().add(a);
-			dao.update(a.getRoomPoll());
+			pollDao.update(a.getRoomPoll());
 		}
 		sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
 	}

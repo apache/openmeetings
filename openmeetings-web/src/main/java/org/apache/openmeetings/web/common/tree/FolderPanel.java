@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Map.Entry;
 
@@ -40,6 +39,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -50,6 +50,10 @@ public class FolderPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	protected final MarkupContainer drop;
 	protected final MarkupContainer drag;
+	@SpringBean
+	private RecordingDao recDao;
+	@SpringBean
+	private FileItemDao fileDao;
 
 	public FolderPanel(String id, final IModel<? extends BaseFileItem> model, final FileTreePanel treePanel) {
 		super(id, model);
@@ -113,9 +117,9 @@ public class FolderPanel extends Panel {
 				BaseFileItem fi = model.getObject();
 				fi.setName(getEditor().getModelObject());
 				if (fi instanceof Recording) {
-					getBean(RecordingDao.class).update((Recording)fi);
+					recDao.update((Recording)fi);
 				} else {
-					getBean(FileItemDao.class).update((FileItem)fi);
+					fileDao.update((FileItem)fi);
 				}
 			}
 		};
@@ -124,13 +128,13 @@ public class FolderPanel extends Panel {
 		add(AttributeModifier.append(ATTR_TITLE, r.getName()));
 	}
 
-	private static void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p) {
+	private void moveAll(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p) {
 		for (Entry<String, BaseFileItem> e : treePanel.getSelected().entrySet()) {
 			move(treePanel, target, p, e.getValue());
 		}
 	}
 
-	private static void move(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
+	private void move(final FileTreePanel treePanel, AjaxRequestTarget target, BaseFileItem p, BaseFileItem f) {
 		Long pid = p.getId();
 		if (pid != null && pid.equals(f.getId())) {
 			return;
@@ -140,9 +144,9 @@ public class FolderPanel extends Panel {
 		f.setRoomId(p.getRoomId());
 		f.setGroupId(p.getGroupId());
 		if (f instanceof Recording) {
-			getBean(RecordingDao.class).update((Recording)f);
+			recDao.update((Recording)f);
 		} else {
-			getBean(FileItemDao.class).update((FileItem)f);
+			fileDao.update((FileItem)f);
 		}
 		treePanel.updateNode(target, f);
 	}

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
@@ -38,16 +37,21 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.web.WidgetView;
 
 public class WelcomeWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private PrivateMessageDao msgDao;
 
 	public WelcomeWidgetView(String id, Model<Widget> model) {
 		super(id, model);
 
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = userDao.get(getUserId());
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		add(new Label("firstname", Model.of(u.getFirstname())));
 		add(new Label("lastname", Model.of(u.getLastname())));
@@ -59,7 +63,7 @@ public class WelcomeWidgetView extends WidgetView {
 			public void onClick(AjaxRequestTarget target) {
 				((MainPage)getPage()).updateContents(PROFILE_MESSAGES, target);
 			}
-		}.add(new Label("unread", Model.of("" + getBean(PrivateMessageDao.class).count(getUserId(), INBOX_FOLDER_ID, null)))));
+		}.add(new Label("unread", Model.of(String.valueOf(msgDao.count(getUserId(), INBOX_FOLDER_ID, null))))));
 		add(new AjaxLink<Void>("editProfile") {
 			private static final long serialVersionUID = 1L;
 

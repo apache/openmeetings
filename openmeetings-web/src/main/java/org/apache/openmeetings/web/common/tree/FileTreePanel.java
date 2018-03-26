@@ -22,7 +22,6 @@ import static org.apache.commons.text.StringEscapeUtils.escapeEcmaScript;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import static org.apache.wicket.util.time.Duration.NONE;
@@ -64,6 +63,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.resource.FileSystemResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -132,6 +132,10 @@ public abstract class FileTreePanel extends Panel {
 		}
 	});
 	private final Component upload = new WebMarkupContainer("upload");
+	@SpringBean
+	private RecordingDao recDao;
+	@SpringBean
+	private FileItemDao fileDao;
 
 	public FileTreePanel(String id, Long roomId, NameDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id);
@@ -264,9 +268,9 @@ public abstract class FileTreePanel extends Panel {
 		Long id = f.getId();
 		if (id != null) {
 			if (f instanceof Recording) {
-				getBean(RecordingDao.class).delete(f);
+				recDao.delete(f);
 			} else {
-				getBean(FileItemDao.class).delete(f);
+				fileDao.delete(f);
 			}
 		}
 		update(handler);
@@ -308,9 +312,9 @@ public abstract class FileTreePanel extends Panel {
 		f.setRoomId(p.getRoomId());
 		f.setParentId(Type.Folder == p.getType() ? p.getId() : null);
 		if (isRecording) {
-			getBean(RecordingDao.class).update((Recording)f);
+			recDao.update((Recording)f);
 		} else {
-			getBean(FileItemDao.class).update((FileItem)f);
+			fileDao.update((FileItem)f);
 		}
 		update(target);
 	}

@@ -18,19 +18,24 @@
  */
 package org.apache.openmeetings.web.user.dashboard;
 
-import static org.apache.openmeetings.web.common.UserPanel.getMyRooms;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
+import org.apache.openmeetings.db.dao.room.RoomDao;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.user.rooms.RoomsPanel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.web.WidgetView;
 
 public class MyRoomsWidgetView extends WidgetView {
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public MyRoomsWidgetView(String id, Model<Widget> model) {
 		super(id, model);
 
-		add(new RoomsPanel("rooms", getMyRooms()));
+		add(new RoomsPanel("rooms", roomDao.getMyRooms(getUserId(), Application.getString("my.room.conference"), Application.getString("my.room.presentation"))));
 	}
 }

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +39,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class GroupUsersPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private long groupId;
 	private List<GroupUser> users2add = new ArrayList<>();
+	@SpringBean
+	private UserDao userDao;
 
 	public GroupUsersPanel(String id, long groupId) {
 		super(id);
@@ -87,10 +89,9 @@ public class GroupUsersPanel extends Panel {
 						if (grpUser.getId() == null) {
 							users2add.remove(grpUser);
 						} else {
-							UserDao uDao = getBean(UserDao.class);
-							User u = uDao.get(grpUser.getUser().getId());
+							User u = userDao.get(grpUser.getUser().getId());
 							u.getGroupUsers().remove(grpUser);
-							uDao.update(u, WebSession.getUserId());
+							userDao.update(u, WebSession.getUserId());
 						}
 						target.add(GroupUsersPanel.this);
 					}
@@ -108,16 +109,15 @@ public class GroupUsersPanel extends Panel {
 		});
 	}
 
-	public static void update(GroupUser grpUser) {
-		UserDao uDao = getBean(UserDao.class);
-		User u = uDao.get(grpUser.getUser().getId());
+	public void update(GroupUser grpUser) {
+		User u = userDao.get(grpUser.getUser().getId());
 		int idx = u.getGroupUsers().indexOf(grpUser);
 		if (idx > -1) {
 			u.getGroupUsers().get(idx).setModerator(grpUser.isModerator());
 		} else {
 			u.getGroupUsers().add(grpUser);
 		}
-		uDao.update(u, WebSession.getUserId());
+		userDao.update(u, WebSession.getUserId());
 	}
 
 	void update(long groupId) {

@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.util;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANDING_ZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.EDIT_PROFILE_TAB_ID;
 import static org.apache.openmeetings.web.user.profile.SettingsPanel.MESSAGES_TAB_ID;
 
@@ -40,6 +39,7 @@ import org.apache.openmeetings.web.admin.ldaps.LdapsPanel;
 import org.apache.openmeetings.web.admin.oauth.OAuthPanel;
 import org.apache.openmeetings.web.admin.rooms.RoomsPanel;
 import org.apache.openmeetings.web.admin.users.UsersPanel;
+import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.openmeetings.web.user.calendar.CalendarPanel;
@@ -188,7 +188,7 @@ public class OmUrlFragment implements Serializable {
 	}
 
 	public static OmUrlFragment get() {
-		String[] arr = getBean(ConfigurationDao.class).getString(CONFIG_DEFAULT_LANDING_ZONE, "").split("/");
+		String[] arr = Application.get().getBean(ConfigurationDao.class).getString(CONFIG_DEFAULT_LANDING_ZONE, "").split("/");
 		if (arr != null && arr.length == 2) {
 			try {
 				return new OmUrlFragment(AreaKeys.valueOf(arr[0]), arr[1]);
@@ -251,7 +251,7 @@ public class OmUrlFragment implements Serializable {
 			case room:
 				try {
 					Long roomId = Long.valueOf(type);
-					Room r = getBean(RoomDao.class).get(roomId);
+					Room r = Application.get().getBean(RoomDao.class).get(roomId);
 					if (r != null) {
 						basePanel = new RoomPanel(CHILD_ID, r);
 					}
@@ -266,7 +266,7 @@ public class OmUrlFragment implements Serializable {
 				MenuParams params = MenuParams.publicTabButton;
 				if (TYPE_GROUP.equals(type)) {
 					params = MenuParams.privateTabButton;
-				} else if (getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true) && TYPE_MY.equals(type)) {
+				} else if (Application.get().getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true) && TYPE_MY.equals(type)) {
 					params = MenuParams.myTabButton;
 				}
 				basePanel = new RoomsSelectorPanel(CHILD_ID, params);

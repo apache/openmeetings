@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
@@ -30,6 +29,7 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 
 import com.googlecode.wicket.jquery.core.Options;
@@ -45,6 +45,8 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	private final Form<String> form = new Form<>("form");
 	private final PasswordTextField pass = new PasswordTextField("password", Model.of(""));
 	private SerializableConsumer<AjaxRequestTarget> action = null;
+	@SpringBean
+	private UserDao userDao;
 
 	public PasswordDialog(String id) {
 		super(id, "");
@@ -104,8 +106,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		final UserForm uf = getUserForm();
 		if (uf.isAdminPassRequired()) {
-			final UserDao dao = getBean(UserDao.class);
-			if (dao.verifyPassword(getUserId(), pass.getConvertedInput())) {
+			if (userDao.verifyPassword(getUserId(), pass.getConvertedInput())) {
 				if (action != null) {
 					action.accept(target);
 				}

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.Strings;
 
@@ -72,6 +72,10 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	private final CheckBox cleanWb = new CheckBox("clean-wb", Model.of(false));
 	private final RoomFilePanel roomFiles;
 	private final RoomPanel room;
+	@SpringBean
+	private FileProcessor processor;
+	@SpringBean
+	private FileItemLogDao fileLogDao;
 
 	public UploadDialog(String id, RoomPanel room, RoomFilePanel roomFiles) {
 		super(id, "");
@@ -197,9 +201,9 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				f.setInsertedBy(getUserId());
 
 				try {
-					ProcessResultList logs = getBean(FileProcessor.class).processFile(f, fu.getInputStream());
+					ProcessResultList logs = processor.processFile(f, fu.getInputStream());
 					for (ProcessResult res : logs.getJobs()) {
-						getBean(FileItemLogDao.class).add(res.getProcess(), f, res);
+						fileLogDao.add(res.getProcess(), f, res);
 					}
 					room.getSidebar().updateFiles(target);
 					if (logs.hasError()) {

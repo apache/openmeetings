@@ -22,7 +22,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.io.DataOutputStream;
@@ -59,6 +58,7 @@ import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +71,12 @@ public class SignInPage extends BaseInitedPage {
 	private static final Logger log = LoggerFactory.getLogger(SignInPage.class);
 	private SignInDialog d;
 	private KickMessageDialog m;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private IUserManager userManager;
+	@SpringBean
+	private OAuth2Dao oauthDao;
 
 	public SignInPage() {
 		this(new PageParameters());
@@ -82,7 +88,7 @@ public class SignInPage extends BaseInitedPage {
 		if (!oauthid.isEmpty()) { // oauth2 login
 			try {
 				long serverId = oauthid.toLong(-1);
-				OAuthServer server = getBean(OAuth2Dao.class).get(serverId);
+				OAuthServer server = oauthDao.get(serverId);
 				log.debug("OAuthServer=" + server);
 				if (server == null) {
 					log.warn("OAuth server id={} not found", serverId);
@@ -120,10 +126,15 @@ public class SignInPage extends BaseInitedPage {
 				log.error("Exception while login with POST parameters passed", e);
 			}
 		}
+	}
+
+	@Override
+	protected void onInitialize() {
+		super.onInitialize();
 
 		RegisterDialog r = new RegisterDialog("register");
 		ForgetPasswordDialog f = new ForgetPasswordDialog("forget");
-		d = new SignInDialog("signin");
+		d = new SignInDialog("signin", this);
 		d.setRegisterDialog(r);
 		d.setForgetPasswordDialog(f);
 		r.setSignInDialog(d);
@@ -133,12 +144,12 @@ public class SignInPage extends BaseInitedPage {
 				r.setVisible(allowRegister()), f, m.setVisible(WebSession.get().isKickedByAdmin()));
 	}
 
-	static boolean allowRegister() {
-		return getBean(ConfigurationDao.class).getBool(CONFIG_REGISTER_FRONTEND, false);
+	boolean allowRegister() {
+		return cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false);
 	}
 
-	static boolean allowOAuthLogin() {
-		return !getBean(OAuth2Dao.class).getActive().isEmpty();
+	boolean allowOAuthLogin() {
+		return !oauthDao.getActive().isEmpty();
 	}
 
 	@Override
@@ -186,11 +197,11 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	private static void prepareConnection(URLConnection _connection) {
+	private void prepareConnection(URLConnection _connection) {
 		if (!(_connection instanceof HttpsURLConnection)) {
 			return;
 		}
-		if (!getBean(ConfigurationDao.class).getBool(CONFIG_IGNORE_BAD_SSL, false)) {
+		if (!cfgDao.getBool(CONFIG_IGNORE_BAD_SSL, false)) {
 			return;
 		}
 		TrustManager[] trustAllCerts = new TrustManager[] {new X509TrustManager() {
@@ -221,7 +232,7 @@ public class SignInPage extends BaseInitedPage {
 		}
 	}
 
-	private static AuthInfo getToken(String code, OAuthServer server) throws IOException {
+	private AuthInfo getToken(String code, OAuthServer server) throws IOException {
 		String requestTokenBaseUrl = server.getRequestTokenUrl();
 		// build url params to request auth token
 		String requestTokenParams = server.getRequestTokenAttributes();
@@ -264,7 +275,7 @@ public class SignInPage extends BaseInitedPage {
 		return result;
 	}
 
-	private static OAuthUser getAuthParams(String token, String code, OAuthServer server) throws IOException {
+	private OAuthUser getAuthParams(String token, String code, OAuthServer server) throws IOException {
 		// prepare url
 		String requestInfoUrl = server.getRequestInfoUrl();
 		requestInfoUrl = prepareUrlParams(requestInfoUrl, server.getClientId(), getRedirectUri(server)
@@ -278,7 +289,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 
 	private void loginViaOAuth2(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException {
-		User u = getBean(IUserManager.class).loginOAuth(user, serverId);
+		User u = userManager.loginOAuth(user, serverId);
 
 		if (u != null && WebSession.get().signIn(u)) {
 			setResponsePage(Application.get().getHomePage());

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
@@ -29,6 +28,7 @@ import org.apache.openmeetings.web.user.profile.UserProfilePanel;
 import org.apache.openmeetings.web.util.ContactsHelper;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -41,6 +41,8 @@ public class UserInfoDialog extends AbstractDialog<String> {
 	private DialogButton contacts;
 	private MessageDialog newMessage;
 	private long userId;
+	@SpringBean
+	private UserContactDao contactDao;
 
 	public UserInfoDialog(String id, MessageDialog newMessage) {
 		super(id, "");
@@ -59,7 +61,7 @@ public class UserInfoDialog extends AbstractDialog<String> {
 
 	public void open(IPartialPageRequestHandler handler, long userId) {
 		this.userId = userId;
-		contacts.setVisible(userId != getUserId() && getBean(UserContactDao.class).get(userId, getUserId()) == null, handler);
+		contacts.setVisible(userId != getUserId() && contactDao.get(userId, getUserId()) == null, handler);
 		message.setVisible(userId != getUserId(), handler);
 		container.replace(new UserProfilePanel("body", userId));
 		handler.add(container);

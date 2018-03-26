@@ -18,15 +18,6 @@
  */
 package org.apache.openmeetings.web.common;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-import static org.apache.openmeetings.web.app.WebSession.getUserId;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.openmeetings.db.dao.room.RoomDao;
-import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -41,13 +32,5 @@ public abstract class UserPanel extends Panel {
 
 	public UserPanel(String id, IModel<?> model) {
 		super(id, model);
-	}
-
-	public static List<Room> getMyRooms() {
-		List<Room> result = new ArrayList<>();
-		result.add(getBean(RoomDao.class).getUserRoom(getUserId(), Room.Type.conference, Application.getString("my.room.conference")));
-		result.add(getBean(RoomDao.class).getUserRoom(getUserId(), Room.Type.presentation, Application.getString("my.room.presentation")));
-		result.addAll(getBean(RoomDao.class).getAppointedRoomsByUser(getUserId()));
-		return result;
 	}
 }

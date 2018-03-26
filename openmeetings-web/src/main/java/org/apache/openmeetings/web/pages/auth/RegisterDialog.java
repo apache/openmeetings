@@ -24,7 +24,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -53,6 +52,7 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.slf4j.Logger;
@@ -84,6 +84,12 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	MessageDialog confirmRegistration;
 	private boolean sendConfirmation = false;
 	private boolean sendEmailAtRegister = false;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private IUserManager userManager;
+	@SpringBean
+	private UserDao userDao;
 
 	public RegisterDialog(String id) {
 		super(id, "");
@@ -148,7 +154,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		String baseURL = getBaseUrl();
 		sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
 		sendConfirmation = !Strings.isEmpty(baseURL) && cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
@@ -190,11 +195,11 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		String hash = UUID.randomUUID().toString();
 
 		try {
-			getBean(IUserManager.class).registerUserInit(UserDao.getDefaultRights(), login, password, lastName
+			userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastName
 					, firstName, email, null /* age/birthday */, "" /* street */
 					, "" /* additionalname */, "" /* fax */, "" /* zip */, country
 					, "" /* town */, lang, true /* sendWelcomeMessage */
-					, Arrays.asList(getBean(ConfigurationDao.class).getLong(CONFIG_DEFAULT_GROUP_ID, null)),
+					, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)),
 					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
 					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
 					true /* showContactDataToContacts */, hash);
@@ -236,7 +241,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		@Override
 		protected void onInitialize() {
 			super.onInitialize();
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			firstNameField.setLabel(Model.of(getString("117")));
 			lastNameField.setLabel(Model.of(getString("136")));
 			loginField.add(minimumLength(getMinLoginLength(cfgDao))).setLabel(Model.of(getString("114")));
@@ -276,10 +280,10 @@ public class RegisterDialog extends NonClosableDialog<String> {
 					|| !passwordField.getConvertedInput().equals(confirmPassword.getConvertedInput())) {
 				error(getString("232"));
 			}
-			if (!getBean(UserDao.class).checkEmail(emailField.getConvertedInput(), User.Type.user, null, null)) {
+			if (!userDao.checkEmail(emailField.getConvertedInput(), User.Type.user, null, null)) {
 				error(getString("error.email.inuse"));
 			}
-			if (!getBean(UserDao.class).checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
+			if (!userDao.checkLogin(loginField.getConvertedInput(), User.Type.user, null, null)) {
 				error(getString("error.login.inuse"));
 			}
 			if (hasErrorMessage()) {

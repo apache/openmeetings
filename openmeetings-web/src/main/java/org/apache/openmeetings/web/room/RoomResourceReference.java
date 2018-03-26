@@ -25,7 +25,6 @@ import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.File;
@@ -42,8 +41,10 @@ import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
 import com.github.openjson.JSONObject;
@@ -51,13 +52,22 @@ import com.github.openjson.JSONObject;
 public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	private static final long serialVersionUID = 1L;
 	private static final String DEFAULT_NAME = "wb-room-file";
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private FileItemDao fileDao;
+	@SpringBean
+	private WhiteboardManager wbManager;
+	@SpringBean
+	private GroupUserDao groupUserDao;
 
 	public RoomResourceReference() {
-		super(DEFAULT_NAME);
+		this(DEFAULT_NAME);
 	}
 
 	public RoomResourceReference(String name) {
 		super(name);
+		Injector.get().inject(this);
 	}
 
 	@Override
@@ -94,18 +104,18 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 			//no-op expected
 		}
 		WebSession ws = WebSession.get();
-		Client c = getBean(ClientManager.class).get(uid);
+		Client c = cm.get(uid);
 		if (id == null || !ws.isSignedIn() || c == null) {
 			return null;
 		}
-		FileItem f = (FileItem)getBean(FileItemDao.class).getAny(id);
+		FileItem f = (FileItem)fileDao.getAny(id);
 		if (f == null) {
 			return null;
 		}
 		String ruid = params.get("ruid").toString();
 		String wuid = params.get("wuid").toString();
 		if (c.getRoom() != null) {
-			Whiteboards wbs = getBean(WhiteboardManager.class).get(c.getRoom().getId());
+			Whiteboards wbs = wbManager.get(c.getRoom().getId());
 			if (!Strings.isEmpty(wuid) && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
 					JSONObject file = e.getValue().get(wuid);
@@ -115,7 +125,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 				}
 			}
 		}
-		if (f.getGroupId() != null && getBean(GroupUserDao.class).isUserInGroup(f.getGroupId(), getUserId())) {
+		if (f.getGroupId() != null && groupUserDao.isUserInGroup(f.getGroupId(), getUserId())) {
 			return f;
 		}
 		return null;

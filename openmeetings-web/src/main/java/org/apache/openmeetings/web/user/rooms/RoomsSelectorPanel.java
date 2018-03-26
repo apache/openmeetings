@@ -18,28 +18,30 @@
  */
 package org.apache.openmeetings.web.user.rooms;
 
-import static org.apache.openmeetings.web.common.UserPanel.getMyRooms;
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.util.OmUrlFragment.MenuParams;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RoomsSelectorPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private String title;
 	private String desc;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public RoomsSelectorPanel(String id, MenuParams param) {
 		super(id);
 
-		RoomDao roomDao = Application.getBean(RoomDao.class);
 		switch (param) {
 			case myTabButton:
 				title = "781";
 				desc = "782";
-				add(new RoomsPanel("rooms", getMyRooms()));
+				add(new RoomsPanel("rooms", roomDao.getMyRooms(getUserId(), Application.getString("my.room.conference"), Application.getString("my.room.presentation"))));
 				break;
 			case privateTabButton:
 				title = "779";

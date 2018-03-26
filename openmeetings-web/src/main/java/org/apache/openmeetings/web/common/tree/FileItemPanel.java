@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
@@ -29,15 +28,18 @@ import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer errors = new WebMarkupContainer("errors");
+	@SpringBean
+	private FileItemLogDao fileLogDao;
 
 	public FileItemPanel(String id, final IModel<? extends BaseFileItem> model, final FileTreePanel fileTreePanel) {
 		super(id, model, fileTreePanel);
 		BaseFileItem f = model.getObject();
-		long errorCount = getBean(FileItemLogDao.class).countErrors(f);
+		long errorCount = fileLogDao.countErrors(f);
 		boolean visible = errorCount != 0;
 		if (BaseFileItem.Type.Recording == f.getType()) {
 			Recording r = (Recording)f;

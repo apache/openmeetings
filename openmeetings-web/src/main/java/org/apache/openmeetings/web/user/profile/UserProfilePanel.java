@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.user.UserContactDao;
@@ -31,19 +30,24 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UserProfilePanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer address = new WebMarkupContainer("address");
 	private final Label addressDenied = new Label("addressDenied", "");
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private UserContactDao contactDao;
 
 	public UserProfilePanel(String id, long userId) {
-		this(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(userId)));
+		super(id);
+		setDefaultModel(new CompoundPropertyModel<>(userDao.get(userId)));
 	}
 
 	public UserProfilePanel(String id, CompoundPropertyModel<User> model) {
 		super(id, model);
-
 	}
 
 	@Override
@@ -58,7 +62,7 @@ public class UserProfilePanel extends UserBasePanel {
 		add(new TextArea<String>("userOffers").setEnabled(false));
 		add(new TextArea<String>("userSearchs").setEnabled(false));
 		if (getUserId().equals(u.getId()) || u.isShowContactData()
-				|| (u.isShowContactDataToContacts() && getBean(UserContactDao.class).isContact(u.getId(), getUserId())))
+				|| (u.isShowContactDataToContacts() && contactDao.isContact(u.getId(), getUserId())))
 		{
 			addressDenied.setVisible(false);
 			address.add(new Label("address.phone"));

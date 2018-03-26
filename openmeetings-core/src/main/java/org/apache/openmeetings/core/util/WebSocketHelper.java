@@ -208,7 +208,7 @@ public class WebSocketHelper {
 		if (publish) {
 			publish(new WsMessageUser(userId, m));
 		}
-		send(a -> ((IApplication)a).getOmBean(IClientManager.class).listByUser(userId), (t, c) -> {
+		send(a -> ((IApplication)a).getBean(IClientManager.class).listByUser(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
 			} catch (IOException e) {
@@ -258,7 +258,7 @@ public class WebSocketHelper {
 	}
 
 	private static void sendRoom(final Long roomId, BiConsumer<IWebSocketConnection, Client> consumer, Predicate<Client> check) {
-		send(a -> ((IApplication)a).getOmBean(IClientManager.class).listByRoom(roomId), consumer, check);
+		send(a -> ((IApplication)a).getBean(IClientManager.class).listByRoom(roomId), consumer, check);
 	}
 
 	private static void send(

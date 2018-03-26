@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.addOnClick;
 
@@ -48,6 +47,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
@@ -64,6 +64,12 @@ public class UserSearchPanel extends UserBasePanel {
 	private boolean searched = false;
 	private final WebMarkupContainer container = new WebMarkupContainer("container");
 	private final FixedHeaderTableBehavior fixedHeader = new FixedHeaderTableBehavior("#searchUsersTable", new Options("height", 400));
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private UserContactDao contactDao;
+	@SpringBean
+	private ClientManager cm;
 
 	public UserSearchPanel(String id) {
 		super(id);
@@ -93,13 +99,13 @@ public class UserSearchPanel extends UserBasePanel {
 
 			@Override
 			public Iterator<? extends User> iterator(long first, long count) {
-				return searched ? getBean(UserDao.class).searchUserProfile(getUserId(), text, offer, search, orderBy, (int)first, (int)count, asc).iterator()
+				return searched ? userDao.searchUserProfile(getUserId(), text, offer, search, orderBy, (int)first, (int)count, asc).iterator()
 						: new ArrayList<User>().iterator();
 			}
 
 			@Override
 			public long size() {
-				return searched ? getBean(UserDao.class).searchCountUserProfile(getUserId(), text, offer, search) : 0;
+				return searched ? userDao.searchCountUserProfile(getUserId(), text, offer, search) : 0;
 			}
 
 			@Override
@@ -113,16 +119,15 @@ public class UserSearchPanel extends UserBasePanel {
 
 			@Override
 			protected void populateItem(Item<User> item) {
-				final UserContactDao contactsDao = getBean(UserContactDao.class);
 				User u = item.getModelObject();
 				final long userId = u.getId();
-				item.add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, getBean(ClientManager.class).isOnline(userId) ? "online" : "offline")));
+				item.add(new WebMarkupContainer("status").add(AttributeModifier.append(ATTR_CLASS, cm.isOnline(userId) ? "online" : "offline")));
 				item.add(new Label("name", getName(u)));
 				item.add(new Label("tz", getTimeZone(u).getID()));
 				item.add(new Label("offer", u.getUserOffers()));
 				item.add(new Label("search", u.getUserSearchs()));
 				item.add(new WebMarkupContainer("view").add(addOnClick(String.format("showUserInfo(%s);", userId))));
-				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactsDao.isContact(userId, getUserId()))
+				item.add(new WebMarkupContainer("add").setVisible(userId != getUserId() && !contactDao.isContact(userId, getUserId()))
 						.add(addOnClick(String.format("addContact(%s);", userId))));
 				item.add(new WebMarkupContainer("message").setVisible(userId != getUserId()).add(addOnClick(String.format("privateMessage(%s);", userId))));
 				item.add(new WebMarkupContainer("invite").setVisible(userId != getUserId()).add(addOnClick(String.format("inviteUser(%s);", userId))));

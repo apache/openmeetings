@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
@@ -34,10 +33,15 @@ import org.apache.openmeetings.web.room.RoomPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RoomFilePanel extends FileTreePanel {
 	private static final long serialVersionUID = 1L;
 	private final RoomPanel room;
+	@SpringBean
+	private FileItemDao fileDao;
+	@SpringBean
+	private RecordingDao recDao;;
 
 	public RoomFilePanel(String id, RoomPanel room, NameDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id, room.getRoom().getId(), addFolder, trashConfirm);
@@ -46,10 +50,9 @@ public class RoomFilePanel extends FileTreePanel {
 
 	@Override
 	public void updateSizes() {
-		FileItemDao dao = getBean(FileItemDao.class);
-		RecordingContainerData sizeData = getBean(RecordingDao.class).getContainerData(getUserId());
-		long userSize = dao.getOwnSize(getUserId());
-		long roomSize = dao.getRoomSize(room.getRoom().getId());
+		RecordingContainerData sizeData = recDao.getContainerData(getUserId());
+		long userSize = fileDao.getOwnSize(getUserId());
+		long roomSize = fileDao.getRoomSize(room.getRoom().getId());
 		if (sizeData != null) {
 			userSize += sizeData.getUserHomeSize();
 			roomSize += sizeData.getPublicFileSize();

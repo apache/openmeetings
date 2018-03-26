@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
@@ -32,6 +31,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 		@Override
 		protected void onValidate() {
 			String p = current.getConvertedInput();
-			if (!Strings.isEmpty(p) && !getBean(UserDao.class).verifyPassword(getUserId(), p)) {
+			if (!Strings.isEmpty(p) && !userDao.verifyPassword(getUserId(), p)) {
 				error(getString("231"));
 				// add random timeout
 				try {
@@ -73,6 +73,10 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 		}
 	};
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private ConfigurationDao cfgDao;
 
 	public ChangePasswordDialog(String id) {
 		super(id, "");
@@ -90,8 +94,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 			}
 		};
 		cancel = new DialogButton("cancel", Model.of(getString("lbl.cancel")));
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-		passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getBean(UserDao.class).get(getUserId()));
+		passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), userDao.get(getUserId()));
 		add(form.add(
 				current.setLabel(Model.of(getString("current.password"))).setRequired(true)
 				, pass.setLabel(Model.of(getString("328"))).add(passValidator)
@@ -124,7 +127,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
 		try {
-			getBean(UserDao.class).update(getBean(UserDao.class).get(getUserId()), pass.getModelObject(), getUserId());
+			userDao.update(userDao.get(getUserId()), pass.getModelObject(), getUserId());
 		} catch (Exception e) {
 			error(e.getMessage());
 			target.add(feedback);

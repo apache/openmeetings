@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.user;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getContactsLink;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -71,6 +70,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.wysiwyg.WysiwygEditor;
@@ -92,6 +92,20 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 	private boolean isPrivate = false;
 	private final IModel<Collection<User>> modelTo = new CollectionModel<>(new ArrayList<User>());
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private AppointmentDao apptDao;
+	@SpringBean
+	private PrivateMessageDao msgDao;
+	@SpringBean
+	private IInvitationManager inviteManager;
+	@SpringBean
+	private MailHandler handler;
 
 	public MessageDialog(String id, CompoundPropertyModel<PrivateMessage> model) {
 		super(id, "", model);
@@ -123,7 +137,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				target.add(bookedRoom, roomParamsBlock);
 			}
 		}));
-		bookedRoom.setVisible(getBean(ConfigurationDao.class).getBool(CONFIG_MYROOMS_ENABLED, true));
+		bookedRoom.setVisible(cfgDao.getBool(CONFIG_MYROOMS_ENABLED, true));
 		roomParamsBlock.add(roomParams);
 		roomParams.add(new RoomTypeDropDown("room.type"));
 		roomParams.add(start);
@@ -139,7 +153,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 		end.setModelObject(now.plus(1, ChronoUnit.HOURS));
 		modelTo.setObject(new ArrayList<User>());
 		PrivateMessage p = new PrivateMessage();
-		p.setFrom(getBean(UserDao.class).get(getUserId()));
+		p.setFrom(userDao.get(getUserId()));
 		p.setOwner(p.getFrom());
 		p.setIsRead(false);
 		p.setFolderId(INBOX_FOLDER_ID);
@@ -157,7 +171,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 
 	public void open(IPartialPageRequestHandler handler, Long userId) {
-		getModelObject().setTo(getBean(UserDao.class).get(userId));
+		getModelObject().setTo(userDao.get(userId));
 		open(handler);
 	}
 
@@ -194,7 +208,6 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	protected void onSubmit(AjaxRequestTarget target) {
 		PrivateMessage m = getModelObject();
 		m.setInserted(new Date());
-		UserDao userDao = getBean(UserDao.class);
 		User owner = userDao.get(getUserId());
 		if (m.isBookedRoom()) {
 			Room r = m.getRoom();
@@ -203,7 +216,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			r.setCapacity(100L);
 			r.setAppointment(true);
 			r.setAllowUserQuestions(true);
-			r = getBean(RoomDao.class).update(r, getUserId());
+			r = roomDao.update(r, getUserId());
 			Appointment a = new Appointment();
 			a.setTitle(m.getSubject());
 			a.setDescription(m.getMessage());
@@ -222,12 +235,11 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 			}
 			a.setOwner(owner);
 			a.setMeetingMembers(attendees);
-			getBean(AppointmentDao.class).update(a, getUserId(), false);
+			apptDao.update(a, getUserId(), false);
 			m.setRoom(r);
 		} else {
 			m.setRoom(null);
 		}
-		PrivateMessageDao msgDao = getBean(PrivateMessageDao.class);
 		for (User to : modelTo.getObject()) {
 			if (to.getId() == null) {
 				userDao.update(to, getUserId());
@@ -247,7 +259,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 							+ Application.getString("1302", to.getLanguageId()) + "</a><br/>" : "";
 				String invitationLink = "";
 				if (p.isBookedRoom()) {
-					Invitation i = getBean(IInvitationManager.class).getInvitation(to, p.getRoom(),
+					Invitation i = inviteManager.getInvitation(to, p.getRoom(),
 							false, null, Valid.Period, owner, to.getLanguageId()
 							, CalendarHelper.getDate(start.getModelObject(), to.getTimeZoneId())
 							, CalendarHelper.getDate(end.getModelObject(), to.getTimeZoneId()), null);
@@ -266,7 +278,7 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 				}
 
 				String subj = p.getSubject() == null ? "" : p.getSubject();
-				getBean(MailHandler.class).send(to.getAddress().getEmail(),
+				handler.send(to.getAddress().getEmail(),
 						Application.getString("1301", to.getLanguageId()) + subj,
 						(p.getMessage() == null ? "" : p.getMessage().replaceAll("\\<.*?>", "")) + aLinkHTML + invitationLink);
 			}

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
@@ -41,6 +40,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -54,6 +54,12 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 	private final Long roomId;
 	private final PollForm form;
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private PollDao pollDao;
 
 	public CreatePollDialog(String id, Long roomId) {
 		super(id, "", new CompoundPropertyModel<>(new RoomPoll()));
@@ -71,9 +77,9 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	public void updateModel(AjaxRequestTarget target) {
 		RoomPoll p = new RoomPoll();
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = userDao.get(getUserId());
 		p.setCreator(u);
-		p.setRoom(getBean(RoomDao.class).get(roomId));
+		p.setRoom(roomDao.get(roomId));
 		p.setType(RoomPoll.Type.yesNo);
 		form.setModelObject(p);
 		target.add(form);
@@ -101,9 +107,8 @@ public class CreatePollDialog extends AbstractFormDialog<RoomPoll> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		PollDao dao = getBean(PollDao.class);
-		dao.close(roomId);
-		dao.update(form.getModelObject());
+		pollDao.close(roomId);
+		pollDao.update(form.getModelObject());
 		sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollCreated));
 	}
 

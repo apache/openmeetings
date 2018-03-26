@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,11 +32,13 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.app.WebSession;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,13 +46,16 @@ import org.slf4j.LoggerFactory;
 public class ProfileImageResourceReference extends ResourceReference {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(ProfileImageResourceReference.class);
+	@SpringBean
+	private UserDao userDao;
 
 	public ProfileImageResourceReference() {
 		super(ProfileImageResourceReference.class, "profile");
+		Injector.get().inject(this);
 	}
 
-	public static String getUrl(RequestCycle rc, Long userId) {
-		return getUrl(rc, getBean(UserDao.class).get(userId));
+	public String getUrl(RequestCycle rc, Long userId) {
+		return getUrl(rc, userDao.get(userId));
 	}
 
 	public static String getUrl(RequestCycle rc, User u) {
@@ -88,7 +92,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 					PageParameters params = attributes.getParameters();
 					try {
 						userId = params.get("id").toOptionalLong();
-						uri = SIP_USER_ID.equals(userId) ? null : getBean(UserDao.class).get(userId).getPictureuri();
+						uri = SIP_USER_ID.equals(userId) ? null : userDao.get(userId).getPictureuri();
 					} catch (Exception e) {
 						// no-op, junk filter
 					}

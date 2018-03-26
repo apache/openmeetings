@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.common.tree;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -39,8 +38,10 @@ import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private static final long serialVersionUID = 1L;
@@ -54,8 +55,15 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 	private final Long roomId;
 	private final List<BaseFileItem> roots = new ArrayList<>();
 	private final String PUBLIC, GROUP_FILE, GROUP_REC;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private RecordingDao recDao;
+	@SpringBean
+	private FileItemDao fileDao;
 
 	public OmTreeProvider(Long roomId) {
+		Injector.get().inject(this);
 		this.roomId = roomId;
 		PUBLIC = Application.getString("861");
 		GROUP_FILE = Application.getString("files.root.group");
@@ -86,7 +94,7 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 				rRoot.add(r);
 			}
 		}
-		for (GroupUser gu : getBean(UserDao.class).get(getUserId()).getGroupUsers()) {
+		for (GroupUser gu : userDao.get(getUserId()).getGroupUsers()) {
 			Group g = gu.getGroup();
 			boolean readOnly = g.isRestricted() && !hasAdminLevel(getRights()) && !gu.isModerator();
 			if (all) {
@@ -132,31 +140,29 @@ public class OmTreeProvider implements ITreeProvider<BaseFileItem> {
 		List<BaseFileItem> list = new ArrayList<>();
 		if (node instanceof Recording) {
 			Recording rec = (Recording)node;
-			RecordingDao dao = getBean(RecordingDao.class);
 			List<Recording> _list;
 			if (id == null) {
 				if (node.getOwnerId() == null) {
-					_list = dao.getRootByPublic(rec.getGroupId());
+					_list = recDao.getRootByPublic(rec.getGroupId());
 				} else {
-					_list = dao.getRootByOwner(node.getOwnerId());
+					_list = recDao.getRootByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(id);
+				_list = recDao.getByParent(id);
 			}
 			list.addAll(_list);
 		} else {
-			FileItemDao dao = getBean(FileItemDao.class);
 			List<FileItem> _list;
 			if (id == null) {
 				if (node.getRoomId() != null) {
-					_list = dao.getByRoom(node.getRoomId());
+					_list = fileDao.getByRoom(node.getRoomId());
 				} else if (node.getGroupId() != null) {
-					_list = dao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
+					_list = fileDao.getByGroup(node.getGroupId(), roomId == null ? VIDEO_TYPES : null);
 				} else {
-					_list = dao.getByOwner(node.getOwnerId());
+					_list = fileDao.getByOwner(node.getOwnerId());
 				}
 			} else {
-				_list = dao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
+				_list = fileDao.getByParent(id, roomId == null ? VIDEO_TYPES : null);
 			}
 			list.addAll(_list);
 		}

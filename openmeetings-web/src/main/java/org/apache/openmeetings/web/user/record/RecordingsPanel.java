@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.record;
 
 import static org.apache.openmeetings.util.OmFileHelper.getHumanSize;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -29,12 +28,15 @@ import org.apache.openmeetings.web.common.NameDialog;
 import org.apache.openmeetings.web.common.UserBasePanel;
 import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final VideoPlayer video = new VideoPlayer("video");
 	private final VideoInfo info = new VideoInfo("info");
 	private FileTreePanel fileTree;
+	@SpringBean
+	private RecordingDao recDao;
 
 	public RecordingsPanel(String id) {
 		super(id);
@@ -55,7 +57,7 @@ public class RecordingsPanel extends UserBasePanel {
 
 			@Override
 			public void updateSizes() {
-				RecordingContainerData sizeData = getBean(RecordingDao.class).getContainerData(getUserId());
+				RecordingContainerData sizeData = recDao.getContainerData(getUserId());
 				if (sizeData != null) {
 					homeSize.setObject(getHumanSize(sizeData.getUserHomeSize()));
 					publicSize.setObject(getHumanSize(sizeData.getPublicFileSize()));

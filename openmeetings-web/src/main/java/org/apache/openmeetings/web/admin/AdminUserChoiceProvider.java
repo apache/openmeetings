@@ -18,20 +18,21 @@
  */
 package org.apache.openmeetings.web.admin;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
 public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 	private static final long serialVersionUID = 1L;
 	public static final int PAGE_SIZE = 20;
+	@SpringBean
+	private UserDao userDao;
 
 	@Override
 	public String getIdValue(User choice) {
@@ -41,7 +42,7 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 
 	@Override
 	public void query(String term, int page, Response<User> response) {
-		response.addAll(getBean(UserDao.class).get(term, true, page * PAGE_SIZE, PAGE_SIZE));
+		response.addAll(userDao.get(term, true, page * PAGE_SIZE, PAGE_SIZE));
 		response.setHasMore(PAGE_SIZE == response.getResults().size());
 	}
 
@@ -51,6 +52,6 @@ public abstract class AdminUserChoiceProvider extends ChoiceProvider<User> {
 		for (String id : _ids) {
 			ids.add(Long.valueOf(id));
 		}
-		return new ArrayList<>(getBean(UserDao.class).get(ids));
+		return new ArrayList<>(userDao.get(ids));
 	}
 }

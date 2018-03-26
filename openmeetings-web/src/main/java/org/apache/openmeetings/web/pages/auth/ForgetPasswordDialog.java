@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.util.Arrays;
@@ -49,6 +48,7 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;
@@ -121,7 +121,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 						error(getString("234"));
 					}
 				}
-				if (type == Type.login && n.length() < UserHelper.getMinLoginLength(getBean(ConfigurationDao.class))) {
+				if (type == Type.login && n.length() < UserHelper.getMinLoginLength(cfgDao)) {
 					error(getString("104"));
 				}
 			}
@@ -129,6 +129,12 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	};
 	private SignInDialog s;
 	MessageDialog confirmDialog;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private MailHandler mailHandler;
 
 	enum Type {
 		email
@@ -232,20 +238,19 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	 */
 	private boolean resetUser(String email, String username) {
 		try {
-			UserDao userDao = getBean(UserDao.class);
 			log.debug("resetUser " + email);
 
 			// check if Mail given
 			if (!Strings.isEmpty(email)) {
 				User us = userDao.getByEmail(email);
 				if (us != null) {
-					sendHashByUser(us, userDao);
+					sendHashByUser(us);
 					return true;
 				}
 			} else if (!Strings.isEmpty(username)) {
 				User us = userDao.getByLogin(username, User.Type.user, null);
 				if (us != null) {
-					sendHashByUser(us, userDao);
+					sendHashByUser(us);
 					return true;
 				}
 			}
@@ -255,7 +260,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 		return false;
 	}
 
-	private void sendHashByUser(User us, UserDao userDao) {
+	private void sendHashByUser(User us) {
 		log.debug("User: " + us.getLogin());
 		us.setResethash(UUID.randomUUID().toString());
 		us.setResetDate(new Date());
@@ -268,6 +273,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 		String template = ResetPasswordTemplate.getEmail(resetLink);
 
-		getBean(MailHandler.class).send(email, getString("517"), template);
+		mailHandler.send(email, getString("517"), template);
 	}
 }

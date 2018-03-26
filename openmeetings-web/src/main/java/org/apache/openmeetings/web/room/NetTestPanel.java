@@ -26,14 +26,11 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
 public class NetTestPanel extends BasePanel {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = LoggerFactory.getLogger(NetTestPanel.class);
 	private static final ResourceReference NETTEST_JS_REFERENCE = new JavaScriptResourceReference(VideoSettings.class, "nettest.js");
 
 	public NetTestPanel(String id) {

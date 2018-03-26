@@ -18,15 +18,16 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.web.common.InvitationForm;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class RecordingInvitationForm extends InvitationForm {
 	private static final long serialVersionUID = 1L;
 	private Long recordingId;
+	@SpringBean
+	private RecordingDao recDao;
 
 	public RecordingInvitationForm(String id) {
 		super(id);
@@ -36,7 +37,7 @@ public class RecordingInvitationForm extends InvitationForm {
 	@Override
 	public void updateModel(AjaxRequestTarget target) {
 		super.updateModel(target);
-		getModelObject().setRecording(getBean(RecordingDao.class).get(recordingId));
+		getModelObject().setRecording(recDao.get(recordingId));
 	}
 
 	public void setRecordingId(Long recordingId) {

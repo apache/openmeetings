@@ -21,7 +21,6 @@ package org.apache.openmeetings.web.admin.rooms;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.admin.AdminUserChoiceProvider.PAGE_SIZE;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.kickUser;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -74,6 +73,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.ChoiceProvider;
@@ -115,6 +115,16 @@ public class RoomForm extends AdminBaseForm<Room> {
 	private IModel<User> moderator2add = Model.of((User)null);
 	private IModel<Collection<BaseFileItem>> files2add = new CollectionModel<>(new ArrayList<BaseFileItem>());
 	private IModel<Long> wbIdx = Model.of(0L);
+	@SpringBean
+	private GroupDao groupDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private FileItemDao fileDao;
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public RoomForm(String id, WebMarkupContainer roomList, final Room room) {
 		super(id, new CompoundPropertyModel<>(room == null ? newRoom() : room));
@@ -152,8 +162,8 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("ispublic").setEnabled(!isGroupAdmin));
 
 		List<Group> orgList = isGroupAdmin
-				? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
-				: getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
+				? groupDao.get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+				: groupDao.get(0, Integer.MAX_VALUE);
 		final List<RoomGroup> orgRooms = new ArrayList<>(orgList.size());
 		for (Group org : orgList) {
 			orgRooms.add(new RoomGroup(org, getModelObject()));
@@ -188,7 +198,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 				if (!orgList.stream().filter(g -> g.getId().equals(id)).findFirst().isPresent()) {
 					return null; // seems to be hacked
 				}
-				Group g = getBean(GroupDao.class).get(id);
+				Group g = groupDao.get(id);
 				return new RoomGroup(g, RoomForm.this.getModelObject());
 			}
 		}).setLabel(Model.of(getString("828"))).setRequired(isGroupAdmin));
@@ -246,7 +256,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 			@Override
 			public void query(String term, int page, Response<User> response) {
-				response.addAll(getBean(UserDao.class).get(term, false, page * PAGE_SIZE, PAGE_SIZE));
+				response.addAll(userDao.get(term, false, page * PAGE_SIZE, PAGE_SIZE));
 				response.setHasMore(PAGE_SIZE == response.getResults().size());
 			}
 
@@ -331,13 +341,13 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 				@Override
 				public void query(String term, int page, Response<BaseFileItem> response) {
-					response.addAll(getBean(FileItemDao.class).getAllRoomFiles(term, page * PAGE_SIZE, PAGE_SIZE, RoomForm.this.getModelObject().getId(), orgList));
+					response.addAll(fileDao.getAllRoomFiles(term, page * PAGE_SIZE, PAGE_SIZE, RoomForm.this.getModelObject().getId(), orgList));
 					response.setHasMore(PAGE_SIZE == response.getResults().size());
 				}
 
 				@Override
 				public Collection<BaseFileItem> toChoices(Collection<String> ids) {
-					return getBean(FileItemDao.class).get(ids);
+					return fileDao.get(ids);
 				}
 			}).setLabel(Model.of(getString("245"))))
 			.add(new TextField<Long>("wbidx", wbIdx) {
@@ -419,7 +429,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	void updateClients(AjaxRequestTarget target) {
 		long roomId = getModelObject().getId() != null ? getModelObject().getId() : 0;
-		final List<Client> clientsInRoom = getBean(ClientManager.class).listByRoom(roomId);
+		final List<Client> clientsInRoom = cm.listByRoom(roomId);
 		clients.setDefaultModelObject(clientsInRoom);
 		target.add(clientsContainer);
 	}
@@ -428,7 +438,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		Room r = getModelObject();
 		boolean newRoom = r.getId() == null;
-		r = getBean(RoomDao.class).update(r, getUserId());
+		r = roomDao.update(r, getUserId());
 		if (newRoom) {
 			for (RoomModerator rm : r.getModerators()) {
 				rm.setRoomId(r.getId());
@@ -436,7 +446,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			for (RoomFile rf : r.getFiles()) {
 				rf.setRoomId(r.getId());
 			}
-			getBean(RoomDao.class).update(getModelObject(), getUserId());
+			roomDao.update(getModelObject(), getUserId());
 		}
 		hideNewRecord();
 		updateView(target);
@@ -458,7 +468,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		Room r = getModelObject();
 		if (r.getId() != null) {
-			r = getBean(RoomDao.class).get(r.getId());
+			r = roomDao.get(r.getId());
 		} else {
 			r = newRoom();
 		}
@@ -468,7 +478,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		getBean(RoomDao.class).delete(getModelObject(), getUserId());
+		roomDao.delete(getModelObject(), getUserId());
 		target.add(roomList);
 		setModelObject(newRoom());
 		updateView(target);

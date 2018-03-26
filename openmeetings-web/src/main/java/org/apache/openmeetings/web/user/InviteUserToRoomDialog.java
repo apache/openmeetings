@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -32,6 +31,7 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.web.user.rooms.RoomListPanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
@@ -43,6 +43,10 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 	private RoomListPanel privateRooms;
 	private final InviteUserMessageDialog inviteMsg = new InviteUserMessageDialog("inviteMsg");
 	private Long userId;
+	@SpringBean
+	private RoomDao roomDao;
+	@SpringBean
+	private UserDao userDao;
 
 	private class InviteRoomListPanel extends RoomListPanel {
 		private static final long serialVersionUID = 1L;
@@ -71,10 +75,9 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 		super.onInitialize();
 	}
 
-	private static List<Room> getPrivateRooms(Long userId1, Long userId2, RoomDao roomDao) {
+	private List<Room> getPrivateRooms(Long userId1, Long userId2, RoomDao roomDao) {
 		List<Long> orgIds = new ArrayList<>();
 		List<Long> orgIds2 = new ArrayList<>();
-		UserDao userDao = getBean(UserDao.class);
 		for (GroupUser gu : userDao.get(userId1).getGroupUsers()) {
 			orgIds.add(gu.getGroup().getId());
 		}
@@ -91,7 +94,6 @@ public class InviteUserToRoomDialog extends AbstractDialog<String> {
 
 	public void open(IPartialPageRequestHandler handler, Long userId) {
 		this.userId = userId;
-		RoomDao roomDao = getBean(RoomDao.class);
 		publicRooms.update(handler, roomDao.getPublicRooms());
 		privateRooms.update(handler, getPrivateRooms(getUserId(), userId, roomDao));
 		open(handler);

@@ -322,4 +322,12 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	public List<RoomGroup> getGroups() {
 		return em.createNamedQuery("getAllRoomGroups", RoomGroup.class).getResultList();
 	}
+
+	public List<Room> getMyRooms(Long userId, String confLbl, String restrLbl) {
+		List<Room> result = new ArrayList<>();
+		result.add(getUserRoom(userId, Room.Type.conference, confLbl));
+		result.add(getUserRoom(userId, Room.Type.presentation, restrLbl));
+		result.addAll(getAppointedRoomsByUser(userId));
+		return result;
+	}
 }

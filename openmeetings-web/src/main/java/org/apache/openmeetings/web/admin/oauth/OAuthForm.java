@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.oauth;
 
+import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.auth.SignInPage.getRedirectUri;
 
 import java.util.Arrays;
@@ -26,8 +27,6 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
 import org.apache.openmeetings.db.entity.server.OAuthServer.RequestMethod;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
-import org.apache.openmeetings.web.app.Application;
-import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -39,12 +38,15 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 
 public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	private static final long serialVersionUID = 1L;
 	private WebMarkupContainer listContainer;
 	private TextField<String> redirectUriText;
+	@SpringBean
+	private OAuth2Dao oauthDao;
 
 	public OAuthForm(String id, WebMarkupContainer listContainer, OAuthServer server) {
 		super(id, new CompoundPropertyModel<>(server));
@@ -85,9 +87,8 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
-		OAuth2Dao oAuth2Dao = Application.getBean(OAuth2Dao.class);
-		oAuth2Dao.update(getModelObject(), WebSession.getUserId());
-		OAuthServer oauthServer = oAuth2Dao.get(getModelObject().getId());
+		oauthDao.update(getModelObject(), getUserId());
+		OAuthServer oauthServer = oauthDao.get(getModelObject().getId());
 		this.setModelObject(oauthServer);
 		hideNewRecord();
 		target.add(this);
@@ -106,7 +107,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 		OAuthServer server = this.getModelObject();
 		if (server.getId() != null) {
-			server = Application.getBean(OAuth2Dao.class).get(getModelObject().getId());
+			server = oauthDao.get(getModelObject().getId());
 		} else {
 			server = new OAuthServer();
 		}
@@ -117,7 +118,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 
 	@Override
 	protected void onDeleteSubmit(AjaxRequestTarget target, Form<?> form) {
-		Application.getBean(OAuth2Dao.class).delete(getModelObject(), WebSession.getUserId());
+		oauthDao.delete(getModelObject(), getUserId());
 		this.setModelObject(new OAuthServer());
 		target.add(listContainer);
 		target.add(this);

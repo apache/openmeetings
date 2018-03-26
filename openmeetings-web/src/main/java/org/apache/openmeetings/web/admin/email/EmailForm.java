@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.admin.email;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
-
 import org.apache.openmeetings.db.dao.basic.MailMessageDao;
 import org.apache.openmeetings.db.entity.basic.MailMessage;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
@@ -30,6 +28,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.ui.form.button.AjaxButton;
 
@@ -39,6 +38,8 @@ public class EmailForm extends Form<MailMessage> {
 	private final AjaxButton reset;
 	private ConfirmableAjaxBorder delBtn;
 	private final WebMarkupContainer list;
+	@SpringBean
+	private MailMessageDao emailDao;
 
 	public EmailForm(String id, final WebMarkupContainer list, MailMessage m) {
 		super(id, new CompoundPropertyModel<>(m));
@@ -56,7 +57,7 @@ public class EmailForm extends Form<MailMessage> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				getBean(MailMessageDao.class).resetSendingStatus(EmailForm.this.getModelObject().getId());
+				emailDao.resetSendingStatus(EmailForm.this.getModelObject().getId());
 				target.add(list);
 			}
 		});
@@ -72,7 +73,7 @@ public class EmailForm extends Form<MailMessage> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				getBean(MailMessageDao.class).delete(getModelObject().getId());
+				emailDao.delete(getModelObject().getId());
 				setModelObject(new MailMessage());
 				target.add(list, EmailForm.this);
 			}

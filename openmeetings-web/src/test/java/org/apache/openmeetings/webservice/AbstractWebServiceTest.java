@@ -76,7 +76,7 @@ public class AbstractWebServiceTest {
 	public static final long TIMEOUT = 5 * 60 * 1000;
 
 	protected static <T> T getBean(Class<T> clazz) {
-		return ensureApplication()._getOmBean(clazz);
+		return ensureApplication().getBean(clazz);
 	}
 
 	public static WebClient getClient(String url) {

@@ -22,7 +22,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REDIRECT_URL_FOR_EXTERNAL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
@@ -55,6 +54,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.ui.widget.menu.IMenuItem;
@@ -94,6 +94,10 @@ public class RoomMenuPanel extends Panel {
 	};
 	private final PollsSubMenu pollsSubMenu;
 	private final ActionsSubMenu actionsSubMenu;
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private ConfigurationDao cfgDao;
 
 	public RoomMenuPanel(String id, final RoomPanel room) {
 		super(id);
@@ -201,7 +205,6 @@ public class RoomMenuPanel extends Panel {
 		StringBuilder roomClass = new StringBuilder("room name");
 		StringBuilder roomTitle = new StringBuilder();
 		if (room.getRecordingUser() != null) {
-			ClientManager cm = getBean(ClientManager.class);
 			Client recClient = cm.getBySid(room.getRecordingUser());
 			if (recClient != null) {
 				roomTitle.append(String.format("%s %s %s %s %s", getString("419")
@@ -229,11 +232,11 @@ public class RoomMenuPanel extends Panel {
 	}
 
 	public void exit(IPartialPageRequestHandler handler) {
-		getBean(ClientManager.class).exitRoom(room.getClient());
+		cm.exitRoom(room.getClient());
 		if (WebSession.getRights().contains(User.Right.Dashboard)) {
 			room.getMainPanel().updateContents(ROOMS_PUBLIC, handler);
 		} else {
-			String url = getBean(ConfigurationDao.class).getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");
+			String url = cfgDao.getString(CONFIG_REDIRECT_URL_FOR_EXTERNAL, "");
 			throw new RedirectToUrlException(Strings.isEmpty(url) ? getBaseUrl() : url);
 		}
 	}

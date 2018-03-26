@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.user.calendar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
@@ -55,6 +54,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,6 +94,14 @@ public class CalendarPanel extends UserBasePanel {
 	private AppointmentDialog dialog;
 	private final WebMarkupContainer calendarListContainer = new WebMarkupContainer("calendarListContainer");
 	private transient HttpClient client = null; // Non-Serializable HttpClient.
+	@SpringBean
+	private AppointmentDao apptDao;
+	@SpringBean
+	private AppointmentManager apptManager;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private ConfigurationDao cfgDao;
 
 	public CalendarPanel(String id) {
 		super(id);
@@ -142,7 +150,7 @@ public class CalendarPanel extends UserBasePanel {
 		options.set("monthNamesShort", shortMonthes.toString());
 		options.set("dayNames", days.toString());
 		options.set("dayNamesShort", shortDays.toString());
-		options.set("firstDay", getBean(ConfigurationDao.class).getInt(CONFIG_CALENDAR_FIRST_DAY, 0));
+		options.set("firstDay", cfgDao.getInt(CONFIG_CALENDAR_FIRST_DAY, 0));
 
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;
@@ -197,7 +205,7 @@ public class CalendarPanel extends UserBasePanel {
 
 			@Override
 			public void onEventClick(AjaxRequestTarget target, CalendarView view, int eventId) {
-				Appointment a = getDao().get((long)eventId);
+				Appointment a = apptDao.get((long)eventId);
 				dialog.setModelObjectWithAjaxTarget(a, target);
 
 				dialog.open(target);
@@ -205,8 +213,7 @@ public class CalendarPanel extends UserBasePanel {
 
 			@Override
 			public void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
-				AppointmentDao dao = getDao();
-				Appointment a = dao.get((long)eventId);
+				Appointment a = apptDao.get((long)eventId);
 
 				if (!AppointmentDialog.isOwner(a)) {
 					return;
@@ -220,7 +227,7 @@ public class CalendarPanel extends UserBasePanel {
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
 				a.setEnd(cal.getTime());
 
-				dao.update(a, getUserId());
+				apptDao.update(a, getUserId());
 
 				if (a.getCalendar() != null) {
 					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
@@ -229,8 +236,7 @@ public class CalendarPanel extends UserBasePanel {
 
 			@Override
 			public void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
-				AppointmentDao dao = getDao();
-				Appointment a = dao.get((long)eventId);
+				Appointment a = apptDao.get((long)eventId);
 				if (!AppointmentDialog.isOwner(a)) {
 					return;
 				}
@@ -239,7 +245,7 @@ public class CalendarPanel extends UserBasePanel {
 				cal.add(java.util.Calendar.MILLISECOND, (int)delta);
 				a.setEnd(cal.getTime());
 
-				dao.update(a, getUserId());
+				apptDao.update(a, getUserId());
 
 				if (a.getCalendar() != null) {
 					updatedeleteAppointment(target, CalendarDialog.DIALOG_TYPE.UPDATE_APPOINTMENT, a);
@@ -264,9 +270,8 @@ public class CalendarPanel extends UserBasePanel {
 
 			@Override
 			protected List<OmCalendar> load() {
-				AppointmentManager manager = getAppointmentManager();
-				List<OmCalendar> cals = new ArrayList<>(manager.getCalendars(getUserId()));
-				cals.addAll(manager.getGoogleCalendars(getUserId()));
+				List<OmCalendar> cals = new ArrayList<>(apptManager.getCalendars(getUserId()));
+				cals.addAll(apptManager.getGoogleCalendars(getUserId()));
 				return cals;
 			}
 		}) {
@@ -317,13 +322,9 @@ public class CalendarPanel extends UserBasePanel {
 		refreshTimer.stop(handler);
 		syncTimer.stop(handler);
 		if (client != null) {
-			getAppointmentManager().cleanupIdleConnections();
+			apptManager.cleanupIdleConnections();
 			client.getState().clear();
 		}
-	}
-
-	private static AppointmentDao getDao() {
-		return getBean(AppointmentDao.class);
 	}
 
 	public void refresh(IPartialPageRequestHandler handler) {
@@ -356,7 +357,7 @@ public class CalendarPanel extends UserBasePanel {
 	public HttpClient getHttpClient() {
 		if (client == null) {
 			//Ensure there's always a client
-			client = getAppointmentManager().createHttpClient();
+			client = apptManager.createHttpClient();
 		}
 
 		return client;
@@ -370,10 +371,8 @@ public class CalendarPanel extends UserBasePanel {
 
 	// Function which populates the already existing Google Calendars.
 	private void populateGoogleCalendars() {
-		AppointmentManager appointmentManager = getAppointmentManager();
-		List<OmCalendar> gcals = appointmentManager.getGoogleCalendars(getUserId());
+		List<OmCalendar> gcals = apptManager.getGoogleCalendars(getUserId());
 		for (OmCalendar gcal : gcals) {
-
 			//Href has the Calendar ID and Token has the API Key.
 			calendar.addSource(new GoogleCalendar(gcal.getHref(), gcal.getToken()));
 		}
@@ -382,7 +381,7 @@ public class CalendarPanel extends UserBasePanel {
 	private OmCalendar getDefaultCalendar() {
 		OmCalendar c = new OmCalendar();
 		c.setDeleted(false);
-		c.setOwner(getBean(UserDao.class).get(getUserId()));
+		c.setOwner(userDao.get(getUserId()));
 		c.setTitle(getString("calendar.defaultTitle"));
 		return c;
 	}
@@ -400,13 +399,9 @@ public class CalendarPanel extends UserBasePanel {
 	private Appointment getDefault() {
 		Appointment a = new Appointment();
 		a.setReminder(Reminder.ical);
-		a.setOwner(getBean(UserDao.class).get(getUserId()));
+		a.setOwner(userDao.get(getUserId()));
 		a.setTitle(getString("1444"));
 		log.debug(" -- getDefault -- Current model " + a);
 		return a;
-	}
-
-	public AppointmentManager getAppointmentManager() {
-		return getBean(AppointmentManager.class);
 	}
 }

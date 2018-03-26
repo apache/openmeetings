@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -36,6 +35,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
@@ -50,6 +50,8 @@ public class NicknameDialog extends NonClosableDialog<User> {
 	private DialogButton ok;
 	private final RoomPanel room;
 	private final Form<User> form;
+	@SpringBean
+	private ClientManager cm;
 
 	public NicknameDialog(String id, final RoomPanel room) {
 		super(id, "");
@@ -111,6 +113,6 @@ public class NicknameDialog extends NonClosableDialog<User> {
 		final User u = form.getModelObject();
 		final Client c = room.getClient();
 		c.getUser().setFirstname(u.getFirstname()).setLastname(u.getLastname());
-		room.broadcast(getBean(ClientManager.class).update(c));
+		room.broadcast(cm.update(c));
 	}
 }

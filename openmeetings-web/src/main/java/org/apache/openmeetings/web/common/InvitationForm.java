@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.common;
 
 import static org.apache.openmeetings.util.CalendarHelper.getDate;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -56,6 +55,7 @@ import org.apache.wicket.markup.html.panel.PanelMarkupSourcingStrategy;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.CollectionModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,6 +78,12 @@ public abstract class InvitationForm extends Form<Invitation> {
 	protected final TextField<String> url = new TextField<>("url", Model.of((String)null));
 	protected final UserMultiChoice recipients = new UserMultiChoice("recipients", new CollectionModel<>(new ArrayList<User>()));
 	protected InvitationDialog dialog;
+	@SpringBean
+	private InvitationDao inviteDao;
+	@SpringBean
+	private UserDao userDao;
+	@SpringBean
+	private InvitationManager inviteManager;
 
 	public InvitationForm(String id) {
 		super(id, new CompoundPropertyModel<>(new Invitation()));
@@ -164,7 +170,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		if (Type.contact == u.getType()) {
 			u.setLanguageId(lang.getModelObject());
 		}
-		return getBean(InvitationDao.class).update(i);
+		return inviteDao.update(i);
 	}
 
 	@Override
@@ -178,7 +184,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	public void updateModel(AjaxRequestTarget target) {
 		Invitation i = new Invitation();
-		User u = getBean(UserDao.class).get(getUserId());
+		User u = userDao.get(getUserId());
 		i.setInvitedBy(u);
 		i.setRoom(null);
 		from.setModelObject(LocalDateTime.now());
@@ -218,7 +224,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 				for (User u : recipients.getModelObject()) {
 					Invitation i = create(u);
 					try {
-						getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+						inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
 					} catch (Exception e) {
 						log.error("error while sending invitation by User ", e);
 					}
@@ -226,7 +232,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 			} else {
 				Invitation i = getModelObject();
 				try {
-					getBean(InvitationManager.class).sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
+					inviteManager.sendInvitationLink(i, MessageType.Create, subject.getModelObject(), message.getModelObject(), false);
 				} catch (Exception e) {
 					log.error("error while sending invitation by URL ", e);
 				}

@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.record;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getExternalType;
 import static org.apache.openmeetings.web.app.WebSession.getRecordingId;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -39,15 +38,28 @@ import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.app.WhiteboardManager;
 import org.apache.openmeetings.web.util.FileItemResourceReference;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
 public abstract class RecordingResourceReference extends FileItemResourceReference<Recording> {
 	private static final long serialVersionUID = 1L;
+	@SpringBean
+	private RecordingDao recDao;
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private WhiteboardManager wbm;
+	@SpringBean
+	private GroupUserDao groupUserDao;
+	@SpringBean
+	private UserDao userDao;
 
 	public RecordingResourceReference(String name) {
 		super(name);
+		Injector.get().inject(this);
 	}
 
 	@Override
@@ -79,18 +91,18 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 		return null;
 	}
 
-	private static Recording getRecording(Long id, String ruid, String uid) {
+	private Recording getRecording(Long id, String ruid, String uid) {
 		log.debug("Recording with id {} is requested", id);
-		Recording r = getBean(RecordingDao.class).get(id);
+		Recording r = recDao.get(id);
 		if (r == null || r.getType() == Type.Folder || r.isDeleted()) {
 			return null;
 		}
 		if (id.equals(getRecordingId())) {
 			return r;
 		}
-		Client c = getBean(ClientManager.class).get(uid);
+		Client c = cm.get(uid);
 		if (c != null && c.getRoom() != null) {
-			Whiteboards wbs = getBean(WhiteboardManager.class).get(c.getRoom().getId());
+			Whiteboards wbs = wbm.get(c.getRoom().getId());
 			if (wbs != null && !Strings.isEmpty(ruid) && ruid.equals(wbs.getUid())) {
 				for (Entry<Long, Whiteboard> e : wbs.getWhiteboards().entrySet()) {
 					if (e.getValue().contains(r.getHash())) {
@@ -107,13 +119,13 @@ public abstract class RecordingResourceReference extends FileItemResourceReferen
 			//own
 			return r;
 		}
-		if (r.getGroupId() != null && getBean(GroupUserDao.class).isUserInGroup(r.getGroupId(), getUserId())) {
+		if (r.getGroupId() != null && groupUserDao.isUserInGroup(r.getGroupId(), getUserId())) {
 			return r;
 		}
 		//external group check was added for plugin recording download
 		String extType = getExternalType();
 		if (extType != null) {
-			User creator = getBean(UserDao.class).get(r.getInsertedBy());
+			User creator = userDao.get(r.getInsertedBy());
 			if (extType.equals(creator.getExternalType())) {
 				return r;
 			}

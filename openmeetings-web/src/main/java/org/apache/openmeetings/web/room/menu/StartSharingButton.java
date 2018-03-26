@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSH
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SCREENSHARING_QUALITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.FLASH_NATIVE_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getApplicationName;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getLanguage;
 import static org.apache.wicket.util.time.Duration.NONE;
 
@@ -47,6 +46,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.AjaxDownloadBehavior;
 import org.apache.wicket.request.resource.ResourceStreamResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.resource.StringResourceStream;
 import org.slf4j.Logger;
@@ -62,6 +62,14 @@ public class StartSharingButton extends OmButton {
 	private final AjaxDownloadBehavior download;
 	private final String uid;
 	private String app = "";
+	@SpringBean
+	private ClientManager cm;
+	@SpringBean
+	private StreamClientManager scm;
+	@SpringBean
+	private ConfigurationDao cfgDao;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public StartSharingButton(String id, String uid) {
 		super(id);
@@ -77,7 +85,7 @@ public class StartSharingButton extends OmButton {
 
 			@Override
 			protected IResourceStream getResourceStream(Attributes attributes) {
-				setFileName(String.format("public_%s.jnlp", getBean(ClientManager.class).get(uid).getRoom().getId()));
+				setFileName(String.format("public_%s.jnlp", cm.get(uid).getRoom().getId()));
 				StringResourceStream srs = new StringResourceStream(app, "application/x-java-jnlp-file");
 				srs.setCharset(UTF_8);
 				return srs;
@@ -94,15 +102,13 @@ public class StartSharingButton extends OmButton {
 	@Override
 	public void onClick(AjaxRequestTarget target) {
 		try (InputStream jnlp = getClass().getClassLoader().getResourceAsStream("APPLICATION.jnlp")) {
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 			app = IOUtils.toString(jnlp, UTF_8);
-			Client c = getBean(ClientManager.class).get(uid);
+			Client c = cm.get(uid);
 			String sid = c.getSid();
 			Long roomId = c.getRoom().getId();
 			JSONObject s = VideoSettings.getInitJson(sid);
 			String _url = s.getString(VideoSettings.URL);
-			Room room = getBean(RoomDao.class).get(roomId);
-			StreamClientManager streamClientManager = getBean(StreamClientManager.class);
+			Room room = roomDao.get(roomId);
 			app = app.replace("$native", String.valueOf(s.getBoolean(FLASH_NATIVE_SSL)))
 					.replace("$codebase", WebSession.get().getExtendedProperties().getCodebase())
 					.replace("$applicationName", getApplicationName())
@@ -121,8 +127,8 @@ public class StartSharingButton extends OmButton {
 					.replace("$defaultFps", String.valueOf(cfgDao.getLong(CONFIG_SCREENSHARING_FPS, 10L)))
 					.replace("$showFps", String.valueOf(cfgDao.getBool(CONFIG_SCREENSHARING_FPS_SHOW, true)))
 					.replace("$allowRemote", String.valueOf(cfgDao.getBool(CONFIG_SCREENSHARING_ALLOW_REMOTE, true)))
-					.replace("$allowRecording", String.valueOf(room.isAllowRecording() && (0 == streamClientManager.getRecordingCount(roomId))))
-					.replace("$allowPublishing", String.valueOf(0 == streamClientManager.getPublishingCount(roomId)))
+					.replace("$allowRecording", String.valueOf(room.isAllowRecording() && (0 == scm.getRecordingCount(roomId))))
+					.replace("$allowPublishing", String.valueOf(0 == scm.getPublishingCount(roomId)))
 					;
 			download.initiate(target);
 		} catch (Exception e) {

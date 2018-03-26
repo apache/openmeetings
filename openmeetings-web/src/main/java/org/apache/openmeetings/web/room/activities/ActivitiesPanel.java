@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.activities;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
 import static org.apache.wicket.ajax.attributes.CallbackParameter.explicit;
@@ -45,6 +44,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +95,7 @@ public class ActivitiesPanel extends Panel {
 						}
 						break;
 					case accept:
-						Client client = getBean(ClientManager.class).get(a.getUid());
+						Client client = cm.get(a.getUid());
 						if (room.getClient().hasRight(Right.moderator) && client != null && client.getRoom() != null && roomId == client.getRoom().getId()) {
 							switch (a.getType()) {
 								case reqRightModerator:
@@ -151,6 +151,8 @@ public class ActivitiesPanel extends Panel {
 			response.render(new PriorityHeaderItem(getNamedFunction("activityAction", this, explicit(PARAM_ROOM_ID), explicit(ACTION), explicit(PARAM_ID))));
 		}
 	};
+	@SpringBean
+	private ClientManager cm;
 
 	public ActivitiesPanel(String id, RoomPanel room) {
 		super(id);

@@ -52,10 +52,6 @@ public class ClientManager implements IClientManager {
 
 	@Autowired
 	private ConferenceLogDao confLogDao;
-	/*
-	@Autowired
-	private ScopeApplicationAdapter scopeAdapter;
-	*/
 
 	private static Map<String, Client> map() {
 		return getHazelcast().getMap(ONLINE_USERS_KEY);

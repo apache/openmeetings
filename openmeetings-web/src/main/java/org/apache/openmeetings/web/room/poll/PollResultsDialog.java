@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.poll;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +42,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.jqplot.behavior.JqPlotBehavior;
 import org.wicketstuff.jqplot.behavior.JqPlotCssResourceReference;
 import org.wicketstuff.jqplot.behavior.JqPlotJavascriptResourceReference;
@@ -80,6 +80,8 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private MessageDialog closeConfirm;
 	private MessageDialog deleteConfirm;
 	private boolean opened = false;
+	@SpringBean
+	private PollDao pollDao;
 
 	public PollResultsDialog(String id, Long _roomId) {
 		super(id, "");
@@ -101,10 +103,10 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if(button != null && button.match(YES)) {
 					Long id = dispForm.getModelObject().getId();
-					getBean(PollDao.class).close(roomId);
+					pollDao.close(roomId);
 					selForm.updateModel(handler);
 
-					RoomPoll p = getBean(PollDao.class).get(id);
+					RoomPoll p = pollDao.get(id);
 					selForm.select.setModelObject(p);
 					dispForm.updateModel(p, true, handler);
 					sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
@@ -117,7 +119,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 			@Override
 			public void onClose(IPartialPageRequestHandler handler, DialogButton button) {
 				if(button != null && button.match(YES)) {
-					getBean(PollDao.class).delete(dispForm.getModelObject());
+					pollDao.delete(dispForm.getModelObject());
 					selForm.updateModel(handler);
 					dispForm.updateModel(selForm.select.getModelObject(), true, handler);
 					sendRoom(new RoomMessage(roomId, findParent(MainPanel.class).getClient(), RoomMessage.Type.pollUpdated));
@@ -296,11 +298,11 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 
 		public void updateModel(IPartialPageRequestHandler handler) {
 			List<RoomPoll> list = new ArrayList<>();
-			RoomPoll p = getBean(PollDao.class).getByRoom(roomId);
+			RoomPoll p = pollDao.getByRoom(roomId);
 			if (p != null) {
 				list.add(p);
 			}
-			list.addAll(getBean(PollDao.class).getArchived(roomId));
+			list.addAll(pollDao.getArchived(roomId));
 			select.setChoices(list);
 			select.setModelObject(list.isEmpty() ? null : list.get(0));
 			if (handler != null) {

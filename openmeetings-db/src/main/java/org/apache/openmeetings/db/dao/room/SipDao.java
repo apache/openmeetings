@@ -33,8 +33,8 @@ import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.response.ManagerError;
 import org.asteriskjava.manager.response.ManagerResponse;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SipDao {
 	private static final Logger log = LoggerFactory.getLogger(SipDao.class);
@@ -50,9 +50,8 @@ public class SipDao {
 	private long timeout;
 	private ManagerConnectionFactory factory;
 
-	@SuppressWarnings("unused")
-	private SipDao() {
-		// prohibited default constructor
+	public SipDao() {
+		// enabled for @SpringBean
 	}
 
 	public SipDao(String sipHostname, int sipPort, String sipUsername, String sipPassword, long timeout) {

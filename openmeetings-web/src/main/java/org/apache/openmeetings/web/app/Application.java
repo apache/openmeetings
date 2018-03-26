@@ -92,7 +92,6 @@ import org.apache.openmeetings.web.util.UserDashboardPersister;
 import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.Page;
-import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.Session;
 import org.apache.wicket.ThreadContext;
@@ -167,12 +166,19 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	private RecordingDao recordingDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private ClientManager cm;
+	@Autowired
+	private StreamClientManager scm;
+	@Autowired
+	private MainService mainService;
 
 	@Override
 	protected void init() {
 		setWicketApplicationName(super.getName());
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
+		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelWsTopic = hazelcast.getTopic("default");
@@ -188,8 +194,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			public void memberRemoved(MembershipEvent evt) {
 				//server down, need to remove all online clients, process persistent addresses
 				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
-				getBean(ClientManager.class).clean(serverId);
-				getBean(StreamClientManager.class).clean(serverId);
+				cm.clean(serverId);
+				scm.clean(serverId);
 				updateJpaAddresses();
 			}
 
@@ -275,7 +281,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		mountResource("/room/preview/${id}", new RoomPreviewResourceReference());
 		mountResource("/profile/${id}", new ProfileImageResourceReference());
 		mountResource("/group/${id}", new GroupLogoResourceReference());
-		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
 		log.debug("Application::init");
 		try {
@@ -378,7 +383,8 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		}
 	}
 
-	public <T> T _getBean(Class<T> clazz) {
+	@Override
+	public <T> T getBean(Class<T> clazz) {
 		return ctx == null ? null : ctx.getBean(clazz);
 	}
 
@@ -426,28 +432,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		return result;
 	}
 
-	public static <T> T getBean(Class<T> clazz) {
-		if (isInitComplete()) {
-			if (!isInstalled()) {
-				throw new RestartResponseException(InstallWizardPage.class);
-			}
-			return get()._getBean(clazz);
-		} else {
-			throw new RestartResponseException(NotInitedPage.class);
-		}
-	}
-
-	//BEGIN hack for email templates support (should be in separate module for now
-	@Override
-	public <T> T getOmBean(Class<T> clazz) {
-		return Application.getBean(clazz);
-	}
-
-	@Override
-	public <T> T _getOmBean(Class<T> clazz) {
-		return Application.get()._getBean(clazz);
-	}
-
 	public static String getContactsLink() {
 		return PROFILE_MESSAGES.getLink();
 	}
@@ -478,7 +462,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			} else {
 				boolean allowed = Type.contact != u.getType() && Type.external != u.getType();
 				if (allowed) {
-					allowed = getBean(MainService.class).isRoomAllowedToUser(r, u);
+					allowed = get().mainService.isRoomAllowedToUser(r, u);
 				}
 				if (allowed) {
 					link = getRoomUrlFragment(r.getId()).getLink();

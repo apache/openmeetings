@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.admin.rooms;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -36,12 +35,15 @@ import org.apache.wicket.authroles.authorization.strategies.role.annotations.Aut
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 @AuthorizeInstantiation({"Admin", "GroupAdmin"})
 public class RoomsPanel extends AdminBasePanel {
 	private static final long serialVersionUID = 1L;
 	final WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 	private RoomForm form;
+	@SpringBean
+	private RoomDao roomDao;
 
 	public RoomsPanel(String id) {
 		super(id);
@@ -61,7 +63,7 @@ public class RoomsPanel extends AdminBasePanel {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.hideNewRecord();
-						form.setModelObject(getBean(RoomDao.class).get(roomId));
+						form.setModelObject(roomDao.get(roomId));
 						form.updateView(target);
 						target.add(form, listContainer);
 						reinitJs(target);

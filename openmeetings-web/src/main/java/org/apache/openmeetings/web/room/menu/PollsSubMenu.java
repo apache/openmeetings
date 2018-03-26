@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.room.menu;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.PARAM_ACTION;
 import static org.apache.openmeetings.web.util.CallbackFunctionHelper.getNamedFunction;
@@ -40,8 +39,10 @@ import org.apache.openmeetings.web.room.poll.VoteDialog;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,13 +72,12 @@ public class PollsSubMenu implements Serializable {
 					return;
 				}
 				String action = mp.getRequest().getRequestParameters().getParameterValue(PARAM_ACTION).toString();
-				QuickPollManager qm = getBean(QuickPollManager.class);
 				Client c = room.getClient();
 				if (ACTION_CLOSE.equals(action)) {
-					qm.close(c);
+					qpollManager.close(c);
 				} else if (PARAM_VOTE.equals(action)) {
 					boolean vote = mp.getRequest().getRequestParameters().getParameterValue(PARAM_VOTE).toBoolean();
-					qm.vote(c, vote);
+					qpollManager.vote(c, vote);
 				}
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'quickPollAction'", e);
@@ -85,8 +85,13 @@ public class PollsSubMenu implements Serializable {
 		}
 	};
 	private final boolean visible;
+	@SpringBean
+	private QuickPollManager qpollManager;
+	@SpringBean
+	private PollDao pollDao;
 
 	public PollsSubMenu(final RoomPanel room, final RoomMenuPanel mp) {
+		Injector.get().inject(this);
 		this.room = room;
 		this.mp = mp;
 		mp.add(createPoll = new CreatePollDialog("createPoll", room.getRoom().getId()));
@@ -102,7 +107,7 @@ public class PollsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				getBean(QuickPollManager.class).start(room.getClient());
+				qpollManager.start(room.getClient());
 			}
 		};
 		pollCreateMenuItem = new RoomMenuItem(mp.getString("24"), mp.getString("1483"), false) {
@@ -119,7 +124,7 @@ public class PollsSubMenu implements Serializable {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
+				RoomPoll rp = pollDao.getByRoom(room.getRoom().getId());
 				if (rp != null) {
 					vote.updateModel(target, rp);
 					vote.open(target);
@@ -151,17 +156,16 @@ public class PollsSubMenu implements Serializable {
 		if (!visible) {
 			return;
 		}
-		PollDao pollDao = getBean(PollDao.class);
 		boolean pollExists = pollDao.hasPoll(r.getId());
 		pollsMenu.setEnabled((moder && visible) || (!moder && r.isAllowUserQuestions()));
-		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter) && !getBean(QuickPollManager.class).isStarted(r.getId()));
+		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter) && !qpollManager.isStarted(r.getId()));
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));
 		pollResultMenuItem.setEnabled(pollExists || !pollDao.getArchived(r.getId()).isEmpty());
 	}
 
 	public void updatePoll(IPartialPageRequestHandler handler, Long createdBy) {
-		RoomPoll rp = getBean(PollDao.class).getByRoom(room.getRoom().getId());
+		RoomPoll rp = pollDao.getByRoom(room.getRoom().getId());
 		if (rp != null) {
 			vote.updateModel(handler, rp);
 		} else {

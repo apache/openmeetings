@@ -25,7 +25,6 @@ import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ITEMS_KEY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getObjWbJson;
 import static org.apache.openmeetings.web.room.wb.WbWebSocketHelper.getWbJson;
 import static org.apache.wicket.AttributeModifier.append;
@@ -85,6 +84,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,6 +131,10 @@ public class WbPanel extends AbstractWbPanel {
 			return getString("144");
 		}
 	};
+	@SpringBean
+	private WhiteboardManager wbm;
+	@SpringBean
+	private FileItemDao fileDao;
 
 	public WbPanel(String id, RoomPanel rp) {
 		super(id, rp);
@@ -154,7 +158,6 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	void internalWbLoad(StringBuilder sb) {
 		Long langId = rp.getClient().getUser().getLanguageId();
-		WhiteboardManager wbm = getBean(WhiteboardManager.class);
 		if (!wbm.contains(roomId) && rp.getRoom().getFiles() != null && !rp.getRoom().getFiles().isEmpty()) {
 			if (wbm.tryLock(roomId)) {
 				try {
@@ -202,7 +205,6 @@ public class WbPanel extends AbstractWbPanel {
 		if (c == null) {
 			return;
 		}
-		WhiteboardManager wbm = getBean(WhiteboardManager.class);
 		switch (a) {
 			case createObj:
 			case modifyObj:
@@ -485,15 +487,15 @@ public class WbPanel extends AbstractWbPanel {
 		return role;
 	}
 
-	private static JSONObject addFileUrl(Client cl, String ruid, JSONObject _file) {
+	private JSONObject addFileUrl(Client cl, String ruid, JSONObject _file) {
 		return addFileUrl(cl, ruid, _file, null);
 	}
 
-	private static JSONObject addFileUrl(Client cl, String ruid, JSONObject _file, Consumer<BaseFileItem> consumer) {
+	private JSONObject addFileUrl(Client cl, String ruid, JSONObject _file, Consumer<BaseFileItem> consumer) {
 		try {
 			final long fid = _file.optLong(ATTR_FILE_ID, -1);
 			if (fid > 0) {
-				BaseFileItem fi = getBean(FileItemDao.class).getAny(fid);
+				BaseFileItem fi = fileDao.getAny(fid);
 				if (fi != null) {
 					if (consumer != null) {
 						consumer.accept(fi);
@@ -521,7 +523,6 @@ public class WbPanel extends AbstractWbPanel {
 	}
 
 	private void clearAll(Long roomId, long wbId) {
-		WhiteboardManager wbm = getBean(WhiteboardManager.class);
 		Whiteboard wb = wbm.get(roomId).get(wbId);
 		if (wb == null) {
 			return;
@@ -547,7 +548,6 @@ public class WbPanel extends AbstractWbPanel {
 	@Override
 	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
-			WhiteboardManager wbm = getBean(WhiteboardManager.class);
 			Whiteboards wbs = wbm.get(roomId);
 			String wuid = UUID.randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
@@ -653,18 +653,18 @@ public class WbPanel extends AbstractWbPanel {
 		}
 	}
 
-	public static String saveWb(Long roomId, Long wbId, String name) {
-		Whiteboard wb = getBean(WhiteboardManager.class).get(roomId).get(wbId);
+	public String saveWb(Long roomId, Long wbId, String name) {
+		Whiteboard wb = wbm.get(roomId).get(wbId);
 		FileItem f = new FileItem();
 		f.setType(BaseFileItem.Type.WmlFile);
 		f.setRoomId(roomId);
 		f.setHash(UUID.randomUUID().toString());
 		f.setName(name);
-		f = getBean(FileItemDao.class).update(f);
+		f = fileDao.update(f);
 		return wb.save(f.getFile().toPath());
 	}
 
-	private static StringBuilder loadWhiteboards(StringBuilder sb, Client cl, Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
+	private StringBuilder loadWhiteboards(StringBuilder sb, Client cl, Whiteboards wbs, Set<Entry<Long, Whiteboard>> boardSet) {
 		for (Entry<Long, Whiteboard> entry : boardSet) {
 			Whiteboard wb = entry.getValue();
 			sb.append(new StringBuilder("WbArea.create(").append(getAddWbJson(wb)).append(");"));

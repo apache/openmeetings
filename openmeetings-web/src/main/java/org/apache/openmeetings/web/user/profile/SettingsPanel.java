@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.ArrayList;
@@ -31,6 +30,7 @@ import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.tabs.AjaxTab;
@@ -44,6 +44,8 @@ public class SettingsPanel extends UserBasePanel {
 	public static final int SEARCH_TAB_ID = 3;
 	public static final int DASHBOARD_TAB_ID = 4;
 	public final int active;
+	@SpringBean
+	private UserDao userDao;
 
 	public SettingsPanel(String id, int active) {
 		super(id);
@@ -69,7 +71,7 @@ public class SettingsPanel extends UserBasePanel {
 			@Override
 			public boolean load(AjaxRequestTarget target) {
 				if (profilePanel != null) {
-					profilePanel.setDefaultModelObject(getBean(UserDao.class).get(getUserId()));
+					profilePanel.setDefaultModelObject(userDao.get(getUserId()));
 					target.add(profilePanel);
 				}
 				return super.load(target);
