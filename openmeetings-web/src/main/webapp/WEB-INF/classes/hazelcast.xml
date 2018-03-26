@@ -32,28 +32,28 @@
 	</map>
 	<map name="ROOMS_KEY">
 		<near-cache>
-			<eviction-policy>NONE</eviction-policy>
+			<eviction eviction-policy="NONE"/>
 			<in-memory-format>OBJECT</in-memory-format>
 			<cache-local-entries>true</cache-local-entries>
 		</near-cache>
 	</map>
 	<map name="UID_BY_SID_KEY">
 		<near-cache>
-			<eviction-policy>NONE</eviction-policy>
+			<eviction eviction-policy="NONE"/>
 			<in-memory-format>OBJECT</in-memory-format>
 			<cache-local-entries>true</cache-local-entries>
 		</near-cache>
 	</map>
 	<map name="WBS_KEY">
 		<near-cache>
-			<eviction-policy>NONE</eviction-policy>
+			<eviction eviction-policy="NONE"/>
 			<in-memory-format>OBJECT</in-memory-format>
 			<cache-local-entries>true</cache-local-entries>
 		</near-cache>
 	</map>
 	<map name="STREAM_CLIENT_KEY">
 		<near-cache>
-			<eviction-policy>NONE</eviction-policy>
+			<eviction eviction-policy="NONE"/>
 			<in-memory-format>OBJECT</in-memory-format>
 			<cache-local-entries>true</cache-local-entries>
 		</near-cache>

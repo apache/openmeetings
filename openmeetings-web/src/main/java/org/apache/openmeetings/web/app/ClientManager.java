@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.core.util.WebSocketHelper.sendRoom;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getHazelcast;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.ArrayList;
@@ -69,17 +68,19 @@ public class ClientManager implements IClientManager {
 	private ConferenceLogDao confLogDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
+	@Autowired
+	private Application app;
 
-	private static IMap<String, Client> map() {
-		return getHazelcast().getMap(ONLINE_USERS_KEY);
+	private IMap<String, Client> map() {
+		return app.hazelcast.getMap(ONLINE_USERS_KEY);
 	}
 
-	private static Map<String, String> mapBySid() {
-		return getHazelcast().getMap(UID_BY_SID_KEY);
+	private Map<String, String> mapBySid() {
+		return app.hazelcast.getMap(UID_BY_SID_KEY);
 	}
 
-	private static IMap<Long, Set<String>> rooms() {
-		return getHazelcast().getMap(ROOMS_KEY);
+	private IMap<Long, Set<String>> rooms() {
+		return app.hazelcast.getMap(ROOMS_KEY);
 	}
 
 	@PostConstruct
@@ -278,7 +279,7 @@ public class ClientManager implements IClientManager {
 		return false;
 	}
 
-	private static Client getByKeys(Long userId, String sessionId) {
+	private Client getByKeys(Long userId, String sessionId) {
 		Client client = null;
 		for (Map.Entry<String, Client> e : map().entrySet()) {
 			Client c = e.getValue();

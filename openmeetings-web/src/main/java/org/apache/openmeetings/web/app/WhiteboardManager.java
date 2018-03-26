@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-import static org.apache.openmeetings.web.app.Application.getHazelcast;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.Map;
@@ -35,6 +34,7 @@ import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hazelcast.core.EntryEvent;
@@ -55,8 +55,11 @@ public class WhiteboardManager implements IWhiteboardManager {
 	private final Map<Long, Whiteboards> onlineWbs = new ConcurrentHashMap<>();
 	private static final String WBS_KEY = "WBS_KEY";
 
-	private static IMap<Long, Whiteboards> map() {
-		return getHazelcast().getMap(WBS_KEY);
+	@Autowired
+	private Application app;
+
+	private IMap<Long, Whiteboards> map() {
+		return app.hazelcast.getMap(WBS_KEY);
 	}
 
 	@PostConstruct
