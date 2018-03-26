@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.manager;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ public interface IClientManager {
 	Client get(String uid);
 	Client getBySid(String sid);
 	List<Client> listByRoom(Long roomId);
-	List<Client> listByUser(Long userId);
+	Collection<Client> listByUser(Long userId);
 	Client update(Client c);
 	void exit(IClient c);
 

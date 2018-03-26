@@ -446,6 +446,26 @@ public class Client implements IClient {
 		return toJson(self).put("sid", _sid).put("streams", _streams);
 	}
 
+	public void merge(Client c) {
+		user = c.user;
+		room = c.room;
+		Set<Right> rr = new HashSet<>(c.rights);
+		rights.clear();
+		rights.addAll(rr);
+		Set<Activity> aa = new HashSet<>(c.activities);
+		activities.clear();
+		activities.addAll(aa);
+		Set<String> ss = new HashSet<>(c.streams);
+		streams.clear();
+		streams.addAll(ss);
+		pod = c.pod;
+		cam = c.cam;
+		mic = c.mic;
+		width = c.width;
+		height = c.height;
+		recordingId = c.recordingId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

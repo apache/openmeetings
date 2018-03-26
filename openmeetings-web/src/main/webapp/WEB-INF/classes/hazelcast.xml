@@ -21,8 +21,43 @@
 <hazelcast
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns="http://www.hazelcast.com/schema/config"
-		xsi:schemaLocation="http://www.hazelcast.com/schema/config https://hazelcast.com/schema/config/hazelcast-config-3.8.xsd"
+		xsi:schemaLocation="http://www.hazelcast.com/schema/config https://hazelcast.com/schema/config/hazelcast-config-3.9.xsd"
 	>
+	<map name="ONLINE_USERS_KEY">
+		<near-cache>
+			<eviction-policy>NONE</eviction-policy>
+			<in-memory-format>OBJECT</in-memory-format>
+			<cache-local-entries>true</cache-local-entries>
+		</near-cache>
+	</map>
+	<map name="ROOMS_KEY">
+		<near-cache>
+			<eviction-policy>NONE</eviction-policy>
+			<in-memory-format>OBJECT</in-memory-format>
+			<cache-local-entries>true</cache-local-entries>
+		</near-cache>
+	</map>
+	<map name="UID_BY_SID_KEY">
+		<near-cache>
+			<eviction-policy>NONE</eviction-policy>
+			<in-memory-format>OBJECT</in-memory-format>
+			<cache-local-entries>true</cache-local-entries>
+		</near-cache>
+	</map>
+	<map name="WBS_KEY">
+		<near-cache>
+			<eviction-policy>NONE</eviction-policy>
+			<in-memory-format>OBJECT</in-memory-format>
+			<cache-local-entries>true</cache-local-entries>
+		</near-cache>
+	</map>
+	<map name="STREAM_CLIENT_KEY">
+		<near-cache>
+			<eviction-policy>NONE</eviction-policy>
+			<in-memory-format>OBJECT</in-memory-format>
+			<cache-local-entries>true</cache-local-entries>
+		</near-cache>
+	</map>
 	<instance-name>server-1</instance-name><!-- MAKE SURE THIS ONE IS UNIQUE -->
 	<network>
 		<join>

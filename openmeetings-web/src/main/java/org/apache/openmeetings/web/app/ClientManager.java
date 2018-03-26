@@ -24,12 +24,16 @@ import static org.apache.openmeetings.web.app.Application.getHazelcast;
 import static org.red5.logging.Red5LoggerFactory.getLogger;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -45,7 +49,12 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.map.listener.EntryRemovedListener;
+import com.hazelcast.map.listener.EntryUpdatedListener;
+import com.hazelcast.query.Predicates;
 
 @Component
 public class ClientManager implements IClientManager {
@@ -53,39 +62,50 @@ public class ClientManager implements IClientManager {
 	private static final String ROOMS_KEY = "ROOMS_KEY";
 	private static final String ONLINE_USERS_KEY = "ONLINE_USERS_KEY";
 	private static final String UID_BY_SID_KEY = "UID_BY_SID_KEY";
+	private final Map<String, Client> onlineClients = new ConcurrentHashMap<>();
+	private final Map<Long, Set<String>> onlineRooms = new ConcurrentHashMap<>();
 
 	@Autowired
 	private ConferenceLogDao confLogDao;
 	@Autowired
 	private ScopeApplicationAdapter scopeAdapter;
 
-	private static Map<String, Client> map() {
+	private static IMap<String, Client> map() {
 		return getHazelcast().getMap(ONLINE_USERS_KEY);
 	}
 
-	private static Map<String, String> mapUidBySid() {
+	private static Map<String, String> mapBySid() {
 		return getHazelcast().getMap(UID_BY_SID_KEY);
 	}
 
-	private static IMap<Long, Set<String>> getRooms() {
+	private static IMap<Long, Set<String>> rooms() {
 		return getHazelcast().getMap(ROOMS_KEY);
+	}
+
+	@PostConstruct
+	void init() {
+		map().addEntryListener(new ClientListener(), true);
+		rooms().addEntryListener(new RoomListener(), true);
 	}
 
 	public void add(Client c) {
 		log.debug("Adding online client: {}, room: {}", c.getUid(), c.getRoom());
 		c.setServerId(Application.get().getServerId());
 		map().put(c.getUid(), c);
-		mapUidBySid().put(c.getSid(), c.getUid());
+		onlineClients.put(c.getUid(), c);
+		mapBySid().put(c.getSid(), c.getUid());
 	}
 
 	@Override
 	public Client update(Client c) {
-		map().put(c.getUid(), c); // update in storage
+		onlineClients.get(c.getUid()).merge(c);
+		map().put(c.getUid(), c);
 		return c;
 	}
+
 	@Override
 	public Client get(String uid) {
-		return uid == null ? null : map().get(uid);
+		return uid == null ? null : onlineClients.get(uid);
 	}
 
 	@Override
@@ -93,8 +113,8 @@ public class ClientManager implements IClientManager {
 		if (sid == null) {
 			return null;
 		}
-		String uid = mapUidBySid().get(sid);
-		return uid == null ? null : map().get(uid);
+		String uid = mapBySid().get(sid);
+		return uid == null ? null : get(uid);
 	}
 
 	public void exitRoom(IClient c) {
@@ -116,7 +136,8 @@ public class ClientManager implements IClientManager {
 			exitRoom(c);
 			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
 			map().remove(c.getUid());
-			mapUidBySid().remove(c.getSid());
+			onlineClients.remove(c.getUid());
+			mapBySid().remove(c.getSid());
 		}
 	}
 
@@ -131,7 +152,7 @@ public class ClientManager implements IClientManager {
 
 	@Override
 	public Set<Long> getActiveRoomIds() {
-		return getRooms().keySet();
+		return onlineRooms.keySet();
 	}
 
 	/**
@@ -143,13 +164,14 @@ public class ClientManager implements IClientManager {
 	public int addToRoom(Client c) {
 		Long roomId = c.getRoom().getId();
 		log.debug("Adding online room client: {}, room: {}", c.getUid(), roomId);
-		IMap<Long, Set<String>> rooms = getRooms();
+		IMap<Long, Set<String>> rooms = rooms();
 		rooms.lock(roomId);
 		rooms.putIfAbsent(roomId, new ConcurrentHashSet<String>());
 		Set<String> set = rooms.get(roomId);
 		set.add(c.getUid());
 		final int count = set.size();
 		rooms.put(roomId, set);
+		onlineRooms.put(roomId, set);
 		rooms.unlock(roomId);
 		update(c);
 		return count;
@@ -159,12 +181,15 @@ public class ClientManager implements IClientManager {
 		Long roomId = _c.getRoomId();
 		log.debug("Removing online room client: {}, room: {}", _c.getUid(), roomId);
 		if (roomId != null) {
-			Map<Long, Set<String>> rooms = getRooms();
+			IMap<Long, Set<String>> rooms = rooms();
+			rooms.lock(roomId);
 			Set<String> clients = rooms.get(roomId);
 			if (clients != null) {
 				clients.remove(_c.getUid());
 				rooms.put(roomId, clients);
+				onlineRooms.put(roomId, clients);
 			}
+			rooms.unlock(roomId);
 			if (_c instanceof StreamClient) {
 				StreamClient sc = (StreamClient)_c;
 				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
@@ -202,15 +227,8 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
-	public List<Client> listByUser(Long userId) {
-		List<Client> result =  new ArrayList<>();
-		for (Map.Entry<String, Client> e : map().entrySet()) {
-			if (e.getValue().getUserId().equals(userId)) {
-				result.add(e.getValue());
-				break;
-			}
-		}
-		return result;
+	public Collection<Client> listByUser(Long userId) {
+		return map().values(Predicates.equal("userId", userId));
 	}
 
 	@Override
@@ -221,7 +239,7 @@ public class ClientManager implements IClientManager {
 	public List<Client> listByRoom(Long roomId, Predicate<Client> filter) {
 		List<Client> clients = new ArrayList<>();
 		if (roomId != null) {
-			Set<String> uids = getRooms().get(roomId);
+			Set<String> uids = onlineRooms.get(roomId);
 			if (uids != null) {
 				for (String uid : uids) {
 					Client c = get(uid);
@@ -236,7 +254,7 @@ public class ClientManager implements IClientManager {
 
 	public Set<Long> listRoomIds(Long userId) {
 		Set<Long> result = new HashSet<>();
-		for (Entry<Long, Set<String>> me : getRooms().entrySet()) {
+		for (Entry<Long, Set<String>> me : onlineRooms.entrySet()) {
 			for (String uid : me.getValue()) {
 				Client c = get(uid);
 				if (c != null && c.getUserId().equals(userId)) {
@@ -248,7 +266,7 @@ public class ClientManager implements IClientManager {
 	}
 
 	public boolean isInRoom(long roomId, long userId) {
-		Set<String> clients = getRooms().get(roomId);
+		Set<String> clients = onlineRooms.get(roomId);
 		if (clients != null) {
 			for (String uid : clients) {
 				Client c = get(uid);
@@ -280,6 +298,59 @@ public class ClientManager implements IClientManager {
 				invalid.put(client.getSessionId(), client.getUid());
 				exit(client);
 			}
+		}
+	}
+
+	public class ClientListener implements
+			EntryAddedListener<String, Client>
+			, EntryUpdatedListener<String, Client>
+			, EntryRemovedListener<String, Client>
+	{
+		@Override
+		public void entryAdded(EntryEvent<String, Client> event) {
+			log.trace("ClientListener::Add");
+			final String uid = event.getKey();
+			if (onlineClients.containsKey(uid)) {
+				onlineClients.get(uid).merge(event.getValue());
+			} else {
+				onlineClients.put(uid, event.getValue());
+			}
+		}
+
+		@Override
+		public void entryUpdated(EntryEvent<String, Client> event) {
+			log.trace("ClientListener::Update");
+			onlineClients.get(event.getKey()).merge(event.getValue());
+		}
+
+		@Override
+		public void entryRemoved(EntryEvent<String, Client> event) {
+			log.trace("ClientListener::Remove");
+			onlineClients.remove(event.getKey());
+		}
+	}
+
+	public class RoomListener implements
+			EntryAddedListener<Long, Set<String>>
+			, EntryUpdatedListener<Long, Set<String>>
+			, EntryRemovedListener<Long, Set<String>>
+	{
+		@Override
+		public void entryAdded(EntryEvent<Long, Set<String>> event) {
+			log.trace("RoomListener::Add");
+			onlineRooms.put(event.getKey(), event.getValue());
+		}
+
+		@Override
+		public void entryUpdated(EntryEvent<Long, Set<String>> event) {
+			log.trace("RoomListener::Update");
+			onlineRooms.put(event.getKey(), event.getValue());
+		}
+
+		@Override
+		public void entryRemoved(EntryEvent<Long, Set<String>> event) {
+			log.trace("RoomListener::Remove");
+			onlineRooms.remove(event.getKey(), event.getValue());
 		}
 	}
 }
