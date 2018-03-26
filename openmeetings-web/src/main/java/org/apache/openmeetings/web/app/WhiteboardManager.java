@@ -21,16 +21,26 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.web.app.Application.getHazelcast;
 
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
 import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
+import com.hazelcast.map.listener.EntryRemovedListener;
+import com.hazelcast.map.listener.EntryUpdatedListener;
 
 /**
  * Hazelcast based Whiteboard manager
@@ -40,10 +50,17 @@ import com.hazelcast.core.IMap;
  */
 @Component
 public class WhiteboardManager implements IWhiteboardManager {
+	private static final Logger log = LoggerFactory.getLogger(WhiteboardManager.class);
+	private final Map<Long, Whiteboards> onlineWbs = new ConcurrentHashMap<>();
 	private static final String WBS_KEY = "WBS_KEY";
 
 	private static IMap<Long, Whiteboards> map() {
 		return getHazelcast().getMap(WBS_KEY);
+	}
+
+	@PostConstruct
+	void init() {
+		map().addEntryListener(new WbListener(), true);
 	}
 
 	public boolean tryLock(Long roomId) {
@@ -75,7 +92,7 @@ public class WhiteboardManager implements IWhiteboardManager {
 		if (roomId == null) {
 			return null;
 		}
-		Whiteboards wbs = map().get(roomId);
+		Whiteboards wbs = onlineWbs.get(roomId);
 		if (wbs == null) {
 			wbs = new Whiteboards(roomId);
 			Whiteboard wb = add(wbs, langId);
@@ -132,7 +149,32 @@ public class WhiteboardManager implements IWhiteboardManager {
 		update(wbs);
 	}
 
-	private static void update(Whiteboards wbs) {
-		map().put(wbs.getRoomId(), wbs);
+	private void update(Whiteboards wbs) {
+		onlineWbs.put(wbs.getRoomId(), wbs);
+		new Thread(() -> map().put(wbs.getRoomId(), wbs)).start();
+	}
+
+	public class WbListener implements
+			EntryAddedListener<Long, Whiteboards>
+			, EntryUpdatedListener<Long, Whiteboards>
+			, EntryRemovedListener<Long, Whiteboards>
+	{
+		@Override
+		public void entryAdded(EntryEvent<Long, Whiteboards> event) {
+			log.trace("WbListener::Add");
+			onlineWbs.put(event.getKey(), event.getValue());
+		}
+
+		@Override
+		public void entryUpdated(EntryEvent<Long, Whiteboards> event) {
+			log.trace("WbListener::Update");
+			onlineWbs.put(event.getKey(), event.getValue());
+		}
+
+		@Override
+		public void entryRemoved(EntryEvent<Long, Whiteboards> event) {
+			log.trace("WbListener::Remove");
+			onlineWbs.remove(event.getKey());
+		}
 	}
 }

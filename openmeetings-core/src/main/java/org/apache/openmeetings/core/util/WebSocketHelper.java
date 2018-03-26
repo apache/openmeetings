@@ -22,6 +22,7 @@ import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -229,7 +230,7 @@ public class WebSocketHelper {
 			Application app = (Application)getApp();
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-			Executor executor = settings.getWebSocketPushMessageExecutor();
+			Executor executor = settings.getWebSocketPushMessageExecutor(); // new NewThreadExecutor();
 			for (IWebSocketConnection c : reg.getConnections(app)) {
 				executor.run(() -> {
 					try {
@@ -243,7 +244,10 @@ public class WebSocketHelper {
 	}
 
 	protected static void publish(IClusterWsMessage m) {
-		getApp().publishWsTopic(m);
+		IApplication app = getApp();
+		new Thread(() -> {
+			app.publishWsTopic(m);
+		}).start();
 	}
 
 	protected static void sendRoom(final Long roomId, final JSONObject m, Predicate<Client> check, BiFunction<JSONObject, Client, String> func) {
@@ -262,7 +266,7 @@ public class WebSocketHelper {
 	}
 
 	private static void send(
-			final Function<Application, List<Client>> func
+			final Function<Application, Collection<Client>> func
 			, BiConsumer<IWebSocketConnection, Client> consumer
 			, Predicate<Client> check)
 	{
@@ -270,7 +274,7 @@ public class WebSocketHelper {
 			Application app = (Application)getApp();
 			WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 			IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-			Executor executor = settings.getWebSocketPushMessageExecutor();
+			Executor executor = settings.getWebSocketPushMessageExecutor(); //new NewThreadExecutor();
 			for (Client c : func.apply(app)) {
 				if (check == null || check.test(c)) {
 					final IWebSocketConnection wc = reg.getConnection(app, c.getSessionId(), new PageIdKey(c.getPageId()));
@@ -280,5 +284,14 @@ public class WebSocketHelper {
 				}
 			}
 		}).start();
+	}
+
+	public static class NewThreadExecutor implements Executor {
+		@Override
+		public void run(Runnable command) {
+			new Thread(() -> {
+				command.run();
+			}).start();
+		}
 	}
 }
