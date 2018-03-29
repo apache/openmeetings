@@ -19,6 +19,7 @@
 package org.apache.openmeetings;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
+import static org.apache.openmeetings.web.common.OmWebSocketPanel.CONNECTED_MSG;
 import static org.apache.wicket.util.string.Strings.escapeMarkup;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -129,7 +130,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));
 		tester.executeBehavior((AbstractAjaxBehavior)page.get("main-container").getBehaviorById(0));
 		WebSocketTester webSocketTester = new WebSocketTester(tester, page);
-		webSocketTester.sendMessage("socketConnected");
+		webSocketTester.sendMessage(CONNECTED_MSG);
 
 		consumer.accept(page);
 		tester.getSession().invalidateNow();

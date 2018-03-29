@@ -25,7 +25,7 @@
 	>
 	<map name="ONLINE_USERS_KEY">
 		<near-cache>
-			<eviction-policy>NONE</eviction-policy>
+			<eviction eviction-policy="NONE"/>
 			<in-memory-format>OBJECT</in-memory-format>
 			<cache-local-entries>true</cache-local-entries>
 		</near-cache>

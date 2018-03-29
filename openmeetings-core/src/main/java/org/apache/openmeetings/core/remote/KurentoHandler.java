@@ -145,6 +145,9 @@ public class KurentoHandler {
 		room.join(this, c.getUid());
 	}
 
+	public void leaveRoom(Client c) {
+	}
+
 	public void sendClient(String uid, JSONObject msg) {
 		WebSocketHelper.sendClient(clientManager.get(uid), msg);
 	}
@@ -156,6 +159,9 @@ public class KurentoHandler {
 	}
 
 	public void remove(IWsClient c) {
+		if (c == null) {
+			return;
+		}
 		final String uid = c.getUid();
 		final boolean test = !(c instanceof Client);
 		IKUser u = test ? getTestByUid(uid) : getByUid(uid);

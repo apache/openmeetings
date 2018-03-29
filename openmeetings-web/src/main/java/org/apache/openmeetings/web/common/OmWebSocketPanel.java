@@ -49,7 +49,7 @@ import com.github.openjson.JSONObject;
 public abstract class OmWebSocketPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(OmWebSocketPanel.class);
-	private static final String CONNECTED_MSG = "socketConnected";
+	public static final String CONNECTED_MSG = "socketConnected";
 	private final AbstractAjaxTimerBehavior pingTimer = new AbstractAjaxTimerBehavior(Duration.seconds(30)) {
 		private static final long serialVersionUID = 1L;
 
@@ -78,7 +78,7 @@ public abstract class OmWebSocketPanel extends Panel {
 
 		@Override
 		protected void onMessage(WebSocketRequestHandler handler, TextMessage msg) {
-			if ("socketConnected".equals(msg.getText())) {
+			if (CONNECTED_MSG.equals(msg.getText())) {
 				OmWebSocketPanel.this.onConnect(handler);
 				log.debug("WebSocketBehavior:: pingTimer is attached");
 				pingTimer.restart(handler);

@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
@@ -64,6 +65,8 @@ public class ClientManager implements IClientManager {
 	private ConferenceLogDao confLogDao;
 	@Autowired
 	private Application app;
+	@Autowired
+	private KurentoHandler kHandler;
 
 	private IMap<String, Client> map() {
 		return app.hazelcast.getMap(ONLINE_USERS_KEY);
@@ -129,6 +132,7 @@ public class ClientManager implements IClientManager {
 	public void exit(IClient c) {
 		if (c != null) {
 			exitRoom(c);
+			kHandler.remove((Client)c);
 			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
 			map().remove(c.getUid());
 			onlineClients.remove(c.getUid());
@@ -196,6 +200,7 @@ public class ClientManager implements IClientManager {
 			if (_c instanceof Client) {
 				//FIXME TODO scopeAdapter.dropSharing(_c, roomId);
 				Client c = (Client)_c;
+				kHandler.leaveRoom(c);
 				/* FIXME TODO
 				IScope sc = scopeAdapter.getChildScope(roomId);
 				for (String uid : c.getStreams()) {
