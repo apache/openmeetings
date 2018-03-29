@@ -590,19 +590,6 @@ public class RoomPanel extends BasePanel {
 							}
 						}
 						break;
-					case audioActivity:
-					{
-						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						Client c = cm.getBySid(obj.getString("sid"));
-						if (c == null) {
-							log.error("Not existing user in audioActivity {} !!!!", obj);
-							return;
-						}
-						if (!_c.getUid().equals(c.getUid())) {
-							handler.appendJavaScript(String.format("if (typeof(VideoManager) !== 'undefined') {VideoManager.micActivity('%s', %s);}", c.getUid(), obj.getBoolean("active")));
-						}
-					}
-						break;
 					case mute:
 					{
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());

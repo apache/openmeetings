@@ -72,7 +72,10 @@ var VideoManager = (function() {
 				return; //ping
 			}
 			const m = jQuery.parseJSON(msg);
-			if (m && 'kurento' === m.type && 'test' !== m.mode) {
+			if (!m) {
+				return;
+			}
+			if ('kurento' === m.type && 'test' !== m.mode) {
 				OmUtil.info('Received message: ' + m);
 				switch (m.id) {
 					case 'broadcast':
@@ -97,12 +100,20 @@ var VideoManager = (function() {
 					default:
 						//no-op
 				}
+			} else if ('mic' === m.type) {
+				switch (m.id) {
+					case 'activity':
+						_micActivity(m.uid, m.active);
+						onBroadcast(m);
+						break;
+					default:
+						//no-op
+				}
 			}
 		} catch (err) {
 			OmUtil.error(err);
 		}
 	}
-	
 	function _init() {
 		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		VideoSettings.init(Room.getOptions());
@@ -262,7 +273,6 @@ var VideoManager = (function() {
 	self.update = _update;
 	self.play = _play;
 	self.close = _close;
-	self.micActivity = _micActivity;
 	self.refresh = _refresh;
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
