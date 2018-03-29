@@ -118,6 +118,14 @@ public class ClientManager implements IClientManager {
 		return uid == null ? null : get(uid);
 	}
 
+	@Override
+	public String uidBySid(String sid) {
+		if (sid == null) {
+			return null;
+		}
+		return mapBySid().get(sid);
+	}
+
 	public void exitRoom(IClient c) {
 		Long roomId = c.getRoomId();
 		removeFromRoom(c);

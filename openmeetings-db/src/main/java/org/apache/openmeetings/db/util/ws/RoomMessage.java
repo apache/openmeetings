@@ -55,7 +55,6 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, kick
 		, newStream
 		, closeStream
-		, audioActivity //user speaks
 		, mute
 		, exclusive
 		, quickPollUpdated

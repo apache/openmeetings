@@ -3,7 +3,28 @@ var VideoManager = (function() {
 	const self = {};
 	let share, inited = false;
 
+	function _onWsMessage(jqEvent, msg) {
+		try {
+			if (msg instanceof Blob) {
+				return; //ping
+			}
+			const m = jQuery.parseJSON(msg);
+			if (m && 'mic' === m.type) {
+				switch (m.id) {
+					case 'activity':
+						_micActivity(m.uid, m.active);
+						onBroadcast(m);
+						break;
+					default:
+						//no-op
+				}
+			}
+		} catch (err) {
+			//no-op
+		}
+	}
 	function _init() {
+		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 		inited = true;
@@ -157,10 +178,12 @@ var VideoManager = (function() {
 	self.play = _play;
 	self.close = _close;
 	self.securityMode = function(uid, on) { $('#' + VideoUtil.getVid(uid)).data().securityMode(on); };
-	self.micActivity = _micActivity;
 	self.refresh = _refresh;
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.destroy = function() {
+		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
+	}
 	return self;
 })();

@@ -942,8 +942,11 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	public void micActivity(boolean active) {
 		IConnection current = Red5.getConnectionLocal();
 		StreamClient client = streamClientManager.get(IClientUtil.getId(current.getClient()));
-		WebSocketHelper.sendRoom(new TextRoomMessage(client.getRoomId(), client, RoomMessage.Type.audioActivity
-				, new JSONObject().put("sid", client.getSid()).put("active", active).toString()));
+		WebSocketHelper.sendRoom(client.getRoomId(), new JSONObject()
+				.put("type", "mic")
+				.put("id", "activity")
+				.put("uid", clientManager.uidBySid(client.getSid()))
+				.put("active", active));
 	}
 
 	/*

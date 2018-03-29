@@ -180,6 +180,9 @@ var Room = (function() {
 		if (typeof(VideoSettings) !== 'undefined') {
 			VideoSettings.close();
 		}
+		if (typeof(VideoManager) === 'object') {
+			VideoManager.destroy();
+		}
 		$('.ui-dialog.user-video').remove();
 		$(window).off('keyup', _keyHandler);
 		$(document).off('click', _mouseHandler);
