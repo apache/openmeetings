@@ -36,15 +36,19 @@
 		</ul>
 		<div id="room-sidebar-tab-users">
 			<div wicket:id="icons" class="user header"></div>
-			<div class="user list clear" wicket:id="user-list">
-				<div wicket:id="user" class="user entry ui-corner-all ui-widget-content">
-					<div wicket:id="user"></div>
+			<div class="user list clear">
+				<div wicket:id="user-list">
+					<div wicket:id="user" class="user entry ui-corner-all ui-widget-content">
+						<div wicket:id="user"></div>
+					</div>
 				</div>
 			</div>
-			<script>Room.setSize();</script>
+			<script type="text/javascript">Room.setSize();</script>
 		</div>
 		<div id="room-sidebar-tab-files" wicket:enclosure="tree">
-			<div class="file list" wicket:id="tree"></div>
+			<div class="file list">
+				<div wicket:id="tree"></div>
+			</div>
 		</div>
 	</div>
 	<div wicket:id="activities"></div>

@@ -394,6 +394,10 @@
 	line-height: 30px;
 	width: auto;
 	max-width: 80px;
+}
+.room.sidebar .tab.om-icon.big .label {
+	max-width: 50px;
+	display: inline-block;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
