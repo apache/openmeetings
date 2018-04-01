@@ -1,4 +1,5 @@
 /*
+
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -28,8 +29,10 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.db.manager.IClientManager;
+import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
+import org.kurento.client.ObjectCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +57,12 @@ public class KurentoHandler {
 		try {
 			// TODO check connection, reconnect, listeners etc.
 			client = KurentoClient.create();
+			client.getServerManager().addObjectCreatedListener(new EventListener<ObjectCreatedEvent>() {
+				@Override
+				public void onEvent(ObjectCreatedEvent evt) {
+					log.warn("Kurento::ObjectCreated -> {}", evt);
+				}
+			});
 		} catch (Exception e) {
 			log.error("Fail to create Kurento client", e);
 		}
