@@ -49,7 +49,7 @@ public class ReminderJob extends AbstractJob {
 	@Autowired
 	private MailHandler mailHandler;
 	@Autowired
-	private ConfigurationDao cfgDao;;
+	private ConfigurationDao cfgDao;
 
 	public void remindMeetings() {
 		log.trace("ReminderJob.remindMeetings");

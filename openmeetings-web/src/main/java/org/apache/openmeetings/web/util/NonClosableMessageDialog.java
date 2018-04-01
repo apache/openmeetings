@@ -24,7 +24,7 @@ import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
-import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;;
+import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 
 public abstract class NonClosableMessageDialog extends MessageDialog {
 	private static final long serialVersionUID = 1L;

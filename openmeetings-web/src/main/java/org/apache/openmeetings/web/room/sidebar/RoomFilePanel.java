@@ -41,7 +41,7 @@ public class RoomFilePanel extends FileTreePanel {
 	@SpringBean
 	private FileItemDao fileDao;
 	@SpringBean
-	private RecordingDao recDao;;
+	private RecordingDao recDao;
 
 	public RoomFilePanel(String id, RoomPanel room, NameDialog addFolder, ConfirmableBorderDialog trashConfirm) {
 		super(id, room.getRoom().getId(), addFolder, trashConfirm);

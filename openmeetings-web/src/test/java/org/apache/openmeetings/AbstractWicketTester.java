@@ -124,7 +124,7 @@ public class AbstractWicketTester extends AbstractJUnitDefaults {
 	}
 
 	protected void testArea(String user, Consumer<MainPage> consumer) throws OmException {
-		Assert.assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));;
+		Assert.assertTrue(((WebSession)tester.getSession()).signIn(user, userpass, User.Type.user, null));
 		MainPage page = tester.startPage(MainPage.class);
 		tester.assertRenderedPage(MainPage.class);
 		tester.executeBehavior((AbstractAjaxBehavior)page.getBehaviorById(0));
