@@ -165,6 +165,15 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 	}
 
 	@Override
+	public void appDisconnect(IConnection conn) {
+		StreamClient c = streamClientManager.get(IClientUtil.getId(conn.getClient()));
+		if (c != null && Client.Type.sip == c.getType()) {
+			clientManager.exit(c);
+		}
+		super.appDisconnect(conn);
+	}
+
+	@Override
 	public boolean roomConnect(IConnection conn, Object[] params) {
 		_log.debug("roomConnect : ");
 
