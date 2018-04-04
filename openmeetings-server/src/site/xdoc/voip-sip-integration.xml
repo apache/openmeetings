@@ -305,6 +305,13 @@ rooms=1 # TBD (not in use)
 ]]>
 					</source>
 				</li>
+				<li>Set correct permissions on red5sip files:
+					<source>
+<![CDATA[
+sudo chown -R nobody:nogroup /opt/red5sip
+]]>
+					</source>
+				</li>
 				<li>Add red5sip to autostart:
 					<source>
 <![CDATA[
