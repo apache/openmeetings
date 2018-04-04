@@ -163,6 +163,7 @@ public class StreamClientManager implements IStreamClientManager {
 				client.setMic(0);
 				client.allow(Room.Right.audio, Room.Right.video);
 				client.set(Activity.broadcastA);
+				client.setRoom(roomDao.get(rcl.getRoomId()));
 				clientManager.addToRoom(client);
 				WebSocketHelper.sendRoom(new RoomMessage(client.getRoom().getId(), client, RoomMessage.Type.roomEnter));
 			} else {
