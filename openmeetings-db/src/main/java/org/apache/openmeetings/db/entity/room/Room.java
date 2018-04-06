@@ -92,6 +92,7 @@ public class Room extends HistoricalEntity {
 	public static final int PRESENTATION_TYPE_ID = 3;
 	public static final int INTERVIEW_TYPE_ID = 4;
 
+	@XmlType(namespace="org.apache.openmeetings.room.right")
 	public enum Right {
 		superModerator
 		, moderator
@@ -118,6 +119,7 @@ public class Room extends HistoricalEntity {
 		, MicrophoneStatus
 	}
 
+	@XmlType(namespace="org.apache.openmeetings.room.type")
 	public enum Type {
 		conference(CONFERENCE_TYPE_ID)
 		, presentation(PRESENTATION_TYPE_ID)
