@@ -20,7 +20,6 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
@@ -170,23 +169,15 @@ public class MobileService {
 				String country = umap.get("stateId");
 				Long langId = Long.valueOf(umap.get("langId"));
 
-				String hash = UUID.randomUUID().toString();
-
-				String baseURL = getBaseUrl();
-				boolean sendConfirmation = !Strings.isEmpty(baseURL)
-						&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
-				Object user = userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastname
-						, firstname, email, null /* age/birthday */, "" /* street */
-						, "" /* additionalname */, "" /* fax */, "" /* zip */, country
-						, "" /* town */, langId, true /* sendWelcomeMessage */
-						, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)),
-						"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzId),
-						false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
-						true /* showContactDataToContacts */, hash);
+				Object user = userManager.registerUser(login, password, lastname
+						, firstname, email, country, langId, tzId);
 				if (user == null) {
 					//do nothing
 				} else if (user instanceof User) {
 					User u = (User)user;
+					String baseURL = getBaseUrl();
+					boolean sendConfirmation = !Strings.isEmpty(baseURL)
+							&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 					if (sendConfirmation) {
 						add(result, PARAM_STATUS, -666L);
 					} else {

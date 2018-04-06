@@ -28,15 +28,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestUserContact extends AbstractWicketTester {
-	@Autowired
-	private GroupDao groupDao;
 
 	@Test
 	public void testGetUser() {

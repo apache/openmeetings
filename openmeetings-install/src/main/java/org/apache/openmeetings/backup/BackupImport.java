@@ -22,7 +22,6 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
@@ -100,6 +99,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIMEOUT_CON;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
@@ -553,7 +553,7 @@ public class BackupImport {
 		log.info("OAuth2 servers import complete, starting user import");
 		String jNameTimeZone = cfgDao.getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
 		List<User> list = readUserList(f, "users.xml", "users");
-		int minLoginLength = getMinLoginLength(cfgDao);
+		int minLoginLength = getMinLoginLength();
 		for (User u : list) {
 			if (u.getLogin() == null) {
 				continue;

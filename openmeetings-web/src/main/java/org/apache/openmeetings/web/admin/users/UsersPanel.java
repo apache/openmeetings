@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_CLASS;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -107,7 +108,7 @@ public class UsersPanel extends AdminBasePanel {
 		};
 
 		UserDao userDao = getBean(UserDao.class);
-		form = new UserForm("form", listContainer, userDao.getNewUserInstance(userDao.get(getUserId())), warning);
+		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), warning);
 		form.showNewRecord();
 		add(form, warning);
 		super.onInitialize();

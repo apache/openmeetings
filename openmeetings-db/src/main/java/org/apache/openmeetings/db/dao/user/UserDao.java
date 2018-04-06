@@ -19,10 +19,10 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
-import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.security.NoSuchAlgorithmException;
@@ -54,7 +54,6 @@ import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
-import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -98,7 +97,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	 * @param currentUser - the user to copy time zone from
 	 * @return new User instance
 	 */
-	public User getNewUserInstance(User currentUser) {
+	public static User getNewUserInstance(User currentUser) {
 		User user = new User();
 		user.setSalutation(Salutation.mr);
 		user.setRights(getDefaultRights());
@@ -107,6 +106,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		user.setForceTimeZoneCheck(false);
 		user.setSendSMS(false);
 		user.setAge(new Date());
+		user.setLastlogin(new Date());
 		Address address = new Address();
 		address.setCountry(Locale.getDefault().getCountry());
 		user.setAddress(address);
@@ -367,7 +367,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public boolean validLogin(String login) {
-		return !Strings.isEmpty(login) && login.length() >= UserHelper.getMinLoginLength(cfgDao);
+		return !Strings.isEmpty(login) && login.length() >= getMinLoginLength();
 	}
 
 	private static User getSingle(List<User> list) {
@@ -482,7 +482,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			User to = new User();
 			to.setType(Type.contact);
 			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
-			to.setLogin(login.length() < getMinLoginLength(cfgDao) ? UUID.randomUUID().toString() : login);
+			to.setLogin(login.length() < getMinLoginLength() ? UUID.randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
 			to.setLanguageId(null == langId || null == LabelDao.getLocale(langId) ? owner.getLanguageId() : langId.longValue());

@@ -18,14 +18,12 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.Application;
@@ -138,8 +136,7 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 			login.setOutputMarkupId(true);
 			add(password = new PasswordTextField("password", new Model<String>()));
 			password.setLabel(Model.of(getString("328"))).setOutputMarkupId(true);
-			ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
-			password.setRequired(false).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), user));
+			password.setRequired(false).add(new StrongPasswordValidator(user));
 			add(confirmPassword = new PasswordTextField("confirmPassword", new Model<String>()));
 			confirmPassword.setLabel(Model.of(getString("116"))).setOutputMarkupId(true);
 

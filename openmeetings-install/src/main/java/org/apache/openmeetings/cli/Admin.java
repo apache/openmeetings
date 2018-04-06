@@ -20,7 +20,6 @@ package org.apache.openmeetings.cli;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.db.util.ApplicationHelper.destroyApplication;
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
@@ -54,7 +53,6 @@ import org.apache.openmeetings.backup.BackupImport;
 import org.apache.openmeetings.backup.ProgressHolder;
 import org.apache.openmeetings.core.ldap.LdapLoginManager;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -461,8 +459,7 @@ public class Admin {
 		if (cmdl.hasOption("password")) {
 			cfg.setPassword(cmdl.getOptionValue("password"));
 		}
-		ConfigurationDao cfgDao = getApplicationContext().getBean(ConfigurationDao.class);
-		IValidator<String> passValidator = new StrongPasswordValidator(false, getMinPasswdLength(cfgDao), new User());
+		IValidator<String> passValidator = new StrongPasswordValidator(false, new User());
 		Validatable<String> passVal;
 		do {
 			passVal = new Validatable<>(cfg.getPassword());
