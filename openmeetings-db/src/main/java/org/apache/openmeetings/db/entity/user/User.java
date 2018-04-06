@@ -109,7 +109,7 @@ public class User extends HistoricalEntity {
 	public static final int SALUTATION_DR_ID = 4;
 	public static final int SALUTATION_PROF_ID = 5;
 
-	@XmlType(namespace="org.apache.openmeetings.user.user.right")
+	@XmlType(namespace="org.apache.openmeetings.user.right")
 	public enum Right {
 		Admin			// access to Admin module
 		, GroupAdmin	// partial access to Admin module (should not be directly assigned)
@@ -119,7 +119,7 @@ public class User extends HistoricalEntity {
 		, Soap			// use rest/soap calls
 	}
 
-	@XmlType(namespace="org.apache.openmeetings.user.user.type")
+	@XmlType(namespace="org.apache.openmeetings.user.type")
 	public enum Type {
 		user
 		, ldap
@@ -127,6 +127,7 @@ public class User extends HistoricalEntity {
 		, external
 		, contact
 	}
+	@XmlType(namespace="org.apache.openmeetings.user.salutation")
 	public enum Salutation {
 		mr(SALUTATION_MR_ID)
 		, ms(SALUTATION_MS_ID)
