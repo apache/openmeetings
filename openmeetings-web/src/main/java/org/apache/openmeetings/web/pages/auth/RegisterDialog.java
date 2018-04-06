@@ -18,18 +18,14 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
-import java.util.UUID;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
@@ -192,18 +188,9 @@ public class RegisterDialog extends NonClosableDialog<String> {
 
 	@Override
 	protected void onSubmit(AjaxRequestTarget target) {
-		String hash = UUID.randomUUID().toString();
-
 		try {
-			userManager.registerUserInit(UserDao.getDefaultRights(), login, password, lastName
-					, firstName, email, null /* age/birthday */, "" /* street */
-					, "" /* additionalname */, "" /* fax */, "" /* zip */, country
-					, "" /* town */, lang, true /* sendWelcomeMessage */
-					, Arrays.asList(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)),
-					"" /* phone */, false, sendConfirmation, TimeZone.getTimeZone(tzModel.getObject()),
-					false /* forceTimeZoneCheck */, "" /* userOffers */, "" /* userSearchs */, false /* showContactData */,
-					true /* showContactDataToContacts */, hash);
-
+			userManager.registerUser(login, password, lastName
+					, firstName, email, country, lang, tzModel.getObject());
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
 		}
@@ -243,8 +230,8 @@ public class RegisterDialog extends NonClosableDialog<String> {
 			super.onInitialize();
 			firstNameField.setLabel(Model.of(getString("117")));
 			lastNameField.setLabel(Model.of(getString("136")));
-			loginField.add(minimumLength(getMinLoginLength(cfgDao))).setLabel(Model.of(getString("114")));
-			passwordField.setResetPassword(true).add(new StrongPasswordValidator(getMinPasswdLength(cfgDao), new User()) {
+			loginField.add(minimumLength(getMinLoginLength())).setLabel(Model.of(getString("114")));
+			passwordField.setResetPassword(true).add(new StrongPasswordValidator(new User()) {
 				private static final long serialVersionUID = 1L;
 
 				@Override

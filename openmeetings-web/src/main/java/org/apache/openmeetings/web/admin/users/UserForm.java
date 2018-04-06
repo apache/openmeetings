@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -119,9 +119,9 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onInitialize() {
 		super.onInitialize();
 		add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
-				.add(passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), getModelObject())));
+				.add(passValidator = new StrongPasswordValidator(getModelObject())));
 		login.setLabel(Model.of(getString("108")));
-		add(login.add(minimumLength(getMinLoginLength(cfgDao))));
+		add(login.add(minimumLength(getMinLoginLength())));
 
 		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
@@ -236,7 +236,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onNewSubmit(AjaxRequestTarget target, Form<?> form) {
-		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
+		setModelObject(getNewUserInstance(userDao.get(getUserId())));
 		update(target);
 	}
 
@@ -246,7 +246,7 @@ public class UserForm extends AdminBaseForm<User> {
 		if (user.getId() != null) {
 			user = userDao.get(user.getId());
 		} else {
-			user = userDao.getNewUserInstance(null);
+			user = getNewUserInstance(null);
 		}
 		setModelObject(user);
 		update(target);
@@ -254,7 +254,7 @@ public class UserForm extends AdminBaseForm<User> {
 
 	private void deleteUser(AjaxRequestTarget target) {
 		userDao.delete(getModelObject(), getUserId());
-		setModelObject(userDao.getNewUserInstance(userDao.get(getUserId())));
+		setModelObject(getNewUserInstance(userDao.get(getUserId())));
 		update(target);
 	}
 

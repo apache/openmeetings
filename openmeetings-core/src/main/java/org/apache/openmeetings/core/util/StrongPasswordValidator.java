@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.core.util;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinPasswdLength;
+
 import java.util.Map;
 
 import org.apache.directory.api.util.Strings;
@@ -33,16 +35,14 @@ import org.slf4j.LoggerFactory;
 public class StrongPasswordValidator implements IValidator<String> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(StrongPasswordValidator.class);
-	private final int minLength;
 	private final boolean web;
 	private User u;
 
-	public StrongPasswordValidator(final int minLength, final User u) {
-		this(true, minLength, u);
+	public StrongPasswordValidator(final User u) {
+		this(true, u);
 	}
 
-	public StrongPasswordValidator(final boolean web, final int minLength, final User u) {
-		this.minLength = minLength;
+	public StrongPasswordValidator(final boolean web, final User u) {
 		this.web = web;
 		this.u = u;
 	}
@@ -63,8 +63,8 @@ public class StrongPasswordValidator implements IValidator<String> {
 		return password == null || password.equals(password.toUpperCase());
 	}
 
-	private boolean badLength(String password) {
-		return password == null || password.length() < minLength;
+	private static boolean badLength(String password) {
+		return password == null || password.length() < getMinPasswdLength();
 	}
 
 	private static boolean checkWord(String password, String word) {
@@ -123,7 +123,7 @@ public class StrongPasswordValidator implements IValidator<String> {
 	@Override
 	public void validate(IValidatable<String> pass) {
 		if (badLength(pass.getValue())) {
-			error(pass, "bad.password.short", new MicroMap<String, Object>("0", minLength));
+			error(pass, "bad.password.short", new MicroMap<String, Object>("0", getMinPasswdLength()));
 		}
 		if (noLowerCase(pass.getValue())) {
 			error(pass, "bad.password.lower");

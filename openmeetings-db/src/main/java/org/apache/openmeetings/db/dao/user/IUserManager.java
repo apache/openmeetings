@@ -20,33 +20,19 @@ package org.apache.openmeetings.db.dao.user;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TimeZone;
 
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.util.OmException;
 
 //HACK to bypass cross project compilation
 public interface IUserManager {
 	Object registerUser(String login, String userpass, String lastname,
-			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, String country,
-			String town, long languageId, String phone, boolean sendSMS,
-			boolean generateSipUserData, String jNameTimeZone, Boolean sendConfirmation);
+			String firstname, String email, String country,
+			long languageId, String tzId);
 
-	Object registerUserInit(Set<Right> rights, String login, String password, String lastname,
-			String firstname, String email, Date age, String street,
-			String additionalname, String fax, String zip, String country,
-			String town, long languageId, boolean sendWelcomeMessage,
-			List<Long> groups, String phone, boolean sendSMS, Boolean sendConfirmation,
-			TimeZone timezone, Boolean forceTimeZoneCheck,
-			String userOffers, String userSearchs, Boolean showContactData,
-			Boolean showContactDataToContacts, String activatedHash) throws OmException, NoSuchAlgorithmException;
+	Object registerUser(User u, String password, String hash) throws OmException, NoSuchAlgorithmException;
 
 	Long getLanguage(Locale loc);
 	User loginOAuth(OAuthUser user, long serverId) throws IOException, NoSuchAlgorithmException;

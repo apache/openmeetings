@@ -21,7 +21,6 @@ package org.apache.openmeetings.backup;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
-import static org.apache.openmeetings.db.util.UserHelper.getMinLoginLength;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
@@ -99,6 +98,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TIM
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_TLS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SMTP_USER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -548,7 +548,7 @@ public class BackupImport {
 		registry.bind(Salutation.class, SalutationConverter.class);
 		registry.bind(Date.class, DateConverter.class);
 		List<User> list = readList(ser, f, "users.xml", "users", User.class);
-		int minLoginLength = getMinLoginLength(cfgDao);
+		int minLoginLength = getMinLoginLength();
 		for (User u : list) {
 			if (u.getLogin() == null) {
 				continue;

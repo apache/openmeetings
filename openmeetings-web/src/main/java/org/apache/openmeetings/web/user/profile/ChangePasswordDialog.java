@@ -18,14 +18,12 @@
  */
 package org.apache.openmeetings.web.user.profile;
 
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
@@ -75,8 +73,6 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	@SpringBean
 	private UserDao userDao;
-	@SpringBean
-	private ConfigurationDao cfgDao;
 
 	public ChangePasswordDialog(String id) {
 		super(id, "");
@@ -94,7 +90,7 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 			}
 		};
 		cancel = new DialogButton("cancel", Model.of(getString("lbl.cancel")));
-		passValidator = new StrongPasswordValidator(getMinPasswdLength(cfgDao), userDao.get(getUserId()));
+		passValidator = new StrongPasswordValidator(userDao.get(getUserId()));
 		add(form.add(
 				current.setLabel(Model.of(getString("current.password"))).setRequired(true)
 				, pass.setLabel(Model.of(getString("328"))).add(passValidator)

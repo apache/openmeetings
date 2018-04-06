@@ -19,6 +19,7 @@
 package org.apache.openmeetings.core.ldap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
@@ -339,7 +340,7 @@ public class LdapLoginManager {
 				throw BAD_CREDENTIALS;
 			}
 			if (u == null) {
-				u = userDao.getNewUserInstance(null);
+				u = getNewUserInstance(null);
 				u.setType(Type.ldap);
 				u.getRights().remove(Right.Login);
 				u.setDomainId(domainId);

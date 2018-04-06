@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.installation;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
@@ -416,7 +417,7 @@ public class ImportInitvalues {
 		org.setInserted(new Date());
 		org = groupDao.update(org, null);
 
-		User u = userDao.getNewUserInstance(null);
+		User u = getNewUserInstance(null);
 		u.setType(User.Type.user);
 		u.getRights().add(Right.Admin);
 		u.getRights().add(Right.Soap);

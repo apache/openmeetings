@@ -21,20 +21,15 @@ package org.apache.openmeetings.domain;
 import static org.junit.Assert.assertNotNull;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
-import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.entity.user.Group;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestAddGroup extends AbstractJUnitDefaults {
 	private static final Logger log = LoggerFactory.getLogger(TestAddGroup.class);
-
-	@Autowired
-	private GroupDao groupDao;
 
 	@Test
 	public void testAddingGroup() {

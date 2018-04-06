@@ -19,13 +19,12 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
-import static org.apache.openmeetings.db.util.UserHelper.getMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
 
-import java.util.Date;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,7 +43,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
@@ -86,8 +84,6 @@ import org.springframework.stereotype.Service;
 public class UserWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 
-	@Autowired
-	private ConfigurationDao cfgDao;
 	@Autowired
 	private UserManager userManager;
 	@Autowired
@@ -178,7 +174,7 @@ public class UserWebService extends BaseWebService {
 			if (user.getLanguageId() == null) {
 				user.setLanguageId(1L);
 			}
-			IValidator<String> passValidator = new StrongPasswordValidator(true, getMinPasswdLength(cfgDao), user.get(userDao));
+			IValidator<String> passValidator = new StrongPasswordValidator(true, user.get(userDao));
 			Validatable<String> passVal = new Validatable<>(user.getPassword());
 			passValidator.validate(passVal);
 			if (!passVal.isValid()) {
@@ -189,12 +185,12 @@ public class UserWebService extends BaseWebService {
 				log.debug("addNewUser::weak password '{}', msg: {}", user.getPassword(), sb);
 				throw new ServiceException(sb.toString());
 			}
-			Object _user = userManager.registerUser(user.getLogin(), user.getPassword(),
-					user.getLastname(), user.getFirstname(), user.getAddress().getEmail(), new Date(), user.getAddress().getStreet(),
-					user.getAddress().getAdditionalname(), user.getAddress().getFax(), user.getAddress().getZip(), user.getAddress().getCountry()
-					, user.getAddress().getTown(), user.getLanguageId(),
-					"", false, true, // generate SIP Data if the config is enabled
-					tz, confirm);
+			Object _user;
+			try {
+				_user = userManager.registerUser(user.get(userDao), user.getPassword(), null);
+			} catch (NoSuchAlgorithmException | OmException e) {
+				throw new ServiceException("Unexpected error while creating user");
+			}
 
 			if (_user == null) {
 				throw new ServiceException(UNKNOWN.getMessage());

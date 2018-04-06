@@ -121,6 +121,8 @@ public class OpenmeetingsVariables {
 	private static String wicketApplicationName = null;
 	private static String applicationName = null;
 	private static int extProcessTtl = 20;
+	private static int minLoginLength = USER_LOGIN_MINIMUM_LENGTH;
+	private static int minPasswdLength = USER_PASSWORD_MINIMUM_LENGTH;
 	private static JSONObject roomSettings = new JSONObject();
 	private static boolean initComplete = false;
 	private static long maxUploadSize = DEFAULT_MAX_UPLOAD_SIZE;
@@ -266,5 +268,21 @@ public class OpenmeetingsVariables {
 			appClass = Class.forName("org.apache.openmeetings.web.app.Application");
 		}
 		return appClass;
+	}
+
+	public static int getMinLoginLength() {
+		return minLoginLength;
+	}
+
+	public static void setMinLoginLength(int length) {
+		minLoginLength = length;
+	}
+
+	public static int getMinPasswdLength() {
+		return minPasswdLength;
+	}
+
+	public static void setMinPasswdLength(int length) {
+		minPasswdLength = length;
 	}
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.CalendarPatterns.ISO8601_FULL_FORMAT_STRING;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_SHOW_MYROOMS;
@@ -235,7 +236,7 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 				if (remoteUser != null && !Strings.isEmpty(remoteUser.getExternalUserId())) {
 					User user = userDao.getExternalUser(remoteUser.getExternalUserId(), remoteUser.getExternalUserType());
 					if (user == null) {
-						user = userDao.getNewUserInstance(null);
+						user = getNewUserInstance(null);
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
 						user.setLogin(remoteUser.getUsername());

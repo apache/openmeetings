@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.pages.auth;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.util.Arrays;
@@ -28,10 +29,8 @@ import java.util.UUID;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.mail.MailHandler;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.util.UserHelper;
 import org.apache.openmeetings.service.mail.template.ResetPasswordTemplate;
 import org.apache.openmeetings.web.common.Captcha;
 import org.apache.openmeetings.web.pages.ResetPage;
@@ -121,7 +120,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 						error(getString("234"));
 					}
 				}
-				if (type == Type.login && n.length() < UserHelper.getMinLoginLength(cfgDao)) {
+				if (type == Type.login && n.length() < getMinLoginLength()) {
 					error(getString("104"));
 				}
 			}
@@ -129,8 +128,6 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 	};
 	private SignInDialog s;
 	MessageDialog confirmDialog;
-	@SpringBean
-	private ConfigurationDao cfgDao;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
