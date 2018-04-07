@@ -95,6 +95,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 
 import java.util.ArrayList;
@@ -192,7 +193,7 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_REGISTER_SOAP, String.valueOf(true), Configuration.Type.bool, "Is user register available via SOAP/REST", VER_3_0);
 		addCfg(list, CONFIG_REGISTER_OAUTH, String.valueOf(true), Configuration.Type.bool, "Is user register available via OAuth", VER_3_0);
 		// this group_id is the Group of users who register through the frontend or SOAP
-		addCfg(list, CONFIG_DEFAULT_GROUP_ID, "1", Configuration.Type.number, "", VER_1_8);
+		addCfg(list, CONFIG_DEFAULT_GROUP_ID, String.valueOf(getDefaultGroup()), Configuration.Type.number, "", VER_1_8);
 
 		addCfg(list, CONFIG_SMTP_SERVER, cfg.getSmtpServer(), Configuration.Type.string, "this is the smtp server to send messages", VER_1_9);
 

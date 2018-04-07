@@ -22,6 +22,7 @@ import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
@@ -43,6 +44,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
@@ -50,6 +52,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
@@ -334,6 +337,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_PASS_MIN_LENGTH:
 				reloadPasswdMinLength();
 				break;
+			case CONFIG_DEFAULT_GROUP_ID:
+				reloadDefaultGroup();
+				break;
 		}
 		return entity;
 	}
@@ -413,6 +419,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setMinPasswdLength(getInt(CONFIG_LOGIN_MIN_LENGTH, USER_PASSWORD_MINIMUM_LENGTH));
 	}
 
+	private void reloadDefaultGroup() {
+		setDefaultGroup(getLong(CONFIG_DEFAULT_GROUP_ID, getDefaultGroup()));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -428,6 +438,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadRoomSettings();
 		reloadLoginMinLength();
 		reloadPasswdMinLength();
+		reloadDefaultGroup();
 	}
 
 	private JSONObject reloadRoomSettings() {

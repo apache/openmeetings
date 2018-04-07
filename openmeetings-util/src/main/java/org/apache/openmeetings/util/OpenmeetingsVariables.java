@@ -130,6 +130,7 @@ public class OpenmeetingsVariables {
 	private static boolean sipEnabled = false;
 	private static String gaCode = null;
 	private static Long defaultLang = 1L;
+	private static Long defaultGroup = 1L;
 	private static int audioRate = 22050;
 	private static String audioBitrate = "32k";
 	private static String defaultTimezone = "Europe/Berlin";
@@ -284,5 +285,13 @@ public class OpenmeetingsVariables {
 
 	public static void setMinPasswdLength(int length) {
 		minPasswdLength = length;
+	}
+
+	public static Long getDefaultGroup() {
+		return defaultGroup;
+	}
+
+	public static void setDefaultGroup(Long group) {
+		defaultGroup = group;
 	}
 }
