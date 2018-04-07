@@ -216,8 +216,8 @@ public class UserDTO implements Serializable {
 			u.address.setEmail(a.optString("email"));
 		}
 		u.timeZoneId = o.optString("timeZoneId");
-		u.externalId = o.optString("externalId");
-		u.externalType = o.optString("externalType");
+		u.externalId = o.optString("externalId", null);
+		u.externalType = o.optString("externalType", null);
 		u.type = optEnum(Type.class, o, "type");
 		return u;
 	}
