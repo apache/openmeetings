@@ -74,6 +74,7 @@ public class UserDTO implements Serializable {
 
 	public User get(UserDao userDao) {
 		User u = id == null ? new User() : userDao.get(id);
+		u.setLogin(login);
 		u.setFirstname(firstname);
 		u.setLastname(lastname);
 		u.setRights(rights);
