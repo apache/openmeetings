@@ -24,7 +24,7 @@ import static org.apache.openmeetings.db.util.LocaleHelper.validateCountry;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.BAD_CREDENTIALS;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.Closeable;
@@ -345,7 +345,7 @@ public class LdapLoginManager {
 				u.setType(Type.ldap);
 				u.getRights().remove(Right.Login);
 				u.setDomainId(domainId);
-				Group g = groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null));
+				Group g = groupDao.get(getDefaultGroup());
 				if (g != null) {
 					u.getGroupUsers().add(new GroupUser(g, u));
 				}

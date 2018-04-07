@@ -19,6 +19,7 @@
 package org.apache.openmeetings.webservice;
 
 import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.webservice.Constants.TNS;
@@ -45,6 +46,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
+import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
@@ -55,6 +57,7 @@ import org.apache.openmeetings.db.dto.user.UserDTO;
 import org.apache.openmeetings.db.entity.server.RemoteSessionObject;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.manager.IClientManager;
@@ -183,7 +186,10 @@ public class UserWebService extends BaseWebService {
 			}
 			Object _user;
 			try {
-				_user = getBean(UserManager.class).registerUser(user.get(userDao), user.getPassword(), null);
+				User u = user.get(userDao);
+				GroupDao groupDao = getBean(GroupDao.class);
+				u.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), u));
+				_user = getBean(UserManager.class).registerUser(u, user.getPassword(), null);
 			} catch (NoSuchAlgorithmException | OmException e) {
 				throw new ServiceException("Unexpected error while creating user");
 			}

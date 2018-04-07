@@ -22,10 +22,10 @@ import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
@@ -125,7 +125,7 @@ public class UserManager implements IUserManager {
 
 				// this is needed cause the language is not a needed data at registering
 				u.setLanguageId(languageId != 0 ? languageId : 1);
-				u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), u));
+				u.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), u));
 
 				Object user = registerUser(u, password, null);
 
@@ -285,7 +285,7 @@ public class UserManager implements IUserManager {
 			u.setType(Type.oauth);
 			u.getRights().remove(Right.Login);
 			u.setDomainId(serverId);
-			u.getGroupUsers().add(new GroupUser(groupDao.get(cfgDao.getLong(CONFIG_DEFAULT_GROUP_ID, null)), u));
+			u.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), u));
 			u.setLogin(user.getUid());
 			u.setShowContactDataToContacts(true);
 			u.setLastname(user.getLastName());
