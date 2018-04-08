@@ -44,7 +44,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_UR
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
@@ -420,7 +419,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	private void reloadDefaultGroup() {
-		setDefaultGroup(getLong(CONFIG_DEFAULT_GROUP_ID, getDefaultGroup()));
+		setDefaultGroup(getLong(CONFIG_DEFAULT_GROUP_ID, null));
 	}
 
 	public void reinit() {
