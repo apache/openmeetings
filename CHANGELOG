@@ -3,6 +3,32 @@ Apache OpenMeetings Change Log
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 4.0.3
+================================================================================================================
+
+** Vulnerability
+    * CVE-2018-1325 - Wicket Jquery UI: XSS while displaying value in WYSIWYG editor
+
+** Bug
+    * [OPENMEETINGS-1836] - Performance degradation
+    * [OPENMEETINGS-1837] - Audio isn't recording but the video is ok
+    * [OPENMEETINGS-1840] - Add Group in Room
+    * [OPENMEETINGS-1841] - List Of All Groups and Group is not Deleted
+    * [OPENMEETINGS-1849] - WhiteBoard tab needed to broadcast cam/audio
+    * [OPENMEETINGS-1852] - Impossible to set/change password of privileged user
+    * [OPENMEETINGS-1853] - Closed Room redirect link causes error
+    * [OPENMEETINGS-1857] - RoomWebService hash method is broken
+
+** Improvement
+    * [OPENMEETINGS-1791] - Quick response within a session
+    * [OPENMEETINGS-1863] - Red5sip Log-files - add a command to VoIP tutorial (chown nobody)
+
+** Task
+    * [OPENMEETINGS-1848] - Library versions need to be updated (4.0.3)
+    * [OPENMEETINGS-1862] - Apache mailing list RSS is not loaded
+    * [OPENMEETINGS-1866] - Entity enums should be annotated with different namespaces
+
+
 Release Notes - OpenMeetings - Version 4.0.2
 ================================================================================================================
 
