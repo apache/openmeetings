@@ -116,6 +116,7 @@ public class OpenmeetingsVariables {
 	public static final String FLASH_MIC_RATE = "micRate";
 	public static final int DEFAULT_MINUTES_REMINDER_SEND = 15;
 	public static final String DEFAULT_BASE_URL = "http://localhost:5080/openmeetings/";
+	public static final String DEFAULT_SIP_CONTEXT = "rooms";
 
 	private static String cryptClassName = null;
 	private static String wicketApplicationName = null;
@@ -136,6 +137,7 @@ public class OpenmeetingsVariables {
 	private static String defaultTimezone = "Europe/Berlin";
 	private static String restAllowOrigin = null;
 	private static Class<?> appClass = null;
+	private static String sipContext = DEFAULT_SIP_CONTEXT;
 
 	private OpenmeetingsVariables() {}
 
@@ -293,5 +295,13 @@ public class OpenmeetingsVariables {
 
 	public static void setDefaultGroup(Long group) {
 		defaultGroup = group;
+	}
+
+	public static String getSipContext() {
+		return sipContext;
+	}
+
+	public static void setSipContext(String context) {
+		sipContext = context;
 	}
 }

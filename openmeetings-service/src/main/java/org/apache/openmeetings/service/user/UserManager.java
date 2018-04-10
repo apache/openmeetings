@@ -162,13 +162,11 @@ public class UserManager implements IUserManager {
 				}
 
 				u.setActivatehash(ahash);
-
-				// this is needed cause the language is not a needed data at registering
 				if (!Strings.isEmpty(password)) {
-					u.updatePassword(cfgDao, password);
+					u.updatePassword(password);
 				}
 				u = userDao.update(u, null);
-				log.debug("Added user-Id " + u.getId());
+				log.debug("Added user-Id {}", u.getId());
 
 				if (u.getId() != null) {
 					return u;

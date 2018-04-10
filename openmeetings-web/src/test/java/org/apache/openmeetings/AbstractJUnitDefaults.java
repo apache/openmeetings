@@ -181,7 +181,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.getAddress().setEmail(getEmail(uuid));
 		u.setRights(UserDao.getDefaultRights());
 		u.setTimeZoneId("Asia/Bangkok");
-		u.updatePassword(null, createPass()); // NO SIP
+		u.updatePassword(createPass());
 		u.setLanguageId(1L);
 		return u;
 	}

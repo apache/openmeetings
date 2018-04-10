@@ -39,9 +39,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_APP_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_SIP_CONTEXT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
@@ -60,6 +62,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLoginLeng
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOrigin;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 
 import java.net.UnknownHostException;
@@ -339,6 +342,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_DEFAULT_GROUP_ID:
 				reloadDefaultGroup();
 				break;
+			case CONFIG_SIP_EXTEN_CONTEXT:
+				reloadSipContext();
+				break;
 		}
 		return entity;
 	}
@@ -422,6 +428,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setDefaultGroup(getLong(CONFIG_DEFAULT_GROUP_ID, null));
 	}
 
+	private void reloadSipContext() {
+		setSipContext(getString(CONFIG_SIP_EXTEN_CONTEXT, DEFAULT_SIP_CONTEXT));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -438,6 +448,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadLoginMinLength();
 		reloadPasswdMinLength();
 		reloadDefaultGroup();
+		reloadSipContext();
 	}
 
 	private JSONObject reloadRoomSettings() {

@@ -411,12 +411,15 @@ public class ImportInitvalues {
 
 	public void loadInitUserAndGroup(InstallationConfig cfg) throws Exception {
 		// Add default group
-		Group org = new Group();
-		org.setName(cfg.getGroup());
-		org.setInsertedby(1L);
-		org.setDeleted(false);
-		org.setInserted(new Date());
-		org = groupDao.update(org, null);
+		Group g = new Group();
+		g.setName(cfg.getGroup());
+		g.setInsertedby(1L);
+		g.setDeleted(false);
+		g.setInserted(new Date());
+		g = groupDao.update(g, null);
+		Configuration c = cfgDao.get(CONFIG_DEFAULT_GROUP_ID);
+		c.setValueN(g.getId());
+		cfgDao.update(c, null);
 
 		User u = getNewUserInstance(null);
 		u.setType(User.Type.user);
@@ -426,7 +429,7 @@ public class ImportInitvalues {
 		u.setFirstname("firstname");
 		u.setLastname("lastname");
 		u.getAddress().setEmail(cfg.getEmail());
-		u.getGroupUsers().add(new GroupUser(org, u));
+		u.getGroupUsers().add(new GroupUser(g, u));
 
 		u = userDao.update(u, cfg.getPassword(), -1L);
 

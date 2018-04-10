@@ -18,9 +18,13 @@
  */
 package org.apache.openmeetings.db.dao;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.openmeetings.AbstractJUnitDefaults;
 import org.apache.openmeetings.db.dao.room.RoomDao;
@@ -59,5 +63,19 @@ public class TestRoomDao extends AbstractJUnitDefaults {
 		}
 		Assert.assertEquals("User presentation room should be created", Room.Type.presentation, r.getType());
 		assertTrue("User presentation room should have mic status hidden", hidden);
+	}
+
+	@Test
+	public void testPublicRooms() {
+		for (Room.Type type : Room.Type.values()) {
+			for (Room r : roomDao.getPublicRooms(type)) {
+				assertEquals(String.format("Room type should be %s", type), type, r.getType());
+			}
+		}
+		Set<Room.Type> types = new HashSet<>();
+		for (Room r : roomDao.getPublicRooms()) {
+			types.add(r.getType());
+		}
+		assertEquals("All room types should be listed", Room.Type.values().length, types.size());
 	}
 }

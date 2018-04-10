@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.user;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isSipEnabled;
 
 import java.security.NoSuchAlgorithmException;
@@ -56,7 +56,6 @@ import org.apache.openjpa.persistence.FetchGroup;
 import org.apache.openjpa.persistence.FetchGroups;
 import org.apache.openjpa.persistence.LoadFetchGroup;
 import org.apache.openjpa.persistence.jdbc.ForeignKey;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.entity.HistoricalEntity;
 import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -374,13 +373,13 @@ public class User extends HistoricalEntity {
 		this.login = login;
 	}
 
-	public void updatePassword(ConfigurationDao configDao, String pass) throws NoSuchAlgorithmException {
+	public void updatePassword(String pass) throws NoSuchAlgorithmException {
 		if (isSipEnabled()) {
 			AsteriskSipUser u = getSipUser();
 			if (u == null) {
 				setSipUser(u = new AsteriskSipUser());
 			}
-			String defaultRoomContext = configDao.getString(CONFIG_SIP_EXTEN_CONTEXT, "rooms");
+			String defaultRoomContext = getSipContext();
 			u.setName(login);
 			u.setDefaultuser(login);
 			u.setMd5secret(MD5.checksum(login + ":asterisk:" + pass));
