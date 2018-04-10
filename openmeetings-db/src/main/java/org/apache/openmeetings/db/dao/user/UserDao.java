@@ -46,7 +46,6 @@ import org.apache.openjpa.persistence.OpenJPAEntityManager;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
 import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
@@ -61,7 +60,6 @@ import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,9 +77,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 
 	@PersistenceContext
 	private EntityManager em;
-
-	@Autowired
-	private ConfigurationDao cfgDao;
 
 	public static Set<Right> getDefaultRights() {
 		Set<Right> rights = new HashSet<>();
@@ -250,7 +245,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	private User updatePassword(Long id, String pwd, Long updatedBy) throws NoSuchAlgorithmException {
 		//OpenJPA is not allowing to set fields not being fetched before
 		User u = get(id, true);
-		u.updatePassword(cfgDao, pwd);
+		u.updatePassword(pwd);
 		return update(u, updatedBy);
 	}
 

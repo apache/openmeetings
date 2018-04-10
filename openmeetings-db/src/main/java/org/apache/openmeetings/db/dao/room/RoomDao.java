@@ -171,7 +171,8 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	public List<Room> getPublicRooms(Type type) {
-		return em.createNamedQuery("getPublicRooms", Room.class).setParameter("type", type).getResultList();
+		return type == null ? getPublicRooms()
+				: em.createNamedQuery("getPublicRooms", Room.class).setParameter("type", type).getResultList();
 	}
 
 	public List<Long> getSipRooms(List<Long> ids) {

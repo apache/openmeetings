@@ -170,7 +170,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		u.getAddress().setEmail(getEmail(uuid));
 		u.setRights(UserDao.getDefaultRights());
 		u.setTimeZoneId("Asia/Bangkok");
-		u.updatePassword(cfgDao, createPass());
+		u.updatePassword(createPass());
 		u.setLanguageId(1L);
 		return u;
 	}
@@ -181,7 +181,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		gu.setModerator(groupAdmin);
 		u.getGroupUsers().add(gu);
 		u.setLogin(login);
-		u.updatePassword(cfgDao, userpass);
+		u.updatePassword(userpass);
 		return createUser(u);
 	}
 

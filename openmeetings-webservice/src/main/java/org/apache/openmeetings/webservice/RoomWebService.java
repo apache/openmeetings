@@ -56,6 +56,7 @@ import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
+import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -78,8 +79,7 @@ public class RoomWebService extends BaseWebService {
 	 * Returns an Object of Type RoomsList which contains a list of
 	 * Room-Objects. Every Room-Object contains a Roomtype and all informations
 	 * about that Room. The List of current-users in the room is Null if you get
-	 * them via SOAP. The Roomtype can be 1 for conference rooms or 2 for
-	 * audience rooms.
+	 * them via SOAP. The Roomtype can be 'conference', 'presentation' or 'interview'.
 	 *
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
@@ -91,7 +91,8 @@ public class RoomWebService extends BaseWebService {
 	@GET
 	@Path("/public/{type}")
 	public List<RoomDTO> getPublic(@QueryParam("sid") @WebParam(name="sid") String sid, @PathParam("type") @WebParam(name="type") String type) {
-		return performCall(sid, User.Right.Room, sd -> RoomDTO.list(getRoomDao().getPublicRooms(Room.Type.valueOf(type))));
+		Room.Type t = Strings.isEmpty(type) ? null : Room.Type.valueOf(type);
+		return performCall(sid, User.Right.Room, sd -> RoomDTO.list(getRoomDao().getPublicRooms(t)));
 	}
 
 	/**

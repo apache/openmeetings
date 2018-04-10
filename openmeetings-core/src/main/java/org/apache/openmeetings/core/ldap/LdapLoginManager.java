@@ -54,7 +54,6 @@ import org.apache.directory.api.ldap.model.name.Dn;
 import org.apache.directory.ldap.client.api.EntryCursorImpl;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.ldap.client.api.LdapNetworkConnection;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -128,8 +127,6 @@ public class LdapLoginManager {
 		, ATTRIBUTE
 		, QUERY
 	}
-	@Autowired
-	private ConfigurationDao cfgDao;
 	@Autowired
 	private LdapConfigDao ldapConfigDao;
 	@Autowired
@@ -249,7 +246,7 @@ public class LdapLoginManager {
 				case AUTOCREATE:
 					u = w.getUser(entry, u);
 					if (w.options.syncPasswd) {
-						u.updatePassword(cfgDao, passwd);
+						u.updatePassword(passwd);
 					}
 					u = userDao.update(u, null);
 					break;
