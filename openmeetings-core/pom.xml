@@ -30,7 +30,7 @@
 	<name>Openmeetings Core</name>
 	<description>Module for OpenMeetings core and red5 related classes and services</description>
 	<properties>
-		<mail.version>1.6.0</mail.version>
+		<javax.mail.version>1.6.1</javax.mail.version>
 		<site.basedir>${project.parent.basedir}</site.basedir>
 	</properties>
 	<build>
@@ -84,7 +84,7 @@
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
-			<version>${mail.version}</version>
+			<version>${javax.mail.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.artofsolving.jodconverter</groupId>
