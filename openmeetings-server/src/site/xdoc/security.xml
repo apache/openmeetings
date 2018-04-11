@@ -45,7 +45,7 @@
 				Please NOTE: only security issues should be reported to this list.
 			</p>
 		</section>
-		<section name="CVE-2018-1325 - Wicket Jquery UI: XSS while displaying value in WYSIWYG editor">
+		<section name="CVE-2018-1325 - Wicket jQuery UI: XSS while displaying value in WYSIWYG editor">
 			<p>Severity: High</p>
 			<p>Vendor: wicket-jquery-ui</p>
 			<p>Versions Affected: &lt;= 6.29.0, &lt;= 7.10.1, &lt;= 8.0.0-M9.1</p>
@@ -53,7 +53,7 @@
 				<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-1325">CVE-2018-1325</a>
 			</p>
 			<p>The issue was fixed in 6.29.1, 7.10.2, 8.0.0-M9.2<br/>
-				All users are recommended to upgrade to Apache OpenMeetings 4.0.2</p>
+				All users are recommended to upgrade to Apache OpenMeetings 4.0.3</p>
 			<p>Credit: This issue was identified by Kamil Sevi</p>
 		</section>
 		<section name="CVE-2017-15719 - Wicket jQuery UI: XSS in WYSIWYG editor">
