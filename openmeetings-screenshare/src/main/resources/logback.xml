@@ -19,26 +19,25 @@
 
 -->
 
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="logback.xsd">
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<contextName>${current_openmeetings_context_name}</contextName>
 
 	<jmxConfigurator contextName="${current_openmeetings_context_name}" />
 
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-		<File>screensharing.log</File>
-		<Append>false</Append>
-		<Encoding>UTF-8</Encoding>
-		<BufferedIO>false</BufferedIO>
-		<ImmediateFlush>true</ImmediateFlush>
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %L %c{10} [%t] - %m%n</pattern>
-		</layout>
+		<file>screensharing.log</file>
+		<append>false</append>
+		<immediateFlush>true</immediateFlush>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %c{15}:%L [%.15thread] - %m%n</pattern>
+		</encoder>
 	</appender>
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-		<layout class="ch.qos.logback.classic.PatternLayout">
-			<pattern>%5p %d{MM-dd HH:mm:ss.SSS } %L %c{10} [%t] - %m%n</pattern>
-		</layout>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%highlight(%-5level) %d{MM-dd HH:mm:ss.SSS } %cyan(%c{15}:%L [%.15thread]) - %m%n</pattern>
+		</encoder>
 	</appender>
 	<logger name="org.apache.openmeetings" level="DEBUG"/>
 	<logger name="org.red5.server.net.rtmp.codec.RTMPProtocolDecoder" level="OFF"/>
