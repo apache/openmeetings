@@ -234,8 +234,8 @@ To build from source code:
     Sources compilation require Oracle Java SE 8.
     The project is built with Apache Maven 3.3.9 or later.
   
-  - To build the OpenMeetings project run ant in the root directory:
-     ant
+  - To build the OpenMeetings project run mvn in the root directory:
+     mvn clean install -P allModules
     
 For a detailed documentation on how to build from source and options see:
     http://openmeetings.apache.org/BuildInstructions.html
