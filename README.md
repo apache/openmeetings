@@ -177,3 +177,5 @@ License
 =======
 Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
+Also this product includes 3rd party software. See more at [NOTICE.md](/NOTICE.md)
+
