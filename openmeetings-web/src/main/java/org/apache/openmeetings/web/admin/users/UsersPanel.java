@@ -77,7 +77,11 @@ public class UsersPanel extends AdminBasePanel {
 						form.update(target);
 					}
 				});
-				item.add(AttributeModifier.append(ATTR_CLASS, getRowClass(u.getId(), form.getModelObject().getId())));
+				StringBuilder cl = getRowClass(u.getId(), form.getModelObject().getId());
+				if (u.isDeleted()) {
+					cl.append(" deleted");
+				}
+				item.add(AttributeModifier.append(ATTR_CLASS, cl));
 			}
 		};
 		add(listContainer.add(dataView).setOutputMarkupId(true));

@@ -146,19 +146,47 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 	}
 
-	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
+	private List<User> get(String search, Integer start, Integer count, String order, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
 		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
-				, getAdditionalWhere(filterContacts, currentUserId, params), sort, searchFields), User.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, false
+				, getAdditionalWhere(filterContacts, currentUserId, params), order, searchFields), User.class);
+		if (start != null) {
+			q.setFirstResult(start);
+		}
+		if (count != null) {
+			q.setMaxResults(count);
+		}
 		setAdditionalParams(q, params);
 		return q.getResultList();
 	}
 
+	//This is AdminDao method
+	public List<User> get(String search, boolean excludeContacts, int first, int count) {
+		Map<String, Object> params = new HashMap<>();
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
+				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
+		setAdditionalParams(q, params);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
+	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
+		return get(search, null, null, null, filterContacts, currentUserId, true);
+	}
+
+	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
+		return get(search, start, count, sort, filterContacts, currentUserId, true);
+	}
+
+	@Override
+	public List<User> adminGet(String search, int start, int count, String order) {
+		return get(search, start, count, order, false, null, false);
+	}
+
 	@Override
 	public List<User> adminGet(String search, Long adminId, int start, int count, String order) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, false
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, false
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
 		q.setParameter("adminId", adminId);
 		q.setFirstResult(start);
@@ -196,25 +224,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
 		q.setParameter("adminId", adminId);
 		return q.getSingleResult();
-	}
-
-	//This is AdminDao method
-	public List<User> get(String search, boolean excludeContacts, int first, int count) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
-				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
-		setAdditionalParams(q, params);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
-	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
-				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), User.class);
-		setAdditionalParams(q, params);
-		return q.getResultList();
 	}
 
 	@Override

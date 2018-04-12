@@ -28,168 +28,136 @@
 	display: inline-block;
 	vertical-align: top;
 }
-
-table.adminListTable {
+.adminListTable {
 	max-width: 518px;
 	min-width: 518px;
 }
-
-table.adminListTable tr:nth-child(odd), table.adminListTableSmall tr:nth-child(odd) {
+.adminListTable tr:nth-child(odd), .adminListTableSmall tr:nth-child(odd) {
 	opacity: .8;
 }
-
-table.adminListTable tr:hover, table.adminListTableSmall tr:hover, .room-row:hover {
+.adminListTable tr.deleted {
+	background-image: repeating-linear-gradient(-45deg, transparent, transparent 5px, /* gap */ #cccccc 6px, /* overall width incluing gap */ #cccccc 6px);
+}
+.adminListTable tr:hover, .adminListTableSmall tr:hover, .room-row:hover {
 	/*SHOULD BE MANUALLY IN SYNC WITH THEME .ui-state-hover */
 	border: 1px solid #74b2e2;
-	background: #e4f1fb;
+	background-color: #e4f1fb;
 	font-weight: normal;
 	color: #0070a3;
 }
-
-table.adminListTable th.two_column_layout_column1 {
+.adminListTable th.two_column_layout_column1 {
 	width: 136px;
 }
-
-table.adminListTable th.two_column_layout_column2 {
+.adminListTable th.two_column_layout_column2 {
 	width: 354px;
 }
-
-table.adminListTable td.two_column_layout_column1 {
+.adminListTable td.two_column_layout_column1 {
 	width: 136px;
 }
-
-table.adminListTable td.two_column_layout_column2 {
+.adminListTable td.two_column_layout_column2 {
 	width: 354px;
 }
-
-table.adminListTable td div.two_column_layout_divcolumn1 {
+.adminListTable td div.two_column_layout_divcolumn1 {
 	word-wrap: break-word;
 	width: 136px;
 }
-
-table.adminListTable td div.two_column_layout_divcolumn2 {
+.adminListTable td div.two_column_layout_divcolumn2 {
 	word-wrap: break-word;
 	width: 354px;
 }
-
-table.adminListTable th.three_column_layout_column1 {
+.adminListTable th.three_column_layout_column1 {
 	width: 96px;
 }
-
-table.adminListTable th.three_column_layout_column2 {
+.adminListTable th.three_column_layout_column2 {
 	width: 150px;
 }
-
-table.adminListTable th.three_column_layout_column3 {
+.adminListTable th.three_column_layout_column3 {
 	width: 244px;
 }
-
-.rooms table.adminListTable th.three_column_layout_column1 {
+.rooms .adminListTable th.three_column_layout_column1 {
 	width: 46px;
 }
-
-.rooms table.adminListTable th.three_column_layout_column2 {
+.rooms .adminListTable th.three_column_layout_column2 {
 	width: 370px;
 }
-
-.rooms table.adminListTable th.three_column_layout_column3 {
+.rooms .adminListTable th.three_column_layout_column3 {
 	width: 74px;
 }
-
-table.adminListTableSmall th.three_column_layout_column1 {
+.adminListTableSmall th.three_column_layout_column1 {
 	width: 50px;
 }
-
-table.adminListTableSmall th.three_column_layout_column2 {
+.adminListTableSmall th.three_column_layout_column2 {
 	width: 50px;
 }
-
-table.adminListTableSmall th.three_column_layout_column3 {
+.adminListTableSmall th.three_column_layout_column3 {
 	width: 218px;
 }
-table.adminListTableSmall th.three_column_layout_column4 {
+.adminListTableSmall th.three_column_layout_column4 {
 	width: 150px;
 }
-table.adminListTableSmall th.three_column_layout_column5 {
+.adminListTableSmall th.three_column_layout_column5 {
 	width: 50px;
 }
-
-table.adminListTable td.three_column_layout_column1 {
+.adminListTable td.three_column_layout_column1 {
 	width: 96px;
 }
-
-table.adminListTable td.three_column_layout_column2 {
+.adminListTable td.three_column_layout_column2 {
 	width: 150px;
 }
-
-table.adminListTable td.three_column_layout_column3 {
+.adminListTable td.three_column_layout_column3 {
 	width: 244px;
 }
-
-table.adminListTableSmall td.three_column_layout_column1 {
+.adminListTableSmall td.three_column_layout_column1 {
 	width: 50px;
 }
-
-table.adminListTableSmall td.three_column_layout_column2 {
+.adminListTableSmall td.three_column_layout_column2 {
 	width: 50px;
 }
-
-table.adminListTableSmall td.three_column_layout_column3 {
+.adminListTableSmall td.three_column_layout_column3 {
 	width: 218px;
 }
-table.adminListTableSmall td.three_column_layout_column4 {
+.adminListTableSmall td.three_column_layout_column4 {
 	width: 150px;
 }
-table.adminListTableSmall td.three_column_layout_column5 {
+.adminListTableSmall td.three_column_layout_column5 {
 	width: 50px;
 }
-
-table.adminListTable td div.three_column_layout_divcolumn1 {
+.adminListTable td div.three_column_layout_divcolumn1 {
 	word-wrap: break-word;
 	width: 96px;
 }
-
-table.adminListTable td div.three_column_layout_divcolumn2 {
+.adminListTable td div.three_column_layout_divcolumn2 {
 	word-wrap: break-word;
 	width: 150px;
 }
-
-table.adminListTable td div.three_column_layout_divcolumn3 {
+.adminListTable td div.three_column_layout_divcolumn3 {
 	word-wrap: break-word;
 	width: 244px;
 }
-
-.rooms table.adminListTable td div.three_column_layout_divcolumn1 {
+.rooms .adminListTable td div.three_column_layout_divcolumn1 {
 	word-wrap: break-word;
 	width: 44px;
 }
-
-.rooms table.adminListTable td div.three_column_layout_divcolumn2 {
+.rooms .adminListTable td div.three_column_layout_divcolumn2 {
 	word-wrap: break-word;
 	width: 382px;
 }
-
-.rooms table.adminListTable td div.three_column_layout_divcolumn3 {
+.rooms .adminListTable td div.three_column_layout_divcolumn3 {
 	word-wrap: break-word;
 	width: 74px;
 }
-
 table.adminListTableSmall td div.three_column_layout_divcolumn1 {
 	width: 50px;
 }
-
 table.adminListTableSmall td div.three_column_layout_divcolumn2 {
 	width: 50px;
 }
-
 table.adminListTableSmall td div.three_column_layout_divcolumn3 {
 	width: 218px;
 }
-
 table.adminListTableSmall td div.three_column_layout_divcolumn4 {
 	width: 150px;
 }
-
 table.adminListTableSmall td div.three_column_layout_divcolumn5 {
 	width: 50px;
 }

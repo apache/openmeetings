@@ -53,7 +53,6 @@ import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -69,7 +68,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.time.Duration;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,16 +172,18 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}));
 		add(new ComunityUserForm("comunity", getModel()));
-
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 		add(adminPass);
 	}
 
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
+		setEnabled(!getModelObject().isDeleted());
+		if (getModelObject().isDeleted()) {
+			remove(validationBehavior);
+		} else {
+			add(validationBehavior);
+		}
 		password.setModelObject(null);
 		generalForm.updateModelObject(getModelObject(), true);
 		passValidator.setUser(getModelObject());
