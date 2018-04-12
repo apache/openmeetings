@@ -31,7 +31,6 @@ import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -44,7 +43,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
@@ -80,10 +78,6 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		add(new Label("user.login"));
 		add(new TextArea<String>("comment"));
 		update(null);
-
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
 
 	private void refresh(AjaxRequestTarget target) {

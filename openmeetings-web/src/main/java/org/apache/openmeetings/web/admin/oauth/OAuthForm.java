@@ -29,7 +29,6 @@ import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -39,7 +38,6 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.time.Duration;
 
 public class OAuthForm extends AdminBaseForm<OAuthServer> {
 	private static final long serialVersionUID = 1L;
@@ -53,10 +51,6 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 
 		add(new CheckBox("isEnabled"));
 		add(new DropDownChoice<>("requestTokenMethod", Arrays.asList(RequestMethod.values()), new ChoiceRenderer<RequestMethod>("name", "name")));
-
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
 
 	@Override
