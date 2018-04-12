@@ -45,7 +45,7 @@ For a detailed documentation on how to build from source and options see:
 Release Notes 
 =============
 
-see [CHANGELOG](/CHANGELOG) file for detailed log
+see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
 4.0.2
 -----
