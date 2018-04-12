@@ -158,7 +158,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
-	public List<User> get(String search, Long adminId, int start, int count, String order) {
+	public List<User> adminGet(String search, Long adminId, int start, int count, String order) {
 		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, false
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
 		q.setParameter("adminId", adminId);
@@ -192,7 +192,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	@Override
-	public long count(String search, Long adminId) {
+	public long adminCount(String search, Long adminId) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, true
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
 		q.setParameter("adminId", adminId);

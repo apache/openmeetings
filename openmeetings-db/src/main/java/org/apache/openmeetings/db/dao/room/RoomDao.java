@@ -137,7 +137,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	@Override
-	public List<Room> get(String search, Long adminId, int start, int count, String order) {
+	public List<Room> adminGet(String search, Long adminId, int start, int count, String order) {
 		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, false
 				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), Room.class);
 		q.setParameter("adminId", adminId);
@@ -159,7 +159,7 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	@Override
-	public long count(String search, Long adminId) {
+	public long adminCount(String search, Long adminId) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, true
 				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
 		q.setParameter("adminId", adminId);

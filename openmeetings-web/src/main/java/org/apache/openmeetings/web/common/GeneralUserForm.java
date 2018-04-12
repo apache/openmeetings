@@ -156,7 +156,7 @@ public class GeneralUserForm extends Form<User> {
 		grpUsers.addAll(u.getGroupUsers());
 		if (isAdminForm) {
 			List<Group> grpList = hasGroupAdminLevel(getRights())
-					? getBean(GroupDao.class).get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+					? getBean(GroupDao.class).adminGet(null, getUserId(), 0, Integer.MAX_VALUE, null)
 					: getBean(GroupDao.class).get(0, Integer.MAX_VALUE);
 			for (Group g : grpList) {
 				GroupUser gu = new GroupUser(g, u);
