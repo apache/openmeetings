@@ -73,7 +73,7 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	}
 
 	@Override
-	public List<Group> get(String search, Long adminId, int start, int count, String order) {
+	public List<Group> adminGet(String search, Long adminId, int start, int count, String order) {
 		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, false
 				, "gu.user.id = :adminId AND gu.moderator = true", order, searchFields), Group.class);
 		q.setParameter("adminId", adminId);
@@ -95,7 +95,7 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	}
 
 	@Override
-	public long count(String search, Long adminId) {
+	public long adminCount(String search, Long adminId) {
 		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, true
 				, "gu.user.id = :adminId AND gu.moderator = true", null, searchFields), Long.class);
 		q.setParameter("adminId", adminId);

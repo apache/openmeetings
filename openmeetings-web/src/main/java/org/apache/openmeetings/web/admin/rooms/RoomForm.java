@@ -162,7 +162,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 		add(new CheckBox("ispublic").setEnabled(!isGroupAdmin));
 
 		List<Group> orgList = isGroupAdmin
-				? groupDao.get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+				? groupDao.adminGet(null, getUserId(), 0, Integer.MAX_VALUE, null)
 				: groupDao.get(0, Integer.MAX_VALUE);
 		final List<RoomGroup> orgRooms = new ArrayList<>(orgList.size());
 		for (Group org : orgList) {
