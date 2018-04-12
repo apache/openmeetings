@@ -194,6 +194,14 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		return q.getResultList();
 	}
 
+	private long count(String search, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
+		Map<String, Object> params = new HashMap<>();
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, true
+				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
+		setAdditionalParams(q, params);
+		return q.getSingleResult();
+	}
+
 	@Override
 	public long count() {
 		// get all users
@@ -211,16 +219,17 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public long count(String search, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, true
-				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
-		setAdditionalParams(q, params);
-		return q.getSingleResult();
+		return count(search, filterContacts, currentUserId, true);
+	}
+
+	@Override
+	public long adminCount(String search) {
+		return count(search, false, Long.valueOf(-1), false);
 	}
 
 	@Override
 	public long adminCount(String search, Long adminId) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, true
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, true
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
 		q.setParameter("adminId", adminId);
 		return q.getSingleResult();
