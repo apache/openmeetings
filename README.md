@@ -1,8 +1,11 @@
 ![About Openmeetings Logo](/openmeetings-server/src/site/resources/images/logo.png)
 
-[Apache OpenMeetings](https://openmeetings.apache.org) provides video conferencing, instant messaging, white board,
-collaborative document editing and other groupware tools using API functions of 
-the [Red5 Streaming Server](http://red5.org/) for Remoting and Streaming. 
+[Apache OpenMeetings](https://openmeetings.apache.org) provides: 
+ - [x] **video conferencing**
+ - [x] **instant messaging**
+ - [x] **white board**
+ - [x] **collaborative document editing**
+ - [x] **other groupware tools** using API functions of the [Red5 Streaming Server](http://red5.org/) for Remoting and Streaming. 
 
 Getting Started
 ===============
