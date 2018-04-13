@@ -157,6 +157,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 
 	protected Invitation create(User u) {
 		Invitation i = new Invitation(getModelObject());
+		i.setInvitedBy(getBean(UserDao.class).get(getUserId()));
 		i.setId(null);
 		i.setUpdated(null);
 		i.setUsed(false);
