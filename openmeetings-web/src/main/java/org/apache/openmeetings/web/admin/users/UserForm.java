@@ -173,12 +173,21 @@ public class UserForm extends AdminBaseForm<User> {
 	protected void onModelChanged() {
 		super.onModelChanged();
 		boolean nd = !getModelObject().isDeleted();
+		boolean isNew = getModelObject().getId() == null;
 		mainContainer.setEnabled(nd);
 		setSaveVisible(nd);
-		setDelVisible(nd && getModelObject().getId() != null);
+		setDelVisible(nd && !isNew);
+		setRestoreVisible(!nd);
+		setPurgeVisible(!isNew);
 		password.setModelObject(null);
 		generalForm.updateModelObject(getModelObject(), true);
 		passValidator.setUser(getModelObject());
+	}
+
+	@Override
+	protected void onRestoreSubmit(AjaxRequestTarget target, Form<?> form) {
+		getModelObject().setDeleted(false);
+		onSaveSubmit(target, form);
 	}
 
 	@Override

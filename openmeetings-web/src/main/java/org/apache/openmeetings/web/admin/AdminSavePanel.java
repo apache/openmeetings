@@ -31,6 +31,8 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
 	private ConfirmableAjaxBorder delBtn;
+	private AjaxButton purgeBtn;
+	private AjaxButton restoreBtn;
 
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
@@ -42,7 +44,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 		newRecord.setDefaultModelObject(getString("155"));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 
-		final AjaxButton newBtn = new AjaxButton("ajax-new-button", form) {
+		final AjaxButton newBtn = new AjaxButton("btn-new", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -58,14 +60,14 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				onNewError(target, form);
+				AdminSavePanel.this.onError(target, form);
 			}
 		};
 		// add a cancel button that can be used to submit the form via ajax
 		final Form<?> cForm = new Form<>("form");
 		cForm.setMultiPart(form.isMultiPart());
 		add(cForm);
-		delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), cForm) {
+		delBtn = new ConfirmableAjaxBorder("btn-delete", getString("80"), getString("833"), cForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -73,7 +75,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				setNewVisible(false);
-				onDeleteError(target, form);
+				AdminSavePanel.this.onError(target, form);
 			}
 
 			@Override
@@ -84,7 +86,45 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				onDeleteSubmit(target, form);
 			}
 		};
-		add(newBtn, delBtn);
+		purgeBtn = new AjaxButton("btn-purge", form) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				// repaint the feedback panel so that it is hidden
+				target.add(feedback);
+				setNewVisible(false);
+				onPurgeSubmit(target, form);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// repaint the feedback panel so errors are shown
+				target.add(feedback);
+				AdminSavePanel.this.onError(target, form);
+			}
+		};
+		restoreBtn = new AjaxButton("btn-restore", form) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				// repaint the feedback panel so that it is hidden
+				target.add(feedback);
+				setNewVisible(false);
+				onRestoreSubmit(target, form);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// repaint the feedback panel so errors are shown
+				target.add(feedback);
+				AdminSavePanel.this.onError(target, form);
+			}
+		};
+		add(newBtn, delBtn
+				, purgeBtn.setOutputMarkupPlaceholderTag(true).setVisible(false)
+				, restoreBtn.setOutputMarkupPlaceholderTag(true).setVisible(false));
 		super.onInitialize();
 	}
 
@@ -97,9 +137,16 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 		delBtn.setVisible(visible);
 	}
 
-	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
-	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
+	public void setPurgeVisible(boolean visible) {
+		purgeBtn.setVisible(visible);
+	}
 
+	public void setRestoreVisible(boolean visible) {
+		restoreBtn.setVisible(visible);
+	}
+
+	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
 	protected abstract void onDeleteSubmit(AjaxRequestTarget target, Form<?> form);
-	protected abstract void onDeleteError(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onPurgeSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onRestoreSubmit(AjaxRequestTarget target, Form<?> form);
 }
