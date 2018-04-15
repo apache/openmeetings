@@ -568,17 +568,6 @@ form .input {
 div.formSaveBar {
 	height: 35px;
 }
-.addButton {
-	display: inline-block;
-	cursor: pointer;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
-	vertical-align: super;
-	background: url(images/plus_icon.png) no-repeat;
-}
 .hash-panel-main {
 	width: 100%;
 	height: 100%;

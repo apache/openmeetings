@@ -51,8 +51,8 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 			}
 
 			@Override
-			protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
-				AdminBaseForm.this.onSaveError(target, form);
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onError(target, form);
 			}
 
 			@Override
@@ -61,18 +61,8 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 			}
 
 			@Override
-			protected void onNewError(AjaxRequestTarget target, Form<?> form) {
-				AdminBaseForm.this.onNewError(target, form);
-			}
-
-			@Override
 			protected void onRefreshSubmit(AjaxRequestTarget target, Form<?> form) {
 				AdminBaseForm.this.onRefreshSubmit(target, form);
-			}
-
-			@Override
-			protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-				AdminBaseForm.this.onRefreshError(target, form);
 			}
 
 			@Override
@@ -81,8 +71,13 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 			}
 
 			@Override
-			protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
-				AdminBaseForm.this.onDeleteError(target, form);
+			protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onPurgeSubmit(target, form);
+			}
+
+			@Override
+			protected void onRestoreSubmit(AjaxRequestTarget target, Form<?> form) {
+				AdminBaseForm.this.onRestoreSubmit(target, form);
 			}
 		};
 		add(savePanel);
@@ -109,9 +104,14 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 		savePanel.setSaveVisible(visible);
 	}
 
-	protected boolean isDelBtnVisible() {
-		return true;
+	public void setPurgeVisible(boolean visible) {
+		savePanel.setPurgeVisible(visible);
 	}
+
+	public void setRestoreVisible(boolean visible) {
+		savePanel.setRestoreVisible(visible);
+	}
+
 	/**
 	 * invoked when user press save button
 	 *
@@ -126,7 +126,7 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	 * @param target - ajax target to update form component
 	 * @param form - Form being processed
 	 */
-	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+	protected void onError(AjaxRequestTarget target, Form<?> form) {
 		//no-op
 	}
 
@@ -139,32 +139,12 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
 
 	/**
-	 * invoked if new has error
-	 *
-	 * @param target - ajax target to update form component
-	 * @param form - Form being processed
-	 */
-	protected void onNewError(AjaxRequestTarget target, Form<?> form) {
-		//no-op
-	}
-
-	/**
 	 * invoked when refresh button is pressed
 	 *
 	 * @param target - ajax target to update form component
 	 * @param form - Form being processed
 	 */
 	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
-
-	/**
-	 * invoked when refresh has error
-	 *
-	 * @param target - ajax target to update form component
-	 * @param form - Form being processed
-	 */
-	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-		//no-op
-	}
 
 	/**
 	 * invoked when delete button is pressed
@@ -175,12 +155,22 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 	protected abstract void onDeleteSubmit(AjaxRequestTarget target, Form<?> form);
 
 	/**
-	 * invoked when delete has error
+	 * invoked when purge button is pressed
 	 *
 	 * @param target - ajax target to update form component
 	 * @param form - Form being processed
 	 */
-	protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
+	protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
+		//no-op
+	}
+
+	/**
+	 * invoked when restore button is pressed
+	 *
+	 * @param target - ajax target to update form component
+	 * @param form - Form being processed
+	 */
+	protected void onRestoreSubmit(AjaxRequestTarget target, Form<?> form) {
 		//no-op
 	}
 

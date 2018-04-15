@@ -57,7 +57,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				onSaveError(target, form);
+				FormSaveRefreshPanel.this.onError(target, form);
 			}
 		});
 
@@ -78,7 +78,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				setNewVisible(false);
-				onRefreshError(target, form);
+				FormSaveRefreshPanel.this.onError(target, form);
 			}
 		});
 		super.onInitialize();
@@ -105,20 +105,9 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 	 * @param target Ajax target
 	 * @param form form object
 	 */
-	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+	protected void onError(AjaxRequestTarget target, Form<?> form) {
 		//no-op
 	}
 
 	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
-
-
-	/**
-	 * Refresh error handler
-	 *
-	 * @param target Ajax target
-	 * @param form form object
-	 */
-	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-		//no-op
-	}
 }

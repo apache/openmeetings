@@ -137,11 +137,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 	}
 
 	@Override
-	protected boolean isDelBtnVisible() {
-		return !hasGroupAdminLevel(getRights());
-	}
-
-	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
@@ -170,6 +165,12 @@ public class GroupForm extends AdminBaseForm<Group> {
 		add(maxRooms.setLabel(Model.of(getString("admin.group.form.maxRooms"))).setEnabled(false).setOutputMarkupId(true));
 		add(recordingTtl.setLabel(Model.of(getString("admin.group.form.recordingTtl"))).setEnabled(false).setOutputMarkupId(true));
 		add(reminderDays.setLabel(Model.of(getString("admin.group.form.reminderDays"))).setEnabled(false).setOutputMarkupId(true));
+	}
+
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		setDelVisible(!hasGroupAdminLevel(getRights()));
 	}
 
 	public void updateView(AjaxRequestTarget target) {
