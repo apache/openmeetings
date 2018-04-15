@@ -84,16 +84,6 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 			protected void onDeleteError(AjaxRequestTarget target, Form<?> form) {
 				AdminBaseForm.this.onDeleteError(target, form);
 			}
-
-			@Override
-			protected boolean isNewBtnVisible() {
-				return AdminBaseForm.this.isNewBtnVisible();
-			}
-
-			@Override
-			protected boolean isDelBtnVisible() {
-				return AdminBaseForm.this.isDelBtnVisible();
-			}
 		};
 		add(savePanel);
 	}
@@ -107,22 +97,16 @@ public abstract class AdminBaseForm<T> extends Form<T> {
 		add(validationBehavior);
 	}
 
-	/**
-	 * @see AdminBaseForm#hideNewRecord()
-	 */
-	public void hideNewRecord() {
-		savePanel.hideNewRecord();
+	public void setNewVisible(boolean visible) {
+		savePanel.setNewVisible(visible);
 	}
 
-	/**
-	 * @see AdminBaseForm#showNewRecord()
-	 */
-	public void showNewRecord() {
-		savePanel.showNewRecord();
+	public void setDelVisible(boolean visible) {
+		savePanel.setDelVisible(visible);
 	}
 
-	protected boolean isNewBtnVisible() {
-		return true;
+	public void setSaveVisible(boolean visible) {
+		savePanel.setSaveVisible(visible);
 	}
 
 	protected boolean isDelBtnVisible() {

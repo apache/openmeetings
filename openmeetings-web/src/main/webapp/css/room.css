@@ -252,12 +252,8 @@
 .exclsv-audio.ui-icon {
 	background-image: url(images/microphone_exclusive.png);
 }
-.kick.ui-icon {
-	background-image: url(images/cancel_icon.png);
-	background-size: 16px;
-}
 .restart.ui-icon {
-	background-image: url(images/arrow_refresh_small.png);
+	background-size: initial !important;
 }
 .settings.ui-icon, .settings.om-icon {
 	background-image: url(images/settings.png);

@@ -35,7 +35,9 @@
 	<div class="adminPanelColumnTable">
 		<div>
 		<div wicket:id="addLangBtn" class="addButton" wicket:message="title:362" ></div>
-		<div wicket:id="deleteLangBtn" class="delButton" wicket:message="title:363"></div>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="deleteLangBtn" wicket:message="title:363">
+			<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+		</div>
 		<form wicket:id="langForm" class="addLanguagePanel">
 			<table>
 				<tr>

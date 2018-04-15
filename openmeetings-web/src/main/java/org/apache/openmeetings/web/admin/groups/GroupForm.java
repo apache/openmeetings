@@ -137,11 +137,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 	}
 
 	@Override
-	protected boolean isNewBtnVisible() {
-		return !hasGroupAdminLevel(getRights());
-	}
-
-	@Override
 	protected boolean isDelBtnVisible() {
 		return !hasGroupAdminLevel(getRights());
 	}
@@ -150,6 +145,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 	protected void onInitialize() {
 		super.onInitialize();
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
+		setNewVisible(!isGroupAdmin);
 		userToadd.setEnabled(!isGroupAdmin);
 		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
 		add(logo);
@@ -226,7 +222,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		for (GroupUser grpUser : usersPanel.getUsers2add()) {
 			usersPanel.update(grpUser);
 		}
-		hideNewRecord();
+		setNewVisible(false);
 		updateView(target);
 	}
 }

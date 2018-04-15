@@ -84,7 +84,7 @@ public class OAuthForm extends AdminBaseForm<OAuthServer> {
 		oauthDao.update(getModelObject(), getUserId());
 		OAuthServer oauthServer = oauthDao.get(getModelObject().getId());
 		this.setModelObject(oauthServer);
-		hideNewRecord();
+		setNewVisible(false);
 		target.add(this);
 		target.add(listContainer);
 		reinitJs(target);

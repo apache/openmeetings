@@ -111,9 +111,6 @@
 .sound-mute.chat-tool-icon {
 	background-image: url(images/sound_mute.png);
 }
-.delete.chat-tool-icon {
-	background-image: url(images/cancel_icon.png);
-}
 .save.chat-tool-icon {
 	background-image: url(images/file_save_as.png);
 }

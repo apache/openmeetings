@@ -442,7 +442,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 			roomDao.update(getModelObject(), getUserId());
 		}
-		hideNewRecord();
+		setNewVisible(false);
 		updateView(target);
 	}
 
