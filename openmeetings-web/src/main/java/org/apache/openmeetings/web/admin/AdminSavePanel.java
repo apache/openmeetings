@@ -30,6 +30,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private static final long serialVersionUID = 1L;
 	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
+	private ConfirmableAjaxBorder delBtn;
 
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
@@ -64,14 +65,14 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 		final Form<?> cForm = new Form<>("form");
 		cForm.setMultiPart(form.isMultiPart());
 		add(cForm);
-		final ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), cForm) {
+		delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), cForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				hideNewRecord();
+				setNewVisible(false);
 				onDeleteError(target, form);
 			}
 
@@ -79,31 +80,22 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
-				hideNewRecord();
+				setNewVisible(false);
 				onDeleteSubmit(target, form);
 			}
 		};
-		add(newBtn.setVisible(isNewBtnVisible()), delBtn.setVisible(isDelBtnVisible()));
+		add(newBtn, delBtn);
 		super.onInitialize();
 	}
 
-	/**
-	 * Hide the new record text
-	 */
 	@Override
-	public void hideNewRecord() {
-		newRecord.setVisible(false);
+	public void setNewVisible(boolean visible) {
+		newRecord.setVisible(visible);
 	}
 
-	/**
-	 * Hide the new record text
-	 */
-	public void showNewRecord() {
-		newRecord.setVisible(true);
+	public void setDelVisible(boolean visible) {
+		delBtn.setVisible(visible);
 	}
-
-	protected abstract boolean isNewBtnVisible();
-	protected abstract boolean isDelBtnVisible();
 
 	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
 	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);

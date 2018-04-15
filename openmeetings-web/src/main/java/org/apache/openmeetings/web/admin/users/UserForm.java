@@ -86,6 +86,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = Red5LoggerFactory.getLogger(UserForm.class, getWebAppRootKey());
+	private final WebMarkupContainer mainContainer = new WebMarkupContainer("adminForm");
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
@@ -101,18 +102,19 @@ public class UserForm extends AdminBaseForm<User> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		this.warning = warning;
-		add(generalForm = new GeneralUserForm("general", getModel(), true));
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
+		add(mainContainer);
+		mainContainer.add(generalForm = new GeneralUserForm("general", getModel(), true));
+		mainContainer.add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getModelObject())));
 		login.setLabel(Model.of(getString("108")));
-		add(login.add(minimumLength(getMinLoginLength())));
+		mainContainer.add(login.add(minimumLength(getMinLoginLength())));
 
-		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
+		mainContainer.add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -121,14 +123,14 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}));
 		update(null);
-		add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
-		add(new Label("ownerId"));
-		add(new DateLabel("inserted"));
-		add(new DateLabel("updated"));
+		mainContainer.add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+		mainContainer.add(new Label("ownerId"));
+		mainContainer.add(new DateLabel("inserted"));
+		mainContainer.add(new DateLabel("updated"));
 
-		add(new CheckBox("forceTimeZoneCheck"));
+		mainContainer.add(new CheckBox("forceTimeZoneCheck"));
 
-		add(new Select2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
+		mainContainer.add(new Select2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -162,19 +164,18 @@ public class UserForm extends AdminBaseForm<User> {
 				return Right.valueOf(id);
 			}
 		}));
-		add(new ComunityUserForm("comunity", getModel()));
+		mainContainer.add(new ComunityUserForm("comunity", getModel()));
 		add(adminPass);
+		remove(validationBehavior);
 	}
 
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
-		setEnabled(!getModelObject().isDeleted());
-		if (getModelObject().isDeleted()) {
-			remove(validationBehavior);
-		} else {
-			add(validationBehavior);
-		}
+		boolean nd = !getModelObject().isDeleted();
+		mainContainer.setEnabled(nd);
+		setSaveVisible(nd);
+		setDelVisible(nd && getModelObject().getId() != null);
 		password.setModelObject(null);
 		generalForm.updateModelObject(getModelObject(), true);
 		passValidator.setUser(getModelObject());
@@ -219,7 +220,7 @@ public class UserForm extends AdminBaseForm<User> {
 			getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
 		}
 		setModelObject(dao.get(u.getId()));
-		hideNewRecord();
+		setNewVisible(false);
 		target.add(this, listContainer);
 		reinitJs(target);
 		if (u.getGroupUsers().isEmpty()) {

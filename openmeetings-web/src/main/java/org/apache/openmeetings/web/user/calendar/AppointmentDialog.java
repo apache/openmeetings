@@ -124,7 +124,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 
 	public AppointmentDialog(String id, CalendarPanel calendarPanel, CompoundPropertyModel<Appointment> model) {
 		super(id, "", model, true);
-		log.debug(" -- AppointmentDialog -- Current model " + getModel().getObject());
+		log.debug(" -- AppointmentDialog -- Current model {}", getModel().getObject());
 		this.calendarPanel = calendarPanel;
 		setOutputMarkupId(true);
 		form = new AppointmentForm("appForm", model);
@@ -296,7 +296,7 @@ public class AppointmentDialog extends AbstractFormDialog<Appointment> {
 		private static final long serialVersionUID = 1L;
 		private final boolean myRoomsAllowed;
 		private boolean createRoom = true;
-		private Room appRoom = null;
+		private Room appRoom = new Room();
 		private final DateTimePicker start = new OmDateTimePicker("start", Model.of(LocalDateTime.now()));
 		private final DateTimePicker end = new OmDateTimePicker("end", Model.of(LocalDateTime.now()));
 		private final PasswordTextField pwd = new PasswordTextField("password");

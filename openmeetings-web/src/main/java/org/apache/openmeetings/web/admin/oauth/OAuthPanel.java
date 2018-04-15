@@ -62,7 +62,7 @@ public class OAuthPanel extends AdminBasePanel {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(server);
-						form.hideNewRecord();
+						form.setNewVisible(false);
 						target.add(form, listContainer);
 						reinitJs(target);
 					}
@@ -88,7 +88,7 @@ public class OAuthPanel extends AdminBasePanel {
 		add(navigator);
 
 		form = new OAuthForm("form", listContainer, new OAuthServer());
-		form.showNewRecord();
+		form.setNewVisible(true);
 		add(form);
 		super.onInitialize();
 	}

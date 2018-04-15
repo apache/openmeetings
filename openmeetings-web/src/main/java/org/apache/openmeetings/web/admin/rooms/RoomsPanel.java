@@ -60,7 +60,7 @@ public class RoomsPanel extends AdminBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						form.hideNewRecord();
+						form.setNewVisible(false);
 						form.setModelObject(getBean(RoomDao.class).get(roomId));
 						form.updateView(target);
 						target.add(form, listContainer);

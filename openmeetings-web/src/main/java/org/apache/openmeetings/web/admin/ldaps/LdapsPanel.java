@@ -68,7 +68,7 @@ public class LdapsPanel extends AdminBasePanel {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(lc);
-						form.hideNewRecord();
+						form.setNewVisible(false);
 						target.add(form, listContainer);
 						reinitJs(target);
 					}
@@ -93,7 +93,7 @@ public class LdapsPanel extends AdminBasePanel {
 		add(navigator);
 
 		form = new LdapForm("form", listContainer, new LdapConfig());
-		form.showNewRecord();
+		form.setNewVisible(true);
 		add(form);
 
 		super.onInitialize();

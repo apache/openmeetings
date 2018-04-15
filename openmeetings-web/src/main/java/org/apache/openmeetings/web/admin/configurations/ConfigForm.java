@@ -158,7 +158,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 			getModelObject().setId(c.getId());
 		}
 		setModelObject(getBean(ConfigurationDao.class).update(getModelObject(), WebSession.getUserId()));
-		hideNewRecord();
+		setNewVisible(false);
 		target.add(listContainer);
 		refresh(target);
 	}

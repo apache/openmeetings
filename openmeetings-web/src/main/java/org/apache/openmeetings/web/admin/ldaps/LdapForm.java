@@ -71,7 +71,7 @@ public class LdapForm extends AdminBaseForm<LdapConfig> {
 	@Override
 	protected void onSaveSubmit(AjaxRequestTarget target, Form<?> form) {
 		setModelObject(getBean(LdapConfigDao.class).update(getModelObject(), WebSession.getUserId()));
-		hideNewRecord();
+		setNewVisible(false);
 		target.add(this, listContainer);
 		reinitJs(target);
 	}

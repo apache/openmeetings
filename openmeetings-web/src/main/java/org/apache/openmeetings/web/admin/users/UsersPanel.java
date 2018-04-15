@@ -71,7 +71,7 @@ public class UsersPanel extends AdminBasePanel {
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
 						form.setModelObject(getBean(UserDao.class).get(userId));
-						form.hideNewRecord();
+						form.setNewVisible(false);
 						form.update(target);
 					}
 				});
@@ -113,7 +113,7 @@ public class UsersPanel extends AdminBasePanel {
 
 		UserDao userDao = getBean(UserDao.class);
 		form = new UserForm("form", listContainer, getNewUserInstance(userDao.get(getUserId())), warning);
-		form.showNewRecord();
+		form.setNewVisible(true);
 		add(form, warning);
 		super.onInitialize();
 	}

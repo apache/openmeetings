@@ -169,7 +169,11 @@
 								<tr wicket:id="files">
 									<td style="width: 380px"><div class="three_column_layout_divcolumn1" style="width: auto"><span wicket:id="name"></span></div></td>
 									<td style="width: 80px"><span wicket:id="wbIdx"></span></td>
-									<td style="width: 50px"><div class="formCancelButton" wicket:id="delete" wicket:message="title:80"></div></td>
+									<td style="width: 50px">
+										<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
+											<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+										</div>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -194,7 +198,11 @@
 								<tr wicket:id="clients">
 									<td class="three_column_layout_column1"><div class="three_column_layout_divcolumn1"><span wicket:id="clientId"></span></div></td>
 									<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="clientLogin"></span></div></td>
-									<td class="three_column_layout_column3"><div class="formCancelButton" wicket:id="clientDelete" wicket:message="title:603"></div></td>
+									<td class="three_column_layout_column3">
+										<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="clientDelete" wicket:message="title:603">
+											<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+										</div>
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -230,7 +238,11 @@
 										<td class="three_column_layout_column2"><div class="three_column_layout_divcolumn2"><span wicket:id="userId"></span></div></td>
 										<td class="three_column_layout_column3"><div class="three_column_layout_divcolumn3"><span wicket:id="uName"></span></div></td>
 										<td class="three_column_layout_column4"><div class="three_column_layout_divcolumn4" style="overflow: hidden;"><span wicket:id="email"></span></div></td>
-										<td style="width: 50px"><div style="width: 50px"><div class="formCancelButton" wicket:id="delete" wicket:message="title:80"></div></div></td>
+										<td style="width: 50px">
+											<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="delete" wicket:message="title:80">
+												<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+											</div>
+										</td>
 									</tr>
 								</tbody>
 							</table>

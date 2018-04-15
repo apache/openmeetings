@@ -432,7 +432,7 @@ public class RoomForm extends AdminBaseForm<Room> {
 			}
 			getBean(RoomDao.class).update(getModelObject(), getUserId());
 		}
-		hideNewRecord();
+		setNewVisible(false);
 		updateView(target);
 	}
 

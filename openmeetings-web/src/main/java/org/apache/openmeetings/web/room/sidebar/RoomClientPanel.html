@@ -27,7 +27,9 @@
 	<span wicket:id="user-speaks"></span>
 	<div wicket:id="actions" class="user actions">
 		<span wicket:id="icons"></span>
-		<span wicket:id="kick"></span>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="kick">
+			<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+		</div>
 		<span wicket:id="privateChat" class="ui-icon align-right clickable private-chat" wicket:message="title:1493" onclick="startPrivateChat($(this));"></span>
 		<div class="clear"></div>
 	</div>
