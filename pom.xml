@@ -56,6 +56,7 @@
 		<maven-dependency-plugin.version>3.0.2</maven-dependency-plugin.version>
 		<maven-bundle-plugin.version>3.5.0</maven-bundle-plugin.version>
 		<maven-war-plugin.version>3.2.0</maven-war-plugin.version>
+		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<!-- dependency versions -->
 		<junit.version>4.12</junit.version>
 		<wicket.version>8.0.0-M9</wicket.version>
@@ -1029,7 +1030,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>${maven-clean-plugin.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.rat</groupId>
