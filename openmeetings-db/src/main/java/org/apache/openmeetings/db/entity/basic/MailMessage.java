@@ -40,6 +40,7 @@ import org.apache.openmeetings.db.entity.HistoricalEntity;
 	, @NamedQuery(name = "countMailMessages", query = "SELECT COUNT(m) FROM MailMessage m")
 	, @NamedQuery(name = "resetMailStatusByDate", query = "UPDATE MailMessage m SET m.status = :noneStatus WHERE m.status = :sendingStatus AND m.updated < :date")
 	, @NamedQuery(name = "resetMailStatusById", query = "UPDATE MailMessage m SET m.errorCount = 0, m.status = :noneStatus WHERE m.id = :id")
+	, @NamedQuery(name = "purgeMailMessages", query = "DELETE FROM MailMessage m WHERE m.recipients LIKE :email OR m.replyTo LIKE :email")
 })
 @Table(name = "email_queue")
 public class MailMessage extends HistoricalEntity {
