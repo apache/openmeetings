@@ -31,7 +31,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
 	private ConfirmableAjaxBorder delBtn;
-	private AjaxButton purgeBtn;
+	private ConfirmableAjaxBorder purgeBtn;
 	private AjaxButton restoreBtn;
 
 	public AdminSavePanel(String id, final Form<T> form) {
@@ -86,7 +86,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 				onDeleteSubmit(target, form);
 			}
 		};
-		purgeBtn = new AjaxButton("btn-purge", form) {
+		purgeBtn = new ConfirmableAjaxBorder("btn-purge", getString("80"), getString("833"), cForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

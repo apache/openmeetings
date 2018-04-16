@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,6 +49,7 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -55,6 +57,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.util.string.Strings;
@@ -323,6 +326,37 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				adr.setDeleted(true);
 			}
 			update(u, userId);
+		}
+	}
+
+	// created here so this action would be executed in Transaction
+	public void purge(User u, Long userId) {
+		if (u != null && u.getId() != null) {
+			em.createNamedQuery("purgeChatUserName")
+				.setParameter("purged", "Purged User")
+				.setParameter("userId", u.getId())
+				.executeUpdate();
+			if (!Strings.isEmpty(u.getAddress().getEmail())) {
+				em.createNamedQuery("purgeMailMessages")
+					.setParameter("email", String.format("%%%s%%", u.getAddress().getEmail()))
+					.executeUpdate();
+			}
+			u.setDeleted(true);
+			u.setSipUser(new AsteriskSipUser());
+			u.setAddress(new Address());
+			u.setAge(new Date());
+			u.setExternalId(null);
+			final String purged = String.format("Purged %s", UUID.randomUUID());
+			u.setFirstname(purged);
+			u.setLastname(purged);
+			u.setLogin(purged);
+			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
+			u.setPictureuri(null);
+			update(u, userId);
+			// this should be last action, so file will be deleted in case there were no errors
+			if (pic != null) {
+				pic.delete();
+			}
 		}
 	}
 

@@ -143,6 +143,10 @@ public class OmFileHelper {
 	}
 
 	public static File getUserProfilePicture(Long userId, String uri) {
+		return getUserProfilePicture(userId, uri, getDefaultProfilePicture());
+	}
+
+	public static File getUserProfilePicture(Long userId, String uri, File def) {
 		File img = null;
 		if (SIP_USER_ID.equals(userId)) {
 			img = new File(getImagesDir(), SIP_PICTURE_URI);
@@ -150,7 +154,7 @@ public class OmFileHelper {
 			img = new File(getUploadProfilesUserDir(userId), uri == null ? "" : uri);
 		}
 		if (img == null || !img.exists() || img.isDirectory()) {
-			img = getDefaultProfilePicture();
+			img = def;
 		}
 		return img;
 	}
