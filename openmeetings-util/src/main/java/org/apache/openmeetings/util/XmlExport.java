@@ -82,6 +82,19 @@ public class XmlExport {
 		return document.addElement(root);
 	}
 
+	public static void saveToXml(Writer out, Document doc) throws Exception {
+		OutputFormat outformat = OutputFormat.createPrettyPrint();
+		outformat.setIndentSize(1);
+		outformat.setIndent("\t");
+		outformat.setEncoding(UTF_8.name());
+		XMLWriter writer = new XMLWriter(out, outformat);
+		writer.write(doc);
+		writer.flush();
+		out.flush();
+		out.close();
+	}
+	
+	@Deprecated
 	public static void toXml(Writer out, Document doc) throws Exception {
 		OutputFormat outformat = OutputFormat.createPrettyPrint();
 		outformat.setIndentSize(1);
