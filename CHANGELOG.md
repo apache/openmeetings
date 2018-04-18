@@ -1,5 +1,6 @@
 Apache OpenMeetings Change Log
 ==============================
+Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
