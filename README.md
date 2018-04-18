@@ -49,7 +49,7 @@ see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
 4.0.3
 -----
-[Release 4.0.3](https://archive.apache.org/dist/openmeetings/4.0.3/), provides following improvements:
+[Release 4.0.3](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.3), provides following improvements:
 
 Security fix in Calendar
 
