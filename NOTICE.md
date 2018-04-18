@@ -1,5 +1,6 @@
 Apache OpenMeetings
-Copyright 2011-2017 The Apache Software Foundation
+Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+Copyright 2011- The Apache Software Foundation
 
 This product includes software developed at  
 The Apache Software Foundation (http://www.apache.org/).
