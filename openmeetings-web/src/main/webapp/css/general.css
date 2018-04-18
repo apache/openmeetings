@@ -566,69 +566,7 @@ form .input {
 }
  /**** TODO need to be unified with other icons used ****/
 div.formSaveBar {
-	height: 22px;
-}
-.addButton, .delButton {
-	display: inline-block;
-	cursor: pointer;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
-	vertical-align: super;
-}
-div.formSaveButton {
-	background-image: url(images/file_save_as.png);
-	background-repeat: no-repeat;
-	background-size: 18px 18px;
-	float: left;
-	cursor: pointer;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
-}
-.addButton {
-	background: url(images/plus_icon.png) no-repeat;
-}
-.delButton {
-	background: url(images/cancel_icon.png) no-repeat;
-}
-.formNewButton {
-	background: url(images/plus_icon.png) no-repeat;
-	float: left;
-	cursor: pointer;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
-}
-.formNewButton.disabled {
-	background: url(images/plus_icon_disabled.png) no-repeat;
-}
-div.formRefreshButton input {
-	background: url(images/arrow_refresh_small.png) no-repeat;
-	float: left;
-	cursor: pointer;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
-}
-.formCancelButton {
-	background: url(images/cancel_icon.png) no-repeat;
-	display: inline-block;
-	float: left;
-	cursor: pointer;
-	width: 18px;
-	height: 18px;
-	border: none;
-	margin-left: 2px;
-	margin-top: 2px;
+	height: 35px;
 }
 .hash-panel-main {
 	width: 100%;

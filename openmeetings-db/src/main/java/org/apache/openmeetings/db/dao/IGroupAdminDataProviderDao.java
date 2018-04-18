@@ -33,7 +33,20 @@ public interface IGroupAdminDataProviderDao<T extends IDataProviderEntity> exten
 	 * @param order - column and sort order
 	 * @return list of instances in the range specified
 	 */
-	List<T> get(String search, Long adminId, int start, int count, String order);
+	List<T> adminGet(String search, Long adminId, int start, int count, String order);
+
+	/**
+	 * Get a list of instances of {@link T}
+	 *
+	 * @param search - string search criteria to filter entities
+	 * @param start - the start to range to retrieve
+	 * @param count - maximum instance count to retrieve
+	 * @param order - column and sort order
+	 * @return list of instances in the range specified
+	 */
+	default List<T> adminGet(String search, int start, int count, String order) {
+		return get(search, start, count, order);
+	}
 
 	/**
 	 * Count the number of instances of {@link T}
@@ -42,5 +55,15 @@ public interface IGroupAdminDataProviderDao<T extends IDataProviderEntity> exten
 	 * @param adminId - id of group admin user
 	 * @return count of instances satisfying given search criteria
 	 */
-	long count(String search, Long adminId);
+	long adminCount(String search, Long adminId);
+
+	/**
+	 * Count the number of instances of {@link T}
+	 *
+	 * @param search - string search criteria to filter entities
+	 * @return count of instances satisfying given search criteria
+	 */
+	default long adminCount(String search) {
+		return count(search);
+	}
 }

@@ -108,7 +108,7 @@ public class UserManager implements IUserManager {
 				u.getAddress().setEmail(email);
 				u.setTimeZoneId(getTimeZone(tzId).getID());
 
-				// this is needed cause the language is not a needed data at registering
+				// this is needed cause the language is not a necessary data at registering
 				u.setLanguageId(languageId != 0 ? languageId : 1);
 				u.getGroupUsers().add(new GroupUser(groupDao.get(getDefaultGroup()), u));
 

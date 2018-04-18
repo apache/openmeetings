@@ -160,7 +160,7 @@ public class GeneralUserForm extends Form<User> {
 		grpUsers.addAll(u.getGroupUsers());
 		if (isAdminForm) {
 			List<Group> grpList = hasGroupAdminLevel(getRights())
-					? groupDao.get(null, getUserId(), 0, Integer.MAX_VALUE, null)
+					? groupDao.adminGet(null, getUserId(), 0, Integer.MAX_VALUE, null)
 					: groupDao.get(0, Integer.MAX_VALUE);
 			for (Group g : grpList) {
 				GroupUser gu = new GroupUser(g, u);

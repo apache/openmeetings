@@ -36,11 +36,6 @@
 .appointmentPopUp select {
 	width: 426px;
 }
-
-.appointmentPopUp .formNewButton {
-	float: left;
-}
-
 .appointmentPopUp td {
 	vertical-align: middle;
 }

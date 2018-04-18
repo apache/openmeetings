@@ -47,6 +47,21 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.3
+-----
+[Release 4.0.3](https://archive.apache.org/dist/openmeetings/4.0.3/), provides following improvements:
+
+Security fix in Calendar
+
+Room:
+* Performance was improved
+* Issues with audio/video were fixed
+* Quick poll was added
+
+Multiple improvements in web services
+
+Other fixes and improvements, 13 issues were fixed
+
 4.0.2
 -----
 [Release 4.0.2](https://archive.apache.org/dist/openmeetings/4.0.2/), provides following improvements:

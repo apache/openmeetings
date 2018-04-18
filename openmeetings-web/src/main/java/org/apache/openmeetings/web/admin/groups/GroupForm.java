@@ -38,7 +38,6 @@ import org.apache.openmeetings.web.admin.AdminUserChoiceProvider;
 import org.apache.openmeetings.web.common.UploadableImagePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -49,7 +48,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.select2.Select2Choice;
 
 public class GroupForm extends AdminBaseForm<Group> {
@@ -132,9 +130,6 @@ public class GroupForm extends AdminBaseForm<Group> {
 				}
 			}
 		});
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
 	}
 
 	static String formatUser(User choice) {
@@ -142,19 +137,10 @@ public class GroupForm extends AdminBaseForm<Group> {
 	}
 
 	@Override
-	protected boolean isNewBtnVisible() {
-		return !hasGroupAdminLevel(getRights());
-	}
-
-	@Override
-	protected boolean isDelBtnVisible() {
-		return !hasGroupAdminLevel(getRights());
-	}
-
-	@Override
 	protected void onInitialize() {
 		super.onInitialize();
 		final boolean isGroupAdmin = hasGroupAdminLevel(getRights());
+		setNewVisible(!isGroupAdmin);
 		userToadd.setEnabled(!isGroupAdmin);
 		add(new RequiredTextField<String>("name").setLabel(Model.of(getString("165"))));
 		add(logo);
@@ -179,6 +165,12 @@ public class GroupForm extends AdminBaseForm<Group> {
 		add(maxRooms.setLabel(Model.of(getString("admin.group.form.maxRooms"))).setEnabled(false).setOutputMarkupId(true));
 		add(recordingTtl.setLabel(Model.of(getString("admin.group.form.recordingTtl"))).setEnabled(false).setOutputMarkupId(true));
 		add(reminderDays.setLabel(Model.of(getString("admin.group.form.reminderDays"))).setEnabled(false).setOutputMarkupId(true));
+	}
+
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		setDelVisible(!hasGroupAdminLevel(getRights()));
 	}
 
 	public void updateView(AjaxRequestTarget target) {
@@ -231,7 +223,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		for (GroupUser grpUser : usersPanel.getUsers2add()) {
 			usersPanel.update(grpUser);
 		}
-		hideNewRecord();
+		setNewVisible(false);
 		updateView(target);
 	}
 }

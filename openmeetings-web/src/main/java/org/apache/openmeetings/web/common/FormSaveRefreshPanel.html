@@ -21,9 +21,11 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	<div class="formSaveBar ui-widget-header">
-		<div class="formSaveButton" wicket:id="ajax-save-button" wicket:message="title:144"></div>
-		<div class="formRefreshButton">
-			<input type="submit" value="" wicket:id="ajax-refresh-button" wicket:message="title:lbl.refresh" />
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="ajax-save-button" wicket:message="title:144">
+			<span class="ui-button-icon ui-icon ui-icon-disk"></span>&nbsp;
+		</div>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="ajax-refresh-button" wicket:message="title:lbl.refresh">
+			<span class="ui-button-icon ui-icon ui-icon-refresh"></span>&nbsp;
 		</div>
 		<wicket:child/>
 	</div>

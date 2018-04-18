@@ -30,6 +30,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<T> form;
 	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
+	private AjaxButton saveBtn;
 
 	public FormSaveRefreshPanel(String id, Form<T> form) {
 		super(id);
@@ -42,7 +43,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 		add(feedback.setOutputMarkupId(true));
 
 		// add a save button that can be used to submit the form via ajax
-		add(new AjaxButton("ajax-save-button", form) {
+		add(saveBtn = new AjaxButton("ajax-save-button", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -56,7 +57,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				onSaveError(target, form);
+				FormSaveRefreshPanel.this.onError(target, form);
 			}
 		});
 
@@ -68,7 +69,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
-				hideNewRecord();
+				setNewVisible(false);
 				onRefreshSubmit(target, form);
 			}
 
@@ -76,17 +77,23 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				hideNewRecord();
-				onRefreshError(target, form);
+				setNewVisible(false);
+				FormSaveRefreshPanel.this.onError(target, form);
 			}
 		});
 		super.onInitialize();
 	}
 
+	public void setSaveVisible(boolean visible) {
+		saveBtn.setVisible(visible);
+	}
+
 	/**
-	 * Hide the new record text
+	 * Change visibility the new record text
+	 *
+	 * @param visible - new visibility
 	 */
-	public void hideNewRecord() {
+	public void setNewVisible(boolean visible) {
 		// for admin only, will be implemented in admin
 	}
 
@@ -98,20 +105,9 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 	 * @param target Ajax target
 	 * @param form form object
 	 */
-	protected void onSaveError(AjaxRequestTarget target, Form<?> form) {
+	protected void onError(AjaxRequestTarget target, Form<?> form) {
 		//no-op
 	}
 
 	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
-
-
-	/**
-	 * Refresh error handler
-	 *
-	 * @param target Ajax target
-	 * @param form form object
-	 */
-	protected void onRefreshError(AjaxRequestTarget target, Form<?> form) {
-		//no-op
-	}
 }

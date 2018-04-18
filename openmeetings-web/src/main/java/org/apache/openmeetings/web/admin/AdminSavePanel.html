@@ -20,8 +20,18 @@
 -->
 <html xmlns:wicket="http://wicket.apache.org">
 	<wicket:extend>
-		<div class="formNewButton" wicket:id="ajax-new-button" wicket:message="title:155"></div>
-		<div class="formCancelButton" wicket:id="ajax-cancel-button" wicket:message="title:157"></div>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="btn-new" wicket:message="title:155">
+			<span class="ui-button-icon ui-icon ui-icon-plusthick"></span>&nbsp;
+		</div>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-highlight" wicket:id="btn-delete" wicket:message="title:157">
+			<span class="ui-button-icon ui-icon ui-icon-closethick"></span>&nbsp;
+		</div>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only ui-state-error" wicket:id="btn-purge" wicket:message="title:admin.purge">
+			<span class="ui-button-icon ui-icon ui-icon-trash"></span>&nbsp;
+		</div>
+		<div class="ui-button ui-widget ui-corner-all ui-button-icon-only" wicket:id="btn-restore" wicket:message="title:admin.restore">
+			<span class="ui-button-icon ui-icon ui-icon-circle-check"></span>&nbsp;
+		</div>
 		<span wicket:id="newRecord"></span>
 		<form wicket:id="form"></form>
 	</wicket:extend>

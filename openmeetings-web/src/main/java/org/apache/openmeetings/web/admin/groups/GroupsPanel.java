@@ -71,7 +71,7 @@ public class GroupsPanel extends AdminBasePanel {
 
 					@Override
 					protected void onEvent(AjaxRequestTarget target) {
-						form.hideNewRecord();
+						form.setNewVisible(false);
 						form.setModelObject(g);
 						form.updateView(target);
 						target.add(listContainer);

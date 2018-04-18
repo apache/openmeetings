@@ -30,6 +30,9 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 	private static final long serialVersionUID = 1L;
 	private final Label newRecord = new Label("newRecord", Model.of(""));
 	private final Form<T> form;
+	private ConfirmableAjaxBorder delBtn;
+	private ConfirmableAjaxBorder purgeBtn;
+	private AjaxButton restoreBtn;
 
 	public AdminSavePanel(String id, final Form<T> form) {
 		super(id, form);
@@ -41,7 +44,7 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 		newRecord.setDefaultModelObject(getString("155"));
 		add(newRecord.setVisible(false).setOutputMarkupId(true));
 
-		final AjaxButton newBtn = new AjaxButton("ajax-new-button", form) {
+		final AjaxButton newBtn = new AjaxButton("btn-new", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -57,57 +60,93 @@ public abstract class AdminSavePanel<T> extends FormSaveRefreshPanel<T> {
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				onNewError(target, form);
+				AdminSavePanel.this.onError(target, form);
 			}
 		};
 		// add a cancel button that can be used to submit the form via ajax
 		final Form<?> cForm = new Form<>("form");
 		cForm.setMultiPart(form.isMultiPart());
 		add(cForm);
-		final ConfirmableAjaxBorder delBtn = new ConfirmableAjaxBorder("ajax-cancel-button", getString("80"), getString("833"), cForm) {
+		delBtn = new ConfirmableAjaxBorder("btn-delete", getString("80"), getString("833"), cForm) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				hideNewRecord();
-				onDeleteError(target, form);
+				setNewVisible(false);
+				AdminSavePanel.this.onError(target, form);
 			}
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
 				// repaint the feedback panel so that it is hidden
 				target.add(feedback);
-				hideNewRecord();
+				setNewVisible(false);
 				onDeleteSubmit(target, form);
 			}
 		};
-		add(newBtn.setVisible(isNewBtnVisible()), delBtn.setVisible(isDelBtnVisible()));
+		purgeBtn = new ConfirmableAjaxBorder("btn-purge", getString("80"), getString("833"), cForm) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				// repaint the feedback panel so that it is hidden
+				target.add(feedback);
+				setNewVisible(false);
+				onPurgeSubmit(target, form);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// repaint the feedback panel so errors are shown
+				target.add(feedback);
+				AdminSavePanel.this.onError(target, form);
+			}
+		};
+		restoreBtn = new AjaxButton("btn-restore", form) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				// repaint the feedback panel so that it is hidden
+				target.add(feedback);
+				setNewVisible(false);
+				onRestoreSubmit(target, form);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// repaint the feedback panel so errors are shown
+				target.add(feedback);
+				AdminSavePanel.this.onError(target, form);
+			}
+		};
+		add(newBtn, delBtn
+				, purgeBtn.setOutputMarkupPlaceholderTag(true).setVisible(false)
+				, restoreBtn.setOutputMarkupPlaceholderTag(true).setVisible(false));
 		super.onInitialize();
 	}
 
-	/**
-	 * Hide the new record text
-	 */
 	@Override
-	public void hideNewRecord() {
-		newRecord.setVisible(false);
+	public void setNewVisible(boolean visible) {
+		newRecord.setVisible(visible);
 	}
 
-	/**
-	 * Hide the new record text
-	 */
-	public void showNewRecord() {
-		newRecord.setVisible(true);
+	public void setDelVisible(boolean visible) {
+		delBtn.setVisible(visible);
 	}
 
-	protected abstract boolean isNewBtnVisible();
-	protected abstract boolean isDelBtnVisible();
+	public void setPurgeVisible(boolean visible) {
+		purgeBtn.setVisible(visible);
+	}
+
+	public void setRestoreVisible(boolean visible) {
+		restoreBtn.setVisible(visible);
+	}
 
 	protected abstract void onNewSubmit(AjaxRequestTarget target, Form<?> form);
-	protected abstract void onNewError(AjaxRequestTarget target, Form<?> form);
-
 	protected abstract void onDeleteSubmit(AjaxRequestTarget target, Form<?> form);
-	protected abstract void onDeleteError(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onPurgeSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onRestoreSubmit(AjaxRequestTarget target, Form<?> form);
 }

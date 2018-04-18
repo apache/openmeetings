@@ -27,8 +27,10 @@ import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,18 +44,20 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
+import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.util.DateLabel;
 import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -69,7 +73,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
-import org.apache.wicket.util.time.Duration;
 import org.danekja.java.util.function.serializable.SerializableConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,6 +90,7 @@ import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
 public class UserForm extends AdminBaseForm<User> {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UserForm.class);
+	private final WebMarkupContainer mainContainer = new WebMarkupContainer("adminForm");
 	private final WebMarkupContainer listContainer;
 	private final WebMarkupContainer domain = new WebMarkupContainer("domain");
 	private GeneralUserForm generalForm;
@@ -112,18 +116,19 @@ public class UserForm extends AdminBaseForm<User> {
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
 		this.warning = warning;
-		add(generalForm = new GeneralUserForm("general", getModel(), true));
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
+		add(mainContainer);
+		mainContainer.add(generalForm = new GeneralUserForm("general", getModel(), true));
+		mainContainer.add(password.setResetPassword(false).setLabel(Model.of(getString("110"))).setRequired(false)
 				.add(passValidator = new StrongPasswordValidator(getModelObject())));
 		login.setLabel(Model.of(getString("108")));
-		add(login.add(minimumLength(getMinLoginLength())));
+		mainContainer.add(login.add(minimumLength(getMinLoginLength())));
 
-		add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
+		mainContainer.add(new DropDownChoice<>("type", Arrays.asList(Type.values())).add(new OnChangeAjaxBehavior() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -132,14 +137,14 @@ public class UserForm extends AdminBaseForm<User> {
 			}
 		}));
 		update(null);
-		add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
-		add(new Label("ownerId"));
-		add(new DateLabel("inserted"));
-		add(new DateLabel("updated"));
+		mainContainer.add(domain.add(domainId).setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true));
+		mainContainer.add(new Label("ownerId"));
+		mainContainer.add(new DateLabel("inserted"));
+		mainContainer.add(new DateLabel("updated"));
 
-		add(new CheckBox("forceTimeZoneCheck"));
+		mainContainer.add(new CheckBox("forceTimeZoneCheck"));
 
-		add(new Select2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
+		mainContainer.add(new Select2MultiChoice<>("rights", null, new RestrictiveChoiceProvider<Right>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -173,20 +178,51 @@ public class UserForm extends AdminBaseForm<User> {
 				return Right.valueOf(id);
 			}
 		}));
-		add(new ComunityUserForm("comunity", getModel()));
-
-		// attach an ajax validation behavior to all form component's keydown
-		// event and throttle it down to once per second
-		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+		mainContainer.add(new ComunityUserForm("comunity", getModel()));
 		add(adminPass);
+		remove(validationBehavior);
 	}
 
 	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
+		boolean nd = !getModelObject().isDeleted();
+		boolean isNew = getModelObject().getId() == null;
+		mainContainer.setEnabled(nd);
+		setSaveVisible(nd);
+		setDelVisible(nd && !isNew);
+		setRestoreVisible(!nd);
+		setPurgeVisible(!isNew);
 		password.setModelObject(null);
 		generalForm.updateModelObject(getModelObject(), true);
 		passValidator.setUser(getModelObject());
+	}
+
+	@Override
+	protected void onRestoreSubmit(AjaxRequestTarget target, Form<?> form) {
+		getModelObject().setDeleted(false);
+		onSaveSubmit(target, form);
+	}
+
+	@Override
+	protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
+		User u = getModelObject();
+		u.setDeleted(true);
+		u.setSipUser(new AsteriskSipUser());
+		u.setAddress(new Address());
+		u.setAge(new Date());
+		u.setExternalId(null);
+		final String purged = String.format("Purged %s", UUID.randomUUID());
+		u.setFirstname(purged);
+		u.setLastname(purged);
+		u.setLogin(purged);
+		File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
+		if (pic != null) {
+			pic.delete();
+		}
+		//u.
+		//User fields "age, externaluserid, firstname, lastname, login, pictureuri" will be replaced with "Purged_some_hash"
+		//onSaveSubmit(target, form);
 	}
 
 	@Override
@@ -226,7 +262,7 @@ public class UserForm extends AdminBaseForm<User> {
 			emainManager.sendMail(login.getValue(), email, u.getActivatehash(), false, null);
 		}
 		setModelObject(userDao.get(u.getId()));
-		hideNewRecord();
+		setNewVisible(false);
 		target.add(this, listContainer);
 		reinitJs(target);
 		if (u.getGroupUsers().isEmpty()) {

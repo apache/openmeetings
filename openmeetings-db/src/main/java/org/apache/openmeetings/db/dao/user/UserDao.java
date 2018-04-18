@@ -24,6 +24,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,6 +48,7 @@ import org.apache.openjpa.persistence.OpenJPAQuery;
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.Address;
+import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Salutation;
@@ -54,6 +56,7 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.util.DaoHelper;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.util.string.Strings;
@@ -146,24 +149,60 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		}
 	}
 
-	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
+	private List<User> get(String search, Integer start, Integer count, String order, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
 		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
-				, getAdditionalWhere(filterContacts, currentUserId, params), sort, searchFields), User.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, false
+				, getAdditionalWhere(filterContacts, currentUserId, params), order, searchFields), User.class);
+		if (start != null) {
+			q.setFirstResult(start);
+		}
+		if (count != null) {
+			q.setMaxResults(count);
+		}
 		setAdditionalParams(q, params);
 		return q.getResultList();
 	}
 
+	//This is AdminDao method
+	public List<User> get(String search, boolean excludeContacts, int first, int count) {
+		Map<String, Object> params = new HashMap<>();
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
+				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
+		setAdditionalParams(q, params);
+		q.setFirstResult(first);
+		q.setMaxResults(count);
+		return q.getResultList();
+	}
+
+	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
+		return get(search, null, null, null, filterContacts, currentUserId, true);
+	}
+
+	public List<User> get(String search, int start, int count, String sort, boolean filterContacts, Long currentUserId) {
+		return get(search, start, count, sort, filterContacts, currentUserId, true);
+	}
+
 	@Override
-	public List<User> get(String search, Long adminId, int start, int count, String order) {
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, false
+	public List<User> adminGet(String search, int start, int count, String order) {
+		return get(search, start, count, order, false, null, false);
+	}
+
+	@Override
+	public List<User> adminGet(String search, Long adminId, int start, int count, String order) {
+		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, false
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), User.class);
 		q.setParameter("adminId", adminId);
 		q.setFirstResult(start);
 		q.setMaxResults(count);
 		return q.getResultList();
+	}
+
+	private long count(String search, boolean filterContacts, Long currentUserId, boolean filterDeleted) {
+		Map<String, Object> params = new HashMap<>();
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, filterDeleted, true
+				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
+		setAdditionalParams(q, params);
+		return q.getSingleResult();
 	}
 
 	@Override
@@ -183,38 +222,20 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 	}
 
 	public long count(String search, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, true
-				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), Long.class);
-		setAdditionalParams(q, params);
-		return q.getSingleResult();
+		return count(search, filterContacts, currentUserId, true);
 	}
 
 	@Override
-	public long count(String search, Long adminId) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, true, true
+	public long adminCount(String search) {
+		return count(search, false, Long.valueOf(-1), false);
+	}
+
+	@Override
+	public long adminCount(String search, Long adminId) {
+		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.user)", "u", null, search, true, false, true
 				, "gu.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", null, searchFields), Long.class);
 		q.setParameter("adminId", adminId);
 		return q.getSingleResult();
-	}
-
-	//This is AdminDao method
-	public List<User> get(String search, boolean excludeContacts, int first, int count) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", null, search, true, true, false
-				, getAdditionalWhere(excludeContacts, params), null, searchFields), User.class);
-		setAdditionalParams(q, params);
-		q.setFirstResult(first);
-		q.setMaxResults(count);
-		return q.getResultList();
-	}
-
-	public List<User> get(String search, boolean filterContacts, Long currentUserId) {
-		Map<String, Object> params = new HashMap<>();
-		TypedQuery<User> q = em.createQuery(DaoHelper.getSearchQuery("User", "u", getAdditionalJoin(filterContacts), search, true, true, false
-				, getAdditionalWhere(filterContacts, currentUserId, params), null, searchFields), User.class);
-		setAdditionalParams(q, params);
-		return q.getResultList();
 	}
 
 	@Override
@@ -304,6 +325,37 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				adr.setDeleted(true);
 			}
 			update(u, userId);
+		}
+	}
+
+	// created here so this action would be executed in Transaction
+	public void purge(User u, Long userId) {
+		if (u != null && u.getId() != null) {
+			em.createNamedQuery("purgeChatUserName")
+				.setParameter("purged", "Purged User")
+				.setParameter("userId", u.getId())
+				.executeUpdate();
+			if (!Strings.isEmpty(u.getAddress().getEmail())) {
+				em.createNamedQuery("purgeMailMessages")
+					.setParameter("email", String.format("%%%s%%", u.getAddress().getEmail()))
+					.executeUpdate();
+			}
+			u.setDeleted(true);
+			u.setSipUser(new AsteriskSipUser());
+			u.setAddress(new Address());
+			u.setAge(new Date());
+			u.setExternalId(null);
+			final String purged = String.format("Purged %s", UUID.randomUUID());
+			u.setFirstname(purged);
+			u.setLastname(purged);
+			u.setLogin(purged);
+			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
+			u.setPictureuri(null);
+			update(u, userId);
+			// this should be last action, so file will be deleted in case there were no errors
+			if (pic != null) {
+				pic.delete();
+			}
 		}
 	}
 
