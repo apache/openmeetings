@@ -26,13 +26,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
-public abstract class FormSaveRefreshPanel<T> extends Panel {
+public abstract class FormActionsPanel<T> extends Panel {
 	private static final long serialVersionUID = 1L;
 	private final Form<T> form;
 	protected final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private AjaxButton saveBtn;
+	private ConfirmableAjaxBorder purgeBtn;
 
-	public FormSaveRefreshPanel(String id, Form<T> form) {
+	public FormActionsPanel(String id, Form<T> form) {
 		super(id);
 		this.form = form;
 		setOutputMarkupId(true);
@@ -43,7 +44,7 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 		add(feedback.setOutputMarkupId(true));
 
 		// add a save button that can be used to submit the form via ajax
-		add(saveBtn = new AjaxButton("ajax-save-button", form) {
+		add(saveBtn = new AjaxButton("btn-save", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -57,12 +58,12 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 			protected void onError(AjaxRequestTarget target) {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
-				FormSaveRefreshPanel.this.onError(target, form);
+				FormActionsPanel.this.onError(target, form);
 			}
 		});
 
 		// add a refresh button that can be used to submit the form via ajax
-		add(new AjaxButton("ajax-refresh-button", form) {
+		add(new AjaxButton("btn-refresh", form) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -78,9 +79,28 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 				// repaint the feedback panel so errors are shown
 				target.add(feedback);
 				setNewVisible(false);
-				FormSaveRefreshPanel.this.onError(target, form);
+				FormActionsPanel.this.onError(target, form);
 			}
 		});
+		purgeBtn = new ConfirmableAjaxBorder("btn-purge", getString("80"), getString("833"), form, null, true) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onSubmit(AjaxRequestTarget target) {
+				// repaint the feedback panel so that it is hidden
+				target.add(feedback);
+				setNewVisible(false);
+				onPurgeSubmit(target, form);
+			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target) {
+				// repaint the feedback panel so errors are shown
+				target.add(feedback);
+				FormActionsPanel.this.onError(target, form);
+			}
+		};
+		add(purgeBtn.setOutputMarkupPlaceholderTag(true).setVisible(false));
 		super.onInitialize();
 	}
 
@@ -97,7 +117,13 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 		// for admin only, will be implemented in admin
 	}
 
+	public void setPurgeVisible(boolean visible) {
+		purgeBtn.setVisible(visible);
+	}
+
 	protected abstract void onSaveSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
+	protected abstract void onPurgeSubmit(AjaxRequestTarget target, Form<?> form);
 
 	/**
 	 * Save error handler
@@ -108,6 +134,4 @@ public abstract class FormSaveRefreshPanel<T> extends Panel {
 	protected void onError(AjaxRequestTarget target, Form<?> form) {
 		//no-op
 	}
-
-	protected abstract void onRefreshSubmit(AjaxRequestTarget target, Form<?> form);
 }

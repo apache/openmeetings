@@ -340,6 +340,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 					.setParameter("email", String.format("%%%s%%", u.getAddress().getEmail()))
 					.executeUpdate();
 			}
+			u.setActivatehash(null);
+			u.setResethash(null);
 			u.setDeleted(true);
 			u.setSipUser(new AsteriskSipUser());
 			u.setAddress(new Address());
@@ -349,8 +351,17 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setFirstname(purged);
 			u.setLastname(purged);
 			u.setLogin(purged);
+			u.setGroupUsers(new ArrayList<>());
+			u.setRights(new HashSet<>());
+			u.setTimeZoneId(null);
 			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
 			u.setPictureuri(null);
+			ICrypt crypt = CryptProvider.get();
+			try {
+				u.updatePassword(crypt.randomPassword(25));
+			} catch (NoSuchAlgorithmException e) {
+				log.error("Unexpected exception while updating password");
+			}
 			update(u, userId);
 			// this should be last action, so file will be deleted in case there were no errors
 			if (pic != null) {
