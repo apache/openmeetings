@@ -38,6 +38,8 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
 @NamedQueries({
 	@NamedQuery(name = "getLogRecentRooms", query = "SELECT c FROM ConferenceLog c "
 		+ "WHERE c.roomId IS NOT NULL AND c.type = :roomEnter and c.userId = :userId ORDER BY c.inserted DESC")
+	, @NamedQuery(name = "clearLogUserIp", query = "UPDATE ConferenceLog c SET c.userip = NULL "
+			+ "WHERE c.userip IS NOT NULL AND c.inserted < :date")
 })
 public class ConferenceLog implements IDataProviderEntity {
 	private static final long serialVersionUID = 1L;
