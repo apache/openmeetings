@@ -49,7 +49,13 @@ public class ConferenceLogDao {
 		confLog.setUserip(userip);
 
 		em.persist(confLog);
-		log.debug("[addConferenceLog]: " + confLog);
+		log.debug("[add]: {}", confLog);
 		return confLog;
+	}
+
+	public int clear(long ttl) {
+		return em.createNamedQuery("clearLogUserIp")
+			.setParameter("date", new Date(System.currentTimeMillis() - ttl))
+			.executeUpdate();
 	}
 }

@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -46,6 +47,7 @@ public class CleanupJob extends AbstractJob {
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
 	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour
 	private long resetHashTtl = 24 * 60 * 60 * 1000L; // 1 day
+	private long confLogTtl = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
 	@Autowired
 	private SessiondataDao sessionDao;
@@ -55,6 +57,8 @@ public class CleanupJob extends AbstractJob {
 	private UserDao userDao;
 	@Autowired
 	private IWhiteboardManager wbManager;
+	@Autowired
+	private ConferenceLogDao confLogDao;
 
 	public void setSessionTimeout(long sessionTimeout) {
 		this.sessionTimeout = sessionTimeout;
@@ -70,6 +74,10 @@ public class CleanupJob extends AbstractJob {
 
 	public void setResetHashTtl(long resetHashTtl) {
 		this.resetHashTtl = resetHashTtl;
+	}
+
+	public void setConfLogTtl(long confLogTtl) {
+		this.confLogTtl = confLogTtl;
 	}
 
 	public void cleanTestSetup() {
@@ -177,5 +185,13 @@ public class CleanupJob extends AbstractJob {
 			}
 			log.debug("... DONE CleanupJob.cleanExpiredResetHash");
 		}
+	}
+
+	public void cleanPersonalData() {
+		log.trace("CleanupJob.cleanPersonalData");
+		if (!isInitComplete()) {
+			return;
+		}
+		confLogDao.clear(confLogTtl);
 	}
 }
