@@ -31,15 +31,27 @@ import org.slf4j.Logger;
 
 public class SCryptImplementation implements ICrypt {
 	private static final Logger log = Red5LoggerFactory.getLogger(SCryptImplementation.class, getWebAppRootKey());
+	private static final ThreadLocal<SecureRandom> rnd = new ThreadLocal<SecureRandom>() {
+		@Override
+		protected SecureRandom initialValue() {
+			SecureRandom sr;
+			try {
+				sr = SecureRandom.getInstance(SECURE_RND_ALG);
+			} catch (NoSuchAlgorithmException e) {
+				log.error("Failed to get instance of SecureRandom {}", SECURE_RND_ALG);
+				sr = new SecureRandom();
+			}
+			return sr;
+		}
+	};
 	private static final String SECURE_RND_ALG = "SHA1PRNG";
 	private static final int COST = 1024 * 16;
 	private static final int KEY_LENGTH = 512;
 	private static final int SALT_LENGTH = 200;
 
-	private static byte[] getSalt() throws NoSuchAlgorithmException {
-		SecureRandom sr = SecureRandom.getInstance(SECURE_RND_ALG);
-		byte[] salt = new byte[SALT_LENGTH];
-		sr.nextBytes(salt);
+	private static byte[] getSalt(int length) {
+		byte[] salt = new byte[length];
+		rnd.get().nextBytes(salt);
 		return salt;
 	}
 
@@ -53,15 +65,9 @@ public class SCryptImplementation implements ICrypt {
 		if (str == null) {
 			return null;
 		}
-		String hash = null;
-		try {
-			byte[] salt = getSalt();
-			String h = hash(str, salt);
-			hash = String.format("%s:%s", h, Base64.encodeBase64String(salt));
-		} catch (NoSuchAlgorithmException e) {
-			log.error("Error", e);
-		}
-		return hash;
+		byte[] salt = getSalt(SALT_LENGTH);
+		String h = hash(str, salt);
+		return String.format("%s:%s", h, Base64.encodeBase64String(salt));
 	}
 
 	@Override
@@ -95,5 +101,10 @@ public class SCryptImplementation implements ICrypt {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String randomPassword(int length) {
+		return Base64.encodeBase64String(getSalt(length));
 	}
 }

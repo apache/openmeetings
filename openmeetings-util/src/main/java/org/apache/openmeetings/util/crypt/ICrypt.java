@@ -58,4 +58,6 @@ public interface ICrypt {
 	 * @return <code>true</code> in case string matches hash, <code>false</code> otherwise
 	 */
 	boolean fallback(String str, String hash);
+
+	String randomPassword(int length);
 }

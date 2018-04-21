@@ -35,14 +35,14 @@ import org.apache.wicket.util.time.Duration;
  */
 public abstract class AdminBaseForm<T> extends Form<T> {
 	private static final long serialVersionUID = 1L;
-	private AdminSavePanel<T> savePanel;
+	private AdminActionsPanel<T> savePanel;
 	protected final AjaxFormValidatingBehavior validationBehavior
 			= new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND);
 
 	public AdminBaseForm(String id, IModel<T> object) {
 		super(id, object);
 
-		savePanel = new AdminSavePanel<T>("buttons", this) {
+		savePanel = new AdminActionsPanel<T>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

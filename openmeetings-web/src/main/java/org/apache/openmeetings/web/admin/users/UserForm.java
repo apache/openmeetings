@@ -29,10 +29,8 @@ import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,14 +44,11 @@ import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
-import org.apache.openmeetings.db.entity.user.Address;
-import org.apache.openmeetings.db.entity.user.AsteriskSipUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.AuthLevelUtil;
 import org.apache.openmeetings.service.mail.EmailManager;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.web.admin.AdminBaseForm;
 import org.apache.openmeetings.web.common.ComunityUserForm;
 import org.apache.openmeetings.web.common.GeneralUserForm;
@@ -175,6 +170,12 @@ public class UserForm extends AdminBaseForm<User> {
 	}
 
 	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		onModelChanged();
+	}
+
+	@Override
 	protected void onModelChanged() {
 		super.onModelChanged();
 		boolean nd = !getModelObject().isDeleted();
@@ -197,23 +198,12 @@ public class UserForm extends AdminBaseForm<User> {
 
 	@Override
 	protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
-		User u = getModelObject();
-		u.setDeleted(true);
-		u.setSipUser(new AsteriskSipUser());
-		u.setAddress(new Address());
-		u.setAge(new Date());
-		u.setExternalId(null);
-		final String purged = String.format("Purged %s", UUID.randomUUID());
-		u.setFirstname(purged);
-		u.setLastname(purged);
-		u.setLogin(purged);
-		File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
-		if (pic != null) {
-			pic.delete();
+		if (isAdminPassRequired()) {
+			adminPass.setAction((SerializableConsumer<AjaxRequestTarget>)t -> purgeUser(t));
+			adminPass.open(target);
+		} else {
+			purgeUser(target);
 		}
-		//u.
-		//User fields "age, externaluserid, firstname, lastname, login, pictureuri" will be replaced with "Purged_some_hash"
-		//onSaveSubmit(target, form);
 	}
 
 	@Override
@@ -237,6 +227,11 @@ public class UserForm extends AdminBaseForm<User> {
 		return checkLevel(u.getRights()) || (ou != null && checkLevel(ou.getRights()));
 	}
 
+	private void purgeUser(AjaxRequestTarget target) {
+		getBean(UserDao.class).purge(getModelObject(), getUserId());
+		updateForm(target);
+	}
+
 	private void saveUser(AjaxRequestTarget target, String pass) {
 		User u = getModelObject();
 		final UserDao dao = getBean(UserDao.class);
@@ -254,13 +249,19 @@ public class UserForm extends AdminBaseForm<User> {
 			String email = u.getAddress().getEmail();
 			getBean(EmailManager.class).sendMail(login.getValue(), email, u.getActivatehash(), false, null);
 		}
+		updateForm(target);
+		if (u.getGroupUsers().isEmpty()) {
+			warning.open(target);
+		}
+	}
+
+	private void updateForm(AjaxRequestTarget target) {
+		User u = getModelObject();
+		final UserDao dao = getBean(UserDao.class);
 		setModelObject(dao.get(u.getId()));
 		setNewVisible(false);
 		target.add(this, listContainer);
 		reinitJs(target);
-		if (u.getGroupUsers().isEmpty()) {
-			warning.open(target);
-		}
 	}
 
 	@Override

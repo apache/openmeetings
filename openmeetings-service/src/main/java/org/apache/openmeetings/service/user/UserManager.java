@@ -32,14 +32,12 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKe
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -56,6 +54,8 @@ import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
+import org.apache.openmeetings.util.crypt.CryptProvider;
+import org.apache.openmeetings.util.crypt.ICrypt;
 import org.apache.wicket.util.string.Strings;
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.api.scope.IScope;
@@ -273,10 +273,6 @@ public class UserManager implements IUserManager {
 			return null;
 		}
 		// generate random password
-		SecureRandom rnd = new SecureRandom();
-		byte[] rawPass = new byte[25];
-		rnd.nextBytes(rawPass);
-		String pass = Base64.encodeBase64String(rawPass);
 		// check if the user already exists and register new one if it's needed
 		if (u == null) {
 			u = getNewUserInstance(null);
@@ -303,7 +299,8 @@ public class UserManager implements IUserManager {
 			}
 		}
 		u.setLastlogin(new Date());
-		u = userDao.update(u, pass, Long.valueOf(-1));
+		ICrypt crypt = CryptProvider.get();
+		u = userDao.update(u, crypt.randomPassword(25), Long.valueOf(-1));
 
 		return u;
 	}

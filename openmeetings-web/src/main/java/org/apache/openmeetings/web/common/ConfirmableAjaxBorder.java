@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.border.Border;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -39,7 +40,9 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	private static final long serialVersionUID = 1L;
 	private static final String DIALOG_ID = "dialog";
 	protected final Form<?> form = new Form<>("form");
+	protected final Form<?> userForm;
 	private final ConfirmableBorderDialog dialog;
+	private boolean validate = false;
 
 	public ConfirmableAjaxBorder(String id, String title, String message) {
 		this(id, title, message, null, null);
@@ -54,6 +57,10 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	}
 
 	public ConfirmableAjaxBorder(String id, String title, String message, Form<?> userForm, ConfirmableBorderDialog dialog) {
+		this(id, title, message, userForm, dialog, false);
+	}
+
+	public ConfirmableAjaxBorder(String id, String title, String message, Form<?> userForm, ConfirmableBorderDialog dialog, boolean validate) {
 		super(id, Model.of(message));
 		if (dialog == null) {
 			this.dialog = new ConfirmableBorderDialog(DIALOG_ID, title, message, userForm == null ? form : userForm);
@@ -62,6 +69,8 @@ public abstract class ConfirmableAjaxBorder extends Border {
 			this.dialog = dialog;
 			form.add(new EmptyPanel(DIALOG_ID));
 		}
+		this.userForm = userForm;
+		this.validate = validate;
 		this.dialog.setSubmitHandler((SerializableConsumer<AjaxRequestTarget>)t->onSubmit(t));
 		this.dialog.setErrorHandler((SerializableConsumer<AjaxRequestTarget>)t->onError(t));
 		setOutputMarkupId(true);
@@ -74,22 +83,38 @@ public abstract class ConfirmableAjaxBorder extends Border {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(new AjaxEventBehavior(EVT_CLICK) {
-			private static final long serialVersionUID = 1L;
+		if (validate) {
+			add(new AjaxFormSubmitBehavior(EVT_CLICK) {
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-				super.updateAjaxAttributes(attributes);
-				ConfirmableAjaxBorder.this.updateAjaxAttributes(attributes);
-			}
-
-			@Override
-			protected void onEvent(AjaxRequestTarget target) {
-				if (isClickable()) {
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
 					dialog.open(target);
 				}
-			}
-		});
+
+				@Override
+				protected void onError(AjaxRequestTarget target) {
+					ConfirmableAjaxBorder.this.onError(target);
+				}
+			});
+		} else {
+			add(new AjaxEventBehavior(EVT_CLICK) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+					super.updateAjaxAttributes(attributes);
+					ConfirmableAjaxBorder.this.updateAjaxAttributes(attributes);
+				}
+
+				@Override
+				protected void onEvent(AjaxRequestTarget target) {
+					if (isClickable()) {
+						dialog.open(target);
+					}
+				}
+			});
+		}
 		addToBorder(form);
 	}
 

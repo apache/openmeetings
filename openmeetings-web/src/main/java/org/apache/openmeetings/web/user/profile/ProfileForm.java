@@ -25,8 +25,10 @@ import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
 
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.ComunityUserForm;
-import org.apache.openmeetings.web.common.FormSaveRefreshPanel;
+import org.apache.openmeetings.web.common.FormActionsPanel;
 import org.apache.openmeetings.web.common.GeneralUserForm;
 import org.apache.openmeetings.web.common.UploadableProfileImagePanel;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -52,6 +54,7 @@ public class ProfileForm extends Form<User> {
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;
+	private FormActionsPanel<User> actions;
 
 	public ProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
 		super(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(getUserId())));
@@ -64,7 +67,7 @@ public class ProfileForm extends Form<User> {
 		super.onInitialize();
 		add(passwd.setLabel(Model.of(getString("current.password"))).setRequired(true));
 
-		add(new FormSaveRefreshPanel<User>("buttons", this) {
+		add(actions = new FormActionsPanel<User>("buttons", this) {
 			private static final long serialVersionUID = 1L;
 
 			private void refreshUser() {
@@ -93,6 +96,13 @@ public class ProfileForm extends Form<User> {
 				refreshUser();
 				target.add(ProfileForm.this);
 			}
+
+			@Override
+			protected void onPurgeSubmit(AjaxRequestTarget target, Form<?> form) {
+				getBean(UserDao.class).purge(getModelObject(), getUserId());
+				WebSession.get().invalidateNow();
+				setResponsePage(Application.get().getSignInPageClass());
+			}
 		});
 		add(new WebMarkupContainer("changePwd").add(new ButtonBehavior("#changePwd"), new AjaxEventBehavior(EVT_CLICK) {
 			private static final long serialVersionUID = 1L;
@@ -109,6 +119,12 @@ public class ProfileForm extends Form<User> {
 		// attach an ajax validation behavior to all form component's keydown
 		// event and throttle it down to once per second
 		add(new AjaxFormValidatingBehavior("keydown", Duration.ONE_SECOND));
+	}
+
+	@Override
+	protected void onConfigure() {
+		super.onConfigure();
+		actions.setPurgeVisible(true);
 	}
 
 	@Override
