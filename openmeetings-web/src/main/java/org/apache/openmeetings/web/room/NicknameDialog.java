@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.web.room;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinFnameLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLnameLength;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
 import java.util.Arrays;
@@ -64,8 +66,8 @@ public class NicknameDialog extends NonClosableDialog<User> {
 		getTitle().setObject(getString("1287"));
 		ok = new DialogButton("ok", getString("54"));
 		form.add(feedback);
-		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(getString("135"))).add(minimumLength(4)));
-		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(getString("136"))).add(minimumLength(4)));
+		form.add(new RequiredTextField<String>("firstname").setLabel(Model.of(getString("135"))).add(minimumLength(getMinFnameLength())));
+		form.add(new RequiredTextField<String>("lastname").setLabel(Model.of(getString("136"))).add(minimumLength(getMinLnameLength())));
 		form.add(new RequiredTextField<String>("address.email").setLabel(Model.of(getString("119"))).add(RfcCompliantEmailAddressValidator.getInstance()));
 		super.onInitialize();
 	}
