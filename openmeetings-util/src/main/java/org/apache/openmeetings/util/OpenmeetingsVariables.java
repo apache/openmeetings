@@ -95,6 +95,8 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_MP4_AUDIO_RATE = "mp4.audio.rate";
 	public static final String CONFIG_MP4_AUDIO_BITRATE = "mp4.audio.bitrate";
 	public static final String CONFIG_REST_ALLOW_ORIGIN = "rest.allow.origin";
+	public static final String CONFIG_FNAME_MIN_LENGTH = "user.fname.minimum.length";
+	public static final String CONFIG_LNAME_MIN_LENGTH = "user.lname.minimum.length";
 
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:;";
@@ -138,6 +140,8 @@ public class OpenmeetingsVariables {
 	private static String defaultTimezone = "Europe/Berlin";
 	private static String restAllowOrigin = null;
 	private static String sipContext = DEFAULT_SIP_CONTEXT;
+	private static int minFnameLength = USER_LOGIN_MINIMUM_LENGTH;
+	private static int minLnameLength = USER_LOGIN_MINIMUM_LENGTH;
 
 	private OpenmeetingsVariables() {}
 
@@ -303,5 +307,21 @@ public class OpenmeetingsVariables {
 
 	public static void setSipContext(String context) {
 		sipContext = context;
+	}
+
+	public static int getMinFnameLength() {
+		return minFnameLength;
+	}
+
+	public static void setMinFnameLength(int length) {
+		minFnameLength = length;
+	}
+
+	public static int getMinLnameLength() {
+		return minLnameLength;
+	}
+
+	public static void setMinLnameLength(int length) {
+		minLnameLength = length;
 	}
 }

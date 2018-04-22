@@ -34,12 +34,14 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
@@ -77,6 +79,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setExtProcessTtl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setGaCode;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMaxUploadSize;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinFnameLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLnameLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOrigin;
@@ -374,6 +378,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_SIP_EXTEN_CONTEXT:
 				reloadSipContext();
 				break;
+			case CONFIG_FNAME_MIN_LENGTH:
+				reloadFnameMinLength();
+				break;
+			case CONFIG_LNAME_MIN_LENGTH:
+				reloadLnameMinLength();
+				break;
 		}
 		return entity;
 	}
@@ -461,6 +471,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setSipContext(getString(CONFIG_SIP_EXTEN_CONTEXT, DEFAULT_SIP_CONTEXT));
 	}
 
+	private void reloadFnameMinLength() {
+		setMinFnameLength(getInt(CONFIG_FNAME_MIN_LENGTH, USER_LOGIN_MINIMUM_LENGTH));
+	}
+
+	private void reloadLnameMinLength() {
+		setMinLnameLength(getInt(CONFIG_LNAME_MIN_LENGTH, USER_LOGIN_MINIMUM_LENGTH));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -478,6 +496,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadPasswdMinLength();
 		reloadDefaultGroup();
 		reloadSipContext();
+		reloadFnameMinLength();
+		reloadLnameMinLength();
 	}
 
 	private JSONObject reloadRoomSettings() {

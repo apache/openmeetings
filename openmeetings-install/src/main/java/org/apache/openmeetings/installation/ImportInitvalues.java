@@ -48,6 +48,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SE
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_CODEC;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_CSP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_HEADER_XFRAME;
@@ -55,6 +56,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_B
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
@@ -341,6 +343,10 @@ public class ImportInitvalues {
 		addCfg(list, CONFIG_MP4_AUDIO_RATE, String.valueOf(getAudioRate()), Configuration.Type.number, "Audio sampling rate (in Hz) for MP4 video", "4.0.1");
 		addCfg(list, CONFIG_MP4_AUDIO_BITRATE, String.valueOf(getAudioBitrate()), Configuration.Type.string, "Audio bitrate for MP4 video", "4.0.1");
 		addCfg(list, CONFIG_REST_ALLOW_ORIGIN, null, Configuration.Type.string, "List of addresses browser Ajax REST requests are allowed from", "4.0.2");
+		addCfg(list, CONFIG_FNAME_MIN_LENGTH, String.valueOf(USER_LOGIN_MINIMUM_LENGTH), Configuration.Type.number,
+				"Number of chars needed in a user first name", "4.0.4");
+		addCfg(list, CONFIG_LNAME_MIN_LENGTH, String.valueOf(USER_LOGIN_MINIMUM_LENGTH), Configuration.Type.number,
+				"Number of chars needed in a user last name", "4.0.4");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {
