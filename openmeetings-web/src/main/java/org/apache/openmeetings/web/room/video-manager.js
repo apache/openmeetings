@@ -182,6 +182,14 @@ var VideoManager = (function() {
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.micActivity = function(active) {
+		OmUtil.sendMessage({
+			area: 'room'
+			, type: 'mic'
+			, id: 'activity'
+			, active: active
+		});
+	};
 	self.destroy = function() {
 		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
 	}

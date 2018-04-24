@@ -806,6 +806,13 @@ public class RoomPanel extends BasePanel {
 			if ("room".equals(type)) {
 				//TODO actions
 			}
+			if ("mic".equals(type) && "activity".equals(o.optString("id"))) {
+				WebSocketHelper.sendRoom(r.getId(), new JSONObject()
+						.put("type", "mic")
+						.put("id", "activity")
+						.put("uid", getUid())
+						.put("active", o.getBoolean("active")));
+			}
 		}
 	}
 

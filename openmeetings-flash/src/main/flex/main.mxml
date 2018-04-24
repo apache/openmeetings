@@ -598,9 +598,7 @@
 			volumeRect.height = ah;
 			if (active !== _active) {
 				active = _active;
-				//video.getNc().call("micActivity", new Responder(function (res:Object):void {
-				//}), active);
-				ExternalInterface.call("VideoManager.micActivity", params.uid, active);
+				ExternalInterface.call("VideoManager.micActivity", active);
 			}
 		}
 
