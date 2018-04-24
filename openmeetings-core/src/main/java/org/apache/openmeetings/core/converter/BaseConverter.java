@@ -74,7 +74,7 @@ public abstract class BaseConverter {
 	@Autowired
 	protected FileItemLogDao logDao;
 
-	protected static class Dimension {
+	public static class Dimension {
 		private final int width;
 		private final int height;
 
@@ -406,7 +406,7 @@ public abstract class BaseConverter {
 		logs.add(ProcessHelper.executeScript(String.format("generate preview PNG :: %s", f.getHash()), argv));
 	}
 
-	protected static Dimension getDimension(String txt) {
+	public static Dimension getDimension(String txt) {
 		Matcher matcher = p.matcher(txt);
 
 		while (matcher.find()) {

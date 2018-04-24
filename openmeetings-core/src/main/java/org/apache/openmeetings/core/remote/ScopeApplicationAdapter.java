@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
+import org.apache.openmeetings.core.converter.BaseConverter;
 import org.apache.openmeetings.core.service.RecordingService;
 import org.apache.openmeetings.core.util.IClientUtil;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -47,7 +48,6 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.room.CheckDto;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -501,6 +501,12 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			String streamName = stream.getPublishedName();
 			_log.debug("start streamPublishStart broadcast start: {}, CONN {}", streamName, current);
 			c.setBroadcastId(streamName);
+			final int sizeIdx = streamName.indexOf("__");
+			if (sizeIdx > -1) {
+				BaseConverter.Dimension d = BaseConverter.getDimension(streamName.substring(sizeIdx + 2));
+				c.setWidth(d.getWidth());
+				c.setHeight(d.getHeight());
+			}
 
 			if (Client.Type.sharing != c.getType() && Client.Type.mobile != c.getType()) {
 				if (Strings.isEmpty(c.getAvsettings()) || "n".equals(c.getAvsettings())) {
@@ -1029,24 +1035,5 @@ public class ScopeApplicationAdapter extends MultiThreadedApplicationAdapter imp
 			sendMessageWithClient(new String[] { "personal", client.getFirstname(), client.getLastname() });
 		}
 		return count != null && count > 0 ? count - 1 : 0;
-	}
-
-	public CheckDto check() {
-		IConnection current = Red5.getConnectionLocal();
-		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
-		Client cl = clientManager.getBySid(c.getSid());
-		return new CheckDto(cl);
-	}
-
-	public void resize(Double width, Double height) {
-		if (width == null || height == null) {
-			return;
-		}
-		IConnection current = Red5.getConnectionLocal();
-		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
-		if (c == null) {
-			return;
-		}
-		streamClientManager.update(c.setWidth(width.intValue()).setHeight(height.intValue()));
 	}
 }

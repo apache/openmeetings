@@ -193,7 +193,8 @@ public class OmVideo {
 		this.mic = _mic;
 		createStream();
 
-		ns.publish(name, (mode === BROADCAST) ? LIVE : mode);
+		ns.publish(name + "__" + (cam === null ? 0 : cam.width) + "x" + (cam === null ? 0 : cam.height)
+				, (mode === BROADCAST) ? LIVE : mode);
 		ns.attachCamera(cam);
 		attachCamera(cam);
 		if (cam !== null) {
@@ -306,9 +307,7 @@ public class OmVideo {
 
 	public function broadcast(name:String, cam:Camera, _mic:Microphone):void {
 		connect(function():void {
-			nc.call("resize", new Responder(function ():void {
-				_publish(BROADCAST, name, cam, _mic, null);
-			}), cam === null ? 0 : cam.width, cam === null ? 0 : cam.height);
+			_publish(BROADCAST, name, cam, _mic, null);
 		});
 	}
 

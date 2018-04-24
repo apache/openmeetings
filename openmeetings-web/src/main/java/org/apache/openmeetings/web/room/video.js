@@ -228,7 +228,7 @@ var Video = (function() {
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		if (typeof(swf[0].update) === 'function') {
-			c.self ? swf[0].update() : swf[0].update(c);
+			swf[0].update(c);
 		}
 	}
 	function _refresh(_opts) {
