@@ -33,7 +33,6 @@ import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.room.SipDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.room.CheckDto;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
@@ -1030,26 +1029,4 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 		return count != null && count > 0 ? count - 1 : 0;
 	}
 	*/
-	public CheckDto check() {
-		/*IConnection current = Red5.getConnectionLocal();
-		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
-		Client cl = clientManager.getBySid(c.getSid());
-		return new CheckDto(cl);
-		*/
-		return new CheckDto(null);
-	}
-
-	public void resize(Double width, Double height) {
-		if (width == null || height == null) {
-			return;
-		}
-		/*
-		IConnection current = Red5.getConnectionLocal();
-		StreamClient c = streamClientManager.get(IClientUtil.getId(current.getClient()));
-		if (c == null) {
-			return;
-		}
-		streamClientManager.update(c.setWidth(width.intValue()).setHeight(height.intValue()));
-		*/
-	}
 }
