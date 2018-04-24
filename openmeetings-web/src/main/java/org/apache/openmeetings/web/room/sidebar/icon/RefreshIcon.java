@@ -30,7 +30,7 @@ public class RefreshIcon extends ClientIcon {
 
 	public RefreshIcon(String id, String uid) {
 		super(id, uid);
-		mainCssClass = "restart ";
+		mainCssClass = "restart ui-icon-refresh ";
 	}
 
 	@Override
