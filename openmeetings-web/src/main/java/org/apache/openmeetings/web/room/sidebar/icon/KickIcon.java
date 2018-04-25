@@ -29,7 +29,7 @@ public class KickIcon extends ClientIcon {
 
 	public KickIcon(String id, String uid) {
 		super(id, uid);
-		mainCssClass = "kick ";
+		mainCssClass = "kick ui-icon-closethick ";
 	}
 
 	@Override
