@@ -233,7 +233,7 @@ public class User extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private String activatehash;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "address_id", insertable = true, updatable = true)
 	@ForeignKey(enabled = true)
 	@Element(name = "address", required = false)
@@ -245,7 +245,7 @@ public class User extends HistoricalEntity {
 	@ElementDependent
 	private List<GroupUser> groupUsers = new ArrayList<>();
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@PrimaryKeyJoinColumn(name="sip_user_id", referencedColumnName="id")
 	@Element(name = "sipUser", required = false)
 	private AsteriskSipUser sipUser;

@@ -1001,4 +1001,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="menu.polls"><![CDATA[Polls]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Create Quick Poll]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Gather feedback without creating a poll]]></entry>
+	<entry key="admin.restore"><![CDATA[Restore]]></entry>
+	<entry key="admin.purge"><![CDATA[Purge]]></entry>
+	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
 </properties>

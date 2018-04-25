@@ -1010,4 +1010,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="menu.polls"><![CDATA[Голосования]]></entry>
 	<entry key="menu.polls.quick.title"><![CDATA[Создать быстрый опрос]]></entry>
 	<entry key="menu.polls.quick.descr"><![CDATA[Собрать отзывы без создания голосования]]></entry>
+	<entry key="admin.restore"><![CDATA[Восстановить]]></entry>
+	<entry key="admin.purge"><![CDATA[Уничтожить]]></entry>
+	<entry key="admin.purge.desc"><![CDATA[Вы действительно хотите уничтожить этот объект? Это действие необратимо!]]></entry>
 </properties>

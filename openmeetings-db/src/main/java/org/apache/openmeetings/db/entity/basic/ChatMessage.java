@@ -53,7 +53,7 @@ import org.simpleframework.xml.Root;
 	, @NamedQuery(name = "deleteChatGlobal", query = "DELETE FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom IS NULL")
 	, @NamedQuery(name = "deleteChatRoom", query = "DELETE FROM ChatMessage c WHERE c.toUser IS NULL AND c.toRoom.id = :roomId")
 	, @NamedQuery(name = "deleteChatUser", query = "DELETE FROM ChatMessage c WHERE c.toRoom IS NULL AND c.toUser.id = :userId")
-	, @NamedQuery(name = "purgeChatUserName", query = "UPDATE ChatMessage c SET c.fromName = :purged WHERE c.toUser.id = :userId")
+	, @NamedQuery(name = "purgeChatUserName", query = "UPDATE ChatMessage c SET c.fromName = :purged WHERE c.fromUser.id = :userId")
 })
 @Table(name = "chat")
 @Root(name = "ChatMessage")
