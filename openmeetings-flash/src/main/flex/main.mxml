@@ -184,35 +184,50 @@
 					ExternalInterface.addCallback("setRights", setRightsCallback);
 					ExternalInterface.addCallback("cleanup", cleanupCallback);
 					video.connect(function ():void {
-						checkAvPermissions(function ():void {
-							addImage(params.width, params.height);
-							_resize(params.width, params.height);
-							_updateExclusive();
-							activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
-							refreshBroadcast(null);
-							ExternalInterface.call("VideoManager.securityMode", params.uid, false);
-							ExternalInterface.addCallback("refresh", refreshBroadcast);
-							ExternalInterface.addCallback("update", function(c:Object):void {
-								var pVideo:Boolean = hasVideo(), nVideo:Boolean = _hasVideo(c.activities)
-										, pAudio:Boolean = hasAudio(), nAudio:Boolean = _hasAudio(c.activities);
-								if (nVideo != pVideo || nAudio != pAudio) {
-									// activities are changed
-									activities = c.activities;
-									if (nVideo && pVideo) {
-										nAudio ? video.unmute() : video.mute();
-										if (mic != null) {
-											activityTimer.start();
-										} else {
-											activityTimer.stop();
-										}
-									} else {
-										refreshBroadcast(null);
-									}
-								}
-								_updateExclusive();
-								//debug("Client updated: ", c);
+						// trust no-one
+						video.getNc().call("check", new Responder(function (check:Object):void {
+							debug("check", check);
+							audioOnly = check.audioOnly;
+							activities = check.activities;
+							interview = 'interview' == check.roomType;
+							checkAvPermissions(function ():void {
+								// trust no-one
+								video.getNc().call("check", new Responder(function (check:Object):void {
+									debug("check", check);
+									activities = check.activities;
+									addImage(params.width, params.height);
+									_resize(params.width, params.height);
+									_updateExclusive();
+									activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
+									refreshBroadcast(null);
+									ExternalInterface.call("VideoManager.securityMode", params.uid, false);
+									ExternalInterface.addCallback("refresh", refreshBroadcast);
+									ExternalInterface.addCallback("update", function ():void {
+										video.getNc().call("check", new Responder(function (check:Object):void {
+											debug("check", check);
+											var pVideo:Boolean = hasVideo(), nVideo:Boolean = _hasVideo(check.activities)
+													, pAudio:Boolean = hasAudio(), nAudio:Boolean = _hasAudio(check.activities);
+											if (nVideo != pVideo || nAudio != pAudio) {
+												// activities are changed
+												activities = check.activities;
+												if (nVideo && pVideo) {
+													nAudio ? video.unmute() : video.mute();
+													if (mic != null) {
+														activityTimer.start();
+													} else {
+														activityTimer.stop();
+													}
+												} else {
+													refreshBroadcast(null);
+												}
+											}
+											_updateExclusive();
+											//debug("Client updated: ", c);
+										}));
+									});
+								}));
 							});
-						});
+						}))
 					});
 				}
 					break;
