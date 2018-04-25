@@ -82,7 +82,7 @@ var VideoUtil = (function() {
 				}
 				if (rectNew.right >= area.right) {
 					rectNew.left = area.left;
-					rectNew.top = minY + offsetY;
+					rectNew.top = Math.max(minY, rectNew.top) + offsetY;
 					posFound = false;
 				}
 				if (rectNew.bottom >= area.bottom) {
