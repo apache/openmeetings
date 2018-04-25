@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
@@ -336,6 +337,9 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 				.setParameter("purged", "Purged User")
 				.setParameter("userId", u.getId())
 				.executeUpdate();
+			em.createNamedQuery("clearLogUserIpByUser")
+				.setParameter("userId", u.getId())
+				.executeUpdate();
 			if (!Strings.isEmpty(u.getAddress().getEmail())) {
 				em.createNamedQuery("purgeMailMessages")
 					.setParameter("email", String.format("%%%s%%", u.getAddress().getEmail()))
@@ -354,7 +358,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setLogin(purged);
 			u.setGroupUsers(new ArrayList<>());
 			u.setRights(new HashSet<>());
-			u.setTimeZoneId(null);
+			u.setTimeZoneId(getDefaultTimezone());
 			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
 			u.setPictureuri(null);
 			ICrypt crypt = CryptProvider.get();
