@@ -19,16 +19,21 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
+import static org.apache.openmeetings.web.room.SwfPanel.SWF;
+import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CALENDAR;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
 import org.apache.openmeetings.web.app.Application;
+import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wicketstuff.dashboard.Widget;
 import org.wicketstuff.dashboard.web.WidgetView;
 
@@ -45,7 +50,14 @@ public class StartWidgetView extends WidgetView {
 	protected void onInitialize() {
 		add(new WebMarkupContainer("step1").add(new PublicRoomsEventBehavior()));
 		add(new WebMarkupContainer("step2").add(new PublicRoomsEventBehavior()));
-		add(new WebMarkupContainer("step3").add(new PublicRoomsEventBehavior()));
+		add(new WebMarkupContainer("step3").add(new Link<Void>("avTest") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(HashPage.class, new PageParameters().add(SWF, SWF_TYPE_SETTINGS));
+			}
+		}));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
 		add(new Label("123msg", Application.getString("widget.start.desc")) //Application here is used to substitute {0}
 				.setEscapeModelStrings(false));
