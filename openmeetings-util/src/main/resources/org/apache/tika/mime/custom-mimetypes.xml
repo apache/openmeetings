@@ -31,7 +31,4 @@
 	<mime-type type="image/other">
 		<glob pattern="*.wpg"/>
 	</mime-type>
-	<mime-type type="image/other">
-		<glob pattern="*.tga"/>
-	</mime-type>
 </mime-info>
