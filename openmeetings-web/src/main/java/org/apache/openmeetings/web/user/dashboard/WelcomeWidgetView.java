@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.HashPage.APP;
 import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_NETWORK;
+import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_EDIT;
 import static org.apache.openmeetings.web.util.OmUrlFragment.PROFILE_MESSAGES;
 
@@ -78,6 +79,14 @@ public class WelcomeWidgetView extends WidgetView {
 			@Override
 			public void onClick() {
 				setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_NETWORK));
+			}
+		});
+		add(new Link<Void>("avTest") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_SETTINGS));
 			}
 		});
 	}

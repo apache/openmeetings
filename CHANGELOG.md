@@ -2146,7 +2146,7 @@ Release Notes - OpenMeetings - Version 2.0-INCUBATING
     * [OPENMEETINGS-230] - Error in the field name on the form "Add external"
     * [OPENMEETINGS-232] - Rooms are imported with invalid room types
     * [OPENMEETINGS-233] - Font styles in propertyPanel are getting disabled.
-    * [OPENMEETINGS-234] - Video and Screen sharing not working with HTTPS and RTMPS - Java Application starts but doesnt connect - java trace logs shows "[WARN] [NioProcessor-2] org.red5.server.net.rtmps.RTMPSMinaIoHandler - Exception caught Keystore or password are null"
+    * [OPENMEETINGS-234] - Video and Screen sharing not working with HTTPS and RTMPS - Java Application starts but doesnt connect - java trace logs shows "[WARN] org.red5.server.net.rtmps.RTMPSMinaIoHandler - Exception caught Keystore or password are null"
     * [OPENMEETINGS-237] - Calender reminder email invitation link fails due to link missing "&language=x" in URL
     * [OPENMEETINGS-238] - Calendar shows incorrect day of week for the actual date when timezone is GMT+10
     * [OPENMEETINGS-239] - Calendar Event details Comment/Description field text can overflow the boundary of the Description field of the Meeting Room's Event details dialog box
