@@ -154,6 +154,8 @@
 				<exclude>WEB-INF/lib/ehcache-core*</exclude>
 				<exclude>WEB-INF/lib/jempbox*</exclude>
 				<exclude>WEB-INF/lib/juniversalchardet*</exclude>
+				<exclude>WEB-INF/lib/jai-imageio-core*</exclude>
+				<exclude>WEB-INF/lib/jbig2-imageio*</exclude>
 				<exclude>WEB-INF/lib/mchange-commons*</exclude>
 				<exclude>WEB-INF/lib/metadata-extractor*</exclude>
 				<exclude>WEB-INF/lib/pdfbox*</exclude>
@@ -251,6 +253,8 @@
 				<include>httpmime-*</include>
 				<include>httpservices-*</include>
 				<include>isoparser-*</include>
+				<include>jbig2-imageio*</include>
+				<include>jai-imageio-core*</include>
 				<include>j2objc-annotations-*</include>
 				<include>jackcess-*</include>
 				<include>jackson-core-*</include>
