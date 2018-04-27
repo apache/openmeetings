@@ -19,8 +19,8 @@
 package org.apache.openmeetings.web.user.dashboard;
 
 import static org.apache.openmeetings.web.common.BasePanel.EVT_CLICK;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF;
-import static org.apache.openmeetings.web.room.SwfPanel.SWF_TYPE_SETTINGS;
+import static org.apache.openmeetings.web.pages.HashPage.APP;
+import static org.apache.openmeetings.web.pages.HashPage.APP_TYPE_SETTINGS;
 import static org.apache.openmeetings.web.util.OmUrlFragment.CALENDAR;
 import static org.apache.openmeetings.web.util.OmUrlFragment.ROOMS_PUBLIC;
 
@@ -55,7 +55,7 @@ public class StartWidgetView extends WidgetView {
 
 			@Override
 			public void onClick() {
-				setResponsePage(HashPage.class, new PageParameters().add(SWF, SWF_TYPE_SETTINGS));
+				setResponsePage(HashPage.class, new PageParameters().add(APP, APP_TYPE_SETTINGS));
 			}
 		}));
 		add(new WebMarkupContainer("step4").add(new PublicRoomsEventBehavior()));
