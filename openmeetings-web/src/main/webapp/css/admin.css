@@ -32,7 +32,7 @@
 	max-width: 518px;
 	min-width: 518px;
 }
-.adminListTable tr:nth-child(odd), .adminListTableSmall tr:nth-child(odd) {
+.adminListTable tr:nth-child(odd), .adminListTableSmall tr:nth-child(odd), .striped-table .striped-row:nth-child(odd) {
 	opacity: .8;
 }
 .adminListTable tr.deleted {
