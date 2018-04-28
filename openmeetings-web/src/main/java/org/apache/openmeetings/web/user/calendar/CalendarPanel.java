@@ -18,7 +18,6 @@
  */
 package org.apache.openmeetings.web.user.calendar;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getDate;
 import static org.apache.openmeetings.web.util.CalendarWebHelper.getZoneId;
@@ -59,7 +58,6 @@ import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.calendar.Calendar;
@@ -131,26 +129,7 @@ public class CalendarPanel extends UserBasePanel {
 				.put("day", getString("799"))
 				.put("today", getString("1555")).toString());
 
-		JSONArray monthes = new JSONArray();
-		JSONArray shortMonthes = new JSONArray();
-		JSONArray days = new JSONArray();
-		JSONArray shortDays = new JSONArray();
-		// first week day must be Sunday
-		days.put(0, getString("466"));
-		shortDays.put(0, getString("459"));
-		for (int i = 0; i < 12; i++) {
-			monthes.put(i, getString(String.valueOf(469 + i)));
-			shortMonthes.put(i, getString(String.valueOf(1556 + i)));
-			if (i + 1 < 7) {
-				days.put(i + 1, getString(String.valueOf(460 + i)));
-				shortDays.put(i + 1, getString(String.valueOf(453 + i)));
-			}
-		}
-		options.set("monthNames", monthes.toString());
-		options.set("monthNamesShort", shortMonthes.toString());
-		options.set("dayNames", days.toString());
-		options.set("dayNamesShort", shortDays.toString());
-		options.set("firstDay", cfgDao.getInt(CONFIG_CALENDAR_FIRST_DAY, 0));
+		options.set("locale", Options.asString(WebSession.get().getLocale().toLanguageTag()));
 
 		calendar = new Calendar("calendar", new AppointmentModel(), options) {
 			private static final long serialVersionUID = 1L;

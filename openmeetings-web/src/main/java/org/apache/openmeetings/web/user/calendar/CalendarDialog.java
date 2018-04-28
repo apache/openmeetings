@@ -218,8 +218,9 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 				if (form.gcal.getModelObject()) {
 					c.setSyncType(OmCalendar.SyncType.GOOGLE_CALENDAR);
 					c.setToken(form.username.getModelObject());
-					if (c.getId() == null)
+					if (c.getId() == null) {
 						calendarPanel.populateGoogleCalendar(c, target);
+					}
 				} else if (c.getId() == null && form.username.getModelObject() != null) {
 					apptManager.provideCredentials(client, c, new UsernamePasswordCredentials(form.username.getModelObject(),
 							form.pass.getModelObject()));
