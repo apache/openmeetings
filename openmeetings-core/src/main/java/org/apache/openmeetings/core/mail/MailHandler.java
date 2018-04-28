@@ -178,6 +178,7 @@ public class MailHandler {
 		props.put("mail.smtp.host", smtpServer);
 		props.put("mail.smtp.port", smtpPort);
 		if (mailTls) {
+			props.put("mail.smtp.ssl.trust", smtpServer);
 			props.put("mail.smtp.starttls.enable", "true");
 		}
 		props.put("mail.smtp.connectiontimeout", smtpConnectionTimeOut);
