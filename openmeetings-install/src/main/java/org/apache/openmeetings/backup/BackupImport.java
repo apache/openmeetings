@@ -44,7 +44,6 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadFilesDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_FIRST_DAY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
@@ -280,7 +279,6 @@ public class BackupImport {
 		configTypes.put(CONFIG_KEYCODE_EXCLUSIVE, Configuration.Type.number);
 		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.number);
 		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.number);
-		configTypes.put(CONFIG_CALENDAR_FIRST_DAY, Configuration.Type.number);
 		configTypes.put(CONFIG_FLASH_VIDEO_FPS, Configuration.Type.number);
 		configTypes.put(CONFIG_FLASH_VIDEO_BANDWIDTH, Configuration.Type.number);
 		configTypes.put(CONFIG_FLASH_CAM_QUALITY, Configuration.Type.number);

@@ -56,7 +56,6 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_SCREENSHARING_FPS = "screensharing.default.fps";
 	public static final String CONFIG_SCREENSHARING_FPS_SHOW = "screensharing.fps.show";
 	public static final String CONFIG_SCREENSHARING_ALLOW_REMOTE = "screensharing.allow.remote";
-	public static final String CONFIG_CALENDAR_FIRST_DAY = "calendar.firstday";
 	public static final String CONFIG_GOOGLE_ANALYTICS_CODE = "google.analytics.code";
 	public static final String CONFIG_SMTP_SERVER = "mail.smtp.server";
 	public static final String CONFIG_SMTP_PORT = "mail.smtp.port";
