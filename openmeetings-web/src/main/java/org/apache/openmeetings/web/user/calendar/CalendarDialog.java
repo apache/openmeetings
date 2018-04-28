@@ -575,13 +575,15 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 					case SYNC_CALENDAR:
 						try {
 							OmCalendar calendar = getModelObject();
-							if (url.isEnabled())
+							if (url.isEnabled()) {
 								calendar.setHref(url.getInput());
+							}
 							HttpClient client = calendarPanel.getHttpClient();
 							apptManager.provideCredentials(client, calendar,
 									new UsernamePasswordCredentials(username.getInput(), pass.getInput()));
-							if (apptManager.testConnection(client, calendar))
+							if (apptManager.testConnection(client, calendar)) {
 								return;
+							}
 						} catch (Exception e) {
 							log.error("Error executing the TestConnection");
 						}

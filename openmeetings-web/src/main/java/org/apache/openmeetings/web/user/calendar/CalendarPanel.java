@@ -47,12 +47,12 @@ import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
@@ -260,7 +260,9 @@ public class CalendarPanel extends UserBasePanel {
 			protected void populateItem(final ListItem<OmCalendar> item) {
 				item.setOutputMarkupId(true);
 				final OmCalendar cal = item.getModelObject();
-				item.add(new Button("item", new PropertyModel<String>(cal, "title")).add(new AjaxEventBehavior(EVT_CLICK) {
+				item.add(new WebMarkupContainer("item")
+						.add(new Label("name", cal.getTitle())));
+				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -268,7 +270,7 @@ public class CalendarPanel extends UserBasePanel {
 						calendarDialog.open(target, CalendarDialog.DIALOG_TYPE.UPDATE_CALENDAR, cal);
 						target.add(calendarDialog);
 					}
-				}));
+				});
 			}
 		});
 

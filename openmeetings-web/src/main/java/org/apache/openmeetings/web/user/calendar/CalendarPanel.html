@@ -25,9 +25,9 @@
 				<button wicket:id="submitCalendar"><span><wicket:message key="calendar.addCalendar"/></span></button>
 				<button wicket:id="syncCalendarButton"><span>Sync</span></button>
 			</div>
-			<ul class="calendarlist" wicket:id="calendarListContainer">
-				<li wicket:id="items">
-					<input type="button" wicket:id="item"/>
+			<ul class="calendarlist striped-table" wicket:id="calendarListContainer">
+				<li wicket:id="items" class="ui-widget-content striped-row clickable">
+					<div wicket:id="item"><span wicket:id="name"></span></div>
 				</li>
 			</ul>
 		</div>
