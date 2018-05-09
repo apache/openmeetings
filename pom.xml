@@ -65,7 +65,7 @@
 		<red5-client.version>1.0.10-M7</red5-client.version>
 		<spring.version>4.3.15.RELEASE</spring.version>
 		<mina.version>2.0.17</mina.version>
-		<tomcat.version>9.0.7</tomcat.version>
+		<tomcat.version>9.0.8</tomcat.version>
 		<ical4j.version>2.2.0</ical4j.version>
 		<cxf.version>3.2.4</cxf.version>
 		<selenium.version>3.11.0</selenium.version>
@@ -993,7 +993,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.0.2</version>
+					<version>3.1.0</version>
 					<dependencies>
 						<dependency>
 							<groupId>org.apache.maven.shared</groupId>
