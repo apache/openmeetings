@@ -37,16 +37,19 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.Captcha;
+import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.openmeetings.web.util.NonClosableDialog;
 import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -108,6 +111,7 @@ public class RegisterDialog extends NonClosableDialog<String> {
 				s.open(handler);
 			}
 		};
+		add(new Label("register", getString("121")).setRenderBodyOnly(true), new BookmarkablePageLink<>("link", PrivacyPage.class));
 		add(confirmRegistration);
 		reset(null);
 		super.onInitialize();

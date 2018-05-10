@@ -47,6 +47,12 @@
 		<span wicket:id="feedback" class="error"></span>
 		<input type="submit" wicket:id="submit" class="invisible-form-component"/>
 	</form>
+	<div>
+		<wicket:message key="register.privacy.accept">
+			<span wicket:id="register"></span>.
+			<a wicket:id="link" target="_blank"><wicket:message key="register.privacy.statement"/></a>
+		</wicket:message>
+	</div>
 	<div wicket:id="confirmRegistration"></div>
 </wicket:panel>
 </html>
