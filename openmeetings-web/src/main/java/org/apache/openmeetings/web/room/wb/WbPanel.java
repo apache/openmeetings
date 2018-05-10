@@ -551,6 +551,9 @@ public class WbPanel extends AbstractWbPanel {
 			Whiteboards wbs = wbm.get(roomId);
 			String wuid = UUID.randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
+			if (wb == null) {
+				return;
+			}
 			switch (fi.getType()) {
 				case Folder:
 					//do nothing
