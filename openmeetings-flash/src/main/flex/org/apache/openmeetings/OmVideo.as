@@ -271,7 +271,7 @@ public class OmVideo {
 				debug("sendVarsToMessageWithClient :: ", obj);
 				if ("copiedText" === obj[0]) {
 					ExternalInterface.call("Room.showClipboard", obj[1]);
-				} else if ("quit" === obj["message"]) {
+				} else if ("quit" === obj["message"] || "kick" === obj["message"]) {
 					reset();
 				}
 			}

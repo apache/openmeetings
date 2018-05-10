@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.service.user;
+package org.apache.openmeetings.web.app;
 
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
@@ -89,9 +89,7 @@ public class UserManager implements IUserManager {
 
 	private boolean sendConfirmation() {
 		String baseURL = getBaseUrl();
-		return baseURL != null
-				&& !baseURL.isEmpty()
-				&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
+		return !Strings.isEmpty(baseURL) && cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
 	}
 
 	/**
