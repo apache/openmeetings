@@ -991,4 +991,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.restore"><![CDATA[Restore]]></entry>
 	<entry key="admin.purge"><![CDATA[Purge]]></entry>
 	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
+	<entry key="register.privacy.accept"><![CDATA[By clicking "${register}", you agree to our ${link}.]]></entry>
+	<entry key="register.privacy.statement"><![CDATA[privacy statement]]></entry>
 </properties>

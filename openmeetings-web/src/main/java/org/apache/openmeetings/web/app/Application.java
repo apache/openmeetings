@@ -72,6 +72,7 @@ import org.apache.openmeetings.web.pages.ActivatePage;
 import org.apache.openmeetings.web.pages.HashPage;
 import org.apache.openmeetings.web.pages.MainPage;
 import org.apache.openmeetings.web.pages.NotInitedPage;
+import org.apache.openmeetings.web.pages.PrivacyPage;
 import org.apache.openmeetings.web.pages.ResetPage;
 import org.apache.openmeetings.web.pages.auth.SignInPage;
 import org.apache.openmeetings.web.pages.install.InstallWizardPage;
@@ -273,6 +274,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(HASH_MAPPING, HashPage.class));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper(SIGNIN_MAPPING, getSignInPageClass()));
 		getRootRequestMapperAsCompound().add(new NoVersionMapper("oauth/${oauthid}", getSignInPageClass()));
+		getRootRequestMapperAsCompound().add(new NoVersionMapper("privacy", PrivacyPage.class));
 		mountPage("install", InstallWizardPage.class);
 		mountPage("activate", ActivatePage.class);
 		mountPage("reset", ResetPage.class);

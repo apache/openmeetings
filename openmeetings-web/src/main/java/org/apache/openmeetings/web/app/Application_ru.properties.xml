@@ -987,4 +987,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.restore"><![CDATA[Восстановить]]></entry>
 	<entry key="admin.purge"><![CDATA[Уничтожить]]></entry>
 	<entry key="admin.purge.desc"><![CDATA[Вы действительно хотите уничтожить этот объект? Это действие необратимо!]]></entry>
+	<entry key="register.privacy.accept"><![CDATA[Нажимая на кнопку "${register}", Вы соглашаетесь с нашим ${link}.]]></entry>
+	<entry key="register.privacy.statement"><![CDATA[соглашением о конфиденциальности]]></entry>
 </properties>
