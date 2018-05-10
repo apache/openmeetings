@@ -46,6 +46,7 @@ import org.apache.cxf.feature.Features;
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.server.SOAPLoginDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
+import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
@@ -58,7 +59,6 @@ import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.manager.IClientManager;
-import org.apache.openmeetings.service.user.UserManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.util.string.Strings;
@@ -88,7 +88,7 @@ public class UserWebService extends BaseWebService {
 	private static final Logger log = LoggerFactory.getLogger(UserWebService.class);
 
 	@Autowired
-	private UserManager userManager;
+	private IUserManager userManager;
 	@Autowired
 	private IClientManager clientManager;
 	@Autowired
