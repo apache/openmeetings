@@ -19,6 +19,7 @@
 package org.apache.openmeetings.web.room.sidebar;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
@@ -53,6 +54,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.string.Strings;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog;
@@ -61,6 +64,7 @@ import com.googlecode.wicket.kendo.ui.panel.KendoFeedbackPanel;
 
 public class UploadDialog extends AbstractFormDialog<String> {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(UploadDialog.class, getWebAppRootKey());
 	private final KendoFeedbackPanel feedback = new KendoFeedbackPanel("feedback", new Options("button", true));
 	private final Form<String> form;
 	private DialogButton upload;
@@ -211,7 +215,8 @@ public class UploadDialog extends AbstractFormDialog<String> {
 						}
 					}
 				} catch (Exception e) {
-					form.error(e.getMessage());
+					log.error("Unexpected error while processing uploaded file", e);
+					form.error(e.getMessage() == null ? "Unexpected error" : e.getMessage());
 				} finally {
 					fu.closeStreams();
 					fu.delete();
