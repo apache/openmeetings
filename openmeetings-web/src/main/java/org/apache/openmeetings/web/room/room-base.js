@@ -43,6 +43,13 @@ var Room = (function() {
 		if (typeof(Activities) !== 'undefined') {
 			Activities.init();
 		}
+		sb.on("remove", function () {
+			$('.ui-dialog.user-video .ui-dialog-content').each(function() {
+				const v = $(this).data();
+				v.cleanup();
+				$(this).remove()
+			});
+		});
 	}
 	function _getSelfAudioClient() {
 		const vw = $('#video' + Room.getOptions().uid);

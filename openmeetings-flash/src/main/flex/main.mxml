@@ -155,9 +155,7 @@
 					ExternalInterface.addCallback("resChanged", function (width:int, height:int):void {
 						setResolution(width, height, true);
 					});
-					ExternalInterface.addCallback("close", function ():void {
-						video.reset();
-					});
+					ExternalInterface.addCallback("close", cleanupCallback);
 					ExternalInterface.addCallback("init", function (camIdx:int, micIdx:int, width:int, height:int):void {
 						selectedCam = camIdx;
 						selectedMic = micIdx;
