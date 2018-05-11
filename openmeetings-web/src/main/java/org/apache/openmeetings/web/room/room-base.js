@@ -177,9 +177,6 @@ var Room = (function() {
 			WbArea.destroy();
 			window.WbArea = undefined;
 		}
-		if (typeof(VideoManager) === 'object') {
-			VideoManager.destroy();
-		}
 		if (typeof(VideoSettings) === 'object') {
 			VideoSettings.close();
 		}
