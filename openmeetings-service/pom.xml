@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>com.github.caldav4j</groupId>
 			<artifactId>caldav4j</artifactId>
-			<version>0.9.1</version>
+			<version>${caldav4j.version}</version>
 			<exclusions>
 				<exclusion>
 					<!-- Remove the need for ehcache, since we use the Methods directly -->
