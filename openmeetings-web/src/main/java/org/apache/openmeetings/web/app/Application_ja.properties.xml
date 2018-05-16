@@ -28,7 +28,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 -->
 <properties>
 	<entry key="4"><![CDATA[設定]]></entry>
-	<entry key="5"><![CDATA[ユーザー]]></entry>
+	<entry key="5"><![CDATA[プロフィール]]></entry>
 	<entry key="6"><![CDATA[管理]]></entry>
 	<entry key="15"><![CDATA[アップロード]]></entry>
 	<entry key="18"><![CDATA[新規投票]]></entry>
@@ -37,8 +37,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="21"><![CDATA[投票タイプ:]]></entry>
 	<entry key="22"><![CDATA[作成]]></entry>
 	<entry key="23"><![CDATA[ヒント: 接続中の全参加者に対して、投票を促すメッセージを送信します]]></entry>
-	<entry key="24"><![CDATA[投票の作成]]></entry>
-	<entry key="32"><![CDATA[投票する]]></entry>
+	<entry key="24"><![CDATA[投票を作成]]></entry>
+	<entry key="32"><![CDATA[投票]]></entry>
 	<entry key="33"><![CDATA[あなたの回答:]]></entry>
 	<entry key="34"><![CDATA[はい]]></entry>
 	<entry key="35"><![CDATA[いいえ]]></entry>
@@ -46,7 +46,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="37"><![CDATA[投票結果閲覧]]></entry>
 	<entry key="39"><![CDATA[結果:]]></entry>
 	<entry key="40"><![CDATA[回答:]]></entry>
-	<entry key="45"><![CDATA[タイプ]]></entry>
+	<entry key="45"><![CDATA[<nobr>タイプ</nobr>]]></entry>
 	<entry key="51"><![CDATA[デバイス選択]]></entry>
 	<entry key="52"><![CDATA[Webカメラ:]]></entry>
 	<entry key="53"><![CDATA[マイク:]]></entry>
@@ -59,17 +59,17 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="73"><![CDATA[文字列]]></entry>
 	<entry key="74"><![CDATA[自由線]]></entry>
 	<entry key="75"><![CDATA[直線]]></entry>
-	<entry key="76"><![CDATA[Highlighter]]></entry>
+	<entry key="76"><![CDATA[ハイライト線]]></entry>
 	<entry key="77"><![CDATA[四角形]]></entry>
 	<entry key="78"><![CDATA[楕円]]></entry>
 	<entry key="79"><![CDATA[矢印]]></entry>
 	<entry key="80"><![CDATA[削除]]></entry>
-	<entry key="81"><![CDATA[司会者になる]]></entry>
-	<entry key="84"><![CDATA[司会者になる]]></entry>
+	<entry key="81"><![CDATA[モデレータ（司会者）になる]]></entry>
+	<entry key="84"><![CDATA[モデレータ（司会者）になる]]></entry>
 	<entry key="85"><![CDATA[閉じる]]></entry>
 	<entry key="86"><![CDATA[イタリック]]></entry>
 	<entry key="87"><![CDATA[ボールド]]></entry>
-	<entry key="98"><![CDATA[司会者:]]></entry>
+	<entry key="98"><![CDATA[モデレータ（司会者）:]]></entry>
 	<entry key="99"><![CDATA[この会議室は満室です。]]></entry>
 	<entry key="108"><![CDATA[ログイン]]></entry>
 	<entry key="109"><![CDATA[ユーザー:]]></entry>
@@ -105,14 +105,14 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="178"><![CDATA[ユーザー追加]]></entry>
 	<entry key="186"><![CDATA[会議室管理]]></entry>
 	<entry key="187"><![CDATA[会議室]]></entry>
-	<entry key="188"><![CDATA[id]]></entry>
+	<entry key="188"><![CDATA[ID]]></entry>
 	<entry key="190"><![CDATA[公開]]></entry>
 	<entry key="196"><![CDATA[コメント]]></entry>
 	<entry key="197"><![CDATA[保存]]></entry>
 	<entry key="199"><![CDATA[名前を付けて保存]]></entry>
 	<entry key="200"><![CDATA[ファイル名]]></entry>
 	<entry key="204"><![CDATA[エラー]]></entry>
-	<entry key="213"><![CDATA[招待メールを送信]]></entry>
+	<entry key="213"><![CDATA[参加依頼メールを送信]]></entry>
 	<entry key="215"><![CDATA[件名]]></entry>
 	<entry key="216"><![CDATA[相手]]></entry>
 	<entry key="217"><![CDATA[メッセージ]]></entry>
@@ -160,7 +160,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="315"><![CDATA[メールアドレス]]></entry>
 	<entry key="316"><![CDATA[ログイン名]]></entry>
 	<entry key="317"><![CDATA[パスワード・リセット用リンクを含むメールを送信する]]></entry>
-	<entry key="321"><![CDATA[The email containing a special link has been sent to the email address, registered to the user corresponding to the data entered]]></entry>
+	<entry key="321"><![CDATA[リセット用リンクを含むメールを送信しました。]]></entry>
 	<entry key="325"><![CDATA[パスワードのリセット]]></entry>
 	<entry key="327"><![CDATA[パスワード変更]]></entry>
 	<entry key="328"><![CDATA[新しいパスワード]]></entry>
@@ -194,7 +194,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="433"><![CDATA[ゲスト]]></entry>
 	<entry key="442"><![CDATA[チャット記録の削除]]></entry>
 	<entry key="482"><![CDATA[定員]]></entry>
-	<entry key="498"><![CDATA[この会議室には、参加者はいますが司会者がいません。司会者になるか他の人が司会者になるのをお待ちください。]]></entry>
+	<entry key="498"><![CDATA[この会議室には、参加者はいますがモデレータ（司会者）がいません。あなたがモデレータになるか、他の人がモデレータになるのをお待ちください。]]></entry>
 	<entry key="499"><![CDATA[{0} フィードバック]]></entry>
 	<entry key="500"><![CDATA[{0} - 会議参加依頼]]></entry>
 	<entry key="501"><![CDATA[宛先ユーザー:]]></entry>
@@ -216,8 +216,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="527"><![CDATA[エンドレス]]></entry>
 	<entry key="528"><![CDATA[期間指定]]></entry>
 	<entry key="529"><![CDATA[ワンタイム]]></entry>
-	<entry key="530"><![CDATA[開始:]]></entry>
-	<entry key="531"><![CDATA[終了:]]></entry>
+	<entry key="530"><![CDATA[<nobr>開始:</nobr>]]></entry>
+	<entry key="531"><![CDATA[<nobr>終了:</nobr>]]></entry>
 	<entry key="537"><![CDATA[パスワードチェック]]></entry>
 	<entry key="545"><![CDATA[x]]></entry>
 	<entry key="546"><![CDATA[x軸]]></entry>
@@ -241,12 +241,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="593"><![CDATA[アップロードを開始する]]></entry>
 	<entry key="594"><![CDATA[アップロード/インポートを行います。ローカル・ディスク上のファイルを選択してください。]]></entry>
 	<entry key="596"><![CDATA[ファイルを選択する]]></entry>
-	<entry key="597"><![CDATA[接続]]></entry>
-	<entry key="601"><![CDATA[接続開始時刻]]></entry>
-	<entry key="602"><![CDATA[会議室 / スコープ]]></entry>
-	<entry key="603"><![CDATA[ユーザー追放]]></entry>
+	<entry key="597"><![CDATA[接続管理]]></entry>
+	<entry key="601"><![CDATA[<nobr>接続開始時刻</nobr>]]></entry>
+	<entry key="602"><![CDATA[会議室 /<br>スコープ]]></entry>
+	<entry key="603"><![CDATA[<nobr>ユーザー追放</nobr>]]></entry>
 	<entry key="605"><![CDATA[本当にこのユーザーを追い出してよろしいですか?<br/> 追い出したとしても、ユーザーは単にこの会議室から追い出されるだけです。ユーザーは、再度ログインすることができます。]]></entry>
-	<entry key="606"><![CDATA[管理者または司会者によって、セッションが切断されました。]]></entry>
+	<entry key="606"><![CDATA[管理者またはモデレータ（司会者）によって、セッションが切断されました。]]></entry>
 	<entry key="607"><![CDATA[電話]]></entry>
 	<entry key="612"><![CDATA[ホワイトボードの利用を禁止する]]></entry>
 	<entry key="615"><![CDATA[ホワイトボード]]></entry>
@@ -257,26 +257,26 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="636"><![CDATA[デモ・ルーム]]></entry>
 	<entry key="637"><![CDATA[デモ時間]]></entry>
 	<entry key="640"><![CDATA[司会権保持者が仕切る]]></entry>
-	<entry key="641"><![CDATA[司会者が入室するまでしばらくお待ちください。司会者は本会議室の管理者/作成者/講師になります。]]></entry>
+	<entry key="641"><![CDATA[モデレータ（司会者）が入室するまでしばらくお待ちください。モデレータは本会議室の管理者/作成者/講師になります。]]></entry>
 	<entry key="667"><![CDATA[登録を完了するためには、下記のリンクをクリックしてください。あるいは下記URLをブラウザにコピー・ペーストしてください。]]></entry>
 	<entry key="668"><![CDATA[メールを確認するにはここをクリックしてください]]></entry>
-	<entry key="675"><![CDATA[司会者権限を剥奪する]]></entry>
-	<entry key="676"><![CDATA[司会者権限を付与する]]></entry>
+	<entry key="675"><![CDATA[モデレータ（司会者）権限を剥奪する]]></entry>
+	<entry key="676"><![CDATA[モデレータ（司会者）権限を付与する]]></entry>
 	<entry key="677"><![CDATA[ユーザー]]></entry>
 	<entry key="678"><![CDATA[ホワイトボード・アクセス]]></entry>
-	<entry key="679"><![CDATA[司会者]]></entry>
+	<entry key="679"><![CDATA[モデレータ（司会者）]]></entry>
 	<entry key="683"><![CDATA[ビデオ共有権限を付与する]]></entry>
 	<entry key="684"><![CDATA[ビデオ共有権限を剥奪する]]></entry>
 	<entry key="686"><![CDATA[ホワイトボードを使いたい]]></entry>
 	<entry key="687"><![CDATA[ビデオ・音声を共有したい]]></entry>
-	<entry key="688"><![CDATA[あなたは司会者です]]></entry>
+	<entry key="688"><![CDATA[あなたはモデレータ（司会者）です]]></entry>
 	<entry key="689"><![CDATA[ホワイトボードの使用を許可されています]]></entry>
 	<entry key="690"><![CDATA[ビデオ・音声の共有を許可されました]]></entry>
 	<entry key="692"><![CDATA[]]></entry>
-	<entry key="693"><![CDATA[さんが、司会者(話者)権限を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使って司会者権限の与奪を行います。]]></entry>
-	<entry key="694"><![CDATA[さんが、ホワイトボードの使用を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。]]></entry>
-	<entry key="695"><![CDATA[さんが、ビデオ・音声の共有を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。]]></entry>
-	<entry key="696"><![CDATA[司会者が入室するまでしばらくお待ちください。]]></entry>
+	<entry key="693"><![CDATA[モデレータ（司会者）権限を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってモデレータ権限の与奪を行います。]]></entry>
+	<entry key="694"><![CDATA[ホワイトボードの使用を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。]]></entry>
+	<entry key="695"><![CDATA[ビデオ・音声の共有を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。]]></entry>
+	<entry key="696"><![CDATA[モデレータ（司会者）が入室するまでしばらくお待ちください。]]></entry>
 	<entry key="702"><![CDATA[ファイルをアップロードする]]></entry>
 	<entry key="703"><![CDATA[フォルダを追加する]]></entry>
 	<entry key="705"><![CDATA[ゴミ箱 (アイテムをここにドラッグ&ドロップ)]]></entry>
@@ -303,7 +303,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="764"><![CDATA[再生]]></entry>
 	<entry key="765"><![CDATA[音声・画像を送信する予定が無い場合はテストを省略することができます。音声・画像を利用しない参加者も、ホワイトボード、デスクトップ共有、チャットを利用することは可能です。]]></entry>
 	<entry key="767"><![CDATA[レベル・メータ]]></entry>
-	<entry key="768"><![CDATA[「開始」を押してください]]></entry>
+	<entry key="768"><![CDATA[「開始」を押す]]></entry>
 	<entry key="771"><![CDATA[会議室を選択する]]></entry>
 	<entry key="772"><![CDATA[設定を確認する]]></entry>
 	<entry key="773"><![CDATA[会議を開始する]]></entry>
@@ -313,8 +313,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="779"><![CDATA[プライベート会議室]]></entry>
 	<entry key="780"><![CDATA[プライベート会議室は、同じ組織に所属する参加者のみ入室することができます。]]></entry>
 	<entry key="781"><![CDATA[私の会議室]]></entry>
-	<entry key="782"><![CDATA[このセクションの会議室は個人使用（または少人数使用）目的です。開始･終了時刻を指定して作成します。会議室が有効である期間、カレンダーに表示されます。]]></entry>
-	<entry key="784"><![CDATA[司会者権限を許可]]></entry>
+	<entry key="782"><![CDATA[個人（または小人数）での使用を目的とした会議室。既定の会議室に加え、カレンダーで作成した会議室が一覧に表示されます。カレンダーで作成した会議室は、その会議室の有効期間内のみ一覧に表示されます。]]></entry>
+	<entry key="784"><![CDATA[モデレータ（司会者）権限を許可]]></entry>
 	<entry key="785"><![CDATA[ホワイトボードへのアクセスを許可]]></entry>
 	<entry key="786"><![CDATA[カメラ・マイクへのアクセスを許可]]></entry>
 	<entry key="788"><![CDATA[開始]]></entry>
@@ -326,17 +326,17 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="801"><![CDATA[月表示]]></entry>
 	<entry key="803"><![CDATA[参加者]]></entry>
 	<entry key="815"><![CDATA[イベント詳細]]></entry>
-	<entry key="816"><![CDATA[デフォルト司会者]]></entry>
+	<entry key="816"><![CDATA[既定のモデレータ（司会者）]]></entry>
 	<entry key="817"><![CDATA[特権]]></entry>
-	<entry key="823"><![CDATA[この項目が選択されている場合、司会進行権保持者(または管理者)は入室によって自動的に司会者権限を与えられます。会議の際、特定のユーザーを司会者に指定したい場合は、この項目を選択しないでください。]]></entry>
+	<entry key="823"><![CDATA[この項目が選択されている場合、モデレータ（司会者）権限保持者(または管理者)は入室によって自動的にモデレータ権限を与えられます。会議の際、特定のユーザーをモデレータに指定したい場合は、この項目を選択しないでください。]]></entry>
 	<entry key="828"><![CDATA[組織を会議室に登録すると、登録された組織に所属するユーザーのみがその会議室に入室することができます。(「公開」が選択されていない場合(つまり非公開の場合)のみ適用)]]></entry>
 	<entry key="830"><![CDATA[制限]]></entry>
 	<entry key="832"><![CDATA[よろしいですか?]]></entry>
 	<entry key="833"><![CDATA[選択された項目を削除してよろしいですか？変更した内容は、保存する必要があります。続いて保存ボタンを押してください。]]></entry>
-	<entry key="843"><![CDATA[Tool Properties]]></entry>
+	<entry key="843"><![CDATA[プロパティ]]></entry>
 	<entry key="844"><![CDATA[ビューア上でマウス・ポインタを表示する]]></entry>
 	<entry key="848"><![CDATA[デスクトップを表示する]]></entry>
-	<entry key="850"><![CDATA[」さんがデスクトップ共有を要求してます。表示しますか?]]></entry>
+	<entry key="850"><![CDATA[デスクトップ共有を要求してます。表示しますか?]]></entry>
 	<entry key="860"><![CDATA[私の録画]]></entry>
 	<entry key="861"><![CDATA[パブリック録画]]></entry>
 	<entry key="864"><![CDATA[全長]]></entry>
@@ -350,10 +350,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="879"><![CDATA[質疑を許可する]]></entry>
 	<entry key="880"><![CDATA[質疑を許可すると、「質問があります」ボタンが表示されます。]]></entry>
 	<entry key="881"><![CDATA[権限]]></entry>
-	<entry key="887"><![CDATA[The have been errors while processing the Recording.]]></entry>
+	<entry key="887"><![CDATA[録画の処理中にエラーが発生しました。]]></entry>
 	<entry key="888"><![CDATA[録画視聴の準備がまだ整っていません。数分後に再実行してください。]]></entry>
 	<entry key="910"><![CDATA[ビデオ表示するユーザーを選択]]></entry>
-	<entry key="911"><![CDATA[Available Users for this Pod]]></entry>
+	<entry key="911"><![CDATA[ポッド利用ユーザー数]]></entry>
 	<entry key="913"><![CDATA[録画・録音を開始]]></entry>
 	<entry key="914"><![CDATA[録画・録音を停止]]></entry>
 	<entry key="923"><![CDATA[ホーム・ドライブ使用量]]></entry>
@@ -368,7 +368,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1066"><![CDATA[システム･バックアップ]]></entry>
 	<entry key="1067"><![CDATA[ユーザーに対し画面共有/録画を許可する]]></entry>
 	<entry key="1068"><![CDATA[ユーザーに対し画面共有/録画を拒否する]]></entry>
-	<entry key="1070"><![CDATA[さんが画面の共有/録画を要求しています。]]></entry>
+	<entry key="1070"><![CDATA[画面の共有/録画を要求中]]></entry>
 	<entry key="1071"><![CDATA[あなたは画面の共有/録画をする権限を与えられています]]></entry>
 	<entry key="1076"><![CDATA[音声のみの会議室]]></entry>
 	<entry key="1077"><![CDATA[このフラッグをオンにすると、ユーザーは会議室で音声のみ使用できるようになります(ビデオ無し)。これにより、ネットワーク帯域を節約することができます。]]></entry>
@@ -376,7 +376,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1079"><![CDATA[リモート制御を拒否 (デスクトップ共有中)]]></entry>
 	<entry key="1080"><![CDATA[リモート制御権限を適用する (デスクトップ共有中)]]></entry>
 	<entry key="1081"><![CDATA[あなたは、リモート画面の制御を許可されています(デスクトップ共有時)]]></entry>
-	<entry key="1082"><![CDATA[さんがリモート画面の制御権限を要求しています。]]></entry>
+	<entry key="1082"><![CDATA[リモート画面の制御権限を要求中]]></entry>
 	<entry key="1089"><![CDATA[画面共有の品質:]]></entry>
 	<entry key="1090"><![CDATA[超高品質]]></entry>
 	<entry key="1091"><![CDATA[高品質]]></entry>
@@ -409,8 +409,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1143"><![CDATA[タイムゾーン]]></entry>
 	<entry key="1146"><![CDATA[概要]]></entry>
 	<entry key="1147"><![CDATA[作成者]]></entry>
-	<entry key="1148"><![CDATA[タイムゾーン設定を勧奨]]></entry>
-	<entry key="1149"><![CDATA[次回ログイン時にタイムゾーン設定を行うことを進めるメッセージを表示する場合にチェックを入れてください。]]></entry>
+	<entry key="1148"><![CDATA[タイムゾーン設定を推奨]]></entry>
+	<entry key="1149"><![CDATA[次回ログイン時にタイムゾーン設定を行うことを勧めるメッセージを表示する場合にチェックを入れてください。]]></entry>
 	<entry key="1151"><![CDATA[{0}会議が設定されました:]]></entry>
 	<entry key="1152"><![CDATA[詳細:]]></entry>
 	<entry key="1153"><![CDATA[開始時刻:]]></entry>
@@ -446,14 +446,14 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1194"><![CDATA[{0}のコンタクト要求を確認するか、承認/拒否のリンクのいずれかをクリックしてください。]]></entry>
 	<entry key="1196"><![CDATA[コンタクト・リスト]]></entry>
 	<entry key="1198"><![CDATA[さんが、あなたをコンタクトとして承認しました!]]></entry>
-	<entry key="1202"><![CDATA[送信者]]></entry>
+	<entry key="1202"><![CDATA[<nobr>送信者</nobr>]]></entry>
 	<entry key="1205"><![CDATA[]]></entry>
 	<entry key="1206"><![CDATA[メッセージ]]></entry>
 	<entry key="1207"><![CDATA[新規メール]]></entry>
 	<entry key="1208"><![CDATA[コンタクトに送信するメッセージを新規に作成します]]></entry>
 	<entry key="1209"><![CDATA[新規メッセージ]]></entry>
-	<entry key="1210"><![CDATA[宛先:]]></entry>
-	<entry key="1211"><![CDATA[件名:]]></entry>
+	<entry key="1210"><![CDATA[<nobr>宛先:</nobr>]]></entry>
+	<entry key="1211"><![CDATA[<nobr>件名:</nobr>]]></entry>
 	<entry key="1218"><![CDATA[会議室を予約する]]></entry>
 	<entry key="1221"><![CDATA[ミーティングをスケジュールします。全てのミーティング参加予定者のカレンダーにイベントが追加されます。]]></entry>
 	<entry key="1222"><![CDATA[受信箱]]></entry>
@@ -498,7 +498,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1362"><![CDATA[私]]></entry>
 	<entry key="1363"><![CDATA[アクティビティ/アクション]]></entry>
 	<entry key="1386"><![CDATA[他の参加者のマイクを無効にして私のマイクだけを有効にする (F12)]]></entry>
-	<entry key="1399"><![CDATA[さんが、参加者のマイクの無効化を依頼しています。]]></entry>
+	<entry key="1399"><![CDATA[参加者のマイクの無効化を依頼中]]></entry>
 	<entry key="1410"><![CDATA[投票名]]></entry>
 	<entry key="1411"><![CDATA[あなた]]></entry>
 	<entry key="1412"><![CDATA[過去の投票]]></entry>
@@ -510,12 +510,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[投票を削除する]]></entry>
 	<entry key="1421"><![CDATA[この投票を削除してよろしいですか？同時に投票結果も削除されます。]]></entry>
 	<entry key="1422"><![CDATA[ISO言語コード]]></entry>
-	<entry key="1427"><![CDATA[さんが、単独話者になることを希望しています。]]></entry>
-	<entry key="1428">単独話者になることを許可する。</entry>
+	<entry key="1427"><![CDATA[単独講演者（話者）権限を要求中]]></entry>
+	<entry key="1428">単独講演者（話者）になることを許可する。</entry>
 	<entry key="1429"><![CDATA[カメラ解像度]]></entry>
 	<entry key="1430"><![CDATA[解像度の変更はネットワーク帯域に影響します。高解像度のビデオ画像は、より多くのネットワーク帯域を必要とします。]]></entry>
-	<entry key="1432"><![CDATA[私は、単独話者になることができる権限の付与を依頼します。]]></entry>
-	<entry key="1433"><![CDATA[あなたは、自分自身の手で単独話者になることができます。単独話者になるには、ここをクリックしてください。(または、あなたのビデオ画面でクリック、あるいはF12押下でも可能です)]]></entry>
+	<entry key="1432"><![CDATA[私は、単独講演者（話者）になることができる権限の付与を依頼します。]]></entry>
+	<entry key="1433"><![CDATA[あなたは、自分自身の手で単独講演者（話者）になることができます。単独講演者（話者）になるには、ここをクリックしてください。(または、あなたのビデオ画面でクリック、あるいはF12押下でも可能です)]]></entry>
 	<entry key="1443"><![CDATA[レイアウト・オプション]]></entry>
 	<entry key="1444"><![CDATA[新規イベント]]></entry>
 	<entry key="1445"><![CDATA[カレンダー・イベントを保存時にパスワードを設定する場合、パスワードは、参加者に対して送付される会議室リンクに対して設定されます。会議室にパスワードが設定されるわけではありません。したがって、一つのイベントを、異なるパスワードで複数回保存したような場合、参加者は、異なるパスワードの会議室リンクを受け取ることになります。また、一旦送付されたリンクは、古いパスワードの会議室リンクであっても有効のまま残ります。]]></entry>
@@ -544,42 +544,42 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1474"><![CDATA[共有画面の高さを拡大するためには、共有画面を上に移動してください。]]></entry>
 	<entry key="1475"><![CDATA[外部プロバイダー向けストリーミングのための設定を行ってください。]]></entry>
 	<entry key="1476"><![CDATA[画面を公開するには、画面共有を開始してください。]]></entry>
-	<entry key="1477"><![CDATA[録画を開始するには、司会者権限が必要です。]]></entry>
+	<entry key="1477"><![CDATA[録画を開始するには、モデレータ（司会者）権限が必要です。]]></entry>
 	<entry key="1479"><![CDATA[ファイルをファイル・エクスプローラにアップロード]]></entry>
 	<entry key="1480"><![CDATA[共有設定画面を開く]]></entry>
-	<entry key="1481"><![CDATA[司会者による許可が必要]]></entry>
-	<entry key="1482"><![CDATA[カメラ／マイクの共有を司会者に要求]]></entry>
+	<entry key="1481"><![CDATA[モデレータ（司会者）による許可が必要]]></entry>
+	<entry key="1482"><![CDATA[カメラ／マイクの共有をモデレータ（司会者）に要求]]></entry>
 	<entry key="1483"><![CDATA[投票によるフィードバック収集]]></entry>
 	<entry key="1484"><![CDATA[投票結果のチャート表示]]></entry>
 	<entry key="1485"><![CDATA[この会議室に投票にあれば投票する]]></entry>
 	<entry key="1488"><![CDATA[外部参加者をVoIP/SIP経由で招待する]]></entry>
-	<entry key="1489"><![CDATA[この会議室へのリンクをEメールで送信する]]></entry>
+	<entry key="1489"><![CDATA[この会議室へのリンクを電子メールで送信する]]></entry>
 	<entry key="1491"><![CDATA[最大アップロード・サイズ]]></entry>
-	<entry key="1492"><![CDATA[ホワイトボードの共有を司会者に要求する]]></entry>
+	<entry key="1492"><![CDATA[ホワイトボードの共有をモデレータ（司会者）に要求する]]></entry>
 	<entry key="1493"><![CDATA[プライベート・チャットを開始する]]></entry>
 	<entry key="1494"><![CDATA[すべて]]></entry>
 	<entry key="1500"><![CDATA[サーバー名]]></entry>
 	<entry key="1503"><![CDATA[SMSを送信]]></entry>
 	<entry key="1504"><![CDATA[公開中。ユーザー：]]></entry>
-	<entry key="1505"><![CDATA[バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます: <ol> <li>オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)</li> <li>オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)</li> <li>オープン・ミーティングスの最新アーカイブをダウンロードする</li> <li>mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)</li> <li>/opt/red5 にダウンロードしたアーカイブを展開する</li> <li>./admin.sh -i -file ~/today_om_backup.zip<br/> (デフォルトのデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')</li> <li>オープン・ミーティングスを起動する</li> </ol>]]></entry>
+	<entry key="1505"><![CDATA[バックアップ／リストア／アップグレードを行なう際にコマンドライン・ツールを利用すると、時間とインターネット・トラフィックを節約することができます: <ol> <li>オープンミーティングスのインストール・ディレクトリに移動する (例：/opt/red5)</li> <li>オープン・ミーティングスを停止する(例： ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (オープン・ミーティングスの現状バックアップを作成する)</li> <li>オープン・ミーティングスの最新アーカイブをダウンロードする</li> <li>mv /opt/red5 /opt.red5.bak (必要に応じて、現環境を移動しておく)</li> <li>/opt/red5 にダウンロードしたアーカイブを展開する</li> <li>./admin.sh -i -file ~/today_om_backup.zip<br/> (既定のデータベースを使用していない場合は './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass')</li> <li>オープン・ミーティングスを起動する</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[全ユーザーに供用される会議室]]></entry>
 	<entry key="1507"><![CDATA[現ユーザー・グループに供用される会議室]]></entry>
 	<entry key="1508"><![CDATA[現ユーザーの会議室]]></entry>
 	<entry key="1509"><![CDATA[イベント専用会議室を作成／編集する]]></entry>
 	<entry key="1513"><![CDATA[チャットを制限]]></entry>
-	<entry key="1515"><![CDATA[チャット画面をデフォルトで表示]]></entry>
-	<entry key="1516"><![CDATA[ファイル画面をデフォルトで表示]]></entry>
+	<entry key="1515"><![CDATA[チャット画面を既定で表示]]></entry>
+	<entry key="1516"><![CDATA[ファイル画面を既定で表示]]></entry>
 	<entry key="1526"><![CDATA[URLを生成]]></entry>
 	<entry key="1527"><![CDATA[ネットワーク・テスト]]></entry>
 	<entry key="1528"><![CDATA[インタビュー用ビデオ・カメラを自動選択]]></entry>
 	<entry key="1536"><![CDATA[システム・インポート]]></entry>
 	<entry key="1537"><![CDATA[バックアップにアップロード済みファイルと録音・録画を含める]]></entry>
 	<entry key="1538"><![CDATA[会議室のSIPトランスポートを有効にする]]></entry>
-	<entry key="1539">このユーザーに単独話者権限を付与してよろしいですか？</entry>
+	<entry key="1539">このユーザーに単独講演者（話者）権限を付与してよろしいですか？</entry>
 	<entry key="1546"><![CDATA[ようこそ]]></entry>
 	<entry key="1547"><![CDATA[ユーザー基本情報／サポート・リンク ウィジェット]]></entry>
 	<entry key="1548"><![CDATA[ウィジェット]]></entry>
-	<entry key="1549"><![CDATA[について]]></entry>
+	<entry key="1549"><![CDATA[製品情報]]></entry>
 	<entry key="1551"><![CDATA[バージョン]]></entry>
 	<entry key="1552"><![CDATA[リビジョン]]></entry>
 	<entry key="1553"><![CDATA[ビルド日時]]></entry>
@@ -606,12 +606,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1580"><![CDATA[リクエスト情報URL]]></entry>
 	<entry key="1581"><![CDATA[OAuth2設定]]></entry>
 	<entry key="1582"><![CDATA[ログイン名]]></entry>
-	<entry key="1583"><![CDATA[Email]]></entry>
+	<entry key="1583"><![CDATA[電子メール]]></entry>
 	<entry key="1584"><![CDATA[姓]]></entry>
 	<entry key="1585"><![CDATA[名]]></entry>
 	<entry key="1586"><![CDATA[トークン属性値]]></entry>
 	<entry key="1587"><![CDATA[リダイレクトURI]]></entry>
-	<entry key="1588"><![CDATA[Emailアドレスを入力します: firstname1 lastname1 <email1> or "firstname2 lastname2" <email2> or 'firstname3 lastname3' <email3> or email]]></entry>
+	<entry key="1588"><![CDATA[電子メール・アドレスを入力します: firstname1 lastname1 <email1>, "firstname2 lastname2" <email2>, 'firstname3 lastname3' <email3>, email]]></entry>
 	<entry key="1589"><![CDATA[通信切断時の処理]]></entry>
 	<entry key="1590"><![CDATA[表示]]></entry>
 	<entry key="1592"><![CDATA[終了日をご確認ください]]></entry>
@@ -620,129 +620,129 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1595"><![CDATA[録音データがみつかりません]]></entry>
 	<entry key="1598"><![CDATA[セキュリティ]]></entry>
 	<entry key="1599"><![CDATA[この会議室へは入れません]]></entry>
-	<entry key="1600"><![CDATA[再録音開始]]></entry>
-	<entry key="1603"><![CDATA[would like to share his audio]]></entry>
-	<entry key="1604"><![CDATA[Allow this user to publish their audio]]></entry>
-	<entry key="1605"><![CDATA[Remove audio of this user]]></entry>
-	<entry key="1606"><![CDATA[I would like to share my audio]]></entry>
-	<entry key="1607"><![CDATA[You are allowed to share your audio]]></entry>
-	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
+	<entry key="1600"><![CDATA[再変換]]></entry>
+	<entry key="1603"><![CDATA[音声の共有を要求中]]></entry>
+	<entry key="1604"><![CDATA[このユーザーに音声の公開を許可する]]></entry>
+	<entry key="1605"><![CDATA[このユーザーの音声共有を解除]]></entry>
+	<entry key="1606"><![CDATA[自分の音声の公開を求める]]></entry>
+	<entry key="1607"><![CDATA[音声の共有を許可されました]]></entry>
+	<entry key="access.denied.header"><![CDATA[アクセスが拒否されました。このアクションの実行権限がありません。]]></entry>
 	<entry key="account.created"><![CDATA[アカウントが作成されました。ログイン可能です。]]></entry>
-	<entry key="admin.email.body"><![CDATA[Body]]></entry>
-	<entry key="admin.email.errorCount"><![CDATA[Error Count]]></entry>
-	<entry key="admin.email.group.label"><![CDATA[Email message]]></entry>
-	<entry key="admin.email.lastError"><![CDATA[Last Error]]></entry>
-	<entry key="admin.email.recipients"><![CDATA[Recipients]]></entry>
-	<entry key="admin.email.reset.status"><![CDATA[Reset Status]]></entry>
-	<entry key="admin.email.status.DONE"><![CDATA[Done]]></entry>
-	<entry key="admin.email.status.ERROR"><![CDATA[Error]]></entry>
-	<entry key="admin.email.status.NONE"><![CDATA[None]]></entry>
-	<entry key="admin.email.status.SENDING"><![CDATA[Sending]]></entry>
-	<entry key="admin.group.form.days"><![CDATA[days]]></entry>
-	<entry key="admin.group.form.limited"><![CDATA[Limits enabled]]></entry>
-	<entry key="admin.group.form.logo"><![CDATA[Logo]]></entry>
-	<entry key="admin.group.form.maxFilesSize"><![CDATA[Maximum files size]]></entry>
-	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[Maximum recordings size]]></entry>
-	<entry key="admin.group.form.maxRooms"><![CDATA[Maximum room number]]></entry>
-	<entry key="admin.group.form.recordingTtl"><![CDATA[Recordings expire in]]></entry>
-	<entry key="admin.group.form.reminderDays"><![CDATA[Expire reminder sent in]]></entry>
-	<entry key="admin.group.form.tag"><![CDATA[Tag]]></entry>
-	<entry key="admin.room.hidden.elements"><![CDATA[Hidden room elements]]></entry>
-	<entry key="appointment.reminder.email"><![CDATA[Eメール]]></entry>
-	<entry key="appointment.reminder.ical"><![CDATA[iCal Eメール]]></entry>
+	<entry key="admin.email.body"><![CDATA[本文]]></entry>
+	<entry key="admin.email.errorCount"><![CDATA[エラー数]]></entry>
+	<entry key="admin.email.group.label"><![CDATA[電子メール・メッセージ]]></entry>
+	<entry key="admin.email.lastError"><![CDATA[最終エラー]]></entry>
+	<entry key="admin.email.recipients"><![CDATA[受信者]]></entry>
+	<entry key="admin.email.reset.status"><![CDATA[状態をリセット]]></entry>
+	<entry key="admin.email.status.DONE"><![CDATA[完了]]></entry>
+	<entry key="admin.email.status.ERROR"><![CDATA[エラー]]></entry>
+	<entry key="admin.email.status.NONE"><![CDATA[無し]]></entry>
+	<entry key="admin.email.status.SENDING"><![CDATA[送信中]]></entry>
+	<entry key="admin.group.form.days"><![CDATA[日]]></entry>
+	<entry key="admin.group.form.limited"><![CDATA[制限を有効化]]></entry>
+	<entry key="admin.group.form.logo"><![CDATA[ロゴ]]></entry>
+	<entry key="admin.group.form.maxFilesSize"><![CDATA[最大ファイル・サイズ]]></entry>
+	<entry key="admin.group.form.maxRecordingsSize"><![CDATA[最大録画サイズ]]></entry>
+	<entry key="admin.group.form.maxRooms"><![CDATA[最大会議室数]]></entry>
+	<entry key="admin.group.form.recordingTtl"><![CDATA[録画有効期限]]></entry>
+	<entry key="admin.group.form.reminderDays"><![CDATA[有効期限切れの予告通知]]></entry>
+	<entry key="admin.group.form.tag"><![CDATA[タグ]]></entry>
+	<entry key="admin.room.hidden.elements"><![CDATA[非表示エレメント]]></entry>
+	<entry key="appointment.reminder.email"><![CDATA[電子メール]]></entry>
+	<entry key="appointment.reminder.ical"><![CDATA[iCal メール]]></entry>
 	<entry key="appointment.reminder.none"><![CDATA[リマインダーを送信しない]]></entry>
-	<entry key="appointment.tab.advanced"><![CDATA[Advanced]]></entry>
-	<entry key="appointment.tab.general"><![CDATA[General]]></entry>
-	<entry key="bad.captcha.text"><![CDATA[You have entered incorrect captcha text]]></entry>
-	<entry key="bad.password.digit"><![CDATA['Weak' password: at least 1 digit is required]]></entry>
-	<entry key="bad.password.lower"><![CDATA['Weak' password: at least 1 lower-case letter is required]]></entry>
-	<entry key="bad.password.short"><![CDATA['Weak' password: minimum password length is ${0}]]></entry>
-	<entry key="bad.password.special"><![CDATA['Weak' password: at least 1 special symbol '!@#$%^&*][' is required]]></entry>
-	<entry key="bad.password.stop"><![CDATA['Weak' password: it shouldn't contain part of the user's email address or username]]></entry>
-	<entry key="bad.password.upper"><![CDATA['Weak' password: at least 1 upper-case letter is required]]></entry>
-	<entry key="button.label.share"><![CDATA[Share]]></entry>
-	<entry key="calendar.addCalendar"><![CDATA[Add External Calendar]]></entry>
-	<entry key="calendar.defaultTitle"><![CDATA[New Calendar]]></entry>
-	<entry key="calendar.dialogTitle"><![CDATA[Calendar Details]]></entry>
-	<entry key="calendar.error"><![CDATA[Error in making connection on the URL specified.]]></entry>
-	<entry key="calendar.gcal"><![CDATA[Google Calendar]]></entry>
-	<entry key="calendar.googleID"><![CDATA[Google Calendar ID]]></entry>
-	<entry key="calendar.googleKey"><![CDATA[Google Calendar API key]]></entry>
-	<entry key="calendar.url"><![CDATA[External CalDAV Calendar URL]]></entry>
-	<entry key="captcha.text"><![CDATA[Captcha text]]></entry>
-	<entry key="convert.errors.file"><![CDATA[The have been errors while processing the file]]></entry>
-	<entry key="convert.errors.file.missing"><![CDATA[File is not found]]></entry>
-	<entry key="current.password"><![CDATA[Current password]]></entry>
+	<entry key="appointment.tab.advanced"><![CDATA[詳細]]></entry>
+	<entry key="appointment.tab.general"><![CDATA[一般]]></entry>
+	<entry key="bad.captcha.text"><![CDATA[キャプチャが不正です。]]></entry>
+	<entry key="bad.password.digit"><![CDATA[パスワード強度='弱': 1文字以上の数字を含める必要があります。]]></entry>
+	<entry key="bad.password.lower"><![CDATA[パスワード強度='弱': 1文字以上の小文字を含める必要があります。]]></entry>
+	<entry key="bad.password.short"><![CDATA[パスワード強度='弱': パスワードは ${0} 文字以上である必要があります。]]></entry>
+	<entry key="bad.password.special"><![CDATA[パスワード強度='弱': 1文字以上の特殊文字（!@#$%^&*][）を含める必要があります。]]></entry>
+	<entry key="bad.password.stop"><![CDATA[パスワード強度='弱': 電子メール・アドレスやユーザー名の一部を含めることはできません。]]></entry>
+	<entry key="bad.password.upper"><![CDATA[パスワード強度='弱': 1文字以上の大文字を含める必要があります。]]></entry>
+	<entry key="button.label.share"><![CDATA[共有]]></entry>
+	<entry key="calendar.addCalendar"><![CDATA[外部カレンダーを追加]]></entry>
+	<entry key="calendar.defaultTitle"><![CDATA[新規カレンダー]]></entry>
+	<entry key="calendar.dialogTitle"><![CDATA[カレンダー詳細]]></entry>
+	<entry key="calendar.error"><![CDATA[エラー。指定された URL に接続できませんでした。]]></entry>
+	<entry key="calendar.gcal"><![CDATA[Google カレンダー]]></entry>
+	<entry key="calendar.googleID"><![CDATA[Google カレンダー ID]]></entry>
+	<entry key="calendar.googleKey"><![CDATA[Google カレンダー API キー]]></entry>
+	<entry key="calendar.url"><![CDATA[外部 CalDAV カレンダー URL]]></entry>
+	<entry key="captcha.text"><![CDATA[キャプチャ・テキスト]]></entry>
+	<entry key="convert.errors.file"><![CDATA[ファイルの処理中にエラーが発生しました]]></entry>
+	<entry key="convert.errors.file.missing"><![CDATA[ファイルがありません]]></entry>
+	<entry key="current.password"><![CDATA[現行のパスワード]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.backup"><![CDATA[backup:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.cleanup"><![CDATA[Cleanup]]></entry>
+	<entry key="dashboard.widget.admin.cleanup.cleanup"><![CDATA[クリーンアップ]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.deleted"><![CDATA[deleted:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.error"><![CDATA[Unexpected error while performing cleanup]]></entry>
+	<entry key="dashboard.widget.admin.cleanup.error"><![CDATA[クリーンアップ中にエラーが発生しました]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.files"><![CDATA[files:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.final"><![CDATA[final:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.import"><![CDATA[import:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.invalid"><![CDATA[invalid:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.missing"><![CDATA[missing count:]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.profiles"><![CDATA[profiles:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.show"><![CDATA[Show cleanup report]]></entry>
+	<entry key="dashboard.widget.admin.cleanup.show"><![CDATA[クリーンアップ・レポートを表示]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.streams"><![CDATA[Streams folder:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.title"><![CDATA[Cleanup report]]></entry>
+	<entry key="dashboard.widget.admin.cleanup.title"><![CDATA[クリーンアップ・レポート]]></entry>
 	<entry key="dashboard.widget.admin.cleanup.upload"><![CDATA[Upload folder:]]></entry>
-	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[Are you sure you want to delete all temporary files? This operation cannot be undone.]]></entry>
-	<entry key="dashboard.widget.admin.desc"><![CDATA[General Admin functions]]></entry>
-	<entry key="dashboard.widget.admin.title"><![CDATA[Admin functions]]></entry>
+	<entry key="dashboard.widget.admin.cleanup.warn"><![CDATA[全ての一時ファイルを削除してよろしいですか？（この作業は実行後、元に戻せません）]]></entry>
+	<entry key="dashboard.widget.admin.desc"><![CDATA[一般管理機能]]></entry>
+	<entry key="dashboard.widget.admin.title"><![CDATA[管理機能]]></entry>
 	<entry key="download.jpg"><![CDATA[JPGとしてダウンロード]]></entry>
 	<entry key="download.pdf"><![CDATA[PDFとしてダウンロード]]></entry>
 	<entry key="download.png"><![CDATA[PNGとしてダウンロード]]></entry>
-	<entry key="error.bad.credentials"><![CDATA[Username/email and/or password are incorrect.]]></entry>
+	<entry key="error.bad.credentials"><![CDATA[ユーザー名/電子メール・アドレス、またはパスワードが不正です。]]></entry>
 	<entry key="error.bad.password"><![CDATA[パスワードが間違っています。]]></entry>
 	<entry key="error.cfg.exist"><![CDATA[指定されたキーの構成は既に存在しています。別のキーを指定するか、既存の構成を編集してください。]]></entry>
 	<entry key="error.contact.added"><![CDATA[このユーザーは既にコンタクト・リストに登録済みか、未回答のコンタクト追加要請メッセージを受信済みです。]]></entry>
 	<entry key="error.contact.approved"><![CDATA[ユーザーは既に承認されています!]]></entry>
 	<entry key="error.contact.denied"><![CDATA[ユーザーは既に拒否されています!]]></entry>
 	<entry key="error.email.inuse"><![CDATA[そのメールアドレスは既に登録されています]]></entry>
-	<entry key="error.hash.invalid"><![CDATA[この招待コードは無効です。]]></entry>
+	<entry key="error.hash.invalid"><![CDATA[この参加依頼コードは無効です。]]></entry>
 	<entry key="error.hash.period"><![CDATA[参加依頼コードが無効です。参加依頼コードは一定期間のみ有効です。]]></entry>
-	<entry key="error.hash.used"><![CDATA[その招待はすでに使われています。このタイプの招待は再利用ができません。]]></entry>
+	<entry key="error.hash.used"><![CDATA[その参加依頼はすでに使われています。このタイプの参加依頼は再利用ができません。]]></entry>
 	<entry key="error.login.inuse"><![CDATA[そのユーザー名は既に使われています]]></entry>
-	<entry key="error.nogroup"><![CDATA[User is not assigned to group.]]></entry>
+	<entry key="error.nogroup"><![CDATA[ユーザーは指定されたグループに所属していません。]]></entry>
 	<entry key="error.notactivated"><![CDATA[アカウントが有効化されていません。アカウント登録時に受信したメール中のリンクをクリックしてアカウントを有効化してください。]]></entry>
 	<entry key="error.notallowed"><![CDATA[管理者権限が必要です。]]></entry>
 	<entry key="error.reg.disabled"><![CDATA[フロントエンド登録は無効です。]]></entry>
-	<entry key="error.short.login"><![CDATA[Login is too short]]></entry>
+	<entry key="error.short.login"><![CDATA[ログイン名が短過ぎます]]></entry>
 	<entry key="error.type.error"><![CDATA[エラー]]></entry>
 	<entry key="error.type.info"><![CDATA[メッセージ]]></entry>
 	<entry key="error.unknown"><![CDATA[未知のエラーです。管理者に報告してください。]]></entry>
 	<entry key="files.download.jpg"><![CDATA[JPG]]></entry>
-	<entry key="files.download.original"><![CDATA[Original]]></entry>
+	<entry key="files.download.original"><![CDATA[オリジナル]]></entry>
 	<entry key="files.download.pdf"><![CDATA[PDF]]></entry>
-	<entry key="files.root.group"><![CDATA[Group files]]></entry>
-	<entry key="find.user"><![CDATA[Find user]]></entry>
+	<entry key="files.root.group"><![CDATA[グループのファイル]]></entry>
+	<entry key="find.user"><![CDATA[ユーザーを検索]]></entry>
 	<entry key="goto.first"><![CDATA[最初へ]]></entry>
 	<entry key="goto.last"><![CDATA[最後へ]]></entry>
 	<entry key="goto.next"><![CDATA[次へ]]></entry>
 	<entry key="goto.prev"><![CDATA[前へ]]></entry>
-	<entry key="install.room.conference.micro"><![CDATA[Conference room with microphone option set]]></entry>
-	<entry key="install.room.presentation.micro"><![CDATA[Presentation room with microphone option set]]></entry>
-	<entry key="install.room.private.conference"><![CDATA[Private Conference Room]]></entry>
-	<entry key="install.room.public.conference"><![CDATA[Public Conference Room]]></entry>
-	<entry key="install.room.public.interview"><![CDATA[Public Interview Room]]></entry>
-	<entry key="install.room.public.presentation"><![CDATA[Public Presentation Room]]></entry>
-	<entry key="install.room.public.video.only"><![CDATA[Public Video Only Room]]></entry>
-	<entry key="install.room.public.video.wb"><![CDATA[Public Video And Whiteboard Room]]></entry>
-	<entry key="install.wizard.congrats.commercial"><![CDATA[There are some companies
-			that also offer commercial support for Apache OpenMeetings:]]></entry>
-	<entry key="install.wizard.congrats.enter"><![CDATA[Enter the Application]]></entry>
-	<entry key="install.wizard.congrats.mail"><![CDATA[Mailing list]]></entry>
-	<entry key="install.wizard.congrats.restart"><![CDATA[Database was changed, please restart application to avoid possible issues]]></entry>
-	<entry key="install.wizard.db.step.check"><![CDATA[Check]]></entry>
+	<entry key="install.room.conference.micro"><![CDATA[マイク・オプション付き会議室]]></entry>
+	<entry key="install.room.presentation.micro"><![CDATA[マイク・オプション付き講演会ルーム]]></entry>
+	<entry key="install.room.private.conference"><![CDATA[プライベート会議室]]></entry>
+	<entry key="install.room.public.conference"><![CDATA[パブリック会議室]]></entry>
+	<entry key="install.room.public.interview"><![CDATA[パブリック・インタービュー・ルーム]]></entry>
+	<entry key="install.room.public.presentation"><![CDATA[パブリック講演会ルーム]]></entry>
+	<entry key="install.room.public.video.only"><![CDATA[パブリック・ビデオ専用ルーム]]></entry>
+	<entry key="install.room.public.video.wb"><![CDATA[パブリック・ビデオ＆ホワイトボード専用ルーム]]></entry>
+	<entry key="install.wizard.congrats.commercial"><![CDATA[Apache OpenMeetingの
+			商用サポートを提供する会社:]]></entry>
+	<entry key="install.wizard.congrats.enter"><![CDATA[アプリケーションを使う]]></entry>
+	<entry key="install.wizard.congrats.mail"><![CDATA[メーリング・リスト]]></entry>
+	<entry key="install.wizard.congrats.restart"><![CDATA[データベースを変更しました。念のためアプリケーションを再起動してください。]]></entry>
+	<entry key="install.wizard.db.step.check"><![CDATA[接続試験]]></entry>
 	<entry key="install.wizard.db.step.db2.name"><![CDATA[IBM DB2]]></entry>
-	<entry key="install.wizard.db.step.dbname"><![CDATA[Specify the name of the database]]></entry>
-	<entry key="install.wizard.db.step.dbtype"><![CDATA[Choose DB type]]></entry>
+	<entry key="install.wizard.db.step.dbname"><![CDATA[データベース名を指定してください]]></entry>
+	<entry key="install.wizard.db.step.dbtype"><![CDATA[データベース・タイプを選択]]></entry>
 	<entry key="install.wizard.db.step.derby.name"><![CDATA[Apache Derby]]></entry>
-	<entry key="install.wizard.db.step.error.patch"><![CDATA[Unexpected error while patching persistence file: {0}]]></entry>
-	<entry key="install.wizard.db.step.errorprops"><![CDATA[Unable to get the properties]]></entry>
-	<entry key="install.wizard.db.step.field.title"><![CDATA[DB configuration]]></entry>
-	<entry key="install.wizard.db.step.host"><![CDATA[Specify DB host]]></entry>
+	<entry key="install.wizard.db.step.error.patch"><![CDATA[下記パッチ適用中にエラーが発生しました: {0}]]></entry>
+	<entry key="install.wizard.db.step.errorprops"><![CDATA[プロパティを取得できません]]></entry>
+	<entry key="install.wizard.db.step.field.title"><![CDATA[データベース構成]]></entry>
+	<entry key="install.wizard.db.step.host"><![CDATA[データベース・ホスト名を指定してください]]></entry>
 	<entry key="install.wizard.db.step.instructions.db2"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/IBMDB2Config.html">IBM DB2</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.derby"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/ApacheDerbyConfig.html">Apache Derby</a>]]></entry>
 	<entry key="install.wizard.db.step.instructions.mssql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/MSSQLConfig.html">MSSQL</a>]]></entry>
@@ -751,241 +751,234 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.db.step.instructions.postgresql"><![CDATA[<a target="_blank" href="http://openmeetings.apache.org/PostgresConfig.html">PostgreSql</a>]]></entry>
 	<entry key="install.wizard.db.step.mssql.name"><![CDATA[MSSQL]]></entry>
 	<entry key="install.wizard.db.step.mysql.name"><![CDATA[MySQL]]></entry>
-	<entry key="install.wizard.db.step.nodriver"><![CDATA[Unable to load proper DB driver, please download appropriate jar file, and restart the OM. Instructions: {0}]]></entry>
+	<entry key="install.wizard.db.step.nodriver"><![CDATA[データベース・ドライバーをロードできません。適切なJARファイルをダウンロードして、OpenMeetingsを再起動してください。手順: {0}]]></entry>
 	<entry key="install.wizard.db.step.note"><![CDATA[
 		<h4>
-			<a id="Recommendation_for_production_environment"></a>Recommendation
-			for production environment<a target="_blank"
+			<a id="Recommendation_for_production_environment"></a>推奨本番環境<a target="_blank"
 				href="#Recommendation_for_production_environment"
 				class="section_anchor"></a>
 		</h4>
 		<blockquote>
-			By default {0} uses the integrated {1} database. For
-			production environment you should consider using {2}, {3}, {4}, {5} or {6}
+			既定では、{0} は組み込み済みデータベース {1} を使用しますが、
+			本番環境では、下記のデータベースの使用をご検討ください: {2}, {3}, {4}, {5}, {6} 
 		</blockquote>
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
-			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
+			<p><strong>注:</strong> 予見し難い DB ログイン名と8文字以上の強固なパスワードを使用してください。</p>
 		</div>
 	]]></entry>
-	<entry key="install.wizard.db.step.notvalid"><![CDATA[Database check was unsuccessfull]]></entry>
+	<entry key="install.wizard.db.step.notvalid"><![CDATA[データベース接続試験に失敗しました]]></entry>
 	<entry key="install.wizard.db.step.oracle.name"><![CDATA[Oracle]]></entry>
-	<entry key="install.wizard.db.step.pass"><![CDATA[Specify DB password]]></entry>
-	<entry key="install.wizard.db.step.port"><![CDATA[Specify DB port]]></entry>
+	<entry key="install.wizard.db.step.pass"><![CDATA[データベース・パスワードを指定してください]]></entry>
+	<entry key="install.wizard.db.step.port"><![CDATA[データベース・ポート番号を指定してください]]></entry>
 	<entry key="install.wizard.db.step.postgresql.name"><![CDATA[PostgreSql]]></entry>
-	<entry key="install.wizard.db.step.user"><![CDATA[Specify DB user]]></entry>
-	<entry key="install.wizard.db.step.valid"><![CDATA[Database check was successfull]]></entry>
-	<entry key="install.wizard.install.desc"><![CDATA[Please click "Finish" button to start installation!]]></entry>
-	<entry key="install.wizard.install.failed"><![CDATA[Installation is failed]]></entry>
-	<entry key="install.wizard.install.header"><![CDATA[Installation]]></entry>
-	<entry key="install.wizard.install.started"><![CDATA[Please wait, installation in progress]]></entry>
-	<entry key="install.wizard.params.step1.email"><![CDATA[EMail]]></entry>
-	<entry key="install.wizard.params.step1.email.title"><![CDATA[Enter a EMail]]></entry>
-	<entry key="install.wizard.params.step1.group"><![CDATA[Name]]></entry>
-	<entry key="install.wizard.params.step1.group.title"><![CDATA[Enter a default Group]]></entry>
-	<entry key="install.wizard.params.step1.groupdata"><![CDATA[Group(Domains)]]></entry>
-	<entry key="install.wizard.params.step1.password"><![CDATA[Userpass]]></entry>
-	<entry key="install.wizard.params.step1.password.title"><![CDATA[Enter a password]]></entry>
-	<entry key="install.wizard.params.step1.tz"><![CDATA[User Time Zone]]></entry>
-	<entry key="install.wizard.params.step1.userdata"><![CDATA[Userdata]]></entry>
-	<entry key="install.wizard.params.step1.username"><![CDATA[Username]]></entry>
-	<entry key="install.wizard.params.step1.username.title"><![CDATA[Enter a username]]></entry>
-	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[Allow self-registering]]></entry>
-	<entry key="install.wizard.params.step2.configuration"><![CDATA[Configuration]]></entry>
-	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[Default DB objects of all types will be created (including Rooms, OAuth2 servers etc.)]]></entry>
-	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[Default Language]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP-Username]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[Enter the mail-username]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP-Userpass]]></entry>
-	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[Enter the mail-userpass]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Mail-Referer]]></entry>
-	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Enter a Referer]]></entry>
-	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Enable TLS in Mail Server Auth]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Set inviter's email
-					address as ReplyTo in email invitations]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Send Email to new registered Users]]></entry>
-	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[New Users need to verify their EMail]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-Server Port(default Smtp-Server Port is 25)]]></entry>
-	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[Enter a SMTP-Server.Port normally 25]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP-Server]]></entry>
-	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[Enter a SMTP-Server]]></entry>
-	<entry key="install.wizard.params.step3.converters"><![CDATA[Converters]]></entry>
-	<entry key="install.wizard.params.step3.docDpi"><![CDATA[Document conversion DPI]]></entry>
-	<entry key="install.wizard.params.step3.docDpi.text"><![CDATA[DPI that ImageMagic will use for PDF to image conversion (default is 150)]]></entry>
-	<entry key="install.wizard.params.step3.docDpi.title"><![CDATA[Enter the dpi that ImageMagic will use for PDF to image conversion]]></entry>
-	<entry key="install.wizard.params.step3.docQuality"><![CDATA[Document conversion JPEG Quality]]></entry>
-	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
-	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[Enter the quality of embedded jpeg pictures to quality. 0 is worst (small), 100 is best (big). (default:90)]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[FFMPEG Path]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[Install FFMpeg. You should get FFMPEG in an up to date copy! For Windows you can download a Build for example from http://ffmpeg.arrozcru.org/builds/ Linux or OSx Users should be able to use one of the various Installation Instructions on the Web. You need to enable libmp3lame!]]></entry>
-	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[Enter the path to FFMPEG, leave blank if FFMPEG is successfully installed to system-path]]></entry>
-	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick Path]]></entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[Install ImageMagick on the server, you can get more information on http://www.imagemagick.org regarding installation. The instructions for installation can be found there http://www.imagemagick.org/script/binary-releases.php, however on most linux systems you can get it via your favorite package managers (apt-get it)]]></entry>
-	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[Enter the path to ImageMagick, leave blank if ImageMagick is successfully installed to system-path]]></entry>
-	<entry key="install.wizard.params.step3.installation"><![CDATA[Installation]]></entry>
-	<entry key="install.wizard.params.step3.officePath"><![CDATA[OpenOffice/LibreOffice Path for jodconverter]]></entry>
-	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation]]></entry>
-	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[The path to OpenOffice/LibreOffice (optional) please set this to the real path in case jodconverter is unable to find OpenOffice/LibreOffice installation automatically]]></entry>
-	<entry key="install.wizard.params.step3.seeAlso"><![CDATA[ see also]]></entry>
-	<entry key="install.wizard.params.step3.soxPath"><![CDATA[SoX Path]]></entry>
-	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[Install SoX http://sox.sourceforge.net/ You should install SoX in a up to date copy! SoX 12.xx will NOT work!]]></entry>
-	<entry key="install.wizard.params.step3.soxPath.title"><![CDATA[Enter the path to SoX, leave blank if SoX is successfully installed to system-path]]></entry>
-	<entry key="install.wizard.params.step4.crypt"><![CDATA[Crypt Type]]></entry>
-	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[Crypt Class]]></entry>
+	<entry key="install.wizard.db.step.user"><![CDATA[データベース・ユーザーを指定してください]]></entry>
+	<entry key="install.wizard.db.step.valid"><![CDATA[データベース接続試験に成功しました]]></entry>
+	<entry key="install.wizard.install.desc"><![CDATA["インストール"ボタンを押してインストールを開始してください!]]></entry>
+	<entry key="install.wizard.install.failed"><![CDATA[インストールに失敗しました]]></entry>
+	<entry key="install.wizard.install.header"><![CDATA[インストール]]></entry>
+	<entry key="install.wizard.install.started"><![CDATA[インストール中です。しばらくお待ちください]]></entry>
+	<entry key="install.wizard.params.step1.email"><![CDATA[電子メール]]></entry>
+	<entry key="install.wizard.params.step1.email.title"><![CDATA[電子メール・アドレスを入力してください]]></entry>
+	<entry key="install.wizard.params.step1.group"><![CDATA[名前]]></entry>
+	<entry key="install.wizard.params.step1.group.title"><![CDATA[既定のグループを入力してください]]></entry>
+	<entry key="install.wizard.params.step1.groupdata"><![CDATA[グループ（ドメイン）]]></entry>
+	<entry key="install.wizard.params.step1.password"><![CDATA[ユーザー・パスワード]]></entry>
+	<entry key="install.wizard.params.step1.password.title"><![CDATA[パスワードを入力してください]]></entry>
+	<entry key="install.wizard.params.step1.tz"><![CDATA[ユーザーのタイムゾーン]]></entry>
+	<entry key="install.wizard.params.step1.userdata"><![CDATA[ユーザー・データ]]></entry>
+	<entry key="install.wizard.params.step1.username"><![CDATA[ユーザー名]]></entry>
+	<entry key="install.wizard.params.step1.username.title"><![CDATA[ユーザー名を入力してください]]></entry>
+	<entry key="install.wizard.params.step2.allowFrontendRegister"><![CDATA[自己登録を許可]]></entry>
+	<entry key="install.wizard.params.step2.configuration"><![CDATA[構成]]></entry>
+	<entry key="install.wizard.params.step2.createDefaultObjects"><![CDATA[既定のデータベース・オブジェクトを自動作成（会議室, OAuth2サーバー, 等）]]></entry>
+	<entry key="install.wizard.params.step2.defaultLangId"><![CDATA[既定の言語]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName"><![CDATA[SMTP ユーザー名]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthName.title"><![CDATA[SMTP ユーザー名を入力してください]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass"><![CDATA[SMTP パスワード]]></entry>
+	<entry key="install.wizard.params.step2.mailAuthPass.title"><![CDATA[SMTP パスワードを入力してください]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[メール・リファラー]]></entry>
+	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[リファラーを入力してください]]></entry>
+	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[SMTP認証でTLSを有効にする]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[参加依頼メールの返信先に、依頼者のメール・アドレスを使用する]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[新規登録ユーザーにメールを送信する]]></entry>
+	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[新規ユーザーはメールによる検証が必要]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP ポート（既定=25）]]></entry>
+	<entry key="install.wizard.params.step2.smtpPort.title"><![CDATA[SMTP ポート番号を入力してください（既定=25）]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer"><![CDATA[SMTP サーバー]]></entry>
+	<entry key="install.wizard.params.step2.smtpServer.title"><![CDATA[SMTPサーバーを入力してください]]></entry>
+	<entry key="install.wizard.params.step3.converters"><![CDATA[文書変換]]></entry>
+	<entry key="install.wizard.params.step3.docDpi"><![CDATA[文書変換 DPI]]></entry>
+	<entry key="install.wizard.params.step3.docDpi.text"><![CDATA[ImageMagick が PDF を画像に変換する際に用いる解像度（既定=150 DPI）]]></entry>
+	<entry key="install.wizard.params.step3.docDpi.title"><![CDATA[ImageMagick が PDF を画像に変換する際に用いる解像度]]></entry>
+	<entry key="install.wizard.params.step3.docQuality"><![CDATA[文書変換時の JPEG 品質]]></entry>
+	<entry key="install.wizard.params.step3.docQuality.text"><![CDATA[埋め込みJPEG画像の品質を入力してください。0=最低（小容量）, 最高=100（大容量）。（既定=90）]]></entry>
+	<entry key="install.wizard.params.step3.docQuality.title"><![CDATA[埋め込みJPEG画像の品質を入力してください。0=最低（小容量）, 最高=100（大容量）。（既定=90）]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath"><![CDATA[FFMPEG のパス]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.text"><![CDATA[FFMpeg をインストールしてください。最新の FFMPEG が必要です。Windowsの場合、例えば http://ffmpeg.arrozcru.org/builds/ からバイナリをダウンロード可能です。Linux や OSx の場合は、ウェブの各種インストール手順を利用できます。libmp3lame を有効化しておく必要があります!]]></entry>
+	<entry key="install.wizard.params.step3.ffmpegPath.title"><![CDATA[FFMPEG のパスを入力してください。システム・パスにインストールされている場合は空欄に設定してください]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath"><![CDATA[ImageMagick のパス]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.text"><![CDATA[ImageMagick をインストールしてください。詳細は http://www.imagemagick.org を参照してください。インストール手順は http://www.imagemagick.org/script/binary-releases.php にありますが、多くのLinuxシステムではそれぞれのパッケージ・マネージャ（apt-get等）で取得可能です]]></entry>
+	<entry key="install.wizard.params.step3.imageMagicPath.title"><![CDATA[ImageMagick のパスを入力してください。システム・パスにインストールされている場合は空欄に設定してください]]></entry>
+	<entry key="install.wizard.params.step3.installation"><![CDATA[インストール]]></entry>
+	<entry key="install.wizard.params.step3.officePath"><![CDATA[JODConverter が使用する OpenOffice/LibreOffice のパス]]></entry>
+	<entry key="install.wizard.params.step3.officePath.text"><![CDATA[OpenOffice/LibreOffice のパスを入力してください（オプション）。JODConverter が OpenOffice/LibreOffice を自動で見つけられない場合は、パスを設定する必要があります]]></entry>
+	<entry key="install.wizard.params.step3.officePath.title"><![CDATA[OpenOffice/LibreOffice のパスを入力してください（オプション）。JODConverter が OpenOffice/LibreOffice を自動で見つけられない場合は、パスを設定する必要があります]]></entry>
+	<entry key="install.wizard.params.step3.seeAlso"><![CDATA[ 参考: ]]></entry>
+	<entry key="install.wizard.params.step3.soxPath"><![CDATA[SoX のパス]]></entry>
+	<entry key="install.wizard.params.step3.soxPath.text"><![CDATA[SoX（http://sox.sourceforge.net/）をインストールしてください。最新の SoX をインストールする非津ようがあります。SoX 12.xx では正常動作しません!]]></entry>
+	<entry key="install.wizard.params.step3.soxPath.title"><![CDATA[SoX のパスを入力してください。システム・パスにインストールされている場合は空欄に設定してください]]></entry>
+	<entry key="install.wizard.params.step4.crypt"><![CDATA[暗号タイプ]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName"><![CDATA[暗号クラス]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.text"><![CDATA[
-		You can use this default crypt type which is equal to
-		PHP-MD5 function or BSD-Style encryption by using:<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b>
-		for more information or to write your own Crypt-Style see: <a
+		既定の暗号化タイプをそのまま利用できます。既定は、PHP-MD5関数相当、あるいは BSDスタイルの暗号相当の
+		<b>org.apache.openmeetings.utils.crypt.MD5CryptImplementation</b> です。
+		独自の暗号スタイルを実装したい場合や、その他の詳細情報は下記を参照してください: <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
-		target="_blank">Custom Crypt Mechanism</a> You can edit this
-		value later BUT previous created Users and Sessions might be not
-		usable anymore
+		target="_blank">Custom Crypt Mechanism</a>。
+                この設定を後で変更することも可能ですが、その場合、それ以前に作成したユーザーやセッションは、変更後に一切利用できなくなります
 	]]></entry>
-	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Enter the Class name of the Encryption Class. DO NOT ALTER THIS IF YOU ARE NOT SURE]]></entry>
-	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP Configuration]]></entry>
-	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[Enable SIP]]></entry>
-	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[Enable red5SIP integration]]></entry>
-	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[SIP extensions context]]></entry>
-	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Context of Asterisk extensions]]></entry>
-	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[SIP rooms prefix]]></entry>
-	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[Prefix for phone number of conference rooms]]></entry>
+	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[暗号化クラス名を入力してください。良く分からない場合は変更しないでください]]></entry>
+	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP 構成]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable"><![CDATA[SIP を有効化]]></entry>
+	<entry key="install.wizard.params.step4.sipEnable.text"><![CDATA[red5SIP 統合を有効化]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext"><![CDATA[SIP exten コンテキスト]]></entry>
+	<entry key="install.wizard.params.step4.sipExtenContext.text"><![CDATA[Asterisk exten コンテキスト]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix"><![CDATA[SIP ルーム・プリフィックス]]></entry>
+	<entry key="install.wizard.params.step4.sipRoomPrefix.text"><![CDATA[会議室用電話番号のプリフィックス]]></entry>
 	<entry key="install.wizard.welcome.panel"><![CDATA[
 	<ol>
 		<li><h4>
-				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>Enabling
-				import of PDFs into whiteboard<a
+				<a id="Enabling_import_of_PDFs_into_whiteboard"></a>ホワイトボードへの PDF のインポートを有効化<a
 					href="#Enabling_import_of_PDFs_into_whiteboard"
 					class="section_anchor"></a>
 			</h4>
 			<ul>
-				<li>Install <strong>GhostScript</strong> on the server, you can
-					get more information on <a target="_blank"
+				<li><strong>GhostScript</strong> をインストールしてください。インストールに関する詳細情報は、<a target="_blank"
 					href="http://pages.cs.wisc.edu/%7Eghost/" rel="nofollow">http://pages.cs.wisc.edu/~ghost/</a>
-					regarding installation. The instructions for installation can be
-					found there, however on most linux systems you can get it via your
-					favorite package managers (apt-get it).
+					にありますが、多くのLinuxシステムではそれぞれのパッケージ・マネージャ（apt-get等）で取得可能です。
 				</li>
 			</ul>
 		</li>
 	</ol>
 
 	<br />
-	<b> <span style="font-size: 1.2em">If you have further
-			questions or need support in installation or hosting:</span></b>
+	<b> <span style="font-size: 1.2em">インストール手順やホスティング等のお問い合わせ先:</span></b>
 	<br />
 	<br />
 
-	<b><span style="font-size: 1.2em">Community-Support:</span></b>
+	<b><span style="font-size: 1.2em">コミュニティ・サポート:</span></b>
 	<br />
 	<br />
 	<span style="font-size: 1.1em"><a
 		href="http://openmeetings.apache.org/mail-lists.html"
-		target="_blank">Mailing lists</a></span>
+		target="_blank">メーリング・リスト</a></span>
 	<br />
 	<br />
-	<b> <span style="font-size: 1.2em">Commercial-Support:</span></b>
+	<b> <span style="font-size: 1.2em">商用サポート:</span></b>
 	<br />
 	<br />
 	<span style="font-size: 1.1em"><a
 		href="http://openmeetings.apache.org/commercial-support.html"
-		target="_blank">Commercial-Support</a></span>
+		target="_blank">商用サポート</a></span>
 
 	<br />
 	]]></entry>
-	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
+	<entry key="invalid.hash"><![CDATA[不正なハッシュ]]></entry>
 	<entry key="lbl.cancel"><![CDATA[キャンセル]]></entry>
 	<entry key="lbl.refresh"><![CDATA[更新]]></entry>
-	<entry key="main.menu.admin.email"><![CDATA[Email management]]></entry>
-	<entry key="main.menu.admin.email.desc"><![CDATA[Check e-mails processing by the system]]></entry>
-	<entry key="my.room.conference"><![CDATA[私の会議室 (ユーザー数 1-16 向け)]]></entry>
-	<entry key="my.room.presentation"><![CDATA[My presentation room (for 1-120 users)]]></entry>
-	<entry key="network.test.click.play"><![CDATA[Click a play button to run a test]]></entry>
-	<entry key="network.test.copy.log"><![CDATA[Copy the log to the clipboard]]></entry>
-	<entry key="network.test.dwn"><![CDATA[Download speed]]></entry>
-	<entry key="network.test.dwn.bytes"><![CDATA[Bytes downloaded]]></entry>
-	<entry key="network.test.dwn.speed"><![CDATA[Download speed]]></entry>
-	<entry key="network.test.dwn.time"><![CDATA[Download time]]></entry>
-	<entry key="network.test.jitter"><![CDATA[Jitter]]></entry>
-	<entry key="network.test.jitter.avg"><![CDATA[Average time]]></entry>
-	<entry key="network.test.jitter.max"><![CDATA[Max time]]></entry>
-	<entry key="network.test.jitter.min"><![CDATA[Min time]]></entry>
+	<entry key="main.menu.admin.email"><![CDATA[電子メール管理]]></entry>
+	<entry key="main.menu.admin.email.desc"><![CDATA[システムで使用する電子メールのチェックを実行]]></entry>
+        <entry key="my.room.conference"><![CDATA[私の会議室 (最適ユーザー数 1-16 人)]]></entry>
+        <entry key="my.room.presentation"><![CDATA[講演会/ウェビナー用会議室 (最
+適ユーザー数 1-120 人)]]></entry>
+	<entry key="network.test.click.play"><![CDATA[再生ボタンを押してテストを実行]]></entry>
+	<entry key="network.test.copy.log"><![CDATA[ログをクリップボードにコピー]]></entry>
+	<entry key="network.test.dwn"><![CDATA[ダウンロード速度]]></entry>
+	<entry key="network.test.dwn.bytes"><![CDATA[バイト ダウンロード済み]]></entry>
+	<entry key="network.test.dwn.speed"><![CDATA[ダウンロード速度]]></entry>
+	<entry key="network.test.dwn.time"><![CDATA[ダウンロード時間]]></entry>
+	<entry key="network.test.jitter"><![CDATA[ジッター]]></entry>
+	<entry key="network.test.jitter.avg"><![CDATA[平均時間]]></entry>
+	<entry key="network.test.jitter.max"><![CDATA[最大時間]]></entry>
+	<entry key="network.test.jitter.min"><![CDATA[最小時間]]></entry>
 	<entry key="network.test.mb"><![CDATA[Mb]]></entry>
 	<entry key="network.test.ms"><![CDATA[ms]]></entry>
-	<entry key="network.test.ping"><![CDATA[Ping]]></entry>
-	<entry key="network.test.ping.avg"><![CDATA[Average ping time]]></entry>
-	<entry key="network.test.ping.load"><![CDATA[load time]]></entry>
-	<entry key="network.test.ping.lost"><![CDATA[Packets lost]]></entry>
-	<entry key="network.test.ping.rcv"><![CDATA[Packets received]]></entry>
-	<entry key="network.test.port"><![CDATA[Port]]></entry>
-	<entry key="network.test.port.avail"><![CDATA[port is available]]></entry>
-	<entry key="network.test.port.stopped"><![CDATA[stopped]]></entry>
-	<entry key="network.test.report"><![CDATA[report]]></entry>
-	<entry key="network.test.report.con.err"><![CDATA[connection error]]></entry>
-	<entry key="network.test.report.error"><![CDATA[Error]]></entry>
-	<entry key="network.test.report.start"><![CDATA[start test...]]></entry>
-	<entry key="network.test.sec"><![CDATA[sec]]></entry>
-	<entry key="network.test.upl"><![CDATA[Upload speed]]></entry>
-	<entry key="network.test.upl.bytes"><![CDATA[Bytes uploaded]]></entry>
-	<entry key="network.test.upl.speed"><![CDATA[Upload speed]]></entry>
-	<entry key="network.test.upl.time"><![CDATA[Upload time]]></entry>
+	<entry key="network.test.ping"><![CDATA[ピング応答]]></entry>
+	<entry key="network.test.ping.avg"><![CDATA[平均ピング応答時間]]></entry>
+	<entry key="network.test.ping.load"><![CDATA[ロード時間]]></entry>
+	<entry key="network.test.ping.lost"><![CDATA[損失パケット数]]></entry>
+	<entry key="network.test.ping.rcv"><![CDATA[受信パケット数]]></entry>
+	<entry key="network.test.port"><![CDATA[ポート]]></entry>
+	<entry key="network.test.port.avail"><![CDATA[ポートは利用可能です]]></entry>
+	<entry key="network.test.port.stopped"><![CDATA[停止]]></entry>
+	<entry key="network.test.report"><![CDATA[レポート]]></entry>
+	<entry key="network.test.report.con.err"><![CDATA[接続エラー]]></entry>
+	<entry key="network.test.report.error"><![CDATA[エラー]]></entry>
+	<entry key="network.test.report.start"><![CDATA[テスト開始...]]></entry>
+	<entry key="network.test.sec"><![CDATA[秒]]></entry>
+	<entry key="network.test.upl"><![CDATA[アップロード速度]]></entry>
+	<entry key="network.test.upl.bytes"><![CDATA[バイト 送信済み]]></entry>
+	<entry key="network.test.upl.speed"><![CDATA[アップロード速度]]></entry>
+	<entry key="network.test.upl.time"><![CDATA[アップロード時間]]></entry>
 	<entry key="poll.type.numeric"><![CDATA[1～10の数字]]></entry>
 	<entry key="poll.type.yesNo"><![CDATA[はい/いいえ]]></entry>
-	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
-	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
-	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
-	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>
-	<entry key="right.presenter.request"><![CDATA[would like to have right to be presenter in this room]]></entry>
-	<entry key="right.presenter.request.self"><![CDATA[I would like to have right to be presenter in this room]]></entry>
-	<entry key="room.action.request.right.moderator"><![CDATA[would like to be moderator of this room.]]></entry>
+	<entry key="recordings.root.group"><![CDATA[グループの録画]]></entry>
+	<entry key="restricted.group.files"><![CDATA[「グループのファイル」のアクセス制限]]></entry>
+	<entry key="right.presenter.allowed.self"><![CDATA[あなたに、このルームの講演者権限が付与されました]]></entry>
+	<entry key="right.presenter.remove"><![CDATA[このルームの講演者権限を剥奪]]></entry>
+	<entry key="right.presenter.request"><![CDATA[このルームの講演者権限を要求中]]></entry>
+	<entry key="right.presenter.request.self"><![CDATA[私は、このルームの講演者権限を求めます]]></entry>
+	<entry key="room.action.request.right.moderator"><![CDATA[このルームのモデレータ（司会者）権限を要求中]]></entry>
 	<entry key="room.type.conference"><![CDATA[会議(ユーザー数:1〜25)]]></entry>
-	<entry key="room.type.conference.desc"><![CDATA["democratic" by default, every user can directly enable audio/video without need for asking]]></entry>
-	<entry key="room.type.interview"><![CDATA[インタビュー(1対1のミーティング；録画付き)]]></entry>
-	<entry key="room.type.interview.desc"><![CDATA[only 2 users can have audio/video enabled (more users can be in the room and you can switch the audio/video between them of course)]]></entry>
-	<entry key="room.type.presentation"><![CDATA[presentation (ユーザー数:1〜150)]]></entry>
-	<entry key="room.type.presentation.desc"><![CDATA["restricted" by default: Every regular user will need to ask if he wants to share audio/video]]></entry>
-	<entry key="save.success"><![CDATA[Saved successfully]]></entry>
-	<entry key="sound.enable"><![CDATA[Enable sound]]></entry>
-	<entry key="sound.mute"><![CDATA[Mute sound]]></entry>
-	<entry key="template.recording.expiring.body"><![CDATA[Your recent {0} recording will be automatically deleted
-		in {1} days. If you would like to save this recording, please download it before then.]]></entry>
+	<entry key="room.type.conference.desc"><![CDATA[既定は"民主的"です。全てのユーザーが音声/ビデオの発信をできます。発信許可を得る必要はありません]]></entry>
+	<entry key="room.type.interview"><![CDATA[インタビュー(1対1のミーティング；録画機能付き)]]></entry>
+	<entry key="room.type.interview.desc"><![CDATA[2ユーザーのみ、音声/ビデオの発信ができます（3人以上のユーザーが在室することも可能です。また、音声/ビデオの発信者を任意に切替えることも可能です）]]></entry>
+	<entry key="room.type.presentation"><![CDATA[講演会 (ユーザー数:1〜150)]]></entry>
+	<entry key="room.type.presentation.desc"><![CDATA[既定は"制限付き"です。通常ユーザーが音声/ビデオを発信する場合は許可が必要です]]></entry>
+	<entry key="save.success"><![CDATA[正常に保存しました]]></entry>
+	<entry key="sound.enable"><![CDATA[消音を解除]]></entry>
+	<entry key="sound.mute"><![CDATA[消音]]></entry>
+	<entry key="template.recording.expiring.body"><![CDATA[あなたの録画（{0}）は {1} 日後に自動削除されます。
+		この録画を保存する場合は、自動削除される前にダウンロードしてください。]]></entry>
 	<entry key="template.recording.expiring.footer"><![CDATA[
-	Regards,<br/>
-	{0} Support Team.]]></entry>
-	<entry key="template.recording.expiring.greetings"><![CDATA[Dear {0}]]></entry>
-	<entry key="template.recording.expiring.subj.prefix"><![CDATA[Recording will be deleted]]></entry>
-	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- Room[{0}]]]></entry>
-	<entry key="user.salutation.dr"><![CDATA[Dr.]]></entry>
-	<entry key="user.salutation.mr"><![CDATA[Mr.]]></entry>
-	<entry key="user.salutation.mrs"><![CDATA[Mrs.]]></entry>
-	<entry key="user.salutation.ms"><![CDATA[Ms.]]></entry>
-	<entry key="user.salutation.prof"><![CDATA[教授]]></entry>
+	<br/>
+	{0} サポート・チーム]]></entry>
+	<entry key="template.recording.expiring.greetings"><![CDATA[こんにちは、 {0}さん]]></entry>
+	<entry key="template.recording.expiring.subj.prefix"><![CDATA[録画自動削除予告]]></entry>
+	<entry key="template.recording.expiring.subj.room"><![CDATA[ -- ルーム[{0}]]]></entry>
+	<entry key="user.salutation.dr"><![CDATA[Dr]]></entry>
+	<entry key="user.salutation.mr"><![CDATA[Mr]]></entry>
+	<entry key="user.salutation.mrs"><![CDATA[Mrs]]></entry>
+	<entry key="user.salutation.ms"><![CDATA[Ms]]></entry>
+	<entry key="user.salutation.prof"><![CDATA[Prof]]></entry>
 	<entry key="video.mic.off"><![CDATA[マイクは消音（無効）です]]></entry>
 	<entry key="video.mic.on"><![CDATA[マイクは有効です!]]></entry>
-	<entry key="volume.label"><![CDATA[ストリーミング音量を調整する]]></entry>
+	<entry key="volume.label"><![CDATA[音量を調整する]]></entry>
 	<entry key="warn.nogroup"><![CDATA[ユーザーは追加されました。このユーザーは少なくとも一つの組織に所属させる必要があります。]]></entry>
 	<entry key="warn.notverified"><![CDATA[サインアップが完了しました。登録メールアドレスに対して確認コードを送付しましたので、メール受信箱をご確認ください。]]></entry>
-	<entry key="widget.recent.desc"><![CDATA[This sections displays rooms recently opened by you]]></entry>
-	<entry key="widget.recent.title"><![CDATA[Recent Rooms]]></entry>
-	<entry key="widget.start.desc"><![CDATA[{0} (オープン・ミーティングス) ウェブ会議プラットホーム]]></entry>
+	<entry key="widget.recent.desc"><![CDATA[あなたが最近開設した会議室を表示します。]]></entry>
+	<entry key="widget.recent.title"><![CDATA[最近の会議室]]></entry>
+	<entry key="widget.start.desc"><![CDATA[ウェブ会議プラットホーム「オープン・ミーティングス」<br>たった4ステップでウェブ会議を始められます。<br>カレンダーでウェブ会議の予定を作成することもできます。]]></entry>
 	<entry key="widget.start.header"><![CDATA[使用方法:]]></entry>
-	<entry key="widget.start.title"><![CDATA[Getting Started]]></entry>
-	<entry key="wizard.button.finish"><![CDATA[Finish]]></entry>
+	<entry key="widget.start.title"><![CDATA[さあ始めましょう]]></entry>
+	<entry key="wizard.button.finish"><![CDATA[インストール]]></entry>
 	<entry key="zoom.fullFit"><![CDATA[画面サイズに合わせる]]></entry>
-	<entry key="zoom.pageWidth"><![CDATA[Page Width]]></entry>
-	<entry key="label.dock.panel"><![CDATA[Click to dock panel]]></entry>
-	<entry key="label.undock.panel"><![CDATA[Click to undock panel]]></entry>
-	<entry key="activities.autoclean"><![CDATA[Auto-clean]]></entry>
-	<entry key="activities.msg.enter"><![CDATA[enter the room.]]></entry>
-	<entry key="activities.msg.exit"><![CDATA[さんは会議室から退室しました]]></entry>
-	<entry key="wb.tool.math.formula"><![CDATA[Math formula]]></entry>
-	<entry key="lbl.update"><![CDATA[Update]]></entry>
-	<entry key="send.on.enter"><![CDATA[Send on Enter]]></entry>
-	<entry key="send.on.ctrl.enter"><![CDATA[Send on Ctrl+Enter]]></entry>
-	<entry key="menu.polls"><![CDATA[Polls]]></entry>
-	<entry key="menu.polls.quick.title"><![CDATA[Create Quick Poll]]></entry>
-	<entry key="menu.polls.quick.descr"><![CDATA[Gather feedback without creating a poll]]></entry>
-	<entry key="admin.restore"><![CDATA[Restore]]></entry>
-	<entry key="admin.purge"><![CDATA[Purge]]></entry>
-	<entry key="admin.purge.desc"><![CDATA[Do you really want to purge this item? This can't be undone!]]></entry>
-	<entry key="register.privacy.accept"><![CDATA[By clicking "${register}", you agree to our ${link}.]]></entry>
-	<entry key="register.privacy.statement"><![CDATA[privacy statement]]></entry>
+	<entry key="zoom.pageWidth"><![CDATA[ページ幅に合わせる]]></entry>
+	<entry key="label.dock.panel"><![CDATA[クリックしてパネルを連結する]]></entry>
+	<entry key="label.undock.panel"><![CDATA[クリックしてパネルを切り離す]]></entry>
+	<entry key="activities.autoclean"><![CDATA[自動クリーンアップ]]></entry>
+	<entry key="activities.msg.enter"><![CDATA[さんが入室しました。]]></entry>
+	<entry key="activities.msg.exit"><![CDATA[さんが退室しました。]]></entry>
+	<entry key="wb.tool.math.formula"><![CDATA[数式]]></entry>
+	<entry key="lbl.update"><![CDATA[更新]]></entry>
+	<entry key="send.on.enter"><![CDATA[Enterを押して送信]]></entry>
+	<entry key="send.on.ctrl.enter"><![CDATA[Ctrl+Enterを押して送信]]></entry>
+	<entry key="menu.polls"><![CDATA[投票]]></entry>
+	<entry key="menu.polls.quick.title"><![CDATA[クイック投票を作成]]></entry>
+	<entry key="menu.polls.quick.descr"><![CDATA[投票を作成せずにフィードバックを収集]]></entry>
+	<entry key="admin.restore"><![CDATA[復元]]></entry>
+	<entry key="admin.purge"><![CDATA[完全削除]]></entry>
+	<entry key="admin.purge.desc"><![CDATA[この項目を完全削除してよろしいですか？この作業は元に戻せません!]]></entry>
+	<entry key="register.privacy.accept"><![CDATA[私は、「${register}」をクリックすることにより、 ${link} に同意します。]]></entry>
+	<entry key="register.privacy.statement"><![CDATA[プライバシーに関する声明]]></entry>
 </properties>
