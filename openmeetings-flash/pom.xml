@@ -32,6 +32,8 @@
 		<site.basedir>${project.parent.basedir}</site.basedir>
 		<skip.site.copy>false</skip.site.copy>
 		<flex.sdk.version>4.16.0</flex.sdk.version>
+		<playerglobal.version>23.0</playerglobal.version>
+		<flexmojos-maven-plugin.version>7.1.1</flexmojos-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,7 +45,7 @@
 		<dependency>
 			<groupId>com.adobe.flash.framework</groupId>
 			<artifactId>playerglobal</artifactId>
-			<version>23.0</version>
+			<version>${playerglobal.version}</version>
 			<type>swc</type>
 		</dependency>
 	</dependencies>
@@ -53,7 +55,7 @@
 			<plugin>
 				<groupId>net.flexmojos.oss</groupId>
 				<artifactId>flexmojos-maven-plugin</artifactId>
-				<version>7.1.1</version>
+				<version>${flexmojos-maven-plugin.version}</version>
 				<extensions>true</extensions>
 				<dependencies>
 					<dependency>
