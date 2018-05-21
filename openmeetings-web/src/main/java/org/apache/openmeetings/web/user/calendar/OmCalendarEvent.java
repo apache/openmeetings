@@ -28,7 +28,7 @@ public class OmCalendarEvent extends CalendarEvent {
 	private static final long serialVersionUID = 1L;
 
 	public OmCalendarEvent(Appointment a) {
-		super(a.getId().intValue(), a.getTitle(), null);
+		super(String.valueOf(a.getId()), a.getTitle(), null);
 		setStart(getDateTime(a.getStart()));
 		setEnd(getDateTime(a.getEnd()));
 		setEditable(AppointmentDialog.isOwner(a));
