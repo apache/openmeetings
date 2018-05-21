@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -183,17 +184,22 @@ public class CalendarPanel extends UserBasePanel {
 			}
 
 			@Override
-			public void onEventClick(AjaxRequestTarget target, CalendarView view, int eventId) {
-				Appointment a = apptDao.get((long)eventId);
+			public void onEventClick(AjaxRequestTarget target, CalendarView view, String eventId) {
+				if (!StringUtils.isNumeric(eventId)) {
+					return;
+				}
+				Appointment a = apptDao.get(Long.valueOf(eventId));
 				dialog.setModelObjectWithAjaxTarget(a, target);
 
 				dialog.open(target);
 			}
 
 			@Override
-			public void onEventDrop(AjaxRequestTarget target, int eventId, long delta, boolean allDay) {
-				Appointment a = apptDao.get((long)eventId);
-
+			public void onEventDrop(AjaxRequestTarget target, String eventId, long delta, boolean allDay) {
+				if (!StringUtils.isNumeric(eventId)) {
+					return;
+				}
+				Appointment a = apptDao.get(Long.valueOf(eventId));
 				if (!AppointmentDialog.isOwner(a)) {
 					return;
 				}
@@ -214,8 +220,11 @@ public class CalendarPanel extends UserBasePanel {
 			}
 
 			@Override
-			public void onEventResize(AjaxRequestTarget target, int eventId, long delta) {
-				Appointment a = apptDao.get((long)eventId);
+			public void onEventResize(AjaxRequestTarget target, String eventId, long delta) {
+				if (!StringUtils.isNumeric(eventId)) {
+					return;
+				}
+				Appointment a = apptDao.get(Long.valueOf(eventId));
 				if (!AppointmentDialog.isOwner(a)) {
 					return;
 				}
