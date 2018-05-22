@@ -197,6 +197,7 @@ public class CalendarPanel extends UserBasePanel {
 			@Override
 			public void onEventDrop(AjaxRequestTarget target, String eventId, long delta, boolean allDay) {
 				if (!StringUtils.isNumeric(eventId)) {
+					refresh(target);
 					return;
 				}
 				Appointment a = apptDao.get(Long.valueOf(eventId));
@@ -222,6 +223,7 @@ public class CalendarPanel extends UserBasePanel {
 			@Override
 			public void onEventResize(AjaxRequestTarget target, String eventId, long delta) {
 				if (!StringUtils.isNumeric(eventId)) {
+					refresh(target);
 					return;
 				}
 				Appointment a = apptDao.get(Long.valueOf(eventId));
