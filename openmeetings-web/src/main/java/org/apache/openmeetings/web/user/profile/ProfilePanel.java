@@ -19,6 +19,8 @@
 package org.apache.openmeetings.web.user.profile;
 
 import org.apache.openmeetings.web.common.UserBasePanel;
+import org.apache.openmeetings.web.pages.PrivacyPage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 public class ProfilePanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -29,5 +31,6 @@ public class ProfilePanel extends UserBasePanel {
 
 		final ChangePasswordDialog chPwdDlg = new ChangePasswordDialog("changePasswd");
 		add(chPwdDlg, new ProfileForm("form", chPwdDlg));
+		add(new BookmarkablePageLink<>("link", PrivacyPage.class));
 	}
 }
