@@ -69,18 +69,16 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 4.0.3 released!</b>
-				<div>Release 4.0.3, provides following improvements:<br/>
-					<div class="bs-callout bs-callout-danger">Security fix in Calendar</div>
+				<b>Version 4.0.4 released!</b>
+				<div>Release 4.0.4, provides following improvements:<br/>
+					<div class="bs-callout bs-callout-danger">The purpose of this release is to provide GDPR compatible version of OpenMeetings</div>
 					<br/>
 					Room:<br/>
 					<ul>
-						<li>Performance was improved</li>
-						<li>Issues with audio/video were fixed</li>
-						<li>Quick poll was added</li>
+						<li>Performance is improved</li>
+						<li>Audio/Video streams were not closed in IE</li>
+						<li>File conversion on Windows is improved</li>
 					</ul>
-					<br/>
-					Multiple improvements in web services
 					<br/>
 					Other fixes and improvements
 					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
@@ -88,12 +86,12 @@
 				<br/>
 
 				<span>
-					13 issues are fixed please check <br/>
-					<a href="https://www.apache.org/dist/openmeetings/4.0.3/CHANGELOG">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12342829">Detailed list</a>
+					9 issues are fixed please check <br/>
+					<a href="https://www.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343045">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2018-04-13)</span>
+				<span class="date">(2018-05-25)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
