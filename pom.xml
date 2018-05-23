@@ -522,7 +522,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
-		<url>https://github.com/apache/openmeetings/tree/4.0.3</url>
+		<url>https://github.com/apache/openmeetings/tree/4.0.x</url>
 		<tag>HEAD</tag>
 	</scm>
 	<mailingLists>
