@@ -81,7 +81,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
@@ -103,7 +103,7 @@ public class PasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		final UserForm uf = getUserForm();
 		if (uf.isAdminPassRequired()) {
 			if (userDao.verifyPassword(getUserId(), pass.getConvertedInput())) {

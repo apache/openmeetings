@@ -182,12 +182,12 @@ public class SignInDialog extends NonClosableDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		shake(target);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		if (domain.getAddDomainToUserName()) {
 			login = login + "@" + domain.getDomain();
 		}
@@ -250,12 +250,12 @@ public class SignInDialog extends NonClosableDialog<String> {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					SignInDialog.this.onSubmit(target);
+					SignInDialog.this.onSubmit(target, loginBtn);
 				}
 
 				@Override
 				protected void onError(AjaxRequestTarget target) {
-					SignInDialog.this.onError(target);
+					SignInDialog.this.onError(target, loginBtn);
 				}
 			};
 			add(ab);

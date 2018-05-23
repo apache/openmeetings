@@ -177,12 +177,12 @@ public class UploadDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		List<FileUpload> ful = uploadField.getFileUploads();
 		if (ful != null) {
 			boolean clean = cleanWb.getModelObject();
@@ -226,7 +226,7 @@ public class UploadDialog extends AbstractFormDialog<String> {
 				}
 			}
 			if (form.hasError()) {
-				onError(target);
+				onError(target, null);
 			} else {
 				close(target, null);
 			}

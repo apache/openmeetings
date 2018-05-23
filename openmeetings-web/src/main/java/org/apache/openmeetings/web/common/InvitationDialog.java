@@ -84,7 +84,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		form.onError(target);
 	}
 
@@ -98,7 +98,7 @@ public class InvitationDialog extends AbstractFormDialog<Invitation> {
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		//designed to be empty because of multiple submit buttons
 	}
 

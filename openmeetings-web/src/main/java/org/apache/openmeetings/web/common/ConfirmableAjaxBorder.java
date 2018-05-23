@@ -183,7 +183,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		}
 
 		@Override
-		protected void onError(AjaxRequestTarget target) {
+		protected void onError(AjaxRequestTarget target, DialogButton btn) {
 			super.close(target, null); // closes the dialog on error.
 			if (errorHandler != null) {
 				errorHandler.accept(target);
@@ -191,7 +191,7 @@ public abstract class ConfirmableAjaxBorder extends Border {
 		}
 
 		@Override
-		protected void onSubmit(AjaxRequestTarget target) {
+		protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 			if (submitHandler != null) {
 				submitHandler.accept(target);
 			}

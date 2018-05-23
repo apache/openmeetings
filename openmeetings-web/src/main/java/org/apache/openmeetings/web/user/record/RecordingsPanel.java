@@ -30,6 +30,8 @@ import org.apache.openmeetings.web.common.tree.FileTreePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
+
 public class RecordingsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
 	private final VideoPlayer video = new VideoPlayer("video");
@@ -48,7 +50,7 @@ public class RecordingsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 				fileTree.createFolder(target, getModelObject());
 			}
 		};

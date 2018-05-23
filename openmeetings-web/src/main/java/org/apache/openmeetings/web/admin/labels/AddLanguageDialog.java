@@ -103,12 +103,12 @@ public class AddLanguageDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		try {
 			LabelDao.add(Locale.forLanguageTag(iso.getModelObject()));
 			langPanel.getLangForm().updateLanguages(target);
