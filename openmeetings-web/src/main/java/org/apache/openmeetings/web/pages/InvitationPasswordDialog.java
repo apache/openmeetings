@@ -68,13 +68,13 @@ public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				InvitationPasswordDialog.this.onSubmit(target);
+				InvitationPasswordDialog.this.onSubmit(target, check);
 				InvitationPasswordDialog.this.close(target, null);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target) {
-				InvitationPasswordDialog.this.onError(target);
+				InvitationPasswordDialog.this.onError(target, check);
 			}
 		};
 		form.add(ab);
@@ -123,12 +123,12 @@ public class InvitationPasswordDialog extends NonClosableDialog<Invitation> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		comp.update(target);
 	}
 }

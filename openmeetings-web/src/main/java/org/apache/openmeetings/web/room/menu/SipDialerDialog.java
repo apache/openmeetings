@@ -53,12 +53,12 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				SipDialerDialog.this.onSubmit(target);
+				SipDialerDialog.this.onSubmit(target, call);
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target) {
-				SipDialerDialog.this.onError(target);
+				SipDialerDialog.this.onError(target, call);
 			}
 		};
 		form.setDefaultButton(ab);
@@ -94,12 +94,12 @@ public class SipDialerDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		getBean(SipDao.class).joinToConfCall(number.getModelObject(), room.getRoom());
 	}
 }

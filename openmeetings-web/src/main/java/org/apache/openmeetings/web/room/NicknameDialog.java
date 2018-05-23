@@ -104,12 +104,12 @@ public class NicknameDialog extends NonClosableDialog<User> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		final User u = form.getModelObject();
 		final Client c = room.getClient();
 		c.getUser().setFirstname(u.getFirstname()).setLastname(u.getLastname());

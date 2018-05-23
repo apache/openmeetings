@@ -119,7 +119,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#onError(org.apache.wicket.ajax.AjaxRequestTarget)
 	 */
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
@@ -127,7 +127,7 @@ public class VoteDialog extends AbstractFormDialog<RoomPollAnswer> {
 	 * @see com.googlecode.wicket.jquery.ui.widget.dialog.AbstractFormDialog#onSubmit(org.apache.wicket.ajax.AjaxRequestTarget)
 	 */
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		RoomPollAnswer a = form.getModelObject();
 		PollDao dao = getBean(PollDao.class);
 		Long roomId = a.getRoomPoll().getRoom().getId();

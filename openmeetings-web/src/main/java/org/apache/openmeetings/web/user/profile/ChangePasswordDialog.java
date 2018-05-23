@@ -115,12 +115,12 @@ public class ChangePasswordDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		try {
 			getBean(UserDao.class).update(getBean(UserDao.class).get(getUserId()), pass.getModelObject(), getUserId());
 		} catch (Exception e) {

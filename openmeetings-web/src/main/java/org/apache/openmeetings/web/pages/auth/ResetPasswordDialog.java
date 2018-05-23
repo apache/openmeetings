@@ -97,12 +97,12 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		try {
 			getBean(UserDao.class).resetPassword(user, password.getConvertedInput());
 		} catch (Exception e) {
@@ -145,12 +145,12 @@ public class ResetPasswordDialog extends NonClosableDialog<String> {
 
 				@Override
 				protected void onSubmit(AjaxRequestTarget target) {
-					ResetPasswordDialog.this.onSubmit(target);
+					ResetPasswordDialog.this.onSubmit(target, resetBtn);
 				}
 
 				@Override
 				protected void onError(AjaxRequestTarget target) {
-					ResetPasswordDialog.this.onError(target);
+					ResetPasswordDialog.this.onError(target, resetBtn);
 				}
 			});
 		}

@@ -66,6 +66,7 @@ import org.slf4j.Logger;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.JQueryUIBehavior;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class RoomSidebar extends Panel {
 	private static final long serialVersionUID = 1L;
@@ -245,7 +246,7 @@ public class RoomSidebar extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
+			protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 				roomFiles.createFolder(target, getModelObject());
 			}
 		};

@@ -66,12 +66,12 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						NameDialog.this.onSubmit(target);
+						NameDialog.this.onSubmit(target, add);
 					}
 
 					@Override
 					protected void onError(AjaxRequestTarget target) {
-						NameDialog.this.onError(target);
+						NameDialog.this.onError(target, add);
 					}
 				});
 		title.setLabel(Model.of(getLabelStr()));
@@ -87,7 +87,7 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		close(target, getSubmitButton());
 	}
 
@@ -107,7 +107,7 @@ public abstract class NameDialog extends AbstractFormDialog<String> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 

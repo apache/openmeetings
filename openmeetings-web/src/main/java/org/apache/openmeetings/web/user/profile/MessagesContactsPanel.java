@@ -83,6 +83,7 @@ import org.apache.wicket.model.util.ListModel;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
 import com.googlecode.wicket.jquery.ui.plugins.fixedheadertable.FixedHeaderTableBehavior;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class MessagesContactsPanel extends UserBasePanel {
 	private static final long serialVersionUID = 1L;
@@ -161,8 +162,8 @@ public class MessagesContactsPanel extends UserBasePanel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				super.onSubmit(target);
+			protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
+				super.onSubmit(target, btn);
 				PrivateMessageFolderDao fDao = getBean(PrivateMessageFolderDao.class);
 				fDao.addPrivateMessageFolder(getModelObject(), getUserId());
 				foldersModel.setObject(fDao.get(0, Integer.MAX_VALUE));

@@ -186,12 +186,12 @@ public class MessageDialog extends AbstractFormDialog<PrivateMessage> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		PrivateMessage m = getModelObject();
 		m.setInserted(new Date());
 		UserDao userDao = getBean(UserDao.class);

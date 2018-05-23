@@ -92,6 +92,7 @@ import org.slf4j.Logger;
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.github.openjson.JSONTokener;
+import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 
 public class WbPanel extends AbstractWbPanel {
 	private static final long serialVersionUID = 1L;
@@ -109,7 +110,7 @@ public class WbPanel extends AbstractWbPanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void onSubmit(AjaxRequestTarget target) {
+		protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 			String res = saveWb(roomId, wb2save, getModelObject());
 			if (!Strings.isEmpty(res)) {
 				error("Unexpected error while saving WB: " + res);

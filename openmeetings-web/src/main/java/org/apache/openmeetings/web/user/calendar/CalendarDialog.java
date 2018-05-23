@@ -204,7 +204,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	}
 
 	@Override
-	protected void onSubmit(AjaxRequestTarget target) {
+	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		switch (type) {
 			case UPDATE_CALENDAR:
 				OmCalendar c = form.getModelObject();
@@ -409,7 +409,7 @@ public class CalendarDialog extends AbstractFormDialog<OmCalendar> {
 	}
 
 	@Override
-	protected void onError(AjaxRequestTarget target) {
+	protected void onError(AjaxRequestTarget target, DialogButton btn) {
 		target.add(feedback);
 	}
 
