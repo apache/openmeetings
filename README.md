@@ -47,6 +47,19 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.4
+-----
+[Release 4.0.4](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4), provides following improvements:
+
+The purpose of this release is to provide GDPR compatible version of OpenMeetings
+
+Room:
+* Performance is improved
+* Audio/Video streams were not closed in IE
+* File conversion on Windows is improved
+
+Other fixes and improvements, 9 issues were fixed
+
 4.0.3
 -----
 [Release 4.0.3](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.3), provides following improvements:

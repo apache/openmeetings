@@ -5,6 +5,25 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 4.0.4
+================================================================================================================
+
+** Bug
+    * [OPENMEETINGS-1877] - User unable to enter the room
+    * [OPENMEETINGS-1878] - Conversions hangs on Windows
+    * [OPENMEETINGS-1880] - mail sending is not working with TLS mail server
+    * [OPENMEETINGS-1885] - Error adding file to Whiteboard
+    * [OPENMEETINGS-1886] - Flash streams are not closed after client exits the room
+
+** Improvement
+    * [OPENMEETINGS-1868] - Create link to webcam and mic settings on dashboard
+    * [OPENMEETINGS-1871] - First and Last name length configurable
+
+** Task
+    * [OPENMEETINGS-1864] - new privacy regulations on the 25th May 2018
+    * [OPENMEETINGS-1872] - Library versions need to be updated (4.0.4)
+
+
 Release Notes - Openmeetings - Version 4.0.3
 ================================================================================================================
 

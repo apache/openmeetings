@@ -97,7 +97,7 @@
 				<ul>
 					<li>
 						Check that all files:<br />
-						LICENSE, NOTICE, DISCLAIMER, CHANGELOG, README<br />
+						LICENSE, NOTICE.md, CHANGELOG.md, README.md<br />
 						are up to date and refer to the right version.
 					</li>
 					<li>
