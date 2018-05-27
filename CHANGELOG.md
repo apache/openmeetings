@@ -8,18 +8,18 @@ See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number 
 Release Notes - Openmeetings - Version 4.0.4
 ================================================================================================================
 
-** Bug
+* Bug
     * [OPENMEETINGS-1877] - User unable to enter the room
     * [OPENMEETINGS-1878] - Conversions hangs on Windows
     * [OPENMEETINGS-1880] - mail sending is not working with TLS mail server
     * [OPENMEETINGS-1885] - Error adding file to Whiteboard
     * [OPENMEETINGS-1886] - Flash streams are not closed after client exits the room
 
-** Improvement
+* Improvement
     * [OPENMEETINGS-1868] - Create link to webcam and mic settings on dashboard
     * [OPENMEETINGS-1871] - First and Last name length configurable
 
-** Task
+* Task
     * [OPENMEETINGS-1864] - new privacy regulations on the 25th May 2018
     * [OPENMEETINGS-1872] - Library versions need to be updated (4.0.4)
 
