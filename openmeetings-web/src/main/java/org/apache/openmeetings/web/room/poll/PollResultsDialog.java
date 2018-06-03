@@ -217,7 +217,7 @@ public class PollResultsDialog extends AbstractDialog<RoomPoll> {
 	private String[] getTicks(RoomPoll p) {
 		return p != null && RoomPoll.Type.numeric == p.getType()
 				? new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}
-				: new String[] {getString("34"), getString("35")};
+				: new String[] {getString("35"), getString("34")};
 	}
 
 	private static Integer[] initValues(int size) {
