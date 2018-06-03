@@ -48,7 +48,7 @@
 		<checksum-maven-plugin.version>1.6</checksum-maven-plugin.version>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<license-maven-plugin.version>1.14</license-maven-plugin.version>
-		<reflow-skin.version>1.3.6</reflow-skin.version>
+		<reflow-skin.version>1.3.8</reflow-skin.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
