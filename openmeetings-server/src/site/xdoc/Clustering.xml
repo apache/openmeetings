@@ -63,8 +63,8 @@
 					<li>Using netstat check if the multicast IP is visible in your route table (see step 2.)</li>
 					<li>
 						Using tcpdump and ping check if your server is able to multicast.<br/>
-						Run the following command on <b>all</b> the servers. <source>sudo tcpdump -ni en0 host 228.0.0.4</source>
-						Run the following command on <b>any</b> server. <source>ping -t 1 -c 2 228.0.0.4</source>
+						Run the following command on <b>all</b> the servers. <source>sudo tcpdump -ni eth0 host 224.0.0.0</source>
+						Run the following command on <b>any</b> server. <source>ping -t 1 -c 2 224.0.0.0</source>
 						Check all servers receiving pings
 					</li>
 					<li>
@@ -130,7 +130,7 @@
 							</li>
 							<li>
 								In case there are more than one network interface with multicast support and/or additional hazelcast configuration is required
-								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.8.3/manual/html-single/index.html</a>
+								Based on the following documentation: <a href="http://docs.hazelcast.org/docs/3.10.1/manual/html-single/index.html">http://docs.hazelcast.org/docs/3.10.1/manual/html-single/index.html</a>
 							</li>
 						</ul>
 					</li>
