@@ -67,6 +67,14 @@
 		</join>
 	</network>
 	<!--network>
+		<join>
+			<multicast enabled="true">
+				<multicast-group>224.0.0.0</multicast-group>
+				<multicast-port>54327</multicast-port>
+				<multicast-time-to-live>32</multicast-time-to-live>
+				<multicast-timeout-seconds>2</multicast-timeout-seconds>
+			</multicast>
+		</join>
 		<interfaces enabled="true">
 			<interface>192.168.1.*</interface>
 		</interfaces>
