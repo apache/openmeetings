@@ -98,7 +98,7 @@
 		<dom4j.version>2.1.0</dom4j.version>
 		<commons-codec.version>1.11</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
-		<mysql.version>5.1.45</mysql.version>
+		<mysql.version>8.0.11</mysql.version>
 		<mssql.version>6.2.1.jre8</mssql.version>
 		<pdfbox.version>2.0.9</pdfbox.version>
 		<commons-collections4.version>4.1</commons-collections4.version>
