@@ -73,8 +73,9 @@ public class ExternalUserDTO implements Serializable {
 		return profilePictureUrl;
 	}
 
-	public void setProfilePictureUrl(String profilePictureUrl) {
+	public ExternalUserDTO setProfilePictureUrl(String profilePictureUrl) {
 		this.profilePictureUrl = profilePictureUrl;
+		return this;
 	}
 
 	public String getEmail() {
