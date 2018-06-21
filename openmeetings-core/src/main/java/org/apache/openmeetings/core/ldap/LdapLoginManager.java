@@ -92,6 +92,7 @@ public class LdapLoginManager {
 	private static final String CONFIGKEY_LDAP_KEY_COUNTRY = "ldap_user_attr_country";
 	private static final String CONFIGKEY_LDAP_KEY_TOWN = "ldap_user_attr_town";
 	private static final String CONFIGKEY_LDAP_KEY_PHONE = "ldap_user_attr_phone";
+	private static final String CONFIGKEY_LDAP_KEY_PICTURE = "ldap_user_attr_picture";
 	private static final String CONFIGKEY_LDAP_KEY_GROUP = "ldap_group_attr";
 
 	// LDAP default attributes mapping
@@ -366,14 +367,15 @@ public class LdapLoginManager {
 			u.getAddress().setCountry(validateCountry(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
 			u.getAddress().setTown(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
 			u.getAddress().setPhone(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
+			u.setPictureuri(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, ""));
+			if (Strings.isEmpty(u.getPictureuri()) && !Strings.isEmpty(options.pictureUri)) {
+				u.setPictureuri(options.pictureUri);
+			}
 			String tz = getStringAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
 			if (tz == null) {
 				tz = options.tz;
 			}
 			u.setTimeZoneId(getTimeZone(tz).getID());
-			if (!Strings.isEmpty(options.pictureUri)) {
-				u.setPictureuri(options.pictureUri);
-			}
 
 			List<Dn> groups = new ArrayList<>();
 			if (GroupMode.ATTRIBUTE == options.groupMode) {
