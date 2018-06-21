@@ -21,6 +21,7 @@ package org.apache.openmeetings.webservice;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -42,10 +43,11 @@ import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.wicket.util.string.StringValue;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class TestUserService extends AbstractWebServiceTest {
+	private static final String DUMMY_PICTURE_URL = "http://openmeetings.apache.org/images/logo.png";
+
 	@Test
 	public void invalidLoginTest() {
 		ServiceResult r = loginNoCheck("invalid-user", "bad pass");
@@ -66,6 +68,7 @@ public class TestUserService extends AbstractWebServiceTest {
 				.setEmail("user1@junit.openmeetings.apache.org")
 				.setFirstname("First Name 1")
 				.setLastname("Last Name 1")
+				.setProfilePictureUrl(DUMMY_PICTURE_URL)
 				.setLogin("login1");
 		RoomOptionsDTO options = new RoomOptionsDTO()
 				.setRoomId(5L)
@@ -103,7 +106,10 @@ public class TestUserService extends AbstractWebServiceTest {
 		ws.checkHashes(StringValue.valueOf(r1.getMessage()), StringValue.valueOf(""));
 		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
 		Long userId1 = WebSession.getUserId();
-		Assert.assertNotEquals(userId0, userId1);
+		assertNotEquals(userId0, userId1);
+		User u = userDao.get(userId1);
+		assertNotNull("User should be created successfuly", u);
+		assertEquals("Picture URL should be preserved", DUMMY_PICTURE_URL, u.getPictureuri());
 	}
 
 	@Test
