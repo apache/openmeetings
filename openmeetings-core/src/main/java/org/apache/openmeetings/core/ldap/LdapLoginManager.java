@@ -145,7 +145,10 @@ public class LdapLoginManager {
 
 	private static Attribute getAttr(Properties config, Entry entry, String aliasCode, String defaultAlias) {
 		String alias = config.getProperty(aliasCode, "");
-		Attribute a = entry.get(Strings.isEmpty(alias) ? defaultAlias : alias);
+		if (Strings.isEmpty(alias)) {
+			alias = defaultAlias;
+		}
+		Attribute a = Strings.isEmpty(alias) ? null : entry.get(alias);
 		return a == null ? null : a;
 	}
 
