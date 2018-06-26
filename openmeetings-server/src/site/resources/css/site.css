@@ -60,3 +60,6 @@ iframe {
 .install-steps .step.run {
 	background-image: url(../images/world.png);
 }
+.carousel.slide .carousel-inner .item img {
+	height: 654px !important;
+}
