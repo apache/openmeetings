@@ -1,82 +1,68 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var InterviewWbArea = function() {
 	const self = {};
-	let container, area, role = NONE, choose, btns
-		, _inited = false, recStart, recStop;
+	let container, area, pArea, role = NONE, choose
+		, _inited = false, rec;
 
 	function _init() {
 		Wicket.Event.subscribe("/websocket/message", wbWsHandler);
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
-		btns = $('.pod-row .pod-container .pod a.choose-btn');
-		btns.button()
-			.click(function() {
-				choose.dialog('open');
-				const sel = choose.find('.users').html('')
-					, users = $('.user.list .user.entry');
-				for (let i = 0; i < users.length; ++i) {
-					const u = $(users[i]);
-					sel.append($('<option></option>').text(u.attr('title')).val(u.attr('id').substr(4)));
-				}
-				choose.find('.pod-name').val($(this).data('pod'));
-				return false;
-			});
-		recStart = $('.pod-row .pod-container a.rec-btn.start').button({
+		pArea = area.find(".pod-area");
+		rec = area.find('.rec-btn');
+		rec.attr('title', rec.data('title-start'));
+		rec.button({
 			disabled: true
-			, icon: "ui-icon-play"
+			, showLabel: false
+			, icon: 'ui-icon-play'
 		}).click(function() {
-			wbAction('startRecording', '');
-			return false;
+			wbAction($(this).data('mode') === 'rec' ? 'startRecording' : 'stopRecording', '');
 		});
-		recStop = $('.pod-row .pod-container a.rec-btn.stop').button({
-			disabled: true
-			, icon: "ui-icon-stop"
-		}).click(function() {
-			wbAction('stopRecording', '');
-			return false;
+		pArea.find('.pod-big').droppable({
+			accept: '.pod'
+			, activeClass: 'ui-hightlight'
+			, drop: function(event, ui) {
+				const vid = ui.draggable.find('.ui-dialog-content');
+				vid.dialog('option', 'appendTo', $(this));
+				ui.draggable.remove();
+				_resizePod($(this));
+			}
 		});
-		choose = $('#interview-choose-video');
-		choose.dialog({
-			modal: true
-			, autoOpen: false
-			, buttons: [
-				{
-					text: choose.data('btn-ok')
-					, click: function() {
-						toggleActivity('broadcastAV', choose.find('.users').val(), choose.find('.pod-name').val());
-						$(this).dialog('close');
-					}
-				}
-				, {
-					text: choose.data('btn-cancel')
-					, click: function() {
-						$(this).dialog('close');
-					}
-				}
-			]
+		pArea.sortable({
+			items: '.pod'
+			, handle: '.ui-dialog-titlebar'
+			, change: function(event, ui) {
+				console.log('changed');
+			}
 		});
 		_inited = true;
 	}
 	function _setRole(_role) {
 		if (!_inited) return;
 		role = _role;
-		if (role !== NONE) {
-			btns.show();
-		} else {
-			btns.hide();
-		}
+	}
+	function _resizePod(el) {
+		(el || pArea).find('.ui-dialog-content').each(function() {
+			$(this).data().resizePod();
+		});
 	}
 	function _resize(sbW, chW, w, h) {
 		if (!container || !_inited) return;
 		const hh = h - 5;
-		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + "px");
+		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
 		area.width(w).height(hh);
+		pArea.width(w).height(hh);
+		_resizePod();
 	}
-	function _setRecStartEnabled(en) {
-		recStart.button("option", "disabled", !en);
+	function _setRecEnabled(en) {
+		if (!_inited) return;
+		rec.data('mode', 'rec').button('option', {disabled: !en, icon: 'ui-icon-play'});
 	}
-	function _setRecStopEnabled(en) {
-		recStop.button("option", "disabled", !en);
+	function _setRecStarted(started) {
+		if (!_inited) return;
+		rec.data('mode', started ? 'stop' : 'rec')
+			.attr('title', rec.data(started ? 'title-stop' : 'title-start'))
+			.button('option', {icon: started ? 'ui-icon-stop' : 'ui-icon-play'});
 	}
 
 	self.init = _init;
@@ -85,8 +71,8 @@ var InterviewWbArea = function() {
 	};
 	self.setRole = _setRole;
 	self.resize = _resize;
-	self.setRecStartEnabled = _setRecStartEnabled;
-	self.setRecStopEnabled = _setRecStopEnabled;
+	self.setRecEnabled = _setRecEnabled;
+	self.setRecStarted = _setRecStarted;
 	self.addDeleteHandler = function() {};
 	self.removeDeleteHandler = function() {};
 	return self;

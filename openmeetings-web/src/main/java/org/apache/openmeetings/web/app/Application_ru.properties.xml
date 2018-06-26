@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Права]]></entry>
 	<entry key="887"><![CDATA[При обработке записи возникли ошибки.]]></entry>
 	<entry key="888"><![CDATA[Запись ещё не готова. Попробуйте снова через пару минут.]]></entry>
-	<entry key="910"><![CDATA[Выберите пользователя для этого видео]]></entry>
-	<entry key="911"><![CDATA[Доступные пользователи для этого Pod]]></entry>
 	<entry key="913"><![CDATA[Начать запись]]></entry>
 	<entry key="914"><![CDATA[Остановить запись]]></entry>
 	<entry key="923"><![CDATA[Размер домашнего накопителя]]></entry>

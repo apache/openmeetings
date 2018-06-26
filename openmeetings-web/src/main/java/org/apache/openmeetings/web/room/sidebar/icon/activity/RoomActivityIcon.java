@@ -44,8 +44,7 @@ public abstract class RoomActivityIcon extends ClientIcon {
 
 	protected boolean visible() {
 		Room r = getRoom();
-		return Room.Type.interview != r.getType()
-				&& activityAllowed(getClient(), activity, r);
+		return activityAllowed(getClient(), activity, r);
 	}
 
 	@Override

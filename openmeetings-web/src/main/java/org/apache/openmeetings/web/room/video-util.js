@@ -5,7 +5,7 @@ const VID_SEL = '.video.user-video';
 var VideoUtil = (function() {
 	const self = {};
 	function _getVid(uid) {
-		return "video" + uid;
+		return 'video' + uid;
 	}
 	function _isSharing(c) {
 		return 'sharing' === c.type && c.screenActivities.includes('sharing');

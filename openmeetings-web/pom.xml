@@ -133,6 +133,7 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>wb-all.js</jsSourceFile>
+								<jsSourceFile>uuid.js</jsSourceFile>
 								<jsSourceFile>interview-area.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>interviewwb.js</jsFinalFile>

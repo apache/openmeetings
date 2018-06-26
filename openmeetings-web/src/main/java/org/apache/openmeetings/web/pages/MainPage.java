@@ -18,10 +18,12 @@
  */
 package org.apache.openmeetings.web.pages;
 
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
-import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -32,21 +34,26 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.IRequestParameters;
-import org.apache.wicket.util.time.Duration;
+import org.red5.logging.Red5LoggerFactory;
+import org.slf4j.Logger;
 
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, getWebAppRootKey());
 	private static final String MAIN_PANEL_ID = "main";
 	private final WebMarkupContainer mainContainer = new WebMarkupContainer("main-container");
-	private final AbstractAjaxTimerBehavior areaBehavior = new AbstractAjaxTimerBehavior(Duration.ONE_SECOND) {
+	private final AbstractDefaultAjaxBehavior areaBehavior = new AbstractDefaultAjaxBehavior() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected void onTimer(AjaxRequestTarget target) {
-			OmUrlFragment area = WebSession.get().getArea();
-			main.updateContents(area == null ? OmUrlFragment.get() : area, target);
-			stop(target);
+		protected void respond(AjaxRequestTarget target) {
+			loaded = true;
+			log.debug("MainPage::areaBehavior");
+			if (uf == null) {
+				uf = WebSession.get().getArea();
+			}
+			main.updateContents(uf == null ? OmUrlFragment.get() : uf, target);
 			WebSession.get().setArea(null);
 		}
 	};
@@ -56,18 +63,22 @@ public class MainPage extends BaseInitedPage {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
+			log.debug("MainPage::delayedLoad");
+			mainContainer.replace(main);
 			target.add(
-				mainContainer.replace(main)
-				.add(areaBehavior, new Behavior() {
+				mainContainer.add(areaBehavior, new Behavior() {
 					private static final long serialVersionUID = 1L;
 
 					@Override
-					public void renderHead(org.apache.wicket.Component component, IHeaderResponse response) {
+					public void renderHead(Component component, IHeaderResponse response) {
 						internalRenderHead(response);
+						response.render(OnDomReadyHeaderItem.forScript(areaBehavior.getCallbackScript()));
 					}
 				}));
 		}
 	};
+	private OmUrlFragment uf = null;
+	private boolean loaded = false;
 
 	public MainPage() {
 		super();
@@ -87,9 +98,12 @@ public class MainPage extends BaseInitedPage {
 
 	@Override
 	protected void onParameterArrival(IRequestParameters params, AjaxRequestTarget target) {
-		OmUrlFragment uf = getUrlFragment(params);
-		if (uf != null) {
-			areaBehavior.stop(target);
+		log.debug("MainPage::onParameterArrival");
+		OmUrlFragment _f = getUrlFragment(params);;
+		if (_f != null) {
+			uf = _f;
+		}
+		if (loaded && uf != null) {
 			main.updateContents(uf, target, false);
 		}
 	}

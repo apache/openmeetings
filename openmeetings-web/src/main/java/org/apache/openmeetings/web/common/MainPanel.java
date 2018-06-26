@@ -69,6 +69,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.PriorityHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
@@ -123,6 +124,18 @@ public class MainPanel extends Panel {
 		setOutputMarkupPlaceholderTag(true);
 		add(new OmWebSocketPanel("ws-panel") {
 			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void renderHead(Component component, IHeaderResponse response) {
+				super.renderHead(component, response);
+				StringBuilder handlers = new StringBuilder()
+						.append("Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_FAILURE, hideBusyIndicator);")
+						.append("Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE, showBusyIndicator);")
+						.append("Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_SUCCESS, hideBusyIndicator);")
+						.append("Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, hideBusyIndicator);")
+						.append("Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() { Wicket.WebSocket.send('socketConnected'); });");
+				response.render(OnDomReadyHeaderItem.forScript(handlers));
+			}
 
 			@Override
 			protected void onConnect(ConnectedMessage msg) {
@@ -372,6 +385,7 @@ public class MainPanel extends Panel {
 
 	public void updateContents(OmUrlFragment f, IPartialPageRequestHandler handler, boolean updateFragment) {
 		BasePanel npanel = getPanel(f.getArea(), f.getType());
+		log.debug("updateContents:: npanels IS null ? {}, client IS null ? {}", npanel == null, getClient() == null);
 		if (npanel != null) {
 			if (getClient() != null) {
 				updateContents(npanel, handler);

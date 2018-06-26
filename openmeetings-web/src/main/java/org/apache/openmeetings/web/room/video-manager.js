@@ -115,7 +115,7 @@ var VideoManager = (function() {
 		}
 	}
 	function _init() {
-		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
+		Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 		VideoSettings.init(Room.getOptions());
 		share = $('.room.box').find('.icon.shared.ui-button');
 		inited = true;
@@ -167,6 +167,7 @@ var VideoManager = (function() {
 		if (v.dialog('instance') !== undefined) {
 			v.dialog('destroy');
 		}
+		v.parent('.pod').remove();
 		v.remove();
 	}
 	function _play(c) {
@@ -217,10 +218,10 @@ var VideoManager = (function() {
 		const u = $('#user' + uid + ' .audio-activity.ui-icon')
 			, v = _find(uid).parent();
 		if (active) {
-			u.addClass("speaking");
+			u.addClass('speaking');
 			v.addClass('user-speaks')
 		} else {
-			u.removeClass("speaking");
+			u.removeClass('speaking');
 			v.removeClass('user-speaks')
 		}
 	}
@@ -281,7 +282,7 @@ var VideoManager = (function() {
 		OmUtil.sendMessage(_m, {type: 'kurento'});
 	}
 	self.destroy = function() {
-		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
+		Wicket.Event.unsubscribe('/websocket/message', _onWsMessage);
 	}
 	return self;
 })();
