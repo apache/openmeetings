@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[権限]]></entry>
 	<entry key="887"><![CDATA[録画の処理中にエラーが発生しました。]]></entry>
 	<entry key="888"><![CDATA[録画視聴の準備がまだ整っていません。数分後に再実行してください。]]></entry>
-	<entry key="910"><![CDATA[ビデオ表示するユーザーを選択]]></entry>
-	<entry key="911"><![CDATA[ポッド利用ユーザー数]]></entry>
 	<entry key="913"><![CDATA[録画・録音を開始]]></entry>
 	<entry key="914"><![CDATA[録画・録音を停止]]></entry>
 	<entry key="923"><![CDATA[ホーム・ドライブ使用量]]></entry>

@@ -7,31 +7,51 @@ var Video = (function() {
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
 	}
-	function _resizeDlg(_ww, _hh) {
-		const interview = Room.getOptions().interview;
-		const _w = interview ? 320 : _ww, _h = interview ? 260 : _hh;
-		const h = _h + t.height() + 2 + (f.is(":visible") ? f.height() : 0);
-		v.dialog("option", "width", _w).dialog("option", "height", h);
-		_resize(_w, _h);
+	function _getExtra() {
+		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
+	}
+	function _resizeDlg(_w, _h) {
+		const h = _h + _getExtra();
+		_resizeDlgArea(_w, h);
 		return h;
 	}
-	function _securityMode(on) {
+	function _resizeDlgArea(_w, _h) {
+		v.dialog('option', 'width', _w).dialog('option', 'height', _h);
+		const h = _h - _getExtra();
+		_resize(_w, h);
 		if (Room.getOptions().interview) {
-			return;
+			v.dialog('widget').css(VideoUtil.getPos());
+			try {
+				swf[0].vidResize(Math.floor(_w), Math.floor(h));
+			} catch (err) {}
 		}
-		if (on) {
-			v.dialog("option", "position", {my: "center", at: "center", of: VideoUtil.container()});
+	}
+	function _resizePod() {
+		const p = v.parents('.pod,.pod-big')
+			, pw = p.width(), ph = p.height();
+		_resizeDlgArea(pw, ph);
+	}
+	function _swfLoaded() {
+		if (Room.getOptions().interview) {
+			_resizePod();
 		} else {
 			const h = _resizeDlg(size.width, size.height);
-			v.dialog("widget").css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
+			v.dialog('widget').css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL, VideoUtil.getVid(c.uid)), c.width, h));
 		}
+	}
+	function _securityMode() {
+		if (Room.getOptions().interview) {
+			swf[0].vidResize(swf.attr('width'), swf.attr('height'));
+			return;
+		}
+		v.dialog('option', 'position', {my: 'center', at: 'center', of: VideoUtil.container()});
 	}
 	function _resize(w, h) {
 		vc.width(w).height(h);
 		swf.attr('width', w).attr('height', h);
 	}
 	function _handleMicStatus(state) {
-		if (!f.is(":visible")) {
+		if (!f.is(':visible')) {
 			return;
 		}
 		if (state) {
@@ -67,15 +87,89 @@ var Video = (function() {
 			return;
 		}
 		if (mute) {
-			const val = slider.slider("option", "value");
+			const val = slider.slider('option', 'value');
 			if (val > 0) {
 				lastVolume = val;
 			}
-			slider.slider("option", "value", 0);
+			slider.slider('option', 'value', 0);
 			_handleVolume(0);
 		} else {
-			slider.slider("option", "value", lastVolume);
+			slider.slider('option', 'value', lastVolume);
 			_handleVolume(lastVolume);
+		}
+	}
+	function _initContainer(_id, name, opts) {
+		let contSel;
+		if (opts.interview) {
+			const area = $('.pod-area');
+			let count = area.find('.video.user-video').length;
+			const empt = area.find('.empty');
+			if (count == 0) {
+				empt.length == 0 && area.append($('<div class="empty"></div>'));
+			} else {
+				empt.remove();
+			}
+			//FIXME TODO add 'pod-big' logic
+			const contId = UUID.generate();
+			contSel = '#' + contId;
+			area.append($('<div class="pod"></div>').attr('id', contId));
+			count++; //FIXME TODO conditional 'pod-big' logic
+			if (count < 3) {
+				area.attr('class', 'pod-area max2');
+			} else if (count < 4) {
+				area.attr('class', 'pod-area max3');
+			} else if (count < 6) {
+				area.attr('class', 'pod-area max5');
+			} else if (count < 10) {
+				area.attr('class', 'pod-area max9');
+			} else if (count < 14) {
+				area.attr('class', 'pod-area max13');
+			} else if (count < 18) {
+				area.attr('class', 'pod-area max17');
+			} else if (count < 26) {
+				area.attr('class', 'pod-area max25');
+			} else if (count < 34) {
+				area.attr('class', 'pod-area max33');
+			}
+		} else {
+			contSel = '.room.box';
+		}
+		$(contSel).append(OmUtil.tmpl('#user-video', _id).attr('title', name)
+				.attr('data-client-uid', c.type + c.cuid).data(self));
+		return contSel;
+	}
+	function _initDialog(v, opts) {
+		if (opts.interview) {
+			v.dialog('option', 'draggable', false);
+			v.dialog('option', 'resizable', false);
+			v.dialogExtend({
+				closable: false
+				, collapsable: false
+				, dblclick: false
+			});
+			$('.pod-area').sortable('refresh');
+		} else {
+			v.dialog('option', 'draggable', true);
+			v.dialog('option', 'resizable', true);
+			v.on('dialogresizestop', function(event, ui) {
+				const w = ui.size.width - 2
+					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
+				_resize(w, h);
+				swf[0].vidResize(w, h);
+			});
+			if (VideoUtil.isSharing(c)) {
+				v.on('dialogclose', function() {
+					VideoManager.close(c.uid, true);
+				});
+			}
+			v.dialogExtend({
+				icons: {
+					'collapse': 'ui-icon-minus'
+				}
+				, closable: VideoUtil.isSharing(c)
+				, collapsable: true
+				, dblclick: 'collapse'
+			});
 		}
 	}
 	function _init(_c, _pos) {
@@ -86,11 +180,7 @@ var Video = (function() {
 			, _w = c.self ? Math.max(300, c.width) : c.width
 			, _h = c.self ? Math.max(200, c.height) : c.height
 			, opts = Room.getOptions();
-		{ //scope
-			const cont = opts.interview ? $('.pod.pod-' + c.pod) : $('.room.box');
-			cont.append(OmUtil.tmpl('#user-video', _id).attr('title', name)
-					.attr('data-client-uid', c.type + c.cuid).data(self));
-		}
+		const contSel = _initContainer(_id, name, opts);
 		v = $('#' + _id);
 		v.dialog({
 			classes: {
@@ -101,27 +191,10 @@ var Video = (function() {
 			, minWidth: 40
 			, minHeight: 50
 			, autoOpen: true
-			, appendTo: opts.interview ? '.pod.pod-' + c.pod : '.room.box'
-			, draggable: !opts.interview
-			, resizable: !opts.interview
 			, modal: false
-			, resizeStop: function(event, ui) {
-				const w = ui.size.width - 2
-					, h = ui.size.height - t.height() - 4 - (f.is(":visible") ? f.height() : 0);
-				_resize(w, h);
-				swf[0].vidResize(w, h);
-			}
-			, close: function() {
-				VideoManager.close(c.uid, true);
-			}
-		}).dialogExtend({
-			icons: {
-				'collapse': 'ui-icon-minus'
-			}
-			, closable: VideoUtil.isSharing(c)
-			, collapsable: true
-			, dblclick: "collapse"
+			, appendTo: contSel
 		});
+		_initDialog(v, opts);
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		f = v.find('.footer');
 		if (!VideoUtil.isSharing(c)) {
@@ -130,9 +203,6 @@ var Video = (function() {
 				.append($('#video-refresh-btn').children().clone());
 			const volume = v.parent().find('.dropdown-menu.video.volume');
 			slider = v.parent().find('.slider');
-			if (opts.interview) {
-				v.parent().find('.ui-dialog-titlebar-collapse').hide();
-			}
 			vol = v.parent().find('.ui-dialog-titlebar-volume')
 				.on('mouseenter', function(e) {
 					e.stopImmediatePropagation();
@@ -169,7 +239,7 @@ var Video = (function() {
 				, max: 100
 				, value: lastVolume
 				, create: function() {
-					handle.text($(this).slider("value"));
+					handle.text($(this).slider('value'));
 				}
 				, slide: function(event, ui) {
 					_handleVolume(ui.value);
@@ -205,7 +275,7 @@ var Video = (function() {
 		delete o.keycode;
 		swf = initSwf(vc, 'main.swf', _id + '-swf', o);
 		swf.attr('width', _w).attr('height', _h);
-		v.dialog("widget").css(_pos);
+		v.dialog('widget').css(_pos);
 	}
 	function _update(_c) {
 		const opts = Room.getOptions();
@@ -258,11 +328,13 @@ var Video = (function() {
 	self.update = _update;
 	self.refresh = _refresh;
 	self.mute = _mute;
-	self.isMuted = function() { return 0 === slider.slider("option", "value"); };
+	self.isMuted = function() { return 0 === slider.slider('option', 'value'); };
 	self.init = _init;
 	self.securityMode = _securityMode;
+	self.swfLoaded = _swfLoaded;
 	self.client = function() { return c; };
 	self.setRights = _setRights;
 	self.cleanup = _cleanup;
+	self.resizePod = _resizePod;
 	return self;
 });

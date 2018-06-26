@@ -29,17 +29,6 @@
 	</script>
 </wicket:head>
 <wicket:panel>
-	<script type="text/javascript">
-		$(function() {
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_FAILURE, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE, showBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_SUCCESS, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_COMPLETE, hideBusyIndicator);
-			Wicket.Event.subscribe(Wicket.Event.Topic.WebSocket.Opened, function() {
-				Wicket.WebSocket.send("socketConnected");
-			});
-		});
-	</script>
 	<div wicket:id="topControls">
 		<div wicket:id="topLinks"><span
 			id="contactsAndMessages"><a wicket:id="messages"><wicket:message key="1188"/></a></span><span

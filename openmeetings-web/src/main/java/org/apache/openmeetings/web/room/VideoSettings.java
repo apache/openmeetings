@@ -79,7 +79,7 @@ public class VideoSettings extends Panel {
 		JSONObject s = new JSONObject(gs.toString())
 				.put("sid", sid)
 				.put("debug", DEVELOPMENT == Application.get().getConfigurationType())
-				.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
+				.put("wmode", "opaque");
 		try {
 			URL url = new URL(cp.getCodebase());
 			String path = url.getPath();

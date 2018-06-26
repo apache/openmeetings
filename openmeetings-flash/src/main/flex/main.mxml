@@ -41,8 +41,6 @@
 
 		import org.apache.openmeetings.OmVideo;
 
-		private static const INTERVIEW_WIDTH:int = 320;
-		private static const INTERVIEW_HEIGHT:int = 260;
 		private var audioOnly:Boolean = false;
 		private var FPS:int;
 		private var bandwidth:int = 0;
@@ -136,6 +134,7 @@
 			userId = params.userId;
 			cuid = params.cuid;
 			type = params.type;
+			ExternalInterface.addCallback("vidResize", vidResize);
 			switch (params.mode) {
 				case 'settings': {
 					ExternalInterface.addCallback("getDevices", function ():Object {
@@ -198,7 +197,7 @@
 									_updateExclusive();
 									activityTimer.addEventListener(TimerEvent.TIMER, broadcastTimerListener);
 									refreshBroadcast(null);
-									ExternalInterface.call("VideoManager.securityMode", params.uid, false);
+									ExternalInterface.call("VideoManager.swfLoaded", params.uid);
 									ExternalInterface.addCallback("refresh", refreshBroadcast);
 									ExternalInterface.addCallback("update", function ():void {
 										video.getNc().call("check", new Responder(function (check:Object):void {
@@ -246,11 +245,11 @@
 					ExternalInterface.addCallback("refresh", refreshCallback);
 					ExternalInterface.addCallback("setRights", setRightsCallback);
 					ExternalInterface.addCallback("cleanup", cleanupCallback);
+					ExternalInterface.call("VideoManager.swfLoaded", params.uid);
 					copyPasteCtxMenu.clipboardMenu = true;
 				}
 					break;
 			}
-			ExternalInterface.addCallback("vidResize", vidResize);
 		}
 
 		private function _updateExclusive():void {
@@ -392,6 +391,7 @@
 		}
 
 		private function vidResize(_width:int, _height:int):void {
+			debug("vidResize", _width, _height);
 			_resize(_width, _height);
 			video.vidResize(_width, _height);
 		}
@@ -401,8 +401,8 @@
 			if (opts && !isNaN(opts.width)) {
 				selectedCam = opts.cam;
 				selectedMic = opts.mic;
-				var width:int = interview ? INTERVIEW_WIDTH : opts.width
-					, height:int = interview ? INTERVIEW_HEIGHT : opts.height;
+				var width:int = isNaN(video.width) ? opts.width : video.width
+					, height:int = isNaN(video.height) ? opts.height : video.height;
 				vidResize(width, height);
 			}
 			video.reset();
@@ -482,19 +482,18 @@
 		}
 
 		private function getCam():Camera {
-			debug("Entering getCam ...");
+			debug("Entering getCam ..." + video.width + ", " + params.width);
 			var _camera:Camera = null;
 			if (selectedCam > -1) {
 				_camera = Camera.getCamera("" + selectedCam);
 				if (_camera != null && !_camera.muted) {
 					//FIXME need to be unified
+					_camera.setMode(video.width, video.height, FPS);
 					if (interview) {
 						//we need a fixed frame rate for the videos to merge them later on
-						_camera.setMode(INTERVIEW_WIDTH, INTERVIEW_HEIGHT, 24);
 						debug("IS INTERVIEW ");
 						_camera.setQuality(0, 98);
 					} else {
-						_camera.setMode(video.width, video.height, FPS);
 						debug("IS NO INTERVIEW ");
 						_camera.setQuality(bandwidth, quality);
 					}
@@ -512,7 +511,7 @@
 				if (cam.muted) {
 					debug("Camera Muted");
 					if (params.mode != 'settings') {
-						ExternalInterface.call("VideoManager.securityMode", params.uid, true);
+						ExternalInterface.call("VideoManager.securityMode", params.uid);
 					}
 					video.attachCamera(cam);
 					cam.addEventListener(StatusEvent.STATUS, function (event:StatusEvent):void {
@@ -536,7 +535,7 @@
 				if (_mic != null) {
 					if (_mic.muted) {
 						debug("Mic Muted");
-						ExternalInterface.call("VideoManager.securityMode", params.uid, true);
+						ExternalInterface.call("VideoManager.securityMode", params.uid);
 						var nc:NetConnection = new NetConnection();
 						nc.connect(null);
 						var ns:NetStream = new NetStream(nc);
@@ -581,8 +580,7 @@
 		}
 
 		private function setResolution(w:int, h:int, attach:Boolean):void {
-			var width:int = interview ? INTERVIEW_WIDTH : w
-				, height:int = interview ? INTERVIEW_HEIGHT : h;
+			var width:int = w, height:int = h;
 			debug("onselect WxH :: " + width + "x" + height);
 			video.resize(width, height);
 			if (attach) {

@@ -121,6 +121,7 @@ public class RoomPanel extends BasePanel {
 
 		@Override
 		protected void respond(AjaxRequestTarget target) {
+			log.debug("RoomPanel::roomEnter");
 			WebSession ws = WebSession.get();
 			ExtendedClientProperties cp = ws.getExtendedProperties();
 			getBean(ConferenceLogDao.class).add(
@@ -152,6 +153,7 @@ public class RoomPanel extends BasePanel {
 			}
 			if (Room.Type.presentation != r.getType()) {
 				List<Client> mods = getBean(ClientManager.class).listByRoom(r.getId(), c -> c.hasRight(Room.Right.moderator));
+				log.debug("RoomPanel::roomEnter, mods IS EMPTY ? {}, is MOD ? {}", mods.isEmpty(), _c.hasRight(Room.Right.moderator));
 				if (mods.isEmpty()) {
 					waitApplyModeration.open(target);
 				}
@@ -172,7 +174,7 @@ public class RoomPanel extends BasePanel {
 				}
 			}
 			if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
-				sb.append("WbArea.setRecStartEnabled(true);");
+				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
 				target.appendJavaScript(sb);
@@ -632,9 +634,9 @@ public class RoomPanel extends BasePanel {
 						break;
 					}
 				}
-				handler.appendJavaScript(String.format("WbArea.setRecStopEnabled(false);WbArea.setRecStartEnabled(%s);", hasStreams));
+				handler.appendJavaScript(String.format("WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);", hasStreams));
 			} else {
-				handler.appendJavaScript("WbArea.setRecStartEnabled(false);WbArea.setRecStopEnabled(true);");
+				handler.appendJavaScript("WbArea.setRecStarted(true);");
 			}
 		}
 	}
@@ -656,6 +658,7 @@ public class RoomPanel extends BasePanel {
 				if (!rr.isEmpty()) {
 					c.allow(rr);
 					cm.update(c);
+					log.info("Setting rights for client:: {}", rr);
 				}
 			}
 		}

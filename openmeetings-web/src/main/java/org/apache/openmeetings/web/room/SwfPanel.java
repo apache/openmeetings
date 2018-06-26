@@ -128,7 +128,7 @@ public class SwfPanel extends BasePanel {
 						.put("path", path)
 						.put("width", "100%")
 						.put("height", "100%")
-						.put("wmode", cp.isBrowserInternetExplorer() && cp.getBrowserVersionMajor() == 11 ? "opaque" : "direct");
+						.put("wmode", "opaque");
 			} catch (Exception e) {
 				log.error("Error while constructing video settings parameters", e);
 			}
