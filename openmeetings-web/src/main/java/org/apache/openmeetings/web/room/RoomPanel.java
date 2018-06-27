@@ -658,7 +658,7 @@ public class RoomPanel extends BasePanel {
 				if (!rr.isEmpty()) {
 					c.allow(rr);
 					cm.update(c);
-					log.info("Setting rights for client:: {}", rr);
+					log.info("Setting rights for client:: {} -> {}", rr, cm.get(c.getUid()).hasRight(Right.moderator));
 				}
 			}
 		}

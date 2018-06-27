@@ -162,7 +162,7 @@ public class Client implements IClient {
 		if (Right.superModerator == right) {
 			return rights.contains(right);
 		}
-		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) ? true : rights.contains(right);
+		return rights.contains(Right.superModerator) || rights.contains(Right.moderator) || rights.contains(right);
 	}
 
 	public Client allow(Right... _rights) {

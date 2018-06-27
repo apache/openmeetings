@@ -62,6 +62,7 @@
 		private var type:String = null;
 		private var params:Object;
 		private var copyPasteCtxMenu:ContextMenu = new ContextMenu();
+		private var muted:Boolean = false;
 
 		[Bindable]
 		private var interview:Boolean = false;
@@ -188,6 +189,7 @@
 							activities = check.activities;
 							interview = 'interview' == check.roomType;
 							checkAvPermissions(function ():void {
+								muted = false;
 								// trust no-one
 								video.getNc().call("check", new Responder(function (check:Object):void {
 									debug("check", check);
@@ -392,8 +394,20 @@
 
 		private function vidResize(_width:int, _height:int):void {
 			debug("vidResize", _width, _height);
-			_resize(_width, _height);
-			video.vidResize(_width, _height);
+			var w:Number = _width, h:Number = _height;
+			if (!muted) {
+				var ratio:Number = params.width / params.height;
+				if (_width / ratio > _height) {
+					w = Math.ceil(ratio * _height);
+					h = _height;
+				} else {
+					w = _width;
+					h = Math.ceil(_width / ratio);
+				}
+				debug("vidResize:: " + _width + "x" + _height + "->" + w + "x" + h);
+			}
+			_resize(w, h);
+			video.vidResize(w, h);
 		}
 
 		private function refreshBroadcast(opts:Object):void {
@@ -509,6 +523,7 @@
 			debug("Camera selected:: " + cam, cam == null ? '' : cam.muted);
 			if (cam != null) {
 				if (cam.muted) {
+					muted = true;
 					debug("Camera Muted");
 					if (params.mode != 'settings') {
 						ExternalInterface.call("VideoManager.securityMode", params.uid);
@@ -534,6 +549,7 @@
 				var _mic:Microphone = getMic();
 				if (_mic != null) {
 					if (_mic.muted) {
+						muted = true;
 						debug("Mic Muted");
 						ExternalInterface.call("VideoManager.securityMode", params.uid);
 						var nc:NetConnection = new NetConnection();
@@ -575,6 +591,7 @@
 		}
 
 		private function settingsCameraCallback():void {
+			muted = false;
 			ExternalInterface.call("VideoSettings.allowRec", true);
 			_attachCamera(getCam());
 		}

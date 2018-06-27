@@ -99,8 +99,10 @@ public class ClientManager implements IClientManager {
 
 	@Override
 	public Client update(Client c) {
-		onlineClients.get(c.getUid()).merge(c);
 		map().put(c.getUid(), c);
+		synchronized (onlineClients) {
+			onlineClients.get(c.getUid()).merge(c);
+		}
 		return c;
 	}
 
