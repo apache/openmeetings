@@ -291,29 +291,3 @@
 .wb-area .wb-zoom button.up {
 	background-image: url(images/page_up.png);
 }
-#quick-vote {
-	position: absolute;
-	right: 40px;
-	bottom: 40px;
-	padding: 5px;
-	background-color: aquamarine;
-}
-#quick-vote .control {
-	display: inline-block;
-	width: 40px;
-	height: 40px;
-	background-repeat: no-repeat;
-	background-size: 35px;
-	position: relative;
-}
-#quick-vote .control.pro {
-	background-image: url(images/add.png);
-}
-#quick-vote .control.con {
-	background-image: url(images/cancel.png);
-}
-#quick-vote .control .badge {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}

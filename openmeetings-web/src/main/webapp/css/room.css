@@ -532,10 +532,46 @@
 .pod-area .pod-big.ui-hightlight {
 	box-shadow: 3px 3px 4px blue;
 }
-
 .width250 {
 	min-width: 250px;
 	max-width: 250px;
+}
+.room.box.interview #quick-vote {
+	z-index: 100;
+	right: 10px;
+}
+.room.box.interview .room.wb.area .wb-area .rec-btn {
+	z-index: 100;
+	border-radius: 20px;
+	position: absolute;
+	right: 200px;
+	bottom: 30px;
+}
+#quick-vote {
+	position: absolute;
+	right: 40px;
+	bottom: 40px;
+	padding: 5px;
+	background-color: aquamarine;
+}
+#quick-vote .control {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background-repeat: no-repeat;
+	background-size: 35px;
+	position: relative;
+}
+#quick-vote .control.pro {
+	background-image: url(images/add.png);
+}
+#quick-vote .control.con {
+	background-image: url(images/cancel.png);
+}
+#quick-vote .control .badge {
+	position: absolute;
+	right: 0;
+	bottom: 0;
 }
 @media screen and (max-width: 1280px) {
 	.room.sidebar {
