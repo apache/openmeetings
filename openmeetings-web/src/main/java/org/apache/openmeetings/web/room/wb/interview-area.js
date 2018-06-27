@@ -22,10 +22,19 @@ var InterviewWbArea = function() {
 			accept: '.pod'
 			, activeClass: 'ui-hightlight'
 			, drop: function(event, ui) {
-				const vid = ui.draggable.find('.ui-dialog-content');
-				vid.dialog('option', 'appendTo', $(this));
-				ui.draggable.remove();
-				_resizePod($(this));
+				const big = $(this)
+					, vid = ui.draggable.find('.ui-dialog-content')
+					, cvid = big.find('.ui-dialog-content');
+				if (cvid.length === 0) {
+					vid.dialog('option', 'appendTo', big);
+					ui.draggable.remove();
+					_resizePod(big);
+				} else {
+					cvid.dialog('option', 'appendTo', ui.draggable);
+					vid.dialog('option', 'appendTo', big);
+					_resizePod();
+				}
+				_updateAreaClass();
 			}
 		});
 		pArea.sortable({
@@ -35,6 +44,7 @@ var InterviewWbArea = function() {
 				console.log('changed');
 			}
 		});
+		_updateAreaClass();
 		_inited = true;
 	}
 	function _setRole(_role) {
@@ -64,6 +74,34 @@ var InterviewWbArea = function() {
 			.attr('title', rec.data(started ? 'title-stop' : 'title-start'))
 			.button('option', {icon: started ? 'ui-icon-stop' : 'ui-icon-play'});
 	}
+	function _updateAreaClass() {
+		const count = pArea.find('.pod:not(.ui-helper,.ui-sortable-placeholder)').length
+			, empt = pArea.find('.empty');
+		if (count < 2) {
+			empt.length == 0 && pArea.append($('<div class="empty"></div>'));
+		} else {
+			empt.remove();
+		}
+		let cls = 'pod-area ';
+		if (count < 2) {
+			cls +='max2';
+		} else if (count < 3) {
+			cls +='max3';
+		} else if (count < 5) {
+			cls +='max5';
+		} else if (count < 9) {
+			cls +='max9';
+		} else if (count < 13) {
+			cls +='max13';
+		} else if (count < 17) {
+			cls +='max17';
+		} else if (count < 25) {
+			cls +='max25';
+		} else if (count < 33) {
+			cls +='max33';
+		}
+		pArea.attr('class', cls);
+	}
 
 	self.init = _init;
 	self.destroy = function() {
@@ -75,5 +113,6 @@ var InterviewWbArea = function() {
 	self.setRecStarted = _setRecStarted;
 	self.addDeleteHandler = function() {};
 	self.removeDeleteHandler = function() {};
+	self.updateAreaClass = _updateAreaClass;
 	return self;
 };

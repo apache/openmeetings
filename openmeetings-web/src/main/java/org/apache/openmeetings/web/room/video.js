@@ -15,15 +15,18 @@ var Video = (function() {
 		_resizeDlgArea(_w, h);
 		return h;
 	}
+	function _vidResize(_w, _h) {
+		try {
+			swf[0].vidResize(Math.floor(_w), Math.floor(_h));
+		} catch (err) {}
+	}
 	function _resizeDlgArea(_w, _h) {
 		v.dialog('option', 'width', _w).dialog('option', 'height', _h);
 		const h = _h - _getExtra();
 		_resize(_w, h);
 		if (Room.getOptions().interview) {
 			v.dialog('widget').css(VideoUtil.getPos());
-			try {
-				swf[0].vidResize(Math.floor(_w), Math.floor(h));
-			} catch (err) {}
+			_vidResize(_w, h);
 		}
 	}
 	function _resizePod() {
@@ -89,35 +92,10 @@ var Video = (function() {
 		let contSel;
 		if (opts.interview) {
 			const area = $('.pod-area');
-			let count = area.find('.video.user-video').length;
-			const empt = area.find('.empty');
-			if (count == 0) {
-				empt.length == 0 && area.append($('<div class="empty"></div>'));
-			} else {
-				empt.remove();
-			}
-			//FIXME TODO add 'pod-big' logic
 			const contId = UUID.generate();
 			contSel = '#' + contId;
 			area.append($('<div class="pod"></div>').attr('id', contId));
-			count++; //FIXME TODO conditional 'pod-big' logic
-			if (count < 3) {
-				area.attr('class', 'pod-area max2');
-			} else if (count < 4) {
-				area.attr('class', 'pod-area max3');
-			} else if (count < 6) {
-				area.attr('class', 'pod-area max5');
-			} else if (count < 10) {
-				area.attr('class', 'pod-area max9');
-			} else if (count < 14) {
-				area.attr('class', 'pod-area max13');
-			} else if (count < 18) {
-				area.attr('class', 'pod-area max17');
-			} else if (count < 26) {
-				area.attr('class', 'pod-area max25');
-			} else if (count < 34) {
-				area.attr('class', 'pod-area max33');
-			}
+			WbArea.updateAreaClass();
 		} else {
 			contSel = '.room.box';
 		}
@@ -142,7 +120,7 @@ var Video = (function() {
 				const w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
 				_resize(w, h);
-				swf[0].vidResize(w, h);
+				vidResize(w, h);
 			});
 			if (VideoUtil.isSharing(c)) {
 				v.on('dialogclose', function() {

@@ -38,7 +38,7 @@
 		<db>derby</db>
 		<jdk.version>1.8</jdk.version>
 		<!-- plugin versions -->
-		<maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
+		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
 		<maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
@@ -932,7 +932,7 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${maven-javadoc-plugin.version}</version>
 					<configuration>
-						<additionalparam>-Xdoclint:none</additionalparam>
+						<additionalparam>-Xdoclint:none -html5</additionalparam>
 						<source>${jdk.version}</source>
 						<javadocVersion>${jdk.version}</javadocVersion>
 					</configuration>
