@@ -336,6 +336,7 @@ var DrawWbArea = function() {
 	self.removeDeleteHandler = function() {
 		$(window).off('keyup', _deleteHandler);
 	};
+	self.updateAreaClass = function() {};
 	return self;
 };
 $(function() {

@@ -72,8 +72,9 @@ var VideoManager = (function() {
 		if (v.dialog('instance') !== undefined) {
 			v.dialog('destroy');
 		}
-		v.parent('.pod').remove();
+		v.parents('.pod').remove();
 		v.remove();
+		WbArea.updateAreaClass();
 	}
 	function _play(c) {
 		if (!inited) {
