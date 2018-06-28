@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.mina.util.ConcurrentHashSet;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -64,9 +65,9 @@ public class Client implements IClient, IWsClient {
 	private final String uid;
 	private final String sid;
 	private String remoteAddress;
-	private final Set<Right> rights = new HashSet<>();
-	private final Set<Activity> activities = new HashSet<>();
-	private final Set<String> streams = new HashSet<>();
+	private final Set<Right> rights = new ConcurrentHashSet<>();
+	private final Set<Activity> activities = new ConcurrentHashSet<>();
+	private final Set<String> streams = new ConcurrentHashSet<>();
 	private final Date connectedSince;
 	private Pod pod;
 	private int cam = -1;
@@ -441,15 +442,21 @@ public class Client implements IClient, IWsClient {
 	public void merge(Client c) {
 		user = c.user;
 		room = c.room;
-		Set<Right> rr = new HashSet<>(c.rights);
-		rights.clear();
-		rights.addAll(rr);
-		Set<Activity> aa = new HashSet<>(c.activities);
-		activities.clear();
-		activities.addAll(aa);
-		Set<String> ss = new HashSet<>(c.streams);
-		streams.clear();
-		streams.addAll(ss);
+		synchronized (rights) {
+			Set<Right> rr = new HashSet<>(c.rights);
+			rights.clear();
+			rights.addAll(rr);
+		}
+		synchronized (activities) {
+			Set<Activity> aa = new HashSet<>(c.activities);
+			activities.clear();
+			activities.addAll(aa);
+		}
+		synchronized (streams) {
+			Set<String> ss = new HashSet<>(c.streams);
+			streams.clear();
+			streams.addAll(ss);
+		}
 		pod = c.pod;
 		cam = c.cam;
 		mic = c.mic;
