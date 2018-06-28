@@ -27,13 +27,13 @@ var InterviewWbArea = function() {
 				if (cvid.length === 0) {
 					vid.dialog('option', 'appendTo', big);
 					ui.draggable.remove();
-					_resizePod(big);
 				} else {
 					cvid.dialog('option', 'appendTo', ui.draggable);
 					vid.dialog('option', 'appendTo', big);
-					_resizePod();
 				}
+				pArea.find('.ui-sortable-placeholder.pod').hide();
 				_updateAreaClass();
+				_resizePod();
 			}
 		});
 		pArea.sortable({
@@ -50,8 +50,8 @@ var InterviewWbArea = function() {
 		if (!_inited) return;
 		role = _role;
 	}
-	function _resizePod(el) {
-		(el || pArea).find('.ui-dialog-content').each(function() {
+	function _resizePod() {
+		pArea.find('.ui-dialog-content').each(function() {
 			$(this).data().resizePod();
 		});
 	}

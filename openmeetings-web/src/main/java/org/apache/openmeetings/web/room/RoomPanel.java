@@ -634,9 +634,9 @@ public class RoomPanel extends BasePanel {
 						break;
 					}
 				}
-				handler.appendJavaScript(String.format("WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);", hasStreams));
+				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
 			} else {
-				handler.appendJavaScript("WbArea.setRecStarted(true);");
+				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			}
 		}
 	}
