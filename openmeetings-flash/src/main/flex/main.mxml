@@ -397,12 +397,13 @@
 			var w:Number = _width, h:Number = _height;
 			if (!muted) {
 				var ratio:Number = params.width / params.height;
-				if (_width / ratio > _height) {
+				var nh:int = Math.ceil(_width / ratio);
+				if (nh > _height) {
 					w = Math.ceil(ratio * _height);
 					h = _height;
 				} else {
 					w = _width;
-					h = Math.ceil(_width / ratio);
+					h = nh;
 				}
 				debug("vidResize:: " + _width + "x" + _height + "->" + w + "x" + h);
 			}
