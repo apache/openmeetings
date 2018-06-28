@@ -603,6 +603,12 @@
 			<releases><enabled>true</enabled></releases>
 			<snapshots><enabled>true</enabled></snapshots>
 		</repository>
+		<repository>
+			<id>tudelft</id>
+			<url>http://simulation.tudelft.nl/maven/</url>
+			<releases><enabled>true</enabled></releases>
+			<snapshots><enabled>false</enabled></snapshots>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
