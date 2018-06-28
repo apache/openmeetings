@@ -34,7 +34,6 @@ var InterviewWbArea = function() {
 				}
 				pArea.find('.ui-sortable-placeholder.pod').hide();
 				_updateAreaClass();
-				_resizePod();
 			}
 		});
 		pArea.sortable({
@@ -101,6 +100,7 @@ var InterviewWbArea = function() {
 			cls +='max33';
 		}
 		pArea.attr('class', cls);
+		_resizePod();
 	}
 
 	self.init = _init;

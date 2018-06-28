@@ -442,18 +442,18 @@ public class Client implements IClient, IWsClient {
 	public void merge(Client c) {
 		user = c.user;
 		room = c.room;
+		Set<Right> rr = new HashSet<>(c.rights);
 		synchronized (rights) {
-			Set<Right> rr = new HashSet<>(c.rights);
 			rights.clear();
 			rights.addAll(rr);
 		}
+		Set<Activity> aa = new HashSet<>(c.activities);
 		synchronized (activities) {
-			Set<Activity> aa = new HashSet<>(c.activities);
 			activities.clear();
 			activities.addAll(aa);
 		}
+		Set<String> ss = new HashSet<>(c.streams);
 		synchronized (streams) {
-			Set<String> ss = new HashSet<>(c.streams);
 			streams.clear();
 			streams.addAll(ss);
 		}
