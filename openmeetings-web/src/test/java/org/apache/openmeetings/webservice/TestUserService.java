@@ -38,6 +38,7 @@ import java.util.UUID;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
+import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.RoomOptionsDTO;
@@ -113,7 +114,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertTrue("Login via secure hash should be successful", ws.isSignedIn());
 		Long userId1 = WebSession.getUserId();
 		assertNotEquals(userId0, userId1);
-		User u = userDao.get(userId1);
+		User u = getBean(UserDao.class).get(userId1);
 		assertNotNull("User should be created successfuly", u);
 		assertEquals("Picture URL should be preserved", DUMMY_PICTURE_URL, u.getPictureuri());
 	}

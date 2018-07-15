@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.web.pages;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
-
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.openmeetings.web.util.OmUrlFragment;
@@ -34,13 +32,13 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.request.IRequestParameters;
-import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @AuthorizeInstantiation({"Admin", "Dashboard", "Room"})
 public class MainPage extends BaseInitedPage {
 	private static final long serialVersionUID = 1L;
-	private static final Logger log = Red5LoggerFactory.getLogger(MainPage.class, getWebAppRootKey());
+	private static final Logger log = LoggerFactory.getLogger(MainPage.class);
 	private static final String MAIN_PANEL_ID = "main";
 	private final WebMarkupContainer mainContainer = new WebMarkupContainer("main-container");
 	private final AbstractDefaultAjaxBehavior areaBehavior = new AbstractDefaultAjaxBehavior() {

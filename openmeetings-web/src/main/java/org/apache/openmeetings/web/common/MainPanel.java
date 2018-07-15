@@ -126,8 +126,8 @@ public class MainPanel extends Panel {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public void renderHead(Component component, IHeaderResponse response) {
-				super.renderHead(component, response);
+			public void renderHead(IHeaderResponse response) {
+				super.renderHead(response);
 				StringBuilder handlers = new StringBuilder()
 						.append("Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_FAILURE, hideBusyIndicator);")
 						.append("Wicket.Event.subscribe(Wicket.Event.Topic.AJAX_CALL_BEFORE, showBusyIndicator);")
