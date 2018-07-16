@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.ATTR_TITLE;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_LEFT;
 import static org.apache.openmeetings.web.pages.BasePage.ALIGN_RIGHT;
+import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -38,6 +39,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.string.Strings;
 
 public class RoomClientPanel extends Panel {
@@ -49,7 +51,7 @@ public class RoomClientPanel extends Panel {
 		Client c = item.getModelObject();
 		final String uid = c.getUid();
 		item.setMarkupId(String.format("user%s", c.getUid()));
-		item.add(AttributeModifier.append("style", String.format("background-image: url(profile/%s);", c.getUserId())));
+		item.add(AttributeModifier.append("style", String.format("background-image: url(%s);", getUrl(RequestCycle.get(), c.getUser()))));
 		item.add(AttributeModifier.append("data-userid", c.getUserId()));
 		add(new RefreshIcon("refresh", uid));
 		final String name = getName(c);
