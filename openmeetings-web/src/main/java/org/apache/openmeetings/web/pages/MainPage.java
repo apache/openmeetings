@@ -101,8 +101,8 @@ public class MainPage extends BaseInitedPage {
 		if (_f != null) {
 			uf = _f;
 		}
-		if (loaded && uf != null) {
-			main.updateContents(uf, target, false);
+		if (loaded && _f != null) {
+			main.updateContents(_f, target, false);
 		}
 	}
 
