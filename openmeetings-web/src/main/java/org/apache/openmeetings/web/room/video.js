@@ -133,7 +133,7 @@ var Video = (function() {
 				const w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
 				_resize(w, h);
-				vidResize(w, h);
+				_vidResize(w, h);
 			});
 			if (VideoUtil.isSharing(c)) {
 				v.on('dialogclose', function() {
