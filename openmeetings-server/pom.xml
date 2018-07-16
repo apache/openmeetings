@@ -117,7 +117,7 @@
 			<id>prepare-web-server</id>
 			<activation>
 				<file>
-					<missing>web-server/apache-tomcat-9.0.8.tar.gz</missing> <!-- TODO should be in-sync with global property -->
+					<missing>web-server/apache-tomcat-9.0.10.tar.gz</missing> <!-- TODO should be in-sync with global property -->
 				</file>
 			</activation>
 			<build>
@@ -133,7 +133,7 @@
 									<goal>download-single</goal>
 								</goals>
 								<configuration>
-									<url>http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-9/v${tomcat.version}/bin</url>
+									<url>http://archive.apache.org/dist/tomcat/tomcat-9/v${tomcat.version}/bin</url>
 									<fromFile>apache-tomcat-${tomcat.version}.tar.gz</fromFile>
 									<toDir>${server-file.dir}</toDir>
 									<skip>${server.dwnd.skip}</skip>
