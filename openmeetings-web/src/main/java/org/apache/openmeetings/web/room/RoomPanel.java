@@ -127,7 +127,7 @@ public class RoomPanel extends BasePanel {
 					ConferenceLog.Type.roomEnter
 					, getUserId(), "0", r.getId()
 					, cp.getRemoteAddress()
-					, "" + r.getId());
+					, String.valueOf(r.getId()));
 			Client _c = getClient();
 			JSONObject options = VideoSettings.getInitJson(_c.getSid())
 					.put("uid", _c.getUid())

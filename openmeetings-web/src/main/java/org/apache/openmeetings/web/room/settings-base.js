@@ -97,7 +97,7 @@ var VideoSettings = (function() {
 	}
 	function _close() {
 		_clear();
-		Wicket.Event.unsubscribe("/websocket/message", _onWsMessage);
+		Wicket.Event.unsubscribe('/websocket/message', _onWsMessage);
 	}
 	function _onIceCandidate(candidate) {
 		OmUtil.log('Local candidate' + JSON.stringify(candidate));
@@ -289,7 +289,7 @@ var VideoSettings = (function() {
 	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-			OmUtil.error("enumerateDevices() not supported.");
+			OmUtil.error('enumerateDevices() not supported.');
 			return;
 		}
 		cam.find('option[value!="-1"]').remove();
@@ -348,7 +348,7 @@ var VideoSettings = (function() {
 			});
 	}
 	function _open() {
-		Wicket.Event.subscribe("/websocket/message", _onWsMessage);
+		Wicket.Event.subscribe('/websocket/message', _onWsMessage);
 		recAllowed = false;
 		timer.hide();
 		playBtn.prop('disabled', true).button('refresh');

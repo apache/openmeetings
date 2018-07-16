@@ -168,11 +168,7 @@ public class RoomSidebar extends Panel {
 						return;
 					}
 					if (client.hasRight(right)) {
-						if (Right.audio == right) {
-							room.denyRight(client, right, Right.video);
-						} else {
-							room.denyRight(client, right);
-						}
+						room.denyRight(client, right);
 					} else {
 						if (Right.video == right) {
 							room.allowRight(client, Right.audio, right);
