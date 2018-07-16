@@ -79,7 +79,7 @@
 		<spring.version>4.3.18.RELEASE</spring.version>
 		<mina.version>2.0.19</mina.version>
 		<tomcat.version>9.0.10</tomcat.version>
-		<ical4j.version>3.0.0</ical4j.version>
+		<ical4j.version>2.2.0</ical4j.version>
 		<cxf.version>3.2.5</cxf.version>
 		<selenium.version>3.13.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
