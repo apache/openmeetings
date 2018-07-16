@@ -43,17 +43,17 @@ var VideoSettings = (function() {
 				{
 					text: vs.data('btn-save')
 					, icons: {
-						primary: "ui-icon-disk"
+						primary: 'ui-icon-disk'
 					}
 					, click: function() {
 						_save(true);
-						vs.dialog("close");
+						vs.dialog('close');
 					}
 				}
 				, {
 					text: vs.data('btn-cancel')
 					, click: function() {
-						vs.dialog("close");
+						vs.dialog('close');
 					}
 				}
 			]
@@ -100,7 +100,7 @@ var VideoSettings = (function() {
 		playBtn.prop('disabled', false).button('refresh');
 	}
 	function _micActivity(level) {
-		lm.progressbar("value", Math.max(0, level));
+		lm.progressbar('value', Math.max(0, level));
 	}
 	function _initSwf() {
 		const obj = swf.getDevices();
@@ -140,7 +140,8 @@ var VideoSettings = (function() {
 			}
 		});
 		_readValues();
-		swf.init(s.video.cam, s.video.mic, s.video.width, s.video.height);
+		swf.init(s.video.cam, s.video.mic
+			, o.interview ? 320 : s.video.width, o.interview ? 260 : s.video.height);
 	}
 	function _open() {
 		recAllowed = false;
