@@ -7,7 +7,7 @@ var Wb = function() {
 			, zoom = 1., zoomMode = 'pageWidth', role = null;
 
 	function getBtn(m) {
-		return !!t ? t.find(".om-icon." + (m || mode)) : null;
+		return !!t ? t.find('.om-icon.' + (m || mode)) : null;
 	}
 	function initToolBtn(m, def, obj) {
 		const btn = getBtn(m);
@@ -73,8 +73,8 @@ var Wb = function() {
 	}
 	function internalInit() {
 		t.draggable({
-			snap: "parent"
-			, containment: "parent"
+			snap: 'parent'
+			, containment: 'parent'
 			, scroll: false
 			, stop: function(event, ui) {
 				const pos = ui.helper.position();
@@ -86,8 +86,8 @@ var Wb = function() {
 			}
 		});
 		z.draggable({
-			snap: "parent"
-			, containment: "parent"
+			snap: 'parent'
+			, containment: 'parent'
 			, scroll: false
 		});
 		const clearAll = t.find('.om-icon.clear-all');
@@ -124,10 +124,10 @@ var Wb = function() {
 				initToolBtn('arrow', _firstToolItem, Arrow(wb, s));
 				initToolBtn('math', _firstToolItem, TMath(wb, s));
 				initCliparts();
-				t.find(".om-icon.settings").click(function() {
+				t.find('.om-icon.settings').click(function() {
 					s.show();
 				});
-				t.find(".om-icon.math").click(function() {
+				t.find('.om-icon.math').click(function() {
 					f.show();
 				});
 				t.find('.om-icon.clear-slide').click(function() {
@@ -232,7 +232,7 @@ var Wb = function() {
 					StaticTMath.create(json, cnvs
 						, function(obj) {
 							_removeHandler(o);
-							cnvs.trigger("object:modified", {target: obj});
+							cnvs.trigger('object:modified', {target: obj});
 						}
 						, function(msg) {
 							const err = f.find('.status');
@@ -357,7 +357,7 @@ var Wb = function() {
 					} else {
 						let scale = width / _o.width;
 						scale = scale < 1 ? 1 : scale;
-						canvas.setBackgroundImage(_o._src + "&slide=" + i, canvas.renderAll.bind(canvas)
+						canvas.setBackgroundImage(_o._src + '&slide=' + i, canvas.renderAll.bind(canvas)
 								, {scaleX: scale, scaleY: scale});
 					}
 				}
@@ -454,7 +454,7 @@ var Wb = function() {
 		if (role === NONE && o.type !== 'pointer') return;
 
 		o.includeDefaultValues = false;
-		if ("activeSelection" === o.type) {
+		if ('activeSelection' === o.type) {
 			o.clone(function(_o) {
 				// ungrouping
 				_o.includeDefaultValues = false;
@@ -640,7 +640,7 @@ var Wb = function() {
 			t.attr('style', 'position: absolute; top: 20px; ' + (Settings.isRtl ? 'left' : 'right') + ': 20px;');
 			a.append(t).append(z);
 			showCurrentSlide();
-			t = a.find('.tools'), s = a.find(".wb-settings");
+			t = a.find('.tools'), s = a.find('.wb-settings');
 			wb.eachCanvas(function(canvas) {
 				setHandlers(canvas);
 				canvas.forEachObject(function(__o) { //TODO reduce iterations
@@ -676,15 +676,15 @@ var Wb = function() {
 				my: (Settings.isRtl ? 'left' : 'right')
 				, at: (Settings.isRtl ? 'left' : 'right') + '-20'
 				, of: '#' + a[0].id
-				, collision: "fit"
+				, collision: 'fit'
 			});
 		}
 		if (z.position().left + z.width() > a.width()) {
 			z.position({
 				my: (Settings.isRtl ? 'right' : 'left') + ' top'
-				, at: "center top"
+				, at: 'center top'
 				, of: '#' + a[0].id
-				, collision: "fit"
+				, collision: 'fit'
 			});
 		}
 		if (zoomMode !== 'zoom') {
@@ -699,7 +699,7 @@ var Wb = function() {
 		const arr = [], del = [], _arr = Array.isArray(obj) ? obj : [obj];
 		for (let i = 0; i < _arr.length; ++i) {
 			const o = _arr[i];
-			if (!!o.deleted && "Presentation" !== o.fileType) {
+			if (!!o.deleted && 'Presentation' !== o.fileType) {
 				del.push(o);
 				continue;
 			}
@@ -770,7 +770,7 @@ var Wb = function() {
 	};
 	wb.clearAll = function() {
 		for (let i = 1; i < canvases.length; ++i) {
-			const cc = $('#can-wb-tab-0-slide-' + i).closest('.canvas-container');
+			const cc = $('#can-wb-tab-' + wb.id + '-slide-' + i).closest('.canvas-container');
 			cc.remove();
 			canvases[i].dispose();
 		}

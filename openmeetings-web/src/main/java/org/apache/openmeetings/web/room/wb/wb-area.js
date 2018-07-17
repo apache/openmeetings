@@ -6,10 +6,10 @@ var DrawWbArea = function() {
 	let container, area, tabs, scroll, role = NONE, _inited = false;
 
 	function refreshTabs() {
-		tabs.tabs("refresh").find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
+		tabs.tabs('refresh').find('ul').removeClass('ui-corner-all').removeClass('ui-widget-header');
 	}
 	function getActive() {
-		const idx = tabs.tabs("option", 'active');
+		const idx = tabs.tabs('option', 'active');
 		if (idx > -1) {
 			const href = tabs.find('a')[idx];
 			if (!!href) {
@@ -52,7 +52,7 @@ var DrawWbArea = function() {
 	function _activateTab(wbId) {
 		container.find('.wb-tabbar li').each(function(idx) {
 			if (wbId === 1 * $(this).data('wb-id')) {
-				tabs.tabs("option", "active", idx);
+				tabs.tabs('option', 'active', idx);
 				$(this)[0].scrollIntoView();
 				return false;
 			}
@@ -67,14 +67,14 @@ var DrawWbArea = function() {
 	}
 	function _resizeWbs() {
 		const w = area.width(), hh = area.height()
-			, wbTabs = area.find(".tabs.ui-tabs")
-			, tabPanels = wbTabs.find(".ui-tabs-panel")
-			, wbah = hh - 5 - wbTabs.find("ul.ui-tabs-nav").height();
+			, wbTabs = area.find('.tabs.ui-tabs')
+			, tabPanels = wbTabs.find('.ui-tabs-panel')
+			, wbah = hh - 5 - wbTabs.find('ul.ui-tabs-nav').height();
 		tabPanels.height(wbah);
 		tabPanels.each(function() {
 			$(this).data().resize(w - 25, wbah - 20);
 		});
-		wbTabs.find(".ui-tabs-panel .scroll-container").height(wbah);
+		wbTabs.find('.ui-tabs-panel .scroll-container').height(wbah);
 	}
 	function _addCloseBtn(li) {
 		if (role !== PRESENTER) {
@@ -105,7 +105,7 @@ var DrawWbArea = function() {
 	}
 
 	self.getWbTabId = function(id) {
-		return "wb-tab-" + id;
+		return 'wb-tab-' + id;
 	};
 	self.getWb = function(id) {
 		return $('#' + self.getWbTabId(id)).data();
@@ -116,8 +116,8 @@ var DrawWbArea = function() {
 	self.setRole = function(_role) {
 		if (!_inited) return;
 		role = _role;
-		const tabsNav = tabs.find(".ui-tabs-nav");
-		tabsNav.sortable(role === PRESENTER ? "enable" : "disable");
+		const tabsNav = tabs.find('.ui-tabs-nav');
+		tabsNav.sortable(role === PRESENTER ? 'enable' : 'disable');
 		const prev = tabs.find('.prev.om-icon'), next = tabs.find('.next.om-icon');
 		if (role === PRESENTER) {
 			if (prev.length === 0) {
@@ -148,7 +148,7 @@ var DrawWbArea = function() {
 			}
 			self.removeDeleteHandler();
 		}
-		tabs.find(".ui-tabs-panel").each(function() {
+		tabs.find('.ui-tabs-panel').each(function() {
 			$(this).data().setRole(role);
 		});
 	}
@@ -169,9 +169,9 @@ var DrawWbArea = function() {
 			}
 		});
 		scroll = tabs.find('.scroll-container');
-		area = container.find(".wb-area");
-		tabs.find(".ui-tabs-nav").sortable({
-			axis: "x"
+		area = container.find('.wb-area');
+		tabs.find('.ui-tabs-nav').sortable({
+			axis: 'x'
 			, stop: function() {
 				refreshTabs();
 			}
@@ -179,7 +179,7 @@ var DrawWbArea = function() {
 		_inited = true;
 		self.setRole(role);
 		$('#wb-rename-menu').menu().find('.wb-rename').click(function() {
-			_getWbTab($(this).parent().data('wb-id')).find('a span').trigger("dblclick");
+			_getWbTab($(this).parent().data('wb-id')).find('a span').trigger('dblclick');
 		});
 	};
 	self.destroy = function() {
@@ -198,7 +198,7 @@ var DrawWbArea = function() {
 					$('#wb-rename-menu').show().data('wb-id', obj.wbId)
 						.position({my: 'left top', collision: 'none', of: _getWbTab(obj.wbId)});
 				});
-		li.find('a').attr('href', "#" + tid);
+		li.find('a').attr('href', '#' + tid);
 		_setTabName(li, obj.name)
 			.dblclick(function() {
 				if (role !== PRESENTER) {
@@ -208,7 +208,7 @@ var DrawWbArea = function() {
 					, name = $(this).hide().after(editor.val(obj.name));
 				editor.focus().blur(function() {
 					const newName = $(this).val();
-					if (newName !== "") {
+					if (newName !== '') {
 						wbAction('renameWb', JSON.stringify({wbId: obj.wbId, name: newName}));
 					}
 					$(this).remove();
@@ -216,7 +216,7 @@ var DrawWbArea = function() {
 				});
 			});
 
-		tabs.find(".ui-tabs-nav").append(li);
+		tabs.find('.ui-tabs-nav').append(li);
 		tabs.append(wb);
 		refreshTabs();
 		_addCloseBtn(li);
@@ -272,16 +272,16 @@ var DrawWbArea = function() {
 		if (!_inited) return;
 		const tabId = self.getWbTabId(obj.wbId);
 		_getWbTab(obj.wbId).remove();
-		$("#" + tabId).remove();
+		$('#' + tabId).remove();
 		refreshTabs();
 	};
 	self.resize = function(sbW, chW, w, h) {
 		const hh = h - 5;
-		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + "px");
+		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
 		if (!container || !_inited) return;
 		area.width(w).height(hh);
 
-		const wbTabs = area.find(".tabs.ui-tabs");
+		const wbTabs = area.find('.tabs.ui-tabs');
 		wbTabs.height(hh);
 		_resizeWbs();
 	}
@@ -340,7 +340,7 @@ var DrawWbArea = function() {
 	return self;
 };
 $(function() {
-	Wicket.Event.subscribe("/websocket/message", function(jqEvent, msg) {
+	Wicket.Event.subscribe('/websocket/message', function(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
 				return; //ping
