@@ -18,8 +18,6 @@
  */
 package org.apache.openmeetings.cli;
 
-import static org.apache.commons.text.StringEscapeUtils.escapeXml10;
-
 import java.io.File;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -140,8 +138,7 @@ public abstract class ConnectionPropertiesPatcher {
 	protected static void patchProp(String[] tokens, int idx, String name, String value) {
 		String prop = tokens[idx].trim();
 		if (prop.startsWith(name)) {
-			prop = name + "=" + escapeXml10(value);
-			tokens[idx] = prop;
+			tokens[idx] = String.format("%s=%s", name, value);
 		}
 	}
 
