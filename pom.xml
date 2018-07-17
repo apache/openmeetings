@@ -90,7 +90,7 @@
 		<javax.mail.version>1.6.1</javax.mail.version>
 		<openjpa.version>3.0.0</openjpa.version>
 		<asterisk-java.version>2.0.2</asterisk-java.version>
-		<commons-dbcp.version>2.4.0</commons-dbcp.version>
+		<commons-dbcp.version>2.5.0</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
 		<commons-pool2.version>2.6.0</commons-pool2.version>
 		<postgresql.version>42.2.2</postgresql.version>
