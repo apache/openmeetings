@@ -44,9 +44,8 @@
 .ui-menu.ui-widget.ui-widget-content.ui-menu-icons {
 	border: 0;
 }
-#menu.ui-menu, #roomMenu.ui-menu {
-	max-height: 30px;
-	min-height: 30px;
+#menu .ui-menu {
+	z-index: 10000000;
 }
 .recording .ui-menu .ui-menu-item {
 	display: block;
