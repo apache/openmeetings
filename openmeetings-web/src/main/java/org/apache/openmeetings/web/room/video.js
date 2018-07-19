@@ -36,6 +36,7 @@ var Video = (function() {
 	}
 	function _swfLoaded() {
 		if (Room.getOptions().interview) {
+			v.parent().parent().removeClass('secure');
 			_resizePod();
 		} else {
 			const h = _resizeDlg(size.width, size.height);
@@ -45,6 +46,7 @@ var Video = (function() {
 	function _securityMode() {
 		if (Room.getOptions().interview) {
 			_resizeDlgArea(Math.max(300, swf.attr('width')), Math.max(200, swf.attr('height')));
+			v.parent().parent().addClass('secure');
 		} else {
 			v.dialog('option', 'position', {my: 'center', at: 'center', of: VideoUtil.container()});
 		}

@@ -57,6 +57,7 @@ public class OmVideo {
 	private var volume:int = 50;
 	private var lastVolume:int = 50;
 	private var cursorCbk:Function = null;
+	private var vidRect:Object = {x: 0, y: 0, width: 0, height: 0};
 
 	public function OmVideo(ui:UIComponent, params:Object, cursorCbk:Function = null) {
 		this.ui = ui;
@@ -67,8 +68,10 @@ public class OmVideo {
 	private function getVideo():Video {
 		if (vid === null) {
 			vid = new Video();
-			vid.width = width;
-			vid.height = height;
+			vid.width = vidRect.width || width;
+			vid.height = vidRect.height || height;
+			vid.x = vidRect.x || 0;
+			vid.y = vidRect.y || 0;
 			ui.addChild(vid);
 		}
 		return vid;
@@ -78,33 +81,43 @@ public class OmVideo {
 		return mic;
 	}
 
-	public function resize(_width:int, _height:int):void {
-		debug("resize:: " + _width + "x" + _height);
-		this.width = ui.width = _width;
-		this.height = ui.height = _height;
+	private function setBg():void {
 		var g:Graphics = ui.graphics;
 		if (!!cam && !cam.muted) {
 			g.beginFill(0x000000, 1);
-			g.drawRect(0, 0, _width, _height);
+			g.drawRect(0, 0, this.width, this.height);
 			g.endFill();
 		} else {
 			g.clear();
 		}
 	}
 
+	public function resize(_width:int, _height:int):void {
+		debug("resize:: " + _width + "x" + _height);
+		this.width = ui.width = _width;
+		this.height = ui.height = _height;
+		setBg();
+	}
+
 	public function vidResize(_width:int, _height:int):void {
 		debug("vidResize:: " + _width + "x" + _height);
-		vid.width = _width;
-		vid.height = _height;
+		vidRect.width = _width;
+		vidRect.height = _height;
 		if (_width < this.width) {
-			vid.x = (this.width - _width) / 2;
+			vidRect.x = (this.width - _width) / 2;
 		} else {
-			vid.x = 0;
+			vidRect.x = 0;
 		}
 		if (_height < this.height) {
-			vid.y = (this.height - _height) / 2;
+			vidRect.y = (this.height - _height) / 2;
 		} else {
-			vid.y = 0;
+			vidRect.y = 0;
+		}
+		if (!!vid) {
+			vid.width = vidRect.width;
+			vid.height = vidRect.height;
+			vid.x = vidRect.x;
+			vid.y = vidRect.y;
 		}
 	}
 
@@ -235,6 +248,7 @@ public class OmVideo {
 			debug("::camera settings ", cam.keyFrameInterval, cam.width, cam.height, cam.fps);
 			videoStreamSettings.setMode(cam.width, cam.height, cam.fps);
 			ns.videoStreamSettings = videoStreamSettings;
+			setBg();
 		}
 		ns.attachAudio(mic);
 		_setVolume(volume);

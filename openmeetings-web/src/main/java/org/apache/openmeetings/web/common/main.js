@@ -23,6 +23,7 @@ var Settings = (function() {
 	};
 })();
 var OmUtil = (function() {
+	let options, errs;
 	const self = {};
 	function _confirmDlg(_id, okHandler) {
 		const confirm = $('#' + _id);
@@ -49,13 +50,40 @@ var OmUtil = (function() {
 	function _tmpl(tmplId, newId) {
 		return $(tmplId).clone().attr('id', newId || '');
 	}
+	function _error(msg) {
+		if (typeof(msg) === 'object') {
+			msg = msg.name + ": " + msg.message;
+		}
+		if (!!errs && errs.length > 0) {
+			errs.data("kendoNotification").show(msg, "error");
+		}
+		return console.error(msg);
+	}
+	function _debugEnabled() {
+		return !!options && !!options.debug;
+	}
+	function _info() {
+		if (_debugEnabled()) {
+			console.info.apply(this, arguments);
+		}
+	}
+	function _log() {
+		if (_debugEnabled()) {
+			console.log.apply(this, arguments);
+		}
+	}
 
 	self.confirmDlg = _confirmDlg;
 	self.tmpl = _tmpl;
+	self.debugEnabled = _debugEnabled;
+	self.enableDebug = function() { if (!!options) { options.debug = true; } };
 	self.sendMessage = function(m) {
 		const msg = JSON.stringify(m || {});
 		Wicket.WebSocket.send(msg);
 	};
+	self.error = _error;
+	self.info = _info;
+	self.log = _log;
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {

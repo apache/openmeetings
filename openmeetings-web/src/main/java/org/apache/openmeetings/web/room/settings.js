@@ -18,6 +18,17 @@ var VideoSettings = (function() {
 			VideoManager.refresh(o.uid, s.video);
 		}
 	}
+	function _clear(_ms) {
+		const ms = _ms;
+		if (ms !== null && 'function' === typeof(ms.getAudioTracks)) {
+			ms.getAudioTracks().forEach(function(track) {
+				track.stop();
+			});
+			ms.getVideoTracks().forEach(function(track) {
+				track.stop();
+			});
+		}
+	}
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
 		vs = $('#video-settings');
@@ -102,43 +113,71 @@ var VideoSettings = (function() {
 	function _micActivity(level) {
 		lm.progressbar('value', Math.max(0, level));
 	}
-	function _initSwf() {
-		const obj = swf.getDevices();
+	function _initDevices() {
+		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+			OmUtil.error('enumerateDevices() not supported.');
+			return;
+		}
 		cam.find('option[value!="-1"]').remove();
-		for (let i = 0; i < obj.cams.length; ++i) {
-			const o = $('<option></option>').attr('value', i).text(obj.cams[i]);
-			if (i === s.video.cam) {
-				o.prop('selected', true);
-			}
-			cam.append(o);
-		}
-		cam.prop('disabled', false).change(function() {
-			_readValues();
-			swf.camChanged(s.video.cam);
-		});
 		mic.find('option[value!="-1"]').remove();
-		for (let i = 0; i < obj.mics.length; ++i) {
-			const o = $('<option></option>').attr('value', i).text(obj.mics[i]);
-			if (i === s.video.mic) {
-				o.prop('selected', true);
-			}
-			mic.append(o);
-		}
-		mic.prop('disabled', false).change(function() {
-			_readValues();
-			swf.micChanged(s.video.mic);
-		});
-		res.change(function() {
-			_readValues();
-			swf.resChanged(s.video.width, s.video.height);
-		});
-		res.find('option').each(function() {
-			const o = $(this).data();
-			if (o.width === s.video.width && o.height === s.video.height) {
-				$(this).prop('selected', true);
-				return false;
-			}
-		});
+		navigator.mediaDevices.getUserMedia({video:true, audio:true})
+			.then(function(stream) {
+				const devices = navigator.mediaDevices.enumerateDevices()
+					.then(function(devices) {
+						return devices;
+					})
+					.catch(function(err) { throw err; });
+				_clear(stream);
+				return devices;
+			})
+			.then(function(devices) {
+				let cCount = 0, mCount = 0;
+				devices.forEach(function(device) {
+					if ('audioinput' === device.kind) {
+						const o = $('<option></option>').attr('value', mCount).text(device.label)
+							.data('device-id', device.deviceId);
+						if (mCount === s.video.cam) {
+							o.prop('selected', true);
+						}
+						mic.append(o);
+						mCount++;
+					} else if ('videoinput' === device.kind) {
+						const o = $('<option></option>').attr('value', cCount).text(device.label)
+							.data('device-id', device.deviceId);
+						if (cCount === s.video.cam) {
+							o.prop('selected', true);
+						}
+						cam.append(o);
+						cCount++;
+					}
+				});
+				cam.prop('disabled', false).off().change(function() {
+					_readValues();
+					swf.camChanged(s.video.cam);
+				});
+				mic.prop('disabled', false).off().change(function() {
+					_readValues();
+					swf.micChanged(s.video.mic);
+				});
+				res.off().change(function() {
+					_readValues();
+					swf.resChanged(s.video.width, s.video.height);
+				});
+				res.find('option').each(function() {
+					const o = $(this).data();
+					if (o.width === s.video.width && o.height === s.video.height) {
+						$(this).prop('selected', true);
+						return false;
+					}
+				});
+				_readValues();
+			})
+			.catch(function(err) {
+				OmUtil.error(err);
+			});
+	}
+	function _initSwf() {
+		_initDevices();
 		_readValues();
 		swf.init(s.video.cam, s.video.mic
 			, o.interview ? 320 : s.video.width, o.interview ? 260 : s.video.height);
