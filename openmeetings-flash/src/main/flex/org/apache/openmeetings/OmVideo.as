@@ -17,6 +17,7 @@
  * under the License.
  */
 package org.apache.openmeetings {
+import flash.display.Graphics;
 import flash.events.AsyncErrorEvent;
 import flash.events.NetStatusEvent;
 import flash.events.IOErrorEvent;
@@ -46,6 +47,7 @@ public class OmVideo {
 	private var nc:NetConnection;
 	private var ns:NetStream;
 	private var mic:Microphone;
+	private var cam:Camera;
 	public var width:int;
 	public var height:int;
 	private var mode:String;
@@ -80,16 +82,35 @@ public class OmVideo {
 		debug("resize:: " + _width + "x" + _height);
 		this.width = ui.width = _width;
 		this.height = ui.height = _height;
+		var g:Graphics = ui.graphics;
+		if (!!cam && !cam.muted) {
+			g.beginFill(0x000000, 1);
+			g.drawRect(0, 0, _width, _height);
+			g.endFill();
+		} else {
+			g.clear();
+		}
 	}
 
 	public function vidResize(_width:int, _height:int):void {
 		debug("vidResize:: " + _width + "x" + _height);
 		vid.width = _width;
 		vid.height = _height;
+		if (_width < this.width) {
+			vid.x = (this.width - _width) / 2;
+		} else {
+			vid.x = 0;
+		}
+		if (_height < this.height) {
+			vid.y = (this.height - _height) / 2;
+		} else {
+			vid.y = 0;
+		}
 	}
 
-	public function attachCamera(cam:Camera):void {
-		getVideo().attachCamera(cam);
+	public function attachCamera(_cam:Camera):void {
+		this.cam = _cam;
+		getVideo().attachCamera(_cam);
 	}
 
 	public function attachStream(_ns:NetStream):void {
@@ -105,7 +126,10 @@ public class OmVideo {
 		vid.attachCamera(null);
 		vid.clear();
 		ui.removeChild(vid);
+		ui.graphics.clear();
 		vid = null;
+		cam = null;
+		mic = null;
 	}
 
 	public function setVolume(vol:int):void {

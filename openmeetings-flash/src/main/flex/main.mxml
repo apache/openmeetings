@@ -407,7 +407,7 @@
 				}
 				debug("vidResize:: " + _width + "x" + _height + "->" + w + "x" + h);
 			}
-			_resize(w, h);
+			_resize(_width, _height);
 			video.vidResize(w, h);
 		}
 
