@@ -124,10 +124,13 @@ var VideoSettings = (function() {
 			.then(function(stream) {
 				const devices = navigator.mediaDevices.enumerateDevices()
 					.then(function(devices) {
+						_clear(stream);
 						return devices;
 					})
-					.catch(function(err) { throw err; });
-				_clear(stream);
+					.catch(function(err) {
+						_clear(stream);
+						throw err;
+					});
 				return devices;
 			})
 			.then(function(devices) {

@@ -140,10 +140,12 @@
 				case 'settings': {
 					ExternalInterface.addCallback("camChanged", function (val:int):void {
 						selectedCam = val;
+						video.reset();
 						camChanged(null);
 					});
 					ExternalInterface.addCallback("micChanged", function (val:int):void {
 						selectedMic = val;
+						video.reset();
 						camChanged(null);
 					});
 					ExternalInterface.addCallback("resChanged", function (width:int, height:int):void {
