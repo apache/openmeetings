@@ -497,7 +497,8 @@
 }
 .pod-area.max17, .pod-area.max25, .pod-area.max33 {
 	grid-template-columns: repeat(8, 1fr);
-	grid-template-areas: "b01 b02 a a a a b03 b04"
+	grid-template-areas: 
+		"b01 b02 a a a a b03 b04"
 		"b05 b06 a a a a b07 b08"
 		"b09 b10 a a a a b11 b12"
 		"b13 b14 a a a a b15 b16";
