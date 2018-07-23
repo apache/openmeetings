@@ -26,15 +26,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.room.Whiteboard;
-import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.db.manager.IWhiteboardManager;
@@ -102,42 +97,6 @@ public class CleanupJob extends AbstractJob {
 				for (File file : files) {
 					log.debug("expired TEST SETUP found: " + file.getCanonicalPath());
 					file.delete();
-				}
-			}
-		} catch (Exception e) {
-			log.error("Unexpected exception while processing tests setup videous.", e);
-		}
-	}
-
-	public void cleanRoomFiles() {
-		log.trace("CleanupJob.cleanRoomFiles");
-		final long now = System.currentTimeMillis();
-		if (!isInitComplete()) {
-			return;
-		}
-		try {
-			File[] folders = getStreamsDir().listFiles(File::isDirectory);
-			if (folders == null) {
-				return;
-			}
-			for (File folder : folders) {
-				Long roomId = null;
-				if (NumberUtils.isCreatable(folder.getName())) {
-					roomId = Long.valueOf(folder.getName());
-					Whiteboards wbList = wbManager.get(roomId);
-					for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
-						if (!e.getValue().isEmpty()) {
-							roomId = null;
-							break;
-						}
-					}
-				}
-				if (roomId != null && streamClientManager.list(roomId).isEmpty()) {
-					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
-					if (files != null && files.length > 0) {
-						log.debug("Room files are too old and no users in the room: " + roomId);
-						FileUtils.deleteDirectory(folder);
-					}
 				}
 			}
 		} catch (Exception e) {
