@@ -25,18 +25,11 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.isInitComplete;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
-import org.apache.openmeetings.db.dto.room.Whiteboard;
-import org.apache.openmeetings.db.dto.room.Whiteboards;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,18 +38,13 @@ public class CleanupJob extends AbstractJob {
 	private static Logger log = LoggerFactory.getLogger(CleanupJob.class);
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
-	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour
 	private long resetHashTtl = 24 * 60 * 60 * 1000L; // 1 day
 	private long confLogTtl = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private IStreamClientManager streamClientManager;
-	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private IWhiteboardManager wbManager;
 	@Autowired
 	private ConferenceLogDao confLogDao;
 
@@ -66,10 +54,6 @@ public class CleanupJob extends AbstractJob {
 
 	public void setTestSetupTimeout(long testSetupTimeout) {
 		this.testSetupTimeout = testSetupTimeout;
-	}
-
-	public void setRoomFilesTtl(long roomFilesTtl) {
-		this.roomFilesTtl = roomFilesTtl;
 	}
 
 	public void setResetHashTtl(long resetHashTtl) {
@@ -101,42 +85,6 @@ public class CleanupJob extends AbstractJob {
 				for (File file : files) {
 					log.debug("expired TEST SETUP found: {}", file.getCanonicalPath());
 					file.delete();
-				}
-			}
-		} catch (Exception e) {
-			log.error("Unexpected exception while processing tests setup videous.", e);
-		}
-	}
-
-	public void cleanRoomFiles() {
-		log.trace("CleanupJob.cleanRoomFiles");
-		final long now = System.currentTimeMillis();
-		if (!isInitComplete()) {
-			return;
-		}
-		try {
-			File[] folders = getStreamsDir().listFiles(File::isDirectory);
-			if (folders == null) {
-				return;
-			}
-			for (File folder : folders) {
-				Long roomId = null;
-				if (NumberUtils.isCreatable(folder.getName())) {
-					roomId = Long.valueOf(folder.getName());
-					Whiteboards wbList = wbManager.get(roomId);
-					for (Map.Entry<Long, Whiteboard> e : wbList.getWhiteboards().entrySet()) {
-						if (!e.getValue().isEmpty()) {
-							roomId = null;
-							break;
-						}
-					}
-				}
-				if (roomId != null && streamClientManager.list(roomId).isEmpty()) {
-					File[] files = folder.listFiles(fi -> fi.isFile() && fi.lastModified() + roomFilesTtl < now);
-					if (files != null && files.length > 0) {
-						log.debug("Room files are too old and no users in the room: {}", roomId);
-						FileUtils.deleteDirectory(folder);
-					}
 				}
 			}
 		} catch (Exception e) {

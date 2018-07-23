@@ -62,11 +62,6 @@
 			p:targetObject-ref="cleanupJob" p:targetMethod="cleanTestSetup" p:concurrent="false" />
 	<bean id="triggerCleanTestSetup" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
 			p:jobDetail-ref="cleanTestSetupJobDetail" p:startDelay="1800000" p:repeatInterval="1800000" />
-	<!-- room files clean-up -->
-	<bean id="cleanRoomFilesJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
-			p:targetObject-ref="cleanupJob" p:targetMethod="cleanRoomFiles" p:concurrent="false" />
-	<bean id="triggerCleanRoomFiles" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
-			p:jobDetail-ref="cleanRoomFilesJobDetail" p:startDelay="10000" p:repeatInterval="1800000" />
 	<!-- expired recordings clean-up -->
 	<bean id="cleanExpiredRecJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
 			p:targetObject-ref="cleanupJob" p:targetMethod="cleanExpiredRecordings" p:concurrent="false" />
@@ -111,7 +106,6 @@
 			<list>
 				<ref bean="triggerCleanSessions" />
 				<ref bean="triggerCleanTestSetup" />
-				<ref bean="triggerCleanRoomFiles" />
 				<ref bean="triggerCleanExpiredRec" />
 				<ref bean="triggerCleanExpiredResetHash" />
 				<ref bean="triggerCleanPersonalData" />

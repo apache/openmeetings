@@ -40,7 +40,6 @@ public class TestJob extends AbstractWicketTester {
 			setInitComplete(false);
 			cleanJob.cleanExpiredRecordings();
 			cleanJob.cleanExpiredResetHash();
-			cleanJob.cleanRoomFiles();
 			cleanJob.cleanSessions();
 			cleanJob.cleanTestSetup();
 
