@@ -31,8 +31,6 @@ import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +39,13 @@ public class CleanupJob extends AbstractJob {
 	private static Logger log = Red5LoggerFactory.getLogger(CleanupJob.class, getWebAppRootKey());
 	private long sessionTimeout = 30 * 60 * 1000L;
 	private long testSetupTimeout = 60 * 60 * 1000L; // 1 hour
-	private long roomFilesTtl = 60 * 60 * 1000L; // 1 hour
 	private long resetHashTtl = 24 * 60 * 60 * 1000L; // 1 day
 	private long confLogTtl = 7 * 24 * 60 * 60 * 1000L; // 7 days
 
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private IStreamClientManager streamClientManager;
-	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private IWhiteboardManager wbManager;
 	@Autowired
 	private ConferenceLogDao confLogDao;
 
@@ -62,10 +55,6 @@ public class CleanupJob extends AbstractJob {
 
 	public void setTestSetupTimeout(long testSetupTimeout) {
 		this.testSetupTimeout = testSetupTimeout;
-	}
-
-	public void setRoomFilesTtl(long roomFilesTtl) {
-		this.roomFilesTtl = roomFilesTtl;
 	}
 
 	public void setResetHashTtl(long resetHashTtl) {
