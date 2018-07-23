@@ -50,7 +50,7 @@
 			604800000	== 7 days
 	 -->
 	<bean id="cleanupJob" class="org.apache.openmeetings.service.quartz.scheduler.CleanupJob"
-			p:sessionTimeout="1800000" p:testSetupTimeout="3600000" p:roomFilesTtl="3600000" p:resetHashTtl="86400000"
+			p:sessionTimeout="1800000" p:testSetupTimeout="3600000" p:resetHashTtl="86400000"
 			p:confLogTtl="604800000" />
 	<!-- sessions clean-up -->
 	<bean id="cleanSessionsJobDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
