@@ -89,20 +89,13 @@
 			return Microphone.names.length > 0;
 		}
 
-		private function _hasAudio(act:Array):Boolean {
-			return act.indexOf('broadcastA') > -1;
-		}
 
 		private function hasAudio():Boolean {
-			return _hasAudio(activities);
-		}
-
-		private function _hasVideo(act:Array):Boolean {
-			return act.indexOf('broadcastV') > -1;
+			return OmVideo.hasAudio(activities);
 		}
 
 		private function hasVideo():Boolean {
-			return _hasVideo(activities);
+			return OmVideo.hasVideo(activities);
 		}
 
 		private function hasRightRemoteControl():Boolean {
@@ -200,8 +193,8 @@
 									ExternalInterface.addCallback("update", function ():void {
 										video.getNc().call("check", new Responder(function (check:Object):void {
 											debug("check", check);
-											var pVideo:Boolean = hasVideo(), nVideo:Boolean = _hasVideo(check.activities)
-													, pAudio:Boolean = hasAudio(), nAudio:Boolean = _hasAudio(check.activities);
+											var pVideo:Boolean = hasVideo(), nVideo:Boolean = OmVideo.hasVideo(check.activities)
+													, pAudio:Boolean = hasAudio(), nAudio:Boolean = OmVideo.hasAudio(check.activities);
 											if (nVideo != pVideo || nAudio != pAudio) {
 												// activities are changed
 												activities = check.activities;
@@ -228,7 +221,7 @@
 					break;
 				case OmVideo.PLAY: {
 					addImage(params.width, params.height);
-					_resize(params.width, params.height);
+					vidResize(params.width, params.height);
 					refreshCallback(null);
 					_updateExclusive();
 					_updateRemote();

@@ -83,7 +83,7 @@ public class OmVideo {
 
 	private function setBg():void {
 		var g:Graphics = ui.graphics;
-		if (!!cam && !cam.muted) {
+		if ((PLAY === mode && hasVideo(params.av == null ? [] : params.av.split(','))) || (!!cam && !cam.muted)) {
 			g.beginFill(0x000000, 1);
 			g.drawRect(0, 0, this.width, this.height);
 			g.endFill();
@@ -367,6 +367,7 @@ public class OmVideo {
 			//invokes Method in baseVideoView which shows the stream
 			getVideo().attachNetStream(ns);
 			ns.play(name);
+			setBg();
 		});
 	}
 
@@ -388,11 +389,20 @@ public class OmVideo {
 		} else {
 			clear();
 		}
+		mode = null;
 		ns = null;
 	}
 
 	public function getNc():NetConnection {
 		return nc;
+	}
+
+	public static function hasVideo(act:Array):Boolean {
+		return act.indexOf('broadcastV') > -1;
+	}
+
+	public static function hasAudio(act:Array):Boolean {
+		return act.indexOf('broadcastA') > -1;
 	}
 }
 }

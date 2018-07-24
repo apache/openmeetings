@@ -81,6 +81,7 @@ var OmUtil = (function() {
 		const msg = JSON.stringify(m || {});
 		Wicket.WebSocket.send(msg);
 	};
+	self.initErrs = function(_e) { errs = _e; };
 	self.error = _error;
 	self.info = _info;
 	self.log = _log;

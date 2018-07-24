@@ -511,7 +511,6 @@
 	position: relative;
 	padding: 2px;
 	margin: 2px;
-	overflow: hidden;
 }
 .pod-area .empty {
 	grid-area: e;

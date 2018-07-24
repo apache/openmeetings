@@ -31,6 +31,9 @@ var VideoSettings = (function() {
 	}
 	function _init(options) {
 		o = JSON.parse(JSON.stringify(options));
+		OmUtil.initErrs($('#jsNotifications').kendoNotification({
+			autoHideAfter: 20000
+		}));
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam');

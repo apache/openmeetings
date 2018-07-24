@@ -62,9 +62,9 @@ var VideoManager = (function() {
 		}
 		if (c.streams.length === 0) {
 			// check for non inited video window
-			const v = $('#' + VideoUtil.getVid(c.uid));
-			if (v.length === 1) {
-				_closeV(v);
+			const vw = $('#' + VideoUtil.getVid(c.uid));
+			if (vw.length === 1) {
+				_closeV(vw);
 			}
 		}
 	}
