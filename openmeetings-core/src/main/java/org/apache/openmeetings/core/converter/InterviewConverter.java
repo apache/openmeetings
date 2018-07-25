@@ -125,7 +125,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				}
 				if (!parts.isEmpty()) {
 					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.flv", id, N)).getCanonicalPath();
-					long diff = diff(pStart, r.getRecordEnd());
+					long diff = diff(r.getRecordEnd(), pStart);
 					// add blank pod till the end
 					//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 					PodPart.add(parts, diff);
