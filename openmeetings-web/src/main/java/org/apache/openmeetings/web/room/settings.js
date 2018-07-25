@@ -153,68 +153,72 @@ var VideoSettings = (function() {
 		el.append(OmUtil.tmpl('#settings-option-loading'));//!settings-option-disabled
 		el.iconselectmenu('refresh');
 	}
+	function _fillDevices(devices) {
+		let cCount = 0, mCount = 0;
+		_load();
+		cam.find('option').remove();
+		cam.append(OmUtil.tmpl('#settings-option-disabled'));
+		mic.find('option').remove();
+		mic.append(OmUtil.tmpl('#settings-option-disabled'));
+		devices.forEach(function(device) {
+			if ('audioinput' === device.kind) {
+				const o = $('<option></option>').attr('value', mCount).text(device.label)
+					.data('device-id', device.deviceId);
+				if (mCount === s.video.mic) {
+					o.prop('selected', true);
+				}
+				mic.append(o);
+				mCount++;
+			} else if ('videoinput' === device.kind) {
+				const o = $('<option></option>').attr('value', cCount).text(device.label)
+					.data('device-id', device.deviceId);
+				if (cCount === s.video.cam) {
+					o.prop('selected', true);
+				}
+				cam.append(o);
+				cCount++;
+			}
+		});
+		cam.iconselectmenu('refresh');
+		mic.iconselectmenu('refresh');
+		res.find('option').each(function() {
+			const o = $(this).data();
+			if (o.width === s.video.width && o.height === s.video.height) {
+				$(this).prop('selected', true);
+				return false;
+			}
+		});
+		res.iconselectmenu('refresh');
+		_readValues();
+		swf.init(s.video.cam, s.video.mic
+				, o.interview ? 320 : s.video.width, o.interview ? 260 : s.video.height);
+	}
 	function _initDevices() {
-		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-			OmUtil.error('enumerateDevices() not supported.');
-			return;
-		}
 		_setLoading(cam);
 		_setLoading(mic);
-		navigator.mediaDevices.getUserMedia({video:true, audio:true})
-			.then(function(stream) {
-				const devices = navigator.mediaDevices.enumerateDevices()
-					.then(function(devices) {
-						_clear(stream);
-						return devices;
-					})
-					.catch(function(err) {
-						_clear(stream);
-						throw err;
-					});
-				return devices;
-			})
-			.then(function(devices) {
-				let cCount = 0, mCount = 0;
-				_load();
-				cam.find('option').remove();
-				cam.append(OmUtil.tmpl('#settings-option-disabled'));
-				mic.find('option').remove();
-				mic.append(OmUtil.tmpl('#settings-option-disabled'));
-				devices.forEach(function(device) {
-					if ('audioinput' === device.kind) {
-						const o = $('<option></option>').attr('value', mCount).text(device.label)
-							.data('device-id', device.deviceId);
-						if (mCount === s.video.mic) {
-							o.prop('selected', true);
-						}
-						mic.append(o);
-						mCount++;
-					} else if ('videoinput' === device.kind) {
-						const o = $('<option></option>').attr('value', cCount).text(device.label)
-							.data('device-id', device.deviceId);
-						if (cCount === s.video.cam) {
-							o.prop('selected', true);
-						}
-						cam.append(o);
-						cCount++;
-					}
+		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+			_fillDevices(swf.getDevices());
+		} else {
+			navigator.mediaDevices.getUserMedia({video:true, audio:true})
+				.then(function(stream) {
+					const devices = navigator.mediaDevices.enumerateDevices()
+						.then(function(devices) {
+							_clear(stream);
+							return devices;
+						})
+						.catch(function(err) {
+							_clear(stream);
+							throw err;
+						});
+					return devices;
+				})
+				.then(function(devices) {
+					_fillDevices(devices);
+				})
+				.catch(function(err) {
+					OmUtil.error(err);
 				});
-				cam.iconselectmenu('refresh');
-				mic.iconselectmenu('refresh');
-				res.find('option').each(function() {
-					const o = $(this).data();
-					if (o.width === s.video.width && o.height === s.video.height) {
-						$(this).prop('selected', true);
-						return false;
-					}
-				});
-				_readValues();
-				swf.init(s.video.cam, s.video.mic
-						, o.interview ? 320 : s.video.width, o.interview ? 260 : s.video.height);
-			})
-			.catch(function(err) {
-				OmUtil.error(err);
-			});
+		}
 	}
 	function _initSwf() {
 		_initDevices();

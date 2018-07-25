@@ -131,6 +131,24 @@
 			ExternalInterface.addCallback("vidResize", vidResize);
 			switch (params.mode) {
 				case 'settings': {
+					ExternalInterface.addCallback("getDevices", function ():Object {
+						var devices:Array = [];
+						for (var i = 0; i < Camera.names.length; ++i) {
+							devices.push({
+								kind: "videoinput"
+								, label: Camera.names[i] || "Camera " + i
+								, deviceId: "camDevice" + i
+							});
+						}
+						for (var i = 0; i < Microphone.names.length; ++i) {
+							devices.push({
+								kind: "audioinput"
+								, label: Microphone.names[i] || "Microphone " + i
+								, deviceId: "micDevice" + i
+							});
+						}
+						return devices;
+					});
 					ExternalInterface.addCallback("camChanged", function (val:int):void {
 						selectedCam = val;
 						video.reset();
