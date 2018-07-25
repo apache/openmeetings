@@ -190,7 +190,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				args.add("-i");
 				args.add(wav.getCanonicalPath());
 				args.add("-map");
-				args.add("[0]");
+				args.add("0:v");
 			} else {
 				/* Creating grid
 				 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
