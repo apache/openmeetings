@@ -14,7 +14,7 @@ var InterviewWbArea = function() {
 		rec.button({
 			disabled: true
 			, showLabel: false
-			, icon: 'ui-icon-play'
+			, icon: 'ui-icon-bullet'
 		}).click(function() {
 			wbAction($(this).data('mode') === 'rec' ? 'startRecording' : 'stopRecording', '');
 		});
@@ -65,13 +65,13 @@ var InterviewWbArea = function() {
 	}
 	function _setRecEnabled(en) {
 		if (!_inited) return;
-		rec.data('mode', 'rec').button('option', {disabled: !en, icon: 'ui-icon-play'});
+		rec.data('mode', 'rec').button('option', {disabled: !en, icon: 'ui-icon-bullet'});
 	}
 	function _setRecStarted(started) {
 		if (!_inited) return;
 		rec.data('mode', started ? 'stop' : 'rec')
 			.attr('title', rec.data(started ? 'title-stop' : 'title-start'))
-			.button('option', {icon: started ? 'ui-icon-stop' : 'ui-icon-play'});
+			.button('option', {icon: started ? 'ui-icon-stop' : 'ui-icon-bullet'});
 	}
 	function _updateAreaClass() {
 		const count = pArea.find('.pod:not(.ui-helper,.ui-sortable-placeholder)').length
