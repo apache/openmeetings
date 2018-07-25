@@ -41,6 +41,7 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem.Type;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
+import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
@@ -94,10 +95,10 @@ public class RecordingService {
 		return "rec_" + recordingId + "_stream_" + streamid + "_" + dateString;
 	}
 
-	public void startRecording(final IScope scope, IClient client, boolean isInterview) {
+	public void startRecording(final IScope scope, IClient client) {
 		try {
 			log.debug("##REC:: recordMeetingStream ::");
-
+			boolean isInterview = Room.Type.interview == client.getRoomType();
 			Long roomId = client.getRoomId();
 
 			Date now = new Date();
@@ -158,6 +159,7 @@ public class RecordingService {
 	public void stopRecording(IScope scope, IClient client) {
 		try {
 			Long recordingId = IClientUtil.getRecordingId(scope);
+			IClientUtil.setRecordingId(scope, null);
 			log.debug("stopRecordAndSave {}, {}, ID: {}", client.getLogin(), client.getRemoteAddress(), recordingId);
 			if (recordingId == null) {
 				log.error("Unable to find recordingId on recording stop");
@@ -343,7 +345,7 @@ public class RecordingService {
 				if (rcl.isSharingStarted() || rcl.isRecordingStarted()) {
 					String streamName = generateFileName(recordingId, broadcastId);
 
-					Long metaId = metaDataDao.add(recordingId, now, false, false, true, streamName, null);
+					Long metaId = metaDataDao.add(recordingId, now, false, false, true, streamName, rcl.getSid());
 
 					// Start FLV Recording
 					addListener(conn, rcl.getBroadcastId(), streamName, metaId, true, isInterview);
@@ -357,8 +359,7 @@ public class RecordingService {
 				// But we only record av or a, video only is not interesting
 				String streamName = generateFileName(recordingId, broadcastId);
 
-				Long metaId = metaDataDao.add(recordingId, now, audioOnly, videoOnly, false, streamName,
-						rcl.getInterviewPodId());
+				Long metaId = metaDataDao.add(recordingId, now, audioOnly, videoOnly, false, streamName, rcl.getSid());
 
 				// Start FLV recording
 				addListener(conn, broadcastId, streamName, metaId, !audioOnly, isInterview);

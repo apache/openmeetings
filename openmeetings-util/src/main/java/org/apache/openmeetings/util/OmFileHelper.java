@@ -55,7 +55,7 @@ public class OmFileHelper {
 	public static final String PROFILES_PREFIX = "profile_";
 	public static final String LANG_FILE_NAME = "languages.xml";
 	public static final String LIBRARY_FILE_NAME = "library.xml";
-	public static final String PROFILE_IMG_NAME = "profile.jpg";
+	public static final String PROFILE_IMG_NAME = "profile.png";
 	public static final String PROFILE_FILE_NAME = "profile";
 	public static final String RECORDING_FILE_NAME = "flvRecording_";
 	public static final String THUMB_IMG_PREFIX = "_thumb_";

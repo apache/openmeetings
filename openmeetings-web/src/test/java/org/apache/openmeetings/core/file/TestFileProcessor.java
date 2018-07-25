@@ -43,8 +43,8 @@ public class TestFileProcessor extends AbstractJUnitDefaults {
 	protected FileProcessor processor;
 
 	@Test
-	public void testProcessJpeg() throws Exception {
-		for (String ext : new String[] {null, "txt", "png"}) {
+	public void testProcessPng() throws Exception {
+		for (String ext : new String[] {null, "txt", "jpg"}) {
 			FileItem f = new FileItemDTO()
 					.setName(String.format(FILE_NAME_FMT, FILE_NAME, ext))
 					.setHash(UUID.randomUUID().toString())

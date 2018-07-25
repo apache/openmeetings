@@ -265,10 +265,6 @@ public class Room extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private boolean filesOpened;
 
-	@Column(name = "auto_video_select", nullable = false)
-	@Element(data = true, required = false)
-	private boolean autoVideoSelect;
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "roomId")
 	@ForeignKey(enabled = true)
@@ -523,14 +519,6 @@ public class Room extends HistoricalEntity {
 
 	public void setFilesOpened(boolean filesOpened) {
 		this.filesOpened = filesOpened;
-	}
-
-	public boolean isAutoVideoSelect() {
-		return autoVideoSelect;
-	}
-
-	public void setAutoVideoSelect(boolean autoVideoSelect) {
-		this.autoVideoSelect = autoVideoSelect;
 	}
 
 	public boolean isSipEnabled() {

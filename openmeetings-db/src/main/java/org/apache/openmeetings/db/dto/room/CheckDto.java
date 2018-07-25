@@ -27,7 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
 
 @XmlRootElement
@@ -37,7 +36,6 @@ public class CheckDto {
 	private final Room.Type roomType;
 	private final boolean audioOnly;
 	private final Set<Activity> activities = new HashSet<>();
-	private final Pod pod;
 
 	public CheckDto(Client c) {
 		roomId = c.getRoom().getId();
@@ -49,7 +47,6 @@ public class CheckDto {
 		if (c.hasActivity(Activity.broadcastV)) {
 			activities.add(Activity.broadcastV);
 		}
-		pod = c.getPod();
 	}
 
 	public long getRoomId() {
@@ -66,9 +63,5 @@ public class CheckDto {
 
 	public Set<Activity> getActivities() {
 		return activities;
-	}
-
-	public Pod getPod() {
-		return pod;
 	}
 }

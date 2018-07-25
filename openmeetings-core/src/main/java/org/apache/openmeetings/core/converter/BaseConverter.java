@@ -18,11 +18,13 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
+import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
@@ -151,7 +153,7 @@ public abstract class BaseConverter {
 		}
 	}
 
-	protected String[] mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
+	private String[] mergeAudioToWaves(List<File> waveFiles, File wav) throws IOException {
 		List<String> argv = new ArrayList<>();
 
 		argv.add(getPathToSoX());
@@ -164,11 +166,30 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 
-	protected void stripAudioFirstPass(Recording recording, ProcessResultList logs,
-			List<File> waveFiles, File streamFolder)
-	{
-		stripAudioFirstPass(recording, logs, waveFiles, streamFolder
-				, metaDataDao.getAudioMetaDataByRecording(recording.getId()));
+	private void stripAudioFirstPass(Recording r, ProcessResultList logs, List<File> waveFiles, File streamFolder) {
+		stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaDataDao.getAudioMetaDataByRecording(r.getId()));
+	}
+
+	protected void createWav(Recording r, ProcessResultList logs, File streamFolder, List<File> waveFiles, File wav) throws IOException {
+		deleteFileIfExists(wav);
+		stripAudioFirstPass(r, logs, waveFiles, streamFolder);
+		if (waveFiles.isEmpty()) {
+			// create default Audio to merge it. strip to content length
+			String oneSecWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
+
+			// Calculate delta at beginning
+			double duration = diffSeconds(r.getRecordEnd(), r.getRecordStart());
+
+			String[] cmd = new String[] { getPathToSoX(), oneSecWav, wav.getCanonicalPath(), "pad", "0", String.valueOf(duration) };
+
+			logs.add(ProcessHelper.executeScript("generateSampleAudio", cmd));
+		} else if (waveFiles.size() == 1) {
+			copyFile(waveFiles.get(0), wav);
+		} else {
+			String[] soxArgs = mergeAudioToWaves(waveFiles, wav);
+
+			logs.add(ProcessHelper.executeScript("mergeAudioToWaves", soxArgs));
+		}
 	}
 
 	private String[] addSoxPad(ProcessResultList logs, String job, double length, double position, File inFile, File outFile) throws IOException {
@@ -253,7 +274,7 @@ public abstract class BaseConverter {
 		return metaData;
 	}
 
-	protected void stripAudioFirstPass(Recording recording,
+	private void stripAudioFirstPass(Recording recording,
 			ProcessResultList logs,
 			List<File> waveFiles, File streamFolder,
 			List<RecordingMetaData> metaDataList) {
@@ -418,17 +439,21 @@ public abstract class BaseConverter {
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 
-	protected void postProcess(Recording r, String mp4path, ProcessResultList logs, List<File> waveFiles) throws IOException {
+	protected void finalize(Recording r, String mp4path, ProcessResultList logs) throws IOException {
 		convertToPng(r, mp4path, logs);
 
 		updateDuration(r);
 		r.setStatus(Recording.Status.PROCESSED);
+	}
 
+	protected void postProcess(Recording r, ProcessResultList logs) {
 		logDao.delete(r);
 		for (ProcessResult res : logs.getJobs()) {
 			logDao.add("generateFFMPEG", r, res);
 		}
+	}
 
+	protected void postProcess(List<File> waveFiles) {
 		// Delete Wave Files
 		for (File audio : waveFiles) {
 			if (audio.exists()) {

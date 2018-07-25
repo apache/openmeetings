@@ -1089,7 +1089,7 @@ public class BackupImport {
 
 	private static File getImgDir(String name) {
 		int start = name.startsWith(THUMB_IMG_PREFIX) ? THUMB_IMG_PREFIX.length() : 0;
-		String hash = name.substring(start, name.length() - EXTENSION_JPG.length() - 1);
+		String hash = name.substring(start, name.length() - EXTENSION_PNG.length() - 1);
 		return new File(getUploadFilesDir(), hash);
 	}
 

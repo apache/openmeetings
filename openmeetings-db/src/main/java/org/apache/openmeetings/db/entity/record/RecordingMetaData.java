@@ -93,6 +93,10 @@ public class RecordingMetaData extends HistoricalEntity {
 	@Element(data = true)
 	private String streamName;
 
+	@Column(name = "sid")
+	@Element(data = true)
+	private String sid;
+
 	@Column(name = "is_audio_only", nullable = false)
 	@Element(name = "isAudioOnly", data = true)
 	private boolean audioOnly;
@@ -112,10 +116,6 @@ public class RecordingMetaData extends HistoricalEntity {
 	@Column(name = "audio_is_valid", nullable = false)
 	@Element(name="audioIsValid", data = true, required = false)
 	private boolean audioValid;
-
-	@Column(name = "interiew_pod_id")
-	@Element(data = true, required = false)
-	private Integer interiewPodId;
 
 	/**
 	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
@@ -190,6 +190,14 @@ public class RecordingMetaData extends HistoricalEntity {
 		this.streamName = streamName;
 	}
 
+	public String getSid() {
+		return sid;
+	}
+
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+
 	public String getFullWavAudioData() {
 		return fullWavAudioData;
 	}
@@ -204,14 +212,6 @@ public class RecordingMetaData extends HistoricalEntity {
 
 	public void setAudioValid(boolean audioValid) {
 		this.audioValid = audioValid;
-	}
-
-	public Integer getInteriewPodId() {
-		return interiewPodId;
-	}
-
-	public void setInteriewPodId(Integer interiewPodId) {
-		this.interiewPodId = interiewPodId;
 	}
 
 	public Status getStreamStatus() {

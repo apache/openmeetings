@@ -19,7 +19,7 @@
 package org.apache.openmeetings.util;
 
 import static org.apache.openmeetings.util.OmFileHelper.FILE_NAME_FMT;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.getFileExt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 import static org.apache.tika.metadata.TikaMetadataKeys.RESOURCE_NAME_KEY;
@@ -54,10 +54,10 @@ public class StoredFile {
 			application("x-tika-msoffice"), application("x-tika-ooxml"), application("msword")
 			, application("vnd.wordperfect"), application("rtf")));
 
-	private static final MediaType MIME_JPG = MediaType.parse(JPG_MIME_TYPE);
+	private static final MediaType MIME_PNG = MediaType.parse(PNG_MIME_TYPE);
 	private static final Set<MediaType> PDF_TYPES = new HashSet<>(Arrays.asList(application("pdf"), application("postscript")));
 	private static final Set<MediaType> CHART_TYPES = new HashSet<>();
-	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_JPG));
+	private static final Set<MediaType> AS_IS_TYPES = new HashSet<>(Arrays.asList(MIME_PNG));
 	private static final String ACCEPT_STRING;
 	private static TikaConfig tika;
 	static {
@@ -154,11 +154,11 @@ public class StoredFile {
 		return PDF_TYPES.contains(mime);
 	}
 
-	public boolean isJpg() {
+	public boolean isPng() {
 		if (mime == null) {
 			return false;
 		}
-		return MIME_JPG.equals(mime);
+		return MIME_PNG.equals(mime);
 	}
 
 	public boolean isImage() {

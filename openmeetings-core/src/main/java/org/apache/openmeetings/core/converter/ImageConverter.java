@@ -20,9 +20,7 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.openmeetings.util.OmFileHelper.DOC_PAGE_PREFIX;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
 import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
@@ -36,6 +34,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -71,16 +70,16 @@ public class ImageConverter extends BaseConverter {
 	}
 
 	public ProcessResultList convertImage(BaseFileItem f, StoredFile sf, ProcessResultList logs) throws IOException {
-		File jpg = f.getFile(EXTENSION_JPG);
-		if (!sf.isJpg()) {
+		File png = f.getFile(EXTENSION_PNG);
+		if (!sf.isPng()) {
 			File img = f.getFile(sf.getExt());
 
-			log.debug("##### convertImage destinationFile: " + jpg);
-			logs.add(convertSingleJpg(img, jpg));
-		} else if (!jpg.exists()){
-			copyFile(f.getFile(sf.getExt()), jpg);
+			log.debug("##### convertImage destinationFile: " + png);
+			logs.add(convertSinglePng(img, png));
+		} else if (!png.exists()){
+			copyFile(f.getFile(sf.getExt()), png);
 		}
-		logs.add(initSize(f, jpg, JPG_MIME_TYPE));
+		logs.add(initSize(f, png, PNG_MIME_TYPE));
 		return logs;
 	}
 
@@ -88,16 +87,16 @@ public class ImageConverter extends BaseConverter {
 		ProcessResultList returnMap = new ProcessResultList();
 
 		// User Profile Update
-		File[] files = getUploadProfilesUserDir(userId).listFiles(fi -> fi.getName().endsWith(EXTENSION_JPG));
+		File[] files = getUploadProfilesUserDir(userId).listFiles(fi -> fi.getName().endsWith(EXTENSION_PNG));
 		if (files != null) {
 			for (File f : files) {
 				FileUtils.deleteQuietly(f);
 			}
 		}
 
-		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), PROFILE_FILE_NAME, EXTENSION_JPG);
+		File destinationFile = OmFileHelper.getNewFile(getUploadProfilesUserDir(userId), PROFILE_FILE_NAME, EXTENSION_PNG);
 		if (!skipConvertion) {
-			returnMap.add(convertSingleJpg(file, destinationFile));
+			returnMap.add(convertSinglePng(file, destinationFile));
 		} else {
 			FileUtils.copyFile(file, destinationFile);
 		}
@@ -109,7 +108,7 @@ public class ImageConverter extends BaseConverter {
 
 		String pictureuri = destinationFile.getName();
 		User us = userDao.get(userId);
-		us.setUpdated(new java.util.Date());
+		us.setUpdated(new Date());
 		us.setPictureuri(pictureuri);
 		userDao.update(us, userId);
 
@@ -151,10 +150,10 @@ public class ImageConverter extends BaseConverter {
 	 * @throws IOException
 	 *
 	 */
-	private ProcessResult convertSingleJpg(File in, File out) throws IOException {
+	private ProcessResult convertSinglePng(File in, File out) throws IOException {
 		String[] argv = new String[] { getPathToConvert(), in.getCanonicalPath(), out.getCanonicalPath() };
 
-		return ProcessHelper.executeScript("convertSingleJpg", argv);
+		return ProcessHelper.executeScript("convertSinglePng", argv);
 	}
 
 	public ProcessResult resize(File in, File out, Integer width, Integer height) throws IOException {

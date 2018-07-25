@@ -22,7 +22,6 @@ import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.FUNC_TOGGLE_A
 import static org.apache.openmeetings.web.room.sidebar.RoomSidebar.activityAllowed;
 
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.room.sidebar.icon.ClientIcon;
 
@@ -39,7 +38,7 @@ public abstract class RoomActivityIcon extends ClientIcon {
 
 	@Override
 	protected String getScript() {
-		return String.format("%s('%s', '%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid, Pod.none.name());
+		return String.format("%s('%s', '%s');", FUNC_TOGGLE_ACTIVITY, activity.name(), uid);
 	}
 
 	protected boolean visible() {

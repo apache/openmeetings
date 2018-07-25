@@ -125,7 +125,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 	@Test
 	public void testCreateWithFiles2() throws IOException {
 		//lets create real file
-		CallResult<FileItemDTO> fileCall = createVerifiedFile(getDefaultProfilePicture(), "img.jpg", BaseFileItem.Type.Image);
+		CallResult<FileItemDTO> fileCall = createVerifiedFile(getDefaultProfilePicture(), "img.png", BaseFileItem.Type.Image);
 
 		Room.Type type = Room.Type.presentation;
 		String name = "Unit Test Ext Room4";

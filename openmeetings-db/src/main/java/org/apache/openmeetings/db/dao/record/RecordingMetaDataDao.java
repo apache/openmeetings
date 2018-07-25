@@ -68,7 +68,7 @@ public class RecordingMetaDataDao {
 	}
 
 	public Long add(Long recordingId, Date recordStart, boolean isAudioOnly,
-			boolean isVideoOnly, boolean isScreenData, String streamName, Integer interiewPodId) {
+			boolean isVideoOnly, boolean isScreenData, String streamName, String sid) {
 		try {
 
 			RecordingMetaData metaData = new RecordingMetaData();
@@ -78,7 +78,7 @@ public class RecordingMetaDataDao {
 			metaData.setVideoOnly(isVideoOnly);
 			metaData.setScreenData(isScreenData);
 			metaData.setStreamName(streamName);
-			metaData.setInteriewPodId(interiewPodId);
+			metaData.setSid(sid);
 			metaData = update(metaData);
 			return metaData.getId();
 		} catch (Exception ex2) {

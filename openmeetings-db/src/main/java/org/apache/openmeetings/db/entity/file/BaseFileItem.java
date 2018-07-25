@@ -271,7 +271,14 @@ public abstract class BaseFileItem extends HistoricalEntity {
 					f = new File(getUploadWmlDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_WML : ext));
 					break;
 				case Image:
-					f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_JPG : ext));
+					if (ext == null) {
+						f = new File(d, String.format(FILE_NAME_FMT, getHash(), EXTENSION_PNG));
+						if (!f.exists()) {
+							f = new File(d, String.format(FILE_NAME_FMT, getHash(), EXTENSION_JPG)); // backward compatibility
+						}
+					} else {
+						f = new File(d, String.format(FILE_NAME_FMT, getHash(), ext));
+					}
 					break;
 				case Recording:
 					f = new File(getStreamsHibernateDir(), String.format(FILE_NAME_FMT, getHash(), ext == null ? EXTENSION_MP4 : ext));
@@ -364,7 +371,7 @@ public abstract class BaseFileItem extends HistoricalEntity {
 		Set<String> exclusions = new HashSet<>();
 
 		OriginalFilter() {
-			exclusions.add(EXTENSION_JPG);
+			exclusions.add(EXTENSION_PNG);
 			exclusions.add("swf");
 			if (Type.Presentation == getType()) {
 				exclusions.add(EXTENSION_PDF);

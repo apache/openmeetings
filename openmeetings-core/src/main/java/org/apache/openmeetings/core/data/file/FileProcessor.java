@@ -118,8 +118,8 @@ public class FileProcessor {
 					log.debug("uploaded chart file"); // NOT implemented yet
 					break;
 				case Image:
-					// convert it to JPG
-					log.debug("##### convert it to JPG: ");
+					// convert it to PNG
+					log.debug("##### convert it to PNG: ");
 					copyFile(temp, file);
 					imageConverter.convertImage(f, sf);
 					break;

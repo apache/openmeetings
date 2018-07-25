@@ -29,7 +29,6 @@ import java.util.ArrayList;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.room.Room.RoomElement;
@@ -79,7 +78,6 @@ public class RoomSidebar extends Panel {
 	public static final String PARAM_ACTIVITY = "activity";
 	public static final String PARAM_RIGHT = "right";
 	public static final String PARAM_UID = "uid";
-	public static final String PARAM_POD = "pod";
 	public static final String PARAM_SETTINGS = "s";
 	private final RoomPanel room;
 	private UploadDialog upload;
@@ -197,10 +195,8 @@ public class RoomSidebar extends Panel {
 					return;
 				}
 				Client.Activity a = Client.Activity.valueOf(getRequest().getRequestParameters().getParameterValue(PARAM_ACTIVITY).toString());
-				StringValue podStr = getRequest().getRequestParameters().getParameterValue(PARAM_POD);
-				Pod pod = podStr.isEmpty() ? Pod.none : Pod.valueOf(podStr.toString());
 				Client c = getBean(ClientManager.class).get(uid);
-				toggleActivity(c, a, pod);
+				toggleActivity(c, a);
 			} catch (Exception e) {
 				log.error("Unexpected exception while toggle 'activity'", e);
 			}
@@ -219,7 +215,7 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
-						toggleActivity(c, Client.Activity.broadcastAV, Pod.none);
+						toggleActivity(c, Client.Activity.broadcastAV);
 					}
 				}
 				sendUpdatedClient(c);
@@ -272,7 +268,7 @@ public class RoomSidebar extends Panel {
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_RIGHT, toggleRight, explicit(PARAM_RIGHT), explicit(PARAM_UID))));
-		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID), explicit(PARAM_POD))));
+		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_TOGGLE_ACTIVITY, toggleActivity, explicit(PARAM_ACTIVITY), explicit(PARAM_UID))));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_ACTION, roomAction, explicit(PARAM_ACTION), explicit(PARAM_UID))));
 		response.render(new PriorityHeaderItem(getNamedFunction(FUNC_SETTINGS, avSettings, explicit(PARAM_SETTINGS))));
 	}
@@ -316,7 +312,7 @@ public class RoomSidebar extends Panel {
 		upload.open(handler);
 	}
 
-	public void toggleActivity(Client c, Client.Activity a, Pod _pod) {
+	public void toggleActivity(Client c, Client.Activity a) {
 		if (c == null) {
 			return;
 		}
@@ -338,14 +334,7 @@ public class RoomSidebar extends Panel {
 			if (a == Client.Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
 				return;
 			}
-			Pod pod = c.getPod();
-			c.setPod(_pod);
-			if (pod != null && pod != Pod.none && pod != c.getPod()) {
-				//pod has changed, no need to toggle
-				c.set(a);
-			} else {
-				c.toggle(a);
-			}
+			c.toggle(a);
 			room.broadcast(c); //will update client
 		}
 	}
