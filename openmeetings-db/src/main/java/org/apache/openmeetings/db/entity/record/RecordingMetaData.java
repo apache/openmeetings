@@ -94,7 +94,7 @@ public class RecordingMetaData extends HistoricalEntity {
 	private String streamName;
 
 	@Column(name = "sid")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String sid;
 
 	@Column(name = "is_audio_only", nullable = false)
