@@ -311,6 +311,9 @@
 #video-settings {
 	padding: 5px 10px;
 }
+ul.settings-menu {
+	max-height: 130px;
+}
 .ui-dialog.video .title {
 	font-weight: bold;
 }
