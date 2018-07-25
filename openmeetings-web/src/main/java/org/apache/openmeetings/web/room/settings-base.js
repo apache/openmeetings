@@ -1,4 +1,18 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
+$.widget('openmeetings.iconselectmenu', $.ui.selectmenu, {
+	_renderItem: function(ul, item) {
+		ul.addClass('settings-menu');
+		const li = $('<li>'), wrapper = $('<div>', {text: item.label});
+		if (item.disabled) {
+			li.addClass('ui-state-disabled');
+		}
+		$('<span>', {
+			style: item.element.attr('data-style')
+			, 'class': 'ui-icon ' + (item.element.attr('data-class') || 'ui-icon-blank')
+		}).appendTo(wrapper);
+		return li.append(wrapper).appendTo(ul);
+	}
+});
 var MicLevel = (function() {
 	let ctx, mic, script, vol = .0;
 
@@ -113,9 +127,27 @@ var VideoSettings = (function() {
 		}));
 		vs = $('#video-settings');
 		lm = vs.find('.level-meter');
-		cam = vs.find('select.cam');
-		mic = vs.find('select.mic');
-		res = vs.find('select.cam-resolution');
+		cam = vs.find('select.cam').iconselectmenu({
+			appendTo: '.cam-row'
+			, change: function(event, ui) {
+				_readValues();
+				swf.camChanged(s.video.cam);
+			}
+		});
+		mic = vs.find('select.mic').iconselectmenu({
+			appendTo: '.mic-row'
+			, change: function(event, ui) {
+				_readValues();
+				swf.micChanged(s.video.mic);
+			}
+		});
+		res = vs.find('select.cam-resolution').iconselectmenu({
+			appendTo: '.res-row'
+			, change: function(event, ui) {
+				_readValues();
+				swf.resChanged(s.video.width, s.video.height);
+			}
+		});
 		vidScroll = vs.find('.vid-block .video-conainer');
 		timer = vs.find('.timer');
 		vid = vidScroll.find('video');
@@ -287,13 +319,18 @@ var VideoSettings = (function() {
 	function _micActivity(level) {
 		lm.progressbar("value", Math.max(0, level));
 	}
+	function _setLoading(el) {
+		el.find('option').remove();
+		el.append(OmUtil.tmpl('#settings-option-loading'));//!settings-option-disabled
+		el.iconselectmenu('refresh');
+	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');
 			return;
 		}
-		cam.find('option[value!="-1"]').remove();
-		mic.find('option[value!="-1"]').remove();
+		_setLoading(cam);
+		_setLoading(mic);
 		navigator.mediaDevices.getUserMedia({video:true, audio:true})
 			.then(function(stream) {
 				const devices = navigator.mediaDevices.enumerateDevices()
@@ -309,11 +346,16 @@ var VideoSettings = (function() {
 			})
 			.then(function(devices) {
 				let cCount = 0, mCount = 0;
+				_load();
+				cam.find('option').remove();
+				cam.append(OmUtil.tmpl('#settings-option-disabled'));
+				mic.find('option').remove();
+				mic.append(OmUtil.tmpl('#settings-option-disabled'));
 				devices.forEach(function(device) {
 					if ('audioinput' === device.kind) {
 						const o = $('<option></option>').attr('value', mCount).text(device.label)
 							.data('device-id', device.deviceId);
-						if (mCount === s.video.cam) {
+						if (mCount === s.video.mic) {
 							o.prop('selected', true);
 						}
 						mic.append(o);
@@ -328,15 +370,8 @@ var VideoSettings = (function() {
 						cCount++;
 					}
 				});
-				cam.prop('disabled', false).off().change(function() {
-					_readValues();
-				});
-				mic.prop('disabled', false).off().change(function() {
-					_readValues();
-				});
-				res.off().change(function() {
-					_readValues();
-				});
+				cam.iconselectmenu('refresh');
+				mic.iconselectmenu('refresh');
 				res.find('option').each(function() {
 					const o = $(this).data();
 					if (o.width === s.video.width && o.height === s.video.height) {
