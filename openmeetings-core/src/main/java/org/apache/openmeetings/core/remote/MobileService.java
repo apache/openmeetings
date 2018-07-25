@@ -28,7 +28,6 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -263,7 +262,7 @@ public class MobileService {
 					add(map, "login", c.getLogin());
 					add(map, "email", c.getEmail());
 					add(map, "avsettings", c.getAvsettings());
-					add(map, "interviewPodId", c.getInterviewPodId());
+					add(map, "interviewPodId", null);
 					add(map, "vWidth", c.getWidth());
 					add(map, "vHeight", c.getHeight());
 					result.add(map);
@@ -344,7 +343,7 @@ public class MobileService {
 		return result;
 	}
 
-	public Map<String, Object> updateAvMode(String avMode, String width, String height, Integer interviewPodId) {
+	public Map<String, Object> updateAvMode(String avMode, String width, String height, @SuppressWarnings("unused") Integer interviewPodId) {
 		Map<String, Object> result = new HashMap<>();
 		/*
 		IConnection current = Red5.getConnectionLocal();
@@ -356,9 +355,6 @@ public class MobileService {
 		}
 		c.setWidth(Double.valueOf(width).intValue());
 		c.setHeight(Double.valueOf(height).intValue());
-		if (interviewPodId > 0) {
-			c.setInterviewPodId(interviewPodId);
-		}
 		streamClientManager.update(c);
 		Map<String, Object> hsm = new HashMap<>();
 		hsm.put("client", c);

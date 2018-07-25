@@ -41,7 +41,6 @@ import org.apache.openmeetings.db.dao.server.SessiondataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.basic.Client.Pod;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
@@ -175,6 +174,7 @@ public class StreamClientManager implements IStreamClientManager {
 		}
 		User u = client.getUser();
 		rcl.setUserId(u.getId());
+		rcl.setRoomType(client.getRoomType());
 		rcl.setLogin(u.getLogin());
 		rcl.setFirstname(u.getFirstname());
 		rcl.setLastname(u.getLastname());
@@ -191,9 +191,6 @@ public class StreamClientManager implements IStreamClientManager {
 			if (forceSize || rcl.getWidth() == 0 || rcl.getHeight() == 0) {
 				rcl.setWidth(client.getWidth());
 				rcl.setHeight(client.getHeight());
-			}
-			if (client.getPod() != Pod.none) {
-				rcl.setInterviewPodId(client.getPod() == Pod.left ? 1 : 2);
 			}
 			StringBuilder sb = new StringBuilder();
 			if (client.hasActivity(Activity.broadcastA)) {

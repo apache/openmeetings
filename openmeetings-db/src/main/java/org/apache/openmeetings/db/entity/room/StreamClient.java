@@ -63,11 +63,11 @@ public class StreamClient implements IClient {
 	private Long metaId;
 	private String externalUserId;
 	private String externalUserType;
-	private Integer interviewPodId = null;
 	private boolean allowRecording = true;
 	private boolean micMuted = false;
 	private String serverId;
 	private Long roomId;
+	private Room.Type roomType;
 	private Type type = Type.video;
 
 	@Override
@@ -352,14 +352,6 @@ public class StreamClient implements IClient {
 		this.externalUserType = externalUserType;
 	}
 
-	public Integer getInterviewPodId() {
-		return interviewPodId;
-	}
-
-	public void setInterviewPodId(Integer interviewPodId) {
-		this.interviewPodId = interviewPodId;
-	}
-
 	public boolean isAllowRecording() {
 		return allowRecording;
 	}
@@ -388,6 +380,15 @@ public class StreamClient implements IClient {
 	@Override
 	public Long getRoomId() {
 		return roomId;
+	}
+
+	@Override
+	public Room.Type getRoomType() {
+		return roomType;
+	}
+
+	public void setRoomType(Room.Type roomType) {
+		this.roomType = roomType;
 	}
 
 	public Type getType() {

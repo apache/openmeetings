@@ -19,7 +19,6 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
-import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData;
 import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
 import org.apache.openmeetings.util.OmFileHelper;
-import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -58,11 +56,11 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			log.warn("Conversion is NOT started. Recording with ID {} is not found", id);
 			return;
 		}
+		ProcessResultList logs = new ProcessResultList();
+		List<File> waveFiles = new ArrayList<>();
 		try {
 			log.debug("recording {}", r.getId());
 
-			ProcessResultList logs = new ProcessResultList();
-			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
 
 			RecordingMetaData screenMetaData = metaDataDao.getScreenByRecording(r.getId());
@@ -83,28 +81,10 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			screenMetaData = waitForTheStream(screenMetaData.getId());
 
-			stripAudioFirstPass(r, logs, waveFiles, streamFolder);
-
 			// Merge Wave to Full Length
 			File wav = new File(streamFolder, screenMetaData.getStreamName() + "_FINAL_WAVE.wav");
+			createWav(r, logs, streamFolder, waveFiles, wav);
 
-			if (waveFiles.isEmpty()) {
-				// create default Audio to merge it. strip to content length
-				String oneSecWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
-
-				// Calculate delta at beginning
-				double duration = diffSeconds(r.getRecordEnd(), r.getRecordStart());
-
-				String[] cmd = new String[] { getPathToSoX(), oneSecWav, wav.getCanonicalPath(), "pad", "0", String.valueOf(duration) };
-
-				logs.add(ProcessHelper.executeScript("generateSampleAudio", cmd));
-			} else if (waveFiles.size() == 1) {
-				wav = waveFiles.get(0);
-			} else {
-				String[] soxArgs = mergeAudioToWaves(waveFiles, wav);
-
-				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", soxArgs));
-			}
 			screenMetaData.setFullWavAudioData(wav.getName());
 			metaDataDao.update(screenMetaData);
 
@@ -137,11 +117,13 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);
 
-			postProcess(r, mp4path, logs, waveFiles);
+			finalize(r, mp4path, logs);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);
 		}
+		postProcess(r, logs);
+		postProcess(waveFiles);
 		recordingDao.update(r);
 	}
 }

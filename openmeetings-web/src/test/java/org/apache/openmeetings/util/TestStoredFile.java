@@ -30,9 +30,9 @@ import org.junit.Test;
 
 public class TestStoredFile extends AbstractJUnitDefaults {
 	@Test
-	public void testJpeg() throws FileNotFoundException, IOException {
+	public void testPng() throws FileNotFoundException, IOException {
 		File f = getDefaultProfilePicture();
-		for (String ext : new String[] {null, "txt", "png"}) {
+		for (String ext : new String[] {null, "txt", "jpg"}) {
 			StoredFile sf = new StoredFile("test image", ext, f);
 			assertTrue("Type should be detected as image", sf.isImage());
 			assertTrue("Type should be detected as image", sf.isAsIs());

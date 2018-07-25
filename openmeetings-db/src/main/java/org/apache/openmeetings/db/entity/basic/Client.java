@@ -55,9 +55,6 @@ public class Client implements IClient, IWsClient {
 		, record
 		, publish //sends A/V to external server
 	}
-	public enum Pod {
-		none, left, right;
-	}
 	private final String sessionId;
 	private final int pageId;
 	private User user;
@@ -69,7 +66,6 @@ public class Client implements IClient, IWsClient {
 	private final Set<Activity> activities = new ConcurrentHashSet<>();
 	private final Set<String> streams = new ConcurrentHashSet<>();
 	private final Date connectedSince;
-	private Pod pod;
 	private int cam = -1;
 	private int mic = -1;
 	private int width = 0;
@@ -274,14 +270,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	public Pod getPod() {
-		return pod;
-	}
-
-	public void setPod(Pod pod) {
-		this.pod = pod;
-	}
-
 	public boolean isCamEnabled() {
 		return cam > -1;
 	}
@@ -371,6 +359,11 @@ public class Client implements IClient, IWsClient {
 		return room == null ? null : room.getId();
 	}
 
+	@Override
+	public Room.Type getRoomType() {
+		return room == null ? null : room.getType();
+	}
+
 	public JSONObject toJson(boolean self) {
 		JSONObject u = new JSONObject();
 		if (user != null) {
@@ -392,7 +385,6 @@ public class Client implements IClient, IWsClient {
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
 				.put("activities", new JSONArray(activities))
-				.put("pod", pod)
 				.put("width", width)
 				.put("height", height)
 				.put("self", self);
@@ -457,7 +449,6 @@ public class Client implements IClient, IWsClient {
 			streams.clear();
 			streams.addAll(ss);
 		}
-		pod = c.pod;
 		cam = c.cam;
 		mic = c.mic;
 		width = c.width;
@@ -498,6 +489,6 @@ public class Client implements IClient, IWsClient {
 	@Override
 	public String toString() {
 		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
-				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + ", pod = " + pod + "]";
+				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
 	}
 }

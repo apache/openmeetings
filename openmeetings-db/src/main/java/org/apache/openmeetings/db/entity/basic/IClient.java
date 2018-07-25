@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.entity.basic;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.apache.openmeetings.db.entity.room.Room;
 
 /**
  * Temporary interface, will be removed after 2 types of cliens will be merged
@@ -43,6 +44,7 @@ public interface IClient extends IDataProviderEntity {
 	String getLastname();
 	String getRemoteAddress();
 	Long getRoomId();
+	Room.Type getRoomType();
 	int getWidth();
 	int getHeight();
 	void setRecordingStarted(boolean recordingStarted);

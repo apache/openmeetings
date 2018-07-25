@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.web.util;
 
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
+import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.SIP_USER_ID;
 
 import java.io.File;
@@ -80,7 +80,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 
 	@Override
 	public IResource getResource() {
-		return new ByteArrayResource(JPG_MIME_TYPE) {
+		return new ByteArrayResource(PNG_MIME_TYPE) {
 			private static final long serialVersionUID = 1L;
 			private Long userId = null;
 			private String uri = null;

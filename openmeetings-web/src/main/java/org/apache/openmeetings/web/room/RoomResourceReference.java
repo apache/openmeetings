@@ -21,10 +21,9 @@ package org.apache.openmeetings.web.room;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.JPG_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.MP4_MIME_TYPE;
 import static org.apache.openmeetings.util.OmFileHelper.PNG_MIME_TYPE;
-import static org.apache.openmeetings.util.OmFileHelper.getPublicDir;
+import static org.apache.openmeetings.util.OmFileHelper.getImagesDir;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.io.File;
@@ -78,7 +77,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 				mime = "application/xml";
 				break;
 			case Image:
-				mime = JPG_MIME_TYPE;
+				mime = PNG_MIME_TYPE;
 				break;
 			case Presentation:
 				mime = PNG_MIME_TYPE;
@@ -134,7 +133,7 @@ public class RoomResourceReference extends FileItemResourceReference<FileItem> {
 	protected File getFile(FileItem f, String ext) {
 		File file = f.getFile(ext);
 		if (file == null || !file.exists()) {
-			file = new File(getPublicDir(), String.format("deleted.%s", EXTENSION_PNG));
+			file = new File(getImagesDir(), String.format("deleted.%s", EXTENSION_PNG));
 		}
 		return file;
 	}

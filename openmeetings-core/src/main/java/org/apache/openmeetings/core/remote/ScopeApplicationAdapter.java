@@ -496,7 +496,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 			}
 			streamClientManager.update(c);
 			if (Client.Type.sharing == c.getType() && c.isRecordingStarted()) {
-				recordingService.startRecording(current.getScope(), c, false);
+				recordingService.startRecording(current.getScope(), c);
 			}
 
 			_log.debug("newStream SEND: {}", c);
@@ -514,7 +514,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 					}
 
 					_log.debug("check send to {}", rcl);
-					if (rcl.isRecordingStarted()) {
+					if (IClientUtil.getRecordingId(current.getScope()) != null) {
 						_log.debug("RCL getIsRecording newStream SEND");
 						recordingService.startStreamRecord(current);
 					}
@@ -929,7 +929,7 @@ public class ScopeApplicationAdapter /*extends MultiThreadedApplicationAdapter i
 			return;
 		}
 
-		recordingService.startRecording(getChildScope(c.getRoomId()), c, true);
+		recordingService.startRecording(getChildScope(c.getRoomId()), c);
 	}
 
 	/**

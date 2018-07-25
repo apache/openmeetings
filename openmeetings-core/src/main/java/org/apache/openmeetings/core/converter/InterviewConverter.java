@@ -18,15 +18,18 @@
  */
 package org.apache.openmeetings.core.converter;
 
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
-import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
@@ -45,14 +48,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class InterviewConverter extends BaseConverter implements IRecordingConverter {
 	private static final Logger log = LoggerFactory.getLogger(InterviewConverter.class);
-	private static class ReConverterParams {
-		private int leftSideLoud = 1;
-		private int rightSideLoud = 1;
-		@SuppressWarnings("unused")
-		private Integer leftSideTime = 0;
-		@SuppressWarnings("unused")
-		private Integer rightSideTime = 0;
-	}
 
 	// Spring loaded Beans
 	@Autowired
@@ -60,45 +55,18 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
 
-	private String[] mergeAudioToWaves(List<File> waveFiles, File wav,
-			List<RecordingMetaData> metaDataList, ReConverterParams rcv) throws IOException {
-		String[] cmdSox = new String[waveFiles.size() + 5];
-		cmdSox[0] = this.getPathToSoX();
-		cmdSox[1] = "-m";
-
-		int counter = 2;
-		for (File _wav : waveFiles) {
-			for (RecordingMetaData metaData : metaDataList) {
-				String hashFileFullNameStored = metaData.getFullWavAudioData();
-
-				if (hashFileFullNameStored.equals(_wav.getName())) {
-					if (metaData.getInteriewPodId() == 1) {
-						cmdSox[counter] = "-v " + rcv.leftSideLoud;
-						counter++;
-					}
-					if (metaData.getInteriewPodId() == 2) {
-						cmdSox[counter] = "-v " + rcv.rightSideLoud;
-						counter++;
-					}
-				}
-			}
-			cmdSox[counter] = _wav.getCanonicalPath();
-			counter++;
-		}
-
-		cmdSox[counter] = wav.getCanonicalPath();
-
-		return cmdSox;
-	}
-
 	@Override
-	public void startConversion(Long recordingId) {
-		startConversion(recordingId, false, new ReConverterParams());
-	}
-
-	public void startConversion(Long id, boolean reconversion, ReConverterParams rcv) {
+	public void startConversion(Long id) {
 		Recording r = null;
+		ProcessResultList logs = new ProcessResultList();
+		List<File> waveFiles = new ArrayList<>();
 		try {
+			// Default Image for empty interview video pods
+			final File interviewCamFile = new File(OmFileHelper.getImagesDir(), "interview_webcam.png");
+			if (!interviewCamFile.exists()) {
+				throw new ConversionException("defaultInterviewImageFile does not exist!");
+			}
+
 			r = recordingDao.get(id);
 			log.debug("recording {}", r.getId());
 			if (Strings.isEmpty(r.getHash())) {
@@ -107,109 +75,104 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			r.setStatus(Recording.Status.CONVERTING);
 			r = recordingDao.update(r);
 
-			ProcessResultList logs = new ProcessResultList();
-			List<File> waveFiles = new ArrayList<>();
 			File streamFolder = getStreamFolder(r);
-			List<RecordingMetaData> metaDataList = metaDataDao.getAudioMetaDataByRecording(r.getId());
-
-			stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaDataList);
-
-			// Merge Wave to Full Length
-			File streamFolderGeneral = getStreamsHibernateDir();
+			List<RecordingMetaData> metaList = metaDataDao.getByRecording(r.getId());
 
 			File wav = new File(streamFolder, String.format("INTERVIEW_%s_FINAL_WAVE.wav", r.getId()));
-			deleteFileIfExists(wav);
+			createWav(r, logs, streamFolder, waveFiles, wav);
 
-			if (waveFiles.isEmpty()) {
-				// create default Audio to merge it.
-				// strip to content length
-				File outputWav = new File(streamFolderGeneral, "one_second.wav");
+			final String interviewCam = interviewCamFile.getCanonicalPath();
 
-				// Calculate delta at beginning
-				double deltaPadding = diffSeconds(r.getRecordEnd(), r.getRecordStart());
-
-				String[] cmdSox = new String[] { getPathToSoX(), outputWav.getCanonicalPath(), wav.getCanonicalPath(), "pad", "0", String.valueOf(deltaPadding) };
-
-				logs.add(ProcessHelper.executeScript("generateSampleAudio", cmdSox));
-			} else if (waveFiles.size() == 1) {
-				wav = waveFiles.get(0);
-			} else {
-				String[] soxArgs;
-				if (reconversion) {
-					soxArgs = mergeAudioToWaves(waveFiles, wav, metaDataList, rcv);
-				} else {
-					soxArgs = mergeAudioToWaves(waveFiles, wav);
-				}
-
-				logs.add(ProcessHelper.executeScript("mergeAudioToWaves", soxArgs));
-			}
-			// Default Image for empty interview video pods
-			final File defaultInterviewImageFile = new File(streamFolderGeneral, "default_interview_image.png");
-
-			if (!defaultInterviewImageFile.exists()) {
-				throw new ConversionException("defaultInterviewImageFile does not exist!");
-			}
-
-			final int flvWidth = 320;
-			final int flvHeight = 260;
+			final int width = 320;
+			final int height = 260;
 			// Merge Audio with Video / Calculate resulting FLV
 
-			String[] pods = new String[2];
-			boolean found = false;
-			for (RecordingMetaData meta : metaDataList) {
-				File flv = getRecordingMetaData(r.getRoomId(), meta.getStreamName());
-
-				Integer pod = meta.getInteriewPodId();
-				if (flv.exists() && pod != null && pod > 0 && pod < 3) {
-					String path = flv.getCanonicalPath();
-					/*
-					 * CHECK FILE:
-					 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.flv -v error -f null file.null
-					 */
-					String[] args = new String[] {getPathToFFMPEG(), "-y"
-							, "-i", path
-							, "-an" // only input files with video will be treated as video sources
-							, "-v", "error"
-							, "-f", "null"
-							, "file.null"};
-					ProcessResult res = ProcessHelper.executeScript("checkFlvPod_" + pod , args, true);
-					logs.add(res);
-					if (res.isOk()) {
-						long diff = diff(meta.getRecordStart(), meta.getRecording().getRecordStart());
-						if (diff != 0L) {
-							// stub to add
-							// ffmpeg -y -loop 1 -i /home/solomax/work/openmeetings/branches/3.0.x/dist/red5/webapps/openmeetings/streams/hibernate/default_interview_image.jpg -filter_complex '[0:0]scale=320:260' -c:v libx264 -t 00:00:29.059 -pix_fmt yuv420p out.flv
-							File podFB = new File(streamFolder, String.format("%s_pod_%s_blank.flv", meta.getStreamName(), pod));
-							String podPB = podFB.getCanonicalPath();
-							String[] argsPodB = new String[] { getPathToFFMPEG(), "-y" //
-									, "-loop", "1", "-i", defaultInterviewImageFile.getCanonicalPath() //
-									, "-filter_complex", String.format("[0:0]scale=%1$d:%2$d", flvWidth, flvHeight) //
-									, "-c:v", "libx264" //
-									, "-t", formatMillis(diff) //
-									, "-pix_fmt", "yuv420p" //
-									, podPB };
-							logs.add(ProcessHelper.executeScript("blankFlvPod_" + pod , argsPodB));
-
-							//ffmpeg -y -i out.flv -i rec_15_stream_4_2014_07_15_20_41_03.flv -filter_complex '[0:0]setsar=1/1[sarfix];[1:0]scale=320:260,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]' -map '[v]'  output1.flv
-							File podF = new File(streamFolder, OmFileHelper.getName(meta.getStreamName() + "_pod_" + pod, EXTENSION_FLV));
-							String podP = podF.getCanonicalPath();
-							String[] argsPod = new String[] { getPathToFFMPEG(), "-y"//
-									, "-i", podPB //
-									, "-i", path //
-									, "-filter_complex", String.format("[0:0]setsar=1/1[sarfix];[1:0]scale=%1$d:%2$d,setsar=1/1[scale];[sarfix] [scale] concat=n=2:v=1:a=0 [v]", flvWidth, flvHeight) //
-									, "-map", "[v]" //
-									, podP };
-							logs.add(ProcessHelper.executeScript("shiftedFlvPod_" + pod , argsPod));
-
-							pods[pod - 1] = podP;
-						} else {
-							pods[pod - 1] = path;
+			// group by sid first to get all pods
+			Map<String, List<RecordingMetaData>> metaBySid = metaList.stream().collect(
+					Collectors.groupingBy(RecordingMetaData::getSid
+					, () -> new LinkedHashMap<>()
+					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingMetaData::getRecordStart)).collect(Collectors.toList()))));
+			List<String> pods = new ArrayList<>();
+			int N = pods.size();
+			for (Entry<String, List<RecordingMetaData>> e : metaBySid.entrySet()) {
+				Date pStart = r.getRecordStart();
+				List<PodPart> parts = new ArrayList<>();
+				for (RecordingMetaData meta : e.getValue()) {
+					File flv = getRecordingMetaData(r.getRoomId(), meta.getStreamName());
+					if (flv.exists()) {
+						String path = flv.getCanonicalPath();
+						/* CHECK FILE:
+						 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.flv -v error -f null file.null
+						 */
+						String[] args = new String[] {getPathToFFMPEG(), "-y"
+								, "-i", path
+								, "-v", "error"
+								, "-f", "null"
+								, "file.null"};
+						ProcessResult res = ProcessHelper.executeScript(String.format("checkFlvPod_%s_%s", N, parts.size()), args, true);
+						logs.add(res);
+						if (!res.isWarn()) {
+							long diff = diff(meta.isAudioOnly() ? meta.getRecordEnd() : meta.getRecordStart(), pStart);
+							//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
+							PodPart.add(parts, diff);
+							if (!meta.isAudioOnly()) {
+								parts.add(new PodPart(path));
+							}
+							pStart = meta.getRecordEnd();
 						}
 					}
-					found = true;
+				}
+				if (!parts.isEmpty()) {
+					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.flv", id, N)).getCanonicalPath();
+					long diff = diff(pStart, r.getRecordEnd());
+					// add blank pod till the end
+					//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
+					PodPart.add(parts, diff);
+					/* create continuous pod
+					 * ffmpeg \
+					 *	-loop 1 -framerate 24 -t 10 -i image1.jpg \
+					 *	-i video.mp4 \
+					 *	-loop 1 -framerate 24 -t 10 -i image2.jpg \
+					 *	-loop 1 -framerate 24 -t 10 -i image3.jpg \
+					 *	-filter_complex "[0][1][2][3]concat=n=4:v=1:a=0" out.mp4
+					 */
+					List<String> args = new ArrayList<>();
+					args.add(getPathToFFMPEG());
+					args.add("-y");
+					args.add("-an");
+					StringBuilder videos = new StringBuilder();
+					StringBuilder concat = new StringBuilder();
+					for (int i = 0; i < parts.size(); ++i) {
+						PodPart p = parts.get(i);
+						if (p.getFile() == null) {
+							args.add("-loop");
+							args.add("1");
+							args.add("-t");
+							args.add(formatMillis(p.getDuration()));
+							args.add("-i");
+							args.add(interviewCam);
+						} else {
+							args.add("-i");
+							args.add(p.getFile());
+						}
+						videos.append('[').append(i).append(']')
+							.append("scale=").append(width).append(':').append(height)
+							.append("[v").append(i).append("]; ");
+						concat.append("[v").append(i).append(']');
+					}
+					args.add("-filter_complex");
+					args.add(concat.insert(0, videos).append("concat=n=").append(parts.size()).append(":v=1:a=0").toString());
+					args.add(podX);
+					ProcessResult res = ProcessHelper.executeScript(String.format("Full Flv pod_%s", N), args.toArray(new String[0]), true);
+					logs.add(res);
+					if (res.isWarn()) {
+						throw new ConversionException("Fail to create pod");
+					}
+					pods.add(podX);
+					N = pods.size();
 				}
 			}
-			if (!found) {
+			if (N == 0) {
 				ProcessResult res = new ProcessResult();
 				res.setProcess("CheckFlvFilesExists");
 				res.setError("No valid pods found");
@@ -217,47 +180,99 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				logs.add(res);
 				return;
 			}
-			boolean shortest = false;
+			double ratio = Math.sqrt(N / Math.sqrt(2));
+			int w = ratio < 1 ? N : (int)Math.round(ratio);
+			w = Math.max(w, (int)Math.round(1. * N / w));
 			List<String> args = new ArrayList<>();
-			for (int i = 0; i < 2; ++i) {
-				/*
-				 * INSERT BLANK INSTEAD OF BAD PAD:
-				 * ffmpeg -loop 1 -i default_interview_image.jpg -i rec_316_stream_569_2013_08_28_11_51_45.flv -filter_complex '[0:v]scale=320:260,pad=2*320:260[left];[1:v]scale=320:260[right];[left][right]overlay=main_w/2:0' -shortest -y out4.flv
-				 *
-				 * JUST MERGE:
-				 * ffmpeg -i rec_316_stream_569_2013_08_28_11_51_45.flv -i rec_316_stream_569_2013_08_28_11_51_45.flv -filter_complex '[0:v]scale=320:260,pad=2*320:260[left];[1:v]scale=320:260[right];[left][right]overlay=main_w/2:0' -y out4.flv
+			if (N == 1) {
+				args.add("-i");
+				args.add(pods.get(0));
+				args.add("-i");
+				args.add(wav.getCanonicalPath());
+				args.add("-map");
+				args.add("[0]");
+			} else {
+				/* Creating grid
+				 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
+				 *	-filter_complex "[0:v][1:v]hstack[t];[2:v][3:v]hstack[b];[t][b]vstack[v]" \
+				 *	-map "[v]" -map 4:a -c:a copy -shortest output.mp4
 				 */
-				if (pods[i] == null) {
-					shortest = true;
-					args.add("-loop"); args.add("1");
-					args.add("-i"); args.add(defaultInterviewImageFile.getCanonicalPath());
-				} else {
-					args.add("-i"); args.add(pods[i]);
+				StringBuilder cols = new StringBuilder();
+				StringBuilder rows = new StringBuilder();
+				for (int i = 0, j = 0; i < N; ++i) {
+					args.add("-i");
+					args.add(pods.get(i));
+					cols.append('[').append(i).append(":v]");
+					if (i != 0 && i % w == 0) {
+						cols.append("hstack[c").append(j).append("];");
+						rows.append("[c").append(j).append(']');
+						j++;
+					}
+					if (i == N - 1) {
+						if (j == 0) {
+							cols.append("hstack[v]");
+						} else {
+							rows.append("vstack[v]");
+						}
+					}
 				}
+				args.add("-i");
+				args.add(wav.getCanonicalPath());
+				args.add("-filter_complex");
+				args.add(cols.append(rows).toString());
+				args.add("-map");
+				args.add("[v]");
 			}
-			args.add("-i"); args.add(wav.getCanonicalPath());
-			args.add("-filter_complex");
-			args.add(String.format("[0:v]scale=%1$d:%2$d,pad=2*%1$d:%2$d[left];[1:v]scale=%1$d:%2$d[right];[left][right]overlay=main_w/2:0%3$s"
-					, flvWidth, flvHeight, shortest ? ":shortest=1" : ""));
-			if (shortest) {
-				args.add("-shortest");
-			}
-			args.add("-map"); args.add("0:0");
-			args.add("-map"); args.add("1:0");
-			args.add("-map"); args.add("2:0");
+			args.add("-map");
+			args.add(String.format("%s:a", N));
 			args.add("-qmax"); args.add("1");
 			args.add("-qmin"); args.add("1");
 
-			r.setWidth(2 * flvWidth);
-			r.setHeight(flvHeight);
+			r.setWidth(w * width);
+			r.setHeight((N / w) * height);
 
 			String mp4path = convertToMp4(r, args, logs);
 
-			postProcess(r, mp4path, logs, waveFiles);
+			finalize(r, mp4path, logs);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);
+		} finally {
+			if (Recording.Status.CONVERTING == r.getStatus()) {
+				r.setStatus(Recording.Status.ERROR);
+			}
+			postProcess(r, logs);
+			postProcess(waveFiles);
+			recordingDao.update(r);
 		}
-		recordingDao.update(r);
+	}
+
+	private static class PodPart {
+		final String file;
+		final long duration;
+
+		public PodPart(String file) {
+			this.file = file;
+			this.duration = 0L;
+		}
+
+		public PodPart(long duration) {
+			this.file = null;
+			this.duration = duration;
+		}
+
+		public String getFile() {
+			return file;
+		}
+
+		public long getDuration() {
+			return duration;
+		}
+
+		public static void add(List<PodPart> parts, long duration) {
+			if (duration != 0L) {
+				parts.add(new PodPart(duration));
+			}
+		}
 	}
 }
