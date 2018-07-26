@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dao.basic;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
@@ -73,6 +74,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationN
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setChatSenndOnEnter;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setCryptClassName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setDefaultLang;
@@ -384,6 +386,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_LNAME_MIN_LENGTH:
 				reloadLnameMinLength();
 				break;
+			case CONFIG_CHAT_SEND_ON_ENTER:
+				reloadChatSendOnEnter();
+				break;
 		}
 		return entity;
 	}
@@ -479,6 +484,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setMinLnameLength(getInt(CONFIG_LNAME_MIN_LENGTH, USER_LOGIN_MINIMUM_LENGTH));
 	}
 
+	private void reloadChatSendOnEnter() {
+		setChatSenndOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -498,6 +507,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadSipContext();
 		reloadFnameMinLength();
 		reloadLnameMinLength();
+		reloadChatSendOnEnter();
 	}
 
 	private JSONObject reloadRoomSettings() {
