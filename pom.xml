@@ -331,26 +331,26 @@
 			</build>
 		</profile>
 	</profiles>
-	<url>http://openmeetings.apache.org</url>
+	<url>https://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
 	<organization>
 		<name>Apache Software Foundation</name>
-		<url>http://apache.org</url>
+		<url>https://apache.org</url>
 	</organization>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
 	<issueManagement>
 		<system>jira</system>
-		<url>http://issues.apache.org/jira/browse/OPENMEETINGS</url>
+		<url>https://issues.apache.org/jira/browse/OPENMEETINGS</url>
 	</issueManagement>
 	<ciManagement>
 		<system>jenkins</system>
-		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/openmeetings/</url>
+		<url>https://builds.apache.org/view/M-R/view/OpenMeetings/job/OpenMeetings 4.0.x/</url>
 	</ciManagement>
 	<developers>
 		<developer>
@@ -961,7 +961,7 @@
 								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							</manifest>
 							<manifestEntries>
-								<Built-By>OpenMeetings - http://openmeetings.apache.org</Built-By>
+								<Built-By>OpenMeetings - https://openmeetings.apache.org</Built-By>
 								<Built-On>${maven.build.timestamp}</Built-On>
 								<Git-Revision>${buildNumber}</Git-Revision>
 								<Product-Version>${project.version}</Product-Version>

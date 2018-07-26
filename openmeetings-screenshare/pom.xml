@@ -162,7 +162,7 @@
 								</manifest>
 								<manifestEntries>
 									<Application-Name>${project.name}</Application-Name>
-									<Built-By>OpenMeetings - http://openmeetings.apache.org</Built-By>
+									<Built-By>OpenMeetings - https://openmeetings.apache.org</Built-By>
 									<Built-On>${maven.build.timestamp}</Built-On>
 									<Git-Revision>${buildNumber}</Git-Revision>
 									<Product-Version>${project.version}</Product-Version>
