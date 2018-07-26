@@ -111,6 +111,7 @@
 		<logback.version>1.2.3</logback.version>
 		<jetty9.version>9.4.11.v20180605</jetty9.version>
 		<license.excludedScopes>test</license.excludedScopes>
+		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
 		<!--  URL of the ASF SonarQube server  -->
 		<sonar.host.url>https://builds.apache.org/analysis</sonar.host.url>
 		<!--  Exclude all generated code  -->
@@ -747,6 +748,11 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-rs-client</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
 				<artifactId>selenium-java</artifactId>
 				<version>${selenium.version}</version>
@@ -829,6 +835,16 @@
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
 				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcprov-jdk15on</artifactId>
+				<version>${bcprov-jdk15on.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-parsers</artifactId>
+				<version>${tika-parsers.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
