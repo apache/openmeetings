@@ -89,7 +89,7 @@ public class SignInPage extends BaseInitedPage {
 			try {
 				long serverId = oauthid.toLong(-1);
 				OAuthServer server = oauthDao.get(serverId);
-				log.debug("OAuthServer=" + server);
+				log.debug("OAuthServer={}", server);
 				if (server == null) {
 					log.warn("OAuth server id={} not found", serverId);
 					return;

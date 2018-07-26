@@ -41,7 +41,6 @@ import org.apache.openmeetings.web.util.RestrictiveChoiceProvider;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.validation.validator.RfcCompliantEmailAddressValidator;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -104,7 +103,6 @@ public class GeneralUserForm extends Form<User> {
 		add(new DropDownChoice<>("timeZoneId", AVAILABLE_TIMEZONES));
 		add(new LanguageDropDown("languageId"));
 		add(new TextField<String>("address.phone"));
-		add(new CheckBox("sendSMS"));
 		add(new AjaxDatePicker("age", new PropertyModel<LocalDate>(this, "age"), WebSession.get().getLocale()) {
 			private static final long serialVersionUID = 1L;
 
