@@ -49,6 +49,9 @@
 				<img src="images/eclipse-import-maven-project.png" alt="Import OM into Eclipse" width="526" height="394" />
 			</p>
 		</section>
+		<section name="Check for known vulnerabilities">
+			<source>mvn org.sonatype.ossindex.maven:ossindex-maven-plugin:audit -f pom.xml</source>
+		</section>
 		<section name="Check for updates">
 			<source>mvn versions:display-dependency-updates</source>
 			<source>mvn versions:display-plugin-updates</source>

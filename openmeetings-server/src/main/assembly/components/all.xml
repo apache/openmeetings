@@ -38,6 +38,7 @@
 				<exclude>lib/spring*.jar</exclude>
 				<!-- Tika related jars are in lib folder-->
 				<exclude>lib/apache-mime4j*</exclude>
+				<exclude>lib/bcprov-*</exclude>
 				<exclude>lib/boilerpipe*</exclude>
 				<exclude>lib/jempbox*</exclude>
 				<exclude>lib/juniversalchardet*</exclude>
@@ -229,6 +230,7 @@
 				<include>commons-lang3*</include>
 				<!-- Tika related jars are in lib folder -->
 				<include>apache-mime4j*</include>
+				<include>bcprov-*</include>
 				<include>boilerpipe*</include>
 				<include>jempbox*</include>
 				<include>juniversalchardet*</include>
