@@ -54,18 +54,20 @@ public class ProfileForm extends Form<User> {
 	private final PasswordTextField passwd = new PasswordTextField("passwd", new Model<String>());
 	private final GeneralUserForm userForm;
 	private final ChangePasswordDialog chPwdDlg;
+	private boolean checkPassword;
 	private FormActionsPanel<User> actions;
 
 	public ProfileForm(String id, final ChangePasswordDialog chPwdDlg) {
 		super(id, new CompoundPropertyModel<>(getBean(UserDao.class).get(getUserId())));
 		userForm = new GeneralUserForm("general", getModel(), false);
 		this.chPwdDlg = chPwdDlg;
+		this.checkPassword = User.Type.oauth != getModelObject().getType();
 	}
 
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		add(passwd.setLabel(Model.of(getString("current.password"))).setRequired(true));
+		add(passwd.setLabel(Model.of(getString("current.password"))).setRequired(true).setVisible(checkPassword));
 
 		add(actions = new FormActionsPanel<User>("buttons", this) {
 			private static final long serialVersionUID = 1L;
@@ -111,7 +113,7 @@ public class ProfileForm extends Form<User> {
 			protected void onEvent(AjaxRequestTarget target) {
 				chPwdDlg.open(target);
 			}
-		}));
+		}).setVisible(checkPassword));
 		add(userForm);
 		add(new UploadableProfileImagePanel("img", getUserId()));
 		add(new ComunityUserForm("comunity", getModel()));
@@ -129,14 +131,16 @@ public class ProfileForm extends Form<User> {
 
 	@Override
 	protected void onValidate() {
-		String p = passwd.getConvertedInput();
-		if (!Strings.isEmpty(p) && !getBean(UserDao.class).verifyPassword(getModelObject().getId(), p)) {
-			error(getString("231"));
-			// add random timeout
-			try {
-				Thread.sleep(6 + (long)(10 * Math.random() * 1000));
-			} catch (InterruptedException e) {
-				log.error("Unexpected exception while sleeping", e);
+		if (checkPassword) {
+			String p = passwd.getConvertedInput();
+			if (!Strings.isEmpty(p) && !getBean(UserDao.class).verifyPassword(getModelObject().getId(), p)) {
+				error(getString("231"));
+				// add random timeout
+				try {
+					Thread.sleep(6 + (long)(10 * Math.random() * 1000));
+				} catch (InterruptedException e) {
+					log.error("Unexpected exception while sleeping", e);
+				}
 			}
 		}
 		super.onValidate();

@@ -103,7 +103,6 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 		user.setLanguageId(getDefaultLang());
 		user.setTimeZoneId(getTimeZone(currentUser).getID());
 		user.setForceTimeZoneCheck(false);
-		user.setSendSMS(false);
 		user.setAge(new Date());
 		user.setLastlogin(new Date());
 		Address address = new Address();
