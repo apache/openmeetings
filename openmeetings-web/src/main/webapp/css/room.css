@@ -40,54 +40,6 @@
 .ui-icon.status-mod {
 	background-image: url(images/status-mod.png);
 }
-.room.menu .ui-menu .ui-menu-item {
-	padding-left: 5px;
-	padding-right: 0;
-}
-.room.menu .top.room.menu.exit {
-	padding-left: 0;
-}
-.room.menu.right {
-	position: absolute;
-	top: 0px;
-	margin-right: 5px;
-	right: 0px;
-	display: inline-block;
-}
-.room.menu.right .room {
-	float: right;
-	padding-top: 5px;
-	padding-right: 5px;
-}
-.room.menu.right .room.name {
-	font-weight: bold;
-}
-.room.menu.right .room.name.screen {
-	color: red;
-}
-.room.menu.right .room.demo {
-}
-.room.menu.right .icon {
-	width: 30px;
-	height: 30px;
-	background-repeat: no-repeat;
-	background-position: 5px 5px;
-	background-size: 22px;
-	float: right;
-	padding: 0;
-}
-.room.menu.right .icon.share {
-	background-image: url(images/monitor_go.png);
-}
-.room.menu.right .icon.shared {
-	background-image: url(images/shared.png);
-}
-.room.menu.right .icon .profile {
-	margin-top: 3px;
-}
-.room.menu.right .icon .profile img {
-	width: 28px;
-}
 .room.sidebar {
 	min-width: 155px;
 	width: 315px;
