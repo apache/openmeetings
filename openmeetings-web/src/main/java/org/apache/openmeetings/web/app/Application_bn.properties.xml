@@ -352,10 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Rights]]></entry>
 	<entry key="887"><![CDATA[The have been errors while processing the recording]]></entry>
 	<entry key="888"><![CDATA[The recording is not yet ready for watching]]></entry>
-	<entry key="910"><![CDATA[Choose the user for this video]]></entry>
-	<entry key="911"><![CDATA[Available users for this pod]]></entry>
-	<entry key="913"><![CDATA[Start recording]]></entry>
-	<entry key="914"><![CDATA[Stop recording]]></entry>
 	<entry key="923"><![CDATA[Home drive size]]></entry>
 	<entry key="924"><![CDATA[Public drive size]]></entry>
 	<entry key="996"><![CDATA[Status]]></entry>
@@ -559,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[Start Private Chat]]></entry>
 	<entry key="1494"><![CDATA[All]]></entry>
 	<entry key="1500"><![CDATA[Server Name]]></entry>
-	<entry key="1503"><![CDATA[Send SMS]]></entry>
 	<entry key="1504"><![CDATA[Publishing. User:]]></entry>
 	<entry key="1505"><![CDATA[To save time and internet traffic you can use command line admin to backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/red5)</li> <li>stop OM (for ex. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/red5</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Rooms common to all user]]></entry>
@@ -571,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Files panel opened by default]]></entry>
 	<entry key="1526"><![CDATA[Generate URL]]></entry>
 	<entry key="1527"><![CDATA[Network testing]]></entry>
-	<entry key="1528"><![CDATA[Auto select interview video pod]]></entry>
 	<entry key="1536"><![CDATA[System import]]></entry>
 	<entry key="1537"><![CDATA[Include uploaded files and recordings in backup]]></entry>
 	<entry key="1538"><![CDATA[Enable SIP transport in the room]]></entry>

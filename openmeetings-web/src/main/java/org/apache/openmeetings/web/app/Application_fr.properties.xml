@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Droits]]></entry>
 	<entry key="887"><![CDATA[Il y a eu des erreurs durant le traitement de l'enregistrement.]]></entry>
 	<entry key="888"><![CDATA[L'enregistrement n'est pas encore prêt à être visionné. Veuillez réessayer dans quelques minutes.]]></entry>
-	<entry key="913"><![CDATA[Démarrer l'enregistr.]]></entry>
-	<entry key="914"><![CDATA[Arrêter l'enregistr.]]></entry>
 	<entry key="923"><![CDATA[Taille du disque local]]></entry>
 	<entry key="924"><![CDATA[Taille du disque public]]></entry>
 	<entry key="996"><![CDATA[Statut]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[Démarrer t'chat privé]]></entry>
 	<entry key="1494"><![CDATA[Tous]]></entry>
 	<entry key="1500"><![CDATA[Nom du serveur]]></entry>
-	<entry key="1503"><![CDATA[Envoyer SMS]]></entry>
 	<entry key="1504"><![CDATA[Publier. Utilisateur :]]></entry>
 	<entry key="1505"><![CDATA[Pour économiser du temps et de la bande passante vous pouvez utiliser la ligne de commande pour sauvegarder/restaurer/mettre à niveau votre système <ol> <li>Aller dans le répertoire d'installation d'OM (par ex. /opt/red5)</li> <li>Arrêter OM (par ex. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/nom_de_la_sauvegarde.zip (créer la sauvegarde d'OM)</li> <li>télécharger la nouvelle version d'OM</li> <li>mv /opt/red5 /opt.red5.bak (déplacer la version d'OM qui fonctionne par sécurité.)</li> <li>extraire la nouvelle version d'OM dans /opt/red5</li> <li>./admin.sh -i -file ~/aujourdhui_om_sauvegarde.zip (ou './admin.sh -i -file ~/aujourdhui_om_sauvegarde.zip --db-type mysql --db-user om_user --db-pass om_user_pass' dans le cas d'une BDD qui n'est pas celle par défaut )</li> <li>Démarrer OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Salles pour tous les utilisateurs]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Panneau des fichiers ouvert par défaut]]></entry>
 	<entry key="1526"><![CDATA[Générer URL]]></entry>
 	<entry key="1527"><![CDATA[Test réseau]]></entry>
-	<entry key="1528"><![CDATA[Sélection auto de la fenêtre vidéo de l'interview]]></entry>
 	<entry key="1536"><![CDATA[Importer Système]]></entry>
 	<entry key="1537"><![CDATA[Inclure les fichiers déposés sur le serveur et les enregistrements dans la sauvegarde]]></entry>
 	<entry key="1538"><![CDATA[Activer le transport SIP dans la salle]]></entry>

@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[حقوق]]></entry>
 	<entry key="887"><![CDATA[وجود مشکلات در حین اجرای ضبط]]></entry>
 	<entry key="888"><![CDATA[ضبط هنوز آماده برای مشاهده نیست.لطفا دو دقیقه دیگر دوباره تلاش کنید.]]></entry>
-	<entry key="913"><![CDATA[شروع ضبط]]></entry>
-	<entry key="914"><![CDATA[توقف ضبط]]></entry>
 	<entry key="923"><![CDATA[اندازه درایو خانگی]]></entry>
 	<entry key="924"><![CDATA[اندازه درایو عمومی]]></entry>
 	<entry key="996"><![CDATA[وضعیت]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[شروع گفتگوی خصوصی]]></entry>
 	<entry key="1494"><![CDATA[همه]]></entry>
 	<entry key="1500"><![CDATA[نام سرور]]></entry>
-	<entry key="1503"><![CDATA[ارسال پیامک]]></entry>
 	<entry key="1504"><![CDATA[انتشار. کاربر:]]></entry>
 	<entry key="1505"><![CDATA[برای ذخیره زمان و ترافیک اینترنت شما می توانید از دستور زیر استفاده کنید backup/restore/upgrade: <ol> <li>go to OM install dir (for ex. /opt/red5)</li> <li>stop OM (for ex. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (create backup of current OM)</li> <li>download archive with new OM</li> <li>mv /opt/red5 /opt.red5.bak (move working version of OM just in case :))</li> <li>extract downloaded OM to the /opt/red5</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' in case of you are using non-default DB )</li> <li>start OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[اتاق های مشترک برای تمام کاربران]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[جایگاه پوشه ها به طور پیش فرض باز است]]></entry>
 	<entry key="1526"><![CDATA[ایجاد URL]]></entry>
 	<entry key="1527"><![CDATA[تست شبکه]]></entry>
-	<entry key="1528"><![CDATA[انتخاب خودکار ویدیوی مصاحبه]]></entry>
 	<entry key="1536"><![CDATA[ورودی سیستم]]></entry>
 	<entry key="1537"><![CDATA[فایل پشتیبان شامل پوشه های بارگذاری شده و ضبط ها نیز   می شود]]></entry>
 	<entry key="1538"><![CDATA[فعال سازی انتقال SIP در اتاق]]></entry>

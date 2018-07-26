@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Rendben]]></entry>
 	<entry key="887"><![CDATA[Hiba történt a felvétel készítése közben.]]></entry>
 	<entry key="888"><![CDATA[A felvétel még nem nézhewtő vissza. Kérjük próbálja ismét pár perc múlva.]]></entry>
-	<entry key="913"><![CDATA[Felvétel indítása]]></entry>
-	<entry key="914"><![CDATA[Felvétel megállítása]]></entry>
 	<entry key="923"><![CDATA[Privát meghajtó mérete]]></entry>
 	<entry key="924"><![CDATA[Publikus meghajtó mérete]]></entry>
 	<entry key="996"><![CDATA[Állapot]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[Privát chat nyitása]]></entry>
 	<entry key="1494"><![CDATA[Mindenki]]></entry>
 	<entry key="1500"><![CDATA[Szerver neve]]></entry>
-	<entry key="1503"><![CDATA[SMS Küldése]]></entry>
 	<entry key="1504"><![CDATA[Közzététel. Felhasználó:]]></entry>
 	<entry key="1505"><![CDATA[Időt és adatforgalmat takarít meg ha a parancssori admint használja a mentésekhez backup/restore/upgrade: <ol> <li>lépjen be az OM telepített könyvtárába (pl.: /opt/red5)</li> <li>állítsa meg az OM-et (cmd: ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (backup készítése az aktuális OM -ről)</li> <li>töltse le az új OM-et</li> <li>mv /opt/red5 /opt.red5.bak (A működő OM verziót őrizze meg :))</li> <li>Csomagolja ki az új OM-et /opt/red5</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' adja meg, ha nem az alapértelmezett DB hozzáférést használja )</li> <li>OM indítása</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Közös termek minden felhasználó számára]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Fileok panel alapbértelmezésben nyitva]]></entry>
 	<entry key="1526"><![CDATA[URL készítése]]></entry>
 	<entry key="1527"><![CDATA[Hálózat tesztelése]]></entry>
-	<entry key="1528"><![CDATA[Automatiksan kiválasztja az interjú video ablakot]]></entry>
 	<entry key="1536"><![CDATA[Rendszer import]]></entry>
 	<entry key="1537"><![CDATA[Feltöltött fileok és felvételek betöltése a mentásből]]></entry>
 	<entry key="1538"><![CDATA[SIP átvitel engedélyezése a szobában]]></entry>
