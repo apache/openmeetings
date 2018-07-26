@@ -273,10 +273,6 @@ public class User extends HistoricalEntity {
 	@Element(data = true, required = false)
 	private boolean forceTimeZoneCheck;
 
-	@Column(name = "sendSMS", nullable = false)
-	@Element(data = false, required = false)
-	private boolean sendSMS;
-
 	@Column(name = "user_offers")
 	@Element(data = true, required = false)
 	private String userOffers;
@@ -518,14 +514,6 @@ public class User extends HistoricalEntity {
 		this.forceTimeZoneCheck = forceTimeZoneCheck;
 	}
 
-	public boolean getSendSMS() {
-		return sendSMS;
-	}
-
-	public void setSendSMS(boolean sendSMS) {
-		this.sendSMS = sendSMS;
-	}
-
 	public String getUserOffers() {
 		return userOffers;
 	}
@@ -556,10 +544,6 @@ public class User extends HistoricalEntity {
 
 	public void setShowContactDataToContacts(boolean showContactDataToContacts) {
 		this.showContactDataToContacts = showContactDataToContacts;
-	}
-
-	public String getPhoneForSMS() {
-		return getSendSMS() ? getAddress().getPhone() : "";
 	}
 
 	public Type getType() {
