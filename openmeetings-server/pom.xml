@@ -41,7 +41,7 @@
 		<root.webapp>webapps/root</root.webapp>
 		<red5-server-file.dir>red5-server</red5-server-file.dir>
 	</properties>
-	<url>http://openmeetings.apache.org</url>
+	<url>https://openmeetings.apache.org</url>
 	<scm>
 		<connection>scm:git:https://github.com/apache/openmeetings.git</connection>
 		<developerConnection>scm:git:https://github.com/apache/openmeetings.git</developerConnection>
