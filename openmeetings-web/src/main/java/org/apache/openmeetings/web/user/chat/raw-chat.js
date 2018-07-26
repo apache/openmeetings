@@ -192,7 +192,7 @@ var Chat = function() {
 	}
 	function _addTab(id, label) {
 		if (!isInited()) {
-			_reinit();
+			_reinit({});
 		}
 		if ($('#chat').length < 1 || $('#' + id).length) {
 			return;
@@ -353,7 +353,7 @@ var Chat = function() {
 	}
 	function _setRoomMode(_mode) {
 		roomMode = _mode;
-		_reinit(allPrefix, roomPrefix);
+		_reinit({all: allPrefix, room: roomPrefix, sendOnEnter: sendOn === SEND_ENTER});
 	}
 	function _scrollDown(area) {
 		area.animate({
