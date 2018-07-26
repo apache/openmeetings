@@ -194,8 +194,6 @@ var VideoSettings = (function() {
 				, o.interview ? 320 : s.video.width, o.interview ? 260 : s.video.height);
 	}
 	function _initDevices() {
-		_setLoading(cam);
-		_setLoading(mic);
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			_fillDevices(swf.getDevices());
 		} else {
@@ -217,6 +215,7 @@ var VideoSettings = (function() {
 				})
 				.catch(function(err) {
 					OmUtil.error(err);
+					_fillDevices(swf.getDevices());
 				});
 		}
 	}
@@ -225,6 +224,8 @@ var VideoSettings = (function() {
 		_readValues();
 	}
 	function _open() {
+		_setLoading(cam);
+		_setLoading(mic);
 		recAllowed = false;
 		vs.dialog('open');
 	}
