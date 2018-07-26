@@ -165,7 +165,10 @@ var DrawWbArea = function() {
 				return res;
 			}
 			, activate: function(e, ui) {
-				wbAction('activateWb', JSON.stringify({wbId: ui.newTab.data('wb-id')}));
+				//only send `activateWb` event if activation was initiated by user
+				if (e.originalEvent && e.originalEvent.type === 'click') {
+					wbAction('activateWb', JSON.stringify({wbId: ui.newTab.data('wb-id')}));
+				}
 			}
 		});
 		scroll = tabs.find('.scroll-container');
