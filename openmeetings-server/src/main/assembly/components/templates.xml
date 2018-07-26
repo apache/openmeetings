@@ -30,6 +30,16 @@
 				<include>**/*.xml</include>
 				<include>**/*.properties</include>
 			</includes>
+			<excludes>
+				<exclude>**/raw-*.css</exclude>
+				<exclude>**/raw-*.js</exclude>
+				<exclude>**/uuid.js</exclude>
+				<exclude>**/fabric.js</exclude>
+				<exclude>**/MathJax*.js</exclude>
+				<exclude>**/fileinput.js</exclude>
+				<exclude>**/fileinput.css</exclude>
+				<exclude>**/jquery.dialogextend.js</exclude>
+			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-web/target/generated-sources/main/java</directory>
