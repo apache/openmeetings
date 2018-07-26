@@ -55,7 +55,7 @@ var OmUtil = (function() {
 			msg = msg.name + ": " + msg.message;
 		}
 		if (!!errs && errs.length > 0) {
-			errs.data("kendoNotification").show(msg, "error");
+			errs.getKendoNotification().error(msg);
 		}
 		return console.error(msg);
 	}

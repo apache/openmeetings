@@ -975,4 +975,5 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="admin.purge.desc"><![CDATA[この項目を完全削除してよろしいですか？この作業は元に戻せません!]]></entry>
 	<entry key="register.privacy.accept"><![CDATA[私は、「${register}」をクリックすることにより、 ${link} に同意します。]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[プライバシーに関する声明]]></entry>
+	<entry key="close.settings.tab"><![CDATA[After saving your audio and video settings you may close this browser tab.]]></entry>
 </properties>
