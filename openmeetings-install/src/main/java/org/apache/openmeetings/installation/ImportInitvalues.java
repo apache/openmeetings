@@ -23,6 +23,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICAT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
@@ -344,6 +345,8 @@ public class ImportInitvalues {
 				"Number of chars needed in a user first name", "4.0.4");
 		addCfg(list, CONFIG_LNAME_MIN_LENGTH, String.valueOf(USER_LOGIN_MINIMUM_LENGTH), Configuration.Type.number,
 				"Number of chars needed in a user last name", "4.0.4");
+		addCfg(list, CONFIG_CHAT_SEND_ON_ENTER, String.valueOf(false), Configuration.Type.bool,
+				"Controls if chat message will be set on Enter (default: send on Ctrl+Enter)", "4.0.5");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {

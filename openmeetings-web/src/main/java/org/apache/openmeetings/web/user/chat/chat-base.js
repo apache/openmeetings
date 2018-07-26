@@ -15,7 +15,7 @@ var Chat = function() {
 		;
 	let p, pp, ctrl, icon, tabs, openedHeight = "345px", openedWidth = "300px", allPrefix = "All"
 		, roomPrefix = "Room ", typingTimer, audio, roomMode = false, globalWidth = 600
-		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn = SEND_CTRL;
+		, editor = $('#chatMessage .wysiwyg-editor'), muted = false, sendOn, DEF_SEND;
 		;
 
 	try {
@@ -31,7 +31,7 @@ var Chat = function() {
 		if (typeof(s.chat) === 'undefined') {
 			s.chat = {
 				muted: false
-				, sendOn: SEND_CTRL
+				, sendOn: DEF_SEND
 			};
 		}
 		muted = s.chat.muted === true;
@@ -115,9 +115,11 @@ var Chat = function() {
 	function isInited() {
 		return !!$("#chatTabs").data("ui-tabs");
 	}
-	function _reinit(_allPrefix, _roomPrefix) {
-		allPrefix = _allPrefix;
-		roomPrefix = _roomPrefix;
+	function _reinit(opts) {
+		allPrefix = opts.all;
+		roomPrefix = opts.room;
+		DEF_SEND = opts.sendOnEnter === true ? SEND_ENTER : SEND_CTRL;
+		sendOn = DEF_SEND;
 		p = $('#chatPanel');
 		clearTimeout(p.data('timeout'));
 		pp = $('#chatPanel, #chatPopup');

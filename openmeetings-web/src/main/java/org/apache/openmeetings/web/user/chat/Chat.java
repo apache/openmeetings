@@ -43,6 +43,7 @@ import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -142,8 +143,10 @@ public class Chat extends Panel {
 
 	public CharSequence getReinit() {
 		StringBuilder sb = new StringBuilder("Chat.reinit(")
-				.append('\'').append(getString("1494")).append('\'')
-				.append(',').append('\'').append(getString("406")).append('\'')
+				.append(new JSONObject()
+						.put("all", getString("1494"))
+						.put("room", getString("406"))
+						.put("sendOnEnter", OpenmeetingsVariables.getChatSenndOnEnter()).toString())
 				.append("); ");
 		return processGlobal(sb);
 	}

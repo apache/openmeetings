@@ -96,6 +96,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_REST_ALLOW_ORIGIN = "rest.allow.origin";
 	public static final String CONFIG_FNAME_MIN_LENGTH = "user.fname.minimum.length";
 	public static final String CONFIG_LNAME_MIN_LENGTH = "user.lname.minimum.length";
+	public static final String CONFIG_CHAT_SEND_ON_ENTER = "chat.send.on.enter";
 
 	public static final String HEADER_XFRAME_SAMEORIGIN = "SAMEORIGIN";
 	public static final String HEADER_CSP_SELF = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; media-src 'self' blob:;";
@@ -141,6 +142,7 @@ public class OpenmeetingsVariables {
 	private static String sipContext = DEFAULT_SIP_CONTEXT;
 	private static int minFnameLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static int minLnameLength = USER_LOGIN_MINIMUM_LENGTH;
+	private static boolean chatSendOnEnter = false;
 
 	private OpenmeetingsVariables() {}
 
@@ -322,5 +324,13 @@ public class OpenmeetingsVariables {
 
 	public static void setMinLnameLength(int length) {
 		minLnameLength = length;
+	}
+
+	public static boolean getChatSenndOnEnter() {
+		return chatSendOnEnter;
+	}
+
+	public static void setChatSenndOnEnter(boolean sendOnEnter) {
+		chatSendOnEnter = sendOnEnter;
 	}
 }
