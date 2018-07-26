@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[权利]]></entry>
 	<entry key="887"><![CDATA[在处理记录时出错]]></entry>
 	<entry key="888"><![CDATA[记录未准备好,请过几分钟再试]]></entry>
-	<entry key="913"><![CDATA[开始录制]]></entry>
-	<entry key="914"><![CDATA[结束录制]]></entry>
 	<entry key="923"><![CDATA[私有记录文件大小]]></entry>
 	<entry key="924"><![CDATA[公共记录文件大小]]></entry>
 	<entry key="996"><![CDATA[状态]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[开始私人聊天]]></entry>
 	<entry key="1494"><![CDATA[全部]]></entry>
 	<entry key="1500"><![CDATA[服务器名字]]></entry>
-	<entry key="1503"><![CDATA[发送SMS]]></entry>
 	<entry key="1504"><![CDATA[发布. 用户:]]></entry>
 	<entry key="1505"><![CDATA[为了节省时间和网络流量，您可以使用命令行管理 backup/restore/upgrade: <ol> <li>到OM安装目录 (for ex. /opt/red5)</li> <li>停止OM (for ex. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (对当前OM产生备份)</li> <li>下载新OM的文件</li> <li>mv /opt/red5 /opt.red5.bak (移动OM的工作版本只是以防万一 :))</li> <li>将下载的OM解压到 /opt/red5</li> <li>./admin.sh -i -file ~/today_om_backup.zip (or './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' 在使用非默认数据库的情况下 )</li> <li>启动OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[所有用户共同的房间]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[默认打开文件面板]]></entry>
 	<entry key="1526"><![CDATA[产生URL]]></entry>
 	<entry key="1527"><![CDATA[网络测试]]></entry>
-	<entry key="1528"><![CDATA[自动选择采访视频荚]]></entry>
 	<entry key="1536"><![CDATA[系统导入]]></entry>
 	<entry key="1537"><![CDATA[包括上传的文件和备份的记录]]></entry>
 	<entry key="1538"><![CDATA[在聊天室启动SIP传输]]></entry>

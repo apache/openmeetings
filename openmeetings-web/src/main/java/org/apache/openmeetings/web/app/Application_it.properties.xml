@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Permessi]]></entry>
 	<entry key="887"><![CDATA[Ci sono stati errori nell'elaborazione della Registrazione.]]></entry>
 	<entry key="888"><![CDATA[La registrazione non è pronta per la visione.]]></entry>
-	<entry key="913"><![CDATA[Avvia Registrazione]]></entry>
-	<entry key="914"><![CDATA[Ferma Registrazione]]></entry>
 	<entry key="923"><![CDATA[Dimensione spazio Utente]]></entry>
 	<entry key="924"><![CDATA[Dimension spazio Pubblico]]></entry>
 	<entry key="996"><![CDATA[Stato]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[Avvia Chat privata]]></entry>
 	<entry key="1494"><![CDATA[Tutti]]></entry>
 	<entry key="1500"><![CDATA[Nome Server]]></entry>
-	<entry key="1503"><![CDATA[Invia SMS]]></entry>
 	<entry key="1504"><![CDATA[Pubblicazione. Utente:]]></entry>
 	<entry key="1505"><![CDATA[Per risparmiare tempo e traffico Internet puoi usare i comandi di amministrazione da riga di comando per backup/ripristino/aggiornamento: <ol> <li>vai alla cartella di installazione di OM (per es. /opt/red5)</li> <li>ferma OM (per es. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/today_om_backup.zip (crea il backup di OM attuale)</li> <li>scarica archivio con il nuovo OM</li> <li>mv /opt/red5 /opt.red5.bak (sposta l'attuale versione di OM per qualsiasi evenienza :))</li> <li>estrae OM scaricato nella cartella /opt/red5</li> <li>./admin.sh -i -file ~/today_om_backup.zip (oppure './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' nel caso stai usando un DB non standard)</li> <li>avvia OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Stanze comuni a tutti gli utenti]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Pannello dei Files aperto in modo predefinito]]></entry>
 	<entry key="1526"><![CDATA[Genera URL]]></entry>
 	<entry key="1527"><![CDATA[Verifica collegamento]]></entry>
-	<entry key="1528"><![CDATA[Seleziona automatica del riquadro video per l'intervista]]></entry>
 	<entry key="1536"><![CDATA[Importa sistema]]></entry>
 	<entry key="1537"><![CDATA[Include files caricati e registrazione nel backup]]></entry>
 	<entry key="1538"><![CDATA[Abilita connessioni SIP nella stanza]]></entry>

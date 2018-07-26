@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Права]]></entry>
 	<entry key="887"><![CDATA[При обробці записи виникли помилки.]]></entry>
 	<entry key="888"><![CDATA[Запис ще не готова. Спробуйте знову через пару хвилин.]]></entry>
-	<entry key="913"><![CDATA[Почати запис]]></entry>
-	<entry key="914"><![CDATA[Зупинити запис]]></entry>
 	<entry key="923"><![CDATA[Розмір домашнього накопичувача]]></entry>
 	<entry key="924"><![CDATA[Розмір публічного накопичувача]]></entry>
 	<entry key="996"><![CDATA[Статус]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[Почати приватний чат]]></entry>
 	<entry key="1494"><![CDATA[]]></entry>
 	<entry key="1500"><![CDATA[Ім'я Сервера]]></entry>
-	<entry key="1503"><![CDATA[СМС]]></entry>
 	<entry key="1504"><![CDATA[Повідомлення. Користувачеві:]]></entry>
 	<entry key="1505"><![CDATA[Що б зменшити час і інтернет трафік ви можете скористатися командним рядком admin для копіювання/відновлення/поновлення: <ol> <li>увійдіть у настановну папку OM (наприклад, /opt/red5)</li> <li>зупиніть OM (./red5-shutdown.sh)</li> <li>виконуємо ./admin.sh -b -файл ~/today_om_backup.zip (створює резервну копію OM)</li> <li>завантажити новий дистрибутив OM</li> <li>mv /opt/red5 /opt.red5.bak (переміщуємо робочу версію OM :))</li> <li>розпаковуємо дистрибутив OM в каталог /opt/red5</li> <li>запускаємо ./admin.sh -i -file ~/today_om_backup.zip (або './admin.sh -i -file ~/today_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass' у разі коли база даних відрізняється від бази за замовчуванням )</li> <li>запускаємо OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[Загальні кімнати для усіх користувачів]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Відкривати панель файлів за умовчанням]]></entry>
 	<entry key="1526"><![CDATA[Згенерувати URL]]></entry>
 	<entry key="1527"><![CDATA[Тестування мережі]]></entry>
-	<entry key="1528"><![CDATA[Автоматично визначати відео вікно]]></entry>
 	<entry key="1536"><![CDATA[Системний імпорт]]></entry>
 	<entry key="1537"><![CDATA[Включати завантажені файли і записи в бекап]]></entry>
 	<entry key="1538"><![CDATA[Дозволити SIP транспорт в кімнаті]]></entry>

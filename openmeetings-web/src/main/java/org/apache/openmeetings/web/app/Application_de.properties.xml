@@ -352,8 +352,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="881"><![CDATA[Rechte]]></entry>
 	<entry key="887"><![CDATA[Es gab Fehler beim Verarbeiten der Aufzeichnung.]]></entry>
 	<entry key="888"><![CDATA[Die Aufzeichnung ist noch nicht zur Wiedergabe bereit. Versuchen Sie es in einigen Minuten erneut.]]></entry>
-	<entry key="913"><![CDATA[Aufzeichnung starten]]></entry>
-	<entry key="914"><![CDATA[Aufzeichnung stoppen]]></entry>
 	<entry key="923"><![CDATA[Größe Homeverzeichnis]]></entry>
 	<entry key="924"><![CDATA[Größe öffentliches Verzeichnis]]></entry>
 	<entry key="996"><![CDATA[Status]]></entry>
@@ -557,7 +555,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1493"><![CDATA[Starte privaten Chat]]></entry>
 	<entry key="1494"><![CDATA[Alle]]></entry>
 	<entry key="1500"><![CDATA[Server Name]]></entry>
-	<entry key="1503"><![CDATA[Sende SMS]]></entry>
 	<entry key="1504"><![CDATA[Veröffentlichen. Nutzer:]]></entry>
 	<entry key="1505"><![CDATA[Um Zeit und Internet-Verkehr sparen, können Sie den Befehl admin für Backup/Wiederherstellen/Aktualisieren verwenden. <ol> <li>Gehen sie zum OM-Installationspfad (z.b. /opt/red5)</li> <li>Stopen Sie OM (z.b. ./red5-shutdown.sh)</li> <li>./admin.sh -b -file ~/heute_om_backup.zip (Backup vom bestehenden OM erstellen)</li> <li>Laden Sie die neue Version OM herunter</li> <li>mv /opt/red5 /opt.red5.bak (kopieren Sie die existierende OM-Version für den Fall :))</li> <li>Entpacken Sie die heruntergeladene OM-Version nach /opt/red5</li> <li>./admin.sh -i -file ~/heute_om_backup.zip (or './admin.sh -i -file ~/heute_om_backup.zip --db-type mysql --db-user om_user --db-pass om_user_pass', für den Fall, dass Sie eine Nicht-Standard-DB verwenden)</li> <li>Starten Sie OM</li> </ol>]]></entry>
 	<entry key="1506"><![CDATA[gemeinsame Räume für alle Benutzer]]></entry>
@@ -569,7 +566,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1516"><![CDATA[Dateien-Fenster standardmäßig geöffnet]]></entry>
 	<entry key="1526"><![CDATA[URL generieren]]></entry>
 	<entry key="1527"><![CDATA[Netzwerk testen]]></entry>
-	<entry key="1528"><![CDATA[Auswahl Interview Video Pod]]></entry>
 	<entry key="1536"><![CDATA[System Import]]></entry>
 	<entry key="1537"><![CDATA[beinhaltet hochgeladene Dateien und Aufnahmen im Backup]]></entry>
 	<entry key="1538"><![CDATA[Aktivieren Sie SIP-Verkehr im Raum]]></entry>
