@@ -33,6 +33,7 @@ import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.Valid;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.util.FormatHelper;
+import org.apache.openmeetings.db.util.LocaleHelper;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.IUpdatable;
 import org.apache.openmeetings.web.common.MainPanel;
@@ -65,6 +66,7 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 	public static final String PANEL_MAIN = "panel-main";
 	public static final String INVITATION_HASH = "invitation";
 	private static final String HASH = "secure";
+	private static final String LANG = "language";
 	private final WebMarkupContainer recContainer = new WebMarkupContainer("panel-recording");
 	private final VideoInfo vi = new VideoInfo("info", null);
 	private final VideoPlayer vp = new VideoPlayer("player");
@@ -98,6 +100,11 @@ public class HashPage extends BaseInitedPage implements IUpdatable {
 
 		WebSession ws = WebSession.get();
 		ws.checkHashes(secure, invitation);
+		long lang = p.get(LANG).toLong(-1L);
+		if (lang > -1) {
+			ws.setLanguage(lang);
+			ws.setLocale(LocaleHelper.getLocale(lang));
+		}
 
 		String errorMsg = getString("invalid.hash");
 		recContainer.setVisible(false);
