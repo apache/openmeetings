@@ -31,7 +31,7 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 	private final long userId;
 
 	public UploadableProfileImagePanel(String id, final long userId) {
-		super(id);
+		super(id, false);
 		this.userId = userId;
 	}
 

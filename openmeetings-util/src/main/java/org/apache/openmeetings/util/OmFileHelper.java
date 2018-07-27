@@ -132,7 +132,7 @@ public class OmFileHelper {
 
 	public static File getGroupLogo(Long groupId, boolean check) {
 		File logo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
-		if (check && !logo.exists()) {
+		if (groupId == null || (check && !logo.exists())) {
 			logo = new File(getImagesDir(), "blank.png");
 		}
 		return logo;
