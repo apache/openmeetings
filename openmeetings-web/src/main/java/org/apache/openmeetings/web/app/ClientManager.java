@@ -96,10 +96,10 @@ public class ClientManager implements IClientManager {
 
 	@Override
 	public Client update(Client c) {
+		map().put(c.getUid(), c);
 		synchronized (onlineClients) {
 			onlineClients.get(c.getUid()).merge(c);
 		}
-		map().put(c.getUid(), c);
 		return c;
 	}
 
@@ -322,19 +322,21 @@ public class ClientManager implements IClientManager {
 	{
 		@Override
 		public void entryAdded(EntryEvent<String, Client> event) {
-			log.trace("ClientListener::Add");
 			final String uid = event.getKey();
-			if (onlineClients.containsKey(uid)) {
-				onlineClients.get(uid).merge(event.getValue());
-			} else {
-				onlineClients.put(uid, event.getValue());
+			synchronized (onlineClients) {
+				if (onlineClients.containsKey(uid)) {
+					onlineClients.get(uid).merge(event.getValue());
+				} else {
+					onlineClients.put(uid, event.getValue());
+				}
 			}
 		}
 
 		@Override
 		public void entryUpdated(EntryEvent<String, Client> event) {
-			log.trace("ClientListener::Update");
-			onlineClients.get(event.getKey()).merge(event.getValue());
+			synchronized (onlineClients) {
+				onlineClients.get(event.getKey()).merge(event.getValue());
+			}
 		}
 
 		@Override
