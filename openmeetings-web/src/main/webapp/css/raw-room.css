@@ -472,6 +472,12 @@ ul.settings-menu {
 }
 .pod-area .pod-big {
 	grid-area: a;
+	border: 1px solid #cccc;
+	border-radius: 8px;
+	background-image: url(images/drop.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 64px;
 }
 .pod-area .pod {
 }
@@ -502,6 +508,15 @@ ul.settings-menu {
 	bottom: 30px;
 	width: 50px;
 	height: 50px;
+}
+.room.box.interview .room.wb.area .wb-area .rec-btn .ui-button-icon.ui-icon.stop
+, .room.box.interview .room.wb.area .wb-area .rec-btn .ui-button-icon.ui-icon.record
+{
+	background-image: none;
+	background-color: red;
+}
+.room.box.interview .room.wb.area .wb-area .rec-btn .ui-button-icon.ui-icon.record {
+	border-radius: 15px;
 }
 #quick-vote {
 	position: absolute;
