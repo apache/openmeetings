@@ -82,7 +82,7 @@ public abstract class FormActionsPanel<T> extends Panel {
 				FormActionsPanel.this.onError(target, form);
 			}
 		});
-		purgeBtn = new ConfirmableAjaxBorder("btn-purge", getString("admin.purge"), getString("admin.purge.desc"), form, null, true) {
+		purgeBtn = new ConfirmableAjaxBorder("btn-purge", getString("admin.purge"), getString("admin.purge.desc"), form, null, false) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
