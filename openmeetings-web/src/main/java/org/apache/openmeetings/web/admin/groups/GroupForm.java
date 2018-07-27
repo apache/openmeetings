@@ -25,6 +25,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.apache.openmeetings.core.converter.ImageConverter;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -60,7 +61,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 	private final NumberTextField<Integer> maxRooms = new NumberTextField<>("maxRooms");
 	private final NumberTextField<Integer> recordingTtl = new NumberTextField<>("recordingTtl");
 	private final NumberTextField<Integer> reminderDays = new NumberTextField<>("reminderDays");
-	private final UploadableImagePanel logo = new UploadableImagePanel("logo") {
+	private final UploadableImagePanel logo = new UploadableImagePanel("logo", true) {
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -223,6 +224,7 @@ public class GroupForm extends AdminBaseForm<Group> {
 		for (GroupUser grpUser : usersPanel.getUsers2add()) {
 			usersPanel.update(grpUser);
 		}
+		logo.process(Optional.of(target));
 		setNewVisible(false);
 		updateView(target);
 	}

@@ -21,12 +21,14 @@ package org.apache.openmeetings.web.common;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMaxUploadSize;
 
 import java.io.File;
+import java.util.Optional;
 
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -39,9 +41,12 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadableImagePanel.class);
 	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<FileUpload>());
+	private final Form<Void> form = new Form<>("form");
+	private final boolean delayed;
 
-	public UploadableImagePanel(String id) {
+	public UploadableImagePanel(String id, boolean delayed) {
 		super(id);
+		this.delayed = delayed;
 	}
 
 	protected abstract void processImage(StoredFile sf, File f) throws Exception;
@@ -49,41 +54,53 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
-		final Form<Void> form = new Form<>("form");
 		form.setMultiPart(true);
 		form.setMaxSize(Bytes.bytes(getMaxUploadSize()));
 		// Model is necessary here to avoid writing image to the User object
 		form.add(fileUploadField);
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
-		fileUploadField.add(new AjaxFormSubmitBehavior(form, "change") {
-			private static final long serialVersionUID = 1L;
+		form.addOrReplace(getImage());
+		if (!delayed) {
+			fileUploadField.add(new AjaxFormSubmitBehavior(form, "change") {
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target) {
-				FileUpload fu = fileUploadField.getFileUpload();
-				if (fu != null) {
-					File temp = null;
-					try {
-						temp = fu.writeToTempFile();
-						StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
-						if (sf.isImage()) {
-							processImage(sf, temp);
-						}
-					} catch (Exception e) {
-						log.error("Error", e);
-					} finally {
-						if (temp != null && temp.exists()) {
-							log.debug("Temp file was deleted ? {}", temp.delete());
-						}
-						fu.closeStreams();
-						fu.delete();
-					}
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					process(Optional.of(target));
 				}
-				update();
-				target.add(profile, form);
-			}
-		});
+			});
+		}
 		add(form.setOutputMarkupId(true));
 		add(BootstrapFileUploadBehavior.INSTANCE);
+	}
+
+	@Override
+	public void update() {
+		profile.addOrReplace(new WebMarkupContainer("img").setVisible(false));
+		form.addOrReplace(getImage());
+	}
+
+	public void process(Optional<AjaxRequestTarget> target) {
+		FileUpload fu = fileUploadField.getFileUpload();
+		if (fu != null) {
+			File temp = null;
+			try {
+				temp = fu.writeToTempFile();
+				StoredFile sf = new StoredFile(fu.getClientFileName(), temp);
+				if (sf.isImage()) {
+					processImage(sf, temp);
+				}
+			} catch (Exception e) {
+				log.error("Error", e);
+			} finally {
+				if (temp != null && temp.exists()) {
+					log.debug("Temp file was deleted ? {}", temp.delete());
+				}
+				fu.closeStreams();
+				fu.delete();
+			}
+		}
+		update();
+		target.ifPresent(t -> t.add(profile, form));
 	}
 }
