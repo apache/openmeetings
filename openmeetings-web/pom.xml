@@ -133,7 +133,6 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>raw-wb-all.js</jsSourceFile>
-								<jsSourceFile>uuid.js</jsSourceFile>
 								<jsSourceFile>raw-interview-area.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>interviewwb.js</jsFinalFile>
@@ -154,7 +153,6 @@
 								<jsSourceFile>MathJax-config.js</jsSourceFile>
 								<jsSourceFile>MathJax.js</jsSourceFile>
 								<jsSourceFile>raw-wb-all.js</jsSourceFile>
-								<!-- TODO jsSourceFile>uuid.js</jsSourceFile-->
 								<jsSourceFile>raw-tool-util.js</jsSourceFile>
 								<jsSourceFile>raw-player.js</jsSourceFile>
 								<jsSourceFile>raw-tool-base.js</jsSourceFile>
@@ -283,7 +281,6 @@
 						**/*.class,
 						**/raw-*.css,
 						**/raw-*.js,
-						**/uuid.js,
 						**/fabric.js,
 						**/MathJax*.js,
 						**/fileinput.js,
@@ -295,7 +292,6 @@
 					<warSourceExcludes>
 						**/raw-*.css,
 						**/raw-*.js,
-						**/uuid.js,
 						**/fabric.js,
 						**/MathJax*.js,
 						**/fileinput.js,
@@ -426,7 +422,6 @@
 									<excludes>
 										<exclude>**/raw-*.css</exclude>
 										<exclude>**/raw-*.js</exclude>
-										<exclude>**/uuid.js</exclude>
 										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
 										<exclude>**/fileinput.js</exclude>
@@ -462,7 +457,6 @@
 									<excludes>
 										<exclude>**/raw-*.css</exclude>
 										<exclude>**/raw-*.js</exclude>
-										<exclude>**/uuid.js</exclude>
 										<exclude>**/fabric.js</exclude>
 										<exclude>**/MathJax*.js</exclude>
 										<exclude>**/fileinput.js</exclude>

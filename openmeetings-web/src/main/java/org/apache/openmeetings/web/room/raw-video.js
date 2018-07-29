@@ -92,7 +92,7 @@ var Video = (function() {
 		let contSel;
 		if (opts.interview) {
 			const area = $('.pod-area');
-			const contId = UUID.generate();
+			const contId = UUID.v4();
 			contSel = '#' + contId;
 			area.append($('<div class="pod"></div>').attr('id', contId));
 			WbArea.updateAreaClass();
