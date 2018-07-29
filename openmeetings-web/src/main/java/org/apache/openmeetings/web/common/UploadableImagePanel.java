@@ -25,9 +25,12 @@ import java.util.Optional;
 
 import org.apache.openmeetings.util.StoredFile;
 import org.apache.openmeetings.web.util.upload.BootstrapFileUploadBehavior;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.form.upload.UploadProgressBar;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -40,6 +43,7 @@ import org.slf4j.LoggerFactory;
 public abstract class UploadableImagePanel extends ImagePanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(UploadableImagePanel.class);
+	private static final String HOVER = "$('.profile .ui-button-icon.ui-icon.ui-icon-closethick.remove').hover(function (e) {$(this).toggleClass('ui-widget-content', e.type === 'mouseenter');});";
 	private final FileUploadField fileUploadField = new FileUploadField("image", new ListModel<FileUpload>());
 	private final Form<Void> form = new Form<>("form");
 	private final boolean delayed;
@@ -51,6 +55,8 @@ public abstract class UploadableImagePanel extends ImagePanel {
 
 	protected abstract void processImage(StoredFile sf, File f) throws Exception;
 
+	protected abstract void deleteImage() throws Exception;
+
 	@Override
 	protected void onInitialize() {
 		super.onInitialize();
@@ -60,7 +66,23 @@ public abstract class UploadableImagePanel extends ImagePanel {
 		form.add(fileUploadField);
 		form.add(new UploadProgressBar("progress", form, fileUploadField));
 		form.addOrReplace(getImage());
-		if (!delayed) {
+		if (delayed) {
+			add(new WebMarkupContainer("remove").add(AttributeModifier.append("onclick"
+					, String.format("$(this).parent().find('.fileinput').fileinput('clear');", form.getMarkupId()))));
+		} else {
+			add(new ConfirmableAjaxBorder("remove", getString("80"), getString("833")) {
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				protected void onSubmit(AjaxRequestTarget target) {
+					try {
+						deleteImage();
+					} catch (Exception e) {
+						log.error("Error", e);
+					}
+					update(Optional.of(target));
+				}
+			});
 			fileUploadField.add(new AjaxFormSubmitBehavior(form, "change") {
 				private static final long serialVersionUID = 1L;
 
@@ -75,9 +97,23 @@ public abstract class UploadableImagePanel extends ImagePanel {
 	}
 
 	@Override
+	public void renderHead(IHeaderResponse response) {
+		super.renderHead(response);
+		response.render(OnDomReadyHeaderItem.forScript(HOVER));
+	}
+
+	@Override
 	public void update() {
 		profile.addOrReplace(new WebMarkupContainer("img").setVisible(false));
 		form.addOrReplace(getImage());
+	}
+
+	private void update(Optional<AjaxRequestTarget> target) {
+		update();
+		target.ifPresent(t -> {
+			t.add(profile, form);
+			t.appendJavaScript(HOVER);
+		});
 	}
 
 	public void process(Optional<AjaxRequestTarget> target) {
@@ -100,7 +136,6 @@ public abstract class UploadableImagePanel extends ImagePanel {
 				fu.delete();
 			}
 		}
-		update();
-		target.ifPresent(t -> t.add(profile, form));
+		update(target);
 	}
 }
