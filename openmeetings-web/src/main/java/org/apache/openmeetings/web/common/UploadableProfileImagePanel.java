@@ -18,12 +18,16 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
+import static org.apache.openmeetings.util.OmFileHelper.PROFILE_FILE_NAME;
+import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.util.ProfileImageResourceReference.getUrl;
 
 import java.io.File;
 
 import org.apache.openmeetings.core.converter.ImageConverter;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.StoredFile;
 
 public class UploadableProfileImagePanel extends UploadableImagePanel {
@@ -38,6 +42,14 @@ public class UploadableProfileImagePanel extends UploadableImagePanel {
 	@Override
 	protected void processImage(StoredFile sf, File f) throws Exception {
 		getBean(ImageConverter.class).convertImageUserProfile(f, userId, sf.isAsIs());
+	}
+
+	@Override
+	protected void deleteImage() throws Exception {
+		File f = new File(getUploadProfilesUserDir(userId), OmFileHelper.getName(PROFILE_FILE_NAME, EXTENSION_PNG));
+		if (f.exists()) {
+			f.delete();
+		}
 	}
 
 	@Override
