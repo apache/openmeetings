@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.admin.groups;
 
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
 import static org.apache.openmeetings.util.OmFileHelper.getGroupLogo;
+import static org.apache.openmeetings.util.OmFileHelper.getGroupLogoDir;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.openmeetings.web.util.GroupLogoResourceReference.getUrl;
@@ -72,6 +73,15 @@ public class GroupForm extends AdminBaseForm<Group> {
 		@Override
 		protected void processImage(StoredFile sf, File f) throws Exception {
 			imageConverter.resize(f, getGroupLogo(GroupForm.this.getModelObject().getId(), false), null, 28);
+		}
+
+		@Override
+		protected void deleteImage() throws Exception {
+			Long groupId = GroupForm.this.getModelObject().getId();
+			File logo = new File(getGroupLogoDir(), String.format("logo%s.png", groupId));
+			if (groupId != null && logo.exists()) {
+				logo.delete();
+			}
 		}
 
 		@Override
