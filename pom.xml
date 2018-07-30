@@ -1360,17 +1360,17 @@
 					<reportSet>
 						<reports>
 							<report>index</report>
-							<report>cim</report>
+							<report>ci-management</report>
 							<report>dependencies</report>
 							<report>dependency-convergence</report>
 							<report>dependency-management</report>
 							<report>distribution-management</report>
-							<report>issue-tracking</report>
-							<report>license</report>
-							<report>mailing-list</report>
+							<report>issue-management</report>
+							<report>licenses</report>
+							<report>mailing-lists</report>
 							<report>plugin-management</report>
 							<report>plugins</report>
-							<report>project-team</report>
+							<report>team</report>
 							<report>scm</report>
 							<report>summary</report>
 						</reports>
