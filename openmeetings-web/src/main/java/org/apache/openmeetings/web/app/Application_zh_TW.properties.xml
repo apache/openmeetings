@@ -257,7 +257,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="636"><![CDATA[Demo Room]]></entry>
 	<entry key="637"><![CDATA[Demo Time]]></entry>
 	<entry key="640"><![CDATA[Moderated]]></entry>
-	<entry key="641"><![CDATA[Please wait untill the Moderator has entered the Room. The Moderator can be either a Teacher, Admin or the creator of this Room.]]></entry>
+	<entry key="641"><![CDATA[Please wait until the Moderator has entered the Room. The Moderator can be either a Teacher, Admin or the creator of this Room.]]></entry>
 	<entry key="667"><![CDATA[To complete your registration please click on the following link. Or copy the URL to your browser bar.]]></entry>
 	<entry key="668"><![CDATA[Click to verify your E-Mail]]></entry>
 	<entry key="675"><![CDATA[Remove Moderation Role from this User]]></entry>
@@ -276,7 +276,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="693"><![CDATA[would like to get the Moderation. Use the status Icons next to the user in the List of Users to add or remove the Moderation.]]></entry>
 	<entry key="694"><![CDATA[would like to draw on whiteboard. Use the status Icons next to the user in the List of Users to add or remove the right to draw anything on the whiteboard.]]></entry>
 	<entry key="695"><![CDATA[would like to share his Audio/Video. Use the status Icons next to the user in the List of Users to add or remove the right to share Audio/Video for any User.]]></entry>
-	<entry key="696"><![CDATA[You have to wait untill a Moderator enters the room.]]></entry>
+	<entry key="696"><![CDATA[You have to wait until a Moderator enters the room.]]></entry>
 	<entry key="702"><![CDATA[Upload File]]></entry>
 	<entry key="703"><![CDATA[Add Folder]]></entry>
 	<entry key="705"><![CDATA[Trash (Drag and Drop item here)]]></entry>
