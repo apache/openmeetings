@@ -224,7 +224,6 @@ var VideoSettings = (function() {
 					_fillDevices(devices);
 				})
 				.catch(function(err) {
-					OmUtil.error(err);
 					_fillDevices(swf.getDevices());
 				});
 		}
