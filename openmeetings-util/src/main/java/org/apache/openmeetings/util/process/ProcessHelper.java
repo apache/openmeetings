@@ -19,6 +19,7 @@
 package org.apache.openmeetings.util.process;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTtl;
 
 import java.io.BufferedReader;
@@ -81,14 +82,14 @@ public class ProcessHelper {
 
 	private static void debugCommandStart(String desc, String[] argv) {
 		if (log.isDebugEnabled()) {
-			log.debug("START " + desc + " ################# ");
+			log.debug("START {} ################# ", desc);
 			log.debug(getCommand(argv));
 		}
 	}
 
 	private static void debugCommandEnd(String desc) {
 		if (log.isDebugEnabled()) {
-			log.debug("END " + desc + " ################# ");
+			log.debug("END {} ################# ", desc);
 		}
 	}
 
@@ -110,6 +111,7 @@ public class ProcessHelper {
 		Process proc = null;
 		StreamWatcher errorWatcher = null;
 		StreamWatcher inputWatcher = null;
+		final long start = System.currentTimeMillis();
 		try {
 			res.setCommand(getCommand(argv)).setOut("");
 
@@ -136,7 +138,7 @@ public class ProcessHelper {
 		} catch (Throwable t) {
 			log.error("executeScript", t);
 			res.setExitCode(-1)
-				.setError(t.getMessage())
+				.setError(String.format("Exception after %s of work; %s", formatMillis(System.currentTimeMillis() - start), t.getMessage()))
 				.setException(t.toString());
 		} finally {
 			if (proc != null) {

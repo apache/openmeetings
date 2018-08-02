@@ -21,6 +21,7 @@ package org.apache.openmeetings.core.converter;
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
+import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,17 +128,6 @@ public abstract class BaseConverter {
 
 	protected double diffSeconds(long val) {
 		return ((double)val) / 1000;
-	}
-
-	protected String formatMillis(long millis) {
-		long m = millis;
-		long hours = TimeUnit.MILLISECONDS.toHours(m);
-		m -= TimeUnit.HOURS.toMillis(hours);
-		long minutes = TimeUnit.MILLISECONDS.toMinutes(m);
-		m -= TimeUnit.MINUTES.toMillis(minutes);
-		long seconds = TimeUnit.MILLISECONDS.toSeconds(m);
-		m -= TimeUnit.SECONDS.toMillis(seconds);
-		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, m);
 	}
 
 	protected void updateDuration(Recording r) {
