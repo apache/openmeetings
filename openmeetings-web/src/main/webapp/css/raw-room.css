@@ -498,18 +498,14 @@ ul.settings-menu {
 	min-width: 250px;
 	max-width: 250px;
 }
-.room.box.interview #quick-vote {
-	z-index: 100;
-	right: 10px;
-}
 .room.box.interview .room.wb.area .wb-area .rec-btn {
 	z-index: 100;
 	border-radius: 30px;
 	position: absolute;
 	right: 200px;
-	bottom: 30px;
-	width: 50px;
-	height: 50px;
+	bottom: 0px;
+	width: 40px;
+	height: 40px;
 }
 .room.box.interview .room.wb.area .wb-area .rec-btn .ui-button-icon.ui-icon.stop
 , .room.box.interview .room.wb.area .wb-area .rec-btn .ui-button-icon.ui-icon.record
@@ -545,6 +541,17 @@ ul.settings-menu {
 	position: absolute;
 	right: 0;
 	bottom: 0;
+}
+.room.box.interview #quick-vote {
+	z-index: 100;
+	right: 10px;
+	bottom: 0;
+	padding: 0px 5px 0px 5px;
+	height: 40px;
+}
+.room.box.interview #quick-vote .close {
+	display: inline-block;
+	float: right;
 }
 @media screen and (max-width: 1280px) {
 	.room.sidebar {

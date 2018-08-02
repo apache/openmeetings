@@ -57,10 +57,11 @@ var InterviewWbArea = function() {
 	}
 	function _resize(sbW, chW, w, h) {
 		if (!container || !_inited) return;
-		const hh = h - 5;
+		const hh = h - 5 - 40;//rec button height
 		container.width(w).height(h).css('left', (Settings.isRtl ? chW : sbW) + 'px');
 		area.width(w).height(hh);
 		pArea.width(w).height(hh);
+		rec.css('right', w / 2)
 		_resizePod();
 	}
 	function _setRecEnabled(en) {
