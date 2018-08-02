@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class CalendarHelper {
 	public static ZoneId getZoneId(String tzId) {
@@ -49,5 +50,16 @@ public class CalendarHelper {
 
 	public static LocalDateTime getDateTime(Date d, String tzId) {
 		return getZoneDateTime(d == null ? new Date() : d, tzId).toLocalDateTime();
+	}
+
+	public static String formatMillis(long millis) {
+		long m = millis;
+		long hours = TimeUnit.MILLISECONDS.toHours(m);
+		m -= TimeUnit.HOURS.toMillis(hours);
+		long minutes = TimeUnit.MILLISECONDS.toMinutes(m);
+		m -= TimeUnit.MINUTES.toMillis(minutes);
+		long seconds = TimeUnit.MILLISECONDS.toSeconds(m);
+		m -= TimeUnit.SECONDS.toMillis(seconds);
+		return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, m);
 	}
 }
