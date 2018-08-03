@@ -93,6 +93,7 @@ public class OpenmeetingsVariables {
 	public static final String CONFIG_REMINDER_MESSAGE = "reminder.message";
 	public static final String CONFIG_MP4_AUDIO_RATE = "mp4.audio.rate";
 	public static final String CONFIG_MP4_AUDIO_BITRATE = "mp4.audio.bitrate";
+	public static final String CONFIG_MP4_VIDEO_PRESET = "mp4.video.preset";
 	public static final String CONFIG_REST_ALLOW_ORIGIN = "rest.allow.origin";
 	public static final String CONFIG_FNAME_MIN_LENGTH = "user.fname.minimum.length";
 	public static final String CONFIG_LNAME_MIN_LENGTH = "user.lname.minimum.length";
@@ -136,6 +137,7 @@ public class OpenmeetingsVariables {
 	private static Long defaultGroup = 1L;
 	private static int audioRate = 22050;
 	private static String audioBitrate = "32k";
+	private static String videoPreset = "medium";
 	private static String defaultTimezone = "Europe/Berlin";
 	private static String restAllowOrigin = null;
 	private static Class<?> appClass = null;
@@ -252,6 +254,14 @@ public class OpenmeetingsVariables {
 
 	public static void setAudioBitrate(String bitrate) {
 		audioBitrate = bitrate;
+	}
+
+	public static String getVideoPreset() {
+		return videoPreset;
+	}
+
+	public static void setVideoPreset(String preset) {
+		videoPreset = preset;
 	}
 
 	public static String getDefaultTimezone() {

@@ -39,6 +39,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
@@ -70,6 +71,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOri
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setVideoPreset;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -333,6 +335,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_MP4_AUDIO_BITRATE:
 				reloadAudioBitrate();
 				break;
+			case CONFIG_MP4_VIDEO_PRESET:
+				reloadVideoPreset();
+				break;
 			case CONFIG_DEFAULT_TIMEZONE:
 				reloadTimezone();
 				break;
@@ -414,6 +419,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setAudioBitrate(getString(CONFIG_MP4_AUDIO_BITRATE, "32k"));
 	}
 
+	private void reloadVideoPreset() {
+		setVideoPreset(getString(CONFIG_MP4_VIDEO_PRESET, "medium"));
+	}
+
 	private void reloadTimezone() {
 		String defaultTzName = getString(CONFIG_DEFAULT_TIMEZONE, "Europe/Berlin");
 
@@ -469,6 +478,7 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadGaCode();
 		reloadAudioRate();
 		reloadAudioBitrate();
+		reloadVideoPreset();
 		reloadTimezone();
 		reloadRestAllowOrigin();
 		reloadRoomSettings();

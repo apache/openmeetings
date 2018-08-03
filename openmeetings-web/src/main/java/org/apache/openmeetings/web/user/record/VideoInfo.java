@@ -145,6 +145,7 @@ public class VideoInfo extends Panel {
 		boolean exists = false;
 		if (_r instanceof Recording) {
 			Recording r = (Recording)_r;
+			isInterview = r.isInterview();
 			rm.setObject(r);
 			exists = r.exists();
 			try {
@@ -153,7 +154,6 @@ public class VideoInfo extends Panel {
 					Room room = roomDao.get(r.getRoomId());
 					if (room != null) {
 						name = room.getName();
-						isInterview = Room.Type.interview == room.getType();
 					}
 				}
 				roomName.setObject(name);

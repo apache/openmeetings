@@ -117,10 +117,12 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 							PodPart.add(parts, diff);
 							if (!meta.isAudioOnly()) {
-								parts.add(new PodPart(path));
+								parts.add(new PodPart(path, diff(meta.getRecordEnd(), meta.getRecordStart())));
 							}
 							pStart = meta.getRecordEnd();
 						}
+					} else {
+						log.debug("Meta FLV doesn't exist: {}", flv);
 					}
 				}
 				if (!parts.isEmpty()) {
@@ -140,7 +142,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					List<String> args = new ArrayList<>();
 					args.add(getPathToFFMPEG());
 					args.add("-y");
-					args.add("-an");
 					StringBuilder videos = new StringBuilder();
 					StringBuilder concat = new StringBuilder();
 					for (int i = 0; i < parts.size(); ++i) {
@@ -165,6 +166,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					}
 					args.add("-filter_complex");
 					args.add(concat.insert(0, videos).append("concat=n=").append(parts.size()).append(":v=1:a=0").toString());
+					args.add("-an");
 					args.add(podX);
 					ProcessResult res = ProcessHelper.executeScript(String.format("Full Flv pod_%s", N), args.toArray(new String[0]), true);
 					logs.add(res);
@@ -206,16 +208,21 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					args.add("-i");
 					args.add(pods.get(i));
 					cols.append('[').append(i).append(":v]");
-					if (i != 0 && i % w == 0) {
-						cols.append("hstack=inputs=").append(w).append("[c").append(j).append("];");
+					if (i != 0 && (i + 1) % w == 0) {
+						cols.append("hstack=inputs=").append(w);
+						if (j == 0 && i == N - 1) {
+							cols.append("[v]");
+						} else {
+							cols.append("[c").append(j).append("];");
+						}
 						rows.append("[c").append(j).append(']');
 						j++;
 					}
 					if (i == N - 1) {
-						if (j == 0) {
-							cols.append("hstack=inputs=").append(i).append("[v]");
-						} else {
+						if (j > 1) {
 							rows.append("vstack=inputs=").append(j).append("[v]");
+						} else {
+							rows.setLength(0);
 						}
 					}
 				}
@@ -254,14 +261,13 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 		final String file;
 		final long duration;
 
-		public PodPart(String file) {
+		public PodPart(String file, long duration) {
 			this.file = file;
-			this.duration = 0L;
+			this.duration = duration;
 		}
 
 		public PodPart(long duration) {
-			this.file = null;
-			this.duration = duration;
+			this(null, duration);
 		}
 
 		public String getFile() {
