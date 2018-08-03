@@ -196,7 +196,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			} else {
 				/* Creating grid
 				 * ffmpeg -i top_l.mp4 -i top_r.mp4 -i bottom_l.mp4 -i bottom_r.mp4 -i audio.mp4 \
-				 *	-filter_complex "[0:v][1:v]hstack[t];[2:v][3:v]hstack[b];[t][b]vstack[v]" \
+				 *	-filter_complex "[0:v][1:v]hstack=inputs=2[t];[2:v][3:v]hstack=inputs=2[b];[t][b]vstack=inputs=2[v]" \
 				 *	-map "[v]" -map 4:a -c:a copy -shortest output.mp4
 				 */
 				StringBuilder cols = new StringBuilder();
@@ -206,15 +206,15 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					args.add(pods.get(i));
 					cols.append('[').append(i).append(":v]");
 					if (i != 0 && i % w == 0) {
-						cols.append("hstack[c").append(j).append("];");
+						cols.append("hstack=inputs=").append(w).append("[c").append(j).append("];");
 						rows.append("[c").append(j).append(']');
 						j++;
 					}
 					if (i == N - 1) {
 						if (j == 0) {
-							cols.append("hstack[v]");
+							cols.append("hstack=inputs=").append(i).append("[v]");
 						} else {
-							rows.append("vstack[v]");
+							rows.append("vstack=inputs=").append(j).append("[v]");
 						}
 					}
 				}

@@ -472,7 +472,7 @@ ul.settings-menu {
 }
 .pod-area .pod-big {
 	grid-area: a;
-	border: 1px solid #cccc;
+	border: 1px solid #cccccc;
 	border-radius: 8px;
 	background-image: url(images/drop.png);
 	background-repeat: no-repeat;
