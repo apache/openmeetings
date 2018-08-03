@@ -84,7 +84,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			// Merge Wave to Full Length
 			File wav = new File(streamFolder, screenMetaData.getStreamName() + "_FINAL_WAVE.wav");
-			createWav(r, logs, streamFolder, waveFiles, wav);
+			createWav(r, logs, streamFolder, waveFiles, wav, null);
 
 			screenMetaData.setFullWavAudioData(wav.getName());
 			metaDataDao.update(screenMetaData);

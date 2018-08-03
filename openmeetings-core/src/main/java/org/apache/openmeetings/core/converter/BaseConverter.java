@@ -153,13 +153,9 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 
-	private void stripAudioFirstPass(Recording r, ProcessResultList logs, List<File> waveFiles, File streamFolder) {
-		stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaDataDao.getAudioMetaDataByRecording(r.getId()));
-	}
-
-	protected void createWav(Recording r, ProcessResultList logs, File streamFolder, List<File> waveFiles, File wav) throws IOException {
+	protected void createWav(Recording r, ProcessResultList logs, File streamFolder, List<File> waveFiles, File wav, List<RecordingMetaData> metaList) throws IOException {
 		deleteFileIfExists(wav);
-		stripAudioFirstPass(r, logs, waveFiles, streamFolder);
+		stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaList == null ? metaDataDao.getAudioMetaDataByRecording(r.getId()) : metaList);
 		if (waveFiles.isEmpty()) {
 			// create default Audio to merge it. strip to content length
 			String oneSecWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
