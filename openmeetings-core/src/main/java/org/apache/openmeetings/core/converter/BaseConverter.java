@@ -32,6 +32,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMA
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getAudioRate;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getVideoPreset;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
@@ -379,10 +380,11 @@ public abstract class BaseConverter {
 				"-c:v", "h264", //
 				"-crf", "24",
 				"-pix_fmt", "yuv420p",
-				"-preset", "medium",
+				"-preset", getVideoPreset(),
 				"-profile:v", "baseline",
-				"-c:a", "libfaac",
-				"-c:a", "libfdk_aac",
+				"-level", "3.0",
+				"-movflags", "faststart",
+				"-c:a", "aac",
 				"-ar", String.valueOf(getAudioRate()),
 				"-b:a", getAudioBitrate(),
 				"-s", getDimensions(r), //

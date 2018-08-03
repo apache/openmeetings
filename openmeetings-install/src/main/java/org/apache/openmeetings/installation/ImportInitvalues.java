@@ -61,6 +61,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -348,6 +349,9 @@ public class ImportInitvalues {
 				"Number of chars needed in a user last name", "4.0.4");
 		addCfg(list, CONFIG_CHAT_SEND_ON_ENTER, String.valueOf(false), Configuration.Type.bool,
 				"Controls if chat message will be set on Enter (default: send on Ctrl+Enter)", "4.0.5");
+		addCfg(list, CONFIG_MP4_VIDEO_PRESET, "medium", Configuration.Type.bool,
+				"Preset (encoder optimization settings) to be used while performing mp4 conversion."
+				+ "Valid values are: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow", "4.0.5");
 		return list;
 	}
 	public void loadConfiguration(InstallationConfig cfg) {
