@@ -81,7 +81,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			List<RecordingMetaData> metaList = metaDataDao.getByRecording(r.getId());
 
 			File wav = new File(streamFolder, String.format("INTERVIEW_%s_FINAL_WAVE.wav", r.getId()));
-			createWav(r, logs, streamFolder, waveFiles, wav);
+			createWav(r, logs, streamFolder, waveFiles, wav, metaList);
 
 			final String interviewCam = interviewCamFile.getCanonicalPath();
 
@@ -154,6 +154,8 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							args.add("-i");
 							args.add(interviewCam);
 						} else {
+							args.add("-t");
+							args.add(formatMillis(p.getDuration()));
 							args.add("-i");
 							args.add(p.getFile());
 						}
