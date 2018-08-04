@@ -246,7 +246,6 @@ public class RoomForm extends AdminBaseForm<Room> {
 		}));
 		add(new CheckBox("chatOpened"));
 		add(new CheckBox("filesOpened"));
-		add(new CheckBox("autoVideoSelect"));
 
 		// Moderators
 		final Select2Choice<User> moderatorChoice = new Select2Choice<>("moderator2add", moderator2add, new AdminUserChoiceProvider() {
