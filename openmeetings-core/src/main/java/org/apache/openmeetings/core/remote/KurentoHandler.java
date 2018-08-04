@@ -22,9 +22,6 @@ package org.apache.openmeetings.core.remote;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
@@ -36,14 +33,13 @@ import org.kurento.client.ObjectCreatedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.github.openjson.JSONObject;
 
-@Component
 public class KurentoHandler {
 	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
 	public final static String KURENTO_TYPE = "kurento";
+	private String kurentoWsUrl;
 	private KurentoClient client;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
@@ -52,11 +48,14 @@ public class KurentoHandler {
 	@Autowired
 	private IClientManager clientManager;
 
-	@PostConstruct
-	private void init() {
+	public void setKurentoWsUrl(String kurentoWsUrl) {
+		this.kurentoWsUrl = kurentoWsUrl;
+	}
+
+	public void init() {
 		try {
 			// TODO check connection, reconnect, listeners etc.
-			client = KurentoClient.create();
+			client = KurentoClient.create(kurentoWsUrl);
 			client.getServerManager().addObjectCreatedListener(new EventListener<ObjectCreatedEvent>() {
 				@Override
 				public void onEvent(ObjectCreatedEvent evt) {
@@ -68,8 +67,7 @@ public class KurentoHandler {
 		}
 	}
 
-	@PreDestroy
-	private void destroy() {
+	public void destroy() {
 		if (client != null) {
 			client.destroy();
 		}

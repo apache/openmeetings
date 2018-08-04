@@ -137,4 +137,9 @@
 		<property name="maxPoolSize" value="10" />
 		<property name="queueCapacity" value="25" />
 	</bean>
+
+	<!-- Kurento -->
+	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" init-method="init" destroy-method="destroy">
+		<property name="kurentoWsUrl" value="ws://localhost:8888/kurento"/>
+	</bean>
 </beans>
