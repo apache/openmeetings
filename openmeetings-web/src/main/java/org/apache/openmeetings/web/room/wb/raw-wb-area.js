@@ -152,6 +152,9 @@ var DrawWbArea = function() {
 			$(this).data().setRole(role);
 		});
 	}
+	function _actionActivateWb(_wbId) {
+		wbAction('activateWb', JSON.stringify({wbId: _wbId}));
+	}
 	self.init = function() {
 		Wicket.Event.subscribe('/websocket/message', wbWsHandler);
 		container = $('.room.wb.area');
@@ -168,7 +171,7 @@ var DrawWbArea = function() {
 			, activate: function(e, ui) {
 				//only send `activateWb` event if activation was initiated by user
 				if (e.originalEvent && e.originalEvent.type === 'click') {
-					wbAction('activateWb', JSON.stringify({wbId: ui.newTab.data('wb-id')}));
+					_actionActivateWb(ui.newTab.data('wb-id'));
 				}
 			}
 		});
@@ -235,6 +238,7 @@ var DrawWbArea = function() {
 		if (!_inited) return;
 		self.create(obj);
 		_activateTab(obj.wbId);
+		_actionActivateWb(obj.wbId);
 	};
 	self.activateWb = function(obj) {
 		if (!_inited) return;
@@ -244,6 +248,14 @@ var DrawWbArea = function() {
 		if (!_inited) return;
 		_renameTab(obj);
 	}
+	self.removeWb = function(obj) {
+		if (!_inited) return;
+		const tabId = self.getWbTabId(obj.wbId);
+		_getWbTab(obj.wbId).remove();
+		$('#' + tabId).remove();
+		refreshTabs();
+		_actionActivateWb(getActive().data().id);
+	};
 	self.load = function(json) {
 		if (!_inited) return;
 		self.getWb(json.wbId).load(json.obj);
@@ -272,13 +284,6 @@ var DrawWbArea = function() {
 	self.clearSlide = function(json) {
 		if (!_inited) return;
 		self.getWb(json.wbId).clearSlide(json.slide);
-	};
-	self.removeWb = function(obj) {
-		if (!_inited) return;
-		const tabId = self.getWbTabId(obj.wbId);
-		_getWbTab(obj.wbId).remove();
-		$('#' + tabId).remove();
-		refreshTabs();
 	};
 	self.resize = function(sbW, chW, w, h) {
 		const hh = h - 5;
