@@ -222,8 +222,7 @@
 .activity.mic.ui-icon {
 	background-image: url(images/microphone_enable.png);
 }
-.ui-icon.disabled, .om-icon.disabled {
-	-webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+.ui-icon.disabled, .om-icon.disabled { /* Safari 6.0 - 9.0 */
 	filter: grayscale(100%);
 	pointer-events: none;
 }
@@ -414,10 +413,13 @@ ul.settings-menu {
 	overflow: hidden;
 }
 .pod-area {
+	display: -ms-inline-grid;
 	display: inline-grid;
 }
 .pod-area.max2, .pod-area.max3 {
+	-ms-grid-columns: (1fr)[3];
 	grid-template-columns: repeat(3, 1fr);
+	-ms-grid-rows: (1fr)[2];
 	grid-template-rows: repeat(2, 1fr);
 }
 .pod-area.max2 {
@@ -431,21 +433,26 @@ ul.settings-menu {
 		"b2 a a";
 }
 .pod-area.max5, .pod-area.max9, .pod-area.max13 {
+	-ms-grid-columns: (1fr)[4];
 	grid-template-columns: repeat(4, 1fr);
 	grid-template-areas:
 		"b1 a a b2"
 		"b3 a a b4";
 }
 .pod-area.max5 {
+	-ms-grid-rows: (1fr)[2];
 	grid-template-rows: repeat(2, 1fr);
 }
 .pod-area.max9 {
+	-ms-grid-rows: (1fr)[3];
 	grid-template-rows: repeat(3, 1fr);
 }
 .pod-area.max13 {
+	-ms-grid-rows: (1fr)[4];
 	grid-template-rows: repeat(4, 1fr);
 }
 .pod-area.max17, .pod-area.max25, .pod-area.max33 {
+	-ms-grid-columns: (1fr)[8];
 	grid-template-columns: repeat(8, 1fr);
 	grid-template-areas: 
 		"b01 b02 a a a a b03 b04"
@@ -454,12 +461,15 @@ ul.settings-menu {
 		"b13 b14 a a a a b15 b16";
 }
 .pod-area.max17 {
+	-ms-grid-rows: (1fr)[4];
 	grid-template-rows: repeat(4, 1fr);
 }
 .pod-area.max25 {
+	-ms-grid-rows: (1fr)[5];
 	grid-template-rows: repeat(5, 1fr);
 }
 .pod-area.max33 {
+	-ms-grid-rows: (1fr)[6];
 	grid-template-rows: repeat(6, 1fr);
 }
 .pod-area .pod-big, .pod-area .pod {
@@ -468,7 +478,25 @@ ul.settings-menu {
 	margin: 2px;
 }
 .pod-area .empty {
+	-ms-grid-row: 1;
+	-ms-grid-column: 1;
 	grid-area: e;
+}
+.pod-area.max2 .pod-big
+ , .pod-area.max3 .pod-big
+ , .pod-area.max5 .pod-big
+ , .pod-area.max9 .pod-big
+ , .pod-area.max13 .pod-big {
+	-ms-grid-row: 1;
+	-ms-grid-row-span: 2;
+	-ms-grid-column: 2;
+	-ms-grid-column-span: 2;
+}
+.pod-area.max17 .pod-big, .pod-area.max25 .pod-big, .pod-area.max33 .pod-big {
+	-ms-grid-row: 1;
+	-ms-grid-row-span: 4;
+	-ms-grid-column: 3;
+	-ms-grid-column-span: 4;
 }
 .pod-area .pod-big {
 	grid-area: a;
