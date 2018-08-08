@@ -39,7 +39,12 @@ var InterviewWbArea = function() {
 			items: '.pod'
 			, handle: '.ui-dialog-titlebar'
 			, change: function(event, ui) {
-				console.log('changed');
+				OmUtil.log('changed');
+				_ieLayout();
+			}
+			, stop: function(event, ui) {
+				OmUtil.log('stopped');
+				_ieLayout();
 			}
 		});
 		_updateAreaClass();
@@ -73,8 +78,51 @@ var InterviewWbArea = function() {
 			.attr('title', rec.data(started ? 'title-stop' : 'title-start'))
 			.button('option', {icon: started ? 'stop' : 'record'});
 	}
+	function _ieLayout() {
+		if (OmUtil.isIe()) {
+			const pods = pArea.find('.pod:not(.ui-sortable-helper)')
+				, count = pods.length
+			if (count < 2) {
+				pods.css('-ms-grid-row', '2').css('-ms-grid-column', '1');
+			} else if (count < 3) {
+				pods.each(function(idx) {
+					$(this).css('-ms-grid-row', '' + idx).css('-ms-grid-column', '1');
+				});
+			} else if (count < 5) {
+				let row = 1, col = 1;
+				pods.each(function(idx) {
+					if (col > 4) {
+						col = 1;
+						row++;
+					}
+					$(this).css('-ms-grid-row', '' + row).css('-ms-grid-column', '' + col);
+					col += 3;
+				});
+			} else if (count < 13) {
+				let row = 1, col = 1;
+				pods.each(function(idx) {
+					if (col > 4) {
+						col = 1;
+						row++;
+					}
+					$(this).css('-ms-grid-row', '' + row).css('-ms-grid-column', '' + col);
+					col += row > 2 ? 1 : 3;
+				});
+			} else if (count < 33) {
+				let row = 1, col = 1;
+				pods.each(function(idx) {
+					if (col > 8) {
+						col = 1;
+						row++;
+					}
+					$(this).css('-ms-grid-row', '' + row).css('-ms-grid-column', '' + col);
+					col += row > 4 || (col < 2 || col > 6) ? 1 : 5;
+				});
+			}
+		}
+	}
 	function _updateAreaClass() {
-		const count = pArea.find('.pod:not(.ui-helper,.ui-sortable-placeholder)').length
+		const count = pArea.find('.pod:not(.ui-sortable-helper,.ui-sortable-placeholder)').length
 			, empt = pArea.find('.empty');
 		if (count < 2) {
 			empt.length == 0 && pArea.append($('<div class="empty"></div>'));
@@ -100,6 +148,7 @@ var InterviewWbArea = function() {
 			cls +='max33';
 		}
 		pArea.attr('class', cls);
+		_ieLayout();
 		_resizePod();
 	}
 

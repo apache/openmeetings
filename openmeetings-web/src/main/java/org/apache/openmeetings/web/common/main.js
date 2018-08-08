@@ -85,6 +85,9 @@ var OmUtil = (function() {
 	self.error = _error;
 	self.info = _info;
 	self.log = _log;
+	self.isIe = function() {
+		return /Trident\/|MSIE/.test(window.navigator.userAgent);
+	};
 	return self;
 })();
 Wicket.BrowserInfo.collectExtraInfo = function(info) {
