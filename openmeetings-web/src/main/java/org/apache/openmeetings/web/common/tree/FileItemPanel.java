@@ -36,7 +36,7 @@ public class FileItemPanel extends FolderPanel {
 	@SpringBean
 	private FileItemLogDao fileLogDao;
 
-	public FileItemPanel(String id, final IModel<? extends BaseFileItem> model, final FileTreePanel fileTreePanel) {
+	public FileItemPanel(String id, final IModel<BaseFileItem> model, final FileTreePanel fileTreePanel) {
 		super(id, model, fileTreePanel);
 		BaseFileItem f = model.getObject();
 		long errorCount = fileLogDao.countErrors(f);
@@ -56,6 +56,6 @@ public class FileItemPanel extends FolderPanel {
 				fileTreePanel.errorsDialog.open(target);
 			}
 		}).setVisible(visible);
-		drag.add(errors);
+		add(errors);
 	}
 }
