@@ -34,7 +34,7 @@ public class FileItemPanel extends FolderPanel {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer errors = new WebMarkupContainer("errors");
 
-	public FileItemPanel(String id, final IModel<? extends BaseFileItem> model, final FileTreePanel fileTreePanel) {
+	public FileItemPanel(String id, final IModel<BaseFileItem> model, final FileTreePanel fileTreePanel) {
 		super(id, model, fileTreePanel);
 		BaseFileItem f = model.getObject();
 		long errorCount = getBean(FileItemLogDao.class).countErrors(f);
@@ -54,6 +54,6 @@ public class FileItemPanel extends FolderPanel {
 				fileTreePanel.errorsDialog.open(target);
 			}
 		}).setVisible(visible);
-		drag.add(errors);
+		add(errors);
 	}
 }
