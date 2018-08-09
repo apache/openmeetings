@@ -498,12 +498,16 @@ public class BackupImport {
 		Long defaultLdapId = cfgDao.getLong(CONFIG_DEFAULT_LDAP_ID, null);
 		List<LdapConfig> list = readList(simpleSerializer, f, "ldapconfigs.xml", "ldapconfigs", LdapConfig.class);
 		for (LdapConfig c : list) {
-			if (!"local DB [internal]".equals(c.getName())) {
-				c.setId(null);
-				c = ldapConfigDao.update(c, null);
-				if (defaultLdapId == null) {
-					defaultLdapId = c.getId();
-				}
+			if (Strings.isEmpty(c.getName())) {
+				continue;
+			}
+			if ("local DB [internal]".equals(c.getName())) {
+				continue;
+			}
+			c.setId(null);
+			c = ldapConfigDao.update(c, null);
+			if (defaultLdapId == null) {
+				defaultLdapId = c.getId();
 			}
 		}
 		return defaultLdapId;

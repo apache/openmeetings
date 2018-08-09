@@ -78,9 +78,9 @@
 		<spring.version>5.0.8.RELEASE</spring.version>
 		<mina.version>2.0.19</mina.version>
 		<tomcat.version>9.0.10</tomcat.version>
-		<ical4j.version>2.2.0</ical4j.version>
+		<ical4j.version>3.0.1</ical4j.version>
 		<cxf.version>3.2.5</cxf.version>
-		<selenium.version>3.13.0</selenium.version>
+		<selenium.version>3.14.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
 		<site.basedir>${project.basedir}</site.basedir>
@@ -93,17 +93,17 @@
 		<commons-dbcp.version>2.5.0</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
 		<commons-pool2.version>2.6.0</commons-pool2.version>
-		<postgresql.version>42.2.2</postgresql.version>
+		<postgresql.version>42.2.4</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
-		<dom4j.version>2.1.0</dom4j.version>
+		<dom4j.version>2.1.1</dom4j.version>
 		<commons-codec.version>1.11</commons-codec.version>
 		<commons-io.version>2.6</commons-io.version>
 		<mysql.version>8.0.11</mysql.version>
 		<mssql.version>6.2.1.jre8</mssql.version>
 		<pdfbox.version>2.0.11</pdfbox.version>
-		<commons-collections4.version>4.1</commons-collections4.version>
+		<commons-collections4.version>4.2</commons-collections4.version>
 		<xstream.version>1.4.10</xstream.version>
-		<api-all.version>1.0.2</api-all.version>
+		<api-all.version>2.0.0.AM1</api-all.version>
 		<caldav4j.version>0.9.1</caldav4j.version>
 		<tika-parsers.version>1.18</tika-parsers.version>
 		<commons-text.version>1.4</commons-text.version>

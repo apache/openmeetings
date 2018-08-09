@@ -19,6 +19,10 @@
 package org.apache.openmeetings.backup;
 
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_IMAGEMAGIC;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_OFFICE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_SOX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -65,6 +69,12 @@ public class TestOldBackups extends AbstractJUnitDefaults {
 		assertNotNull("Not null config should be returned", cfg);
 		cfg.setValue(cryptClass);
 		cfgDao.update(cfg, null);
+		for (String key : new String[] {CONFIG_PATH_IMAGEMAGIC, CONFIG_PATH_FFMPEG, CONFIG_PATH_OFFICE, CONFIG_PATH_SOX}) {
+			Configuration c = cfgDao.get(key);
+			assertNotNull("Not null config should be returned", c);
+			c.setValue("");
+			cfgDao.update(c, null);
+		}
 	}
 
 	@Test

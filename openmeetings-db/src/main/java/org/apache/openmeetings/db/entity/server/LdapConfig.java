@@ -54,7 +54,7 @@ public class LdapConfig extends HistoricalEntity {
 	private Long id;
 
 	@Column(name = "name")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private String name;
 
 	@Column(name = "config_file_name")
@@ -62,7 +62,7 @@ public class LdapConfig extends HistoricalEntity {
 	private String configFileName;
 
 	@Column(name = "add_domain_to_user_name", nullable = false)
-	@Element(data = true)
+	@Element(data = true, required = false)
 	private boolean addDomainToUserName;
 
 	@Column(name = "domain")
@@ -70,7 +70,7 @@ public class LdapConfig extends HistoricalEntity {
 	private String domain;
 
 	@Column(name = "is_active", nullable = false)
-	@Element(data = true, name = "isActive")
+	@Element(data = true, name = "isActive", required = false)
 	private boolean active;
 
 	@ManyToOne(fetch = FetchType.EAGER)
