@@ -17,19 +17,27 @@ var InterviewWbArea = function() {
 		}).click(function() {
 			wbAction($(this).data('mode') === 'rec' ? 'startRecording' : 'stopRecording', '');
 		});
-		pArea.find('.pod-big').droppable({
+		const bigSel = '.wb-area .pod-area .pod-big'
+			, big = pArea.find('.pod-big');
+		big.droppable({
 			accept: '.pod'
 			, activeClass: 'ui-hightlight'
 			, drop: function(event, ui) {
-				const big = $(this)
-					, vid = ui.draggable.find('.ui-dialog-content')
+				const vid = ui.draggable.find('.ui-dialog-content')
 					, cvid = big.find('.ui-dialog-content');
 				if (cvid.length === 0) {
-					vid.dialog('option', 'appendTo', big);
+					vid.dialog('option', 'appendTo', bigSel);
 					ui.draggable.remove();
+					if (OmUtil.isIe()) {
+						vid.data().reinitSwf();
+					}
 				} else {
-					cvid.dialog('option', 'appendTo', ui.draggable);
-					vid.dialog('option', 'appendTo', big);
+					cvid.dialog('option', 'appendTo', '#' + ui.draggable.attr('id'));
+					vid.dialog('option', 'appendTo', bigSel);
+					if (OmUtil.isIe()) {
+						vid.data().reinitSwf();
+						cvid.data().reinitSwf();
+					}
 				}
 				pArea.find('.ui-sortable-placeholder.pod').hide();
 				_updateAreaClass();
@@ -44,6 +52,9 @@ var InterviewWbArea = function() {
 			}
 			, stop: function(event, ui) {
 				OmUtil.log('stopped');
+				if (OmUtil.isIe()) {
+					ui.item.find('.ui-dialog-content').data().reinitSwf();
+				}
 				_ieLayout();
 			}
 		});
@@ -80,6 +91,7 @@ var InterviewWbArea = function() {
 	}
 	function _ieLayout() {
 		if (OmUtil.isIe()) {
+			pArea.find('.pod.ui-sortable-helper').css('-ms-grid-row', '').css('-ms-grid-column', '');;
 			const pods = pArea.find('.pod:not(.ui-sortable-helper)')
 				, count = pods.length
 			if (count < 2) {

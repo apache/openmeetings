@@ -233,6 +233,12 @@ var Video = (function() {
 		}
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
+		_reinitSwf();
+		v.dialog('widget').css(_pos);
+	}
+	function _reinitSwf() {
+		const _id = VideoUtil.getVid(c.uid);
+		swf && swf.remove();
 		//broadcast
 		const o = Room.getOptions();
 		if (c.self) {
@@ -254,8 +260,7 @@ var Video = (function() {
 		o.type = c.type;
 		delete o.keycode;
 		swf = initSwf(vc, 'main.swf', _id + '-swf', o);
-		swf.attr('width', _w).attr('height', _h);
-		v.dialog('widget').css(_pos);
+		swf.attr('width', vc.width()).attr('height', vc.height());
 	}
 	function _update(_c) {
 		const opts = Room.getOptions();
@@ -316,5 +321,6 @@ var Video = (function() {
 	self.setRights = _setRights;
 	self.cleanup = _cleanup;
 	self.resizePod = _resizePod;
+	self.reinitSwf = _reinitSwf;
 	return self;
 });
