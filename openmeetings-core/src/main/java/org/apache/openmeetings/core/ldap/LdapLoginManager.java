@@ -385,8 +385,8 @@ public class LdapLoginManager {
 			if (GroupMode.ATTRIBUTE == options.groupMode) {
 				Attribute attr = getAttr(config, entry, CONFIGKEY_LDAP_KEY_GROUP, LDAP_KEY_GROUP);
 				if (attr != null) {
-					for (Value<?> v : attr) {
-						groups.add(new Dn(v.getString()));
+					for (Value v : attr) {
+						groups.add(new Dn(v.getValue()));
 					}
 				}
 			} else if (GroupMode.QUERY == options.groupMode) {
