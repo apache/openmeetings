@@ -33,8 +33,8 @@
 	line-height: 20px;
 	color: transparent;
 }
-.trash-toolbar .fileitem, .trash-toolbar .recorditem {
-	display: none;
+.trash-toolbar .om-icon.fileitem, .trash-toolbar .om-icon.recorditem {
+	display: none !important;
 }
 .trash-toolbar-hover {
 	color: inherit;

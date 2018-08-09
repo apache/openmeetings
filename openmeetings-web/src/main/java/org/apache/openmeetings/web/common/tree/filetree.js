@@ -1,7 +1,7 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 function dragHelper() {
 	let s = $(this);
-	if (s.parents('a').hasClass('ui-state-active')) {
+	if (s.hasClass('ui-state-active')) {
 		s = $('.ui-state-active .ui-draggable.ui-draggable-handle');
 	}
 	const c = $('<div/>').attr('id', 'draggingContainer').width(80).height(36)
