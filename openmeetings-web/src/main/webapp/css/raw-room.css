@@ -571,7 +571,7 @@ ul.settings-menu {
 .room.box.interview #quick-vote {
 	z-index: 100;
 	right: 10px;
-	bottom: 0;
+	bottom: 2px;
 	padding: 0px 5px 0px 5px;
 	height: 40px;
 }
