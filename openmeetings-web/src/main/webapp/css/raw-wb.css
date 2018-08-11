@@ -63,14 +63,14 @@
 }
 .room.wb.area .tools.vertical {
 	width: 31px;
-	height: 479px;
+	height: 332px;
 }
 .room.wb.area .tools.readonly.vertical {
 	width: 31px;
 	height: 42px;
 }
 .room.wb.area .tools.horisontal {
-	width: 479px;
+	width: 332px;
 	height: 31px;
 }
 .room.wb.area .tools.readonly.horisontal {
@@ -129,6 +129,9 @@
 .room.wb.area .tools .om-icon.big.math {
 	background-image: url(images/math.png);
 }
+.room.wb.area .tools .om-icon.big.textbox {
+	background-image: url(images/textbox.png);
+}
 .room.wb.area .om-icon.big.next {
 	background-image: url(images/next.png);
 }
@@ -138,6 +141,20 @@
 .wb-settings, .wb-formula {
 	position: absolute;
 	z-index: 95;
+}
+.room.wb.area .tools .dropdown-toggle {
+	position: relative;
+	width: 27px;
+	height: 22px;
+	display: inline-block;
+}
+.room.wb.area .tools .dropdown-toggle .caret {
+	position: absolute;
+	border-top: 8px solid transparent;
+	border-left: 8px solid blue;
+	border-right: 8px solid transparent;
+	bottom: -5px;
+	left: 2px;
 }
 .wb-settings, .wb-settings .tab.props, .wb-formula {
 	display: inline-block;
