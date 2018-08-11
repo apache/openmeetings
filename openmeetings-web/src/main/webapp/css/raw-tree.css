@@ -56,6 +56,9 @@
 	padding-right: 20px;
 	vertical-align: top;
 }
+.trees .tree-node {
+	white-space: nowrap;
+}
 .refresh.om-icon {
 	background-image: url(images/refresh.png);
 }
