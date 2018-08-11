@@ -6,11 +6,11 @@ var Wb = function() {
 	let a, t, z, s, f, mode, slide = 0, width = 0, height = 0
 			, zoom = 1., zoomMode = 'pageWidth', role = null;
 
-	function getBtn(m) {
+	function _getBtn(m) {
 		return !!t ? t.find('.om-icon.' + (m || mode)) : null;
 	}
-	function initToolBtn(m, def, obj) {
-		const btn = getBtn(m);
+	function _initToolBtn(m, def, obj) {
+		const btn = _getBtn(m);
 		btn.data({
 			obj: obj
 			, activate: function() {
@@ -25,7 +25,7 @@ var Wb = function() {
 				obj.deactivate();
 			}
 		}).click(function() {
-			const b = getBtn();
+			const b = _getBtn();
 			if (b.length && b.hasClass(ACTIVE)) {
 				b.data().deactivate();
 			}
@@ -35,9 +35,37 @@ var Wb = function() {
 			btn.data().activate();
 		}
 	}
-	function initCliparts() {
+	function _initGroup(__id, e) {
+		const c = OmUtil.tmpl(__id);
+		e.after(c);
+		const fT = c.find('div.om-icon.big:first');
+		c.attr('title', fT.attr('title')).find('a').prepend(fT);
+		c.find('.om-icon').each(function() {
+			const cur = $(this);
+			cur.click(function() {
+					const old = c.find('a .om-icon');
+					c.find('ul li').prepend(old);
+					c.attr('title', cur.attr('title')).find('a').prepend(cur);
+				});
+		});
+	}
+	function _initTexts() {
+		_initGroup('#wb-area-texts', _getBtn('apointer'));
+		_initToolBtn('text', false, Text(wb, s));
+		_initToolBtn('textbox', false, Textbox(wb, s));
+	}
+	function _initDrawings() {
+		_initGroup('#wb-area-drawings', t.find('.texts'));
+		_initToolBtn('paint', false, Paint(wb, s));
+		_initToolBtn('line', false, Line(wb, s));
+		_initToolBtn('uline', false, ULine(wb, s));
+		_initToolBtn('rect', false, Rect(wb, s));
+		_initToolBtn('ellipse', false, Ellipse(wb, s));
+		_initToolBtn('arrow', false, Arrow(wb, s));
+	}
+	function _initCliparts() {
 		const c = OmUtil.tmpl('#wb-area-cliparts');
-		getBtn('arrow').after(c);
+		t.find('.drawings').after(c);
 		c.find('a').prepend(c.find('div.om-icon.big:first'));
 		c.find('.om-icon.clipart').each(function() {
 			const cur = $(this);
@@ -47,7 +75,7 @@ var Wb = function() {
 					c.find('ul li').prepend(old);
 					c.find('a').prepend(cur);
 				});
-			initToolBtn(cur.data('mode'), false, Clipart(wb, cur, s));
+			_initToolBtn(cur.data('mode'), false, Clipart(wb, cur, s));
 		});
 	}
 	function _updateZoomPanel() {
@@ -113,17 +141,12 @@ var Wb = function() {
 				if (role === WHITEBOARD) {
 					clearAll.addClass('disabled');
 				}
-				initToolBtn('pointer', _firstToolItem, Pointer(wb, s));
+				_initToolBtn('pointer', _firstToolItem, Pointer(wb, s));
 				_firstToolItem = false;
-				initToolBtn('text', _firstToolItem, Text(wb, s));
-				initToolBtn('paint', _firstToolItem, Paint(wb, s));
-				initToolBtn('line', _firstToolItem, Line(wb, s));
-				initToolBtn('uline', _firstToolItem, ULine(wb, s));
-				initToolBtn('rect', _firstToolItem, Rect(wb, s));
-				initToolBtn('ellipse', _firstToolItem, Ellipse(wb, s));
-				initToolBtn('arrow', _firstToolItem, Arrow(wb, s));
-				initToolBtn('math', _firstToolItem, TMath(wb, s));
-				initCliparts();
+				_initTexts();
+				_initDrawings();
+				_initToolBtn('math', _firstToolItem, TMath(wb, s));
+				_initCliparts();
 				t.find('.om-icon.settings').click(function() {
 					s.show();
 				});
@@ -143,14 +166,14 @@ var Wb = function() {
 					.button()
 					.click(function() {
 						$(this).toggleClass('ui-state-active selected');
-						const btn = getBtn()
+						const btn = _getBtn()
 							, isB = $(this).hasClass('wb-prop-b');
 						btn.data().obj.style[isB ? 'bold' : 'italic'] = $(this).hasClass('selected');
 					});
 				s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
 					.button({icon: 'ui-icon-locked', showLabel: false})
 					.click(function() {
-						const btn = getBtn()
+						const btn = _getBtn()
 							, isColor = $(this).hasClass('wb-prop-lock-color')
 							, c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill')
 							, enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
@@ -159,7 +182,7 @@ var Wb = function() {
 						btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
 					});
 				s.find('.wb-prop-color').change(function() {
-					const btn = getBtn();
+					const btn = _getBtn();
 					if (btn.length === 1) {
 						const v = $(this).val();
 						btn.data().obj.stroke.color = v;
@@ -171,7 +194,7 @@ var Wb = function() {
 					}
 				});
 				s.find('.wb-prop-width').change(function() {
-					const btn = getBtn();
+					const btn = _getBtn();
 					if (btn.length === 1) {
 						const v = 1 * $(this).val();
 						btn.data().obj.stroke.width = v;
@@ -183,14 +206,14 @@ var Wb = function() {
 					}
 				});
 				s.find('.wb-prop-fill').change(function() {
-					const btn = getBtn();
+					const btn = _getBtn();
 					if (btn.length === 1) {
 						const v = $(this).val();
 						btn.data().obj.fill.color = v;
 					}
 				});
 				s.find('.wb-prop-opacity').change(function() {
-					const btn = getBtn();
+					const btn = _getBtn();
 					if (btn.length === 1) {
 						const v = (1 * $(this).val()) / 100;
 						btn.data().obj.opacity = v;
@@ -305,7 +328,7 @@ var Wb = function() {
 					}));
 				});
 				_setSize();
-				initToolBtn('apointer', _firstToolItem, APointer(wb, s));
+				_initToolBtn('apointer', _firstToolItem, APointer(wb, s));
 		}
 	}
 	function _findObject(o) {
@@ -363,7 +386,7 @@ var Wb = function() {
 				}
 				_updateZoomPanel();
 				if (ccount !== canvases.length) {
-					const b = getBtn();
+					const b = _getBtn();
 					if (b.length && b.hasClass(ACTIVE)) {
 						b.data().deactivate();
 						b.data().activate();
@@ -439,6 +462,7 @@ var Wb = function() {
 		const o = e.target;
 		if (!!o.loaded) return;
 		switch(o.type) {
+			case 'textbox':
 			case 'i-text':
 				o.uid = UUID.v4();
 				o.slide = this.slide;
@@ -611,7 +635,7 @@ var Wb = function() {
 
 	wb.setRole = function(_role) {
 		if (role !== _role) {
-			const btn = getBtn();
+			const btn = _getBtn();
 			if (!!btn && btn.length === 1) {
 				btn.data().deactivate();
 			}

@@ -43,8 +43,36 @@
 			<span class="ui-button-icon-space"> </span>
 			<wicket:message key="85"/>
 		</button>
-		<div id="wb-area-cliparts" class="btn-group" style="float: left;">
-			<a class="dropdown-toggle" data-toggle="dropdown" wicket:message="title:1323"></a>
+		<div id="wb-area-texts" class="btn-group texts" style="float: left;">
+			<a class="dropdown-toggle" data-toggle="dropdown">
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu om-left">
+				<li>
+					<div wicket:message="title:73" class="ui-widget-header clickable om-icon big text"></div>
+					<div wicket:message="title:82" class="ui-widget-header clickable om-icon big textbox"></div>
+				</li>
+			</ul>
+		</div>
+		<div id="wb-area-drawings" class="btn-group drawings" style="float: left;">
+			<a class="dropdown-toggle" data-toggle="dropdown">
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu om-left">
+				<li>
+					<div wicket:message="title:74" class="ui-widget-header clickable om-icon big paint"></div>
+					<div wicket:message="title:75" class="ui-widget-header clickable om-icon big line"></div>
+					<div wicket:message="title:76" class="ui-widget-header clickable om-icon big uline"></div>
+					<div wicket:message="title:77" class="ui-widget-header clickable om-icon big rect"></div>
+					<div wicket:message="title:78" class="ui-widget-header clickable om-icon big ellipse"></div>
+					<div wicket:message="title:79" class="ui-widget-header clickable om-icon big arrow"></div>
+				</li>
+			</ul>
+		</div>
+		<div id="wb-area-cliparts" class="btn-group cliparts" style="float: left;">
+			<a class="dropdown-toggle" data-toggle="dropdown" wicket:message="title:1323">
+				<span class="caret"></span>
+			</a>
 			<ul class="dropdown-menu om-left">
 				<li>
 					<div wicket:id="clipart" class="ui-widget-header clickable om-icon big clipart"
@@ -95,13 +123,6 @@
 
 			<div wicket:message="title:72" class="ui-widget-header clickable om-icon big pointer"></div>
 			<div wicket:message="title:557" class="ui-widget-header clickable om-icon big apointer"></div>
-			<div wicket:message="title:73" class="ui-widget-header clickable om-icon big text"></div>
-			<div wicket:message="title:74" class="ui-widget-header clickable om-icon big paint"></div>
-			<div wicket:message="title:75" class="ui-widget-header clickable om-icon big line"></div>
-			<div wicket:message="title:76" class="ui-widget-header clickable om-icon big uline"></div>
-			<div wicket:message="title:77" class="ui-widget-header clickable om-icon big rect"></div>
-			<div wicket:message="title:78" class="ui-widget-header clickable om-icon big ellipse"></div>
-			<div wicket:message="title:79" class="ui-widget-header clickable om-icon big arrow"></div>
 			<div wicket:message="title:wb.tool.math.formula" class="ui-widget-header clickable om-icon big math"></div>
 			<div wicket:message="title:843" class="ui-widget-header clickable om-icon big settings"></div>
 		</div>
