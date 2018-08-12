@@ -54,37 +54,37 @@
 	background: repeating-linear-gradient(-45deg, transparent, transparent 3px, gray 3px, gray 5px);
 }
 .room.wb.area .tools.vertical .bumper {
-	width: 30px;
+	width: 35px;
 	height: 9px;
 }
 .room.wb.area .tools.horisontal .bumper {
 	width: 9px;
-	height: 30px;
+	height: 35px;
 }
 .room.wb.area .tools.vertical {
-	width: 30px;
-	height: 330px;
+	width: 35px;
+	height: 394px;
 }
 .room.wb.area .tools.readonly.vertical {
-	width: 30px;
-	height: 39px;
+	width: 35px;
+	height: 43px;
 }
 .room.wb.area .tools.horisontal {
-	width: 330px;
-	height: 30px;
+	width: 394px;
+	height: 35px;
 }
 .room.wb.area .tools.readonly.horisontal {
-	width: 39px;
-	height: 30px;
+	width: 43px;
+	height: 35px;
 }
 .room.wb.area .tools .om-icon.big {
 	float: left;
 	vertical-align: top;
-	width: 30px;
-	height: 30px;
-	background-size: 25px;
+	width: 35px;
+	height: 35px;
+	background-size: 27px;
 	margin: 0;
-	background-position: 2px !important;
+	background-position: 4px !important;
 }
 .room.wb.area .tools .om-icon.big.active {
 	background-color: whitesmoke;
@@ -144,19 +144,31 @@
 	position: absolute;
 	z-index: 95;
 }
+.room.wb.area .tools.vertical .dropdown-toggle {
+	width: 35px;
+	height: 28px;
+}
+.room.wb.area .tools.horisontal .dropdown-toggle {
+	width: 35px;
+	height: 23px;
+}
 .room.wb.area .tools .dropdown-toggle {
 	position: relative;
-	width: 27px;
-	height: 22px;
 	display: inline-block;
+}
+.room.wb.area .tools.horisontal .dropdown-toggle .caret {
+	left: -1px;
+	bottom: -12px;
+}
+.room.wb.area .tools.vertical .dropdown-toggle .caret {
+	left: -1px;
+	bottom: -7px;
 }
 .room.wb.area .tools .dropdown-toggle .caret {
 	position: absolute;
 	border-top: 8px solid transparent;
 	border-left: 8px solid blue;
 	border-right: 8px solid transparent;
-	bottom: -5px;
-	left: 2px;
 }
 .wb-settings, .wb-settings .tab.props, .wb-formula {
 	display: inline-block;
