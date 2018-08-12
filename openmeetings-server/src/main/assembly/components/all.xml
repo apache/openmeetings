@@ -107,6 +107,7 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>META-INF/**</exclude>
+				<exclude>WEB-INF/classes/META-INF/**</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
