@@ -246,6 +246,7 @@ table.adminListTable .one_sixth {
 	border: solid 1px #aacfe4;
 	width: 280px;
 	min-height: 20px;
+	white-space: normal; /* IE */
 	white-space: initial;
 }
 .adminForm input {

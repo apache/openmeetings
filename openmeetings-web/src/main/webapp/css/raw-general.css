@@ -22,6 +22,7 @@ html, body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 * {
+	box-sizing: content-box; /* IE */
 	box-sizing: initial; /*reset bootstrap box sizing*/
 }
 .signin .oauth-section {
@@ -509,6 +510,8 @@ select.messages.selector {
 	width: 100%;
 }
 #topControls #wicketDebugBar {
+	right: auto; /* IE */
+	top: auto; /* IE */
 	right: initial;
 	top: initial;
 	z-index: 2;
@@ -562,6 +565,7 @@ form .input {
 .table .column {
 	display: inline-block;
 	margin-bottom: 5px;
+	min-height: auto; /* IE */
 	min-height: initial;
 	float: none;
 	margin-right: 0;

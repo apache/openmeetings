@@ -199,7 +199,8 @@
 	background-image: url(images/webcam_add.png);
 }
 .room.sidebar .user.list .user .kick.ui-icon {
-	background-size: auto;
+	background-size: auto; /* IE */
+	background-size: initial;
 }
 .right.camera.ui-icon.granted {
 	background-image: url(images/webcam_delete.png);
@@ -208,6 +209,7 @@
 	background-image: url(images/microphone_exclusive.png);
 }
 .restart.ui-icon {
+	background-size: auto !important; /* IE */
 	background-size: initial !important;
 }
 .settings.ui-icon, .settings.om-icon {
