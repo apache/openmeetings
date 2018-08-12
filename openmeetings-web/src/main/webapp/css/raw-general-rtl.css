@@ -17,11 +17,13 @@
  * under the License.
  */
 #header {
+	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 150px;
 	background-position: right center;
 }
 #topLinks {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: 10px;
 }
@@ -33,6 +35,7 @@
 	border-left: none;
 }
 #busy-indicator {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0 !important;
 }
@@ -41,23 +44,28 @@
 }
 .info-text {
 	background-position: right top !important;
+	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 20px;
 }
 .start_step1, .start_step2, .start_step3, .start_step4 {
+	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 30px;
 	background-position: right top !important;
 }
 .start_step2 {
+	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 20px !important;
 }
 .start_step3 {
+	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 40px !important;
 }
 .start_step4 {
+	margin-left: 0 !important; /* IE */
 	margin-left: initial !important;
 	margin-right: 60px !important;
 }
@@ -71,6 +79,7 @@ form .input {
 	float: right !important;
 }
 .ui-dialog .ui-dialog-titlebar-close {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: .3em;
 }
@@ -78,17 +87,20 @@ form .input {
 	float: left !important;
 }
 .room.menu.right {
-	right:initial !important;
-	left:0;
+	right: auto !important; /* IE */
+	right: initial !important;
+	left: 0;
 }
 .room.menu.right .icon, .room.menu.right .room.name {
-	float:left !important;
+	float: left !important;
 }
 #activities {
 	right: 10px !important;
+	left: auto !important; /* IE */
 	left: initial !important;
 }
 #activities .control.block .label, #chatPopup .control.block .label {
+	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 20px !important;
 }
@@ -96,10 +108,12 @@ form .input {
 	float: right !important;
 }
 #chatPanel {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: 10px;
 }
 #chatPanel.room {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0px;
 }
@@ -107,20 +121,24 @@ form .input {
 	float: left !important;
 }
 #chat .chat-btn:first-of-type {
+	margin-right: 0 !important; /* IE */
 	margin-right: initial !important;
 }
 #chat .chat-btn:last-of-type {
 	margin-left: 10px !important;
 }
 #chatMessage {
+	margin-right: 0 !important; /* IE */
 	margin-right: initial !important;
 	margin-left: 22px;
 }
 #chat .send {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: 0;
 }
 #chat .messageArea .user-row {
+	padding-left: 0 !important; /* IE */
 	padding-left: initial !important;
 	padding-right: 40px !important;
 }
@@ -143,6 +161,7 @@ form .input {
 	padding: 0px 44px 0px 0px !important;
 }
 .room.sidebar .user.list .user .ui-icon.audio-activity {
+	right: auto !important; /* IE */
 	right: initial !important;
 	left: 3px !important;
 }
@@ -155,6 +174,7 @@ span.css-emoticon {
 	transform: rotate(-90deg) !important;
 }
 .chat.dropdown-menu {
+	left: auto !important; /* IE */
 	left: initial !important;
 	right: -50px !important;
 	float: right !important;
