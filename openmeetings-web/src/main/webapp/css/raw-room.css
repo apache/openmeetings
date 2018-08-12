@@ -199,7 +199,7 @@
 	background-image: url(images/webcam_add.png);
 }
 .room.sidebar .user.list .user .kick.ui-icon {
-	background-size: initial;
+	background-size: auto;
 }
 .right.camera.ui-icon.granted {
 	background-image: url(images/webcam_delete.png);
