@@ -66,7 +66,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("fileWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.FileWebService", targetNamespace = TNS)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/file")
 public class FileWebService extends BaseWebService {

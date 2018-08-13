@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("infoWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.InfoWebService", targetNamespace = TNS)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/info")
 public class InfoWebService {

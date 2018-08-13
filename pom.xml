@@ -80,7 +80,7 @@
 		<mina.version>2.0.19</mina.version>
 		<tomcat.version>9.0.10</tomcat.version>
 		<ical4j.version>3.0.1</ical4j.version>
-		<cxf.version>3.2.5</cxf.version>
+		<cxf.version>3.2.6</cxf.version>
 		<selenium.version>3.14.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
@@ -769,6 +769,11 @@
 			<dependency>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-rs-client</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-features-logging</artifactId>
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>

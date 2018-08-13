@@ -69,7 +69,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("roomWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.RoomWebService", targetNamespace = TNS)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/room")
 public class RoomWebService extends BaseWebService {

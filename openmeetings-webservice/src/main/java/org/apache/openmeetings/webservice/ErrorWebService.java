@@ -50,7 +50,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("errorWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.ErrorWebService", targetNamespace = TNS)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/error")
 public class ErrorWebService extends BaseWebService {
