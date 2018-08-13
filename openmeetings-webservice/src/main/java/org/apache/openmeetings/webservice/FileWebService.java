@@ -150,7 +150,7 @@ public class FileWebService extends BaseWebService {
 			, @Multipart(value = "stream", type = MediaType.APPLICATION_OCTET_STREAM, required = false) @WebParam(name="stream") InputStream stream
 			)
 	{
-		return performCall(sid, User.Right.Room, sd -> {
+		return performCall(sid, User.Right.Soap, sd -> {
 			FileItem f = file == null ? null : file.get();
 			if (f == null || f.getId() != null) {
 				throw new ServiceException("Bad id");
@@ -189,7 +189,7 @@ public class FileWebService extends BaseWebService {
 			)
 	{
 		log.debug("getRoom::roomId {}", roomId);
-		return performCall(sid, User.Right.Room, sd -> {
+		return performCall(sid, User.Right.Soap, sd -> {
 			FileExplorerObject fileExplorerObject = new FileExplorerObject();
 
 			// Home File List

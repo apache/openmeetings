@@ -19,9 +19,9 @@
 package org.apache.openmeetings.webservice;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
-import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
 import static org.apache.openmeetings.AbstractJUnitDefaults.ensureSchema;
+import static org.apache.openmeetings.AbstractJUnitDefaults.soapUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OmFileHelper.getOmHome;
@@ -89,7 +89,7 @@ public class AbstractWebServiceTest {
 	}
 
 	public static ServiceResult login() {
-		return login(adminUsername, userpass);
+		return login(soapUsername, userpass);
 	}
 
 	public static ServiceResult loginNoCheck(String user, String pass) {

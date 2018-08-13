@@ -51,6 +51,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public static final int ONE_HOUR = 60 * 60 * 1000;
 	public static final String adminUsername = "admin";
 	public static final String regularUsername = "user";
+	public static final String soapUsername = "soap";
 	protected static final String groupAdminUsername = "groupAdmin";
 	public static final String userpass = "Q!w2e3r4t5";
 	public static final String group = "smoketest";
@@ -213,10 +214,17 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		cfg.setTimeZone(timeZone);
 		importInitvalues.loadAll(cfg, false);
 		// regular user
-		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, regularUsername, userpass, false);
+		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, regularUsername, userpass, false, null);
+
+		// soap user
+		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, soapUsername, userpass, false, u -> {
+			u.getRights().remove(User.Right.Room);
+			u.getRights().remove(User.Right.Dashboard);
+			u.getRights().add(User.Right.Soap);
+		});
 
 		// group admin
-		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, groupAdminUsername, userpass, true);
+		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, groupAdminUsername, userpass, true, null);
 	}
 
 	public User getContact(String uuid, Long ownerId) {

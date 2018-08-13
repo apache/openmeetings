@@ -104,6 +104,7 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getExtProcessTt
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -451,11 +452,14 @@ public class ImportInitvalues {
 		}
 	}
 
-	public User createSystemUser(User u, String group, String login, String pass, boolean groupAdmin) throws Exception {
+	public User createSystemUser(User u, String group, String login, String pass, boolean groupAdmin, Consumer<User> postprocess) throws Exception {
 		GroupUser gu = new GroupUser(groupDao.get(group), u);
 		gu.setModerator(groupAdmin);
 		u.getGroupUsers().add(gu);
 		u.setLogin(login);
+		if (postprocess != null) {
+			postprocess.accept(u);
+		}
 		return userDao.update(u, pass, null);
 	}
 
