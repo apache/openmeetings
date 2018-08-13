@@ -82,7 +82,7 @@ public class AbstractWebServiceTest extends AbstractJUnitDefaults {
 	}
 
 	public static ServiceResult login() {
-		return login(adminUsername, userpass);
+		return login(soapUsername, userpass);
 	}
 
 	public static ServiceResult loginNoCheck(String user, String pass) {

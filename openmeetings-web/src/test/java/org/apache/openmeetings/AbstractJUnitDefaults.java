@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -49,6 +50,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	public static final int ONE_HOUR = 60 * 60 * 1000;
 	public static final String adminUsername = "admin";
 	public static final String regularUsername = "user";
+	public static final String soapUsername = "soap";
 	protected static final String groupAdminUsername = "groupAdmin";
 	public static final String userpass = "Q!w2e3r4t5";
 	public static final String group = "smoketest";
@@ -72,6 +74,13 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		cfgDao.reinit();
 		if (userDao.count() < 1) {
 			makeDefaultScheme();
+			// soap user
+			createSystemUser(soapUsername, false, u -> {
+				u.getRights().remove(User.Right.Room);
+				u.getRights().remove(User.Right.Dashboard);
+				u.getRights().add(User.Right.Soap);
+			});
+
 			// regular user
 			createSystemUser(regularUsername, false);
 
@@ -176,12 +185,19 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	}
 
 	public User createSystemUser(String login, boolean groupAdmin) throws Exception {
+		return createSystemUser(login, groupAdmin, null);
+	}
+
+	public User createSystemUser(String login, boolean groupAdmin, Consumer<User> postprocess) throws Exception {
 		User u = getUser();
 		GroupUser gu = new GroupUser(groupDao.get(group), u);
 		gu.setModerator(groupAdmin);
 		u.getGroupUsers().add(gu);
 		u.setLogin(login);
 		u.updatePassword(userpass);
+		if (postprocess != null) {
+			postprocess.accept(u);
+		}
 		return createUser(u);
 	}
 
