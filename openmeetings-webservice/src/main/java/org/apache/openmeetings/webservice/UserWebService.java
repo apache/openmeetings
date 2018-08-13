@@ -81,7 +81,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("userWebService")
 @WebService(serviceName = USER_SERVICE_NAME, targetNamespace = TNS, portName = USER_SERVICE_PORT_NAME)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/user")
 public class UserWebService extends BaseWebService {

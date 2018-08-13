@@ -65,7 +65,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("groupWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.GroupWebService", targetNamespace = TNS)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/group")
 public class GroupWebService extends BaseWebService {

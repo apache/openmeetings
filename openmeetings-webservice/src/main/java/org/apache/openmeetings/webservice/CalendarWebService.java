@@ -61,7 +61,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("calendarWebService")
 @WebService(serviceName="org.apache.openmeetings.webservice.CalendarWebService", targetNamespace = TNS)
-@Features(features = "org.apache.cxf.feature.LoggingFeature")
+@Features(features = "org.apache.cxf.ext.logging.LoggingFeature")
 @Produces({MediaType.APPLICATION_JSON})
 @Path("/calendar")
 public class CalendarWebService extends BaseWebService {
