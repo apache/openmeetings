@@ -56,6 +56,7 @@ var Text = function(wb, s) {
 			canvas.forEachObject(function(o) {
 				if (text.fabricType === o.type) {
 					o.selectable = true;
+					o.editable = true;
 				}
 			});
 		});
@@ -83,6 +84,7 @@ var Text = function(wb, s) {
 			canvas.forEachObject(function(o) {
 				if (text.fabricType === o.type) {
 					o.selectable = false;
+					o.editable = false;
 				}
 			});
 		});
