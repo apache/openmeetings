@@ -349,7 +349,6 @@ var Wb = function() {
 		if (!!__o) {
 			const cnvs = canvases[o.slide];
 			if (!!cnvs) {
-				cnvs.discardActiveObject();
 				if ('Video' === __o.omType) {
 					$('#wb-video-' + __o.uid).remove();
 				}
@@ -502,6 +501,21 @@ var Wb = function() {
 		s.find('.wb-dim-w').val(o.width);
 		s.find('.wb-dim-h').val(o.height);
 	}
+	function selectionCleared(e) {
+		const o = e.target;
+		if (!o || '' !== o.text) {
+			return;
+		}
+		if ('textbox' === o.type || 'i-text' === o.type) {
+			wbAction('deleteObj', JSON.stringify({
+				wbId: wb.id
+				, obj: [{
+					uid: o.uid
+					, slide: o.slide
+				}]
+			}));
+		}
+	}
 	function pathCreatedHandler(o) {
 		o.path.uid = UUID.generate();
 		o.path.slide = this.slide;
@@ -553,6 +567,7 @@ var Wb = function() {
 			, 'path:created': pathCreatedHandler
 			//, 'text:editing:exited': textEditedHandler
 			//, 'text:changed': textChangedHandler
+			, 'before:selection:cleared': selectionCleared
 		});
 		canvas.on({
 			'wb:object:created': objCreatedHandler
@@ -563,6 +578,7 @@ var Wb = function() {
 				'object:added': objAddedHandler
 				, 'object:selected': objSelectedHandler
 				, 'path:created': pathCreatedHandler
+				, 'before:selection:cleared': selectionCleared
 				//, 'text:editing:exited': textEditedHandler
 				//, 'text:changed': textChangedHandler
 			});

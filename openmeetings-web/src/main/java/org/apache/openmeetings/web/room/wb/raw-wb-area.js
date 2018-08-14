@@ -25,7 +25,7 @@ var DrawWbArea = function() {
 			return true;
 		}
 		const arr = [], objs = canvas.getActiveObjects();
-		for (let i =0; i < objs.length; ++i) {
+		for (let i = 0; i < objs.length; ++i) {
 			arr.push({
 				uid: objs[i].uid
 				, slide: objs[i].slide
