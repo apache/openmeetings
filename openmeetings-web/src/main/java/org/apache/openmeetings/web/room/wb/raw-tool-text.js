@@ -2,29 +2,42 @@
 var Text = function(wb, s) {
 	const text = ShapeBase();
 	text.obj = null;
+	text.fabricType = 'i-text';
 	text.fill.color = '#000000';
 	text.stroke.width = 50; //fontSize
 	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
 
+	text.createTextObj = function(canvas, pointer) {
+		return new fabric.IText('', {
+			left: pointer.x
+			, top: pointer.y
+			, padding: 7
+			, fill: text.fill.enabled ? text.fill.color : 'rgba(0,0,0,0)'
+			, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
+			//, strokeWidth: text.stroke.width
+			, fontSize: text.stroke.width
+			, fontFamily: text.fontFamily
+			, opacity: text.opacity
+		});
+	};
+	text._onMouseDown = function() {
+		text.obj.enterEditing();
+	};
+	text._onActivate = function() {
+		WbArea.removeDeleteHandler();
+	};
+	text._onDeactivate = function() {
+		WbArea.addDeleteHandler();
+	};
 	text.mouseDown = function(o) {
 		const canvas = this
 			, pointer = canvas.getPointer(o.e)
 			, ao = canvas.getActiveObject();
-		if (!!ao && ao.type === 'i-text') {
+		if (!!ao && text.fabricType === ao.type) {
 			text.obj = ao;
 		} else {
-			text.obj = new fabric.IText('', {
-				left: pointer.x
-				, top: pointer.y
-				, padding: 7
-				, fill: text.fill.enabled ? text.fill.color : 'rgba(0,0,0,0)'
-				, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
-				//, strokeWidth: text.stroke.width
-				, fontSize: text.stroke.width
-				, fontFamily: text.fontFamily
-				, opacity: text.opacity
-			});
+			text.obj = text.createTextObj(canvas, pointer);
 			if (text.style.bold) {
 				text.obj.fontWeight = 'bold'
 			}
@@ -33,14 +46,15 @@ var Text = function(wb, s) {
 			}
 			canvas.add(text.obj).setActiveObject(text.obj);
 		}
-		text.obj.enterEditing();
+		text._onMouseDown();
 	};
 	text.activate = function() {
 		wb.eachCanvas(function(canvas) {
 			canvas.on('mouse:down', text.mouseDown);
+			canvas.on('mouse:dblclick', text.doubleClick);
 			canvas.selection = true;
 			canvas.forEachObject(function(o) {
-				if (o.type === 'i-text') {
+				if (text.fabricType === o.type) {
 					o.selectable = true;
 				}
 			});
@@ -59,19 +73,20 @@ var Text = function(wb, s) {
 		} else {
 			i.removeClass('ui-state-active selected');
 		}
-		WbArea.removeDeleteHandler();
+		text._onActivate();
 	};
 	text.deactivate = function() {
 		wb.eachCanvas(function(canvas) {
 			canvas.off('mouse:down', text.mouseDown);
+			canvas.off('mouse:dblclick', text.doubleClick);
 			canvas.selection = false;
 			canvas.forEachObject(function(o) {
-				if (o.type === 'i-text') {
+				if (text.fabricType === o.type) {
 					o.selectable = false;
 				}
 			});
 		});
-		WbArea.addDeleteHandler();
+		text._onDeactivate();
 	};
 	return text;
 };
