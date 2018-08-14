@@ -99,6 +99,107 @@ var Wb = function() {
 		}));
 		_updateZoomPanel();
 	}
+	function _initSettings() {
+		s.find('.wb-prop-b, .wb-prop-i')
+			.button()
+			.click(function() {
+				$(this).toggleClass('ui-state-active selected');
+				const btn = _getBtn()
+					, isB = $(this).hasClass('wb-prop-b');
+				btn.data().obj.style[isB ? 'bold' : 'italic'] = $(this).hasClass('selected');
+			});
+		s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
+			.button({icon: 'ui-icon-locked', showLabel: false})
+			.click(function() {
+				const btn = _getBtn()
+					, isColor = $(this).hasClass('wb-prop-lock-color')
+					, c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill')
+					, enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
+				$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
+				c.prop('disabled', !enabled);
+				btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
+			});
+		function setStyle(canvas, styleName, value) {
+			const o = canvas.getActiveObject();
+			if (o.setSelectionStyles && o.isEditing) {
+				let style = {};
+				style[styleName] = value;
+				o.setSelectionStyles(style);
+			} else {
+				o[styleName] = value;
+			}
+			canvas.requestRenderAll();
+		}
+		s.find('.wb-prop-color').change(function() {
+			const btn = _getBtn();
+			if (btn.length === 1) {
+				const v = $(this).val();
+				btn.data().obj.stroke.color = v;
+				wb.eachCanvas(function(canvas) {
+					if ('paint' === mode) {
+						canvas.freeDrawingBrush.color = v;
+					} else {
+						setStyle(canvas, 'stroke', v)
+					}
+				});
+			}
+		});
+		s.find('.wb-prop-width').change(function() {
+			const btn = _getBtn();
+			if (btn.length === 1) {
+				const v = 1 * $(this).val();
+				btn.data().obj.stroke.width = v;
+				wb.eachCanvas(function(canvas) {
+					if ('paint' === mode) {
+						canvas.freeDrawingBrush.width = v;
+					} else {
+						setStyle(canvas, 'strokeWidth', v)
+					}
+				});
+			}
+		});
+		s.find('.wb-prop-fill').change(function() {
+			const btn = _getBtn();
+			if (btn.length === 1) {
+				const v = $(this).val();
+				btn.data().obj.fill.color = v;
+				wb.eachCanvas(function(canvas) {
+					setStyle(canvas, 'fill', v)
+				});
+			}
+		});
+		s.find('.wb-prop-opacity').change(function() {
+			const btn = _getBtn();
+			if (btn.length === 1) {
+				const v = (1 * $(this).val()) / 100;
+				btn.data().obj.opacity = v;
+				wb.eachCanvas(function(canvas) {
+					if ('paint' === mode) {
+						canvas.freeDrawingBrush.opacity = v;
+					} else {
+						setStyle(canvas, 'opacity', v)
+					}
+				});
+			}
+		});
+		s.find('.ui-dialog-titlebar-close').click(function() {
+			s.hide();
+		});
+		s.draggable({
+			scroll: false
+			, containment: 'body'
+			, start: function() {
+				if (!!s.css('bottom')) {
+					s.css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
+				}
+			}
+			, drag: function() {
+				if (s.position().x + s.width() >= s.parent().width()) {
+					return false;
+				}
+			}
+		});
+	}
 	function internalInit() {
 		t.draggable({
 			snap: 'parent'
@@ -162,88 +263,10 @@ var Wb = function() {
 				t.find('.om-icon.undo').click(function() {
 					wbAction('undo', JSON.stringify({wbId: wb.id}));
 				});
-				s.find('.wb-prop-b, .wb-prop-i')
-					.button()
-					.click(function() {
-						$(this).toggleClass('ui-state-active selected');
-						const btn = _getBtn()
-							, isB = $(this).hasClass('wb-prop-b');
-						btn.data().obj.style[isB ? 'bold' : 'italic'] = $(this).hasClass('selected');
-					});
-				s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
-					.button({icon: 'ui-icon-locked', showLabel: false})
-					.click(function() {
-						const btn = _getBtn()
-							, isColor = $(this).hasClass('wb-prop-lock-color')
-							, c = s.find(isColor ? '.wb-prop-color' : '.wb-prop-fill')
-							, enabled = $(this).button('option', 'icon') === 'ui-icon-locked';
-						$(this).button('option', 'icon', enabled ? 'ui-icon-unlocked' : 'ui-icon-locked');
-						c.prop('disabled', !enabled);
-						btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
-					});
-				s.find('.wb-prop-color').change(function() {
-					const btn = _getBtn();
-					if (btn.length === 1) {
-						const v = $(this).val();
-						btn.data().obj.stroke.color = v;
-						if ('paint' === mode) {
-							wb.eachCanvas(function(canvas) {
-								canvas.freeDrawingBrush.color = v;
-							});
-						}
-					}
-				});
-				s.find('.wb-prop-width').change(function() {
-					const btn = _getBtn();
-					if (btn.length === 1) {
-						const v = 1 * $(this).val();
-						btn.data().obj.stroke.width = v;
-						if ('paint' === mode) {
-							wb.eachCanvas(function(canvas) {
-								canvas.freeDrawingBrush.width = v;
-							});
-						}
-					}
-				});
-				s.find('.wb-prop-fill').change(function() {
-					const btn = _getBtn();
-					if (btn.length === 1) {
-						const v = $(this).val();
-						btn.data().obj.fill.color = v;
-					}
-				});
-				s.find('.wb-prop-opacity').change(function() {
-					const btn = _getBtn();
-					if (btn.length === 1) {
-						const v = (1 * $(this).val()) / 100;
-						btn.data().obj.opacity = v;
-						if ('paint' === mode) {
-							wb.eachCanvas(function(canvas) {
-								canvas.freeDrawingBrush.opacity = v;
-							});
-						}
-					}
-				});
-				s.find('.ui-dialog-titlebar-close').click(function() {
-					s.hide();
-				});
-				s.draggable({
-					scroll: false
-					, containment: 'body'
-					, start: function() {
-						if (!!s.css('bottom')) {
-							s.css('bottom', '').css(Settings.isRtl ? 'left' : 'right', '');
-						}
-					}
-					, drag: function() {
-						if (s.position().x + s.width() >= s.parent().width()) {
-							return false;
-						}
-					}
-				});
 				f.find('.ui-dialog-titlebar-close').click(function() {
 					f.hide();
 				});
+				_initSettings();
 				f.find('.update-btn').button().click(function() {
 					const o = _findObject({
 						uid: $(this).data('uid')
