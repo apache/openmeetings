@@ -67,7 +67,7 @@ public class TestGroupService extends AbstractWebServiceTest {
 
 	@Test
 	public void addRemoveTest() {
-		ServiceResult r = login();
+		ServiceResult r = login(adminUsername, userpass);
 		Long groupId = createGroup(r.getMessage(), "Test Group");
 		//delete group created
 		{
