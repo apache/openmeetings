@@ -100,13 +100,30 @@ var Wb = function() {
 		_updateZoomPanel();
 	}
 	function _initSettings() {
+		function setStyle(canvas, styleName, value) {
+			const o = canvas.getActiveObject();
+			if (o.setSelectionStyles && o.isEditing) {
+				let style = {};
+				style[styleName] = value;
+				o.setSelectionStyles(style);
+			} else {
+				o[styleName] = value;
+			}
+			canvas.requestRenderAll();
+		}
 		s.find('.wb-prop-b, .wb-prop-i')
 			.button()
 			.click(function() {
 				$(this).toggleClass('ui-state-active selected');
 				const btn = _getBtn()
-					, isB = $(this).hasClass('wb-prop-b');
-				btn.data().obj.style[isB ? 'bold' : 'italic'] = $(this).hasClass('selected');
+					, isB = $(this).hasClass('wb-prop-b')
+					, style = isB ? 'bold' : 'italic'
+					, v = $(this).hasClass('selected')
+					, val = v ? style : '';
+				btn.data().obj.style[style] = v;
+				wb.eachCanvas(function(canvas) {
+					setStyle(canvas, isB ? 'fontWeight' : 'fontStyle', val)
+				});
 			});
 		s.find('.wb-prop-lock-color, .wb-prop-lock-fill')
 			.button({icon: 'ui-icon-locked', showLabel: false})
@@ -119,17 +136,6 @@ var Wb = function() {
 				c.prop('disabled', !enabled);
 				btn.data().obj[isColor ? 'stroke' : 'fill'].enabled = enabled;
 			});
-		function setStyle(canvas, styleName, value) {
-			const o = canvas.getActiveObject();
-			if (o.setSelectionStyles && o.isEditing) {
-				let style = {};
-				style[styleName] = value;
-				o.setSelectionStyles(style);
-			} else {
-				o[styleName] = value;
-			}
-			canvas.requestRenderAll();
-		}
 		s.find('.wb-prop-color').change(function() {
 			const btn = _getBtn();
 			if (btn.length === 1) {
@@ -422,6 +428,7 @@ var Wb = function() {
 				const canvas = canvases[_o.slide];
 				if (!!canvas) {
 					_o.selectable = canvas.selection;
+					_o.editable = ('text' === mode || 'textbox' === mode);
 					canvas.add(_o);
 				}
 			}
