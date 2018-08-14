@@ -49,7 +49,7 @@
 	<logger name="httpclient.wire.header" level="ERROR" />
 	<logger name="org.apache.mina.filter.ssl.SslFilter" level="ERROR" />
 	<logger name="org.apache.openmeetings" level="DEBUG" />
-	<logger name="org.apache.cxf.service" level="WARN" /> <!-- no payload -->
+	<logger name="org.apache.cxf.services" level="WARN" /> <!-- no payload -->
 	<root level="INFO">
 		<appender-ref ref="FILE" />
 		<appender-ref ref="CONSOLE" />
