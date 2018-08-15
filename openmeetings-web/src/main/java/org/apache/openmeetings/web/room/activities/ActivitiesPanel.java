@@ -127,10 +127,6 @@ public class ActivitiesPanel extends Panel {
 									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.audio);
 									break;
-								case reqRightMute:
-									sendRoom(getRemoveMsg(id));
-									room.allowRight(client, Right.mute);
-									break;
 								case reqRightExclusive:
 									sendRoom(getRemoveMsg(id));
 									room.allowRight(client, Right.exclusive);
@@ -179,34 +175,31 @@ public class ActivitiesPanel extends Panel {
 				text = String.format(fmt, name, getString("activities.msg.exit"), df.format(a.getCreated()));
 				break;
 			case reqRightModerator:
-				text = String.format(fmt, name, getString("room.action.request.right.moderator"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.moderator"), df.format(a.getCreated()));
 				break;
 			case reqRightPresenter:
-				text = String.format(fmt, name, getString("right.presenter.request"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.presenter"), df.format(a.getCreated()));
 				break;
 			case reqRightWb:
-				text = String.format(fmt, name, getString("694"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.wb"), df.format(a.getCreated()));
 				break;
 			case reqRightShare:
-				text = String.format(fmt, name, getString("1070"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.share"), df.format(a.getCreated()));
 				break;
 			case reqRightRemote:
-				text = String.format(fmt, name, getString("1082"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.remote"), df.format(a.getCreated()));
 				break;
 			case reqRightA:
-				text = String.format(fmt, name, getString("1603"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.audio"), df.format(a.getCreated()));
 				break;
 			case reqRightAv:
-				text = String.format(fmt, name, getString("695"), df.format(a.getCreated()));
-				break;
-			case reqRightMute:
-				text = String.format(fmt, name, getString("1399"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.video"), df.format(a.getCreated()));
 				break;
 			case reqRightExclusive:
-				text = String.format(fmt, name, getString("1427"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.request.right.exclusive"), df.format(a.getCreated()));
 				break;
 			case haveQuestion:
-				text = String.format(fmt, name, getString("693"), df.format(a.getCreated()));
+				text = String.format(fmt, name, getString("activities.ask.question"), df.format(a.getCreated()));
 				break;
 		}
 		final JSONObject aobj = new JSONObject()
@@ -224,7 +217,6 @@ public class ActivitiesPanel extends Panel {
 			case reqRightRemote:
 			case reqRightA:
 			case reqRightAv:
-			case reqRightMute:
 			case reqRightExclusive:
 				aobj.put("accept", room.getClient().hasRight(Right.moderator));
 				aobj.put("decline", room.getClient().hasRight(Right.moderator));
@@ -261,7 +253,6 @@ public class ActivitiesPanel extends Panel {
 			case reqRightRemote:
 			case reqRightA:
 			case reqRightAv:
-			case reqRightMute:
 			case reqRightExclusive:
 			case haveQuestion:
 				cls.append("ui-state-highlight");

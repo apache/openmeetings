@@ -30,6 +30,6 @@ public class ExclusiveRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(hasRight() ? "1433" : "1432");
+		return getString(String.format("ulist.right.exclusive.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
 	}
 }

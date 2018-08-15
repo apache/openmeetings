@@ -30,6 +30,6 @@ public class AudioRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(isSelf() ? (hasRight() ? "1607" : "1606") : (hasRight() ? "1605" : "1604"));
+		return getString(String.format("ulist.right.audio.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
 	}
 }

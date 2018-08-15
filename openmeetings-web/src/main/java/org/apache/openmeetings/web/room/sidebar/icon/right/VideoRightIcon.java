@@ -30,7 +30,7 @@ public class VideoRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(isSelf() ? (hasRight() ? "690" : "687"): (hasRight() ?  "684": "683"));
+		return getString(String.format("ulist.right.video.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
 	}
 
 	@Override

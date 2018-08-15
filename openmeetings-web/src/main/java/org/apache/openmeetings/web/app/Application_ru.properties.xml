@@ -64,7 +64,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="78"><![CDATA[Эллипс]]></entry>
 	<entry key="79"><![CDATA[Стрелка]]></entry>
 	<entry key="80"><![CDATA[Удалить выбранный элемент]]></entry>
-	<entry key="81"><![CDATA[Запрос функции модератора]]></entry>
 	<entry key="82"><![CDATA[Текстовая область]]></entry>
 	<entry key="84"><![CDATA[Запросить ф-ции модератора]]></entry>
 	<entry key="85"><![CDATA[Закрыть]]></entry>
@@ -249,7 +248,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Вы действительно хотите отключить этого клиента? Клиент может залогиниться вновь]]></entry>
 	<entry key="606"><![CDATA[Ваша сессия завершена администратором или модератором.]]></entry>
 	<entry key="607"><![CDATA[Телефон]]></entry>
-	<entry key="612"><![CDATA[Запретить рисовать на доске]]></entry>
 	<entry key="615"><![CDATA[Доска]]></entry>
 	<entry key="619"><![CDATA[Тип комнаты]]></entry>
 	<entry key="620"><![CDATA[Комната назначений]]></entry>
@@ -261,22 +259,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="641"><![CDATA[Подождите, пока модератор зайдёт в комнату. Модератором может быть лектор, администратор, либо создатель этой комнаты.]]></entry>
 	<entry key="667"><![CDATA[Для завершения регистрации кликните на эту ссылку или скопируйте URL в окно браузера.]]></entry>
 	<entry key="668"><![CDATA[Нажмите для проверки вашего e-mail.]]></entry>
-	<entry key="675"><![CDATA[Снять роль модератора у этого пользователя]]></entry>
-	<entry key="676"><![CDATA[Дать пользователю права модерации]]></entry>
 	<entry key="677"><![CDATA[Пользователь]]></entry>
 	<entry key="678"><![CDATA[Доступ к доске]]></entry>
 	<entry key="679"><![CDATA[Модератор]]></entry>
-	<entry key="683"><![CDATA[Разрешить этому пользователю публиковать своё Аудио/Видео]]></entry>
-	<entry key="684"><![CDATA[Удалить Аудио/Видео этого пользователя]]></entry>
-	<entry key="686"><![CDATA[Я хочу рисовать на доске]]></entry>
-	<entry key="687"><![CDATA[Я хочу сделать моё Аудио/Видео общим]]></entry>
-	<entry key="688"><![CDATA[Вы - модератор в этой комнате]]></entry>
-	<entry key="689"><![CDATA[Вам разрешено рисовать на доске]]></entry>
-	<entry key="690"><![CDATA[Вам разрешено сделать ваше Аудио/Видео общим]]></entry>
 	<entry key="692"><![CDATA[Пользователь]]></entry>
-	<entry key="693"><![CDATA[желает стать модератором. Для того, чтобы разрешить или запретить функцию модерации, используйте иконки статуса рядом с именами в списке участников.]]></entry>
-	<entry key="694"><![CDATA[желает рисовать на доске. Для того, чтобы разрешить или запретить рисовать на доске, используйте иконки статуса рядом с именами в списке участников.]]></entry>
-	<entry key="695"><![CDATA[желает сделать своё Аудио/Видео общим. Для того, чтобы разрешить или запретить участникам делать Аудио/Видео общим, используйте иконки статуса рядом с именами в списке участников.]]></entry>
 	<entry key="696"><![CDATA[Нужно подождать, пока модератор войдёт в комнату.]]></entry>
 	<entry key="702"><![CDATA[Загрузить файл]]></entry>
 	<entry key="703"><![CDATA[Добавить папку]]></entry>
@@ -363,17 +349,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1005"><![CDATA[Очистить объекты только на текущем слайде!]]></entry>
 	<entry key="1065"><![CDATA[Бэкап системы. Включает все данные, сгенерированные пользователем. Не включается конфигурация и метки языка, потому что они импортируются системным инстоллятором. Для апдейта, сэкспортируйте вашу старую систему (1) преустановите новые пакеты для новой базы данных (2) и симпортируйте файл бэкапа снова (3). Бэкап должен быть симпортирован перед генерацией данных в новой системе.]]></entry>
 	<entry key="1066"><![CDATA[Системный бэкап]]></entry>
-	<entry key="1067"><![CDATA[Позволить пользователю делать его экран/запись общим]]></entry>
-	<entry key="1068"><![CDATA[Запретить пользователю делать его экран/запись общим]]></entry>
-	<entry key="1070"><![CDATA[хотел бы сделать его экран/запись общим.]]></entry>
-	<entry key="1071"><![CDATA[Вам разрешается оделать экран/запись общим]]></entry>
 	<entry key="1076"><![CDATA[Только с аудио]]></entry>
 	<entry key="1077"><![CDATA[Установите этот флаг, и польз-ли будут иметь только звук опции без видео в комнате для конференций. Полезно для уменьшения нагрузки сети.]]></entry>
-	<entry key="1078"><![CDATA[Позволить удалённый контроль (для общего экрана)]]></entry>
-	<entry key="1079"><![CDATA[Запретить удалённый контроль (для общего экрана)]]></entry>
-	<entry key="1080"><![CDATA[Применить к правам удалённого контроля (для общего экрана)]]></entry>
-	<entry key="1081"><![CDATA[У вас нет прав на удалённый контроль (для общего экрана)]]></entry>
-	<entry key="1082"><![CDATA[хочет удалённый контроль для общего экрана.]]></entry>
 	<entry key="1089"><![CDATA[Качество общего доступа:]]></entry>
 	<entry key="1090"><![CDATA[Очень высокое качество]]></entry>
 	<entry key="1091"><![CDATA[Высокое качество]]></entry>
@@ -495,7 +472,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1362"><![CDATA[Я]]></entry>
 	<entry key="1363"><![CDATA[Активность и действия]]></entry>
 	<entry key="1386"><![CDATA[Дать слово]]></entry>
-	<entry key="1399"><![CDATA[хочет, чтобы модератор выключил его/её микрофон.]]></entry>
 	<entry key="1410"><![CDATA[Название опроса]]></entry>
 	<entry key="1411"><![CDATA[Вы]]></entry>
 	<entry key="1412"><![CDATA[Заархивированные голосования]]></entry>
@@ -507,12 +483,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[Удалить опрос]]></entry>
 	<entry key="1421"><![CDATA[Хотите удалить этот опрос? Результаты тоже будут удалены.]]></entry>
 	<entry key="1422"><![CDATA[Код ISO языка]]></entry>
-	<entry key="1427"><![CDATA[хочу, чтобы модератор разрешил мне эксклюзивный звук.]]></entry>
 	<entry key="1428">Разрешить эксклюзивный звук.</entry>
 	<entry key="1429"><![CDATA[Разрешение камеры]]></entry>
 	<entry key="1430"><![CDATA[Изменение разрешения влияет на пропускную способность сети, увеличенная картинка требует больше разрешения.]]></entry>
-	<entry key="1432"><![CDATA[Я хотел бы получить разрешение на эксклюзивный звук.]]></entry>
-	<entry key="1433"><![CDATA[Дать мне эксклюзивный звук (как альтернатива, кликните на ваш экран или нажмите F12)]]></entry>
 	<entry key="1443"><![CDATA[Параметры расположения]]></entry>
 	<entry key="1444"><![CDATA[Новое событие]]></entry>
 	<entry key="1445"><![CDATA[Ссылки, защищённые паролем - это ссылки на комнаты, которые посылаются участникам при сохранении события в календаре, не в комнате! Это значит, что если вы сохраняете событие несколько раз с разными паролями, участники каждый раз получают новые ссылки с разными паролями. Но ссылки, посланные ранее, тоже работают!]]></entry>
@@ -616,11 +589,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1598"><![CDATA[Безопасность]]></entry>
 	<entry key="1599"><![CDATA[Доступ запрещён. У вас нет прав для входа в эту комнату.]]></entry>
 	<entry key="1600"><![CDATA[Пересоздать]]></entry>
-	<entry key="1603"><![CDATA[желает сделать своё Аудио общим. Для того, чтобы разрешить или запретить участникам делать Аудио общим, используйте иконки статуса рядом с именами в списке участников.]]></entry>
-	<entry key="1604"><![CDATA[Разрешить этому пользователю публиковать своё Аудио]]></entry>
-	<entry key="1605"><![CDATA[Удалить Аудио этого пользователя]]></entry>
-	<entry key="1606"><![CDATA[Я хочу сделать моё Аудио общим]]></entry>
-	<entry key="1607"><![CDATA[Вам разрешено сделать ваше Аудио общим]]></entry>
 	<entry key="access.denied.header"><![CDATA[Доступ запрещён. У вас недостаточно прав на это действие.]]></entry>
 	<entry key="account.created"><![CDATA[Ваш аккаунт создан. Теперь вы можете войти в систему.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Текст]]></entry>
@@ -861,13 +829,12 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 				</li>
 			</ul>
 		</li>
-
 	<br />
 	<b> <span style="font-size: 1.2em">Если у Вас остались
 			вопросы или Вам требуется поддержка по установке или хостингу:</span></b>
+	<br />
+	<br />
 
-	<br />
-	<br />
 	<b><span style="font-size: 1.2em">Поддержка сообщества:</span></b>
 	<br />
 	<br />
@@ -927,11 +894,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.yesNo"><![CDATA[Да/Нет]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Записи группы]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Доступ к групповым файлам ограничен]]></entry>
-	<entry key="right.presenter.allowed.self"><![CDATA[Вы Докладчик в этой комнате.]]></entry>
-	<entry key="right.presenter.remove"><![CDATA[Отнять право быть Докладчиком в комнате]]></entry>
-	<entry key="right.presenter.request"><![CDATA[хотел бы быть Докладчиком в этой комнате]]></entry>
-	<entry key="right.presenter.request.self"><![CDATA[Я хотел бы быть Докладчиком в этой комнате]]></entry>
-	<entry key="room.action.request.right.moderator"><![CDATA[хочет быть модератором в этой комнате.]]></entry>
 	<entry key="room.type.conference"><![CDATA[конференц зал (1-25 участников)]]></entry>
 	<entry key="room.type.conference.desc"><![CDATA["Демократичная", у каждого пользователя есть права на использование камеры и микрофона. Видео "стартует" автоматически]]></entry>
 	<entry key="room.type.interview"><![CDATA[интервью (1:1 встреча с записью)]]></entry>
@@ -985,4 +947,41 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="register.privacy.accept"><![CDATA[Нажимая на кнопку "${register}", Вы соглашаетесь с нашим ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[соглашением о конфиденциальности]]></entry>
 	<entry key="close.settings.tab"><![CDATA[Вы можете закрыть вкладку браузера после того как сохраните выбранные настройки.]]></entry>
+	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.revoke"><![CDATA[Deny this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.request"><![CDATA[I would like to use microphone]]></entry>
+	<entry key="ulist.right.exclusive.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.revoke"><![CDATA[Deny this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.request"><![CDATA[I would like to get the right for exclusive audio]]></entry>
+	<entry key="ulist.right.moderator.grant"><![CDATA[Дать пользователю права модерации]]></entry>
+	<entry key="ulist.right.moderator.revoke"><![CDATA[Снять роль модератора у этого пользователя]]></entry>
+	<entry key="ulist.right.moderator.request"><![CDATA[Запрос функции модератора]]></entry>
+	<entry key="ulist.right.presenter.grant"><![CDATA[Grant presenter rights to this user]]></entry>
+	<entry key="ulist.right.presenter.revoke"><![CDATA[Remove presenter role from this user]]></entry>
+	<entry key="ulist.right.presenter.request"><![CDATA[I would like to be presenter]]></entry>
+	<entry key="ulist.right.remote.grant"><![CDATA[Позволить удалённый контроль (для общего экрана)]]></entry>
+	<entry key="ulist.right.remote.revoke"><![CDATA[Запретить удалённый контроль (для общего экрана)]]></entry>
+	<entry key="ulist.right.remote.request"><![CDATA[Применить к правам удалённого контроля (для общего экрана)]]></entry>
+	<entry key="ulist.right.share.grant"><![CDATA[Позволить пользователю делать его экран/запись общим]]></entry>
+	<entry key="ulist.right.share.revoke"><![CDATA[Запретить пользователю делать его экран/запись общим]]></entry>
+	<entry key="ulist.right.share.request"><![CDATA[хотел бы сделать его экран/запись общим.]]></entry>
+	<entry key="ulist.right.video.grant"><![CDATA[Разрешить этому пользователю публиковать своё Аудио/Видео]]></entry>
+	<entry key="ulist.right.video.revoke"><![CDATA[Удалить Аудио/Видео этого пользователя]]></entry>
+	<entry key="ulist.right.video.request"><![CDATA[Я хочу сделать моё Аудио/Видео общим]]></entry>
+	<entry key="ulist.right.wb.grant"><![CDATA[Allow to draw on whiteboard]]></entry>
+	<entry key="ulist.right.wb.revoke"><![CDATA[Запретить рисовать на доске]]></entry>
+	<entry key="ulist.right.wb.request"><![CDATA[Я хочу рисовать на доске]]></entry>
+	<entry key="activities.request.right.moderator"><![CDATA[хочет быть модератором в этой комнате.]]></entry>
+	<entry key="activities.request.right.presenter"><![CDATA[would like to be presenter]]></entry>
+	<entry key="activities.request.right.wb"><![CDATA[хочет рисовать на доске.]]></entry>
+	<entry key="activities.request.right.share"><![CDATA[would like to share/record screen.]]></entry>
+	<entry key="activities.request.right.remote"><![CDATA[хочет удалённый контроль для общего экрана.]]></entry>
+	<entry key="activities.request.right.audio"><![CDATA[would like to use micropone]]></entry>
+	<entry key="activities.request.right.video"><![CDATA[желает сделать своё Аудио/Видео общим.]]></entry>
+	<entry key="activities.request.right.exclusive"><![CDATA[хочу, чтобы модератор разрешил мне эксклюзивный звук.]]></entry>
+	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
+	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
+	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
+	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
+	<entry key="microphone.off"><![CDATA[Turn off microphone]]></entry>
 </properties>

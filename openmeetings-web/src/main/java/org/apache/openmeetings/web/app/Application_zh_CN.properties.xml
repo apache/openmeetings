@@ -64,7 +64,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="78"><![CDATA[椭圆]]></entry>
 	<entry key="79"><![CDATA[箭头]]></entry>
 	<entry key="80"><![CDATA[删除已选项]]></entry>
-	<entry key="81"><![CDATA[接受主持]]></entry>
 	<entry key="82"><![CDATA[Flexible textbox]]></entry>
 	<entry key="84"><![CDATA[成为主持]]></entry>
 	<entry key="85"><![CDATA[关闭]]></entry>
@@ -249,7 +248,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[你确认从此连接断开用户？<br/> 仅将用户从此房间踢出.用户可以重新连入.]]></entry>
 	<entry key="606"><![CDATA[你的会话已经被管理员或主持人关闭.]]></entry>
 	<entry key="607"><![CDATA[电话]]></entry>
-	<entry key="612"><![CDATA[移除在白板画画功能]]></entry>
 	<entry key="615"><![CDATA[白板]]></entry>
 	<entry key="619"><![CDATA[会议室类型]]></entry>
 	<entry key="620"><![CDATA[指定会议室]]></entry>
@@ -261,22 +259,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="641"><![CDATA[会议室需要一个主持人，主持人可以是讲座人、管理员或会议室创建者。]]></entry>
 	<entry key="667"><![CDATA[要完成注册，请点击下面的链接，或将链接复制到地址栏中进行访问]]></entry>
 	<entry key="668"><![CDATA[点击此处验证您的邮箱]]></entry>
-	<entry key="675"><![CDATA[移除此用户的主持人角色]]></entry>
-	<entry key="676"><![CDATA[赋予该用户主持的权限]]></entry>
 	<entry key="677"><![CDATA[用户]]></entry>
 	<entry key="678"><![CDATA[使用演示板]]></entry>
 	<entry key="679"><![CDATA[主持人]]></entry>
-	<entry key="683"><![CDATA[允许该用户发布声音或视频]]></entry>
-	<entry key="684"><![CDATA[禁止该用户发布声音或视频]]></entry>
-	<entry key="686"><![CDATA[我需要在演示板上进行书写]]></entry>
-	<entry key="687"><![CDATA[我需要共享声音和视频]]></entry>
-	<entry key="688"><![CDATA[您是会议室的主持人]]></entry>
-	<entry key="689"><![CDATA[您可以在演示板上进行书写了]]></entry>
-	<entry key="690"><![CDATA[您可以接收声音和视频了]]></entry>
 	<entry key="692"><![CDATA[用户]]></entry>
-	<entry key="693"><![CDATA[如果要成为主持人，请在用户列表中，通过该用户的状态图标进行设置]]></entry>
-	<entry key="694"><![CDATA[如果要在演示板上书写，请在用户列表中，通过该用户的状态图标添加或删除此用户的书写权限。]]></entry>
-	<entry key="695"><![CDATA[如果要共享声音和视频，请在用户列表中，通过该用户的状态图标设置是否共享此用户的声音和图像。]]></entry>
 	<entry key="696"><![CDATA[会议室中必需有一个主持人]]></entry>
 	<entry key="702"><![CDATA[上载文件]]></entry>
 	<entry key="703"><![CDATA[新建目录]]></entry>
@@ -363,17 +349,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1005"><![CDATA[清除此片子中的所有对象]]></entry>
 	<entry key="1065"><![CDATA[备份系统，包括所有用户产生的数据，不过不包括语言配置，这是由于语言的配置是有系统安装时候导入的。如果需要更新您的系统，需要导出旧系统然后，1）重新生成数据库；2）导入备份的文件；3）在系统产生任何数据前先导入备份的文件。]]></entry>
 	<entry key="1066"><![CDATA[系统备份]]></entry>
-	<entry key="1067"><![CDATA[允许用户共享屏幕]]></entry>
-	<entry key="1068"><![CDATA[D禁止用户共享屏幕]]></entry>
-	<entry key="1070"><![CDATA[想共享屏幕]]></entry>
-	<entry key="1071"><![CDATA[您可以共享屏幕了]]></entry>
 	<entry key="1076"><![CDATA[只有音频]]></entry>
 	<entry key="1077"><![CDATA[勾选此项可以使得会议室只能有音频功能有利于节省带宽]]></entry>
-	<entry key="1078"><![CDATA[在共享屏幕期间允许远程控制]]></entry>
-	<entry key="1079"><![CDATA[在共享屏幕期间禁止远程控制]]></entry>
-	<entry key="1080"><![CDATA[请求在共享屏幕期间允许远程控制]]></entry>
-	<entry key="1081"><![CDATA[您被允许在共享屏幕期间允许远程控制]]></entry>
-	<entry key="1082"><![CDATA[想远程控制]]></entry>
 	<entry key="1089"><![CDATA[共享屏幕的质量:]]></entry>
 	<entry key="1090"><![CDATA[超高清晰]]></entry>
 	<entry key="1091"><![CDATA[高清晰]]></entry>
@@ -495,7 +472,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1362"><![CDATA[I]]></entry>
 	<entry key="1363"><![CDATA[活动]]></entry>
 	<entry key="1386"><![CDATA[给予独家音频]]></entry>
-	<entry key="1399"><![CDATA[请求主持人设置自身为静音]]></entry>
 	<entry key="1410"><![CDATA[调查名称]]></entry>
 	<entry key="1411"><![CDATA[调查人]]></entry>
 	<entry key="1412"><![CDATA[存档的调查]]></entry>
@@ -507,12 +483,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[删除调查]]></entry>
 	<entry key="1421"><![CDATA[确定要删除此调查？调查结果也将会被删除。]]></entry>
 	<entry key="1422"><![CDATA[语言ISO码]]></entry>
-	<entry key="1427"><![CDATA[希望主持人允许本人提供独家音频]]></entry>
 	<entry key="1428">允许提供独家音频</entry>
 	<entry key="1429"><![CDATA[摄像头像素]]></entry>
 	<entry key="1430"><![CDATA[更改像素会影响频宽，较大的图片需要较高频宽]]></entry>
-	<entry key="1432"><![CDATA[希望得到独家音频的权利]]></entry>
-	<entry key="1433"><![CDATA[赋予我独家音频（或点击你的视频，或点击F12）]]></entry>
 	<entry key="1443"><![CDATA[布局选项]]></entry>
 	<entry key="1444"><![CDATA[新事件]]></entry>
 	<entry key="1445"><![CDATA[密码保护是当你保存日历事件时发送给参与者的会议链接，而非会议室。如果多次用不同密码保存事件，每个参与者会收到一个新链接和新密码，但之前发出的链接仍将适用。]]></entry>
@@ -616,11 +589,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1598"><![CDATA[安全]]></entry>
 	<entry key="1599"><![CDATA[拒绝访问。你无权进入这个房间.]]></entry>
 	<entry key="1600"><![CDATA[再转换]]></entry>
-	<entry key="1603"><![CDATA[想分享他的音频]]></entry>
-	<entry key="1604"><![CDATA[允许该用户发布他们的音频]]></entry>
-	<entry key="1605"><![CDATA[删除该用户的音频]]></entry>
-	<entry key="1606"><![CDATA[我想分享我的音频]]></entry>
-	<entry key="1607"><![CDATA[你可以分享你的声音]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
 	<entry key="account.created"><![CDATA[用户已建立. 请登录.]]></entry>
 	<entry key="admin.email.body"><![CDATA[Body]]></entry>
@@ -724,7 +692,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.room.public.presentation"><![CDATA[Public Presentation Room]]></entry>
 	<entry key="install.room.public.video.only"><![CDATA[Public Video Only Room]]></entry>
 	<entry key="install.room.public.video.wb"><![CDATA[Public Video And Whiteboard Room]]></entry>
-	<entry key="install.wizard.congrats.commercial"><![CDATA[有一些公司也给Apache OpenMeetings提供商业支持：]]></entry>
+	<entry key="install.wizard.congrats.commercial"><![CDATA[有一些公司也给Apache OpenMeetings提供商业支持：
+			]]></entry>
 	<entry key="install.wizard.congrats.enter"><![CDATA[输入应用程序]]></entry>
 	<entry key="install.wizard.congrats.mail"><![CDATA[邮件列表]]></entry>
 	<entry key="install.wizard.congrats.restart"><![CDATA[Database was changed, please restart application to avoid possible issues]]></entry>
@@ -758,6 +727,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
+
+
 	]]></entry>
 	<entry key="install.wizard.db.step.notvalid"><![CDATA[数据库检查不成功]]></entry>
 	<entry key="install.wizard.db.step.oracle.name"><![CDATA[Oracle]]></entry>
@@ -792,7 +763,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[邮件地址]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[输入一个邮件]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[启用TLS邮件服务器认证]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[设置邀请人的电子邮件地址作为邮件邀请回复]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[设置邀请人的电子邮件地址作为邮件邀请回复
+					]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[发送电子邮件到新的注册用户]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[新用户需要验证他们的电子邮件]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP-服务器端口(默认Smtp-服务器端口25)]]></entry>
@@ -828,6 +800,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		参照更多信息或者编写你自己的加密方式，请参见: <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">个性化加密机制</a> 您可以稍后编辑此值，但以前创建的用户和会话可能不可用了
+
+
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[输入加密类的类名. 如果你不能肯定，就不要改变]]></entry>
 	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP 配置]]></entry>
@@ -875,6 +849,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">商业支持</a></span>
 
 	<br />
+
+
+
+
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[取消]]></entry>
@@ -916,11 +894,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.yesNo"><![CDATA[是/否]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
-	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
-	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>
-	<entry key="right.presenter.request"><![CDATA[would like to have right to be presenter in this room]]></entry>
-	<entry key="right.presenter.request.self"><![CDATA[I would like to have right to be presenter in this room]]></entry>
-	<entry key="room.action.request.right.moderator"><![CDATA[would like to be moderator of this room.]]></entry>
 	<entry key="room.type.conference"><![CDATA[会议室 (1-25 用户)]]></entry>
 	<entry key="room.type.conference.desc"><![CDATA["democratic" by default, every user can directly enable audio/video without need for asking]]></entry>
 	<entry key="room.type.interview"><![CDATA[约见 (1:1 会见并记录)]]></entry>
@@ -974,4 +947,41 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="register.privacy.accept"><![CDATA[By clicking "${register}", you agree to our ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[privacy statement]]></entry>
 	<entry key="close.settings.tab"><![CDATA[After saving your audio and video settings you may close this browser tab.]]></entry>
+	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.revoke"><![CDATA[Deny this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.request"><![CDATA[I would like to use microphone]]></entry>
+	<entry key="ulist.right.exclusive.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.revoke"><![CDATA[Deny this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.request"><![CDATA[I would like to get the right for exclusive audio]]></entry>
+	<entry key="ulist.right.moderator.grant"><![CDATA[赋予该用户主持的权限]]></entry>
+	<entry key="ulist.right.moderator.revoke"><![CDATA[移除此用户的主持人角色]]></entry>
+	<entry key="ulist.right.moderator.request"><![CDATA[接受主持]]></entry>
+	<entry key="ulist.right.presenter.grant"><![CDATA[Grant presenter rights to this user]]></entry>
+	<entry key="ulist.right.presenter.revoke"><![CDATA[Remove presenter role from this user]]></entry>
+	<entry key="ulist.right.presenter.request"><![CDATA[I would like to be presenter]]></entry>
+	<entry key="ulist.right.remote.grant"><![CDATA[在共享屏幕期间允许远程控制]]></entry>
+	<entry key="ulist.right.remote.revoke"><![CDATA[在共享屏幕期间禁止远程控制]]></entry>
+	<entry key="ulist.right.remote.request"><![CDATA[请求在共享屏幕期间允许远程控制]]></entry>
+	<entry key="ulist.right.share.grant"><![CDATA[允许用户共享屏幕]]></entry>
+	<entry key="ulist.right.share.revoke"><![CDATA[D禁止用户共享屏幕]]></entry>
+	<entry key="ulist.right.share.request"><![CDATA[想共享屏幕]]></entry>
+	<entry key="ulist.right.video.grant"><![CDATA[允许该用户发布声音或视频]]></entry>
+	<entry key="ulist.right.video.revoke"><![CDATA[禁止该用户发布声音或视频]]></entry>
+	<entry key="ulist.right.video.request"><![CDATA[我需要共享声音和视频]]></entry>
+	<entry key="ulist.right.wb.grant"><![CDATA[Allow to draw on whiteboard]]></entry>
+	<entry key="ulist.right.wb.revoke"><![CDATA[移除在白板画画功能]]></entry>
+	<entry key="ulist.right.wb.request"><![CDATA[我需要在演示板上进行书写]]></entry>
+	<entry key="activities.request.right.moderator"><![CDATA[would like to be moderator of this room.]]></entry>
+	<entry key="activities.request.right.presenter"><![CDATA[would like to be presenter]]></entry>
+	<entry key="activities.request.right.wb"><![CDATA[如果要在演示板上书写，请在用户列表中，通过该用户的状态图标添加或删除此用户的书写权限。]]></entry>
+	<entry key="activities.request.right.share"><![CDATA[would like to share/record screen.]]></entry>
+	<entry key="activities.request.right.remote"><![CDATA[想远程控制]]></entry>
+	<entry key="activities.request.right.audio"><![CDATA[would like to use micropone]]></entry>
+	<entry key="activities.request.right.video"><![CDATA[如果要共享声音和视频，请在用户列表中，通过该用户的状态图标设置是否共享此用户的声音和图像。]]></entry>
+	<entry key="activities.request.right.exclusive"><![CDATA[希望主持人允许本人提供独家音频]]></entry>
+	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
+	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
+	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
+	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
+	<entry key="microphone.off"><![CDATA[Turn off microphone]]></entry>
 </properties>

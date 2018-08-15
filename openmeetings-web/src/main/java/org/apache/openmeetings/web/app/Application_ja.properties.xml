@@ -64,7 +64,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="78"><![CDATA[楕円]]></entry>
 	<entry key="79"><![CDATA[矢印]]></entry>
 	<entry key="80"><![CDATA[削除]]></entry>
-	<entry key="81"><![CDATA[モデレータ（司会者）になる]]></entry>
 	<entry key="82"><![CDATA[Flexible textbox]]></entry>
 	<entry key="84"><![CDATA[モデレータ（司会者）になる]]></entry>
 	<entry key="85"><![CDATA[閉じる]]></entry>
@@ -249,7 +248,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[本当にこのユーザーを追い出してよろしいですか?<br/> 追い出したとしても、ユーザーは単にこの会議室から追い出されるだけです。ユーザーは、再度ログインすることができます。]]></entry>
 	<entry key="606"><![CDATA[管理者またはモデレータ（司会者）によって、セッションが切断されました。]]></entry>
 	<entry key="607"><![CDATA[電話]]></entry>
-	<entry key="612"><![CDATA[ホワイトボードの利用を禁止する]]></entry>
 	<entry key="615"><![CDATA[ホワイトボード]]></entry>
 	<entry key="619"><![CDATA[会議室タイプ]]></entry>
 	<entry key="620"><![CDATA[会議室]]></entry>
@@ -261,22 +259,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="641"><![CDATA[モデレータ（司会者）が入室するまでしばらくお待ちください。モデレータは本会議室の管理者/作成者/講師になります。]]></entry>
 	<entry key="667"><![CDATA[登録を完了するためには、下記のリンクをクリックしてください。あるいは下記URLをブラウザにコピー・ペーストしてください。]]></entry>
 	<entry key="668"><![CDATA[メールを確認するにはここをクリックしてください]]></entry>
-	<entry key="675"><![CDATA[モデレータ（司会者）権限を剥奪する]]></entry>
-	<entry key="676"><![CDATA[モデレータ（司会者）権限を付与する]]></entry>
 	<entry key="677"><![CDATA[ユーザー]]></entry>
 	<entry key="678"><![CDATA[ホワイトボード・アクセス]]></entry>
 	<entry key="679"><![CDATA[モデレータ（司会者）]]></entry>
-	<entry key="683"><![CDATA[ビデオ共有権限を付与する]]></entry>
-	<entry key="684"><![CDATA[ビデオ共有権限を剥奪する]]></entry>
-	<entry key="686"><![CDATA[ホワイトボードを使いたい]]></entry>
-	<entry key="687"><![CDATA[ビデオ・音声を共有したい]]></entry>
-	<entry key="688"><![CDATA[あなたはモデレータ（司会者）です]]></entry>
-	<entry key="689"><![CDATA[ホワイトボードの使用を許可されています]]></entry>
-	<entry key="690"><![CDATA[ビデオ・音声の共有を許可されました]]></entry>
 	<entry key="692"><![CDATA[]]></entry>
-	<entry key="693"><![CDATA[モデレータ（司会者）権限を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってモデレータ権限の与奪を行います。]]></entry>
-	<entry key="694"><![CDATA[ホワイトボードの使用を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。]]></entry>
-	<entry key="695"><![CDATA[ビデオ・音声の共有を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。]]></entry>
 	<entry key="696"><![CDATA[モデレータ（司会者）が入室するまでしばらくお待ちください。]]></entry>
 	<entry key="702"><![CDATA[ファイルをアップロードする]]></entry>
 	<entry key="703"><![CDATA[フォルダを追加する]]></entry>
@@ -363,17 +349,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1005"><![CDATA[現在表示中のスライド内のオブジェクトだけを消去!]]></entry>
 	<entry key="1065"><![CDATA[システムをバックアップします。バックアップには、ユーザーが生成した、あらゆるデータが含まれます。サーバ設定、および各言語ラベルはバックアップされません。システムをより新しいバージョンにアップデートする場合は、<br>(1)まずバックアップ・ファイルにエクスポートし、<br>(2)新規に作成したデータベース上にアプリケーションを再インストールし、<br>(3)バックアップ・ファイルをインポート、してください。バックアップ・ファイルのインポートは、新システム上で最初に行う必要があります。]]></entry>
 	<entry key="1066"><![CDATA[システム･バックアップ]]></entry>
-	<entry key="1067"><![CDATA[ユーザーに対し画面共有/録画を許可する]]></entry>
-	<entry key="1068"><![CDATA[ユーザーに対し画面共有/録画を拒否する]]></entry>
-	<entry key="1070"><![CDATA[画面の共有/録画を要求中]]></entry>
-	<entry key="1071"><![CDATA[あなたは画面の共有/録画をする権限を与えられています]]></entry>
 	<entry key="1076"><![CDATA[音声のみの会議室]]></entry>
 	<entry key="1077"><![CDATA[このフラッグをオンにすると、ユーザーは会議室で音声のみ使用できるようになります(ビデオ無し)。これにより、ネットワーク帯域を節約することができます。]]></entry>
-	<entry key="1078"><![CDATA[リモート制御を許可 (デスクトップ共有中)]]></entry>
-	<entry key="1079"><![CDATA[リモート制御を拒否 (デスクトップ共有中)]]></entry>
-	<entry key="1080"><![CDATA[リモート制御権限を適用する (デスクトップ共有中)]]></entry>
-	<entry key="1081"><![CDATA[あなたは、リモート画面の制御を許可されています(デスクトップ共有時)]]></entry>
-	<entry key="1082"><![CDATA[リモート画面の制御権限を要求中]]></entry>
 	<entry key="1089"><![CDATA[画面共有の品質:]]></entry>
 	<entry key="1090"><![CDATA[超高品質]]></entry>
 	<entry key="1091"><![CDATA[高品質]]></entry>
@@ -495,7 +472,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1362"><![CDATA[私]]></entry>
 	<entry key="1363"><![CDATA[アクティビティ/アクション]]></entry>
 	<entry key="1386"><![CDATA[他の参加者のマイクを無効にして私のマイクだけを有効にする (F12)]]></entry>
-	<entry key="1399"><![CDATA[参加者のマイクの無効化を依頼中]]></entry>
 	<entry key="1410"><![CDATA[投票名]]></entry>
 	<entry key="1411"><![CDATA[あなた]]></entry>
 	<entry key="1412"><![CDATA[過去の投票]]></entry>
@@ -507,12 +483,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[投票を削除する]]></entry>
 	<entry key="1421"><![CDATA[この投票を削除してよろしいですか？同時に投票結果も削除されます。]]></entry>
 	<entry key="1422"><![CDATA[ISO言語コード]]></entry>
-	<entry key="1427"><![CDATA[単独講演者（話者）権限を要求中]]></entry>
 	<entry key="1428">単独講演者（話者）になることを許可する。</entry>
 	<entry key="1429"><![CDATA[カメラ解像度]]></entry>
 	<entry key="1430"><![CDATA[解像度の変更はネットワーク帯域に影響します。高解像度のビデオ画像は、より多くのネットワーク帯域を必要とします。]]></entry>
-	<entry key="1432"><![CDATA[私は、単独講演者（話者）になることができる権限の付与を依頼します。]]></entry>
-	<entry key="1433"><![CDATA[あなたは、自分自身の手で単独講演者（話者）になることができます。単独講演者（話者）になるには、ここをクリックしてください。(または、あなたのビデオ画面でクリック、あるいはF12押下でも可能です)]]></entry>
 	<entry key="1443"><![CDATA[レイアウト・オプション]]></entry>
 	<entry key="1444"><![CDATA[新規イベント]]></entry>
 	<entry key="1445"><![CDATA[カレンダー・イベントを保存時にパスワードを設定する場合、パスワードは、参加者に対して送付される会議室リンクに対して設定されます。会議室にパスワードが設定されるわけではありません。したがって、一つのイベントを、異なるパスワードで複数回保存したような場合、参加者は、異なるパスワードの会議室リンクを受け取ることになります。また、一旦送付されたリンクは、古いパスワードの会議室リンクであっても有効のまま残ります。]]></entry>
@@ -616,11 +589,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1598"><![CDATA[セキュリティ]]></entry>
 	<entry key="1599"><![CDATA[この会議室へは入れません]]></entry>
 	<entry key="1600"><![CDATA[再変換]]></entry>
-	<entry key="1603"><![CDATA[音声の共有を要求中]]></entry>
-	<entry key="1604"><![CDATA[このユーザーに音声の公開を許可する]]></entry>
-	<entry key="1605"><![CDATA[このユーザーの音声共有を解除]]></entry>
-	<entry key="1606"><![CDATA[自分の音声の公開を求める]]></entry>
-	<entry key="1607"><![CDATA[音声の共有を許可されました]]></entry>
 	<entry key="access.denied.header"><![CDATA[アクセスが拒否されました。このアクションの実行権限がありません。]]></entry>
 	<entry key="account.created"><![CDATA[アカウントが作成されました。ログイン可能です。]]></entry>
 	<entry key="admin.email.body"><![CDATA[本文]]></entry>
@@ -760,6 +728,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
 			<p><strong>注:</strong> 予見し難い DB ログイン名と8文字以上の強固なパスワードを使用してください。</p>
 		</div>
+
 	]]></entry>
 	<entry key="install.wizard.db.step.notvalid"><![CDATA[データベース接続試験に失敗しました]]></entry>
 	<entry key="install.wizard.db.step.oracle.name"><![CDATA[Oracle]]></entry>
@@ -794,7 +763,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[メール・リファラー]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[リファラーを入力してください]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[SMTP認証でTLSを有効にする]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[参加依頼メールの返信先に、依頼者のメール・アドレスを使用する]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[参加依頼メールの返信先に、依頼者のメール・アドレスを使用する
+					]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[新規登録ユーザーにメールを送信する]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[新規ユーザーはメールによる検証が必要]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[SMTP ポート（既定=25）]]></entry>
@@ -831,6 +801,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Custom Crypt Mechanism</a>。
                 この設定を後で変更することも可能ですが、その場合、それ以前に作成したユーザーやセッションは、変更後に一切利用できなくなります
+
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[暗号化クラス名を入力してください。良く分からない場合は変更しないでください]]></entry>
 	<entry key="install.wizard.params.step4.sip"><![CDATA[red5SIP 構成]]></entry>
@@ -877,15 +848,19 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">商用サポート</a></span>
 
 	<br />
+
+
+
+
+
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[不正なハッシュ]]></entry>
 	<entry key="lbl.cancel"><![CDATA[キャンセル]]></entry>
 	<entry key="lbl.refresh"><![CDATA[更新]]></entry>
 	<entry key="main.menu.admin.email"><![CDATA[電子メール管理]]></entry>
 	<entry key="main.menu.admin.email.desc"><![CDATA[システムで使用する電子メールのチェックを実行]]></entry>
-        <entry key="my.room.conference"><![CDATA[私の会議室 (最適ユーザー数 1-16 人)]]></entry>
-        <entry key="my.room.presentation"><![CDATA[講演会/ウェビナー用会議室 (最
-適ユーザー数 1-120 人)]]></entry>
+	<entry key="my.room.conference"><![CDATA[私の会議室 (最適ユーザー数 1-16 人)]]></entry>
+	<entry key="my.room.presentation"><![CDATA[講演会/ウェビナー用会議室 (最 適ユーザー数 1-120 人)]]></entry>
 	<entry key="network.test.click.play"><![CDATA[再生ボタンを押してテストを実行]]></entry>
 	<entry key="network.test.copy.log"><![CDATA[ログをクリップボードにコピー]]></entry>
 	<entry key="network.test.dwn"><![CDATA[ダウンロード速度]]></entry>
@@ -919,11 +894,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.yesNo"><![CDATA[はい/いいえ]]></entry>
 	<entry key="recordings.root.group"><![CDATA[グループの録画]]></entry>
 	<entry key="restricted.group.files"><![CDATA[「グループのファイル」のアクセス制限]]></entry>
-	<entry key="right.presenter.allowed.self"><![CDATA[あなたに、このルームの講演者権限が付与されました]]></entry>
-	<entry key="right.presenter.remove"><![CDATA[このルームの講演者権限を剥奪]]></entry>
-	<entry key="right.presenter.request"><![CDATA[このルームの講演者権限を要求中]]></entry>
-	<entry key="right.presenter.request.self"><![CDATA[私は、このルームの講演者権限を求めます]]></entry>
-	<entry key="room.action.request.right.moderator"><![CDATA[このルームのモデレータ（司会者）権限を要求中]]></entry>
 	<entry key="room.type.conference"><![CDATA[会議(ユーザー数:1〜25)]]></entry>
 	<entry key="room.type.conference.desc"><![CDATA[既定は"民主的"です。全てのユーザーが音声/ビデオの発信をできます。発信許可を得る必要はありません]]></entry>
 	<entry key="room.type.interview"><![CDATA[インタビュー(1対1のミーティング；録画機能付き)]]></entry>
@@ -977,4 +947,41 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="register.privacy.accept"><![CDATA[私は、「${register}」をクリックすることにより、 ${link} に同意します。]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[プライバシーに関する声明]]></entry>
 	<entry key="close.settings.tab"><![CDATA[After saving your audio and video settings you may close this browser tab.]]></entry>
+	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.revoke"><![CDATA[Deny this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.request"><![CDATA[I would like to use microphone]]></entry>
+	<entry key="ulist.right.exclusive.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.revoke"><![CDATA[Deny this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.request"><![CDATA[I would like to get the right for exclusive audio]]></entry>
+	<entry key="ulist.right.moderator.grant"><![CDATA[モデレータ（司会者）権限を付与する]]></entry>
+	<entry key="ulist.right.moderator.revoke"><![CDATA[モデレータ（司会者）権限を剥奪する]]></entry>
+	<entry key="ulist.right.moderator.request"><![CDATA[モデレータ（司会者）になる]]></entry>
+	<entry key="ulist.right.presenter.grant"><![CDATA[Grant presenter rights to this user]]></entry>
+	<entry key="ulist.right.presenter.revoke"><![CDATA[このルームの講演者権限を剥奪]]></entry>
+	<entry key="ulist.right.presenter.request"><![CDATA[私は、このルームの講演者権限を求めます]]></entry>
+	<entry key="ulist.right.remote.grant"><![CDATA[リモート制御を許可 (デスクトップ共有中)]]></entry>
+	<entry key="ulist.right.remote.revoke"><![CDATA[リモート制御を拒否 (デスクトップ共有中)]]></entry>
+	<entry key="ulist.right.remote.request"><![CDATA[リモート制御権限を適用する (デスクトップ共有中)]]></entry>
+	<entry key="ulist.right.share.grant"><![CDATA[ユーザーに対し画面共有/録画を許可する]]></entry>
+	<entry key="ulist.right.share.revoke"><![CDATA[ユーザーに対し画面共有/録画を拒否する]]></entry>
+	<entry key="ulist.right.share.request"><![CDATA[画面の共有/録画を要求中]]></entry>
+	<entry key="ulist.right.video.grant"><![CDATA[ビデオ共有権限を付与する]]></entry>
+	<entry key="ulist.right.video.revoke"><![CDATA[ビデオ共有権限を剥奪する]]></entry>
+	<entry key="ulist.right.video.request"><![CDATA[ビデオ・音声を共有したい]]></entry>
+	<entry key="ulist.right.wb.grant"><![CDATA[Allow to draw on whiteboard]]></entry>
+	<entry key="ulist.right.wb.revoke"><![CDATA[ホワイトボードの利用を禁止する]]></entry>
+	<entry key="ulist.right.wb.request"><![CDATA[ホワイトボードを使いたい]]></entry>
+	<entry key="activities.request.right.moderator"><![CDATA[このルームのモデレータ（司会者）権限を要求中]]></entry>
+	<entry key="activities.request.right.presenter"><![CDATA[このルームの講演者権限を要求中]]></entry>
+	<entry key="activities.request.right.wb"><![CDATA[ホワイトボードの使用を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってホワイトボード使用権限の与奪を行います。]]></entry>
+	<entry key="activities.request.right.share"><![CDATA[would like to share/record screen.]]></entry>
+	<entry key="activities.request.right.remote"><![CDATA[リモート画面の制御権限を要求中]]></entry>
+	<entry key="activities.request.right.audio"><![CDATA[would like to use micropone]]></entry>
+	<entry key="activities.request.right.video"><![CDATA[ビデオ・音声の共有を要求しています。ユーザー一覧のユーザー名右側にあるステータス・アイコンを使ってビデオ共有権限の与奪を行います。]]></entry>
+	<entry key="activities.request.right.exclusive"><![CDATA[単独講演者（話者）権限を要求中]]></entry>
+	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
+	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
+	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
+	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
+	<entry key="microphone.off"><![CDATA[Turn off microphone]]></entry>
 </properties>

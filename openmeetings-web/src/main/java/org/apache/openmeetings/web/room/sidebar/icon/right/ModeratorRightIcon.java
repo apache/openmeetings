@@ -30,12 +30,6 @@ public class ModeratorRightIcon extends RoomRightIcon {
 
 	@Override
 	protected String getTitle() {
-		String title;
-		if (hasRight()) {
-			title = isSelf() ? "688" : "675";
-		} else {
-			title = isSelf() ? "81" : "676";
-		}
-		return getString(title);
+		return getString(String.format("ulist.right.moderator.%s", (isSelf() ? "request" : (hasRight() ? "revoke" : "grant"))));
 	}
 }

@@ -19,7 +19,6 @@
 package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.room.Room.Right;
 
 public class MicActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +30,7 @@ public class MicActivityIcon extends RoomActivityIcon {
 
 	@Override
 	protected String getTitle() {
-		return getString(getClient().hasRight(Right.audio) ? "1607" : "1606");
+		return getString(getClient().hasActivity(Activity.broadcastA) ? "microphone.off" : "microphone.on");
 	}
 
 	@Override
