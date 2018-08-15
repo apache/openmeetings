@@ -64,7 +64,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="78"><![CDATA[Ellipse]]></entry>
 	<entry key="79"><![CDATA[Flèche]]></entry>
 	<entry key="80"><![CDATA[Supprimer l'élément sélectionné]]></entry>
-	<entry key="81"><![CDATA[Demander la modération]]></entry>
 	<entry key="82"><![CDATA[Flexible textbox]]></entry>
 	<entry key="84"><![CDATA[Devenir modérateur]]></entry>
 	<entry key="85"><![CDATA[Fermer]]></entry>
@@ -249,7 +248,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="605"><![CDATA[Voulez-vous vraiment sortir cet utilisateur ?<br/> Cela supprimera le client de la réunion actuelle mais il pourra se reconnecter.]]></entry>
 	<entry key="606"><![CDATA[Votre session a été interrompue par l'administrateur ou le modérateur.]]></entry>
 	<entry key="607"><![CDATA[Téléphone]]></entry>
-	<entry key="612"><![CDATA[Retirer le droit de dessiner sur le tableau blanc.]]></entry>
 	<entry key="615"><![CDATA[Tableau blanc]]></entry>
 	<entry key="619"><![CDATA[Type de salle]]></entry>
 	<entry key="620"><![CDATA[Salle temporaire]]></entry>
@@ -261,22 +259,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="641"><![CDATA[S.V.P. attendez que le modérateur rejoigne la salle.<br/>Le modérateur peut-être un enseignant,<br/>l'administrateur ou le créateur de<br/> cette réunion.]]></entry>
 	<entry key="667"><![CDATA[Pour terminer votre enregistrement veuillez cliquer sur le lien suivant. Ou copier l'URL dans la barre d'adresse de votre navigateur.]]></entry>
 	<entry key="668"><![CDATA[Cliquez pour vérifier votre courriel]]></entry>
-	<entry key="675"><![CDATA[Enlever le rôle de modérateur à cet utilisateur]]></entry>
-	<entry key="676"><![CDATA[Donner les droits de modération à cet utilisateur]]></entry>
 	<entry key="677"><![CDATA[Utilisateur]]></entry>
 	<entry key="678"><![CDATA[Accès au tableau blanc]]></entry>
 	<entry key="679"><![CDATA[Modérateur]]></entry>
-	<entry key="683"><![CDATA[Autoriser cet utilisateur à publier son Audio/Vidéo]]></entry>
-	<entry key="684"><![CDATA[Supprimer l'Audio/Vidéo de cet utilisateur]]></entry>
-	<entry key="686"><![CDATA[Je souhaiterais dessiner sur le tableau blanc]]></entry>
-	<entry key="687"><![CDATA[Je souhaiterais partager mon audio/vidéo]]></entry>
-	<entry key="688"><![CDATA[Vous êtes le modérateur de cette salle]]></entry>
-	<entry key="689"><![CDATA[Vous êtes autorisé à dessiner sur le tableau blanc]]></entry>
-	<entry key="690"><![CDATA[Vous êtes autorisé à partager votre Audio/Vidéo.]]></entry>
 	<entry key="692"><![CDATA[L'utilisateur]]></entry>
-	<entry key="693"><![CDATA[<br/>demande la modération. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever la modération.]]></entry>
-	<entry key="694"><![CDATA[<br/>demande l'accès au tableau blanc. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de dessiner sur le tableau blanc.]]></entry>
-	<entry key="695"><![CDATA[<br/>demande le partage audio/vidéo. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de partager l'audio/vidéo.]]></entry>
 	<entry key="696"><![CDATA[Vous devez attendre qu'un modérateur entre dans la salle.]]></entry>
 	<entry key="702"><![CDATA[Ajouter un fichier]]></entry>
 	<entry key="703"><![CDATA[Ajouter un dossier]]></entry>
@@ -363,17 +349,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1005"><![CDATA[Supprimer les objets sur le document actuel seulement !]]></entry>
 	<entry key="1065"><![CDATA[Sauvegarder le système. La sauvegarde inclut toutes les données générées par les utilisateurs. La configuration n'est pas inclue ainsi que les étiquettes des langues car ces données sont importées avec l'installateur du système. Pour mettre votre système à jour, exportez votre système (1) réinstallez la nouvelle version dans une nouvelle base de données (2) et importez la sauvegarde (3). La sauvegarde devrait être importée avant de générer de nouvelles données avec le nouveau système.]]></entry>
 	<entry key="1066"><![CDATA[Sauvegarde système]]></entry>
-	<entry key="1067"><![CDATA[Permettre à l'utilisateur de partager/enregistrer son écran]]></entry>
-	<entry key="1068"><![CDATA[Refuser à l'utilisateur de partager/enregistrer son écran]]></entry>
-	<entry key="1070"><![CDATA[voudrait partager/enregistrer son écran.]]></entry>
-	<entry key="1071"><![CDATA[Vous avez la permission de partager/enregistrer votre écran]]></entry>
 	<entry key="1076"><![CDATA[Salle audio seulement]]></entry>
 	<entry key="1077"><![CDATA[Activez ce champ et les utilisateurs auront seulement l'option audio et non vidéo dans une salle de conférence. Ceci peut-être bon pour économiser de la bande passante.]]></entry>
-	<entry key="1078"><![CDATA[Permettre le contrôle à distance (Durant un partage d'écran)]]></entry>
-	<entry key="1079"><![CDATA[Refuser le contrôle à distance (Durant un partage d'écran)]]></entry>
-	<entry key="1080"><![CDATA[Demander le droit de contrôler à distance (Durant un partage d'écran)]]></entry>
-	<entry key="1081"><![CDATA[Vous avez le droit de contrôler à distance (Durant un partage d'écran)]]></entry>
-	<entry key="1082"><![CDATA[souhaite contrôler à distance.]]></entry>
 	<entry key="1089"><![CDATA[Qualité du partage d'écran :]]></entry>
 	<entry key="1090"><![CDATA[très haute qualité]]></entry>
 	<entry key="1091"><![CDATA[Haute qualité]]></entry>
@@ -495,7 +472,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1362"><![CDATA[Je]]></entry>
 	<entry key="1363"><![CDATA[Activités et actions]]></entry>
 	<entry key="1386"><![CDATA[Couper le micro des autres]]></entry>
-	<entry key="1399"><![CDATA[souhaite que le modérateur coupe son micro.]]></entry>
 	<entry key="1410"><![CDATA[Nom du sondage]]></entry>
 	<entry key="1411"><![CDATA[Vous]]></entry>
 	<entry key="1412"><![CDATA[Sondages]]></entry>
@@ -507,12 +483,9 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1420"><![CDATA[Supprimer]]></entry>
 	<entry key="1421"><![CDATA[Etes-vous sûr de vouloir supprimer ce sondage ? Les résultats seront supprimés également.]]></entry>
 	<entry key="1422"><![CDATA[Code IS de la langue]]></entry>
-	<entry key="1427"><![CDATA[souhaite que le modérateur me donne la permission d'audio exclusif.]]></entry>
 	<entry key="1428">Donner une permission d'audio exclusif.</entry>
 	<entry key="1429"><![CDATA[Résolution caméra]]></entry>
 	<entry key="1430"><![CDATA[Changer la résolution affecte la bande passante, une image plus grande à besoin de plus de bande passante !]]></entry>
-	<entry key="1432"><![CDATA[Je souhaite avoir le droit d'avoir l'audio exclusif]]></entry>
-	<entry key="1433"><![CDATA[Me donne l'audio exclusif (alternativement cliquez sur votre fenêtre vidéo ou appuyez sur F12)]]></entry>
 	<entry key="1443"><![CDATA[Options de disposition]]></entry>
 	<entry key="1444"><![CDATA[Nouvel événement]]></entry>
 	<entry key="1445"><![CDATA[Les liens envoyés aux participants pour une conférence lorsque vous sauvez le calendrier sont protégés par mot de passe, pas la salle ! Cela signifie que si vous sauvez l'événement plusieurs fois avec un mot de passe différent, chaque participant recevra un nouveau lien avec un mot de passe différent. Les anciens liens sont toujours valables une fois envoyés !]]></entry>
@@ -616,11 +589,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="1598"><![CDATA[Sécurité]]></entry>
 	<entry key="1599"><![CDATA[Accès refusé. Vous avez pas le droit d'entrer dans cette salle.]]></entry>
 	<entry key="1600"><![CDATA[Re-convertir]]></entry>
-	<entry key="1603"><![CDATA[aimerait partager son audio]]></entry>
-	<entry key="1604"><![CDATA[Autoriser cet utilisateur à publier son audio]]></entry>
-	<entry key="1605"><![CDATA[Retirer l'audio de cet utilisateur]]></entry>
-	<entry key="1606"><![CDATA[Je voudrais partager mon audio]]></entry>
-	<entry key="1607"><![CDATA[Vous êtes autorisé à partager votre audio]]></entry>
 	<entry key="access.denied.header"><![CDATA[Access denied. You are not authorized to perform this action.]]></entry>
 	<entry key="account.created"><![CDATA[Votre compte a été créé. Vous pouvez maintenant vous connecter]]></entry>
 	<entry key="admin.email.body"><![CDATA[Corps]]></entry>
@@ -760,6 +728,7 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		<div class="ui-state-highlight ui-corner-all" style="margin-top: 20px;padding: 0 .7em;">
 			<p><strong>NOTE</strong> Please use unpredictable DB login and 'strong' password with length 8 characters or more.</p>
 		</div>
+
 	]]></entry>
 	<entry key="install.wizard.db.step.notvalid"><![CDATA[La vérification de la base de données a échoué]]></entry>
 	<entry key="install.wizard.db.step.oracle.name"><![CDATA[Oracle]]></entry>
@@ -794,7 +763,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="install.wizard.params.step2.mailReferer"><![CDATA[Adresse de courriel du système]]></entry>
 	<entry key="install.wizard.params.step2.mailReferer.title"><![CDATA[Entrez l'adresse de courriel utilisée par le système]]></entry>
 	<entry key="install.wizard.params.step2.mailUseTls"><![CDATA[Activer TLS pour le serveur de courriels]]></entry>
-	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Inclure l'adresse de courriel de l'organisateur dans le champ des destinataires d'un courriel]]></entry>
+	<entry key="install.wizard.params.step2.replyToOrganizer"><![CDATA[Inclure l'adresse de courriel de l'organisateur dans le champ
+					des destinataires d'un courriel]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailAtRegister"><![CDATA[Envoyer un courriel aux nouveaux utilisateurs]]></entry>
 	<entry key="install.wizard.params.step2.sendEmailWithVerficationCode"><![CDATA[Les nouveaux utilisateurs doivent vérifier leur adresse de courriel]]></entry>
 	<entry key="install.wizard.params.step2.smtpPort"><![CDATA[Port du serveur SMTP (Le port standard est 25)]]></entry>
@@ -830,6 +800,8 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		Pour plus d'information ou pour écrire votre propre chiffrement voir : <a
 		href="http://openmeetings.apache.org/CustomCryptMechanism.html"
 		target="_blank">Custom Crypt Mechanism</a>. Vous pouvez éditer cette valeur plus tard MAIS les utilisateurs créés précédemment pourraient ne plus être utilisables.
+
+
 	]]></entry>
 	<entry key="install.wizard.params.step4.cryptClassName.title"><![CDATA[Indiquez le nom de la classe de chiffrement. NE MODIFIEZ PAS CECI SI VOUS N'ETES PAS SUR !]]></entry>
 	<entry key="install.wizard.params.step4.sip"><![CDATA[Configuration red5SIP]]></entry>
@@ -877,6 +849,10 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 		target="_blank">Support commercial</a></span>
 
 	<br />
+
+
+
+
 	]]></entry>
 	<entry key="invalid.hash"><![CDATA[Invalid hash]]></entry>
 	<entry key="lbl.cancel"><![CDATA[Annuler]]></entry>
@@ -918,11 +894,6 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="poll.type.yesNo"><![CDATA[Oui/Non]]></entry>
 	<entry key="recordings.root.group"><![CDATA[Group recordings]]></entry>
 	<entry key="restricted.group.files"><![CDATA[Group files are restricted]]></entry>
-	<entry key="right.presenter.allowed.self"><![CDATA[You granted right to be presenter in this room]]></entry>
-	<entry key="right.presenter.remove"><![CDATA[Remove right to be presenter in this room]]></entry>
-	<entry key="right.presenter.request"><![CDATA[would like to have right to be presenter in this room]]></entry>
-	<entry key="right.presenter.request.self"><![CDATA[I would like to have right to be presenter in this room]]></entry>
-	<entry key="room.action.request.right.moderator"><![CDATA[would like to be moderator of this room.]]></entry>
 	<entry key="room.type.conference"><![CDATA[conférence (1-25 utilisateurs)]]></entry>
 	<entry key="room.type.conference.desc"><![CDATA["democratic" by default, every user can directly enable audio/video without need for asking]]></entry>
 	<entry key="room.type.interview"><![CDATA[interview (1:1 réunion avec enregistrement)]]></entry>
@@ -976,4 +947,41 @@ see http://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="register.privacy.accept"><![CDATA[By clicking "${register}", you agree to our ${link}.]]></entry>
 	<entry key="register.privacy.statement"><![CDATA[privacy statement]]></entry>
 	<entry key="close.settings.tab"><![CDATA[After saving your audio and video settings you may close this browser tab.]]></entry>
+	<entry key="ulist.right.audio.grant"><![CDATA[Allow this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.revoke"><![CDATA[Deny this user to use microphone]]></entry>
+	<entry key="ulist.right.audio.request"><![CDATA[I would like to use microphone]]></entry>
+	<entry key="ulist.right.exclusive.grant"><![CDATA[Allow this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.revoke"><![CDATA[Deny this user to mute others]]></entry>
+	<entry key="ulist.right.exclusive.request"><![CDATA[I would like to get the right for exclusive audio]]></entry>
+	<entry key="ulist.right.moderator.grant"><![CDATA[Donner les droits de modération à cet utilisateur]]></entry>
+	<entry key="ulist.right.moderator.revoke"><![CDATA[Enlever le rôle de modérateur à cet utilisateur]]></entry>
+	<entry key="ulist.right.moderator.request"><![CDATA[Demander la modération]]></entry>
+	<entry key="ulist.right.presenter.grant"><![CDATA[Grant presenter rights to this user]]></entry>
+	<entry key="ulist.right.presenter.revoke"><![CDATA[Remove presenter role from this user]]></entry>
+	<entry key="ulist.right.presenter.request"><![CDATA[I would like to be presenter]]></entry>
+	<entry key="ulist.right.remote.grant"><![CDATA[Permettre le contrôle à distance (Durant un partage d'écran)]]></entry>
+	<entry key="ulist.right.remote.revoke"><![CDATA[Refuser le contrôle à distance (Durant un partage d'écran)]]></entry>
+	<entry key="ulist.right.remote.request"><![CDATA[Demander le droit de contrôler à distance (Durant un partage d'écran)]]></entry>
+	<entry key="ulist.right.share.grant"><![CDATA[Permettre à l'utilisateur de partager/enregistrer son écran]]></entry>
+	<entry key="ulist.right.share.revoke"><![CDATA[Refuser à l'utilisateur de partager/enregistrer son écran]]></entry>
+	<entry key="ulist.right.share.request"><![CDATA[voudrait partager/enregistrer son écran.]]></entry>
+	<entry key="ulist.right.video.grant"><![CDATA[Autoriser cet utilisateur à publier son Audio/Vidéo]]></entry>
+	<entry key="ulist.right.video.revoke"><![CDATA[Supprimer l'Audio/Vidéo de cet utilisateur]]></entry>
+	<entry key="ulist.right.video.request"><![CDATA[Je souhaiterais partager mon audio/vidéo]]></entry>
+	<entry key="ulist.right.wb.grant"><![CDATA[Allow to draw on whiteboard]]></entry>
+	<entry key="ulist.right.wb.revoke"><![CDATA[Retirer le droit de dessiner sur le tableau blanc.]]></entry>
+	<entry key="ulist.right.wb.request"><![CDATA[Je souhaiterais dessiner sur le tableau blanc]]></entry>
+	<entry key="activities.request.right.moderator"><![CDATA[would like to be moderator of this room.]]></entry>
+	<entry key="activities.request.right.presenter"><![CDATA[would like to be presenter]]></entry>
+	<entry key="activities.request.right.wb"><![CDATA[<br/>demande l'accès au tableau blanc. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de dessiner sur le tableau blanc.]]></entry>
+	<entry key="activities.request.right.share"><![CDATA[would like to share/record screen.]]></entry>
+	<entry key="activities.request.right.remote"><![CDATA[souhaite contrôler à distance.]]></entry>
+	<entry key="activities.request.right.audio"><![CDATA[would like to use micropone]]></entry>
+	<entry key="activities.request.right.video"><![CDATA[<br/>demande le partage audio/vidéo. Utilisez l'icône dans la liste des utilisateurs pour ajouter ou enlever le droit de partager l'audio/vidéo.]]></entry>
+	<entry key="activities.request.right.exclusive"><![CDATA[souhaite que le modérateur me donne la permission d'audio exclusif.]]></entry>
+	<entry key="activities.ask.question"><![CDATA[would like to ask a question]]></entry>
+	<entry key="camera.on"><![CDATA[Turn on camera]]></entry>
+	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
+	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
+	<entry key="microphone.off"><![CDATA[Turn off microphone]]></entry>
 </properties>

@@ -567,9 +567,6 @@ public class RoomPanel extends BasePanel {
 					case requestRightAv:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightAv), handler);
 						break;
-					case requestRightMute:
-						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightMute), handler);
-						break;
 					case requestRightExclusive:
 						sidebar.addActivity(new Activity((TextRoomMessage)m, Activity.Type.reqRightExclusive), handler);
 						break;
@@ -770,9 +767,6 @@ public class RoomPanel extends BasePanel {
 				break;
 			case exclusive:
 				reqType = Type.requestRightExclusive;
-				break;
-			case mute:
-				reqType = Type.requestRightMute;
 				break;
 			case remoteControl:
 				reqType = Type.requestRightRemote;

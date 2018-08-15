@@ -18,9 +18,7 @@
  */
 package org.apache.openmeetings.web.room.sidebar.icon.activity;
 
-import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
-import org.apache.openmeetings.db.entity.room.Room.Right;
 
 public class CamActivityIcon extends RoomActivityIcon {
 	private static final long serialVersionUID = 1L;
@@ -32,8 +30,7 @@ public class CamActivityIcon extends RoomActivityIcon {
 
 	@Override
 	protected String getTitle() {
-		final Client c = getClient();
-		return getString(c.hasRight(Right.audio) && c.hasRight(Right.video) ? "690" : "687");
+		return getString(getClient().hasActivity(Activity.broadcastV) ? "camera.off" : "camera.on");
 	}
 
 	@Override

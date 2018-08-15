@@ -102,7 +102,6 @@ public class Room extends HistoricalEntity {
 		, remoteControl
 		, audio
 		, video
-		, mute
 		, exclusive
 	}
 
