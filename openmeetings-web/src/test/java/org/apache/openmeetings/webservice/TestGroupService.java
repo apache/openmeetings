@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
+import static org.apache.openmeetings.AbstractJUnitDefaults.userpass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
