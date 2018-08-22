@@ -10,8 +10,8 @@ var Clipart = function(wb, btn, s) {
 			art.obj = img.set({
 				left: art.orig.x
 				, top: art.orig.y
-				, width: 0
-				, height: 0
+				, scaleX: 0.
+				, scaleY: 0.
 				, omType: 'Clipart'
 				, _src: imgSrc
 				, opacity: art.opacity
@@ -23,11 +23,13 @@ var Clipart = function(wb, btn, s) {
 		if (!art.obj) {
 			return; // not ready
 		}
-		const dx = pointer.x - art.orig.x, dy = pointer.y - art.orig.y
-			, d = Math.sqrt(dx * dx + dy * dy);
+		const dx = pointer.x - art.orig.x
+			, dy = pointer.y - art.orig.y
+			, d = Math.sqrt(dx * dx + dy * dy)
+			, scale = d / art.obj.width;
 		art.obj.set({
-			width: d
-			, height: art.orig.height * d / art.orig.width
+			scaleX: scale
+			, scaleY: scale
 			, angle: Math.atan2(dy, dx) * 180 / Math.PI
 		});
 	};

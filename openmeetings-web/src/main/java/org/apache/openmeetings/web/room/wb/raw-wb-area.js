@@ -362,3 +362,14 @@ $(function() {
 		}
 	});
 });
+if ('function' !== window.originalDrawControl) {
+	window.originalDrawControl = fabric.Object.prototype._drawControl;
+	fabric.Object.prototype._drawControl = function(control, ctx, methodName, left, top) {
+		const size = this.cornerSize;
+		if (this.canvas.controlCallback && 'function' === typeof(this.canvas.controlCallback[control])) {
+			this.canvas.controlCallback[control](ctx, left, top, size);
+		} else {
+			window.originalDrawControl.call(this, control, ctx, methodName, left, top);
+		}
+	};
+}
