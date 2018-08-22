@@ -7,76 +7,101 @@ var Wb = function() {
 			, zoom = 1., zoomMode = 'pageWidth', role = null;
 
 	function _getBtn(m) {
-		return !!t ? t.find('.om-icon.' + (m || mode)) : null;
+		return !!t ? t.find('.om-icon.' + (m || mode) + ':not(.stub)') : null;
+	}
+	function _cleanActive() {
+		!!t && t.find('.om-icon.' + ACTIVE).removeClass(ACTIVE);
+	}
+	function _setActive() {
+		!!t && t.find('.om-icon.' + mode).addClass(ACTIVE);
+	}
+	function _btnClick(toolType) {
+		const b = _getBtn();
+		if (b.length && b.hasClass(ACTIVE)) {
+			b.data().deactivate();
+		}
+		_cleanActive();
+		_getBtn('string' === typeof(toolType) && !!toolType ? toolType : $(this).data('toolType')).data().activate();
+		_setActive();
 	}
 	function _initToolBtn(m, def, obj) {
 		const btn = _getBtn(m);
 		btn.data({
 			obj: obj
+			, toolType: m
 			, activate: function() {
 				if (!btn.hasClass(ACTIVE)) {
 					mode = m;
-					btn.addClass(ACTIVE);
 					obj.activate();
 				}
 			}
 			, deactivate: function() {
-				btn.removeClass(ACTIVE);
 				obj.deactivate();
 			}
-		}).click(function() {
-			const b = _getBtn();
-			if (b.length && b.hasClass(ACTIVE)) {
-				b.data().deactivate();
-			}
-			btn.data().activate();
-		});
+		}).click(_btnClick);
 		if (def) {
 			btn.data().activate();
 		}
 	}
+	function _setCurrent(c, _cur) {
+		const hndl = c.find('a')
+			, cur = _cur || c.find('div.om-icon.big:first')
+		c.attr('title', cur.attr('title'));
+		hndl.find('.om-icon').remove();
+		hndl.prepend(cur.clone().addClass('stub').data('toolType', cur.data('toolType')));
+	}
+	function _initGroupHandle(c) {
+		c.find('a').off().click(function(e) {
+			e.stopImmediatePropagation()
+			const stub = $(this).find('.stub');
+			if (stub.hasClass(ACTIVE)) {
+				$(this).dropdown('toggle')
+			} else {
+				_btnClick(stub.data('toolType'));
+				stub.addClass(ACTIVE);
+			}
+		});
+		_setCurrent(c);
+	}
 	function _initGroup(__id, e) {
 		const c = OmUtil.tmpl(__id);
 		e.after(c);
-		const fT = c.find('div.om-icon.big:first');
-		c.attr('title', fT.attr('title')).find('a').prepend(fT);
 		c.find('.om-icon').each(function() {
 			const cur = $(this);
 			cur.click(function() {
-					const old = c.find('a .om-icon');
-					c.find('ul li').prepend(old);
-					c.attr('title', cur.attr('title')).find('a').prepend(cur);
-				});
+				_setCurrent(c, cur);
+			});
 		});
+		return c;
 	}
 	function _initTexts() {
-		_initGroup('#wb-area-texts', _getBtn('apointer'));
+		const c = _initGroup('#wb-area-texts', _getBtn('apointer'));
 		_initToolBtn('text', false, Text(wb, s));
 		_initToolBtn('textbox', false, Textbox(wb, s));
+		_initGroupHandle(c);
 	}
 	function _initDrawings() {
-		_initGroup('#wb-area-drawings', t.find('.texts'));
+		const c = _initGroup('#wb-area-drawings', t.find('.texts'));
 		_initToolBtn('paint', false, Paint(wb, s));
 		_initToolBtn('line', false, Line(wb, s));
 		_initToolBtn('uline', false, ULine(wb, s));
 		_initToolBtn('rect', false, Rect(wb, s));
 		_initToolBtn('ellipse', false, Ellipse(wb, s));
 		_initToolBtn('arrow', false, Arrow(wb, s));
+		_initGroupHandle(c);
 	}
 	function _initCliparts() {
 		const c = OmUtil.tmpl('#wb-area-cliparts');
 		t.find('.drawings').after(c);
-		c.find('a').prepend(c.find('div.om-icon.big:first'));
 		c.find('.om-icon.clipart').each(function() {
 			const cur = $(this);
 			cur.css('background-image', 'url(' + cur.data('image') + ')')
 				.click(function() {
-					const old = c.find('a .om-icon.clipart');
-					c.find('ul li').prepend(old);
-					c.find('a').prepend(cur);
+					_setCurrent(c, cur);
 				});
 			_initToolBtn(cur.data('mode'), false, Clipart(wb, cur, s));
 		});
+		_initGroupHandle(c);
 	}
 	function _updateZoomPanel() {
 		const ccount = canvases.length;

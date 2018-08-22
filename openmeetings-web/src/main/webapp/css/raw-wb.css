@@ -86,8 +86,14 @@
 	margin: 0;
 	background-position: 4px !important;
 }
+.room.wb.area .tools .dropdown-menu .om-icon.big {
+	float: none;
+}
 .room.wb.area .tools .om-icon.big.active {
 	background-color: whitesmoke;
+}
+.room.wb.area .tools .dropdown-menu .om-icon.big.active {
+	border: 1px solid #6b6565;
 }
 .room.wb.area .tools .om-icon.big.paint {
 	background-image: url(images/paintbrush.png);
