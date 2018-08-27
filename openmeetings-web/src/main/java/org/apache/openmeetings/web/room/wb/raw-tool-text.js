@@ -4,6 +4,7 @@ var Text = function(wb, s) {
 	text.obj = null;
 	text.fabricType = 'i-text';
 	text.fill.color = '#000000';
+	text.stroke.enabled = false;
 	text.stroke.width = 50; //fontSize
 	text.stroke.color = '#000000';
 	text.style = {bold: false, italic: false};
@@ -15,7 +16,6 @@ var Text = function(wb, s) {
 			, padding: 7
 			, fill: text.fill.enabled ? text.fill.color : 'rgba(0,0,0,0)'
 			, stroke: text.stroke.enabled ? text.stroke.color : 'rgba(0,0,0,0)'
-			//, strokeWidth: text.stroke.width
 			, fontSize: text.stroke.width
 			, fontFamily: text.fontFamily
 			, opacity: text.opacity
