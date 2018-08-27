@@ -64,6 +64,12 @@
 				Clipboard.generalClipboard.clear();
 				Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, logStr);
 			});
+			copyLog.toolTip = lbl('copy.log');
+			pingTest.toolTip = lbl('click.play');
+			portTest.toolTip = lbl('click.play');
+			jitterTest.toolTip = lbl('click.play');
+			downTest.toolTip = lbl('click.play');
+			upTest.toolTip = lbl('click.play');
 		}
 
 		private function appComplete():void {
@@ -110,7 +116,7 @@
 	<s:VGroup paddingTop="20">
 		<s:Group>
 			<s:Label id="runLbl" x="10"/>
-			<s:Image id="copyLog" source="{copyImgCls}" visible="true" width="16" height="16" x="550"/>
+			<s:Image id="copyLog" source="{copyImgCls}" buttonMode="true" visible="true" width="16" height="16" x="550"/>
 		</s:Group>
 		<s:HGroup id="tests" paddingBottom="15" paddingTop="10">
 			<nettest:PingTest id="pingTest"/>
