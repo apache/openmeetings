@@ -224,18 +224,18 @@ mvn clean install -Prc,release
 					<li>Replace jar files inside artifacts <tt>webapps/openmeetings/screenshare</tt> with the signed ones</li>
 					<li>
 						Re-create artifact signatures
-						<p>Create sha256sum checksums</p>
+						<p>Create sha512sum checksums</p>
 						<source>
 #On OSX you might use this command to make a SHA checksum and store it to a file
-shasum -a 256 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.sha256
+shasum -a 512 -r apache-openmeetings-XXX-src.zip >apache-openmeetings-XXX-src.zip.sha512
 						</source>
 						<source>
 <![CDATA[
 #To create SHA hashes On Ubuntu:
-for f in `ls -1 *.tar.gz *.zip`; do sha256sum $f > $f.sha256; done
+for f in `ls -1 *.tar.gz *.zip`; do sha512sum $f > $f.sha512; done
 
 #To check SHA hashes On Ubuntu:
-for f in `ls -1 *.tar.gz *.zip`; do sha256sum -c $f.sha256; done
+for f in `ls -1 *.tar.gz *.zip`; do sha512sum -c $f.sha512; done
 ]]>
 						</source>
 						<p>
