@@ -213,7 +213,7 @@
 						<configuration>
 							<shasumSummary>true</shasumSummary>
 							<algorithms>
-								<algorithm>SHA-256</algorithm>
+								<algorithm>SHA-512</algorithm>
 							</algorithms>
 						</configuration>
 					</plugin>

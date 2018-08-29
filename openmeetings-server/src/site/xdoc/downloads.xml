@@ -43,12 +43,12 @@
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.zip">apache-openmeetings-4.0.4.zip</a>
 								<a href="https://www.apache.org/dist/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.zip.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.tar.gz">apache-openmeetings-4.0.4.tar.gz</a>
 								<a href="https://www.apache.org/dist/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.tar.gz.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.4/bin/apache-openmeetings-4.0.4.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>
@@ -58,12 +58,12 @@
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.zip">apache-openmeetings-4.0.4-src.zip</a>
 								<a href="https://www.apache.org/dist/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.zip.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.zip.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.zip.sha512">[SHA512]</a>
 							</li>
 							<li>
 								<a href="https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.tar.gz">apache-openmeetings-4.0.4-src.tar.gz</a>
 								<a href="https://www.apache.org/dist/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.tar.gz.asc">[SIG]</a>
-								<a href="https://www.apache.org/dist/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.tar.gz.sha256">[SHA256]</a>
+								<a href="https://www.apache.org/dist/openmeetings/4.0.4/src/apache-openmeetings-4.0.4-src.tar.gz.sha512">[SHA512]</a>
 							</li>
 						</ul>
 					</li>

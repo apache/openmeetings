@@ -84,7 +84,7 @@
 			<outputDirectory>${om.webapp}/screenshare</outputDirectory>
 			<excludes>
 				<exclude>APPLICATION.jnlp</exclude>
-				<exclude>*.sha256</exclude>
+				<exclude>*.sha512</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
