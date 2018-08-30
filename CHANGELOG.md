@@ -5,6 +5,42 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 4.0.5
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-1876] - Floating menu obscures page on Safari
+    * [OPENMEETINGS-1882] - Can't delete user - E-Mail required
+    * [OPENMEETINGS-1890] - Uploaded image is duplicated for new groups
+    * [OPENMEETINGS-1895] - Polling result is reversed
+    * [OPENMEETINGS-1898] - Meeting invitation time and profile update problem issue.
+    * [OPENMEETINGS-1900] - LDAP fails to map picture uri
+    * [OPENMEETINGS-1905] - 'Clear whiteboard' doesn't clear 2+ WB
+    * [OPENMEETINGS-1906] - installation fails on new MySql driver
+    * [OPENMEETINGS-1908] - Whiteboards automatically begin switching back and forth quickly and uncontrollably
+    * [OPENMEETINGS-1909] - Room title and sharring icon are not visible
+    * [OPENMEETINGS-1911] - Impossible to set language for hash
+    * [OPENMEETINGS-1912] - Video is not resized when user change video settings
+    * [OPENMEETINGS-1914] - Typo in language files need to be fixed
+    * [OPENMEETINGS-1919] - Drag Files not always work as expected
+    * [OPENMEETINGS-1923] - copy result at network test page doesn't work
+
+* New Feature
+    * [OPENMEETINGS-1142] - simplify OM to look like skype
+    * [OPENMEETINGS-1671] - background music for moderated rooms
+
+* Improvement
+    * [OPENMEETINGS-1884] - The text tool of a text-field to text-Area
+    * [OPENMEETINGS-1891] - Change default mapping of Return key for chat
+    * [OPENMEETINGS-1896] - Notification to user to close browser tab after changing webcam and mic settings
+    * [OPENMEETINGS-1903] - Bengali language need to be added
+    * [OPENMEETINGS-1907] - cleanRoomFiles method is redundant
+    * [OPENMEETINGS-1921] - Wording need to be improved
+
+* Task
+    * [OPENMEETINGS-1897] - Library versions need to be updated (4.0.5)
+
+
 Release Notes - Openmeetings - Version 4.0.4
 ================================================================================================================
 

@@ -69,15 +69,14 @@
 		</section>
 		<section name="News">
 			<div class="bs-callout bs-callout-danger">
-				<b>Version 4.0.4 released!</b>
-				<div>Release 4.0.4, provides following improvements:<br/>
-					<div class="bs-callout bs-callout-danger">The purpose of this release is to provide GDPR compatible version of OpenMeetings</div>
-					<br/>
+				<b>Version 4.0.5 released!</b>
+				<div>Release 4.0.5, provides following improvements:<br/>
 					Room:<br/>
 					<ul>
-						<li>Performance is improved</li>
-						<li>Audio/Video streams were not closed in IE</li>
-						<li>File conversion on Windows is improved</li>
+						<li>Interview room is improved: re-designed, multiple video windows are supported</li>
+						<li>Multiple improvements in Admin</li>
+						<li>File tree is improved</li>
+						<li>Multiple improvements in white boards</li>
 					</ul>
 					<br/>
 					Other fixes and improvements
@@ -86,12 +85,12 @@
 				<br/>
 
 				<span>
-					9 issues are fixed please check <br/>
+					24 issues are fixed please check <br/>
 					<a href="https://www.apache.org/dist/openmeetings/4.0.4/CHANGELOG.md">CHANGELOG</a> and
-					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343045">Detailed list</a>
+					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12343344">Detailed list</a>
 				</span>
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
-				<span class="date">(2018-05-25)</span>
+				<span class="date">(2018-09-04)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
