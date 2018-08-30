@@ -47,6 +47,18 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.5
+-----
+[Release 4.0.5](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.5), provides following improvements:
+
+Room:
+* Interview room is improved: re-designed, multiple video windows are supported
+* Multiple improvements in Admin
+* File tree is improved
+* Multiple improvements in white boards
+
+Other fixes and improvements, 24 issues were addressed
+
 4.0.4
 -----
 [Release 4.0.4](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.4), provides following improvements:
