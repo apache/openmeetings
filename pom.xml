@@ -53,9 +53,9 @@
 		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
 		<maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
-		<maven-dependency-plugin.version>3.1.0</maven-dependency-plugin.version>
-		<maven-bundle-plugin.version>3.5.0</maven-bundle-plugin.version>
-		<maven-war-plugin.version>3.2.1</maven-war-plugin.version>
+		<maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
+		<maven-bundle-plugin.version>3.5.1</maven-bundle-plugin.version>
+		<maven-war-plugin.version>3.2.2</maven-war-plugin.version>
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<wagon-maven-plugin.version>2.0.0</wagon-maven-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
@@ -67,8 +67,8 @@
 		<apache-rat-plugin.version>0.12</apache-rat-plugin.version>
 		<keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
 		<maven-jarsigner-plugin.version>1.4</maven-jarsigner-plugin.version>
-		<sonar-maven-plugin.version>3.4.0.905</sonar-maven-plugin.version>
-		<jacoco-maven-plugin.versoin>0.8.1</jacoco-maven-plugin.versoin>
+		<sonar-maven-plugin.version>3.4.1.1168</sonar-maven-plugin.version>
+		<jacoco-maven-plugin.versoin>0.8.2</jacoco-maven-plugin.versoin>
 		<!-- dependency versions -->
 		<junit.version>4.12</junit.version>
 		<wicket.version>8.0.0</wicket.version>
@@ -88,13 +88,13 @@
 		<src.pack.skip>false</src.pack.skip>
 		<derby.version>10.14.2.0</derby.version>
 		<commons-lang3.version>3.8</commons-lang3.version>
-		<javax.mail.version>1.6.1</javax.mail.version>
+		<javax.mail.version>1.6.2</javax.mail.version>
 		<openjpa.version>3.0.0</openjpa.version>
 		<asterisk-java.version>2.0.2</asterisk-java.version>
 		<commons-dbcp.version>2.5.0</commons-dbcp.version>
 		<commons-pool.version>1.6</commons-pool.version> <!-- required by OpenJPA for clustering -->
 		<commons-pool2.version>2.6.0</commons-pool2.version>
-		<postgresql.version>42.2.4</postgresql.version>
+		<postgresql.version>42.2.5</postgresql.version>
 		<commons-cli.version>1.4</commons-cli.version>
 		<dom4j.version>2.1.1</dom4j.version>
 		<commons-codec.version>1.11</commons-codec.version>
