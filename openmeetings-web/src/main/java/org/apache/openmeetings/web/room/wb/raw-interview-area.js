@@ -1,11 +1,11 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var InterviewWbArea = function() {
-	const self = {};
+	const self = BaseWbArea();;
 	let container, area, pArea, role = NONE, choose
 		, _inited = false, rec;
 
 	function _init() {
-		Wicket.Event.subscribe("/websocket/message", wbWsHandler);
+		Wicket.Event.subscribe("/websocket/message", self.wbWsHandler);
 		container = $(".room.wb.area");
 		area = container.find(".wb-area");
 		pArea = area.find(".pod-area");
@@ -106,7 +106,7 @@ var InterviewWbArea = function() {
 
 	self.init = _init;
 	self.destroy = function() {
-		Wicket.Event.unsubscribe("/websocket/message", wbWsHandler);
+		Wicket.Event.unsubscribe("/websocket/message", self.wbWsHandler);
 	};
 	self.setRole = _setRole;
 	self.resize = _resize;

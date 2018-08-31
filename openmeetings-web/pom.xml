@@ -132,7 +132,7 @@
 							<charset>UTF-8</charset>
 							<jsSourceDir>../java/org/apache/openmeetings/web/room/wb</jsSourceDir>
 							<jsSourceFiles>
-								<jsSourceFile>raw-wb-all.js</jsSourceFile>
+								<jsSourceFile>raw-wb-area-base.js</jsSourceFile>
 								<jsSourceFile>raw-interview-area.js</jsSourceFile>
 							</jsSourceFiles>
 							<jsFinalFile>interviewwb.js</jsFinalFile>
@@ -152,7 +152,7 @@
 								<jsSourceFile>fabric.js</jsSourceFile>
 								<jsSourceFile>MathJax-config.js</jsSourceFile>
 								<jsSourceFile>MathJax.js</jsSourceFile>
-								<jsSourceFile>raw-wb-all.js</jsSourceFile>
+								<jsSourceFile>raw-wb-area-base.js</jsSourceFile>
 								<jsSourceFile>raw-tool-util.js</jsSourceFile>
 								<jsSourceFile>raw-player.js</jsSourceFile>
 								<jsSourceFile>raw-tool-base.js</jsSourceFile>

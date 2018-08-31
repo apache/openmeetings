@@ -2,7 +2,7 @@
 var PRESENTER = 'presenter';
 var WHITEBOARD = 'whiteBoard';
 var DrawWbArea = function() {
-	const self = {};
+	const self = BaseWbArea();;
 	let container, area, tabs, scroll, role = NONE, _inited = false;
 
 	function refreshTabs() {
@@ -156,7 +156,7 @@ var DrawWbArea = function() {
 		wbAction('activateWb', JSON.stringify({wbId: _wbId}));
 	}
 	self.init = function() {
-		Wicket.Event.subscribe('/websocket/message', wbWsHandler);
+		Wicket.Event.subscribe('/websocket/message', self.wbWsHandler);
 		container = $('.room.wb.area');
 		tabs = container.find('.tabs');
 		if (tabs.length === 0) return;
@@ -191,7 +191,7 @@ var DrawWbArea = function() {
 	};
 	self.destroy = function() {
 		self.removeDeleteHandler();
-		Wicket.Event.unsubscribe('/websocket/message', wbWsHandler);
+		Wicket.Event.unsubscribe('/websocket/message', self.wbWsHandler);
 	};
 	self.create = function(obj) {
 		if (!_inited) return;
