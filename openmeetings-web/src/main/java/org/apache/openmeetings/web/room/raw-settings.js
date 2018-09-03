@@ -207,7 +207,7 @@ var VideoSettings = (function() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			_fillDevices(swf.getDevices());
 		} else {
-			navigator.mediaDevices.getUserMedia({video:true, audio:true})
+			navigator.mediaDevices.getUserMedia({video: true, audio: true})
 				.then(function(stream) {
 					const devices = navigator.mediaDevices.enumerateDevices()
 						.then(function(devices) {
@@ -237,6 +237,7 @@ var VideoSettings = (function() {
 		_setLoading(mic);
 		recAllowed = false;
 		vs.dialog('open');
+		_initSwf();
 	}
 	return {
 		init: _init
