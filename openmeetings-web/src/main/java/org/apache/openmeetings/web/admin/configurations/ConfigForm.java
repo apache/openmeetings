@@ -55,7 +55,7 @@ import org.apache.wicket.validation.ValidationError;
 public class ConfigForm extends AdminBaseForm<Configuration> {
 	private static final long serialVersionUID = 1L;
 	private final WebMarkupContainer listContainer;
-	private final TextField<String> valueS;
+	private final TextArea<String> valueS;
 	private final TextField<Long> valueN;
 	private final CheckBox valueB;
 	@SpringBean
@@ -65,7 +65,7 @@ public class ConfigForm extends AdminBaseForm<Configuration> {
 		super(id, new CompoundPropertyModel<>(configuration));
 		setOutputMarkupId(true);
 		this.listContainer = listContainer;
-		valueS = new TextField<>("valueS");
+		valueS = new TextArea<>("valueS");
 		valueN = new TextField<Long>("valueN") {
 			private static final long serialVersionUID = 1L;
 
