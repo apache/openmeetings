@@ -20,7 +20,7 @@
 		<menu name="Project">
 			<item name="About" href="/index.html" />
 			<item name="Info" href="/project-info.html" />
-			<item name="Summary" href="/project-summary.html" />
+			<item name="Summary" href="/summary.html" />
 			<item name="License" href="http://www.apache.org/licenses/" />
 			<item name="Dependencies" href="/dependencies.html" />
 			<item name="Dependency Convergence" href="/dependency-convergence.html" />

@@ -35,9 +35,9 @@
 		</menu>
 		<menu name="Community">
 			<item name="Get Involved" href="/get-involved.html" />
-			<item name="Committers" href="/team-list.html" />
+			<item name="Committers" href="/team.html" />
 			<item name="Our Users" href="/OurUsers.html" />
-			<item name="Mailing Lists" href="/mail-lists.html" />
+			<item name="Mailing Lists" href="/mailing-lists.html" />
 			<item name="Wiki" href="http://cwiki.apache.org/confluence/display/OPENMEETINGS/" />
 		</menu>
 		<menu name="Configuration">
@@ -114,8 +114,8 @@
 			</item>
 		</menu>
 		<menu name="Development">
-			<item name="Source Code" href="/source-repository.html" />
-			<item name="Bugs / Issues" href="/issue-tracking.html" />
+			<item name="Source Code" href="/scm.html" />
+			<item name="Bugs / Issues" href="/issue-management.html" />
 			<item name="Dependencies" href="/dependencies.html" />
 			<item name="Continuous Integration" href="/integration.html" />
 			<item name="Build Instructions" href="/BuildInstructions.html" />
