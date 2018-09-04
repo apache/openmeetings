@@ -17,8 +17,8 @@
 		name="Apache OpenMeetings Project">
 	<bannerLeft>
 		<name>Apache OpenMeetings</name>
-		<src>http://openmeetings.apache.org/images/logo.png</src>
-		<href>http://openmeetings.apache.org/index.html</href>
+		<src>https://openmeetings.apache.org/images/logo.png</src>
+		<href>https://openmeetings.apache.org/index.html</href>
 	</bannerLeft>
 	<bannerRight>
 		<name>Apache</name>
@@ -39,8 +39,8 @@
 			<link rel="stylesheet" href="$resourcePath/css/site.css"/>
 		]]></head>
 		<links>
-			<item name="Demo" href="http://openmeetings.apache.org/demo.html"/>
-			<item name="Download" href="http://openmeetings.apache.org/downloads.html"/>
+			<item name="Demo" href="https://openmeetings.apache.org/demo.html"/>
+			<item name="Download" href="https://openmeetings.apache.org/downloads.html"/>
 			<item name="Wiki" href="https://cwiki.apache.org/confluence/display/OPENMEETINGS"/>
 		</links>
 		<menu ref="modules" inherit="top"/>
@@ -58,9 +58,9 @@
 				<name><![CDATA[
 					<span class="color-highlight">Apache</span> OpenMeetings
 				]]></name>
-				<href>http://openmeetings.apache.org/index.html</href>
+				<href>https://openmeetings.apache.org/index.html</href>
 			</brand>
-			<absoluteResourceURL>http://openmeetings.apache.org</absoluteResourceURL>
+			<absoluteResourceURL>https://openmeetings.apache.org</absoluteResourceURL>
 			<protocolRelativeURLs>true</protocolRelativeURLs>
 			<localResources>true</localResources>
 			<theme>site</theme><!-- http://bootswatch.com/2/cerulean offline -->

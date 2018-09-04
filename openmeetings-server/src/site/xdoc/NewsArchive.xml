@@ -464,13 +464,13 @@
 				</div>
 				<span>
 					77 issues are fixed please check
-					<a href="http://archive.apache.org/dist/openmeetings/3.1.0/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.1.0/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12333397">Detailed list</a>
 				</span>
 				<div class="bs-callout bs-callout-danger">please NOTE this release contains screen-sharing application signed be self-signed certificate due to <a href="https://issues.apache.org/jira/browse/INFRA-11384">INFRA-11384</a>.
 						to use screen-sharing application with modern Java, please add OM site to the list of java security exceptions by running $JAVA_HOME/bin/ControlPanel.
 				</div>
-				<span> See <a href="http://archive.apache.org/dist/openmeetings/3.1.0">Archived download</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.1.0">Archived download</a>.</span>
 				<span class="date">(2016-03-06)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
@@ -489,10 +489,10 @@
 				</div>
 				<span>
 					20 issues are fixed please check
-					<a href="http://archive.apache.org/dist/openmeetings/3.0.7/CHANGELOG">CHANGELOG</a> and
+					<a href="https://archive.apache.org/dist/openmeetings/3.0.7/CHANGELOG">CHANGELOG</a> and
 					<a href="https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12312720&amp;version=12332443">Detailed list</a>
 				</span>
-				<span> See <a href="http://archive.apache.org/dist/openmeetings/3.0.7">Archived download</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.7">Archived download</a>.</span>
 				<span class="date">(2015-09-29)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
@@ -508,9 +508,9 @@
 					<br/>
 					Other fixes<br/>
 				</div>
-				<span>7 issues are fixed please check <a href="http://archive.apache.org/dist/openmeetings/3.0.6/CHANGELOG">CHANGELOG</a> for details
+				<span>7 issues are fixed please check <a href="https://archive.apache.org/dist/openmeetings/3.0.6/CHANGELOG">CHANGELOG</a> for details
 				</span>
-				<span> See <a href="http://archive.apache.org/dist/openmeetings/3.0.6">Archived download</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.6">Archived download</a>.</span>
 				<span class="date">(2015-05-25)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
@@ -533,9 +533,9 @@
 					<br/>
 					Other fixes in SOAP, localizations, invitations etc.:<br/>
 				</div>
-				<span>18 issues are fixed please check <a href="http://archive.apache.org/dist/openmeetings/3.0.5/CHANGELOG">CHANGELOG</a> for details
+				<span>18 issues are fixed please check <a href="https://archive.apache.org/dist/openmeetings/3.0.5/CHANGELOG">CHANGELOG</a> for details
 				</span>
-				<span> See <a href="http://archive.apache.org/dist/openmeetings/3.0.5">Archived download</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.5">Archived download</a>.</span>
 				<span class="date">(2015-04-26)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
@@ -564,55 +564,55 @@
 						<li>Time zone support is greatly improved</li>
 					</ol>
 				</div>
-				<span>67 issues are fixed please check <a href="http://archive.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
+				<span>67 issues are fixed please check <a href="https://archive.apache.org/dist/openmeetings/3.0.4/CHANGELOG">CHANGELOG</a> for details
 				</span>
-				<span> See <a href="http://archive.apache.org/dist/openmeetings/3.0.4">Archived download</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.4">Archived download</a>.</span>
 				<span class="date">(2015-02-15)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.3 released!</b>
 				<span>Service release 3 for 3.0.0, no new features were added, <br/>
 					More than 60 issues are fixed, recordings stability is improved, LDAP support is enhanced<br/>
-					please check <a href="http://archive.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a> for details
+					please check <a href="https://archive.apache.org/dist/openmeetings/3.0.3/CHANGELOG">CHANGELOG</a> for details
 				</span>
-				<span> See <a href="http://archive.apache.org/dist/openmeetings/3.0.3">Archived download</a>.</span>
+				<span> See <a href="https://archive.apache.org/dist/openmeetings/3.0.3">Archived download</a>.</span>
 				<span class="alert alert-error">please <b>NOTE</b> Java7 is required on both client and server from now on</span>
 				<span class="date">(2014-09-05)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.2 released!</b>
-				<span>See <a href="http://archive.apache.org/dist/openmeetings/3.0.2">Archived download</a>.</span>
+				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.2">Archived download</a>.</span>
 				<span class="date">(2014-06-04)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.1 released!</b>
-				<span>See <a href="http://archive.apache.org/dist/openmeetings/3.0.1">Archived download</a>.</span>
+				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.1">Archived download</a>.</span>
 				<span class="date">(2014-04-18)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 3.0.0 released!</b>
-				<span>See <a href="http://archive.apache.org/dist/openmeetings/3.0.0">Archived download</a>.</span>
+				<span>See <a href="https://archive.apache.org/dist/openmeetings/3.0.0">Archived download</a>.</span>
 				<span class="date">(2014-03-07)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 2.2.0 released!</b>
-				<span>See <a href="http://archive.apache.org/dist/openmeetings/2.2.0">Archived download</a>.</span>
+				<span>See <a href="https://archive.apache.org/dist/openmeetings/2.2.0">Archived download</a>.</span>
 				<span class="date">(2013-12-12)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>Version 2.1.1 released!</b>
 				<span>See <a href="https://blogs.apache.org/openmeetings/entry/apache_openmeetings_2_1_11" target="_blank">Project Blog</a>
-					or <a href="http://archive.apache.org/dist/openmeetings/2.1.1">Archived download</a>.</span>
+					or <a href="https://archive.apache.org/dist/openmeetings/2.1.1">Archived download</a>.</span>
 				<span class="date">(2013-07-06)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>OpenMeetings 2.1.0 is released!</b>
-				<span>Please check <a href="http://archive.apache.org/dist/openmeetings/2.1.0">Archived download</a>.</span>
+				<span>Please check <a href="https://archive.apache.org/dist/openmeetings/2.1.0">Archived download</a>.</span>
 				<span class="date">(2013-04-01)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">
 				<b>OpenMeetings new URL, update your filters!</b>
-				<span><a href="http://openmeetings.apache.org">openmeetings.apache.org</a> is the new home.</span>
+				<span><a href="https://openmeetings.apache.org">openmeetings.apache.org</a> is the new home.</span>
 				<span class="date">(2013-01-28)</span>
 			</div>
 			<div class="bs-callout bs-callout-info">

@@ -19,7 +19,7 @@
 		<menu name="General">
 			<item name="Home" href="/index.html"/>
 			<item name="License" href="http://www.apache.org/licenses/"/>
-			<item name="ASF" href="http://www.apache.org/"/>
+			<item name="ASF" href="https://www.apache.org/"/>
 			<item name="Sponsorship" href="https://www.apache.org/foundation/sponsorship" />
 			<item name="Thanks" href="https://www.apache.org/foundation/thanks" />
 			<item name="Call For Logo" href="/CallForLogo.html"/>
