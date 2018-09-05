@@ -45,7 +45,7 @@ public class RoomFile implements IDataProviderEntity {
 	@Element(data = true, required = true)
 	private Long id;
 
-	@Column(name = "room_id", nullable = false)
+	@Column(name = "room_id")
 	@Element(data = true, required = true)
 	private Long roomId;
 
