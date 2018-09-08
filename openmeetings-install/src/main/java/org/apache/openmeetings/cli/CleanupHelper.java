@@ -58,7 +58,7 @@ public class CleanupHelper {
 			}
 		}
 		for (User u : udao.getAllBackupUsers()) {
-			if (!u.isDeleted() && u.getPictureuri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureuri()).exists()) {
+			if (!u.isDeleted() && u.getPictureUri() != null && !new File(OmFileHelper.getUploadProfilesUserDir(u.getId()), u.getPictureUri()).exists()) {
 				missing++;
 			}
 		}

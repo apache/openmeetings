@@ -106,10 +106,10 @@ public class ImageConverter extends BaseConverter {
 			file.delete();
 		}
 
-		String pictureuri = destinationFile.getName();
+		String img = destinationFile.getName();
 		User us = userDao.get(userId);
 		us.setUpdated(new Date());
-		us.setPictureuri(pictureuri);
+		us.setPictureUri(img);
 		userDao.update(us, userId);
 
 		return returnMap;

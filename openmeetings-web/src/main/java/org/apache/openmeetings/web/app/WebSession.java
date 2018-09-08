@@ -234,11 +234,11 @@ public class WebSession extends AbstractAuthenticatedWebSession implements IWebS
 						user.getRights().clear();
 						user.getRights().add(Right.Room);
 						user.getAddress().setEmail(remoteUser.getEmail());
-						user.setPictureuri(remoteUser.getPictureUrl());
+						user.setPictureUri(remoteUser.getPictureUrl());
 					} else {
 						user.setFirstname(remoteUser.getFirstname());
 						user.setLastname(remoteUser.getLastname());
-						user.setPictureuri(remoteUser.getPictureUrl());
+						user.setPictureUri(remoteUser.getPictureUrl());
 					}
 					user = userDao.update(user, null);
 					if (markUsed) {

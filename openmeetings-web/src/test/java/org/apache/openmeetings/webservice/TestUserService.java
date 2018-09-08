@@ -109,7 +109,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		assertNotEquals(userId0, userId1);
 		User u = userDao.get(userId1);
 		assertNotNull("User should be created successfuly", u);
-		assertEquals("Picture URL should be preserved", DUMMY_PICTURE_URL, u.getPictureuri());
+		assertEquals("Picture URL should be preserved", DUMMY_PICTURE_URL, u.getPictureUri());
 	}
 
 	@Test
