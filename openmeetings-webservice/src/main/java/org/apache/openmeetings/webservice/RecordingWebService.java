@@ -106,7 +106,7 @@ public class RecordingWebService extends BaseWebService {
 	 * @param sid
 	 *            The SID of the User. This SID must be marked as Loggedin
 	 * @param externalType
-	 *            externalRoomType specified when creating the room
+	 *            externalType specified when creating the room
 	 * @return - list of flv recordings
 	 */
 	@WebMethod

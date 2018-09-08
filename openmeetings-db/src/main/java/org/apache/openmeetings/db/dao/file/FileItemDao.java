@@ -119,6 +119,14 @@ public class FileItemDao extends BaseFileItemDao {
 		return em.createNamedQuery("getAllFiles", FileItem.class).getResultList();
 	}
 
+	public List<FileItem> getExternal(String externalType) {
+		log.debug("get external started");
+
+		return em.createNamedQuery("getFileAllExternal", FileItem.class)
+				.setParameter("externalType", externalType)
+				.getResultList();
+	}
+
 	public void delete(String externalId, String externalType) {
 		log.debug("delete started");
 
