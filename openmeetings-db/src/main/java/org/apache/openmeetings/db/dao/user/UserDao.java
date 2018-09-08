@@ -358,8 +358,8 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setGroupUsers(new ArrayList<>());
 			u.setRights(new HashSet<>());
 			u.setTimeZoneId(getDefaultTimezone());
-			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureuri(), null);
-			u.setPictureuri(null);
+			File pic = OmFileHelper.getUserProfilePicture(u.getId(), u.getPictureUri(), null);
+			u.setPictureUri(null);
 			ICrypt crypt = CryptProvider.get();
 			try {
 				u.updatePassword(crypt.randomPassword(25));

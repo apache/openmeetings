@@ -215,7 +215,7 @@ public class User extends HistoricalEntity {
 
 	@Column(name = "pictureuri")
 	@Element(data = true, required = false)
-	private String pictureuri;
+	private String pictureUri;
 
 	@Column(name = "language_id")
 	@Element(name = "language_id", data = true, required = false)
@@ -417,12 +417,12 @@ public class User extends HistoricalEntity {
 		this.salutation = salutation;
 	}
 
-	public String getPictureuri() {
-		return pictureuri;
+	public String getPictureUri() {
+		return pictureUri;
 	}
 
-	public void setPictureuri(String pictureuri) {
-		this.pictureuri = pictureuri;
+	public void setPictureUri(String pictureUri) {
+		this.pictureUri = pictureUri;
 	}
 
 	public long getLanguageId() {
@@ -582,7 +582,7 @@ public class User extends HistoricalEntity {
 	public String toString() {
 		return "User [id=" + id + ", firstname=" + firstname
 				+ ", lastname=" + lastname + ", login=" + login
-				+ ", pictureuri=" + pictureuri + ", deleted=" + isDeleted()
+				+ ", pictureuri=" + pictureUri + ", deleted=" + isDeleted()
 				+ ", languageId=" + languageId + ", address=" + address
 				+ ", externalId=" + externalId + ", externalType=" + externalType
 				+ ", type=" + type + "]";

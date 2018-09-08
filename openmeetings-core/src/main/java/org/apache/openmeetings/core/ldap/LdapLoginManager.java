@@ -371,9 +371,9 @@ public class LdapLoginManager {
 			u.getAddress().setCountry(validateCountry(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_COUNTRY, LDAP_KEY_COUNTRY)));
 			u.getAddress().setTown(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_TOWN, LDAP_KEY_TOWN));
 			u.getAddress().setPhone(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PHONE, LDAP_KEY_PHONE));
-			u.setPictureuri(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, ""));
-			if (Strings.isEmpty(u.getPictureuri()) && !Strings.isEmpty(options.pictureUri)) {
-				u.setPictureuri(options.pictureUri);
+			u.setPictureUri(getStringAttr(config, entry, CONFIGKEY_LDAP_KEY_PICTURE, ""));
+			if (Strings.isEmpty(u.getPictureUri()) && !Strings.isEmpty(options.pictureUri)) {
+				u.setPictureUri(options.pictureUri);
 			}
 			String tz = getStringAttr(config, entry, LdapOptions.CONFIGKEY_LDAP_TIMEZONE_NAME, LDAP_KEY_TIMEZONE);
 			if (tz == null) {
