@@ -83,7 +83,7 @@ public class RoomsPanel extends UserPanel {
 					protected byte[] getData(Attributes attributes) {
 						String uri = null;
 						if (userId != null) {
-							uri = userDao.get(userId > 0 ? userId : -userId).getPictureuri();
+							uri = userDao.get(userId > 0 ? userId : -userId).getPictureUri();
 						}
 						File img = OmFileHelper.getUserProfilePicture(userId, uri);
 						try (InputStream is = new FileInputStream(img)) {

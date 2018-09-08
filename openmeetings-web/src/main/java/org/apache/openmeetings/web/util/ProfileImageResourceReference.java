@@ -59,7 +59,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 	}
 
 	public static String getUrl(RequestCycle rc, User u) {
-		String uri = u.getPictureuri();
+		String uri = u.getPictureUri();
 		if (!isAbsolute(uri)) {
 			File img = OmFileHelper.getUserProfilePicture(u.getId(), uri);
 			uri = rc.urlFor(new ProfileImageResourceReference()
@@ -92,7 +92,7 @@ public class ProfileImageResourceReference extends ResourceReference {
 					PageParameters params = attributes.getParameters();
 					try {
 						userId = params.get("id").toOptionalLong();
-						uri = SIP_USER_ID.equals(userId) ? null : userDao.get(userId).getPictureuri();
+						uri = SIP_USER_ID.equals(userId) ? null : userDao.get(userId).getPictureUri();
 					} catch (Exception e) {
 						// no-op, junk filter
 					}

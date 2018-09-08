@@ -52,6 +52,7 @@ public class UserDTO implements Serializable {
 	private String timeZoneId;
 	private String externalId;
 	private String externalType;
+	private String pictureUri;
 	private Type type = Type.user;
 
 	public UserDTO() {
@@ -70,6 +71,7 @@ public class UserDTO implements Serializable {
 		type = u.getType();
 		externalId = u.getExternalId();
 		externalType = u.getExternalType();
+		pictureUri = u.getPictureUri();
 	}
 
 	public User get(UserDao userDao) {
@@ -84,6 +86,7 @@ public class UserDTO implements Serializable {
 		u.setExternalId(externalId);
 		u.setExternalType(externalType);
 		u.setType(type);
+		u.setPictureUri(pictureUri);
 		return u;
 	}
 
@@ -193,6 +196,14 @@ public class UserDTO implements Serializable {
 		this.externalType = externalType;
 	}
 
+	public String getPictureUri() {
+		return pictureUri;
+	}
+
+	public void setPictureUri(String pictureUri) {
+		this.pictureUri = pictureUri;
+	}
+
 	public static UserDTO fromString(String s) {
 		return get(new JSONObject(s));
 	}
@@ -219,6 +230,7 @@ public class UserDTO implements Serializable {
 		u.externalId = o.optString("externalId", null);
 		u.externalType = o.optString("externalType", null);
 		u.type = optEnum(Type.class, o, "type");
+		u.pictureUri = o.optString("pictureUri", null);
 		return u;
 	}
 

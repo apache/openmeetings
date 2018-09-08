@@ -274,7 +274,7 @@ public class UserManager implements IUserManager {
 			u.getAddress().setEmail(user.getEmail());
 			String picture = user.getPicture();
 			if (picture != null) {
-				u.setPictureuri(picture);
+				u.setPictureUri(picture);
 			}
 			String locale = user.getLocale();
 			if (locale != null) {
