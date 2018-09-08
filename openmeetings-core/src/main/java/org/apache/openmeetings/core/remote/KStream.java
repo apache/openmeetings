@@ -26,6 +26,10 @@ import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.ConnectionStateChangedEvent;
 import org.kurento.client.Continuation;
 import org.kurento.client.EventListener;
@@ -45,17 +49,19 @@ import com.github.openjson.JSONObject;
  * @author Ivan Gracia (izanmail@gmail.com)
  * @since 4.3.1
  */
-public class KUser implements IKUser {
-	private static final Logger log = LoggerFactory.getLogger(KUser.class);
+public class KStream implements IKStream {
+	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
+	private final String sid;
 	private final String uid;
 	private final MediaPipeline pipeline;
 	private final Long roomId;
 	private final WebRtcEndpoint outgoingMedia;
 	private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
-	public KUser(final KurentoHandler h, final String uid, Long roomId, MediaPipeline pipeline) {
+	public KStream(final KurentoHandler h, final String sid, final String uid, Long roomId, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
+		this.sid = sid;
 		this.uid = uid;
 		this.roomId = roomId;
 		//TODO Min/MaxVideoSendBandwidth
@@ -69,7 +75,7 @@ public class KUser implements IKUser {
 				response.put("id", "iceCandidate");
 				response.put("uid", uid);
 				response.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate())));
-				h.sendClient(uid, response);
+				h.sendClient(sid, response);
 			}
 		});
 		//TODO add logic here
@@ -91,6 +97,10 @@ public class KUser implements IKUser {
 		return outgoingMedia;
 	}
 
+	public String getSid() {
+		return sid;
+	}
+
 	public String getUid() {
 		return uid;
 	}
@@ -104,11 +114,15 @@ public class KUser implements IKUser {
 		return this.roomId;
 	}
 
-	public void receiveVideoFrom(final KurentoHandler h, KUser sender, String sdpOffer) {
+	public void receiveVideoFrom(final KurentoHandler h, Client c, KStream sender, String sdpOffer) {
 		log.info("USER {}: connecting with {} in room {}", this.uid, sender.getUid(), this.roomId);
 
 		log.trace("USER {}: SdpOffer for {} is {}", this.uid, sender.getUid(), sdpOffer);
 
+		if (c.getUid().equals(sender.getUid())) {
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.newStream, c.getUid()));
+		}
 		final String sdpAnswer = this.getEndpointForUser(h, sender).processOffer(sdpOffer);
 		final JSONObject scParams = newKurentoMsg();
 		scParams.put("id", "videoResponse");
@@ -116,12 +130,12 @@ public class KUser implements IKUser {
 		scParams.put("sdpAnswer", sdpAnswer);
 
 		log.trace("USER {}: SdpAnswer for {} is {}", this.uid, sender.getUid(), sdpAnswer);
-		h.sendClient(uid, scParams);
+		h.sendClient(sid, scParams);
 		log.debug("gather candidates");
 		this.getEndpointForUser(h, sender).gatherCandidates();
 	}
 
-	private WebRtcEndpoint getEndpointForUser(final KurentoHandler h, final KUser sender) {
+	private WebRtcEndpoint getEndpointForUser(final KurentoHandler h, final KStream sender) {
 		if (sender.getUid().equals(uid)) {
 			log.debug("PARTICIPANT {}: configuring loopback", this.uid);
 			return outgoingMedia;
@@ -142,7 +156,7 @@ public class KUser implements IKUser {
 					response.put("id", "iceCandidate");
 					response.put("uid", sender.getUid());
 					response.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate())));
-					h.sendClient(uid, response);
+					h.sendClient(sid, response);
 				}
 			});
 
@@ -155,7 +169,7 @@ public class KUser implements IKUser {
 		return incoming;
 	}
 
-	public void cancelVideoFrom(final KUser sender) {
+	public void cancelVideoFrom(final KStream sender) {
 		this.cancelVideoFrom(sender.getUid());
 	}
 
@@ -167,12 +181,12 @@ public class KUser implements IKUser {
 		incoming.release(new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
-				log.trace("PARTICIPANT {}: Released successfully incoming EP for {}", KUser.this.uid, senderName);
+				log.trace("PARTICIPANT {}: Released successfully incoming EP for {}", KStream.this.uid, senderName);
 			}
 
 			@Override
 			public void onError(Throwable cause) throws Exception {
-				log.warn("PARTICIPANT {}: Could not release incoming EP for {}", KUser.this.uid, senderName);
+				log.warn("PARTICIPANT {}: Could not release incoming EP for {}", KStream.this.uid, senderName);
 			}
 		});
 	}
@@ -188,13 +202,13 @@ public class KUser implements IKUser {
 			ep.release(new Continuation<Void>() {
 				@Override
 				public void onSuccess(Void result) throws Exception {
-					log.trace("PARTICIPANT {}: Released successfully incoming EP for {}", KUser.this.uid,
+					log.trace("PARTICIPANT {}: Released successfully incoming EP for {}", KStream.this.uid,
 							remoteParticipantName);
 				}
 
 				@Override
 				public void onError(Throwable cause) throws Exception {
-					log.warn("PARTICIPANT {}: Could not release incoming EP for {}", KUser.this.uid,
+					log.warn("PARTICIPANT {}: Could not release incoming EP for {}", KStream.this.uid,
 							remoteParticipantName);
 				}
 			});
@@ -204,12 +218,12 @@ public class KUser implements IKUser {
 
 			@Override
 			public void onSuccess(Void result) throws Exception {
-				log.trace("PARTICIPANT {}: Released outgoing EP", KUser.this.uid);
+				log.trace("PARTICIPANT {}: Released outgoing EP", KStream.this.uid);
 			}
 
 			@Override
 			public void onError(Throwable cause) throws Exception {
-				log.warn("USER {}: Could not release outgoing EP", KUser.this.uid);
+				log.warn("USER {}: Could not release outgoing EP", KStream.this.uid);
 			}
 		});
 	}
@@ -239,10 +253,10 @@ public class KUser implements IKUser {
 		if (this == obj) {
 			return true;
 		}
-		if (obj == null || !(obj instanceof KUser)) {
+		if (obj == null || !(obj instanceof KStream)) {
 			return false;
 		}
-		KUser other = (KUser) obj;
+		KStream other = (KStream) obj;
 		boolean eq = uid.equals(other.uid);
 		eq &= roomId.equals(other.roomId);
 		return eq;

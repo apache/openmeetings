@@ -38,6 +38,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -56,7 +57,6 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.apache.openmeetings.util.NullStringer;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.QuickPollManager;
-import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.BasePanel;
 import org.apache.openmeetings.web.pages.BasePage;
@@ -165,8 +165,8 @@ public class RoomPanel extends BasePanel {
 			boolean hasStreams = false;
 			Client _c = getClient();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
-				for (String uid : c.getStreams()) {
-					JSONObject jo = videoJson(c, c.getSid(), uid);
+				for (StreamDesc sd : c.getStreams()) {
+					JSONObject jo = videoJson(c, c.getSid(), sd);
 					sb.append(String.format("VideoManager.play(%s);", jo));
 					hasStreams = true;
 				}
@@ -225,8 +225,6 @@ public class RoomPanel extends BasePanel {
 
 	@SpringBean
 	private ClientManager cm;
-	@SpringBean
-	private StreamClientManager scm;
 	@SpringBean
 	private ConferenceLogDao confLogDao;
 	@SpringBean
@@ -485,9 +483,9 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s);"
+							/* FIXME TODO handler.appendJavaScript(String.format("VideoManager.update(%s);"
 									, c.streamJson(_c.getSid(), self, scm).toString(new NullStringer())
-									));
+									));*/
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -496,6 +494,7 @@ public class RoomPanel extends BasePanel {
 						break;
 					case newStream:
 					{
+						/* FIXME TODO
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
 						String uid = obj.getString("uid");
 						Client c = cm.get(uid);
@@ -514,12 +513,13 @@ public class RoomPanel extends BasePanel {
 						}
 						if (self) {
 							cm.update(c.addStream(uid));
-						}
+						}*/
 						updateInterviewRecordingButtons(handler);
 					}
 						break;
 					case closeStream:
 					{
+						/* FIXME TODO
 						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
 						String uid = obj.getString("uid");
 						Client c = cm.getBySid(obj.getString("sid"));
@@ -529,7 +529,7 @@ public class RoomPanel extends BasePanel {
 								cm.update(c.removeStream(uid));
 							}
 						}
-						handler.appendJavaScript(String.format("VideoManager.close('%s');", uid));
+						handler.appendJavaScript(String.format("VideoManager.close('%s');", uid));*/
 						updateInterviewRecordingButtons(handler);
 					}
 						break;
@@ -802,7 +802,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void broadcast(Client client) {
-		RoomBroadcaster.sendUpdatedClient(client);
+		cm.update(client);
 		WebSocketHelper.sendRoom(new TextRoomMessage(getRoom().getId(), getClient(), RoomMessage.Type.rightUpdated, client.getUid()));
 	}
 
@@ -858,7 +858,7 @@ public class RoomPanel extends BasePanel {
 		return interview;
 	}
 
-	public JSONObject videoJson(Client c, String sid, String uid) {
+	public JSONObject videoJson(Client c, String sid, StreamDesc sd) {
 		/*
 		TODO streams
 		StreamClient sc = mgr.get(uid);

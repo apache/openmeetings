@@ -18,29 +18,29 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.mina.util.ConcurrentHashSet;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
-import org.apache.openmeetings.db.util.RoomHelper;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 /**
- * Temporary class, later will be merged with {@link org.apache.openmeetings.db.entity.room.StreamClient}
  * @author solomax
  *
  */
@@ -64,7 +64,7 @@ public class Client implements IClient, IWsClient {
 	private String remoteAddress;
 	private final Set<Right> rights = new ConcurrentHashSet<>();
 	private final Set<Activity> activities = new ConcurrentHashSet<>();
-	private final Set<String> streams = new ConcurrentHashSet<>();
+	private final Map<String, StreamDesc> streams = new ConcurrentHashMap<>();
 	private final Date connectedSince;
 	private int cam = -1;
 	private int mic = -1;
@@ -80,16 +80,6 @@ public class Client implements IClient, IWsClient {
 		this.connectedSince = new Date();
 		uid = UUID.randomUUID().toString();
 		sid = UUID.randomUUID().toString();
-	}
-
-	public Client(StreamClient rcl, User user) {
-		this.sessionId = UUID.randomUUID().toString();
-		this.pageId = 0;
-		this.user = user;
-		this.connectedSince = new Date();
-		uid = rcl.getUid();
-		sid = rcl.getSid();
-		this.remoteAddress = rcl.getRemoteAddress();
 	}
 
 	@Override
@@ -191,12 +181,13 @@ public class Client implements IClient, IWsClient {
 		return activities.contains(a);
 	}
 
-	public void toggle(Activity a) {
+	public Client toggle(Activity a) {
 		if (hasActivity(a)) {
 			remove(a);
 		} else {
 			set(a);
 		}
+		return this;
 	}
 
 	public Client set(Activity a) {
@@ -233,8 +224,8 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	public Client addStream(String _uid) {
-		streams.add(_uid);
+	public Client addStream(StreamDesc stream) {
+		streams.put(stream.getUid(), stream);
 		return this;
 	}
 
@@ -243,8 +234,8 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	public List<String> getStreams() {
-		return new ArrayList<>(streams);
+	public List<StreamDesc> getStreams() {
+		return new ArrayList<>(streams.values());
 	}
 
 	public Date getConnectedSince() {
@@ -394,43 +385,6 @@ public class Client implements IClient, IWsClient {
 		return json;
 	}
 
-	public JSONObject streamJson(String _sid, boolean self, IStreamClientManager mgr) {
-		JSONArray _streams = new JSONArray();
-		boolean avFound = false;
-		for (String _uid : streams) {
-			StreamClient rc = mgr.get(_uid);
-			if (rc == null) {
-				continue;
-			}
-			Type t = rc.getType();
-			if (Type.room == t) {
-				avFound = true;
-			}
-			_streams.put(RoomHelper.addScreenActivities(
-					new JSONObject()
-						.put("type", t.name())
-						// stream `uid` is unknown at the time of self stream creation
-						// so we will replace stream `uid` with client `uid` for self
-						.put("uid", self && Type.room == t ? uid : rc.getUid())
-						.put("broadcastId", rc.getBroadcastId())
-						.put("width", rc.getWidth())
-						.put("height", rc.getHeight())
-					, rc
-				));
-		}
-		if (self && !avFound && hasAnyActivity(Activity.broadcastA, Activity.broadcastV)) {
-			_streams.put(new JSONObject()
-					.put("type", Type.room.name())
-					// stream `uid` is unknown at the time of self stream creation
-					// so we will replace stream `uid` with client `uid` for self
-					.put("uid", uid)
-					.put("width", width)
-					.put("height", height)
-					);
-		}
-		return toJson(self).put("sid", _sid).put("streams", _streams);
-	}
-
 	public void merge(Client c) {
 		user = c.user;
 		room = c.room;
@@ -444,10 +398,10 @@ public class Client implements IClient, IWsClient {
 			activities.clear();
 			activities.addAll(aa);
 		}
-		Set<String> ss = new HashSet<>(c.streams);
+		Map<String, StreamDesc> ss = new HashMap<>(c.streams);
 		synchronized (streams) {
 			streams.clear();
-			streams.addAll(ss);
+			streams.putAll(ss);
 		}
 		cam = c.cam;
 		mic = c.mic;
@@ -490,5 +444,55 @@ public class Client implements IClient, IWsClient {
 	public String toString() {
 		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
 				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
+	}
+
+	public static class StreamDesc implements Serializable {
+		private static final long serialVersionUID = 1L;
+		public enum Type {
+			broadcast //sends Audio/Video to the room
+		}
+		private final String sid;
+		private final String uid;
+		private final Type type;
+		private int width;
+		private int height;
+
+		public StreamDesc(String sid, Type type) {
+			this(sid, UUID.randomUUID().toString(), type);
+		}
+
+		public StreamDesc(String sid, String uid, Type type) {
+			this.sid = sid;
+			this.uid = uid;
+			this.type = type;
+		}
+
+		public String getSid() {
+			return sid;
+		}
+
+		public String getUid() {
+			return uid;
+		}
+
+		public Type getType() {
+			return type;
+		}
+
+		public int getWidth() {
+			return width;
+		}
+
+		public void setWidth(int width) {
+			this.width = width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
+		}
 	}
 }

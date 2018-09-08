@@ -3,8 +3,7 @@ var VideoManager = (function() {
 	const self = {};
 	let share, inited = false;
 
-/*FIXME TODO*/
-	function onVideoResponse(m) {
+	function _onVideoResponse(m) {
 		const w = $('#' + VideoUtil.getVid(m.uid))
 			, v = w.data()
 
@@ -15,9 +14,11 @@ var VideoManager = (function() {
 		});
 	}
 
-	function onBroadcast(msg) {
-		const uid = Room.getOptions().uid;
-		const w = $('#' + VideoUtil.getVid(uid))
+	function _onBroadcast(msg) {
+		const uid = msg.uid;
+		$('#' + VideoUtil.getVid(uid)).remove();
+		const o = VideoSettings.load()
+			, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
 			, v = w.data()
 			, cl = v.client();
 		OmUtil.log(uid + " registered in room");
@@ -47,7 +48,7 @@ var VideoManager = (function() {
 			}));
 	}
 
-	function receiveVideo(uid) {
+	function _receiveVideo(uid) {
 		const w = $('#' + VideoUtil.getVid(uid))
 			, v = w.data()
 			, cl = v.client();
@@ -64,7 +65,6 @@ var VideoManager = (function() {
 			}
 		));
 	}
-	/*FIXME TODO*/
 
 	function _onWsMessage(jqEvent, msg) {
 		try {
@@ -78,11 +78,14 @@ var VideoManager = (function() {
 			if ('kurento' === m.type && 'test' !== m.mode) {
 				OmUtil.info('Received message: ' + m);
 				switch (m.id) {
+					case 'broadcastStopped':
+						_closeV($('#' + VideoUtil.getVid(m.uid)));
+						break;
 					case 'broadcast':
-						onBroadcast(m);
+						_onBroadcast(m);
 						break;
 					case 'videoResponse':
-						onVideoResponse(m);
+						_onVideoResponse(m);
 						break;
 					case 'iceCandidate':
 						{
@@ -104,7 +107,7 @@ var VideoManager = (function() {
 				switch (m.id) {
 					case 'activity':
 						_micActivity(m.uid, m.active);
-						onBroadcast(m);
+						_onBroadcast(m);
 						break;
 					default:
 						//no-op
@@ -135,11 +138,13 @@ var VideoManager = (function() {
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
 			if (av && v.length !== 1 && !!cl.self) {
-				VideoManager.sendMessage({
+				/**** FIXME TODO LETS reduce round-trips
+				self.sendMessage({
 					id: 'joinRoom' //TODO stream uid
 				});
 
 				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
+				******/
 			} else if (av && v.length === 1) {
 				v.data().update(cl);
 			} else if (!av && v.length === 1) {
@@ -148,6 +153,7 @@ var VideoManager = (function() {
 		}
 		if (c.uid === Room.getOptions().uid) {
 			Room.setRights(c.rights);
+			Room.setActivities(c.activities);
 			const windows = $(VID_SEL + ' .ui-dialog-content');
 			for (let i = 0; i < windows.length; ++i) {
 				const w = $(windows[i]);
@@ -190,7 +196,7 @@ var VideoManager = (function() {
 			});
 		} else if ('sharing' !== c.type) {
 			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
-			receiveVideo(c.uid);
+			_receiveVideo(c.uid);
 		}
 	}
 	function _close(uid, showShareBtn) {
@@ -270,6 +276,12 @@ var VideoManager = (function() {
 			w.data().mute('room' + uid !== w.data('client-uid'));
 		}
 	}
+	function _toggleActivity(activity) {
+		self.sendMessage({
+			id: 'toggleActivity'
+			, activity: activity
+		});
+	}
 
 	self.init = _init;
 	self.update = _update;
@@ -279,6 +291,7 @@ var VideoManager = (function() {
 	self.mute = _mute;
 	self.clickExclusive = _clickExclusive;
 	self.exclusive = _exclusive;
+	self.toggleActivity = _toggleActivity;
 	self.sendMessage = function(_m) {
 		OmUtil.sendMessage(_m, {type: 'kurento'});
 	}

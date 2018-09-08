@@ -256,6 +256,7 @@ var Video = (function() {
 		swf.attr('width', _w).attr('height', _h);
 		*/
 		v.dialog('widget').css(_pos);
+		return v;
 	}
 	function _update(_c) {
 		const opts = Room.getOptions();

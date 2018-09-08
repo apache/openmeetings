@@ -32,6 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PreDestroy;
 
+import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
@@ -46,7 +48,7 @@ import com.github.openjson.JSONObject;
 public class KRoom implements Closeable {
 	private final static Logger log = LoggerFactory.getLogger(KRoom.class);
 
-	private final Map<String, KUser> participants = new ConcurrentHashMap<>();
+	private final Map<String, KStream> participants = new ConcurrentHashMap<>();
 	private final MediaPipeline pipeline;
 	private final Long roomId;
 
@@ -60,21 +62,21 @@ public class KRoom implements Closeable {
 		log.info("ROOM {} has been created", roomId);
 	}
 
-	public KUser addUser(final KurentoHandler h, String uid) {
-		log.info("ROOM {}: adding participant {}", roomId, uid);
-		final KUser u = new KUser(h, uid, this.roomId, this.pipeline);
+	public KStream addStream(final KurentoHandler h, StreamDesc sd) {
+		log.info("ROOM {}: adding participant {}", roomId, sd.getUid());
+		final KStream u = new KStream(h, sd.getSid(), sd.getUid(), this.roomId, this.pipeline);
 		participants.put(u.getUid(), u);
 		h.usersByUid.put(u.getUid(), u);
 		return u;
 	}
 
-	public KUser join(final KurentoHandler h, String uid) {
-		KUser u = addUser(h, uid);
-		broadcast(h, u);
+	public KStream join(final KurentoHandler h, Client c, StreamDesc sd) {
+		KStream u = addStream(h, sd);
+		broadcast(h, c, sd);
 		return u;
 	}
 
-	public void leave(final KurentoHandler h, KUser user) {
+	public void leave(final KurentoHandler h, KStream user) {
 		log.debug("PARTICIPANT {}: Leaving room {}", user.getUid(), this.roomId);
 		this.removeParticipant(h, user.getUid());
 		user.release();
@@ -89,9 +91,9 @@ public class KRoom implements Closeable {
 		final JSONObject msg = newKurentoMsg();
 		msg.put("id", "participantLeft");
 		msg.put("name", name);
-		for (final KUser participant : participants.values()) {
+		for (final KStream participant : participants.values()) {
 			participant.cancelVideoFrom(name);
-			h.sendClient(participant.getUid(), msg);
+			h.sendClient(participant.getSid(), msg);
 		}
 
 		if (!unnotifiedParticipants.isEmpty()) {
@@ -100,21 +102,24 @@ public class KRoom implements Closeable {
 		}
 	}
 
-	private static void broadcast(final KurentoHandler h, KUser user) {
+	private static void broadcast(final KurentoHandler h, Client c, StreamDesc sd) {
 		final JSONObject msg = newKurentoMsg();
 		msg.put("id", "broadcast");
-		log.debug("User {}: has started broadcast", user.getUid());
-		h.sendClient(user.getUid(), msg);
+		msg.put("uid", sd.getUid());
+		msg.put("stream", new JSONObject(sd));
+		msg.put("client", c.toJson(true));
+		log.debug("User {}: has started broadcast", sd.getSid());
+		h.sendClient(sd.getSid(), msg);
 	}
 
-	public Collection<KUser> getParticipants() {
+	public Collection<KStream> getParticipants() {
 		return participants.values();
 	}
 
 	@PreDestroy
 	@Override
 	public void close() {
-		for (final KUser user : participants.values()) {
+		for (final KStream user : participants.values()) {
 			user.release();
 		}
 

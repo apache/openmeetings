@@ -18,8 +18,8 @@
  */
 package org.apache.openmeetings.core.util;
 
-import static org.apache.openmeetings.core.remote.ScopeApplicationAdapter.getApp;
 import static org.apache.openmeetings.db.util.FormatHelper.getDisplayName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -133,6 +133,10 @@ public class WebSocketHelper {
 				}
 			});
 		}
+	}
+
+	public static IApplication getApp() {
+		return (IApplication)Application.get(getWicketApplicationName());
 	}
 
 	private static void sendClient(IWsClient client, Consumer<IWebSocketConnection> wsc) {

@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.app.WebSession;
 import org.apache.openmeetings.web.common.OmButton;
 import org.apache.openmeetings.web.room.VideoSettings;
@@ -64,8 +63,6 @@ public class StartSharingButton extends OmButton {
 	private String app = "";
 	@SpringBean
 	private ClientManager cm;
-	@SpringBean
-	private StreamClientManager scm;
 	@SpringBean
 	private ConfigurationDao cfgDao;
 	@SpringBean
@@ -127,8 +124,8 @@ public class StartSharingButton extends OmButton {
 					.replace("$defaultFps", String.valueOf(cfgDao.getLong(CONFIG_SCREENSHARING_FPS, 10L)))
 					.replace("$showFps", String.valueOf(cfgDao.getBool(CONFIG_SCREENSHARING_FPS_SHOW, true)))
 					.replace("$allowRemote", String.valueOf(cfgDao.getBool(CONFIG_SCREENSHARING_ALLOW_REMOTE, true)))
-					.replace("$allowRecording", String.valueOf(room.isAllowRecording() && (0 == scm.getRecordingCount(roomId))))
-					.replace("$allowPublishing", String.valueOf(0 == scm.getPublishingCount(roomId)))
+					.replace("$allowRecording", String.valueOf(true/* FIXME TODO room.isAllowRecording() && (0 == scm.getRecordingCount(roomId))*/))
+					.replace("$allowPublishing", String.valueOf(true/* FIXME TODO 0 == scm.getPublishingCount(roomId)*/))
 					;
 			download.initiate(target);
 		} catch (Exception e) {

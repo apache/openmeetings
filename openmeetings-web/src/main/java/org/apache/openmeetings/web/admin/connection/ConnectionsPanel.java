@@ -26,14 +26,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
-import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.ClientManager;
-import org.apache.openmeetings.web.app.StreamClientManager;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -53,7 +52,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 	@SpringBean
 	private ClientManager cm;
 	@SpringBean
-	private StreamClientManager scm;
+	private KurentoHandler scm;
 	@SpringBean
 	private IUserManager userManager;
 
@@ -65,7 +64,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 
 			private List<IClient> list() {
 				List<IClient> l = new ArrayList<>();
-				l.addAll(scm.list());
+				//l.addAll(scm.list());
 				l.addAll(cm.list());
 				return l;
 			}
@@ -95,9 +94,9 @@ public class ConnectionsPanel extends AdminBasePanel {
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
 						IClient _c = item.getModelObject();
-						if (_c instanceof StreamClient) {
+						/*FIXME TODO if (_c instanceof StreamClient) {
 							userManager.kickById(_c.getUid());
-						} else {
+						} else */{
 							Client c = (Client)_c;
 							cm.invalidate(c.getUserId(), c.getSessionId());
 						}
@@ -105,14 +104,14 @@ public class ConnectionsPanel extends AdminBasePanel {
 					}
 				};
 				confirm.setOutputMarkupId(true).add(new ButtonBehavior(String.format("#%s", confirm.getMarkupId())));
-				if (_c instanceof StreamClient) {
+				/*FIXME TODO if (_c instanceof StreamClient) {
 					StreamClient c = (StreamClient)_c;
 					item.add(new Label("type", "flash"));
 					item.add(new Label("login", c.getLogin()));
 					item.add(new Label("since", c.getConnectedSince()));
 					item.add(new Label("scope"));
 					confirm.setEnabled(Client.Type.sharing != c.getType());
-				} else {
+				} else */{
 					Client c = (Client)_c;
 					item.add(new Label("type", "html5"));
 					item.add(new Label("login", c.getUser().getLogin()));

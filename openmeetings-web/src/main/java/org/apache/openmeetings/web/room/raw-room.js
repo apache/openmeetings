@@ -259,6 +259,9 @@ var Room = (function() {
 		options.rights = _r;
 		_setQuickPollRights();
 	};
+	self.setActivities = function(_a) {
+		options.activities = _a;
+	};
 	self.setSize = _setSize;
 	self.load = _load;
 	self.unload = _unload;

@@ -18,6 +18,6 @@
  */
 package org.apache.openmeetings.core.remote;
 
-public interface IKUser {
+public interface IKStream {
 	void release();
 }

@@ -170,8 +170,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Autowired
 	private ClientManager cm;
 	@Autowired
-	private StreamClientManager scm;
-	@Autowired
 	private MainService mainService;
 
 	@Override
@@ -196,7 +194,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 				//server down, need to remove all online clients, process persistent addresses
 				String serverId = evt.getMember().getStringAttribute(NAME_ATTR_KEY);
 				cm.clean(serverId);
-				scm.clean(serverId);
 				updateJpaAddresses();
 			}
 

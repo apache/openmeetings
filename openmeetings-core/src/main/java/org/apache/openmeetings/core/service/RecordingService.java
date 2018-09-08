@@ -25,12 +25,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask;
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
-import org.apache.openmeetings.core.remote.ScopeApplicationAdapter;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.manager.IClientManager;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,8 +47,6 @@ public class RecordingService {
 	private static final Map<Long, StreamListener> streamListeners = new ConcurrentHashMap<>();
 
 	@Autowired
-	private IStreamClientManager streamClientManager;
-	@Autowired
 	private IClientManager clientManager;
 	@Autowired
 	private UserDao userDao;
@@ -60,8 +56,6 @@ public class RecordingService {
 	private InterviewConverterTask interviewConverter;
 	@Autowired
 	private RecordingDao recordingDao;
-	@Autowired
-	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private RecordingMetaDataDao metaDataDao;
 

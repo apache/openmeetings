@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.openmeetings.core.service.MainService;
@@ -47,10 +46,7 @@ import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.room.Room;
-import org.apache.openmeetings.db.entity.room.StreamClient;
-import org.apache.openmeetings.db.entity.server.Sessiondata;
 import org.apache.openmeetings.db.entity.user.User;
-import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
@@ -70,13 +66,9 @@ public class MobileService {
 	@Autowired
 	private SessiondataDao sessionDao;
 	@Autowired
-	private IStreamClientManager streamClientManager;
-	@Autowired
 	private RoomDao roomDao;
 	@Autowired
 	private ChatDao chatDao;
-	@Autowired
-	private ScopeApplicationAdapter scopeAdapter;
 
 	private static void add(Map<String, Object> m, String key, Object v) {
 		m.put(key, v == null ? "" : v);
@@ -196,28 +188,6 @@ public class MobileService {
 		return result;
 	}
 
-	public StreamClient create(User u, Sessiondata sd) {
-		StreamClient c = new StreamClient();
-		c.setType(StreamClient.Type.mobile);
-		c.setSid(sd.getSessionId());
-		c.setUid(UUID.randomUUID().toString());
-		return create(c, u);
-	}
-
-	public StreamClient create(StreamClient c, User u) {
-		c.setUserId(u.getId());
-		c.setFirstname(u.getFirstname());
-		c.setLastname(u.getLastname());
-		if (c.getUserId() != null) {
-			c.setLogin(u.getLogin());
-			c.setFirstname(u.getFirstname());
-			c.setLastname(u.getLastname());
-			c.setEmail(u.getAddress() == null ? null : u.getAddress().getEmail());
-		}
-		c.setBroadcastId(UUID.randomUUID().toString());
-		return c;
-	}
-
 	private Map<String, Object> login(User u, Map<String, Object> result) {
 		/*
 		if (u != null) {
@@ -283,7 +253,7 @@ public class MobileService {
 			room.put("org", org);
 		}
 		room.put("first", first);
-		room.put("users", streamClientManager.list(r.getId()).size());
+		// room.put("users", streamClientManager.list(r.getId()).size());
 		room.put("total", r.getCapacity());
 		room.put("audioOnly", r.isAudioOnly());
 		result.add(room);
@@ -389,11 +359,10 @@ public class MobileService {
 	}
 
 	public void sendChatMessage(String uid, ChatMessage m, FastDateFormat fmt) {
-		sendChatMessage(streamClientManager.get(uid), m, fmt);
+		/*sendChatMessage(streamClientManager.get(uid), m, fmt);
 	}
 
 	public void sendChatMessage(StreamClient c, ChatMessage m, FastDateFormat fmt) {
-		/*
 		if (c == null) {
 			return;
 		}
@@ -411,11 +380,11 @@ public class MobileService {
 						|| rcl.getRoomId() == null || !rcl.getRoomId().equals(roomId);
 			}
 		}.start();
-		*/
 	}
 
 	private static boolean isModerator(StreamClient c) {
 		return c.isMod() || c.isSuperMod();
+		*/
 	}
 
 	private static Map<String, Object> encodeChatMessage(ChatMessage m, FastDateFormat fmt) {

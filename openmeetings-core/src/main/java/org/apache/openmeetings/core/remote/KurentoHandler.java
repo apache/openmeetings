@@ -24,8 +24,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.manager.IClientManager;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
@@ -42,11 +47,11 @@ public class KurentoHandler {
 	private String kurentoWsUrl;
 	private KurentoClient client;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
-	final Map<String, KUser> usersByUid = new ConcurrentHashMap<>();
-	final Map<String, KTestUser> testsByUid = new ConcurrentHashMap<>();
+	final Map<String, KStream> usersByUid = new ConcurrentHashMap<>();
+	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
 
 	@Autowired
-	private IClientManager clientManager;
+	private IClientManager cm;
 
 	public void setKurentoWsUrl(String kurentoWsUrl) {
 		this.kurentoWsUrl = kurentoWsUrl;
@@ -80,12 +85,12 @@ public class KurentoHandler {
 		}
 		final String cmdId = msg.getString("id");
 		if ("test".equals(msg.optString("mode"))) {
-			KTestUser user = getTestByUid(_c.getUid());
+			KTestStream user = getTestByUid(_c.getUid());
 			switch (cmdId) {
 				case "start":
 				{
 					//TODO FIXME assert null user ???
-					user = new KTestUser(_c, msg, client.createMediaPipeline());
+					user = new KTestStream(_c, msg, client.createMediaPipeline());
 					testsByUid.put(_c.getUid(), user);
 				}
 					break;
@@ -112,28 +117,25 @@ public class KurentoHandler {
 			} else {
 				log.debug("Incoming message from new user: {}", msg);
 			}
-			KUser user = getByUid(_c.getUid());
+			KStream user = getByUid(_c.getUid());
 			switch (cmdId) {
-				case "joinRoom":
-					joinRoom(c);
+				case "toggleActivity":
+					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
 					break;
 				case "receiveVideoFrom":
 					final String senderUid = msg.getString("sender");
-					final KUser sender = getByUid(senderUid);
+					final KStream sender = getByUid(senderUid);
 					final String sdpOffer = msg.getString("sdpOffer");
 					if (user == null) {
-						KRoom room = getRoom(c.getRoomId());
-						user = room.addUser(this, _c.getUid());
+						return;
 					}
-					user.receiveVideoFrom(this, sender, sdpOffer);
+					user.receiveVideoFrom(this, c, sender, sdpOffer);
 					break;
 				case "onIceCandidate":
 				{
 					JSONObject candidate = msg.getJSONObject("candidate");
-
 					if (user == null) {
-						KRoom room = getRoom(c.getRoomId());
-						user = room.addUser(this, _c.getUid());
+						return;
 					}
 					IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
 							candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
@@ -144,19 +146,62 @@ public class KurentoHandler {
 		}
 	}
 
-	private void joinRoom(Client c) {
-		log.info("PARTICIPANT {}: trying to join room {}", c, c.getRoomId());
+	private static boolean isBroadcasting(final Client c) {
+		return c.hasAnyActivity(Client.Activity.broadcastA, Client.Activity.broadcastV);
+	}
 
-		KRoom room = getRoom(c.getRoomId());
-		clientManager.update(c.addStream(c.getUid()));
-		room.join(this, c.getUid());
+	public void toggleActivity(Client c, Client.Activity a) {
+		log.info("PARTICIPANT {}: trying to toggle activity {}", c, c.getRoomId());
+
+		if (!activityAllowed(c, a, c.getRoom())) {
+			if (a == Client.Activity.broadcastA || a == Client.Activity.broadcastAV) {
+				c.allow(Room.Right.audio);
+			}
+			if (!c.getRoom().isAudioOnly() && (a == Client.Activity.broadcastV || a == Client.Activity.broadcastAV)) {
+				c.allow(Room.Right.video);
+			}
+		}
+		if (activityAllowed(c, a, c.getRoom())) {
+			boolean broadcasting = isBroadcasting(c);
+			if (a == Client.Activity.broadcastA && !c.isMicEnabled()) {
+				return;
+			}
+			if (a == Client.Activity.broadcastV && !c.isCamEnabled()) {
+				return;
+			}
+			if (a == Client.Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
+				return;
+			}
+			c.toggle(a);
+			if (!isBroadcasting(c)) {
+				//close
+				leaveRoom(cm.update(c.removeStream(c.getUid())));
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.closeStream, c.getUid()));
+			} else if (!broadcasting) {
+				//join
+				KRoom room = getRoom(c.getRoomId());
+				StreamDesc sd = new StreamDesc(c.getSid(), c.getUid(), StreamDesc.Type.broadcast);
+				sd.setWidth(c.getWidth());
+				sd.setHeight(c.getHeight());
+				cm.update(c.addStream(sd));
+				room.join(this, c, sd);
+			} else {
+				//change constraints
+				//FIXME TODO WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+			}
+		}
 	}
 
 	public void leaveRoom(Client c) {
+		remove(c);
+		WebSocketHelper.sendClient(c, newKurentoMsg()
+				.put("id", "broadcastStopped")
+				.put("uid", c.getUid()));
 	}
 
-	public void sendClient(String uid, JSONObject msg) {
-		WebSocketHelper.sendClient(clientManager.get(uid), msg);
+	public void sendClient(String sid, JSONObject msg) {
+		WebSocketHelper.sendClient(cm.getBySid(sid), msg);
 	}
 
 	public static void sendError(IWsClient c, String msg) {
@@ -171,7 +216,7 @@ public class KurentoHandler {
 		}
 		final String uid = c.getUid();
 		final boolean test = !(c instanceof Client);
-		IKUser u = test ? getTestByUid(uid) : getByUid(uid);
+		IKStream u = test ? getTestByUid(uid) : getByUid(uid);
 		if (u != null) {
 			u.release();
 			if (test) {
@@ -215,11 +260,11 @@ public class KurentoHandler {
 		log.info("Room {} removed and closed", room.getRoomId());
 	}
 
-	private KUser getByUid(String uid) {
+	private KStream getByUid(String uid) {
 		return uid == null ? null : usersByUid.get(uid);
 	}
 
-	private KTestUser getTestByUid(String uid) {
+	private KTestStream getTestByUid(String uid) {
 		return uid == null ? null : testsByUid.get(uid);
 	}
 
@@ -229,5 +274,23 @@ public class KurentoHandler {
 
 	static JSONObject newTestKurentoMsg() {
 		return newKurentoMsg().put("mode", "test");
+	}
+
+	public static boolean activityAllowed(Client c, Client.Activity a, Room room) {
+		boolean r = false;
+		switch (a) {
+			case broadcastA:
+				r = c.hasRight(Right.audio);
+				break;
+			case broadcastV:
+				r = !room.isAudioOnly() && c.hasRight(Right.video);
+				break;
+			case broadcastAV:
+				r = !room.isAudioOnly() && c.hasRight(Right.audio) && c.hasRight(Right.video);
+				break;
+			default:
+				break;
+		}
+		return r;
 	}
 }

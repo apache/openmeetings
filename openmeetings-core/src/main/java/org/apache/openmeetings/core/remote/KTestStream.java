@@ -51,8 +51,8 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
-public class KTestUser implements IKUser {
-	private final static Logger log = LoggerFactory.getLogger(KTestUser.class);
+public class KTestStream implements IKStream {
+	private final static Logger log = LoggerFactory.getLogger(KTestStream.class);
 	private MediaPipeline pipeline;
 	private WebRtcEndpoint webRtcEndpoint;
 	private PlayerEndpoint player;
@@ -62,7 +62,7 @@ public class KTestUser implements IKUser {
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestUser(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public KTestStream(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		webRtcEndpoint.connect(webRtcEndpoint);

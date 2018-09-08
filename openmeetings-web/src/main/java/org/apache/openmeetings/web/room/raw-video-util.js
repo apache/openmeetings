@@ -2,6 +2,8 @@
 const WB_AREA_SEL = '.room.wb.area';
 const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
 const VID_SEL = '.video.user-video';
+const CAM_ACTIVITY = 'broadcastV';
+const MIC_ACTIVITY = 'broadcastA';
 var VideoUtil = (function() {
 	const self = {};
 	function _getVid(uid) {
@@ -16,10 +18,10 @@ var VideoUtil = (function() {
 			&& !c.screenActivities.includes('sharing');
 	}
 	function _hasAudio(c) {
-		return c.activities.includes('broadcastA');
+		return c.activities.includes(MIC_ACTIVITY);
 	}
 	function _hasVideo(c) {
-		return c.activities.includes('broadcastV');
+		return c.activities.includes(CAM_ACTIVITY);
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);
