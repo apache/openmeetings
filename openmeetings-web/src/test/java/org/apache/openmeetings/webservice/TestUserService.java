@@ -52,7 +52,7 @@ import org.apache.wicket.util.string.StringValue;
 import org.junit.Test;
 
 public class TestUserService extends AbstractWebServiceTest {
-	private static final String DUMMY_PICTURE_URL = "http://openmeetings.apache.org/images/logo.png";
+	private static final String DUMMY_PICTURE_URL = "https://openmeetings.apache.org/images/logo.png";
 
 	@Test
 	public void invalidLoginTest() {

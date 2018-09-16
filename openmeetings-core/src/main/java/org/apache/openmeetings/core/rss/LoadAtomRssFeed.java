@@ -43,7 +43,7 @@ public class LoadAtomRssFeed {
 		conn.setDoOutput(true);
 		conn.setDoInput(true);
 		conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)");
-		conn.setRequestProperty("Referer", "http://openmeetings.apache.org/");
+		conn.setRequestProperty("Referer", "https://openmeetings.apache.org/");
 		conn.setUseCaches(false);
 		conn.connect();
 		return conn;
