@@ -189,7 +189,7 @@ public class ImportInitvalues {
 				"This Class is used for Authentification-Crypting. "
 						+ "Be carefull what you do here! If you change it while "
 						+ "running previous Pass of users will not be workign anymore! "
-						+ "for more Information see http://openmeetings.apache.org/CustomCryptMechanism.html"
+						+ "for more Information see https://openmeetings.apache.org/CustomCryptMechanism.html"
 				, VER_1_9);
 
 		addCfg(list, CONFIG_REGISTER_FRONTEND, String.valueOf(cfg.isAllowFrontendRegister()), Configuration.Type.bool

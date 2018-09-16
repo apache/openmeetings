@@ -44,7 +44,7 @@
 			<subsection name="Editing the website">
 				<div>
 					<p>
-						OpenMeetings website (<a href="https://openmeetings.apache.org/">http://openmeetings.apache.org/</a>) is a copy from the Git repository.<br />
+						OpenMeetings website (<a href="https://openmeetings.apache.org/">https://openmeetings.apache.org/</a>) is a copy from the Git repository.<br />
 						The files in the Git to be synced are at:
 						<br />
 						<a href="https://github.com/apache/openmeetings-site.git">https://github.com/apache/openmeetings-site.git</a><br/>

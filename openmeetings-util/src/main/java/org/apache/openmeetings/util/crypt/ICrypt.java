@@ -20,7 +20,7 @@ package org.apache.openmeetings.util.crypt;
 
 /**
  * Interface for Encryption-Class see:
- * http://openmeetings.apache.org/CustomCryptMechanism.html see:
+ * https://openmeetings.apache.org/CustomCryptMechanism.html see:
  * https://crackstation.net/hashing-security.htm
  *
  * @author sebastianwagner, solomax
