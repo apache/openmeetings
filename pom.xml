@@ -732,7 +732,7 @@
 						<artifactId>*</artifactId>
 					</exclusion>
 					<exclusion>
-						<groupId>asm</groupId>
+						<groupId>org.ow2.asm</groupId>
 						<artifactId>asm</artifactId>
 					</exclusion>
 				</exclusions>
@@ -850,6 +850,12 @@
 				<groupId>org.apache.tika</groupId>
 				<artifactId>tika-parsers</artifactId>
 				<version>${tika-parsers.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
