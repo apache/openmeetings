@@ -26,6 +26,7 @@ import static org.springframework.web.context.support.WebApplicationContextUtils
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import javax.servlet.SessionCookieConfig;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.IWebSession;
@@ -44,6 +45,7 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.cycle.RequestCycleContext;
 import org.slf4j.Logger;
+import org.springframework.mock.web.MockSessionCookieConfig;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
@@ -74,7 +76,14 @@ public class ApplicationHelper {
 					log.error("Failed to create Application");
 					return null;
 				}
-				app.setServletContext(new MockServletContext(app, null));
+				app.setServletContext(new MockServletContext(app, null) {
+					@Override
+					public SessionCookieConfig getSessionCookieConfig() {
+						SessionCookieConfig cfg = new MockSessionCookieConfig();
+						cfg.setName("_ensureApplication");
+						return cfg;
+					}
+				});
 				app.setName(getWicketApplicationName());
 				ServletContext sc = app.getServletContext();
 				OMContextListener omcl = new OMContextListener();
@@ -115,7 +124,7 @@ public class ApplicationHelper {
 		WebApplicationContext ctx = getWebApplicationContext(app.getServletContext());
 		app.internalDestroy(); //need to be called to
 		if (ctx != null) {
-			((XmlWebApplicationContext)ctx).destroy();
+			((XmlWebApplicationContext)ctx).close();
 		}
 		ThreadContext.setApplication(null);
 		ThreadContext.setRequestCycle(null);
