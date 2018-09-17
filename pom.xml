@@ -995,6 +995,7 @@
 								<Built-On>${maven.build.timestamp}</Built-On>
 								<Git-Revision>${buildNumber}</Git-Revision>
 								<Product-Version>${project.version}</Product-Version>
+								<Automatic-Module-Name>${project.artifactId}</Automatic-Module-Name>
 							</manifestEntries>
 						</archive>
 					</configuration>
