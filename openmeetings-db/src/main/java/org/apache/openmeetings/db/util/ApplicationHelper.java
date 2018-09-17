@@ -80,7 +80,7 @@ public class ApplicationHelper {
 					@Override
 					public SessionCookieConfig getSessionCookieConfig() {
 						SessionCookieConfig cfg = new MockSessionCookieConfig();
-						cfg.setName("_ensureApplication");
+						cfg.setName("_ensureApplication"); // FIXME TODO WICKET-6588
 						return cfg;
 					}
 				});

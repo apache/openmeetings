@@ -155,6 +155,10 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getSecuritySettings().setAuthenticationStrategy(new OmAuthenticationStrategy());
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 
+		// FIXME TODO WICKET-6588
+		if (getServletContext().getSessionCookieConfig().getName() == null) {
+			getServletContext().getSessionCookieConfig().setName("OMSESSIONID");
+		}
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
