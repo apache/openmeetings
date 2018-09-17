@@ -117,7 +117,7 @@ public class StartSharingButton extends OmButton {
 							, "1091", "1092", "1093", "1465", "1466"
 							, "1467", "1468", "1469", "1470", "1471"
 							, "1472", "1473", "1474", "1475", "1476"
-							, "1477", "1589", "1598", "1078"))
+							, "1477", "1589", "1598", "ulist.right.remote.grant"))
 					.replace("$defaultQuality", String.valueOf(cfgDao.getLong(CONFIG_SCREENSHARING_QUALITY, 1L)))
 					.replace("$defaultFps", String.valueOf(cfgDao.getLong(CONFIG_SCREENSHARING_FPS, 10L)))
 					.replace("$showFps", String.valueOf(cfgDao.getBool(CONFIG_SCREENSHARING_FPS_SHOW, true)))
