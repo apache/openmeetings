@@ -63,7 +63,14 @@ public class ApplicationHelper {
 			try {
 				app = (WebApplication)OpenmeetingsVariables.getAppClass().newInstance();
 				app.setName("--dumb--"); //temporary name for temporary application
-				ServletContext sc = new MockServletContext(app, null);
+				ServletContext sc = new MockServletContext(app, null) {
+					@Override
+					public SessionCookieConfig getSessionCookieConfig() {
+						SessionCookieConfig cfg = new MockSessionCookieConfig();
+						cfg.setName("_ensureApplication");
+						return cfg;
+					}
+				};
 				XmlWebApplicationContext xmlContext = new XmlWebApplicationContext();
 				xmlContext.setConfigLocation("classpath:applicationContext.xml");
 				xmlContext.setServletContext(sc);
