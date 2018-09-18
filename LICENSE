@@ -258,7 +258,6 @@ webapps/root/WEB-INF/red5-web.properties
 webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
-webapps/openmeetings/WEB-INF/lib/animal-sniffer-annotations-1.14.jar
 webapps/openmeetings/WEB-INF/lib/api-all-*.jar
 webapps/openmeetings/WEB-INF/lib/asterisk-java-2.0.2.jar
 webapps/openmeetings/WEB-INF/lib/caldav4j-*.jar
@@ -267,39 +266,34 @@ webapps/openmeetings/WEB-INF/lib/cxf-*.jar
 webapps/openmeetings/WEB-INF/lib/derby*.jar
 webapps/openmeetings/WEB-INF/lib/dom4j-2.1.0.jar
 webapps/openmeetings/WEB-INF/lib/fontbox-2.0.8.jar
-webapps/openmeetings/WEB-INF/lib/geronimo-jms_1.1_spec-1.1.1.jar
-webapps/openmeetings/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
-webapps/openmeetings/WEB-INF/lib/gson-2.8.2.jar
+webapps/openmeetings/WEB-INF/lib/gson-*.jar
 webapps/openmeetings/WEB-INF/lib/hazelcast-*.jar
-webapps/openmeetings/WEB-INF/lib/httpcore-*.jar
 webapps/openmeetings/WEB-INF/lib/jackrabbit-webdav-2.13.5.jar
+webapps/openmeetings/WEB-INF/lib/jackson-annotations*.jar
+webapps/openmeetings/WEB-INF/lib/jackson-databind*.jar
 webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
 webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
-webapps/openmeetings/WEB-INF/lib/jqplot4java-1.3.3.jar
+webapps/openmeetings/WEB-INF/lib/jqplot4java-*.jar
 webapps/openmeetings/WEB-INF/lib/jqplot-*.jar
-webapps/openmeetings/WEB-INF/lib/json-1.3.jar
-webapps/openmeetings/WEB-INF/lib/jsr305-1.3.9.jar
 webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
 webapps/openmeetings/WEB-INF/lib/neethi-3.1.1.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-2.4.2.jar
-webapps/openmeetings/WEB-INF/lib/openjson-1.0.8.jar
+webapps/openmeetings/WEB-INF/lib/openjpa-*.jar
+webapps/openmeetings/WEB-INF/lib/openjson-*.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
 webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
 webapps/openmeetings/WEB-INF/lib/owasp-java-html-sanitizer-20171016.1.jar
-webapps/openmeetings/WEB-INF/lib/pdfbox-*.jar
 webapps/openmeetings/WEB-INF/lib/ridl-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
-webapps/openmeetings/WEB-INF/lib/smslib-3.5.4.jar
 webapps/openmeetings/WEB-INF/lib/stax-1.2.0.jar
 webapps/openmeetings/WEB-INF/lib/stax2-api-3.1.4.jar
 webapps/openmeetings/WEB-INF/lib/unoil-4.1.2.jar
 webapps/openmeetings/WEB-INF/lib/wicket*.jar
 webapps/openmeetings/WEB-INF/lib/woodstox-core-*.jar
 webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
-webapps/openmeetings/WEB-INF/lib/xbean-asm5-shaded-3.17.jar
+webapps/openmeetings/WEB-INF/lib/xbean-asm6-shaded-*.jar
 webapps/openmeetings/WEB-INF/lib/xml-apis-*.jar
 webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
 webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.3.jar
@@ -311,11 +305,16 @@ lib/boilerpipe-1.1.0.jar
 lib/commons-*.jar
 lib/cors-filter-2.6.jar
 lib/ehcache-core-2.6.11.jar
+lib/error_prone_annotations*.jar
 lib/geronimo-jpa_2.0_spec-1.1.jar
+lib/guava*.jar
 lib/httpclient-4.5.3.jar
 lib/httpcore-4.4.6.jar
-lib/isoparser-1.9.29.jar
+lib/httpmime-4.5.6.jar
+lib/httpservices-4.5.5.jar
+lib/isoparser-*.jar
 lib/java-property-utils-1.9.1.jar
+lib/jackson-core*.jar
 lib/jempbox-1.8.13.jar
 lib/metadata-extractor-2.9.1.jar
 lib/mina-*.jar
@@ -345,7 +344,7 @@ conditions of the following licenses.
 For GlassFish components
 
 webapps/openmeetings/WEB-INF/lib/activation-1.1.jar
-webapps/openmeetings/WEB-INF/lib/javax.mail-1.6.0.jar
+webapps/openmeetings/WEB-INF/lib/javax.mail-1.6.2.jar
 
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
@@ -1081,8 +1080,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS'' AND
 
  For Bouncy Castle:
  
- lib/bcprov-jdk15on-1.56.jar
- webapps/openmeetings/screenshare/bcprov-jdk15on-1.56.jar
+ lib/bcmail-jdk15on-1.60.jar
+ lib/bcpkix-jdk15on-1.60.jar
+ lib/bcprov-jdk15on-1.60.jar
+ webapps/openmeetings/screenshare/bcprov-jdk15on-1.60.jar
 
  Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
 
@@ -1359,7 +1360,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
-lib/asm-5.0.4.jar
+lib/asm-6.2.jar
 	URL: http://asm.objectweb.org/asm/
 	
 ======================================================================================================================
@@ -1595,7 +1596,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ======================================================================================================================
 
-For javax.annotation-api-1.2.jar:
+For javax.annotation-api-1.3.jar:
 	URL: http://jcp.org/en/jsr/detail?id=250
 	
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
@@ -1868,12 +1869,11 @@ As a special exception, the copyright holders of this library give you permissio
 
 ======================================================================================================================
 
-For javax.ws.rs-api-2.0.1.jar:
+For javax.ws.rs-api-2.1.jar:
 	URL: http://jax-rs-spec.java.net/
-For jaxb-core-2.2.11.jar:
-	URL: http://jaxb.java.net/jaxb-bundles/jaxb-core
-For jaxb-impl-2.2.11.jar:
-	URL: http://jaxb.java.net/jaxb-bundles/jaxb-impl
+For jaxb-api-2.3.0.jar:
+For jaxb-core-2.3.0.jar:
+For jaxb-impl-2.3.0.jar:
 	
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.1
 
@@ -2563,6 +2563,10 @@ EXHIBIT A -Mozilla Public License.
 
  =======================================================================================
 
+lib/bzip2-*.jar
+lib/cdm-*.jar
+lib/dec-*.jar
+lib/grib-*.jar
 webapps/openmeetings/WEB-INF/lib/checker-compat-qual-2.0.0.jar
 webapps/openmeetings/WEB-INF/lib/jdk-serializable-functional-1.8.3.jar
 
@@ -2590,7 +2594,7 @@ THE SOFTWARE.
 
  =======================================================================================
 
-webapps/openmeetings/WEB-INF/lib/threetenbp-1.3.6.jar
+lib/curvesapi-1.04.jar
 
 BSD 3-clause
 
