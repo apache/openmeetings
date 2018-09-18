@@ -176,6 +176,16 @@
 				</li>
 			</ol>
 		</section>
+		<section name="Tutorials by Alvaro Bustos">
+			<h4>OpenMeetings Installation tutorials by Alvaro Bustos for:</h4>
+			<div>
+				Arch Linux, CentOS, Debian, Devuan, Fedora, Gentoo, MacOS, Mageia, Manjaro, Mint
+				, MX Linux, OpenSuse, PCLinuxOS, Slackware, Ubuntu and Windows.
+				<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">
+					Can be found here</a><br/>
+				As wee as some automatic scripts
+			</div>
+		</section>
 		<section name="Ports, NAT Settings, Customize">
 			<p>
 				See
@@ -212,26 +222,13 @@
 			</ul>
 
 		</section>
-		<section name="Debian, Links, Changelog, VoIP">
+		<section name="Useful Links">
 			<ul>
 				<li>for VoIP and SIP Integration see also <a href="voip-sip-integration.html">VoIPAndSIP</a></li>
 				<li><a href="http://meetingslive.sourceforge.net/" rel="nofollow">http://meetingslive.sourceforge.net/</a></li>
 				<li>
-					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">Installation of OM 2.0 for Windows XP, 7, 2003, 2008</a>
-				</li>
-				<li>
-					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools">
-						OpenMeetings Installation tutorials by Alvaro Bustos for: <br/>
-						Arch Linux, CentOS, Debian, Devuan, Fedora, Gentoo, MacOS, Mageia, Manjaro, Mint
-						, MX Linux, OpenSuse, PCLinuxOS, Slackware, Ubuntu and Windows.</a>
-				</li>
-				<li>
 					<a href="https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=27837303"
 						rel="nofollow">Tutoriales en español relacionados con OpenMeetings</a>
-				</li>
-				<li>
-					<a href="https://cwiki.apache.org/confluence/display/OPENMEETINGS/Tutorials+for+installing+OpenMeetings+and+Tools"
-						rel="nofollow">Automatic script installation for Ubuntu/Debian (beta)</a>
 				</li>
 				<li>
 					French version of Installation Instructions:
