@@ -46,22 +46,21 @@ import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.wicketstuff.jqplot.behavior.JqPlotBehavior;
 import org.wicketstuff.jqplot.behavior.JqPlotCssResourceReference;
 import org.wicketstuff.jqplot.behavior.JqPlotJavascriptResourceReference;
+import org.wicketstuff.jqplot.lib.Chart;
+import org.wicketstuff.jqplot.lib.ChartConfiguration;
+import org.wicketstuff.jqplot.lib.JqPlotResources;
+import org.wicketstuff.jqplot.lib.JqPlotUtils;
+import org.wicketstuff.jqplot.lib.chart.BarChart;
+import org.wicketstuff.jqplot.lib.chart.PieChart;
+import org.wicketstuff.jqplot.lib.elements.Highlighter;
+import org.wicketstuff.jqplot.lib.elements.Location;
+import org.wicketstuff.jqplot.lib.elements.RendererOptions;
 
 import com.googlecode.wicket.jquery.ui.widget.dialog.AbstractDialog;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButtons;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogIcon;
 import com.googlecode.wicket.jquery.ui.widget.dialog.MessageDialog;
-
-import br.com.digilabs.jqplot.Chart;
-import br.com.digilabs.jqplot.ChartConfiguration;
-import br.com.digilabs.jqplot.JqPlotResources;
-import br.com.digilabs.jqplot.JqPlotUtils;
-import br.com.digilabs.jqplot.chart.BarChart;
-import br.com.digilabs.jqplot.chart.PieChart;
-import br.com.digilabs.jqplot.elements.Highlighter;
-import br.com.digilabs.jqplot.elements.Location;
-import br.com.digilabs.jqplot.elements.RendererOptions;
 
 /**
  * @author solomax
