@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.service.calendar.caldav.handler;
 
-import static javax.servlet.http.HttpServletResponse.SC_OK;
-
-import java.io.IOException;
-
-import org.apache.commons.httpclient.HttpClient;
+import com.github.caldav4j.CalDAVConstants;
+import com.github.caldav4j.methods.HttpPropFindMethod;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.jackrabbit.webdav.DavException;
 import org.apache.jackrabbit.webdav.MultiStatusResponse;
-import org.apache.jackrabbit.webdav.client.methods.DavMethodBase;
+import org.apache.jackrabbit.webdav.client.methods.BaseDavRequest;
 import org.apache.jackrabbit.webdav.property.DavPropertyName;
 import org.apache.jackrabbit.webdav.property.DavPropertyNameSet;
 import org.apache.jackrabbit.webdav.property.DavPropertySet;
@@ -35,10 +35,12 @@ import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.service.calendar.caldav.AppointmentManager;
 import org.apache.openmeetings.service.calendar.caldav.IcalUtils;
-import org.osaf.caldav4j.CalDAVConstants;
-import org.osaf.caldav4j.methods.PropFindMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+
+import static javax.servlet.http.HttpServletResponse.SC_OK;
 
 /**
  * Class for Syncing through the help of Ctags.
@@ -53,46 +55,48 @@ public class CtagHandler extends AbstractCalendarHandler {
 	public static final Namespace NAMESPACE_CALSERVER = Namespace.getNamespace("cs", "http://calendarserver.org/ns/");
 	public static final DavPropertyName DNAME_GETCTAG = DavPropertyName.create("getctag", NAMESPACE_CALSERVER);
 
-	public CtagHandler(String path, OmCalendar calendar, HttpClient client, AppointmentDao appointmentDao, IcalUtils utils) {
-		super(path, calendar, client, appointmentDao, utils);
+	public CtagHandler(String path, OmCalendar calendar, HttpClient client,
+	                   HttpClientContext context, AppointmentDao appointmentDao,
+	                   IcalUtils utils) {
+		super(path, calendar, client, context, appointmentDao, utils);
 	}
 
 	@Override
-	DavMethodBase internalSyncItems() throws IOException, DavException {
+	BaseDavRequest internalSyncItems() throws IOException, DavException {
 		//Calendar already inited.
 
 		DavPropertyNameSet properties = new DavPropertyNameSet();
 		properties.add(DNAME_GETCTAG);
 
-		PropFindMethod method = new PropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
-		client.executeMethod(method);
+		HttpPropFindMethod method = new HttpPropFindMethod(path, properties, CalDAVConstants.DEPTH_0);
+		HttpResponse httpResponse = client.execute(method, context);
 
-		if (method.succeeded()) {
-			for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus().getResponses()) {
+		if (method.succeeded(httpResponse)) {
+			for (MultiStatusResponse response : method.getResponseBodyAsMultiStatus(httpResponse).getResponses()) {
 				DavPropertySet set = response.getProperties(SC_OK);
 				String ctag = AppointmentManager.getTokenFromProperty(set.get(DNAME_GETCTAG));
 
 				if (ctag != null && !ctag.equals(calendar.getToken())) {
-					EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+					EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, context, appointmentDao, utils);
 					etagsHandler.syncItems();
 					calendar.setToken(ctag);
 				}
 			}
 		} else {
-			log.error("Error executing PROPFIND Method, with status Code: {}", method.getStatusCode());
+			log.error("Error executing PROPFIND Method, with status Code: {}", httpResponse.getStatusLine().getStatusCode());
 		}
 		return method;
 	}
 
 	@Override
 	public boolean updateItem(Appointment appointment) {
-		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, context, appointmentDao, utils);
 		return etagsHandler.updateItem(appointment);
 	}
 
 	@Override
 	public boolean deleteItem(Appointment appointment) {
-		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, appointmentDao, utils);
+		EtagsHandler etagsHandler = new EtagsHandler(path, calendar, client, context, appointmentDao, utils);
 		return etagsHandler.deleteItem(appointment);
 	}
 }
