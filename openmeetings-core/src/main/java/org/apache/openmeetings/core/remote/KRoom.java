@@ -56,6 +56,10 @@ public class KRoom implements Closeable {
 		return roomId;
 	}
 
+	public String getPipelineId() {
+		return pipeline.getId();
+	}
+
 	public KRoom(Long roomId, MediaPipeline pipeline) {
 		this.roomId = roomId;
 		this.pipeline = pipeline;

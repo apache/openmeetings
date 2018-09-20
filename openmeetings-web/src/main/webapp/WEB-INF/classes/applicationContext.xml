@@ -140,6 +140,6 @@
 
 	<!-- Kurento -->
 	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" init-method="init" destroy-method="destroy">
-		<property name="kurentoWsUrl" value="ws://192.168.15.177:8888/kurento"/>
+		<property name="kurentoWsUrl" value="wss://192.168.15.177:8883/kurento"/>
 	</bean>
 </beans>

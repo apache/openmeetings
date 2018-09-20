@@ -19,8 +19,13 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -34,7 +39,10 @@ import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
+import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
+import org.kurento.client.Tag;
+import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +51,15 @@ import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
 	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
+	private final static String MODE_TEST = "test";
+	private final static String TAG_KUID = "kuid";
+	private final static String TAG_MODE = "mode";
+	private final static String TAG_ROOM = "roomId";
 	public final static String KURENTO_TYPE = "kurento";
 	private String kurentoWsUrl;
 	private KurentoClient client;
+	private String kuid;
+	private ScheduledExecutorService scheduler;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KStream> usersByUid = new ConcurrentHashMap<>();
 	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
@@ -64,9 +78,48 @@ public class KurentoHandler {
 			client.getServerManager().addObjectCreatedListener(new EventListener<ObjectCreatedEvent>() {
 				@Override
 				public void onEvent(ObjectCreatedEvent evt) {
-					log.warn("Kurento::ObjectCreated -> {}", evt);
+					log.debug("Kurento::ObjectCreated -> {}", evt.getObject());
+					if (evt.getObject() instanceof MediaPipeline) {
+						// room created
+						final String roid = evt.getObject().getId();
+						scheduler.schedule(() -> {
+							if (client != null) { // still alive
+								MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
+								try {
+									Map<String, String> tags = tagsAsMap(pipe);
+									if (kuid.equals(tags.get(TAG_KUID))) {
+										if (MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_MODE))) {
+											return;
+										}
+										KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
+										if (r.getPipelineId().equals(pipe.getId())) {
+											return;
+										} else if (r != null) {
+											rooms.remove(r.getRoomId());
+											r.close();
+										}
+									}
+								} catch(Exception e) {
+									//no-op, connect will be dropped
+								}
+								log.warn("Invalid MediaPipeline {} detected, will be dropped", pipe.getId());
+								pipe.release();
+							}
+						}, 2, TimeUnit.SECONDS);
+					} else if (evt.getObject() instanceof WebRtcEndpoint) { //FIXME TODO RecordingEndpoint
+						// endpoint created
+						final String eoid = evt.getObject().getId();
+						scheduler.schedule(() -> {
+							if (client != null) { // still alive
+								WebRtcEndpoint point = client.getById(eoid, WebRtcEndpoint.class);
+								//point.release();
+							}
+						}, 2, TimeUnit.SECONDS);
+					}
 				}
 			});
+			kuid = UUID.randomUUID().toString(); //FIXME TODO regenerate on re-connect
+			scheduler = Executors.newScheduledThreadPool(10);
 		} catch (Exception e) {
 			log.error("Fail to create Kurento client", e);
 		}
@@ -78,19 +131,35 @@ public class KurentoHandler {
 		}
 	}
 
+	private static Map<String, String> tagsAsMap(MediaPipeline pipe) {
+		Map<String, String> map = new HashMap<>();
+		for (Tag t : pipe.getTags()) {
+			map.put(t.getKey(), t.getValue());
+		}
+		return map;
+	}
+
+	private MediaPipeline createTestPipeline() {
+		MediaPipeline pipe = client.createMediaPipeline();
+		pipe.addTag(TAG_KUID, kuid);
+		pipe.addTag(TAG_MODE, MODE_TEST);
+		pipe.addTag(TAG_ROOM, MODE_TEST);
+		return pipe;
+	}
+
 	public void onMessage(IWsClient _c, JSONObject msg) {
 		if (client == null) {
 			sendError(_c, "Multimedia server is inaccessible");
 			return;
 		}
 		final String cmdId = msg.getString("id");
-		if ("test".equals(msg.optString("mode"))) {
+		if (MODE_TEST.equals(msg.optString(TAG_MODE))) {
 			KTestStream user = getTestByUid(_c.getUid());
 			switch (cmdId) {
 				case "start":
 				{
 					//TODO FIXME assert null user ???
-					user = new KTestStream(_c, msg, client.createMediaPipeline());
+					user = new KTestStream(_c, msg, createTestPipeline());
 					testsByUid.put(_c.getUid(), user);
 				}
 					break;
@@ -106,17 +175,16 @@ public class KurentoHandler {
 				}
 					break;
 				case "play":
-					user.play(_c, msg, client.createMediaPipeline());
+					user.play(_c, msg, createTestPipeline());
 					break;
 			}
 		} else {
 			final Client c = (Client)_c;
 
-			if (c != null) {
-				log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-			} else {
-				log.debug("Incoming message from new user: {}", msg);
+			if (c == null) {
+				log.warn("Incoming message from invalid user");
 			}
+			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			KStream user = getByUid(_c.getUid());
 			switch (cmdId) {
 				case "toggleActivity":
@@ -241,7 +309,10 @@ public class KurentoHandler {
 
 		if (room == null) {
 			log.debug("Room {} does not exist. Will create now!", roomId);
-			room = new KRoom(roomId, client.createMediaPipeline());
+			MediaPipeline pipe = client.createMediaPipeline();
+			pipe.addTag(TAG_KUID, kuid);
+			pipe.addTag(TAG_ROOM, String.valueOf(roomId));
+			room = new KRoom(roomId, pipe);
 			rooms.put(roomId, room);
 		}
 		log.debug("Room {} found!", roomId);
@@ -273,7 +344,7 @@ public class KurentoHandler {
 	}
 
 	static JSONObject newTestKurentoMsg() {
-		return newKurentoMsg().put("mode", "test");
+		return newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
 
 	public static boolean activityAllowed(Client c, Client.Activity a, Room room) {

@@ -100,7 +100,7 @@ var Video = (function() {
 			contSel = '.room.box';
 		}
 		$(contSel).append(OmUtil.tmpl('#user-video', _id).attr('title', name)
-				.attr('data-client-uid', c.type + c.cuid).data(self));
+				.attr('data-client-uid', c.type + c.cuid).data(self)); //FIXME TODO c.type === 'undefined'
 		return contSel;
 	}
 	function _initDialog(v, opts) {
