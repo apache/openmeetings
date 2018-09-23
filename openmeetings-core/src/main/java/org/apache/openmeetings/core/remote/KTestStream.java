@@ -198,8 +198,7 @@ public class KTestStream implements IKStream {
 	}
 
 	private void sendPlayEnd(IWsClient _c) {
-		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
-				.put("id", "playStopped"));
+		WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "playStopped"));
 		release();
 	}
 

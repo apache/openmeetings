@@ -139,7 +139,6 @@
 	</bean>
 
 	<!-- Kurento -->
-	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" init-method="init" destroy-method="destroy">
-		<property name="kurentoWsUrl" value="wss://192.168.15.177:8883/kurento"/>
-	</bean>
+	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" init-method="init" destroy-method="destroy"
+			p:kurentoWsUrl="ws://localhost:8888/kurento" p:checkTimeout="200"/>
 </beans>

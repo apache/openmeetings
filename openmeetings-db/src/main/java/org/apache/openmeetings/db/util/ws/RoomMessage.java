@@ -52,8 +52,6 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, requestRightExclusive
 		, haveQuestion
 		, kick
-		, newStream
-		, closeStream
 		, mute
 		, exclusive
 		, quickPollUpdated

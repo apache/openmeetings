@@ -24,9 +24,7 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 
 import java.io.Closeable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -66,44 +64,13 @@ public class KRoom implements Closeable {
 		log.info("ROOM {} has been created", roomId);
 	}
 
-	public KStream addStream(final KurentoHandler h, StreamDesc sd) {
+	public KStream startBroadcast(final KurentoHandler h, Client c, StreamDesc sd) {
 		log.info("ROOM {}: adding participant {}", roomId, sd.getUid());
-		final KStream u = new KStream(h, sd.getSid(), sd.getUid(), this.roomId, this.pipeline);
+		final KStream u = new KStream(h, c, this.pipeline);
 		participants.put(u.getUid(), u);
 		h.usersByUid.put(u.getUid(), u);
-		return u;
-	}
-
-	public KStream join(final KurentoHandler h, Client c, StreamDesc sd) {
-		KStream u = addStream(h, sd);
 		broadcast(h, c, sd);
 		return u;
-	}
-
-	public void leave(final KurentoHandler h, KStream user) {
-		log.debug("PARTICIPANT {}: Leaving room {}", user.getUid(), this.roomId);
-		this.removeParticipant(h, user.getUid());
-		user.release();
-	}
-
-	private void removeParticipant(final KurentoHandler h, String name) {
-		participants.remove(name);
-
-		log.debug("ROOM {}: notifying all users that {} is leaving the room", this.roomId, name);
-
-		final List<String> unnotifiedParticipants = new ArrayList<>();
-		final JSONObject msg = newKurentoMsg();
-		msg.put("id", "participantLeft");
-		msg.put("name", name);
-		for (final KStream participant : participants.values()) {
-			participant.cancelVideoFrom(name);
-			h.sendClient(participant.getSid(), msg);
-		}
-
-		if (!unnotifiedParticipants.isEmpty()) {
-			log.debug("ROOM {}: The users {} could not be notified that {} left the room", this.roomId,
-					unnotifiedParticipants, name);
-		}
 	}
 
 	private static void broadcast(final KurentoHandler h, Client c, StreamDesc sd) {
@@ -112,7 +79,7 @@ public class KRoom implements Closeable {
 		msg.put("uid", sd.getUid());
 		msg.put("stream", new JSONObject(sd));
 		msg.put("client", c.toJson(true));
-		log.debug("User {}: has started broadcast", sd.getSid());
+		log.debug("User {}: has started broadcast", sd.getUid());
 		h.sendClient(sd.getSid(), msg);
 	}
 
@@ -126,11 +93,8 @@ public class KRoom implements Closeable {
 		for (final KStream user : participants.values()) {
 			user.release();
 		}
-
 		participants.clear();
-
 		pipeline.release(new Continuation<Void>() {
-
 			@Override
 			public void onSuccess(Void result) throws Exception {
 				log.trace("ROOM {}: Released Pipeline", KRoom.this.roomId);

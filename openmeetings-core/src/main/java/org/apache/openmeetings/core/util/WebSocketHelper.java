@@ -36,6 +36,7 @@ import org.apache.openmeetings.core.util.ws.WsMessageAll;
 import org.apache.openmeetings.core.util.ws.WsMessageChat;
 import org.apache.openmeetings.core.util.ws.WsMessageRoom;
 import org.apache.openmeetings.core.util.ws.WsMessageRoomMsg;
+import org.apache.openmeetings.core.util.ws.WsMessageRoomOthers;
 import org.apache.openmeetings.core.util.ws.WsMessageUser;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -155,6 +156,9 @@ public class WebSocketHelper {
 	public static void send(IClusterWsMessage _m) {
 		if (_m instanceof WsMessageRoomMsg) {
 			sendRoom(((WsMessageRoomMsg)_m).getMsg(), false);
+		} else if (_m instanceof WsMessageRoomOthers) {
+			WsMessageRoomOthers m = (WsMessageRoomOthers)_m;
+			sendRoomOthers(m.getRoomId(), m.getUid(), m.getMsg(), false);
 		} else if (_m instanceof WsMessageRoom) {
 			WsMessageRoom m = (WsMessageRoom)_m;
 			sendRoom(m.getRoomId(), m.getMsg(), false);
@@ -190,6 +194,17 @@ public class WebSocketHelper {
 			publish(new WsMessageRoom(roomId, m));
 		}
 		sendRoom(roomId, m, null, null);
+	}
+
+	public static void sendRoomOthers(final Long roomId, final String uid, final JSONObject m) {
+		sendRoomOthers(roomId, uid, m, true);
+	}
+
+	private static void sendRoomOthers(final Long roomId, final String uid, final JSONObject m, boolean publish) {
+		if (publish) {
+			publish(new WsMessageRoomOthers(roomId, uid, m));
+		}
+		sendRoom(roomId, m, c -> !uid.equals(c.getUid()), null);
 	}
 
 	public static void sendRoom(ChatMessage m, JSONObject msg) {

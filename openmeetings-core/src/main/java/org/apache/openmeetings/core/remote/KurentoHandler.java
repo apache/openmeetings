@@ -19,13 +19,14 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
@@ -36,11 +37,15 @@ import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
+import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
+import org.kurento.client.PlayerEndpoint;
+import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.Tag;
 import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
@@ -56,6 +61,7 @@ public class KurentoHandler {
 	private final static String TAG_MODE = "mode";
 	private final static String TAG_ROOM = "roomId";
 	public final static String KURENTO_TYPE = "kurento";
+	private long checkTimeout = 200; //ms
 	private String kurentoWsUrl;
 	private KurentoClient client;
 	private String kuid;
@@ -83,38 +89,61 @@ public class KurentoHandler {
 						// room created
 						final String roid = evt.getObject().getId();
 						scheduler.schedule(() -> {
-							if (client != null) { // still alive
-								MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
-								try {
-									Map<String, String> tags = tagsAsMap(pipe);
-									if (kuid.equals(tags.get(TAG_KUID))) {
-										if (MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_MODE))) {
-											return;
-										}
-										KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
-										if (r.getPipelineId().equals(pipe.getId())) {
-											return;
-										} else if (r != null) {
-											rooms.remove(r.getRoomId());
-											r.close();
-										}
-									}
-								} catch(Exception e) {
-									//no-op, connect will be dropped
+							if (client == null) {
+								return;
+							}
+							// still alive
+							MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
+							try {
+								Map<String, String> tags = tagsAsMap(pipe);
+								if (validTestPipeline(tags)) {
+									return;
 								}
-								log.warn("Invalid MediaPipeline {} detected, will be dropped", pipe.getId());
-								pipe.release();
+								if (kuid.equals(tags.get(TAG_KUID))) {
+									KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
+									if (r.getPipelineId().equals(pipe.getId())) {
+										return;
+									} else if (r != null) {
+										rooms.remove(r.getRoomId());
+										r.close();
+									}
+								}
+							} catch(Exception e) {
+								//no-op, connect will be dropped
 							}
-						}, 2, TimeUnit.SECONDS);
-					} else if (evt.getObject() instanceof WebRtcEndpoint) { //FIXME TODO RecordingEndpoint
+							log.warn("Invalid MediaPipeline {} detected, will be dropped", pipe.getId());
+							pipe.release();
+						}, checkTimeout, MILLISECONDS);
+					} else if (evt.getObject() instanceof Endpoint) {
 						// endpoint created
-						final String eoid = evt.getObject().getId();
+						Endpoint _point = (Endpoint)evt.getObject();
+						final String eoid = _point.getId();
+						Class<? extends Endpoint> _clazz = null;
+						if (_point instanceof WebRtcEndpoint) {
+							_clazz = WebRtcEndpoint.class;
+						} else if (_point instanceof RecorderEndpoint) {
+							_clazz = RecorderEndpoint.class;
+						} else if (_point instanceof PlayerEndpoint) {
+							_clazz = PlayerEndpoint.class;
+						}
+						final Class<? extends Endpoint> clazz = _clazz;
 						scheduler.schedule(() -> {
-							if (client != null) { // still alive
-								WebRtcEndpoint point = client.getById(eoid, WebRtcEndpoint.class);
-								//point.release();
+							if (client == null || clazz == null) {
+								return;
 							}
-						}, 2, TimeUnit.SECONDS);
+							// still alive
+							Endpoint point = client.getById(eoid, clazz);
+							if (validTestPipeline(point.getMediaPipeline())) {
+								return;
+							}
+							Map<String, String> tags = tagsAsMap(point);
+							KStream stream = getByUid(tags.get("suid"));
+							if (stream != null && stream.contains(tags.get("uid"))) {
+								return;
+							}
+							log.warn("Invalid Endpoint {} detected, will be dropped", point.getId());
+							point.release();
+						}, checkTimeout, MILLISECONDS);
 					}
 				}
 			});
@@ -131,12 +160,20 @@ public class KurentoHandler {
 		}
 	}
 
-	private static Map<String, String> tagsAsMap(MediaPipeline pipe) {
+	private static Map<String, String> tagsAsMap(MediaObject pipe) {
 		Map<String, String> map = new HashMap<>();
 		for (Tag t : pipe.getTags()) {
 			map.put(t.getKey(), t.getValue());
 		}
 		return map;
+	}
+
+	private boolean validTestPipeline(MediaPipeline pipeline) {
+		return validTestPipeline(tagsAsMap(pipeline));
+	}
+
+	private boolean validTestPipeline(Map<String, String> tags) {
+		return kuid.equals(tags.get(TAG_KUID)) && MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_MODE));
 	}
 
 	private MediaPipeline createTestPipeline() {
@@ -190,14 +227,14 @@ public class KurentoHandler {
 				case "toggleActivity":
 					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
 					break;
-				case "receiveVideoFrom":
-					final String senderUid = msg.getString("sender");
-					final KStream sender = getByUid(senderUid);
+				case "broadcastStarted":
+				{
 					final String sdpOffer = msg.getString("sdpOffer");
 					if (user == null) {
 						return;
 					}
-					user.receiveVideoFrom(this, c, sender, sdpOffer);
+					user.videoResponse(this, c, sdpOffer);
+				}
 					break;
 				case "onIceCandidate":
 				{
@@ -208,6 +245,17 @@ public class KurentoHandler {
 					IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
 							candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
 					user.addCandidate(cand, msg.getString("uid"));
+				}
+					break;
+				case "receiveVideo":
+				{
+					final String senderUid = msg.getString("sender");
+					KStream sender = getByUid(senderUid);
+					if (sender == null) {
+						return;
+					}
+					final String sdpOffer = msg.getString("sdpOffer");
+					sender.videoResponse(this, c, sdpOffer);
 				}
 					break;
 			}
@@ -245,7 +293,7 @@ public class KurentoHandler {
 				//close
 				leaveRoom(cm.update(c.removeStream(c.getUid())));
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.closeStream, c.getUid()));
+				//FIXME TODO update interview buttons
 			} else if (!broadcasting) {
 				//join
 				KRoom room = getRoom(c.getRoomId());
@@ -253,7 +301,8 @@ public class KurentoHandler {
 				sd.setWidth(c.getWidth());
 				sd.setHeight(c.getHeight());
 				cm.update(c.addStream(sd));
-				room.join(this, c, sd);
+				room.startBroadcast(this, c, sd);
+				//FIXME TODO update interview buttons
 			} else {
 				//change constraints
 				//FIXME TODO WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
@@ -263,9 +312,11 @@ public class KurentoHandler {
 
 	public void leaveRoom(Client c) {
 		remove(c);
-		WebSocketHelper.sendClient(c, newKurentoMsg()
+		WebSocketHelper.sendAll(newKurentoMsg()
 				.put("id", "broadcastStopped")
-				.put("uid", c.getUid()));
+				.put("uid", c.getUid())
+				.toString()
+			);
 	}
 
 	public void sendClient(String sid, JSONObject msg) {
@@ -363,5 +414,9 @@ public class KurentoHandler {
 				break;
 		}
 		return r;
+	}
+
+	public void setCheckTimeout(long checkTimeout) {
+		this.checkTimeout = checkTimeout;
 	}
 }

@@ -44,26 +44,49 @@ var VideoManager = (function() {
 				if (error) {
 					return OmUtil.error(error);
 				}
-				this.generateOffer(v.offerToReceiveVideo);
+				this.generateOffer(function(error, offerSdp, wp) {
+					if (error) {
+						return OmUtil.error('Sender sdp offer error');
+					}
+					OmUtil.log('Invoking Sender SDP offer callback function');
+					VideoManager.sendMessage({
+						id : 'broadcastStarted'
+						, sdpOffer: offerSdp
+					});
+				});
 			}));
 	}
 
-	function _receiveVideo(uid) {
-		const w = $('#' + VideoUtil.getVid(uid))
+	function _onReceive(msg) {
+		const uid = msg.client.uid;
+		$('#' + VideoUtil.getVid(uid)).remove();
+		const o = VideoSettings.load() //FIXME TODO add multiple streams support
+			//, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
+			, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.client.width, msg.client.height + 25))
 			, v = w.data()
 			, cl = v.client();
-		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-			{
-				remoteVideo: v.video()
-				, onicecandidate: v.onIceCandidate
+		OmUtil.log(uid + " receiving video");
+
+		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly({
+				remoteVideo : v.video()
+				, onicecandidate : v.onIceCandidate
 			}
-			, function (error) {
-				if(error) {
+			, function(error) {
+				if (error) {
 					return OmUtil.error(error);
 				}
-				this.generateOffer(v.offerToReceiveVideo);
-			}
-		));
+				this.generateOffer(function onOfferViewer(error, offerSdp) {
+					if (error) {
+						return OmUtil.error('Receiver sdp offer error');
+					}
+					OmUtil.log('Invoking Receiver SDP offer callback function');
+					VideoManager.sendMessage({
+						id : 'receiveVideo'
+						, sender: cl.uid
+						, sdpOffer: offerSdp
+					});
+				});
+			}));
 	}
 
 	function _onWsMessage(jqEvent, msg) {
@@ -99,6 +122,9 @@ var VideoManager = (function() {
 								}
 							});
 						}
+						break;
+					case 'newStream':
+						_onReceive(m);
 						break;
 					default:
 						//no-op
@@ -194,9 +220,6 @@ var VideoManager = (function() {
 					v.dialog('open');
 				}
 			});
-		} else if ('sharing' !== c.type) {
-			Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
-			_receiveVideo(c.uid);
 		}
 	}
 	function _close(uid, showShareBtn) {

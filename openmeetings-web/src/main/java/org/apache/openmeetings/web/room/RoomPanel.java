@@ -167,7 +167,7 @@ public class RoomPanel extends BasePanel {
 			for (Client c: cm.listByRoom(getRoom().getId())) {
 				for (StreamDesc sd : c.getStreams()) {
 					JSONObject jo = videoJson(c, c.getSid(), sd);
-					sb.append(String.format("VideoManager.play(%s);", jo));
+					//FIXME TODO sb.append(String.format("VideoManager.play(%s);", jo));
 					hasStreams = true;
 				}
 			}
@@ -491,47 +491,6 @@ public class RoomPanel extends BasePanel {
 							wb.update(handler);
 							updateInterviewRecordingButtons(handler);
 						}
-						break;
-					case newStream:
-					{
-						/* FIXME TODO
-						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						String uid = obj.getString("uid");
-						Client c = cm.get(uid);
-						if (c == null) {
-							// screen client, ext video stream
-							c = cm.getBySid(obj.getString("sid"));
-						}
-						if (c == null) {
-							log.error("Not existing user in newStream {} !!!!", uid);
-							return;
-						}
-						boolean self = _c.getSid().equals(c.getSid());
-						if (!self || Client.Type.room != scm.get(uid).getType()) { // stream from others or self external video
-							JSONObject jo = videoJson(c, _c.getSid(), uid);
-							handler.appendJavaScript(String.format("VideoManager.play(%s);", jo));
-						}
-						if (self) {
-							cm.update(c.addStream(uid));
-						}*/
-						updateInterviewRecordingButtons(handler);
-					}
-						break;
-					case closeStream:
-					{
-						/* FIXME TODO
-						JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-						String uid = obj.getString("uid");
-						Client c = cm.getBySid(obj.getString("sid"));
-						if (c != null) {
-							//c == null means client exits the room
-							if (_c.getUid().equals(c.getUid())) {
-								cm.update(c.removeStream(uid));
-							}
-						}
-						handler.appendJavaScript(String.format("VideoManager.close('%s');", uid));*/
-						updateInterviewRecordingButtons(handler);
-					}
 						break;
 					case roomEnter:
 						sidebar.update(handler);

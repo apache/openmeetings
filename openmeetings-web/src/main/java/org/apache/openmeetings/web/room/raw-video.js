@@ -333,17 +333,6 @@ var Video = (function() {
 			, uid: c.uid
 		});
 	};
-	self.offerToReceiveVideo = function(error, offerSdp, wp) {
-		if (error) {
-			return OmUtil.error("sdp offer error");
-		}
-		OmUtil.log('Invoking SDP offer callback function');
-		VideoManager.sendMessage({
-			id : "receiveVideoFrom"
-			, sender: c.uid
-			, sdpOffer: offerSdp
-		});
-	}
 	self.resizePod = _resizePod;
 	return self;
 });
