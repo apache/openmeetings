@@ -72,11 +72,12 @@ var VideoSettings = (function() {
 	function _load() {
 		s = Settings.load();
 		if (!s.video) {
+			const _res = $('#video-settings .cam-resolution option:selected').data();
 			s.video = {
 				cam: 0
 				, mic: 0
-				, width: 120
-				, height: 90
+				, width: _res.width
+				, height: _res.height
 			};
 		}
 		return s;
