@@ -220,6 +220,7 @@ var Video = (function() {
 			OmUtil.log('Disposing participant ' + c.uid);
 			if (!!rtcPeer) {
 				rtcPeer.dispose();
+				rtcPeer = null;
 			}
 		});
 		vc = v.find('.video');

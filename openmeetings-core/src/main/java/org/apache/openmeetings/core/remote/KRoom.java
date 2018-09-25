@@ -21,8 +21,6 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
-
 import java.io.Closeable;
 import java.util.Collection;
 import java.util.Map;
@@ -31,18 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PreDestroy;
 
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.openjson.JSONObject;
-
-/**
- * @author Ivan Gracia (izanmail@gmail.com)
- * @since 4.3.1
- */
 public class KRoom implements Closeable {
 	private final static Logger log = LoggerFactory.getLogger(KRoom.class);
 
@@ -64,23 +55,12 @@ public class KRoom implements Closeable {
 		log.info("ROOM {} has been created", roomId);
 	}
 
-	public KStream startBroadcast(final KurentoHandler h, Client c, StreamDesc sd) {
-		log.info("ROOM {}: adding participant {}", roomId, sd.getUid());
+	public KStream startBroadcast(final KurentoHandler h, Client c) {
+		log.info("ROOM {}: adding participant {}", roomId, c.getUid());
 		final KStream u = new KStream(h, c, this.pipeline);
 		participants.put(u.getUid(), u);
 		h.usersByUid.put(u.getUid(), u);
-		broadcast(h, c, sd);
 		return u;
-	}
-
-	private static void broadcast(final KurentoHandler h, Client c, StreamDesc sd) {
-		final JSONObject msg = newKurentoMsg();
-		msg.put("id", "broadcast");
-		msg.put("uid", sd.getUid());
-		msg.put("stream", new JSONObject(sd));
-		msg.put("client", c.toJson(true));
-		log.debug("User {}: has started broadcast", sd.getUid());
-		h.sendClient(sd.getSid(), msg);
 	}
 
 	public Collection<KStream> getParticipants() {

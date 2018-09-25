@@ -99,7 +99,7 @@ var VideoManager = (function() {
 				return;
 			}
 			if ('kurento' === m.type && 'test' !== m.mode) {
-				OmUtil.info('Received message: ' + m);
+				OmUtil.info('Received message: ' + msg);
 				switch (m.id) {
 					case 'broadcastStopped':
 						_closeV($('#' + VideoUtil.getVid(m.uid)));

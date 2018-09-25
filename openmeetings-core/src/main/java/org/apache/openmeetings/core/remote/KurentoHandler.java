@@ -156,6 +156,7 @@ public class KurentoHandler {
 
 	public void destroy() {
 		if (client != null) {
+			//FIXME TODO destroy connected objects
 			client.destroy();
 		}
 	}
@@ -222,29 +223,34 @@ public class KurentoHandler {
 				log.warn("Incoming message from invalid user");
 			}
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-			KStream user = getByUid(_c.getUid());
+			KStream stream = getByUid(_c.getUid());
+			//FIXME TODO check client rights here
 			switch (cmdId) {
 				case "toggleActivity":
 					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
 				{
-					final String sdpOffer = msg.getString("sdpOffer");
-					if (user == null) {
+					if (stream != null) {
+						log.warn("Broadcast started, but strem already exists!");
 						return;
 					}
-					user.videoResponse(this, c, sdpOffer);
+					KRoom room = getRoom(c.getRoomId());
+					stream = room.startBroadcast(this, c);
+					stream.videoResponse(this, c, msg.getString("sdpOffer"));
 				}
 					break;
 				case "onIceCandidate":
 				{
 					JSONObject candidate = msg.getJSONObject("candidate");
-					if (user == null) {
+					if (stream == null) {
 						return;
 					}
-					IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
-							candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
-					user.addCandidate(cand, msg.getString("uid"));
+					IceCandidate cand = new IceCandidate(
+							candidate.getString("candidate")
+							, candidate.getString("sdpMid")
+							, candidate.getInt("sdpMLineIndex"));
+					stream.addCandidate(cand, msg.getString("uid"));
 				}
 					break;
 				case "receiveVideo":
@@ -254,8 +260,7 @@ public class KurentoHandler {
 					if (sender == null) {
 						return;
 					}
-					final String sdpOffer = msg.getString("sdpOffer");
-					sender.videoResponse(this, c, sdpOffer);
+					sender.videoResponse(this, c, msg.getString("sdpOffer"));
 				}
 					break;
 			}
@@ -296,12 +301,16 @@ public class KurentoHandler {
 				//FIXME TODO update interview buttons
 			} else if (!broadcasting) {
 				//join
-				KRoom room = getRoom(c.getRoomId());
 				StreamDesc sd = new StreamDesc(c.getSid(), c.getUid(), StreamDesc.Type.broadcast);
 				sd.setWidth(c.getWidth());
 				sd.setHeight(c.getHeight());
 				cm.update(c.addStream(sd));
-				room.startBroadcast(this, c, sd);
+				log.debug("User {}: has started broadcast", sd.getUid());
+				sendClient(sd.getSid(), newKurentoMsg()
+						.put("id", "broadcast")
+						.put("uid", sd.getUid())
+						.put("stream", new JSONObject(sd))
+						.put("client", c.toJson(true)));
 				//FIXME TODO update interview buttons
 			} else {
 				//change constraints

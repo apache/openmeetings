@@ -231,7 +231,7 @@ public class WebSocketHelper {
 		send(a -> ((IApplication)a).getBean(IClientManager.class).listByUser(userId), (t, c) -> {
 			try {
 				t.sendMessage(m);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("Error while sending message to user", e);
 			}
 		}, null);
@@ -254,7 +254,7 @@ public class WebSocketHelper {
 				executor.run(() -> {
 					try {
 						c.sendMessage(m);
-					} catch (IOException e) {
+					} catch (Exception e) {
 						log.error("Error while sending message to ALL", e);
 					}
 				});
@@ -274,7 +274,7 @@ public class WebSocketHelper {
 		sendRoom(roomId, (t, c) -> {
 			try {
 				t.sendMessage(func == null ? m.toString() : func.apply(m, c));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				log.error("Error while broadcasting message to room", e);
 			}
 		}, check);

@@ -45,11 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import com.github.openjson.JSONObject;
 
-/**
- *
- * @author Ivan Gracia (izanmail@gmail.com)
- * @since 4.3.1
- */
 public class KStream implements IKStream {
 	private static final Logger log = LoggerFactory.getLogger(KStream.class);
 
@@ -192,12 +187,11 @@ public class KStream implements IKStream {
 		endpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 			@Override
 			public void onEvent(IceCandidateFoundEvent event) {
-				JSONObject response = newKurentoMsg();
-				response.put("id", "iceCandidate");
-				response.put("uid", uid);
-				response.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate())));
-				h.sendClient(c.getSid(), response);
-			}
+				h.sendClient(c.getSid(), newKurentoMsg()
+						.put("id", "iceCandidate")
+						.put("uid", uid)
+						.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate()))));
+					}
 		});
 		return endpoint;
 	}
