@@ -53,6 +53,7 @@ import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.manager.IClientManager;
+import org.apache.openmeetings.db.manager.IWhiteboardManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.service.room.InvitationManager;
 import org.apache.openmeetings.webservice.error.ServiceException;
@@ -362,6 +363,26 @@ public class RoomWebService extends BaseWebService {
 			} else {
 				return new ServiceResult("error.unknown", Type.ERROR);
 			}
+		});
+	}
+
+	/**
+	 * Method to clean room white board (all objects will be purged)
+	 *
+	 * @param roomId - id of the room to clean
+	 * @return - serviceResult object with the result
+	 */
+	@WebMethod
+	@GET
+	@Path("/cleanwb/{id}")
+	public ServiceResult cleanWb(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			)
+	{
+		log.debug("[cleanwb] room id {}", id);
+		return performCall(sid, User.Right.Soap, sd -> {
+			getBean(IWhiteboardManager.class).remove(id);
+			return new ServiceResult("", Type.SUCCESS);
 		});
 	}
 }
