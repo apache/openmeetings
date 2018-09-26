@@ -26,8 +26,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PreDestroy;
-
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
@@ -55,19 +53,28 @@ public class KRoom implements Closeable {
 		log.info("ROOM {} has been created", roomId);
 	}
 
-	public KStream startBroadcast(final KurentoHandler h, Client c) {
-		log.info("ROOM {}: adding participant {}", roomId, c.getUid());
-		final KStream u = new KStream(h, c, this.pipeline);
-		participants.put(u.getUid(), u);
-		h.usersByUid.put(u.getUid(), u);
-		return u;
+	public KStream join(final KurentoHandler h, final Client c) {
+		log.info("ROOM {}: join participant {}", roomId, c.getUid());
+		final KStream stream = new KStream(h, c, this.pipeline);
+		participants.put(stream.getUid(), stream);
+		h.usersByUid.put(stream.getUid(), stream);
+		return stream;
 	}
 
 	public Collection<KStream> getParticipants() {
 		return participants.values();
 	}
 
-	@PreDestroy
+	public void leave(final Client c) {
+		for (Map.Entry<String, KStream> e : participants.entrySet()) {
+			e.getValue().remove(c);
+		}
+		KStream stream = participants.remove(c.getUid());
+		if (stream != null) {
+			stream.release();
+		}
+	}
+
 	@Override
 	public void close() {
 		for (final KStream user : participants.values()) {

@@ -63,7 +63,7 @@ public class KStream implements IKStream {
 		this.roomId = c.getRoomId();
 		//TODO Min/MaxVideoSendBandwidth
 		//TODO Min/Max Audio/Video RecvBandwidth
-		outgoingMedia = createEndpoint(h, c);
+		outgoingMedia = createEndpoint(h, this);
 		//TODO add logic here
 		outgoingMedia.addConnectionStateChangedListener(new EventListener<ConnectionStateChangedEvent>() {
 			@Override
@@ -76,13 +76,18 @@ public class KStream implements IKStream {
 			public void onEvent(MediaFlowOutStateChangeEvent event) {
 				log.warn("MediaFlowOutStateChange {}", event.getState());
 				if (MediaFlowState.FLOWING == event.getState()) {
-					JSONObject msg = newKurentoMsg();
-					msg.put("id", "newStream");
-					msg.put("client", c.toJson(false));
-					WebSocketHelper.sendRoomOthers(roomId, uid, msg);
+					WebSocketHelper.sendRoomOthers(roomId, uid, newKurentoMsg()
+							.put("id", "newStream")
+							.put("client", c.toJson(false)));
 				}
 			}
 		});
+	}
+
+	public KStream startBroadcast(final KurentoHandler h, final Client c, final String sdpOffer) {
+		videoResponse(h, this, sdpOffer);
+		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+		return this;
 	}
 
 	public String getSid() {
@@ -106,45 +111,66 @@ public class KStream implements IKStream {
 		return this.uid.equals(uid) || incomingMedia.containsKey(uid);
 	}
 
-	public void videoResponse(final KurentoHandler h, Client c, String sdpOffer) {
-		final boolean self = c.getUid().equals(uid);
+	public void videoResponse(final KurentoHandler h, KStream sender, String sdpOffer) {
+		final boolean self = sender.getUid().equals(uid);
 		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", roomId);
-		log.trace("USER {}: SdpOffer is {}", c.getUid(), sdpOffer);
+		log.trace("USER {}: SdpOffer is {}", sender.getUid(), sdpOffer);
 
-		final WebRtcEndpoint endpoint = getEndpointForUser(h, c);
+		final WebRtcEndpoint endpoint = getEndpointForUser(h, sender);
 		final String sdpAnswer = endpoint.processOffer(sdpOffer);
 
 		log.trace("USER {}: SdpAnswer is {}", uid, sdpAnswer);
-		h.sendClient(c.getSid(), newKurentoMsg()
+		h.sendClient(sid, newKurentoMsg()
 				.put("id", "videoResponse")
-				.put("uid", uid)
+				.put("uid", sender.getUid())
 				.put("sdpAnswer", sdpAnswer));
 		log.debug("gather candidates");
 		endpoint.gatherCandidates();
-		if (self) {
-			WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-		}
 	}
 
-	private WebRtcEndpoint getEndpointForUser(final KurentoHandler h, final Client c) {
-		if (c.getUid().equals(uid)) {
+	private WebRtcEndpoint getEndpointForUser(final KurentoHandler h, final KStream sender) {
+		if (sender.getUid().equals(uid)) {
 			log.debug("PARTICIPANT {}: configuring loopback", uid);
 			return outgoingMedia;
 		}
 
-		log.debug("PARTICIPANT {}: receiving video from {}", uid, c.getUid());
+		log.debug("PARTICIPANT {}: receiving video from {}", uid, sender.getUid());
 
-		WebRtcEndpoint incoming = incomingMedia.get(c.getUid());
+		WebRtcEndpoint incoming = incomingMedia.get(sender.getUid());
 		if (incoming == null) {
-			log.debug("PARTICIPANT {}: creating new endpoint for {}", uid, c.getUid());
-			incoming = createEndpoint(h, c);
-			incomingMedia.put(c.getUid(), incoming);
+			log.debug("PARTICIPANT {}: creating new endpoint for {}", uid, sender.getUid());
+			incoming = createEndpoint(h, sender);
+			incomingMedia.put(sender.getUid(), incoming);
 		}
 
-		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, c.getUid());
-		outgoingMedia.connect(incoming);
+		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, sender.getUid());
+		sender.outgoingMedia.connect(incoming);
 
 		return incoming;
+	}
+
+	private WebRtcEndpoint createEndpoint(final KurentoHandler h, final KStream sender) {
+		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
+		endpoint.addTag("suid", uid);
+		endpoint.addTag("uid", sender.getUid());
+
+		endpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
+			@Override
+			public void onEvent(IceCandidateFoundEvent event) {
+				h.sendClient(sid, newKurentoMsg()
+						.put("id", "iceCandidate")
+						.put("uid", sender.getUid())
+						.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate()))));
+					}
+		});
+		return endpoint;
+	}
+
+	public void remove(final Client c) {
+		WebRtcEndpoint point = incomingMedia.remove(c.getUid());
+		if (point != null) {
+			point.release();
+		}
 	}
 
 	@Override
@@ -177,23 +203,6 @@ public class KStream implements IKStream {
 				log.warn("USER {}: Could not release outgoing EP", KStream.this.uid);
 			}
 		});
-	}
-
-	private WebRtcEndpoint createEndpoint(final KurentoHandler h, final Client c) {
-		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
-		endpoint.addTag("suid", uid);
-		endpoint.addTag("uid", c.getUid());
-
-		endpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-			@Override
-			public void onEvent(IceCandidateFoundEvent event) {
-				h.sendClient(c.getSid(), newKurentoMsg()
-						.put("id", "iceCandidate")
-						.put("uid", uid)
-						.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate()))));
-					}
-		});
-		return endpoint;
 	}
 
 	public void addCandidate(IceCandidate candidate, String name) {

@@ -23,6 +23,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -156,7 +157,15 @@ public class KurentoHandler {
 
 	public void destroy() {
 		if (client != null) {
-			//FIXME TODO destroy connected objects
+			for (Entry<Long, KRoom> e : rooms.entrySet()) {
+				e.getValue().close();
+			}
+			rooms.clear();
+			for (Entry<String, KTestStream> e : testsByUid.entrySet()) {
+				e.getValue().release();
+			}
+			testsByUid.clear();
+			usersByUid.clear();
 			client.destroy();
 		}
 	}
@@ -204,7 +213,6 @@ public class KurentoHandler {
 				case "iceCandidate":
 				{
 					JSONObject candidate = msg.getJSONObject("candidate");
-
 					if (user != null) {
 						IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
 								candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
@@ -219,33 +227,27 @@ public class KurentoHandler {
 		} else {
 			final Client c = (Client)_c;
 
-			if (c == null) {
+			if (c == null || c.getRoomId() == null) {
 				log.warn("Incoming message from invalid user");
+				return;
 			}
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-			KStream stream = getByUid(_c.getUid());
+			KStream stream = getByUid(c.getUid());
+			if (stream == null) {
+				KRoom room = getRoom(c.getRoomId());
+				stream = room.join(this, c);
+			}
 			//FIXME TODO check client rights here
 			switch (cmdId) {
 				case "toggleActivity":
 					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
-				{
-					if (stream != null) {
-						log.warn("Broadcast started, but strem already exists!");
-						return;
-					}
-					KRoom room = getRoom(c.getRoomId());
-					stream = room.startBroadcast(this, c);
-					stream.videoResponse(this, c, msg.getString("sdpOffer"));
-				}
+					stream.startBroadcast(this, c, msg.getString("sdpOffer"));
 					break;
 				case "onIceCandidate":
 				{
 					JSONObject candidate = msg.getJSONObject("candidate");
-					if (stream == null) {
-						return;
-					}
 					IceCandidate cand = new IceCandidate(
 							candidate.getString("candidate")
 							, candidate.getString("sdpMid")
@@ -254,14 +256,7 @@ public class KurentoHandler {
 				}
 					break;
 				case "receiveVideo":
-				{
-					final String senderUid = msg.getString("sender");
-					KStream sender = getByUid(senderUid);
-					if (sender == null) {
-						return;
-					}
-					sender.videoResponse(this, c, msg.getString("sdpOffer"));
-				}
+					stream.videoResponse(this, getByUid(msg.getString("sender")), msg.getString("sdpOffer"));
 					break;
 			}
 		}
@@ -338,18 +333,23 @@ public class KurentoHandler {
 				.put("message", msg));
 	}
 
-	public void remove(IWsClient c) {
-		if (c == null) {
+	public void remove(IWsClient _c) {
+		if (_c == null) {
 			return;
 		}
-		final String uid = c.getUid();
-		final boolean test = !(c instanceof Client);
+		final String uid = _c.getUid();
+		final boolean test = !(_c instanceof Client);
 		IKStream u = test ? getTestByUid(uid) : getByUid(uid);
 		if (u != null) {
 			u.release();
 			if (test) {
 				testsByUid.remove(uid);
 			} else {
+				Client c = (Client)_c;
+				KRoom room = rooms.get(c.getRoomId());
+				if (room != null) {
+					room.leave(c);
+				}
 				usersByUid.remove(uid);
 			}
 		}
