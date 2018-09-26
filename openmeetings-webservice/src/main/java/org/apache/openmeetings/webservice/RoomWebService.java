@@ -80,6 +80,8 @@ public class RoomWebService extends BaseWebService {
 	@Autowired
 	private IClientManager clientManager;
 	@Autowired
+	private IWhiteboardManager wbManager;
+	@Autowired
 	private InvitationDao inviteDao;
 	@Autowired
 	private InvitationManager inviteManager;
@@ -384,7 +386,7 @@ public class RoomWebService extends BaseWebService {
 	{
 		log.debug("[cleanwb] room id {}", id);
 		return performCall(sid, User.Right.Soap, sd -> {
-			getBean(IWhiteboardManager.class).remove(id);
+			wbManager.remove(id);
 			return new ServiceResult("", Type.SUCCESS);
 		});
 	}
