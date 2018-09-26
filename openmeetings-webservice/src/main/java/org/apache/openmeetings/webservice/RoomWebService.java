@@ -369,7 +369,8 @@ public class RoomWebService extends BaseWebService {
 	/**
 	 * Method to clean room white board (all objects will be purged)
 	 *
-	 * @param roomId - id of the room to clean
+	 * @param sid - The SID of the User. This SID must be marked as Loggedin
+	 * @param id - id of the room to clean
 	 * @return - serviceResult object with the result
 	 */
 	@WebMethod
