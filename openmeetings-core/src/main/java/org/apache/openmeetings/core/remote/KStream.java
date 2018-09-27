@@ -30,7 +30,6 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.kurento.client.ConnectionStateChangedEvent;
 import org.kurento.client.Continuation;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
@@ -65,20 +64,12 @@ public class KStream implements IKStream {
 		//TODO Min/Max Audio/Video RecvBandwidth
 		outgoingMedia = createEndpoint(h, this);
 		//TODO add logic here
-		outgoingMedia.addConnectionStateChangedListener(new EventListener<ConnectionStateChangedEvent>() {
-			@Override
-			public void onEvent(ConnectionStateChangedEvent event) {
-				log.warn("StateChanged {} -> {}", event.getOldState(), event.getNewState());
-			}
-		});
 		outgoingMedia.addMediaFlowOutStateChangeListener(new EventListener<MediaFlowOutStateChangeEvent>() {
 			@Override
 			public void onEvent(MediaFlowOutStateChangeEvent event) {
 				log.warn("MediaFlowOutStateChange {}", event.getState());
-				if (MediaFlowState.FLOWING == event.getState()) {
-					WebSocketHelper.sendRoomOthers(roomId, uid, newKurentoMsg()
-							.put("id", "newStream")
-							.put("client", c.toJson(false)));
+				if (MediaFlowState.NOT_FLOWING == event.getState()) {
+					//FIXME TODO release resources
 				}
 			}
 		});
@@ -87,6 +78,9 @@ public class KStream implements IKStream {
 	public KStream startBroadcast(final KurentoHandler h, final Client c, final String sdpOffer) {
 		videoResponse(h, this, sdpOffer);
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+		WebSocketHelper.sendRoomOthers(roomId, uid, newKurentoMsg()
+				.put("id", "newStream")
+				.put("client", c.toJson(false)));
 		return this;
 	}
 

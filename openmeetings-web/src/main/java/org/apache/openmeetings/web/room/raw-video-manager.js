@@ -57,12 +57,12 @@ var VideoManager = (function() {
 			}));
 	}
 
-	function _onReceive(msg) {
-		const uid = msg.client.uid;
+	function _onReceive(c) {
+		const uid = c.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
 		const o = VideoSettings.load() //FIXME TODO add multiple streams support
-			//, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
-			, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.client.width, msg.client.height + 25))
+			//, w = Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
+			, w = Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25))
 			, v = w.data()
 			, cl = v.client();
 		OmUtil.log(uid + " receiving video");
@@ -124,7 +124,7 @@ var VideoManager = (function() {
 						}
 						break;
 					case 'newStream':
-						_onReceive(m);
+						_onReceive(m.client);
 						break;
 					default:
 						//no-op
@@ -220,6 +220,8 @@ var VideoManager = (function() {
 					v.dialog('open');
 				}
 			});
+		} else {
+			_onReceive(c);
 		}
 	}
 	function _close(uid, showShareBtn) {

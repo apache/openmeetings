@@ -38,7 +38,6 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -165,9 +164,9 @@ public class RoomPanel extends BasePanel {
 			boolean hasStreams = false;
 			Client _c = getClient();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
-				for (StreamDesc sd : c.getStreams()) {
-					JSONObject jo = videoJson(c, c.getSid(), sd);
-					//FIXME TODO sb.append(String.format("VideoManager.play(%s);", jo));
+				//FIXME TODO add multiple streams support
+				if (!c.getStreams().isEmpty()) {
+					sb.append(String.format("VideoManager.play(%s);", c.toJson(false)));
 					hasStreams = true;
 				}
 			}
@@ -815,28 +814,5 @@ public class RoomPanel extends BasePanel {
 
 	public boolean isInterview() {
 		return interview;
-	}
-
-	public JSONObject videoJson(Client c, String sid, StreamDesc sd) {
-		/*
-		TODO streams
-		StreamClient sc = mgr.get(uid);
-		if (sc == null) {
-			return new JSONObject();
-		}
-		*/
-		JSONObject o = c.toJson(getUid().equals(c.getUid()))
-				.put("sid", sid)
-				.put("uid", c.getUid())
-				 /*TODO
-				 .put("uid", sc.getUid())
-				.put("broadcastId", sc.getBroadcastId())
-				.put("width", sc.getWidth())
-				.put("height", sc.getHeight())
-				.put("type", sc.getType());
-		return addScreenActivities(o, sc);
-		*/
-				;
-		return o;
 	}
 }
