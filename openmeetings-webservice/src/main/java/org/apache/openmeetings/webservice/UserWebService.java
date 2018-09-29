@@ -301,6 +301,9 @@ public class UserWebService extends BaseWebService {
 			)
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
+			if (Strings.isEmpty(user.getExternalId()) || Strings.isEmpty(user.getExternalType())) {
+				return new ServiceResult("externalId and/or externalType are not set", Type.ERROR);
+			}
 			RemoteSessionObject remoteSessionObject = new RemoteSessionObject(
 					user.getLogin(), user.getFirstname(), user.getLastname()
 					, user.getProfilePictureUrl(), user.getEmail()
@@ -310,7 +313,7 @@ public class UserWebService extends BaseWebService {
 
 			String xmlString = remoteSessionObject.toXml();
 
-			log.debug("xmlString " + xmlString);
+			log.debug("xmlString {}", xmlString);
 
 			String hash = soapDao.addSOAPLogin(sid, options.getRoomId(),
 					options.isModerator(), options.isShowAudioVideoTest(), options.isAllowSameURLMultipleTimes(),
@@ -323,7 +326,7 @@ public class UserWebService extends BaseWebService {
 					sd.setPermanent(true);
 				}
 				sd.setXml(xmlString);
-				sessionDao.update(sd);
+				sd = sessionDao.update(sd);
 				return new ServiceResult(hash, Type.SUCCESS);
 			}
 			return UNKNOWN;
