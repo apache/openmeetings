@@ -45,30 +45,26 @@ public class SOAPLoginDao {
 			boolean becomemoderator, boolean showAudioVideoTest,
 			boolean allowSameURLMultipleTimes, Long recordingId,
 			boolean allowRecording) {
-		try {
-			SOAPLogin soapLogin = new SOAPLogin();
-			soapLogin.setCreated(new Date());
-			soapLogin.setUsed(false);
-			soapLogin.setRoomId(roomId);
-			soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
-			soapLogin.setHash(UUID.randomUUID().toString());
-			soapLogin.setRecordingId(recordingId);
-			soapLogin.setSessionHash(sessionHash);
-			soapLogin.setModerator(becomemoderator);
-			soapLogin.setShowAudioVideoTest(showAudioVideoTest);
-			soapLogin.setAllowRecording(allowRecording);
+		SOAPLogin soapLogin = new SOAPLogin();
+		soapLogin.setCreated(new Date());
+		soapLogin.setUsed(false);
+		soapLogin.setRoomId(roomId);
+		soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
+		soapLogin.setHash(UUID.randomUUID().toString());
+		soapLogin.setRecordingId(recordingId);
+		soapLogin.setSessionHash(sessionHash);
+		soapLogin.setModerator(becomemoderator);
+		soapLogin.setShowAudioVideoTest(showAudioVideoTest);
+		soapLogin.setAllowRecording(allowRecording);
 
-			em.persist(soapLogin);
-			em.flush();
-			Long soapLoginId = soapLogin.getId();
+		em.persist(soapLogin);
+		em.flush();
+		Long soapLoginId = soapLogin.getId();
 
-			if (soapLoginId != null) {
-				return soapLogin.getHash();
-			} else {
-				log.error("[addSOAPLogin]: Could not store SOAPLogin");
-			}
-		} catch (Exception ex2) {
-			log.error("[addSOAPLogin]: ", ex2);
+		if (soapLoginId != null) {
+			return soapLogin.getHash();
+		} else {
+			log.error("[addSOAPLogin]: Could not store SOAPLogin");
 		}
 		return null;
 	}
