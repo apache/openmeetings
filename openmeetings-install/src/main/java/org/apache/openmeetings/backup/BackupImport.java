@@ -552,7 +552,7 @@ public class BackupImport {
 		List<User> list = readList(ser, f, "users.xml", "users", User.class);
 		int minLoginLength = getMinLoginLength();
 		for (User u : list) {
-			if (u.getLogin() == null) {
+			if (u.getLogin() == null || u.isDeleted()) {
 				continue;
 			}
 			// check that email is unique

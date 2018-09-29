@@ -123,7 +123,7 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 				entity.setUpdatedby(userId);
 			}
 			entity.setUpdated(new Date());
-			em.merge(entity);
+			entity = em.merge(entity);
 		}
 		return entity;
 	}

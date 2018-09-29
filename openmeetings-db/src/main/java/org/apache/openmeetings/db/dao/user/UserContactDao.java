@@ -145,7 +145,7 @@ public class UserContactDao {
 			em.persist(c);
 		} else {
 			c.setUpdated(new Date());
-			em.merge(c);
+			c = em.merge(c);
 		}
 		return c;
 	}
