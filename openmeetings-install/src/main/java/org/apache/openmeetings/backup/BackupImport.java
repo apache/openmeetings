@@ -557,7 +557,7 @@ public class BackupImport {
 		List<User> list = readUserList(f, "users.xml", "users");
 		int minLoginLength = getMinLoginLength();
 		for (User u : list) {
-			if (u.getLogin() == null) {
+			if (u.getLogin() == null || u.isDeleted()) {
 				continue;
 			}
 			if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
