@@ -246,10 +246,16 @@ var Video = (function() {
 		o.type = c.type;
 		delete o.keycode;
 
-		video = $('<video>').attr('id', 'vid' + _id)
-			.attr('poster', 'profile/' + o.userId + '?anti=' + new Date().time) //TODO add normal URL
+		const hasVideo = VideoUtil.hasVideo(c)
+			, imgUrl = 'profile/' + o.userId + '?anti=' + new Date().getTime();  //TODO add normal URL ????
+		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(o.width).height(o.height)
 			.prop('autoplay', true).prop('controls', false);
+		if (hasVideo) {
+			video.attr('poster', imgUrl);
+		} else {
+			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
+		}
 
 		vc.append(video);
 		/* TODO

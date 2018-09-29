@@ -147,21 +147,18 @@ var VideoSettings = (function() {
 			appendTo: '.cam-row'
 			, change: function(event, ui) {
 				_readValues();
-				swf.camChanged(s.video.cam);
 			}
 		});
 		mic = vs.find('select.mic').iconselectmenu({
 			appendTo: '.mic-row'
 			, change: function(event, ui) {
 				_readValues();
-				swf.micChanged(s.video.mic);
 			}
 		});
 		res = vs.find('select.cam-resolution').iconselectmenu({
 			appendTo: '.res-row'
 			, change: function(event, ui) {
 				_readValues();
-				swf.resChanged(s.video.width, s.video.height);
 			}
 		});
 		vidScroll = vs.find('.vid-block .video-conainer');

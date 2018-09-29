@@ -323,6 +323,10 @@ public class KurentoHandler {
 			);
 	}
 
+	Client getBySid(String sid) {
+		return cm.getBySid(sid);
+	}
+
 	public void sendClient(String sid, JSONObject msg) {
 		WebSocketHelper.sendClient(cm.getBySid(sid), msg);
 	}

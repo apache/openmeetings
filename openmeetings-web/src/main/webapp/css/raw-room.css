@@ -420,6 +420,10 @@ ul.settings-menu {
 	min-height: 30px;
 	overflow: hidden;
 }
+.room.box .user-video .video.audio-only {
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
 .pod-area {
 	display: inline-grid;
 }

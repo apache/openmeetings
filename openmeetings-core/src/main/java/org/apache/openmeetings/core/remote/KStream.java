@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
@@ -37,6 +38,7 @@ import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaFlowOutStateChangeEvent;
 import org.kurento.client.MediaFlowState;
 import org.kurento.client.MediaPipeline;
+import org.kurento.client.MediaType;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
@@ -138,8 +140,13 @@ public class KStream implements IKStream {
 		}
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, sender.getUid());
-		sender.outgoingMedia.connect(incoming);
-
+		Client c = h.getBySid(sender.getSid());
+		if (c.hasActivity(Activity.broadcastA)) {
+			sender.outgoingMedia.connect(incoming, MediaType.AUDIO);
+		}
+		if (c.hasActivity(Activity.broadcastV)) {
+			sender.outgoingMedia.connect(incoming, MediaType.VIDEO);
+		}
 		return incoming;
 	}
 
