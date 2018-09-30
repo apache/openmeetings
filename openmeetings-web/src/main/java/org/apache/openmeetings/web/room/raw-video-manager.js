@@ -17,46 +17,8 @@ var VideoManager = (function() {
 	function _onBroadcast(msg) {
 		const uid = msg.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
-		const o = VideoSettings.load()
-			, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
-			, v = w.data()
-			, cl = v.client();
+		Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25));
 		OmUtil.log(uid + ' registered in room');
-		//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
-		const constraints = {
-			audio : VideoUtil.hasAudio(cl)
-			, video : VideoUtil.hasVideo(cl)
-		}
-		if (constraints.video) {
-			constraints.video = {
-				mandatory : {
-					maxWidth : cl.width,
-					maxFrameRate : cl.height,
-				}
-			};
-		}
-		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-			{
-				localVideo: v.video()
-				, mediaConstraints: constraints
-				, onicecandidate: v.onIceCandidate
-			}
-			, function (error) {
-				if (error) {
-					return OmUtil.error(error);
-				}
-				v.initGain();
-				this.generateOffer(function(error, offerSdp, wp) {
-					if (error) {
-						return OmUtil.error('Sender sdp offer error');
-					}
-					OmUtil.log('Invoking Sender SDP offer callback function');
-					VideoManager.sendMessage({
-						id : 'broadcastStarted'
-						, sdpOffer: offerSdp
-					});
-				});
-			}));
 	}
 
 	function _onReceive(c) {

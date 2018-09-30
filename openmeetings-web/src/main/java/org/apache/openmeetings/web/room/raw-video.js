@@ -2,7 +2,7 @@
 var Video = (function() {
 	const self = {};
 	let c, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50, aCtx, gainNode;
+		, lastVolume = 50, aCtx, aSrc, aDest, gainNode;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -32,26 +32,59 @@ var Video = (function() {
 		vc.width(w).height(h);
 		video.width(w).height(h);
 	}
-	function _initGain() {
-		if (!rtcPeer) {
-			return;
+	function _createGainableStream() {
+		//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+		const constraints = {
+			audio : VideoUtil.hasAudio(c)
+			, video : VideoUtil.hasVideo(c)
 		}
-		const stream = rtcPeer.getLocalStream();
-		if (!stream || stream.getAudioTracks().length === 0) {
-			return;
+		if (constraints.video) {
+			constraints.video = {
+				mandatory : {
+					maxWidth : c.width,
+					maxFrameRate : c.height,
+				}
+			};
 		}
-		vol.show();
-		aCtx = new AudioContext();
-		gainNode = aCtx.createGain();
-		const aSrc = aCtx.createMediaStreamSource(stream)
-			, aDest = aCtx.createMediaStreamDestination();
-		aSrc.connect(gainNode);
-		gainNode.connect(aDest);
-
-		//update stream
-		const pc = rtcPeer.peerConnection;
-		pc.getSenders().forEach(sender => pc.removeTrack(sender));
-		aDest.stream.getTracks().forEach(track => pc.addTrack(track, aDest.stream));
+		navigator.mediaDevices.getUserMedia(constraints)
+			.then(function(stream) {
+				let _stream = stream;
+				if (stream.getAudioTracks().length !== 0) {
+					vol.show();
+					aCtx = new AudioContext();
+					gainNode = aCtx.createGain();
+					aSrc = aCtx.createMediaStreamSource(stream);
+					aDest = aCtx.createMediaStreamDestination();
+					aSrc.connect(gainNode);
+					gainNode.connect(aDest);
+					_stream = aDest.stream;
+				}
+				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+						{
+							localVideo: video[0]
+							, videoStream: _stream
+							, mediaConstraints: constraints
+							, onicecandidate: self.onIceCandidate
+						}
+						, function (error) {
+							if (error) {
+								return OmUtil.error(error);
+							}
+							this.generateOffer(function(error, offerSdp, wp) {
+								if (error) {
+									return OmUtil.error('Sender sdp offer error');
+								}
+								OmUtil.log('Invoking Sender SDP offer callback function');
+								VideoManager.sendMessage({
+									id : 'broadcastStarted'
+									, sdpOffer: offerSdp
+								});
+							});
+						});
+			})
+			.catch(function(err) {
+				OmUtil.error(err);
+			});
 	}
 	function _handleMicStatus(state) {
 		if (!f.is(':visible')) {
@@ -260,7 +293,9 @@ var Video = (function() {
 		} else {
 			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
 		}
-		if (!c.self) { //FIXME TODO multi-stream
+		if (c.self) { //FIXME TODO multi-stream
+			_createGainableStream();
+		} else {
 			_handleVolume(lastVolume);
 		}
 
@@ -295,9 +330,16 @@ var Video = (function() {
 	}
 	function _cleanup() {
 		OmUtil.log('Disposing participant ' + c.uid);
-		if (!!rtcPeer) {
-			rtcPeer.dispose();
-			rtcPeer = null;
+		VideoUtil.cleanPeer(rtcPeer);
+		if (!!gainNode) {
+			gainNode.disconnect();
+		}
+		if (!!aSrc) {
+			VideoUtil.cleanStream(aSrc.mediaStream);
+			aSrc.disconnect();
+		}
+		if (!!aDest) {
+			aDest.disconnect();
 		}
 		if (!!aCtx) {
 			aCtx.close();
@@ -310,7 +352,6 @@ var Video = (function() {
 	self.mute = _mute;
 	self.isMuted = function() { return 0 === slider.slider('option', 'value'); };
 	self.init = _init;
-	self.initGain = _initGain;
 	self.client = function() { return c; };
 	self.setRights = _setRights;
 	self.video = function() { return video[0]; };

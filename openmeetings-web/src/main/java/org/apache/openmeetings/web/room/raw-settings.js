@@ -93,18 +93,11 @@ var VideoSettings = (function() {
 	}
 	function _clear(_ms) {
 		const ms = _ms || (vid.length === 1 ? vid[0].srcObject : null);
-		if (ms !== null && 'function' === typeof(ms.getTracks)) {
-			ms.getTracks().forEach(function(track) {
-				track.stop();
-			});
-			if (vid.length === 1) {
-				vid[0].srcObject = null;
-			}
+		VideoUtil.cleanStream(ms);
+		if (vid.length === 1) {
+			vid[0].srcObject = null;
 		}
-		if (!!rtcPeer) {
-			rtcPeer.dispose();
-			rtcPeer = null;
-		}
+		VideoUtil.cleanPeer(rtcPeer);
 		if (!!level) {
 			level.dispose();
 			level = null;

@@ -104,6 +104,25 @@ var VideoUtil = (function() {
 			list.push(_getRect(v));
 		}
 	}
+	function _cleanStream(stream) {
+		if (!!stream) {
+			stream.getTracks().forEach(function(track) {
+				track.stop();
+			});
+		}
+	}
+	function _cleanPeer(peer) {
+		if (!!peer) {
+			const pc = peer.peerConnection;
+			if (!!pc) {
+				pc.getLocalStreams().forEach(function(stream) {
+					_cleanStream(stream);
+				});
+			}
+			peer.dispose();
+			peer = null;
+		}
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
@@ -114,5 +133,7 @@ var VideoUtil = (function() {
 	self.getPos = _getPos;
 	self.container = _container;
 	self.arrange = _arrange;
+	self.cleanStream = _cleanStream;
+	self.cleanPeer = _cleanPeer;
 	return self;
 })();
