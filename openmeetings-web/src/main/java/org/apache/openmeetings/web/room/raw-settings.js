@@ -45,7 +45,7 @@ var MicLevel = (function() {
 					return;
 				}
 				t = Date.now();
-				_micActivity(140 * vol); // magic number
+				_micActivity(vol);
 			};
 		} catch (err) {
 			_error(err);
@@ -93,11 +93,8 @@ var VideoSettings = (function() {
 	}
 	function _clear(_ms) {
 		const ms = _ms || (vid.length === 1 ? vid[0].srcObject : null);
-		if (ms !== null && 'function' === typeof(ms.getAudioTracks)) {
-			ms.getAudioTracks().forEach(function(track) {
-				track.stop();
-			});
-			ms.getVideoTracks().forEach(function(track) {
+		if (ms !== null && 'function' === typeof(ms.getTracks)) {
+			ms.getTracks().forEach(function(track) {
 				track.stop();
 			});
 			if (vid.length === 1) {
@@ -330,7 +327,7 @@ var VideoSettings = (function() {
 		playBtn.prop('disabled', false).button('refresh');
 	}
 	function _micActivity(level) {
-		lm.progressbar("value", Math.max(0, level));
+		lm.progressbar("value", Math.max(0, 140 * level)); // magic number
 	}
 	function _setLoading(el) {
 		el.find('option').remove();

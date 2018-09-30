@@ -21,29 +21,31 @@ var VideoManager = (function() {
 			, w = Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
 			, v = w.data()
 			, cl = v.client();
-		OmUtil.log(uid + " registered in room");
-
+		OmUtil.log(uid + ' registered in room');
+		//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+		const constraints = {
+			audio : VideoUtil.hasAudio(cl)
+			, video : VideoUtil.hasVideo(cl)
+		}
+		if (constraints.video) {
+			constraints.video = {
+				mandatory : {
+					maxWidth : cl.width,
+					maxFrameRate : cl.height,
+				}
+			};
+		}
 		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
 			{
 				localVideo: v.video()
-				, mediaConstraints:
-					{ //each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
-						audio : VideoUtil.hasAudio(cl)
-						, video : VideoUtil.hasVideo(cl)
-						/* TODO FIXME {
-							mandatory : {
-								maxWidth : cl.width,
-								maxFrameRate : cl.height,
-								minFrameRate : 15
-							}
-						}*/
-					}
+				, mediaConstraints: constraints
 				, onicecandidate: v.onIceCandidate
 			}
 			, function (error) {
 				if (error) {
 					return OmUtil.error(error);
 				}
+				v.initGain();
 				this.generateOffer(function(error, offerSdp, wp) {
 					if (error) {
 						return OmUtil.error('Sender sdp offer error');
@@ -65,7 +67,7 @@ var VideoManager = (function() {
 			, w = Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25))
 			, v = w.data()
 			, cl = v.client();
-		OmUtil.log(uid + " receiving video");
+		OmUtil.log(uid + ' receiving video');
 
 		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly({
 				remoteVideo : v.video()
@@ -117,7 +119,7 @@ var VideoManager = (function() {
 
 							v.getPeer().addIceCandidate(m.candidate, function (error) {
 								if (error) {
-									OmUtil.error("Error adding candidate: " + error);
+									OmUtil.error('Error adding candidate: ' + error);
 									return;
 								}
 							});

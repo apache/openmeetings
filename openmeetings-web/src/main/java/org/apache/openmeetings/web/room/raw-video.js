@@ -2,7 +2,7 @@
 var Video = (function() {
 	const self = {};
 	let c, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50;
+		, lastVolume = 50, aCtx, gainNode;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -15,11 +15,6 @@ var Video = (function() {
 		_resizeDlgArea(_w, h);
 		return h;
 	}
-	function _vidResize(_w, _h) {
-		try {
-			swf[0].vidResize(Math.floor(_w), Math.floor(_h));
-		} catch (err) {}
-	}
 	function _resizeDlgArea(_w, _h) {
 		v.dialog('option', 'width', _w).dialog('option', 'height', _h);
 		const h = _h - _getExtra();
@@ -27,7 +22,6 @@ var Video = (function() {
 		if (Room.getOptions().interview) {
 			v.dialog('widget').css(VideoUtil.getPos());
 		}
-		_vidResize(_w, h);
 	}
 	function _resizePod() {
 		const p = v.parents('.pod,.pod-big')
@@ -37,6 +31,27 @@ var Video = (function() {
 	function _resize(w, h) {
 		vc.width(w).height(h);
 		video.width(w).height(h);
+	}
+	function _initGain() {
+		if (!rtcPeer) {
+			return;
+		}
+		const stream = rtcPeer.getLocalStream();
+		if (!stream || stream.getAudioTracks().length === 0) {
+			return;
+		}
+		vol.show();
+		aCtx = new AudioContext();
+		gainNode = aCtx.createGain();
+		const aSrc = aCtx.createMediaStreamSource(stream)
+			, aDest = aCtx.createMediaStreamDestination();
+		aSrc.connect(gainNode);
+		gainNode.connect(aDest);
+
+		//update stream
+		const pc = rtcPeer.peerConnection;
+		pc.getSenders().forEach(sender => pc.removeTrack(sender));
+		aDest.stream.getTracks().forEach(track => pc.addTrack(track, aDest.stream));
 	}
 	function _handleMicStatus(state) {
 		if (!f.is(':visible')) {
@@ -56,6 +71,11 @@ var Video = (function() {
 	}
 	function _handleVolume(val) {
 		handle.text(val);
+		if (c.self) { //FIXME TODO multistream support
+			gainNode.gain.value = val / 100;
+		} else {
+			video[0].volume = val / 100;
+		}
 		const ico = vol.find('.ui-icon');
 		if (val > 0 && ico.hasClass('ui-icon-volume-off')) {
 			ico.toggleClass('ui-icon-volume-off ui-icon-volume-on');
@@ -66,11 +86,6 @@ var Video = (function() {
 			vol.addClass('ui-state-error');
 			_handleMicStatus(false);
 		}
-		/* TODO
-		if (typeof(swf[0].setVolume) === 'function') {
-			swf[0].setVolume(val);
-		}
-		*/
 	}
 	function _mute(mute) {
 		if (!slider) {
@@ -120,7 +135,6 @@ var Video = (function() {
 				const w = ui.size.width - 2
 					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
 				_resize(w, h);
-				_vidResize(w, h);
 			});
 			if (VideoUtil.isSharing(c)) {
 				v.on('dialogclose', function() {
@@ -210,19 +224,9 @@ var Video = (function() {
 					_handleVolume(ui.value);
 				}
 			});
-			const hasAudio = VideoUtil.hasAudio(c);
-			_handleMicStatus(hasAudio);
-			if (!hasAudio) {
-				vol.hide();
-			}
+			vol.hide();
 		}
-		v.on("remove", function () {
-			OmUtil.log('Disposing participant ' + c.uid);
-			if (!!rtcPeer) {
-				rtcPeer.dispose();
-				rtcPeer = null;
-			}
-		});
+		v.on("remove", _cleanup);
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 		//broadcast
@@ -256,12 +260,11 @@ var Video = (function() {
 		} else {
 			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
 		}
+		if (!c.self) { //FIXME TODO multi-stream
+			_handleVolume(lastVolume);
+		}
 
 		vc.append(video);
-		/* TODO
-		swf = initSwf(vc, 'main.swf', _id + '-swf', o);
-		swf.attr('width', _w).attr('height', _h);
-		*/
 		v.dialog('widget').css(_pos);
 		return v;
 	}
@@ -285,40 +288,21 @@ var Video = (function() {
 		}
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
-		/* TODO
-		if (typeof(swf[0].update) === 'function') {
-			c.self ? swf[0].update() : swf[0].update(c);
-		}
-		*/
 	}
 	function _refresh(_opts) {
-		/*
-		if (typeof(swf[0].refresh) === 'function') {
-			const opts = _opts || {};
-			if (!Room.getOptions().interview && !isNaN(opts.width)) {
-				_resizeDlg(opts.width, opts.height);
-			}
-			try {
-				swf[0].refresh(opts);
-			} catch (e) {
-				//swf might throw
-			}
-		}
-		*/
 	}
 	function _setRights(_r) {
-		/*
-		if (typeof(swf[0].setRights) === 'function') {
-			swf[0].setRights(_r);
-		}
-		*/
 	}
 	function _cleanup() {
-		/*
-		if (typeof(swf[0].cleanup) === 'function') {
-			swf[0].cleanup();
+		OmUtil.log('Disposing participant ' + c.uid);
+		if (!!rtcPeer) {
+			rtcPeer.dispose();
+			rtcPeer = null;
 		}
-		*/
+		if (!!aCtx) {
+			aCtx.close();
+			aCtx = null;
+		}
 	}
 
 	self.update = _update;
@@ -326,9 +310,9 @@ var Video = (function() {
 	self.mute = _mute;
 	self.isMuted = function() { return 0 === slider.slider('option', 'value'); };
 	self.init = _init;
+	self.initGain = _initGain;
 	self.client = function() { return c; };
 	self.setRights = _setRights;
-	self.cleanup = _cleanup;
 	self.video = function() { return video[0]; };
 	self.setPeer = function(p) { rtcPeer = p; };
 	self.getPeer = function() { return rtcPeer; };
