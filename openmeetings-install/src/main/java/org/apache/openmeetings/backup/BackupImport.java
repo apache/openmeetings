@@ -44,6 +44,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getUploadProfilesUserDir
 import static org.apache.openmeetings.util.OmFileHelper.getUploadRoomDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPOINTMENT_REMINDER_MINUTES;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CALENDAR_ROOM_CAPACITY;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED1;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DASHBOARD_RSS_FEED2;
@@ -58,18 +59,15 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DOCUMENT
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_CAM_QUALITY;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_ECHO_PATH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_MIC_RATE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_SECURE;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_BANDWIDTH;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FLASH_VIDEO_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_ARRANGE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_EXCLUSIVE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_MUTE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_ECHO;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_NOISE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MYROOMS_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -239,7 +237,6 @@ public class BackupImport {
 		configTypes.put(CONFIG_DASHBOARD_SHOW_RSS, Configuration.Type.bool);
 		configTypes.put(CONFIG_REPLY_TO_ORGANIZER, Configuration.Type.bool);
 		configTypes.put(CONFIG_IGNORE_BAD_SSL, Configuration.Type.bool);
-		configTypes.put(CONFIG_FLASH_SECURE, Configuration.Type.bool);
 		configTypes.put(CONFIG_MYROOMS_ENABLED, Configuration.Type.bool);
 		configTypes.put(CONFIG_DEFAULT_GROUP_ID, Configuration.Type.number);
 		configTypes.put(CONFIG_SMTP_PORT, Configuration.Type.number);
@@ -259,11 +256,10 @@ public class BackupImport {
 		configTypes.put(CONFIG_KEYCODE_EXCLUSIVE, Configuration.Type.number);
 		configTypes.put(CONFIG_KEYCODE_MUTE, Configuration.Type.number);
 		configTypes.put(CONFIG_DEFAULT_LDAP_ID, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_VIDEO_FPS, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_VIDEO_BANDWIDTH, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_CAM_QUALITY, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_MIC_RATE, Configuration.Type.number);
-		configTypes.put(CONFIG_FLASH_ECHO_PATH, Configuration.Type.number);
+		configTypes.put(CONFIG_CAM_FPS, Configuration.Type.number);
+		configTypes.put(CONFIG_MIC_RATE, Configuration.Type.number);
+		configTypes.put(CONFIG_MIC_ECHO, Configuration.Type.bool);
+		configTypes.put(CONFIG_MIC_NOISE, Configuration.Type.bool);
 		configTypes.put(CONFIG_EXT_PROCESS_TTL, Configuration.Type.number);
 	}
 

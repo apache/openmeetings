@@ -210,6 +210,7 @@
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
 								<jsSourceFile>jquery.dialogextend.js</jsSourceFile>
+								<jsSourceFile>raw-video-util.js</jsSourceFile>
 								<jsSourceFile>raw-video.js</jsSourceFile>
 								<jsSourceFile>raw-video-manager.js</jsSourceFile>
 								<jsSourceFile>raw-room.js</jsSourceFile>
@@ -228,7 +229,6 @@
 							<charset>UTF-8</charset>
 							<jsSourceDir>../java/org/apache/openmeetings/web/room</jsSourceDir>
 							<jsSourceFiles>
-								<jsSourceFile>raw-video-util.js</jsSourceFile>
 								<jsSourceFile>raw-settings.js</jsSourceFile>
 								<jsSourceFile>kurento-utils.js</jsSourceFile>
 							</jsSourceFiles>

@@ -253,13 +253,11 @@ var VideoSettings = (function() {
 	function _constraints(c) {
 		const cnts = {};
 		//TODO add check if constraint is supported
-		//TODO remove hardcodings
-		const o = typeof(Room) === 'object' ? Room.getOptions() : {audioOnly: false};
 		if (false === o.audioOnly && VideoUtil.hasVideo(c) && s.video.cam > -1) {
 			cnts.video = {
 				width: s.video.width
 				, height: s.video.height
-				, frameRate: { max: 30 }
+				, frameRate: o.camera.fps
 			};
 			if (!!s.video.camDevice) {
 				cnts.video.deviceId = {
@@ -271,8 +269,9 @@ var VideoSettings = (function() {
 		}
 		if (VideoUtil.hasAudio(c) && s.video.mic > -1) {
 			cnts.audio = {
-				sampleSize: 22
-				, echoCancellation: true
+				sampleRate: o.microphone.rate
+				, echoCancellation: o.microphone.echo
+				, noiseSuppression: o.microphone.noise
 			};
 			if (!!s.video.micDevice) {
 				cnts.audio.deviceId = {

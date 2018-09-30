@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dao.basic;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CHAT_SEND_ON_ENTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
@@ -37,6 +38,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_KEYCODE_
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_LOGIN_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MAX_UPLOAD_SIZE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_ECHO;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_NOISE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MIC_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_BITRATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
@@ -284,6 +288,10 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			entity = em.merge(entity);
 		}
 		switch (key) {
+			case CONFIG_CAM_FPS:
+			case CONFIG_MIC_ECHO:
+			case CONFIG_MIC_NOISE:
+			case CONFIG_MIC_RATE:
 			case CONFIG_KEYCODE_ARRANGE:
 			case CONFIG_KEYCODE_EXCLUSIVE:
 			case CONFIG_KEYCODE_MUTE:
@@ -494,10 +502,16 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	private JSONObject reloadRoomSettings() {
 		try {
 			setRoomSettings(new JSONObject()
-				.put("keycode", new JSONObject()
-						.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
-						.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
-						.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
+					.put("keycode", new JSONObject()
+							.put("arrange", getLong(CONFIG_KEYCODE_ARRANGE, 119L))
+							.put("exclusive", getLong(CONFIG_KEYCODE_EXCLUSIVE, 123L))
+							.put("mute", getLong(CONFIG_KEYCODE_MUTE, 118L))
+							)
+					.put("camera", new JSONObject().put("fps", getLong(CONFIG_CAM_FPS, 30L)))
+					.put("microphone", new JSONObject()
+							.put("rate", getLong(CONFIG_MIC_RATE, 30L))
+							.put("echo", getBool(CONFIG_MIC_ECHO, true))
+							.put("noise", getBool(CONFIG_MIC_NOISE, true))
 						)
 				);
 		} catch (Exception e) {
