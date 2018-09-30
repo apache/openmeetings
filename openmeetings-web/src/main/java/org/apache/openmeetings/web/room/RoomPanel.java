@@ -132,6 +132,7 @@ public class RoomPanel extends BasePanel {
 					.put("uid", _c.getUid())
 					.put("rights", _c.toJson(true).getJSONArray("rights"))
 					.put("interview", interview)
+					.put("audioOnly", r.isAudioOnly())
 					.put("showMicStatus", !r.getHiddenElements().contains(RoomElement.MicrophoneStatus))
 					.put("exclusiveTitle", getString("1386"));
 			if (!Strings.isEmpty(r.getRedirectURL()) && (ws.getSoapLogin() != null || ws.getInvitation() != null)) {

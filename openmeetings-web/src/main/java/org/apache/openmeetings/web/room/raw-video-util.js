@@ -18,10 +18,10 @@ var VideoUtil = (function() {
 			&& !c.screenActivities.includes('sharing');
 	}
 	function _hasAudio(c) {
-		return c.activities.includes(MIC_ACTIVITY);
+		return !c || c.activities.includes(MIC_ACTIVITY);
 	}
 	function _hasVideo(c) {
-		return c.activities.includes(CAM_ACTIVITY);
+		return !c || c.activities.includes(CAM_ACTIVITY);
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);

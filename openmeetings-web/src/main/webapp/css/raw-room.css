@@ -422,7 +422,8 @@ ul.settings-menu {
 }
 .room.box .user-video .video.audio-only {
 	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-size: auto 100%;
+	background-position: center;
 }
 .pod-area {
 	display: inline-grid;

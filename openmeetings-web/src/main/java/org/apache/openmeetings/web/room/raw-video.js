@@ -32,20 +32,8 @@ var Video = (function() {
 		vc.width(w).height(h);
 		video.width(w).height(h);
 	}
-	function _createGainableStream() {
-		//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
-		const constraints = {
-			audio : VideoUtil.hasAudio(c)
-			, video : VideoUtil.hasVideo(c)
-		}
-		if (constraints.video) {
-			constraints.video = {
-				mandatory : {
-					maxWidth : c.width,
-					maxFrameRate : c.height,
-				}
-			};
-		}
+	function _createSendPeer() {
+		const constraints = VideoSettings.constraints(c);
 		navigator.mediaDevices.getUserMedia(constraints)
 			.then(function(stream) {
 				let _stream = stream;
@@ -294,8 +282,9 @@ var Video = (function() {
 			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
 		}
 		if (c.self) { //FIXME TODO multi-stream
-			_createGainableStream();
-		} else {
+			_createSendPeer();
+		} else if (VideoUtil.hasAudio(c)) {
+			vol.show();
 			_handleVolume(lastVolume);
 		}
 

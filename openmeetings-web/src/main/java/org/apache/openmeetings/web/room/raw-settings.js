@@ -249,28 +249,36 @@ var VideoSettings = (function() {
 	function _updateRec() {
 		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0)).button('refresh');
 	}
-	function _constraints() {
-		const cnts = {}
-			, v = cam.find('option:selected')
-			, m = mic.find('option:selected');
+	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+	function _constraints(c) {
+		const cnts = {};
 		//TODO add check if constraint is supported
-		if (s.video.cam > -1) {
+		//TODO remove hardcodings
+		const o = typeof(Room) === 'object' ? Room.getOptions() : {audioOnly: false};
+		if (false === o.audioOnly && VideoUtil.hasVideo(c) && s.video.cam > -1) {
 			cnts.video = {
 				width: s.video.width
 				, height: s.video.height
-				, deviceId: { exact: v.data('device-id')  }
 				, frameRate: { max: 30 }
 			};
+			if (!!s.video.camDevice) {
+				cnts.video.deviceId = {
+					exact: s.video.camDevice
+				};
+			}
 		} else {
 			cnts.video = false;
 		}
-		if (s.video.mic > -1) {
-			//TODO remove hardcodings
+		if (VideoUtil.hasAudio(c) && s.video.mic > -1) {
 			cnts.audio = {
 				sampleSize: 22
-				, deviceId: { exact: m.data('device-id')  }
 				, echoCancellation: true
 			};
+			if (!!s.video.micDevice) {
+				cnts.audio.deviceId = {
+					exact: s.video.micDevice
+				};
+			}
 		} else {
 			cnts.audio = false;
 		}
@@ -281,7 +289,9 @@ var VideoSettings = (function() {
 			, m = mic.find('option:selected')
 			, o = res.find('option:selected').data();
 		s.video.cam = 1 * cam.val();
+		s.video.camDevice = v.data('device-id');
 		s.video.mic = 1 * mic.val();
+		s.video.micDevice = m.data('device-id');
 		s.video.width = o.width;
 		s.video.height = o.height;
 		vid.width(o.width).height(o.height);
@@ -467,5 +477,6 @@ var VideoSettings = (function() {
 		, close: function() { _close(); vs.dialog('close'); }
 		, load: _load
 		, save: _save
+		, constraints: _constraints
 	};
 })();
