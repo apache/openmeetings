@@ -53,7 +53,7 @@ public class KStream implements IKStream {
 	private final String uid;
 	private final MediaPipeline pipeline;
 	private final Long roomId;
-	private final WebRtcEndpoint outgoingMedia;
+	private WebRtcEndpoint outgoingMedia;
 	private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
 	//FIXME TODO multiple streams from client
@@ -64,6 +64,9 @@ public class KStream implements IKStream {
 		this.roomId = c.getRoomId();
 		//TODO Min/MaxVideoSendBandwidth
 		//TODO Min/Max Audio/Video RecvBandwidth
+	}
+
+	private void initOutMedia(final KurentoHandler h) {
 		outgoingMedia = createEndpoint(h, this);
 		//TODO add logic here
 		outgoingMedia.addMediaFlowOutStateChangeListener(new EventListener<MediaFlowOutStateChangeEvent>() {
@@ -71,13 +74,17 @@ public class KStream implements IKStream {
 			public void onEvent(MediaFlowOutStateChangeEvent event) {
 				log.warn("MediaFlowOutStateChange {}", event.getState());
 				if (MediaFlowState.NOT_FLOWING == event.getState()) {
-					//FIXME TODO release resources
+					outgoingMedia.release();
 				}
 			}
 		});
 	}
 
 	public KStream startBroadcast(final KurentoHandler h, final Client c, final String sdpOffer) {
+		if (outgoingMedia != null) {
+			outgoingMedia.release();
+		}
+		initOutMedia(h);
 		videoResponse(h, this, sdpOffer);
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 		WebSocketHelper.sendRoomOthers(roomId, uid, newKurentoMsg()
@@ -174,6 +181,15 @@ public class KStream implements IKStream {
 		}
 	}
 
+	public void stopBroadcast() {
+		outgoingMedia.release();
+		WebSocketHelper.sendAll(newKurentoMsg()
+				.put("id", "broadcastStopped")
+				.put("uid", uid)
+				.toString()
+			);
+	}
+
 	@Override
 	public void release() {
 		log.debug("PARTICIPANT {}: Releasing resources", uid);
@@ -193,17 +209,7 @@ public class KStream implements IKStream {
 				}
 			});
 		}
-		outgoingMedia.release(new Continuation<Void>() {
-			@Override
-			public void onSuccess(Void result) throws Exception {
-				log.trace("PARTICIPANT {}: Released outgoing EP", KStream.this.uid);
-			}
-
-			@Override
-			public void onError(Throwable cause) throws Exception {
-				log.warn("USER {}: Could not release outgoing EP", KStream.this.uid);
-			}
-		});
+		outgoingMedia.release();
 	}
 
 	public void addCandidate(IceCandidate candidate, String name) {

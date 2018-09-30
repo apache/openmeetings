@@ -265,31 +265,11 @@ var Video = (function() {
 		v.on("remove", _cleanup);
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
-		//broadcast
-		const o = Room.getOptions();
-		if (c.self) {
-			o.cam = c.cam;
-			o.mic = c.mic;
-			o.mode = 'broadcast';
-		} else {
-			o.mode = 'play';
-		}
-		o.av = c.activities.join();
-		o.rights = o.rights.join();
-		o.width = c.width;
-		o.height = c.height;
-		o.sid = c.sid;
-		o.uid = c.uid;
-		o.cuid = c.cuid;
-		o.userId = c.user.id;
-		o.broadcastId = c.broadcastId;
-		o.type = c.type;
-		delete o.keycode;
 
 		const hasVideo = VideoUtil.hasVideo(c)
-			, imgUrl = 'profile/' + o.userId + '?anti=' + new Date().getTime();  //TODO add normal URL ????
+			, imgUrl = 'profile/' + c.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
-			.width(o.width).height(o.height)
+			.width(c.width).height(c.height)
 			.prop('autoplay', true).prop('controls', false);
 		if (hasVideo) {
 			video.attr('poster', imgUrl);
@@ -328,7 +308,9 @@ var Video = (function() {
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 	}
-	function _refresh(_opts) {
+	function _refresh() {
+		_cleanup();
+		_createSendPeer();
 	}
 	function _setRights(_r) {
 	}
@@ -349,8 +331,13 @@ var Video = (function() {
 			aCtx.close();
 			aCtx = null;
 		}
-		_micActivity(0);
-		lm.hide();
+		if (video.length > 0) {
+			video[0].srcObject = null;
+		}
+		if (!!lm && lm.length > 0) {
+			_micActivity(0);
+			lm.hide();
+		}
 		if (!!level) {
 			level.dispose();
 			level = null;

@@ -120,21 +120,13 @@ var VideoManager = (function() {
 			const cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
 			delete cl.streams;
 			$.extend(cl, s);
-			if (cl.self && VideoUtil.isSharing(cl) || VideoUtil.isRecording(cl)) {
+			if (cl.self && (VideoUtil.isSharing(cl) || VideoUtil.isRecording(cl))) {
 				continue;
 			}
 			const _id = VideoUtil.getVid(cl.uid)
 				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
 				, v = $('#' + _id);
-			if (av && v.length !== 1 && !!cl.self) {
-				/**** FIXME TODO LETS reduce round-trips
-				self.sendMessage({
-					id: 'joinRoom' //TODO stream uid
-				});
-
-				Video().init(cl, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), cl.width, cl.height + 25));
-				******/
-			} else if (av && v.length === 1) {
+			if (av && v.length === 1) {
 				v.data().update(cl);
 			} else if (!av && v.length === 1) {
 				_closeV(v);
@@ -148,7 +140,6 @@ var VideoManager = (function() {
 				const w = $(windows[i]);
 				w.data().setRights(c.rights);
 			}
-
 		}
 		if (c.streams.length === 0) {
 			// check for non inited video window

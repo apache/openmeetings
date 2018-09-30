@@ -87,8 +87,8 @@ var VideoSettings = (function() {
 		if (typeof(avSettings) === 'function') {
 			avSettings(_s);
 		}
-		if (refr && typeof(VideoManager) !== 'undefined' && o.uid) {
-			VideoManager.refresh(o.uid, s.video);
+		if (refr && typeof(VideoManager) === 'object' && o.uid) {
+			VideoManager.refresh(o.uid);
 		}
 	}
 	function _clear(_ms) {

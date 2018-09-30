@@ -291,7 +291,11 @@ public class KurentoHandler {
 			c.toggle(a);
 			if (!isBroadcasting(c)) {
 				//close
-				leaveRoom(cm.update(c.removeStream(c.getUid())));
+				KStream s = getByUid(c.getUid());
+				if (s != null) {
+					cm.update(c.removeStream(c.getUid()));
+					s.stopBroadcast();
+				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 				//FIXME TODO update interview buttons
 			} else if (!broadcasting) {
