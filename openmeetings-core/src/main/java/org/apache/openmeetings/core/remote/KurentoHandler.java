@@ -305,7 +305,7 @@ public class KurentoHandler {
 						.put("id", "broadcast")
 						.put("uid", sd.getUid())
 						.put("stream", new JSONObject(sd))
-						.put("client", c.toJson(true)));
+						.put("client", c.toJson(true).put("type", "room"))); // FIXME TODO add multi-stream support
 				//FIXME TODO update interview buttons
 			} else {
 				//change constraints

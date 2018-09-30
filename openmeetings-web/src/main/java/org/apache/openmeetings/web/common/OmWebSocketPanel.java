@@ -23,6 +23,7 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -86,10 +87,25 @@ public abstract class OmWebSocketPanel extends Panel {
 				final JSONObject m;
 				try {
 					m = new JSONObject(msg.getText());
-					if (KURENTO_TYPE.equals(m.optString("type"))) {
-						kHandler.onMessage(getWsClient(), m);
-					} else {
-						OmWebSocketPanel.this.onMessage(handler, m);
+					switch(m.optString("type", "")) {
+						case KURENTO_TYPE:
+							kHandler.onMessage(getWsClient(), m);
+							break;
+						case "mic":
+						{
+							IWsClient _c = getWsClient();
+							if (!(_c instanceof Client)) {
+								break;
+							}
+							Client c = (Client)_c;
+							if (c.getRoomId() == null) {
+								break;
+							}
+							WebSocketHelper.sendRoomOthers(c.getRoomId(), c.getUid(), m.put("uid", c.getUid()));
+						}
+							break;
+						default:
+							OmWebSocketPanel.this.onMessage(handler, m);
 					}
 				} catch (Exception e) {
 					log.error("Error while processing incoming message", e);

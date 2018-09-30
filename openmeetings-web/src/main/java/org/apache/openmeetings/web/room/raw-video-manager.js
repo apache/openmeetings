@@ -96,8 +96,7 @@ var VideoManager = (function() {
 			} else if ('mic' === m.type) {
 				switch (m.id) {
 					case 'activity':
-						_micActivity(m.uid, m.active);
-						_onBroadcast(m);
+						_userSpeaks(m.uid, m.active);
 						break;
 					default:
 						//no-op
@@ -210,7 +209,7 @@ var VideoManager = (function() {
 	function _find(uid) {
 		return $(VID_SEL + ' div[data-client-uid="room' + uid + '"]');
 	}
-	function _micActivity(uid, active) {
+	function _userSpeaks(uid, active) {
 		const u = $('#user' + uid + ' .audio-activity.ui-icon')
 			, v = _find(uid).parent();
 		if (active) {

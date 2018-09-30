@@ -230,7 +230,7 @@ var VideoSettings = (function() {
 				_close();
 			}
 		});
-		lm.progressbar({ value: 0 });
+		lm.kendoProgressBar({ value: 0, showStatus: false });
 		o.width = 300;
 		o.height = 200;
 		o.mode = 'settings';
@@ -250,6 +250,7 @@ var VideoSettings = (function() {
 		recBtn.prop('disabled', !recAllowed || (s.video.cam < 0 && s.video.mic < 0)).button('refresh');
 	}
 	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
+	// min/ideal/max/exact/mandatory can also be used
 	function _constraints(c) {
 		const cnts = {};
 		//TODO add check if constraint is supported
@@ -329,7 +330,7 @@ var VideoSettings = (function() {
 		playBtn.prop('disabled', false).button('refresh');
 	}
 	function _micActivity(level) {
-		lm.progressbar("value", Math.max(0, 140 * level)); // magic number
+		lm.getKendoProgressBar().value(140 * level); // magic number
 	}
 	function _setLoading(el) {
 		el.find('option').remove();

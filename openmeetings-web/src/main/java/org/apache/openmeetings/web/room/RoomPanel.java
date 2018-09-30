@@ -167,7 +167,7 @@ public class RoomPanel extends BasePanel {
 			for (Client c: cm.listByRoom(getRoom().getId())) {
 				//FIXME TODO add multiple streams support
 				if (!c.getStreams().isEmpty()) {
-					sb.append(String.format("VideoManager.play(%s);", c.toJson(false)));
+					sb.append(String.format("VideoManager.play(%s);", c.toJson(false).put("type", "room"))); // FIXME TODO add multi-stream support
 					hasStreams = true;
 				}
 			}

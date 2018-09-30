@@ -2,7 +2,8 @@
 var Video = (function() {
 	const self = {};
 	let c, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50, aCtx, aSrc, aDest, gainNode;
+		, lastVolume = 50, aCtx, aSrc, aDest, gainNode
+		, lm, level, userSpeaks = false;
 
 	function _getName() {
 		return c.user.firstName + ' ' + c.user.lastName;
@@ -30,7 +31,16 @@ var Video = (function() {
 	}
 	function _resize(w, h) {
 		vc.width(w).height(h);
+		lm.height(h - 10);
 		video.width(w).height(h);
+	}
+	function _micActivity(level) {
+		lm.getKendoProgressBar().value(140 * level); // magic number
+		let speaks = level > .02;
+		if (speaks !== userSpeaks) {
+			userSpeaks = speaks;
+			OmUtil.sendMessage({type: 'mic', id: 'activity', active: speaks});
+		}
 	}
 	function _createSendPeer() {
 		const constraints = VideoSettings.constraints(c);
@@ -39,6 +49,9 @@ var Video = (function() {
 				let _stream = stream;
 				if (stream.getAudioTracks().length !== 0) {
 					vol.show();
+					lm = vc.find('.level-meter')
+						.kendoProgressBar({ value: 0, showStatus: false, orientation: 'vertical' });
+					lm.height(vc.height() - 10);
 					aCtx = new AudioContext();
 					gainNode = aCtx.createGain();
 					aSrc = aCtx.createMediaStreamSource(stream);
@@ -58,6 +71,8 @@ var Video = (function() {
 							if (error) {
 								return OmUtil.error(error);
 							}
+							level = MicLevel();
+							level.meter(rtcPeer, _micActivity, OmUtil.error);
 							this.generateOffer(function(error, offerSdp, wp) {
 								if (error) {
 									return OmUtil.error('Sender sdp offer error');
@@ -136,7 +151,7 @@ var Video = (function() {
 			contSel = '.room.box';
 		}
 		$(contSel).append(OmUtil.tmpl('#user-video', _id).attr('title', name)
-				.attr('data-client-uid', c.type + c.cuid).data(self)); //FIXME TODO c.type === 'undefined'
+				.attr('data-client-uid', c.type + c.cuid).data(self));
 		return contSel;
 	}
 	function _initDialog(v, opts) {
@@ -333,6 +348,12 @@ var Video = (function() {
 		if (!!aCtx) {
 			aCtx.close();
 			aCtx = null;
+		}
+		_micActivity(0);
+		lm.hide();
+		if (!!level) {
+			level.dispose();
+			level = null;
 		}
 	}
 
