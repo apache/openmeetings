@@ -128,6 +128,7 @@
 			<excludes>
 				<exclude>META-INF/**</exclude>
 				<exclude>WEB-INF/classes/META-INF/**</exclude>
+				<exclude>WEB-INF/lib/openmeetings*-tests.jar</exclude>
 				<exclude>WEB-INF/lib/asm*</exclude>
 				<exclude>WEB-INF/lib/aopalliance*</exclude>
 				<exclude>WEB-INF/lib/bcprov-*</exclude>

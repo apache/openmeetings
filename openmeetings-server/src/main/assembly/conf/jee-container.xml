@@ -62,6 +62,10 @@
 					<property name="pattern" value="common" />
 					<property name="rotatable" value="true" />
 				</bean>
+				<bean id="valve.error" class="org.apache.catalina.valves.ErrorReportValve">
+					<property name="showReport" value="false" />
+					<property name="showServerInfo" value="false" />
+				</bean>
 			</list>
 		</property>
 	</bean>
@@ -119,6 +123,10 @@
 					<property name="suffix" value=".log" />
 					<property name="pattern" value="common" />
 					<property name="rotatable" value="true" />
+				</bean>
+				<bean id="valve.error" class="org.apache.catalina.valves.ErrorReportValve">
+					<property name="showReport" value="false" />
+					<property name="showServerInfo" value="false" />
 				</bean>
 			</list>
 		</property>

@@ -81,6 +81,7 @@
 		<tomcat.version>9.0.12</tomcat.version>
 		<ical4j.version>3.0.1</ical4j.version>
 		<cxf.version>3.2.6</cxf.version>
+		<neethi.version>3.1.1</neethi.version>
 		<selenium.version>3.14.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
@@ -775,6 +776,11 @@
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-rt-features-logging</artifactId>
 				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.neethi</groupId>
+				<artifactId>neethi</artifactId>
+				<version>${neethi.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
