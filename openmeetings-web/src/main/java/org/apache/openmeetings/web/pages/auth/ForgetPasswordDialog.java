@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.User;
@@ -48,6 +47,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.Validatable;

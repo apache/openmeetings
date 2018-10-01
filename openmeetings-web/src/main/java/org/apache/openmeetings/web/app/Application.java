@@ -47,7 +47,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
@@ -116,6 +115,7 @@ import org.apache.wicket.request.mapper.info.PageComponentInfo;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.mapper.parameter.PageParametersEncoder;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.validator.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

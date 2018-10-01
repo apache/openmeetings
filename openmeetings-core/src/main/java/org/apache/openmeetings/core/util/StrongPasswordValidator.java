@@ -22,10 +22,10 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinPasswdLen
 
 import java.util.Map;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.wicket.util.collections.MicroMap;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;

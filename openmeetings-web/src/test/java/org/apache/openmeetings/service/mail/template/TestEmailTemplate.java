@@ -18,10 +18,10 @@
  */
 package org.apache.openmeetings.service.mail.template;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.UserContact;
+import org.apache.wicket.util.string.Strings;
 import org.junit.Assert;
 import org.junit.Test;
 
