@@ -20,7 +20,6 @@ package org.apache.openmeetings.web.room;
 
 import java.util.ArrayList;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.web.app.Application;
 import org.apache.openmeetings.web.util.NonClosableMessageDialog;
 import org.apache.wicket.Component;
@@ -29,6 +28,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.util.string.Strings;
 
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.ui.widget.dialog.DialogButton;

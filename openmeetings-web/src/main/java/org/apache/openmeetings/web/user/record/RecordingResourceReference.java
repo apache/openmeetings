@@ -25,7 +25,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 
 import java.util.Map.Entry;
 
-import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.GroupUserDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -42,6 +41,7 @@ import org.apache.openmeetings.web.util.FileItemResourceReference;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.IResource.Attributes;
 import org.apache.wicket.util.string.StringValue;
+import org.apache.wicket.util.string.Strings;
 
 public abstract class RecordingResourceReference extends FileItemResourceReference<Recording> {
 	private static final long serialVersionUID = 1L;
