@@ -122,6 +122,9 @@
 .chart.file.om-icon {
 	background-image: url(images/chart_pie.png);
 }
+.drag-container .om-icon {
+	display: block !important;
+}
 .selected .file.item {
 	background-color: #0099FF;
 }

@@ -21,7 +21,7 @@ var Player = (function() {
 		$('#wb-tab-' + canvas.wbId).append(vid);
 		fabric.Image.fromURL(_o._poster, function(poster) {
 			poster.scaleX = poster.scaleY = _o.width / poster.getOriginalSize().width;
-			const video = new fabric.Image(vid[0], {visible: false});
+			const video = new fabric.Image(vid[0], {visible: false, objectCaching: false});
 			if (typeof(_o.status) === 'undefined') {
 				_o.status = {paused: true};
 			}
