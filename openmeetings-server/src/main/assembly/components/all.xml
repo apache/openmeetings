@@ -35,6 +35,7 @@
 				<exclude>webapps/root/index.html</exclude>
 				<exclude>lib/commons-io*.jar</exclude>
 				<exclude>lib/commons-lang3*</exclude>
+				<exclude>lib/commons-compress*</exclude>
 				<exclude>lib/spring*.jar</exclude>
 				<exclude>lib/asm*</exclude>
 				<!-- Tika related jars are in lib folder-->
@@ -144,7 +145,7 @@
 				<exclude>WEB-INF/lib/commons-fileupload*</exclude>
 				<exclude>WEB-INF/lib/commons-io*</exclude>
 				<exclude>WEB-INF/lib/commons-codec*</exclude>
-				<exclude>WEB-INF/lib/commons-collections-*</exclude>
+				<exclude>WEB-INF/lib/commons-collections*</exclude>
 				<exclude>WEB-INF/lib/commons-lang3*</exclude>
 				<exclude>WEB-INF/lib/commons-compress*</exclude>
 				<exclude>WEB-INF/lib/httpclient*</exclude>
@@ -235,6 +236,8 @@
 				<include>commons-fileupload*</include>
 				<include>commons-io*</include>
 				<include>commons-lang3*</include>
+				<include>commons-collections*</include>
+				<include>commons-compress*</include>
 				<!-- Tika related jars are in lib folder -->
 				<include>apache-mime4j*</include>
 				<include>bcprov-*</include>
