@@ -31,6 +31,7 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
+import org.apache.wicket.util.string.Strings;
 import org.kurento.client.Continuation;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
@@ -57,7 +58,7 @@ public class KStream implements IKStream {
 	private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
 	//FIXME TODO multiple streams from client
-	public KStream(final KurentoHandler h, final Client c, MediaPipeline pipeline) {
+	public KStream(final Client c, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		this.sid = c.getSid();
 		this.uid = c.getUid();
@@ -159,6 +160,9 @@ public class KStream implements IKStream {
 
 	private WebRtcEndpoint createEndpoint(final KurentoHandler h, final KStream sender) {
 		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
+		if (!Strings.isEmpty(h.getTurnServerUrl())) {
+			endpoint.setTurnUrl(h.getTurnServerUrl());
+		}
 		endpoint.addTag("suid", uid);
 		endpoint.addTag("uid", sender.getUid());
 

@@ -55,7 +55,7 @@ public class KRoom implements Closeable {
 
 	public KStream join(final KurentoHandler h, final Client c) {
 		log.info("ROOM {}: join participant {}", roomId, c.getUid());
-		final KStream stream = new KStream(h, c, this.pipeline);
+		final KStream stream = new KStream(c, this.pipeline);
 		participants.put(stream.getUid(), stream);
 		h.usersByUid.put(stream.getUid(), stream);
 		return stream;

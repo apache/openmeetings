@@ -64,6 +64,7 @@ public class KurentoHandler {
 	public final static String KURENTO_TYPE = "kurento";
 	private long checkTimeout = 200; //ms
 	private String kurentoWsUrl;
+	private String turnServerUrl;
 	private KurentoClient client;
 	private String kuid;
 	private ScheduledExecutorService scheduler;
@@ -73,10 +74,6 @@ public class KurentoHandler {
 
 	@Autowired
 	private IClientManager cm;
-
-	public void setKurentoWsUrl(String kurentoWsUrl) {
-		this.kurentoWsUrl = kurentoWsUrl;
-	}
 
 	public void init() {
 		try {
@@ -435,5 +432,17 @@ public class KurentoHandler {
 
 	public void setCheckTimeout(long checkTimeout) {
 		this.checkTimeout = checkTimeout;
+	}
+
+	public void setKurentoWsUrl(String kurentoWsUrl) {
+		this.kurentoWsUrl = kurentoWsUrl;
+	}
+
+	public String getTurnServerUrl() {
+		return turnServerUrl;
+	}
+
+	public void setTurnServerUrl(String turnServerUrl) {
+		this.turnServerUrl = turnServerUrl;
 	}
 }
