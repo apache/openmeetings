@@ -31,7 +31,10 @@
 					<h3><b>3 <i>steps</i> to install OpenMeetings</b></h3>
 					<ol class="install-steps">
 						<li class="step">
-							<div><a href="https://doc-kurento.readthedocs.io/en/stable/user/installation.html">Install Kurento Media server</a></div>
+							<div>
+								<a href="https://doc-kurento.readthedocs.io/en/stable/user/installation.html">Install Kurento Media server</a>
+								It should be run under same user as OM
+							</div>
 							<div class="small"></div>
 						</li>
 						<li class="step download os">

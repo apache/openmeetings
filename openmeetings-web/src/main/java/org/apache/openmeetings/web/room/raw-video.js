@@ -31,7 +31,9 @@ var Video = (function() {
 	}
 	function _resize(w, h) {
 		vc.width(w).height(h);
-		lm.height(h - 10);
+		if (!!lm) {
+			lm.height(h - 10);
+		}
 		video.width(w).height(h);
 	}
 	function _micActivity(level) {
