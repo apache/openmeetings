@@ -23,6 +23,7 @@ import java.io.InputStream;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.wicket.util.string.Strings;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.LoggerContext;
@@ -31,12 +32,13 @@ import ch.qos.logback.core.util.StatusPrinter;
 
 public class OMContextListener implements ServletContextListener {
 	private static final String LOG_DIR_PROP = "current_openmeetings_log_dir";
+	private static final String CTX_NAME_PROP = "current_openmeetings_context_name";
 
 	@Override
 	public void contextInitialized(ServletContextEvent event) {
 		String ctx = pathToName(event);
-		System.setProperty("current_openmeetings_context_name", ctx);
-		if (System.getProperty(LOG_DIR_PROP) == null) {
+		System.setProperty(CTX_NAME_PROP, ctx);
+		if (Strings.isEmpty(System.getProperty(LOG_DIR_PROP))) {
 			System.setProperty(LOG_DIR_PROP, "logs");
 		}
 		System.setProperty("webapp.contextPath", String.format("/%s", ctx));

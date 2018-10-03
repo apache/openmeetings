@@ -30,6 +30,10 @@
 				<div>
 					<h3><b>3 <i>steps</i> to install OpenMeetings</b></h3>
 					<ol class="install-steps">
+						<li class="step">
+							<div><a href="https://doc-kurento.readthedocs.io/en/stable/user/installation.html">Install Kurento Media server</a></div>
+							<div class="small"></div>
+						</li>
 						<li class="step download os">
 							<div><a href="downloads.html" rel="nofollow">Download latest .zip (.tar.gz)</a></div>
 							<div class="small">Java 8 required</div>
