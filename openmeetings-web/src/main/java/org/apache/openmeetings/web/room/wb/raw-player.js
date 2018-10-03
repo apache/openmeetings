@@ -165,7 +165,7 @@ var Player = (function() {
 						left: pos.left
 						, top: pos.top
 					});
-					if (!group.status.paused && isDone()) {
+					if (isDone()) {
 						video.getElement().currentTime = 0;
 					}
 					_sendStatus(group, !group.status.paused, video.getElement().currentTime)
