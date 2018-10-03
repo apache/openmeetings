@@ -33,7 +33,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyy/MM/dd HH:mm</maven.build.timestamp.format>
-		<wicket.mode>DEPLOYMENT</wicket.mode>
+		<wicket.configuration>DEPLOYMENT</wicket.configuration>
 		<om.quick.build>false</om.quick.build>
 		<db>derby</db>
 		<jdk.version>1.8</jdk.version>
@@ -146,7 +146,7 @@
 				<maven.test.skip>true</maven.test.skip>
 				<om.quick.build>true</om.quick.build>
 				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
-				<wicket.mode>DEVELOPMENT</wicket.mode>
+				<wicket.configuration>DEVELOPMENT</wicket.configuration>
 				<src.pack.skip>true</src.pack.skip>
 			</properties>
 		</profile>
