@@ -180,7 +180,7 @@ public class KurentoHandler {
 	}
 
 	private boolean validTestPipeline(Map<String, String> tags) {
-		return kuid.equals(tags.get(TAG_KUID)) && MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_MODE));
+		return kuid.equals(tags.get(TAG_KUID)) && MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_ROOM));
 	}
 
 	private MediaPipeline createTestPipeline() {
