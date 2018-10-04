@@ -100,10 +100,6 @@
 			<artifactId>cxf-rt-features-logging</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.neethi</groupId>
-			<artifactId>neethi</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.codehaus.jettison</groupId>
 			<artifactId>jettison</artifactId>
 		</dependency>

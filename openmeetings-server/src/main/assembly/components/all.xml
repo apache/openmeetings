@@ -38,6 +38,7 @@
 				<exclude>lib/commons-compress*</exclude>
 				<exclude>lib/spring*.jar</exclude>
 				<exclude>lib/asm*</exclude>
+				<exclude>lib/http*.jar</exclude>
 				<!-- Tika related jars are in lib folder-->
 				<exclude>lib/apache-mime4j*</exclude>
 				<exclude>lib/bcprov-*</exclude>
@@ -128,95 +129,25 @@
 			<outputDirectory>${om.webapp}</outputDirectory>
 			<excludes>
 				<exclude>META-INF/**</exclude>
+				<exclude>WEB-INF/**</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory>
+			<outputDirectory>${om.webapp}</outputDirectory>
+			<excludes>
+				<exclude>META-INF/**</exclude>
 				<exclude>WEB-INF/classes/META-INF/**</exclude>
 				<exclude>WEB-INF/lib/openmeetings*-tests.jar</exclude>
-				<exclude>WEB-INF/lib/asm*</exclude>
-				<exclude>WEB-INF/lib/aopalliance*</exclude>
-				<exclude>WEB-INF/lib/bcprov-*</exclude>
-				<exclude>WEB-INF/lib/cglib-nodep*</exclude>
-				<exclude>WEB-INF/lib/jcl-over-slf4j*</exclude>
-				<exclude>WEB-INF/lib/jul-to-slf4j*</exclude>
-				<exclude>WEB-INF/lib/slf4j-*</exclude>
-				<exclude>WEB-INF/lib/ecj-*</exclude> <!-- added for Red5 lib substitution -->
-				<exclude>WEB-INF/lib/tomcat-*</exclude>
-				<exclude>WEB-INF/lib/spring-*</exclude>
-				<exclude>WEB-INF/lib/mina-core-*</exclude>
-				<exclude>WEB-INF/lib/geronimo-jpa*</exclude>
-				<exclude>WEB-INF/lib/commons-fileupload*</exclude>
-				<exclude>WEB-INF/lib/commons-io*</exclude>
-				<exclude>WEB-INF/lib/commons-codec*</exclude>
-				<exclude>WEB-INF/lib/commons-collections*</exclude>
-				<exclude>WEB-INF/lib/commons-lang3*</exclude>
-				<exclude>WEB-INF/lib/commons-compress*</exclude>
-				<exclude>WEB-INF/lib/httpclient*</exclude>
-				<exclude>WEB-INF/lib/httpcore*</exclude>
-				<exclude>WEB-INF/lib/xmpcore*</exclude>
-				<exclude>WEB-INF/lib/quartz*</exclude>
-				<!-- Tika related jars are in lib folder -->
-				<exclude>WEB-INF/lib/apache-mime4j*</exclude>
-				<exclude>WEB-INF/lib/boilerpipe*</exclude>
-				<exclude>WEB-INF/lib/dec-*</exclude>
-				<exclude>WEB-INF/lib/ehcache-core*</exclude>
-				<exclude>WEB-INF/lib/jempbox*</exclude>
-				<exclude>WEB-INF/lib/juniversalchardet*</exclude>
-				<exclude>WEB-INF/lib/jai-imageio-core*</exclude>
-				<exclude>WEB-INF/lib/jbig2-imageio*</exclude>
-				<exclude>WEB-INF/lib/mchange-commons*</exclude>
-				<exclude>WEB-INF/lib/metadata-extractor*</exclude>
-				<exclude>WEB-INF/lib/pdfbox*</exclude>
-				<exclude>WEB-INF/lib/rome*</exclude>
-				<exclude>WEB-INF/lib/tagsoup*</exclude>
-				<exclude>WEB-INF/lib/tika*</exclude>
-				<exclude>WEB-INF/lib/animal-sniffer-annotations*</exclude>
-				<exclude>WEB-INF/lib/bcmail-*</exclude>
-				<exclude>WEB-INF/lib/bcpkix-*</exclude>
-				<exclude>WEB-INF/lib/bzip2-*</exclude>
-				<exclude>WEB-INF/lib/cdm-*</exclude>
-				<exclude>WEB-INF/lib/commons-csv-*</exclude>
-				<exclude>WEB-INF/lib/commons-exec-*</exclude>
-				<exclude>WEB-INF/lib/commons-vfs2-*</exclude>
-				<exclude>WEB-INF/lib/curvesapi-*</exclude>
-				<exclude>WEB-INF/lib/error_prone_annotations-*</exclude>
-				<exclude>WEB-INF/lib/geoapi-*</exclude>
-				<exclude>WEB-INF/lib/grib-*</exclude>
-				<exclude>WEB-INF/lib/guava-*</exclude>
-				<exclude>WEB-INF/lib/httpmime-*</exclude>
-				<exclude>WEB-INF/lib/httpservices-*</exclude>
-				<exclude>WEB-INF/lib/isoparser-*</exclude>
-				<exclude>WEB-INF/lib/j2objc-annotations-*</exclude>
-				<exclude>WEB-INF/lib/jackcess-*</exclude>
-				<exclude>WEB-INF/lib/jackson-core-*</exclude>
-				<exclude>WEB-INF/lib/java-libpst-*</exclude>
-				<exclude>WEB-INF/lib/jcip-annotations-*</exclude>
-				<exclude>WEB-INF/lib/jcommander-*</exclude>
-				<exclude>WEB-INF/lib/jdom2-*</exclude>
-				<exclude>WEB-INF/lib/jhighlight-*</exclude>
-				<exclude>WEB-INF/lib/jmatio-*</exclude>
-				<exclude>WEB-INF/lib/jna-*</exclude>
-				<exclude>WEB-INF/lib/joda-time-*</exclude>
-				<exclude>WEB-INF/lib/json-*</exclude>
-				<exclude>WEB-INF/lib/json-simple-*</exclude>
-				<exclude>WEB-INF/lib/jsoup-*</exclude>
-				<exclude>WEB-INF/lib/jsr-275-*</exclude>
-				<exclude>WEB-INF/lib/jsr305-*</exclude>
-				<exclude>WEB-INF/lib/junrar-*</exclude>
-				<exclude>WEB-INF/lib/maven-scm-*</exclude>
-				<exclude>WEB-INF/lib/netcdf4-*</exclude>
-				<exclude>WEB-INF/lib/opennlp-tools-*</exclude>
-				<exclude>WEB-INF/lib/plexus-utils-*</exclude>
-				<exclude>WEB-INF/lib/poi-*</exclude>
-				<exclude>WEB-INF/lib/protobuf-java-*</exclude>
-				<exclude>WEB-INF/lib/regexp-*</exclude>
-				<exclude>WEB-INF/lib/sentiment-analysis-parser-*</exclude>
-				<exclude>WEB-INF/lib/sis-*</exclude>
-				<exclude>WEB-INF/lib/udunits-*</exclude>
-				<exclude>WEB-INF/lib/uimafit-core-*</exclude>
-				<exclude>WEB-INF/lib/uimaj-core-*</exclude>
-				<exclude>WEB-INF/lib/unit-api-*</exclude>
-				<exclude>WEB-INF/lib/vorbis-java-*</exclude>
-				<exclude>WEB-INF/lib/xmlbeans-*</exclude>
-				<exclude>WEB-INF/lib/xz-*</exclude>
 			</excludes>
+			<includes>
+				<include>WEB-INF/*</include>
+				<include>WEB-INF/classes/**</include>
+				<include>WEB-INF/lib/hazelcast*</include>
+				<include>WEB-INF/lib/openmeetings*</include>
+				<include>WEB-INF/lib/jqplot*</include>
+				<include>WEB-INF/lib/wicket*</include>
+			</includes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}</directory>
@@ -229,78 +160,15 @@
 		<fileSet>
 			<directory>${project.parent.basedir}/openmeetings-web/target/openmeetings-web-${project.version}/WEB-INF/lib</directory>
 			<outputDirectory>lib</outputDirectory>
+			<excludes>
+				<exclude>hazelcast*</exclude>
+				<exclude>openmeetings*</exclude>
+				<exclude>jqplot*</exclude>
+				<exclude>wicket*</exclude>
+				<exclude>tomcat*</exclude>
+			</excludes>
 			<includes>
-				<include>asm-*</include>
-				<include>spring-*</include>
-				<include>geronimo-jpa*</include>
-				<include>commons-fileupload*</include>
-				<include>commons-io*</include>
-				<include>commons-lang3*</include>
-				<include>commons-collections*</include>
-				<include>commons-compress*</include>
-				<!-- Tika related jars are in lib folder -->
-				<include>apache-mime4j*</include>
-				<include>bcprov-*</include>
-				<include>boilerpipe*</include>
-				<include>dec-*</include>
-				<include>jempbox*</include>
-				<include>juniversalchardet*</include>
-				<include>mchange-commons*</include>
-				<include>metadata-extractor*</include>
-				<include>pdfbox*</include>
-				<include>rome*</include>
-				<include>tagsoup*</include>
-				<include>tika*</include>
-				<include>bcmail-*</include>
-				<include>bcpkix-*</include>
-				<include>bzip2-*</include>
-				<include>cdm-*</include>
-				<include>commons-csv-*</include>
-				<include>commons-exec-*</include>
-				<include>commons-vfs2-*</include>
-				<include>curvesapi-*</include>
-				<include>error_prone_annotations-*</include>
-				<include>geoapi-*</include>
-				<include>grib-*</include>
-				<include>guava-*</include>
-				<include>httpmime-*</include>
-				<include>httpservices-*</include>
-				<include>isoparser-*</include>
-				<include>jbig2-imageio*</include>
-				<include>jai-imageio-core*</include>
-				<include>j2objc-annotations-*</include>
-				<include>jackcess-*</include>
-				<include>jackson-core-*</include>
-				<include>java-libpst-*</include>
-				<include>jcip-annotations-*</include>
-				<include>jcommander-*</include>
-				<include>jdom2-*</include>
-				<include>jhighlight-*</include>
-				<include>jmatio-*</include>
-				<include>jna-*</include>
-				<include>joda-time-*</include>
-				<include>json-*</include>
-				<include>json-simple-*</include>
-				<include>jsoup-*</include>
-				<include>jsr-275-*</include>
-				<include>jsr305-*</include>
-				<include>junrar-*</include>
-				<include>maven-scm-*</include>
-				<include>netcdf4-*</include>
-				<include>opennlp-tools-*</include>
-				<include>plexus-utils-*</include>
-				<include>poi-*</include>
-				<include>protobuf-java-*</include>
-				<include>regexp-*</include>
-				<include>sentiment-analysis-parser-*</include>
-				<include>sis-*</include>
-				<include>udunits-*</include>
-				<include>uimafit-core-*</include>
-				<include>uimaj-core-*</include>
-				<include>unit-api-*</include>
-				<include>vorbis-java-*</include>
-				<include>xmlbeans-*</include>
-				<include>xz-*</include>
+				<include>*</include>
 			</includes>
 		</fileSet>
 		<fileSet>

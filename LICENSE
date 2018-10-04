@@ -258,55 +258,25 @@ webapps/root/WEB-INF/red5-web.properties
 webapps/root/WEB-INF/red5-web.xml
 webapps/root/WEB-INF/web.xml
 
-webapps/openmeetings/WEB-INF/lib/api-all-*.jar
-webapps/openmeetings/WEB-INF/lib/asterisk-java-2.0.2.jar
-webapps/openmeetings/WEB-INF/lib/caldav4j-*.jar
-webapps/openmeetings/WEB-INF/lib/commons-*.jar
-webapps/openmeetings/WEB-INF/lib/cxf-*.jar
-webapps/openmeetings/WEB-INF/lib/derby*.jar
-webapps/openmeetings/WEB-INF/lib/dom4j-2.1.0.jar
-webapps/openmeetings/WEB-INF/lib/fontbox-2.0.8.jar
-webapps/openmeetings/WEB-INF/lib/gson-*.jar
-webapps/openmeetings/WEB-INF/lib/hazelcast-*.jar
-webapps/openmeetings/WEB-INF/lib/jackrabbit-webdav-2.13.5.jar
-webapps/openmeetings/WEB-INF/lib/jackson-annotations*.jar
-webapps/openmeetings/WEB-INF/lib/jackson-databind*.jar
-webapps/openmeetings/WEB-INF/lib/jettison-1.3.8.jar
-webapps/openmeetings/WEB-INF/lib/jodconverter-core-3.0.1-om.jar
-webapps/openmeetings/WEB-INF/lib/jqplot4java-*.jar
-webapps/openmeetings/WEB-INF/lib/jqplot-*.jar
-webapps/openmeetings/WEB-INF/lib/juh-4.1.2.jar
-webapps/openmeetings/WEB-INF/lib/jurt-4.1.2.jar
-webapps/openmeetings/WEB-INF/lib/log4j-1.2.17.jar
-webapps/openmeetings/WEB-INF/lib/neethi-3.1.1.jar
-webapps/openmeetings/WEB-INF/lib/openjpa-*.jar
-webapps/openmeetings/WEB-INF/lib/openjson-*.jar
-webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
-webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
-webapps/openmeetings/WEB-INF/lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
-webapps/openmeetings/WEB-INF/lib/owasp-java-html-sanitizer-20171016.1.jar
-webapps/openmeetings/WEB-INF/lib/ridl-4.1.2.jar
-webapps/openmeetings/WEB-INF/lib/simple-xml-2.7.1.jar
-webapps/openmeetings/WEB-INF/lib/stax-1.2.0.jar
-webapps/openmeetings/WEB-INF/lib/stax2-api-3.1.4.jar
-webapps/openmeetings/WEB-INF/lib/unoil-4.1.2.jar
-webapps/openmeetings/WEB-INF/lib/wicket*.jar
-webapps/openmeetings/WEB-INF/lib/woodstox-core-*.jar
-webapps/openmeetings/WEB-INF/lib/wsdl4j-1.6.3.jar
-webapps/openmeetings/WEB-INF/lib/xbean-asm6-shaded-*.jar
-webapps/openmeetings/WEB-INF/lib/xml-apis-*.jar
-webapps/openmeetings/WEB-INF/lib/xml-resolver-1.2.jar
-webapps/openmeetings/WEB-INF/lib/xmlschema-core-2.2.3.jar
+webapps/openmeetings/WEB-INF/lib/*.jar
 
 webapps/openmeetings/screenshare/openmeetings-screenshare-*.jar
 
 lib/apache-mime4j-*.jar
+lib/api-all-*.jar
+lib/asterisk-java-2.0.2.jar
 lib/boilerpipe-1.1.0.jar
+lib/caldav4j-*.jar
 lib/commons-*.jar
 lib/cors-filter-2.6.jar
+lib/cxf-*.jar
+lib/derby*.jar
+lib/dom4j-2.1.0.jar
 lib/ehcache-core-2.6.11.jar
 lib/error_prone_annotations*.jar
+lib/fontbox-2.0.8.jar
 lib/geronimo-jpa_2.0_spec-1.1.jar
+lib/gson-*.jar
 lib/guava*.jar
 lib/httpclient-4.5.3.jar
 lib/httpcore-4.4.6.jar
@@ -314,18 +284,44 @@ lib/httpmime-4.5.6.jar
 lib/httpservices-4.5.5.jar
 lib/isoparser-*.jar
 lib/java-property-utils-1.9.1.jar
-lib/jackson-core*.jar
+lib/jackrabbit-webdav-2.13.5.jar
+lib/jackson-*.jar
 lib/jempbox-1.8.13.jar
+lib/jettison-1.3.8.jar
+lib/jodconverter-core-3.0.1-om.jar
+lib/jqplot4java-*.jar
+lib/jqplot-*.jar
+lib/juh-4.1.2.jar
+lib/jurt-4.1.2.jar
+lib/log4j-1.2.17.jar
 lib/metadata-extractor-2.9.1.jar
 lib/mina-*.jar
+lib/neethi-3.1.1.jar
+lib/openjpa-*.jar
+lib/openjson-*.jar
+lib/org.apache.servicemix.bundles.antlr-2.7.7_5.jar
+lib/org.apache.servicemix.bundles.dom4j-1.6.1_5.jar
+lib/org.apache.servicemix.bundles.xpp3-1.1.4c_7.jar
+lib/owasp-java-html-sanitizer-20171016.1.jar
 lib/pdfbox-*.jar
 lib/quartz-2.3.0.jar
 lib/red5-*.jar
+lib/ridl-4.1.2.jar
 lib/rome-1.5.1.jar
 lib/rome-utils-1.5.1.jar
+lib/simple-xml-2.7.1.jar
 lib/spring-*.jar
+lib/stax-1.2.0.jar
+lib/stax2-api-3.1.4.jar
 lib/tagsoup-1.2.1.jar
 lib/tika-*.jar
+lib/unoil-4.1.2.jar
+lib/woodstox-core-*.jar
+lib/wsdl4j-1.6.3.jar
+lib/xbean-asm6-shaded-*.jar
+lib/xml-apis-*.jar
+lib/xml-resolver-1.2.jar
+lib/xmlschema-core-2.2.3.jar
 
 plugins/tomcat-*.jar
 plugins/tomcatplugin-*.jar
@@ -343,8 +339,8 @@ conditions of the following licenses.
 
 For GlassFish components
 
-webapps/openmeetings/WEB-INF/lib/activation-1.1.jar
-webapps/openmeetings/WEB-INF/lib/javax.mail-1.6.2.jar
+lib/activation-1.1.jar
+lib/javax.mail-1.6.2.jar
 
 
 COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
@@ -500,15 +496,15 @@ Copyright (c) 2004-2008 QOS.ch
  
  lib/aopalliance-1.0.jar
  
- For webapps/openmeetings/WEB-INF/lib/xmlpull-1.1.3.1.jar
- For webapps/openmeetings/WEB-INF/lib/xpp3_min-1.1.4c.jar
+ For lib/xmlpull-1.1.3.1.jar
+ For lib/xpp3_min-1.1.4c.jar
  
  The XmlPull API is in public domain in hope that it will be embraced by Java developers
 
  ======================================================================================================================
  
-webapps/openmeetings/WEB-INF/lib/jaxb-core-jar-2.2.11.jar
-webapps/openmeetings/WEB-INF/lib/jaxb-impl-jar-2.2.11.jar
+lib/jaxb-core-jar-2.2.11.jar
+lib/jaxb-impl-jar-2.2.11.jar
 
  COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL)Version 1.1
 
@@ -788,7 +784,7 @@ As a special exception, the copyright holders of this library give you permissio
 ======================================================================================================================
 
 For 
-webapps/openmeetings/WEB-INF/lib/jaxen-1.1.6.jar
+lib/jaxen-1.1.6.jar
 
  $Id: LICENSE.txt,v 1.5 2006/02/05 21:49:04 elharo Exp $
 
@@ -1154,7 +1150,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
 
 For XStream Components: 
-webapps/openmeetings/WEB-INF/lib/xstream-1.4.10.jar
+lib/xstream-1.4.10.jar
 
 Copyright (c) 2003-2006, Joe Walnes
 Copyright (c) 2006-2007, XStream Committers
@@ -1328,7 +1324,7 @@ STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
 
-webapps/openmeetings/WEB-INF/lib/postgresql-*.jar
+lib/postgresql-*.jar
 	Containing Project URL: http://jdbc.postgresql.org
 	
 	The PostgreSQL JDBC driver is distributed under the BSD license, same as the server. The simplest explanation of the licensing terms is that you can do whatever you want with the product and source code as long as you don't claim you wrote it or sue us. You should give it a read though, it's only half a page.
@@ -1398,7 +1394,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ======================================================================================================================
  iCal4j - License
  
-webapps/openmeetings/WEB-INF/lib/ical4j-2.1.5.jar
+lib/ical4j-2.1.5.jar
  
 ======================================================================================================================
 
@@ -2567,8 +2563,8 @@ lib/bzip2-*.jar
 lib/cdm-*.jar
 lib/dec-*.jar
 lib/grib-*.jar
-webapps/openmeetings/WEB-INF/lib/checker-compat-qual-2.0.0.jar
-webapps/openmeetings/WEB-INF/lib/jdk-serializable-functional-1.8.3.jar
+lib/checker-compat-qual-2.0.0.jar
+lib/jdk-serializable-functional-1.8.3.jar
 
 The MIT License (MIT)
 

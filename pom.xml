@@ -81,7 +81,6 @@
 		<tomcat.version>9.0.12</tomcat.version>
 		<ical4j.version>3.0.1</ical4j.version>
 		<cxf.version>3.2.6</cxf.version>
-		<neethi.version>3.1.1</neethi.version>
 		<selenium.version>3.14.0</selenium.version>
 		<simple-xml.version>2.7.1</simple-xml.version>
 		<jettison.version>1.4.0</jettison.version>
@@ -778,11 +777,6 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.neethi</groupId>
-				<artifactId>neethi</artifactId>
-				<version>${neethi.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
 				<artifactId>selenium-java</artifactId>
 				<version>${selenium.version}</version>
@@ -897,6 +891,8 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${maven-bundle-plugin.version}</version>
+				<extensions>true</extensions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -1050,12 +1046,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-report-plugin</artifactId>
 					<version>${maven-surefire-plugin.version}</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>${maven-bundle-plugin.version}</version>
-					<extensions>true</extensions>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
