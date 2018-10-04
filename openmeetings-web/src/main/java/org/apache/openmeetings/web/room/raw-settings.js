@@ -65,7 +65,7 @@ var MicLevel = (function() {
 	};
 });
 var VideoSettings = (function() {
-	let vs, lm, s, cam, mic, res, o, rtcPeer, offerSdp, timer
+	let vs, lm, s, cam, mic, res, o, rtcPeer, timer
 		, vidScroll, vid, recBtn, playBtn, recAllowed = false
 		, level;
 	const MsgBase = {type: 'kurento', mode: 'test'};
@@ -103,7 +103,6 @@ var VideoSettings = (function() {
 			level = null;
 		}
 		_micActivity(0);
-		offerSdp = null;
 	}
 	function _close() {
 		_clear();
@@ -159,16 +158,9 @@ var VideoSettings = (function() {
 			.click(function() {
 				recBtn.prop('disabled', true).button('refresh');
 				_setEnabled(true);
-
-				OmUtil.info('Invoking SDP offer callback function');
-				const cnts = _constraints();
 				OmUtil.sendMessage({
-					id : 'start'
-					, sdpOffer: offerSdp
-					, video: cnts.video !== false
-					, audio: cnts.audio !== false
+					id : 'wannaRecord'
 				}, MsgBase);
-				rtcPeer.on('icecandidate', _onIceCandidate);
 			});
 		playBtn = vs.find('.play')
 			.button({icon: "ui-icon-play"})
@@ -284,7 +276,7 @@ var VideoSettings = (function() {
 		}
 		return cnts;
 	}
-	function _readValues() {
+	function _readValues(msg, func) {
 		const v = cam.find('option:selected')
 			, m = mic.find('option:selected')
 			, o = res.find('option:selected').data();
@@ -300,10 +292,16 @@ var VideoSettings = (function() {
 		_clear();
 		const cnts = _constraints();
 		if (cnts.video !== false || cnts.audio !== false) {
+			const options = {
+				localVideo: vid[0]
+				, mediaConstraints: cnts
+			};
+			if (msg && msg.configuration) {
+				options.configuration = msg.configuration;
+			}
 			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-				{
-					localVideo: vid[0], mediaConstraints: cnts
-				}, function(error) {
+				options
+				, function(error) {
 					if (error) {
 						return OmUtil.error(error);
 					}
@@ -313,8 +311,11 @@ var VideoSettings = (function() {
 						if (error) {
 							return OmUtil.error('Error generating the offer');
 						}
-						offerSdp = _offerSdp;
-						_allowRec(true);
+						if (typeof(func) === 'function') {
+							func(_offerSdp, cnts);
+						} else {
+							_allowRec(true);
+						}
 					});
 				});
 		}
@@ -428,6 +429,18 @@ var VideoSettings = (function() {
 				if ('test' === m.mode) {
 					OmUtil.info('Received message: ', m);
 					switch (m.id) {
+						case 'canRecord':
+							_readValues(m, function(_offerSdp, cnts) {
+								OmUtil.info('Invoking SDP offer callback function');
+								OmUtil.sendMessage({
+									id : 'record'
+									, sdpOffer: _offerSdp
+									, video: cnts.video !== false
+									, audio: cnts.audio !== false
+								}, MsgBase);
+								rtcPeer.on('icecandidate', _onIceCandidate);
+							});
+							break;
 						case 'playResponse':
 						case 'startResponse':
 							OmUtil.log('SDP answer received from server. Processing ...');

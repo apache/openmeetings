@@ -21,6 +21,9 @@ package org.apache.openmeetings.core.remote;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -29,6 +32,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -53,6 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
@@ -61,10 +69,15 @@ public class KurentoHandler {
 	private final static String TAG_KUID = "kuid";
 	private final static String TAG_MODE = "mode";
 	private final static String TAG_ROOM = "roomId";
+	private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	public final static String KURENTO_TYPE = "kurento";
 	private long checkTimeout = 200; //ms
 	private String kurentoWsUrl;
-	private String turnServerUrl;
+	private String turnUrl;
+	private String turnUser;
+	private String turnSecret;
+	private String turnMode;
+	private int turnTtl = 60; //minutes
 	private KurentoClient client;
 	private String kuid;
 	private ScheduledExecutorService scheduler;
@@ -200,7 +213,13 @@ public class KurentoHandler {
 		if (MODE_TEST.equals(msg.optString(TAG_MODE))) {
 			KTestStream user = getTestByUid(_c.getUid());
 			switch (cmdId) {
-				case "start":
+				case "wannaRecord":
+					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+							.put("id", "canRecord")
+							.put("configuration", new JSONObject().put("iceServers", getTurnServers(true)))
+							);
+					break;
+				case "record":
 				{
 					//TODO FIXME assert null user ???
 					user = new KTestStream(_c, msg, createTestPipeline());
@@ -430,6 +449,34 @@ public class KurentoHandler {
 		return r;
 	}
 
+	private JSONArray getTurnServers(final boolean test) {
+		JSONArray arr = new JSONArray();
+		if (!Strings.isEmpty(turnUrl)) {
+			try {
+				JSONObject turn = new JSONObject();
+				if ("rest".equalsIgnoreCase(turnMode)) {
+					Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+					mac.init(new SecretKeySpec(turnSecret.getBytes(), HMAC_SHA1_ALGORITHM));
+					StringBuilder user = new StringBuilder()
+							.append((test ? 30 : turnTtl) + System.currentTimeMillis() / 1000L);
+					if (!Strings.isEmpty(turnUser)) {
+						user.append(':').append(turnUser);
+					}
+					turn.put("username", user)
+						.put("credential", Base64.getEncoder().encodeToString(mac.doFinal(user.toString().getBytes())));
+				} else {
+					turn.put("username", turnUser)
+						.put("credential", turnSecret);
+				}
+				turn.put("url", String.format("turn:%s", turnUrl));
+				arr.put(turn);
+			} catch (NoSuchAlgorithmException|InvalidKeyException e) {
+				log.error("Unexpected error while creating turn", e);
+			}
+		}
+		return arr;
+	}
+
 	public void setCheckTimeout(long checkTimeout) {
 		this.checkTimeout = checkTimeout;
 	}
@@ -438,11 +485,23 @@ public class KurentoHandler {
 		this.kurentoWsUrl = kurentoWsUrl;
 	}
 
-	public String getTurnServerUrl() {
-		return turnServerUrl;
+	public void setTurnUrl(String turnUrl) {
+		this.turnUrl = turnUrl;
 	}
 
-	public void setTurnServerUrl(String turnServerUrl) {
-		this.turnServerUrl = turnServerUrl;
+	public void setTurnUser(String turnUser) {
+		this.turnUser = turnUser;
+	}
+
+	public void setTurnSecret(String turnSecret) {
+		this.turnSecret = turnSecret;
+	}
+
+	public void setTurnMode(String turnMode) {
+		this.turnMode = turnMode;
+	}
+
+	public void setTurnTtl(int turnTtl) {
+		this.turnTtl = turnTtl;
 	}
 }

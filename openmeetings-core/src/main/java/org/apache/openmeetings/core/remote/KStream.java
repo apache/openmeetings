@@ -31,7 +31,6 @@ import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
-import org.apache.wicket.util.string.Strings;
 import org.kurento.client.Continuation;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
@@ -160,9 +159,6 @@ public class KStream implements IKStream {
 
 	private WebRtcEndpoint createEndpoint(final KurentoHandler h, final KStream sender) {
 		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
-		if (!Strings.isEmpty(h.getTurnServerUrl())) {
-			endpoint.setTurnUrl(h.getTurnServerUrl());
-		}
 		endpoint.addTag("suid", uid);
 		endpoint.addTag("uid", sender.getUid());
 
