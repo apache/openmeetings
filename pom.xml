@@ -100,7 +100,6 @@
 		<commons-io.version>2.6</commons-io.version>
 		<mysql.version>8.0.11</mysql.version>
 		<mssql.version>6.2.1.jre8</mssql.version>
-		<pdfbox.version>2.0.11</pdfbox.version>
 		<commons-collections4.version>4.2</commons-collections4.version>
 		<xstream.version>1.4.10</xstream.version>
 		<api-all.version>2.0.0.AM2</api-all.version>
