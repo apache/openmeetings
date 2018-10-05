@@ -25,6 +25,7 @@ import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -40,6 +41,7 @@ import org.kurento.client.IceCandidate;
 import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
+import org.kurento.client.MediaSessionStartedEvent;
 import org.kurento.client.MediaType;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
@@ -68,8 +70,7 @@ public class KTestStream implements IKStream {
 		webRtcEndpoint.connect(webRtcEndpoint);
 
 		MediaProfileSpecType profile = getProfile(msg);
-		//FIXME TODO generated file uid
-		initRecPath(_c.getUid());
+		initRecPath();
 		recorder = new RecorderEndpoint.Builder(pipeline, recPath)
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
@@ -110,11 +111,9 @@ public class KTestStream implements IKStream {
 				break;
 		}
 
-		// 3. SDP negotiation
 		String sdpOffer = msg.getString("sdpOffer");
 		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
 
-		// 4. Gather ICE candidates
 		addIceListener(_c);
 
 		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
@@ -136,37 +135,36 @@ public class KTestStream implements IKStream {
 	}
 
 	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
-		// 1. Media logic
 		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
 		player.connect(webRtcEndpoint);
-
-		// Player listeners
-		player.addErrorListener(new EventListener<ErrorEvent>() {
+		webRtcEndpoint.addMediaSessionStartedListener(new EventListener<MediaSessionStartedEvent>() {
 			@Override
-			public void onEvent(ErrorEvent event) {
-				log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
-				sendPlayEnd(_c);
+			public void onEvent(MediaSessionStartedEvent event) {
+				log.info("Media session started {}", event);
+				player.addErrorListener(new EventListener<ErrorEvent>() {
+					@Override
+					public void onEvent(ErrorEvent event) {
+						log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
+						sendPlayEnd(_c);
+					}
+				});
+				player.addEndOfStreamListener(new EventListener<EndOfStreamEvent>() {
+					@Override
+					public void onEvent(EndOfStreamEvent event) {
+						log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
+						sendPlayEnd(_c);
+					}
+				});
+				player.play();
 			}
 		});
-		player.addEndOfStreamListener(new EventListener<EndOfStreamEvent>() {
-			@Override
-			public void onEvent(EndOfStreamEvent event) {
-				log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
-				sendPlayEnd(_c);
-			}
-		});
 
-		// 3. SDP negotiation
 		String sdpOffer = msg.getString("sdpOffer");
 		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
 
-		// 4. Gather ICE candidates
 		addIceListener(_c);
-
-		// 5. Play recorded stream
-		player.play();
 
 		WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 				.put("id", "playResponse")
@@ -213,9 +211,9 @@ public class KTestStream implements IKStream {
 		}
 	}
 
-	private void initRecPath(String uid) {
+	private void initRecPath() {
 		try {
-			File f = new File(getStreamsDir(), String.format("%s%s.webm", TEST_SETUP_PREFIX, uid));
+			File f = new File(getStreamsDir(), String.format("%s%s.webm", TEST_SETUP_PREFIX, UUID.randomUUID()));
 			recPath = String.format("file://%s", f.getCanonicalPath());
 			log.info("Configured to record to {}", recPath);
 		} catch (IOException e) {

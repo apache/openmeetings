@@ -135,5 +135,11 @@ var VideoUtil = (function() {
 	self.arrange = _arrange;
 	self.cleanStream = _cleanStream;
 	self.cleanPeer = _cleanPeer;
+	self.addIceServers = function(opts, m) {
+		if (m && m.iceServers && m.iceServers.length > 0) {
+			opts.configuration = {iceServers: m.iceServers};
+		}
+		return opts;
+	};
 	return self;
 })();

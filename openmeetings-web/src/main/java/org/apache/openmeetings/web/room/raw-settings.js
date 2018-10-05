@@ -271,13 +271,10 @@ var VideoSettings = (function() {
 		_clear();
 		const cnts = _constraints();
 		if (cnts.video !== false || cnts.audio !== false) {
-			const options = {
+			const options = VideoUtil.addIceServers({
 				localVideo: vid[0]
 				, mediaConstraints: cnts
-			};
-			if (msg && msg.configuration) {
-				options.configuration = msg.configuration;
-			}
+			}, msg);
 			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
 				options
 				, function(error) {
@@ -298,7 +295,9 @@ var VideoSettings = (function() {
 					});
 				});
 		}
-		_updateRec();
+		if (!msg) {
+			_updateRec();
+		}
 	}
 
 	function _allowRec(allow) {
@@ -422,14 +421,11 @@ var VideoSettings = (function() {
 							break;
 						case 'canPlay':
 							{
-								const options = {
+								const options = VideoUtil.addIceServers({
 									remoteVideo: vid[0]
 									, mediaConstraints: {audio: true, video: true}
 									, onicecandidate: _onIceCandidate
-								};
-								if (m && m.configuration) {
-									options.configuration = m.configuration;
-								}
+								}, m);
 								_clear();
 								rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
 									options

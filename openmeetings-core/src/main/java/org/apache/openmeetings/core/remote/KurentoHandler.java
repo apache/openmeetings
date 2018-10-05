@@ -55,6 +55,7 @@ import org.kurento.client.ObjectCreatedEvent;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
 import org.kurento.client.Tag;
+import org.kurento.client.Transaction;
 import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,10 +66,10 @@ import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
 	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
-	private final static String MODE_TEST = "test";
-	private final static String TAG_KUID = "kuid";
-	private final static String TAG_MODE = "mode";
-	private final static String TAG_ROOM = "roomId";
+	final static String MODE_TEST = "test";
+	final static String TAG_KUID = "kuid";
+	final static String TAG_MODE = "mode";
+	final static String TAG_ROOM = "roomId";
 	private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	public final static String KURENTO_TYPE = "kurento";
 	private long checkTimeout = 200; //ms
@@ -80,7 +81,6 @@ public class KurentoHandler {
 	private int turnTtl = 60; //minutes
 	private KurentoClient client;
 	private String kuid;
-	private ScheduledExecutorService scheduler;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KStream> usersByUid = new ConcurrentHashMap<>();
 	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
@@ -92,74 +92,8 @@ public class KurentoHandler {
 		try {
 			// TODO check connection, reconnect, listeners etc.
 			client = KurentoClient.create(kurentoWsUrl);
-			client.getServerManager().addObjectCreatedListener(new EventListener<ObjectCreatedEvent>() {
-				@Override
-				public void onEvent(ObjectCreatedEvent evt) {
-					log.debug("Kurento::ObjectCreated -> {}", evt.getObject());
-					if (evt.getObject() instanceof MediaPipeline) {
-						// room created
-						final String roid = evt.getObject().getId();
-						scheduler.schedule(() -> {
-							if (client == null) {
-								return;
-							}
-							// still alive
-							MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
-							try {
-								Map<String, String> tags = tagsAsMap(pipe);
-								if (validTestPipeline(tags)) {
-									return;
-								}
-								if (kuid.equals(tags.get(TAG_KUID))) {
-									KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
-									if (r.getPipelineId().equals(pipe.getId())) {
-										return;
-									} else if (r != null) {
-										rooms.remove(r.getRoomId());
-										r.close();
-									}
-								}
-							} catch(Exception e) {
-								//no-op, connect will be dropped
-							}
-							log.warn("Invalid MediaPipeline {} detected, will be dropped", pipe.getId());
-							pipe.release();
-						}, checkTimeout, MILLISECONDS);
-					} else if (evt.getObject() instanceof Endpoint) {
-						// endpoint created
-						Endpoint _point = (Endpoint)evt.getObject();
-						final String eoid = _point.getId();
-						Class<? extends Endpoint> _clazz = null;
-						if (_point instanceof WebRtcEndpoint) {
-							_clazz = WebRtcEndpoint.class;
-						} else if (_point instanceof RecorderEndpoint) {
-							_clazz = RecorderEndpoint.class;
-						} else if (_point instanceof PlayerEndpoint) {
-							_clazz = PlayerEndpoint.class;
-						}
-						final Class<? extends Endpoint> clazz = _clazz;
-						scheduler.schedule(() -> {
-							if (client == null || clazz == null) {
-								return;
-							}
-							// still alive
-							Endpoint point = client.getById(eoid, clazz);
-							if (validTestPipeline(point.getMediaPipeline())) {
-								return;
-							}
-							Map<String, String> tags = tagsAsMap(point);
-							KStream stream = getByUid(tags.get("suid"));
-							if (stream != null && stream.contains(tags.get("uid"))) {
-								return;
-							}
-							log.warn("Invalid Endpoint {} detected, will be dropped", point.getId());
-							point.release();
-						}, checkTimeout, MILLISECONDS);
-					}
-				}
-			});
 			kuid = UUID.randomUUID().toString(); //FIXME TODO regenerate on re-connect
-			scheduler = Executors.newScheduledThreadPool(10);
+			client.getServerManager().addObjectCreatedListener(new KWatchDog(client, kuid, checkTimeout));
 		} catch (Exception e) {
 			log.error("Fail to create Kurento client", e);
 		}
@@ -180,7 +114,7 @@ public class KurentoHandler {
 		}
 	}
 
-	private static Map<String, String> tagsAsMap(MediaObject pipe) {
+	static Map<String, String> tagsAsMap(MediaObject pipe) {
 		Map<String, String> map = new HashMap<>();
 		for (Tag t : pipe.getTags()) {
 			map.put(t.getKey(), t.getValue());
@@ -188,19 +122,13 @@ public class KurentoHandler {
 		return map;
 	}
 
-	private boolean validTestPipeline(MediaPipeline pipeline) {
-		return validTestPipeline(tagsAsMap(pipeline));
-	}
-
-	private boolean validTestPipeline(Map<String, String> tags) {
-		return kuid.equals(tags.get(TAG_KUID)) && MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_ROOM));
-	}
-
 	private MediaPipeline createTestPipeline() {
-		MediaPipeline pipe = client.createMediaPipeline();
-		pipe.addTag(TAG_KUID, kuid);
-		pipe.addTag(TAG_MODE, MODE_TEST);
-		pipe.addTag(TAG_ROOM, MODE_TEST);
+		Transaction t = client.beginTransaction();
+		MediaPipeline pipe = client.createMediaPipeline(t);
+		pipe.addTag(t, TAG_KUID, kuid);
+		pipe.addTag(t, TAG_MODE, MODE_TEST);
+		pipe.addTag(t, TAG_ROOM, MODE_TEST);
+		t.commit();
 		return pipe;
 	}
 
@@ -216,7 +144,7 @@ public class KurentoHandler {
 				case "wannaRecord":
 					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 							.put("id", "canRecord")
-							.put("configuration", new JSONObject().put("iceServers", getTurnServers(true)))
+							.put("iceServers", getTurnServers(true))
 							);
 					break;
 				case "record":
@@ -239,7 +167,7 @@ public class KurentoHandler {
 				case "wannaPlay":
 					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 							.put("id", "canPlay")
-							.put("configuration", new JSONObject().put("iceServers", getTurnServers(true)))
+							.put("iceServers", getTurnServers(true))
 							);
 					break;
 				case "play":
@@ -464,7 +392,7 @@ public class KurentoHandler {
 					Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
 					mac.init(new SecretKeySpec(turnSecret.getBytes(), HMAC_SHA1_ALGORITHM));
 					StringBuilder user = new StringBuilder()
-							.append((test ? 30 : turnTtl) + System.currentTimeMillis() / 1000L);
+							.append((test ? 60 : turnTtl * 60) + System.currentTimeMillis() / 1000L);
 					if (!Strings.isEmpty(turnUser)) {
 						user.append(':').append(turnUser);
 					}
@@ -509,5 +437,92 @@ public class KurentoHandler {
 
 	public void setTurnTtl(int turnTtl) {
 		this.turnTtl = turnTtl;
+	}
+
+	private class KWatchDog implements EventListener<ObjectCreatedEvent> {
+		private ScheduledExecutorService scheduler;
+		private final String kuid;
+		private final long checkTimeout;
+		private final KurentoClient client;
+
+		public KWatchDog(final KurentoClient client, final String kuid, final long checkTimeout) {
+			this.client = client;
+			this.kuid = kuid;
+			this.checkTimeout = checkTimeout;
+			scheduler = Executors.newScheduledThreadPool(10);
+		}
+
+		@Override
+		public void onEvent(ObjectCreatedEvent evt) {
+			log.debug("Kurento::ObjectCreated -> {}", evt.getObject());
+			if (evt.getObject() instanceof MediaPipeline) {
+				// room created
+				final String roid = evt.getObject().getId();
+				scheduler.schedule(() -> {
+					if (client == null) {
+						return;
+					}
+					// still alive
+					MediaPipeline pipe = client.getById(roid, MediaPipeline.class);
+					Map<String, String> tags = tagsAsMap(pipe);
+					try {
+						if (validTestPipeline(tags)) {
+							return;
+						}
+						if (kuid.equals(tags.get(TAG_KUID))) {
+							KRoom r = rooms.get(Long.valueOf(tags.get(TAG_ROOM)));
+							if (r.getPipelineId().equals(pipe.getId())) {
+								return;
+							} else if (r != null) {
+								rooms.remove(r.getRoomId());
+								r.close();
+							}
+						}
+					} catch(Exception e) {
+						//no-op, connect will be dropped
+					}
+					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
+					pipe.release();
+				}, checkTimeout, MILLISECONDS);
+			} else if (evt.getObject() instanceof Endpoint) {
+				// endpoint created
+				Endpoint _point = (Endpoint)evt.getObject();
+				final String eoid = _point.getId();
+				Class<? extends Endpoint> _clazz = null;
+				if (_point instanceof WebRtcEndpoint) {
+					_clazz = WebRtcEndpoint.class;
+				} else if (_point instanceof RecorderEndpoint) {
+					_clazz = RecorderEndpoint.class;
+				} else if (_point instanceof PlayerEndpoint) {
+					_clazz = PlayerEndpoint.class;
+				}
+				final Class<? extends Endpoint> clazz = _clazz;
+				scheduler.schedule(() -> {
+					if (client == null || clazz == null) {
+						return;
+					}
+					// still alive
+					Endpoint point = client.getById(eoid, clazz);
+					if (validTestPipeline(point.getMediaPipeline())) {
+						return;
+					}
+					Map<String, String> tags = tagsAsMap(point);
+					KStream stream = getByUid(tags.get("suid"));
+					if (stream != null && stream.contains(tags.get("uid"))) {
+						return;
+					}
+					log.warn("Invalid Endpoint {} detected, will be dropped", point.getId());
+					point.release();
+				}, checkTimeout, MILLISECONDS);
+			}
+		}
+
+		private boolean validTestPipeline(MediaPipeline pipeline) {
+			return validTestPipeline(tagsAsMap(pipeline));
+		}
+
+		private boolean validTestPipeline(Map<String, String> tags) {
+			return kuid.equals(tags.get(TAG_KUID)) && MODE_TEST.equals(tags.get(TAG_MODE)) && MODE_TEST.equals(tags.get(TAG_ROOM));
+		}
 	}
 }
