@@ -140,12 +140,12 @@
 
 	<!-- Kurento -->
 	<bean id="kurentoHandler" class="org.apache.openmeetings.core.remote.KurentoHandler" init-method="init" destroy-method="destroy"
-			p:kurentoWsUrl="ws://209.188.14.137:8888/kurento"
-			p:turnUrl="209.188.14.137:3478"
-			p:turnUser="solo-work"
-			p:turnSecret="t2DgV3NMQyRKj4SOH7"
+			p:kurentoWsUrl="ws://127.0.0.1:8888/kurento"
+			p:turnUrl=""
+			p:turnUser=""
+			p:turnSecret=""
 			p:turnMode="rest"
 			p:turnTtl="60"
-			p:checkTimeout="500"
+			p:checkTimeout="200"
 			/>
 </beans>
