@@ -236,6 +236,12 @@ public class KurentoHandler {
 					}
 				}
 					break;
+				case "wannaPlay":
+					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
+							.put("id", "canPlay")
+							.put("configuration", new JSONObject().put("iceServers", getTurnServers(true)))
+							);
+					break;
 				case "play":
 					user.play(_c, msg, createTestPipeline());
 					break;

@@ -167,30 +167,9 @@ var VideoSettings = (function() {
 			.click(function() {
 				recBtn.prop('disabled', true).button('refresh');
 				_setEnabled(true);
-				_clear();
-				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-					{
-						remoteVideo: vid[0]
-						, mediaConstraints: {
-							audio: true
-							, video: true
-						}
-						, onicecandidate: _onIceCandidate
-					}
-					, function(error) {
-						if (error) {
-							return OmUtil.error(error);
-						}
-						rtcPeer.generateOffer(function(error, offerSdp) {
-							if (error) {
-								return OmUtil.error('Error generating the offer');
-							}
-							OmUtil.sendMessage({
-								id : 'play'
-								, sdpOffer: offerSdp
-							}, MsgBase);
-						});
-					});
+				OmUtil.sendMessage({
+					id : 'wannaPlay'
+				}, MsgBase);
 			});
 		vs.dialog({
 			classes: {
@@ -440,6 +419,35 @@ var VideoSettings = (function() {
 								}, MsgBase);
 								rtcPeer.on('icecandidate', _onIceCandidate);
 							});
+							break;
+						case 'canPlay':
+							{
+								const options = {
+									remoteVideo: vid[0]
+									, mediaConstraints: {audio: true, video: true}
+									, onicecandidate: _onIceCandidate
+								};
+								if (m && m.configuration) {
+									options.configuration = m.configuration;
+								}
+								_clear();
+								rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+									options
+									, function(error) {
+										if (error) {
+											return OmUtil.error(error);
+										}
+										rtcPeer.generateOffer(function(error, offerSdp) {
+											if (error) {
+												return OmUtil.error('Error generating the offer');
+											}
+											OmUtil.sendMessage({
+												id : 'play'
+												, sdpOffer: offerSdp
+											}, MsgBase);
+										});
+									});
+								}
 							break;
 						case 'playResponse':
 						case 'startResponse':
