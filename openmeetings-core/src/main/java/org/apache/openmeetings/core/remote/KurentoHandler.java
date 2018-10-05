@@ -93,7 +93,7 @@ public class KurentoHandler {
 			// TODO check connection, reconnect, listeners etc.
 			client = KurentoClient.create(kurentoWsUrl);
 			kuid = UUID.randomUUID().toString(); //FIXME TODO regenerate on re-connect
-			client.getServerManager().addObjectCreatedListener(new KWatchDog(client, kuid, checkTimeout));
+			client.getServerManager().addObjectCreatedListener(new KWatchDog());
 		} catch (Exception e) {
 			log.error("Fail to create Kurento client", e);
 		}
@@ -182,18 +182,20 @@ public class KurentoHandler {
 				return;
 			}
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-			KStream stream = getByUid(c.getUid());
-			if (stream == null) {
-				KRoom room = getRoom(c.getRoomId());
-				stream = room.join(this, c);
-			}
 			//FIXME TODO check client rights here
 			switch (cmdId) {
 				case "toggleActivity":
 					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
+				{
+					KStream stream = getByUid(c.getUid());
+					if (stream == null) {
+						KRoom room = getRoom(c.getRoomId());
+						stream = room.join(this, c);
+					}
 					stream.startBroadcast(this, c, msg.getString("sdpOffer"));
+				}
 					break;
 				case "onIceCandidate":
 				{
@@ -202,11 +204,15 @@ public class KurentoHandler {
 							candidate.getString("candidate")
 							, candidate.getString("sdpMid")
 							, candidate.getInt("sdpMLineIndex"));
-					stream.addCandidate(cand, msg.getString("uid"));
+					KStream sender = getByUid(msg.getString("uid"));
+					sender.addCandidate(cand, c.getUid());
 				}
 					break;
-				case "receiveVideo":
-					stream.videoResponse(this, getByUid(msg.getString("sender")), msg.getString("sdpOffer"));
+				case "addListener":
+				{
+					KStream sender = getByUid(msg.getString("sender"));
+					sender.addListener(this, c, msg.getString("sdpOffer"));
+				}
 					break;
 			}
 		}
@@ -314,14 +320,6 @@ public class KurentoHandler {
 		}
 	}
 
-	/**
-	 * Looks for a room in the active room list.
-	 *
-	 * @param roomId
-	 *            the Id of the room
-	 * @return the room if it was already created, or a new one if it is the first
-	 *         time this room is accessed
-	 */
 	public KRoom getRoom(Long roomId) {
 		log.debug("Searching for room {}", roomId);
 		KRoom room = rooms.get(roomId);
@@ -338,12 +336,6 @@ public class KurentoHandler {
 		return room;
 	}
 
-	/**
-	 * Removes a room from the list of available rooms.
-	 *
-	 * @param room
-	 *            the room to be removed
-	 */
 	public void removeRoom(KRoom room) {
 		this.rooms.remove(room.getRoomId());
 		room.close();
@@ -446,14 +438,8 @@ public class KurentoHandler {
 
 	private class KWatchDog implements EventListener<ObjectCreatedEvent> {
 		private ScheduledExecutorService scheduler;
-		private final String kuid;
-		private final long checkTimeout;
-		private final KurentoClient client;
 
-		public KWatchDog(final KurentoClient client, final String kuid, final long checkTimeout) {
-			this.client = client;
-			this.kuid = kuid;
-			this.checkTimeout = checkTimeout;
+		public KWatchDog() {
 			scheduler = Executors.newScheduledThreadPool(10);
 		}
 
@@ -512,7 +498,7 @@ public class KurentoHandler {
 						return;
 					}
 					Map<String, String> tags = tagsAsMap(point);
-					KStream stream = getByUid(tags.get("suid"));
+					KStream stream = getByUid(tags.get("outUid"));
 					if (stream != null && stream.contains(tags.get("uid"))) {
 						return;
 					}

@@ -47,7 +47,7 @@ var VideoManager = (function() {
 					}
 					OmUtil.log('Invoking Receiver SDP offer callback function');
 					VideoManager.sendMessage({
-						id : 'receiveVideo'
+						id : 'addListener'
 						, sender: cl.uid
 						, sdpOffer: offerSdp
 					});

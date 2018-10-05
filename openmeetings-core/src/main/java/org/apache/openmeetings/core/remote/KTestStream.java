@@ -180,7 +180,6 @@ public class KTestStream implements IKStream {
 	}
 
 	private void addIceListener(IWsClient _c) {
-		// 4. Gather ICE candidates
 		webRtcEndpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 			@Override
 			public void onEvent(IceCandidateFoundEvent event) {
@@ -223,54 +222,51 @@ public class KTestStream implements IKStream {
 
 	@Override
 	public void release() {
-		//TODO improve this
-		pipeline.release(new Continuation<Void>() {
-			@Override
-			public void onSuccess(Void result) throws Exception {
-				log.info("Pipeline released successfully");
-				cleanup();
-			}
-
-			@Override
-			public void onError(Throwable cause) throws Exception {
-				log.info("Error releasing pipeline ", cause);
-				cleanup();
-			}
-		});
-		if (player != null) {
-			player.release(new Continuation<Void>() {
+		if (webRtcEndpoint != null) {
+			webRtcEndpoint.release();
+			webRtcEndpoint = null;
+		}
+		if (pipeline != null) {
+			pipeline.release(new Continuation<Void>() {
 				@Override
 				public void onSuccess(Void result) throws Exception {
 					log.info("Pipeline released successfully");
-					player = null;
 				}
 
 				@Override
 				public void onError(Throwable cause) throws Exception {
 					log.info("Error releasing pipeline ", cause);
-					player = null;
 				}
 			});
+			pipeline = null;
+		}
+		if (player != null) {
+			player.release(new Continuation<Void>() {
+				@Override
+				public void onSuccess(Void result) throws Exception {
+					log.info("Pipeline released successfully");
+				}
+
+				@Override
+				public void onError(Throwable cause) throws Exception {
+					log.info("Error releasing pipeline ", cause);
+				}
+			});
+			player = null;
 		}
 		if (recorder != null) {
 			recorder.release(new Continuation<Void>() {
 				@Override
 				public void onSuccess(Void result) throws Exception {
 					log.info("Pipeline released successfully");
-					recorder = null;
 				}
 
 				@Override
 				public void onError(Throwable cause) throws Exception {
 					log.info("Error releasing pipeline ", cause);
-					recorder = null;
 				}
 			});
+			recorder = null;
 		}
-	}
-
-	private void cleanup() {
-		webRtcEndpoint = null;
-		pipeline = null;
 	}
 }
