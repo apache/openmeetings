@@ -17,24 +17,26 @@ var VideoManager = (function() {
 	function _onBroadcast(msg) {
 		const uid = msg.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
-		Video().init(msg.client, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25));
+		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
 	}
 
-	function _onReceive(c) {
-		const uid = c.uid;
+	function _onReceive(msg) {
+		const uid = msg.client.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
 		const o = VideoSettings.load() //FIXME TODO add multiple streams support
 			//, w = Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
-			, w = Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25))
+			, w = Video().init(msg)
 			, v = w.data()
 			, cl = v.client();
 		OmUtil.log(uid + ' receiving video');
 
-		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly({
-				remoteVideo : v.video()
-				, onicecandidate : v.onIceCandidate
-			}
+		const options = VideoUtil.addIceServers({
+			remoteVideo : v.video()
+			, onicecandidate : v.onIceCandidate
+		}, msg);
+		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+			options
 			, function(error) {
 				if (error) {
 					return OmUtil.error(error);
@@ -88,7 +90,7 @@ var VideoManager = (function() {
 						}
 						break;
 					case 'newStream':
-						_onReceive(m.client);
+						_onReceive(m);
 						break;
 					default:
 						//no-op
@@ -157,10 +159,11 @@ var VideoManager = (function() {
 		v.remove();
 		WbArea.updateAreaClass();
 	}
-	function _play(c) {
+	function _play(msg) {
 		if (!inited) {
 			return;
 		}
+		const c = msg.client;
 		if (VideoUtil.isSharing(c)) {
 			_highlight(share
 					.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text'))
@@ -175,7 +178,7 @@ var VideoManager = (function() {
 				}
 			});
 		} else {
-			_onReceive(c);
+			_onReceive(msg);
 		}
 	}
 	function _close(uid, showShareBtn) {

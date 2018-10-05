@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
@@ -167,7 +168,10 @@ public class RoomPanel extends BasePanel {
 			for (Client c: cm.listByRoom(getRoom().getId())) {
 				//FIXME TODO add multiple streams support
 				if (!c.getStreams().isEmpty()) {
-					sb.append(String.format("VideoManager.play(%s);", c.toJson(false).put("type", "room"))); // FIXME TODO add multi-stream support
+					sb.append(String.format("VideoManager.play(%s);", new JSONObject()
+							.put("client", c.toJson(false).put("type", "room"))
+							.put("iceServers", kHandler.getTurnServers())
+							)); // FIXME TODO add multi-stream support
 					hasStreams = true;
 				}
 			}
@@ -233,6 +237,8 @@ public class RoomPanel extends BasePanel {
 	private AppointmentDao apptDao;
 	@SpringBean
 	private QuickPollManager qpollManager;
+	@SpringBean
+	private KurentoHandler kHandler;
 
 	public RoomPanel(String id, Room r) {
 		super(id);

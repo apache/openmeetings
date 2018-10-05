@@ -89,6 +89,7 @@ public class KStream implements IKStream {
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 		WebSocketHelper.sendRoomOthers(roomId, uid, newKurentoMsg()
 				.put("id", "newStream")
+				.put("iceServers", h.getTurnServers())
 				.put("client", c.toJson(false).put("type", "room"))); // FIXME TODO add multi-stream support
 		return this;
 	}

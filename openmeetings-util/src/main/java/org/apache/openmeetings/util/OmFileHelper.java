@@ -180,8 +180,7 @@ public class OmFileHelper {
 	}
 
 	public static File getStreamsDir() {
-		//FIXME TODO return getDir(OmFileHelper.omHome, STREAMS_DIR);
-		return new File(System.getProperty("java.io.tmpdir"), STREAMS_DIR);
+		return getDir(OmFileHelper.omHome, STREAMS_DIR);
 	}
 
 	public static File getStreamsHibernateDir() {

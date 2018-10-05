@@ -259,6 +259,7 @@ public class KurentoHandler {
 						.put("id", "broadcast")
 						.put("uid", sd.getUid())
 						.put("stream", new JSONObject(sd))
+						.put("iceServers", getTurnServers(false))
 						.put("client", c.toJson(true).put("type", "room"))); // FIXME TODO add multi-stream support
 				//FIXME TODO update interview buttons
 			} else {
@@ -381,6 +382,10 @@ public class KurentoHandler {
 				break;
 		}
 		return r;
+	}
+
+	public JSONArray getTurnServers() {
+		return getTurnServers(false);
 	}
 
 	private JSONArray getTurnServers(final boolean test) {

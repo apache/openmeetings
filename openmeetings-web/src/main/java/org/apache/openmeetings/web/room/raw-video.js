@@ -44,7 +44,7 @@ var Video = (function() {
 			OmUtil.sendMessage({type: 'mic', id: 'activity', active: speaks});
 		}
 	}
-	function _createSendPeer() {
+	function _createSendPeer(msg) {
 		const constraints = VideoSettings.constraints(c);
 		navigator.mediaDevices.getUserMedia(constraints)
 			.then(function(stream) {
@@ -62,13 +62,14 @@ var Video = (function() {
 					gainNode.connect(aDest);
 					_stream = aDest.stream;
 				}
+				const options = VideoUtil.addIceServers({
+					localVideo: video[0]
+					, videoStream: _stream
+					, mediaConstraints: constraints
+					, onicecandidate: self.onIceCandidate
+				}, msg);
 				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-						{
-							localVideo: video[0]
-							, videoStream: _stream
-							, mediaConstraints: constraints
-							, onicecandidate: self.onIceCandidate
-						}
+						options
 						, function (error) {
 							if (error) {
 								return OmUtil.error(error);
@@ -189,8 +190,8 @@ var Video = (function() {
 			});
 		}
 	}
-	function _init(_c, _pos) {
-		c = _c;
+	function _init(msg) {
+		c = msg.client;
 		size = {width: c.width, height: c.height};
 		const _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
@@ -279,14 +280,15 @@ var Video = (function() {
 			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
 		}
 		if (c.self) { //FIXME TODO multi-stream
-			_createSendPeer();
+			_createSendPeer(msg);
 		} else if (VideoUtil.hasAudio(c)) {
 			vol.show();
 			_handleVolume(lastVolume);
 		}
 
 		vc.append(video);
-		v.dialog('widget').css(_pos);
+		//FIXME TODO multiple streams
+		v.dialog('widget').css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
 		return v;
 	}
 	function _update(_c) {
