@@ -63,3 +63,11 @@ iframe {
 .carousel.slide .carousel-inner .item img {
 	height: 654px !important;
 }
+.apachecon-banner img {
+	height: 62px !important;
+}
+.apachecon-banner div {
+	font-size: small;
+	font-weight: bold;
+	text-align: center;
+}

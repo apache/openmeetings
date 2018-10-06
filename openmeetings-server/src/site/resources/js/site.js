@@ -23,4 +23,12 @@ $(document).ready(function() {
 	for (var i = 0; i < topics.length; ++i) {
 		$('ul.nav li a[title="' + topics[i] + '"').append('&nbsp;&nbsp;<span class="label label-success">New</span>')
 	}
+	// "ACNA" banner on the right
+	$('#bannerRight').parent().parent().append(
+		$('<div class="pull-right">')
+			.append($('<a href="https://www.apachecon.com" class="apachecon-banner">')
+				.append($('<img src="https://apachecon.com/acna18/banners/acna-sleek-standard.png">'))
+				.append($('<div>').text('Register to ApacheCon!'))
+				)
+		);
 })
