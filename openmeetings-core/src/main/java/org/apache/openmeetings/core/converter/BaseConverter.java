@@ -426,7 +426,7 @@ public abstract class BaseConverter {
 		return new Dimension(100, 100); // will return 100x100 for non-video to be able to play
 	}
 
-	protected void finalize(Recording r, String mp4path, ProcessResultList logs) throws IOException {
+	protected void finalizeRec(Recording r, String mp4path, ProcessResultList logs) throws IOException {
 		convertToPng(r, mp4path, logs);
 
 		updateDuration(r);

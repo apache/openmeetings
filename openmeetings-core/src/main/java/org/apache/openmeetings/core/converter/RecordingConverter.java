@@ -118,7 +118,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 					"-i", inputScreenFullFlv, "-i", wav.getCanonicalPath()
 					), logs);
 
-			finalize(r, mp4path, logs);
+			finalizeRec(r, mp4path, logs);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);

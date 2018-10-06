@@ -170,7 +170,9 @@ public class KurentoHandler {
 							);
 					break;
 				case "play":
-					user.play(_c, msg, createTestPipeline());
+					if (user != null) {
+						user.play(_c, msg, createTestPipeline());
+					}
 					break;
 			}
 		} else {
@@ -197,19 +199,23 @@ public class KurentoHandler {
 					break;
 				case "onIceCandidate":
 				{
-					JSONObject candidate = msg.getJSONObject("candidate");
-					IceCandidate cand = new IceCandidate(
-							candidate.getString("candidate")
-							, candidate.getString("sdpMid")
-							, candidate.getInt("sdpMLineIndex"));
 					KStream sender = getByUid(msg.getString("uid"));
-					sender.addCandidate(cand, c.getUid());
+					if (sender != null) {
+						JSONObject candidate = msg.getJSONObject("candidate");
+						IceCandidate cand = new IceCandidate(
+								candidate.getString("candidate")
+								, candidate.getString("sdpMid")
+								, candidate.getInt("sdpMLineIndex"));
+						sender.addCandidate(cand, c.getUid());
+					}
 				}
 					break;
 				case "addListener":
 				{
 					KStream sender = getByUid(msg.getString("sender"));
-					sender.addListener(this, c, msg.getString("sdpOffer"));
+					if (sender != null) {
+						sender.addListener(this, c, msg.getString("sdpOffer"));
+					}
 				}
 					break;
 			}

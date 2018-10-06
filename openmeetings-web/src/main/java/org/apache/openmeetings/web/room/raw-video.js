@@ -61,6 +61,10 @@ var Video = (function() {
 					aSrc.connect(gainNode);
 					gainNode.connect(aDest);
 					_stream = aDest.stream;
+					stream.getVideoTracks().forEach(function(track) {
+						_stream.addTrack(track);
+					});
+					_handleVolume(lastVolume);
 				}
 				const options = VideoUtil.addIceServers({
 					localVideo: video[0]
@@ -103,7 +107,7 @@ var Video = (function() {
 				if (error) {
 					return OmUtil.error(error);
 				}
-				this.generateOffer(function onOfferViewer(error, offerSdp) {
+				this.generateOffer(function(error, offerSdp) {
 					if (error) {
 						return OmUtil.error('Receiver sdp offer error ' + error);
 					}
@@ -294,19 +298,8 @@ var Video = (function() {
 		vc = v.find('.video');
 		vc.width(_w).height(_h);
 
-		const hasVideo = VideoUtil.hasVideo(c)
-			, imgUrl = 'profile/' + c.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
-		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
-			.width(c.width).height(c.height)
-			.prop('autoplay', true).prop('controls', false);
-		if (hasVideo) {
-			video.attr('poster', imgUrl);
-		} else {
-			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
-		}
 		_refresh(msg);
 
-		vc.append(video);
 		//FIXME TODO multiple streams
 		v.dialog('widget').css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
 		return v;
@@ -318,14 +311,6 @@ var Video = (function() {
 		c.activities = _c.activities.sort();
 		c.user.firstName = _c.user.firstName;
 		c.user.lastName = _c.user.lastName;
-		const hasAudio = VideoUtil.hasAudio(c);
-		_handleMicStatus(hasAudio);
-		if (hasAudio) {
-			vol.show();
-		} else {
-			vol.hide();
-			v.parent().find('.dropdown-menu.video.volume').hide();
-		}
 		if (opts.interview && c.pod !== _c.pod) {
 			c.pod = _c.pod;
 			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
@@ -333,20 +318,36 @@ var Video = (function() {
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
 		const same = prevA.length === c.activities.length && prevA.every(function(value, index) { return value === c.activities[index]})
-		if (!same) {
-			//_refresh();
+		if (c.self && !same) {
+			_refresh();
 		}
 	}
 	function _refresh(msg) {
 		_cleanup();
+		const _id = VideoUtil.getVid(c.uid);
+		const hasVideo = VideoUtil.hasVideo(c)
+			, imgUrl = 'profile/' + c.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
+		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
+			.width(vc.width()).height(vc.height())
+			.prop('autoplay', true).prop('controls', false);
+		if (hasVideo) {
+			video.attr('poster', imgUrl);
+		} else {
+			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
+		}
+		vc.append(video);
+		const hasAudio = VideoUtil.hasAudio(c);
 		if (c.self) { //FIXME TODO multi-stream
 			_createSendPeer(msg);
+			_handleMicStatus(hasAudio);
 		} else {
 			_createResvPeer(msg);
-			if (VideoUtil.hasAudio(c)) {
-				vol.show();
-				_handleVolume(lastVolume);
-			}
+		}
+		if (hasAudio) {
+			vol.show();
+		} else {
+			vol.hide();
+			v.parent().find('.dropdown-menu.video.volume').hide();
 		}
 	}
 	function _setRights(_r) {
@@ -368,7 +369,7 @@ var Video = (function() {
 			aCtx.close();
 			aCtx = null;
 		}
-		if (video.length > 0) {
+		if (!!video && video.length > 0) {
 			video[0].srcObject = null;
 		}
 		if (!!lm && lm.length > 0) {
@@ -379,6 +380,7 @@ var Video = (function() {
 			level.dispose();
 			level = null;
 		}
+		vc.find('audio,video').remove();
 	}
 
 	self.update = _update;

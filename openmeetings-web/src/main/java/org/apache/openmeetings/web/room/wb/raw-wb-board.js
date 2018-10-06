@@ -649,7 +649,7 @@ var Wb = function() {
 		const canvas = new fabric.Canvas(c.attr('id'), {
 			preserveObjectStacking: true
 			, controlCallback: {
-				mtr: function mtrControlCallback (ctx, left, top, size) {
+				mtr: function(ctx, left, top, size) {
 					const x = left + (size - arrowImg.width) / 2
 						, y = top + (size - arrowImg.height) / 2;
 					ctx.drawImage(arrowImg, x, y);

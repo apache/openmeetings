@@ -39,9 +39,6 @@ var InterviewWbArea = function() {
 		pArea.sortable({
 			items: '.pod'
 			, handle: '.ui-dialog-titlebar'
-			, change: function(event, ui) {
-				console.log('changed');
-			}
 		});
 		_updateAreaClass();
 		_inited = true;
@@ -78,7 +75,7 @@ var InterviewWbArea = function() {
 		const count = pArea.find('.pod:not(.ui-helper,.ui-sortable-placeholder)').length
 			, empt = pArea.find('.empty');
 		if (count < 2) {
-			empt.length == 0 && pArea.append($('<div class="empty"></div>'));
+			empt.length === 0 && pArea.append($('<div class="empty"></div>'));
 		} else {
 			empt.remove();
 		}

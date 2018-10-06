@@ -69,6 +69,10 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			}
 
 			r = recordingDao.get(id);
+			if (r == null) {
+				log.warn("Unable to get REcording by id {}, will interrupt conversion", id);
+				return;
+			}
 			log.debug("recording {}", r.getId());
 			if (Strings.isEmpty(r.getHash())) {
 				r.setHash(UUID.randomUUID().toString());
@@ -243,7 +247,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			String mp4path = convertToMp4(r, args, logs);
 
-			finalize(r, mp4path, logs);
+			finalizeRec(r, mp4path, logs);
 		} catch (Exception err) {
 			log.error("[startConversion]", err);
 			r.setStatus(Recording.Status.ERROR);

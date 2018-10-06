@@ -21,8 +21,7 @@ var Textbox = function(wb, s) {
 		});
 	};
 	text.doubleClick = function(e) {
-		const canvas = this
-			, ao = e.target;
+		const ao = e.target;
 		if (!!ao && text.fabricType === ao.type) {
 			text.obj = ao;
 			text.obj.enterEditing();
