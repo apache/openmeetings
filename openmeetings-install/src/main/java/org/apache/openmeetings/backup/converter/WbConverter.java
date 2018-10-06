@@ -51,6 +51,9 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.XppDriver;
+import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.NullPermission;
+import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 
 public class WbConverter {
 	private static final Logger log = LoggerFactory.getLogger(WbConverter.class);
@@ -305,10 +308,14 @@ public class WbConverter {
 		File file = new File(OmFileHelper.getUploadWmlDir(), name);
 		log.debug("filepathComplete: {}", file);
 
-		XStream xStream = new XStream(new XppDriver());
-		xStream.setMode(XStream.NO_REFERENCES);
+		XStream xstream = new XStream(new XppDriver());
+		xstream.setMode(XStream.NO_REFERENCES);
+		xstream.addPermission(NoTypePermission.NONE);
+		xstream.addPermission(NullPermission.NULL);
+		xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
+		xstream.allowTypeHierarchy(List.class);
 		try (InputStream is = new FileInputStream(file); BufferedReader reader = new BufferedReader(new InputStreamReader(is, UTF_8))) {
-			return (List<?>) xStream.fromXML(reader);
+			return (List<?>) xstream.fromXML(reader);
 		} catch (Exception err) {
 			log.error("loadWmlFile", err);
 		}

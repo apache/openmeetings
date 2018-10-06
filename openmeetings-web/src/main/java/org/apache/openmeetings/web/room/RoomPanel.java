@@ -488,10 +488,6 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
-							boolean self = _c.getUid().equals(c.getUid());
-							/* FIXME TODO handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.streamJson(_c.getSid(), self, scm).toString(new NullStringer())
-									));*/
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);

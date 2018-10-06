@@ -66,10 +66,10 @@ import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
 	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
-	final static String MODE_TEST = "test";
-	final static String TAG_KUID = "kuid";
-	final static String TAG_MODE = "mode";
-	final static String TAG_ROOM = "roomId";
+	private final static String MODE_TEST = "test";
+	private final static String TAG_KUID = "kuid";
+	private final static String TAG_MODE = "mode";
+	private final static String TAG_ROOM = "roomId";
 	private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
 	public final static String KURENTO_TYPE = "kurento";
 	private long checkTimeout = 200; //ms
@@ -114,7 +114,7 @@ public class KurentoHandler {
 		}
 	}
 
-	static Map<String, String> tagsAsMap(MediaObject pipe) {
+	private static Map<String, String> tagsAsMap(MediaObject pipe) {
 		Map<String, String> map = new HashMap<>();
 		for (Tag t : pipe.getTags()) {
 			map.put(t.getKey(), t.getValue());
@@ -313,8 +313,11 @@ public class KurentoHandler {
 				usersByUid.remove(uid);
 			}
 		}
-		if (!test) {
-			Client c = (Client)_c;
+		if (test) {
+			return;
+		}
+		Client c = (Client)_c;
+		if (c.getRoomId() != null) {
 			KRoom room = rooms.get(c.getRoomId());
 			if (room != null) {
 				room.leave(c);
