@@ -43,8 +43,9 @@ import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
 import org.apache.openmeetings.db.dto.basic.ServiceResult.Type;
 import org.apache.openmeetings.db.dto.room.InvitationDTO;
-import org.apache.openmeetings.db.dto.room.RoomCountDTO;
 import org.apache.openmeetings.db.dto.room.RoomDTO;
+import org.apache.openmeetings.db.dto.user.UserDTO;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Invitation.MessageType;
 import org.apache.openmeetings.db.entity.room.Room;
@@ -308,30 +309,36 @@ public class RoomWebService extends BaseWebService {
 	}
 
 	/**
-	 * Returns current users for rooms ids
+	 * Returns the count of users currently in the Room with given id
 	 *
-	 * @param sid - The SID of the User. This SID must be marked as Loggedin
-	 * @param ids - id of the room you need counters for
-	 * @return - current users for rooms ids
+	 * @param sid The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return number of users as int
 	 */
 	@WebMethod
 	@GET
-	@Path("/counters")
-	public List<RoomCountDTO> counters(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @QueryParam("id") List<Long> ids) {
+	@Path("/count/{roomid}")
+	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
+		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
+	}
+
+	/**
+	 * Returns list of users currently in the Room with given id
+	 *
+	 * @param sid The SID from UserService.getSession
+	 * @param roomId id of the room to get users
+	 * @return {@link List} of users in the room
+	 */
+	@WebMethod
+	@GET
+	@Path("/users/{roomid}")
+	public List<UserDTO> users(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
 		return performCall(sid, User.Right.Soap, sd -> {
-			List<RoomCountDTO> roomBeans = new ArrayList<>();
-			List<Room> rooms = roomDao.get(ids);
-
-			for (Room room : rooms) {
-				RoomCountDTO rCountBean = new RoomCountDTO();
-				rCountBean.setRoomId(room.getId());
-				rCountBean.setRoomName(room.getName());
-				rCountBean.setMaxUser(room.getCapacity());
-				rCountBean.setRoomCount(clientManager.listByRoom(room.getId()).size());
-
-				roomBeans.add(rCountBean);
+			List<UserDTO> result = new ArrayList<>();
+			for (Client c : clientManager.listByRoom(roomId)) {
+				result.add(new UserDTO(c.getUser()));
 			}
-			return roomBeans;
+			return result;
 		});
 	}
 

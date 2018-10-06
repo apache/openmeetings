@@ -351,19 +351,4 @@ public class UserWebService extends BaseWebService {
 			return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
 		});
 	}
-
-	/**
-	 * Returns the count of users currently in the Room with given id
-	 * No admin rights are necessary for this call
-	 *
-	 * @param sid The SID from UserService.getSession
-	 * @param roomId id of the room to get users
-	 * @return number of users as int
-	 */
-	@WebMethod
-	@GET
-	@Path("/count/{roomid}")
-	public ServiceResult count(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="roomid") @PathParam("roomid") Long roomId) {
-		return performCall(sid, User.Right.Soap, sd -> new ServiceResult(String.valueOf(clientManager.listByRoom(roomId).size()), Type.SUCCESS));
-	}
 }
