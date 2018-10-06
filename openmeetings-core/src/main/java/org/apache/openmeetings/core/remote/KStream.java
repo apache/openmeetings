@@ -69,6 +69,12 @@ public class KStream implements IKStream {
 		if (outgoingMedia != null) {
 			release();
 		}
+		if ((sdpOffer.indexOf("m=audio") > -1 && !c.hasActivity(Activity.broadcastA))
+				|| (sdpOffer.indexOf("m=video") > -1 && !c.hasActivity(Activity.broadcastV)))
+		{
+			log.warn("Broadcast started without enough rights");
+			return this;
+		}
 		outgoingMedia = createEndpoint(h, h.getBySid(sid));
 		addListener(h, c, sdpOffer);
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
@@ -99,6 +105,10 @@ public class KStream implements IKStream {
 		final boolean self = c.getUid().equals(uid);
 		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", roomId);
 		log.trace("USER {}: SdpOffer is {}", c.getUid(), sdpOffer);
+		if (!self && outgoingMedia == null) {
+			log.warn("Trying to add listener too early");
+			return;
+		}
 
 		final WebRtcEndpoint endpoint = getEndpointForUser(h, c);
 		final String sdpAnswer = endpoint.processOffer(sdpOffer);

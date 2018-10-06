@@ -78,7 +78,7 @@ var Video = (function() {
 							level.meter(rtcPeer, _micActivity, OmUtil.error);
 							this.generateOffer(function(error, offerSdp, wp) {
 								if (error) {
-									return OmUtil.error('Sender sdp offer error');
+									return OmUtil.error('Sender sdp offer error ' + error);
 								}
 								OmUtil.log('Invoking Sender SDP offer callback function');
 								VideoManager.sendMessage({
@@ -90,6 +90,30 @@ var Video = (function() {
 			})
 			.catch(function(err) {
 				OmUtil.error(err);
+			});
+	}
+	function _createResvPeer(msg) {
+		const options = VideoUtil.addIceServers({
+			remoteVideo : video[0]
+			, onicecandidate : self.onIceCandidate
+		}, msg);
+		rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
+			options
+			, function(error) {
+				if (error) {
+					return OmUtil.error(error);
+				}
+				this.generateOffer(function onOfferViewer(error, offerSdp) {
+					if (error) {
+						return OmUtil.error('Receiver sdp offer error ' + error);
+					}
+					OmUtil.log('Invoking Receiver SDP offer callback function');
+					VideoManager.sendMessage({
+						id : 'addListener'
+						, sender: c.uid
+						, sdpOffer: offerSdp
+					});
+				});
 			});
 	}
 	function _handleMicStatus(state) {
@@ -192,6 +216,7 @@ var Video = (function() {
 	}
 	function _init(msg) {
 		c = msg.client;
+		c.activities = c.activities.sort();
 		size = {width: c.width, height: c.height};
 		const _id = VideoUtil.getVid(c.uid)
 			, name = _getName()
@@ -279,12 +304,7 @@ var Video = (function() {
 		} else {
 			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
 		}
-		if (c.self) { //FIXME TODO multi-stream
-			_createSendPeer(msg);
-		} else if (VideoUtil.hasAudio(c)) {
-			vol.show();
-			_handleVolume(lastVolume);
-		}
+		_refresh(msg);
 
 		vc.append(video);
 		//FIXME TODO multiple streams
@@ -292,9 +312,10 @@ var Video = (function() {
 		return v;
 	}
 	function _update(_c) {
-		const opts = Room.getOptions();
+		const opts = Room.getOptions()
+			, prevA = c.activities;
 		c.screenActivities = _c.screenActivities;
-		c.activities = _c.activities;
+		c.activities = _c.activities.sort();
 		c.user.firstName = _c.user.firstName;
 		c.user.lastName = _c.user.lastName;
 		const hasAudio = VideoUtil.hasAudio(c);
@@ -311,10 +332,22 @@ var Video = (function() {
 		}
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
+		const same = prevA.length === c.activities.length && prevA.every(function(value, index) { return value === c.activities[index]})
+		if (!same) {
+			//_refresh();
+		}
 	}
-	function _refresh() {
+	function _refresh(msg) {
 		_cleanup();
-		_createSendPeer();
+		if (c.self) { //FIXME TODO multi-stream
+			_createSendPeer(msg);
+		} else {
+			_createResvPeer(msg);
+			if (VideoUtil.hasAudio(c)) {
+				vol.show();
+				_handleVolume(lastVolume);
+			}
+		}
 	}
 	function _setRights(_r) {
 	}

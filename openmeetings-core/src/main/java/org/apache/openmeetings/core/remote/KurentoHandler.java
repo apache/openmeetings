@@ -149,7 +149,6 @@ public class KurentoHandler {
 					break;
 				case "record":
 				{
-					//TODO FIXME assert null user ???
 					user = new KTestStream(_c, msg, createTestPipeline());
 					testsByUid.put(_c.getUid(), user);
 				}
@@ -182,7 +181,6 @@ public class KurentoHandler {
 				return;
 			}
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
-			//FIXME TODO check client rights here
 			switch (cmdId) {
 				case "toggleActivity":
 					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
@@ -234,7 +232,7 @@ public class KurentoHandler {
 			}
 		}
 		if (activityAllowed(c, a, c.getRoom())) {
-			boolean broadcasting = isBroadcasting(c);
+			boolean wasBroadcasting = isBroadcasting(c);
 			if (a == Client.Activity.broadcastA && !c.isMicEnabled()) {
 				return;
 			}
@@ -254,7 +252,7 @@ public class KurentoHandler {
 				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 				//FIXME TODO update interview buttons
-			} else if (!broadcasting) {
+			} else if (!wasBroadcasting) {
 				//join
 				StreamDesc sd = new StreamDesc(c.getSid(), c.getUid(), StreamDesc.Type.broadcast);
 				sd.setWidth(c.getWidth());
@@ -269,8 +267,8 @@ public class KurentoHandler {
 						.put("client", c.toJson(true).put("type", "room"))); // FIXME TODO add multi-stream support
 				//FIXME TODO update interview buttons
 			} else {
-				//change constraints
-				//FIXME TODO WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
+				//constraints were changed
+				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
 		}
 	}

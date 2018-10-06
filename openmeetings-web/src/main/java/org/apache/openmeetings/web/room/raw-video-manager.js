@@ -24,35 +24,8 @@ var VideoManager = (function() {
 	function _onReceive(msg) {
 		const uid = msg.client.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
-		const o = VideoSettings.load() //FIXME TODO add multiple streams support
-			//, w = Video().init(c, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), msg.stream.width, msg.stream.height + 25))
-			, w = Video().init(msg)
-			, v = w.data()
-			, cl = v.client();
+		Video().init(msg);
 		OmUtil.log(uid + ' receiving video');
-
-		const options = VideoUtil.addIceServers({
-			remoteVideo : v.video()
-			, onicecandidate : v.onIceCandidate
-		}, msg);
-		v.setPeer(new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
-			options
-			, function(error) {
-				if (error) {
-					return OmUtil.error(error);
-				}
-				this.generateOffer(function onOfferViewer(error, offerSdp) {
-					if (error) {
-						return OmUtil.error('Receiver sdp offer error');
-					}
-					OmUtil.log('Invoking Receiver SDP offer callback function');
-					VideoManager.sendMessage({
-						id : 'addListener'
-						, sender: cl.uid
-						, sdpOffer: offerSdp
-					});
-				});
-			}));
 	}
 
 	function _onWsMessage(jqEvent, msg) {
@@ -118,6 +91,7 @@ var VideoManager = (function() {
 		if (!inited) {
 			return;
 		}
+		// FIXME TODO add multi-stream support
 		for (let i = 0; i < c.streams.length; ++i) {
 			const cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
 			delete cl.streams;

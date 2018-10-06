@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -370,12 +371,17 @@ public class Client implements IClient, IWsClient {
 				a.put("country", user.getAddress().getCountry());
 			}
 		}
+		JSONArray streamArr = new JSONArray();
+		for (Entry<String, StreamDesc> e : streams.entrySet()) {
+			streamArr.put(new JSONObject(e.getValue()));
+		}
 		JSONObject json = new JSONObject()
 				.put("user", u)
 				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
 				.put("activities", new JSONArray(activities))
+				.put("streams", streamArr)
 				.put("width", width)
 				.put("height", height)
 				.put("self", self);

@@ -488,6 +488,10 @@ public class RoomPanel extends BasePanel {
 								log.error("Not existing user in rightUpdated {} !!!!", uid);
 								return;
 							}
+							boolean self = _c.getUid().equals(c.getUid());
+							handler.appendJavaScript(String.format("VideoManager.update(%s);"
+									, c.toJson(self).put("type", "room") // FIXME TODO add multi-stream support
+									));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -744,8 +748,7 @@ public class RoomPanel extends BasePanel {
 	}
 
 	public void allowRight(Client client, Right... rights) {
-		cm.update(client.allow(rights));
-		broadcast(client);
+		broadcast(client.allow(rights));
 	}
 
 	public void denyRight(Client client, Right... rights) {
@@ -758,7 +761,6 @@ public class RoomPanel extends BasePanel {
 		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
 			client.remove(Client.Activity.broadcastV);
 		}
-		cm.update(client);
 		broadcast(client);
 	}
 
