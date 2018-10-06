@@ -58,7 +58,6 @@ import org.apache.openmeetings.db.entity.user.Address;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
-import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.webservice.error.ServiceException;
 import org.apache.wicket.util.string.Strings;
@@ -89,8 +88,6 @@ public class UserWebService extends BaseWebService {
 
 	@Autowired
 	private IUserManager userManager;
-	@Autowired
-	private IClientManager clientManager;
 	@Autowired
 	private SOAPLoginDao soapDao;
 	@Autowired
