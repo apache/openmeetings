@@ -310,12 +310,14 @@ public class KurentoHandler {
 			if (test) {
 				testsByUid.remove(uid);
 			} else {
-				Client c = (Client)_c;
-				KRoom room = rooms.get(c.getRoomId());
-				if (room != null) {
-					room.leave(c);
-				}
 				usersByUid.remove(uid);
+			}
+		}
+		if (!test) {
+			Client c = (Client)_c;
+			KRoom room = rooms.get(c.getRoomId());
+			if (room != null) {
+				room.leave(c);
 			}
 		}
 	}
@@ -326,20 +328,16 @@ public class KurentoHandler {
 
 		if (room == null) {
 			log.debug("Room {} does not exist. Will create now!", roomId);
-			MediaPipeline pipe = client.createMediaPipeline();
-			pipe.addTag(TAG_KUID, kuid);
-			pipe.addTag(TAG_ROOM, String.valueOf(roomId));
+			Transaction t = client.beginTransaction();
+			MediaPipeline pipe = client.createMediaPipeline(t);
+			pipe.addTag(t, TAG_KUID, kuid);
+			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
+			t.commit();
 			room = new KRoom(roomId, pipe);
 			rooms.put(roomId, room);
 		}
 		log.debug("Room {} found!", roomId);
 		return room;
-	}
-
-	public void removeRoom(KRoom room) {
-		this.rooms.remove(room.getRoomId());
-		room.close();
-		log.info("Room {} removed and closed", room.getRoomId());
 	}
 
 	private KStream getByUid(String uid) {
