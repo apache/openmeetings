@@ -76,6 +76,7 @@ public class TestInstall {
 
 	@Before
 	public void setUp() throws IOException {
+		log.info("Going to perform setup for TestInstall");
 		AbstractSpringTest.setOmHome();
 		setWicketApplicationName(DEFAULT_APP_NAME);
 		tempFolder = Files.createTempDirectory("omtempdb").toFile();
@@ -84,14 +85,16 @@ public class TestInstall {
 		assertNotNull("Web session should not be null", WebSession.get());
 		Locale[] locales = Locale.getAvailableLocales();
 		tester.getSession().setLocale(locales[rnd.nextInt(locales.length)]);
-		log.debug("Setup complete");
+		log.info("Setup complete");
 	}
 
 	@After
 	public void tearDown() throws IOException {
+		log.info("Going to perform clean-up for TestInstall");
 		AbstractWicketTester.destroy(tester);
 		resetDerbyHome();
 		deleteDirectory(tempFolder);
+		log.info("Clean-up complete");
 	}
 
 	@Test
