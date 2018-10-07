@@ -161,7 +161,7 @@ public class ActionsSubMenu implements Serializable {
 		downloadPngMenuItem.setEnabled(!isInterview);
 		downloadJpgMenuItem.setEnabled(!isInterview);
 		downloadPdfMenuItem.setEnabled(!isInterview);
-		actionsMenu.setEnabled((moder && visible) || (!moder && r.isAllowUserQuestions()));
+		actionsMenu.setEnabled(moder || r.isAllowUserQuestions());
 		inviteMenuItem.setEnabled(notExternalUser && moder);
 		boolean shareVisible = room.screenShareAllowed();
 		shareMenuItem.setEnabled(shareVisible);
