@@ -39,14 +39,12 @@ import java.util.List;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
-import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.ChatMessage;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
-import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.common.MainPanel;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -168,10 +166,6 @@ public class Chat extends Panel {
 			ChatDao dao = getBean(ChatDao.class);
 			StringBuilder sb = new StringBuilder(getReinit());
 			List<ChatMessage> list = new ArrayList<>(dao.getGlobal(0, 30));
-			for(Long roomId : getBean(ClientManager.class).listRoomIds(getUserId())) {
-				Room r = getBean(RoomDao.class).get(roomId);
-				sb.append(addRoom(r));
-			}
 			list.addAll(dao.getUserRecent(getUserId(), Date.from(Instant.now().minus(Duration.ofHours(1L))), 0, 30));
 			if (!list.isEmpty()) {
 				sb.append("Chat.addMessage(").append(getMessage(list).toString()).append(");");
