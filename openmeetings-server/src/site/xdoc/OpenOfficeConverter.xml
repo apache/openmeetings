@@ -45,10 +45,10 @@
 				<ol>
 					<li>locate <tt>soffice.bin</tt> on your system</li>
 					<li>
-						set <tt>officeHome</tt> to <tt>/usr/lib/libreoffice</tt> 
+						set <tt>officeHome</tt> to <tt>/usr/lib/libreoffice</tt>
 						(in case soffice.bin is located in <tt>/usr/lib/libreoffice/program</tt>)
 					</li>
-				</ol> 
+				</ol>
 			</div>
 		</section>
 	</body>
