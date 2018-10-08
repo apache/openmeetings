@@ -53,8 +53,8 @@ public class RecordingMetaDataDao {
 		return em.createNamedQuery("getMetaByRecording", RecordingMetaData.class).setParameter("recordingId", recordingId).getResultList();
 	}
 
-	public List<RecordingMetaData> getAudioMetaDataByRecording(Long recordingId) {
-		return em.createNamedQuery("getAudioMetaByRecording", RecordingMetaData.class)
+	public List<RecordingMetaData> getNotScreenMetaDataByRecording(Long recordingId) {
+		return em.createNamedQuery("getNotScreenMetaByRecording", RecordingMetaData.class)
 				.setParameter("recordingId", recordingId)
 				.setParameter("none", Status.NONE)
 				.getResultList();

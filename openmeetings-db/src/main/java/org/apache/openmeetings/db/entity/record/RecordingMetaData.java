@@ -53,10 +53,9 @@ import org.simpleframework.xml.Root;
 @NamedQueries({
 	@NamedQuery(name = "getMetaById", query = "SELECT c FROM RecordingMetaData c WHERE c.id = :id")
 	, @NamedQuery(name = "getMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.deleted = false")
-	, @NamedQuery(name = "getAudioMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId "
-			+ "AND c.screenData = false AND c.streamStatus <> :none AND (c.audioOnly = true OR (c.audioOnly = false AND c.videoOnly = false))")
-	, @NamedQuery(name = "getScreenMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId"
-			+ " AND c.screenData = true")
+	, @NamedQuery(name = "getNotScreenMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.deleted = false "
+			+ "AND c.screenData = false AND c.streamStatus <> :none")
+	, @NamedQuery(name = "getScreenMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.screenData = true")
 })
 @Table(name = "recording_metadata")
 @Root(name = "flvrecordingmetadata")
