@@ -20,11 +20,11 @@ package org.apache.openmeetings.core.remote;
 
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -152,8 +152,7 @@ public class MobileService {
 				} else if (user instanceof User) {
 					User u = (User)user;
 					String baseURL = getBaseUrl();
-					boolean sendConfirmation = !Strings.isEmpty(baseURL)
-							&& cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
+					boolean sendConfirmation = !Strings.isEmpty(baseURL) && isSendVerificationEmail();
 					if (sendConfirmation) {
 						add(result, PARAM_STATUS, -666L);
 					} else {

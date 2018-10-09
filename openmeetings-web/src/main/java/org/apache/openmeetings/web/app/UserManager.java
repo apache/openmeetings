@@ -21,12 +21,12 @@ package org.apache.openmeetings.web.app;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -34,7 +34,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
@@ -64,8 +63,6 @@ public class UserManager implements IUserManager {
 	private static final Logger log = LoggerFactory.getLogger(UserManager.class);
 
 	@Autowired
-	private ConfigurationDao cfgDao;
-	@Autowired
 	private GroupDao groupDao;
 	@Autowired
 	private UserDao userDao;
@@ -74,7 +71,7 @@ public class UserManager implements IUserManager {
 
 	private boolean sendConfirmation() {
 		String baseURL = getBaseUrl();
-		return !Strings.isEmpty(baseURL) && cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
+		return !Strings.isEmpty(baseURL) && isSendVerificationEmail();
 	}
 
 	/**

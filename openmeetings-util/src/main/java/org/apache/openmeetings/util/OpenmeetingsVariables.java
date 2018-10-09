@@ -144,6 +144,8 @@ public class OpenmeetingsVariables {
 	private static boolean allowRegisterFrontend = false;
 	private static boolean allowRegisterSoap = false;
 	private static boolean allowRegisterOauth = false;
+	private static boolean sendVerificationEmail = false;
+	private static boolean sendRegisterEmail = false;
 
 	private OpenmeetingsVariables() {}
 
@@ -365,5 +367,21 @@ public class OpenmeetingsVariables {
 
 	public static void setAllowRegisterOauth(boolean allow) {
 		allowRegisterOauth = allow;
+	}
+
+	public static boolean isSendVerificationEmail() {
+		return sendVerificationEmail;
+	}
+
+	public static void setSendVerificationEmail(boolean send) {
+		sendVerificationEmail = send;
+	}
+
+	public static boolean isSendRegisterEmail() {
+		return sendRegisterEmail;
+	}
+
+	public static void setSendRegisterEmail(boolean send) {
+		sendRegisterEmail = send;
 	}
 }

@@ -27,6 +27,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CRYPT;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_GROUP_ID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_LANG;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_DEFAULT_TIMEZONE;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EXT_PROCESS_TTL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_FNAME_MIN_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_GOOGLE_ANALYTICS_CODE;
@@ -79,6 +81,8 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinLoginLeng
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setMinPasswdLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRestAllowOrigin;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setRoomSettings;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendRegisterEmail;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setSendVerificationEmail;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipContext;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setSipEnabled;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setVideoPreset;
@@ -388,6 +392,12 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_REGISTER_OAUTH:
 				reloadAllowRegisterOauth();
 				break;
+			case CONFIG_EMAIL_VERIFICATION:
+				reloadSendVerificationEmail();
+				break;
+			case CONFIG_EMAIL_AT_REGISTER:
+				reloadSendRegisterEmail();
+				break;
 		}
 		return entity;
 	}
@@ -503,6 +513,14 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setAllowRegisterOauth(getBool(CONFIG_REGISTER_OAUTH, false));
 	}
 
+	private void reloadSendVerificationEmail() {
+		setSendVerificationEmail(getBool(CONFIG_EMAIL_VERIFICATION, false));
+	}
+
+	private void reloadSendRegisterEmail() {
+		setSendRegisterEmail(getBool(CONFIG_EMAIL_AT_REGISTER, false));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -527,6 +545,8 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadAllowRegisterFront();
 		reloadAllowRegisterSoap();
 		reloadAllowRegisterOauth();
+		reloadSendVerificationEmail();
+		reloadSendRegisterEmail();
 	}
 
 	private JSONObject reloadRoomSettings() {

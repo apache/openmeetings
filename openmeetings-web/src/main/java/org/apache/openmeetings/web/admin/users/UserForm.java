@@ -21,8 +21,8 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
@@ -36,7 +36,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -95,8 +94,6 @@ public class UserForm extends AdminBaseForm<User> {
 	private final MessageDialog warning;
 	private final DropDownChoice<Long> domainId = new DropDownChoice<>("domainId");
 	private final PasswordDialog adminPass = new PasswordDialog("adminPass");
-	@SpringBean
-	private ConfigurationDao cfgDao;
 	@SpringBean
 	private UserDao userDao;
 	@SpringBean
@@ -243,7 +240,7 @@ public class UserForm extends AdminBaseForm<User> {
 	private void saveUser(AjaxRequestTarget target, String pass) {
 		User u = getModelObject();
 		final boolean isNew = u.getId() == null;
-		boolean sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
+		boolean sendEmailAtRegister = isSendRegisterEmail();
 		if (isNew && sendEmailAtRegister) {
 			u.setActivatehash(UUID.randomUUID().toString());
 		}
