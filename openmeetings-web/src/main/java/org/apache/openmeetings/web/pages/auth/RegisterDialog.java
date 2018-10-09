@@ -187,9 +187,11 @@ public class RegisterDialog extends NonClosableDialog<String> {
 	@Override
 	protected void onSubmit(AjaxRequestTarget target, DialogButton btn) {
 		try {
-			getBean(IUserManager.class).registerUser(login, password, lastName
+			Object o = getBean(IUserManager.class).registerUser(login, password, lastName
 					, firstName, email, country, lang, tzModel.getObject());
-
+			if (o instanceof String) {
+				confirmRegistration.setModelObject(getString((String)o));
+			}
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
 		}
