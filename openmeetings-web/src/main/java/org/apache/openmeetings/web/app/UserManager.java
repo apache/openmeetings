@@ -23,12 +23,12 @@ import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OmFileHelper.HIBERNATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultLang;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -112,7 +112,7 @@ public class UserManager implements IUserManager {
 			String firstname, String email, String country, long languageId, String tzId) {
 		try {
 			// Checks if FrontEndUsers can register
-			if (cfgDao.getBool(CONFIG_REGISTER_SOAP, false)) {
+			if (isAllowRegisterFrontend()) {
 				User u = getNewUserInstance(null);
 				u.setFirstname(firstname);
 				u.setLogin(login);
@@ -128,11 +128,14 @@ public class UserManager implements IUserManager {
 				Object user = registerUser(u, password, null);
 
 				if (user instanceof User && sendConfirmation()) {
+					log.debug("User created, confirmation should be sent");
 					return -40L;
 				}
 
+				log.debug("User creation result: {}", user);
 				return user;
 			} else {
+				log.warn("Frontend registering is disabled");
 				return "error.reg.disabled";
 			}
 		} catch (Exception e) {

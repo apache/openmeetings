@@ -22,6 +22,7 @@ import static org.apache.openmeetings.db.dto.basic.ServiceResult.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultGroup;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getDefaultTimezone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterSoap;
 import static org.apache.openmeetings.webservice.Constants.TNS;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_NAME;
 import static org.apache.openmeetings.webservice.Constants.USER_SERVICE_PORT_NAME;
@@ -154,6 +155,9 @@ public class UserWebService extends BaseWebService {
 	{
 		return performCall(sid, User.Right.Soap, sd -> {
 			UserDao userDao = getUserDao();
+			if (!isAllowRegisterSoap()) {
+				throw new ServiceException("Soap register is denied in Settings");
+			}
 			User testUser = userDao.getExternalUser(user.getExternalId(), user.getExternalType());
 
 			if (testUser != null) {

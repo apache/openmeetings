@@ -145,6 +145,9 @@ public class OpenmeetingsVariables {
 	private static int minFnameLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static int minLnameLength = USER_LOGIN_MINIMUM_LENGTH;
 	private static boolean chatSendOnEnter = false;
+	private static boolean allowRegisterFrontend = false;
+	private static boolean allowRegisterSoap = false;
+	private static boolean allowRegisterOauth = false;
 
 	private OpenmeetingsVariables() {}
 
@@ -342,5 +345,29 @@ public class OpenmeetingsVariables {
 
 	public static void setChatSenndOnEnter(boolean sendOnEnter) {
 		chatSendOnEnter = sendOnEnter;
+	}
+
+	public static boolean isAllowRegisterFrontend() {
+		return allowRegisterFrontend;
+	}
+
+	public static void setAllowRegisterFrontend(boolean allow) {
+		allowRegisterFrontend = allow;
+	}
+
+	public static boolean isAllowRegisterSoap() {
+		return allowRegisterSoap;
+	}
+
+	public static void setAllowRegisterSoap(boolean allow) {
+		allowRegisterSoap = allow;
+	}
+
+	public static boolean isAllowRegisterOauth() {
+		return allowRegisterOauth;
+	}
+
+	public static void setAllowRegisterOauth(boolean allow) {
+		allowRegisterOauth = allow;
 	}
 }
