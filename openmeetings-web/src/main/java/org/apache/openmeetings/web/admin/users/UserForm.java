@@ -21,9 +21,9 @@ package org.apache.openmeetings.web.admin.users;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.openmeetings.web.app.WebSession.getRights;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
@@ -38,7 +38,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
 import org.apache.openmeetings.db.dao.server.OAuth2Dao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -236,7 +235,7 @@ public class UserForm extends AdminBaseForm<User> {
 		User u = getModelObject();
 		final UserDao dao = getBean(UserDao.class);
 		final boolean isNew = u.getId() == null;
-		boolean sendEmailAtRegister = getBean(ConfigurationDao.class).getBool(CONFIG_EMAIL_AT_REGISTER, false);
+		boolean sendEmailAtRegister = isSendRegisterEmail();
 		if (isNew && sendEmailAtRegister) {
 			u.setActivatehash(UUID.randomUUID().toString());
 		}

@@ -18,11 +18,11 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendRegisterEmail;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isSendVerificationEmail;
 import static org.apache.openmeetings.web.app.Application.getBean;
 import static org.apache.wicket.validation.validator.StringValidator.minimumLength;
 
@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
-import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.user.Address;
@@ -149,10 +148,9 @@ public class RegisterDialog extends NonClosableDialog<String> {
 
 	@Override
 	protected void onOpen(IPartialPageRequestHandler handler) {
-		ConfigurationDao cfgDao = getBean(ConfigurationDao.class);
 		String baseURL = getBaseUrl();
-		sendEmailAtRegister = cfgDao.getBool(CONFIG_EMAIL_AT_REGISTER, false);
-		sendConfirmation = !Strings.isEmpty(baseURL) && cfgDao.getBool(CONFIG_EMAIL_VERIFICATION, false);
+		sendEmailAtRegister = isSendRegisterEmail();
+		sendConfirmation = !Strings.isEmpty(baseURL) && isSendVerificationEmail();
 		String messageCode = "account.created";
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";
