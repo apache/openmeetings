@@ -233,7 +233,7 @@ var VideoSettings = (function() {
 			};
 			if (!!s.video.camDevice) {
 				cnts.video.deviceId = {
-					exact: s.video.camDevice
+					ideal: s.video.camDevice
 				};
 			}
 		} else {
@@ -247,7 +247,7 @@ var VideoSettings = (function() {
 			};
 			if (!!s.video.micDevice) {
 				cnts.audio.deviceId = {
-					exact: s.video.micDevice
+					ideal: s.video.micDevice
 				};
 			}
 		} else {
@@ -316,6 +316,13 @@ var VideoSettings = (function() {
 		el.append(OmUtil.tmpl('#settings-option-loading'));//!settings-option-disabled
 		el.iconselectmenu('refresh');
 	}
+	function _setSelectedDevice(dev, devIdx) {
+		let o = dev.find('option[value="' + devIdx + '"]');
+		if (o.length === 0 && devIdx !== -1) {
+			o = dev.find('option[value="0"]');
+		}
+		o.prop('selected', true);
+	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');
@@ -347,21 +354,17 @@ var VideoSettings = (function() {
 					if ('audioinput' === device.kind) {
 						const o = $('<option></option>').attr('value', mCount).text(device.label)
 							.data('device-id', device.deviceId);
-						if (mCount === s.video.mic) {
-							o.prop('selected', true);
-						}
 						mic.append(o);
 						mCount++;
 					} else if ('videoinput' === device.kind) {
 						const o = $('<option></option>').attr('value', cCount).text(device.label)
 							.data('device-id', device.deviceId);
-						if (cCount === s.video.cam) {
-							o.prop('selected', true);
-						}
 						cam.append(o);
 						cCount++;
 					}
 				});
+				_setSelectedDevice(cam, s.video.cam);
+				_setSelectedDevice(mic, s.video.mic);
 				cam.iconselectmenu('refresh');
 				mic.iconselectmenu('refresh');
 				res.find('option').each(function() {
