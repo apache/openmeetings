@@ -154,8 +154,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		String messageCode = "account.created";
 		if (sendConfirmation && sendEmailAtRegister) {
 			messageCode = "warn.notverified";
-		} else if (sendConfirmation) {
-			messageCode = "1591";
 		}
 		confirmRegistration.setModelObject(getString(messageCode));
 		reset(handler);
