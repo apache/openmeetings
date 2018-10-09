@@ -264,15 +264,15 @@ webapps/openmeetings/screenshare/openmeetings-screenshare-*.jar
 
 lib/apache-mime4j-*.jar
 lib/api-all-*.jar
-lib/asterisk-java-2.0.2.jar
-lib/boilerpipe-1.1.0.jar
+lib/asterisk-java-*.jar
+lib/boilerpipe-*.jar
 lib/caldav4j-*.jar
 lib/commons-*.jar
-lib/cors-filter-2.6.jar
+lib/cors-filter-*.jar
 lib/cxf-*.jar
 lib/derby*.jar
-lib/dom4j-2.1.0.jar
-lib/ehcache-core-2.6.11.jar
+lib/dom4j-*.jar
+lib/ehcache-core-*.jar
 lib/error_prone_annotations*.jar
 lib/fontbox-2.0.8.jar
 lib/geronimo-jpa_2.0_spec-1.1.jar
@@ -339,7 +339,7 @@ conditions of the following licenses.
 
 For GlassFish components
 
-lib/activation-1.1.jar
+lib/activation-*.jar
 lib/javax.mail-1.6.2.jar
 
 
@@ -1076,10 +1076,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS'' AND
 
  For Bouncy Castle:
  
- lib/bcmail-jdk15on-1.60.jar
- lib/bcpkix-jdk15on-1.60.jar
- lib/bcprov-jdk15on-1.60.jar
- webapps/openmeetings/screenshare/bcprov-jdk15on-1.60.jar
+ lib/bcmail-jdk15on-*.jar
+ lib/bcpkix-jdk15on-*.jar
+ lib/bcprov-jdk15on-*.jar
+ webapps/openmeetings/screenshare/bcprov-jdk15on-*.jar
 
  Copyright (c) 2000 - 2011 The Legion Of The Bouncy Castle (http://www.bouncycastle.org)
 
@@ -1356,7 +1356,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
-lib/asm-6.2.jar
+lib/asm-*.jar
 	URL: http://asm.objectweb.org/asm/
 	
 ======================================================================================================================
@@ -1437,7 +1437,8 @@ For the components:
 lib/logback-classic-*.jar
 lib/logback-core-*.jar
 lib/mchange-commons-java-0.2.11.jar
-plugins/ecj-3.12.3.jar
+lib/ecj-*.jar
+plugins/ecj-*.jar
 
 Eclipse Public License - v 1.0
 
@@ -2563,8 +2564,9 @@ lib/bzip2-*.jar
 lib/cdm-*.jar
 lib/dec-*.jar
 lib/grib-*.jar
-lib/checker-compat-qual-2.0.0.jar
+lib/checker-compat-qual-*.jar
 lib/jdk-serializable-functional-1.8.3.jar
+lib/animal-sniffer-annotations-*.jar
 
 The MIT License (MIT)
 
@@ -2590,7 +2592,7 @@ THE SOFTWARE.
 
  =======================================================================================
 
-lib/curvesapi-1.04.jar
+lib/curvesapi-*.jar
 
 BSD 3-clause
 
