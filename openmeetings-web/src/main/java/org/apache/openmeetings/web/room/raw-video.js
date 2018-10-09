@@ -2,7 +2,7 @@
 var Video = (function() {
 	const self = {};
 	let c, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50, aCtx, aSrc, aDest, gainNode
+		, lastVolume = 50, aCtx, aSrc, gainNode
 		, lm, level, userSpeaks = false;
 
 	function _getName() {
@@ -48,7 +48,6 @@ var Video = (function() {
 		const constraints = VideoSettings.constraints(c);
 		navigator.mediaDevices.getUserMedia(constraints)
 			.then(function(stream) {
-				let _stream = stream;
 				if (stream.getAudioTracks().length !== 0) {
 					vol.show();
 					lm = vc.find('.level-meter')
@@ -57,18 +56,13 @@ var Video = (function() {
 					aCtx = new AudioContext();
 					gainNode = aCtx.createGain();
 					aSrc = aCtx.createMediaStreamSource(stream);
-					aDest = aCtx.createMediaStreamDestination();
 					aSrc.connect(gainNode);
-					gainNode.connect(aDest);
-					_stream = aDest.stream;
-					stream.getVideoTracks().forEach(function(track) {
-						_stream.addTrack(track);
-					});
+					gainNode.connect(aCtx.destination);
 					_handleVolume(lastVolume);
 				}
 				const options = VideoUtil.addIceServers({
 					localVideo: video[0]
-					, videoStream: _stream
+					, videoStream: stream
 					, mediaConstraints: constraints
 					, onicecandidate: self.onIceCandidate
 				}, msg);
@@ -362,10 +356,10 @@ var Video = (function() {
 			VideoUtil.cleanStream(aSrc.mediaStream);
 			aSrc.disconnect();
 		}
-		if (!!aDest) {
-			aDest.disconnect();
-		}
 		if (!!aCtx) {
+			if (!!aCtx.destination) {
+				aCtx.destination.disconnect();
+			}
 			aCtx.close();
 			aCtx = null;
 		}

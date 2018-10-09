@@ -67,8 +67,8 @@ public class UserDashboardPersister implements DashboardPersister {
 			xstream.addPermission(NoTypePermission.NONE);
 			xstream.addPermission(NullPermission.NULL);
 			xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
+			xstream.allowTypesByWildcard(new String[] {"org.apache.openmeetings.web.**"});
 			xstream.allowTypeHierarchy(ArrayList.class);
-			xstream.allowTypeHierarchy(UserDashboard.class);
 			xstream.alias("dashboard", UserDashboard.class);
 		}
 
