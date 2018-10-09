@@ -430,6 +430,7 @@ ul.settings-menu {
 	min-width: 40px;
 	min-height: 30px;
 	overflow: hidden;
+	position: relative;
 }
 .room.box .user-video .video.audio-only {
 	background-repeat: no-repeat;
