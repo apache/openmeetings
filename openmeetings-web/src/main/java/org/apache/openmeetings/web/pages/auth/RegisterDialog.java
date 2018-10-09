@@ -198,7 +198,6 @@ public class RegisterDialog extends NonClosableDialog<String> {
 		} catch (Exception e) {
 			log.error("[registerUser]", e);
 		}
-
 		confirmRegistration.open(target);
 	}
 

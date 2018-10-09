@@ -20,8 +20,8 @@ package org.apache.openmeetings.web.pages.auth;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_IGNORE_BAD_SSL;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
 
 import java.io.DataOutputStream;
@@ -145,7 +145,7 @@ public class SignInPage extends BaseInitedPage {
 	}
 
 	boolean allowRegister() {
-		return cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false);
+		return isAllowRegisterFrontend();
 	}
 
 	boolean allowOAuthLogin() {

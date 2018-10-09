@@ -21,10 +21,10 @@ package org.apache.openmeetings.core.remote;
 import static org.apache.openmeetings.db.util.LocaleHelper.getCountryName;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
-import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterFrontend;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -96,8 +96,8 @@ public class MobileService {
 
 	public Map<String, Object> checkServer() {
 		Map<String, Object> result = new HashMap<>();
-		result.put("allowSelfRegister",  cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false));
-		result.put("allowOauthRegister",  cfgDao.getBool(CONFIG_REGISTER_OAUTH, false));
+		result.put("allowSelfRegister", isAllowRegisterFrontend());
+		result.put("allowOauthRegister", isAllowRegisterOauth());
 		return result;
 	}
 
@@ -116,7 +116,7 @@ public class MobileService {
 	public Map<String, Object> loginGoogle(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if (cfgDao.getBool(CONFIG_REGISTER_OAUTH, false)) {
+			if (isAllowRegisterOauth()) {
 				User u = userManager.loginOAuth(new OAuthUser(umap), 2); //TODO hardcoded
 				result = login(u, result);
 			}
@@ -129,7 +129,7 @@ public class MobileService {
 	public Map<String, Object> registerUser(Map<String, String> umap) {
 		Map<String, Object> result = getResult();
 		try {
-			if (cfgDao.getBool(CONFIG_REGISTER_FRONTEND, false)) {
+			if (isAllowRegisterFrontend()) {
 				String login = umap.get("login");
 				String email = umap.get("email");
 				String lastname = umap.get("lastname");

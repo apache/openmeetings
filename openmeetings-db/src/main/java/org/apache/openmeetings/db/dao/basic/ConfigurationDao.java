@@ -45,6 +45,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_AUDIO_RATE;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_MP4_VIDEO_PRESET;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PASS_MIN_LENGTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_FRONTEND;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_OAUTH;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REGISTER_SOAP;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_REST_ALLOW_ORIGIN;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ENABLED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_EXTEN_CONTEXT;
@@ -56,6 +59,9 @@ import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_LOGIN_MINI
 import static org.apache.openmeetings.util.OpenmeetingsVariables.USER_PASSWORD_MINIMUM_LENGTH;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getRoomSettings;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWicketApplicationName;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterFrontend;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterOauth;
+import static org.apache.openmeetings.util.OpenmeetingsVariables.setAllowRegisterSoap;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setApplicationName;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioBitrate;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.setAudioRate;
@@ -373,6 +379,15 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 			case CONFIG_CHAT_SEND_ON_ENTER:
 				reloadChatSendOnEnter();
 				break;
+			case CONFIG_REGISTER_FRONTEND:
+				reloadAllowRegisterFront();
+				break;
+			case CONFIG_REGISTER_SOAP:
+				reloadAllowRegisterSoap();
+				break;
+			case CONFIG_REGISTER_OAUTH:
+				reloadAllowRegisterOauth();
+				break;
 		}
 		return entity;
 	}
@@ -476,6 +491,18 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		setChatSenndOnEnter(getBool(CONFIG_CHAT_SEND_ON_ENTER, false));
 	}
 
+	private void reloadAllowRegisterFront() {
+		setAllowRegisterFrontend(getBool(CONFIG_REGISTER_FRONTEND, false));
+	}
+
+	private void reloadAllowRegisterSoap() {
+		setAllowRegisterSoap(getBool(CONFIG_REGISTER_SOAP, false));
+	}
+
+	private void reloadAllowRegisterOauth() {
+		setAllowRegisterOauth(getBool(CONFIG_REGISTER_OAUTH, false));
+	}
+
 	public void reinit() {
 		reloadMaxUpload();
 		reloadCrypt();
@@ -497,6 +524,9 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 		reloadFnameMinLength();
 		reloadLnameMinLength();
 		reloadChatSendOnEnter();
+		reloadAllowRegisterFront();
+		reloadAllowRegisterSoap();
+		reloadAllowRegisterOauth();
 	}
 
 	private JSONObject reloadRoomSettings() {
