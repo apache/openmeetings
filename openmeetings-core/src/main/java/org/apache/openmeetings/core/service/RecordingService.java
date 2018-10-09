@@ -362,7 +362,7 @@ public class RecordingService {
 				Long metaId = metaDataDao.add(recordingId, now, audioOnly, videoOnly, false, streamName, rcl.getSid());
 
 				// Start FLV recording
-				addListener(conn, broadcastId, streamName, metaId, !audioOnly, isInterview);
+				addListener(conn, broadcastId, streamName, metaId, false, isInterview);
 
 				// Add Meta Data
 				rcl.setMetaId(metaId);

@@ -67,7 +67,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					return;
 				}
 				// we should not skip audio data in case it is Audio only interview
-				if (isInterview && isScreenData && startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
+				if ((isInterview || isScreenData) && startTimeStamp == -1 && KEYFRAME != streampacket.getFrameType()) {
 					//skip until keyframe
 					log.trace("##REC:: no KEYFRAME, skipping");
 					return;
