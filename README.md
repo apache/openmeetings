@@ -47,6 +47,18 @@ Release Notes
 
 see [CHANGELOG.md](/CHANGELOG.md) file for detailed log
 
+4.0.6
+-----
+[Release 4.0.6](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.6), provides following improvements:
+
+* Multiple issues with device list retrieval in Settings dialog
+* Web services were improved
+* Multiple issues with room recording
+* Frontend self registering
+
+Other fixes and improvements, 16 issues were addressed
+
+
 4.0.5
 -----
 [Release 4.0.5](https://www.apache.org/dyn/closer.lua/openmeetings/4.0.5), provides following improvements:

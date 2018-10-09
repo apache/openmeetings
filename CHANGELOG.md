@@ -5,6 +5,32 @@ Licensed under Apache License 2.0 - http://www.apache.org/licenses/LICENSE-2.0
 See http://issues.apache.org/jira/browse/OPENMEETINGS-* (where * is the number of the issue below)  
 See https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-* (where * is the number of CVE below)
 
+Release Notes - Openmeetings - Version 4.0.6
+================================================================================================================
+
+* Bug
+    * [OPENMEETINGS-1924] - List of available devices is not loaded if click on Camera and mic settings twice
+    * [OPENMEETINGS-1925] - String value field on the Admin->configuration tab should be displayed as text area instead of text field
+    * [OPENMEETINGS-1927] - Unable to add files to whiteboard from Admin conference rooms
+    * [OPENMEETINGS-1930] - OpenMeetings 4.0.5 in Public Room when try record icedtea-web error
+    * [OPENMEETINGS-1938] - Import restores purged data
+    * [OPENMEETINGS-1943] - Tomcat version should not be displayed
+    * [OPENMEETINGS-1944] - Bug various
+    * [OPENMEETINGS-1946] - When recording with audio and later play it there is no audio
+    * [OPENMEETINGS-1949] - duplicated messages
+    * [OPENMEETINGS-1952] - allow.soap.register setting is being checked instead of allow.frontend.register
+    * [OPENMEETINGS-1953] - When send.email.with.verification is enable give an error
+
+* Improvement
+    * [OPENMEETINGS-1929] - Code need to be enhanced
+    * [OPENMEETINGS-1932] - First camera/mic should be autoselected it it wasn't explicitly denied
+    * [OPENMEETINGS-1937] - Method for room hash generation should return ERROR in case of invalid parameters
+    * [OPENMEETINGS-1947] -  How to know whether a user is in room or not
+
+* Task
+    * [OPENMEETINGS-1928] - Library versions need to be updated (4.0.6)
+
+
 Release Notes - Openmeetings - Version 4.0.5
 ================================================================================================================
 
