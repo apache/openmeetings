@@ -92,6 +92,7 @@ public class TestInstall {
 	public void tearDown() throws IOException {
 		log.info("Going to perform clean-up for TestInstall");
 		AbstractWicketTester.destroy(tester);
+		log.info("WicketTester is destroyed");
 		resetDerbyHome();
 		deleteDirectory(tempFolder);
 		log.info("Clean-up complete");
