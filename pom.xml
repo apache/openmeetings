@@ -106,7 +106,7 @@
 		<xstream.version>1.4.10</xstream.version>
 		<api-all.version>2.0.0.AM2</api-all.version>
 		<caldav4j.version>0.9.1</caldav4j.version>
-		<tika-parsers.version>1.19</tika-parsers.version>
+		<tika-parsers.version>1.19.1</tika-parsers.version>
 		<commons-text.version>1.5</commons-text.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
