@@ -322,10 +322,12 @@ var VideoSettings = (function() {
 		el.append(OmUtil.tmpl('#settings-option-loading'));
 		el.iconselectmenu('refresh');
 	}
-	function _setDisabled(el) {
-		el.find('option').remove();
-		el.append(OmUtil.tmpl('#settings-option-disabled'));
-		el.iconselectmenu('refresh');
+	function _setDisabled(els) {
+		els.forEach(function(el) {
+			el.find('option').remove();
+			el.append(OmUtil.tmpl('#settings-option-disabled'));
+			el.iconselectmenu('refresh');
+		});
 	}
 	function _setSelectedDevice(dev, devIdx) {
 		let o = dev.find('option[value="' + devIdx + '"]');
@@ -335,9 +337,9 @@ var VideoSettings = (function() {
 		o.prop('selected', true);
 	}
 	function _getDevConstraints(callback) {
+		const devCnts = {audio: false, video: false};
 		navigator.mediaDevices.enumerateDevices()
 			.then(function(devices) {
-				const devCnts = {audio: false, video: false};
 				devices.forEach(function(device) {
 					if (DEV_AUDIO === device.kind) {
 						devCnts.audio = true;
@@ -347,6 +349,10 @@ var VideoSettings = (function() {
 				});
 				callback(devCnts);
 			})
+			.catch(function(err) {
+				OmUtil.error(err);
+				callback(devCnts);
+			});
 	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
@@ -357,8 +363,7 @@ var VideoSettings = (function() {
 		_setLoading(mic);
 		_getDevConstraints(function(devCnts) {
 			if (!devCnts.audio && !devCnts.video) {
-				_setDisabled(cam);
-				_setDisabled(mic);
+				_setDisabled([cam, mic]);
 				return;
 			}
 			navigator.mediaDevices.getUserMedia(devCnts)
@@ -377,8 +382,7 @@ var VideoSettings = (function() {
 				.then(function(devices) {
 					let cCount = 0, mCount = 0;
 					_load();
-					_setDisabled(cam);
-					_setDisabled(mic);
+					_setDisabled([cam, mic]);
 					devices.forEach(function(device) {
 						if (DEV_AUDIO === device.kind) {
 							const o = $('<option></option>').attr('value', mCount).text(device.label)
@@ -406,8 +410,7 @@ var VideoSettings = (function() {
 					_readValues();
 				})
 				.catch(function(err) {
-					_setDisabled(cam);
-					_setDisabled(mic);
+					_setDisabled([cam, mic]);
 					OmUtil.error(err);
 				});
 		});
