@@ -45,28 +45,40 @@ var Video = (function() {
 		}
 	}
 	function _createSendPeer(msg) {
-		const constraints = VideoSettings.constraints(c);
-		navigator.mediaDevices.getUserMedia(constraints)
-			.then(function(stream) {
-				if (stream.getAudioTracks().length !== 0) {
-					vol.show();
-					lm = vc.find('.level-meter')
-						.kendoProgressBar({ value: 0, showStatus: false, orientation: 'vertical' });
-					lm.height(vc.height() - 10);
-					aCtx = new AudioContext();
-					gainNode = aCtx.createGain();
-					aSrc = aCtx.createMediaStreamSource(stream);
-					aSrc.connect(gainNode);
-					gainNode.connect(aCtx.destination);
-					_handleVolume(lastVolume);
-				}
-				const options = VideoUtil.addIceServers({
-					localVideo: video[0]
-					, videoStream: stream
-					, mediaConstraints: constraints
-					, onicecandidate: self.onIceCandidate
-				}, msg);
-				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+		VideoSettings.constraints(c, function(cnts) {
+			if ((VideoUtil.hasVideo(c) && !cnts.video) || (VideoUtil.hasAudio(c) && !cnts.audio)) {
+				VideoManager.sendMessage({
+					id : 'devicesAltered'
+					, audio: !!cnts.audio
+					, video: !!cnts.video
+				});
+			}
+			if (!cnts.audio && !cnts.video) {
+				OmUtil.error("Requested devices are not available");
+				VideoManager.close(c.uid)
+				return;
+			}
+			navigator.mediaDevices.getUserMedia(cnts)
+				.then(function(stream) {
+					if (stream.getAudioTracks().length !== 0) {
+						vol.show();
+						lm = vc.find('.level-meter')
+							.kendoProgressBar({ value: 0, showStatus: false, orientation: 'vertical' });
+						lm.height(vc.height() - 10);
+						aCtx = new AudioContext();
+						gainNode = aCtx.createGain();
+						aSrc = aCtx.createMediaStreamSource(stream);
+						aSrc.connect(gainNode);
+						gainNode.connect(aCtx.destination);
+						_handleVolume(lastVolume);
+					}
+					const options = VideoUtil.addIceServers({
+						localVideo: video[0]
+						, videoStream: stream
+						, mediaConstraints: cnts
+						, onicecandidate: self.onIceCandidate
+					}, msg);
+					rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
 						options
 						, function (error) {
 							if (error) {
@@ -85,10 +97,11 @@ var Video = (function() {
 								});
 							});
 						});
-			})
-			.catch(function(err) {
-				OmUtil.error(err);
-			});
+				})
+				.catch(function(err) {
+					OmUtil.error(err);
+				});
+		});
 	}
 	function _createResvPeer(msg) {
 		const options = VideoUtil.addIceServers({
@@ -348,13 +361,14 @@ var Video = (function() {
 	}
 	function _cleanup() {
 		OmUtil.log('Disposing participant ' + c.uid);
-		VideoUtil.cleanPeer(rtcPeer);
 		if (!!gainNode) {
 			gainNode.disconnect();
+			gainNode = null;
 		}
 		if (!!aSrc) {
 			VideoUtil.cleanStream(aSrc.mediaStream);
 			aSrc.disconnect();
+			aSrc = null;
 		}
 		if (!!aCtx) {
 			if (!!aCtx.destination) {
@@ -364,7 +378,10 @@ var Video = (function() {
 			aCtx = null;
 		}
 		if (!!video && video.length > 0) {
+			VideoUtil.cleanStream(video[0].srcObject);
 			video[0].srcObject = null;
+			video.remove();
+			video = null;
 		}
 		if (!!lm && lm.length > 0) {
 			_micActivity(0);
@@ -374,6 +391,7 @@ var Video = (function() {
 			level.dispose();
 			level = null;
 		}
+		VideoUtil.cleanPeer(rtcPeer);
 		vc.find('audio,video').remove();
 	}
 

@@ -184,6 +184,15 @@ public class KurentoHandler {
 			}
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			switch (cmdId) {
+				case "devicesAltered":
+					if (!msg.getBoolean("audio") && c.hasActivity(Client.Activity.broadcastA)) {
+						c.remove(Client.Activity.broadcastA);
+					}
+					if (!msg.getBoolean("video") && c.hasActivity(Client.Activity.broadcastV)) {
+						c.remove(Client.Activity.broadcastV);
+					}
+					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
+					break;
 				case "toggleActivity":
 					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
 					break;

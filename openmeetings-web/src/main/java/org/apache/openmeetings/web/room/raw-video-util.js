@@ -114,7 +114,7 @@ var VideoUtil = (function() {
 	function _cleanPeer(peer) {
 		if (!!peer) {
 			const pc = peer.peerConnection;
-			if (!!pc) {
+			if (!!pc && !!pc.getLocalStreams()) {
 				pc.getLocalStreams().forEach(function(stream) {
 					_cleanStream(stream);
 				});

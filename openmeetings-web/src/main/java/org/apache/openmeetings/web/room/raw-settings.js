@@ -53,9 +53,12 @@ var MicLevel = (function() {
 	}
 	function _dispose() {
 		if (!!ctx) {
-			mic.disconnect(script);
-			script.disconnect(ctx.destination);
+			VideoUtil.cleanStream(mic.mediaStream);
+			mic.disconnect();
+			ctx.destination.disconnect();
+			script.disconnect();
 			script.onaudioprocess = null;
+			ctx.close();
 			ctx = null;
 		}
 	}
@@ -65,6 +68,7 @@ var MicLevel = (function() {
 	};
 });
 var VideoSettings = (function() {
+	const DEV_AUDIO = 'audioinput', DEV_VIDEO = 'videoinput';
 	let vs, lm, s, cam, mic, res, o, rtcPeer, timer
 		, vidScroll, vid, recBtn, playBtn, recAllowed = false
 		, level;
@@ -222,38 +226,39 @@ var VideoSettings = (function() {
 	}
 	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
 	// min/ideal/max/exact/mandatory can also be used
-	function _constraints(c) {
-		const cnts = {};
-		//TODO add check if constraint is supported
-		if (false === o.audioOnly && VideoUtil.hasVideo(c) && s.video.cam > -1) {
-			cnts.video = {
-				width: s.video.width
-				, height: s.video.height
-				, frameRate: o.camera.fps
-			};
-			if (!!s.video.camDevice) {
-				cnts.video.deviceId = {
-					ideal: s.video.camDevice
+	function _constraints(c, callback) {
+		_getDevConstraints(function(devCnts){
+			const cnts = {};
+			if (devCnts.video && false === o.audioOnly && VideoUtil.hasVideo(c) && s.video.cam > -1) {
+				cnts.video = {
+					width: s.video.width
+					, height: s.video.height
+					, frameRate: o.camera.fps
 				};
+				if (!!s.video.camDevice) {
+					cnts.video.deviceId = {
+						ideal: s.video.camDevice
+					};
+				}
+			} else {
+				cnts.video = false;
 			}
-		} else {
-			cnts.video = false;
-		}
-		if (VideoUtil.hasAudio(c) && s.video.mic > -1) {
-			cnts.audio = {
-				sampleRate: o.microphone.rate
-				, echoCancellation: o.microphone.echo
-				, noiseSuppression: o.microphone.noise
-			};
-			if (!!s.video.micDevice) {
-				cnts.audio.deviceId = {
-					ideal: s.video.micDevice
+			if (devCnts.audio && VideoUtil.hasAudio(c) && s.video.mic > -1) {
+				cnts.audio = {
+					sampleRate: o.microphone.rate
+					, echoCancellation: o.microphone.echo
+					, noiseSuppression: o.microphone.noise
 				};
+				if (!!s.video.micDevice) {
+					cnts.audio.deviceId = {
+						ideal: s.video.micDevice
+					};
+				}
+			} else {
+				cnts.audio = false;
 			}
-		} else {
-			cnts.audio = false;
-		}
-		return cnts;
+			callback(cnts);
+		});
 	}
 	function _readValues(msg, func) {
 		const v = cam.find('option:selected')
@@ -269,35 +274,36 @@ var VideoSettings = (function() {
 		vidScroll.scrollLeft(Math.max(0, s.video.width / 2 - 150))
 			.scrollTop(Math.max(0, s.video.height / 2 - 110));
 		_clear();
-		const cnts = _constraints();
-		if (cnts.video !== false || cnts.audio !== false) {
-			const options = VideoUtil.addIceServers({
-				localVideo: vid[0]
-				, mediaConstraints: cnts
-			}, msg);
-			rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
-				options
-				, function(error) {
-					if (error) {
-						return OmUtil.error(error);
-					}
-					level = MicLevel();
-					level.meter(rtcPeer, _micActivity, OmUtil.error);
-					rtcPeer.generateOffer(function(error, _offerSdp) {
+		_constraints(null, function(cnts) {
+			if (cnts.video !== false || cnts.audio !== false) {
+				const options = VideoUtil.addIceServers({
+					localVideo: vid[0]
+					, mediaConstraints: cnts
+				}, msg);
+				rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(
+					options
+					, function(error) {
 						if (error) {
-							return OmUtil.error('Error generating the offer');
+							return OmUtil.error(error);
 						}
-						if (typeof(func) === 'function') {
-							func(_offerSdp, cnts);
-						} else {
-							_allowRec(true);
-						}
+						level = MicLevel();
+						level.meter(rtcPeer, _micActivity, OmUtil.error);
+						rtcPeer.generateOffer(function(error, _offerSdp) {
+							if (error) {
+								return OmUtil.error('Error generating the offer');
+							}
+							if (typeof(func) === 'function') {
+								func(_offerSdp, cnts);
+							} else {
+								_allowRec(true);
+							}
+						});
 					});
-				});
-		}
-		if (!msg) {
-			_updateRec();
-		}
+			}
+			if (!msg) {
+				_updateRec();
+			}
+		});
 	}
 
 	function _allowRec(allow) {
@@ -313,7 +319,12 @@ var VideoSettings = (function() {
 	}
 	function _setLoading(el) {
 		el.find('option').remove();
-		el.append(OmUtil.tmpl('#settings-option-loading'));//!settings-option-disabled
+		el.append(OmUtil.tmpl('#settings-option-loading'));
+		el.iconselectmenu('refresh');
+	}
+	function _setDisabled(el) {
+		el.find('option').remove();
+		el.append(OmUtil.tmpl('#settings-option-disabled'));
 		el.iconselectmenu('refresh');
 	}
 	function _setSelectedDevice(dev, devIdx) {
@@ -323,6 +334,20 @@ var VideoSettings = (function() {
 		}
 		o.prop('selected', true);
 	}
+	function _getDevConstraints(callback) {
+		navigator.mediaDevices.enumerateDevices()
+			.then(function(devices) {
+				const devCnts = {audio: false, video: false};
+				devices.forEach(function(device) {
+					if (DEV_AUDIO === device.kind) {
+						devCnts.audio = true;
+					} else if (DEV_VIDEO === device.kind) {
+						devCnts.video = true;
+					}
+				});
+				callback(devCnts);
+			})
+	}
 	function _initDevices() {
 		if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
 			OmUtil.error('enumerateDevices() not supported.');
@@ -330,55 +355,62 @@ var VideoSettings = (function() {
 		}
 		_setLoading(cam);
 		_setLoading(mic);
-		navigator.mediaDevices.getUserMedia({video:true, audio:true})
-			.then(function(stream) {
-				const devices = navigator.mediaDevices.enumerateDevices()
-					.then(function(devices) {
-						_clear(stream);
-						return devices;
-					})
-					.catch(function(err) {
-						_clear(stream);
-						throw err;
+		_getDevConstraints(function(devCnts) {
+			if (!devCnts.audio && !devCnts.video) {
+				_setDisabled(cam);
+				_setDisabled(mic);
+				return;
+			}
+			navigator.mediaDevices.getUserMedia(devCnts)
+				.then(function(stream) {
+					const devices = navigator.mediaDevices.enumerateDevices()
+						.then(function(devices) {
+							_clear(stream);
+							return devices;
+						})
+						.catch(function(err) {
+							_clear(stream);
+							throw err;
+						});
+					return devices;
+				})
+				.then(function(devices) {
+					let cCount = 0, mCount = 0;
+					_load();
+					_setDisabled(cam);
+					_setDisabled(mic);
+					devices.forEach(function(device) {
+						if (DEV_AUDIO === device.kind) {
+							const o = $('<option></option>').attr('value', mCount).text(device.label)
+								.data('device-id', device.deviceId);
+							mic.append(o);
+							mCount++;
+						} else if (DEV_VIDEO === device.kind) {
+							const o = $('<option></option>').attr('value', cCount).text(device.label)
+								.data('device-id', device.deviceId);
+							cam.append(o);
+							cCount++;
+						}
 					});
-				return devices;
-			})
-			.then(function(devices) {
-				let cCount = 0, mCount = 0;
-				_load();
-				cam.find('option').remove();
-				cam.append(OmUtil.tmpl('#settings-option-disabled'));
-				mic.find('option').remove();
-				mic.append(OmUtil.tmpl('#settings-option-disabled'));
-				devices.forEach(function(device) {
-					if ('audioinput' === device.kind) {
-						const o = $('<option></option>').attr('value', mCount).text(device.label)
-							.data('device-id', device.deviceId);
-						mic.append(o);
-						mCount++;
-					} else if ('videoinput' === device.kind) {
-						const o = $('<option></option>').attr('value', cCount).text(device.label)
-							.data('device-id', device.deviceId);
-						cam.append(o);
-						cCount++;
-					}
+					_setSelectedDevice(cam, s.video.cam);
+					_setSelectedDevice(mic, s.video.mic);
+					cam.iconselectmenu('refresh');
+					mic.iconselectmenu('refresh');
+					res.find('option').each(function() {
+						const o = $(this).data();
+						if (o.width === s.video.width && o.height === s.video.height) {
+							$(this).prop('selected', true);
+							return false;
+						}
+					});
+					_readValues();
+				})
+				.catch(function(err) {
+					_setDisabled(cam);
+					_setDisabled(mic);
+					OmUtil.error(err);
 				});
-				_setSelectedDevice(cam, s.video.cam);
-				_setSelectedDevice(mic, s.video.mic);
-				cam.iconselectmenu('refresh');
-				mic.iconselectmenu('refresh');
-				res.find('option').each(function() {
-					const o = $(this).data();
-					if (o.width === s.video.width && o.height === s.video.height) {
-						$(this).prop('selected', true);
-						return false;
-					}
-				});
-				_readValues();
-			})
-			.catch(function(err) {
-				OmUtil.error(err);
-			});
+		});
 	}
 	function _open() {
 		Wicket.Event.subscribe('/websocket/message', _onWsMessage);
