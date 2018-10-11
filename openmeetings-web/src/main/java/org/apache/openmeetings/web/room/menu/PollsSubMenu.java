@@ -157,7 +157,7 @@ public class PollsSubMenu implements Serializable {
 			return;
 		}
 		boolean pollExists = pollDao.hasPoll(r.getId());
-		pollsMenu.setEnabled((moder && visible) || (!moder && r.isAllowUserQuestions()));
+		pollsMenu.setEnabled(moder || r.isAllowUserQuestions());
 		pollQuickMenuItem.setEnabled(room.getClient().hasRight(Room.Right.presenter) && !qpollManager.isStarted(r.getId()));
 		pollCreateMenuItem.setEnabled(moder);
 		pollVoteMenuItem.setEnabled(pollExists && notExternalUser && !pollDao.hasVoted(r.getId(), getUserId()));

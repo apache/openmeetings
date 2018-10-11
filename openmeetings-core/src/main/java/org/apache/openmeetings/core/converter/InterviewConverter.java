@@ -58,7 +58,11 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 	@Override
 	public void startConversion(Long id) {
-		Recording r = null;
+		Recording r = recordingDao.get(id);
+		if (r == null) {
+			log.warn("Conversion is NOT started. Recording with ID {} is not found", id);
+			return;
+		}
 		ProcessResultList logs = new ProcessResultList();
 		List<File> waveFiles = new ArrayList<>();
 		try {
@@ -68,11 +72,6 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				throw new ConversionException("defaultInterviewImageFile does not exist!");
 			}
 
-			r = recordingDao.get(id);
-			if (r == null) {
-				log.warn("Unable to get REcording by id {}, will interrupt conversion", id);
-				return;
-			}
 			log.debug("recording {}", r.getId());
 			if (Strings.isEmpty(r.getHash())) {
 				r.setHash(UUID.randomUUID().toString());
