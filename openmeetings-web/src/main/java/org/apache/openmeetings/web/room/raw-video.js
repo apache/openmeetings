@@ -394,6 +394,11 @@ var Video = (function() {
 		VideoUtil.cleanPeer(rtcPeer);
 		vc.find('audio,video').remove();
 	}
+	function _reattachStream() {
+		if (!!rtcPeer && !!video && video.length > 0) {
+			video[0].srcObject = c.self ? rtcPeer.getLocalStream() : rtcPeer.getRemoteStream();
+		}
+	}
 
 	self.update = _update;
 	self.refresh = _refresh;
@@ -402,8 +407,6 @@ var Video = (function() {
 	self.init = _init;
 	self.client = function() { return c; };
 	self.setRights = _setRights;
-	self.video = function() { return video[0]; };
-	self.setPeer = function(p) { rtcPeer = p; };
 	self.getPeer = function() { return rtcPeer; };
 	self.onIceCandidate = function(candidate, wp) {
 		OmUtil.log("Local candidate" + JSON.stringify(candidate));
@@ -414,5 +417,6 @@ var Video = (function() {
 		});
 	};
 	self.resizePod = _resizePod;
+	self.reattachStream = _reattachStream;
 	return self;
 });

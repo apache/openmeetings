@@ -30,8 +30,10 @@ var InterviewWbArea = function() {
 					ui.draggable.remove();
 				} else {
 					cvid.dialog('option', 'appendTo', ui.draggable);
+					cvid.data().reattachStream();
 					vid.dialog('option', 'appendTo', big);
 				}
+				vid.data().reattachStream();
 				pArea.find('.ui-sortable-placeholder.pod').hide();
 				_updateAreaClass();
 			}
@@ -39,6 +41,12 @@ var InterviewWbArea = function() {
 		pArea.sortable({
 			items: '.pod'
 			, handle: '.ui-dialog-titlebar'
+			, stop: function(event, ui) {
+				const vid = ui.item.find('.ui-dialog-content');
+				if (vid.length === 1) {
+					vid.data().reattachStream();
+				}
+			}
 		});
 		_updateAreaClass();
 		_inited = true;

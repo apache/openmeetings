@@ -431,7 +431,6 @@ var VideoSettings = (function() {
 		_updateRec();
 		_setEnabled(false);
 	}
-	//FIXME TODO, try to unify this
 	function _onWsMessage(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
