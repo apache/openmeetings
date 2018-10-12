@@ -63,7 +63,7 @@
 			<absoluteResourceURL>https://openmeetings.apache.org</absoluteResourceURL>
 			<protocolRelativeURLs>true</protocolRelativeURLs>
 			<localResources>true</localResources>
-			<theme>site</theme><!-- http://bootswatch.com/2/cerulean offline -->
+			<theme>bootswatch-${reflow-theme}</theme>
 			<bottomNav maxSpan="12">
 				<column>General</column>
 				<column>Installation</column>
