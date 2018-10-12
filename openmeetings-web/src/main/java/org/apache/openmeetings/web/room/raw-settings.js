@@ -350,7 +350,7 @@ var VideoSettings = (function() {
 				callback(devCnts);
 			})
 			.catch(function(err) {
-				OmUtil.error(err);
+				OmUtil.error('Unable to get the list of multimedia devices');
 				callback(devCnts);
 			});
 	}

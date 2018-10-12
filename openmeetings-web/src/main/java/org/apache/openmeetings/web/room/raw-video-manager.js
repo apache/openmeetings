@@ -238,6 +238,33 @@ var VideoManager = (function() {
 			, activity: activity
 		});
 	}
+	function _getScreenStream(callback) {
+		//FIXME TODO frameRate
+		//FIXME TODO can be unified
+		const b = kurentoUtils.WebRtcPeer.browser;
+		if (b.name === 'Edge' && b.major > 16) {
+			navigator.getDisplayMedia({
+				video: true
+			}).then(function(stream) {
+				callback(stream);
+			})
+			.catch(function(err) {
+				OmUtil.error(err);
+			});
+		} else if (b.name === 'Firefox') {
+			// https://mozilla.github.io/webrtc-landing/gum_test.html
+			navigator.mediaDevices.getUserMedia({
+				video: {
+					mediaSource: 'screen' // 'window'/'application' //FIXME TODO different behavior
+				}
+			}).then(function(stream) {
+				callback(stream);
+			})
+			.catch(function(err) {
+				OmUtil.error(err);
+			});
+		}
+	}
 
 	self.init = _init;
 	self.update = _update;
