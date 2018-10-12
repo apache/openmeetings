@@ -82,7 +82,7 @@ public class KurentoHandler {
 	private KurentoClient client;
 	private String kuid;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
-	final Map<String, KStream> usersByUid = new ConcurrentHashMap<>();
+	final Map<String, KStream> streamsByUid = new ConcurrentHashMap<>();
 	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
 
 	@Autowired
@@ -109,7 +109,7 @@ public class KurentoHandler {
 				e.getValue().release();
 			}
 			testsByUid.clear();
-			usersByUid.clear();
+			streamsByUid.clear();
 			client.destroy();
 		}
 	}
@@ -323,7 +323,7 @@ public class KurentoHandler {
 			if (test) {
 				testsByUid.remove(uid);
 			} else {
-				usersByUid.remove(uid);
+				streamsByUid.remove(uid);
 			}
 		}
 		if (test) {
@@ -357,7 +357,7 @@ public class KurentoHandler {
 	}
 
 	private KStream getByUid(String uid) {
-		return uid == null ? null : usersByUid.get(uid);
+		return uid == null ? null : streamsByUid.get(uid);
 	}
 
 	private KTestStream getTestByUid(String uid) {

@@ -74,7 +74,7 @@ import org.simpleframework.xml.Root;
 			+ "AND (f.parentId IS NULL OR f.parentId = 0) "
 			+ "ORDER BY f.type ASC, f.inserted")
 	, @NamedQuery(name = "resetRecordingProcessingStatus", query = "UPDATE Recording f SET f.status = :error WHERE f.status IN (:recording, :converting)")
-	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM Recording c LEFT JOIN FETCH c.metaData ORDER BY c.id")
+	, @NamedQuery(name = "getRecordingsAll", query = "SELECT c FROM Recording c LEFT JOIN FETCH c.chunks ORDER BY c.id")
 	, @NamedQuery(name = "getRecordingsByRoom", query = "SELECT c FROM Recording c WHERE c.deleted = false AND c.roomId = :roomId "
 			+ "ORDER BY c.type ASC, c.inserted")
 	, @NamedQuery(name = "getRecordingsByParent", query = "SELECT f FROM Recording f WHERE f.deleted = false AND f.parentId = :parentId "

@@ -36,10 +36,16 @@ import org.slf4j.LoggerFactory;
 public class KRoom implements Closeable {
 	private final static Logger log = LoggerFactory.getLogger(KRoom.class);
 
-	private final Map<String, KStream> participants = new ConcurrentHashMap<>();
+	private final Map<String, KStream> streams = new ConcurrentHashMap<>();
 	private final MediaPipeline pipeline;
 	private final Long roomId;
 	private final AtomicBoolean sharingStarted = new AtomicBoolean(false);
+
+	public KRoom(Long roomId, MediaPipeline pipeline) {
+		this.roomId = roomId;
+		this.pipeline = pipeline;
+		log.info("ROOM {} has been created", roomId);
+	}
 
 	public Long getRoomId() {
 		return roomId;
@@ -49,29 +55,23 @@ public class KRoom implements Closeable {
 		return pipeline.getId();
 	}
 
-	public KRoom(Long roomId, MediaPipeline pipeline) {
-		this.roomId = roomId;
-		this.pipeline = pipeline;
-		log.info("ROOM {} has been created", roomId);
-	}
-
 	public KStream join(final KurentoHandler h, final Client c) {
 		log.info("ROOM {}: join participant {}", roomId, c.getUid());
 		final KStream stream = new KStream(c, this.pipeline);
-		participants.put(stream.getUid(), stream);
-		h.usersByUid.put(stream.getUid(), stream);
+		streams.put(stream.getUid(), stream);
+		h.streamsByUid.put(stream.getUid(), stream);
 		return stream;
 	}
 
 	public Collection<KStream> getParticipants() {
-		return participants.values();
+		return streams.values();
 	}
 
 	public void leave(final Client c) {
-		for (Map.Entry<String, KStream> e : participants.entrySet()) {
+		for (Map.Entry<String, KStream> e : streams.entrySet()) {
 			e.getValue().remove(c);
 		}
-		KStream stream = participants.remove(c.getUid());
+		KStream stream = streams.remove(c.getUid());
 		if (stream != null) {
 			stream.release();
 		}
@@ -79,10 +79,10 @@ public class KRoom implements Closeable {
 
 	@Override
 	public void close() {
-		for (final KStream user : participants.values()) {
-			user.release();
+		for (final KStream stream : streams.values()) {
+			stream.release();
 		}
-		participants.clear();
+		streams.clear();
 		pipeline.release(new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
