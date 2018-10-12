@@ -245,7 +245,7 @@ public class Client implements IClient, IWsClient {
 	}
 
 	public StreamDesc getStream(String _uid) {
-		return streams.get(uid);
+		return streams.get(_uid);
 	}
 
 	public Date getConnectedSince() {
@@ -382,7 +382,7 @@ public class Client implements IClient, IWsClient {
 		}
 		JSONArray streamArr = new JSONArray();
 		for (Entry<String, StreamDesc> e : streams.entrySet()) {
-			streamArr.put(new JSONObject(e.getValue()));
+			streamArr.put(e.getValue().toJson());
 		}
 		JSONObject json = new JSONObject()
 				.put("user", u)

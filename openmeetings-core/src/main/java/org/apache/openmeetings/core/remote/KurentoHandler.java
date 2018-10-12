@@ -124,8 +124,12 @@ public class KurentoHandler {
 		return map;
 	}
 
+	Transaction beginTransaction() {
+		return client.beginTransaction();
+	}
+
 	private MediaPipeline createTestPipeline() {
-		Transaction t = client.beginTransaction();
+		Transaction t = beginTransaction();
 		MediaPipeline pipe = client.createMediaPipeline(t);
 		pipe.addTag(t, TAG_KUID, kuid);
 		pipe.addTag(t, TAG_MODE, MODE_TEST);
@@ -208,7 +212,7 @@ public class KurentoHandler {
 					KStream stream = getByUid(uid);
 					if (stream == null) {
 						KRoom room = getRoom(c.getRoomId());
-						stream = room.join(this, sd, uid);
+						stream = room.join(this, sd);
 					}
 					stream.startBroadcast(this, sd, msg.getString("sdpOffer"));
 				}
@@ -222,7 +226,7 @@ public class KurentoHandler {
 								candidate.getString("candidate")
 								, candidate.getString("sdpMid")
 								, candidate.getInt("sdpMLineIndex"));
-						sender.addCandidate(cand, c.getUid());
+						sender.addCandidate(cand, msg.getString("luid"));
 					}
 				}
 					break;

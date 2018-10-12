@@ -13,9 +13,11 @@ var VideoUtil = (function() {
 		return 'screen' === sd.type;
 	}
 	function _isRecording(c) {
-		return 'sharing' === c.type
+		return false;
+		/*FIXME TODO return 'sharing' === c.type
 			&& c.screenActivities.includes('recording')
 			&& !c.screenActivities.includes('sharing');
+		*/
 	}
 	function _hasAudio(sd) {
 		return !sd || sd.activities.includes(MIC_ACTIVITY);

@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -92,6 +93,7 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -163,19 +165,17 @@ public class RoomPanel extends BasePanel {
 
 		private void initVideos(AjaxRequestTarget target) {
 			StringBuilder sb = new StringBuilder();
-			boolean hasStreams = false;
 			Client _c = getClient();
+			JSONArray streams = new JSONArray();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
-				//FIXME TODO add multiple streams support
-				if (!c.getStreams().isEmpty()) {
-					sb.append(String.format("VideoManager.play(%s);", new JSONObject()
-							.put("client", c.toJson(false).put("type", "room"))
-							.put("iceServers", kHandler.getTurnServers())
-							)); // FIXME TODO add multi-stream support
-					hasStreams = true;
+				for (StreamDesc sd : c.getStreams()) {
+					streams.put(sd.toJson());
+				}
+				if (streams.length() > 0) {
+					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
 				}
 			}
-			if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+			if (interview && recordingUser == null && streams.length() > 0 && _c.hasRight(Right.moderator)) {
 				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -489,9 +489,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.toJson(self).put("type", "room") // FIXME TODO add multi-stream support
-									));
+							handler.appendJavaScript(String.format("VideoManager.update(%s);", c.toJson(self)));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);

@@ -39,6 +39,7 @@ import org.kurento.client.IceCandidate;
 import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaType;
+import org.kurento.client.Transaction;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
@@ -79,7 +80,7 @@ public class KStream implements IKStream {
 		addListener(h, sd.getSid(), sd.getUid(), sdpOffer);
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
-		WebSocketHelper.sendRoomOthers(roomId, uid, newKurentoMsg()
+		WebSocketHelper.sendRoomOthers(roomId, c.getUid(), newKurentoMsg()
 				.put("id", "newStream")
 				.put("iceServers", h.getTurnServers())
 				.put("stream", sd.toJson()));
@@ -104,7 +105,7 @@ public class KStream implements IKStream {
 
 	public void addListener(final KurentoHandler h, String sid, String uid, String sdpOffer) {
 		final boolean self = uid.equals(this.uid);
-		log.info("USER {}: have started {} in room {}", this.uid, self ? "broadcasting" : "receiving", roomId);
+		log.info("USER {}: have started {} in room {}", uid, self ? "broadcasting" : "receiving", roomId);
 		log.trace("USER {}: SdpOffer is {}", uid, sdpOffer);
 		if (!self && outgoingMedia == null) {
 			log.warn("Trying to add listener too early");
@@ -150,9 +151,11 @@ public class KStream implements IKStream {
 	}
 
 	private WebRtcEndpoint createEndpoint(final KurentoHandler h, String sid, String uid) {
-		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
-		endpoint.addTag("outUid", this.uid);
-		endpoint.addTag("uid", uid);
+		Transaction t = h.beginTransaction();
+		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build(t);
+		endpoint.addTag(t, "outUid", this.uid);
+		endpoint.addTag(t, "uid", uid);
+		t.commit();
 
 		endpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 			@Override

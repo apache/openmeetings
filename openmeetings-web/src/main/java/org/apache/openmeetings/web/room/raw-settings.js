@@ -226,10 +226,10 @@ var VideoSettings = (function() {
 	}
 	//each bool OR https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
 	// min/ideal/max/exact/mandatory can also be used
-	function _constraints(c, callback) {
+	function _constraints(sd, callback) {
 		_getDevConstraints(function(devCnts){
 			const cnts = {};
-			if (devCnts.video && false === o.audioOnly && VideoUtil.hasVideo(c) && s.video.cam > -1) {
+			if (devCnts.video && false === o.audioOnly && VideoUtil.hasVideo(sd) && s.video.cam > -1) {
 				cnts.video = {
 					width: s.video.width
 					, height: s.video.height
@@ -243,7 +243,7 @@ var VideoSettings = (function() {
 			} else {
 				cnts.video = false;
 			}
-			if (devCnts.audio && VideoUtil.hasAudio(c) && s.video.mic > -1) {
+			if (devCnts.audio && VideoUtil.hasAudio(sd) && s.video.mic > -1) {
 				cnts.audio = {
 					sampleRate: o.microphone.rate
 					, echoCancellation: o.microphone.echo

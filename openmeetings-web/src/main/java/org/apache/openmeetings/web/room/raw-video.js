@@ -45,8 +45,8 @@ var Video = (function() {
 		}
 	}
 	function _createSendPeer(msg) {
-		VideoSettings.constraints(c, function(cnts) {
-			if ((VideoUtil.hasVideo(c) && !cnts.video) || (VideoUtil.hasAudio(c) && !cnts.audio)) {
+		VideoSettings.constraints(sd, function(cnts) {
+			if ((VideoUtil.hasVideo(sd) && !cnts.video) || (VideoUtil.hasAudio(sd) && !cnts.audio)) {
 				VideoManager.sendMessage({
 					id : 'devicesAltered'
 					, uid: sd.uid
@@ -314,8 +314,7 @@ var Video = (function() {
 		return v;
 	}
 	function _update(_c) {
-		const opts = Room.getOptions()
-			, prevA = sd.activities;
+		const prevA = sd.activities;
 		sd.activities = _c.activities.sort();
 		sd.user.firstName = _c.user.firstName;
 		sd.user.lastName = _c.user.lastName;
@@ -406,11 +405,13 @@ var Video = (function() {
 	self.setRights = _setRights;
 	self.getPeer = function() { return rtcPeer; };
 	self.onIceCandidate = function(candidate, wp) {
+		const opts = Room.getOptions();
 		OmUtil.log("Local candidate" + JSON.stringify(candidate));
 		VideoManager.sendMessage({
 			id: 'onIceCandidate'
 			, candidate: candidate
 			, uid: sd.uid
+			, luid: sd.self ? sd.uid : opts.uid
 		});
 	};
 	self.resizePod = _resizePod;

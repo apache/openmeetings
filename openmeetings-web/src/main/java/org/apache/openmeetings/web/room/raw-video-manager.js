@@ -22,7 +22,7 @@ var VideoManager = (function() {
 	}
 
 	function _onReceive(msg) {
-		const uid = msg.client.uid;
+		const uid = msg.stream.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
 		Video().init(msg);
 		OmUtil.log(uid + ' receiving video');
@@ -65,6 +65,9 @@ var VideoManager = (function() {
 					case 'newStream':
 						_onReceive(m);
 						break;
+					case 'error':
+						OmUtil.error(m.message);
+						break;
 					default:
 						//no-op
 				}
@@ -91,23 +94,19 @@ var VideoManager = (function() {
 		if (!inited) {
 			return;
 		}
-		// FIXME TODO add multi-stream support
-		for (let i = 0; i < c.streams.length; ++i) {
-			const cl = JSON.parse(JSON.stringify(c)), s = c.streams[i];
-			delete cl.streams;
-			$.extend(cl, s);
-			if (cl.self && (VideoUtil.isSharing(cl) || VideoUtil.isRecording(cl))) {
-				continue;
+		c.streams.forEach(function(sd) {
+			if (sd.self && (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd))) {
+				return;
 			}
-			const _id = VideoUtil.getVid(cl.uid)
-				, av = VideoUtil.hasAudio(cl) || VideoUtil.hasVideo(cl)
+			const _id = VideoUtil.getVid(sd.uid)
+				, av = VideoUtil.hasAudio(sd) || VideoUtil.hasVideo(sd)
 				, v = $('#' + _id);
 			if (av && v.length === 1) {
-				v.data().update(cl);
+				v.data().update(sd);
 			} else if (!av && v.length === 1) {
 				_closeV(v);
 			}
-		}
+		});
 		if (c.uid === Room.getOptions().uid) {
 			Room.setRights(c.rights);
 			Room.setActivities(c.activities);
@@ -133,27 +132,29 @@ var VideoManager = (function() {
 		v.remove();
 		WbArea.updateAreaClass();
 	}
-	function _play(msg) {
+	function _play(streams, iceServers) {
 		if (!inited) {
 			return;
 		}
-		const c = msg.client;
-		if (VideoUtil.isSharing(c)) {
-			_highlight(share
-					.attr('title', share.data('user') + ' ' + c.user.firstName + ' ' + c.user.lastName + ' ' + share.data('text'))
-					.data('uid', c.uid)
-					.show(), 10);
-			share.tooltip().off('click').click(function() {
-				const v = $('#' + VideoUtil.getVid(c.uid))
-				if (v.length !== 1) {
-					Video().init(c, VideoUtil.container().offset());
-				} else {
-					v.dialog('open');
-				}
-			});
-		} else {
-			_onReceive(msg);
-		}
+		streams.forEach(function(sd) {
+			const m = {stream: sd, iceServers: iceServers};
+			if (VideoUtil.isSharing(sd)) {
+				_highlight(share
+						.attr('title', share.data('user') + ' ' + sd.user.firstName + ' ' + sd.user.lastName + ' ' + share.data('text'))
+						.data('uid', sd.uid)
+						.show(), 10);
+				share.tooltip().off('click').click(function() {
+					const v = $('#' + VideoUtil.getVid(sd.uid))
+					if (v.length !== 1) {
+						Video().init(m);
+					} else {
+						v.dialog('open');
+					}
+				});
+			} else {
+				_onReceive(m);
+			}
+		});
 	}
 	function _close(uid, showShareBtn) {
 		const _id = VideoUtil.getVid(uid), v = $('#' + _id);
