@@ -21,19 +21,19 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import java.io.Closeable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KRoom implements Closeable {
+public class KRoom {
 	private final static Logger log = LoggerFactory.getLogger(KRoom.class);
 
 	private final Map<String, KStream> streams = new ConcurrentHashMap<>();
@@ -55,9 +55,9 @@ public class KRoom implements Closeable {
 		return pipeline.getId();
 	}
 
-	public KStream join(final KurentoHandler h, final Client c) {
-		log.info("ROOM {}: join participant {}", roomId, c.getUid());
-		final KStream stream = new KStream(c, this.pipeline);
+	public KStream join(final KurentoHandler h, final StreamDesc sd, final String uid) {
+		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient().getUser().getLogin(), uid);
+		final KStream stream = new KStream(sd, this.pipeline);
 		streams.put(stream.getUid(), stream);
 		h.streamsByUid.put(stream.getUid(), stream);
 		return stream;
@@ -67,20 +67,19 @@ public class KRoom implements Closeable {
 		return streams.values();
 	}
 
-	public void leave(final Client c) {
+	public void leave(final KurentoHandler h, final Client c) {
 		for (Map.Entry<String, KStream> e : streams.entrySet()) {
 			e.getValue().remove(c);
 		}
 		KStream stream = streams.remove(c.getUid());
 		if (stream != null) {
-			stream.release();
+			stream.release(h);
 		}
 	}
 
-	@Override
-	public void close() {
+	public void close(final KurentoHandler h) {
 		for (final KStream stream : streams.values()) {
-			stream.release();
+			stream.release(h);
 		}
 		streams.clear();
 		pipeline.release(new Continuation<Void>() {

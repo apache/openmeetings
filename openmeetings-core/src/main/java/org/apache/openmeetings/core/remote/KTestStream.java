@@ -61,11 +61,13 @@ public class KTestStream implements IKStream {
 	private RecorderEndpoint recorder;
 	private String recPath = null;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	private final String uid;
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestStream(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public KTestStream(final KurentoHandler h, IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
+		this.uid = _c.getUid();
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		webRtcEndpoint.connect(webRtcEndpoint);
 
@@ -92,7 +94,7 @@ public class KTestStream implements IKStream {
 			@Override
 			public void onEvent(StoppedEvent event) {
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
-				release();
+				release(h);
 			}
 		});
 		switch (profile) {
@@ -134,7 +136,7 @@ public class KTestStream implements IKStream {
 		});
 	}
 
-	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public void play(final KurentoHandler h, final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
@@ -147,14 +149,14 @@ public class KTestStream implements IKStream {
 					@Override
 					public void onEvent(ErrorEvent event) {
 						log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
-						sendPlayEnd(_c);
+						sendPlayEnd(h, _c);
 					}
 				});
 				player.addEndOfStreamListener(new EventListener<EndOfStreamEvent>() {
 					@Override
 					public void onEvent(EndOfStreamEvent event) {
 						log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
-						sendPlayEnd(_c);
+						sendPlayEnd(h, _c);
 					}
 				});
 				player.play();
@@ -194,9 +196,9 @@ public class KTestStream implements IKStream {
 		});
 	}
 
-	private void sendPlayEnd(IWsClient _c) {
+	private void sendPlayEnd(final KurentoHandler h, IWsClient _c) {
 		WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "playStopped"));
-		release();
+		release(h);
 	}
 
 	private static MediaProfileSpecType getProfile(JSONObject msg) {
@@ -221,7 +223,7 @@ public class KTestStream implements IKStream {
 	}
 
 	@Override
-	public void release() {
+	public void release(KurentoHandler h) {
 		if (webRtcEndpoint != null) {
 			webRtcEndpoint.release();
 			webRtcEndpoint = null;
@@ -268,5 +270,6 @@ public class KTestStream implements IKStream {
 			});
 			recorder = null;
 		}
+		h.testsByUid.remove(uid);
 	}
 }

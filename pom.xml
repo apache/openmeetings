@@ -108,7 +108,7 @@
 		<commons-text.version>1.5</commons-text.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.2.3</logback.version>
-		<jetty9.version>9.4.12.RC0</jetty9.version>
+		<jetty9.version>9.4.12.v20180830</jetty9.version>
 		<license.excludedScopes>test</license.excludedScopes>
 		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
 		<!--  URL of the ASF SonarQube server  -->

@@ -9,19 +9,19 @@ var VideoUtil = (function() {
 	function _getVid(uid) {
 		return 'video' + uid;
 	}
-	function _isSharing(c) {
-		return 'sharing' === c.type && c.screenActivities.includes('sharing');
+	function _isSharing(sd) {
+		return 'screen' === sd.type;
 	}
 	function _isRecording(c) {
 		return 'sharing' === c.type
 			&& c.screenActivities.includes('recording')
 			&& !c.screenActivities.includes('sharing');
 	}
-	function _hasAudio(c) {
-		return !c || c.activities.includes(MIC_ACTIVITY);
+	function _hasAudio(sd) {
+		return !sd || sd.activities.includes(MIC_ACTIVITY);
 	}
-	function _hasVideo(c) {
-		return !c || c.activities.includes(CAM_ACTIVITY);
+	function _hasVideo(sd) {
+		return !sd || sd.activities.includes(CAM_ACTIVITY);
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);

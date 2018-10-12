@@ -56,6 +56,10 @@ public class Client implements IClient, IWsClient {
 		, record
 		, publish //sends A/V to external server
 	}
+	public enum StreamType {
+		webCam //sends Audio/Video to the room
+		, screen //send screen sharing
+	}
 	private final String sessionId;
 	private final int pageId;
 	private User user;
@@ -225,9 +229,10 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	public Client addStream(StreamDesc stream) {
-		streams.put(stream.getUid(), stream);
-		return this;
+	public StreamDesc addStream(StreamType stype) {
+		StreamDesc sd = new StreamDesc(stype);
+		streams.put(sd.getUid(), sd);
+		return sd;
 	}
 
 	public Client removeStream(String _uid) {
@@ -237,6 +242,10 @@ public class Client implements IClient, IWsClient {
 
 	public List<StreamDesc> getStreams() {
 		return new ArrayList<>(streams.values());
+	}
+
+	public StreamDesc getStream(String _uid) {
+		return streams.get(uid);
 	}
 
 	public Date getConnectedSince() {
@@ -380,7 +389,7 @@ public class Client implements IClient, IWsClient {
 				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
-				.put("activities", new JSONArray(activities))
+				.put("sactivities", new JSONArray(activities))
 				.put("streams", streamArr)
 				.put("width", width)
 				.put("height", height)
@@ -449,29 +458,25 @@ public class Client implements IClient, IWsClient {
 	@Override
 	public String toString() {
 		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
-				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
+				+ ", rights=" + rights + ", sactivities=" + activities + ", connectedSince=" + connectedSince + "]";
 	}
 
-	public static class StreamDesc implements Serializable {
+	public class StreamDesc implements Serializable {
 		private static final long serialVersionUID = 1L;
-		public enum Type {
-			room //sends Audio/Video to the room
-		}
-		private final Set<Activity> activities = new ConcurrentHashSet<>();
-		private final String sid;
-		private final String uid;
-		private final Type type;
-		private int width;
-		private int height;
+		private final Set<Activity> sactivities = new ConcurrentHashSet<>();
+		private final String uuid;
+		private final StreamType type;
+		private int swidth;
+		private int sheight;
 
-		public StreamDesc(String sid, Type type) {
-			this(sid, UUID.randomUUID().toString(), type);
-		}
-
-		public StreamDesc(String sid, String uid, Type type) {
-			this.sid = sid;
-			this.uid = uid;
+		public StreamDesc(StreamType type) {
+			this.uuid = UUID.randomUUID().toString();
 			this.type = type;
+			setActivities();
+			if (StreamType.webCam == type) {
+				this.swidth = width;
+				this.sheight = height;
+			}
 		}
 
 		public String getSid() {
@@ -479,27 +484,72 @@ public class Client implements IClient, IWsClient {
 		}
 
 		public String getUid() {
-			return uid;
+			return uuid;
 		}
 
-		public Type getType() {
+		public StreamType getType() {
 			return type;
 		}
 
 		public int getWidth() {
-			return width;
+			return swidth;
 		}
 
-		public void setWidth(int width) {
-			this.width = width;
+		public StreamDesc setWidth(int width) {
+			this.swidth = width;
+			return this;
 		}
 
 		public int getHeight() {
-			return height;
+			return sheight;
 		}
 
-		public void setHeight(int height) {
-			this.height = height;
+		public StreamDesc setHeight(int height) {
+			this.sheight = height;
+			return this;
+		}
+
+		public StreamDesc setActivities() {
+			sactivities.clear();
+			if (StreamType.webCam == type) {
+				if (Client.this.hasActivity(Activity.broadcastA)) {
+					sactivities.add(Activity.broadcastA);
+				}
+				if (Client.this.hasActivity(Activity.broadcastV)) {
+					sactivities.add(Activity.broadcastV);
+				}
+			}
+			if (StreamType.screen == type) {
+				sactivities.add(Activity.broadcastV);
+			}
+			return this;
+		}
+
+		public boolean hasActivity(Activity a) {
+			return sactivities.contains(a);
+		}
+
+		public Client getClient() {
+			return Client.this;
+		}
+
+		private JSONArray getActivities() {
+			return new JSONArray(new ArrayList<>(sactivities));
+		}
+
+		public JSONObject toJson() {
+			return new JSONObject()
+					.put("uid", uuid)
+					.put("type", type.name())
+					.put("width", swidth)
+					.put("height", sheight)
+					.put("activities", getActivities())
+					.put("cuid", uid)
+					.put("user", new JSONObject()
+							.put("id", user.getId())
+							.put("firstName", user.getFirstname())
+							.put("lastName", user.getLastname())
+							);
 		}
 	}
 }

@@ -48,7 +48,7 @@ var Room = (function() {
 		const vw = $('#video' + Room.getOptions().uid);
 		if (vw.length > 0) {
 			const v = vw.data();
-			if (VideoUtil.hasAudio(v.client())) {
+			if (VideoUtil.hasAudio(v.stream())) {
 				return v;
 			}
 		}

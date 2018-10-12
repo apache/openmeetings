@@ -15,7 +15,7 @@ var VideoManager = (function() {
 	}
 
 	function _onBroadcast(msg) {
-		const uid = msg.uid;
+		const uid = msg.stream.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
@@ -175,7 +175,7 @@ var VideoManager = (function() {
 		});
 	}
 	function _find(uid) {
-		return $(VID_SEL + ' div[data-client-uid="room' + uid + '"]');
+		return $(VID_SEL + ' div[data-client-uid="webCam' + uid + '"]');
 	}
 	function _userSpeaks(uid, active) {
 		const u = $('#user' + uid + ' .audio-activity.ui-icon')
