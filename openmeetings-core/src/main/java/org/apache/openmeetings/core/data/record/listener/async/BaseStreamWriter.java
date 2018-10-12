@@ -49,7 +49,7 @@ public abstract class BaseStreamWriter implements Runnable {
 	protected boolean isScreenData = false;
 
 	protected String streamName = "";
-	protected final RecordingMetaDataDao metaDataDao;
+	protected final RecordingChunkDao metaDataDao;
 	private final BlockingQueue<CachedEvent> queue = new LinkedBlockingQueue<>();
 
 	public BaseStreamWriter(String streamName, IScope scope, Long metaDataId, boolean isScreenData) {
@@ -57,14 +57,14 @@ public abstract class BaseStreamWriter implements Runnable {
 		this.isScreenData = isScreenData;
 		this.streamName = streamName;
 		this.metaDataId = metaDataId;
-		this.metaDataDao = getApp().getOmBean(RecordingMetaDataDao.class);
+		this.metaDataDao = getApp().getOmBean(RecordingChunkDao.class);
 		this.scope = scope;
 		try {
 			init();
 		} catch (IOException ex) {
 			log.error("##REC:: [BaseStreamWriter] Could not init Thread", ex);
 		}
-		RecordingMetaData metaData = metaDataDao.get(metaDataId);
+		RecordingChunk metaData = metaDataDao.get(metaDataId);
 		metaData.setStreamStatus(Status.STARTED);
 		metaDataDao.update(metaData);
 
@@ -162,7 +162,7 @@ public abstract class BaseStreamWriter implements Runnable {
 		internalCloseStream();
 		// Write the complete Bit to the meta data, the converter task will wait for this bit!
 		try {
-			RecordingMetaData metaData = metaDataDao.get(metaDataId);
+			RecordingChunk metaData = metaDataDao.get(metaDataId);
 			log.debug("##REC:: Stream Status was: {} has been written for: {}", metaData.getStreamStatus(), metaDataId);
 			metaData.setStreamStatus(Status.STOPPED);
 			metaDataDao.update(metaData);

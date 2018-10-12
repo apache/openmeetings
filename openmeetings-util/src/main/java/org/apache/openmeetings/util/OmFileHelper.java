@@ -203,7 +203,7 @@ public class OmFileHelper {
 		return String.format(FILE_NAME_FMT, name, ext);
 	}
 
-	public static File getRecordingMetaData(Long roomId, String name) {
+	public static File getRecordingChunk(Long roomId, String name) {
 		return new File(getStreamsSubDir(roomId), getName(name, EXTENSION_FLV));
 	}
 

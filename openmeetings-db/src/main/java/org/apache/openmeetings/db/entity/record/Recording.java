@@ -120,18 +120,14 @@ public class Recording extends BaseFileItem {
 	@Element(data = true, required = false)
 	private String duration;
 
-	@Column(name = "recorder_stream_id")
-	@Element(data = true, required = false)
-	private String recorderStreamId;
-
 	@Column(name = "is_interview")
 	@Element(data = true, required = false)
-	private Boolean interview = false;
+	private boolean interview = false;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "recording_id")
 	@ElementList(name = "flvrecordingmetadatas", required = false)
-	private List<RecordingMetaData> metaData;
+	private List<RecordingChunk> chunks;
 
 	@Column(name = "status")
 	@Enumerated(value = EnumType.STRING)
@@ -140,7 +136,7 @@ public class Recording extends BaseFileItem {
 
 	@Column(name = "notified")
 	@Element(data = true, required = false)
-	private Boolean notified = false;
+	private boolean notified = false;
 
 	@Override
 	@Element(data = true, name = "flvRecordingId")
@@ -186,20 +182,12 @@ public class Recording extends BaseFileItem {
 		this.recordEnd = recordEnd;
 	}
 
-	public String getRecorderStreamId() {
-		return recorderStreamId;
+	public List<RecordingChunk> getChunks() {
+		return chunks;
 	}
 
-	public void setRecorderStreamId(String recorderStreamId) {
-		this.recorderStreamId = recorderStreamId;
-	}
-
-	public List<RecordingMetaData> getMetaData() {
-		return metaData;
-	}
-
-	public void setMetaData(List<RecordingMetaData> metaData) {
-		this.metaData = metaData;
+	public void setChunks(List<RecordingChunk> chunks) {
+		this.chunks = chunks;
 	}
 
 	public boolean isInterview() {
@@ -219,7 +207,7 @@ public class Recording extends BaseFileItem {
 	}
 
 	public boolean isNotified() {
-		return Boolean.TRUE.equals(notified);
+		return notified;
 	}
 
 	public void setNotified(boolean notified) {

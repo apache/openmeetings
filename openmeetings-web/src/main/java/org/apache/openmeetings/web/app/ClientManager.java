@@ -199,24 +199,9 @@ public class ClientManager implements IClientManager {
 				onlineRooms.put(roomId, clients);
 			}
 			rooms.unlock(roomId);
-			/* FIXME TODO KurentoHandler
-			if (_c instanceof StreamClient) {
-				StreamClient sc = (StreamClient)_c;
-				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
-					scopeAdapter.roomLeaveByScope(_c, roomId);
-				}
-			}
-			 */
 			if (_c instanceof Client) {
-				//FIXME TODO scopeAdapter.dropSharing(_c, roomId);
 				Client c = (Client)_c;
 				kHandler.leaveRoom(c);
-				/* FIXME TODO
-				IScope sc = scopeAdapter.getChildScope(roomId);
-				for (String uid : c.getStreams()) {
-					scopeAdapter.sendMessageById("quit", uid, sc);
-				}
-				*/
 				c.setRoom(null);
 				c.clear();
 				update(c);

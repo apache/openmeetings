@@ -269,7 +269,7 @@ public class KurentoHandler {
 				//FIXME TODO update interview buttons
 			} else if (!wasBroadcasting) {
 				//join
-				StreamDesc sd = new StreamDesc(c.getSid(), c.getUid(), StreamDesc.Type.broadcast);
+				StreamDesc sd = new StreamDesc(c.getSid(), c.getUid(), StreamDesc.Type.room);
 				sd.setWidth(c.getWidth());
 				sd.setHeight(c.getHeight());
 				cm.update(c.addStream(sd));

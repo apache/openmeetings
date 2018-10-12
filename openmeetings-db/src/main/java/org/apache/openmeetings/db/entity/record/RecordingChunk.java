@@ -41,7 +41,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 /**
- * contains meta data about each stream, for example if it is a screen sharing or
+ * contains data about each stream, for example if it is a screen sharing or
  * audio/video stream. There is also a {@link Status} value
  * {@link #streamStatus}, as long as this variable is not set
  * to {@link Status#STOPPED}, the recording process will not proceed and start to convert all
@@ -51,15 +51,15 @@ import org.simpleframework.xml.Root;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name = "getMetaById", query = "SELECT c FROM RecordingMetaData c WHERE c.id = :id")
-	, @NamedQuery(name = "getMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.deleted = false")
-	, @NamedQuery(name = "getNotScreenMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.deleted = false "
+	@NamedQuery(name = "getChunkById", query = "SELECT c FROM RecordingChunk c WHERE c.id = :id")
+	, @NamedQuery(name = "getChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false")
+	, @NamedQuery(name = "getNotScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.deleted = false "
 			+ "AND c.screenData = false AND c.streamStatus <> :none")
-	, @NamedQuery(name = "getScreenMetaByRecording", query = "SELECT c FROM RecordingMetaData c WHERE c.recording.id = :recordingId AND c.screenData = true")
+	, @NamedQuery(name = "getScreenChunkByRecording", query = "SELECT c FROM RecordingChunk c WHERE c.recording.id = :recordingId AND c.screenData = true")
 })
-@Table(name = "recording_metadata")
+@Table(name = "recording_chunk")
 @Root(name = "flvrecordingmetadata")
-public class RecordingMetaData extends HistoricalEntity {
+public class RecordingChunk extends HistoricalEntity {
 	private static final long serialVersionUID = 1L;
 	@XmlType(namespace="org.apache.openmeetings.record.meta")
 	public enum Status {

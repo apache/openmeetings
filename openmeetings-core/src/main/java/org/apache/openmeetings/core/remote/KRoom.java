@@ -25,6 +25,7 @@ import java.io.Closeable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.kurento.client.Continuation;
@@ -38,6 +39,7 @@ public class KRoom implements Closeable {
 	private final Map<String, KStream> participants = new ConcurrentHashMap<>();
 	private final MediaPipeline pipeline;
 	private final Long roomId;
+	private final AtomicBoolean sharingStarted = new AtomicBoolean(false);
 
 	public Long getRoomId() {
 		return roomId;

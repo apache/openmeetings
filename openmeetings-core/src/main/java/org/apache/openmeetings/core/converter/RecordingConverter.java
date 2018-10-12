@@ -28,10 +28,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
+import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessResultList;
 import org.apache.wicket.util.string.Strings;
@@ -48,7 +48,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
-	private RecordingMetaDataDao metaDataDao;
+	private RecordingChunkDao chunkDao;
 
 	@Override
 	public void startConversion(Long id) {
@@ -64,14 +64,14 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 
 			File streamFolder = getStreamFolder(r);
 
-			RecordingMetaData screenMetaData = metaDataDao.getScreenByRecording(r.getId());
+			RecordingChunk screenMetaData = chunkDao.getScreenByRecording(r.getId());
 
 			if (screenMetaData == null) {
 				throw new ConversionException("screenMetaData is Null recordingId " + r.getId());
 			}
 
 			if (screenMetaData.getStreamStatus() == Status.NONE) {
-				printMetaInfo(screenMetaData, "StartConversion");
+				printChunkInfo(screenMetaData, "StartConversion");
 				throw new ConversionException("Stream has not been started, error in recording");
 			}
 			if (Strings.isEmpty(r.getHash())) {
@@ -87,7 +87,7 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 			createWav(r, logs, streamFolder, waveFiles, wav, null);
 
 			screenMetaData.setFullWavAudioData(wav.getName());
-			metaDataDao.update(screenMetaData);
+			chunkDao.update(screenMetaData);
 
 			// Merge Audio with Video / Calculate resulting FLV
 

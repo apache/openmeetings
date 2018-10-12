@@ -50,7 +50,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 	*/
 	@Override
 	public void packetReceived(CachedEvent streampacket) {
-		/*
+		/* FIXME TODO
 		try {
 			// We only care about audio at this moment
 			if (isInterview || TYPE_AUDIO == streampacket.getDataType()) {
@@ -111,7 +111,7 @@ public class StreamAudioWriter extends BaseStreamWriter {
 					// That will be not bigger then long value
 					startTimeStamp = streampacket.getTimestamp();
 
-					RecordingMetaData metaData = metaDataDao.get(metaDataId);
+					RecordingChunk metaData = metaDataDao.get(metaDataId);
 					metaData.setRecordStart(virtualTime);
 					metaDataDao.update(metaData);
 				}

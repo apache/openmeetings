@@ -153,7 +153,7 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -791,10 +791,10 @@ public class BackupImport {
 			if (r.getOwnerId() != null) {
 				r.setOwnerId(userMap.get(r.getOwnerId()));
 			}
-			if (r.getMetaData() != null) {
-				for (RecordingMetaData meta : r.getMetaData()) {
-					meta.setId(null);
-					meta.setRecording(r);
+			if (r.getChunks() != null) {
+				for (RecordingChunk chunk : r.getChunks()) {
+					chunk.setId(null);
+					chunk.setRecording(r);
 				}
 			}
 			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {

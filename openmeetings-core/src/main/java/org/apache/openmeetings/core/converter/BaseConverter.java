@@ -24,7 +24,7 @@ import static org.apache.openmeetings.core.data.record.listener.async.BaseStream
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
-import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsSubDir;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_PATH_FFMPEG;
@@ -45,13 +45,11 @@ import java.util.regex.Pattern;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.file.FileItemLogDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDeltaDao;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
-import org.apache.openmeetings.db.entity.record.RecordingMetaDelta;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
+import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
@@ -69,9 +67,7 @@ public abstract class BaseConverter {
 	@Autowired
 	protected ConfigurationDao cfgDao;
 	@Autowired
-	private RecordingMetaDataDao metaDataDao;
-	@Autowired
-	private RecordingMetaDeltaDao metaDeltaDao;
+	private RecordingChunkDao chunkDao;
 	@Autowired
 	protected FileItemLogDao logDao;
 
@@ -154,9 +150,9 @@ public abstract class BaseConverter {
 		return argv.toArray(new String[0]);
 	}
 
-	protected void createWav(Recording r, ProcessResultList logs, File streamFolder, List<File> waveFiles, File wav, List<RecordingMetaData> metaList) throws IOException {
+	protected void createWav(Recording r, ProcessResultList logs, File streamFolder, List<File> waveFiles, File wav, List<RecordingChunk> chunks) throws IOException {
 		deleteFileIfExists(wav);
-		stripAudioFirstPass(r, logs, waveFiles, streamFolder, metaList == null ? metaDataDao.getNotScreenMetaDataByRecording(r.getId()) : metaList);
+		stripAudioFirstPass(r, logs, waveFiles, streamFolder, chunks == null ? chunkDao.getNotScreenChunksByRecording(r.getId()) : chunks);
 		if (waveFiles.isEmpty()) {
 			// create default Audio to merge it. strip to content length
 			String oneSecWav = new File(getStreamsHibernateDir(), "one_second.wav").getCanonicalPath();
@@ -188,100 +184,74 @@ public abstract class BaseConverter {
 		return argv;
 	}
 
-	private static File getMetaFlvSer(RecordingMetaData metaData) {
-		File metaDir = getStreamsSubDir(metaData.getRecording().getRoomId());
-		return new File(metaDir, metaData.getStreamName() + ".flv.ser");
-	}
-
-	public static void printMetaInfo(RecordingMetaData metaData, String prefix) {
+	public static void printChunkInfo(RecordingChunk chunk, String prefix) {
 		if (log.isDebugEnabled()) {
-			log.debug("### {}:: recording id {}; stream with id {}; current status: {} ", prefix, metaData.getRecording().getId()
-					, metaData.getId(), metaData.getStreamStatus());
-			File metaFlv = getRecordingMetaData(metaData.getRecording().getRoomId(), metaData.getStreamName());
-			File metaSer = getMetaFlvSer(metaData);
-			log.debug("### {}:: Flv file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, metaFlv.getPath(), metaFlv.exists(), metaFlv.length(), metaFlv.lastModified());
-			log.debug("### {}:: Ser file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, metaSer.getPath(), metaSer.exists(), metaSer.length(), metaSer.lastModified());
+			log.debug("### {}:: recording id {}; stream with id {}; current status: {} ", prefix, chunk.getRecording().getId()
+					, chunk.getId(), chunk.getStreamStatus());
+			File chunkFlv = getRecordingChunk(chunk.getRecording().getRoomId(), chunk.getStreamName());
+			log.debug("### {}:: Flv file [{}] exists ? {}; size: {}, lastModified: {} ", prefix, chunkFlv.getPath(), chunkFlv.exists(), chunkFlv.length(), chunkFlv.lastModified());
 		}
 	}
 
-	protected RecordingMetaData waitForTheStream(long metaId) throws InterruptedException {
-		RecordingMetaData metaData = metaDataDao.get(metaId);
-		if (metaData.getStreamStatus() != Status.STOPPED) {
-			log.debug("### meta Stream not yet written to disk {}", metaId);
+	protected RecordingChunk waitForTheStream(long chunkId) throws InterruptedException {
+		RecordingChunk chunk = chunkDao.get(chunkId);
+		if (chunk.getStreamStatus() != Status.STOPPED) {
+			log.debug("### Chunk Stream not yet written to disk {}", chunkId);
 			long counter = 0;
 			long maxTimestamp = 0;
 			while(true) {
-				log.trace("### Stream not yet written Thread Sleep - {}", metaId);
+				log.trace("### Stream not yet written Thread Sleep - {}", chunkId);
 
-				metaData = metaDataDao.get(metaId);
+				chunk = chunkDao.get(chunkId);
 
-				if (metaData.getStreamStatus() == Status.STOPPED) {
-					printMetaInfo(metaData, "Stream now written");
+				if (chunk.getStreamStatus() == Status.STOPPED) {
+					printChunkInfo(chunk, "Stream now written");
 					log.debug("### Thread continue ... " );
 					break;
 				} else {
-					File metaFlv = getRecordingMetaData(metaData.getRecording().getRoomId(), metaData.getStreamName());
-					if (metaFlv.exists() && maxTimestamp < metaFlv.lastModified()) {
-						maxTimestamp = metaFlv.lastModified();
-					}
-					File metaSer = getMetaFlvSer(metaData);
-					if (metaSer.exists() && maxTimestamp < metaSer.lastModified()) {
-						maxTimestamp = metaSer.lastModified();
+					File chunkFlv = getRecordingChunk(chunk.getRecording().getRoomId(), chunk.getStreamName());
+					if (chunkFlv.exists() && maxTimestamp < chunkFlv.lastModified()) {
+						maxTimestamp = chunkFlv.lastModified();
 					}
 					if (maxTimestamp + TIME_TO_WAIT_FOR_FRAME < System.currentTimeMillis()) {
-						if (metaSer.exists()) {
-							log.debug("### long time without any update, trying to repair ... ");
-							/*
-							try {
-								if (FLVWriter.repair(metaSer.getCanonicalPath(), null, null) && !metaSer.exists()) {
-									log.debug("### Repairing was successful ... ");
-								} else {
-									log.debug("### Repairing was NOT successful ... ");
-								}
-							} catch (IOException e) {
-								log.error("### Error while file repairing ... ", e);
-							}
-							*/
-						} else {
-							log.debug("### long time without any update, closing ... ");
-						}
-						metaData.setStreamStatus(Status.STOPPED);
-						metaDataDao.update(metaData);
+						log.debug("### long time without any update, closing ... ");
+						chunk.setStreamStatus(Status.STOPPED);
+						chunkDao.update(chunk);
 						break;
 					}
 				}
 				if (++counter % 1000 == 0) {
-					printMetaInfo(metaData, "Still waiting");
+					printChunkInfo(chunk, "Still waiting");
 				}
 
 				Thread.sleep(100L);
 			}
 		}
-		return metaData;
+		return chunk;
 	}
 
 	private void stripAudioFirstPass(Recording recording,
 			ProcessResultList logs,
 			List<File> waveFiles, File streamFolder,
-			List<RecordingMetaData> metaDataList) {
+			List<RecordingChunk> chunks) {
 		try {
 			// Init variables
-			log.debug("### meta Data Number - {}", metaDataList.size());
+			log.debug("### Chunks count - {}", chunks.size());
 			log.debug("###################################################");
 
-			for (RecordingMetaData metaData : metaDataList) {
-				long metaId = metaData.getId();
-				log.debug("### processing metadata: {}", metaId);
-				if (metaData.getStreamStatus() == Status.NONE) {
-					log.debug("Stream has not been started, error in recording {}", metaId);
+			for (RecordingChunk chunk : chunks) {
+				long chunkId = chunk.getId();
+				log.debug("### processing chunk: {}", chunkId);
+				if (chunk.getStreamStatus() == Status.NONE) {
+					log.debug("Stream has not been started, error in recording {}", chunkId);
 					continue;
 				}
 
-				metaData = waitForTheStream(metaId);
+				chunk = waitForTheStream(chunkId);
 
-				File inputFlvFile = new File(streamFolder, OmFileHelper.getName(metaData.getStreamName(), EXTENSION_FLV));
+				File inputFlvFile = new File(streamFolder, OmFileHelper.getName(chunk.getStreamName(), EXTENSION_FLV));
 
-				File outputWav = new File(streamFolder, metaData.getStreamName() + "_WAVE.wav");
+				File outputWav = new File(streamFolder, chunk.getStreamName() + "_WAVE.wav");
 
 				log.debug("FLV File Name: {} Length: {} ", inputFlvFile.getName(), inputFlvFile.length());
 
@@ -296,10 +266,11 @@ public abstract class BaseConverter {
 				}
 
 				if (outputWav.exists() && outputWav.length() != 0) {
-					metaData.setAudioValid(true);
+					chunk.setAudioValid(true);
 					// Strip Wave to Full Length
 					File outputGapFullWav = outputWav;
 
+					/* FIXME TODO
 					// Fix Start/End in Audio
 					List<RecordingMetaDelta> metaDeltas = metaDeltaDao.getByMetaId(metaId);
 
@@ -334,16 +305,17 @@ public abstract class BaseConverter {
 							outputGapFullWav = inputFile;
 						}
 					}
+					*/
 
 					// Strip Wave to Full Length
-					String hashFileFullName = metaData.getStreamName() + "_FULL_WAVE.wav";
+					String hashFileFullName = chunk.getStreamName() + "_FULL_WAVE.wav";
 					File outputFullWav = new File(streamFolder, hashFileFullName);
 
 					// Calculate delta at beginning
-					double startPad = diffSeconds(metaData.getRecordStart(), recording.getRecordStart());
+					double startPad = diffSeconds(chunk.getRecordStart(), recording.getRecordStart());
 
 					// Calculate delta at ending
-					double endPad = diffSeconds(recording.getRecordEnd(), metaData.getRecordEnd());
+					double endPad = diffSeconds(recording.getRecordEnd(), chunk.getRecordEnd());
 
 					addSoxPad(logs, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
 
@@ -355,12 +327,12 @@ public abstract class BaseConverter {
 					if (!outputFullWav.exists()) {
 						throw new ConversionException("Audio File does not exist , could not extract the Audio correctly");
 					}
-					metaData.setFullWavAudioData(hashFileFullName);
+					chunk.setFullWavAudioData(hashFileFullName);
 
 					// Finally add it to the row!
 					waveFiles.add(outputFullWav);
 				}
-				metaDataDao.update(metaData);
+				chunkDao.update(chunk);
 			}
 		} catch (Exception err) {
 			log.error("[stripAudioFirstPass]", err);

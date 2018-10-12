@@ -144,7 +144,7 @@ public class WebSocketHelper {
 		Application app = (Application)getApp();
 		WebSocketSettings settings = WebSocketSettings.Holder.get(app);
 		IWebSocketConnectionRegistry reg = settings.getConnectionRegistry();
-		Executor executor = settings.getWebSocketPushMessageExecutor(); //FIXME TODO
+		Executor executor = settings.getWebSocketPushMessageExecutor();
 		final IWebSocketConnection wc = reg.getConnection(app, client.getSessionId(), new PageIdKey(client.getPageId()));
 		if (wc != null && wc.isOpen()) {
 			executor.run(() -> {

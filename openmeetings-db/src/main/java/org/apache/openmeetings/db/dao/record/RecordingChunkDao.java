@@ -24,8 +24,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData.Status;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
+import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,32 +34,34 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class RecordingMetaDataDao {
-	private static final Logger log = LoggerFactory.getLogger(RecordingMetaDataDao.class);
+public class RecordingChunkDao {
+	private static final Logger log = LoggerFactory.getLogger(RecordingChunkDao.class);
 	@PersistenceContext
 	private EntityManager em;
 	@Autowired
 	private RecordingDao recordingDao;
 
-	public RecordingMetaData get(Long id) {
-		List<RecordingMetaData> list = em.createNamedQuery("getMetaById", RecordingMetaData.class)
+	public RecordingChunk get(Long id) {
+		List<RecordingChunk> list = em.createNamedQuery("getChunkById", RecordingChunk.class)
 				.setParameter("id", id).getResultList();
 		return list.size() == 1 ? list.get(0) : null;
 	}
 
-	public List<RecordingMetaData> getByRecording(Long recordingId) {
-		return em.createNamedQuery("getMetaByRecording", RecordingMetaData.class).setParameter("recordingId", recordingId).getResultList();
+	public List<RecordingChunk> getByRecording(Long recordingId) {
+		return em.createNamedQuery("getChunkByRecording", RecordingChunk.class)
+				.setParameter("recordingId", recordingId)
+				.getResultList();
 	}
 
-	public List<RecordingMetaData> getNotScreenMetaDataByRecording(Long recordingId) {
-		return em.createNamedQuery("getNotScreenMetaByRecording", RecordingMetaData.class)
+	public List<RecordingChunk> getNotScreenChunksByRecording(Long recordingId) {
+		return em.createNamedQuery("getNotScreenChunkByRecording", RecordingChunk.class)
 				.setParameter("recordingId", recordingId)
 				.setParameter("none", Status.NONE)
 				.getResultList();
 	}
 
-	public RecordingMetaData getScreenByRecording(Long recordingId) {
-		List<RecordingMetaData> list = em.createNamedQuery("getScreenMetaByRecording", RecordingMetaData.class)
+	public RecordingChunk getScreenByRecording(Long recordingId) {
+		List<RecordingChunk> list = em.createNamedQuery("getScreenChunkByRecording", RecordingChunk.class)
 				.setParameter("recordingId", recordingId)
 				.getResultList();
 		return list.isEmpty() ? null : list.get(0);
@@ -69,48 +71,48 @@ public class RecordingMetaDataDao {
 			boolean isVideoOnly, boolean isScreenData, String streamName, String sid) {
 		try {
 
-			RecordingMetaData metaData = new RecordingMetaData();
-			metaData.setRecording(recordingDao.get(recordingId));
-			metaData.setRecordStart(recordStart);
-			metaData.setAudioOnly(isAudioOnly);
-			metaData.setVideoOnly(isVideoOnly);
-			metaData.setScreenData(isScreenData);
-			metaData.setStreamName(streamName);
-			metaData.setSid(sid);
-			metaData = update(metaData);
-			return metaData.getId();
+			RecordingChunk chunk = new RecordingChunk();
+			chunk.setRecording(recordingDao.get(recordingId));
+			chunk.setRecordStart(recordStart);
+			chunk.setAudioOnly(isAudioOnly);
+			chunk.setVideoOnly(isVideoOnly);
+			chunk.setScreenData(isScreenData);
+			chunk.setStreamName(streamName);
+			chunk.setSid(sid);
+			chunk = update(chunk);
+			return chunk.getId();
 		} catch (Exception ex2) {
 			log.error("[add]: ", ex2);
 		}
 		return null;
 	}
 
-	public Long updateEndDate(Long metaId, Date recordEnd) {
+	public Long updateEndDate(Long chunkId, Date recordEnd) {
 		try {
-			RecordingMetaData meta = get(metaId);
+			RecordingChunk chunk = get(chunkId);
 
-			if (meta != null) {
-				meta.setRecordEnd(recordEnd);
-				log.debug("updateEndDate :: Start Date : {}", meta.getRecordStart());
-				log.debug("updateEndDate :: End Date : {}", meta.getRecordEnd());
-				update(meta);
+			if (chunk != null) {
+				chunk.setRecordEnd(recordEnd);
+				log.debug("updateEndDate :: Start Date : {}", chunk.getRecordStart());
+				log.debug("updateEndDate :: End Date : {}", chunk.getRecordEnd());
+				update(chunk);
 			}
-			return metaId;
+			return chunkId;
 		} catch (Exception ex2) {
 			log.error("[updateEndDate]: ", ex2);
 		}
 		return null;
 	}
 
-	public RecordingMetaData update(RecordingMetaData metaData) {
+	public RecordingChunk update(RecordingChunk chunk) {
 		log.debug("[update]: ");
-		if (metaData.getId() == null) {
-			metaData.setInserted(new Date());
-			em.persist(metaData);
+		if (chunk.getId() == null) {
+			chunk.setInserted(new Date());
+			em.persist(chunk);
 		} else {
-			metaData.setUpdated(new Date());
-			metaData = em.merge(metaData);
+			chunk.setUpdated(new Date());
+			chunk = em.merge(chunk);
 		}
-		return metaData;
+		return chunk;
 	}
 }

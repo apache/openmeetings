@@ -31,11 +31,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.mina.util.ConcurrentHashSet;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
@@ -455,8 +455,9 @@ public class Client implements IClient, IWsClient {
 	public static class StreamDesc implements Serializable {
 		private static final long serialVersionUID = 1L;
 		public enum Type {
-			broadcast //sends Audio/Video to the room
+			room //sends Audio/Video to the room
 		}
+		private final Set<Activity> activities = new ConcurrentHashSet<>();
 		private final String sid;
 		private final String uid;
 		private final Type type;

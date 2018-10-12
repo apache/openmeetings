@@ -57,7 +57,7 @@ public class StreamVideoWriter extends BaseStreamWriter {
 			if (startedSessionScreenTimeDate == null) {
 				startedSessionScreenTimeDate = virtualTime;
 
-				RecordingMetaData metaData = metaDataDao.get(metaDataId);
+				RecordingChunk metaData = metaDataDao.get(metaDataId);
 				metaData.setRecordStart(virtualTime);
 				metaDataDao.update(metaData);
 			}

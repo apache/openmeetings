@@ -26,7 +26,7 @@ import org.apache.openmeetings.core.data.record.converter.InterviewConverterTask
 import org.apache.openmeetings.core.data.record.converter.RecordingConverterTask;
 import org.apache.openmeetings.core.data.record.listener.StreamListener;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.util.CalendarPatterns;
@@ -57,7 +57,7 @@ public class RecordingService {
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
-	private RecordingMetaDataDao metaDataDao;
+	private RecordingChunkDao metaDataDao;
 
 	private static String generateFileName(Long recordingId, String streamid) {
 		String dateString = CalendarPatterns.getTimeForStreamId(new Date());
@@ -242,7 +242,7 @@ public class RecordingService {
 			StreamListener listenerAdapter = streamListeners.get(metaId);
 			log.debug("Stream Closing :: " + metaId);
 
-			RecordingMetaData metaData = metaDataDao.get(metaId);
+			RecordingChunk metaData = metaDataDao.get(metaId);
 			printMetaInfo(metaData, "Stopping the stream");
 			// Manually call finish on the stream so that there is no endless loop waiting in the RecordingConverter waiting for the stream to finish
 			// this would normally happen in the Listener

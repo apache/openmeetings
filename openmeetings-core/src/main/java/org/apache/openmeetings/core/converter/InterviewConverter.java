@@ -19,7 +19,7 @@
 package org.apache.openmeetings.core.converter;
 
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OmFileHelper.getRecordingMetaData;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,9 +33,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
-import org.apache.openmeetings.db.dao.record.RecordingMetaDataDao;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
@@ -54,7 +54,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	@Autowired
 	private RecordingDao recordingDao;
 	@Autowired
-	private RecordingMetaDataDao metaDataDao;
+	private RecordingChunkDao chunkDao;
 
 	@Override
 	public void startConversion(Long id) {
@@ -80,10 +80,10 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			r = recordingDao.update(r);
 
 			File streamFolder = getStreamFolder(r);
-			List<RecordingMetaData> metaList = metaDataDao.getByRecording(r.getId());
+			List<RecordingChunk> chunks = chunkDao.getByRecording(r.getId());
 
 			File wav = new File(streamFolder, String.format("INTERVIEW_%s_FINAL_WAVE.wav", r.getId()));
-			createWav(r, logs, streamFolder, waveFiles, wav, metaList);
+			createWav(r, logs, streamFolder, waveFiles, wav, chunks);
 
 			final String interviewCam = interviewCamFile.getCanonicalPath();
 
@@ -92,17 +92,17 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			// Merge Audio with Video / Calculate resulting FLV
 
 			// group by sid first to get all pods
-			Map<String, List<RecordingMetaData>> metaBySid = metaList.stream().collect(
-					Collectors.groupingBy(RecordingMetaData::getSid
+			Map<String, List<RecordingChunk>> cunksBySid = chunks.stream().collect(
+					Collectors.groupingBy(RecordingChunk::getSid
 					, () -> new LinkedHashMap<>()
-					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingMetaData::getRecordStart)).collect(Collectors.toList()))));
+					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingChunk::getRecordStart)).collect(Collectors.toList()))));
 			List<String> pods = new ArrayList<>();
 			int N = pods.size();
-			for (Entry<String, List<RecordingMetaData>> e : metaBySid.entrySet()) {
+			for (Entry<String, List<RecordingChunk>> e : cunksBySid.entrySet()) {
 				Date pStart = r.getRecordStart();
 				List<PodPart> parts = new ArrayList<>();
-				for (RecordingMetaData meta : e.getValue()) {
-					File flv = getRecordingMetaData(r.getRoomId(), meta.getStreamName());
+				for (RecordingChunk chunk : e.getValue()) {
+					File flv = getRecordingChunk(r.getRoomId(), chunk.getStreamName());
 					if (flv.exists()) {
 						String path = flv.getCanonicalPath();
 						/* CHECK FILE:
@@ -116,13 +116,13 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 						ProcessResult res = ProcessHelper.executeScript(String.format("checkFlvPod_%s_%s", N, parts.size()), args, true);
 						logs.add(res);
 						if (!res.isWarn()) {
-							long diff = diff(meta.isAudioOnly() ? meta.getRecordEnd() : meta.getRecordStart(), pStart);
+							long diff = diff(chunk.isAudioOnly() ? chunk.getRecordEnd() : chunk.getRecordStart(), pStart);
 							//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 							PodPart.add(parts, diff);
-							if (!meta.isAudioOnly()) {
-								parts.add(new PodPart(path, diff(meta.getRecordEnd(), meta.getRecordStart())));
+							if (!chunk.isAudioOnly()) {
+								parts.add(new PodPart(path, diff(chunk.getRecordEnd(), chunk.getRecordStart())));
 							}
-							pStart = meta.getRecordEnd();
+							pStart = chunk.getRecordEnd();
 						}
 					} else {
 						log.debug("Meta FLV doesn't exist: {}", flv);
