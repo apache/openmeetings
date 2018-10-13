@@ -22,7 +22,6 @@ package org.apache.openmeetings.core.remote;
 import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -306,11 +305,7 @@ public class KurentoHandler {
 	}
 
 	public void startRecording(Client c) {
-		try {
-			getRoom(c.getRoomId()).startRecording(c, recDao, chunkDao);
-		} catch (IOException e) {
-			log.error("Unexpected error while start record", e);
-		}
+		getRoom(c.getRoomId()).startRecording(c, recDao);
 	}
 
 	public void stopRecording(Client c) {
@@ -387,7 +382,7 @@ public class KurentoHandler {
 			pipe.addTag(t, TAG_KUID, kuid);
 			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
 			t.commit();
-			room = new KRoom(roomId, pipe);
+			room = new KRoom(roomId, pipe, chunkDao);
 			rooms.put(roomId, room);
 		}
 		log.debug("Room {} found!", roomId);

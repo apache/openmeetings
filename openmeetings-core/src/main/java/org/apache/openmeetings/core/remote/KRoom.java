@@ -23,7 +23,6 @@ package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -52,15 +51,17 @@ public class KRoom {
 	private static final Logger log = LoggerFactory.getLogger(KRoom.class);
 
 	private final Map<String, KStream> streams = new ConcurrentHashMap<>();
-	private final MediaPipeline pipeline;
-	private final Long roomId;
-	private final AtomicBoolean recordingStarted = new AtomicBoolean(false);
-	private Long recordingId = null;
+	final MediaPipeline pipeline;
+	final Long roomId;
+	final AtomicBoolean recordingStarted = new AtomicBoolean(false);
+	Long recordingId = null;
+	final RecordingChunkDao chunkDao;
 	private JSONObject recordingUser = new JSONObject();
 
-	public KRoom(Long roomId, MediaPipeline pipeline) {
+	public KRoom(Long roomId, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
 		this.roomId = roomId;
 		this.pipeline = pipeline;
+		this.chunkDao = chunkDao;
 		log.info("ROOM {} has been created", roomId);
 	}
 
@@ -74,7 +75,7 @@ public class KRoom {
 
 	public KStream join(final StreamDesc sd) {
 		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient().getUser().getLogin(), sd.getUid());
-		final KStream stream = new KStream(sd, this.pipeline);
+		final KStream stream = new KStream(sd, this);
 		streams.put(stream.getUid(), stream);
 		return stream;
 	}
@@ -101,7 +102,7 @@ public class KRoom {
 		return new JSONObject(recordingUser.toString());
 	}
 
-	public void startRecording(Client c, RecordingDao recDao, RecordingChunkDao chunkDao) throws IOException {
+	public void startRecording(Client c, RecordingDao recDao) {
 		if (recordingStarted.compareAndSet(false, true)) {
 			log.debug("##REC:: recording in room is started ::");
 			Room r = c.getRoom();
@@ -134,7 +135,7 @@ public class KRoom {
 			log.debug("##REC:: recording created by USER: {}", ownerId);
 
 			for (final KStream stream : streams.values()) {
-				stream.startRecord(recordingId, chunkDao);
+				stream.startRecord();
 			}
 
 			// Send notification to all users that the recording has been started
@@ -150,6 +151,8 @@ public class KRoom {
 			Recording rec = recDao.get(recordingId);
 			rec.setRecordEnd(new Date());
 			rec = recDao.update(rec);
+			recordingUser = new JSONObject();
+			recordingId = null;
 
 			// Send notification to all users that the recording has been started
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, c.getUser(), RoomMessage.Type.recordingToggled));

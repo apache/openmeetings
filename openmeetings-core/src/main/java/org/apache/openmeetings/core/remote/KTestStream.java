@@ -26,7 +26,6 @@ import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -215,12 +214,8 @@ public class KTestStream implements IKStream {
 	}
 
 	private void initRecPath() {
-		try {
-			File f = new File(getStreamsDir(), String.format("%s%s.%s", TEST_SETUP_PREFIX, randomUUID(), EXTENSION_WEBM));
-			recPath = OmFileHelper.getRecUri(f);
-		} catch (IOException e) {
-			log.error("Uexpected error while creating recording URI", e);
-		}
+		File f = new File(getStreamsDir(), String.format("%s%s.%s", TEST_SETUP_PREFIX, randomUUID(), EXTENSION_WEBM));
+		recPath = OmFileHelper.getRecUri(f);
 	}
 
 	@Override

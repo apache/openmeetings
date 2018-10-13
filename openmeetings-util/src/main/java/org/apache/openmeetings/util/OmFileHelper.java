@@ -202,8 +202,14 @@ public class OmFileHelper {
 		return getDir(getStreamsDir(), name);
 	}
 
-	public static String getRecUri(File f) throws IOException {
-		String uri = String.format("file://%s", f.getCanonicalPath());
+	public static String getRecUri(File f) {
+		String furi = f.getAbsolutePath();
+		try {
+			furi = f.getCanonicalPath();
+		} catch (IOException e) {
+			log.error("Unexpected error while getting canonical path", e);
+		}
+		String uri = String.format("file://%s", furi);
 		log.info("Configured to record to {}", uri);
 		return uri;
 	}
