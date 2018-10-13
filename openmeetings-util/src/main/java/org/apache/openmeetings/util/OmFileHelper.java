@@ -203,7 +203,7 @@ public class OmFileHelper {
 	}
 
 	public static String getRecUri(File f) throws IOException {
-		String uri = f.getCanonicalFile().toURI().toString();
+		String uri = String.format("file://", f.getCanonicalPath());
 		log.info("Configured to record to {}", uri);
 		return uri;
 	}
