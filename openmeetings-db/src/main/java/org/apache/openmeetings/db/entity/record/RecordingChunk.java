@@ -104,7 +104,7 @@ public class RecordingChunk extends HistoricalEntity {
 	private String sid;
 
 	@Column(name = "type")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Type type;
 
