@@ -91,7 +91,7 @@ public class RecordingChunk extends HistoricalEntity {
 	@Element(name = "recordStart", data = true)
 	private Date start;
 
-	@Column(name = "record_end")
+	@Column(name = "end")
 	@Element(name = "recordEnd", data = true, required = false)
 	private Date end;
 
