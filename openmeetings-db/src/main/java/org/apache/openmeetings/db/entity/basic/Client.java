@@ -416,7 +416,9 @@ public class Client implements IClient, IWsClient {
 		Map<String, StreamDesc> ss = new HashMap<>(c.streams);
 		synchronized (streams) {
 			streams.clear();
-			streams.putAll(ss);
+			for (Entry<String, StreamDesc> e : ss.entrySet()) {
+				streams.put(e.getKey(), new StreamDesc(e.getValue()));
+			}
 		}
 		cam = c.cam;
 		mic = c.mic;
@@ -468,6 +470,14 @@ public class Client implements IClient, IWsClient {
 		private final StreamType type;
 		private int swidth;
 		private int sheight;
+
+		public StreamDesc(StreamDesc sd) {
+			this.uuid = sd.uuid;
+			this.type = sd.type;
+			this.swidth = sd.swidth;
+			this.sheight = sd.sheight;
+			sactivities.addAll(sd.sactivities);
+		}
 
 		public StreamDesc(StreamType type) {
 			this.uuid = UUID.randomUUID().toString();

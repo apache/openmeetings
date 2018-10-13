@@ -87,7 +87,7 @@ var Video = (function() {
 							}
 							level = MicLevel();
 							level.meter(rtcPeer, _micActivity, OmUtil.error);
-							this.generateOffer(function(error, offerSdp, wp) {
+							this.generateOffer(function(error, offerSdp) {
 								if (error) {
 									return OmUtil.error('Sender sdp offer error ' + error);
 								}
@@ -404,7 +404,7 @@ var Video = (function() {
 	self.stream = function() { return sd; };
 	self.setRights = _setRights;
 	self.getPeer = function() { return rtcPeer; };
-	self.onIceCandidate = function(candidate, wp) {
+	self.onIceCandidate = function(candidate) {
 		const opts = Room.getOptions();
 		OmUtil.log("Local candidate" + JSON.stringify(candidate));
 		VideoManager.sendMessage({

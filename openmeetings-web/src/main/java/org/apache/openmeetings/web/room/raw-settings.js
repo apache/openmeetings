@@ -138,19 +138,19 @@ var VideoSettings = (function() {
 		lm = vs.find('.level-meter');
 		cam = vs.find('select.cam').iconselectmenu({
 			appendTo: '.cam-row'
-			, change: function(event, ui) {
+			, change: function() {
 				_readValues();
 			}
 		});
 		mic = vs.find('select.mic').iconselectmenu({
 			appendTo: '.mic-row'
-			, change: function(event, ui) {
+			, change: function() {
 				_readValues();
 			}
 		});
 		res = vs.find('select.cam-resolution').iconselectmenu({
 			appendTo: '.res-row'
-			, change: function(event, ui) {
+			, change: function() {
 				_readValues();
 			}
 		});
@@ -349,7 +349,7 @@ var VideoSettings = (function() {
 				});
 				callback(devCnts);
 			})
-			.catch(function(err) {
+			.catch(function() {
 				OmUtil.error('Unable to get the list of multimedia devices');
 				callback(devCnts);
 			});

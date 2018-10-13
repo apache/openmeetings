@@ -154,20 +154,16 @@ public class KurentoHandler {
 							);
 					break;
 				case "record":
-				{
 					user = new KTestStream(this, _c, msg, createTestPipeline());
 					testsByUid.put(_c.getUid(), user);
-				}
 					break;
 				case "iceCandidate":
-				{
 					JSONObject candidate = msg.getJSONObject("candidate");
 					if (user != null) {
 						IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
 								candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
 						user.addCandidate(cand);
 					}
-				}
 					break;
 				case "wannaPlay":
 					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
@@ -189,10 +185,10 @@ public class KurentoHandler {
 				log.warn("Incoming message from invalid user");
 				return;
 			}
+			KStream sender;
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			switch (cmdId) {
 				case "devicesAltered":
-				{
 					if (!msg.getBoolean("audio") && c.hasActivity(Activity.broadcastA)) {
 						c.remove(Activity.broadcastA);
 					}
@@ -201,25 +197,21 @@ public class KurentoHandler {
 					}
 					c.getStream(uid).setActivities();
 					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
-				}
 					break;
 				case "toggleActivity":
 					toggleActivity(c, Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
-				{
 					StreamDesc sd = c.getStream(uid);
-					KStream stream = getByUid(uid);
-					if (stream == null) {
+					sender = getByUid(uid);
+					if (sender == null) {
 						KRoom room = getRoom(c.getRoomId());
-						stream = room.join(sd);
+						sender = room.join(sd);
 					}
-					stream.startBroadcast(this, sd, msg.getString("sdpOffer"));
-				}
+					sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
 					break;
 				case "onIceCandidate":
-				{
-					KStream sender = getByUid(uid);
+					sender = getByUid(uid);
 					if (sender != null) {
 						JSONObject candidate = msg.getJSONObject("candidate");
 						IceCandidate cand = new IceCandidate(
@@ -228,15 +220,12 @@ public class KurentoHandler {
 								, candidate.getInt("sdpMLineIndex"));
 						sender.addCandidate(cand, msg.getString("luid"));
 					}
-				}
 					break;
 				case "addListener":
-				{
-					KStream sender = getByUid(msg.getString("sender"));
+					sender = getByUid(msg.getString("sender"));
 					if (sender != null) {
 						sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
 					}
-				}
 					break;
 			}
 		}
@@ -297,6 +286,13 @@ public class KurentoHandler {
 				//FIXME TODO update interview buttons
 			} else {
 				//constraints were changed
+				for (StreamDesc sd : c.getStreams()) {
+					if (StreamType.webCam == sd.getType()) {
+						sd.setActivities();
+						cm.update(c);
+						break;
+					}
+				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
 		}
