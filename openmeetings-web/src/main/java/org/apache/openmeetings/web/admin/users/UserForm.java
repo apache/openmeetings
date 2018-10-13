@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.admin.users;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasAdminLevel;
 import static org.apache.openmeetings.db.util.AuthLevelUtil.hasGroupAdminLevel;
@@ -33,7 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.openmeetings.core.util.StrongPasswordValidator;
 import org.apache.openmeetings.db.dao.server.LdapConfigDao;
@@ -242,7 +242,7 @@ public class UserForm extends AdminBaseForm<User> {
 		final boolean isNew = u.getId() == null;
 		boolean sendEmailAtRegister = isSendRegisterEmail();
 		if (isNew && sendEmailAtRegister) {
-			u.setActivatehash(UUID.randomUUID().toString());
+			u.setActivatehash(randomUUID().toString());
 		}
 		try {
 			u = userDao.update(u, pass, getUserId());

@@ -18,7 +18,7 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
-import java.util.UUID;
+import static java.util.UUID.randomUUID;
 
 /**
  * Temporary class for test recording, will be unified
@@ -35,7 +35,7 @@ public class WsClient implements IWsClient {
 	public WsClient(String sessionId, int pageId) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
-		uid = UUID.randomUUID().toString();
+		uid = randomUUID().toString();
 	}
 	@Override
 	public String getSessionId() {

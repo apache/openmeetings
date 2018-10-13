@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OmFileHelper.getDefaultProfilePicture;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,7 +27,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.room.RoomDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
@@ -46,7 +46,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 	@Test
 	public void testExternal() {
 		ServiceResult sr = login();
-		String extId = UUID.randomUUID().toString();
+		String extId = randomUUID().toString();
 		Room.Type type = Room.Type.presentation;
 		String name = "Unit Test Ext Room";
 		String comment = "Unit Test Ext Room Comments";
@@ -71,7 +71,7 @@ public class TestRoomService extends AbstractWebServiceTest {
 
 	@Test
 	public void testCreate1() {
-		String extId = UUID.randomUUID().toString();
+		String extId = randomUUID().toString();
 		Room.Type type = Room.Type.presentation;
 		String name = "Unit Test Ext Room1";
 		String comment = "Unit Test Ext Room Comments1";

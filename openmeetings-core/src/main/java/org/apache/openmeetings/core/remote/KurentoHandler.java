@@ -19,15 +19,16 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,6 +38,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.directory.api.util.Strings;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
@@ -67,13 +70,13 @@ import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
-	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
-	private final static String MODE_TEST = "test";
-	private final static String TAG_KUID = "kuid";
-	private final static String TAG_MODE = "mode";
-	private final static String TAG_ROOM = "roomId";
-	private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-	public final static String KURENTO_TYPE = "kurento";
+	private static final Logger log = LoggerFactory.getLogger(KurentoHandler.class);
+	private static final String MODE_TEST = "test";
+	private static final String TAG_KUID = "kuid";
+	private static final String TAG_MODE = "mode";
+	private static final String TAG_ROOM = "roomId";
+	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	public static final String KURENTO_TYPE = "kurento";
 	private long checkTimeout = 200; //ms
 	private String kurentoWsUrl;
 	private String turnUrl;
@@ -89,12 +92,16 @@ public class KurentoHandler {
 
 	@Autowired
 	private IClientManager cm;
+	@Autowired
+	private RecordingDao recDao;
+	@Autowired
+	private RecordingChunkDao chunkDao;
 
 	public void init() {
 		try {
 			// TODO check connection, reconnect, listeners etc.
 			client = KurentoClient.create(kurentoWsUrl);
-			kuid = UUID.randomUUID().toString(); //FIXME TODO regenerate on re-connect
+			kuid = randomUUID().toString(); //FIXME TODO regenerate on re-connect
 			client.getServerManager().addObjectCreatedListener(new KWatchDog());
 		} catch (Exception e) {
 			log.error("Fail to create Kurento client", e);
@@ -298,6 +305,26 @@ public class KurentoHandler {
 		}
 	}
 
+	public void startRecording(Client c) {
+		try {
+			getRoom(c.getRoomId()).startRecording(c, recDao, chunkDao);
+		} catch (IOException e) {
+			log.error("Unexpected error while start record", e);
+		}
+	}
+
+	public void stopRecording(Client c) {
+		getRoom(c.getRoomId()).stopRecording(c, recDao);
+	}
+
+	public boolean isRecording(Long roomId) {
+		return getRoom(roomId).isRecording();
+	}
+
+	public JSONObject getRecordingUser(Long roomId) {
+		return getRoom(roomId).getRecordingUser();
+	}
+
 	public void leaveRoom(Client c) {
 		remove(c);
 		WebSocketHelper.sendAll(newKurentoMsg()
@@ -349,7 +376,7 @@ public class KurentoHandler {
 		}
 	}
 
-	public KRoom getRoom(Long roomId) {
+	private KRoom getRoom(Long roomId) {
 		log.debug("Searching for room {}", roomId);
 		KRoom room = rooms.get(roomId);
 

@@ -29,7 +29,6 @@ import java.util.List;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.ClientManager;
@@ -59,19 +58,18 @@ public class ConnectionsPanel extends AdminBasePanel {
 	public ConnectionsPanel(String id) {
 		super(id);
 
-		SearchableDataProvider<IClient> sdp = new SearchableDataProvider<IClient>(null) {
+		SearchableDataProvider<Client> sdp = new SearchableDataProvider<Client>(null) {
 			private static final long serialVersionUID = 1L;
 
-			private List<IClient> list() {
-				List<IClient> l = new ArrayList<>();
-				//l.addAll(scm.list());
+			private List<Client> list() {
+				List<Client> l = new ArrayList<>();
 				l.addAll(cm.list());
 				return l;
 			}
 
 			@Override
-			public Iterator<? extends IClient> iterator(long first, long count) {
-				List<IClient> l = list();
+			public Iterator<? extends Client> iterator(long first, long count) {
+				List<Client> l = list();
 				return l.subList((int)Math.max(0, first), (int)Math.min(first + count, l.size())).iterator();
 			}
 
@@ -82,43 +80,27 @@ public class ConnectionsPanel extends AdminBasePanel {
 		};
 		final WebMarkupContainer container = new WebMarkupContainer("container");
 		final WebMarkupContainer details = new WebMarkupContainer("details");
-		SearchableDataView<IClient> dataView = new SearchableDataView<IClient>("clientList", sdp) {
+		SearchableDataView<Client> dataView = new SearchableDataView<Client>("clientList", sdp) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(final Item<IClient> item) {
-				IClient _c = item.getModelObject();
+			protected void populateItem(final Item<Client> item) {
+				Client c = item.getModelObject();
 				final ConfirmableAjaxBorder confirm = new ConfirmableAjaxBorder("kick", getString("603"), getString("605")) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					protected void onSubmit(AjaxRequestTarget target) {
-						IClient _c = item.getModelObject();
-						/*FIXME TODO if (_c instanceof StreamClient) {
-							userManager.kickById(_c.getUid());
-						} else */{
-							Client c = (Client)_c;
-							cm.invalidate(c.getUserId(), c.getSessionId());
-						}
+						cm.invalidate(c.getUserId(), c.getSessionId());
 						target.add(container, details.setVisible(false));
 					}
 				};
 				confirm.setOutputMarkupId(true).add(new ButtonBehavior(String.format("#%s", confirm.getMarkupId())));
-				/*FIXME TODO if (_c instanceof StreamClient) {
-					StreamClient c = (StreamClient)_c;
-					item.add(new Label("type", "flash"));
-					item.add(new Label("login", c.getLogin()));
-					item.add(new Label("since", c.getConnectedSince()));
-					item.add(new Label("scope"));
-					confirm.setEnabled(Client.Type.sharing != c.getType());
-				} else */{
-					Client c = (Client)_c;
-					item.add(new Label("type", "html5"));
-					item.add(new Label("login", c.getUser().getLogin()));
-					item.add(new Label("since", c.getConnectedSince()));
-					item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
-				}
-				item.add(new Label("server", _c.getServerId()));
+				item.add(new Label("type", "html5"));
+				item.add(new Label("login", c.getUser().getLogin()));
+				item.add(new Label("since", c.getConnectedSince()));
+				item.add(new Label("scope", c.getRoom() == null ? "html5" : "" + c.getRoom().getId()));
+				item.add(new Label("server", c.getServerId()));
 				item.add(confirm);
 				item.add(new AjaxEventBehavior(EVT_CLICK) {
 					private static final long serialVersionUID = 1L;
@@ -127,7 +109,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 					protected void onEvent(AjaxRequestTarget target) {
 						Field[] ff = item.getModelObject().getClass().getDeclaredFields();
 						RepeatingView lines = new RepeatingView("line");
-						IClient c = item.getModelObject();
+						Client c = item.getModelObject();
 						for (Field f : ff) {
 							int mod = f.getModifiers();
 							if (Modifier.isStatic(mod) || Modifier.isTransient(mod)) {

@@ -20,9 +20,7 @@ package org.apache.openmeetings.core.converter;
 
 import static org.apache.commons.io.FileUtils.copyFile;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
-import static org.apache.openmeetings.core.data.record.listener.async.BaseStreamWriter.TIME_TO_WAIT_FOR_FRAME;
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsHibernateDir;
@@ -50,7 +48,6 @@ import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
-import org.apache.openmeetings.util.OmFileHelper;
 import org.apache.openmeetings.util.process.ProcessHelper;
 import org.apache.openmeetings.util.process.ProcessResult;
 import org.apache.openmeetings.util.process.ProcessResultList;
@@ -63,6 +60,8 @@ public abstract class BaseConverter {
 	private static final Logger log = LoggerFactory.getLogger(BaseConverter.class);
 	private static final Pattern p = Pattern.compile("\\d{2,5}(x)\\d{2,5}");
 	public static final String EXEC_EXT = System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") < 0 ? "" : ".exe";
+	private static final int MINUTE_MULTIPLIER = 60 * 1000;
+	public static final int TIME_TO_WAIT_FOR_FRAME = 15 * MINUTE_MULTIPLIER;
 
 	@Autowired
 	protected ConfigurationDao cfgDao;
@@ -249,7 +248,7 @@ public abstract class BaseConverter {
 
 				chunk = waitForTheStream(chunkId);
 
-				File inputFlvFile = new File(streamFolder, OmFileHelper.getName(chunk.getStreamName(), EXTENSION_FLV));
+				File inputFlvFile = getRecordingChunk(chunk.getRecording().getRoomId(), chunk.getStreamName());
 
 				File outputWav = new File(streamFolder, chunk.getStreamName() + "_WAVE.wav");
 
@@ -266,7 +265,6 @@ public abstract class BaseConverter {
 				}
 
 				if (outputWav.exists() && outputWav.length() != 0) {
-					chunk.setAudioValid(true);
 					// Strip Wave to Full Length
 					File outputGapFullWav = outputWav;
 
@@ -312,10 +310,10 @@ public abstract class BaseConverter {
 					File outputFullWav = new File(streamFolder, hashFileFullName);
 
 					// Calculate delta at beginning
-					double startPad = diffSeconds(chunk.getRecordStart(), recording.getRecordStart());
+					double startPad = diffSeconds(chunk.getStart(), recording.getRecordStart());
 
 					// Calculate delta at ending
-					double endPad = diffSeconds(recording.getRecordEnd(), chunk.getRecordEnd());
+					double endPad = diffSeconds(recording.getRecordEnd(), chunk.getEnd());
 
 					addSoxPad(logs, "addStartEndToAudio", startPad, endPad, outputGapFullWav, outputFullWav);
 
@@ -327,7 +325,6 @@ public abstract class BaseConverter {
 					if (!outputFullWav.exists()) {
 						throw new ConversionException("Audio File does not exist , could not extract the Audio correctly");
 					}
-					chunk.setFullWavAudioData(hashFileFullName);
 
 					// Finally add it to the row!
 					waveFiles.add(outputFullWav);

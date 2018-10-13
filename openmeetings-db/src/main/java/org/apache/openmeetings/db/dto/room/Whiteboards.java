@@ -18,16 +18,17 @@
  */
 package org.apache.openmeetings.db.dto.room;
 
+import static java.util.UUID.randomUUID;
+
 import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Whiteboards implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Long roomId;
-	private final String uid = UUID.randomUUID().toString();
+	private final String uid = randomUUID().toString();
 	private Map<Long, Whiteboard> whiteboards = new ConcurrentHashMap<>();
 	private volatile AtomicLong whiteboardId = new AtomicLong(0);
 	private volatile AtomicLong activeWb = new AtomicLong(0);

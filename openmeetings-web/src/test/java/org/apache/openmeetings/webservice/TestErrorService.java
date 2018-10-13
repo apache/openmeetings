@@ -18,12 +18,12 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.AbstractJUnitDefaults.rnd;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Locale;
-import java.util.UUID;
 
 import javax.ws.rs.core.Response;
 
@@ -39,7 +39,7 @@ public class TestErrorService extends AbstractWebServiceTest {
 	public void getTestBadKey() {
 		Locale[] locales = Locale.getAvailableLocales();
 		ServiceResult sr = getClient(getErrorUrl())
-				.path(String.format("/%s/%s", UUID.randomUUID().toString(), LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
+				.path(String.format("/%s/%s", randomUUID().toString(), LabelDao.getLanguage(locales[rnd.nextInt(locales.length)], 1L)))
 				.get(ServiceResult.class);
 		assertNotNull("Valid Result should be returned", sr);
 		assertEquals("SUCCESS result should be returned", ServiceResult.Type.SUCCESS.name(), sr.getType());

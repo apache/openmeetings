@@ -12,13 +12,6 @@ var VideoUtil = (function() {
 	function _isSharing(sd) {
 		return 'screen' === sd.type;
 	}
-	function _isRecording(c) {
-		return false;
-		/*FIXME TODO return 'sharing' === c.type
-			&& c.screenActivities.includes('recording')
-			&& !c.screenActivities.includes('sharing');
-		*/
-	}
 	function _hasAudio(sd) {
 		return !sd || sd.activities.includes(MIC_ACTIVITY);
 	}
@@ -133,7 +126,6 @@ var VideoUtil = (function() {
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
-	self.isRecording = _isRecording;
 	self.hasAudio = _hasAudio;
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;

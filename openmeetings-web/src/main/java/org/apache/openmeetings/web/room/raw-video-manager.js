@@ -92,7 +92,7 @@ var VideoManager = (function() {
 			return;
 		}
 		c.streams.forEach(function(sd) {
-			if (sd.self && (VideoUtil.isSharing(sd) || VideoUtil.isRecording(sd))) {
+			if (sd.self && VideoUtil.isSharing(sd)) {
 				return;
 			}
 			const _id = VideoUtil.getVid(sd.uid)

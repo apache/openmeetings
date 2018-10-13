@@ -18,14 +18,15 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newTestKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.kurento.client.Continuation;
 import org.kurento.client.EndOfStreamEvent;
 import org.kurento.client.ErrorEvent;
@@ -214,9 +216,8 @@ public class KTestStream implements IKStream {
 
 	private void initRecPath() {
 		try {
-			File f = new File(getStreamsDir(), String.format("%s%s.webm", TEST_SETUP_PREFIX, UUID.randomUUID()));
-			recPath = String.format("file://%s", f.getCanonicalPath());
-			log.info("Configured to record to {}", recPath);
+			File f = new File(getStreamsDir(), String.format("%s%s.%s", TEST_SETUP_PREFIX, randomUUID(), EXTENSION_WEBM));
+			recPath = OmFileHelper.getRecUri(f);
 		} catch (IOException e) {
 			log.error("Uexpected error while creating recording URI", e);
 		}
@@ -229,45 +230,15 @@ public class KTestStream implements IKStream {
 			webRtcEndpoint = null;
 		}
 		if (pipeline != null) {
-			pipeline.release(new Continuation<Void>() {
-				@Override
-				public void onSuccess(Void result) throws Exception {
-					log.info("Pipeline released successfully");
-				}
-
-				@Override
-				public void onError(Throwable cause) throws Exception {
-					log.info("Error releasing pipeline ", cause);
-				}
-			});
+			pipeline.release();
 			pipeline = null;
 		}
 		if (player != null) {
-			player.release(new Continuation<Void>() {
-				@Override
-				public void onSuccess(Void result) throws Exception {
-					log.info("Pipeline released successfully");
-				}
-
-				@Override
-				public void onError(Throwable cause) throws Exception {
-					log.info("Error releasing pipeline ", cause);
-				}
-			});
+			player.release();
 			player = null;
 		}
 		if (recorder != null) {
-			recorder.release(new Continuation<Void>() {
-				@Override
-				public void onSuccess(Void result) throws Exception {
-					log.info("Pipeline released successfully");
-				}
-
-				@Override
-				public void onError(Throwable cause) throws Exception {
-					log.info("Error releasing pipeline ", cause);
-				}
-			});
+			recorder.release();
 			recorder = null;
 		}
 		h.testsByUid.remove(uid);

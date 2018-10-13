@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.calendar;
 
+import static java.util.UUID.randomUUID;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -27,7 +28,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -162,7 +162,7 @@ public class TestAppointmentAddAppointment extends AbstractWicketTester {
 		a.getRoom().setType(Room.Type.conference);
 		for (int i = 0; i < 3; ++i) {
 			MeetingMember mm = new MeetingMember();
-			mm.setUser(getContact(UUID.randomUUID().toString(), owner.getId()));
+			mm.setUser(getContact(randomUUID().toString(), owner.getId()));
 			a.getMeetingMembers().add(mm);
 		}
 		a = appointmentDao.update(a, owner.getId());

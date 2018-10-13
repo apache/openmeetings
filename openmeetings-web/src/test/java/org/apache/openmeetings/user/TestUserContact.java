@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.user;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +26,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.user.GroupUser;
@@ -41,7 +41,7 @@ public class TestUserContact extends AbstractWicketTester {
 
 	@Test
 	public void createUserWithGroup() throws Exception {
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u.getGroupUsers().add(new GroupUser(groupDao.get(1L), u));
 		u = userDao.update(u, null);
@@ -55,7 +55,7 @@ public class TestUserContact extends AbstractWicketTester {
 
 	@Test
 	public void testCreateUser() throws Exception {
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = createUser(uuid);
 		assertTrue("Password should be set as expected", userDao.verifyPassword(u.getId(), createPass()));
 	}

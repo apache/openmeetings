@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.DEFAULT_CONTEXT_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getCryptClassName;
@@ -27,7 +28,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 import java.util.Random;
-import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
@@ -157,7 +157,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	}
 
 	public User getUser() throws Exception {
-		return getUser(UUID.randomUUID().toString());
+		return getUser(randomUUID().toString());
 	}
 
 	protected static String getLogin(String uid) {
@@ -188,7 +188,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	}
 
 	public User createUser() throws Exception {
-		return createUser(UUID.randomUUID().toString());
+		return createUser(randomUUID().toString());
 	}
 
 	public User createUser(String uuid) throws Exception {
@@ -214,17 +214,17 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 		cfg.setTimeZone(timeZone);
 		importInitvalues.loadAll(cfg, false);
 		// regular user
-		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, regularUsername, userpass, false, null);
+		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, regularUsername, userpass, false, null);
 
 		// soap user
-		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, soapUsername, userpass, false, u -> {
+		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, soapUsername, userpass, false, u -> {
 			u.getRights().remove(User.Right.Room);
 			u.getRights().remove(User.Right.Dashboard);
 			u.getRights().add(User.Right.Soap);
 		});
 
 		// group admin
-		importInitvalues.createSystemUser(getUser(UUID.randomUUID().toString()), group, groupAdminUsername, userpass, true, null);
+		importInitvalues.createSystemUser(getUser(randomUUID().toString()), group, groupAdminUsername, userpass, true, null);
 	}
 
 	public User getContact(String uuid, Long ownerId) {
@@ -232,7 +232,7 @@ public abstract class AbstractJUnitDefaults extends AbstractSpringTest {
 	}
 
 	public User createUserContact(Long ownerId) {
-		return createUserContact(getContact(UUID.randomUUID().toString(), ownerId), ownerId);
+		return createUserContact(getContact(randomUUID().toString(), ownerId), ownerId);
 	}
 
 	public User createUserContact(User user, Long ownerId) {

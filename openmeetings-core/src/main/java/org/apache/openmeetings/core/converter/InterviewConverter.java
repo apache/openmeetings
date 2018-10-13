@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
@@ -29,11 +30,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.util.OmFileHelper;
@@ -74,7 +74,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			log.debug("recording {}", r.getId());
 			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 			}
 			r.setStatus(Recording.Status.CONVERTING);
 			r = recordingDao.update(r);
@@ -95,7 +95,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			Map<String, List<RecordingChunk>> cunksBySid = chunks.stream().collect(
 					Collectors.groupingBy(RecordingChunk::getSid
 					, () -> new LinkedHashMap<>()
-					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingChunk::getRecordStart)).collect(Collectors.toList()))));
+					, Collectors.collectingAndThen(Collectors.toList(), l -> l.stream().sorted(Comparator.comparing(RecordingChunk::getStart)).collect(Collectors.toList()))));
 			List<String> pods = new ArrayList<>();
 			int N = pods.size();
 			for (Entry<String, List<RecordingChunk>> e : cunksBySid.entrySet()) {
@@ -116,13 +116,13 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 						ProcessResult res = ProcessHelper.executeScript(String.format("checkFlvPod_%s_%s", N, parts.size()), args, true);
 						logs.add(res);
 						if (!res.isWarn()) {
-							long diff = diff(chunk.isAudioOnly() ? chunk.getRecordEnd() : chunk.getRecordStart(), pStart);
+							long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
 							//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
 							PodPart.add(parts, diff);
 							if (!chunk.isAudioOnly()) {
-								parts.add(new PodPart(path, diff(chunk.getRecordEnd(), chunk.getRecordStart())));
+								parts.add(new PodPart(path, diff(chunk.getEnd(), chunk.getStart())));
 							}
-							pStart = chunk.getRecordEnd();
+							pStart = chunk.getEnd();
 						}
 					} else {
 						log.debug("Meta FLV doesn't exist: {}", flv);

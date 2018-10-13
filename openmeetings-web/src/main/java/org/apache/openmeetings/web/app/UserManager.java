@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.app;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dao.user.UserDao.getNewUserInstance;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OmException.UNKNOWN;
@@ -32,7 +33,6 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.user.GroupDao;
@@ -144,7 +144,7 @@ public class UserManager implements IUserManager {
 			String email = u.getAddress() == null ? null : u.getAddress().getEmail();
 			boolean checkEmail = Strings.isEmpty(email) || userDao.checkEmail(email, User.Type.user, null, null);
 			if (checkName && checkEmail) {
-				String ahash = Strings.isEmpty(hash) ? UUID.randomUUID().toString() : hash;
+				String ahash = Strings.isEmpty(hash) ? randomUUID().toString() : hash;
 				if (Strings.isEmpty(u.getExternalType())) {
 					if (!Strings.isEmpty(email)) {
 						emailManager.sendMail(login, email, ahash, sendConfirmation(), u.getLanguageId());

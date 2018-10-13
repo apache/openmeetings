@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static org.apache.openmeetings.AbstractJUnitDefaults.adminUsername;
 import static org.apache.openmeetings.AbstractJUnitDefaults.createPass;
@@ -33,7 +34,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
@@ -125,7 +125,7 @@ public class TestUserService extends AbstractWebServiceTest {
 		String tz = TimeZone.getTimeZone(tzList[rnd.nextInt(tzList.length)]).getID();
 		ServiceResult r = login();
 		UserDTO u = new UserDTO();
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		u.setLogin("test" + uuid);
 		u.setPassword(createPass());
 		u.setFirstname("testF" + uuid);

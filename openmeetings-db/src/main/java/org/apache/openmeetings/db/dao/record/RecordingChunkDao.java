@@ -26,6 +26,7 @@ import javax.persistence.PersistenceContext;
 
 import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.record.RecordingChunk.Status;
+import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,52 +57,38 @@ public class RecordingChunkDao {
 	public List<RecordingChunk> getNotScreenChunksByRecording(Long recordingId) {
 		return em.createNamedQuery("getNotScreenChunkByRecording", RecordingChunk.class)
 				.setParameter("recordingId", recordingId)
+				.setParameter("screen", Type.SCREEN)
 				.setParameter("none", Status.NONE)
 				.getResultList();
 	}
 
 	public RecordingChunk getScreenByRecording(Long recordingId) {
 		List<RecordingChunk> list = em.createNamedQuery("getScreenChunkByRecording", RecordingChunk.class)
+				.setParameter("screen", Type.SCREEN)
 				.setParameter("recordingId", recordingId)
 				.getResultList();
 		return list.isEmpty() ? null : list.get(0);
 	}
 
-	public Long add(Long recordingId, Date recordStart, boolean isAudioOnly,
-			boolean isVideoOnly, boolean isScreenData, String streamName, String sid) {
-		try {
-
-			RecordingChunk chunk = new RecordingChunk();
-			chunk.setRecording(recordingDao.get(recordingId));
-			chunk.setRecordStart(recordStart);
-			chunk.setAudioOnly(isAudioOnly);
-			chunk.setVideoOnly(isVideoOnly);
-			chunk.setScreenData(isScreenData);
-			chunk.setStreamName(streamName);
-			chunk.setSid(sid);
-			chunk = update(chunk);
-			return chunk.getId();
-		} catch (Exception ex2) {
-			log.error("[add]: ", ex2);
-		}
-		return null;
+	public Long start(Long recordingId, Type type, String streamName, String sid) {
+		RecordingChunk chunk = new RecordingChunk();
+		chunk.setRecording(recordingDao.get(recordingId));
+		chunk.setStart(new Date());
+		chunk.setType(type);
+		chunk.setStreamName(streamName);
+		chunk.setStreamStatus(Status.STARTED);
+		chunk.setSid(sid);
+		chunk = update(chunk);
+		return chunk.getId();
 	}
 
-	public Long updateEndDate(Long chunkId, Date recordEnd) {
-		try {
-			RecordingChunk chunk = get(chunkId);
-
-			if (chunk != null) {
-				chunk.setRecordEnd(recordEnd);
-				log.debug("updateEndDate :: Start Date : {}", chunk.getRecordStart());
-				log.debug("updateEndDate :: End Date : {}", chunk.getRecordEnd());
-				update(chunk);
-			}
-			return chunkId;
-		} catch (Exception ex2) {
-			log.error("[updateEndDate]: ", ex2);
+	public void stop(Long chunkId) {
+		RecordingChunk chunk = get(chunkId);
+		if (chunk != null) {
+			chunk.setEnd(new Date());
+			chunk.setStreamStatus(Status.STOPPED);
+			update(chunk);
 		}
-		return null;
 	}
 
 	public RecordingChunk update(RecordingChunk chunk) {

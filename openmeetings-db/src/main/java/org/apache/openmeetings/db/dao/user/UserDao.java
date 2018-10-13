@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.DaoHelper.getStringParam;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -350,7 +350,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			u.setAddress(new Address());
 			u.setAge(new Date());
 			u.setExternalId(null);
-			final String purged = String.format("Purged %s", UUID.randomUUID());
+			final String purged = String.format("Purged %s", randomUUID());
 			u.setFirstname(purged);
 			u.setLastname(purged);
 			u.setLogin(purged);
@@ -542,7 +542,7 @@ public class UserDao implements IGroupAdminDataProviderDao<User> {
 			User to = new User();
 			to.setType(Type.contact);
 			String login = owner.getId() + "_" + email; //UserId prefix is used to ensure unique login
-			to.setLogin(login.length() < getMinLoginLength() ? UUID.randomUUID().toString() : login);
+			to.setLogin(login.length() < getMinLoginLength() ? randomUUID().toString() : login);
 			to.setFirstname(firstName);
 			to.setLastname(lastName);
 			to.setLanguageId(null == langId || null == LabelDao.getLocale(langId) ? owner.getLanguageId() : langId.longValue());

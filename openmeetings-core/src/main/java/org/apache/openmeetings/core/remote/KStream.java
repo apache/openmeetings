@@ -21,16 +21,23 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
+import static org.apache.openmeetings.util.OmFileHelper.getRecUri;
+import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
+import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.Client.StreamType;
+import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
@@ -38,7 +45,11 @@ import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaPipeline;
+import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
+import org.kurento.client.RecorderEndpoint;
+import org.kurento.client.RecordingEvent;
+import org.kurento.client.StoppedEvent;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
@@ -52,9 +63,15 @@ public class KStream implements IKStream {
 	private final String sid;
 	private final String uid;
 	private final MediaPipeline pipeline;
+	private MediaProfileSpecType profile;
+	private RecorderEndpoint recorder;
 	private final Long roomId;
 	private WebRtcEndpoint outgoingMedia = null;
 	private final ConcurrentMap<String, WebRtcEndpoint> listeners = new ConcurrentHashMap<>();
+	private Long recordingId;
+	private Long chunkId;
+	private Type type;
+	private RecordingChunkDao chunkDao;
 
 	public KStream(final StreamDesc sd, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
@@ -69,11 +86,37 @@ public class KStream implements IKStream {
 		if (outgoingMedia != null) {
 			release(h);
 		}
-		if ((sdpOffer.indexOf("m=audio") > -1 && !sd.hasActivity(Activity.broadcastA))
-				|| (sdpOffer.indexOf("m=video") > -1 && !sd.hasActivity(Activity.broadcastV)))
+		final boolean hasAudio = sd.hasActivity(Activity.broadcastA);
+		final boolean hasVideo = sd.hasActivity(Activity.broadcastV);
+		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
+				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo))
 		{
 			log.warn("Broadcast started without enough rights");
 			return this;
+		}
+		if (StreamType.screen == sd.getType()) {
+			type = Type.SCREEN;
+		} else {
+			if (hasAudio && hasVideo) {
+				type = Type.AUDIO_VIDEO;
+			} else if (hasVideo) {
+				type = Type.VIDEO_ONLY;
+			} else {
+				type = Type.AUDIO_ONLY;
+			}
+		}
+		switch (type) {
+			case AUDIO_VIDEO:
+				profile = MediaProfileSpecType.WEBM;
+				break;
+			case AUDIO_ONLY:
+				profile = MediaProfileSpecType.WEBM_AUDIO_ONLY;
+				break;
+			case SCREEN:
+			case VIDEO_ONLY:
+			default:
+				profile = MediaProfileSpecType.WEBM_VIDEO_ONLY;
+				break;
 		}
 		outgoingMedia = createEndpoint(h, sd.getSid(), sd.getUid());
 		h.streamsByUid.put(uid, this);
@@ -85,22 +128,6 @@ public class KStream implements IKStream {
 				.put("iceServers", h.getTurnServers())
 				.put("stream", sd.toJson()));
 		return this;
-	}
-
-	public String getSid() {
-		return sid;
-	}
-
-	public String getUid() {
-		return uid;
-	}
-
-	public Long getRoomId() {
-		return roomId;
-	}
-
-	public boolean contains(String uid) {
-		return this.uid.equals(uid) || listeners.containsKey(uid);
 	}
 
 	public void addListener(final KurentoHandler h, String sid, String uid, String sdpOffer) {
@@ -167,6 +194,60 @@ public class KStream implements IKStream {
 		return endpoint;
 	}
 
+	public void startRecord(Long recId, final RecordingChunkDao chunkDao) throws IOException {
+		this.chunkDao = chunkDao;
+		final String chunkUid = randomUUID().toString();
+		recordingId = recId;
+		recorder = new RecorderEndpoint.Builder(pipeline, getRecUri(getRecordingChunk(roomId, chunkUid)))
+				.stopOnEndOfStream()
+				.withMediaProfile(profile).build();
+
+		recorder.addRecordingListener(new EventListener<RecordingEvent>() {
+			@Override
+			public void onEvent(RecordingEvent event) {
+				chunkId = chunkDao.start(recordingId, type, chunkUid, sid);
+			}
+		});
+		recorder.addStoppedListener(new EventListener<StoppedEvent>() {
+			@Override
+			public void onEvent(StoppedEvent event) {
+				chunkDao.stop(chunkId);
+			}
+		});
+		switch (profile) {
+			case WEBM:
+				outgoingMedia.connect(recorder, MediaType.AUDIO);
+				outgoingMedia.connect(recorder, MediaType.VIDEO);
+				break;
+			case WEBM_VIDEO_ONLY:
+				outgoingMedia.connect(recorder, MediaType.VIDEO);
+				break;
+			case WEBM_AUDIO_ONLY:
+			default:
+				outgoingMedia.connect(recorder, MediaType.AUDIO);
+				break;
+		}
+		recorder.record(new Continuation<Void>() {
+			@Override
+			public void onSuccess(Void result) throws Exception {
+				log.info("Recording started successfully");
+			}
+
+			@Override
+			public void onError(Throwable cause) throws Exception {
+				log.error("Failed to start recording", cause);
+			}
+		});
+	}
+
+	public void stopRecord() {
+		recorder.stopAndWait();
+		releaseRecorder();
+		recordingId = null;
+		chunkId = null;
+		chunkDao = null;
+	}
+
 	public void remove(final Client c) {
 		WebRtcEndpoint point = listeners.remove(c.getUid());
 		if (point != null) {
@@ -208,7 +289,15 @@ public class KStream implements IKStream {
 			outgoingMedia.release();
 			outgoingMedia = null;
 		}
+		releaseRecorder();
 		h.streamsByUid.remove(uid);
+	}
+
+	private void releaseRecorder() {
+		if (recorder != null) {
+			recorder.release();
+			recorder = null;
+		}
 	}
 
 	public void addCandidate(IceCandidate candidate, String uid) {
@@ -225,5 +314,21 @@ public class KStream implements IKStream {
 
 	private static JSONObject convert(com.google.gson.JsonObject o) {
 		return new JSONObject(o.toString());
+	}
+
+	public String getSid() {
+		return sid;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public Long getRoomId() {
+		return roomId;
+	}
+
+	public boolean contains(String uid) {
+		return this.uid.equals(uid) || listeners.containsKey(uid);
 	}
 }
