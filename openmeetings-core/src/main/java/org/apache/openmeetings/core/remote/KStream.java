@@ -39,7 +39,6 @@ import org.kurento.client.IceCandidate;
 import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaType;
-import org.kurento.client.Transaction;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
@@ -77,6 +76,7 @@ public class KStream implements IKStream {
 			return this;
 		}
 		outgoingMedia = createEndpoint(h, sd.getSid(), sd.getUid());
+		h.streamsByUid.put(uid, this);
 		addListener(h, sd.getSid(), sd.getUid(), sdpOffer);
 		Client c = sd.getClient();
 		WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
@@ -140,7 +140,7 @@ public class KStream implements IKStream {
 		}
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, this.uid);
-		Client cur = h.getBySid(sid);
+		Client cur = h.getBySid(this.sid);
 		if (cur.hasActivity(Activity.broadcastA)) {
 			outgoingMedia.connect(listener, MediaType.AUDIO);
 		}
@@ -151,11 +151,9 @@ public class KStream implements IKStream {
 	}
 
 	private WebRtcEndpoint createEndpoint(final KurentoHandler h, String sid, String uid) {
-		Transaction t = h.beginTransaction();
-		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build(t);
-		endpoint.addTag(t, "outUid", this.uid);
-		endpoint.addTag(t, "uid", uid);
-		t.commit();
+		WebRtcEndpoint endpoint = new WebRtcEndpoint.Builder(pipeline).build();
+		endpoint.addTag("outUid", this.uid);
+		endpoint.addTag("uid", uid);
 
 		endpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
 			@Override
@@ -217,9 +215,10 @@ public class KStream implements IKStream {
 		if (this.uid.equals(uid)) {
 			outgoingMedia.addIceCandidate(candidate);
 		} else {
-			WebRtcEndpoint webRtc = listeners.get(uid);
-			if (webRtc != null) {
-				webRtc.addIceCandidate(candidate);
+			WebRtcEndpoint endpoint = listeners.get(uid);
+			log.debug("Add candidate for {}, listener found ? {}", uid, endpoint != null);
+			if (endpoint != null) {
+				endpoint.addIceCandidate(candidate);
 			}
 		}
 	}

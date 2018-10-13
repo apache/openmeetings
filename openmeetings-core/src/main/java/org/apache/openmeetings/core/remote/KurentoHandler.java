@@ -212,7 +212,7 @@ public class KurentoHandler {
 					KStream stream = getByUid(uid);
 					if (stream == null) {
 						KRoom room = getRoom(c.getRoomId());
-						stream = room.join(this, sd);
+						stream = room.join(sd);
 					}
 					stream.startBroadcast(this, sd, msg.getString("sdpOffer"));
 				}
@@ -359,7 +359,7 @@ public class KurentoHandler {
 
 		if (room == null) {
 			log.debug("Room {} does not exist. Will create now!", roomId);
-			Transaction t = client.beginTransaction();
+			Transaction t = beginTransaction();
 			MediaPipeline pipe = client.createMediaPipeline(t);
 			pipe.addTag(t, TAG_KUID, kuid);
 			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
@@ -531,7 +531,7 @@ public class KurentoHandler {
 					if (stream != null && stream.contains(tags.get("uid"))) {
 						return;
 					}
-					log.warn("Invalid Endpoint {} detected, will be dropped", point.getId());
+					log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
 					point.release();
 				}, checkTimeout, MILLISECONDS);
 			}

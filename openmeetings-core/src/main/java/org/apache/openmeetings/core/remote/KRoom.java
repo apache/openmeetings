@@ -55,11 +55,10 @@ public class KRoom {
 		return pipeline.getId();
 	}
 
-	public KStream join(final KurentoHandler h, final StreamDesc sd) {
+	public KStream join(final StreamDesc sd) {
 		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient().getUser().getLogin(), sd.getUid());
 		final KStream stream = new KStream(sd, this.pipeline);
 		streams.put(stream.getUid(), stream);
-		h.streamsByUid.put(stream.getUid(), stream);
 		return stream;
 	}
 
