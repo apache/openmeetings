@@ -26,11 +26,13 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Collectors;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -241,6 +243,17 @@ public class KurentoHandler {
 		return c.hasAnyActivity(Activity.broadcastA, Activity.broadcastV);
 	}
 
+	private void checkStreams(Long roomId) {
+		KRoom room = getRoom(roomId);
+		if (room.isRecording()) {
+			List<Client> clients = cm.listByRoom(roomId).parallelStream().filter(c -> c.getStreams().isEmpty()).collect(Collectors.toList());
+			if (clients.isEmpty()) {
+				log.info("No more streams in the room, stopping recording");
+				room.stopRecording(null, recDao);
+			}
+		}
+	}
+
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, c.getRoomId());
 
@@ -277,6 +290,7 @@ public class KurentoHandler {
 				}
 				if (changed) {
 					cm.update(c);
+					checkStreams(c.getRoomId());
 				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 				//FIXME TODO update interview buttons
@@ -364,10 +378,9 @@ public class KurentoHandler {
 			}
 		}
 		if (c.getRoomId() != null) {
-			KRoom room = rooms.get(c.getRoomId());
-			if (room != null) {
-				room.leave(this, c);
-			}
+			KRoom room = getRoom(c.getRoomId());
+			room.leave(this, c);
+			checkStreams(c.getRoomId());
 		}
 	}
 

@@ -54,7 +54,6 @@ public class Client implements IDataProviderEntity, IWsClient {
 		broadcastA //sends Audio to the room
 		, broadcastV //sends Video to the room
 		, broadcastAV //sends Audio+Video to the room
-		, share
 	}
 	public enum StreamType {
 		webCam //sends Audio/Video to the room

@@ -155,7 +155,8 @@ public class KRoom {
 			recordingId = null;
 
 			// Send notification to all users that the recording has been started
-			WebSocketHelper.sendRoom(new RoomMessage(roomId, c.getUser(), RoomMessage.Type.recordingToggled));
+			User u = c == null ? new User() : c.getUser();
+			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
 		}
 	}
 

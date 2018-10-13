@@ -437,7 +437,6 @@ public class RoomPanel extends BasePanel {
 							}
 							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", uid));
 							sharingUser = null;
-							cm.update(c.removeStream(uid).remove(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
@@ -450,7 +449,6 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							sharingUser = uid;
-							cm.update(c.set(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
