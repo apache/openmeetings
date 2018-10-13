@@ -115,6 +115,7 @@ var VideoUtil = (function() {
 	}
 	function _cleanPeer(peer) {
 		if (!!peer) {
+			peer.cleaned = true;
 			const pc = peer.peerConnection;
 			if (!!pc && !!pc.getLocalStreams()) {
 				pc.getLocalStreams().forEach(function(stream) {
@@ -124,6 +125,10 @@ var VideoUtil = (function() {
 			peer.dispose();
 			peer = null;
 		}
+	}
+	function _isEdge() {
+		const b = kurentoUtils.WebRtcPeer.browser;
+		return b.name === 'Edge';
 	}
 
 	self.getVid = _getVid;
@@ -143,5 +148,6 @@ var VideoUtil = (function() {
 		}
 		return opts;
 	};
+	self.isEdge = _isEdge;
 	return self;
 })();

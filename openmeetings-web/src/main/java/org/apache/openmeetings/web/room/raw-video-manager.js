@@ -13,21 +13,18 @@ var VideoManager = (function() {
 			}
 		});
 	}
-
 	function _onBroadcast(msg) {
 		const uid = msg.stream.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
 	}
-
 	function _onReceive(msg) {
 		const uid = msg.stream.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
 		Video().init(msg);
 		OmUtil.log(uid + ' receiving video');
 	}
-
 	function _onWsMessage(jqEvent, msg) {
 		try {
 			if (msg instanceof Blob) {
@@ -243,7 +240,7 @@ var VideoManager = (function() {
 		//FIXME TODO frameRate
 		//FIXME TODO can be unified
 		const b = kurentoUtils.WebRtcPeer.browser;
-		if (b.name === 'Edge' && b.major > 16) {
+		if (VideoUtil.isEdge() && b.major > 16) {
 			navigator.getDisplayMedia({
 				video: true
 			}).then(function(stream) {

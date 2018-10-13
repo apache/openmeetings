@@ -2,7 +2,7 @@
 var Video = (function() {
 	const self = {};
 	let sd, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50, aCtx, aSrc, gainNode
+		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode
 		, lm, level, userSpeaks = false;
 
 	function _getName() {
@@ -61,6 +61,7 @@ var Video = (function() {
 			}
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(function(stream) {
+					let _stream = stream;
 					if (stream.getAudioTracks().length !== 0) {
 						vol.show();
 						lm = vc.find('.level-meter')
@@ -70,12 +71,21 @@ var Video = (function() {
 						gainNode = aCtx.createGain();
 						aSrc = aCtx.createMediaStreamSource(stream);
 						aSrc.connect(gainNode);
-						gainNode.connect(aCtx.destination);
+						if (VideoUtil.isEdge()) {
+							gainNode.connect(aCtx.destination);
+						} else {
+							aDest = aCtx.createMediaStreamDestination();
+							gainNode.connect(aDest);
+							_stream = aDest.stream;
+							stream.getVideoTracks().forEach(function(track) {
+								_stream.addTrack(track);
+							});
+						}
 						_handleVolume(lastVolume);
 					}
 					const options = VideoUtil.addIceServers({
 						localVideo: video[0]
-						, videoStream: stream
+						, videoStream: _stream
 						, mediaConstraints: cnts
 						, onicecandidate: self.onIceCandidate
 					}, msg);
@@ -117,7 +127,7 @@ var Video = (function() {
 					return OmUtil.error(error);
 				}
 				this.generateOffer(function(error, offerSdp) {
-					if (error) {
+					if (!this.cleaned && error) {
 						return OmUtil.error('Receiver sdp offer error ' + error);
 					}
 					OmUtil.log('Invoking Receiver SDP offer callback function');
@@ -148,7 +158,9 @@ var Video = (function() {
 	function _handleVolume(val) {
 		handle.text(val);
 		if (sd.self) {
-			gainNode.gain.value = val / 100;
+			if (!!gainNode) {
+				gainNode.gain.value = val / 100;
+			}
 		} else {
 			video[0].volume = val / 100;
 		}
@@ -167,6 +179,7 @@ var Video = (function() {
 		if (!slider) {
 			return;
 		}
+		muted = mute;
 		if (mute) {
 			const val = slider.slider('option', 'value');
 			if (val > 0) {
@@ -267,7 +280,6 @@ var Video = (function() {
 				})
 				.click(function(e) {
 					e.stopImmediatePropagation();
-					const muted = $(this).find('.ui-icon').hasClass('ui-icon-volume-off');
 					roomAction('mute', JSON.stringify({uid: sd.uid, mute: !muted}));
 					_mute(!muted);
 					volume.hide();
@@ -348,6 +360,7 @@ var Video = (function() {
 		}
 		if (hasAudio) {
 			vol.show();
+			_mute(muted);
 		} else {
 			vol.hide();
 			v.parent().find('.dropdown-menu.video.volume').hide();
@@ -365,6 +378,10 @@ var Video = (function() {
 			VideoUtil.cleanStream(aSrc.mediaStream);
 			aSrc.disconnect();
 			aSrc = null;
+		}
+		if (!!aDest) {
+			aDest.disconnect();
+			aDest = null;
 		}
 		if (!!aCtx) {
 			if (!!aCtx.destination) {
@@ -399,7 +416,7 @@ var Video = (function() {
 	self.update = _update;
 	self.refresh = _refresh;
 	self.mute = _mute;
-	self.isMuted = function() { return 0 === slider.slider('option', 'value'); };
+	self.isMuted = function() { return muted; };
 	self.init = _init;
 	self.stream = function() { return sd; };
 	self.setRights = _setRights;
