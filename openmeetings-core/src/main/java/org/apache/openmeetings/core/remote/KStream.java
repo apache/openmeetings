@@ -201,6 +201,8 @@ public class KStream implements IKStream {
 		recorder = new RecorderEndpoint.Builder(pipeline, getRecUri(getRecordingChunk(roomId, chunkUid)))
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
+		recorder.addTag("outUid", uid);
+		recorder.addTag("uid", uid);
 
 		recorder.addRecordingListener(new EventListener<RecordingEvent>() {
 			@Override
