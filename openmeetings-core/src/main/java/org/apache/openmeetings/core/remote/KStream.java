@@ -191,7 +191,7 @@ public class KStream implements IKStream {
 	}
 
 	public void startRecord() {
-		final String chunkUid = randomUUID().toString();
+		final String chunkUid = String.format("rec_%s_%s", room.recordingId, randomUUID());
 		recorder = new RecorderEndpoint.Builder(room.pipeline, getRecUri(getRecordingChunk(room.roomId, chunkUid)))
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
