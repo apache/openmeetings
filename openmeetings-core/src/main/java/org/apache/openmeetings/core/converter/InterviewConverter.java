@@ -20,6 +20,7 @@ package org.apache.openmeetings.core.converter;
 
 import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.CalendarHelper.formatMillis;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.getRecordingChunk;
 
 import java.io.File;
@@ -88,7 +89,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 
 			final int width = 320;
 			final int height = 260;
-			// Merge Audio with Video / Calculate resulting FLV
+			// Merge Audio with Video / Calculate resulting video
 
 			// group by sid first to get all pods
 			Map<String, List<RecordingChunk>> cunksBySid = chunks.stream().collect(
@@ -101,18 +102,18 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 				Date pStart = r.getRecordStart();
 				List<PodPart> parts = new ArrayList<>();
 				for (RecordingChunk chunk : e.getValue()) {
-					File flv = getRecordingChunk(r.getRoomId(), chunk.getStreamName());
-					if (flv.exists()) {
-						String path = flv.getCanonicalPath();
+					File chunkStream = getRecordingChunk(r.getRoomId(), chunk.getStreamName());
+					if (chunkStream.exists()) {
+						String path = chunkStream.getCanonicalPath();
 						/* CHECK FILE:
-						 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.flv -v error -f null file.null
+						 * ffmpeg -i rec_316_stream_567_2013_08_28_11_51_45.webm -v error -f null file.null
 						 */
 						String[] args = new String[] {getPathToFFMPEG(), "-y"
 								, "-i", path
 								, "-v", "error"
 								, "-f", "null"
 								, "file.null"};
-						ProcessResult res = ProcessHelper.executeScript(String.format("checkFlvPod_%s_%s", N, parts.size()), args, true);
+						ProcessResult res = ProcessHelper.executeScript(String.format("Check chunk pod video_%s_%s", N, parts.size()), args, true);
 						logs.add(res);
 						if (!res.isWarn()) {
 							long diff = diff(chunk.isAudioOnly() ? chunk.getEnd() : chunk.getStart(), pStart);
@@ -124,11 +125,11 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							pStart = chunk.getEnd();
 						}
 					} else {
-						log.debug("Meta FLV doesn't exist: {}", flv);
+						log.debug("Chunk stream doesn't exist: {}", chunkStream);
 					}
 				}
 				if (!parts.isEmpty()) {
-					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.flv", r.getId(), N)).getCanonicalPath();
+					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.%s", r.getId(), N, EXTENSION_MP4)).getCanonicalPath();
 					long diff = diff(r.getRecordEnd(), pStart);
 					// add blank pod till the end
 					//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);
@@ -162,7 +163,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 							args.add(p.getFile());
 						}
 						videos.append('[').append(i).append(']')
-							.append("scale=").append(width).append(':').append(height)
+							.append("scale=").append(width).append(':').append(height).append(",setsar=1:1")
 							.append("[v").append(i).append("]; ");
 						concat.append("[v").append(i).append(']');
 					}
@@ -170,7 +171,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					args.add(concat.insert(0, videos).append("concat=n=").append(parts.size()).append(":v=1:a=0").toString());
 					args.add("-an");
 					args.add(podX);
-					ProcessResult res = ProcessHelper.executeScript(String.format("Full Flv pod_%s", N), args.toArray(new String[0]), true);
+					ProcessResult res = ProcessHelper.executeScript(String.format("Full video pod_%s", N), args.toArray(new String[0]), true);
 					logs.add(res);
 					if (res.isWarn()) {
 						throw new ConversionException("Fail to create pod");
@@ -181,7 +182,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 			}
 			if (N == 0) {
 				ProcessResult res = new ProcessResult();
-				res.setProcess("CheckFlvFilesExists");
+				res.setProcess("CheckStreamFilesExists");
 				res.setError("No valid pods found");
 				res.setExitCode(-1);
 				logs.add(res);
