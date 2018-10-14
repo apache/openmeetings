@@ -104,7 +104,7 @@ public class KRoom {
 
 	public void startRecording(Client c, RecordingDao recDao) {
 		if (recordingStarted.compareAndSet(false, true)) {
-			log.debug("##REC:: recording in room is started ::");
+			log.debug("##REC:: recording in room {} is starting ::", roomId);
 			Room r = c.getRoom();
 			boolean interview = Room.Type.interview == r.getType();
 
@@ -140,11 +140,13 @@ public class KRoom {
 
 			// Send notification to all users that the recording has been started
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
+			log.debug("##REC:: recording in room {} is started {} ::", roomId, recordingId);
 		}
 	}
 
 	public void stopRecording(Client c, RecordingDao recDao) {
 		if (recordingStarted.compareAndSet(true, false)) {
+			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
 			for (final KStream stream : streams.values()) {
 				stream.stopRecord();
 			}
@@ -157,6 +159,7 @@ public class KRoom {
 			// Send notification to all users that the recording has been started
 			User u = c == null ? new User() : c.getUser();
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
+			log.debug("##REC:: recording in room {} is stopped ::", roomId);
 		}
 	}
 
