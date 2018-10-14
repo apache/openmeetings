@@ -112,7 +112,7 @@ public class RecordingChunk extends HistoricalEntity {
 	 * this is only STOPPED when the asynchronous stream writer's have completed to write packets to the file.
 	 */
 	@Column(name = "stream_status")
-	@Element(data = true)
+	@Element(data = true, required = false)
 	@Enumerated(EnumType.STRING)
 	private Status streamStatus = Status.NONE;
 
