@@ -38,6 +38,9 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.converter.IRecordingConverter;
+import org.apache.openmeetings.core.converter.InterviewConverter;
+import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -46,6 +49,7 @@ import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.manager.IClientManager;
@@ -66,6 +70,7 @@ import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
@@ -97,6 +102,12 @@ public class KurentoHandler {
 	private RecordingDao recDao;
 	@Autowired
 	private RecordingChunkDao chunkDao;
+	@Autowired
+	private TaskExecutor taskExecutor;
+	@Autowired
+	private RecordingConverter recordingConverter;
+	@Autowired
+	private InterviewConverter interviewConverter;
 
 	public void init() {
 		try {
@@ -249,7 +260,7 @@ public class KurentoHandler {
 			List<Client> clients = cm.listByRoom(roomId).parallelStream().filter(c -> c.getStreams().isEmpty()).collect(Collectors.toList());
 			if (clients.isEmpty()) {
 				log.info("No more streams in the room, stopping recording");
-				room.stopRecording(null, recDao);
+				room.stopRecording(this, null, recDao);
 			}
 		}
 	}
@@ -323,7 +334,12 @@ public class KurentoHandler {
 	}
 
 	public void stopRecording(Client c) {
-		getRoom(c.getRoomId()).stopRecording(c, recDao);
+		getRoom(c.getRoomId()).stopRecording(this, c, recDao);
+	}
+
+	void startConvertion(Recording rec) {
+		IRecordingConverter conv = rec.isInterview() ? interviewConverter : recordingConverter;
+		taskExecutor.execute(() -> conv.startConversion(rec));
 	}
 
 	public boolean isRecording(Long roomId) {
@@ -358,7 +374,7 @@ public class KurentoHandler {
 	}
 
 	public void remove(IWsClient _c) {
-		if (_c == null) {
+		if (client == null ||_c == null) {
 			return;
 		}
 		final String uid = _c.getUid();

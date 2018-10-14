@@ -50,10 +50,9 @@ public class RecordingConverter extends BaseConverter implements IRecordingConve
 	private RecordingChunkDao chunkDao;
 
 	@Override
-	public void startConversion(Long id) {
-		Recording r = recordingDao.get(id);
+	public void startConversion(Recording r) {
 		if (r == null) {
-			log.warn("Conversion is NOT started. Recording with ID {} is not found", id);
+			log.warn("Conversion is NOT started. Recording passed is NULL");
 			return;
 		}
 		ProcessResultList logs = new ProcessResultList();

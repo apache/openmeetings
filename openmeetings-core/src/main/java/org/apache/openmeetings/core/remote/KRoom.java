@@ -144,7 +144,7 @@ public class KRoom {
 		}
 	}
 
-	public void stopRecording(Client c, RecordingDao recDao) {
+	public void stopRecording(KurentoHandler h, Client c, RecordingDao recDao) {
 		if (recordingStarted.compareAndSet(true, false)) {
 			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
 			for (final KStream stream : streams.values()) {
@@ -156,6 +156,7 @@ public class KRoom {
 			recordingUser = new JSONObject();
 			recordingId = null;
 
+			h.startConvertion(rec);
 			// Send notification to all users that the recording has been started
 			User u = c == null ? new User() : c.getUser();
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));

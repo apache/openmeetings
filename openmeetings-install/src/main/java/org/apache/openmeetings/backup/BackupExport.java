@@ -525,7 +525,7 @@ public class BackupExport {
 		root.commit();
 	}
 
-	private void writeZip(String prefix, URI base, File file, ZipOutputStream zos) throws IOException {
+	private static void writeZip(String prefix, URI base, File file, ZipOutputStream zos) throws IOException {
 		String path = prefix + "/" + base.relativize(file.toURI()).toString();
 		log.debug("Writing '" + path + "' to zip file");
 		ZipEntry zipEntry = new ZipEntry(path);

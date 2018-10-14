@@ -57,10 +57,9 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 	private RecordingChunkDao chunkDao;
 
 	@Override
-	public void startConversion(Long id) {
-		Recording r = recordingDao.get(id);
+	public void startConversion(Recording r) {
 		if (r == null) {
-			log.warn("Conversion is NOT started. Recording with ID {} is not found", id);
+			log.warn("Conversion is NOT started. Recording passed is NULL");
 			return;
 		}
 		ProcessResultList logs = new ProcessResultList();
@@ -129,7 +128,7 @@ public class InterviewConverter extends BaseConverter implements IRecordingConve
 					}
 				}
 				if (!parts.isEmpty()) {
-					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.flv", id, N)).getCanonicalPath();
+					String podX = new File(streamFolder, String.format("rec_%s_pod_%s.flv", r.getId(), N)).getCanonicalPath();
 					long diff = diff(r.getRecordEnd(), pStart);
 					// add blank pod till the end
 					//createBlankPod(id, streamFolder, interviewCam, diff, logs, pods, parts);

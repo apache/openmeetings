@@ -76,7 +76,7 @@ public class VideoInfo extends Panel {
 			new Thread() {
 				@Override
 				public void run() {
-					converter.startConversion(rm.getObject().getId());
+					converter.startConversion(rm.getObject());
 				}
 			}.start();
 		}

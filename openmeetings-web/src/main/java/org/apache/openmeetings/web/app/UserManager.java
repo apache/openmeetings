@@ -69,7 +69,7 @@ public class UserManager implements IUserManager {
 	@Autowired
 	private EmailManager emailManager;
 
-	private boolean sendConfirmation() {
+	private static boolean sendConfirmation() {
 		String baseURL = getBaseUrl();
 		return !Strings.isEmpty(baseURL) && isSendVerificationEmail();
 	}

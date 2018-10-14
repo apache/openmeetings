@@ -18,7 +18,9 @@
  */
 package org.apache.openmeetings.core.converter;
 
+import org.apache.openmeetings.db.entity.record.Recording;
+
 @FunctionalInterface
 public interface IRecordingConverter {
-	void startConversion(Long recordingId);
+	void startConversion(Recording rec);
 }
