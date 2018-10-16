@@ -3,7 +3,7 @@ iframe {
 	width: 100%;
 	min-height: 700px;
 }
-#bannerRight img, #bannerLeft img {
+.bannerRight img, .bannerLeft img {
 	height: 80px !important;
 }
 .color-highlight {
@@ -59,9 +59,6 @@ iframe {
 }
 .install-steps .step.run {
 	background-image: url(../images/world.png);
-}
-.carousel.slide .carousel-inner .item img {
-	height: 654px !important;
 }
 .apachecon-banner img {
 	height: 62px !important;
