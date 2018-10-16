@@ -435,8 +435,9 @@ public class Client implements IDataProviderEntity, IWsClient {
 			this.type = type;
 			setActivities();
 			if (StreamType.webCam == type) {
-				this.swidth = width;
-				this.sheight = height;
+				boolean interview = room != null && Room.Type.interview == room.getType();
+				this.swidth = interview ? 320 : width;
+				this.sheight = interview ? 260 : height;
 			}
 		}
 

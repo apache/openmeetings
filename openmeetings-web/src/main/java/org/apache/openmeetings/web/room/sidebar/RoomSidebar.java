@@ -189,7 +189,7 @@ public class RoomSidebar extends Panel {
 			if (!s.isEmpty()) {
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				Client c = room.getClient();
-				cp.setSettings(new JSONObject(s.toString())).update(c, room.isInterview());
+				cp.setSettings(new JSONObject(s.toString())).update(c);
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {

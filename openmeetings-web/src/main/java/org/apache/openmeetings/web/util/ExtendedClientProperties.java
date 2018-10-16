@@ -92,10 +92,6 @@ public class ExtendedClientProperties extends ClientProperties {
 	}
 
 	public Client update(Client c) {
-		return update(c, false);
-	}
-
-	public Client update(Client c, boolean interview) {
 		JSONObject s = getSettings().optJSONObject("video");
 		if (s == null) {
 			s = new JSONObject();
@@ -103,7 +99,7 @@ public class ExtendedClientProperties extends ClientProperties {
 		return c.setRemoteAddress(getRemoteAddress())
 				.setCam(s.optInt(CAM, -1))
 				.setMic(s.optInt(MIC, -1))
-				.setWidth(interview ? 320 : s.optInt(WIDTH, 0))
-				.setHeight(interview ? 260 : s.optInt(HEIGHT, 0));
+				.setWidth(s.optInt(WIDTH, 0))
+				.setHeight(s.optInt(HEIGHT, 0));
 	}
 }
