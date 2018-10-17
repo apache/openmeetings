@@ -23,13 +23,13 @@
 		<section name="Install Kurento Media server">
 			<p>
 				<a href="https://doc-kurento.readthedocs.io/en/stable/user/installation.html">Install Kurento Media server</a>
-				<div class="bs-callout bs-callout-danger">
+				<div class="bd-callout bd-callout-danger">
 					It should be run under same user as OM
 				</div>
 			</p>
 		</section>
 		<section name="Specify/Install Turn server">
-			<div class="bs-callout bs-callout-info">Optional step</div>
+			<div class="bd-callout bd-callout-info">Optional step</div>
 		</section>
 	</body>
 </document>
