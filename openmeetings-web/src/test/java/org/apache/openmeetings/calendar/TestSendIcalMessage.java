@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.calendar;
 
+import static java.util.UUID.randomUUID;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URI;
@@ -27,7 +29,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
@@ -114,7 +115,7 @@ public class TestSendIcalMessage extends AbstractJUnitDefaults {
 		meeting.getProperties().add(tz.getTimeZoneId());
 
 		// generate unique identifier..
-		Uid uid = new Uid(UUID.randomUUID().toString());
+		Uid uid = new Uid(randomUUID().toString());
 		meeting.getProperties().add(uid);
 
 		// add attendees..

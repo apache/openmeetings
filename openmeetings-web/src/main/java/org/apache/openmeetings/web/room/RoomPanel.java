@@ -39,6 +39,7 @@ import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
 import org.apache.openmeetings.db.entity.calendar.Appointment;
 import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
@@ -92,6 +93,7 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 import com.googlecode.wicket.jquery.core.JQueryBehavior;
 import com.googlecode.wicket.jquery.core.Options;
@@ -163,19 +165,17 @@ public class RoomPanel extends BasePanel {
 
 		private void initVideos(AjaxRequestTarget target) {
 			StringBuilder sb = new StringBuilder();
-			boolean hasStreams = false;
 			Client _c = getClient();
+			JSONArray streams = new JSONArray();
 			for (Client c: cm.listByRoom(getRoom().getId())) {
-				//FIXME TODO add multiple streams support
-				if (!c.getStreams().isEmpty()) {
-					sb.append(String.format("VideoManager.play(%s);", new JSONObject()
-							.put("client", c.toJson(false).put("type", "room"))
-							.put("iceServers", kHandler.getTurnServers())
-							)); // FIXME TODO add multi-stream support
-					hasStreams = true;
+				for (StreamDesc sd : c.getStreams()) {
+					streams.put(sd.toJson());
+				}
+				if (streams.length() > 0) {
+					sb.append("VideoManager.play(").append(streams).append(", ").append(kHandler.getTurnServers()).append(");");
 				}
 			}
-			if (interview && recordingUser == null && hasStreams && _c.hasRight(Right.moderator)) {
+			if (interview && !kHandler.isRecording(r.getId()) && streams.length() > 0 && _c.hasRight(Right.moderator)) {
 				sb.append("WbArea.setRecEnabled(true);");
 			}
 			if (!Strings.isEmpty(sb)) {
@@ -190,7 +190,6 @@ public class RoomPanel extends BasePanel {
 	private RoomSidebar sidebar;
 	private final AbstractWbPanel wb;
 	private String sharingUser = null;
-	private String recordingUser = null;
 	private byte[] pdfWb;
 	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 		private static final long serialVersionUID = 1L;
@@ -423,34 +422,9 @@ public class RoomPanel extends BasePanel {
 					case pollUpdated:
 						menu.updatePoll(handler, null);
 						break;
-					case recordingStoped:
-						{
-							String uid = ((TextRoomMessage)m).getText();
-							Client c = cm.getBySid(uid);
-							if (c == null) {
-								log.error("Not existing/BAD user has stopped recording {} != {} !!!!", uid);
-								return;
-							}
-							recordingUser = null;
-							cm.update(c.remove(Client.Activity.record));
-							menu.update(handler);
-							updateInterviewRecordingButtons(handler);
-						}
-						break;
-					case recordingStarted:
-						{
-							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-							String sid = obj.getString("sid");
-							Client c = cm.getBySid(sid);
-							if (c == null) {
-								log.error("Not existing user has started recording {} !!!!", sid);
-								return;
-							}
-							recordingUser = sid;
-							cm.update(c.set(Client.Activity.record));
-							menu.update(handler);
-							updateInterviewRecordingButtons(handler);
-						}
+					case recordingToggled:
+						menu.update(handler);
+						updateInterviewRecordingButtons(handler);
 						break;
 					case sharingStoped:
 						{
@@ -463,7 +437,6 @@ public class RoomPanel extends BasePanel {
 							}
 							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", uid));
 							sharingUser = null;
-							cm.update(c.removeStream(uid).remove(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
@@ -476,7 +449,6 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							sharingUser = uid;
-							cm.update(c.set(Client.Activity.share));
 							menu.update(handler);
 						}
 						break;
@@ -489,9 +461,7 @@ public class RoomPanel extends BasePanel {
 								return;
 							}
 							boolean self = _c.getUid().equals(c.getUid());
-							handler.appendJavaScript(String.format("VideoManager.update(%s);"
-									, c.toJson(self).put("type", "room") // FIXME TODO add multi-stream support
-									));
+							handler.appendJavaScript(String.format("VideoManager.update(%s);", c.toJson(self)));
 							sidebar.update(handler);
 							menu.update(handler);
 							wb.update(handler);
@@ -597,7 +567,9 @@ public class RoomPanel extends BasePanel {
 	private void updateInterviewRecordingButtons(IPartialPageRequestHandler handler) {
 		Client _c = getClient();
 		if (interview && _c.hasRight(Right.moderator)) {
-			if (recordingUser == null) {
+			if (kHandler.isRecording(r.getId())) {
+				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
+			} else {
 				boolean hasStreams = false;
 				for (Client cl : cm.listByRoom(r.getId())) {
 					if (!cl.getStreams().isEmpty()) {
@@ -606,8 +578,6 @@ public class RoomPanel extends BasePanel {
 					}
 				}
 				handler.appendJavaScript(String.format("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(false);WbArea.setRecEnabled(%s);}", hasStreams));
-			} else {
-				handler.appendJavaScript("if (typeof(WbArea) === 'object') {WbArea.setRecStarted(true);}");
 			}
 		}
 	}
@@ -807,10 +777,6 @@ public class RoomPanel extends BasePanel {
 
 	public String getSharingUser() {
 		return sharingUser;
-	}
-
-	public String getRecordingUser() {
-		return recordingUser;
 	}
 
 	public String getPublishingUser() {

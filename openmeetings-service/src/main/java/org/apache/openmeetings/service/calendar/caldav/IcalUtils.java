@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.calendar.caldav;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
 import java.net.URI;
@@ -412,7 +413,7 @@ public class IcalUtils {
 		String uid = appointment.getIcalId();
 		Uid ui;
 		if (uid == null || uid.length() < 1) {
-			UUID uuid = UUID.randomUUID();
+			UUID uuid = randomUUID();
 			appointment.setIcalId(uuid.toString());
 			ui = new Uid(uuid.toString());
 		} else {

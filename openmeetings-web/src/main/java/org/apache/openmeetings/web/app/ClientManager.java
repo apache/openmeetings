@@ -35,7 +35,6 @@ import javax.annotation.PostConstruct;
 import org.apache.openmeetings.core.remote.KurentoHandler;
 import org.apache.openmeetings.db.dao.log.ConferenceLogDao;
 import org.apache.openmeetings.db.entity.basic.Client;
-import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.log.ConferenceLog;
 import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
@@ -125,7 +124,7 @@ public class ClientManager implements IClientManager {
 		return mapBySid().get(sid);
 	}
 
-	public void exitRoom(IClient c) {
+	public void exitRoom(Client c) {
 		Long roomId = c.getRoomId();
 		removeFromRoom(c);
 		if (roomId != null) {
@@ -139,10 +138,10 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
-	public void exit(IClient c) {
+	public void exit(Client c) {
 		if (c != null) {
 			exitRoom(c);
-			kHandler.remove((Client)c);
+			kHandler.remove(c);
 			log.debug("Removing online client: {}, roomId: {}", c.getUid(), c.getRoomId());
 			map().remove(c.getUid());
 			onlineClients.remove(c.getUid());
@@ -186,43 +185,25 @@ public class ClientManager implements IClientManager {
 		return count;
 	}
 
-	public IClient removeFromRoom(IClient _c) {
-		Long roomId = _c.getRoomId();
-		log.debug("Removing online room client: {}, room: {}", _c.getUid(), roomId);
+	public Client removeFromRoom(Client c) {
+		Long roomId = c.getRoomId();
+		log.debug("Removing online room client: {}, room: {}", c.getUid(), roomId);
 		if (roomId != null) {
 			IMap<Long, Set<String>> rooms = rooms();
 			rooms.lock(roomId);
 			Set<String> clients = rooms.get(roomId);
 			if (clients != null) {
-				clients.remove(_c.getUid());
+				clients.remove(c.getUid());
 				rooms.put(roomId, clients);
 				onlineRooms.put(roomId, clients);
 			}
 			rooms.unlock(roomId);
-			/* FIXME TODO KurentoHandler
-			if (_c instanceof StreamClient) {
-				StreamClient sc = (StreamClient)_c;
-				if (Client.Type.mobile != sc.getType() && Client.Type.sip != sc.getType()) {
-					scopeAdapter.roomLeaveByScope(_c, roomId);
-				}
-			}
-			 */
-			if (_c instanceof Client) {
-				//FIXME TODO scopeAdapter.dropSharing(_c, roomId);
-				Client c = (Client)_c;
-				kHandler.leaveRoom(c);
-				/* FIXME TODO
-				IScope sc = scopeAdapter.getChildScope(roomId);
-				for (String uid : c.getStreams()) {
-					scopeAdapter.sendMessageById("quit", uid, sc);
-				}
-				*/
-				c.setRoom(null);
-				c.clear();
-				update(c);
-			}
+			kHandler.leaveRoom(c);
+			c.setRoom(null);
+			c.clear();
+			update(c);
 		}
-		return _c;
+		return c;
 	}
 
 	public boolean isOnline(Long userId) {

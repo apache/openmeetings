@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.CalendarHelper.getDate;
 import static org.apache.openmeetings.web.app.Application.getInvitationLink;
 import static org.apache.openmeetings.web.app.WebSession.AVAILABLE_TIMEZONES;
@@ -26,7 +27,6 @@ import static org.apache.openmeetings.web.app.WebSession.getUserId;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.room.InvitationDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -167,7 +167,7 @@ public abstract class InvitationForm extends Form<Invitation> {
 		i.setValidTo(getDate(to.getModelObject(), timeZoneId.getModelObject()));
 
 		i.setInvitee(u);
-		i.setHash(UUID.randomUUID().toString());
+		i.setHash(randomUUID().toString());
 		if (Type.contact == u.getType()) {
 			u.setLanguageId(lang.getModelObject());
 		}

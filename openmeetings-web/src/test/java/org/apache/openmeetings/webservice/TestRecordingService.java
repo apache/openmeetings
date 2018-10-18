@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.webservice;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.AbstractJUnitDefaults.getUser;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
-import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dto.basic.ServiceResult;
@@ -37,7 +37,7 @@ public class TestRecordingService extends AbstractWebServiceTest {
 	public static final String RECORD_SERVICE_MOUNT = "record";
 
 	private User getExternalUser() throws Exception {
-		String uuid = UUID.randomUUID().toString();
+		String uuid = randomUUID().toString();
 		User u = getUser(uuid);
 		u.setExternalType(UNIT_TEST_EXT_TYPE);
 		u.setExternalId(uuid);

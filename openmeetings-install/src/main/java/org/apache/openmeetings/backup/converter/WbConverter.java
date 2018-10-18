@@ -19,6 +19,7 @@
 package org.apache.openmeetings.backup.converter;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
@@ -37,7 +38,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.openmeetings.db.dto.room.Whiteboard;
@@ -70,7 +70,7 @@ public class WbConverter {
 	}
 
 	private static void add(Whiteboard wb, JSONObject o) {
-		String uid = UUID.randomUUID().toString();
+		String uid = randomUUID().toString();
 		wb.put(uid, o.put("uid", uid));
 	}
 

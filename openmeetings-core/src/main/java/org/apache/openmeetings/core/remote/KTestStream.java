@@ -18,14 +18,14 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.core.remote.KurentoHandler.newTestKurentoMsg;
 import static org.apache.openmeetings.core.remote.KurentoHandler.sendError;
+import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_WEBM;
 import static org.apache.openmeetings.util.OmFileHelper.TEST_SETUP_PREFIX;
 import static org.apache.openmeetings.util.OmFileHelper.getStreamsDir;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
+import org.apache.openmeetings.util.OmFileHelper;
 import org.kurento.client.Continuation;
 import org.kurento.client.EndOfStreamEvent;
 import org.kurento.client.ErrorEvent;
@@ -61,11 +62,13 @@ public class KTestStream implements IKStream {
 	private RecorderEndpoint recorder;
 	private String recPath = null;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+	private final String uid;
 	private ScheduledFuture<?> recHandle;
 	private int recTime;
 
-	public KTestStream(IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public KTestStream(final KurentoHandler h, IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
+		this.uid = _c.getUid();
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		webRtcEndpoint.connect(webRtcEndpoint);
 
@@ -92,7 +95,7 @@ public class KTestStream implements IKStream {
 			@Override
 			public void onEvent(StoppedEvent event) {
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
-				release();
+				release(h);
 			}
 		});
 		switch (profile) {
@@ -134,7 +137,7 @@ public class KTestStream implements IKStream {
 		});
 	}
 
-	public void play(final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
+	public void play(final KurentoHandler h, final IWsClient _c, JSONObject msg, MediaPipeline pipeline) {
 		this.pipeline = pipeline;
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
@@ -147,14 +150,14 @@ public class KTestStream implements IKStream {
 					@Override
 					public void onEvent(ErrorEvent event) {
 						log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
-						sendPlayEnd(_c);
+						sendPlayEnd(h, _c);
 					}
 				});
 				player.addEndOfStreamListener(new EventListener<EndOfStreamEvent>() {
 					@Override
 					public void onEvent(EndOfStreamEvent event) {
 						log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
-						sendPlayEnd(_c);
+						sendPlayEnd(h, _c);
 					}
 				});
 				player.play();
@@ -194,9 +197,9 @@ public class KTestStream implements IKStream {
 		});
 	}
 
-	private void sendPlayEnd(IWsClient _c) {
+	private void sendPlayEnd(final KurentoHandler h, IWsClient _c) {
 		WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "playStopped"));
-		release();
+		release(h);
 	}
 
 	private static MediaProfileSpecType getProfile(JSONObject msg) {
@@ -211,62 +214,28 @@ public class KTestStream implements IKStream {
 	}
 
 	private void initRecPath() {
-		try {
-			File f = new File(getStreamsDir(), String.format("%s%s.webm", TEST_SETUP_PREFIX, UUID.randomUUID()));
-			recPath = String.format("file://%s", f.getCanonicalPath());
-			log.info("Configured to record to {}", recPath);
-		} catch (IOException e) {
-			log.error("Uexpected error while creating recording URI", e);
-		}
+		File f = new File(getStreamsDir(), String.format("%s%s.%s", TEST_SETUP_PREFIX, randomUUID(), EXTENSION_WEBM));
+		recPath = OmFileHelper.getRecUri(f);
 	}
 
 	@Override
-	public void release() {
+	public void release(KurentoHandler h) {
 		if (webRtcEndpoint != null) {
 			webRtcEndpoint.release();
 			webRtcEndpoint = null;
 		}
 		if (pipeline != null) {
-			pipeline.release(new Continuation<Void>() {
-				@Override
-				public void onSuccess(Void result) throws Exception {
-					log.info("Pipeline released successfully");
-				}
-
-				@Override
-				public void onError(Throwable cause) throws Exception {
-					log.info("Error releasing pipeline ", cause);
-				}
-			});
+			pipeline.release();
 			pipeline = null;
 		}
 		if (player != null) {
-			player.release(new Continuation<Void>() {
-				@Override
-				public void onSuccess(Void result) throws Exception {
-					log.info("Pipeline released successfully");
-				}
-
-				@Override
-				public void onError(Throwable cause) throws Exception {
-					log.info("Error releasing pipeline ", cause);
-				}
-			});
+			player.release();
 			player = null;
 		}
 		if (recorder != null) {
-			recorder.release(new Continuation<Void>() {
-				@Override
-				public void onSuccess(Void result) throws Exception {
-					log.info("Pipeline released successfully");
-				}
-
-				@Override
-				public void onError(Throwable cause) throws Exception {
-					log.info("Error releasing pipeline ", cause);
-				}
-			});
+			recorder.release();
 			recorder = null;
 		}
+		h.testsByUid.remove(uid);
 	}
 }

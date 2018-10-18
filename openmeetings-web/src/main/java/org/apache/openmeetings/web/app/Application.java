@@ -48,16 +48,20 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.openmeetings.IApplication;
-import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
+import org.apache.openmeetings.db.dao.calendar.AppointmentDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.calendar.Appointment;
+import org.apache.openmeetings.db.entity.calendar.MeetingMember;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Invitation;
 import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.room.RoomGroup;
+import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
@@ -170,7 +174,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 	@Autowired
 	private ClientManager cm;
 	@Autowired
-	private MainService mainService;
+	private AppointmentDao appointmentDao;
 
 	@Override
 	protected void init() {
@@ -179,10 +183,6 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 		getApplicationSettings().setAccessDeniedPage(AccessDeniedPage.class);
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this, ctx, true));
 
-		// FIXME TODO WICKET-6588
-		if (getServletContext().getSessionCookieConfig().getName() == null) {
-			getServletContext().getSessionCookieConfig().setName("OMSESSIONID");
-		}
 		hazelcast.getCluster().getLocalMember().setStringAttribute(NAME_ATTR_KEY, hazelcast.getName());
 		hazelWsTopic = hazelcast.getTopic("default");
 		hazelWsTopic.addMessageListener(msg -> {
@@ -466,7 +466,7 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			} else {
 				boolean allowed = Type.contact != u.getType() && Type.external != u.getType();
 				if (allowed) {
-					allowed = get().mainService.isRoomAllowedToUser(r, u);
+					allowed = get().isRoomAllowedToUser(r, u);
 				}
 				if (allowed) {
 					link = getRoomUrlFragment(r.getId()).getLink();
@@ -485,6 +485,52 @@ public class Application extends AuthenticatedWebApplication implements IApplica
 			link = urlForPage(HashPage.class, new PageParameters().add(INVITATION_HASH, i.getHash()), baseUrl);
 		}
 		return link;
+	}
+
+	private static boolean checkAppointment(Appointment a, User u) {
+		if (a == null || a.isDeleted()) {
+			return false;
+		}
+		if (a.getOwner().getId().equals(u.getId())) {
+			log.debug("[isRoomAllowedToUser] appointed room, Owner entered");
+			return true;
+		}
+		for (MeetingMember mm : a.getMeetingMembers()) {
+			if (mm.getUser().getId().equals(u.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean checkGroups(Room r, User u) {
+		if (null == r.getGroups()) { //u.getGroupUsers() can't be null due to user was able to login
+			return false;
+		}
+		for (RoomGroup ro : r.getGroups()) {
+			for (GroupUser ou : u.getGroupUsers()) {
+				if (ro.getGroup().getId().equals(ou.getGroup().getId())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean isRoomAllowedToUser(Room r, User u) {
+		if (r == null) {
+			return false;
+		}
+		if (r.isAppointment()) {
+			Appointment a = appointmentDao.getByRoom(r.getId());
+			return checkAppointment(a, u);
+		} else {
+			if (r.getIspublic() || (r.getOwnerId() != null && r.getOwnerId().equals(u.getId()))) {
+				log.debug("[isRoomAllowedToUser] public ? {} , ownedId ? {} ALLOWED", r.getIspublic(), r.getOwnerId());
+				return true;
+			}
+			return checkGroups(r, u);
+		}
 	}
 
 	public static String urlForPage(Class<? extends Page> clazz, PageParameters pp, String _baseUrl) {

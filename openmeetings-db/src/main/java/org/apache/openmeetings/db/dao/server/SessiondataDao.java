@@ -18,10 +18,11 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static java.util.UUID.randomUUID;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,7 +50,7 @@ public class SessiondataDao {
 		log.debug("startsession :: startsession");
 
 		Sessiondata sd = new Sessiondata();
-		sd.setSessionId(UUID.randomUUID().toString());
+		sd.setSessionId(randomUUID().toString());
 		sd.setCreated(new Date());
 		sd.setUserId(null);
 

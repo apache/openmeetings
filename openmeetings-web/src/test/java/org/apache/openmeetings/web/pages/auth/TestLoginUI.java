@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_AT_REGISTER;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_EMAIL_VERIFICATION;
 import static org.junit.Assert.assertFalse;
@@ -28,7 +29,6 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 import org.apache.openmeetings.AbstractWicketTester;
 import org.apache.openmeetings.db.entity.basic.Configuration;
@@ -101,7 +101,7 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
-		String uid = UUID.randomUUID().toString();
+		String uid = randomUUID().toString();
 		performRegister(uid, "account.created");
 	}
 
@@ -124,12 +124,12 @@ public class TestLoginUI extends AbstractWicketTester {
 		tester.startPage(SignInPage.class);
 		tester.assertRenderedPage(SignInPage.class);
 
-		performForget(UUID.randomUUID().toString());
+		performForget(randomUUID().toString());
 	}
 
 	@Test
 	public void testReset() {
-		tester.startPage(ResetPage.class, new PageParameters().add(ResetPage.RESET_PARAM, UUID.randomUUID().toString()));
+		tester.startPage(ResetPage.class, new PageParameters().add(ResetPage.RESET_PARAM, randomUUID().toString()));
 		tester.assertRenderedPage(SignInPage.class);
 	}
 

@@ -46,7 +46,6 @@ public class TestConfig extends AbstractJUnitDefaults {
 
 	@Test
 	public void getConfigs() {
-
 		try {
 			List<Configuration> list = cfgDao.get(4, 6);
 
@@ -59,9 +58,8 @@ public class TestConfig extends AbstractJUnitDefaults {
 			}
 
 			assertEquals(list.size(), 6);
-
 		} catch (Exception err) {
-			log.error("[startConversion]", err);
+			log.error("[getConfigs]", err);
 		}
 
 	}

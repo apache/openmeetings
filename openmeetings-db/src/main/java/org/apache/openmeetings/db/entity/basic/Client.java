@@ -18,6 +18,8 @@
  */
 package org.apache.openmeetings.db.entity.basic;
 
+import static java.util.UUID.randomUUID;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,14 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.mina.util.ConcurrentHashSet;
 import org.apache.openmeetings.db.dao.user.UserDao;
+import org.apache.openmeetings.db.entity.IDataProviderEntity;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.apache.wicket.util.string.Strings;
 
 import com.github.openjson.JSONArray;
@@ -45,16 +47,17 @@ import com.github.openjson.JSONObject;
  * @author solomax
  *
  */
-public class Client implements IClient, IWsClient {
+public class Client implements IDataProviderEntity, IWsClient {
 	private static final long serialVersionUID = 1L;
 
 	public enum Activity {
 		broadcastA //sends Audio to the room
 		, broadcastV //sends Video to the room
 		, broadcastAV //sends Audio+Video to the room
-		, share
-		, record
-		, publish //sends A/V to external server
+	}
+	public enum StreamType {
+		webCam //sends Audio/Video to the room
+		, screen //send screen sharing
 	}
 	private final String sessionId;
 	private final int pageId;
@@ -72,15 +75,14 @@ public class Client implements IClient, IWsClient {
 	private int width = 0;
 	private int height = 0;
 	private String serverId = null;
-	private Long recordingId;
 
 	public Client(String sessionId, int pageId, Long userId, UserDao dao) {
 		this.sessionId = sessionId;
 		this.pageId = pageId;
 		this.user = dao.get(userId);
 		this.connectedSince = new Date();
-		uid = UUID.randomUUID().toString();
-		sid = UUID.randomUUID().toString();
+		uid = randomUUID().toString();
+		sid = randomUUID().toString();
 	}
 
 	@Override
@@ -102,24 +104,8 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public Long getUserId() {
 		return user.getId();
-	}
-
-	@Override
-	public String getLogin() {
-		return user.getLogin();
-	}
-
-	@Override
-	public String getFirstname() {
-		return user.getFirstname();
-	}
-
-	@Override
-	public String getLastname() {
-		return user.getLastname();
 	}
 
 	@Override
@@ -127,7 +113,6 @@ public class Client implements IClient, IWsClient {
 		return uid;
 	}
 
-	@Override
 	public String getSid() {
 		return sid;
 	}
@@ -225,9 +210,10 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	public Client addStream(StreamDesc stream) {
-		streams.put(stream.getUid(), stream);
-		return this;
+	public StreamDesc addStream(StreamType stype) {
+		StreamDesc sd = new StreamDesc(stype);
+		streams.put(sd.getUid(), sd);
+		return sd;
 	}
 
 	public Client removeStream(String _uid) {
@@ -237,6 +223,10 @@ public class Client implements IClient, IWsClient {
 
 	public List<StreamDesc> getStreams() {
 		return new ArrayList<>(streams.values());
+	}
+
+	public StreamDesc getStream(String _uid) {
+		return streams.get(_uid);
 	}
 
 	public Date getConnectedSince() {
@@ -288,7 +278,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public int getWidth() {
 		return width;
 	}
@@ -298,7 +287,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public int getHeight() {
 		return height;
 	}
@@ -308,7 +296,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public String getRemoteAddress() {
 		return remoteAddress;
 	}
@@ -318,7 +305,6 @@ public class Client implements IClient, IWsClient {
 		return this;
 	}
 
-	@Override
 	public String getServerId() {
 		return serverId;
 	}
@@ -327,33 +313,8 @@ public class Client implements IClient, IWsClient {
 		this.serverId = serverId;
 	}
 
-	@Override
-	public void setRecordingStarted(boolean recordingStarted) {
-		if (recordingStarted) {
-			activities.add(Activity.record);
-		} else {
-			activities.remove(Activity.record);
-		}
-	}
-
-	@Override
-	public Long getRecordingId() {
-		return recordingId;
-	}
-
-	@Override
-	public void setRecordingId(Long recordingId) {
-		this.recordingId = recordingId;
-	}
-
-	@Override
 	public Long getRoomId() {
 		return room == null ? null : room.getId();
-	}
-
-	@Override
-	public Room.Type getRoomType() {
-		return room == null ? null : room.getType();
 	}
 
 	public JSONObject toJson(boolean self) {
@@ -373,14 +334,14 @@ public class Client implements IClient, IWsClient {
 		}
 		JSONArray streamArr = new JSONArray();
 		for (Entry<String, StreamDesc> e : streams.entrySet()) {
-			streamArr.put(new JSONObject(e.getValue()));
+			streamArr.put(e.getValue().toJson());
 		}
 		JSONObject json = new JSONObject()
 				.put("user", u)
 				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
-				.put("activities", new JSONArray(activities))
+				.put("sactivities", new JSONArray(activities))
 				.put("streams", streamArr)
 				.put("width", width)
 				.put("height", height)
@@ -407,13 +368,14 @@ public class Client implements IClient, IWsClient {
 		Map<String, StreamDesc> ss = new HashMap<>(c.streams);
 		synchronized (streams) {
 			streams.clear();
-			streams.putAll(ss);
+			for (Entry<String, StreamDesc> e : ss.entrySet()) {
+				streams.put(e.getKey(), new StreamDesc(e.getValue()));
+			}
 		}
 		cam = c.cam;
 		mic = c.mic;
 		width = c.width;
 		height = c.height;
-		recordingId = c.recordingId;
 	}
 
 	@Override
@@ -449,28 +411,34 @@ public class Client implements IClient, IWsClient {
 	@Override
 	public String toString() {
 		return "Client [uid=" + uid + ", sessionId=" + sessionId + ", pageId=" + pageId + ", userId=" + user.getId() + ", room=" + (room == null ? null : room.getId())
-				+ ", rights=" + rights + ", activities=" + activities + ", connectedSince=" + connectedSince + "]";
+				+ ", rights=" + rights + ", sactivities=" + activities + ", connectedSince=" + connectedSince + "]";
 	}
 
-	public static class StreamDesc implements Serializable {
+	public class StreamDesc implements Serializable {
 		private static final long serialVersionUID = 1L;
-		public enum Type {
-			broadcast //sends Audio/Video to the room
-		}
-		private final String sid;
-		private final String uid;
-		private final Type type;
-		private int width;
-		private int height;
+		private final Set<Activity> sactivities = new ConcurrentHashSet<>();
+		private final String uuid;
+		private final StreamType type;
+		private int swidth;
+		private int sheight;
 
-		public StreamDesc(String sid, Type type) {
-			this(sid, UUID.randomUUID().toString(), type);
+		public StreamDesc(StreamDesc sd) {
+			this.uuid = sd.uuid;
+			this.type = sd.type;
+			this.swidth = sd.swidth;
+			this.sheight = sd.sheight;
+			sactivities.addAll(sd.sactivities);
 		}
 
-		public StreamDesc(String sid, String uid, Type type) {
-			this.sid = sid;
-			this.uid = uid;
+		public StreamDesc(StreamType type) {
+			this.uuid = randomUUID().toString();
 			this.type = type;
+			setActivities();
+			if (StreamType.webCam == type) {
+				boolean interview = room != null && Room.Type.interview == room.getType();
+				this.swidth = interview ? 320 : width;
+				this.sheight = interview ? 260 : height;
+			}
 		}
 
 		public String getSid() {
@@ -478,27 +446,72 @@ public class Client implements IClient, IWsClient {
 		}
 
 		public String getUid() {
-			return uid;
+			return uuid;
 		}
 
-		public Type getType() {
+		public StreamType getType() {
 			return type;
 		}
 
 		public int getWidth() {
-			return width;
+			return swidth;
 		}
 
-		public void setWidth(int width) {
-			this.width = width;
+		public StreamDesc setWidth(int width) {
+			this.swidth = width;
+			return this;
 		}
 
 		public int getHeight() {
-			return height;
+			return sheight;
 		}
 
-		public void setHeight(int height) {
-			this.height = height;
+		public StreamDesc setHeight(int height) {
+			this.sheight = height;
+			return this;
+		}
+
+		public StreamDesc setActivities() {
+			sactivities.clear();
+			if (StreamType.webCam == type) {
+				if (Client.this.hasActivity(Activity.broadcastA)) {
+					sactivities.add(Activity.broadcastA);
+				}
+				if (Client.this.hasActivity(Activity.broadcastV)) {
+					sactivities.add(Activity.broadcastV);
+				}
+			}
+			if (StreamType.screen == type) {
+				sactivities.add(Activity.broadcastV);
+			}
+			return this;
+		}
+
+		public boolean hasActivity(Activity a) {
+			return sactivities.contains(a);
+		}
+
+		public Client getClient() {
+			return Client.this;
+		}
+
+		private JSONArray getActivities() {
+			return new JSONArray(new ArrayList<>(sactivities));
+		}
+
+		public JSONObject toJson() {
+			return new JSONObject()
+					.put("uid", uuid)
+					.put("type", type.name())
+					.put("width", swidth)
+					.put("height", sheight)
+					.put("activities", getActivities())
+					.put("cuid", uid)
+					.put("user", new JSONObject()
+							.put("id", user.getId())
+							.put("firstName", user.getFirstname())
+							.put("lastName", user.getLastname())
+							);
 		}
 	}
 }

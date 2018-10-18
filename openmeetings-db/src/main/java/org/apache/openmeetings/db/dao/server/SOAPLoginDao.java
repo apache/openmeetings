@@ -18,9 +18,10 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static java.util.UUID.randomUUID;
+
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -48,7 +49,7 @@ public class SOAPLoginDao {
 		soapLogin.setUsed(false);
 		soapLogin.setRoomId(roomId);
 		soapLogin.setAllowSameURLMultipleTimes(allowSameURLMultipleTimes);
-		soapLogin.setHash(UUID.randomUUID().toString());
+		soapLogin.setHash(randomUUID().toString());
 		soapLogin.setRecordingId(recordingId);
 		soapLogin.setSessionHash(sessionHash);
 		soapLogin.setModerator(becomemoderator);

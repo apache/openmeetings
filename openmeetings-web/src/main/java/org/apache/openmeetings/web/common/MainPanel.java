@@ -104,7 +104,7 @@ public class MainPanel extends Panel {
 	private InviteUserToRoomDialog inviteUser;
 
 	@SpringBean
-	private ClientManager clientManager;
+	private ClientManager cm;
 	@SpringBean
 	private ConfigurationDao cfgDao;
 	@SpringBean
@@ -142,7 +142,7 @@ public class MainPanel extends Panel {
 				ExtendedClientProperties cp = WebSession.get().getExtendedProperties();
 				final Client client = new Client(getSession().getId(), msg.getKey().hashCode(), getUserId(), userDao);
 				uid = client.getUid();
-				clientManager.add(cp.update(client));
+				cm.add(cp.update(client));
 				log.debug("WebSocketBehavior::onConnect [uid: {}, session: {}, key: {}]", client.getUid(), msg.getSessionId(), msg.getKey());
 			}
 
@@ -165,7 +165,7 @@ public class MainPanel extends Panel {
 			protected void closeHandler(AbstractClientMessage msg) {
 				super.closeHandler(msg);
 				if (uid != null) {
-					clientManager.exit(getClient());
+					cm.exit(getClient());
 					uid = null;
 				}
 			}
@@ -431,6 +431,6 @@ public class MainPanel extends Panel {
 	}
 
 	public Client getClient() {
-		return clientManager.get(uid);
+		return cm.get(uid);
 	}
 }

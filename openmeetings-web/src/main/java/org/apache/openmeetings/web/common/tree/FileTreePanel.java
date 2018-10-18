@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.common.tree;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.commons.text.StringEscapeUtils.escapeEcmaScript;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PDF;
@@ -34,7 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.apache.openmeetings.db.dao.file.FileItemDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
@@ -175,7 +175,7 @@ public abstract class FileTreePanel extends Panel {
 
 							@Override
 							public CharSequence getCallbackFunctionBody(CallbackParameter... parameters) {
-								String dialogId = UUID.randomUUID().toString();
+								String dialogId = randomUUID().toString();
 
 								String statement = "var $drop = $(this);";
 								statement += "$('body').append('<div id=" + dialogId + ">" + getString("713") + "</div>');";
@@ -303,7 +303,7 @@ public abstract class FileTreePanel extends Panel {
 		boolean isRecording = p instanceof Recording;
 		BaseFileItem f = isRecording ? new Recording() : new FileItem();
 		f.setName(name);
-		f.setHash(UUID.randomUUID().toString());
+		f.setHash(randomUUID().toString());
 		f.setInsertedBy(getUserId());
 		f.setInserted(new Date());
 		f.setType(Type.Folder);

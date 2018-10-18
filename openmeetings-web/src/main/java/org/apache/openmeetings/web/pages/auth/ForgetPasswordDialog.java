@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.pages.auth;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getBaseUrl;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getMinLoginLength;
 import static org.apache.openmeetings.web.app.Application.urlForPage;
@@ -25,7 +26,6 @@ import static org.apache.openmeetings.web.app.Application.urlForPage;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.openmeetings.core.mail.MailHandler;
 import org.apache.openmeetings.db.dao.user.UserDao;
@@ -259,7 +259,7 @@ public class ForgetPasswordDialog extends AbstractFormDialog<String> {
 
 	private void sendHashByUser(User us) {
 		log.debug("User: " + us.getLogin());
-		us.setResethash(UUID.randomUUID().toString());
+		us.setResethash(randomUUID().toString());
 		us.setResetDate(new Date());
 		userDao.update(us, null);
 		String resetLink = urlForPage(ResetPage.class

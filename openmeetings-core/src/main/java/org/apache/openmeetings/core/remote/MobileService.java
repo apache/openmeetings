@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.commons.lang3.time.FastDateFormat;
-import org.apache.openmeetings.core.service.MainService;
 import org.apache.openmeetings.db.dao.basic.ChatDao;
 import org.apache.openmeetings.db.dao.basic.ConfigurationDao;
 import org.apache.openmeetings.db.dao.label.LabelDao;
@@ -56,7 +55,7 @@ import org.springframework.stereotype.Service;
 
 @Service("mobile.service")
 public class MobileService {
-	private static final Logger log = LoggerFactory.getLogger(MainService.class);
+	private static final Logger log = LoggerFactory.getLogger(MobileService.class);
 	@Autowired
 	private ConfigurationDao cfgDao;
 	@Autowired

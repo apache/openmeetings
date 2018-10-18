@@ -19,27 +19,37 @@
  */
 package org.apache.openmeetings.core.remote;
 
+import static java.util.UUID.randomUUID;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Collectors;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.directory.api.util.Strings;
+import org.apache.openmeetings.core.converter.IRecordingConverter;
+import org.apache.openmeetings.core.converter.InterviewConverter;
+import org.apache.openmeetings.core.converter.RecordingConverter;
 import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.Activity;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
+import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.Room.Right;
 import org.apache.openmeetings.db.manager.IClientManager;
@@ -60,18 +70,19 @@ import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 
 import com.github.openjson.JSONArray;
 import com.github.openjson.JSONObject;
 
 public class KurentoHandler {
-	private final static Logger log = LoggerFactory.getLogger(KurentoHandler.class);
-	private final static String MODE_TEST = "test";
-	private final static String TAG_KUID = "kuid";
-	private final static String TAG_MODE = "mode";
-	private final static String TAG_ROOM = "roomId";
-	private final static String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-	public final static String KURENTO_TYPE = "kurento";
+	private static final Logger log = LoggerFactory.getLogger(KurentoHandler.class);
+	private static final String MODE_TEST = "test";
+	private static final String TAG_KUID = "kuid";
+	private static final String TAG_MODE = "mode";
+	private static final String TAG_ROOM = "roomId";
+	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	public static final String KURENTO_TYPE = "kurento";
 	private long checkTimeout = 200; //ms
 	private String kurentoWsUrl;
 	private String turnUrl;
@@ -82,17 +93,27 @@ public class KurentoHandler {
 	private KurentoClient client;
 	private String kuid;
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
-	final Map<String, KStream> usersByUid = new ConcurrentHashMap<>();
+	final Map<String, KStream> streamsByUid = new ConcurrentHashMap<>();
 	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
 
 	@Autowired
 	private IClientManager cm;
+	@Autowired
+	private RecordingDao recDao;
+	@Autowired
+	private RecordingChunkDao chunkDao;
+	@Autowired
+	private TaskExecutor taskExecutor;
+	@Autowired
+	private RecordingConverter recordingConverter;
+	@Autowired
+	private InterviewConverter interviewConverter;
 
 	public void init() {
 		try {
 			// TODO check connection, reconnect, listeners etc.
 			client = KurentoClient.create(kurentoWsUrl);
-			kuid = UUID.randomUUID().toString(); //FIXME TODO regenerate on re-connect
+			kuid = randomUUID().toString(); //FIXME TODO regenerate on re-connect
 			client.getServerManager().addObjectCreatedListener(new KWatchDog());
 		} catch (Exception e) {
 			log.error("Fail to create Kurento client", e);
@@ -102,14 +123,14 @@ public class KurentoHandler {
 	public void destroy() {
 		if (client != null) {
 			for (Entry<Long, KRoom> e : rooms.entrySet()) {
-				e.getValue().close();
+				e.getValue().close(this);
 			}
 			rooms.clear();
 			for (Entry<String, KTestStream> e : testsByUid.entrySet()) {
-				e.getValue().release();
+				e.getValue().release(this);
 			}
 			testsByUid.clear();
-			usersByUid.clear();
+			streamsByUid.clear();
 			client.destroy();
 		}
 	}
@@ -122,8 +143,12 @@ public class KurentoHandler {
 		return map;
 	}
 
+	Transaction beginTransaction() {
+		return client.beginTransaction();
+	}
+
 	private MediaPipeline createTestPipeline() {
-		Transaction t = client.beginTransaction();
+		Transaction t = beginTransaction();
 		MediaPipeline pipe = client.createMediaPipeline(t);
 		pipe.addTag(t, TAG_KUID, kuid);
 		pipe.addTag(t, TAG_MODE, MODE_TEST);
@@ -148,20 +173,16 @@ public class KurentoHandler {
 							);
 					break;
 				case "record":
-				{
-					user = new KTestStream(_c, msg, createTestPipeline());
+					user = new KTestStream(this, _c, msg, createTestPipeline());
 					testsByUid.put(_c.getUid(), user);
-				}
 					break;
 				case "iceCandidate":
-				{
 					JSONObject candidate = msg.getJSONObject("candidate");
 					if (user != null) {
 						IceCandidate cand = new IceCandidate(candidate.getString("candidate"),
 								candidate.getString("sdpMid"), candidate.getInt("sdpMLineIndex"));
 						user.addCandidate(cand);
 					}
-				}
 					break;
 				case "wannaPlay":
 					WebSocketHelper.sendClient(_c, newTestKurentoMsg()
@@ -171,121 +192,162 @@ public class KurentoHandler {
 					break;
 				case "play":
 					if (user != null) {
-						user.play(_c, msg, createTestPipeline());
+						user.play(this, _c, msg, createTestPipeline());
 					}
 					break;
 			}
 		} else {
+			final String uid = msg.optString("uid");
 			final Client c = (Client)_c;
 
 			if (c == null || c.getRoomId() == null) {
 				log.warn("Incoming message from invalid user");
 				return;
 			}
+			KStream sender;
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			switch (cmdId) {
 				case "devicesAltered":
-					if (!msg.getBoolean("audio") && c.hasActivity(Client.Activity.broadcastA)) {
-						c.remove(Client.Activity.broadcastA);
+					if (!msg.getBoolean("audio") && c.hasActivity(Activity.broadcastA)) {
+						c.remove(Activity.broadcastA);
 					}
-					if (!msg.getBoolean("video") && c.hasActivity(Client.Activity.broadcastV)) {
-						c.remove(Client.Activity.broadcastV);
+					if (!msg.getBoolean("video") && c.hasActivity(Activity.broadcastV)) {
+						c.remove(Activity.broadcastV);
 					}
+					c.getStream(uid).setActivities();
 					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
 					break;
 				case "toggleActivity":
-					toggleActivity(c, Client.Activity.valueOf(msg.getString("activity")));
+					toggleActivity(c, Activity.valueOf(msg.getString("activity")));
 					break;
 				case "broadcastStarted":
-				{
-					KStream stream = getByUid(c.getUid());
-					if (stream == null) {
+					StreamDesc sd = c.getStream(uid);
+					sender = getByUid(uid);
+					if (sender == null) {
 						KRoom room = getRoom(c.getRoomId());
-						stream = room.join(this, c);
+						sender = room.join(sd);
 					}
-					stream.startBroadcast(this, c, msg.getString("sdpOffer"));
-				}
+					sender.startBroadcast(this, sd, msg.getString("sdpOffer"));
 					break;
 				case "onIceCandidate":
-				{
-					KStream sender = getByUid(msg.getString("uid"));
+					sender = getByUid(uid);
 					if (sender != null) {
 						JSONObject candidate = msg.getJSONObject("candidate");
 						IceCandidate cand = new IceCandidate(
 								candidate.getString("candidate")
 								, candidate.getString("sdpMid")
 								, candidate.getInt("sdpMLineIndex"));
-						sender.addCandidate(cand, c.getUid());
+						sender.addCandidate(cand, msg.getString("luid"));
 					}
-				}
 					break;
 				case "addListener":
-				{
-					KStream sender = getByUid(msg.getString("sender"));
+					sender = getByUid(msg.getString("sender"));
 					if (sender != null) {
-						sender.addListener(this, c, msg.getString("sdpOffer"));
+						sender.addListener(this, c.getSid(), c.getUid(), msg.getString("sdpOffer"));
 					}
-				}
 					break;
 			}
 		}
 	}
 
 	private static boolean isBroadcasting(final Client c) {
-		return c.hasAnyActivity(Client.Activity.broadcastA, Client.Activity.broadcastV);
+		return c.hasAnyActivity(Activity.broadcastA, Activity.broadcastV);
 	}
 
-	public void toggleActivity(Client c, Client.Activity a) {
+	private void checkStreams(Long roomId) {
+		KRoom room = getRoom(roomId);
+		if (room.isRecording()) {
+			List<Client> clients = cm.listByRoom(roomId).parallelStream().filter(c -> c.getStreams().isEmpty()).collect(Collectors.toList());
+			if (clients.isEmpty()) {
+				log.info("No more streams in the room, stopping recording");
+				room.stopRecording(this, null, recDao);
+			}
+		}
+	}
+
+	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, c.getRoomId());
 
 		if (!activityAllowed(c, a, c.getRoom())) {
-			if (a == Client.Activity.broadcastA || a == Client.Activity.broadcastAV) {
+			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
 				c.allow(Room.Right.audio);
 			}
-			if (!c.getRoom().isAudioOnly() && (a == Client.Activity.broadcastV || a == Client.Activity.broadcastAV)) {
+			if (!c.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
 				c.allow(Room.Right.video);
 			}
 		}
 		if (activityAllowed(c, a, c.getRoom())) {
 			boolean wasBroadcasting = isBroadcasting(c);
-			if (a == Client.Activity.broadcastA && !c.isMicEnabled()) {
+			if (a == Activity.broadcastA && !c.isMicEnabled()) {
 				return;
 			}
-			if (a == Client.Activity.broadcastV && !c.isCamEnabled()) {
+			if (a == Activity.broadcastV && !c.isCamEnabled()) {
 				return;
 			}
-			if (a == Client.Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
+			if (a == Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
 				return;
 			}
 			c.toggle(a);
 			if (!isBroadcasting(c)) {
 				//close
-				KStream s = getByUid(c.getUid());
-				if (s != null) {
-					cm.update(c.removeStream(c.getUid()));
-					s.stopBroadcast();
+				boolean changed = false;
+				for (StreamDesc sd : c.getStreams()) {
+					KStream s = getByUid(sd.getUid());
+					if (s != null) {
+						c.removeStream(sd.getUid());
+						changed = true;
+						s.stopBroadcast(this);
+					}
+				}
+				if (changed) {
+					cm.update(c);
+					checkStreams(c.getRoomId());
 				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 				//FIXME TODO update interview buttons
 			} else if (!wasBroadcasting) {
 				//join
-				StreamDesc sd = new StreamDesc(c.getSid(), c.getUid(), StreamDesc.Type.broadcast);
-				sd.setWidth(c.getWidth());
-				sd.setHeight(c.getHeight());
-				cm.update(c.addStream(sd));
+				StreamDesc sd = c.addStream(StreamType.webCam);
+				cm.update(c);
 				log.debug("User {}: has started broadcast", sd.getUid());
 				sendClient(sd.getSid(), newKurentoMsg()
 						.put("id", "broadcast")
-						.put("uid", sd.getUid())
-						.put("stream", new JSONObject(sd))
-						.put("iceServers", getTurnServers(false))
-						.put("client", c.toJson(true).put("type", "room"))); // FIXME TODO add multi-stream support
+						.put("stream", sd.toJson())
+						.put("iceServers", getTurnServers(false)));
 				//FIXME TODO update interview buttons
 			} else {
 				//constraints were changed
+				for (StreamDesc sd : c.getStreams()) {
+					if (StreamType.webCam == sd.getType()) {
+						sd.setActivities();
+						cm.update(c);
+						break;
+					}
+				}
 				WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), c, RoomMessage.Type.rightUpdated, c.getUid()));
 			}
 		}
+	}
+
+	public void startRecording(Client c) {
+		getRoom(c.getRoomId()).startRecording(c, recDao);
+	}
+
+	public void stopRecording(Client c) {
+		getRoom(c.getRoomId()).stopRecording(this, c, recDao);
+	}
+
+	void startConvertion(Recording rec) {
+		IRecordingConverter conv = rec.isInterview() ? interviewConverter : recordingConverter;
+		taskExecutor.execute(() -> conv.startConversion(rec));
+	}
+
+	public boolean isRecording(Long roomId) {
+		return getRoom(roomId).isRecording();
+	}
+
+	public JSONObject getRecordingUser(Long roomId) {
+		return getRoom(roomId).getRecordingUser();
 	}
 
 	public void leaveRoom(Client c) {
@@ -312,44 +374,44 @@ public class KurentoHandler {
 	}
 
 	public void remove(IWsClient _c) {
-		if (_c == null) {
+		if (client == null ||_c == null) {
 			return;
 		}
 		final String uid = _c.getUid();
 		final boolean test = !(_c instanceof Client);
-		IKStream u = test ? getTestByUid(uid) : getByUid(uid);
-		if (u != null) {
-			u.release();
-			if (test) {
-				testsByUid.remove(uid);
-			} else {
-				usersByUid.remove(uid);
-			}
-		}
 		if (test) {
+			IKStream s = getTestByUid(uid);
+			if (s != null) {
+				s.release(this);
+			}
 			return;
 		}
 		Client c = (Client)_c;
-		if (c.getRoomId() != null) {
-			KRoom room = rooms.get(c.getRoomId());
-			if (room != null) {
-				room.leave(c);
+		for (StreamDesc sd : c.getStreams()) {
+			IKStream s = getByUid(sd.getUid());
+			if (s != null) {
+				s.release(this);
 			}
+		}
+		if (c.getRoomId() != null) {
+			KRoom room = getRoom(c.getRoomId());
+			room.leave(this, c);
+			checkStreams(c.getRoomId());
 		}
 	}
 
-	public KRoom getRoom(Long roomId) {
+	private KRoom getRoom(Long roomId) {
 		log.debug("Searching for room {}", roomId);
 		KRoom room = rooms.get(roomId);
 
 		if (room == null) {
 			log.debug("Room {} does not exist. Will create now!", roomId);
-			Transaction t = client.beginTransaction();
+			Transaction t = beginTransaction();
 			MediaPipeline pipe = client.createMediaPipeline(t);
 			pipe.addTag(t, TAG_KUID, kuid);
 			pipe.addTag(t, TAG_ROOM, String.valueOf(roomId));
 			t.commit();
-			room = new KRoom(roomId, pipe);
+			room = new KRoom(roomId, pipe, chunkDao);
 			rooms.put(roomId, room);
 		}
 		log.debug("Room {} found!", roomId);
@@ -357,7 +419,7 @@ public class KurentoHandler {
 	}
 
 	private KStream getByUid(String uid) {
-		return uid == null ? null : usersByUid.get(uid);
+		return uid == null ? null : streamsByUid.get(uid);
 	}
 
 	private KTestStream getTestByUid(String uid) {
@@ -372,7 +434,7 @@ public class KurentoHandler {
 		return newKurentoMsg().put(TAG_MODE, MODE_TEST);
 	}
 
-	public static boolean activityAllowed(Client c, Client.Activity a, Room room) {
+	public static boolean activityAllowed(Client c, Activity a, Room room) {
 		boolean r = false;
 		switch (a) {
 			case broadcastA:
@@ -480,7 +542,7 @@ public class KurentoHandler {
 								return;
 							} else if (r != null) {
 								rooms.remove(r.getRoomId());
-								r.close();
+								r.close(KurentoHandler.this);
 							}
 						}
 					} catch(Exception e) {
@@ -516,7 +578,7 @@ public class KurentoHandler {
 					if (stream != null && stream.contains(tags.get("uid"))) {
 						return;
 					}
-					log.warn("Invalid Endpoint {} detected, will be dropped", point.getId());
+					log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
 					point.release();
 				}, checkTimeout, MILLISECONDS);
 			}

@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.service.room;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.util.ApplicationHelper.ensureApplication;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 
@@ -26,7 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.core.mail.MailHandler;
@@ -190,7 +190,7 @@ public class InvitationManager implements IInvitationManager {
 		Invitation invitation = _invitation;
 		if (null == _invitation) {
 			invitation = new Invitation();
-			invitation.setHash(UUID.randomUUID().toString());
+			invitation.setHash(randomUUID().toString());
 		}
 
 		invitation.setPasswordProtected(isPasswordProtected);

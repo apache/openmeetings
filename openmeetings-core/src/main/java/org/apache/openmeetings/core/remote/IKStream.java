@@ -19,5 +19,5 @@
 package org.apache.openmeetings.core.remote;
 
 public interface IKStream {
-	void release();
+	void release(KurentoHandler h);
 }

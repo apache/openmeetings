@@ -9,19 +9,14 @@ var VideoUtil = (function() {
 	function _getVid(uid) {
 		return 'video' + uid;
 	}
-	function _isSharing(c) {
-		return 'sharing' === c.type && c.screenActivities.includes('sharing');
+	function _isSharing(sd) {
+		return 'screen' === sd.type;
 	}
-	function _isRecording(c) {
-		return 'sharing' === c.type
-			&& c.screenActivities.includes('recording')
-			&& !c.screenActivities.includes('sharing');
+	function _hasAudio(sd) {
+		return !sd || sd.activities.includes(MIC_ACTIVITY);
 	}
-	function _hasAudio(c) {
-		return !c || c.activities.includes(MIC_ACTIVITY);
-	}
-	function _hasVideo(c) {
-		return !c || c.activities.includes(CAM_ACTIVITY);
+	function _hasVideo(sd) {
+		return !sd || sd.activities.includes(CAM_ACTIVITY);
 	}
 	function _getRects(sel, excl) {
 		const list = [], elems = $(sel);
@@ -113,6 +108,7 @@ var VideoUtil = (function() {
 	}
 	function _cleanPeer(peer) {
 		if (!!peer) {
+			peer.cleaned = true;
 			const pc = peer.peerConnection;
 			if (!!pc && !!pc.getLocalStreams()) {
 				pc.getLocalStreams().forEach(function(stream) {
@@ -123,10 +119,13 @@ var VideoUtil = (function() {
 			peer = null;
 		}
 	}
+	function _isEdge() {
+		const b = kurentoUtils.WebRtcPeer.browser;
+		return b.name === 'Edge';
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
-	self.isRecording = _isRecording;
 	self.hasAudio = _hasAudio;
 	self.hasVideo = _hasVideo;
 	self.getRects = _getRects;
@@ -141,5 +140,6 @@ var VideoUtil = (function() {
 		}
 		return opts;
 	};
+	self.isEdge = _isEdge;
 	return self;
 })();

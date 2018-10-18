@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.web.room.wb;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_ID;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_FILE_TYPE;
 import static org.apache.openmeetings.db.dto.room.Whiteboard.ATTR_SLIDE;
@@ -46,7 +47,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -550,7 +550,7 @@ public class WbPanel extends AbstractWbPanel {
 	public void sendFileToWb(final BaseFileItem fi, boolean clean) {
 		if (isVisible() && fi.getId() != null) {
 			Whiteboards wbs = wbm.get(roomId);
-			String wuid = UUID.randomUUID().toString();
+			String wuid = randomUUID().toString();
 			Whiteboard wb = wbs.get(wbs.getActiveWb());
 			if (wb == null) {
 				return;
@@ -662,7 +662,7 @@ public class WbPanel extends AbstractWbPanel {
 		FileItem f = new FileItem();
 		f.setType(BaseFileItem.Type.WmlFile);
 		f.setRoomId(roomId);
-		f.setHash(UUID.randomUUID().toString());
+		f.setHash(randomUUID().toString());
 		f.setName(name);
 		f = fileDao.update(f);
 		return wb.save(f.getFile().toPath());

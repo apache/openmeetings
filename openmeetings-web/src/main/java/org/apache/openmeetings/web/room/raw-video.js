@@ -1,12 +1,12 @@
 /* Licensed under the Apache License, Version 2.0 (the "License") http://www.apache.org/licenses/LICENSE-2.0 */
 var Video = (function() {
 	const self = {};
-	let c, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
-		, lastVolume = 50, aCtx, aSrc, gainNode
+	let sd, v, vc, t, f, size, vol, slider, handle, video, rtcPeer
+		, lastVolume = 50, muted = false, aCtx, aSrc, aDest, gainNode
 		, lm, level, userSpeaks = false;
 
 	function _getName() {
-		return c.user.firstName + ' ' + c.user.lastName;
+		return sd.user.firstName + ' ' + sd.user.lastName;
 	}
 	function _getExtra() {
 		return t.height() + 2 + (f.is(':visible') ? f.height() : 0);
@@ -45,21 +45,23 @@ var Video = (function() {
 		}
 	}
 	function _createSendPeer(msg) {
-		VideoSettings.constraints(c, function(cnts) {
-			if ((VideoUtil.hasVideo(c) && !cnts.video) || (VideoUtil.hasAudio(c) && !cnts.audio)) {
+		VideoSettings.constraints(sd, function(cnts) {
+			if ((VideoUtil.hasVideo(sd) && !cnts.video) || (VideoUtil.hasAudio(sd) && !cnts.audio)) {
 				VideoManager.sendMessage({
 					id : 'devicesAltered'
+					, uid: sd.uid
 					, audio: !!cnts.audio
 					, video: !!cnts.video
 				});
 			}
 			if (!cnts.audio && !cnts.video) {
 				OmUtil.error("Requested devices are not available");
-				VideoManager.close(c.uid)
+				VideoManager.close(sd.uid)
 				return;
 			}
 			navigator.mediaDevices.getUserMedia(cnts)
 				.then(function(stream) {
+					let _stream = stream;
 					if (stream.getAudioTracks().length !== 0) {
 						vol.show();
 						lm = vc.find('.level-meter')
@@ -69,12 +71,21 @@ var Video = (function() {
 						gainNode = aCtx.createGain();
 						aSrc = aCtx.createMediaStreamSource(stream);
 						aSrc.connect(gainNode);
-						gainNode.connect(aCtx.destination);
+						if (VideoUtil.isEdge()) {
+							gainNode.connect(aCtx.destination);
+						} else {
+							aDest = aCtx.createMediaStreamDestination();
+							gainNode.connect(aDest);
+							_stream = aDest.stream;
+							stream.getVideoTracks().forEach(function(track) {
+								_stream.addTrack(track);
+							});
+						}
 						_handleVolume(lastVolume);
 					}
 					const options = VideoUtil.addIceServers({
 						localVideo: video[0]
-						, videoStream: stream
+						, videoStream: _stream
 						, mediaConstraints: cnts
 						, onicecandidate: self.onIceCandidate
 					}, msg);
@@ -86,13 +97,14 @@ var Video = (function() {
 							}
 							level = MicLevel();
 							level.meter(rtcPeer, _micActivity, OmUtil.error);
-							this.generateOffer(function(error, offerSdp, wp) {
+							this.generateOffer(function(error, offerSdp) {
 								if (error) {
 									return OmUtil.error('Sender sdp offer error ' + error);
 								}
 								OmUtil.log('Invoking Sender SDP offer callback function');
 								VideoManager.sendMessage({
 									id : 'broadcastStarted'
+									, uid: sd.uid
 									, sdpOffer: offerSdp
 								});
 							});
@@ -115,13 +127,13 @@ var Video = (function() {
 					return OmUtil.error(error);
 				}
 				this.generateOffer(function(error, offerSdp) {
-					if (error) {
+					if (!this.cleaned && error) {
 						return OmUtil.error('Receiver sdp offer error ' + error);
 					}
 					OmUtil.log('Invoking Receiver SDP offer callback function');
 					VideoManager.sendMessage({
 						id : 'addListener'
-						, sender: c.uid
+						, sender: sd.uid
 						, sdpOffer: offerSdp
 					});
 				});
@@ -145,8 +157,10 @@ var Video = (function() {
 	}
 	function _handleVolume(val) {
 		handle.text(val);
-		if (c.self) { //FIXME TODO multistream support
-			gainNode.gain.value = val / 100;
+		if (sd.self) {
+			if (!!gainNode) {
+				gainNode.gain.value = val / 100;
+			}
 		} else {
 			video[0].volume = val / 100;
 		}
@@ -165,6 +179,7 @@ var Video = (function() {
 		if (!slider) {
 			return;
 		}
+		muted = mute;
 		if (mute) {
 			const val = slider.slider('option', 'value');
 			if (val > 0) {
@@ -189,7 +204,7 @@ var Video = (function() {
 			contSel = '.room.box';
 		}
 		$(contSel).append(OmUtil.tmpl('#user-video', _id).attr('title', name)
-				.attr('data-client-uid', c.type + c.cuid).data(self));
+				.attr('data-client-uid', sd.type + sd.cuid).data(self));
 		return contSel;
 	}
 	function _initDialog(v, opts) {
@@ -210,30 +225,31 @@ var Video = (function() {
 					, h = ui.size.height - t.height() - 4 - (f.is(':visible') ? f.height() : 0);
 				_resize(w, h);
 			});
-			if (VideoUtil.isSharing(c)) {
+			if (VideoUtil.isSharing(sd)) {
 				v.on('dialogclose', function() {
-					VideoManager.close(c.uid, true);
+					VideoManager.close(sd.uid, true);
 				});
 			}
 			v.dialogExtend({
 				icons: {
 					'collapse': 'ui-icon-minus'
 				}
-				, closable: VideoUtil.isSharing(c)
+				, closable: VideoUtil.isSharing(sd)
 				, collapsable: true
 				, dblclick: 'collapse'
 			});
 		}
 	}
 	function _init(msg) {
-		c = msg.client;
-		c.activities = c.activities.sort();
-		size = {width: c.width, height: c.height};
-		const _id = VideoUtil.getVid(c.uid)
+		sd = msg.stream;
+		sd.activities = sd.activities.sort();
+		size = {width: sd.width, height: sd.height};
+		const _id = VideoUtil.getVid(sd.uid)
 			, name = _getName()
-			, _w = c.width
-			, _h = c.height
+			, _w = sd.width
+			, _h = sd.height
 			, opts = Room.getOptions();
+		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
 		v = $('#' + _id);
 		v.dialog({
@@ -251,7 +267,7 @@ var Video = (function() {
 		_initDialog(v, opts);
 		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
 		f = v.find('.footer');
-		if (!VideoUtil.isSharing(c)) {
+		if (!VideoUtil.isSharing(sd)) {
 			v.parent().find('.ui-dialog-titlebar-buttonpane')
 				.append($('#video-volume-btn').children().clone())
 				.append($('#video-refresh-btn').children().clone());
@@ -264,8 +280,7 @@ var Video = (function() {
 				})
 				.click(function(e) {
 					e.stopImmediatePropagation();
-					const muted = $(this).find('.ui-icon').hasClass('ui-icon-volume-off');
-					roomAction('mute', JSON.stringify({uid: c.cuid, mute: !muted}));
+					roomAction('mute', JSON.stringify({uid: sd.uid, mute: !muted}));
 					_mute(!muted);
 					volume.hide();
 					return false;
@@ -307,33 +322,26 @@ var Video = (function() {
 
 		_refresh(msg);
 
-		//FIXME TODO multiple streams
-		v.dialog('widget').css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL), c.width, c.height + 25));
+		v.dialog('widget').css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL), sd.width, sd.height + 25));
 		return v;
 	}
 	function _update(_c) {
-		const opts = Room.getOptions()
-			, prevA = c.activities;
-		c.screenActivities = _c.screenActivities;
-		c.activities = _c.activities.sort();
-		c.user.firstName = _c.user.firstName;
-		c.user.lastName = _c.user.lastName;
-		if (opts.interview && c.pod !== _c.pod) {
-			c.pod = _c.pod;
-			v.dialog('option', 'appendTo', '.pod.pod-' + c.pod);
-		}
+		const prevA = sd.activities;
+		sd.activities = _c.activities.sort();
+		sd.user.firstName = _c.user.firstName;
+		sd.user.lastName = _c.user.lastName;
 		const name = _getName();
 		v.dialog('option', 'title', name).parent().find('.ui-dialog-titlebar').attr('title', name);
-		const same = prevA.length === c.activities.length && prevA.every(function(value, index) { return value === c.activities[index]})
-		if (c.self && !same) {
+		const same = prevA.length === sd.activities.length && prevA.every(function(value, index) { return value === sd.activities[index]})
+		if (sd.self && !same) {
 			_refresh();
 		}
 	}
 	function _refresh(msg) {
 		_cleanup();
-		const _id = VideoUtil.getVid(c.uid);
-		const hasVideo = VideoUtil.hasVideo(c)
-			, imgUrl = 'profile/' + c.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
+		const _id = VideoUtil.getVid(sd.uid);
+		const hasVideo = VideoUtil.hasVideo(sd)
+			, imgUrl = 'profile/' + sd.user.id + '?anti=' + new Date().getTime();  //TODO add normal URL ????
 		video = $(hasVideo ? '<video>' : '<audio>').attr('id', 'vid' + _id)
 			.width(vc.width()).height(vc.height())
 			.prop('autoplay', true).prop('controls', false);
@@ -343,8 +351,8 @@ var Video = (function() {
 			vc.addClass('audio-only').css('background-image', 'url(' + imgUrl + ')');
 		}
 		vc.append(video);
-		const hasAudio = VideoUtil.hasAudio(c);
-		if (c.self) { //FIXME TODO multi-stream
+		const hasAudio = VideoUtil.hasAudio(sd);
+		if (sd.self) {
 			_createSendPeer(msg);
 			_handleMicStatus(hasAudio);
 		} else {
@@ -352,6 +360,7 @@ var Video = (function() {
 		}
 		if (hasAudio) {
 			vol.show();
+			_mute(muted);
 		} else {
 			vol.hide();
 			v.parent().find('.dropdown-menu.video.volume').hide();
@@ -360,7 +369,7 @@ var Video = (function() {
 	function _setRights(_r) {
 	}
 	function _cleanup() {
-		OmUtil.log('Disposing participant ' + c.uid);
+		OmUtil.log('Disposing participant ' + sd.uid);
 		if (!!gainNode) {
 			gainNode.disconnect();
 			gainNode = null;
@@ -369,6 +378,10 @@ var Video = (function() {
 			VideoUtil.cleanStream(aSrc.mediaStream);
 			aSrc.disconnect();
 			aSrc = null;
+		}
+		if (!!aDest) {
+			aDest.disconnect();
+			aDest = null;
 		}
 		if (!!aCtx) {
 			if (!!aCtx.destination) {
@@ -396,24 +409,26 @@ var Video = (function() {
 	}
 	function _reattachStream() {
 		if (!!rtcPeer && !!video && video.length > 0) {
-			video[0].srcObject = c.self ? rtcPeer.getLocalStream() : rtcPeer.getRemoteStream();
+			video[0].srcObject = sd.self ? rtcPeer.getLocalStream() : rtcPeer.getRemoteStream();
 		}
 	}
 
 	self.update = _update;
 	self.refresh = _refresh;
 	self.mute = _mute;
-	self.isMuted = function() { return 0 === slider.slider('option', 'value'); };
+	self.isMuted = function() { return muted; };
 	self.init = _init;
-	self.client = function() { return c; };
+	self.stream = function() { return sd; };
 	self.setRights = _setRights;
 	self.getPeer = function() { return rtcPeer; };
-	self.onIceCandidate = function(candidate, wp) {
+	self.onIceCandidate = function(candidate) {
+		const opts = Room.getOptions();
 		OmUtil.log("Local candidate" + JSON.stringify(candidate));
 		VideoManager.sendMessage({
 			id: 'onIceCandidate'
 			, candidate: candidate
-			, uid: c.uid
+			, uid: sd.uid
+			, luid: sd.self ? sd.uid : opts.uid
 		});
 	};
 	self.resizePod = _resizePod;

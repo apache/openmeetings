@@ -18,13 +18,13 @@
  */
 package org.apache.openmeetings.backup;
 
+import static java.util.UUID.randomUUID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.SENT_FOLDER_ID;
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.TRASH_FOLDER_ID;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_RECORD_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.BCKP_ROOM_FILES;
 import static org.apache.openmeetings.util.OmFileHelper.CSS_DIR;
-import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_FLV;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_JPG;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_MP4;
 import static org.apache.openmeetings.util.OmFileHelper.EXTENSION_PNG;
@@ -108,7 +108,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -153,7 +152,7 @@ import org.apache.openmeetings.db.entity.calendar.OmCalendar;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.file.FileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
-import org.apache.openmeetings.db.entity.record.RecordingMetaData;
+import org.apache.openmeetings.db.entity.record.RecordingChunk;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
@@ -555,14 +554,14 @@ public class BackupImport {
 			if (u.getAddress() != null && u.getAddress().getEmail() != null && User.Type.user == u.getType()) {
 				if (userEmailMap.containsKey(u.getAddress().getEmail())) {
 					log.warn("Email is duplicated for user " + u.toString());
-					String updateEmail = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getAddress().getEmail());
+					String updateEmail = String.format("modified_by_import_<%s>%s", randomUUID(), u.getAddress().getEmail());
 					u.getAddress().setEmail(updateEmail);
 				}
 				userEmailMap.put(u.getAddress().getEmail(), Integer.valueOf(userEmailMap.size()));
 			}
 			if (userLoginMap.containsKey(u.getLogin())) {
 				log.warn("Login is duplicated for user " + u.toString());
-				String updateLogin = String.format("modified_by_import_<%s>%s", UUID.randomUUID(), u.getLogin());
+				String updateLogin = String.format("modified_by_import_<%s>%s", randomUUID(), u.getLogin());
 				u.setLogin(updateLogin);
 			}
 			userLoginMap.put(u.getLogin(), Integer.valueOf(userLoginMap.size()));
@@ -572,7 +571,7 @@ public class BackupImport {
 				}
 			}
 			if (u.getType() == User.Type.contact && u.getLogin().length() < minLoginLength) {
-				u.setLogin(UUID.randomUUID().toString());
+				u.setLogin(randomUUID().toString());
 			}
 
 			String tz = u.getTimeZoneId();
@@ -791,20 +790,20 @@ public class BackupImport {
 			if (r.getOwnerId() != null) {
 				r.setOwnerId(userMap.get(r.getOwnerId()));
 			}
-			if (r.getMetaData() != null) {
-				for (RecordingMetaData meta : r.getMetaData()) {
-					meta.setId(null);
-					meta.setRecording(r);
+			if (r.getChunks() != null) {
+				for (RecordingChunk chunk : r.getChunks()) {
+					chunk.setId(null);
+					chunk.setRecording(r);
 				}
 			}
 			if (!Strings.isEmpty(r.getHash()) && r.getHash().startsWith(RECORDING_FILE_NAME)) {
 				String name = getFileName(r.getHash());
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 				fileMap.put(String.format(FILE_NAME_FMT, name, EXTENSION_JPG), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_PNG));
-				fileMap.put(String.format("%s.%s.%s", name, EXTENSION_FLV, EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
+				fileMap.put(String.format("%s.%s.%s", name, "flv", EXTENSION_MP4), String.format(FILE_NAME_FMT, r.getHash(), EXTENSION_MP4));
 			}
 			if (Strings.isEmpty(r.getHash())) {
-				r.setHash(UUID.randomUUID().toString());
+				r.setHash(randomUUID().toString());
 			}
 			r = recordingDao.update(r);
 			fileItemMap.put(recId, r.getId());
@@ -931,7 +930,7 @@ public class BackupImport {
 				file.setParentId(null);
 			}
 			if (Strings.isEmpty(file.getHash())) {
-				file.setHash(UUID.randomUUID().toString());
+				file.setHash(randomUUID().toString());
 			}
 			file = fileItemDao.update(file);
 			result.add(file);

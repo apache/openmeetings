@@ -26,7 +26,7 @@ var Shape = function(wb) {
 	shape.updateCreated = function(o) {
 		return o;
 	};
-	shape.mouseUp = function(o) {
+	shape.mouseUp = function() {
 		const canvas = this;
 		shape.isDown = false;
 		shape.obj.setCoords();

@@ -21,23 +21,49 @@
  */
 package org.apache.openmeetings.core.remote;
 
-import java.io.Closeable;
+import static java.util.UUID.randomUUID;
+
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.openmeetings.core.util.WebSocketHelper;
+import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
+import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
+import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.file.BaseFileItem;
+import org.apache.openmeetings.db.entity.record.Recording;
+import org.apache.openmeetings.db.entity.room.Room;
+import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.util.ws.RoomMessage;
+import org.apache.openmeetings.util.CalendarPatterns;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KRoom implements Closeable {
-	private final static Logger log = LoggerFactory.getLogger(KRoom.class);
+import com.github.openjson.JSONObject;
 
-	private final Map<String, KStream> participants = new ConcurrentHashMap<>();
-	private final MediaPipeline pipeline;
-	private final Long roomId;
+public class KRoom {
+	private static final Logger log = LoggerFactory.getLogger(KRoom.class);
+
+	private final Map<String, KStream> streams = new ConcurrentHashMap<>();
+	final MediaPipeline pipeline;
+	final Long roomId;
+	final AtomicBoolean recordingStarted = new AtomicBoolean(false);
+	Long recordingId = null;
+	final RecordingChunkDao chunkDao;
+	private JSONObject recordingUser = new JSONObject();
+
+	public KRoom(Long roomId, MediaPipeline pipeline, RecordingChunkDao chunkDao) {
+		this.roomId = roomId;
+		this.pipeline = pipeline;
+		this.chunkDao = chunkDao;
+		log.info("ROOM {} has been created", roomId);
+	}
 
 	public Long getRoomId() {
 		return roomId;
@@ -47,40 +73,102 @@ public class KRoom implements Closeable {
 		return pipeline.getId();
 	}
 
-	public KRoom(Long roomId, MediaPipeline pipeline) {
-		this.roomId = roomId;
-		this.pipeline = pipeline;
-		log.info("ROOM {} has been created", roomId);
-	}
-
-	public KStream join(final KurentoHandler h, final Client c) {
-		log.info("ROOM {}: join participant {}", roomId, c.getUid());
-		final KStream stream = new KStream(c, this.pipeline);
-		participants.put(stream.getUid(), stream);
-		h.usersByUid.put(stream.getUid(), stream);
+	public KStream join(final StreamDesc sd) {
+		log.info("ROOM {}: join client {}, stream: {}", roomId, sd.getClient().getUser().getLogin(), sd.getUid());
+		final KStream stream = new KStream(sd, this);
+		streams.put(stream.getUid(), stream);
 		return stream;
 	}
 
 	public Collection<KStream> getParticipants() {
-		return participants.values();
+		return streams.values();
 	}
 
-	public void leave(final Client c) {
-		for (Map.Entry<String, KStream> e : participants.entrySet()) {
+	public void leave(final KurentoHandler h, final Client c) {
+		for (Map.Entry<String, KStream> e : streams.entrySet()) {
 			e.getValue().remove(c);
 		}
-		KStream stream = participants.remove(c.getUid());
+		KStream stream = streams.remove(c.getUid());
 		if (stream != null) {
-			stream.release();
+			stream.release(h);
 		}
 	}
 
-	@Override
-	public void close() {
-		for (final KStream user : participants.values()) {
-			user.release();
+	public boolean isRecording() {
+		return recordingStarted.get();
+	}
+
+	public JSONObject getRecordingUser() {
+		return new JSONObject(recordingUser.toString());
+	}
+
+	public void startRecording(Client c, RecordingDao recDao) {
+		if (recordingStarted.compareAndSet(false, true)) {
+			log.debug("##REC:: recording in room {} is starting ::", roomId);
+			Room r = c.getRoom();
+			boolean interview = Room.Type.interview == r.getType();
+
+			Date now = new Date();
+
+			Recording rec = new Recording();
+
+			rec.setHash(randomUUID().toString());
+			rec.setName(String.format("%s %s", interview ? "Interview" : "Recording", CalendarPatterns.getDateWithTimeByMiliSeconds(new Date())));
+			User u = c.getUser();
+			recordingUser.put("login", u.getLogin());
+			recordingUser.put("firstName", u.getFirstname());
+			recordingUser.put("lastName", u.getLastname());
+			recordingUser.put("started", now.getTime());
+			Long ownerId = User.Type.contact == u.getType() ? u.getOwnerId() : u.getId();
+			rec.setInsertedBy(ownerId);
+			rec.setType(BaseFileItem.Type.Recording);
+			rec.setInterview(interview);
+
+			rec.setRoomId(roomId);
+			rec.setRecordStart(now);
+
+			rec.setOwnerId(ownerId);
+			rec.setStatus(Recording.Status.RECORDING);
+			rec = recDao.update(rec);
+			// Receive recordingId
+			recordingId = rec.getId();
+			log.debug("##REC:: recording created by USER: {}", ownerId);
+
+			for (final KStream stream : streams.values()) {
+				stream.startRecord();
+			}
+
+			// Send notification to all users that the recording has been started
+			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
+			log.debug("##REC:: recording in room {} is started {} ::", roomId, recordingId);
 		}
-		participants.clear();
+	}
+
+	public void stopRecording(KurentoHandler h, Client c, RecordingDao recDao) {
+		if (recordingStarted.compareAndSet(true, false)) {
+			log.debug("##REC:: recording in room {} is stopping {} ::", roomId, recordingId);
+			for (final KStream stream : streams.values()) {
+				stream.stopRecord();
+			}
+			Recording rec = recDao.get(recordingId);
+			rec.setRecordEnd(new Date());
+			rec = recDao.update(rec);
+			recordingUser = new JSONObject();
+			recordingId = null;
+
+			h.startConvertion(rec);
+			// Send notification to all users that the recording has been started
+			User u = c == null ? new User() : c.getUser();
+			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
+			log.debug("##REC:: recording in room {} is stopped ::", roomId);
+		}
+	}
+
+	public void close(final KurentoHandler h) {
+		for (final KStream stream : streams.values()) {
+			stream.release(h);
+		}
+		streams.clear();
 		pipeline.release(new Continuation<Void>() {
 			@Override
 			public void onSuccess(Void result) throws Exception {
