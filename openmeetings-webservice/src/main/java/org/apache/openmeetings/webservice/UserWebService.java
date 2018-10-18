@@ -333,23 +333,4 @@ public class UserWebService extends BaseWebService {
 			return UNKNOWN;
 		});
 	}
-
-	/**
-	 * Kick a user by its public SID
-	 *
-	 * @param sid
-	 *            The SID from getSession
-	 * @param uid the uid of the client
-	 * @return - <code>true</code> if user was kicked
-	 */
-	@WebMethod
-	@POST
-	@Path("/kick/{uid}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="uid") @PathParam("uid") String uid) {
-		return performCall(sid, User.Right.Soap, sd -> {
-			boolean success = userManager.kickById(uid);
-
-			return new ServiceResult(Boolean.TRUE.equals(success) ? "kicked" : "not kicked", Type.SUCCESS);
-		});
-	}
 }

@@ -301,9 +301,38 @@ public class RoomWebService extends BaseWebService {
 	@WebMethod
 	@GET
 	@Path("/kick/{id}")
-	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
+	public ServiceResult kickAll(@WebParam(name="sid") @QueryParam("sid") String sid, @WebParam(name="id") @PathParam("id") long id) {
 		return performCall(sid, User.Right.Soap, sd -> {
 			boolean result = userManager.kickUsersByRoomId(id);
+			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
+		});
+	}
+
+	/**
+	 * kick external user from given room
+	 *
+	 * @param sid
+	 *            The SID of the User. This SID must be marked as Loggedin
+	 *            _Admin
+	 * @param id
+	 *            the room id
+	 * @param externalType
+	 *            external type of user to kick
+	 * @param externalId
+	 *            external id of user to kick
+	 *
+	 * @return - true if user was kicked, false otherwise
+	 */
+	@WebMethod
+	@GET
+	@Path("/kick/{id}/{externalType}/{externalId}")
+	public ServiceResult kick(@WebParam(name="sid") @QueryParam("sid") String sid
+			, @WebParam(name="id") @PathParam("id") long id
+			, @WebParam(name="externalType") @PathParam("externalType") String externalType
+			, @WebParam(name="externalId") @PathParam("externalId") String externalId)
+	{
+		return performCall(sid, User.Right.Soap, sd -> {
+			boolean result = userManager.kickExternal(id, externalType, externalId);
 			return new ServiceResult(result ? "Kicked" : "Not kicked", Type.SUCCESS);
 		});
 	}

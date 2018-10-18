@@ -39,10 +39,12 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
 import org.apache.openmeetings.util.crypt.CryptProvider;
@@ -68,6 +70,8 @@ public class UserManager implements IUserManager {
 	private UserDao userDao;
 	@Autowired
 	private EmailManager emailManager;
+	@Autowired
+	private IClientManager cm;
 
 	private static boolean sendConfirmation() {
 		String baseURL = getBaseUrl();
@@ -188,59 +192,37 @@ public class UserManager implements IUserManager {
 	 */
 	@Override
 	public boolean kickUsersByRoomId(Long roomId) {
-		/*
 		try {
-			sessionDao.clearSessionByRoomId(roomId);
-
-			for (StreamClient rcl : streamClientManager.list(roomId)) {
-				if (rcl == null) {
-					return true;
-				}
-				String scopeName = rcl.getRoomId() == null ? HIBERNATE : rcl.getRoomId().toString();
-				IScope currentScope = scopeAdapter.getChildScope(scopeName);
-				scopeAdapter.roomLeaveByScope(rcl, currentScope);
-
-				Map<Integer, String> messageObj = new HashMap<>();
-				messageObj.put(0, "kick");
-				scopeAdapter.sendMessageById(messageObj, rcl.getUid(), currentScope);
+			for (Client c : cm.listByRoom(roomId)) {
+				Application.kickUser(c);
 			}
 			return true;
 		} catch (Exception err) {
 			log.error("[kickUsersByRoomId]", err);
 		}
-		*/
 		return false;
 	}
 
 	@Override
-	public boolean kickById(String uid) {
-		/*
+	public boolean kickExternal(Long roomId, String externalType, String externalId) {
+		boolean result = false;
 		try {
-			StreamClient rcl = streamClientManager.get(uid);
-
-			if (rcl == null) {
-				return true;
+			if (roomId == null) {
+				return result;
 			}
-
-			String scopeName = rcl.getScope() == null ? HIBERNATE : rcl.getScope();
-			IScope scope = scopeAdapter.getChildScope(scopeName);
-			if (scope == null) {
-				log.warn("### kickById ### The scope is NULL");
-				return false;
+			User u = userDao.getExternalUser(externalId, externalType);
+			if (u != null) {
+				for (Client c : cm.listByUser(u.getId())) {
+					if (roomId.equals(c.getRoomId())) {
+						Application.kickUser(c);
+						result = true;
+					}
+				}
 			}
-
-			Map<Integer, String> messageObj = new HashMap<>();
-			messageObj.put(0, "kick");
-			scopeAdapter.sendMessageById(messageObj, uid, scope);
-
-			scopeAdapter.roomLeaveByScope(rcl, scope);
-
-			return true;
-		} catch (Exception err) {
-			log.error("[kickById]", err);
+		} catch (Exception e) {
+			log.error("[kickExternal]", e);
 		}
-		*/
-		return false;
+		return result;
 	}
 
 	@Override
