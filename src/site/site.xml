@@ -70,7 +70,8 @@
 				<column>Community</column>
 				<column>Development</column>
 			</bottomNav>
-			<toc type="fixed">sidebar</toc>
+			<toc position="fixed">sidebar</toc>
+			<navbar cssClass="navbar-dark bg-primary"/>
 			<skinAttribution>false</skinAttribution>
 			<endContent>
 				<script type="text/javascript" src="$resourcePath/js/site.js"></script>
