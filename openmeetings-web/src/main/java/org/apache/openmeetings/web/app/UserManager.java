@@ -45,11 +45,13 @@ import org.apache.openmeetings.db.dao.user.GroupDao;
 import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.dto.user.OAuthUser;
+import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.room.StreamClient;
 import org.apache.openmeetings.db.entity.user.GroupUser;
 import org.apache.openmeetings.db.entity.user.User;
 import org.apache.openmeetings.db.entity.user.User.Right;
 import org.apache.openmeetings.db.entity.user.User.Type;
+import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.manager.IStreamClientManager;
 import org.apache.openmeetings.service.mail.EmailManager;
 import org.apache.openmeetings.util.OmException;
@@ -83,6 +85,8 @@ public class UserManager implements IUserManager {
 	private ScopeApplicationAdapter scopeAdapter;
 	@Autowired
 	private IStreamClientManager streamClientManager;
+	@Autowired
+	private IClientManager cm;
 
 	private boolean sendConfirmation() {
 		String baseURL = getBaseUrl();
@@ -218,6 +222,9 @@ public class UserManager implements IUserManager {
 				messageObj.put(0, "kick");
 				scopeAdapter.sendMessageById(messageObj, rcl.getUid(), currentScope);
 			}
+			for (Client c : cm.listByRoom(roomId)) {
+				Application.kickUser(c);
+			}
 			return true;
 		} catch (Exception err) {
 			log.error("[kickUsersByRoomId]", err);
@@ -226,6 +233,27 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
+	public boolean kickExternal(Long roomId, String externalType, String externalId) {
+		boolean result = false;
+		try {
+			if (roomId == null) {
+				return result;
+			}
+			User u = userDao.getExternalUser(externalId, externalType);
+			if (u != null) {
+				for (Client c : cm.listByUser(u.getId())) {
+					if (roomId.equals(c.getRoomId())) {
+						Application.kickUser(c);
+						result = true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.error("[kickExternal]", e);
+		}
+		return result;
+	}
+
 	public boolean kickById(String uid) {
 		try {
 			StreamClient rcl = streamClientManager.get(uid);

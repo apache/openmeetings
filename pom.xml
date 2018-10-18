@@ -120,218 +120,6 @@
 		<db_user></db_user>
 		<db_pass></db_pass>
 	</properties>
-	<profiles>
-		<profile>
-			<id>allModules</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<modules>
-				<module>openmeetings-util</module>
-				<module>openmeetings-db</module>
-				<module>openmeetings-core</module>
-				<module>openmeetings-install</module>
-				<module>openmeetings-service</module>
-				<module>openmeetings-webservice</module>
-				<module>openmeetings-web</module>
-				<module>openmeetings-flash</module>
-				<module>openmeetings-screenshare</module>
-				<module>openmeetings-server</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>quick</id>
-			<properties>
-				<maven.test.skip>true</maven.test.skip>
-				<om.quick.build>true</om.quick.build>
-				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
-				<wicket.configuration>DEVELOPMENT</wicket.configuration>
-				<src.pack.skip>true</src.pack.skip>
-			</properties>
-		</profile>
-		<profile>
-			<id>rc</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-enforcer-plugin</artifactId>
-						<version>${maven-enforcer-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>enforce-versions</id>
-								<goals>
-									<goal>enforce</goal>
-								</goals>
-								<configuration>
-									<rules>
-										<requireJavaVersion>
-											<version>[${jdk.version}.0,)</version>
-										</requireJavaVersion>
-									</rules>
-									<failFast>true</failFast>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>${maven-source-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>net.nicoulaj.maven.plugins</groupId>
-						<artifactId>checksum-maven-plugin</artifactId>
-						<version>${checksum-maven-plugin.version}</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>artifacts</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<shasumSummary>true</shasumSummary>
-							<algorithms>
-								<algorithm>SHA-512</algorithm>
-							</algorithms>
-						</configuration>
-					</plugin>
-					<plugin>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>${maven-gpg-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>release</id>
-			<properties>
-				<jarsigner.skip>true</jarsigner.skip>
-			</properties>
-		</profile>
-		<profile>
-			<id>deploy</id>
-			<modules>
-				<module>openmeetings-util</module>
-				<module>openmeetings-db</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>generate-third-party</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>license-maven-plugin</artifactId>
-						<version>${license-maven-plugin.version}</version>
-						<executions>
-							<execution>
-								<id>download-licenses</id>
-								<goals>
-									<goal>aggregate-add-third-party</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<useMissingFile>true</useMissingFile>
-									<licenseMerges>
-										<licenseMerge>
-											The Apache Software License, Version 2.0|
-											Apache Software License 2.0|
-											Apache License, Version 2.0|
-											Apache License|
-											Apache License 2.0|
-											Apache 2|
-											Apache 2.0|
-											Apache 2.0 License|
-											The Apache License, Version 2.0|
-											Apache Software License - Version 2.0|
-											Apache Software Licenses|
-											Apache License, Version 2.0 and|
-											ASL, version 2|
-											ASF 2.0|
-											Apache License, Version 2.0 and
-        Common Development And Distribution License (CDDL) Version 1.0|
-											The SAX License
-										</licenseMerge>
-										<licenseMerge>
-											Eclipse Public License 1.0|
-											Eclipse Public License - v 1.0|
-											Eclipse Public License - Version 1.0
-										</licenseMerge>
-										<licenseMerge>
-											BSD license|
-											BSD|
-											The BSD License
-										</licenseMerge>
-										<licenseMerge>
-											FreeBSD License|
-											The BSD 2-Clause License|
-											BSD-2-Clause|
-											BSD style
-										</licenseMerge>
-										<licenseMerge>
-											BSD License 2.0|
-											BSD 3-clause New License|
-											New BSD License
-										</licenseMerge>
-										<licenseMerge>
-											The W3C License|
-											The W3C Software License
-										</licenseMerge>
-									</licenseMerges>
-									<fileTemplate>/org/codehaus/mojo/license/third-party-file-groupByLicense.ftl</fileTemplate>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>Jenkins</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<excludedGroups>org.apache.openmeetings.test.NonJenkinsTests</excludedGroups>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 	<url>https://openmeetings.apache.org</url>
 	<inceptionYear>2012</inceptionYear>
 	<organization>
@@ -1148,231 +936,6 @@
 						<append>true</append>
 					</configuration>
 				</plugin>
-
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.felix</groupId>
-										<artifactId>maven-bundle-plugin</artifactId>
-										<versionRange>[2.3.7,)</versionRange>
-										<goals>
-											<goal>manifest</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-remote-resources-plugin</artifactId>
-										<versionRange>[1.0.0,)</versionRange>
-										<goals>
-											<goal>process</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.rat</groupId>
-										<artifactId>apache-rat-plugin</artifactId>
-										<versionRange>[0.10,)</versionRange>
-										<goals>
-											<goal>check</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-site-plugin</artifactId>
-										<versionRange>[3.3,)</versionRange>
-										<goals>
-											<goal>site</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-javadoc-plugin</artifactId>
-										<versionRange>[2.9.1,)</versionRange>
-										<goals>
-											<goal>javadoc-no-fork</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-antrun-plugin</artifactId>
-										<versionRange>[1.8,)</versionRange>
-										<goals>
-											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>[2.10,)</versionRange>
-										<goals>
-											<goal>unpack</goal>
-											<goal>copy-dependencies</goal>
-											<goal>copy</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.openjpa</groupId>
-										<artifactId>openjpa-maven-plugin</artifactId>
-										<versionRange>[2.3.0,)</versionRange>
-										<goals>
-											<goal>enhance</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>com.google.code.maven-replacer-plugin</groupId>
-										<artifactId>replacer</artifactId>
-										<versionRange>[1.5.3,)</versionRange>
-										<goals>
-											<goal>replace</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>keytool-maven-plugin</artifactId>
-										<versionRange>[1.5,)</versionRange>
-										<goals>
-											<goal>generateKeyPair</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>wagon-maven-plugin</artifactId>
-										<versionRange>[1.0-beta-5,)</versionRange>
-										<goals>
-											<goal>download</goal>
-											<goal>download-single</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-war-plugin</artifactId>
-										<versionRange>[2.4,)</versionRange>
-										<goals>
-											<goal>exploded</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>xml-maven-plugin</artifactId>
-										<versionRange>[1.0,)</versionRange>
-										<goals>
-											<goal>transform</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>com.internetitem</groupId>
-										<artifactId>write-properties-file-maven-plugin</artifactId>
-										<versionRange>[1.0.1,)</versionRange>
-										<goals>
-											<goal>write-properties-file</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>exec-maven-plugin</artifactId>
-										<versionRange>[1.6.0,)</versionRange>
-										<goals>
-											<goal>java</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>net.flexmojos.oss</groupId>
-										<artifactId>flexmojos-maven-plugin</artifactId>
-										<versionRange>[7.0.0,)</versionRange>
-										<goals>
-											<goal>compile-swf</goal>
-											<goal>test-compile</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -1431,5 +994,455 @@
 			</plugin>
 		</plugins>
 	</reporting>
+	<profiles>
+		<profile>
+			<id>allModules</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>openmeetings-util</module>
+				<module>openmeetings-db</module>
+				<module>openmeetings-core</module>
+				<module>openmeetings-install</module>
+				<module>openmeetings-service</module>
+				<module>openmeetings-webservice</module>
+				<module>openmeetings-web</module>
+				<module>openmeetings-flash</module>
+				<module>openmeetings-screenshare</module>
+				<module>openmeetings-server</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>quick</id>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+				<om.quick.build>true</om.quick.build>
+				<red5-server.dwnd.skip>true</red5-server.dwnd.skip>
+				<wicket.configuration>DEVELOPMENT</wicket.configuration>
+				<src.pack.skip>true</src.pack.skip>
+			</properties>
+		</profile>
+		<profile>
+			<id>rc</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<version>${maven-enforcer-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>enforce-versions</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireJavaVersion>
+											<version>[${jdk.version}.0,)</version>
+										</requireJavaVersion>
+									</rules>
+									<failFast>true</failFast>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven-source-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>net.nicoulaj.maven.plugins</groupId>
+						<artifactId>checksum-maven-plugin</artifactId>
+						<version>${checksum-maven-plugin.version}</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>artifacts</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<shasumSummary>true</shasumSummary>
+							<algorithms>
+								<algorithm>SHA-512</algorithm>
+							</algorithms>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>${maven-gpg-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<properties>
+				<jarsigner.skip>true</jarsigner.skip>
+			</properties>
+		</profile>
+		<profile>
+			<id>deploy</id>
+			<modules>
+				<module>openmeetings-util</module>
+				<module>openmeetings-db</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>generate-third-party</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>${license-maven-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>download-licenses</id>
+								<goals>
+									<goal>aggregate-add-third-party</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}</outputDirectory>
+									<useMissingFile>true</useMissingFile>
+									<licenseMerges>
+										<licenseMerge>
+											The Apache Software License, Version 2.0|
+											Apache Software License 2.0|
+											Apache License, Version 2.0|
+											Apache License|
+											Apache License 2.0|
+											Apache 2|
+											Apache 2.0|
+											Apache 2.0 License|
+											The Apache License, Version 2.0|
+											Apache Software License - Version 2.0|
+											Apache Software Licenses|
+											Apache License, Version 2.0 and|
+											ASL, version 2|
+											ASF 2.0|
+											Apache License, Version 2.0 and
+        Common Development And Distribution License (CDDL) Version 1.0|
+											The SAX License
+										</licenseMerge>
+										<licenseMerge>
+											Eclipse Public License 1.0|
+											Eclipse Public License - v 1.0|
+											Eclipse Public License - Version 1.0
+										</licenseMerge>
+										<licenseMerge>
+											BSD license|
+											BSD|
+											The BSD License
+										</licenseMerge>
+										<licenseMerge>
+											FreeBSD License|
+											The BSD 2-Clause License|
+											BSD-2-Clause|
+											BSD style
+										</licenseMerge>
+										<licenseMerge>
+											BSD License 2.0|
+											BSD 3-clause New License|
+											New BSD License
+										</licenseMerge>
+										<licenseMerge>
+											The W3C License|
+											The W3C Software License
+										</licenseMerge>
+									</licenseMerges>
+									<fileTemplate>/org/codehaus/mojo/license/third-party-file-groupByLicense.ftl</fileTemplate>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>Jenkins</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludedGroups>org.apache.openmeetings.test.NonJenkinsTests</excludedGroups>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>only-eclipse</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.felix</groupId>
+												<artifactId>maven-bundle-plugin</artifactId>
+												<versionRange>[2.3.7,)</versionRange>
+												<goals>
+													<goal>manifest</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore />
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-remote-resources-plugin</artifactId>
+												<versionRange>[1.0.0,)</versionRange>
+												<goals>
+													<goal>process</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore />
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.rat</groupId>
+												<artifactId>apache-rat-plugin</artifactId>
+												<versionRange>[0.10,)</versionRange>
+												<goals>
+													<goal>check</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore />
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-site-plugin</artifactId>
+												<versionRange>[3.3,)</versionRange>
+												<goals>
+													<goal>site</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore />
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-javadoc-plugin</artifactId>
+												<versionRange>[2.9.1,)</versionRange>
+												<goals>
+													<goal>javadoc-no-fork</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-antrun-plugin</artifactId>
+												<versionRange>[1.8,)</versionRange>
+												<goals>
+													<goal>run</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-dependency-plugin</artifactId>
+												<versionRange>[2.10,)</versionRange>
+												<goals>
+													<goal>unpack</goal>
+													<goal>copy-dependencies</goal>
+													<goal>copy</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.openjpa</groupId>
+												<artifactId>openjpa-maven-plugin</artifactId>
+												<versionRange>[2.3.0,)</versionRange>
+												<goals>
+													<goal>enhance</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>com.google.code.maven-replacer-plugin</groupId>
+												<artifactId>replacer</artifactId>
+												<versionRange>[1.5.3,)</versionRange>
+												<goals>
+													<goal>replace</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.codehaus.mojo</groupId>
+												<artifactId>keytool-maven-plugin</artifactId>
+												<versionRange>[1.5,)</versionRange>
+												<goals>
+													<goal>generateKeyPair</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.codehaus.mojo</groupId>
+												<artifactId>wagon-maven-plugin</artifactId>
+												<versionRange>[1.0-beta-5,)</versionRange>
+												<goals>
+													<goal>download</goal>
+													<goal>download-single</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.apache.maven.plugins</groupId>
+												<artifactId>maven-war-plugin</artifactId>
+												<versionRange>[2.4,)</versionRange>
+												<goals>
+													<goal>exploded</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.codehaus.mojo</groupId>
+												<artifactId>xml-maven-plugin</artifactId>
+												<versionRange>[1.0,)</versionRange>
+												<goals>
+													<goal>transform</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>com.internetitem</groupId>
+												<artifactId>write-properties-file-maven-plugin</artifactId>
+												<versionRange>[1.0.1,)</versionRange>
+												<goals>
+													<goal>write-properties-file</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>org.codehaus.mojo</groupId>
+												<artifactId>exec-maven-plugin</artifactId>
+												<versionRange>[1.6.0,)</versionRange>
+												<goals>
+													<goal>java</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>net.flexmojos.oss</groupId>
+												<artifactId>flexmojos-maven-plugin</artifactId>
+												<versionRange>[7.0.0,)</versionRange>
+												<goals>
+													<goal>compile-swf</goal>
+													<goal>test-compile</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 </project>
 

@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.openmeetings.db.dao.user.IUserManager;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.IClient;
 import org.apache.openmeetings.db.entity.room.StreamClient;
@@ -35,6 +34,7 @@ import org.apache.openmeetings.web.admin.AdminBasePanel;
 import org.apache.openmeetings.web.admin.SearchableDataView;
 import org.apache.openmeetings.web.app.ClientManager;
 import org.apache.openmeetings.web.app.StreamClientManager;
+import org.apache.openmeetings.web.app.UserManager;
 import org.apache.openmeetings.web.common.ConfirmableAjaxBorder;
 import org.apache.openmeetings.web.common.PagedEntityListPanel;
 import org.apache.openmeetings.web.data.SearchableDataProvider;
@@ -90,7 +90,7 @@ public class ConnectionsPanel extends AdminBasePanel {
 					protected void onSubmit(AjaxRequestTarget target) {
 						IClient _c = item.getModelObject();
 						if (_c instanceof StreamClient) {
-							getBean(IUserManager.class).kickById(_c.getUid());
+							getBean(UserManager.class).kickById(_c.getUid());
 						} else {
 							Client c = (Client)_c;
 							getBean(ClientManager.class).invalidate(c.getUserId(), c.getSessionId());
