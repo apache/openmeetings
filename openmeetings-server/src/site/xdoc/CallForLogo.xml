@@ -47,7 +47,7 @@
 			//<![CDATA[
 				function applyLogoBig(e) {
 					var ib = e.closest('table').find('.logo-big');
-					var bi = $('#bannerLeft img');
+					var bi = $('.bannerLeft img');
 					bi.attr('src', ib.attr('src'));
 					$('.subhead')[0].scrollIntoView()
 				}
