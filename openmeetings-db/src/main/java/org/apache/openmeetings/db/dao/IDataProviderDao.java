@@ -21,6 +21,7 @@ package org.apache.openmeetings.db.dao;
 import java.util.List;
 
 import org.apache.openmeetings.db.entity.IDataProviderEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * General interface to perform CRUD operations on entities
@@ -29,6 +30,7 @@ import org.apache.openmeetings.db.entity.IDataProviderEntity;
  *
  * @param <T> entity type for this provider
  */
+@Transactional
 public interface IDataProviderDao<T extends IDataProviderEntity> {
 	/**
 	 * Get an instance of an {@link T}
