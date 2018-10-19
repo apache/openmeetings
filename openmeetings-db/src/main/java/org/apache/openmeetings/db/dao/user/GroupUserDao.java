@@ -18,7 +18,8 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
-import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
 
 import java.util.List;
@@ -29,7 +30,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.user.GroupUser;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,11 +42,6 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	private EntityManager em;
 
 	@Override
-	public GroupUser get(long id) {
-		return get(Long.valueOf(id));
-	}
-
-	@Override
 	public GroupUser get(Long id) {
 		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersById", GroupUser.class);
 		q.setParameter("id", id);
@@ -53,29 +49,26 @@ public class GroupUserDao implements IDataProviderDao<GroupUser> {
 	}
 
 	@Override
-	public List<GroupUser> get(int start, int count) {
+	public List<GroupUser> get(long start, long count) {
 		throw UNSUPPORTED;
 	}
 
 	@Override
-	public List<GroupUser> get(String search, int start, int count, String sort) {
+	public List<GroupUser> get(String search, long start, long count, String sort) {
 		throw UNSUPPORTED;
 	}
 
-	public List<GroupUser> get(long groupId, String search, int start, int count, String sort) {
-		TypedQuery<GroupUser> q = em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", null, search, false, false, "ou.group.id = :groupId", sort, searchFields), GroupUser.class);
-		q.setParameter("groupId", groupId);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<GroupUser> get(long groupId, String search, long start, long count, String sort) {
+		return setLimits(
+				em.createQuery(DaoHelper.getSearchQuery(GroupUser.class.getSimpleName(), "ou", null, search, false, false, "ou.group.id = :groupId", sort, searchFields), GroupUser.class)
+					.setParameter("groupId", groupId)
+				, start, count).getResultList();
 	}
 
-	public List<GroupUser> get(long groupId, int start, int count) {
-		TypedQuery<GroupUser> q = em.createNamedQuery("getGroupUsersByGroupId", GroupUser.class);
-		q.setParameter("id", groupId);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<GroupUser> get(long groupId, long start, long count) {
+		return setLimits(
+				em.createNamedQuery("getGroupUsersByGroupId", GroupUser.class).setParameter("id", groupId)
+				, start, count).getResultList();
 	}
 
 	public GroupUser getByGroupAndUser(Long groupId, Long userId) {

@@ -99,7 +99,7 @@ public class UserSearchPanel extends UserBasePanel {
 
 			@Override
 			public Iterator<? extends User> iterator(long first, long count) {
-				return searched ? userDao.searchUserProfile(getUserId(), text, offer, search, orderBy, (int)first, (int)count, asc).iterator()
+				return searched ? userDao.searchUserProfile(getUserId(), text, offer, search, orderBy, first, count, asc).iterator()
 						: new ArrayList<User>().iterator();
 			}
 

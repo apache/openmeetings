@@ -976,4 +976,5 @@ target="_blank">Custom Crypt Mechanism</a>
 	<entry key="camera.off"><![CDATA[Turn off camera]]></entry>
 	<entry key="microphone.on"><![CDATA[Turn on microphone]]></entry>
 	<entry key="microphone.off"><![CDATA[Turn off microphone]]></entry>
+	<entry key="profile.invitations"><![CDATA[Invitations]]></entry>
 </properties>

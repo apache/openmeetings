@@ -19,6 +19,7 @@
 package org.apache.openmeetings.db.dao.basic;
 
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_BASE_URL;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_APPLICATION_NAME;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_CAM_FPS;
@@ -107,7 +108,7 @@ import org.apache.openmeetings.IApplication;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.basic.Configuration;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.apache.openmeetings.util.OpenmeetingsVariables;
 import org.apache.openmeetings.util.crypt.CryptProvider;
 import org.apache.wicket.Application;
@@ -241,11 +242,6 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
-	public Configuration get(long id) {
-		return get(Long.valueOf(id));
-	}
-
-	@Override
 	public Configuration get(Long id) {
 		if (id == null) {
 			return null;
@@ -255,17 +251,15 @@ public class ConfigurationDao implements IDataProviderDao<Configuration> {
 	}
 
 	@Override
-	public List<Configuration> get(int start, int count) {
-		return em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
-				.setFirstResult(start).setMaxResults(count).getResultList();
+	public List<Configuration> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getNondeletedConfiguration", Configuration.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<Configuration> get(String search, int start, int count, String sort) {
-		TypedQuery<Configuration> q = em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Configuration> get(String search, long start, long count, String sort) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Configuration", "c", search, true, false, sort, searchFields), Configuration.class)
+				, start, count).getResultList();
 	}
 
 	@Override

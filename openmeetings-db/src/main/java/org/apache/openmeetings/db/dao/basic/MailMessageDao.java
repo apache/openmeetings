@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.basic;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_STATUS;
 
 import java.util.Calendar;
@@ -42,24 +43,19 @@ public class MailMessageDao implements IDataProviderDao<MailMessage> {
 	private EntityManager em;
 
 	@Override
-	public MailMessage get(long id) {
-		return get(Long.valueOf(id));
-	}
-
-	@Override
 	public MailMessage get(Long id) {
 		return em.createNamedQuery("getMailMessageById", MailMessage.class).setParameter("id", id).getSingleResult();
 	}
 
 	@Override
-	public List<MailMessage> get(int start, int count) {
-		return em.createNamedQuery("getMailMessages", MailMessage.class)
-				.setFirstResult(start).setMaxResults(count).getResultList();
+	public List<MailMessage> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getMailMessages", MailMessage.class)
+				, start, count).getResultList();
 	}
 
-	public List<MailMessage> get(int start, int count, Status status) {
-		return em.createNamedQuery("getMailMessagesByStatus", MailMessage.class).setParameter(PARAM_STATUS, status)
-				.setFirstResult(start).setMaxResults(count).getResultList();
+	public List<MailMessage> get(long start, long count, Status status) {
+		return setLimits(em.createNamedQuery("getMailMessagesByStatus", MailMessage.class).setParameter(PARAM_STATUS, status)
+				, start, count).getResultList();
 	}
 
 	private <T> TypedQuery<T> getQuery(boolean isCount, String search, String order, Class<T> clazz) {
@@ -80,8 +76,9 @@ public class MailMessageDao implements IDataProviderDao<MailMessage> {
 	}
 
 	@Override
-	public List<MailMessage> get(String search, int start, int count, String order) {
-		return getQuery(false, search, order, MailMessage.class).setFirstResult(start).setMaxResults(count).getResultList();
+	public List<MailMessage> get(String search, long start, long count, String order) {
+		return setLimits(getQuery(false, search, order, MailMessage.class)
+				, start, count).getResultList();
 	}
 
 	@Override

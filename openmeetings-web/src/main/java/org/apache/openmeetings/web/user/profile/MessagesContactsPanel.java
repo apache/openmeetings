@@ -261,7 +261,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 				unreadMessages.clear();
 				String sort = getSort() == null ? "" : "m." + getSort().getProperty();
 				boolean isAsc = getSort() == null ? true : getSort().isAscending();
-				return getDao().get(getUserId(), selectedFolderModel.getObject(), search, sort, isAsc, (int)first, (int)count).iterator();
+				return getDao().get(getUserId(), selectedFolderModel.getObject(), search, sort, isAsc, first, count).iterator();
 			}
 
 			@Override
@@ -424,7 +424,7 @@ public class MessagesContactsPanel extends UserBasePanel {
 
 			@Override
 			public Iterator<? extends UserContact> iterator(long first, long count) {
-				return contactDao.get(getUserId(), (int)first, (int)count).iterator();
+				return contactDao.get(getUserId(), first, count).iterator();
 			}
 
 			@Override

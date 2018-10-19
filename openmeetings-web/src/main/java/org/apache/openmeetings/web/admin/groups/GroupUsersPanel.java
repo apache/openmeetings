@@ -151,8 +151,8 @@ public class GroupUsersPanel extends Panel {
 			List<GroupUser> list = new ArrayList<>();
 			list.addAll(users2add);
 			list.addAll(search == null && getSort() == null
-					? getDao().get(groupId, (int)first, (int)count)
-					: getDao().get(groupId, search, (int)first, (int)count, getSortStr()));
+					? getDao().get(groupId, first, count)
+					: getDao().get(groupId, search, first, count, getSortStr()));
 
 			return list.iterator();
 		}
