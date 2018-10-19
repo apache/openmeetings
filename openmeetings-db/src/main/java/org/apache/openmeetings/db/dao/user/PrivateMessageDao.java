@@ -19,8 +19,9 @@
 package org.apache.openmeetings.db.dao.user;
 
 import static org.apache.openmeetings.db.entity.user.PrivateMessage.INBOX_FOLDER_ID;
-import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
-import static org.apache.openmeetings.util.DaoHelper.getStringParam;
+import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.getStringParam;
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.Collection;
@@ -73,15 +74,9 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	}
 
 	@Override
-	public List<PrivateMessage> get(int first, int count) {
-		return em.createNamedQuery("getPrivateMessages", PrivateMessage.class)
-				.setFirstResult(first).setMaxResults(count)
-				.getResultList();
-	}
-
-	@Override
-	public PrivateMessage get(long id) {
-		return get(Long.valueOf(id));
+	public List<PrivateMessage> get(long first, long count) {
+		return setLimits(em.createNamedQuery("getPrivateMessages", PrivateMessage.class)
+				, first, count).getResultList();
 	}
 
 	@Override
@@ -139,14 +134,12 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 		return query.getSingleResult();
 	}
 
-	public List<PrivateMessage> get(Long ownerId, Long folderId, String search, String orderBy, boolean asc, int start, int max) {
+	public List<PrivateMessage> get(Long ownerId, Long folderId, String search, String orderBy, boolean asc, long start, long max) {
 		TypedQuery<PrivateMessage> query = em.createQuery(getQuery(false, search, orderBy, asc), PrivateMessage.class);
 		query.setParameter("ownerId", ownerId);
 		query.setParameter("folderId", folderId);
 		setSearch(query, search);
-		query.setFirstResult(start);
-		query.setMaxResults(max);
-		return query.getResultList();
+		return setLimits(query, start, max).getResultList();
 	}
 
 	public int updateReadStatus(Collection<Long> ids, Boolean isRead) {
@@ -175,7 +168,7 @@ public class PrivateMessageDao implements IDataProviderDao<PrivateMessage> {
 	}
 
 	@Override
-	public List<PrivateMessage> get(String search, int start, int count, String order) {
+	public List<PrivateMessage> get(String search, long start, long count, String order) {
 		throw UNSUPPORTED;
 	}
 

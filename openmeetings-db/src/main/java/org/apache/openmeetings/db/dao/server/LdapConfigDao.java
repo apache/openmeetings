@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import javax.persistence.TypedQuery;
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.dao.user.UserDao;
 import org.apache.openmeetings.db.entity.server.LdapConfig;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.red5.logging.Red5LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,11 +58,6 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 
 	@Autowired
 	private UserDao userDao;
-
-	@Override
-	public LdapConfig get(long id) {
-		return get(Long.valueOf(id));
-	}
 
 	@Override
 	public LdapConfig get(Long id) {
@@ -94,19 +90,15 @@ public class LdapConfigDao implements IDataProviderDao<LdapConfig> {
 	}
 
 	@Override
-	public List<LdapConfig> get(int start, int count) {
-		TypedQuery<LdapConfig> q = em.createNamedQuery("getNondeletedLdapConfigs", LdapConfig.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<LdapConfig> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getNondeletedLdapConfigs", LdapConfig.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<LdapConfig> get(String search, int start, int count, String sort) {
-		TypedQuery<LdapConfig> q = em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, false, sort, searchFields), LdapConfig.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<LdapConfig> get(String search, long start, long count, String sort) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("LdapConfig", "lc", search, true, false, sort, searchFields), LdapConfig.class)
+				, start, count).getResultList();
 	}
 
 	@Override

@@ -42,8 +42,8 @@ public class SearchableGroupAdminDataProvider<T extends IDataProviderEntity> ext
 	@Override
 	public Iterator<? extends T> iterator(long first, long count) {
 		return (hasGroupAdminLevel(getRights())
-				? getDao().adminGet(search, getUserId(), (int)first, (int)count, getSortStr())
-				: getDao().adminGet(search, (int)first, (int)count, getSortStr())).iterator();
+				? getDao().adminGet(search, getUserId(), first, count, getSortStr())
+				: getDao().adminGet(search, first, count, getSortStr())).iterator();
 	}
 
 	@Override

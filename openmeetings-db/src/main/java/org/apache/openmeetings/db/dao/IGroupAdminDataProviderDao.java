@@ -33,7 +33,7 @@ public interface IGroupAdminDataProviderDao<T extends IDataProviderEntity> exten
 	 * @param order - column and sort order
 	 * @return list of instances in the range specified
 	 */
-	List<T> adminGet(String search, Long adminId, int start, int count, String order);
+	List<T> adminGet(String search, Long adminId, long start, long count, String order);
 
 	/**
 	 * Get a list of instances of {@link T}
@@ -44,7 +44,7 @@ public interface IGroupAdminDataProviderDao<T extends IDataProviderEntity> exten
 	 * @param order - column and sort order
 	 * @return list of instances in the range specified
 	 */
-	default List<T> adminGet(String search, int start, int count, String order) {
+	default List<T> adminGet(String search, long start, long count, String order) {
 		return get(search, start, count, order);
 	}
 

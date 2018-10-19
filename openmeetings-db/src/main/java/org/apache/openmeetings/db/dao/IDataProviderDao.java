@@ -38,7 +38,9 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 */
 	T get(Long id);
 
-	T get(long id);
+	default T get(long id) {
+		return get(Long.valueOf(id));
+	}
 
 	/**
 	 * Get a list of instances of {@link T}
@@ -47,7 +49,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 * @param count - maximum instance count to retrieve
 	 * @return list of instances in the range specified
 	 */
-	List<T> get(int start, int count);
+	List<T> get(long start, long count);
 
 	/**
 	 * Get a list of instances of {@link T}
@@ -58,7 +60,7 @@ public interface IDataProviderDao<T extends IDataProviderEntity> {
 	 * @param order - column and sort order
 	 * @return list of instances in the range specified
 	 */
-	List<T> get(String search, int start, int count, String order);
+	List<T> get(String search, long start, long count, String order);
 
 	/**
 	 * Count the number of instances of {@link T}

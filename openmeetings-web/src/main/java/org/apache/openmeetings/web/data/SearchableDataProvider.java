@@ -64,8 +64,8 @@ public class SearchableDataProvider<T extends IDataProviderEntity> extends Sorta
 	@Override
 	public Iterator<? extends T> iterator(long first, long count) {
 		return (search == null && getSort() == null
-			? getDao().get((int)first, (int)count)
-			: getDao().get(search, (int)first, (int)count, getSortStr())).iterator();
+			? getDao().get(first, count)
+			: getDao().get(search, first, count, getSortStr())).iterator();
 	}
 
 	@Override

@@ -107,7 +107,7 @@ public class LangPanel extends AdminBasePanel {
 
 					@Override
 					public Iterator<? extends StringLabel> iterator(long first, long count) {
-						return LabelDao.get(language.getValue(), search, (int)first, (int)count, getSort()).iterator();
+						return LabelDao.get(language.getValue(), search, first, count, getSort()).iterator();
 					}
 				}) {
 			private static final long serialVersionUID = 1L;

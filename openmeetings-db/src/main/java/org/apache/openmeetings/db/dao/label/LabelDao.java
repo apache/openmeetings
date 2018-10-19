@@ -19,7 +19,7 @@
 package org.apache.openmeetings.db.dao.label;
 
 import static org.apache.openmeetings.db.util.ApplicationHelper._ensureApplication;
-import static org.apache.openmeetings.util.DaoHelper.UNSUPPORTED;
+import static org.apache.openmeetings.db.util.DaoHelper.UNSUPPORTED;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.getWebAppRootKey;
 
 import java.io.File;
@@ -200,12 +200,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 	}
 
 	@Override
-	public List<StringLabel> get(int start, int count) {
+	public List<StringLabel> get(long start, long count) {
 		throw UNSUPPORTED;
 	}
 
 	@Override
-	public List<StringLabel> get(String search, int start, int count, String order) {
+	public List<StringLabel> get(String search, long start, long count, String order) {
 		throw UNSUPPORTED;
 	}
 
@@ -228,12 +228,12 @@ public class LabelDao implements IDataProviderDao<StringLabel>{
 		return languages.entrySet();
 	}
 
-	public static List<StringLabel> get(Locale l, final String search, int start, int count, final SortParam<String> sort) {
+	public static List<StringLabel> get(Locale l, final String search, long start, long count, final SortParam<String> sort) {
 		List<StringLabel> result = getLabels(l, search);
 		if (sort != null) {
 			Collections.sort(result, new LabelComparator(sort));
 		}
-		return result.subList(start, start + count > result.size() ? result.size() : start + count);
+		return result.subList((int)start, (int)(start + count > result.size() ? result.size() : start + count));
 	}
 
 	@Override

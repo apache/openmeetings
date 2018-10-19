@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.server;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.isAllowRegisterOauth;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IDataProviderDao;
 import org.apache.openmeetings.db.entity.server.OAuthServer;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,11 +51,6 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	}
 
 	@Override
-	public OAuthServer get(long id) {
-		return get(Long.valueOf(id));
-	}
-
-	@Override
 	public OAuthServer get(Long id) {
 		List<OAuthServer> list = em.createNamedQuery("getOAuthServerById", OAuthServer.class)
 				.setParameter("id", id).getResultList();
@@ -62,19 +58,15 @@ public class OAuth2Dao implements IDataProviderDao<OAuthServer> {
 	}
 
 	@Override
-	public List<OAuthServer> get(int start, int count) {
-		TypedQuery<OAuthServer> query = em.createNamedQuery("getAllOAuthServers", OAuthServer.class);
-		query.setFirstResult(start);
-		query.setMaxResults(count);
-		return query.getResultList();
+	public List<OAuthServer> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getAllOAuthServers", OAuthServer.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<OAuthServer> get(String search, int start, int count, String order) {
-		TypedQuery<OAuthServer> q = em.createQuery(DaoHelper.getSearchQuery("OAuthServer", "s", search, true, false, null, searchFields), OAuthServer.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<OAuthServer> get(String search, long start, long count, String order) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("OAuthServer", "s", search, true, false, null, searchFields), OAuthServer.class)
+				, start, count).getResultList();
 	}
 
 	@Override
