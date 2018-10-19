@@ -18,17 +18,18 @@
  */
 package org.apache.openmeetings.db.dao.user;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 
 import org.apache.openmeetings.db.dao.IGroupAdminDataProviderDao;
 import org.apache.openmeetings.db.entity.user.Group;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +39,6 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	private static final String[] searchFields = {"name"};
 	@PersistenceContext
 	private EntityManager em;
-
-	@Override
-	public Group get(long id) {
-		return get(Long.valueOf(id));
-	}
 
 	@Override
 	public Group get(Long id) {
@@ -57,49 +53,42 @@ public class GroupDao implements IGroupAdminDataProviderDao<Group> {
 	}
 
 	@Override
-	public List<Group> get(int start, int count) {
-		TypedQuery<Group> q = em.createNamedQuery("getNondeletedGroups", Group.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Group> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getNondeletedGroups", Group.class), start, count)
+				.getResultList();
 	}
 
 	@Override
-	public List<Group> get(String search, int start, int count, String sort) {
-		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("Group", "g", search, true, false, sort, searchFields), Group.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Group> get(String search, long start, long count, String sort) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Group", "g", search, true, false, sort, searchFields), Group.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<Group> adminGet(String search, Long adminId, int start, int count, String order) {
-		TypedQuery<Group> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, false
-				, "gu.user.id = :adminId AND gu.moderator = true", order, searchFields), Group.class);
-		q.setParameter("adminId", adminId);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Group> adminGet(String search, Long adminId, long start, long count, String order) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, false
+				, "gu.user.id = :adminId AND gu.moderator = true", order, searchFields), Group.class)
+					.setParameter("adminId", adminId)
+				, start, count).getResultList();
 	}
 
 	@Override
 	public long count() {
-		TypedQuery<Long> q = em.createNamedQuery("countGroups", Long.class);
-		return q.getSingleResult();
+		return em.createNamedQuery("countGroups", Long.class).getSingleResult();
 	}
 
 	@Override
 	public long count(String search) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, true, null, searchFields), Long.class);
-		return q.getSingleResult();
+		return em.createQuery(DaoHelper.getSearchQuery("Group", "o", search, true, true, null, searchFields), Long.class)
+				.getSingleResult();
 	}
 
 	@Override
 	public long adminCount(String search, Long adminId) {
-		TypedQuery<Long> q = em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, true
-				, "gu.user.id = :adminId AND gu.moderator = true", null, searchFields), Long.class);
-		q.setParameter("adminId", adminId);
-		return q.getSingleResult();
+		return em.createQuery(DaoHelper.getSearchQuery("GroupUser gu, IN(gu.group)", "g", null, search, true, true, true
+				, "gu.user.id = :adminId AND gu.moderator = true", null, searchFields), Long.class)
+				.setParameter("adminId", adminId)
+				.getSingleResult();
 	}
 
 	public List<Group> get(Collection<Long> ids) {

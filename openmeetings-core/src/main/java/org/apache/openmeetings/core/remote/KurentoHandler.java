@@ -82,8 +82,11 @@ public class KurentoHandler {
 	private static final String TAG_MODE = "mode";
 	private static final String TAG_ROOM = "roomId";
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	private final ScheduledExecutorService recheckScheduler = Executors.newScheduledThreadPool(1);
 	public static final String KURENTO_TYPE = "kurento";
-	private long checkTimeout = 200; //ms
+	private long checkTimeout = 120000; //ms
+	private long objCheckTimeout = 200; //ms
+	private int watchThreadCount = 10;
 	private String kurentoWsUrl;
 	private String turnUrl;
 	private String turnUser;
@@ -95,6 +98,7 @@ public class KurentoHandler {
 	private final Map<Long, KRoom> rooms = new ConcurrentHashMap<>();
 	final Map<String, KStream> streamsByUid = new ConcurrentHashMap<>();
 	final Map<String, KTestStream> testsByUid = new ConcurrentHashMap<>();
+	private Runnable check = null;
 
 	@Autowired
 	private IClientManager cm;
@@ -110,14 +114,17 @@ public class KurentoHandler {
 	private InterviewConverter interviewConverter;
 
 	public void init() {
-		try {
-			// TODO check connection, reconnect, listeners etc.
-			client = KurentoClient.create(kurentoWsUrl);
-			kuid = randomUUID().toString(); //FIXME TODO regenerate on re-connect
-			client.getServerManager().addObjectCreatedListener(new KWatchDog());
-		} catch (Exception e) {
-			log.error("Fail to create Kurento client", e);
-		}
+		check = () -> {
+			try {
+				client = KurentoClient.create(kurentoWsUrl);
+				kuid = randomUUID().toString();
+				client.getServerManager().addObjectCreatedListener(new KWatchDog());
+			} catch (Exception e) {
+				log.error("Fail to create Kurento client");
+				recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+			}
+		};
+		recheckScheduler.schedule(check, 50, MILLISECONDS);
 	}
 
 	public void destroy() {
@@ -255,6 +262,10 @@ public class KurentoHandler {
 	}
 
 	private void checkStreams(Long roomId) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return;
+		}
 		KRoom room = getRoom(roomId);
 		if (room.isRecording()) {
 			List<Client> clients = cm.listByRoom(roomId).parallelStream().filter(c -> c.getStreams().isEmpty()).collect(Collectors.toList());
@@ -330,10 +341,18 @@ public class KurentoHandler {
 	}
 
 	public void startRecording(Client c) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return;
+		}
 		getRoom(c.getRoomId()).startRecording(c, recDao);
 	}
 
 	public void stopRecording(Client c) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return;
+		}
 		getRoom(c.getRoomId()).stopRecording(this, c, recDao);
 	}
 
@@ -343,10 +362,18 @@ public class KurentoHandler {
 	}
 
 	public boolean isRecording(Long roomId) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return false;
+		}
 		return getRoom(roomId).isRecording();
 	}
 
 	public JSONObject getRecordingUser(Long roomId) {
+		if (client == null) {
+			log.warn("Media Server is not accessible");
+			return new JSONObject();
+		}
 		return getRoom(roomId).getRecordingUser();
 	}
 
@@ -488,6 +515,14 @@ public class KurentoHandler {
 		this.checkTimeout = checkTimeout;
 	}
 
+	public void setObjCheckTimeout(long objCheckTimeout) {
+		this.objCheckTimeout = objCheckTimeout;
+	}
+
+	public void setWatchThreadCount(int watchThreadCount) {
+		this.watchThreadCount = watchThreadCount;
+	}
+
 	public void setKurentoWsUrl(String kurentoWsUrl) {
 		this.kurentoWsUrl = kurentoWsUrl;
 	}
@@ -516,7 +551,7 @@ public class KurentoHandler {
 		private ScheduledExecutorService scheduler;
 
 		public KWatchDog() {
-			scheduler = Executors.newScheduledThreadPool(10);
+			scheduler = Executors.newScheduledThreadPool(watchThreadCount);
 		}
 
 		@Override
@@ -550,7 +585,7 @@ public class KurentoHandler {
 					}
 					log.warn("Invalid MediaPipeline {} detected, will be dropped, tags: {}", pipe.getId(), tags);
 					pipe.release();
-				}, checkTimeout, MILLISECONDS);
+				}, objCheckTimeout, MILLISECONDS);
 			} else if (evt.getObject() instanceof Endpoint) {
 				// endpoint created
 				Endpoint _point = (Endpoint)evt.getObject();
@@ -580,7 +615,7 @@ public class KurentoHandler {
 					}
 					log.warn("Invalid Endpoint {} detected, will be dropped, tags: {}", point.getId(), tags);
 					point.release();
-				}, checkTimeout, MILLISECONDS);
+				}, objCheckTimeout, MILLISECONDS);
 			}
 		}
 

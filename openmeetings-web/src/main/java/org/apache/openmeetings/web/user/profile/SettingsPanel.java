@@ -42,7 +42,8 @@ public class SettingsPanel extends UserBasePanel {
 	public static final int MESSAGES_TAB_ID = 1;
 	public static final int EDIT_PROFILE_TAB_ID = 2;
 	public static final int SEARCH_TAB_ID = 3;
-	public static final int DASHBOARD_TAB_ID = 4;
+	public static final int INVITATIONS_TAB_ID = 4;
+	public static final int DASHBOARD_TAB_ID = 5;
 	public final int active;
 	@SpringBean
 	private UserDao userDao;
@@ -99,6 +100,14 @@ public class SettingsPanel extends UserBasePanel {
 			@Override
 			public WebMarkupContainer getPanel(String panelId) {
 				return new UserSearchPanel(panelId);
+			}
+		});
+		tabs.add(new AbstractTab(Model.of(getString("profile.invitations"))) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public WebMarkupContainer getPanel(String panelId) {
+				return new InvitationsPanel(panelId);
 			}
 		});
 		tabs.add(new AbstractTab(Model.of(getString("1548"))) {

@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.openmeetings.util;
+package org.apache.openmeetings.db.util;
+
+import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.util.string.Strings;
@@ -111,5 +113,15 @@ public class DaoHelper {
 
 	public static String getStringParam(String param) {
 		return param == null ? "%" : "%" + StringUtils.lowerCase(param) + "%";
+	}
+
+	public static <T> TypedQuery<T> setLimits(TypedQuery<T> q, Long first, Long max) {
+		if (first != null) {
+			q.setFirstResult(first.intValue());
+		}
+		if (max != null) {
+			q.setMaxResults(max.intValue());
+		}
+		return q;
 	}
 }

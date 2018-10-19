@@ -18,6 +18,7 @@
  */
 package org.apache.openmeetings.db.dao.room;
 
+import static org.apache.openmeetings.db.util.DaoHelper.setLimits;
 import static org.apache.openmeetings.db.util.TimezoneUtil.getTimeZone;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.CONFIG_SIP_ROOM_PREFIX;
 import static org.apache.openmeetings.util.OpenmeetingsVariables.PARAM_USER_ID;
@@ -49,7 +50,7 @@ import org.apache.openmeetings.db.entity.room.Room.RoomElement;
 import org.apache.openmeetings.db.entity.room.Room.Type;
 import org.apache.openmeetings.db.entity.room.RoomFile;
 import org.apache.openmeetings.db.entity.room.RoomGroup;
-import org.apache.openmeetings.util.DaoHelper;
+import org.apache.openmeetings.db.util.DaoHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,11 +71,6 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	private SipDao sipDao;
 	@Autowired
 	private UserDao userDao;
-
-	@Override
-	public Room get(long id) {
-		return get(Long.valueOf(id));
-	}
 
 	@Override
 	public Room get(Long id) {
@@ -120,29 +116,23 @@ public class RoomDao implements IGroupAdminDataProviderDao<Room> {
 	}
 
 	@Override
-	public List<Room> get(int start, int count) {
-		TypedQuery<Room> q = em.createNamedQuery("getNondeletedRooms", Room.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Room> get(long start, long count) {
+		return setLimits(em.createNamedQuery("getNondeletedRooms", Room.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<Room> get(String search, int start, int count, String sort) {
-		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, false, sort, searchFields), Room.class);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Room> get(String search, long start, long count, String sort) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("Room", "r", search, true, false, sort, searchFields), Room.class)
+				, start, count).getResultList();
 	}
 
 	@Override
-	public List<Room> adminGet(String search, Long adminId, int start, int count, String order) {
-		TypedQuery<Room> q = em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, false
-				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), Room.class);
-		q.setParameter("adminId", adminId);
-		q.setFirstResult(start);
-		q.setMaxResults(count);
-		return q.getResultList();
+	public List<Room> adminGet(String search, Long adminId, long start, long count, String order) {
+		return setLimits(em.createQuery(DaoHelper.getSearchQuery("RoomGroup rg, IN(rg.room)", "r", null, search, true, true, false
+				, "rg.group.id IN (SELECT gu1.group.id FROM GroupUser gu1 WHERE gu1.moderator = true AND gu1.user.id = :adminId)", order, searchFields), Room.class)
+					.setParameter("adminId", adminId)
+				, start, count).getResultList();
 	}
 
 	@Override

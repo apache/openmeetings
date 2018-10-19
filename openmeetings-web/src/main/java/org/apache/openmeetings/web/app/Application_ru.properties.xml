@@ -984,4 +984,5 @@ see https://openmeetings.apache.org/LanguageEditor.html for Details
 	<entry key="camera.off"><![CDATA[Выключить камеру]]></entry>
 	<entry key="microphone.on"><![CDATA[Включить микрофон]]></entry>
 	<entry key="microphone.off"><![CDATA[Выключить микрофон]]></entry>
+	<entry key="profile.invitations"><![CDATA[Приглашения]]></entry>
 </properties>
