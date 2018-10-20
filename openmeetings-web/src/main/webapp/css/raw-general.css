@@ -442,8 +442,9 @@ select.messages.selector {
 	min-width: 400px;
 }
 .room-list .room-row {
+	border: 1px solid transparent;
 	background-color: rgb(248, 248, 248);
-	border-bottom: 5px solid white;
+	margin-bottom: 4px;
 	padding: 5px;
 	position: relative;
 }

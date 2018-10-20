@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * Necessary for temp clients being created on HashPage
  *
- * {@link org.apache.openmeetings.db.entity.room.StreamClient}
  * {@link org.apache.openmeetings.db.entity.basic.Client}
  * @author solomax
  *

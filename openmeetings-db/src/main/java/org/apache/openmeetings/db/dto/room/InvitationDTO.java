@@ -159,6 +159,8 @@ public class InvitationDTO implements Serializable {
 	 *
 	 * @param validFrom
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
+	 *
+	 * @return this for chaining
 	 */
 	public InvitationDTO setValidFrom(String validFrom) {
 		this.validFrom = validFrom;
@@ -179,6 +181,8 @@ public class InvitationDTO implements Serializable {
 	 *
 	 * @param validTo
 	 *            date-time in format YYYY-MM-dd HH:mm:ss
+	 *
+	 * @return this for chaining
 	 */
 	public InvitationDTO setValidTo(String validTo) {
 		this.validTo = validTo;

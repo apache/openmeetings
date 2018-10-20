@@ -35,19 +35,12 @@ import org.apache.openmeetings.core.util.WebSocketHelper;
 import org.apache.openmeetings.db.entity.basic.IWsClient;
 import org.apache.openmeetings.util.OmFileHelper;
 import org.kurento.client.Continuation;
-import org.kurento.client.EndOfStreamEvent;
-import org.kurento.client.ErrorEvent;
-import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
-import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.MediaProfileSpecType;
-import org.kurento.client.MediaSessionStartedEvent;
 import org.kurento.client.MediaType;
 import org.kurento.client.PlayerEndpoint;
 import org.kurento.client.RecorderEndpoint;
-import org.kurento.client.RecordingEvent;
-import org.kurento.client.StoppedEvent;
 import org.kurento.client.WebRtcEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,9 +71,7 @@ public class KTestStream implements IKStream {
 				.stopOnEndOfStream()
 				.withMediaProfile(profile).build();
 
-		recorder.addRecordingListener(new EventListener<RecordingEvent>() {
-			@Override
-			public void onEvent(RecordingEvent event) {
+		recorder.addRecordingListener(evt -> {
 				recTime = 0;
 				recHandle = scheduler.scheduleAtFixedRate(
 						() -> WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recording").put("time", recTime++))
@@ -89,15 +80,11 @@ public class KTestStream implements IKStream {
 						recorder.stop();
 						recHandle.cancel(true);
 					}, 5, TimeUnit.SECONDS);
-			}
-		});
-		recorder.addStoppedListener(new EventListener<StoppedEvent>() {
-			@Override
-			public void onEvent(StoppedEvent event) {
+			});
+		recorder.addStoppedListener(evt -> {
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg().put("id", "recStopped"));
 				release(h);
-			}
-		});
+			});
 		switch (profile) {
 			case WEBM:
 				webRtcEndpoint.connect(recorder, MediaType.AUDIO);
@@ -142,27 +129,18 @@ public class KTestStream implements IKStream {
 		webRtcEndpoint = new WebRtcEndpoint.Builder(pipeline).build();
 		player = new PlayerEndpoint.Builder(pipeline, recPath).build();
 		player.connect(webRtcEndpoint);
-		webRtcEndpoint.addMediaSessionStartedListener(new EventListener<MediaSessionStartedEvent>() {
-			@Override
-			public void onEvent(MediaSessionStartedEvent event) {
-				log.info("Media session started {}", event);
-				player.addErrorListener(new EventListener<ErrorEvent>() {
-					@Override
-					public void onEvent(ErrorEvent event) {
+		webRtcEndpoint.addMediaSessionStartedListener(evt -> {
+				log.info("Media session started {}", evt);
+				player.addErrorListener(event -> {
 						log.info("ErrorEvent for player with uid '{}': {}", _c.getUid(), event.getDescription());
 						sendPlayEnd(h, _c);
-					}
-				});
-				player.addEndOfStreamListener(new EventListener<EndOfStreamEvent>() {
-					@Override
-					public void onEvent(EndOfStreamEvent event) {
+					});
+				player.addEndOfStreamListener(event -> {
 						log.info("EndOfStreamEvent for player with uid '{}'", _c.getUid());
 						sendPlayEnd(h, _c);
-					}
-				});
+					});
 				player.play();
-			}
-		});
+			});
 
 		String sdpOffer = msg.getString("sdpOffer");
 		String sdpAnswer = webRtcEndpoint.processOffer(sdpOffer);
@@ -183,18 +161,15 @@ public class KTestStream implements IKStream {
 	}
 
 	private void addIceListener(IWsClient _c) {
-		webRtcEndpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-			@Override
-			public void onEvent(IceCandidateFoundEvent event) {
-				IceCandidate cand = event.getCandidate();
+		webRtcEndpoint.addIceCandidateFoundListener(evt -> {
+				IceCandidate cand = evt.getCandidate();
 				WebSocketHelper.sendClient(_c, newTestKurentoMsg()
 						.put("id", "iceCandidate")
 						.put("candidate", new JSONObject()
 								.put("candidate", cand.getCandidate())
 								.put("sdpMid", cand.getSdpMid())
 								.put("sdpMLineIndex", cand.getSdpMLineIndex())));
-			}
-		});
+			});
 	}
 
 	private void sendPlayEnd(final KurentoHandler h, IWsClient _c) {

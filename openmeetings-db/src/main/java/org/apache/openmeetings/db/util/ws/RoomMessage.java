@@ -37,8 +37,7 @@ public class RoomMessage implements IWebSocketPushMessage {
 		, pollCreated
 		, pollUpdated
 		, recordingToggled
-		, sharingStarted
-		, sharingStoped
+		, sharingToggled
 		, rightUpdated
 		, activityRemove
 		, requestRightModerator

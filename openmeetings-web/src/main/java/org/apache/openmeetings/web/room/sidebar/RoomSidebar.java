@@ -129,7 +129,7 @@ public class RoomSidebar extends Panel {
 					{
 						JSONObject obj = uid.isEmpty() ? new JSONObject() : new JSONObject(uid);
 						Client _c = cm.get(obj.getString("uid"));
-						if (_c == null || !_c.hasActivity(Client.Activity.broadcastA)) {
+						if (_c == null || !_c.hasActivity(Client.Activity.AUDIO)) {
 							return;
 						}
 						if (cl.hasRight(Right.moderator) || cl.getUid().equals(_c.getUid())) {
@@ -193,7 +193,7 @@ public class RoomSidebar extends Panel {
 				if (!avInited) {
 					avInited = true;
 					if (Room.Type.conference == room.getRoom().getType()) {
-						kurento.toggleActivity(c, Client.Activity.broadcastAV);
+						kurento.toggleActivity(c, Client.Activity.AUDIO_VIDEO);
 					}
 				}
 				cm.update(c);

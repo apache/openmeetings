@@ -39,14 +39,10 @@ import org.apache.openmeetings.db.entity.record.RecordingChunk.Type;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.db.util.ws.TextRoomMessage;
 import org.kurento.client.Continuation;
-import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
-import org.kurento.client.IceCandidateFoundEvent;
 import org.kurento.client.MediaProfileSpecType;
 import org.kurento.client.MediaType;
 import org.kurento.client.RecorderEndpoint;
-import org.kurento.client.RecordingEvent;
-import org.kurento.client.StoppedEvent;
 import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.slf4j.Logger;
@@ -79,15 +75,15 @@ public class KStream implements IKStream {
 		if (outgoingMedia != null) {
 			release(h);
 		}
-		final boolean hasAudio = sd.hasActivity(Activity.broadcastA);
-		final boolean hasVideo = sd.hasActivity(Activity.broadcastV);
+		final boolean hasAudio = sd.hasActivity(Activity.AUDIO);
+		final boolean hasVideo = sd.hasActivity(Activity.VIDEO);
 		if ((sdpOffer.indexOf("m=audio") > -1 && !hasAudio)
-				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo))
+				|| (sdpOffer.indexOf("m=video") > -1 && !hasVideo && StreamType.SCREEN != sd.getType()))
 		{
 			log.warn("Broadcast started without enough rights");
 			return this;
 		}
-		if (StreamType.screen == sd.getType()) {
+		if (StreamType.SCREEN == sd.getType()) {
 			type = Type.SCREEN;
 		} else {
 			if (hasAudio && hasVideo) {
@@ -164,10 +160,10 @@ public class KStream implements IKStream {
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, this.uid);
 		Client cur = h.getBySid(this.sid);
-		if (cur.hasActivity(Activity.broadcastA)) {
+		if (cur.hasActivity(Activity.AUDIO)) {
 			outgoingMedia.connect(listener, MediaType.AUDIO);
 		}
-		if (cur.hasActivity(Activity.broadcastV)) {
+		if (cur.hasActivity(Activity.VIDEO)) {
 			outgoingMedia.connect(listener, MediaType.VIDEO);
 		}
 		return listener;
@@ -178,15 +174,11 @@ public class KStream implements IKStream {
 		endpoint.addTag("outUid", this.uid);
 		endpoint.addTag("uid", uid);
 
-		endpoint.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-			@Override
-			public void onEvent(IceCandidateFoundEvent event) {
-				h.sendClient(sid, newKurentoMsg()
+		endpoint.addIceCandidateFoundListener(evt -> h.sendClient(sid, newKurentoMsg()
 						.put("id", "iceCandidate")
 						.put("uid", KStream.this.uid)
-						.put("candidate", convert(JsonUtils.toJsonObject(event.getCandidate()))));
-					}
-		});
+						.put("candidate", convert(JsonUtils.toJsonObject(evt.getCandidate()))))
+				);
 		return endpoint;
 	}
 
@@ -198,18 +190,8 @@ public class KStream implements IKStream {
 		recorder.addTag("outUid", uid);
 		recorder.addTag("uid", uid);
 
-		recorder.addRecordingListener(new EventListener<RecordingEvent>() {
-			@Override
-			public void onEvent(RecordingEvent event) {
-				chunkId = room.chunkDao.start(room.recordingId, type, chunkUid, sid);
-			}
-		});
-		recorder.addStoppedListener(new EventListener<StoppedEvent>() {
-			@Override
-			public void onEvent(StoppedEvent event) {
-				room.chunkDao.stop(chunkId);
-			}
-		});
+		recorder.addRecordingListener(evt -> chunkId = room.chunkDao.start(room.recordingId, type, chunkUid, sid));
+		recorder.addStoppedListener(evt -> room.chunkDao.stop(chunkId));
 		switch (profile) {
 			case WEBM:
 				outgoingMedia.connect(recorder, MediaType.AUDIO);
@@ -255,6 +237,8 @@ public class KStream implements IKStream {
 				.put("uid", uid)
 				.toString()
 			);
+		//FIXME TODO check close on stop sharing
+		//FIXME TODO permission can be removed, some listener might be required
 	}
 
 	@Override

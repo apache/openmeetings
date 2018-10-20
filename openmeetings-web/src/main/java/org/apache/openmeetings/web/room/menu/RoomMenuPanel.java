@@ -113,8 +113,7 @@ public class RoomMenuPanel extends Panel {
 		add((roomName = new Label("roomName", r.getName())).setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
 		String tag = getGroup().getTag();
 		add(logo, new Label("tag", tag).setVisible(!Strings.isEmpty(tag)));
-		add((shareBtn = new StartSharingButton("share", room.getUid()))
-				.setOutputMarkupPlaceholderTag(true).setOutputMarkupId(true));
+		add(shareBtn = new StartSharingButton("share"));
 		pollsSubMenu = new PollsSubMenu(room, this);
 		actionsSubMenu = new ActionsSubMenu(room, this, shareBtn);
 	}

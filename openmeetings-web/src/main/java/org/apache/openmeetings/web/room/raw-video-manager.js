@@ -14,8 +14,12 @@ var VideoManager = (function() {
 		});
 	}
 	function _onBroadcast(msg) {
-		const uid = msg.stream.uid;
+		const sd = msg.stream
+			, uid = sd.uid;
 		$('#' + VideoUtil.getVid(uid)).remove();
+		if (sd.self && VideoUtil.isSharing(sd)) {
+			return;
+		}
 		Video().init(msg);
 		OmUtil.log(uid + ' registered in room');
 	}
@@ -37,6 +41,14 @@ var VideoManager = (function() {
 			if ('kurento' === m.type && 'test' !== m.mode) {
 				OmUtil.info('Received message: ' + msg);
 				switch (m.id) {
+					case 'clientLeave':
+						$(VID_SEL + ' div[data-client-uid="' + m.uid + '"]').each(function() {
+							_closeV($(this));
+						});
+						if (share.data('cuid') === m.uid) {
+							share.off('click').hide();
+						}
+						break;
 					case 'broadcastStopped':
 						_closeV($('#' + VideoUtil.getVid(m.uid)));
 						break;
@@ -60,7 +72,7 @@ var VideoManager = (function() {
 						}
 						break;
 					case 'newStream':
-						_onReceive(m);
+						_play([m.stream], m.iceServers);
 						break;
 					case 'error':
 						OmUtil.error(m.message);
@@ -92,6 +104,7 @@ var VideoManager = (function() {
 			return;
 		}
 		c.streams.forEach(function(sd) {
+			sd.self = c.self;
 			if (sd.self && VideoUtil.isSharing(sd)) {
 				return;
 			}
@@ -139,6 +152,7 @@ var VideoManager = (function() {
 				_highlight(share
 						.attr('title', share.data('user') + ' ' + sd.user.firstName + ' ' + sd.user.lastName + ' ' + share.data('text'))
 						.data('uid', sd.uid)
+						.data('cuid', sd.cuid)
 						.show(), 10);
 				share.tooltip().off('click').click(function() {
 					const v = $('#' + VideoUtil.getVid(sd.uid))
@@ -173,7 +187,7 @@ var VideoManager = (function() {
 		});
 	}
 	function _find(uid) {
-		return $(VID_SEL + ' div[data-client-uid="webCam' + uid + '"]');
+		return $(VID_SEL + ' div[data-client-uid="' + uid + '"][data-client-type="WEBCAM"]');
 	}
 	function _userSpeaks(uid, active) {
 		const u = $('#user' + uid + ' .audio-activity.ui-icon')
@@ -235,33 +249,6 @@ var VideoManager = (function() {
 			id: 'toggleActivity'
 			, activity: activity
 		});
-	}
-	function _getScreenStream(callback) {
-		//FIXME TODO frameRate
-		//FIXME TODO can be unified
-		const b = kurentoUtils.WebRtcPeer.browser;
-		if (VideoUtil.isEdge() && b.major > 16) {
-			navigator.getDisplayMedia({
-				video: true
-			}).then(function(stream) {
-				callback(stream);
-			})
-			.catch(function(err) {
-				OmUtil.error(err);
-			});
-		} else if (b.name === 'Firefox') {
-			// https://mozilla.github.io/webrtc-landing/gum_test.html
-			navigator.mediaDevices.getUserMedia({
-				video: {
-					mediaSource: 'screen' // 'window'/'application' //FIXME TODO different behavior
-				}
-			}).then(function(stream) {
-				callback(stream);
-			})
-			.catch(function(err) {
-				OmUtil.error(err);
-			});
-		}
 	}
 
 	self.init = _init;

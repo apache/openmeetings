@@ -22,6 +22,7 @@
 package org.apache.openmeetings.core.remote;
 
 import static java.util.UUID.randomUUID;
+import static org.apache.openmeetings.core.remote.KurentoHandler.newKurentoMsg;
 
 import java.util.Collection;
 import java.util.Date;
@@ -34,10 +35,12 @@ import org.apache.openmeetings.db.dao.record.RecordingChunkDao;
 import org.apache.openmeetings.db.dao.record.RecordingDao;
 import org.apache.openmeetings.db.entity.basic.Client;
 import org.apache.openmeetings.db.entity.basic.Client.StreamDesc;
+import org.apache.openmeetings.db.entity.basic.Client.StreamType;
 import org.apache.openmeetings.db.entity.file.BaseFileItem;
 import org.apache.openmeetings.db.entity.record.Recording;
 import org.apache.openmeetings.db.entity.room.Room;
 import org.apache.openmeetings.db.entity.user.User;
+import org.apache.openmeetings.db.manager.IClientManager;
 import org.apache.openmeetings.db.util.ws.RoomMessage;
 import org.apache.openmeetings.util.CalendarPatterns;
 import org.kurento.client.Continuation;
@@ -54,6 +57,7 @@ public class KRoom {
 	final MediaPipeline pipeline;
 	final Long roomId;
 	final AtomicBoolean recordingStarted = new AtomicBoolean(false);
+	final AtomicBoolean sharingStarted = new AtomicBoolean(false);
 	Long recordingId = null;
 	final RecordingChunkDao chunkDao;
 	private JSONObject recordingUser = new JSONObject();
@@ -88,9 +92,14 @@ public class KRoom {
 		for (Map.Entry<String, KStream> e : streams.entrySet()) {
 			e.getValue().remove(c);
 		}
-		KStream stream = streams.remove(c.getUid());
-		if (stream != null) {
-			stream.release(h);
+		for (StreamDesc sd : c.getStreams()) {
+			if (StreamType.SCREEN == sd.getType()) {
+
+			}
+			KStream stream = streams.remove(sd.getUid());
+			if (stream != null) {
+				stream.release(h);
+			}
 		}
 	}
 
@@ -161,6 +170,27 @@ public class KRoom {
 			User u = c == null ? new User() : c.getUser();
 			WebSocketHelper.sendRoom(new RoomMessage(roomId, u, RoomMessage.Type.recordingToggled));
 			log.debug("##REC:: recording in room {} is stopped ::", roomId);
+		}
+	}
+
+	public boolean isSharing() {
+		return sharingStarted.get();
+	}
+
+	public void startSharing(KurentoHandler h, IClientManager cm, Client c) {
+		if (sharingStarted.compareAndSet(false, true)) {
+			StreamDesc sd = c.addStream(StreamType.SCREEN);
+			cm.update(c);
+			log.debug("User {}: has started broadcast", sd.getUid());
+			h.sendClient(sd.getSid(), newKurentoMsg()
+					.put("id", "broadcast")
+					.put("stream", sd.toJson())
+					.put("iceServers", h.getTurnServers()));
+		}
+	}
+
+	public void stopSharing() {
+		if (sharingStarted.compareAndSet(true, false)) {
 		}
 	}
 

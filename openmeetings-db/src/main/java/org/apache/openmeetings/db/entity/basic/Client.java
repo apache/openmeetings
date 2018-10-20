@@ -51,13 +51,15 @@ public class Client implements IDataProviderEntity, IWsClient {
 	private static final long serialVersionUID = 1L;
 
 	public enum Activity {
-		broadcastA //sends Audio to the room
-		, broadcastV //sends Video to the room
-		, broadcastAV //sends Audio+Video to the room
+		AUDIO //sends Audio to the room
+		, VIDEO //sends Video to the room
+		, AUDIO_VIDEO //sends Audio+Video to the room
+		, SCREEN //screen is shared
+		, RECORD //record in non-interview room
 	}
 	public enum StreamType {
-		webCam //sends Audio/Video to the room
-		, screen //send screen sharing
+		WEBCAM //sends Audio/Video to the room
+		, SCREEN //send screen sharing
 	}
 	private final String sessionId;
 	private final int pageId;
@@ -179,15 +181,15 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public Client set(Activity a) {
 		activities.add(a);
 		switch (a) {
-			case broadcastV:
-			case broadcastA:
-				if (hasActivity(Activity.broadcastA) && hasActivity(Activity.broadcastV)) {
-					activities.add(Activity.broadcastAV);
+			case VIDEO:
+			case AUDIO:
+				if (hasActivity(Activity.AUDIO) && hasActivity(Activity.VIDEO)) {
+					activities.add(Activity.AUDIO_VIDEO);
 				}
 				break;
-			case broadcastAV:
-				activities.add(Activity.broadcastA);
-				activities.add(Activity.broadcastV);
+			case AUDIO_VIDEO:
+				activities.add(Activity.AUDIO);
+				activities.add(Activity.VIDEO);
 				break;
 			default:
 		}
@@ -197,13 +199,13 @@ public class Client implements IDataProviderEntity, IWsClient {
 	public Client remove(Activity a) {
 		activities.remove(a);
 		switch (a) {
-			case broadcastV:
-			case broadcastA:
-				activities.remove(Activity.broadcastAV);
+			case VIDEO:
+			case AUDIO:
+				activities.remove(Activity.AUDIO_VIDEO);
 				break;
-			case broadcastAV:
-				activities.remove(Activity.broadcastA);
-				activities.remove(Activity.broadcastV);
+			case AUDIO_VIDEO:
+				activities.remove(Activity.AUDIO);
+				activities.remove(Activity.VIDEO);
 				break;
 			default:
 		}
@@ -341,7 +343,7 @@ public class Client implements IDataProviderEntity, IWsClient {
 				.put("cuid", uid)
 				.put("uid", uid)
 				.put("rights", new JSONArray(rights))
-				.put("sactivities", new JSONArray(activities))
+				.put("activities", new JSONArray(activities))
 				.put("streams", streamArr)
 				.put("width", width)
 				.put("height", height)
@@ -434,10 +436,14 @@ public class Client implements IDataProviderEntity, IWsClient {
 			this.uuid = randomUUID().toString();
 			this.type = type;
 			setActivities();
-			if (StreamType.webCam == type) {
+			if (StreamType.WEBCAM == type) {
 				boolean interview = room != null && Room.Type.interview == room.getType();
 				this.swidth = interview ? 320 : width;
 				this.sheight = interview ? 260 : height;
+			}
+			if (StreamType.SCREEN == type) {
+				this.swidth = 800;
+				this.sheight = 600;
 			}
 		}
 
@@ -473,16 +479,16 @@ public class Client implements IDataProviderEntity, IWsClient {
 
 		public StreamDesc setActivities() {
 			sactivities.clear();
-			if (StreamType.webCam == type) {
-				if (Client.this.hasActivity(Activity.broadcastA)) {
-					sactivities.add(Activity.broadcastA);
+			if (StreamType.WEBCAM == type) {
+				if (Client.this.hasActivity(Activity.AUDIO)) {
+					sactivities.add(Activity.AUDIO);
 				}
-				if (Client.this.hasActivity(Activity.broadcastV)) {
-					sactivities.add(Activity.broadcastV);
+				if (Client.this.hasActivity(Activity.VIDEO)) {
+					sactivities.add(Activity.VIDEO);
 				}
 			}
-			if (StreamType.screen == type) {
-				sactivities.add(Activity.broadcastV);
+			if (StreamType.SCREEN == type) {
+				sactivities.add(Activity.SCREEN);
 			}
 			return this;
 		}

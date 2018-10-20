@@ -215,11 +215,11 @@ public class KurentoHandler {
 			log.debug("Incoming message from user with ID '{}': {}", c.getUserId(), msg);
 			switch (cmdId) {
 				case "devicesAltered":
-					if (!msg.getBoolean("audio") && c.hasActivity(Activity.broadcastA)) {
-						c.remove(Activity.broadcastA);
+					if (!msg.getBoolean("audio") && c.hasActivity(Activity.AUDIO)) {
+						c.remove(Activity.AUDIO);
 					}
-					if (!msg.getBoolean("video") && c.hasActivity(Activity.broadcastV)) {
-						c.remove(Activity.broadcastV);
+					if (!msg.getBoolean("video") && c.hasActivity(Activity.VIDEO)) {
+						c.remove(Activity.VIDEO);
 					}
 					c.getStream(uid).setActivities();
 					WebSocketHelper.sendRoom(new TextRoomMessage(c.getRoomId(), cm.update(c), RoomMessage.Type.rightUpdated, c.getUid()));
@@ -258,7 +258,7 @@ public class KurentoHandler {
 	}
 
 	private static boolean isBroadcasting(final Client c) {
-		return c.hasAnyActivity(Activity.broadcastA, Activity.broadcastV);
+		return c.hasAnyActivity(Activity.AUDIO, Activity.VIDEO);
 	}
 
 	private void checkStreams(Long roomId) {
@@ -274,28 +274,37 @@ public class KurentoHandler {
 				room.stopRecording(this, null, recDao);
 			}
 		}
+		if (room.isSharing()) {
+			List<StreamDesc> streams = cm.listByRoom(roomId).parallelStream()
+					.flatMap(c -> c.getStreams().stream())
+					.filter(sd -> StreamType.SCREEN != sd.getType()).collect(Collectors.toList());
+			if (streams.isEmpty()) {
+				log.info("No more screen streams in the room, stopping sharing");
+				room.stopSharing();
+			}
+		}
 	}
 
 	public void toggleActivity(Client c, Activity a) {
 		log.info("PARTICIPANT {}: trying to toggle activity {}", c, c.getRoomId());
 
 		if (!activityAllowed(c, a, c.getRoom())) {
-			if (a == Activity.broadcastA || a == Activity.broadcastAV) {
+			if (a == Activity.AUDIO || a == Activity.AUDIO_VIDEO) {
 				c.allow(Room.Right.audio);
 			}
-			if (!c.getRoom().isAudioOnly() && (a == Activity.broadcastV || a == Activity.broadcastAV)) {
+			if (!c.getRoom().isAudioOnly() && (a == Activity.VIDEO || a == Activity.AUDIO_VIDEO)) {
 				c.allow(Room.Right.video);
 			}
 		}
 		if (activityAllowed(c, a, c.getRoom())) {
 			boolean wasBroadcasting = isBroadcasting(c);
-			if (a == Activity.broadcastA && !c.isMicEnabled()) {
+			if (a == Activity.AUDIO && !c.isMicEnabled()) {
 				return;
 			}
-			if (a == Activity.broadcastV && !c.isCamEnabled()) {
+			if (a == Activity.VIDEO && !c.isCamEnabled()) {
 				return;
 			}
-			if (a == Activity.broadcastAV && !c.isMicEnabled() && !c.isCamEnabled()) {
+			if (a == Activity.AUDIO_VIDEO && !c.isMicEnabled() && !c.isCamEnabled()) {
 				return;
 			}
 			c.toggle(a);
@@ -318,7 +327,7 @@ public class KurentoHandler {
 				//FIXME TODO update interview buttons
 			} else if (!wasBroadcasting) {
 				//join
-				StreamDesc sd = c.addStream(StreamType.webCam);
+				StreamDesc sd = c.addStream(StreamType.WEBCAM);
 				cm.update(c);
 				log.debug("User {}: has started broadcast", sd.getUid());
 				sendClient(sd.getSid(), newKurentoMsg()
@@ -329,7 +338,7 @@ public class KurentoHandler {
 			} else {
 				//constraints were changed
 				for (StreamDesc sd : c.getStreams()) {
-					if (StreamType.webCam == sd.getType()) {
+					if (StreamType.WEBCAM == sd.getType()) {
 						sd.setActivities();
 						cm.update(c);
 						break;
@@ -377,10 +386,18 @@ public class KurentoHandler {
 		return getRoom(roomId).getRecordingUser();
 	}
 
+	public void startSharing(Client c) {
+		getRoom(c.getRoomId()).startSharing(this, cm, c);
+	}
+
+	public boolean isSharing(Long roomId) {
+		return getRoom(roomId).isSharing();
+	}
+
 	public void leaveRoom(Client c) {
 		remove(c);
 		WebSocketHelper.sendAll(newKurentoMsg()
-				.put("id", "broadcastStopped")
+				.put("id", "clientLeave")
 				.put("uid", c.getUid())
 				.toString()
 			);
@@ -464,13 +481,13 @@ public class KurentoHandler {
 	public static boolean activityAllowed(Client c, Activity a, Room room) {
 		boolean r = false;
 		switch (a) {
-			case broadcastA:
+			case AUDIO:
 				r = c.hasRight(Right.audio);
 				break;
-			case broadcastV:
+			case VIDEO:
 				r = !room.isAudioOnly() && c.hasRight(Right.video);
 				break;
-			case broadcastAV:
+			case AUDIO_VIDEO:
 				r = !room.isAudioOnly() && c.hasRight(Right.audio) && c.hasRight(Right.video);
 				break;
 			default:

@@ -46,7 +46,7 @@ public class RefreshIcon extends ClientIcon {
 	@Override
 	protected boolean isClickable() {
 		final Client c = getClient();
-		return c != null && (c.hasActivity(Activity.broadcastA) || c.hasActivity(Activity.broadcastV));
+		return c != null && (c.hasActivity(Activity.AUDIO) || c.hasActivity(Activity.VIDEO));
 	}
 
 	@Override

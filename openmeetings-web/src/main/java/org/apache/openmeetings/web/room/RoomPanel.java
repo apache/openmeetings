@@ -189,7 +189,6 @@ public class RoomPanel extends BasePanel {
 	private RoomMenuPanel menu;
 	private RoomSidebar sidebar;
 	private final AbstractWbPanel wb;
-	private String sharingUser = null;
 	private byte[] pdfWb;
 	private final AjaxDownloadBehavior download = new AjaxDownloadBehavior(new ResourceStreamResource() {
 		private static final long serialVersionUID = 1L;
@@ -426,31 +425,8 @@ public class RoomPanel extends BasePanel {
 						menu.update(handler);
 						updateInterviewRecordingButtons(handler);
 						break;
-					case sharingStoped:
-						{
-							JSONObject obj = new JSONObject(((TextRoomMessage)m).getText());
-							String uid = obj.getString("uid");
-							Client c = cm.getBySid(obj.getString("sid"));
-							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", obj);
-								return;
-							}
-							handler.appendJavaScript(String.format("VideoManager.close('%s', true);", uid));
-							sharingUser = null;
-							menu.update(handler);
-						}
-						break;
-					case sharingStarted:
-						{
-							String uid = ((TextRoomMessage)m).getText();
-							Client c = cm.get(uid);
-							if (c == null) {
-								log.error("Not existing user has started sharing {} !!!!", uid);
-								return;
-							}
-							sharingUser = uid;
-							menu.update(handler);
-						}
+					case sharingToggled:
+						menu.update(handler);
 						break;
 					case rightUpdated:
 						{
@@ -725,11 +701,11 @@ public class RoomPanel extends BasePanel {
 		for (Right right : rights) {
 			client.deny(right);
 		}
-		if (client.hasActivity(Client.Activity.broadcastA) && !client.hasRight(Right.audio)) {
-			client.remove(Client.Activity.broadcastA);
+		if (client.hasActivity(Client.Activity.AUDIO) && !client.hasRight(Right.audio)) {
+			client.remove(Client.Activity.AUDIO);
 		}
-		if (client.hasActivity(Client.Activity.broadcastV) && !client.hasRight(Right.video)) {
-			client.remove(Client.Activity.broadcastV);
+		if (client.hasActivity(Client.Activity.VIDEO) && !client.hasRight(Right.video)) {
+			client.remove(Client.Activity.VIDEO);
 		}
 		broadcast(client);
 	}
@@ -764,7 +740,7 @@ public class RoomPanel extends BasePanel {
 	public boolean screenShareAllowed() {
 		return !interview && !r.isHidden(RoomElement.ScreenSharing)
 				&& r.isAllowRecording() && getClient().hasRight(Right.share)
-				&& sharingUser == null;
+				&& !kHandler.isSharing(r.getId());
 	}
 
 	public RoomSidebar getSidebar() {
@@ -773,10 +749,6 @@ public class RoomPanel extends BasePanel {
 
 	public AbstractWbPanel getWb() {
 		return wb;
-	}
-
-	public String getSharingUser() {
-		return sharingUser;
 	}
 
 	public String getPublishingUser() {

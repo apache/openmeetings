@@ -2,15 +2,15 @@
 const WB_AREA_SEL = '.room.wb.area';
 const WBA_WB_SEL = '.room.wb.area .ui-tabs-panel.ui-corner-bottom.ui-widget-content:visible';
 const VID_SEL = '.video.user-video';
-const CAM_ACTIVITY = 'broadcastV';
-const MIC_ACTIVITY = 'broadcastA';
+const CAM_ACTIVITY = 'VIDEO';
+const MIC_ACTIVITY = 'AUDIO';
 var VideoUtil = (function() {
 	const self = {};
 	function _getVid(uid) {
 		return 'video' + uid;
 	}
 	function _isSharing(sd) {
-		return 'screen' === sd.type;
+		return 'SCREEN' === sd.type;
 	}
 	function _hasAudio(sd) {
 		return !sd || sd.activities.includes(MIC_ACTIVITY);

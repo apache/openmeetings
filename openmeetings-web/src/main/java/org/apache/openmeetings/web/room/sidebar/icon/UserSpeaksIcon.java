@@ -32,7 +32,7 @@ public class UserSpeaksIcon extends ClientIcon {
 
 	private boolean isActive() {
 		Client c = getClient();
-		return c != null && (c.hasActivity(Activity.broadcastA) && roomHasRight(Room.Right.exclusive));
+		return c != null && (c.hasActivity(Activity.AUDIO) && roomHasRight(Room.Right.exclusive));
 	}
 
 	@Override
