@@ -105,7 +105,7 @@ var VideoManager = (function() {
 		}
 		c.streams.forEach(function(sd) {
 			sd.self = c.self;
-			if (sd.self && VideoUtil.isSharing(sd)) {
+			if (VideoUtil.isSharing(sd)) {
 				return;
 			}
 			const _id = VideoUtil.getVid(sd.uid)
@@ -155,12 +155,12 @@ var VideoManager = (function() {
 						.data('cuid', sd.cuid)
 						.show(), 10);
 				share.tooltip().off('click').click(function() {
-					const v = $('#' + VideoUtil.getVid(sd.uid))
-					if (v.length !== 1) {
-						Video().init(m);
-					} else {
-						v.dialog('open');
+					let v = $('#' + VideoUtil.getVid(sd.uid))
+					if (v.length === 1) {
+						v.remove();
 					}
+					v = Video().init(m);
+					VideoUtil.setPos(v, {left: 0, top: 35});
 				});
 			} else {
 				_onReceive(m);

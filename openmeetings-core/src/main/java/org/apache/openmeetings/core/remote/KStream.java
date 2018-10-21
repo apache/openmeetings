@@ -111,6 +111,12 @@ public class KStream implements IKStream {
 		outgoingMedia.addMediaSessionTerminatedListener(evt -> {
 			log.warn("Media stream terminated");
 		});
+		outgoingMedia.addMediaFlowOutStateChangeListener(evt -> {
+			log.warn("Media FlowOut :: {}", evt.getState());
+		});
+		outgoingMedia.addMediaFlowInStateChangeListener(evt -> {
+			log.warn("Media FlowIn :: {}", evt);
+		});
 		h.streamsByUid.put(uid, this);
 		addListener(h, sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {
@@ -164,11 +170,20 @@ public class KStream implements IKStream {
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, this.uid);
 		Client cur = h.getBySid(this.sid);
-		if (cur.hasActivity(Activity.AUDIO)) {
-			outgoingMedia.connect(listener, MediaType.AUDIO);
-		}
-		if (cur.hasActivity(Activity.VIDEO)) {
-			outgoingMedia.connect(listener, MediaType.VIDEO);
+		if (cur == null) {
+			log.warn("Client for endpoint dooesn't exists");
+		} else {
+			StreamDesc sd = cur.getStream(this.uid);
+			if (sd == null) {
+				log.warn("Stream for endpoint dooesn't exists");
+			} else {
+				if (sd.hasActivity(Activity.AUDIO)) {
+					outgoingMedia.connect(listener, MediaType.AUDIO);
+				}
+				if (StreamType.SCREEN == sd.getType() || sd.hasActivity(Activity.VIDEO)) {
+					outgoingMedia.connect(listener, MediaType.VIDEO);
+				}
+			}
 		}
 		return listener;
 	}

@@ -21,7 +21,7 @@ var Video = (function() {
 		const h = _h - _getExtra();
 		_resize(_w, h);
 		if (Room.getOptions().interview) {
-			v.dialog('widget').css(VideoUtil.getPos());
+			VideoUtil.setPos(v, VideoUtil.getPos());
 		}
 	}
 	function _resizePod() {
@@ -295,6 +295,8 @@ var Video = (function() {
 		sd.self = sd.cuid === opts.uid;
 		const contSel = _initContainer(_id, name, opts);
 		v = $('#' + _id);
+		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
+		f = v.find('.footer');
 		if (sd.self && isSharing) {
 			v.hide();
 		} else {
@@ -306,14 +308,12 @@ var Video = (function() {
 				, width: _w
 				, minWidth: 40
 				, minHeight: 50
-				, autoOpen: !isSharing
+				, autoOpen: true
 				, modal: false
 				, appendTo: contSel
 			});
 			_initDialog(v, opts);
 		}
-		t = v.parent().find('.ui-dialog-titlebar').attr('title', name);
-		f = v.find('.footer');
 		if (!isSharing) {
 			v.parent().find('.ui-dialog-titlebar-buttonpane')
 				.append($('#video-volume-btn').children().clone())
@@ -370,7 +370,7 @@ var Video = (function() {
 		_refresh(msg);
 
 		if (!isSharing) {
-			v.dialog('widget').css(VideoUtil.getPos(VideoUtil.getRects(VID_SEL), sd.width, sd.height + 25));
+			VideoUtil.setPos(v, VideoUtil.getPos(VideoUtil.getRects(VID_SEL), sd.width, sd.height + 25));
 		}
 		return v;
 	}

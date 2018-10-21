@@ -123,6 +123,9 @@ var VideoUtil = (function() {
 		const b = kurentoUtils.WebRtcPeer.browser;
 		return b.name === 'Edge';
 	}
+	function _setPos(v, pos) {
+		v.dialog('widget').css(pos);
+	}
 
 	self.getVid = _getVid;
 	self.isSharing = _isSharing;
@@ -141,5 +144,6 @@ var VideoUtil = (function() {
 		return opts;
 	};
 	self.isEdge = _isEdge;
+	self.setPos = _setPos;
 	return self;
 })();
