@@ -110,10 +110,14 @@ var VideoUtil = (function() {
 		if (!!peer) {
 			peer.cleaned = true;
 			const pc = peer.peerConnection;
-			if (!!pc && !!pc.getLocalStreams()) {
-				pc.getLocalStreams().forEach(function(stream) {
-					_cleanStream(stream);
-				});
+			try {
+				if (!!pc && !!pc.getLocalStreams()) {
+					pc.getLocalStreams().forEach(function(stream) {
+						_cleanStream(stream);
+					});
+				}
+			} catch(e) {
+				OmUtil.log('Failed to clean peer' + e);
 			}
 			peer.dispose();
 			peer = null;
