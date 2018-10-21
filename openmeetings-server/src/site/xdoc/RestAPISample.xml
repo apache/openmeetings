@@ -31,7 +31,7 @@
 					<li>REST: as xml <tt>?_wadl</tt> for example <tt>http://localhost:5080/openmeetings/services/user?_wadl</tt></li>
 					<li>REST: as json <tt>?_wadl&amp;type=json</tt> for example <tt>http://localhost:5080/openmeetings/services/user?_wadl&amp;type=json</tt></li>
 				</ul>
-				<div class="bs-callout bs-callout-info">
+				<div class="bd-callout bd-callout-info">
 					The full list of services with All WSDLs/WADLs is available at following URL: <tt>http://localhost:5080/openmeetings/services/services</tt>
 				</div>
 			</div>

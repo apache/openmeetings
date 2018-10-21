@@ -103,24 +103,26 @@
 
 				</li>
 				<li>
-					<p>
+					<div>
 						After you've received an email from
 						<a href="mailto:root@apache.org">root@apache.org</a>
 						with your committer account information, change your initial
 						password:
-						Login by 'ssh -l &lt;username&gt; people.apache.org';
-						run
-						'passwd';
-						run 'svnpasswd'. See
-						<a class="external" rel="nofollow"
-							href="http://apache.org/dev/version-control.html">Committer Subversion Access
-						</a>
-						.
-					</p>
+						<ol>
+							<li>Go to <a class="external" rel="nofollow"
+									href="https://id.apache.org/">https://id.apache.org/</a>
+							</li>
+							<li>Set up password/certificate</li>
+							<li>Go to <a class="external" rel="nofollow"
+									href="https://gitbox.apache.org/setup/">https://gitbox.apache.org/setup</a>
+							</li>
+							<li>Set up Github integration</li>
+						</ol>
+					</div>
 				</li>
 				<li>
 					<p>
-						Check out the OpenMeetings sources and test your svn account:
+						Check out the OpenMeetings sources and test your account:
 						<a href="https://github.com/apache/openmeetings.git">Git Repository</a>
 					</p>
 				</li>
