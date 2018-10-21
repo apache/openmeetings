@@ -59,6 +59,7 @@ import org.kurento.client.Endpoint;
 import org.kurento.client.EventListener;
 import org.kurento.client.IceCandidate;
 import org.kurento.client.KurentoClient;
+import org.kurento.client.KurentoConnectionListener;
 import org.kurento.client.MediaObject;
 import org.kurento.client.MediaPipeline;
 import org.kurento.client.ObjectCreatedEvent;
@@ -116,11 +117,32 @@ public class KurentoHandler {
 	public void init() {
 		check = () -> {
 			try {
-				client = KurentoClient.create(kurentoWsUrl);
+				client = KurentoClient.create(kurentoWsUrl, new KurentoConnectionListener() {
+					@Override
+					public void reconnected(boolean sameServer) {
+						log.info("Kurento reconnected ? {}", sameServer);
+					}
+
+					@Override
+					public void disconnected() {
+						log.warn("Disconnected, will re-try in {} ms", checkTimeout);
+						recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
+					}
+
+					@Override
+					public void connectionFailed() {
+						log.info("Kurento connectionFailed");
+					}
+
+					@Override
+					public void connected() {
+						log.info("Kurento connected");
+					}
+				});
 				kuid = randomUUID().toString();
 				client.getServerManager().addObjectCreatedListener(new KWatchDog());
 			} catch (Exception e) {
-				log.error("Fail to create Kurento client");
+				log.warn("Fail to create Kurento client, will re-try in {} ms", checkTimeout);
 				recheckScheduler.schedule(check, checkTimeout, MILLISECONDS);
 			}
 		};
