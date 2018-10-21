@@ -98,12 +98,14 @@
 
 		<section name="Community">
 			<div class="bd-callout bd-callout-info">
-				<h4>Who we are</h4>
-				<span><a href="team.html">List of committers</a>.</span>
+				<div class="h4">Who we are</div>
+				<div>
+					<a href="team.html">Here</a> is the list of our commiters. Contributions are welcome :)
+				</div>
 			</div>
 			<div class="bd-callout bd-callout-info">
-				<h4>Users!</h4>
-				<span>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</span>
+				<div class="h4">Users!</div>
+				<div>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</div>
 			</div>
 		</section>
 
