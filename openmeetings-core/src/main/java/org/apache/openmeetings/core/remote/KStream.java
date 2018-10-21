@@ -108,6 +108,9 @@ public class KStream implements IKStream {
 				break;
 		}
 		outgoingMedia = createEndpoint(h, sd.getSid(), sd.getUid());
+		outgoingMedia.addMediaSessionTerminatedListener(evt -> {
+			log.warn("Media stream terminated");
+		});
 		h.streamsByUid.put(uid, this);
 		addListener(h, sd.getSid(), sd.getUid(), sdpOffer);
 		if (room.isRecording()) {
@@ -150,13 +153,14 @@ public class KStream implements IKStream {
 		}
 
 		log.debug("PARTICIPANT {}: receiving video from {}", uid, this.uid);
-
-		WebRtcEndpoint listener = listeners.get(uid);
-		if (listener == null) {
-			log.debug("PARTICIPANT {}: creating new endpoint for {}", uid, this.uid);
-			listener = createEndpoint(h, sid, uid);
-			listeners.put(uid, listener);
+		WebRtcEndpoint listener = listeners.remove(uid);
+		if (listener != null) {
+			log.debug("PARTICIPANT {}: re-started video receiving, will drop previous endpoint", uid);
+			listener.release();
 		}
+		log.debug("PARTICIPANT {}: creating new endpoint for {}", uid, this.uid);
+		listener = createEndpoint(h, sid, uid);
+		listeners.put(uid, listener);
 
 		log.debug("PARTICIPANT {}: obtained endpoint for {}", uid, this.uid);
 		Client cur = h.getBySid(this.sid);

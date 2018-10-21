@@ -306,7 +306,7 @@ var Video = (function() {
 				, width: _w
 				, minWidth: 40
 				, minHeight: 50
-				, autoOpen: true
+				, autoOpen: !isSharing
 				, modal: false
 				, appendTo: contSel
 			});
