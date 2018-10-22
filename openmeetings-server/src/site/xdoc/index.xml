@@ -68,8 +68,8 @@
 			</p>
 		</section>
 		<section name="News">
-			<div class="bs-callout bs-callout-danger">
-				<b>Version 4.0.6 released!</b>
+			<div class="bd-callout bd-callout-danger">
+				<h4>Version 4.0.6 released!</h4>
 				<div>Release 4.0.6, provides following improvements:<br/>
 					<ul>
 						<li>Multiple issues with device list retrieval in Settings dialog</li>
@@ -79,7 +79,7 @@
 					</ul>
 					<br/>
 					Other fixes and improvements
-					<div class="bs-callout bs-callout-info">Please update to this release from any previous OpenMeetings release</div>
+					<div class="bd-callout bd-callout-info">Please update to this release from any previous OpenMeetings release</div>
 				</div>
 				<br/>
 
@@ -91,19 +91,21 @@
 				<span> See <a href="downloads.html">Downloads page</a>.</span>
 				<span class="date">(2018-10-18)</span>
 			</div>
-			<div class="bs-callout bs-callout-info">
+			<div class="bd-callout bd-callout-info">
 				<span class="date"><a href="NewsArchive.html">You can find older news here</a></span>
 			</div>
 		</section>
 
 		<section name="Community">
-			<div class="bs-callout bs-callout-info">
-				<b>Who we are</b>
-				<span><a href="team.html">List of committers</a>.</span>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Who we are</div>
+				<div>
+					<a href="team.html">Here</a> is the list of our commiters. Contributions are welcome :)
+				</div>
 			</div>
-			<div class="bs-callout bs-callout-info">
-				<b>Users!</b>
-				<span>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</span>
+			<div class="bd-callout bd-callout-info">
+				<div class="h4">Users!</div>
+				<div>We'd love to have you involved. Check out the <a href="get-involved.html">Get involved</a>.</div>
 			</div>
 		</section>
 
