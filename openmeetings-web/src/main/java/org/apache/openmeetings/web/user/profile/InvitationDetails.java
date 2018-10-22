@@ -20,6 +20,7 @@ package org.apache.openmeetings.web.user.profile;
 
 import static org.apache.openmeetings.db.util.FormatHelper.formatUser;
 import static org.apache.openmeetings.web.app.WebSession.getUserId;
+import static org.apache.openmeetings.web.app.Application.getBean;
 
 import java.util.Date;
 
@@ -34,7 +35,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class InvitationDetails extends Form<Invitation>{
 	private static final long serialVersionUID = 1L;
@@ -44,8 +44,6 @@ public class InvitationDetails extends Form<Invitation>{
 	private final Label invitee = new Label("invitee", Model.of(""));
 	private final DateLabel from = new DateLabel("validFrom", Model.of((Date)null));
 	private final DateLabel to = new DateLabel("validTo", Model.of((Date)null));
-	@SpringBean
-	private InvitationDao inviteDao;
 
 	public InvitationDetails(String id, final WebMarkupContainer list, Invitation i) {
 		super(id, new CompoundPropertyModel<>(i));
@@ -67,7 +65,7 @@ public class InvitationDetails extends Form<Invitation>{
 
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-				inviteDao.delete(getModelObject(), getUserId());
+				getBean(InvitationDao.class).delete(getModelObject(), getUserId());
 				setModelObject(new Invitation());
 				target.add(list, InvitationDetails.this);
 			}
