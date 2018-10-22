@@ -105,6 +105,9 @@
 						<tt>openmeetings-server/src/site/xdoc/index.xml</tt><br/>
 						<tt>openmeetings-server/src/site/xdoc/NewsArchive.xml</tt><br/>
 						<tt>openmeetings-server/src/site/xdoc/downloads.xml</tt><br/>
+						<div class="bd-callout bd-callout-danger">
+							<div class="h4">Download links in NewsArchive.xml should be updated</div>
+						</div>
 					</li>
 					<li>Switch to the necessary branch:
 						<source>git checkout 4.0.x</source>
